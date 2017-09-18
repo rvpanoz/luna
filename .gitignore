@@ -1,0 +1,8 @@
+node_modules/
+dev/
+dist/
+tests/
+npm-debug.log
+package-lock.json
+test/
+log.log

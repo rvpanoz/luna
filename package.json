@@ -1,0 +1,44 @@
+{
+  "name": "nodepm",
+  "version": "1.0.0",
+  "description": "npm management tool",
+  "main": "./main.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development npm run start-dev",
+    "start-dev": "electron -r babel-register . --debug",
+    "pack": "electron-builder --dir",
+    "test": "mocha --compilers js:babel-core/register --require ./test/test-helper.js \"test/*@(.js|.jsx)\" --watch --watch-extensions jsx"
+  },
+  "author": "rvpanoz@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "chai": "^3.5.0",
+    "cross-env": "3.1.4",
+    "electron-builder": "^19.22.1",
+    "electron-devtools-installer": "^2.2.0",
+    "electron-hot": "^0.2.0",
+    "electron-prebuilt": "^1.4.13",
+    "electron-reload": "^1.2.1",
+    "mocha": "^3.0.2",
+    "winston": "^2.3.1"
+  },
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "electron-json-storage": "^3.0.7",
+    "electron-store": "^1.2.0",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.17.1",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-router-dom": "^4.2.2",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
+  }
+}
