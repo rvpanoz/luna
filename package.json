@@ -1,5 +1,5 @@
 {
-  "name": "nodepm",
+  "name": "luna",
   "version": "1.0.0",
   "description": "npm management tool",
   "main": "./main.js",
