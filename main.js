@@ -31,14 +31,19 @@ global.logger = new winston.Logger({
 
 //development mode
 if (NODE_ENV === 'development' && debug) {
-  require('./development/imports.js');
+  /** https://github.com/yan-foto/electron-reload - hard reset starts a new process **/
+  require('electron-reload')(cwd, {
+    electron: require('electron'),
+    ignored: /log.log|node_modules|dist|build|[\/\\]\./
+  });
 }
 
 //instatiate electron store
 const store = new electronStore();
 
 // set store and config as global objects
-// so we can call them via remote.getGlobal in a renderer process
+// so we can call them via remote.getGlobal(name)
+// in a renderer process
 global.store = store;
 global.config = config;
 

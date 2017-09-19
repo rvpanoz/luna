@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:400,900,400italic,700italic");
+@import url(font-awesome.min.css);
+
 .valign:before {
   content: '';
   display: inline-block;
@@ -206,7 +209,7 @@ body.main-scrollable .main {
   box-sizing: border-box;
   color: #5e6870;
 }
-.dashboard {
+.main-content {
   border-top: 75px solid transparent;
   height: 100%;
   width: 100%;
@@ -214,7 +217,7 @@ body.main-scrollable .main {
   font-size: 0;
 }
 @media (max-width: 768px) {
-  .dashboard {
+  .main-content {
     border-top: 64px solid transparent;
   }
 }
@@ -238,7 +241,7 @@ body.main-scrollable .main {
     width: 0;
     background-color: rgba(0, 0, 0, 0.6) !important;
   }
-  .dashboard_menu .sidebar {
+  .main-content_menu .sidebar {
     width: 200px;
   }
 }

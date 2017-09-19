@@ -9,12 +9,16 @@ import ReactDOM from 'react-dom';
 import {PropTypes} from 'prop-types';
 import {HashRouter as Router} from 'react-router-dom';
 
+import Bootstrap from 'bootstrap/dist/js/bootstrap.min';
+import Header from './common/Header';
+import Main from './content/Main';
+
 //configuration and store globals
 const config = remote.getGlobal('config');
 const store = remote.getGlobal('store');
 
-//app components
-import Main from './content/Main';
+//dev mode on
+require('./development/imports.js');
 
 class App extends React.Component {
   constructor(props) {
@@ -29,6 +33,7 @@ class App extends React.Component {
   render() {
     return (
       <div className="wrapper">
+        <Header />
         <Main />
       </div>
     )

@@ -5,6 +5,7 @@
 
 import React from 'react';
 import {Route} from 'react-router-dom';
+import Sidebar from './../common/Sidebar';
 import Home from './Home';
 
 export default class Main extends React.Component {
@@ -13,13 +14,12 @@ export default class Main extends React.Component {
   }
   render() {
     return (
-      <section className="content">
-        <div className="content__middle">
-          <Route exact path='/' render={(props) => {
-            return <Home />
-          }}/>
-        </div>
-      </section>
+      <div className="main-content">
+        <Sidebar />
+        <Route exact path='/' render={(props) => {
+          return <Home />
+        }}/>
+    </div>
     )
   }
 }
