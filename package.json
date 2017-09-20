@@ -1,13 +1,12 @@
 {
-  "name": "nodepm",
+  "name": "luna",
   "version": "1.0.0",
   "description": "npm management tool",
   "main": "./main.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development npm run start-dev",
     "start-dev": "electron -r babel-register . --debug",
-    "pack": "electron-builder --dir",
-    "test": "mocha --compilers js:babel-core/register --require ./test/test-helper.js \"test/*@(.js|.jsx)\" --watch --watch-extensions jsx"
+    "pack": "electron-builder --dir"
   },
   "author": "rvpanoz@gmail.com",
   "license": "MIT",
@@ -28,6 +27,7 @@
     "winston": "^2.3.1"
   },
   "dependencies": {
+    "bluebird": "^3.5.0",
     "bootstrap": "^3.3.7",
     "electron-json-storage": "^3.0.7",
     "electron-store": "^1.2.0",

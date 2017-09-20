@@ -24,12 +24,6 @@ class App extends React.Component {
   constructor(props) {
     super(props);
   }
-  componentWillMount() {
-
-  }
-  componentDidMount() {
-
-  }
   render() {
     return (
       <div className="wrapper">

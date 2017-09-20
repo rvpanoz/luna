@@ -19,7 +19,7 @@ export default class Header extends React.Component {
           <ul className="nav navbar-nav navbar-left">
             <li>
               <Link to="/">
-                <span>Dashboard</span>
+                <span>Home</span>
               </Link>
             </li>
           </ul>
