@@ -1,2 +1,2 @@
-# nodePM (WIP)
+# luna (WIP)
 NPM management application.
