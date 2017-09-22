@@ -2,6 +2,7 @@
  * Electron's Main process
  */
 
+import electron from 'electron';
 import {
   app,
   BrowserWindow,
@@ -47,12 +48,14 @@ global.store = store;
 global.config = config;
 
 function createMainWindow() {
+  let screenSize = electron.screen.getPrimaryDisplay().size;
 
   //create main window
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    show: true
+    width: screenSize.width,
+    height: screenSize.height,
+    show: true,
+    resizable: true
   });
 
   //load index.html
@@ -85,14 +88,35 @@ ipcMain.on('get-global-modules', (event) => {
   });
 });
 
-ipcMain.on('get-package-info', (event, packageData) => {
-  let name = packageData.name;
-
-  shell.npmInfo(name, (data) => {
+ipcMain.on('get-package-info', (event, pkg) => {
+  let pkgName = pkg.name;
+  if(!pkgName) {
+    event.sender.send('get-package-info-reply', false);
+    return;
+  }
+  shell.doCmd({
+    cmd: 'info',
+    pkgName: pkgName,
+    parameters: false
+  }, (data) => {
     event.sender.send('get-package-info-reply', data);
   });
 });
 
+ipcMain.on('get-latest-version', (event, pkg) => {
+  let pkgName = pkg.name;
+  if(!pkgName) {
+    event.sender.send('get-latest-version-reply', false);
+    return;
+  }
+  shell.doCmd({
+    cmd: 'view',
+    pkgName: pkgName,
+    parameters: 'version'
+  }, (data) => {
+    event.sender.send('get-latest-version-reply', data);
+  });
+})
 /**
  * register app events
  */
