@@ -52,7 +52,7 @@ function createMainWindow() {
 
   //create main window
   mainWindow = new BrowserWindow({
-    width: screenSize.width,
+    'min-width': 830,
     height: screenSize.height,
     show: true,
     resizable: true

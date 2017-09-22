@@ -60,18 +60,16 @@ p {
   margin: 2px 0px;
   padding: 0px;
   margin-bottom: 5px;
-  line-height: 28px;
+  line-height: 20px;
 }
 
 a {
   text-decoration: none;
-  color: #777;
 }
 
 a:hover, a:active, a:focus {
   outline: 0;
   text-decoration: none;
-  color: #999;
 }
 
 hr {
@@ -592,6 +590,7 @@ nav.sidebar {
   background: none repeat scroll 0 0 #0099ff;
   color: white;
   padding: 20px 10px;
+  z-index: 2;
 }
 
 nav.sidebar a#justify-icon {
@@ -840,7 +839,9 @@ nav.sidebar ul li.active a.expandable:hover {
 }
 
 .modules-list {
-  margin: 50px auto;
+  display: block;
+  position: relative;
+  margin: 20px 30px auto;
   background: #fff;
   padding: 20px 0px;
   border: 1px solid #e7e7e7;
@@ -854,8 +855,8 @@ nav.sidebar ul li.active a.expandable:hover {
 }
 
 .selected {
-  background-color: #bdbdbd;
-  color: #fff;
+  background-color: #0099ff;
+  color: #fff !important;
 }
 
 p.help {
@@ -864,12 +865,9 @@ p.help {
 }
 
 
-/** article item **/
+/** .detail item **/
 
-
-/* ARTICLE TILES */
-
-article {
+.detail {
   background: #fff;
   border-radius: 2px;
   margin: 0 auto;
@@ -877,10 +875,10 @@ article {
   position: relative;
   width: 100%;
   height: 100%;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.075);
+  box-shadow: 0px 4px rgba(0, 0, 0, 0.075)
 }
 
-.article-image {
+.detail-image {
   background: url(http://lorempixel.com/640/220/nature);
   background-position: center;
   border-radius: 2px 2px 0 0;
@@ -901,41 +899,41 @@ article {
   border-radius: 2px 0 0 0;
 }
 
-.article-body {
+.detail-body {
   padding: 24px 30px 0;
 }
 
-.article-heading {
+.detail-heading {
   color: #2f3032;
   font-size: 1.5em;
   font-weight: 300;
   margin-bottom: 16px;
 }
 
-.article-tags {
+.detail-tags {
   color: #a7aab0;
   font-size: .8125em;
   margin-bottom: .8125em;
 }
 
-.article-footer {
+.detail-footer {
   border-top: 1px solid #f1f2f3;
   margin-top: 25px;
   padding: 1em 30px;
 }
 
-.article-links {
+.detail-links {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.article-links li {
+.detail-links li {
   display: inline-block;
   margin: 0 0 2px 0;
 }
 
-.article-links a {
+.detail-links a {
   color: #fff;
   background: #66a5e9;
   border-radius: 2px;
@@ -944,7 +942,7 @@ article {
   transition: background 0.3s ease;
 }
 
-.article-links a:hover {
+.detail-links a:hover {
   background: #4785C7;
   text-decoration: none;
 }

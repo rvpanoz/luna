@@ -28,9 +28,7 @@ class App extends React.Component {
     return (
       <div className="wrapper">
         <Sidebar />
-        <div className="content">
-          <Main />
-        </div>
+        <Main />
       </div>
     )
   }

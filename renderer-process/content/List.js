@@ -28,16 +28,16 @@ class ListItemDetails extends React.Component {
         <div className={(is_visible)
           ? 'show'
           : 'hide'}>
-          <article className="article tile">
-            <section className="article-body">
-              <p className="article-tags">{module.author}</p>
-              <h2 className="article-heading">{module.name}</h2>
+          <div className="detail tile">
+            <section className="detail-body">
+              <p className="detail-tags">{module.author}</p>
+              <h2 className="detail-heading">{module.name}</h2>
               <p>
                 {module.description}
               </p>
             </section>
-            <footer className="article-footer">
-              <ul className="article-links">
+            <footer className="detail-footer">
+              <ul className="detail-links">
                 <li>
 
                 </li>
@@ -46,7 +46,7 @@ class ListItemDetails extends React.Component {
                 </li>
               </ul>
             </footer>
-          </article>
+          </div>
         </div>
       </div>
     )
@@ -64,8 +64,10 @@ class ListItem extends React.Component {
   }
   onItemClick(e) {
     e.preventDefault();
-    let root = this.refs[`root-${this.props.idx}`];
-    root.classList.add('selected');
+    let el = this.refs[`root-${this.props.idx}`];
+    let $el = $(el);
+    $('tr.module').not(el).removeClass('selected');
+    $el.addClass('selected');
     this.getInfo();
     return false;
   }
@@ -109,13 +111,15 @@ class List extends React.Component {
     });
   }
   componentDidMount() {
-    ipcRenderer.on('get-latest-version-reply', (event, data) => {});
+    ipcRenderer.on('get-latest-version-reply', (event, data) => {
+      console.log(data);
+    });
     ipcRenderer.on('get-package-info-reply', (event, data) => {
       console.log(data);
       this.setState({active_module: data, detail: true});
     });
     ipcRenderer.on('get-global-modules-reply', (event, modules) => {
-      let root = this.refs.root;
+      let root = this.refs.modules_tbl;
       if (root) {
         let data = this.parse(modules);
         this.setState({modules: data, loader: false, detail: false});
@@ -145,7 +149,7 @@ class List extends React.Component {
     }
 
     return (
-      <div className="modules-list table-responsive">
+      <div className="modules-list">
         <AppLoader isVisible={this.state.loader}/>
         <div className="row">
           <div className="col-lg-6 cold-md-6 col-xs-6">
@@ -153,7 +157,7 @@ class List extends React.Component {
               <i className="fa fa-file red"></i>&nbsp; Modules list
             </h4>
             <p className="help">{`List of global modules installed in your system`}</p>
-            <table className="table" ref="root">
+            <table className="table table-responsive" ref="modules_tbl">
               <tbody>
                 {modules.map((module, idx) => {
                   return <ListItem idx={idx} key={idx} {...module}/>
