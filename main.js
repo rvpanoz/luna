@@ -42,8 +42,7 @@ if (NODE_ENV === 'development' && debug) {
 const store = new electronStore();
 
 // set store and config as global objects
-// so we can call them via remote.getGlobal(name)
-// in a renderer process
+// so we can call them via remote.getGlobal(name) in a renderer process
 global.store = store;
 global.config = config;
 
@@ -81,8 +80,16 @@ function createMainWindow() {
  * IPC events
  */
 ipcMain.on('get-global-modules', (event) => {
-  shell.npmLs((modules) => {
+  shell.doCmd({}, (modules) => {
     event.sender.send('get-global-modules-reply', modules);
+  });
+});
+
+ipcMain.on('get-package-info', (event, packageData) => {
+  let name = packageData.name;
+
+  shell.npmInfo(name, (data) => {
+    event.sender.send('get-package-info-reply', data);
   });
 });
 
