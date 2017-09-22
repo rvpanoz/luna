@@ -5,6 +5,7 @@
 import {
   app,
   BrowserWindow,
+  ipcMain,
   dialog
 } from 'electron';
 
@@ -33,7 +34,7 @@ if (NODE_ENV === 'development' && debug) {
   /** https://github.com/yan-foto/electron-reload - hard reset, starts a new process **/
   require('electron-reload')(cwd, {
     electron: require('electron'),
-    ignored: /log.log|node_modules|dist|build|[\/\\]\./
+    ignored: /log.log|node_modules|dist|test|build|[\/\\]\./
   });
 }
 
@@ -41,8 +42,7 @@ if (NODE_ENV === 'development' && debug) {
 const store = new electronStore();
 
 // set store and config as global objects
-// so we can call them via remote.getGlobal(name)
-// in a renderer process
+// so we can call them via remote.getGlobal(name) in a renderer process
 global.store = store;
 global.config = config;
 
@@ -64,7 +64,7 @@ function createMainWindow() {
 
     //inspect element on right click
     ipcMain.on('inspect-element', function(event, coords) {
-      if (MainWindow) {
+      if (mainWindow) {
         MainWindow.inspectElement(coords.x, coords.y);
       }
     });
@@ -76,6 +76,26 @@ function createMainWindow() {
   });
 }
 
+/**
+ * IPC events
+ */
+ipcMain.on('get-global-modules', (event) => {
+  shell.doCmd({}, (modules) => {
+    event.sender.send('get-global-modules-reply', modules);
+  });
+});
+
+ipcMain.on('get-package-info', (event, packageData) => {
+  let name = packageData.name;
+
+  shell.npmInfo(name, (data) => {
+    event.sender.send('get-package-info-reply', data);
+  });
+});
+
+/**
+ * register app events
+ */
 app.on('window-all-closed', () => {
   if (process.platform != 'darwin') {
     app.quit();

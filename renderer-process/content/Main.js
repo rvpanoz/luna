@@ -5,8 +5,7 @@
 
 import React from 'react';
 import {Route} from 'react-router-dom';
-import Sidebar from './../common/Sidebar';
-import Home from './Home';
+import List from './List';
 
 export default class Main extends React.Component {
   constructor(props) {
@@ -14,10 +13,9 @@ export default class Main extends React.Component {
   }
   render() {
     return (
-      <div className="main-content">
-        <Sidebar />
+      <div className="container">
         <Route exact path='/' render={(props) => {
-          return <Home />
+          return <List onLoad={this.onLoad}/>
         }}/>
     </div>
     )

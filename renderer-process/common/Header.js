@@ -14,17 +14,7 @@ export default class Header extends React.Component {
   }
   render() {
     return (
-      <nav className="navbar navbar-static-top header-navbar">
-        <div className="topnavbar">
-          <ul className="nav navbar-nav navbar-left">
-            <li>
-              <Link to="/">
-                <span>Dashboard</span>
-              </Link>
-            </li>
-          </ul>
-        </div>
-      </nav>
+      <nav></nav>
     )
   }
 }

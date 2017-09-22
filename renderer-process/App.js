@@ -10,7 +10,7 @@ import {PropTypes} from 'prop-types';
 import {HashRouter as Router} from 'react-router-dom';
 
 import Bootstrap from 'bootstrap/dist/js/bootstrap.min';
-import Header from './common/Header';
+import Sidebar from './common/Sidebar';
 import Main from './content/Main';
 
 //configuration and store globals
@@ -24,17 +24,13 @@ class App extends React.Component {
   constructor(props) {
     super(props);
   }
-  componentWillMount() {
-
-  }
-  componentDidMount() {
-
-  }
   render() {
     return (
       <div className="wrapper">
-        <Header />
-        <Main />
+        <Sidebar />
+        <div className="content">
+          <Main />
+        </div>
       </div>
     )
   }
