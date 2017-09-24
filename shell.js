@@ -10,6 +10,15 @@ const NPM_COMMANDS = [
   'ls', 'info'
 ];
 
+function isJson(str) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
+
 exports.doCmd = function(options = {}, cb) {
   let o = options;
   let cmd, pkgName, parameters;
@@ -17,36 +26,33 @@ exports.doCmd = function(options = {}, cb) {
   //list global modules if no cmd passed
   cmd = o.cmd || 'ls ';
 
-  if(o.pkgName && cmd !== 'ls') {
-    cmd+= ' ' + o.pkgName;
+  if (o.pkgName && cmd !== 'ls') {
+    cmd += ' ' + o.pkgName;
   }
 
-  if(o.parameters) {
-    cmd+=' ' + o.parameters;
+  if (o.parameters) {
+    cmd += ' ' + o.parameters;
   } else {
-    cmd+=' -g --depth=0';
+    cmd += ' -g --depth=0';
   }
 
-  if(cmd !== 'uninstall') {
+  if (cmd !== 'uninstall') {
     //always return data in json format
-    cmd+=' --json';
+    cmd += ' --json';
   }
 
   const npm_exec = exec(`npm ${cmd}`, {
     maxBuffer: 1024 * 500
   }, (error, stderr, stdout) => {
-    if(error) {
+    if (error) {
       throw new Error(error);
     }
   });
 
   npm_exec.stdout.on('data', (outout) => {
-    try {
-      let jsonData = JSON.parse(outout);
-      cb(JSON.parse(jsonData));
-    } catch (e) {
-      console.log(e);
-    } finally {
+    if(isJson(outout)) {
+      cb(JSON.parse(outout))
+    } else {
       cb();
     }
   });
