@@ -27,8 +27,10 @@ exports.doCmd = function(options = {}, cb) {
     cmd+=' -g --depth=0';
   }
 
-  //always return data in json format
-  cmd+=' --json';
+  if(cmd !== 'uninstall') {
+    //always return data in json format
+    cmd+=' --json';
+  }
 
   const npm_exec = exec(`npm ${cmd}`, {
     maxBuffer: 1024 * 500
@@ -39,8 +41,13 @@ exports.doCmd = function(options = {}, cb) {
   });
 
   npm_exec.stdout.on('data', (outout) => {
-    if(cb) {
-      cb(JSON.parse(outout));
+    try {
+      let jsonData = JSON.parse(outout);
+      cb(JSON.parse(jsonData));
+    } catch (e) {
+      console.log(e);
+    } finally {
+      cb();
     }
   });
 

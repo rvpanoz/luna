@@ -17,6 +17,11 @@ export default class List extends React.Component {
       loader: false,
       modules: []
     }
+    this.clearSelection = this.clearSelection.bind(this);
+  }
+  clearSelection() {
+    let tableElement = $(this.modulesTable);
+    tableElement.find('tr.selected').removeClass('selected');
   }
   updateModules(modules) {
     let rootElement = this.refs.rootElement;
@@ -26,7 +31,6 @@ export default class List extends React.Component {
   parse(data) {
     let modules = data.dependencies;
     let arr = [];
-
     for (let z in modules) {
       let mod = {
         name: z,
@@ -47,8 +51,8 @@ export default class List extends React.Component {
     ipcRenderer.on('get-global-modules-reply', (event, modules) => {
       this.updateModules(modules);
     });
-    ipcRenderer.on('get-latest-version-reply', (event, latest_version) => {
-
+    ipcRenderer.on('uninstall-module-reply', (event, result) => {
+      console.log(result);
     });
   }
   render() {
@@ -58,13 +62,18 @@ export default class List extends React.Component {
     }
     return (
       <AppLoader loading={this.state.loader}>
-      <table className="table table-responsive" ref="rootElement">
-        <tbody>
-          {modules.map((module, idx) => {
-            return <ListItem idx={idx} key={idx} {...module}/>
-          })}
-        </tbody>
-      </table>
+        <div className="modules-list">
+          <h6 className="title">Global packages installed</h6>
+          <table className="table table-responsive" ref={(el) => {
+              this.modulesTable = el;
+            }}>
+            <tbody>
+              {modules.map((module, idx) => {
+                return <ListItem clearSelection={this.clearSelection} idx={idx} key={idx} {...module}/>
+              })}
+            </tbody>
+          </table>
+        </div>
     </AppLoader>
     )
   }

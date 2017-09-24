@@ -3,6 +3,8 @@
  *
  */
 
+'use strict';
+
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
