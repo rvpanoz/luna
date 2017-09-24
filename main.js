@@ -88,6 +88,17 @@ ipcMain.on('get-global-modules', (event) => {
   });
 });
 
+ipcMain.on('uninstall-module', (event, pkgName) => {
+  shell.doCmd({
+    cmd: 'uninstall',
+    pkgName: pkgName,
+    parameters:'-g'
+  }, (result) => {
+    console.log(result);
+    event.sender.send('uninstall-module-reply', result);
+  });
+});
+
 ipcMain.on('get-package-info', (event, pkg) => {
   let pkgName = pkg.name;
   if(!pkgName) {

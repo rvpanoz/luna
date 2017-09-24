@@ -3,6 +3,8 @@
  * in this component we render app routes
  */
 
+'use strict';
+
 import React from 'react';
 import {Route} from 'react-router-dom';
 import Dashboard from './pages/Dashboard';

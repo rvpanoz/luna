@@ -369,3 +369,66 @@
   top: -13px;
   right: -8px;
 }
+
+
+/** tabs **/
+.tab-wrap section {
+  display: none;
+  padding: 20px 0 0;
+  border-top: 1px solid #ddd;
+}
+
+.tab-wrap input {
+  display: none;
+}
+
+.tab-wrap label {
+  display: inline-block;
+  margin: 0 0 -1px;
+  padding: 15px 25px;
+  font-weight: 600;
+  text-align: center;
+  color: #bbb;
+  border: 1px solid transparent;
+}
+
+.tab-wrap label:before {
+  font-family: fontawesome;
+  font-weight: normal;
+  margin-right: 10px;
+}
+
+.tab-wrap label[for*='1']:before {
+  content: '\f1cb';
+}
+
+.tab-wrap label[for*='2']:before {
+  content: '\f17d';
+}
+
+.tab-wrap label[for*='3']:before {
+  content: '\f16b';
+}
+
+.tab-wrap label[for*='4']:before {
+  content: '\f1a9';
+}
+
+.tab-wrap label:hover {
+  color: #888;
+  cursor: pointer;
+}
+
+.tab-wrap input:checked + label {
+  color: #555;
+  border: 1px solid #ddd;
+  border-top: 2px solid orange;
+  border-bottom: 1px solid #fff;
+}
+
+.tab-wrap #tab1:checked ~ #content1,
+.tab-wrap #tab2:checked ~ #content2,
+.tab-wrap #tab3:checked ~ #content3,
+.tab-wrap #tab4:checked ~ #content4 {
+  display: block;
+}

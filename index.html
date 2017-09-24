@@ -11,6 +11,7 @@
   <body>
     <div id="app-content"></div>
     <script>
+      window.$ = window.jQuery = require('jquery');
       require('babel-register');
       require('./renderer-process/App');
     </script>
