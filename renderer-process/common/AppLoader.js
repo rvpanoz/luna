@@ -5,11 +5,10 @@ import React from 'react';
  * @param {[type]} props [description]
  */
 const Loader = (props) => {
-  let is_visible = props.isVisible;
+  let loading = props.loading;
   return (
-    <div id="loader" className={(is_visible)
-      ? 'show'
-      : 'hide'}>
+    (loading) ?
+    <div id="loader">
       <div className="line"></div>
       <div className="line"></div>
       <div className="line"></div>
@@ -18,6 +17,7 @@ const Loader = (props) => {
       <div className="line"></div>
       <div className="line"></div>
     </div>
+    : props.children
   )
 }
 
