@@ -1,6 +1,12 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 
+const OptionItems = (props) => {
+  return (
+    <option id={props.idx}>{props.name}</option>
+  )
+}
+
 const StaticListItem = (props) => {
   return (
     <li>{props.name}</li>
@@ -8,10 +14,11 @@ const StaticListItem = (props) => {
 }
 
 const StaticList = (props) => {
-  let items = props.data, data;
-  if(Object.prototype.toString.call(items) !== '[object Array]' ) {
+  let items = props.data,
+    data;
+  if (Object.prototype.toString.call(items) !== '[object Array]') {
     data = [];
-    for(let z in items) {
+    for (let z in items) {
       data.push(`${z} - ${items[z]}`);
     }
   } else {
@@ -29,13 +36,29 @@ const StaticList = (props) => {
 export default class ListItemDetails extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      active: null
+    }
     this.uninstall = this.uninstall.bind(this);
+    this.onChangeVersion = this.onChangeVersion.bind(this);
   }
   uninstall(e) {
-    debugger;
     e.preventDefault();
     let module = this.props.module;
     ipcRenderer.send('uninstall-module', module.name);
+  }
+  onChangeVersion(e) {
+    let version = e.target.value;
+    let module = this.props.module;
+    ipcRenderer.send('get-info-by-version', module.name, version);
+  }
+  componentDidMount() {
+    let root = this.moduleDetails;
+    if(root) {
+      ipcRenderer.on('get-info-by-version-reply', (event, module) => {
+        console.log(module);
+      });
+    }
   }
   render() {
     let module = this.props.module;
@@ -44,15 +67,35 @@ export default class ListItemDetails extends React.Component {
     }
     console.log(module);
     return (
-      <div className="module-details">
+      <div className="module-details" ref={(el) => {
+          this.moduleDetails = el;
+        }}>
         <div className="detail tile">
           <section className="detail-body">
             <div className="detail-top">
-              <h2 className="detail-heading">{module.name}</h2>
-                <span className="badge badge-orange version">
-                  v{module.version}
-                </span>
-              <a onClick={this.uninstall} href="#" style={{float: 'right'}} className="btn btn-danger btn-sm">Uninstall</a>
+              <h2 className="detail-heading">{module.name}&nbsp;<span className="badge badge-orange version">
+                v{module.version}
+              </span></h2>
+              <div className="flex-row">
+                <div className="versions">
+                  <form className="form">
+                    <div className="form-group">
+                      <label className="control-label">Versions</label>
+                      <select className="form-control" id="versions" onChange={this.onChangeVersion}>
+                        <option>Select version</option>
+                        {module.versions.map((version, idx) => {
+                          return <OptionItems name={version} key={idx}/>
+                        })}
+                      </select>
+                    </div>
+                  </form>
+                </div>
+                <div className="actions">
+                  <a onClick={this.uninstall} href="#" style={{
+                    float: 'right'
+                  }} className="btn btn-red btn-sm">Uninstall</a>
+                </div>
+              </div>
             </div>
             <p>
               {module.description}
@@ -68,10 +111,10 @@ export default class ListItemDetails extends React.Component {
                 <p className="detail-tags">{module.author}</p>
               </section>
               <section id="content2">
-                <StaticList data={module.maintainers} />
+                <StaticList data={module.maintainers}/>
               </section>
               <section id="content3">
-                <StaticList data={module.dependencies} />
+                <StaticList data={module.dependencies}/>
               </section>
             </div>
           </section>

@@ -88,6 +88,17 @@ ipcMain.on('get-global-modules', (event) => {
   });
 });
 
+ipcMain.on('get-info-by-version', (event, pkgName, version) => {
+  shell.doCmd({
+    cmd: 'info',
+    pkgName: pkgName,
+    parameters: `@${version}`
+  }, (outout) => {
+    console.log(module);
+    event.sender.send('get-info-by-version-reply', module);
+  });
+});
+
 ipcMain.on('uninstall-module', (event, pkgName) => {
   shell.doCmd({
     cmd: 'uninstall',
