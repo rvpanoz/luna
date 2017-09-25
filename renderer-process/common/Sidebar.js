@@ -13,14 +13,6 @@ export default class Sidebar extends React.Component {
     return (
       <nav className="main-menu">
         <ul>
-          <li>
-            <Link to="/">
-              <i className="fa fa-home fa-2x"></i>
-              <span className="nav-text">
-                Dashboard
-              </span>
-            </Link>
-          </li>
           <li className="has-subnav">
             <Link to="/packages" href="#">
               <i className="fa fa-list fa-2x"></i>
