@@ -30,7 +30,7 @@ class Packages extends React.Component {
     });
   }
   componentWillUnmount() {
-    ipcRenderer.removeAllListeners('get-global-modules-reply');
+    ipcRenderer.removeAllListeners('get-package-info-reply');
   }
   render() {
     return (

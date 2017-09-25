@@ -93,9 +93,32 @@ ipcMain.on('get-info-by-version', (event, pkgName, version) => {
     cmd: 'info',
     pkgName: pkgName,
     parameters: `@${version}`
-  }, (outout) => {
-    console.log(module);
-    event.sender.send('get-info-by-version-reply', module);
+  }, (result) => {
+    console.log(result);
+    
+    // const userReposStr = outout.repository.url.replace('git+https://github.com/', '').replace('.git', '').replace('https://github.com/', '');
+    // let readMeUrl = `https://raw.githubusercontent.com/${userReposStr}/`;
+    //
+    // $.ajax({
+    //   url: `${readMeUrl}v${parsedData.version}/README.md`,
+    //   type: 'GET',
+    //   data: {},
+    //   complete: (xhr: any, statusText: any) => {
+    //     if (xhr.status === 404) {
+    //       $.ajax({
+    //         url: `${readMeUrl}${parsedData.version}/README.md`,
+    //         type: 'GET',
+    //         data: {},
+    //         complete: (subXhr: any, subStatusText: any) => {
+    //           callback(parsedData, subXhr.status !== 404 ? subXhr.responseText : undefined);
+    //         }
+    //       })
+    //     } else {
+    //       callback(parsedData, xhr.responseText);
+    //     }
+    //   }
+    // });
+
   });
 });
 
@@ -103,16 +126,15 @@ ipcMain.on('uninstall-module', (event, pkgName) => {
   shell.doCmd({
     cmd: 'uninstall',
     pkgName: pkgName,
-    parameters:'-g'
+    parameters: '-g'
   }, (result) => {
-    console.log(result);
     event.sender.send('uninstall-module-reply', result);
   });
 });
 
 ipcMain.on('get-package-info', (event, pkg) => {
   let pkgName = pkg.name;
-  if(!pkgName) {
+  if (!pkgName) {
     event.sender.send('get-package-info-reply', false);
     return;
   }
@@ -127,7 +149,7 @@ ipcMain.on('get-package-info', (event, pkg) => {
 
 ipcMain.on('get-latest-version', (event, pkg) => {
   let pkgName = pkg.name;
-  if(!pkgName) {
+  if (!pkgName) {
     event.sender.send('get-latest-version-reply', false);
     return;
   }
@@ -161,6 +183,6 @@ process.on('uncaughtException', function(err) {
 });
 
 // GPU AMD fix for Linux
-if(platform === 'linux') {
+if (platform === 'linux') {
   app.commandLine.appendSwitch('disable-gpu-compositing');
 }

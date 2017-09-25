@@ -45,7 +45,19 @@ export default class ListItemDetails extends React.Component {
   uninstall(e) {
     e.preventDefault();
     let module = this.props.module;
-    ipcRenderer.send('uninstall-module', module.name);
+    remote.dialog.showMessageBox(remote.getCurrentWindow(), {
+      type: 'question',
+      message: `This action will uninstall ${module.name} - ${module.version} from your system. \nAre you sure? `,
+      buttons: ['OK', 'CANCEL']
+    }, (btnIdx) => {
+      switch (btnIdx) {
+        case 0:
+          ipcRenderer.send('uninstall-module', module.name);
+          break;
+        default:
+          return;
+      }
+    });
   }
   onChangeVersion(e) {
     let version = e.target.value;
@@ -55,17 +67,20 @@ export default class ListItemDetails extends React.Component {
   componentDidMount() {
     let root = this.moduleDetails;
     if(root) {
-      ipcRenderer.on('get-info-by-version-reply', (event, module) => {
-        console.log(module);
+      ipcRenderer.on('get-info-by-version-reply', (event, info) => {
+        console.log(info);
       });
     }
+  }
+  componentWillUnmount() {
+    ipcRenderer.removeAllListeners('get-info-by-version-reply');
   }
   render() {
     let module = this.props.module;
     if (!module) {
       return null;
     }
-    console.log(module);
+    
     return (
       <div className="module-details" ref={(el) => {
           this.moduleDetails = el;

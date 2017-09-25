@@ -52,8 +52,11 @@ export default class List extends React.Component {
       this.updateModules(modules);
     });
     ipcRenderer.on('uninstall-module-reply', (event, result) => {
-      console.log(result);
+      console.log(result.removed);
     });
+  }
+  componentWillUnmount() {
+    ipcRenderer.removeAllListeners(['get-global-modules-reply', 'uninstall-module-reply']);
   }
   render() {
     let modules = this.state.modules;

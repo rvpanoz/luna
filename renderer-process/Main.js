@@ -17,7 +17,7 @@ export default class Main extends React.Component {
   render() {
     return (
       <main>
-        <Route path='/' component={Packages}/>
+        <Route exact path='/' component={Packages}/>
         <Route path='/settings' component={Settings}/>
       </main>
     )

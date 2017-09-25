@@ -14,7 +14,7 @@ export default class Sidebar extends React.Component {
       <nav className="main-menu">
         <ul>
           <li className="has-subnav">
-            <Link to="/packages" href="#">
+            <Link to="/" href="#">
               <i className="fa fa-list fa-2x"></i>
               <span className="nav-text">
                 Packages

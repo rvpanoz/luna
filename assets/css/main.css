@@ -454,12 +454,13 @@ ul.static-list {
 }
 ul.static-list li {
   list-style-type: none;
-  background-color: #EFEFEF;
-  border: 2px solid #FFFFFF;
+  background-color: #eef;
+  border: 2px solid #fff;
   padding: 5px;
+  cursor: pointer;
 }
 ul.static-list li:hover {
-  background-color: #FFFFFF;
+  background-color: #eee;
 }
 
 .detail-top .versions, .detail-top .latest-version, .detail-top > .actions {
