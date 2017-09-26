@@ -30,6 +30,10 @@ exports.doCmd = function(options = {}, cb) {
     cmd += ' ' + o.pkgName;
   }
 
+  if(o.version) {
+    cmd+=o.version;
+  }
+
   if (o.parameters) {
     cmd += ' ' + o.parameters;
   } else {
@@ -40,7 +44,7 @@ exports.doCmd = function(options = {}, cb) {
     //always return data in json format
     cmd += ' --json';
   }
-
+  
   const npm_exec = exec(`npm ${cmd}`, {
     maxBuffer: 1024 * 500
   }, (error, stderr, stdout) => {
@@ -63,5 +67,5 @@ exports.doCmd = function(options = {}, cb) {
 
   npm_exec.on('close', () => {
     console.log(`${cmd} finish execution.`);
-  })
+  });
 }

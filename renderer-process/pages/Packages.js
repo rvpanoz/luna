@@ -25,14 +25,15 @@ class Packages extends React.Component {
     }
   }
   componentDidMount() {
-    ipcRenderer.on('get-package-info-reply', (event, data) => {
-      this.setActive(data);
+    ipcRenderer.on('get-info-by-version-reply', (event, packageInfo) => {
+      this.setActive(packageInfo);
     });
   }
   componentWillUnmount() {
-    ipcRenderer.removeAllListeners('get-package-info-reply');
+    ipcRenderer.removeAllListeners('get-info-by-version-reply');
   }
   render() {
+    console.log(this.state.active);
     return (
       <div className="packages-page" ref="rootElement">
         <div className="row">

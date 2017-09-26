@@ -1,5 +1,6 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import AppLoader from './../common/AppLoader';
 
 const OptionItems = (props) => {
   return (
@@ -35,7 +36,7 @@ const StaticList = (props) => {
   )
 }
 
-export default class ListItemDetails extends React.Component {
+export default class ItemDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -49,7 +50,7 @@ export default class ListItemDetails extends React.Component {
     let module = this.props.module;
     remote.dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'question',
-      message: `This action will uninstall ${module.name} - ${module.version} from your system. \nAre you sure? `,
+      message: `This action will uninstall ${module.name} from your system. \nAre you sure? `,
       buttons: ['OK', 'CANCEL']
     }, (btnIdx) => {
       switch (btnIdx) {
@@ -63,12 +64,14 @@ export default class ListItemDetails extends React.Component {
   }
   onChangeVersion(e) {
     let version = e.target.value;
-    let module = this.props.module;
-    ipcRenderer.send('get-info-by-version', module.name, version);
+    ipcRenderer.send('get-info-by-version', this.props.module.name, version);
+  }
+  componentDidUpdate() {
+
   }
   componentDidMount() {
     let root = this.moduleDetails;
-    if(root) {
+    if (root) {
       ipcRenderer.on('get-info-by-version-reply', (event, info) => {
         console.log(info);
       });
@@ -85,20 +88,23 @@ export default class ListItemDetails extends React.Component {
 
     return (
       <div className="module-details" ref={(el) => {
-          this.moduleDetails = el;
-        }}>
+        this.moduleDetails = el;
+      }}>
         <div className="detail tile">
           <section className="detail-body">
             <div className="detail-top">
               <h2 className="detail-heading">{module.name}</h2>
               <p>
-                <label>Latest&nbsp;</label>&nbsp;v{module.version}
+                <label>Latest&nbsp;</label>&nbsp;v{module['dist-tags'].latest}
               </p>
               <div className="flex-row">
                 <div className="versions">
                   <form className="form">
                     <div className="form-group flex-row">
-                      <label className="control-label" style={{marginTop:'5px', marginRight:'15px'}}>Versions</label>
+                      <label className="control-label" style={{
+                        marginTop: '5px',
+                        marginRight: '15px'
+                      }}>Versions</label>
                       <select className="form-control" id="versions" onChange={this.onChangeVersion}>
                         <option>Select version</option>
                         {module.versions.map((version, idx) => {
@@ -115,9 +121,6 @@ export default class ListItemDetails extends React.Component {
                 </div>
               </div>
             </div>
-            <p className="mt">
-              {module.description}
-            </p>
             <div className="tab-wrap">
               <input id="tab1" type="radio" name="tabs" defaultChecked/>
               <label htmlFor="tab1">Details</label>
@@ -127,6 +130,9 @@ export default class ListItemDetails extends React.Component {
               <label htmlFor="tab3">Dependencies</label>
               <section id="details-content">
                 <p className="detail-tags">{module.author}</p>
+                <div className="detail-description">
+                  {module.description}
+                </div>
               </section>
               <section id="contributors-content">
                 <StaticList data={module.maintainers}/>

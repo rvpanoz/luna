@@ -101,6 +101,13 @@ hr {
   font-size: 20px;
 }
 
+table.packages tr {
+  cursor: pointer;
+}
+
+table.packages tr.selected {
+  border-right: 2px solid orange;
+}
 
 /** LAYOUT **/
 
@@ -337,8 +344,9 @@ p.help {
 }
 
 .modules-list {
+  padding: 10px;
+  overflow-x: hidden;
   overflow-y: auto;
-  height: 100vh;
 }
 
 .modules-list h6.title {
@@ -386,6 +394,19 @@ p.help {
   margin-top: 15px;
 }
 
+@media (max-width: 768px) {
+.detail-body .detail-top .versions {
+   width: 50%;
+ }
+}
+
+@media (max-width: 990px) {
+  .detail-body .detail-top .versions {
+    width: 40%;
+  }
+}
+
+
 .detail-heading {
   color: #2f3032;
   font-size: 1.5em;
@@ -428,16 +449,6 @@ p.help {
 .detail-links a:hover {
   background: #4785C7;
   text-decoration: none;
-}
-
-.detail-top .versions, .detail-top .latest-version, .detail-top > .actions {
-  position: relative;
-  display: block;
-  width:45%;
-}
-
-.detail-top .latest-version, .detail-top > .actions {
-  justify-content: center;
 }
 
 /** tabs **/

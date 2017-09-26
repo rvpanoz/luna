@@ -10,6 +10,21 @@ import React from 'react';
 import AppLoader from './../common/AppLoader';
 import ListItem from './ListItem';
 
+class SearchBar extends React.Component {
+  render() {
+    return (
+      <div className="container-fluid">
+        <div className="input-group">
+          <span className="input-group-addon">
+            <i className=" fa fa-search"></i>
+          </span>
+          <input className="form-control" name="search" placeholder="search" autoFocus="autofocus" type="search" id="search-user"></input>
+        </div>
+      </div>
+    )
+  }
+}
+
 export default class List extends React.Component {
   constructor(props) {
     super(props);
@@ -20,8 +35,10 @@ export default class List extends React.Component {
     this.clearSelection = this.clearSelection.bind(this);
   }
   clearSelection() {
-    let tableElement = $(this.modulesTable);
-    tableElement.find('tr.selected').removeClass('selected');
+    if(this.modulesList) {
+      let tableElement = $(this.modulesList);
+      tableElement.find('tr.selected').removeClass('selected');
+    }
   }
   updateModules(modules) {
     let rootElement = this.refs.rootElement;
@@ -34,7 +51,7 @@ export default class List extends React.Component {
     for (let z in modules) {
       let mod = {
         name: z,
-        info: modules[z]
+        version: modules[z].version
       }
       arr.push(mod);
     }
@@ -60,24 +77,22 @@ export default class List extends React.Component {
   }
   render() {
     let modules = this.state.modules;
-    if(!modules.length && this.state.loader == false) {
+    if (!modules.length && this.state.loader == false) {
       return null;
     }
     return (
       <AppLoader loading={this.state.loader}>
         <div className="modules-list">
           <h6 className="title">Global packages installed</h6>
-          <table className="table table-responsive" ref={(el) => {
-              this.modulesTable = el;
-            }}>
-            <tbody>
-              {modules.map((module, idx) => {
-                return <ListItem clearSelection={this.clearSelection} idx={idx} key={idx} {...module}/>
-              })}
-            </tbody>
-          </table>
+          <div className="list-group" ref={(el) => {
+            this.modulesList = el;
+          }}>
+            {modules.map((module, idx) => {
+              return <ListItem clearSelection={this.clearSelection} idx={idx} key={idx} {...module}/>
+            })}
+          </div>
         </div>
-    </AppLoader>
+      </AppLoader>
     )
   }
 }
