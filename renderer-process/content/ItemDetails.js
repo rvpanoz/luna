@@ -9,7 +9,9 @@ const OptionItems = (props) => {
 
 const StaticListItem = (props) => {
   return (
-    <li>{props.name}</li>
+    <p>
+      {props.name}
+    </p>
   )
 }
 
@@ -25,11 +27,11 @@ const StaticList = (props) => {
     data = items;
   }
   return (
-    <ul className="static-list">
+    <div className="static-list">
       {data.map((name, idx) => {
         return <StaticListItem key={idx} name={name}/>
       })}
-    </ul>
+    </div>
   )
 }
 
@@ -45,7 +47,19 @@ export default class ListItemDetails extends React.Component {
   uninstall(e) {
     e.preventDefault();
     let module = this.props.module;
-    ipcRenderer.send('uninstall-module', module.name);
+    remote.dialog.showMessageBox(remote.getCurrentWindow(), {
+      type: 'question',
+      message: `This action will uninstall ${module.name} - ${module.version} from your system. \nAre you sure? `,
+      buttons: ['OK', 'CANCEL']
+    }, (btnIdx) => {
+      switch (btnIdx) {
+        case 0:
+          ipcRenderer.send('uninstall-module', module.name);
+          break;
+        default:
+          return;
+      }
+    });
   }
   onChangeVersion(e) {
     let version = e.target.value;
@@ -55,17 +69,20 @@ export default class ListItemDetails extends React.Component {
   componentDidMount() {
     let root = this.moduleDetails;
     if(root) {
-      ipcRenderer.on('get-info-by-version-reply', (event, module) => {
-        console.log(module);
+      ipcRenderer.on('get-info-by-version-reply', (event, info) => {
+        console.log(info);
       });
     }
+  }
+  componentWillUnmount() {
+    ipcRenderer.removeAllListeners('get-info-by-version-reply');
   }
   render() {
     let module = this.props.module;
     if (!module) {
       return null;
     }
-    console.log(module);
+
     return (
       <div className="module-details" ref={(el) => {
           this.moduleDetails = el;
@@ -73,14 +90,15 @@ export default class ListItemDetails extends React.Component {
         <div className="detail tile">
           <section className="detail-body">
             <div className="detail-top">
-              <h2 className="detail-heading">{module.name}&nbsp;<span className="badge badge-orange version">
-                v{module.version}
-              </span></h2>
+              <h2 className="detail-heading">{module.name}</h2>
+              <p>
+                <label>Latest&nbsp;</label>&nbsp;v{module.version}
+              </p>
               <div className="flex-row">
                 <div className="versions">
                   <form className="form">
-                    <div className="form-group">
-                      <label className="control-label">Versions</label>
+                    <div className="form-group flex-row">
+                      <label className="control-label" style={{marginTop:'5px', marginRight:'15px'}}>Versions</label>
                       <select className="form-control" id="versions" onChange={this.onChangeVersion}>
                         <option>Select version</option>
                         {module.versions.map((version, idx) => {
@@ -97,7 +115,7 @@ export default class ListItemDetails extends React.Component {
                 </div>
               </div>
             </div>
-            <p>
+            <p className="mt">
               {module.description}
             </p>
             <div className="tab-wrap">
@@ -107,13 +125,13 @@ export default class ListItemDetails extends React.Component {
               <label htmlFor="tab2">Contributors</label>
               <input id="tab3" type="radio" name="tabs"/>
               <label htmlFor="tab3">Dependencies</label>
-              <section id="content1">
+              <section id="details-content">
                 <p className="detail-tags">{module.author}</p>
               </section>
-              <section id="content2">
+              <section id="contributors-content">
                 <StaticList data={module.maintainers}/>
               </section>
-              <section id="content3">
+              <section id="dependencies-content">
                 <StaticList data={module.dependencies}/>
               </section>
             </div>

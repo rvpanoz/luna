@@ -30,16 +30,16 @@ class Packages extends React.Component {
     });
   }
   componentWillUnmount() {
-    ipcRenderer.removeAllListeners('get-global-modules-reply');
+    ipcRenderer.removeAllListeners('get-package-info-reply');
   }
   render() {
     return (
       <div className="packages-page" ref="rootElement">
         <div className="row">
-          <div className="col-lg-4 col-md-4 col-sm-6">
+          <div className="col-lg-3 col-md-3 col-sm-4 col-xs-12">
             <List/>
           </div>
-          <div className="col-lg-8 col-md-8 col-sm-6">
+          <div className="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <ItemDetails module={this.state.active}/>
           </div>
         </div>
