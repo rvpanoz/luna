@@ -2,12 +2,12 @@
 Main css
 ************************/
 
-
-/* Fonts  */
-
+/** IMPORTS **/
 @import url("https://fonts.googleapis.com/css?family=Lato:400,900,400italic,700italic");
 @import url(font-awesome.min.css);
 @import url(extras.css);
+
+/** GENERAL STYLES **/
 body {
   margin: 0;
   color: #666666;
@@ -87,8 +87,22 @@ hr {
   border: 0;
 }
 
+.fa-2x {
+  font-size: 2em;
+}
 
-/** layout **/
+.fa {
+  position: relative;
+  display: table-cell;
+  width: 60px;
+  height: 36px;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 20px;
+}
+
+
+/** LAYOUT **/
 
 .wrapper {
   min-height: 100vh;
@@ -128,21 +142,7 @@ hr {
   justify-content: space-between;
 }
 
-/* Sidebar */
-
-.fa-2x {
-  font-size: 2em;
-}
-
-.fa {
-  position: relative;
-  display: table-cell;
-  width: 60px;
-  height: 36px;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 20px;
-}
+/* SIDEBAR */
 
 .main-menu:hover, nav.main-menu.expanded {
   width: 250px;
@@ -216,19 +216,6 @@ hr {
   bottom: 0;
 }
 
-.no-touch .scrollable.hover {
-  overflow-y: hidden;
-}
-
-.no-touch .scrollable.hover:hover {
-  overflow-y: auto;
-  overflow: visible;
-}
-
-a:hover, a:focus {
-  text-decoration: none;
-}
-
 nav {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -249,7 +236,7 @@ nav ul, nav li {
 }
 
 
-/** loader **/
+/** LOADER **/
 
 ::-webkit-scrollbar {
   width: 12px;
@@ -277,14 +264,6 @@ nav ul, nav li {
 
 #loader.show {
   display: block;
-}
-
-#app-message.show {
-  right: 0px;
-}
-
-#app-message.hide {
-  right: -100px;
 }
 
 #loader.hide {
@@ -333,6 +312,7 @@ nav ul, nav li {
   }
 }
 
+/** LISTS **/
 .modules {
   width: 100%;
   display: block;
@@ -369,8 +349,13 @@ p.help {
   background-position: right;
 }
 
+.static-list {
+  -moz-column-width: 100px;
+  -webkit-column-width: 100px;
+  column-width: 100px;
+}
 
-/** .detail item **/
+/** DETAILS **/
 
 .detail {
   margin: 0 auto;
@@ -397,7 +382,7 @@ p.help {
   padding: 24px 30px 0;
 }
 
-.detail-body p {
+.detail-body .detail-top p {
   margin-top: 15px;
 }
 
@@ -445,30 +430,69 @@ p.help {
   text-decoration: none;
 }
 
-ul.static-list {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-}
-ul.static-list li {
-  list-style-type: none;
-  background-color: #eef;
-  border: 2px solid #fff;
-  padding: 5px;
-  cursor: pointer;
-}
-ul.static-list li:hover {
-  background-color: #eee;
-}
-
 .detail-top .versions, .detail-top .latest-version, .detail-top > .actions {
   position: relative;
   display: block;
-  width:30%;
+  width:45%;
 }
 
 .detail-top .latest-version, .detail-top > .actions {
   justify-content: center;
+}
+
+/** tabs **/
+.tab-wrap section {
+  display: none;
+  padding: 20px 0 0;
+  border-top: 1px solid #ddd;
+}
+
+.tab-wrap input {
+  display: none;
+}
+
+.tab-wrap label {
+  display: inline-block;
+  margin: 0 0 -1px;
+  padding: 15px 25px;
+  font-weight: 600;
+  text-align: center;
+  color: #bbb;
+  border: 1px solid transparent;
+}
+
+.tab-wrap label:before {
+  font-family: fontawesome;
+  font-weight: normal;
+  margin-right: 10px;
+}
+
+.tab-wrap label[for*='1']:before {
+  content: '\f1cb';
+}
+
+.tab-wrap label[for*='2']:before {
+  content: '\f17d';
+}
+
+.tab-wrap label[for*='3']:before {
+  content: '\f16b';
+}
+
+.tab-wrap label:hover {
+  color: #888;
+  cursor: pointer;
+}
+
+.tab-wrap input:checked + label {
+  color: #555;
+  border: 1px solid #ddd;
+  border-top: 2px solid orange;
+  border-bottom: 1px solid #fff;
+}
+
+.tab-wrap #tab1:checked ~ #details-content,
+.tab-wrap #tab2:checked ~ #contributors-content,
+.tab-wrap #tab3:checked ~ #dependencies-content {
+  display: block;
 }
