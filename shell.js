@@ -4,19 +4,10 @@ const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
 const exec = cp.exec;
-
+const utils = require('./utils');
 const NPM_COMMANDS = [
-  'ls', 'info'
+  'ls', 'view', 'uninstall', 'update'
 ];
-
-function isJson(str) {
-  try {
-    JSON.parse(str);
-  } catch (e) {
-    return false;
-  }
-  return true;
-}
 
 exports.doCmd = function(options = {}, cb) {
   let o = options;
@@ -43,7 +34,7 @@ exports.doCmd = function(options = {}, cb) {
     //always return data in json format
     cmd += ' --json';
   }
-  console.log(cmd);
+
   const npm_exec = exec(`npm ${cmd}`, {
     maxBuffer: 1024 * 500
   }, (error, stderr, stdout) => {
@@ -53,7 +44,7 @@ exports.doCmd = function(options = {}, cb) {
   });
 
   npm_exec.stdout.on('data', (outout) => {
-    if(isJson(outout)) {
+    if(utils.isJson(outout)) {
       cb(JSON.parse(outout));
     } else {
       return null;

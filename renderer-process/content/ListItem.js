@@ -21,7 +21,7 @@ export default class ListItem extends React.Component {
   }
   onItemClick(e) {
     e.preventDefault();
-    ipcRenderer.send('get-info-by-version', this.props.name, this.props.version);
+    ipcRenderer.send('view-by-version', this.props.name, this.props.version);
     return false;
   }
   render() {

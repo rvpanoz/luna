@@ -24,7 +24,7 @@ class Packages extends React.Component {
     });
   }
   componentDidMount() {
-    ipcRenderer.on('get-info-by-version-reply', (event, packageData) => {
+    ipcRenderer.on('view-by-version-reply', (event, packageData) => {
       let root = this.refs.rootElement;
       if(root) {
         this.setActive(packageData);
@@ -32,7 +32,7 @@ class Packages extends React.Component {
     });
   }
   componentWillUnmount() {
-    ipcRenderer.removeAllListeners('get-info-by-version-reply');
+    ipcRenderer.removeAllListeners('view-by-version-reply');
   }
   render() {
     return (
@@ -42,7 +42,7 @@ class Packages extends React.Component {
             <List setActive={this.setActive}/>
           </div>
           <div className="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <ItemDetails module={this.state.active}/>
+            <ItemDetails packageItem={this.state.active} />
           </div>
         </div>
       </div>
