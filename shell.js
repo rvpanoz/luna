@@ -1,10 +1,9 @@
 //run shell commands
 
-const cp = require('child_process');
-const exec = cp.exec;
-
 const fs = require('fs');
 const path = require('path');
+const cp = require('child_process');
+const exec = cp.exec;
 
 const NPM_COMMANDS = [
   'ls', 'info'
@@ -26,8 +25,8 @@ exports.doCmd = function(options = {}, cb) {
   //list global modules if no cmd passed
   cmd = o.cmd || 'ls ';
 
-  if (o.pkgName && cmd !== 'ls') {
-    cmd += ' ' + o.pkgName;
+  if (o.packageName && cmd !== 'ls') {
+    cmd += ' ' + o.packageName;
   }
 
   if(o.version) {
@@ -44,7 +43,7 @@ exports.doCmd = function(options = {}, cb) {
     //always return data in json format
     cmd += ' --json';
   }
-  
+  console.log(cmd);
   const npm_exec = exec(`npm ${cmd}`, {
     maxBuffer: 1024 * 500
   }, (error, stderr, stdout) => {
@@ -55,9 +54,9 @@ exports.doCmd = function(options = {}, cb) {
 
   npm_exec.stdout.on('data', (outout) => {
     if(isJson(outout)) {
-      cb(JSON.parse(outout))
+      cb(JSON.parse(outout));
     } else {
-      cb();
+      return null;
     }
   });
 

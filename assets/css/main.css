@@ -2,12 +2,15 @@
 Main css
 ************************/
 
+
 /** IMPORTS **/
+
 @import url("https://fonts.googleapis.com/css?family=Lato:400,900,400italic,700italic");
 @import url(font-awesome.min.css);
 @import url(extras.css);
 
 /** GENERAL STYLES **/
+
 body {
   margin: 0;
   color: #666666;
@@ -67,7 +70,7 @@ a {
   text-decoration: none;
 }
 
-a:hover, a:active, a:focus {
+a:hover, a:focus {
   outline: 0;
   text-decoration: none;
 }
@@ -87,27 +90,6 @@ hr {
   border: 0;
 }
 
-.fa-2x {
-  font-size: 2em;
-}
-
-.fa {
-  position: relative;
-  display: table-cell;
-  width: 60px;
-  height: 36px;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 20px;
-}
-
-table.packages tr {
-  cursor: pointer;
-}
-
-table.packages tr.selected {
-  border-right: 2px solid orange;
-}
 
 /** LAYOUT **/
 
@@ -122,7 +104,7 @@ table.packages tr.selected {
 
 .content {
   display: block;
-  margin-left: 60px;
+  margin-left: 85px;
   overflow-x: hidden;
   min-height: 100vh;
 }
@@ -149,12 +131,8 @@ table.packages tr.selected {
   justify-content: space-between;
 }
 
-/* SIDEBAR */
 
-.main-menu:hover, nav.main-menu.expanded {
-  width: 250px;
-  overflow: visible;
-}
+/* SIDEBAR */
 
 .main-menu {
   background: #fbfbfb;
@@ -164,7 +142,7 @@ table.packages tr.selected {
   bottom: 0;
   height: 100%;
   left: 0;
-  width: 60px;
+  width: 75px;
   overflow: hidden;
   -webkit-transition: width .05s linear;
   transition: width .05s linear;
@@ -182,7 +160,7 @@ table.packages tr.selected {
 .main-menu li {
   position: relative;
   display: block;
-  width: 250px;
+  width: 75px;
 }
 
 .main-menu li>a {
@@ -200,10 +178,11 @@ table.packages tr.selected {
 }
 
 .main-menu .nav-icon {
+  margin: 5px;
   position: relative;
-  display: table-cell;
+  display: block;
   width: 60px;
-  height: 36px;
+  height: 60px;
   text-align: center;
   vertical-align: middle;
   font-size: 18px;
@@ -213,7 +192,7 @@ table.packages tr.selected {
   position: relative;
   display: table-cell;
   vertical-align: middle;
-  width: 190px;
+  width: 75px;
   font-family: 'Lato';
 }
 
@@ -235,11 +214,6 @@ nav ul, nav li {
   outline: 0;
   margin: 0;
   padding: 0;
-}
-
-.main-menu li:hover>a, nav.main-menu li.active>a {
-  color: #fff;
-  background-color: #5fa2db;
 }
 
 
@@ -319,7 +293,9 @@ nav ul, nav li {
   }
 }
 
+
 /** LISTS **/
+
 .modules {
   width: 100%;
   display: block;
@@ -363,6 +339,7 @@ p.help {
   column-width: 100px;
 }
 
+
 /** DETAILS **/
 
 .detail {
@@ -395,9 +372,9 @@ p.help {
 }
 
 @media (max-width: 768px) {
-.detail-body .detail-top .versions {
-   width: 50%;
- }
+  .detail-body .detail-top .versions {
+    width: 50%;
+  }
 }
 
 @media (max-width: 990px) {
@@ -405,7 +382,6 @@ p.help {
     width: 40%;
   }
 }
-
 
 .detail-heading {
   color: #2f3032;
@@ -451,7 +427,9 @@ p.help {
   text-decoration: none;
 }
 
+
 /** tabs **/
+
 .tab-wrap section {
   display: none;
   padding: 20px 0 0;
@@ -495,15 +473,13 @@ p.help {
   cursor: pointer;
 }
 
-.tab-wrap input:checked + label {
+.tab-wrap input:checked+label {
   color: #555;
   border: 1px solid #ddd;
   border-top: 2px solid orange;
   border-bottom: 1px solid #fff;
 }
 
-.tab-wrap #tab1:checked ~ #details-content,
-.tab-wrap #tab2:checked ~ #contributors-content,
-.tab-wrap #tab3:checked ~ #dependencies-content {
+.tab-wrap #tab1:checked~#details-content, .tab-wrap #tab2:checked~#contributors-content, .tab-wrap #tab3:checked~#dependencies-content {
   display: block;
 }

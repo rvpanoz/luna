@@ -15,9 +15,8 @@ export default class Sidebar extends React.Component {
         <ul>
           <li className="has-subnav">
             <Link to="/" href="#">
-              <i className="fa fa-list fa-2x"></i>
-              <span className="nav-text">
-                Packages
+              <span className="nav-icon">
+                <img src="./assets/images/npm.png" alt="npm"/>
               </span>
             </Link>
           </li>
@@ -26,9 +25,8 @@ export default class Sidebar extends React.Component {
         <ul className="settings">
           <li>
             <Link to="/settings">
-              <i className="fa fa-cog fa-2x"></i>
-              <span className="nav-text">
-                Settings
+              <span className="nav-icon">
+                <i className="fa fa-cog"></i>
               </span>
             </Link>
           </li>

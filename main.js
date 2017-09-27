@@ -76,7 +76,6 @@ function createMainWindow() {
     });
   }
 
-  //on close event
   MainWindow.on('closed', () => {
     MainWindow = null;
   });
@@ -85,26 +84,26 @@ function createMainWindow() {
 /**
  * IPC events
  */
-ipcMain.on('get-global-modules', (event) => {
-  shell.doCmd({}, (modules) => {
-    event.sender.send('get-global-modules-reply', modules);
+ipcMain.on('get-global-packages', (event) => {
+  shell.doCmd({}, (packages) => {
+    event.sender.send('get-global-packages-reply', packages);
   });
 });
 
 ipcMain.on('get-info-by-version', (event, packageName, packageVersion) => {
   shell.doCmd({
     cmd: 'info',
-    pkgName: packageName,
+    packageName: packageName,
     version: `@${packageVersion}`
   }, (result) => {
     event.sender.send('get-info-by-version-reply', result);
   });
 });
 
-ipcMain.on('uninstall-module', (event, pkgName) => {
+ipcMain.on('uninstall-module', (event, packageName) => {
   shell.doCmd({
     cmd: 'uninstall',
-    pkgName: pkgName,
+    packageName: packageName,
     parameters: '-g'
   }, (result) => {
     event.sender.send('uninstall-module-reply', result);
@@ -112,17 +111,13 @@ ipcMain.on('uninstall-module', (event, pkgName) => {
 });
 
 ipcMain.on('get-latest-version', (event, pkg) => {
-  let pkgName = pkg.name;
-  if (!pkgName) {
-    event.sender.send('get-latest-version-reply', false);
-    return;
-  }
+  let packageName = pkg.name;
   shell.doCmd({
     cmd: 'view',
-    pkgName: pkgName,
+    packageName: packageName,
     parameters: 'version'
-  }, (data) => {
-    event.sender.send('get-latest-version-reply', data);
+  }, (result) => {
+    event.sender.send('get-latest-version-reply', result);
   });
 });
 
@@ -139,7 +134,7 @@ app.on('ready', () => {
   createMainWindow();
 
   if (process.env.NODE_ENV === 'development') {
-    //load react devtools extension
+    //load react devtools extension when app is ready
     BrowserWindow.addDevToolsExtension(
       '/home/rvpanoz/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.2_0'
     );

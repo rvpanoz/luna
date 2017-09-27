@@ -21,13 +21,8 @@ export default class ListItem extends React.Component {
   }
   onItemClick(e) {
     e.preventDefault();
-    let element = $(e.target);
-    let name = this.props.name;
-    let version = this.props.version;
-
-    this.props.clearSelection();
-    element.closest('tr').addClass('selected');
-    ipcRenderer.send('get-info-by-version', name, version);
+    ipcRenderer.send('get-info-by-version', this.props.name, this.props.version);
+    return false;
   }
   render() {
     return (

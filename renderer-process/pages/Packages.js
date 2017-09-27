@@ -18,27 +18,28 @@ class Packages extends React.Component {
     }
     this.setActive = this.setActive.bind(this);
   }
-  setActive(module) {
-    let root = this.refs.rootElement;
-    if(root) {
-      this.setState({active: module});
-    }
+  setActive(packageData) {
+    this.setState({
+      active: packageData
+    });
   }
   componentDidMount() {
-    ipcRenderer.on('get-info-by-version-reply', (event, packageInfo) => {
-      this.setActive(packageInfo);
+    ipcRenderer.on('get-info-by-version-reply', (event, packageData) => {
+      let root = this.refs.rootElement;
+      if(root) {
+        this.setActive(packageData);
+      }
     });
   }
   componentWillUnmount() {
     ipcRenderer.removeAllListeners('get-info-by-version-reply');
   }
   render() {
-    console.log(this.state.active);
     return (
       <div className="packages-page" ref="rootElement">
         <div className="row">
           <div className="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-            <List/>
+            <List setActive={this.setActive}/>
           </div>
           <div className="col-lg-9 col-md-9 col-sm-8 col-xs-12">
             <ItemDetails module={this.state.active}/>
