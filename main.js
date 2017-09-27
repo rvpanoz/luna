@@ -14,14 +14,15 @@ const cwd = process.cwd();
 const NODE_ENV = process.env.NODE_ENV;
 const config = require('./config');
 const electronStore = require('electron-store');
+const request = require('request');
 const shell = require('./shell');
 const winston = require('winston');
 
 let platform = process.platform;
-let mainWindow = null;
+let MainWindow = null;
 let debug = /--debug/.test(process.argv[4]);
 
-global.logger = new winston.Logger({
+const logger = new winston.Logger({
   level: 'info',
   transports: [
     new(winston.transports.Console)(),
@@ -31,6 +32,7 @@ global.logger = new winston.Logger({
   ]
 });
 
+//hot-reload
 if (NODE_ENV === 'development' && debug) {
   /** https://github.com/yan-foto/electron-reload - hard reset, starts a new process **/
   require('electron-reload')(cwd, {
@@ -46,12 +48,13 @@ const store = new electronStore();
 // so we can call them via remote.getGlobal(name) in a renderer process
 global.store = store;
 global.config = config;
+global.logger = logger;
 
 function createMainWindow() {
   let screenSize = electron.screen.getPrimaryDisplay().size;
 
   //create main window
-  mainWindow = new BrowserWindow({
+  MainWindow = new BrowserWindow({
     'min-width': 830,
     height: screenSize.height,
     show: true,
@@ -59,108 +62,65 @@ function createMainWindow() {
   });
 
   //load index.html
-  mainWindow.loadURL('file://' + __dirname + '/index.html');
+  MainWindow.loadURL('file://' + __dirname + '/index.html');
 
   if (process.env.NODE_ENV === 'development' && debug) {
     //open devtools
-    mainWindow.openDevTools();
+    MainWindow.openDevTools();
 
     //inspect element on right click
     ipcMain.on('inspect-element', function(event, coords) {
-      if (mainWindow) {
+      if (MainWindow) {
         MainWindow.inspectElement(coords.x, coords.y);
       }
     });
   }
 
-  //on close event
-  mainWindow.on('closed', () => {
-    mainWindow = null;
+  MainWindow.on('closed', () => {
+    MainWindow = null;
   });
 }
 
 /**
  * IPC events
  */
-ipcMain.on('get-global-modules', (event) => {
-  shell.doCmd({}, (modules) => {
-    event.sender.send('get-global-modules-reply', modules);
+ipcMain.on('get-global-packages', (event) => {
+  shell.doCmd({}, (packages) => {
+    event.sender.send('get-global-packages-reply', packages);
   });
 });
 
-ipcMain.on('get-info-by-version', (event, pkgName, version) => {
+ipcMain.on('get-info-by-version', (event, packageName, packageVersion) => {
   shell.doCmd({
     cmd: 'info',
-    pkgName: pkgName,
-    parameters: `@${version}`
+    packageName: packageName,
+    version: `@${packageVersion}`
   }, (result) => {
-    console.log(result);
-    
-    // const userReposStr = outout.repository.url.replace('git+https://github.com/', '').replace('.git', '').replace('https://github.com/', '');
-    // let readMeUrl = `https://raw.githubusercontent.com/${userReposStr}/`;
-    //
-    // $.ajax({
-    //   url: `${readMeUrl}v${parsedData.version}/README.md`,
-    //   type: 'GET',
-    //   data: {},
-    //   complete: (xhr: any, statusText: any) => {
-    //     if (xhr.status === 404) {
-    //       $.ajax({
-    //         url: `${readMeUrl}${parsedData.version}/README.md`,
-    //         type: 'GET',
-    //         data: {},
-    //         complete: (subXhr: any, subStatusText: any) => {
-    //           callback(parsedData, subXhr.status !== 404 ? subXhr.responseText : undefined);
-    //         }
-    //       })
-    //     } else {
-    //       callback(parsedData, xhr.responseText);
-    //     }
-    //   }
-    // });
-
+    event.sender.send('get-info-by-version-reply', result);
   });
 });
 
-ipcMain.on('uninstall-module', (event, pkgName) => {
+ipcMain.on('uninstall-module', (event, packageName) => {
   shell.doCmd({
     cmd: 'uninstall',
-    pkgName: pkgName,
+    packageName: packageName,
     parameters: '-g'
   }, (result) => {
     event.sender.send('uninstall-module-reply', result);
   });
 });
 
-ipcMain.on('get-package-info', (event, pkg) => {
-  let pkgName = pkg.name;
-  if (!pkgName) {
-    event.sender.send('get-package-info-reply', false);
-    return;
-  }
+ipcMain.on('get-latest-version', (event, pkg) => {
+  let packageName = pkg.name;
   shell.doCmd({
-    cmd: 'info',
-    pkgName: pkgName,
-    parameters: false
-  }, (data) => {
-    event.sender.send('get-package-info-reply', data);
+    cmd: 'view',
+    packageName: packageName,
+    parameters: 'version'
+  }, (result) => {
+    event.sender.send('get-latest-version-reply', result);
   });
 });
 
-ipcMain.on('get-latest-version', (event, pkg) => {
-  let pkgName = pkg.name;
-  if (!pkgName) {
-    event.sender.send('get-latest-version-reply', false);
-    return;
-  }
-  shell.doCmd({
-    cmd: 'view',
-    pkgName: pkgName,
-    parameters: 'version'
-  }, (data) => {
-    event.sender.send('get-latest-version-reply', data);
-  });
-})
 /**
  * register app events
  */
@@ -172,6 +132,13 @@ app.on('window-all-closed', () => {
 
 app.on('ready', () => {
   createMainWindow();
+
+  if (process.env.NODE_ENV === 'development') {
+    //load react devtools extension when app is ready
+    BrowserWindow.addDevToolsExtension(
+      '/home/rvpanoz/.config/google-chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.2_0'
+    );
+  }
 });
 
 app.on('gpu-process-crashed', (event, killed) => {
