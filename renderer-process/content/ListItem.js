@@ -2,6 +2,7 @@
 
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import Semver from 'semver-compare';
 
 const ModuleLoader = (props) => {
   return (
@@ -28,7 +29,7 @@ export default class ListItem extends React.Component {
     return (
       <a href="#" className="list-group-item" onClick={this.onItemClick} ref={`root-${this.props.idx}`}>
         {this.props.name}
-        <span className="badge badge-green version">
+        <span className={`badge badge-green`}>
           v{this.props.version}
         </span>
       </a>

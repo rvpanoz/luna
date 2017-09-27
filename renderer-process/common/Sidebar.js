@@ -24,11 +24,7 @@ export default class Sidebar extends React.Component {
 
         <ul className="settings">
           <li>
-            <Link to="/settings">
-              <span className="nav-icon">
-                <i className="fa fa-cog"></i>
-              </span>
-            </Link>
+            
           </li>
         </ul>
       </nav>

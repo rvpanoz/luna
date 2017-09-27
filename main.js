@@ -100,11 +100,30 @@ ipcMain.on('view-by-version', (event, packageName, packageVersion) => {
   });
 });
 
+ipcMain.on('install-by-version', (event, packageName, version) => {
+  shell.doCmd({
+    cmd: 'install',
+    packageName: packageName,
+    version: `@${version}`,
+  }, (result) => {
+    event.sender.send('install-by-version-reply', result);
+  });
+});
+
+ipcMain.on('update-package', (event, packageName) => {
+  shell.doCmd({
+    cmd: 'install',
+    packageName: packageName,
+    version: '@latest',
+  }, (result) => {
+    event.sender.send('update-package-reply', result);
+  });
+});
+
 ipcMain.on('uninstall-package', (event, packageName) => {
   shell.doCmd({
     cmd: 'uninstall',
-    packageName: packageName,
-    parameters: '-g'
+    packageName: packageName
   }, (result) => {
     event.sender.send('uninstall-package-reply', result);
   });

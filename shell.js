@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const cp = require('child_process');
-const exec = cp.exec;
+const spawn = cp.spawn;
 const utils = require('./utils');
 const NPM_COMMANDS = [
   'ls', 'view', 'uninstall', 'update'
@@ -11,51 +11,43 @@ const NPM_COMMANDS = [
 
 exports.doCmd = function(options = {}, cb) {
   let o = options;
-  let cmd, pkgName, parameters;
+  let cmd, pkgName, parameters = '-g --depth=0';
 
   //list global modules if no cmd passed
-  cmd = o.cmd || 'ls ';
+  cmd = o.cmd || 'ls';
 
-  if (o.packageName && cmd !== 'ls') {
-    cmd += ' ' + o.packageName;
-  }
-
-  if(o.version) {
-    cmd+=o.version;
-  }
+  // if (o.packageName && cmd !== 'list') {
+  //   cmd += ' ' + o.packageName;
+  // }
+  //
+  // if(o.version) {
+  //   cmd+=o.version;
+  // }
 
   if (o.parameters) {
-    cmd += ' ' + o.parameters;
-  } else {
-    cmd += ' -g --depth=0';
+    parameters = o.parameters
   }
 
-  if (cmd !== 'uninstall') {
-    //always return data in json format
-    cmd += ' --json';
-  }
+  // if (cmd !== 'uninstall') {
+  //   cmd += '--json';
+  // }
 
-  const npm_exec = exec(`npm ${cmd}`, {
-    maxBuffer: 1024 * 500
-  }, (error, stderr, stdout) => {
-    if (error) {
-      throw new Error(error);
-    }
-  });
+  const npm_exec = spawn(`npm ${cmd}`, [parameters]);
 
   npm_exec.stdout.on('data', (outout) => {
-    if(utils.isJson(outout)) {
-      cb(JSON.parse(outout));
-    } else {
-      return null;
-    }
+    console.log('stdout: ' + outout.toString());
+    // if(utils.isJson(outout)) {
+    //   cb(JSON.parse(outout));
+    // } else {
+    //   return null;
+    // }
   });
 
   npm_exec.stderr.on('data', (err) => {
-    throw new Error(err);
+    console.log(err);
   });
 
   npm_exec.on('close', () => {
-    console.log(`${cmd} finish execution.`);
+    console.log(arguments);
   });
 }

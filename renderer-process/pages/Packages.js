@@ -35,6 +35,7 @@ class Packages extends React.Component {
     ipcRenderer.removeAllListeners('view-by-version-reply');
   }
   render() {
+    // <AppLoader loading={this.state.loader}></AppLoader>
     return (
       <div className="packages-page" ref="rootElement">
         <div className="row">

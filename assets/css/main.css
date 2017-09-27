@@ -65,6 +65,7 @@ p {
 
 a {
   text-decoration: none;
+  cursor: pointer;
 }
 
 a:hover, a:focus {
@@ -120,6 +121,11 @@ hr {
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+}
+
+.flex-row div {
+  display: inline-flex;
+  align-items: center;
 }
 
 .flex-column {
@@ -373,19 +379,16 @@ p.help {
 }
 
 .detail-body .detail-top .version {
+  width: 20%;
   padding: 4px;
 }
 
-@media (max-width: 768px) {
-  .detail-body .detail-top .versions {
-    width: 50%;
-  }
+.detail-body .detail-top .actions {
+  width: 40%;
 }
 
-@media (max-width: 990px) {
-  .detail-body .detail-top .versions {
-    width: 40%;
-  }
+.detail-body .detail-top .versions {
+  width: 30%;
 }
 
 .detail-heading {
