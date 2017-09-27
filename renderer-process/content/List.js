@@ -7,6 +7,7 @@
 
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import utils from './../../utils';
 import AppLoader from './../common/AppLoader';
 import ListItem from './ListItem';
 
@@ -32,34 +33,18 @@ export default class List extends React.Component {
       loader: false,
       packages: []
     }
-    this.clearSelection = this.clearSelection.bind(this);
     this.updatePackages = this.updatePackages.bind(this);
   }
-  clearSelection() {
-    //todo..
-  }
   updatePackages(packages) {
-    let data = this.parse(packages);
+    let data = utils.parse(packages);
     this.setState({
       packages: data, loader: false
     }, () => {
       let first = data[0];
       if(first) {
-        ipcRenderer.send('get-info-by-version', first.name, first.version);
+        ipcRenderer.send('view-by-version', first.name, first.version);
       }
     });
-  }
-  parse(data) {
-    let packages = data.dependencies;
-    let arr = [];
-    for (let z in packages) {
-      let mod = {
-        name: z,
-        version: packages[z].version
-      }
-      arr.push(mod);
-    }
-    return arr;
   }
   componentWillMount() {
     this.setState({
@@ -86,13 +71,11 @@ export default class List extends React.Component {
     }
     return (
       <AppLoader loading={this.state.loader}>
-        <div className="packages-list" ref={(el)=>{
-            this.rootElement = el;
-          }}>
-          <h6 className="title">Global packages installed</h6>
+        <div className="packages-list">
+          <h4 className="title">Global packages installed</h4>
           <div className="list-group">
             {packages.map((pkg, idx) => {
-              return <ListItem clearSelection={this.clearSelection} idx={idx} key={idx} {...pkg}/>
+              return <ListItem idx={idx} key={idx} {...pkg}/>
             })}
           </div>
         </div>

@@ -1,123 +1,96 @@
+/**
+ * ItemDetails component
+ */
+
+'use strict';
+
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import Semver from 'semver-compare';
 import AppLoader from './../common/AppLoader';
-
-const OptionItems = (props) => {
-  return (
-    <option id={props.idx}>{props.name}</option>
-  )
-}
-
-const StaticListItem = (props) => {
-  return (
-    <p>
-      {props.name}
-    </p>
-  )
-}
-
-const StaticList = (props) => {
-  let items = props.data,
-    data;
-  if (Object.prototype.toString.call(items) !== '[object Array]') {
-    data = [];
-    for (let z in items) {
-      data.push(`${z} - ${items[z]}`);
-    }
-  } else {
-    data = items;
-  }
-  return (
-    <div className="static-list">
-      {data.map((name, idx) => {
-        return <StaticListItem key={idx} name={name}/>
-      })}
-    </div>
-  )
-}
+import {
+  OptionItems,
+  StaticList
+} from './../common/Statics';
 
 export default class ItemDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: null
+      needsUpdate: false
     }
+    this.update = this.update.bind(this);
     this.uninstall = this.uninstall.bind(this);
-    this.onChangeVersion = this.onChangeVersion.bind(this);
   }
-  uninstall(e) {
+  update(e) {
     e.preventDefault();
-    let module = this.props.module;
+    let packageItem = this.props.packageItem;
     remote.dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'question',
-      message: `This action will uninstall ${module.name} from your system. \nAre you sure? `,
+      message: `This action will update ${packageItem.name} to the latest version. \nAre you sure? `,
       buttons: ['OK', 'CANCEL']
     }, (btnIdx) => {
       switch (btnIdx) {
         case 0:
-          ipcRenderer.send('uninstall-module', module.name);
+          ipcRenderer.send('update-package', packageItem.name);
           break;
         default:
           return;
       }
     });
   }
-  onChangeVersion(e) {
-    let version = e.target.value;
-    ipcRenderer.send('get-info-by-version', this.props.module.name, version);
-  }
-  componentDidUpdate() {
+  uninstall(e) {
+    e.preventDefault();
+    let packageItem = this.props.packageItem;
 
+    remote.dialog.showMessageBox(remote.getCurrentWindow(), {
+      type: 'question',
+      message: `This action will uninstall ${packageItem.name} from your system. \nAre you sure? `,
+      buttons: ['OK', 'CANCEL']
+    }, (btnIdx) => {
+      switch (btnIdx) {
+        case 0:
+          ipcRenderer.send('uninstall-package', packageItem.name);
+          break;
+        default:
+          return;
+      }
+    });
   }
-  componentDidMount() {
-    let root = this.moduleDetails;
-    if (root) {
-      ipcRenderer.on('get-info-by-version-reply', (event, info) => {
-        console.log(info);
+  componentWillReceiveProps(props) {
+    let activePkg = props.packageItem, diff = 0;
+    let latestVersion = activePkg['dist-tags'].latest;
+    let installedVersion = activePkg.version;
+
+    //compare versions
+    diff = Semver(latestVersion, installedVersion);
+    if(diff === 1) {
+      this.setState({
+        needsUpdate: true
       });
     }
   }
-  componentWillUnmount() {
-    ipcRenderer.removeAllListeners('get-info-by-version-reply');
-  }
   render() {
-    let module = this.props.module;
-    if (!module) {
+    let packageItem = this.props.packageItem;
+    if (!packageItem) {
       return null;
     }
 
+    let latestVersion = packageItem['dist-tags'].latest;
+    let currentVersion = packageItem.version;
+
     return (
-      <div className="module-details" ref={(el) => {
-        this.moduleDetails = el;
-      }}>
+      <div className="package-details">
         <div className="detail tile">
           <section className="detail-body">
             <div className="detail-top">
-              <h2 className="detail-heading">{module.name}</h2>
-              <p>
-                <label>Latest&nbsp;</label>&nbsp;v{module['dist-tags'].latest}
-              </p>
+              <h2 className="detail-heading">{packageItem.name}</h2>
               <div className="flex-row">
-                <div className="versions">
-                  <form className="form">
-                    <div className="form-group flex-row">
-                      <label className="control-label" style={{
-                        marginTop: '5px',
-                        marginRight: '15px'
-                      }}>Versions</label>
-                      <select className="form-control" id="versions" onChange={this.onChangeVersion}>
-                        <option>Select version</option>
-                        {module.versions.map((version, idx) => {
-                          return <OptionItems name={version} key={idx}/>
-                        })}
-                      </select>
-                    </div>
-                  </form>
-                </div>
+                <div className="version">Latest:&nbsp;v{latestVersion}&nbsp;
+                  <a href="#" className={(this.state.needsUpdate) ? 'show' : 'hide'}
+                  onClick={this.update}>Update</a></div>
                 <div className="actions">
-                  <a onClick={this.uninstall} href="#" style={{
-                    float: 'right'
-                  }} className="btn btn-red btn-sm">Uninstall</a>
+                  <a onClick={this.uninstall} href="#" className="btn btn-red btn-sm">Uninstall</a>
                 </div>
               </div>
             </div>
@@ -129,16 +102,17 @@ export default class ItemDetails extends React.Component {
               <input id="tab3" type="radio" name="tabs"/>
               <label htmlFor="tab3">Dependencies</label>
               <section id="details-content">
-                <p className="detail-tags">{module.author}</p>
+                <p className="detail-tags">{packageItem.author}</p>
+                <div className="version">v{currentVersion}</div>
                 <div className="detail-description">
-                  {module.description}
+                  {packageItem.description}
                 </div>
               </section>
               <section id="contributors-content">
-                <StaticList data={module.maintainers}/>
+                <StaticList data={packageItem.maintainers}/>
               </section>
               <section id="dependencies-content">
-                <StaticList data={module.dependencies}/>
+                <StaticList data={packageItem.dependencies}/>
               </section>
             </div>
           </section>

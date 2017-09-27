@@ -90,34 +90,23 @@ ipcMain.on('get-global-packages', (event) => {
   });
 });
 
-ipcMain.on('get-info-by-version', (event, packageName, packageVersion) => {
+ipcMain.on('view-by-version', (event, packageName, packageVersion) => {
   shell.doCmd({
-    cmd: 'info',
+    cmd: 'view',
     packageName: packageName,
     version: `@${packageVersion}`
   }, (result) => {
-    event.sender.send('get-info-by-version-reply', result);
+    event.sender.send('view-by-version-reply', result);
   });
 });
 
-ipcMain.on('uninstall-module', (event, packageName) => {
+ipcMain.on('uninstall-package', (event, packageName) => {
   shell.doCmd({
     cmd: 'uninstall',
     packageName: packageName,
     parameters: '-g'
   }, (result) => {
-    event.sender.send('uninstall-module-reply', result);
-  });
-});
-
-ipcMain.on('get-latest-version', (event, pkg) => {
-  let packageName = pkg.name;
-  shell.doCmd({
-    cmd: 'view',
-    packageName: packageName,
-    parameters: 'version'
-  }, (result) => {
-    event.sender.send('get-latest-version-reply', result);
+    event.sender.send('uninstall-package-reply', result);
   });
 });
 

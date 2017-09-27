@@ -13,12 +13,9 @@ Main css
 
 body {
   margin: 0;
-  color: #666666;
-  font-size: 13px;
-  line-height: 23px;
+  font-size: 12pt;
   background: #f4f8fd;
   font-family: 'Lato';
-  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -367,8 +364,16 @@ p.help {
   padding: 24px 30px 0;
 }
 
+.detail-body .detail-top {
+  margin-bottom: 25px;
+}
+
 .detail-body .detail-top p {
   margin-top: 15px;
+}
+
+.detail-body .detail-top .version {
+  padding: 4px;
 }
 
 @media (max-width: 768px) {
