@@ -2,22 +2,10 @@
 
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
-import Semver from 'semver-compare';
-
-const ModuleLoader = (props) => {
-  return (
-    <span className={props.loader
-      ? 'show'
-      : 'hide'}>Loading..</span>
-  )
-}
 
 export default class ListItem extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      loader: false
-    };
     this.onItemClick = this.onItemClick.bind(this);
   }
   onItemClick(e) {

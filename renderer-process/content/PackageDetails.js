@@ -7,7 +7,7 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Semver from 'semver-compare';
-import AppLoader from './../common/AppLoader';
+import Loader from './../common/Loader';
 import {OptionItems, StaticList} from './../common/Statics';
 
 const OptionItem = (props) => {
@@ -20,7 +20,7 @@ export default class ItemDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loader: false,
+      loader: true,
       needsUpdate: false
     }
     this.install = this.install.bind(this);
@@ -29,7 +29,7 @@ export default class ItemDetails extends React.Component {
   }
   update(e) {
     e.preventDefault();
-    let pkg = this.props.packageItem;
+    let pkg = this.props.pkg;
     remote.dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'question',
       message: `This action will update ${pkg.name} to the latest version. \nAre you sure? `,
@@ -37,8 +37,8 @@ export default class ItemDetails extends React.Component {
     }, (btnIdx) => {
       switch (btnIdx) {
         case 0:
-          this.setState({loader: true});
           ipcRenderer.send('update-package', pkg.name);
+          this.setState({loader: true});
           break;
         default:
           return;
@@ -47,17 +47,17 @@ export default class ItemDetails extends React.Component {
   }
   uninstall(e) {
     e.preventDefault();
-    let packageItem = this.props.packageItem;
+    let pkg = this.props.pkg;
 
     remote.dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'question',
-      message: `This action will uninstall ${packageItem.name} from your system. \nAre you sure? `,
+      message: `This action will uninstall ${pkg.name} from your system. \nAre you sure? `,
       buttons: ['OK', 'CANCEL']
     }, (btnIdx) => {
       switch (btnIdx) {
         case 0:
+          ipcRenderer.send('uninstall-package', pkg.name);
           this.setState({loader: true});
-          ipcRenderer.send('uninstall-package', packageItem.name);
           break;
         default:
           return;
@@ -65,12 +65,12 @@ export default class ItemDetails extends React.Component {
     });
   }
   install(e) {
-    if(e) {
+    if (e) {
       e.preventDefault();
     }
     let version = this.refs.selectVersion.value;
-    if(version) {
-      let pkg = this.props.packageItem;
+    if (version != '0') {
+      let pkg = this.props.pkg;
       remote.dialog.showMessageBox(remote.getCurrentWindow(), {
         type: 'question',
         message: `This action will install ${pkg.name} ${version} to your system. \nAre you sure? `,
@@ -78,9 +78,8 @@ export default class ItemDetails extends React.Component {
       }, (btnIdx) => {
         switch (btnIdx) {
           case 0:
+            ipcRenderer.send('install-by-version', pkg.name, version);
             this.setState({loader: true});
-            let pkgName = pkg.name;
-            ipcRenderer.send('install-by-version', pkgName, version);
             break;
           default:
             return;
@@ -89,9 +88,10 @@ export default class ItemDetails extends React.Component {
     }
     return false;
   }
-  componentWillReceiveProps(props) {
-    let pkg = props.packageItem,
+  componentWillReceiveProps(nextProps) {
+    let pkg = nextProps.pkg,
       diff = 0;
+
     if (pkg) {
       let latest = pkg['dist-tags'].latest;
       let installed = pkg.version;
@@ -99,11 +99,15 @@ export default class ItemDetails extends React.Component {
       //compare versions
       diff = Semver(latest, installed);
       this.setState({
+        loader: false,
         needsUpdate: (diff > 0)
           ? 1
           : 0
       });
     }
+  }
+  componentWillMount() {
+    let props = this.props;
   }
   componentDidMount() {
     ipcRenderer.on('update-package-reply', (event) => {
@@ -117,7 +121,7 @@ export default class ItemDetails extends React.Component {
     });
   }
   render() {
-    let pkg = this.props.packageItem;
+    let pkg = this.props.pkg;
     if (!pkg) {
       return null;
     }
@@ -126,7 +130,7 @@ export default class ItemDetails extends React.Component {
     let currentVersion = pkg.version;
 
     return (
-      <AppLoader loading={this.state.loader}>
+      <Loader loading={this.state.loader}>
         <div className="package-details">
           <div className="detail tile">
             <section className="detail-body">
@@ -184,7 +188,7 @@ export default class ItemDetails extends React.Component {
             </footer>
           </div>
         </div>
-      </AppLoader>
+      </Loader>
     )
   }
 }
