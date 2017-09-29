@@ -65,6 +65,7 @@ p {
 
 a {
   text-decoration: none;
+  cursor: pointer;
 }
 
 a:hover, a:focus {
@@ -120,6 +121,11 @@ hr {
   display: flex;
   flex-flow: row;
   justify-content: space-between;
+}
+
+.flex-row div {
+  display: inline-flex;
+  align-items: center;
 }
 
 .flex-column {
@@ -230,6 +236,49 @@ nav ul, nav li {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 
+/*** component loader ***/
+.loader {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.loader p {
+  color: #fff;
+}
+
+.loader.show {
+  display: block;
+}
+
+.loader.hide {
+  display: none;
+}
+
+.loader .line {
+  animation: expand 1s ease-in-out infinite;
+  border-radius: 10px;
+  display: inline-block;
+  transform-origin: center center;
+  margin: 0 3px;
+  width: 1px;
+  height: 25px;
+}
+
+.loader .line:nth-child(1) {
+  background: #27ae60;
+}
+
+.loader .line:nth-child(2) {
+  animation-delay: 180ms;
+  background: #f1c40f;
+}
+
+.loader .line:nth-child(3) {
+  animation-delay: 360ms;
+  background: #e67e22;
+}
+
+/** App loader **/
 #loader {
   position: fixed;
   top: 50%;
@@ -373,19 +422,16 @@ p.help {
 }
 
 .detail-body .detail-top .version {
+  width: 20%;
   padding: 4px;
 }
 
-@media (max-width: 768px) {
-  .detail-body .detail-top .versions {
-    width: 50%;
-  }
+.detail-body .detail-top .actions {
+  width: 40%;
 }
 
-@media (max-width: 990px) {
-  .detail-body .detail-top .versions {
-    width: 40%;
-  }
+.detail-body .detail-top .versions {
+  width: 30%;
 }
 
 .detail-heading {
@@ -393,6 +439,18 @@ p.help {
   font-size: 1.5em;
   font-weight: 300;
   margin-bottom: 16px;
+}
+
+.detail-top .actions {
+  justify-content: flex-end;
+}
+
+.detail-top .versions {
+  justify-content: flex-start;
+}
+
+.detail-top .version {
+  justify-content: flex-start;
 }
 
 .detail-tags {

@@ -5,9 +5,6 @@ const path = require('path');
 const cp = require('child_process');
 const exec = cp.exec;
 const utils = require('./utils');
-const NPM_COMMANDS = [
-  'ls', 'view', 'uninstall', 'update'
-];
 
 exports.doCmd = function(options = {}, cb) {
   let o = options;

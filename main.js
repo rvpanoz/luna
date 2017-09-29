@@ -56,7 +56,7 @@ function createMainWindow() {
   //create main window
   MainWindow = new BrowserWindow({
     'min-width': 830,
-    height: screenSize.height,
+    height: screenSize.height / 1.5,
     show: true,
     resizable: true
   });
@@ -85,8 +85,8 @@ function createMainWindow() {
  * IPC events
  */
 ipcMain.on('get-global-packages', (event) => {
-  shell.doCmd({}, (packages) => {
-    event.sender.send('get-global-packages-reply', packages);
+  shell.doCmd({}, (data) => {
+    event.sender.send('get-global-packages-reply', data);
   });
 });
 
@@ -100,11 +100,30 @@ ipcMain.on('view-by-version', (event, packageName, packageVersion) => {
   });
 });
 
+ipcMain.on('install-by-version', (event, packageName, version) => {
+  shell.doCmd({
+    cmd: 'install',
+    packageName: packageName,
+    version: `@${version}`,
+  }, (result) => {
+    event.sender.send('install-by-version-reply', result);
+  });
+});
+
+ipcMain.on('update-package', (event, packageName) => {
+  shell.doCmd({
+    cmd: 'install',
+    packageName: packageName,
+    version: '@latest',
+  }, (result) => {
+    event.sender.send('update-package-reply', result);
+  });
+});
+
 ipcMain.on('uninstall-package', (event, packageName) => {
   shell.doCmd({
     cmd: 'uninstall',
-    packageName: packageName,
-    parameters: '-g'
+    packageName: packageName
   }, (result) => {
     event.sender.send('uninstall-package-reply', result);
   });
