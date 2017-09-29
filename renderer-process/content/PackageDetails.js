@@ -106,20 +106,6 @@ export default class ItemDetails extends React.Component {
       });
     }
   }
-  componentWillMount() {
-    let props = this.props;
-  }
-  componentDidMount() {
-    ipcRenderer.on('update-package-reply', (event) => {
-      this.setState({loader: false});
-    });
-    ipcRenderer.on('install-by-version-reply', (event) => {
-      this.setState({loader: false});
-    });
-    ipcRenderer.on('uninstall-package-reply', (event) => {
-      this.setState({loader: false});
-    });
-  }
   render() {
     let pkg = this.props.pkg;
     if (!pkg) {

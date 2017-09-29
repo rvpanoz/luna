@@ -52,6 +52,15 @@ export default class List extends React.Component {
     ipcRenderer.on('get-global-packages-reply', (event, packages) => {
       this.updatePackages(packages);
     });
+    ipcRenderer.on('update-package-reply', (event) => {
+      this.reload();
+    });
+    ipcRenderer.on('install-by-version-reply', (event) => {
+      this.reload();
+    });
+    ipcRenderer.on('uninstall-package-reply', (event) => {
+      this.reload();
+    });
   }
   componentWillUnmount() {
     // Removes listeners of the specified channel

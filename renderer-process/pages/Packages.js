@@ -47,7 +47,7 @@ class Packages extends React.Component {
             <List setActive={this.setActive}/>
           </div>
           <div className="col-lg-9 col-md-9 col-sm-8 col-xs-12">
-            <PackageDetails pkg={this.state.package} />
+            <PackageDetails pkg={this.state.package} setActive={this.setActive}/>
           </div>
         </div>
       </div>
