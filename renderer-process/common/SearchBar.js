@@ -60,8 +60,12 @@ export default class SearchBar extends React.Component {
   }
   componentDidMount() {
     let root = this.refs.root;
+    let searchInput = this.refs.searchInput;
     if (root) {
       root.addEventListener("keypress", this._onKeyUp);
+      if(searchInput) {
+        searchInput.focus();
+      }
     }
   }
   render() {
@@ -69,7 +73,7 @@ export default class SearchBar extends React.Component {
       <div className="item search" ref="root">
         <div className="ui icon input transparent inverted icon">
           <div className="inner">
-            <input type="text" placeholder="search" ref="searchInput"/>
+            <input type="text" placeholder="search registry.." ref="searchInput"/>
             <a onClick={this._doSearch} style={{
               cursor: 'pointer'
             }}>

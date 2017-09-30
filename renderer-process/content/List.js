@@ -16,6 +16,7 @@ export default class List extends React.Component {
       loader: this.props.loader || true,
       packages: []
     }
+    this.deselect = this.deselect.bind(this);
     this.updatePackages = this.updatePackages.bind(this);
   }
   componentWillReceiveProps(props) {
@@ -36,6 +37,15 @@ export default class List extends React.Component {
     ipcRenderer.on('search-packages-close', (event, packages) => {
       this.updatePackages(packages);
     });
+  }
+  deselect() {
+    let list = this.refs.list;
+    if(list) {
+      let selected = list.querySelector('.selected');
+      if(selected) {
+        selected.classList.remove('selected');
+      }
+    }
   }
   updatePackages(packages) {
     let data = JSON.parse(packages);
@@ -64,7 +74,7 @@ export default class List extends React.Component {
               pkg.name = (pkg.from)
                 ? pkg.from.split("@")[0]
                 : pkg.name;
-              return <ListItem idx={idx} key={idx} {...pkg}/>
+              return <ListItem deselect={this.deselect} idx={idx} key={idx} {...pkg}/>
             })
             : null}
         </div>

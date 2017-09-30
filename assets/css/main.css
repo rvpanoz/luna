@@ -171,7 +171,7 @@ b, strong {
 }
 
 .ui.vertical.list .item>.header:not(.ui) {
-  margin: 0 0 .5em;
+  margin: 0 0 .5em .8em;
   font-size: 1.4em;
   font-weight: 700;
   background-image: url('../images/npm.png');
@@ -207,6 +207,10 @@ b, strong {
   color: rgba(255, 255, 255, .5);
 }
 
+.list .item a.selected {
+  color: #fff !important;
+}
+
 .ui.vertical.list .list .item {
   background: 0 0;
   padding: .5em 1.4em;
@@ -237,7 +241,7 @@ b, strong {
   -ms-user-select: none;
   user-select: none;
   background: 0 0;
-  padding: .5em 0.3em;
+  padding: .3em 0.3em;
   text-transform: none;
   color: rgba(0, 0, 0, .87);
   font-weight: 400;
@@ -253,7 +257,8 @@ b, strong {
 .ui.vertical.inverted.list .item.search .inner {
   width: 100%;
   vertical-align: middle;
-  border-bottom: 1px solid rgba(34, 36, 38, .1);
+  border-bottom: 1px solid rgba(255, 255, 38, .1);
+  padding: 0.5em;
 }
 
 .ui.vertical.inverted.list .item.search:before {
@@ -366,6 +371,19 @@ b, strong {
   -webkit-transition: box-shadow .1s ease, border-color .1s ease;
   transition: box-shadow .1s ease, border-color .1s ease;
   box-shadow: none;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #fff;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #fff;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #fff;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #fff;
 }
 
 .ui.icon.input>i.icon:not(.link) {
