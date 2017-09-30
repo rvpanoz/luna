@@ -9,6 +9,7 @@ import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import SearchBar from './common/SearchBar';
 import List from './content/List';
 import Main from './content/Main';
 
@@ -23,16 +24,37 @@ require('./development/imports.js');
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      loader: false,
+      showMain: true,
+      mode: 'global'
+    }
+    this.doSearch = this.doSearch.bind(this);
+  }
+  doSearch(pkgName) {
+    if (pkgName) {
+      this.setState({
+        loader: true,
+        mode: 'search'
+      });
+      ipcRenderer.send('search-packages', pkgName);
+    }
+    return false;
   }
   render() {
-    console.log('App render');
     return (
-      <div className="wrapper">
+      <div className="wrapper" ref="root">
         <section className="sidebar ui inverted vertical left fixed list" ref="sidebar">
-          <List />
+          <div className="item">
+            <div className="header">Packages</div>
+            <div className="search-bar">
+              <SearchBar doSearch={this.doSearch}/>
+            </div>
+            <List loading={this.state.loader}/>
+        </div>
         </section>
         <section className="content" ref="content">
-          <Main />
+          <Main mode={this.state.mode} />
         </section>
       </div>
     )

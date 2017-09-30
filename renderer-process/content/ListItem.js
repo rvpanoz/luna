@@ -19,10 +19,15 @@ export default class ListItem extends React.Component {
   }
   render() {
     return (
-      <a href="#" className="item" onClick={this.onItemClick} ref={`root-${this.props.idx}`}>
-        {this.props.name}
-        <i>{this.props.version}</i>
-      </a>
+      <div className="item" ref={`root-${this.props.idx}`}>
+        <div className="flex-row">
+          <a href="#" onClick={this.onItemClick}>
+            {this.props.name}
+          </a>
+          <span style={{width: '20%', height: '15px'}}>{this.props.version}</span>
+        </div>
+      </div>
+
     )
   }
 }

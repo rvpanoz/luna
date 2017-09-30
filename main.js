@@ -95,6 +95,16 @@ ipcMain.on('get-packages', (event) => {
   });
 });
 
+ipcMain.on('search-packages', (event, pkgName) => {
+  shell.search(pkgName, (type, data) => {
+    if(type === 'close') {
+      event.sender.send('search-packages-close', data);
+    } else {
+      event.sender.send('search-packages-reply', data);
+    }
+  });
+});
+
 ipcMain.on('view-by-version', (event, packageName, packageVersion) => {
   shell.doCmd({
     cmd: 'view',

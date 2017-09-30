@@ -8,6 +8,30 @@ const exec = cp.exec;
 const spawn = cp.spawn;
 const utils = require('./utils');
 
+exports.search = function(pkgName, cb) {
+  const cmd = 'search';
+  if(!pkgName) {
+    return;
+  }
+  let result = '';
+  let npmc = spawn('npm', [cmd, pkgName, '--json'], {
+    maxBuffer: 1024 * 500
+  });
+
+  npmc.stdout.on('data', (data) => {
+    let dataStr = data.toString();
+    result+=dataStr;
+    cb('stdout', dataStr);
+  });
+  npmc.stderr.on('data', (data) => {
+    cb('stderr', data.toString());
+  });
+  npmc.on('close', () => {
+    cb('close', result);
+    console.log(`npm ${cmd} ${pkgName} finished execution`);
+  });
+}
+
 exports.list = function(options, cb) {
   const cmd = 'ls';
   let opts = options || ['-g', '--depth=0', '--json'];
@@ -23,12 +47,10 @@ exports.list = function(options, cb) {
       }
       break;
     default:
-
   }
 
   let npmc = spawn('npm', [cmd].concat(opts), {
-    maxBuffer: 1024 * 500,
-    encoding: 'utf8'
+    maxBuffer: 1024 * 500
   });
 
   npmc.stdout.on('data', (data) => {
