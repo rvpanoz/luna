@@ -8,9 +8,9 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {HashRouter as Router} from 'react-router-dom';
-import Sidebar from './common/Sidebar';
-import Main from './Main';
+
+import List from './content/List';
+import Main from './content/Main';
 
 //configuration and store globals
 const config = remote.getGlobal('config');
@@ -25,20 +25,18 @@ class App extends React.Component {
     super(props);
   }
   render() {
+    console.log('App render');
     return (
       <div className="wrapper">
-        <Sidebar/>
-        <section className="content">
-          <div className="columns">
-            <div className="main">
-              <Main/>
-            </div>
-          </div>
+        <section className="sidebar ui inverted vertical left fixed list" ref="sidebar">
+          <List />
+        </section>
+        <section className="content" ref="content">
+          <Main />
         </section>
       </div>
     )
   }
 }
 
-ReactDOM.render(
-  <Router><App/></Router>, rootEl);
+ReactDOM.render(<App/>, rootEl);

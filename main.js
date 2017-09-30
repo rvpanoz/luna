@@ -55,8 +55,8 @@ function createMainWindow() {
 
   //create main window
   MainWindow = new BrowserWindow({
-    'min-width': 830,
-    height: screenSize.height / 1.5,
+    'min-width': 860,
+    height: screenSize.height,
     show: true,
     resizable: true
   });
@@ -84,9 +84,14 @@ function createMainWindow() {
 /**
  * IPC events
  */
-ipcMain.on('get-global-packages', (event) => {
-  shell.doCmd({}, (data) => {
-    event.sender.send('get-global-packages-reply', data);
+
+ipcMain.on('get-packages', (event) => {
+  shell.list(null, (type, data) => {
+    if(type === 'close') {
+      event.sender.send('get-packages-close', data);
+    } else {
+      event.sender.send('get-packages-reply', data);
+    }
   });
 });
 
@@ -101,12 +106,12 @@ ipcMain.on('view-by-version', (event, packageName, packageVersion) => {
 });
 
 ipcMain.on('install-by-version', (event, packageName, version) => {
-  shell.doCmd({
+  shell.ndoCmd({
     cmd: 'install',
     packageName: packageName,
     version: `@${version}`,
-  }, (result) => {
-    event.sender.send('install-by-version-reply', result);
+  }, (stdtype, result) => {
+    event.sender.send('install-by-version-reply', stdtype, result);
   });
 });
 

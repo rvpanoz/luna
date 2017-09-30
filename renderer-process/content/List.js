@@ -6,91 +6,49 @@
 
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
-import utils from './../../utils';
-import Loader from './../common/Loader';
+import SearchBar from './../common/SearchBar';
 import ListItem from './ListItem';
 
 export default class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loader: true,
       packages: []
     }
-    this.reload = this.reload.bind(this);
-    this.updatePackages = this.updatePackages.bind(this);
   }
-  reload(e) {
-    if (e) {
-      e.preventDefault();
-    }
-    this.props.setActive(null);
-    ipcRenderer.send('get-global-packages');
-    this.setState({
-      loader: true
-    });
+  componentWillMount() {
+    ipcRenderer.send('get-packages');
   }
-  updatePackages(packages) {
-    let root = this.refs.rootElement;
-    let data = utils.parse(packages);
-
-    this.setState({
-      loader: false,
-      packages: data
-    }, () => {
-      let first = data[0];
-      if (first) {
-        ipcRenderer.send('view-by-version', first.name, first.version);
+  componentDidMount() {
+    ipcRenderer.on('get-packages-reply', (event, packages) => {
+      let data = JSON.parse(packages);
+      if (this.refs.list) {
+        this.setState({
+          packages: Object.keys(data.dependencies).map(function(key) {
+            return data.dependencies[key];
+          })
+        });
       }
     });
   }
-  componentDidMount() {
-    //get global packages
-    ipcRenderer.send('get-global-packages');
-
-    //update packages data
-    ipcRenderer.on('get-global-packages-reply', (event, packages) => {
-      this.updatePackages(packages);
-    });
-    ipcRenderer.on('update-package-reply', (event) => {
-      this.reload();
-    });
-    ipcRenderer.on('install-by-version-reply', (event) => {
-      this.reload();
-    });
-    ipcRenderer.on('uninstall-package-reply', (event) => {
-      this.reload();
-    });
-  }
-  componentWillUnmount() {
-    // Removes listeners of the specified channel
-    ipcRenderer.removeAllListeners(['get-global-packages-reply', 'uninstall-module-reply', 'update-package-reply', 'install-by-version-reply']);
-  }
   render() {
     let packages = this.state.packages;
-    if (!packages) {
-      return null;
-    }
+    console.log(packages);
     return (
-      <Loader loading={this.state.loader}>
-      <div className="packages-list" ref="rootElement">
-        <div className="flex-row">
-          <h4 className="title">Global packages installed</h4>
-          <div className="refresh text-center">
-            <a onClick={this.reload} title="Update list">
-              <span className="fa fa-refresh"></span>
-            </a>
+        <div className="item">
+          <div className="header">Packages</div>
+          <div className="search-bar">
+            <SearchBar />
           </div>
-        </div>
-        <div className="list-group">
-          {(packages && packages.length)
-            ? packages.map((pkg, idx) => {
-              return <ListItem idx={idx} key={idx} {...pkg}/>
-            })
-            : null}
+          <div className="list" ref="list">
+            {(packages && packages.length)
+              ? packages.map((pkg, idx) => {
+                pkg.name = pkg.from.split("@")[0];
+                return <ListItem idx={idx} key={idx} {...pkg}/>
+              })
+              : null}
         </div>
       </div>
-      </Loader>
     )
   }
 }

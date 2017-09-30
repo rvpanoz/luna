@@ -10,16 +10,18 @@ export default class ListItem extends React.Component {
   }
   onItemClick(e) {
     e.preventDefault();
-    ipcRenderer.send('view-by-version', this.props.name, this.props.version);
+    let el = this.refs[`root-${this.props.idx}`];
+    if(el) {
+      let props = this.props;
+      ipcRenderer.send('view-by-version', props.name, props.version);
+    }
     return false;
   }
   render() {
     return (
-      <a href="#" className="list-group-item" onClick={this.onItemClick} ref={`root-${this.props.idx}`}>
+      <a href="#" className="item" onClick={this.onItemClick} ref={`root-${this.props.idx}`}>
         {this.props.name}
-        <span className={`badge badge-green`}>
-          v{this.props.version}
-        </span>
+        <i>{this.props.version}</i>
       </a>
     )
   }
