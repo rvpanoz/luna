@@ -30,16 +30,24 @@ class App extends React.Component {
       mode: 'global'
     }
     this.doSearch = this.doSearch.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
   }
   doSearch(pkgName) {
+    this.setState({
+      loader: true,
+      mode: 'search'
+    });
     if (pkgName) {
-      this.setState({
-        loader: true,
-        mode: 'search'
-      });
       ipcRenderer.send('search-packages', pkgName);
     }
     return false;
+  }
+  clearSearch() {
+    this.setState({
+      loader: true,
+      mode: 'global'
+    });
+    ipcRenderer.send('get-packages');
   }
   render() {
     return (
@@ -48,7 +56,7 @@ class App extends React.Component {
           <div className="item">
             <div className="header">Packages</div>
             <div className="search-bar">
-              <SearchBar doSearch={this.doSearch}/>
+              <SearchBar doSearch={this.doSearch} clearSearch={this.clearSearch}/>
             </div>
             <List loading={this.state.loader}/>
         </div>

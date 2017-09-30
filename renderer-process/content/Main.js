@@ -137,7 +137,7 @@ export default class Main extends React.Component {
                   <input id="tab3" type="radio" name="tabs"/>
                   <label htmlFor="tab3">Dependencies</label>
                   <section id="details-content">
-                    <div clasName="author">
+                    <div className="author">
                       Author:&nbsp;{pkg.author}
                     </div>
                     <div className="detail-description">
