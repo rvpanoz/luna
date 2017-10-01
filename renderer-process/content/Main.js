@@ -32,6 +32,7 @@ export default class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      mode: this.props.mode,
       activepkg: null
     }
     this.setActive = this.setActive.bind(this);
@@ -46,11 +47,20 @@ export default class Main extends React.Component {
         : null
     });
   }
+  componentWillReceiveProps(props) {
+
+  }
   componentDidMount() {
     let root = this.refs.root;
     if (root) {
       ipcRenderer.on('view-by-version-reply', (event, data) => {
         this.setActive(data);
+      });
+      ipcRenderer.on('get-packages-reply', (event) => {
+        this.setActive(null);
+      });
+      ipcRenderer.on('search-packages-reply', (event) => {
+        this.setActive(null);
       });
     }
   }
@@ -108,9 +118,10 @@ export default class Main extends React.Component {
   }
   render() {
     let pkg = this.state.activepkg;
+    let visible = this.props.visible;
     return (
       <div className="main" ref="root">
-        {(pkg)
+        {(pkg && visible)
           ? <div className="ui container">
               <div className="ui basic padded segment">
                 <div className="flex-row">

@@ -26,24 +26,46 @@ class App extends React.Component {
     super(props);
     this.state = {
       loader: false,
-      showMain: true,
-      mode: 'global'
+      mode: 'global',
+      showMain: true
     }
     this.doSearch = this.doSearch.bind(this);
     this.clearSearch = this.clearSearch.bind(this);
   }
+  componentDidMount() {
+    let root = this.refs.root;
+    if(root) {
+      ipcRenderer.on('get-packages-reply', (event) => {
+        this.setState({
+          loader: false,
+          showMain: true,
+          mode: 'global'
+        });
+      });
+      ipcRenderer.on('search-packages-reply', (event) => {
+        this.setState({
+          loader: false,
+          showMain: true,
+          mode: 'search'
+        });
+      });
+    }
+  }
   doSearch(pkgName) {
-    this.setState({
-      loader: true,
-      mode: 'search'
-    });
     if (pkgName) {
-      ipcRenderer.send('search-packages', pkgName);
+      this.setState({
+        loader: true,
+        showMain: false,
+        mode: 'search'
+      }, () => {
+        ipcRenderer.send('search-packages', pkgName);
+      });
     }
     return false;
   }
   clearSearch() {
     this.setState({
+      showMain: false,
       loader: true,
       mode: 'global'
     });
@@ -54,15 +76,15 @@ class App extends React.Component {
       <div className="wrapper" ref="root">
         <section className="sidebar ui inverted vertical left fixed list" ref="sidebar">
           <div className="item">
-            <div className="header">Packages</div>
             <div className="search-bar">
               <SearchBar doSearch={this.doSearch} clearSearch={this.clearSearch}/>
             </div>
+            <div className="header">Packages</div>
             <List loading={this.state.loader}/>
         </div>
         </section>
         <section className="content" ref="content">
-          <Main mode={this.state.mode} />
+          <Main mode={this.state.mode} visible={this.state.showMain}/>
         </section>
       </div>
     )

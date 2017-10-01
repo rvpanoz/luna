@@ -53,8 +53,17 @@ export default class SearchBar extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     let target = e.target;
+    let searchInput = this.refs.searchInput;
+    
     if(target.classList.contains('fa-arrow-left')) {
+      target.classList.remove('fa-arrow-left');
+      target.classList.add('fa-search');
       this._clearSearch();
+    } else if(target.classList.contains('fa-search')) {
+      let value = searchInput.value.replace(/\s/g, '');
+      if(searchInput.value.length) {
+        this._doSearch();
+      }
     }
     return false;
   }
