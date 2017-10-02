@@ -132,3 +132,49 @@ exports.view = function(pkgName, options, cb) {
     console.log(`npm ${cmd} finished execution`);
   });
 }
+
+exports.doCmd = function(cmd, options, cb) {
+  if(!cmd) {
+    throw new Error('shell->doCmd: Missing cmd parameter')
+  }
+  const defaults = ['--depth=0', '--json'];
+  let run=[cmd], params=[], opts=[];
+  let pkgName = options.pkgName;
+  let pkgVersion = options.pkgVersion;
+  let result = '';
+
+  if(pkgName && pkgVersion) {
+    run.push(`${pkgName}@${pkgVersion}`);
+  } else if(pkgName) {
+    run.push(`${pkgName}`);
+  }
+
+  if(options.scope) {
+    params.push(`-${options.scope}`);
+  }
+
+  if(options.arguments) {
+    for(let z in options.arguments) {
+      let v = options.arguments[z];
+      opts.push(`--${z}=${v}`);
+    }
+  } else {
+    opts = defaults.concat();
+  }
+
+  let npmc = spawn('npm', run.concat(params).concat(opts), {
+    maxBuffer: 1024 * 500
+  });
+
+  npmc.stdout.on('data', (data) => {
+    result+=data.toString();
+    cb(data.toString());
+  });
+  npmc.stderr.on('data', (data) => {
+    cb(data.toString());
+  });
+  npmc.on('close', () => {
+    console.log(`npm ${run.join(" ")} ${params.join(" ")} ${opts.join(" ")} finished execution`);
+    cb(result, 'close');
+  });
+}

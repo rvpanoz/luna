@@ -58,7 +58,9 @@ class App extends React.Component {
         showMain: false,
         mode: 'search'
       }, () => {
-        ipcRenderer.send('search-packages', pkgName);
+        ipcRenderer.send('search-packages', {
+          pkgName: pkgName
+        });
       });
     }
     return false;

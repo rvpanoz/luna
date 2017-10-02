@@ -28,11 +28,14 @@ export default class Main extends React.Component {
     this.uninstall = this.uninstall.bind(this);
   }
   _addListeners() {
-    const listeners = ['view-by-version-reply', 'get-packages-reply', 'search-packages-reply', 'update-package-reply'];
+    const listeners = ['view-by-version-reply', 'get-packages-reply', 'search-packages-reply', 'update-package-close'];
     listeners.forEach((listener) => {
       ipcRenderer.on(listener, (event, data) => {
         switch (listener) {
           case 'get-packages-reply':
+            this.setActive(null, false);
+            break;
+          case 'update-package-reply':
             this.setActive(null, false);
             break;
           case 'search-packages-reply':
@@ -56,7 +59,10 @@ export default class Main extends React.Component {
         : null
     }, () => {
       if(pkg) {
-        ipcRenderer.send('get-package', pkg.name);
+        ipcRenderer.send('get-package', {
+          pkgName: pkg.name,
+          scope: 'g'
+        });
       }
     });
   }
@@ -78,7 +84,11 @@ export default class Main extends React.Component {
       action: 'install',
       name: pkg.name
     }, () => {
-      ipcRenderer.send('install-package', pkg.name);
+      ipcRenderer.send('install-package', {
+        scope: 'g',
+        pkgName: pkgName,
+        version: 'latest'
+      });
     });
   }
   update(e) {
@@ -88,7 +98,11 @@ export default class Main extends React.Component {
       action: 'update',
       name: pkg.name
     }, () => {
-      ipcRenderer.send('update-package', pkg.name);
+      ipcRenderer.send('update-package', {
+        scope: 'g',
+        pkgName: pkgName,
+        version: 'latest'
+      });
     });
   }
   uninstall(e) {
@@ -98,7 +112,10 @@ export default class Main extends React.Component {
       action: 'uninstall',
       name: pkg.name
     }, () => {
-      ipcRenderer.send('uninstall-package', pkg.name);
+      ipcRenderer.send('uninstall-package', {
+        scope: 'g',
+        pkgName: pkgName
+      });
       this.setState({loader: true});
     });
   }
