@@ -2,7 +2,6 @@
 
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,900,400italic,700italic");
 @import url(font-awesome.min.css);
-
 html, body, div, section, audio, video {
   margin: 0;
   padding: 0;
@@ -67,7 +66,7 @@ h1 {
 }
 
 a {
-  color: #4183c4;
+  color: #f4c058;
   text-decoration: none;
 }
 
@@ -84,7 +83,7 @@ b, strong {
   display: flex;
   flex-direction: row;
   flex-flow: nowrap;
-  flex-grow:1;
+  flex-grow: 1;
   justify-content: space-between;
 }
 
@@ -380,16 +379,23 @@ b, strong {
   box-shadow: none;
 }
 
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
   color: #fff;
 }
-::-moz-placeholder { /* Firefox 19+ */
+
+::-moz-placeholder {
+  /* Firefox 19+ */
   color: #fff;
 }
-:-ms-input-placeholder { /* IE 10+ */
+
+:-ms-input-placeholder {
+  /* IE 10+ */
   color: #fff;
 }
-:-moz-placeholder { /* Firefox 18- */
+
+:-moz-placeholder {
+  /* Firefox 18- */
   color: #fff;
 }
 
@@ -425,7 +431,6 @@ b, strong {
 .ui.container .flex-row {
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
 }
 
 .ui.basic.segment {
@@ -567,38 +572,28 @@ h1.ui.header .sub.header {
 /** buttons **/
 
 .button {
-  width: 50px;
-  height: 25px;
+  padding: 0.25em 12em;
+  text-align: center;
+  text-decoration: none;
+  color: #2194E0;
+  border: 2px solid #2194E0;
+  font-size: 12px;
+  display: inline-block;
+  border-radius: 0.3em;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
 }
 
-.button:hover {
-  background: #64b6b1;
-  color: white;
-  cursor: pointer;
-}
-
-.button-red {
-  border: solid 1px #fff;
-  background: red;
-  color: #fff;
-}
-
-.button-red:hover {
-  background: #e7637a;
-  color: white;
-  cursor: pointer;
-}
-
-.button-green {
-  border: solid 1px #fff;
-  background: green;
-  color: #fff;
-}
-
-.button-red:hover {
-  background: #e7637a;
-  color: white;
-  cursor: pointer;
+.button:before {
+  content: "";
+  background-color: rgba(255, 255, 255, 0.5);
+  height: 100%;
+  width: 3em;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: -4.5em;
 }
 
 

@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 
 import SearchBar from './common/SearchBar';
 import List from './content/List';
-import Main from './content/Main';
+import Main from './content/Package';
 
 //configuration and store globals
 const config = remote.getGlobal('config');

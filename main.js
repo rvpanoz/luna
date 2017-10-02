@@ -105,6 +105,34 @@ ipcMain.on('search-packages', (event, pkgName) => {
   });
 });
 
+ipcMain.on('update-package', (event, pkgName, version) => {
+  shell.install(pkgName, {
+    scope: '-g',
+    version: version
+  }, (type, data) => {
+    if(type === 'close') {
+      event.sender.send('update-package-close', data);
+    } else {
+      event.sender.send('update-package-reply', data);
+    }
+  });
+});
+
+ipcMain.on('install-package', (event, packageName, version) => {
+  shell.install(pkgName, {
+    scope: '-g',
+    version: version
+  }, (type, data) => {
+    if(type === 'close') {
+      event.sender.send('install-package-close', data);
+    } else {
+      event.sender.send('install-package-reply', data);
+    }
+  });
+});
+
+/* =========================== */
+
 ipcMain.on('view-by-version', (event, packageName, packageVersion) => {
   shell.doCmd({
     cmd: 'view',
@@ -112,26 +140,6 @@ ipcMain.on('view-by-version', (event, packageName, packageVersion) => {
     version: `@${packageVersion}`
   }, (result) => {
     event.sender.send('view-by-version-reply', result);
-  });
-});
-
-ipcMain.on('install-by-version', (event, packageName, version) => {
-  shell.ndoCmd({
-    cmd: 'install',
-    packageName: packageName,
-    version: `@${version}`,
-  }, (stdtype, result) => {
-    event.sender.send('install-by-version-reply', stdtype, result);
-  });
-});
-
-ipcMain.on('update-package', (event, packageName) => {
-  shell.doCmd({
-    cmd: 'install',
-    packageName: packageName,
-    version: '@latest',
-  }, (result) => {
-    event.sender.send('update-package-reply', result);
   });
 });
 

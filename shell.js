@@ -66,6 +66,33 @@ exports.list = function(options, cb) {
   });
 }
 
+exports.install = function(pkgName, options, cb) {
+  const cmd = 'install';
+  let opts = [];
+
+  let pkgversion = opts.push(`${pkgName}${options.version || '@latest'}`);
+  let scope = opts.push(options.scope || '-g');
+  let env, params = [], result = '';
+
+  opts.push('--json');
+  let npmc = spawn('npm', [cmd].concat(opts), {
+    maxBuffer: 1024 * 500
+  });
+
+  npmc.stdout.on('data', (data) => {
+    result+=data;
+    cb('stdout', data.toString());
+  });
+  npmc.stderr.on('data', (data) => {
+    cb('stderr', data.toString());
+  });
+  npmc.on('close', () => {
+    console.log(`npm ${cmd} finished execution`);
+    cb('close', result);
+  });
+}
+
+/* ============================= */
 exports.ndoCmd = function(cb, parameters, options) {
   let params = parameters || '-g';
   let coptions = options || {};

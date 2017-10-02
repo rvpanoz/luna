@@ -6,6 +6,7 @@
 
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import {parse} from './../../utils';
 import Loader from './../common/Loader';
 import ListItem from './ListItem';
 
@@ -13,7 +14,7 @@ export default class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loader: this.props.loader || true,
+      loader: this.props.loader || false,
       packages: []
     }
     this.deselect = this.deselect.bind(this);
@@ -31,6 +32,7 @@ export default class List extends React.Component {
     ipcRenderer.send('get-packages');
   }
   componentDidMount() {
+    this
     ipcRenderer.on('get-packages-reply', (event, packages) => {
       this.updatePackages(packages);
     });
@@ -48,19 +50,13 @@ export default class List extends React.Component {
     }
   }
   updatePackages(packages) {
-    let data = JSON.parse(packages);
+    console.log(parse(packages, 'dependencies'));
     this.setState({
       loader: false
     });
     if (this.refs.list) {
       this.setState({
-        packages: (data.dependencies)
-          ? Object.keys(data.dependencies).map(function(key) {
-            return data.dependencies[key];
-          })
-          : Object.keys(data).map(function(key) {
-            return data[key];
-          })
+        packages: parse(packages, 'dependencies')
       });
     }
   }
