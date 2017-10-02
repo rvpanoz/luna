@@ -176,7 +176,7 @@ b, strong {
   margin: 0.5em 0 0.5em .8em;
   font-size: 1.4em;
   font-weight: 700;
-  background-image: url('../images/npm.png');
+  /*background-image: url('../images/npm.png');*/
   background-repeat: no-repeat;
   background-position: right;
 }
@@ -571,32 +571,45 @@ h1.ui.header .sub.header {
 
 /** buttons **/
 
-.button {
-  padding: 0.25em 12em;
-  text-align: center;
-  text-decoration: none;
-  color: #2194E0;
-  border: 2px solid #2194E0;
-  font-size: 12px;
-  display: inline-block;
-  border-radius: 0.3em;
-  transition: all 0.2s ease-in-out;
-  position: relative;
-  overflow: hidden;
-}
-
-.button:before {
-  content: "";
-  background-color: rgba(255, 255, 255, 0.5);
-  height: 100%;
-  width: 3em;
+a.button {
   display: block;
-  position: absolute;
-  top: 0;
-  left: -4.5em;
+  position: relative;
+  float: left;
+  width: 120px;
+  padding: 0;
+  margin: 10px 20px 10px 0;
+  font-weight: 600;
+  text-align: center;
+  line-height: 50px;
+  color: #fff;
+  border-radius: 5px;
+  transition: all 0.2s ;
 }
 
+.btn-green {
+  background: #00AE68;
+}
 
+.btn-orange {
+  background: #FFAA40;
+}
+
+.btn-red {
+  background: #e82e44;
+}
+
+/* FADE */
+.btn-fade.btn-orange:hover {
+  background: #ed7f01;
+}
+
+.btn-fade.btn-red:hover {
+  background: #ed021e;
+}
+
+.btn-fade.btn-green:hover {
+  background: #00ed73;
+}
 /** badges **/
 
 .badge {

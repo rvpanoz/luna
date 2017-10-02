@@ -6,16 +6,19 @@
 
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import {parse} from './../../utils';
 import Header from './package/Header';
-
+import Details from './package/Details';
 import Semver from 'semver-compare';
+import Loader from './../common/Loader';
 
 export default class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      mode: this.props.mode,
-      activepkg: null
+      loader: false,
+      activepkg: null,
+      mode: this.props.mode
     }
     this.setActive = this.setActive.bind(this);
     this.needsUpdate = this.needsUpdate.bind(this);
@@ -24,36 +27,53 @@ export default class Main extends React.Component {
     this.update = this.update.bind(this);
     this.uninstall = this.uninstall.bind(this);
   }
-  setActive(pkg) {
+  _addListeners() {
+    const listeners = ['view-by-version-reply', 'get-packages-reply', 'search-packages-reply', 'update-package-reply'];
+    listeners.forEach((listener) => {
+      ipcRenderer.on(listener, (event, data) => {
+        switch (listener) {
+          case 'get-packages-reply':
+            this.setActive(null, false);
+            break;
+          case 'search-packages-reply':
+            this.setActive(null, false);
+            break;
+          case 'view-by-version-reply':
+            this.setActive(data);
+          default:
+        }
+      });
+    });
+  }
+  _removeListeners() {
+    ipcRenderer.removeAllListeners(listeners);
+  }
+  setActive(pkg, loader) {
     this.setState({
+      loader: (loader && loader === true) ? loader : false,
       activepkg: (pkg)
         ? pkg
         : null
+    }, () => {
+      if(pkg) {
+        ipcRenderer.send('get-package', pkg.name);
+      }
     });
   }
   componentDidMount() {
     let root = this.refs.root;
     if (root) {
-      ipcRenderer.on('view-by-version-reply', (event, data) => {
-        this.setActive(data);
-      });
-      ipcRenderer.on('get-packages-reply', (event) => {
-        this.setActive(null);
-      });
-      ipcRenderer.on('search-packages-reply', (event) => {
-        this.setActive(null);
-      });
-      ipcRenderer.on('update-package-reply', (event, data) => {
-        this.setActive(null);
-      });
+      this._addListeners();
     }
+  }
+  componentWillUnmount() {
+    this._removeListeners();
   }
   install(e) {
     if (e) {
       e.preventDefault();
     }
     let pkg = this.state.activepkg;
-
     this.showMessageBox({
       action: 'install',
       name: pkg.name
@@ -64,7 +84,6 @@ export default class Main extends React.Component {
   update(e) {
     e.preventDefault();
     let pkg = this.state.activepkg;
-
     this.showMessageBox({
       action: 'update',
       name: pkg.name
@@ -75,7 +94,6 @@ export default class Main extends React.Component {
   uninstall(e) {
     e.preventDefault();
     let pkg = this.props.pkg;
-
     this.showMessageBox({
       action: 'uninstall',
       name: pkg.name
@@ -109,7 +127,6 @@ export default class Main extends React.Component {
       diff = 0;
     let latest = pkg['dist-tags'].latest;
     let installed = pkg.version;
-
     diff = Semver(latest, installed);
     return diff;
   }
@@ -117,7 +134,6 @@ export default class Main extends React.Component {
     e.preventDefault();
     let mode = this.state.mode;
     let pkg = this.state.activepkg;
-    debugger;
     switch (mode) {
       case 'global':
         ipcRenderer.send('uninstall-package', pkg.name);
@@ -133,6 +149,7 @@ export default class Main extends React.Component {
     let pkg = this.state.activepkg;
     let visible = this.props.visible;
     return (
+      <Loader loading={this.state.loader}>
       <div className="main" ref="root">
         {(pkg && visible)
           ? <div className="ui container">
@@ -148,12 +165,7 @@ export default class Main extends React.Component {
                   <input id="tab3" type="radio" name="tabs"/>
                   <label htmlFor="tab3">Dependencies</label>
                   <section id="details-content">
-                    <div className="author">
-                      Author:&nbsp;{pkg.author}
-                    </div>
-                    <div className="detail-description">
-                      {pkg.description}
-                    </div>
+                    <Details pkg={pkg} />
                   </section>
                   <section id="contributors-content"></section>
                   <section id="dependencies-content"></section>
@@ -162,6 +174,7 @@ export default class Main extends React.Component {
             </div>
           : null}
       </div>
+    </Loader>
     )
   }
 }

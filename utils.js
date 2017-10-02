@@ -12,12 +12,12 @@ export function parse(data, key) {
   let packages = JSON.parse(data);
   let arr = [];
 
-  if (key) {
+  if (key && packages[key]) {
     packages = packages[key];
   }
 
-  return Object.keys(packages).map(function(key) {
-    return packages[key];
+  return Object.keys(packages).map(function(pkey) {
+    return packages[pkey];
   });
 }
 

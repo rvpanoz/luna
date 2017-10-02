@@ -14,7 +14,7 @@ export default class List extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loader: this.props.loader || false,
+      loader: this.props.loader || true,
       packages: []
     }
     this.deselect = this.deselect.bind(this);
@@ -32,7 +32,6 @@ export default class List extends React.Component {
     ipcRenderer.send('get-packages');
   }
   componentDidMount() {
-    this
     ipcRenderer.on('get-packages-reply', (event, packages) => {
       this.updatePackages(packages);
     });
@@ -50,15 +49,10 @@ export default class List extends React.Component {
     }
   }
   updatePackages(packages) {
-    console.log(parse(packages, 'dependencies'));
     this.setState({
-      loader: false
+      loader: false,
+      packages: parse(packages, 'dependencies')
     });
-    if (this.refs.list) {
-      this.setState({
-        packages: parse(packages, 'dependencies')
-      });
-    }
   }
   render() {
     let packages = this.state.packages;

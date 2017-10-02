@@ -1,39 +1,29 @@
+'use strict';
+
 import React from 'react';
+import ActionButton from './ActionButton';
 
-const Header = (props) => {
-  let pkg = props.pkg;
-  let mode = props.mode;
-  let className = '';
-
-  // ipcRenderer.send('list-by-version');
-  // ipcRenderer.on('list-by-version-reply', (event, data) => {
-  //   console.log(data);
-  // });
-
-  switch (mode) {
-    case 'search':
-      className = 'install'
-      break;
-    default:
-      className = 'uninstall';
+export default class Header extends React.Component {
+  constructor(props) {
+    super(props);
   }
-  return (
-    <div className="flex-row">
-      <h1 className="ui header" style={{
-        marginBottom: '0.25em'
-      }}>
-        {pkg.name}&nbsp;{pkg.version}
-        <div className="sub header">
-          Latest:&nbsp;{pkg['dist-tags'].latest}&nbsp; {(props.needsUpdate())
-            ? <a href="#" onClick={props.update}>Update</a>
-            : ''}
-        </div>
-      </h1>
-      <div className="ui action">
-        <button onClick={props.doAction} className={`button ${className}`} href="#">{className}</button>
-      </div>
-    </div>
-  )
-}
+  render() {
+    let pkg = this.props.pkg;
 
-export default Header;
+    return (
+      <div className="flex-row" ref="root">
+        <h1 className="ui header" style={{
+          marginBottom: '0.25em'
+        }}>
+          {pkg.name}&nbsp;{pkg.version}
+          <div className="sub header">
+            Latest:&nbsp;{pkg['dist-tags'].latest}&nbsp; {(this.props.needsUpdate())
+              ? <a href="#" onClick={this.props.update}>Update</a>
+              : ''}
+          </div>
+        </h1>
+        <ActionButton />
+      </div>
+    )
+  }
+}

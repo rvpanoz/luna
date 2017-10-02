@@ -85,13 +85,15 @@ function createMainWindow() {
  * IPC events
  */
 
-ipcMain.on('get-packages', (event) => {
-  shell.list(null, (type, data) => {
-    if(type === 'close') {
-      event.sender.send('get-packages-close', data);
-    } else {
-      event.sender.send('get-packages-reply', data);
-    }
+ipcMain.on('get-packages', (event, pkgName, scope) => {
+  shell.list(pkgName, scope, null, (data) => {
+    event.sender.send('get-packages-reply', data);
+  });
+});
+
+ipcMain.on('get-package', (event, pkgName, scope) => {
+  shell.list(pkgName, scope, null, (data) => {
+    event.sender.send('get-package-reply', data);
   });
 });
 
@@ -118,7 +120,7 @@ ipcMain.on('update-package', (event, pkgName, version) => {
   });
 });
 
-ipcMain.on('install-package', (event, packageName, version) => {
+ipcMain.on('install-package', (event, pkgName, version) => {
   shell.install(pkgName, {
     scope: '-g',
     version: version
@@ -131,26 +133,30 @@ ipcMain.on('install-package', (event, packageName, version) => {
   });
 });
 
-/* =========================== */
-
-ipcMain.on('view-by-version', (event, packageName, packageVersion) => {
-  shell.doCmd({
-    cmd: 'view',
-    packageName: packageName,
-    version: `@${packageVersion}`
-  }, (result) => {
-    event.sender.send('view-by-version-reply', result);
+ipcMain.on('view-by-version', (event, pkgName, version) => {
+  shell.view(pkgName, {
+    scope: '-g',
+    version: version
+  }, (type, data) => {
+    event.sender.send('view-by-version-reply', JSON.parse(data));
   });
 });
 
-ipcMain.on('uninstall-package', (event, packageName) => {
-  shell.doCmd({
+ipcMain.on('uninstall-package', (event, pkgName) => {
+  shell.uninstall(pkgName, {
+    scope: '-g',
     cmd: 'uninstall',
     packageName: packageName
-  }, (result) => {
-    event.sender.send('uninstall-package-reply', result);
+  }, (type, data) => {
+    if(type === 'close') {
+      event.sender.send('uninstall-package-close', data);
+    } else {
+      event.sender.send('uninstall-package-reply', data);
+    }
   });
 });
+
+/* =========================== */
 
 /**
  * register app events
