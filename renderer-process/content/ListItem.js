@@ -10,17 +10,25 @@ export default class ListItem extends React.Component {
   }
   onItemClick(e) {
     e.preventDefault();
-    ipcRenderer.send('view-by-version', this.props.name, this.props.version);
+    let props = this.props;
+    let target = e.target;
+
+    this.props.deselect();
+    target.classList.add('selected');
+    ipcRenderer.send('view-by-version', props.name, props.version);
     return false;
   }
   render() {
     return (
-      <a href="#" className="list-group-item" onClick={this.onItemClick} ref={`root-${this.props.idx}`}>
-        {this.props.name}
-        <span className={`badge badge-green`}>
-          v{this.props.version}
-        </span>
-      </a>
+      <div className="item" ref={`root-${this.props.idx}`}>
+        <div className="flex-row">
+          <a href="#" onClick={this.onItemClick}>
+            {this.props.name}
+          </a>
+          <span style={{width: '20%', height: '15px'}}>{this.props.version}</span>
+        </div>
+      </div>
+
     )
   }
 }

@@ -55,8 +55,8 @@ function createMainWindow() {
 
   //create main window
   MainWindow = new BrowserWindow({
-    'min-width': 830,
-    height: screenSize.height / 1.5,
+    'min-width': 860,
+    height: screenSize.height,
     show: true,
     resizable: true
   });
@@ -84,50 +84,79 @@ function createMainWindow() {
 /**
  * IPC events
  */
-ipcMain.on('get-global-packages', (event) => {
-  shell.doCmd({}, (data) => {
-    event.sender.send('get-global-packages-reply', data);
+
+ipcMain.on('get-packages', (event, pkgName, scope) => {
+  shell.list(pkgName, scope, null, (data) => {
+    event.sender.send('get-packages-reply', data);
   });
 });
 
-ipcMain.on('view-by-version', (event, packageName, packageVersion) => {
-  shell.doCmd({
-    cmd: 'view',
-    packageName: packageName,
-    version: `@${packageVersion}`
-  }, (result) => {
-    event.sender.send('view-by-version-reply', result);
+ipcMain.on('get-package', (event, pkgName, scope) => {
+  shell.list(pkgName, scope, null, (data) => {
+    event.sender.send('get-package-reply', data);
   });
 });
 
-ipcMain.on('install-by-version', (event, packageName, version) => {
-  shell.doCmd({
-    cmd: 'install',
-    packageName: packageName,
-    version: `@${version}`,
-  }, (result) => {
-    event.sender.send('install-by-version-reply', result);
+ipcMain.on('search-packages', (event, pkgName) => {
+  shell.search(pkgName, (type, data) => {
+    if(type === 'close') {
+      event.sender.send('search-packages-close', data);
+    } else {
+      event.sender.send('search-packages-reply', data);
+    }
   });
 });
 
-ipcMain.on('update-package', (event, packageName) => {
-  shell.doCmd({
-    cmd: 'install',
-    packageName: packageName,
-    version: '@latest',
-  }, (result) => {
-    event.sender.send('update-package-reply', result);
+ipcMain.on('update-package', (event, pkgName, version) => {
+  shell.install(pkgName, {
+    scope: '-g',
+    version: version
+  }, (type, data) => {
+    if(type === 'close') {
+      event.sender.send('update-package-close', data);
+    } else {
+      event.sender.send('update-package-reply', data);
+    }
   });
 });
 
-ipcMain.on('uninstall-package', (event, packageName) => {
-  shell.doCmd({
+ipcMain.on('install-package', (event, pkgName, version) => {
+  shell.install(pkgName, {
+    scope: '-g',
+    version: version
+  }, (type, data) => {
+    if(type === 'close') {
+      event.sender.send('install-package-close', data);
+    } else {
+      event.sender.send('install-package-reply', data);
+    }
+  });
+});
+
+ipcMain.on('view-by-version', (event, pkgName, version) => {
+  shell.view(pkgName, {
+    scope: '-g',
+    version: version
+  }, (type, data) => {
+    event.sender.send('view-by-version-reply', JSON.parse(data));
+  });
+});
+
+ipcMain.on('uninstall-package', (event, pkgName) => {
+  shell.uninstall(pkgName, {
+    scope: '-g',
     cmd: 'uninstall',
     packageName: packageName
-  }, (result) => {
-    event.sender.send('uninstall-package-reply', result);
+  }, (type, data) => {
+    if(type === 'close') {
+      event.sender.send('uninstall-package-close', data);
+    } else {
+      event.sender.send('uninstall-package-reply', data);
+    }
   });
 });
+
+/* =========================== */
 
 /**
  * register app events
