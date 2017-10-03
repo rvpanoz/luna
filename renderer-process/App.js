@@ -26,36 +26,32 @@ class App extends React.Component {
     super(props);
     this.state = {
       loader: false,
-      mode: 'global',
-      showMain: true
+      showMain: false,
+      mode: 'global'
     }
+    this._addListeners = this._addListeners.bind(this);
+    this._removeListeners = this._removeListeners.bind(this);
     this.doSearch = this.doSearch.bind(this);
     this.clearSearch = this.clearSearch.bind(this);
+  }
+  _addListeners() {
+    const listeners = ['view-by-version-reply', 'get-packages-reply', 'search-packages-reply', 'update-package-close'];
+    listeners.forEach((listener) => {
+      ipcRenderer.on(listener, (event, data) => {
+        this.setState({
+          loader: false,
+          showMain: true
+        });
+      });
+    });
+  }
+  _removeListeners() {
+    ipcRenderer.removeAllListeners(listeners);
   }
   componentDidMount() {
     let root = this.refs.root;
     if(root) {
-      ipcRenderer.on('get-packages-reply', (event) => {
-        this.setState({
-          loader: false,
-          showMain: true,
-          mode: 'global'
-        });
-      });
-      ipcRenderer.on('search-packages-reply', (event) => {
-        this.setState({
-          loader: false,
-          showMain: true,
-          mode: 'search'
-        });
-      });
-      ipcRenderer.on('view-by-version-reply', (event) => {
-        this.setState({
-          loader: false,
-          showMain: true,
-          mode: this.state.mode
-        });
-      });
+      this._addListeners();
     }
   }
   showMessageBox(opts, cb) {

@@ -20,6 +20,8 @@ export default class Main extends React.Component {
       activepkg: null,
       mode: this.props.mode
     }
+    this._addListeners = this._addListeners.bind(this);
+    this._removeListeners = this._removeListeners.bind(this);
     this.setActive = this.setActive.bind(this);
     this.needsUpdate = this.needsUpdate.bind(this);
     this.update = this.update.bind(this);
@@ -28,7 +30,6 @@ export default class Main extends React.Component {
     const listeners = ['view-by-version-reply', 'get-packages-reply', 'search-packages-reply', 'update-package-close'];
     listeners.forEach((listener) => {
       ipcRenderer.on(listener, (event, data) => {
-        console.log(listener);
         if(listener === 'view-by-version-reply') {
           this.setActive(data, false);
         } else {
@@ -47,7 +48,7 @@ export default class Main extends React.Component {
         ? pkg
         : null
     }, () => {
-
+      //todo..
     });
   }
   componentDidMount() {
