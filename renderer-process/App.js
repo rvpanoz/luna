@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 
 import SearchBar from './common/SearchBar';
 import List from './content/List';
-import Main from './content/Package';
+import Package from './content/Package';
 
 //configuration and store globals
 const config = remote.getGlobal('config');
@@ -26,30 +26,53 @@ class App extends React.Component {
     super(props);
     this.state = {
       loader: false,
-      mode: 'global',
-      showMain: true
+      showMain: false,
+      mode: 'global'
     }
+    this._addListeners = this._addListeners.bind(this);
+    this._removeListeners = this._removeListeners.bind(this);
     this.doSearch = this.doSearch.bind(this);
     this.clearSearch = this.clearSearch.bind(this);
+  }
+  _addListeners() {
+    const listeners = ['view-by-version-reply', 'get-packages-reply', 'search-packages-reply', 'update-package-close'];
+    listeners.forEach((listener) => {
+      ipcRenderer.on(listener, (event, data) => {
+        this.setState({
+          loader: false,
+          showMain: true
+        });
+      });
+    });
+  }
+  _removeListeners() {
+    ipcRenderer.removeAllListeners(listeners);
   }
   componentDidMount() {
     let root = this.refs.root;
     if(root) {
-      ipcRenderer.on('get-packages-reply', (event) => {
-        this.setState({
-          loader: false,
-          showMain: true,
-          mode: 'global'
-        });
-      });
-      ipcRenderer.on('search-packages-reply', (event) => {
-        this.setState({
-          loader: false,
-          showMain: true,
-          mode: 'search'
-        });
-      });
+      this._addListeners();
     }
+  }
+  showMessageBox(opts, cb) {
+    let pkgName = opts.name;
+    let action = opts.action;
+
+    remote.dialog.showMessageBox(remote.getCurrentWindow(), {
+      type: 'question',
+      message: `This action will ${action} ${pkgName} ${(opts.version) ? opts.version : ''}. \nAre you sure? `,
+      buttons: ['OK', 'CANCEL']
+    }, (btnIdx) => {
+      switch (btnIdx) {
+        case 0:
+          if(cb) {
+            cb();
+          }
+          break;
+        default:
+          return;
+      }
+    });
   }
   doSearch(pkgName) {
     if (pkgName) {
@@ -58,18 +81,23 @@ class App extends React.Component {
         showMain: false,
         mode: 'search'
       }, () => {
-        ipcRenderer.send('search-packages', pkgName);
+        ipcRenderer.send('search-packages', {
+          pkgName: pkgName
+        });
       });
     }
     return false;
   }
   clearSearch() {
     this.setState({
-      showMain: false,
       loader: true,
+      showMain: false,
       mode: 'global'
+    }, () => {
+      ipcRenderer.send('get-packages', {
+        scope: 'g'
+      });
     });
-    ipcRenderer.send('get-packages');
   }
   render() {
     return (
@@ -81,10 +109,10 @@ class App extends React.Component {
             </div>
             <div className="header">Packages</div>
             <List loading={this.state.loader}/>
-        </div>
+          </div>
         </section>
         <section className="content" ref="content">
-          <Main mode={this.state.mode} visible={this.state.showMain}/>
+          <Package mode={this.state.mode} showMessageBox={this.showMessageBox} visible={this.state.showMain}/>
         </section>
       </div>
     )

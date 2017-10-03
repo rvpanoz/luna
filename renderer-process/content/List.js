@@ -29,7 +29,9 @@ export default class List extends React.Component {
     }
   }
   componentWillMount() {
-    ipcRenderer.send('get-packages');
+    ipcRenderer.send('get-packages', {
+      scope: 'g'
+    });
   }
   componentDidMount() {
     ipcRenderer.on('get-packages-reply', (event, packages) => {

@@ -8,127 +8,50 @@ const exec = cp.exec;
 const spawn = cp.spawn;
 const utils = require('./utils');
 
-exports.search = function(pkgName, cb) {
-  const cmd = 'search';
-  if(!pkgName) {
-    return;
+exports.doCmd = function(cmd, options, cb) {
+  const defaults = ['--depth=0', '--json'];
+
+  if(!cmd) {
+    throw new Error('shell->doCmd: Missing cmd parameter');
   }
+
+  let run=[cmd], params=[], opts=[];
+  let pkgName = options.pkgName;
+  let pkgVersion = options.pkgVersion;
   let result = '';
-  let npmc = spawn('npm', [cmd, pkgName, '--json'], {
-    maxBuffer: 1024 * 500
-  });
 
-  npmc.stdout.on('data', (data) => {
-    let dataStr = data.toString();
-    result+=dataStr;
-    cb('stdout', dataStr);
-  });
-  npmc.stderr.on('data', (data) => {
-    cb('stderr', data.toString());
-  });
-  npmc.on('close', () => {
-    cb('close', result);
-    console.log(`npm ${cmd} ${pkgName} finished execution`);
-  });
-}
-
-exports.list = function(pkgName, scope='-g', options, cb) {
-  const cmd = 'ls';
-  let opts = options || ['--depth=0', '--json'];
-  let params = [];
-
-  if(pkgName) {
-    params.push(pkgName);
+  if(pkgName && pkgVersion) {
+    run.push(`${pkgName}@${pkgVersion}`);
+  } else if(pkgName) {
+    run.push(`${pkgName}`);
   }
 
-  params.push(scope);
-  let npmc = spawn('npm', [cmd].concat(params).concat(opts), {
+  if(options.scope) {
+    params.push(`-${options.scope}`);
+  }
+
+  if(options.arguments) {
+    for(let z in options.arguments) {
+      let v = options.arguments[z];
+      opts.push(`--${z}=${v}`);
+    }
+  } else {
+    opts = defaults.concat();
+  }
+
+  let npmc = spawn('npm', run.concat(params).concat(opts), {
     maxBuffer: 1024 * 500
   });
 
   npmc.stdout.on('data', (data) => {
+    result+=data.toString();
     cb(data.toString());
   });
   npmc.stderr.on('data', (data) => {
     cb(data.toString());
   });
   npmc.on('close', () => {
-    console.log(`npm ${cmd} finished execution`);
-  });
-}
-
-exports.install = function(pkgName, options, cb) {
-  const cmd = 'install';
-  let opts = [];
-
-  let pkgversion = opts.push(`${pkgName}@${options.version || '@latest'}`);
-  let scope = opts.push(options.scope || '-g');
-  let env, params = [], result = '';
-
-  opts.push('--json');
-  let npmc = spawn('npm', [cmd].concat(opts), {
-    maxBuffer: 1024 * 500
-  });
-
-  npmc.stdout.on('data', (data) => {
-    result+=data;
-    cb('stdout', data.toString());
-  });
-  npmc.stderr.on('data', (data) => {
-    cb('stderr', data.toString());
-  });
-  npmc.on('close', () => {
-    console.log(`npm ${cmd} finished execution`);
-    cb('close', result);
-  });
-}
-
-exports.uninstall = function(pkgName, options, cb) {
-  const cmd = 'uninstall';
-  let opts = [];
-
-  let pkgversion = opts.push(pkgName);
-  let scope = opts.push(options.scope || '-g');
-  let env, params = [], result = '';
-
-  opts.push('--json');
-  let npmc = spawn('npm', [cmd].concat(opts), {
-    maxBuffer: 1024 * 500
-  });
-
-  npmc.stdout.on('data', (data) => {
-    result+=data;
-    cb('stdout', data.toString());
-  });
-  npmc.stderr.on('data', (data) => {
-    cb('stderr', data.toString());
-  });
-  npmc.on('close', () => {
-    console.log(`npm ${cmd} finished execution`);
-    cb('close', result);
-  });
-}
-
-exports.view = function(pkgName, options, cb) {
-  const cmd = 'view';
-  let opts = [];
-
-  let pkgversion = opts.push(`${pkgName}@${options.version || '@latest'}`);
-  let scope = opts.push(options.scope || '-g');
-  let env, params = [], result = '';
-
-  opts.push('--json');
-  let npmc = spawn('npm', [cmd].concat(opts), {
-    maxBuffer: 1024 * 500
-  });
-
-  npmc.stdout.on('data', (data) => {
-    cb('stdout', data.toString());
-  });
-  npmc.stderr.on('data', (data) => {
-    cb('stderr', data.toString());
-  });
-  npmc.on('close', () => {
-    console.log(`npm ${cmd} finished execution`);
+    console.log(`npm ${run.join(" ")} ${params.join(" ")} ${opts.join(" ")} finished execution`);
+    cb(result, 'close');
   });
 }

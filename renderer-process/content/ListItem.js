@@ -13,9 +13,12 @@ export default class ListItem extends React.Component {
     let props = this.props;
     let target = e.target;
 
-    this.props.deselect();
+    props.deselect();
     target.classList.add('selected');
-    ipcRenderer.send('view-by-version', props.name, props.version);
+    ipcRenderer.send('view-by-version', {
+      pkgName: props.name,
+      pkgVersion: props.version
+    });
     return false;
   }
   render() {
