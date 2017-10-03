@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom';
 
 import SearchBar from './common/SearchBar';
 import List from './content/List';
-import Main from './content/Package';
+import Package from './content/Package';
 
 //configuration and store globals
 const config = remote.getGlobal('config');
@@ -49,7 +49,34 @@ class App extends React.Component {
           mode: 'search'
         });
       });
+      ipcRenderer.on('view-by-version-reply', (event) => {
+        this.setState({
+          loader: false,
+          showMain: true,
+          mode: this.state.mode
+        });
+      });
     }
+  }
+  showMessageBox(opts, cb) {
+    let pkgName = opts.name;
+    let action = opts.action;
+
+    remote.dialog.showMessageBox(remote.getCurrentWindow(), {
+      type: 'question',
+      message: `This action will ${action} ${pkgName} ${(opts.version) ? opts.version : ''}. \nAre you sure? `,
+      buttons: ['OK', 'CANCEL']
+    }, (btnIdx) => {
+      switch (btnIdx) {
+        case 0:
+          if(cb) {
+            cb();
+          }
+          break;
+        default:
+          return;
+      }
+    });
   }
   doSearch(pkgName) {
     if (pkgName) {
@@ -67,11 +94,14 @@ class App extends React.Component {
   }
   clearSearch() {
     this.setState({
-      showMain: false,
       loader: true,
+      showMain: false,
       mode: 'global'
+    }, () => {
+      ipcRenderer.send('get-packages', {
+        scope: 'g'
+      });
     });
-    ipcRenderer.send('get-packages');
   }
   render() {
     return (
@@ -83,10 +113,10 @@ class App extends React.Component {
             </div>
             <div className="header">Packages</div>
             <List loading={this.state.loader}/>
-        </div>
+          </div>
         </section>
         <section className="content" ref="content">
-          <Main mode={this.state.mode} visible={this.state.showMain}/>
+          <Package mode={this.state.mode} showMessageBox={this.showMessageBox} visible={this.state.showMain}/>
         </section>
       </div>
     )

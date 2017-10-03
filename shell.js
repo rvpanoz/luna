@@ -9,10 +9,12 @@ const spawn = cp.spawn;
 const utils = require('./utils');
 
 exports.doCmd = function(cmd, options, cb) {
-  if(!cmd) {
-    throw new Error('shell->doCmd: Missing cmd parameter')
-  }
   const defaults = ['--depth=0', '--json'];
+
+  if(!cmd) {
+    throw new Error('shell->doCmd: Missing cmd parameter');
+  }
+
   let run=[cmd], params=[], opts=[];
   let pkgName = options.pkgName;
   let pkgVersion = options.pkgVersion;
