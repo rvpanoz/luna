@@ -12,6 +12,7 @@ const listeners = [
 class PackagesList extends React.Component {
   constructor(props) {
     super(props);
+    this.deSelectAll = this.deSelectAll.bind(this);
   }
   componentWillMount() {
     ipcRenderer.send('get-packages', {
@@ -36,17 +37,26 @@ class PackagesList extends React.Component {
   componentWillUnMount() {
     ipcRenderer.removeAllListeners(listeners);
   }
+  deSelectAll() {
+    let list = this.refs.list;
+    if(list) {
+      let selected = list.querySelector('.selected');
+      if(selected) {
+        selected.classList.remove('selected');
+      }
+    }
+  }
   render() {
     let packages = this.props.packages;
     return (
       <Loader loading={this.props.loading}>
-        <div className="list">
+        <div className="list" ref="list">
           {(packages)
             ? packages.map((pkg, idx) => {
               pkg.name = (pkg.from)
                 ? pkg.from.split("@")[0]
                 : pkg.name;
-              return <PackageItem idx={idx} key={idx} {...pkg}/>
+              return <PackageItem deSelectAll={this.deSelectAll} idx={idx} key={idx} {...pkg}/>
             })
             : null}
         </div>
