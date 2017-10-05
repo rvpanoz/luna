@@ -1,15 +1,14 @@
-'use strict';
-
 import React from 'react';
-import ActionButton from './ActionButton';
 
-export default class Header extends React.Component {
+class PackageHeader extends React.Component {
   constructor(props) {
     super(props);
   }
   render() {
     let pkg = this.props.pkg;
-
+    if(!pkg) {
+      return null;
+    }
     return (
       <div className="flex-row" ref="root">
         <h1 className="ui header" style={{
@@ -17,13 +16,12 @@ export default class Header extends React.Component {
         }}>
           {pkg.name}&nbsp;{pkg.version}
           <div className="sub header">
-            Latest:&nbsp;{pkg['dist-tags'].latest}&nbsp; {(this.props.needsUpdate())
-              ? <a href="#" onClick={this.props.update}>Update</a>
-              : ''}
+            Latest:&nbsp;{pkg['dist-tags'].latest}
           </div>
         </h1>
-        <ActionButton />
       </div>
     )
   }
 }
+
+export default PackageHeader;
