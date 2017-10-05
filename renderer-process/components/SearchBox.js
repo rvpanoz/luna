@@ -21,6 +21,9 @@ export default class SearchBox extends React.Component {
   }
   _clearSearch(e) {
     let searchInput = this.refs.searchInput;
+    if(!searchInput.value.length) {
+      return;
+    }
     searchInput.value = '';
     this.props.toggleLoader(true);
     this.props.setMode('global');
