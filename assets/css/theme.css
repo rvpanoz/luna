@@ -31,6 +31,14 @@ body:before {
   background: -webkit-radial-gradient(95% 10%, farthest-corner, #94525A, #181528);
   background: radial-gradient(farthest-corner at 95% 10%, #94525A, #181528);
 }
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: #373737;
+}
 a {
   text-decoration: none;
   color: #5e6870;
@@ -426,6 +434,7 @@ body.main-scrollable .main {
 }
 .main > .main__scroll {
   height: 100%;
+  overflow-x: hidden;
 }
 .main__cont {
   padding: 15px;
@@ -1122,28 +1131,28 @@ body.main-scrollable .main {
 .ss-widget .input-number {
   min-width: 50px;
 }
-.mailbox {
+.packages {
   padding: 10px 15px;
   border-radius: 2px;
   background-color: rgba(36, 41, 44, 0.5);
 }
-.mailbox__head:after {
+.packages__head:after {
   content: '';
   display: block;
   clear: both;
 }
-.mailbox__title {
+.packages__title {
   float: left;
   box-sizing: border-box;
   width: 100%;
   padding-right: 60px;
   margin-right: -50px;
 }
-.mailbox__title span {
+.packages__title span {
   font-size: 18px;
   color: #fff;
 }
-.mailbox__actions {
+.packages__actions {
   float: left;
   width: 50px;
   cursor: pointer;
@@ -1151,55 +1160,55 @@ body.main-scrollable .main {
   font-size: 0;
   text-align: right;
 }
-.mailbox__action {
+.packages__action {
   display: inline-block;
   margin-right: 5px;
   font-size: 14px;
   vertical-align: top;
 }
-.mailbox__action:last-child {
+.packages__action:last-child {
   margin-right: 0;
 }
-.mailbox__action > .fa:hover {
+.packages__action > .fa:hover {
   color: #fff;
 }
-.mailbox__action .dropdown-menu > li .fa {
+.packages__action .dropdown-menu > li .fa {
   margin-right: 10px;
 }
-.mailbox__search {
+.packages__search {
   margin: 10px 0;
 }
-.mailbox__list {
+.packages__list {
   margin-top: 15px;
   max-height: 735px;
 }
 @media (max-width: 768px) {
-  .mailbox__list {
+  .packages__list {
     margin-bottom: 30px;
   }
 }
-.mailbox-item {
+.packages-item {
   border-top: 1px solid rgba(36, 41, 44, 0.5);
   padding: 10px 10px 15px;
   cursor: pointer;
 }
-.mailbox-item:hover {
+.packages-item:hover {
   background-color: rgba(36, 41, 44, 0.5);
 }
-.mailbox-item__head {
+.packages-item__head {
   overflow: hidden;
 }
-.mailbox-item__check {
+.packages-item__check {
   float: left;
 }
-.mailbox-item__check .checkbox {
+.packages-item__check .checkbox {
   padding-top: 0;
   height: 20px;
 }
-.mailbox-item__check .checkbox label {
+.packages-item__check .checkbox label {
   padding-left: 0;
 }
-.mailbox-item__name {
+.packages-item__name {
   float: left;
   box-sizing: border-box;
   width: 100%;
@@ -1211,29 +1220,29 @@ body.main-scrollable .main {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.mailbox-item__name span {
+.packages-item__name span {
   padding-right: 10px;
 }
-.mailbox-item__name span:nth-of-type(1) {
+.packages-item__name span:nth-of-type(1) {
   font-weight: bold;
 }
-.mailbox-item.new .mailbox-item__name {
+.packages-item.new .packages-item__name {
   color: #fff;
 }
-.mailbox-item__date {
+.packages-item__date {
   float: left;
   width: 60px;
   text-align: right;
 }
-.mailbox-item__body {
+.packages-item__body {
   overflow: hidden;
   padding-top: 5px;
 }
-.mailbox-item__tag {
+.packages-item__tag {
   float: left;
   width: 20px;
 }
-.mailbox-item__text {
+.packages-item__text {
   float: left;
   box-sizing: border-box;
   width: 100%;
@@ -1243,17 +1252,17 @@ body.main-scrollable .main {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.mailbox-mail__head:after {
+.packages-mail__head:after {
   content: '';
   display: block;
   clear: both;
 }
-.mailbox-mail__tag {
+.packages-mail__tag {
   float: left;
   width: 20px;
   line-height: 25px;
 }
-.mailbox-mail__title {
+.packages-mail__title {
   float: left;
   width: 100%;
   box-sizing: border-box;
@@ -1262,27 +1271,27 @@ body.main-scrollable .main {
   font-size: 18px;
   color: #fff;
 }
-.mailbox-mail__settings {
+.packages-mail__settings {
   float: left;
   width: 20px;
   text-align: right;
   line-height: 25px;
   cursor: pointer;
 }
-.mailbox-mail__settings > .fa:hover {
+.packages-mail__settings > .fa:hover {
   color: #fff;
 }
-.mailbox-mail__settings .dropdown-menu > li .fa {
+.packages-mail__settings .dropdown-menu > li .fa {
   margin-right: 10px;
 }
-.mailbox-mail__info {
+.packages-mail__info {
   border-top: 1px solid rgba(36, 41, 44, 0.5);
   border-bottom: 1px solid rgba(36, 41, 44, 0.5);
   padding: 8px 0;
   margin-top: 10px;
   overflow: hidden;
 }
-.mailbox-mail__photo {
+.packages-mail__photo {
   float: left;
   width: 40px;
   height: 40px;
@@ -1293,7 +1302,7 @@ body.main-scrollable .main {
   background-position: 50% 50%;
   background-size: contain;
 }
-.mailbox-mail__name {
+.packages-mail__name {
   float: left;
   width: 100%;
   box-sizing: border-box;
@@ -1304,31 +1313,31 @@ body.main-scrollable .main {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.mailbox-mail__name span {
+.packages-mail__name span {
   padding-right: 5px;
 }
-.mailbox-mail__name span:nth-of-type(1) {
+.packages-mail__name span:nth-of-type(1) {
   font-weight: bold;
 }
-.mailbox-mail__date {
+.packages-mail__date {
   float: left;
   font-size: 12px;
   line-height: 20px;
   padding: 10px 0;
   text-align: right;
 }
-.mailbox-mail__body {
+.packages-mail__body {
   margin-top: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid rgba(36, 41, 44, 0.5);
 }
-.mailbox-reply {
+.packages-reply {
   margin-top: 20px;
 }
-.mailbox-reply__body {
+.packages-reply__body {
   overflow: hidden;
 }
-.mailbox-reply__photo {
+.packages-reply__photo {
   float: left;
   width: 60px;
   height: 60px;
@@ -1339,28 +1348,28 @@ body.main-scrollable .main {
   background-position: 50% 50%;
   background-size: contain;
 }
-.mailbox-reply__text {
+.packages-reply__text {
   float: left;
   width: 100%;
   box-sizing: border-box;
   padding-left: 70px;
   margin-left: -60px;
 }
-.mailbox-reply__submit {
+.packages-reply__submit {
   clear: both;
   text-align: right;
   margin-top: 10px;
   margin-left: 70px;
 }
 @media (max-width: 768px) {
-  .mailbox-compose {
+  .packages-compose {
     margin-bottom: 30px;
   }
 }
-.mailbox-compose__head {
+.packages-compose__head {
   overflow: hidden;
 }
-.mailbox-compose__title {
+.packages-compose__title {
   float: left;
   box-sizing: border-box;
   width: 100%;
@@ -1369,7 +1378,7 @@ body.main-scrollable .main {
   font-size: 18px;
   color: #fff;
 }
-.mailbox-compose__actions {
+.packages-compose__actions {
   float: left;
   width: 50px;
   cursor: pointer;
@@ -1377,46 +1386,46 @@ body.main-scrollable .main {
   font-size: 0;
   text-align: right;
 }
-.mailbox-compose__action {
+.packages-compose__action {
   display: inline-block;
   margin-right: 5px;
   font-size: 14px;
   vertical-align: top;
 }
-.mailbox-compose__action:last-child {
+.packages-compose__action:last-child {
   margin-right: 0;
 }
-.mailbox-compose__action > .fa:hover {
+.packages-compose__action > .fa:hover {
   color: #fff;
 }
-.mailbox-compose__form {
+.packages-compose__form {
   margin: 10px 0;
 }
-.mailbox-compose__text {
+.packages-compose__text {
   margin-top: 20px;
 }
-.mailbox-compose__submit {
+.packages-compose__submit {
   margin-top: 10px;
   text-align: right;
 }
-.mailbox-contacts .mailbox__title {
+.packages-contacts .packages__title {
   padding: 0;
   margin: 0;
 }
-.mailbox-contacts__list {
+.packages-contacts__list {
   margin-top: 15px;
   max-height: 735px;
 }
-.mailbox-contacts__item {
+.packages-contacts__item {
   border-top: 1px solid rgba(36, 41, 44, 0.5);
   padding: 10px 10px 10px;
   cursor: pointer;
   overflow: hidden;
 }
-.mailbox-contacts__item:hover {
+.packages-contacts__item:hover {
   background-color: rgba(47, 54, 58, 0.5);
 }
-.mailbox-contacts__photo {
+.packages-contacts__photo {
   float: left;
   width: 40px;
   height: 40px;
@@ -1425,20 +1434,20 @@ body.main-scrollable .main {
   border: 1px solid rgba(36, 41, 44, 0.5);
   border-radius: 2px;
 }
-.mailbox-contacts__info {
+.packages-contacts__info {
   float: left;
   box-sizing: border-box;
   width: 100%;
   padding-left: 50px;
   margin-left: -40px;
 }
-.mailbox-contacts__name {
+.packages-contacts__name {
   font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.mailbox-contacts__email {
+.packages-contacts__email {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -2,24 +2,20 @@ import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 
 const PackageItem = (props) => (
-  <div className="item">
-    <div className="flex-row">
-      <a href="#" onClick={(e) => {
-          let target = e.target;
-          props.deSelectAll();
-          props.toggleMainLoader(true);
-          target.classList.add('selected');
-          ipcRenderer.send('view-by-version', {
-            pkgName: props.name,
-            pkgVersion: props.version
-          });
-        }}>
-      {props.name}
-      </a>
-      <span style={{
-        width: '20%',
-        height: '15px'
-      }}>{props.version}</span>
+  <div className="packages-item new">
+    <div className="packages-item__head">
+      <div className="packages-item__check">
+        <div className="checkbox">
+          <input id={`m`+props.idx} type="checkbox"/>
+          <label htmlFor={`m`+props.idx}></label>
+        </div>
+      </div>
+      <div className="packages-item__name">
+        <span>{props.name}</span>
+      </div>
+      <div className="packages-item__date">
+        <span>{props.version}</span>
+      </div>
     </div>
   </div>
 )
