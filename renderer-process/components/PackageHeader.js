@@ -21,13 +21,15 @@ class PackageHeader extends React.Component {
   _install(e) {
     e.preventDefault();
     let pkg = this.props.pkg, version;
+    let mode = this.props.mode;
     this.props.showMessageBox({
       action: 'Install',
-      name: pkg.name
+      name: pkg.name,
+      version: version || 'latest'
     }, () => {
       this.props.setMode('global');
       ipcRenderer.send('install-package', {
-        scope: 'g',
+        scope: (mode !== 'local') ? 'g' : null,
         pkgName: pkg.name,
         version: version || 'latest'
       });
@@ -36,13 +38,14 @@ class PackageHeader extends React.Component {
   _uninstall(e) {
     e.preventDefault();
     let pkg = this.props.pkg, version;
+    let mode = this.props.mode;
     this.props.showMessageBox({
       action: 'Uninstall',
       name: pkg.name
     }, () => {
       this.props.setMode('global');
       ipcRenderer.send('uninstall-package', {
-        scope: 'g',
+        scope: (mode !== 'local') ? 'g' : null,
         pkgName: pkg.name
       });
     });
@@ -50,37 +53,45 @@ class PackageHeader extends React.Component {
   _update(e) {
     e.preventDefault();
     let pkg = this.props.pkg, version;
+    let mode = this.props.mode;
     this.props.showMessageBox({
       action: 'Update',
-      name: pkg.name
+      name: pkg.name,
+      version: version || 'latest'
     }, () => {
+      this.props.setMode('global');
       ipcRenderer.send('update-package', {
-        scope: 'g',
+        scope: (mode !== 'local') ? 'g' : null,
         pkgName: pkg.name,
         version: version || 'latest'
       });
     });
   }
   componentDidMount() {
+    let mode = this.props.mode;
     ipcRenderer.on('uninstall-package-reply', (event, data) => {
+      this.props.setActive(null);
       this.props.toggleLoader(true);
       ipcRenderer.send('get-packages', {
-        scope: 'g'
+        scope: (mode !== 'local') ? 'g' : null
       });
     });
     ipcRenderer.on('install-package-reply', (event, data) => {
       this.props.toggleLoader(true);
       ipcRenderer.send('get-packages', {
-        scope: 'g'
+        scope: (mode !== 'local') ? 'g' : null
       });
     });
     ipcRenderer.on('update-package-reply', (event, data) => {
       this.props.setActive(null);
       this.props.toggleLoader(true);
       ipcRenderer.send('get-packages', {
-        scope: 'g'
+        scope: (mode !== 'local') ? 'g' : null
       });
     });
+  }
+  componentWillUnMount() {
+    ipcRenderer.removeAllListeners('install-package-reply', 'update-package-reply', 'uninstall-package-reply');
   }
   render() {
     let pkg = this.props.pkg;
@@ -92,7 +103,7 @@ class PackageHeader extends React.Component {
         <h1 className="ui header" style={{
           marginBottom: '0.25em'
         }}>
-          {pkg.name}&nbsp;{pkg.version} - {this.props.mode}
+          {pkg.name}&nbsp;{pkg.version}
           <div className="sub header">
             Latest:&nbsp;{pkg['dist-tags'].latest}&nbsp; {(this._needsUpdate())
               ? <a href="#" onClick={this._update}>Update</a>
