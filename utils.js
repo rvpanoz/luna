@@ -25,8 +25,9 @@ export function parse(data, key) {
 export function showMessageBox(opts, cb = {}) {
   let pkgName = opts.name;
   let action = opts.action;
-  let version = opts.version, message;
+  let version, message;
 
+  version = (opts.version !== "0") ? opts.version : 'latest';
   switch (action) {
     case 'Uninstall':
       message = `${action} ${pkgName} from your system.`;

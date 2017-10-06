@@ -511,6 +511,10 @@ h1.ui.header .sub.header {
   color: rgba(0, 0, 0, .6);
 }
 
+.ui.actions {
+  height: 75px;
+}
+
 
 /** tabs **/
 
@@ -583,7 +587,7 @@ a.button {
   line-height: 50px;
   color: #fff;
   border-radius: 5px;
-  transition: all 0.2s ;
+  transition: all 0.2s;
 }
 
 .btn-green {
@@ -598,7 +602,9 @@ a.button {
   background: #e82e44;
 }
 
+
 /* FADE */
+
 .btn-fade.btn-orange:hover {
   background: #ed7f01;
 }
@@ -610,6 +616,8 @@ a.button {
 .btn-fade.btn-green:hover {
   background: #00ed73;
 }
+
+
 /** badges **/
 
 .badge {
@@ -644,4 +652,28 @@ a.button {
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: .25em;
+}
+
+
+/** Select **/
+
+select.soflow {
+   -webkit-appearance: button;
+   -webkit-border-radius: 2px;
+   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+   -webkit-padding-end: 20px;
+   -webkit-padding-start: 2px;
+   -webkit-user-select: none;
+   background-image: url(http://i62.tinypic.com/15xvbd5.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+   background-position: 97% center;
+   background-repeat: no-repeat;
+   border: 1px solid #AAA;
+   color: #555;
+   font-size: inherit;
+   margin: 0;
+   overflow: hidden;
+   padding: 5px 10px;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   width: 300px;
 }
