@@ -1,6 +1,5 @@
 import * as types from '../constants/ActionTypes';
-import {remote, ipcRenderer} from 'electron';
-import {parse} from '../../utils';
+import { parse, isJson } from '../../utils';
 
 export function toggleLoader(loading) {
   return {
@@ -9,7 +8,22 @@ export function toggleLoader(loading) {
   };
 }
 
+export function toggleMainLoader(packages_loading) {
+  return {
+    type: types.TOGGLE_MAIN_LOADER,
+    packages_loading
+  }
+}
+
 export function setPackages(data) {
+  let jsonData = isJson(data);
+  if(!jsonData) {
+    return {
+      type: types.SET_APP_MESSAGE,
+      app_message: jsonData
+    }
+  }
+
   let packages = parse(data, 'dependencies');
   return {
     type: types.SET_PACKAGES,

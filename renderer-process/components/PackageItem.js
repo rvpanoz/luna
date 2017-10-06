@@ -7,6 +7,7 @@ const PackageItem = (props) => (
       <a href="#" onClick={(e) => {
           let target = e.target;
           props.deSelectAll();
+          props.toggleMainLoader(true);
           target.classList.add('selected');
           ipcRenderer.send('view-by-version', {
             pkgName: props.name,

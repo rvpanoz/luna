@@ -1,5 +1,6 @@
 import {
   TOGGLE_LOADER,
+  TOGGLE_MAIN_LOADER,
   SET_PACKAGES,
   SET_ACTIVE,
   SET_MODE
@@ -11,6 +12,10 @@ export default function packagesReducer(state = initialState, action) {
     case TOGGLE_LOADER:
       return Object.assign({}, state, {
         loading: action.loading
+      });
+    case TOGGLE_MAIN_LOADER:
+      return Object.assign({}, state, {
+        package_loading: action.package_loading
       });
     case SET_PACKAGES:
       return Object.assign({}, state, {

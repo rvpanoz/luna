@@ -20,7 +20,9 @@ export default class SearchBox extends React.Component {
     return false;
   }
   _clearSearch(e) {
+    let target = e.target;
     let searchInput = this.refs.searchInput;
+
     searchInput.value = '';
     this.props.toggleLoader(true);
     this.props.setMode('global');
@@ -58,12 +60,12 @@ export default class SearchBox extends React.Component {
       <div className="item search" ref="root">
         <div className="ui icon input transparent inverted icon">
           <div className="inner">
-            <input style={{width: '80%'}} type="text" placeholder="search registry.." ref="searchInput"/>
+            <input onChange={this._onChange} style={{width: '80%'}} type="text" placeholder="search registry.." ref="searchInput"/>
             <a style={{marginRight: '8.5px', cursor: 'pointer'}} onClick={this._search}>
-              <i aria-hidden="true" className="fa fa-search search icon" ref="iconSearch"></i>
+              <i aria-hidden="true" className="fa fa-search icon" ref="iconSearch"></i>
             </a>
             <a style={{cursor: 'pointer'}} onClick={this._clearSearch}>
-              <i aria-hidden="true" className="fa fa-remove remove icon" ref="iconClear"></i>
+              <i aria-hidden="true" className="fa fa-refresh icon" ref="iconRefresh"></i>
             </a>
           </div>
         </div>
