@@ -50,17 +50,17 @@ class PackagesList extends React.Component {
     let packages = this.props.packages;
     return (
       <Loader loading={this.props.loading}>
-        <div className="list" ref="list">
-          {(packages)
-            ? packages.map((pkg, idx) => {
-              pkg.name = (pkg.from)
-                ? pkg.from.split("@")[0]
-                : pkg.name;
-              return <PackageItem deSelectAll={this.deSelectAll} idx={idx} key={idx} {...pkg}/>
-            })
-            : null}
-        </div>
-      </Loader>
+      <div className="list" ref="list">
+        {(packages)
+          ? packages.map((pkg, idx) => {
+            pkg.name = (pkg.from)
+              ? pkg.from.split("@")[0]
+              : pkg.name;
+            return <PackageItem toggleMainLoader={this.props.toggleMainLoader} deSelectAll={this.deSelectAll} idx={idx} key={idx} {...pkg}/>
+          })
+          : null}
+      </div>
+    </Loader>
     )
   }
 }

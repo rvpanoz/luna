@@ -17,6 +17,7 @@ const PackagesContainer = (props) => {
         setPackages={props.actions.setPackages}
         packages={props.packages}
         toggleLoader={props.actions.toggleLoader}
+        toggleMainLoader={props.actions.toggleMainLoader}
         setActive={props.actions.setActive}
         active={props.active}
       />

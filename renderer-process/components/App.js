@@ -13,7 +13,7 @@ import configureStore from '../store';
 
 import SearchBoxContainer from '../containers/SearchBoxContainer';
 import PackageContainer from '../containers/PackageContainer';
-import PackagesContainer from '../containers/PackagesContainer';
+import PackagesListContainer from '../containers/PackagesListContainer';
 
 //configuration and store globals
 const config = remote.getGlobal('config');
@@ -34,7 +34,7 @@ const App = () => {
               <SearchBoxContainer />
             </div>
             <div className="header">Packages</div>
-            <PackagesContainer />
+            <PackagesListContainer />
           </div>
         </section>
         <section className="content">
