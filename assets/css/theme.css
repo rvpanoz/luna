@@ -1,3 +1,6 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,900,400italic,700italic");
+@import url(font-awesome.min.css);
+
 .valign:before {
   content: '';
   display: inline-block;
@@ -73,8 +76,8 @@ body.main-scrollable .main {
   top: 0;
   width: 100%;
   background-color: #272c30;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
 }
 @media (max-width: 768px) {
   .header-navbar .navbar-header,

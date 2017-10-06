@@ -46,7 +46,7 @@ export function setActive(active) {
   }
 }
 
-export function setMode(mode='global') {
+export function setMode(mode) {
   return {
     type: types.SET_MODE,
     mode

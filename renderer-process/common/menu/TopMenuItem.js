@@ -1,9 +1,10 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 const TopMenuItem = (props) => {
   return (
     <li className={props.className}>
-      <a onClick={props.onClick} href={props.href}><span>{props.text}</span></a>
+      <Link to={props.href}><span>{props.text}</span></Link>
     </li>
   )
 }

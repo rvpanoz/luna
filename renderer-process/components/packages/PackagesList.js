@@ -1,6 +1,6 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
-import Loader from '../common/Loader';
+import Loader from '../../common/Loader';
 import PackageItem from './PackageItem';
 
 const listeners = [

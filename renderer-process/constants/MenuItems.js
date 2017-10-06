@@ -1,13 +1,13 @@
 export const menuItems = {
   items: [{
     text: 'Dashboard',
-    href: '#',
+    href: '/',
     className: 'active'
   }, {
     text: 'Packages',
-    href: '#'
+    href: '/packages'
   }, {
     text: 'Analyze',
-    href: '#'
+    href: '/analyze'
   }]
 }
