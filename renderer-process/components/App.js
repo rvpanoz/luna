@@ -11,7 +11,9 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import configureStore from '../store';
 
-import AppHeader from '../common/AppHeader';
+import AppHeader from '../containers/AppHeader';
+import SidebarContainer from '../containers/SidebarContainer';
+import MainContainer from '../containers/MainContainer';
 
 //configuration and store globals
 const config = remote.getGlobal('config');
@@ -27,6 +29,10 @@ const App = () => {
     <Provider store={store}>
       <div className="wrapper">
         <AppHeader title="Luna"/>
+        <div className="dashboard">
+          <SidebarContainer/>
+          <MainContainer/>
+        </div>
       </div>
     </Provider>
   );

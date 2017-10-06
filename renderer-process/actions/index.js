@@ -1,10 +1,11 @@
 import * as types from '../constants/ActionTypes';
 import { parse, isJson } from '../../utils';
 
-export function setActivePage(page) {
+export function setActivePage(activePage, pageTitle) {
   return {
     type: types.SET_ACTIVE_PAGE,
-    page
+    activePage,
+    pageTitle
   }
 }
 
