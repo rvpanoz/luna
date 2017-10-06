@@ -117,7 +117,7 @@ ipcMain.on('search-packages', (event, options) => {
 
 ipcMain.on('update-package', (event, options) => {
   shell.doCmd('install', options, (data, end) => {
-    if(end) {
+    if (end) {
       event.sender.send('update-package-close', data);
     } else {
       event.sender.send('update-package-reply', data);
@@ -127,7 +127,7 @@ ipcMain.on('update-package', (event, options) => {
 
 ipcMain.on('install-package', (event, options) => {
   shell.doCmd('install', options, (data, end) => {
-    if(end) {
+    if (end) {
       event.sender.send('install-package-close', data);
     } else {
       event.sender.send('install-package-reply', data);
@@ -137,7 +137,7 @@ ipcMain.on('install-package', (event, options) => {
 
 ipcMain.on('uninstall-package', (event, options) => {
   shell.doCmd('uninstall', options, (data, end) => {
-    if(end) {
+    if (end) {
       event.sender.send('uninstall-package-close', data);
     } else {
       event.sender.send('uninstall-package-reply', data);
