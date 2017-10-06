@@ -26,6 +26,10 @@ export default function packagesReducer(state = initialState, action) {
       return Object.assign({}, state, {
         active: action.active
       });
+    case SET_ACTIVE:
+      return Object.assign({}, state, {
+        page: action.page
+      });
     case SET_MODE:
       return Object.assign({}, state, {
         mode: action.mode,

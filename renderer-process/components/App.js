@@ -11,9 +11,7 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import configureStore from '../store';
 
-import SearchBoxContainer from '../containers/SearchBoxContainer';
-import PackageContainer from '../containers/PackageContainer';
-import PackagesListContainer from '../containers/PackagesListContainer';
+import AppHeader from '../common/AppHeader';
 
 //configuration and store globals
 const config = remote.getGlobal('config');
@@ -28,18 +26,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <div className="wrapper">
-        <section className="sidebar ui inverted vertical left fixed list">
-          <div className="item">
-            <div className="search-bar">
-              <SearchBoxContainer />
-            </div>
-            <div className="header">Packages</div>
-            <PackagesListContainer />
-          </div>
-        </section>
-        <section className="content">
-          <PackageContainer />
-        </section>
+        <AppHeader title="Luna"/>
       </div>
     </Provider>
   );

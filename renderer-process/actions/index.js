@@ -1,6 +1,13 @@
 import * as types from '../constants/ActionTypes';
 import { parse, isJson } from '../../utils';
 
+export function setActivePage(page) {
+  return {
+    type: types.SET_ACTIVE_PAGE,
+    page
+  }
+}
+
 export function toggleLoader(loading) {
   return {
     type: types.TOGGLE_LOADER,
