@@ -1,23 +1,43 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 
-const PackageItem = (props) => (
-  <div className="packages-item new">
-    <div className="packages-item__head">
-      <div className="packages-item__check">
-        <div className="checkbox">
-          <input id={`m`+props.idx} type="checkbox"/>
-          <label htmlFor={`m`+props.idx}></label>
+class PackageItem extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onItemClick = this.onItemClick.bind(this);
+  }
+  onItemClick(e) {
+    e.preventDefault();
+    let el = this.refs[`root-${this.props.idx}`];
+    if(el) {
+      let isSelected = el.classList.contains('selected');
+      if(!isSelected) {
+        el.classList.add('selected');
+        ipcRenderer.send('view-by-version', {
+          pkgName: this.props.name,
+          version: this.props.version
+        });
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+  render() {
+    let props = this.props;
+    return (
+      <div ref={`root-${this.props.idx}`} className="packages-item new" onClick={this.onItemClick}>
+        <div className="packages-item__head">
+          <div className="packages-item__name">
+            <span>&nbsp;{props.name}</span>
+          </div>
+          <div className="packages-item__date">
+            <span>{props.version}</span>
+          </div>
         </div>
       </div>
-      <div className="packages-item__name">
-        <span>{props.name}</span>
-      </div>
-      <div className="packages-item__date">
-        <span>{props.version}</span>
-      </div>
-    </div>
-  </div>
-)
+    )
+  }
+}
 
 export default PackageItem

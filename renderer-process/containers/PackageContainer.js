@@ -7,29 +7,15 @@ import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
 import Loader from '../common/Loader';
 import {showMessageBox} from '../../utils';
-import PackageHeader from '../components/PackageHeader';
-import PackageDetails from '../components/PackageDetails';
+import PackageDetails from '../components/package/PackageDetails';
 
 const PackageContainer = (props) => {
   return (
-    <div className="main">
-      <Loader loading={props.package_loading}>
-        <div className="ui container">
-          <div className="ui basic padded segment">
-            <PackageHeader
-              pkg={props.active}
-              mode={props.mode}
-              setMode={props.actions.setMode}
-              setActive={props.actions.setActive}
-              toggleLoader={props.actions.toggleLoader}
-              showMessageBox={showMessageBox} />
-          </div>
-          <div className="ui basic padded segment">
-            <PackageDetails pkg={props.active}/>
-          </div>
-        </div>
-      </Loader>
-    </div>
+    <Loader loading={props.package_loading}>
+      <div className="package-container">
+        <PackageDetails pkg={props.active}/>
+      </div>
+    </Loader>
   )
 }
 

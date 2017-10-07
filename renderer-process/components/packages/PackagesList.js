@@ -24,8 +24,8 @@ class PackagesList extends React.Component {
       this.props.toggleLoader(false);
     });
     ipcRenderer.on('view-by-version-reply', (event, pkg) => {
+      console.log(pkg);
       this.props.setActive(pkg);
-      this.props.toggleLoader(false);
     });
   }
   componentWillUnMount() {
@@ -50,7 +50,7 @@ class PackagesList extends React.Component {
               pkg.name = (pkg.from)
                 ? pkg.from.split("@")[0]
                 : pkg.name;
-              return <PackageItem toggleMainLoader={this.props.toggleMainLoader} deSelectAll={this.deSelectAll} idx={idx} key={idx} {...pkg}/>
+              return <PackageItem idx={idx} key={idx} {...pkg}/>
             })
             : null}
         </div>

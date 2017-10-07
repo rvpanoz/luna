@@ -28,6 +28,7 @@
     "winston": "^2.3.1"
   },
   "dependencies": {
+    "awesome-bootstrap-checkbox": "^1.0.0",
     "bootstrap": "^3.3.7",
     "electron-json-storage": "^3.0.7",
     "electron-store": "^1.2.0",

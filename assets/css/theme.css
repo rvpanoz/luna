@@ -199,7 +199,7 @@ body.main-scrollable .main {
   vertical-align: middle;
   font-size: 25px;
   width: 15px;
-  color: #ed4949;
+  color: orange;
 }
 .logo__text {
   font-family: 'Roboto', sans-serif;
@@ -812,27 +812,26 @@ body.main-scrollable .main {
   margin-top: 5px;
   height: 10px;
 }
-.feed-widget {
+.list-widget {
   padding: 15px 0;
 }
-.feed-widget__wrap {
+.list-widget__wrap {
   height: 252px;
 }
-.feed-widget__cont {
+.list-widget__cont {
   padding: 0px 20px;
 }
-.feed-widget__item {
-  padding-bottom: 10px;
+.list-widget__item {
   border-bottom: 1px solid rgba(36, 41, 44, 0.5);
   margin-bottom: 15px;
   overflow: hidden;
 }
-.feed-widget__item:last-child {
+.list-widget__item:last-child {
   margin-bottom: 0;
   border-bottom: 0;
   padding-bottom: 0;
 }
-.feed-widget__ico {
+.list-widget__ico {
   float: left;
   width: 40px;
   height: 40px;
@@ -842,39 +841,39 @@ body.main-scrollable .main {
   font-size: 0;
   white-space: nowrap;
 }
-.feed-widget__ico:before {
+.list-widget__ico:before {
   content: '';
   display: inline-block;
   vertical-align: middle;
   height: 100%;
 }
-.feed-widget__ico .fa {
+.list-widget__ico .fa {
   vertical-align: middle;
   font-size: 20px;
 }
-.feed-widget__item_user .feed-widget__ico .fa:before {
+.list-widget__item_user .list-widget__ico .fa:before {
   content: "\f024";
 }
-.feed-widget__item_product .feed-widget__ico .fa:before {
+.list-widget__item_product .list-widget__ico .fa:before {
   content: "\f1b2";
 }
-.feed-widget__item_order .feed-widget__ico .fa:before {
+.list-widget__item_order .list-widget__ico .fa:before {
   content: "\f0d1";
 }
-.feed-widget__item_subscriber .feed-widget__ico .fa:before {
+.list-widget__item_subscriber .list-widget__ico .fa:before {
   content: "\f004";
 }
-.feed-widget__info {
+.list-widget__info {
   float: left;
   width: 100%;
   box-sizing: border-box;
   padding-left: 55px;
   margin-left: -40px;
 }
-.feed-widget__text {
+.list-widget__text {
   margin-bottom: 5px;
 }
-.feed-widget__date {
+.list-widget__date {
   font-size: 12px;
   line-height: 14px;
 }
@@ -1132,6 +1131,7 @@ body.main-scrollable .main {
   min-width: 50px;
 }
 .packages {
+  min-height: 100vh;
   padding: 10px 15px;
   border-radius: 2px;
   background-color: rgba(36, 41, 44, 0.5);
@@ -1252,17 +1252,17 @@ body.main-scrollable .main {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.packages-mail__head:after {
+.package-details__head:after {
   content: '';
   display: block;
   clear: both;
 }
-.packages-mail__tag {
+.package-details__tag {
   float: left;
   width: 20px;
   line-height: 25px;
 }
-.packages-mail__title {
+.package-details__title {
   float: left;
   width: 100%;
   box-sizing: border-box;
@@ -1271,27 +1271,27 @@ body.main-scrollable .main {
   font-size: 18px;
   color: #fff;
 }
-.packages-mail__settings {
+.package-details__settings {
   float: left;
   width: 20px;
   text-align: right;
   line-height: 25px;
   cursor: pointer;
 }
-.packages-mail__settings > .fa:hover {
+.package-details__settings > .fa:hover {
   color: #fff;
 }
-.packages-mail__settings .dropdown-menu > li .fa {
+.package-details__settings .dropdown-menu > li .fa {
   margin-right: 10px;
 }
-.packages-mail__info {
+.package-details__info {
   border-top: 1px solid rgba(36, 41, 44, 0.5);
   border-bottom: 1px solid rgba(36, 41, 44, 0.5);
   padding: 8px 0;
   margin-top: 10px;
   overflow: hidden;
 }
-.packages-mail__photo {
+.package-details__photo {
   float: left;
   width: 40px;
   height: 40px;
@@ -1302,7 +1302,7 @@ body.main-scrollable .main {
   background-position: 50% 50%;
   background-size: contain;
 }
-.packages-mail__name {
+.package-details__name {
   float: left;
   width: 100%;
   box-sizing: border-box;
@@ -1313,23 +1313,22 @@ body.main-scrollable .main {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.packages-mail__name span {
+.package-details__name span {
   padding-right: 5px;
 }
-.packages-mail__name span:nth-of-type(1) {
+.package-details__name span:nth-of-type(1) {
   font-weight: bold;
 }
-.packages-mail__date {
-  float: left;
-  font-size: 12px;
+.package-details__date {
   line-height: 20px;
   padding: 10px 0;
   text-align: right;
+  font-weight: bold;
 }
-.packages-mail__body {
+.package-details__body {
   margin-top: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid rgba(36, 41, 44, 0.5);
+  border-bottom: 0px solid rgba(36, 41, 44, 0.5);
 }
 .packages-reply {
   margin-top: 20px;
@@ -3286,4 +3285,124 @@ table.dataTable thead > tr > td.sorting {
 }
 .input-number-less:hover {
   border-color: #fff transparent transparent transparent;
+}
+
+/** loader **/
+
+.loader {
+  position: relative;
+  top: 300px;
+  left: 50%;
+}
+
+.loader p {
+  color: #fff;
+}
+
+.loader.show {
+  display: block;
+}
+
+.loader.hide {
+  display: none;
+}
+
+.loader .line {
+  animation: expand 1s ease-in-out infinite;
+  border-radius: 10px;
+  display: inline-block;
+  transform-origin: center center;
+  margin: 0 3px;
+  width: 1px;
+  height: 25px;
+}
+
+.loader .line:nth-child(1) {
+  background: #27ae60;
+}
+
+.loader .line:nth-child(2) {
+  animation-delay: 180ms;
+  background: #f1c40f;
+}
+
+.loader .line:nth-child(3) {
+  animation-delay: 360ms;
+  background: #e67e22;
+}
+
+@keyframes expand {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(2);
+  }
+}
+
+.license {
+  background-image: url("../images/license.png");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/** tabs **/
+
+.package-details__tabs {
+  margin-top: 20px;
+}
+
+.tab-wrap section {
+  display: none;
+  padding: 20px 0 0;
+  border-top: 1px solid #ddd;
+}
+
+.tab-wrap input {
+  display: none;
+}
+
+.tab-wrap label {
+  display: inline-block;
+  margin: 0 0 -1px;
+  padding: 15px 25px;
+  font-weight: 600;
+  text-align: center;
+  color: #bbb;
+  border: 1px solid transparent;
+}
+
+.tab-wrap label:before {
+  font-family: fontawesome;
+  font-weight: normal;
+  margin-right: 10px;
+}
+
+.tab-wrap label[for*='1']:before {
+  content: '\f1cb';
+}
+
+.tab-wrap label[for*='2']:before {
+  content: '\f17d';
+}
+
+.tab-wrap label[for*='3']:before {
+  content: '\f16b';
+}
+
+.tab-wrap label:hover {
+  color: #888;
+  cursor: pointer;
+}
+
+.tab-wrap input:checked+label {
+  color: #888;
+  background: #272c30;
+  border: 1px solid #ddd;
+  border-top: 2px solid orange;
+  border-bottom: 1px solid #fff;
+}
+
+.tab-wrap #tab2:checked~#contributors-content, .tab-wrap #tab1:checked~#dependencies-content {
+  display: block;
 }

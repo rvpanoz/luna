@@ -6,9 +6,10 @@ import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
 
 //components
-import Header from '../components/packages/Header';
+import PackagesListHeader from '../components/packages/PackagesListHeader';
 import SearchBox from '../components/packages/SearchBox';
 import PackagesList from '../components/packages/PackagesList';
+import PackageContainer from '../containers/PackageContainer';
 
 const PackagesPage = (props) => {
   return (
@@ -16,19 +17,19 @@ const PackagesPage = (props) => {
       <div className="container-fluid half-padding">
         <div className="row">
           <div className="col-md-4">
-            <Header title="Packages"/>
-            <SearchBox />
+            <PackagesListHeader title="Packages" toggleLoader={props.actions.toggleLoader}/>
+            <SearchBox toggleLoader={props.actions.toggleLoader}/>
             <PackagesList
               loading={props.loading}
-              setPackages={props.actions.setPackages}
               packages={props.packages}
+              setPackages={props.actions.setPackages}
               toggleLoader={props.actions.toggleLoader}
               setActive={props.actions.setActive}
               active={props.active}
             />
           </div>
           <div className="col-md-8">
-
+            <PackageContainer active={props.active} />
           </div>
         </div>
       </div>

@@ -25,7 +25,6 @@ export default class SearchBox extends React.Component {
 
     searchInput.value = '';
     this.props.toggleLoader(true);
-    this.props.setMode('global');
     ipcRenderer.send('get-packages', {scope: 'g'});
     return false;
   }
@@ -36,7 +35,6 @@ export default class SearchBox extends React.Component {
     let searchInput = this.refs.searchInput;
     if (searchInput.value.length) {
       this.props.toggleLoader(true);
-      this.props.setMode('search');
       ipcRenderer.send('search-packages', {pkgName: searchInput.value});
     }
     return false;
@@ -53,7 +51,7 @@ export default class SearchBox extends React.Component {
   }
   render() {
     return (
-      <div className="packages__search">
+      <div className="packages__search" ref="root">
         <input className="form-control" type="text" placeholder="Search registry.." ref="searchInput"/>
       </div>
     )
