@@ -24,7 +24,6 @@ class PackagesList extends React.Component {
       this.props.toggleLoader(false);
     });
     ipcRenderer.on('view-by-version-reply', (event, pkg) => {
-      console.log(pkg);
       this.props.setActive(pkg);
     });
   }
