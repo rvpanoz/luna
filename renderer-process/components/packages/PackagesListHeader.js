@@ -8,6 +8,7 @@ class PackagesListHeader extends React.Component {
   }
   _reload(e) {
     this.props.toggleLoader(true);
+    this.props.setActive(null);
     ipcRenderer.send('get-packages', {scope: 'g'});
   }
   render() {

@@ -16,13 +16,6 @@ export function toggleLoader(loading) {
   };
 }
 
-export function toggleMainLoader(packages_loading) {
-  return {
-    type: types.TOGGLE_MAIN_LOADER,
-    packages_loading
-  }
-}
-
 export function setPackages(data) {
   let jsonData = isJson(data);
   if(!jsonData) {

@@ -17,8 +17,16 @@ const PackagesPage = (props) => {
       <div className="container-fluid half-padding">
         <div className="row">
           <div className="col-md-4">
-            <PackagesListHeader title="Packages" toggleLoader={props.actions.toggleLoader}/>
-            <SearchBox toggleLoader={props.actions.toggleLoader}/>
+            <PackagesListHeader
+              title="Packages"
+              toggleLoader={props.actions.toggleLoader}
+              setActive={props.actions.setActive}
+              active={props.active}
+            />
+            <SearchBox
+              toggleLoader={props.actions.toggleLoader}
+              setActive={props.actions.setActive}
+            />
             <PackagesList
               loading={props.loading}
               packages={props.packages}

@@ -1273,7 +1273,7 @@ body.main-scrollable .main {
 }
 .package-details__settings {
   float: left;
-  width: 20px;
+  width: 30px;
   text-align: right;
   line-height: 25px;
   cursor: pointer;

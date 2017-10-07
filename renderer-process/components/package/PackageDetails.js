@@ -13,9 +13,6 @@ class PackageDetails extends React.Component {
     return (
       <div className="package-details">
         <div className="package-details__head">
-          <div className="package-details__tag">
-            <i className="fa fa-fw fa-tag"></i>
-          </div>
           <div className="package-details__title">
             {pkg.name}&nbsp;v{pkg.version}
           </div>
