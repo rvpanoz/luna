@@ -9,17 +9,14 @@ class PackageItem extends React.Component {
   onItemClick(e) {
     e.preventDefault();
     let el = this.refs[`root-${this.props.idx}`];
-    if(el) {
-      let isSelected = el.classList.contains('selected');
-      if(!isSelected) {
-        el.classList.add('selected');
-        ipcRenderer.send('view-by-version', {
-          pkgName: this.props.name,
-          version: this.props.version
-        });
-      } else {
-        return false;
-      }
+    let isSelected = el.classList.contains('selected');
+    if(!isSelected) {
+      this.props.deselect();
+      el.classList.add('selected');
+      ipcRenderer.send('view-by-version', {
+        pkgName: this.props.name,
+        version: this.props.version
+      });
     }
     return false;
   }

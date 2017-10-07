@@ -50,7 +50,7 @@ class PackagesList extends React.Component {
               pkg.name = (pkg.from)
                 ? pkg.from.split("@")[0]
                 : pkg.name;
-              return <PackageItem idx={idx} key={idx} {...pkg}/>
+              return <PackageItem deselect={this.deSelectAll} idx={idx} key={idx} {...pkg}/>
             })
             : null}
         </div>
