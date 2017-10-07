@@ -2,9 +2,15 @@ import React from 'react';
 
 const StaticListItem = (props) => {
   return (
-    <p>
-      {props.name}
-    </p>
+    <div className="list-widget__item">
+      <div className="list-widget__info">
+        <div className="list-widget__text">
+          <b>
+            {props.name}
+          </b>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -25,11 +31,16 @@ exports.StaticList = (props) => {
   } else {
     data = items;
   }
+  
   return (
-    <div className="static-list">
-      {data.map((name, idx) => {
-        return <StaticListItem key={idx} name={name}/>
-      })}
+    <div className="list-widget">
+      <div className="list-widget__cont">
+        <div className="list-widget__list">
+          {data.map((name, idx) => {
+            return <StaticListItem key={idx} name={name} />
+          })}
+        </div>
+      </div>
     </div>
   )
 }

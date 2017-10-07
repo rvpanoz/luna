@@ -3,5 +3,7 @@ export default {
   loading: false,
   packages_loading: false,
   packages: [],
-  active: null
+  active: null,
+  pageTitle: 'Dashboard',
+  activePage: 'Dashboard'
 };

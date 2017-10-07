@@ -10,10 +10,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import configureStore from '../store';
+import {Route} from 'react-router-dom';
 
-import SearchBoxContainer from '../containers/SearchBoxContainer';
-import PackageContainer from '../containers/PackageContainer';
-import PackagesListContainer from '../containers/PackagesListContainer';
+import AppHeader from '../containers/AppHeader';
+import SidebarContainer from '../containers/SidebarContainer';
+import Dashboard from '../components/Dashboard';
+import Analyze from '../containers/AnalyzePage';
+import PackagesPage from '../containers/PackagesPage';
 
 //configuration and store globals
 const config = remote.getGlobal('config');
@@ -28,18 +31,19 @@ const App = () => {
   return (
     <Provider store={store}>
       <div className="wrapper">
-        <section className="sidebar ui inverted vertical left fixed list">
-          <div className="item">
-            <div className="search-bar">
-              <SearchBoxContainer />
+        <AppHeader title="Luna"/>
+        <div className="dashboard">
+          <SidebarContainer/>
+          <div className="main">
+            <div className="main__scroll">
+              <div className="main__cont">
+                <Route exact path="/" component={Dashboard}/>
+                <Route path="/packages" component={PackagesPage}/>
+                <Route path="/analyze" component={Analyze}/>
+              </div>
             </div>
-            <div className="header">Packages</div>
-            <PackagesListContainer />
           </div>
-        </section>
-        <section className="content">
-          <PackageContainer />
-        </section>
+        </div>
       </div>
     </Provider>
   );

@@ -1,4 +1,4 @@
-import { remote, ipcRenderer } from 'electron';
+import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -14,7 +14,7 @@ export default class SearchBox extends React.Component {
     let searchInput = this.refs.searchInput;
     let value = searchInput.value.replace(/\s/g, '');
 
-    if(value.length && key === 13) {
+    if (value.length && key === 13) {
       this._search();
     }
     return false;
@@ -25,23 +25,18 @@ export default class SearchBox extends React.Component {
 
     searchInput.value = '';
     this.props.toggleLoader(true);
-    this.props.setMode('global');
-    ipcRenderer.send('get-packages', {
-      scope: 'g'
-    });
+    ipcRenderer.send('get-packages', {scope: 'g'});
     return false;
   }
   _search(e) {
-    if(e) {
+    if (e) {
       e.preventDefault();
     }
     let searchInput = this.refs.searchInput;
-    if(searchInput.value.length) {
+    if (searchInput.value.length) {
       this.props.toggleLoader(true);
-      this.props.setMode('search');
-      ipcRenderer.send('search-packages', {
-        pkgName: searchInput.value
-      });
+      this.props.setActive(null);
+      ipcRenderer.send('search-packages', {pkgName: searchInput.value});
     }
     return false;
   }
@@ -50,25 +45,15 @@ export default class SearchBox extends React.Component {
     let searchInput = this.refs.searchInput;
     if (root) {
       root.addEventListener("keypress", this._onKeyUp);
-      if(searchInput) {
+      if (searchInput) {
         searchInput.focus();
       }
     }
   }
   render() {
     return (
-      <div className="item search" ref="root">
-        <div className="ui icon input transparent inverted icon">
-          <div className="inner">
-            <input onChange={this._onChange} style={{width: '80%'}} type="text" placeholder="search registry.." ref="searchInput"/>
-            <a style={{marginRight: '8.5px', cursor: 'pointer'}} onClick={this._search}>
-              <i aria-hidden="true" className="fa fa-search icon" ref="iconSearch"></i>
-            </a>
-            <a style={{cursor: 'pointer'}} onClick={this._clearSearch}>
-              <i aria-hidden="true" className="fa fa-refresh icon" ref="iconRefresh"></i>
-            </a>
-          </div>
-        </div>
+      <div className="packages__search" ref="root">
+        <input className="form-control" type="text" placeholder="Search registry.." ref="searchInput"/>
       </div>
     )
   }

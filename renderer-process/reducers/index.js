@@ -3,6 +3,7 @@ import {
   TOGGLE_MAIN_LOADER,
   SET_PACKAGES,
   SET_ACTIVE,
+  SET_ACTIVE_PAGE,
   SET_MODE
 } from '../constants/ActionTypes';
 import initialState from './initialState';
@@ -26,10 +27,15 @@ export default function packagesReducer(state = initialState, action) {
       return Object.assign({}, state, {
         active: action.active
       });
+    case SET_ACTIVE_PAGE:
+      return Object.assign({}, state, {
+        activePage: action.activePage
+      });
     case SET_MODE:
       return Object.assign({}, state, {
         mode: action.mode,
-        active: null
+        active: null,
+        activePage: null
       });
     default:
       return state;

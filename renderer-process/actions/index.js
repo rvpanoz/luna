@@ -1,18 +1,19 @@
 import * as types from '../constants/ActionTypes';
 import { parse, isJson } from '../../utils';
 
+export function setActivePage(activePage, pageTitle) {
+  return {
+    type: types.SET_ACTIVE_PAGE,
+    activePage,
+    pageTitle
+  }
+}
+
 export function toggleLoader(loading) {
   return {
     type: types.TOGGLE_LOADER,
     loading
   };
-}
-
-export function toggleMainLoader(packages_loading) {
-  return {
-    type: types.TOGGLE_MAIN_LOADER,
-    packages_loading
-  }
 }
 
 export function setPackages(data) {
@@ -38,7 +39,7 @@ export function setActive(active) {
   }
 }
 
-export function setMode(mode='global') {
+export function setMode(mode) {
   return {
     type: types.SET_MODE,
     mode

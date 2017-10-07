@@ -1,13 +1,9 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
-import Loader from '../common/Loader';
+import Loader from '../../common/Loader';
 import PackageItem from './PackageItem';
 
-const listeners = [
-  'get-packages-reply',
-  'search-packages-reply',
-  'view-by-version-reply'
-];
+const listeners = ['get-packages-reply', 'search-packages-reply', 'view-by-version-reply'];
 
 class PackagesList extends React.Component {
   constructor(props) {
@@ -15,9 +11,7 @@ class PackagesList extends React.Component {
     this.deSelectAll = this.deSelectAll.bind(this);
   }
   componentWillMount() {
-    ipcRenderer.send('get-packages', {
-      scope: 'g'
-    });
+    ipcRenderer.send('get-packages', {scope: 'g'});
   }
   componentDidMount() {
     this.props.toggleLoader(true);
@@ -31,7 +25,6 @@ class PackagesList extends React.Component {
     });
     ipcRenderer.on('view-by-version-reply', (event, pkg) => {
       this.props.setActive(pkg);
-      this.props.toggleLoader(false);
     });
   }
   componentWillUnMount() {
@@ -39,9 +32,9 @@ class PackagesList extends React.Component {
   }
   deSelectAll() {
     let list = this.refs.list;
-    if(list) {
+    if (list) {
       let selected = list.querySelector('.selected');
-      if(selected) {
+      if (selected) {
         selected.classList.remove('selected');
       }
     }
@@ -50,17 +43,17 @@ class PackagesList extends React.Component {
     let packages = this.props.packages;
     return (
       <Loader loading={this.props.loading}>
-      <div className="list" ref="list">
-        {(packages)
-          ? packages.map((pkg, idx) => {
-            pkg.name = (pkg.from)
-              ? pkg.from.split("@")[0]
-              : pkg.name;
-            return <PackageItem toggleMainLoader={this.props.toggleMainLoader} deSelectAll={this.deSelectAll} idx={idx} key={idx} {...pkg}/>
-          })
-          : null}
-      </div>
-    </Loader>
+        <div className="packages_list" ref="list">
+          {(packages)
+            ? packages.map((pkg, idx) => {
+              pkg.name = (pkg.from)
+                ? pkg.from.split("@")[0]
+                : pkg.name;
+              return <PackageItem deselect={this.deSelectAll} idx={idx} key={idx} {...pkg}/>
+            })
+            : null}
+        </div>
+      </Loader>
     )
   }
 }
