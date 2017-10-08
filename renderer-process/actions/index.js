@@ -16,6 +16,13 @@ export function toggleLoader(loading) {
   };
 }
 
+export function toggleMainLoader(package_loading) {
+  return {
+    type: types.TOGGLE_MAIN_LOADER,
+    package_loading
+  };
+}
+
 export function setPackages(data) {
   let jsonData = isJson(data);
   if(!jsonData) {
@@ -39,9 +46,10 @@ export function setActive(active) {
   }
 }
 
-export function setMode(mode) {
+export function setMode(mode, modeActions) {
   return {
     type: types.SET_MODE,
-    mode
+    mode,
+    modeActions
   }
 }

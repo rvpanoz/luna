@@ -34,6 +34,7 @@ export default function packagesReducer(state = initialState, action) {
     case SET_MODE:
       return Object.assign({}, state, {
         mode: action.mode,
+        modeActions: action.modeActions,
         active: null,
         activePage: null
       });

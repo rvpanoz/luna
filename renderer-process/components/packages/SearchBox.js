@@ -36,18 +36,22 @@ export default class SearchBox extends React.Component {
     if (searchInput.value.length) {
       this.props.toggleLoader(true);
       this.props.setActive(null);
-      ipcRenderer.send('search-packages', {pkgName: searchInput.value});
+      ipcRenderer.send('search-packages', {
+        pkgName: searchInput.value
+      });
     }
     return false;
   }
   componentDidMount() {
     let root = this.refs.root;
-    let searchInput = this.refs.searchInput;
     if (root) {
       root.addEventListener("keypress", this._onKeyUp);
-      if (searchInput) {
-        searchInput.focus();
-      }
+    }
+  }
+  componentDidUpdate() {
+    let searchInput = this.refs.searchInput;
+    if (searchInput) {
+      searchInput.focus();
     }
   }
   render() {

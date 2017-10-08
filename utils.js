@@ -29,7 +29,7 @@ export function showMessageBox(opts, cb = {}) {
 
   version = (opts.version !== "0") ? opts.version : 'latest';
   switch (action) {
-    case 'Uninstall':
+    case 'UNINSTALL':
       message = `${action} ${pkgName} from your system.`;
       break;
     default:
