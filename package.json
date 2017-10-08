@@ -2,12 +2,21 @@
   "name": "luna",
   "version": "1.0.0",
   "description": "npm management tool",
-  "main": "./main.js",
+  "main": "./entry.js",
   "scripts": {
     "start": "cross-env NODE_ENV=development npm run start-dev",
-    "start-dev": "electron -r babel-register . --debug",
+    "start-dev": "electron . --debug",
     "pack": "electron-builder --dir"
   },
+  "build": {
+    "appId": "luna"
+  },
+  "keywords": [
+    "npm",
+    "electron",
+    "javascript",
+    "react"
+  ],
   "author": "rvpanoz@gmail.com",
   "license": "MIT",
   "devDependencies": {
@@ -16,21 +25,20 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
-    "chai": "^3.5.0",
     "cross-env": "3.1.4",
+    "electron": "^1.7.8",
     "electron-builder": "^19.22.1",
+    "electron-compile": "^6.4.2",
     "electron-devtools-installer": "^2.2.0",
     "electron-hot": "^0.2.0",
     "electron-prebuilt": "^1.4.13",
+    "electron-prebuilt-compile": "^1.7.8",
     "electron-reload": "^1.2.1",
-    "mocha": "^3.0.2",
-    "react-addons-test-utils": "^15.6.0",
     "winston": "^2.3.1"
   },
   "dependencies": {
     "awesome-bootstrap-checkbox": "^1.0.0",
     "bootstrap": "^3.3.7",
-    "electron-json-storage": "^3.0.7",
     "electron-store": "^1.2.0",
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",

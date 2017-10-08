@@ -1,11 +1,8 @@
 export const menuItems = {
   items: [{
-    text: 'Dashboard',
+    text: 'Packages',
     href: '/',
     className: 'active'
-  }, {
-    text: 'Packages',
-    href: '/packages'
   }, {
     text: 'Analyze',
     href: '/analyze'

@@ -45,7 +45,6 @@ class PackageDetails extends React.Component {
   }
   update() {
     let pkg = this.props.pkg;
-
     showMessageBox({
       action: 'UPDATE',
       name: pkg.name
@@ -59,7 +58,6 @@ class PackageDetails extends React.Component {
   }
   uninstall() {
     let pkg = this.props.pkg;
-
     showMessageBox({
       action: 'UNINSTALL',
       name: pkg.name
@@ -72,21 +70,19 @@ class PackageDetails extends React.Component {
     });
   }
   install() {
-    let version = this.refs.selectVersion.value;
-    if (version != '0') {
-      let pkg = this.props.pkg;
-      showMessageBox({
-        action: 'INSTALL',
-        name: pkg.name,
-        version: version
-      }, () => {
-        ipcRenderer.send('install-by-version', {
-          pkgName: pkg.name,
-          pkgVersion: version
-        });
-        this.props.toggleMainLoader(true)
+    let pkg = this.props.pkg, version;
+    showMessageBox({
+      action: 'INSTALL',
+      name: pkg.name,
+      version: version || 'latest'
+    }, () => {
+      ipcRenderer.send('install-package', {
+        pkgName: pkg.name,
+        scope: 'g',
+        pkgVersion: version || 'latest'
       });
-    }
+      this.props.toggleMainLoader(true)
+    });
     return false;
   }
   componentDidMount() {
