@@ -37,8 +37,7 @@ const App = () => {
           <div className="main">
             <div className="main__scroll">
               <div className="main__cont">
-                <Route exact path="/" component={Dashboard}/>
-                <Route path="/packages" component={PackagesPage}/>
+                <Route exact path="/" component={PackagesPage}/>
                 <Route path="/analyze" component={Analyze}/>
               </div>
             </div>

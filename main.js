@@ -20,7 +20,7 @@ const winston = require('winston');
 
 let platform = process.platform;
 let MainWindow = null;
-let debug = /--debug/.test(process.argv[4]);
+let debug = /--debug/.test(process.argv[2]);
 
 const logger = new winston.Logger({
   level: 'info',
