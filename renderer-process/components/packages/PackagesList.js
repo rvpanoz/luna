@@ -18,10 +18,12 @@ class PackagesList extends React.Component {
     ipcRenderer.on('get-packages-reply', (event, packages) => {
       this.props.setPackages(packages);
       this.props.toggleLoader(false);
+      this.props.setMode('global', ['Update', 'Uninstall']);
     });
     ipcRenderer.on('search-packages-close', (event, packages) => {
       this.props.setPackages(packages);
       this.props.toggleLoader(false);
+      this.props.setMode('search', ['Install']);
     });
     ipcRenderer.on('view-by-version-reply', (event, pkg) => {
       this.props.setActive(pkg);

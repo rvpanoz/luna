@@ -34,6 +34,7 @@ const PackagesPage = (props) => {
               toggleLoader={props.actions.toggleLoader}
               setActive={props.actions.setActive}
               active={props.active}
+              setMode={props.actions.setMode}
             />
           </div>
           <div className="col-md-8">

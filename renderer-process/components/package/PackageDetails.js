@@ -1,7 +1,30 @@
-import { remote, ipcRenderer} from 'electron';
+import {remote, ipcRenderer} from 'electron';
 import React from 'react';
-import { StaticList } from '../../common/Statics';
-import { showMessageBox } from '../../../utils';
+import Loader from '../../common/Loader';
+import {StaticList} from '../../common/Statics';
+import {showMessageBox} from '../../../utils';
+
+const actions = ['Install', 'Uninstall', 'Update'];
+
+const Action = (props) => {
+  return (
+    <li>
+      <a href="#" onClick={props.doAction}>
+        <span>{props.action}</span>
+      </a>
+    </li>
+  )
+}
+
+const Actions = (props) => {
+  return (
+    <ul className="dropdown-menu dropdown-menu-right">
+      {props.modeActions.map((action, idx) => {
+        return <Action doAction={props.doAction} action={action} key={idx}/>
+      })}
+    </ul>
+  )
+}
 
 class PackageDetails extends React.Component {
   constructor(props) {
@@ -9,46 +32,51 @@ class PackageDetails extends React.Component {
     this.install = this.install.bind(this);
     this.update = this.update.bind(this);
     this.uninstall = this.uninstall.bind(this);
+    this.doAction = this.doAction.bind(this);
   }
-  update(e) {
+  doAction(e) {
     e.preventDefault();
+    let target = e.currentTarget;
+    let action = target.querySelector('span').innerHTML.toLowerCase();
+    if(this[action]) {
+      this[action]();
+    }
+    return false;
+  }
+  update() {
     let pkg = this.props.pkg;
 
     showMessageBox({
-      action: 'update',
+      action: 'UPDATE',
       name: pkg.name
     }, () => {
       ipcRenderer.send('update-package', {
         pkgName: pkg.name,
         scope: 'g'
       });
-      this.setState({loader: true});
+      this.props.toggleMainLoader(true)
     });
   }
-  uninstall(e) {
-    e.preventDefault();
+  uninstall() {
     let pkg = this.props.pkg;
 
     showMessageBox({
-      action: 'uninstall',
-      name: pkg.name,
+      action: 'UNINSTALL',
+      name: pkg.name
     }, () => {
       ipcRenderer.send('uninstall-package', {
         pkgName: pkg.name,
         scope: 'g'
       });
-      this.setState({loader: true});
+      this.props.toggleMainLoader(true);
     });
   }
-  install(e) {
-    if (e) {
-      e.preventDefault();
-    }
+  install() {
     let version = this.refs.selectVersion.value;
     if (version != '0') {
       let pkg = this.props.pkg;
       showMessageBox({
-        action: 'install',
+        action: 'INSTALL',
         name: pkg.name,
         version: version
       }, () => {
@@ -56,10 +84,16 @@ class PackageDetails extends React.Component {
           pkgName: pkg.name,
           pkgVersion: version
         });
-        this.setState({loader: true});
+        this.props.toggleMainLoader(true)
       });
     }
     return false;
+  }
+  componentDidMount() {
+    ipcRenderer.on('uninstall-package-reply', (event) => {
+      this.props.toggleMainLoader(false);
+      this.props.setActive(null);
+    });
   }
   render() {
     let pkg = this.props.pkg;
@@ -67,43 +101,29 @@ class PackageDetails extends React.Component {
       return null;
     }
     return (
-      <div className="package-details">
-        <div className="package-details__head">
-          <div className="package-details__title">
-            {pkg.name}&nbsp;v{pkg.version}
+      <div className="package-details" ref="root">
+        <Loader loading={this.props.package_loading}>
+          <div className="package-details__head">
+            <div className="package-details__title">
+              {pkg.name}&nbsp;v{pkg.version}
+            </div>
+            <div className="package-details__settings dropdown">
+              <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
+              <Actions modeActions={this.props.modeActions} doAction={this.doAction}/>
+            </div>
           </div>
-          <div className="package-details__settings dropdown">
-            <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
-            <ul className="dropdown-menu dropdown-menu-right">
-              <li>
-                <a href="#">
-                  <i className="fa fa-fw fa-reply"></i>
-                  <span>Update</span>
-                </a>
-              </li>
-              <li>
-                <a href="#" onClick={this.uninstall}>
-                  <i className="fa fa-fw fa-trash"></i>
-                  <span>Uninstall</span>
-                </a>
-              </li>
-            </ul>
+          <div className="package-details__info">
+            <div className="package-details__name">
+              <span>Author:&nbsp;{pkg.author}</span>
+              <br/>
+              <span>Latest:&nbsp;v{pkg['dist-tags'].latest}</span>
+              <br/>
+              <span>License:&nbsp;{pkg.license}</span>
+            </div>
+            <div className="package-details__date"></div>
           </div>
-        </div>
-        <div className="package-details__info">
-          <div className="package-details__name">
-            <span>Author:&nbsp;{pkg.author}</span>
-            <br/>
-            <span>Latest:&nbsp;v{pkg['dist-tags'].latest}</span>
-            <br/>
-            <span>License:&nbsp;{pkg.license}</span>
-          </div>
-          <div className="package-details__date">
-
-          </div>
-        </div>
-        <div className="package-details__body">
-          <div className="package-details__text">{pkg.description}</div>
+          <div className="package-details__body">
+            <div className="package-details__text">{pkg.description}</div>
             <div className="package-details__tabs tab-wrap">
               <input id="tab1" type="radio" name="tabs" defaultChecked/>
               <label htmlFor="tab1">Dependencies</label>
@@ -116,7 +136,8 @@ class PackageDetails extends React.Component {
                 <StaticList data={pkg.maintainers}/>
               </section>
             </div>
-        </div>
+          </div>
+        </Loader>
       </div>
     )
   }
