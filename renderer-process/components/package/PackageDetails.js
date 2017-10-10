@@ -1,30 +1,9 @@
+import config from '../../../config';
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
 import {StaticList} from '../../common/Statics';
-import {showMessageBox} from '../../../utils';
-
-const actions = ['Install', 'Uninstall', 'Update'];
-
-const Action = (props) => {
-  return (
-    <li>
-      <a href="#" onClick={props.doAction}>
-        <span>{props.action}</span>
-      </a>
-    </li>
-  )
-}
-
-const Actions = (props) => {
-  return (
-    <ul className="dropdown-menu dropdown-menu-right">
-      {props.modeActions.map((action, idx) => {
-        return <Action doAction={props.doAction} action={action} key={idx}/>
-      })}
-    </ul>
-  )
-}
+import {showMessageBox, makeRequest} from '../../../utils';
 
 class PackageDetails extends React.Component {
   constructor(props) {
@@ -33,18 +12,19 @@ class PackageDetails extends React.Component {
     this.update = this.update.bind(this);
     this.uninstall = this.uninstall.bind(this);
     this.doAction = this.doAction.bind(this);
+    this.onChangeVersion = this.onChangeVersion.bind(this);
   }
   doAction(e) {
     e.preventDefault();
     let target = e.currentTarget;
     let action = target.querySelector('span').innerHTML.toLowerCase();
-    if(this[action]) {
+    if (this[action]) {
       this[action]();
     }
     return false;
   }
   update() {
-    let pkg = this.props.pkg;
+    let pkg = this.props.active;
     showMessageBox({
       action: 'UPDATE',
       name: pkg.name
@@ -57,7 +37,7 @@ class PackageDetails extends React.Component {
     });
   }
   uninstall() {
-    let pkg = this.props.pkg;
+    let pkg = this.props.active;
     showMessageBox({
       action: 'UNINSTALL',
       name: pkg.name
@@ -70,7 +50,8 @@ class PackageDetails extends React.Component {
     });
   }
   install() {
-    let pkg = this.props.pkg, version;
+    let pkg = this.props.active,
+      version;
     showMessageBox({
       action: 'INSTALL',
       name: pkg.name,
@@ -85,55 +66,83 @@ class PackageDetails extends React.Component {
     });
     return false;
   }
-  componentDidMount() {
-    ipcRenderer.on('uninstall-package-reply', (event) => {
-      this.props.toggleMainLoader(false);
-      this.props.setActive(null);
-    });
+  onChangeVersion(e) {
+    let target = e.currentTarget;
+    let pkg = this.props.active;
+    let version = target.value;
+
+    if(version !== "0") {
+      ipcRenderer.send('view-by-version', {
+        pkgName: pkg.name,
+        pkgVersion: version
+      });
+    }
+    return false;
   }
   render() {
-    let pkg = this.props.pkg;
+    let pkg = this.props.active;
     if (!pkg) {
       return null;
     }
     return (
       <div className="package-details" ref="root">
-        <Loader loading={this.props.package_loading}>
-          <div className="package-details__head">
-            <div className="package-details__title">
-              {pkg.name}&nbsp;v{pkg.version}
-            </div>
-            <div className="package-details__settings dropdown">
-              <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
-              <Actions modeActions={this.props.modeActions} doAction={this.doAction}/>
+        <div className="package-details__head">
+          <div className="package-details__title">
+            {pkg.name}&nbsp;
+            <span className="label label-success">v{pkg.version}</span>
+          </div>
+          <div className="package-details__settings dropdown">
+            <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
+            <ul className="dropdown-menu dropdown-menu-right">
+              <li>
+                <a href="#">
+                  <span>Update</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="package-details__info">
+          <div className="package-details__name">
+            <span>Author:&nbsp;{pkg.author}</span>
+            <br/>
+            <span>Latest:&nbsp;v{pkg['dist-tags'].latest}</span>
+            <br/>
+            <br/>
+            <div className="form-group">
+              <label htmlFor="selectVersion">
+                <span>Select version:</span>
+              </label>
+              <select onChange={this.onChangeVersion} className="form-control input-sm select-mini" id="selectVersion">
+                <option value="0"> - </option>
+                {pkg.versions.map((version, idx) => {
+                  return <option key={idx} value={version}>{version}</option>
+                })}
+              </select>
             </div>
           </div>
-          <div className="package-details__info">
-            <div className="package-details__name">
-              <span>Author:&nbsp;{pkg.author}</span>
-              <br/>
-              <span>Latest:&nbsp;v{pkg['dist-tags'].latest}</span>
-              <br/>
-              <span>License:&nbsp;{pkg.license}</span>
-            </div>
-            <div className="package-details__date"></div>
+          <div className="package-details__date"></div>
+        </div>
+        <div className="package-details__body">
+          <div className="package-details__text">{pkg.description}</div>
+          <div className="package-details__tabs tab-wrap">
+            <input id="tab1" type="radio" name="tabs" defaultChecked/>
+            <label htmlFor="tab1">DevDependencies</label>
+            <input id="tab2" type="radio" name="tabs"/>
+            <label htmlFor="tab2">Dependencies</label>
+            <input id="tab3" type="radio" name="tabs"/>
+            <label htmlFor="tab3">Contributors</label>
+            <section id="devDependencies-content">
+              <StaticList data={pkg.devDependencies}/>
+            </section>
+            <section id="dependencies-content">
+              <StaticList data={pkg.dependencies}/>
+            </section>
+            <section id="contributors-content">
+              <StaticList data={pkg.maintainers}/>
+            </section>
           </div>
-          <div className="package-details__body">
-            <div className="package-details__text">{pkg.description}</div>
-            <div className="package-details__tabs tab-wrap">
-              <input id="tab1" type="radio" name="tabs" defaultChecked/>
-              <label htmlFor="tab1">Dependencies</label>
-              <input id="tab2" type="radio" name="tabs"/>
-              <label htmlFor="tab2">Contributors</label>
-              <section id="dependencies-content">
-                <StaticList data={pkg.dependencies}/>
-              </section>
-              <section id="contributors-content">
-                <StaticList data={pkg.maintainers}/>
-              </section>
-            </div>
-          </div>
-        </Loader>
+        </div>
       </div>
     )
   }

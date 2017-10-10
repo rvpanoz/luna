@@ -7,7 +7,7 @@ import * as actions from '../actions';
 
 //components
 import PackagesListHeader from '../components/packages/PackagesListHeader';
-import SearchBox from '../components/packages/SearchBox';
+import PackagesListSearch from '../components/packages/PackagesListSearch';
 import PackagesList from '../components/packages/PackagesList';
 import PackageContainer from '../containers/PackageContainer';
 
@@ -22,8 +22,9 @@ const PackagesPage = (props) => {
               toggleLoader={props.actions.toggleLoader}
               setActive={props.actions.setActive}
               active={props.active}
+              setAppMessage={props.actions.setAppMessage}
             />
-            <SearchBox
+            <PackagesListSearch
               toggleLoader={props.actions.toggleLoader}
               setActive={props.actions.setActive}
             />
@@ -35,6 +36,7 @@ const PackagesPage = (props) => {
               setActive={props.actions.setActive}
               active={props.active}
               setMode={props.actions.setMode}
+              setAppMessage={props.actions.setAppMessage}
             />
           </div>
           <div className="col-md-8">
@@ -47,7 +49,11 @@ const PackagesPage = (props) => {
 }
 
 function mapStateToProps(state) {
-  return {loading: state.loading, packages: state.packages, active: state.active};
+  return {
+    loading: state.loading,
+    packages: state.packages,
+    active: state.active
+  }
 }
 
 function mapDispatchToProps(dispatch) {

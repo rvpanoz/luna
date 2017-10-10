@@ -1,7 +1,7 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 
-class PackageItem extends React.Component {
+class PackageListItem extends React.Component {
   constructor(props) {
     super(props);
     this.onItemClick = this.onItemClick.bind(this);
@@ -22,8 +22,9 @@ class PackageItem extends React.Component {
   }
   render() {
     let props = this.props;
+
     return (
-      <div ref={`root-${this.props.idx}`} className="packages-item new" onClick={this.onItemClick}>
+      <div ref={`root-${props.idx}`} className="packages-item new" onClick={this.onItemClick}>
         <div className="packages-item__head">
           <div className="packages-item__name">
             <span>&nbsp;{props.name}</span>
@@ -37,4 +38,4 @@ class PackageItem extends React.Component {
   }
 }
 
-export default PackageItem
+export default PackageListItem

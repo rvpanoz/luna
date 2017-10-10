@@ -38,17 +38,17 @@ exports.doCmd = function(cmd, options, cb) {
   } else {
     opts = defaults.concat();
   }
-  
+
   let npmc = spawn('npm', run.concat(params).concat(opts), {
     maxBuffer: 1024 * 500
   });
 
   npmc.stdout.on('data', (data) => {
     result+=data.toString();
-    cb(data.toString());
+    cb(data.toString(), 'reply');
   });
   npmc.stderr.on('data', (data) => {
-    cb(data.toString());
+    cb(data.toString(), 'error');
   });
   npmc.on('close', () => {
     console.log(`npm ${run.join(" ")} ${params.join(" ")} ${opts.join(" ")} finished execution`);

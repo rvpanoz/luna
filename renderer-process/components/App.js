@@ -12,11 +12,11 @@ import {Provider} from 'react-redux';
 import configureStore from '../store';
 import {Route} from 'react-router-dom';
 
-import AppHeader from '../containers/AppHeader';
+import AppMessageContainer from '../containers/AppMessageContainer';
 import SidebarContainer from '../containers/SidebarContainer';
 import Dashboard from '../components/Dashboard';
 import Analyze from '../containers/AnalyzePage';
-import PackagesPage from '../containers/PackagesPage';
+import PackagesContainer from '../containers/PackagesContainer';
 
 //configuration and store globals
 const config = remote.getGlobal('config');
@@ -31,13 +31,13 @@ const App = () => {
   return (
     <Provider store={store}>
       <div className="wrapper">
-        <AppHeader title="Luna"/>
+        <AppMessageContainer />
         <div className="dashboard">
           <SidebarContainer/>
           <div className="main">
             <div className="main__scroll">
               <div className="main__cont">
-                <Route exact path="/" component={PackagesPage}/>
+                <Route exact path="/" component={PackagesContainer}/>
                 <Route path="/analyze" component={Analyze}/>
               </div>
             </div>

@@ -9,6 +9,14 @@ export function setActivePage(activePage, pageTitle) {
   }
 }
 
+export function setAppMessage(appMessage, appMessageType) {
+  return {
+    type: types.SET_APP_MESSAGE,
+    appMessage,
+    appMessageType
+  }
+}
+
 export function toggleLoader(loading) {
   return {
     type: types.TOGGLE_LOADER,
@@ -16,10 +24,10 @@ export function toggleLoader(loading) {
   };
 }
 
-export function toggleMainLoader(package_loading) {
+export function toggleMainLoader(isLoading) {
   return {
     type: types.TOGGLE_MAIN_LOADER,
-    package_loading
+    isLoading
   };
 }
 
@@ -43,13 +51,5 @@ export function setActive(active) {
   return {
     type: types.SET_ACTIVE,
     active
-  }
-}
-
-export function setMode(mode, modeActions) {
-  return {
-    type: types.SET_MODE,
-    mode,
-    modeActions
   }
 }

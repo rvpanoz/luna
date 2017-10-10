@@ -86,8 +86,17 @@ function createMainWindow() {
  */
 
 ipcMain.on('get-packages', (event, options) => {
-  shell.doCmd('list', options, (data) => {
-    event.sender.send('get-packages-reply', data);
+  shell.doCmd('list', options, (data, type) => {
+    switch (true) {
+      case (type === 'close'):
+        event.sender.send('get-packages-close', data);
+        break;
+      case (type === 'error'):
+        event.sender.send('get-packages-error', data);
+        break;
+      default:
+        event.sender.send('search-packages-reply', data);
+    }
   });
 });
 
@@ -104,10 +113,13 @@ ipcMain.on('get-package', (event, options) => {
 });
 
 ipcMain.on('search-packages', (event, options) => {
-  shell.doCmd('search', options, (data, end) => {
+  shell.doCmd('search', options, (data, type) => {
     switch (true) {
-      case (end === 'close'):
+      case (type === 'close'):
         event.sender.send('search-packages-close', data);
+        break;
+      case (type === 'error'):
+        event.sender.send('search-packages-error', data);
         break;
       default:
         event.sender.send('search-packages-reply', data);
