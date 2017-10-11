@@ -2,7 +2,7 @@ import config from '../../../config';
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
-import PackageTabs from './partials/PackageTabs';
+import PackageTabs from './PackageTabs';
 import {showMessageBox, makeRequest} from '../../../utils';
 
 class PackageDetails extends React.Component {
@@ -82,6 +82,7 @@ class PackageDetails extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     let pkg = this.props.active;
+    console.log(this.props.mode, pkg);
     if (pkg && pkg.name) {
       ipcRenderer.send('get-package', {
         pkgName: pkg.name,
@@ -126,16 +127,6 @@ class PackageDetails extends React.Component {
           </div>
         </div>
         <div className="package-details__info">
-          <div className="package-preview__props">
-            <div className="package-preview__prop" title="author">
-              <i className="fa fa-tags"></i>
-              <span className="package-preview__author" title={pkg.author}>Author:&nbsp;{pkg.author}</span>
-            </div>
-            <div className="package-preview__prop">
-              <i className="fa fa-flag"></i>
-              <span className="package-preview__date" title={`v${pkg['dist-tags'].latest}`}>Latest:&nbsp;v{pkg['dist-tags'].latest}</span>
-            </div>
-          </div>
           <div className="form-group">
             <label htmlFor="selectVersion">
               <span>Select version</span>
@@ -151,12 +142,7 @@ class PackageDetails extends React.Component {
         </div>
         <div className="package-details__body">
           <Loader loading={this.props.isLoading}>
-            <PackageTabs
-              description={pkg.description}
-              devDependencies={pkg.devDependencies}
-              dependencies={pkg.dependencies}
-              maintainers={pkg.maintainers}
-          />
+            <PackageTabs pkg={pkg} />
           </Loader>
         </div>
       </div>

@@ -1501,13 +1501,10 @@ body.main-scrollable .main {
 }
 
 .package-details__text {
-  position: relative;
-  width: 100%;
-  height: 80px;
   padding: 15px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   color: #fff;
-  line-height: 2;
+  line-height: 1.5;
 }
 
 .package-details__head:after {
