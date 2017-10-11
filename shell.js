@@ -39,6 +39,7 @@ exports.doCmd = function(cmd, options, cb) {
     opts = defaults.concat();
   }
 
+  console.log(run.concat(params).concat(opts));
   let npmc = spawn('npm', run.concat(params).concat(opts), {
     maxBuffer: 1024 * 500
   });

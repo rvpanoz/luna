@@ -1252,6 +1252,9 @@ body.main-scrollable .main {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.package-details__text {
+  color: #fff;
+}
 .package-details__head:after {
   content: '';
   display: block;
@@ -1315,6 +1318,7 @@ body.main-scrollable .main {
 }
 .package-details__name span {
   padding-right: 5px;
+  color: #fff;
 }
 .package-details__name span:nth-of-type(1), span:nth-of-type(2), span:nth-of-type(3) {
   font-weight: bold;
@@ -3403,7 +3407,7 @@ table.dataTable thead > tr > td.sorting {
   border-bottom: 1px solid #fff;
 }
 
-.tab-wrap #tab1:checked~#devDependencies-content, .tab-wrap #tab3:checked~#contributors-content, .tab-wrap #tab2:checked~#dependencies-content {
+.tab-wrap #tab1:checked~#dependencies-content, .tab-wrap #tab3:checked~#contributors-content, .tab-wrap #tab2:checked~#devDependencies-content {
   display: block;
 }
 

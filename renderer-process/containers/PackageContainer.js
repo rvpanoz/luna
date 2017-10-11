@@ -16,6 +16,7 @@ const PackageContainer = (props) => {
         active={props.active}
         setActive={props.actions.setActive}
         toggleMainLoader={props.actions.toggleMainLoader}
+        isLoading={props.isLoading}
       />
     </div>
   )
@@ -23,7 +24,8 @@ const PackageContainer = (props) => {
 }
 function mapStateToProps(state) {
   return {
-    active: state.active
+    active: state.active,
+    isLoading: state.isLoading
   };
 }
 

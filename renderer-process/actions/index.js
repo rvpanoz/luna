@@ -47,9 +47,10 @@ export function setPackages(data) {
   }
 }
 
-export function setActive(active) {
+export function setActive(active, isLoading) {
   return {
     type: types.SET_ACTIVE,
-    active
+    active,
+    isLoading
   }
 }

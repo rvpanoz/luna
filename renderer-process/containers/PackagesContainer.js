@@ -34,8 +34,6 @@ const PackagesPage = (props) => {
               setPackages={props.actions.setPackages}
               toggleLoader={props.actions.toggleLoader}
               setActive={props.actions.setActive}
-              active={props.active}
-              setMode={props.actions.setMode}
               setAppMessage={props.actions.setAppMessage}
             />
           </div>

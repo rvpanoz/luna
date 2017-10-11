@@ -62,7 +62,7 @@ class PackageDetails extends React.Component {
         scope: 'g',
         pkgVersion: version || 'latest'
       });
-      this.props.toggleMainLoader(true)
+      this.props.toggleMainLoader(true);
     });
     return false;
   }
@@ -71,13 +71,34 @@ class PackageDetails extends React.Component {
     let pkg = this.props.active;
     let version = target.value;
 
-    if(version !== "0") {
+    if (version !== "0") {
+      this.props.toggleMainLoader(true);
       ipcRenderer.send('view-by-version', {
         pkgName: pkg.name,
         pkgVersion: version
       });
     }
     return false;
+  }
+  componentDidUpdate(prevProps, prevState) {
+    let pkg = this.props.active;
+    if (pkg && pkg.name) {
+      ipcRenderer.send('get-package', {
+        pkgName: pkg.name,
+        scope: 'g'
+      });
+    }
+  }
+  componentDidMount() {
+    ipcRenderer.on('view-by-version-reply', (event, pkg) => {
+      this.props.setActive(pkg, false);
+    });
+    // ipcRenderer.on('get-package-reply', (event, pkg) => {
+    //   console.log(pkg);
+    // });
+  }
+  componentWillUnMount() {
+    ipcRenderer.removeAllListeners('view-by-version-reply');
   }
   render() {
     let pkg = this.props.active;
@@ -113,8 +134,10 @@ class PackageDetails extends React.Component {
               <label htmlFor="selectVersion">
                 <span>Select version:</span>
               </label>
-              <select onChange={this.onChangeVersion} className="form-control input-sm select-mini" id="selectVersion">
-                <option value="0"> - </option>
+              <select onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
+                <option value="0">
+                  -
+                </option>
                 {pkg.versions.map((version, idx) => {
                   return <option key={idx} value={version}>{version}</option>
                 })}
@@ -124,24 +147,26 @@ class PackageDetails extends React.Component {
           <div className="package-details__date"></div>
         </div>
         <div className="package-details__body">
-          <div className="package-details__text">{pkg.description}</div>
-          <div className="package-details__tabs tab-wrap">
-            <input id="tab1" type="radio" name="tabs" defaultChecked/>
-            <label htmlFor="tab1">DevDependencies</label>
-            <input id="tab2" type="radio" name="tabs"/>
-            <label htmlFor="tab2">Dependencies</label>
-            <input id="tab3" type="radio" name="tabs"/>
-            <label htmlFor="tab3">Contributors</label>
-            <section id="devDependencies-content">
-              <StaticList data={pkg.devDependencies}/>
-            </section>
-            <section id="dependencies-content">
-              <StaticList data={pkg.dependencies}/>
-            </section>
-            <section id="contributors-content">
-              <StaticList data={pkg.maintainers}/>
-            </section>
-          </div>
+          <Loader loading={this.props.isLoading}>
+            <div className="package-details__text">{pkg.description}</div>
+            <div className="package-details__tabs tab-wrap">
+              <input id="tab1" type="radio" name="tabs" defaultChecked/>
+              <label htmlFor="tab1">Dependencies</label>
+              <input id="tab2" type="radio" name="tabs"/>
+              <label htmlFor="tab2">DevDependencies</label>
+              <input id="tab3" type="radio" name="tabs"/>
+              <label htmlFor="tab3">Contributors</label>
+              <section id="devDependencies-content">
+                <StaticList data={pkg.devDependencies}/>
+              </section>
+              <section id="dependencies-content">
+                <StaticList data={pkg.dependencies}/>
+              </section>
+              <section id="contributors-content">
+                <StaticList data={pkg.maintainers}/>
+              </section>
+            </div>
+          </Loader>
         </div>
       </div>
     )

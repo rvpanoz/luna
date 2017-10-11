@@ -24,7 +24,8 @@ export default function packagesReducer(state = initialState, action) {
       });
     case SET_ACTIVE:
       return Object.assign({}, state, {
-        active: action.active
+        active: action.active,
+        isLoading: action.isLoading || false
       });
     case SET_APP_MESSAGE:
       return Object.assign({}, state, {

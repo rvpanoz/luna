@@ -107,8 +107,8 @@ ipcMain.on('view-by-version', (event, options) => {
 });
 
 ipcMain.on('get-package', (event, options) => {
-  shell.doCmd('list', options, (data) => {
-    event.sender.send('get-package-reply', data);
+  shell.doCmd('la', options, (data) => {
+    event.sender.send('get-package-reply', JSON.parse(data));
   });
 });
 
