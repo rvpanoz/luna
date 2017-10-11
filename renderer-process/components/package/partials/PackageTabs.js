@@ -2,6 +2,7 @@ import React from 'react';
 import {PackageTabsList} from './PackageTabsList';
 
 const PackageTabs = (props) => {
+  let pkg = props.pkg;
   return (
     <div className="package-tabs">
       <ul className="nav nav-tabs" role="tablist">
@@ -27,16 +28,36 @@ const PackageTabs = (props) => {
       </ul>
       <div className="tab-content">
         <div className="tab-pane active" id="details" role="tabpanel">
-          <div className="package-details__text">{props.description}</div>
+          <div className="package-details__text">{pkg.description}</div>
+          <div className="package-preview__props">
+            <div className="package-preview__prop" title="author">
+              <i className="fa fa-tags"></i>
+              <span className="package-preview__author" title={pkg.author}>
+                Author:&nbsp;{pkg.author}
+              </span>
+            </div>
+            <div className="package-preview__prop" title="license">
+              <i className="fa fa-balance-scale"></i>
+              <span className="package-preview__license" title={`v${pkg['dist-tags'].latest}`}>
+                License:&nbsp;{pkg.license}
+              </span>
+            </div>
+            <div className="package-preview__prop" title="latest">
+              <i className="fa fa-flag"></i>
+              <span className="package-preview__latest" title={`v${pkg['dist-tags'].latest}`}>
+                Latest:&nbsp;v{pkg['dist-tags'].latest}
+              </span>
+            </div>
+          </div>
         </div>
         <div className="tab-pane" id="dependencies" role="tabpanel">
-          <PackageTabsList data={props.dependencies}/>
+          <PackageTabsList data={pkg.dependencies}/>
         </div>
         <div className="tab-pane" id="devDependencies" role="tabpanel">
-          <PackageTabsList data={props.devDependencies}/>
+          <PackageTabsList data={pkg.devDependencies}/>
         </div>
         <div className="tab-pane" id="maintainers" role="tabpanel">
-          <PackageTabsList data={props.maintainers}/>
+          <PackageTabsList data={pkg.maintainers}/>
         </div>
       </div>
     </div>
