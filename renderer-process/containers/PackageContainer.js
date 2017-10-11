@@ -14,6 +14,7 @@ const PackageContainer = (props) => {
     <div className="package-container">
       <PackageDetails
         active={props.active}
+        mode={props.mode}
         setActive={props.actions.setActive}
         toggleMainLoader={props.actions.toggleMainLoader}
         isLoading={props.isLoading}
@@ -24,6 +25,7 @@ const PackageContainer = (props) => {
 }
 function mapStateToProps(state) {
   return {
+    mode: state.mode,
     active: state.active,
     isLoading: state.isLoading
   };

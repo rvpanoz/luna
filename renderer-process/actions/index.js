@@ -1,4 +1,5 @@
 import * as types from '../constants/ActionTypes';
+import modes from '../constants/Modes';
 import { parse, isJson } from '../../utils';
 
 export function setActivePage(activePage, pageTitle) {
@@ -52,5 +53,12 @@ export function setActive(active, isLoading) {
     type: types.SET_ACTIVE,
     active,
     isLoading
+  }
+}
+
+export function setMode(mode=modes.GLOBAL) {
+  return {
+    type: types.SET_MODE,
+    mode
   }
 }

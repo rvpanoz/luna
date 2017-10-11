@@ -2,7 +2,7 @@ import config from '../../../config';
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
-import PackageTabs from './partials/PackageTabs';
+import PackageTabs from './PackageTabs';
 import {showMessageBox, makeRequest} from '../../../utils';
 
 class PackageDetails extends React.Component {
@@ -82,7 +82,7 @@ class PackageDetails extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     let pkg = this.props.active;
-    console.log(pkg);
+    console.log(this.props.mode, pkg);
     if (pkg && pkg.name) {
       ipcRenderer.send('get-package', {
         pkgName: pkg.name,

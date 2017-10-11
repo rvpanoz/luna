@@ -18,9 +18,13 @@ class PackagesList extends React.Component {
     //ipcRenderer listeners
     ipcRenderer.on('get-packages-close', (event, packages) => {
       this.props.setPackages(packages);
+      this.props.setMode('GLOBAL');
+      this.props.toggleLoader(false);
     });
     ipcRenderer.on('search-packages-close', (event, packages) => {
       this.props.setPackages(packages);
+      this.props.setMode('SEARCH');
+      this.props.toggleLoader(false);
     });
   }
   componentWillUnMount() {

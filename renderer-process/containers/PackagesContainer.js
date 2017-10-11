@@ -24,16 +24,14 @@ const PackagesPage = (props) => {
               active={props.active}
               setAppMessage={props.actions.setAppMessage}
             />
-            <PackagesListSearch
-              toggleLoader={props.actions.toggleLoader}
-              setActive={props.actions.setActive}
-            />
+            <PackagesListSearch />
             <PackagesList
               loading={props.loading}
               packages={props.packages}
               setPackages={props.actions.setPackages}
               toggleLoader={props.actions.toggleLoader}
               setActive={props.actions.setActive}
+              setMode={props.actions.setMode}
               setAppMessage={props.actions.setAppMessage}
             />
           </div>
