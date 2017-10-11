@@ -31,14 +31,14 @@ exports.StaticList = (props) => {
   } else {
     data = items;
   }
-  
+
   return (
     <div className="list-widget">
       <div className="list-widget__cont">
         <div className="list-widget__list">
-          {data.map((name, idx) => {
+          {(data.length) ? data.map((name, idx) => {
             return <StaticListItem key={idx} name={name} />
-          })}
+          }): 'No data'}
         </div>
       </div>
     </div>

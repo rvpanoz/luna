@@ -124,41 +124,72 @@ class PackageDetails extends React.Component {
           </div>
         </div>
         <div className="package-details__info">
-          <div className="package-details__name">
-            <span>Author:&nbsp;{pkg.author}</span>
-            <br/>
-            <span>Latest:&nbsp;v{pkg['dist-tags'].latest}</span>
-            <br/>
-            <br/>
-            <div className="form-group">
-              <label htmlFor="selectVersion">
-                <span>Select version:</span>
-              </label>
-              <select onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
-                <option value="0">
-                  -
-                </option>
-                {pkg.versions.map((version, idx) => {
-                  return <option key={idx} value={version}>{version}</option>
-                })}
-              </select>
+          <div className="package-preview__props">
+            <div className="package-preview__prop" title="author">
+              <i className="fa fa-tags"></i>
+              <span className="package-preview__author" title={pkg.author}>Author:&nbsp;{pkg.author}</span>
             </div>
+            <div className="package-preview__prop">
+              <i className="fa fa-flag"></i>
+              <span className="package-preview__date" title={`v${pkg['dist-tags'].latest}`}>Latest:&nbsp;v{pkg['dist-tags'].latest}</span>
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="selectVersion">
+              <span>Select version</span>
+            </label>
+            <select onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
+              <option value="0">-</option>
+              {pkg.versions.map((version, idx) => {
+                return <option key={idx} value={version}>{version}</option>
+              })}
+            </select>
           </div>
           <div className="package-details__date"></div>
         </div>
         <div className="package-details__body">
           <Loader loading={this.props.isLoading}>
             <div className="package-details__text">{pkg.description}</div>
-            <div className="package-details__tabs tab-wrap">
+            <ul className="nav nav-tabs" role="tablist">
+              <li className="dropdown pull-right tabdrop hide">
+                <a className="dropdown-toggle" data-toggle="dropdown" href="#">
+                  <i className="icon-align-justify"></i>
+                  <b className="caret"></b>
+                </a>
+                <ul className="dropdown-menu"></ul>
+              </li>
+              <li className="active" role="presentation">
+                <a href="#dependencies" aria-controls="dependencies" role="tab" data-toggle="tab" aria-expanded="true">Dependencies</a>
+              </li>
+              <li role="presentation">
+                <a href="#devDependencies" aria-controls="devDependencies" role="tab" data-toggle="tab" aria-expanded="true">DevDependencies</a>
+              </li>
+              <li role="presentation">
+                <a href="#maintainers" aria-controls="maintainers" role="tab" data-toggle="tab" aria-expanded="true">Contributors</a>
+              </li>
+            </ul>
+            <div className="tab-content">
+              <div className="tab-pane active" id="dependencies" role="tabpanel">
+                <StaticList data={pkg.dependencies}/>
+              </div>
+              <div className="tab-pane" id="devDependencies" role="tabpanel">
+                <StaticList data={pkg.devDependencies}/>
+              </div>
+              <div className="tab-pane" id="maintainers" role="tabpanel">
+                <StaticList data={pkg.maintainers}/>
+              </div>
+            </div>
+
+            <div className="package-details__tabs tab-wrap" style={{
+              display: 'none'
+            }}>
               <input id="tab1" type="radio" name="tabs" defaultChecked/>
               <label htmlFor="tab1">Dependencies</label>
               <input id="tab2" type="radio" name="tabs"/>
               <label htmlFor="tab2">DevDependencies</label>
               <input id="tab3" type="radio" name="tabs"/>
               <label htmlFor="tab3">Contributors</label>
-              <section id="devDependencies-content">
-                <StaticList data={pkg.devDependencies}/>
-              </section>
+              <section id="devDependencies-content"></section>
               <section id="dependencies-content">
                 <StaticList data={pkg.dependencies}/>
               </section>
