@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StaticListItem = (props) => {
+const PackageTabsListItem = (props) => {
   return (
     <div className="list-widget__item">
       <div className="list-widget__info">
@@ -14,13 +14,7 @@ const StaticListItem = (props) => {
   )
 }
 
-exports.OptionItems = (props) => {
-  return (
-    <option id={props.idx}>{props.name}</option>
-  )
-}
-
-exports.StaticList = (props) => {
+exports.PackageTabsList = (props) => {
   let items = props.data,
     data;
   if (Object.prototype.toString.call(items) !== '[object Array]') {
@@ -37,7 +31,7 @@ exports.StaticList = (props) => {
       <div className="list-widget__cont">
         <div className="list-widget__list">
           {(data.length) ? data.map((name, idx) => {
-            return <StaticListItem key={idx} name={name} />
+            return <PackageTabsListItem key={idx} name={name} />
           }): 'No data'}
         </div>
       </div>

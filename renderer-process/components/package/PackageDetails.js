@@ -2,7 +2,7 @@ import config from '../../../config';
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
-import {StaticList} from '../../common/Statics';
+import PackageTabs from './partials/PackageTabs';
 import {showMessageBox, makeRequest} from '../../../utils';
 
 class PackageDetails extends React.Component {
@@ -93,6 +93,8 @@ class PackageDetails extends React.Component {
     ipcRenderer.on('view-by-version-reply', (event, pkg) => {
       this.props.setActive(pkg, false);
     });
+
+    //TODO
     // ipcRenderer.on('get-package-reply', (event, pkg) => {
     //   console.log(pkg);
     // });
@@ -149,54 +151,12 @@ class PackageDetails extends React.Component {
         </div>
         <div className="package-details__body">
           <Loader loading={this.props.isLoading}>
-            <div className="package-details__text">{pkg.description}</div>
-            <ul className="nav nav-tabs" role="tablist">
-              <li className="dropdown pull-right tabdrop hide">
-                <a className="dropdown-toggle" data-toggle="dropdown" href="#">
-                  <i className="icon-align-justify"></i>
-                  <b className="caret"></b>
-                </a>
-                <ul className="dropdown-menu"></ul>
-              </li>
-              <li className="active" role="presentation">
-                <a href="#dependencies" aria-controls="dependencies" role="tab" data-toggle="tab" aria-expanded="true">Dependencies</a>
-              </li>
-              <li role="presentation">
-                <a href="#devDependencies" aria-controls="devDependencies" role="tab" data-toggle="tab" aria-expanded="true">DevDependencies</a>
-              </li>
-              <li role="presentation">
-                <a href="#maintainers" aria-controls="maintainers" role="tab" data-toggle="tab" aria-expanded="true">Contributors</a>
-              </li>
-            </ul>
-            <div className="tab-content">
-              <div className="tab-pane active" id="dependencies" role="tabpanel">
-                <StaticList data={pkg.dependencies}/>
-              </div>
-              <div className="tab-pane" id="devDependencies" role="tabpanel">
-                <StaticList data={pkg.devDependencies}/>
-              </div>
-              <div className="tab-pane" id="maintainers" role="tabpanel">
-                <StaticList data={pkg.maintainers}/>
-              </div>
-            </div>
-
-            <div className="package-details__tabs tab-wrap" style={{
-              display: 'none'
-            }}>
-              <input id="tab1" type="radio" name="tabs" defaultChecked/>
-              <label htmlFor="tab1">Dependencies</label>
-              <input id="tab2" type="radio" name="tabs"/>
-              <label htmlFor="tab2">DevDependencies</label>
-              <input id="tab3" type="radio" name="tabs"/>
-              <label htmlFor="tab3">Contributors</label>
-              <section id="devDependencies-content"></section>
-              <section id="dependencies-content">
-                <StaticList data={pkg.dependencies}/>
-              </section>
-              <section id="contributors-content">
-                <StaticList data={pkg.maintainers}/>
-              </section>
-            </div>
+            <PackageTabs
+              description={pkg.description}
+              devDependencies={pkg.devDependencies}
+              dependencies={pkg.dependencies}
+              maintainers={pkg.maintainers}
+          />
           </Loader>
         </div>
       </div>
