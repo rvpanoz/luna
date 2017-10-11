@@ -25,9 +25,9 @@ export function parse(data, key) {
 export function showMessageBox(opts, cb = {}) {
   let pkgName = opts.name;
   let action = opts.action;
-  let version, message;
+  let version = opts.version;
+  let message;
 
-  version = (opts.version !== "0") ? opts.version : 'latest';
   switch (action) {
     case 'UNINSTALL':
       message = `${action} ${pkgName} from your system.`;

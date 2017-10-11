@@ -30,7 +30,8 @@ export default function packagesReducer(state = initialState, action) {
       });
     case SET_MODE:
       return Object.assign({}, state, {
-        mode: action.mode
+        mode: action.mode,
+        packageActions: action.packageActions
       });
     case SET_APP_MESSAGE:
       return Object.assign({}, state, {

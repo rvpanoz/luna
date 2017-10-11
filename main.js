@@ -14,7 +14,6 @@ const cwd = process.cwd();
 const NODE_ENV = process.env.NODE_ENV;
 const config = require('./config');
 const electronStore = require('electron-store');
-const request = require('request');
 const shell = require('./shell');
 const winston = require('winston');
 
@@ -27,7 +26,7 @@ const logger = new winston.Logger({
   transports: [
     new(winston.transports.Console)(),
     new(winston.transports.File)({
-      filename: 'log.log'
+      filename: 'app-log.log'
     })
   ]
 });
@@ -92,6 +91,7 @@ ipcMain.on('get-packages', (event, options) => {
         event.sender.send('get-packages-close', data);
         break;
       case (type === 'error'):
+        logger.log(data);
         event.sender.send('get-packages-error', data);
         break;
       default:
@@ -107,7 +107,7 @@ ipcMain.on('view-by-version', (event, options) => {
 });
 
 ipcMain.on('get-package', (event, options) => {
-  shell.doCmd('la', options, (data) => {
+  shell.doCmd('list', options, (data) => {
     event.sender.send('get-package-reply', JSON.parse(data));
   });
 });
@@ -119,6 +119,7 @@ ipcMain.on('search-packages', (event, options) => {
         event.sender.send('search-packages-close', data);
         break;
       case (type === 'error'):
+        logger.log(data);
         event.sender.send('search-packages-error', data);
         break;
       default:

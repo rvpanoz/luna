@@ -1,40 +1,22 @@
 import React from 'react';
 
 const PackageActions = (props) => {
-  function renderItems(mode) {
-    switch (mode) {
-      case 'SEARCH':
-        return (
-          <ul className="dropdown-menu dropdown-menu-right">
-            <li>
-              <a href="#">
-                <span>Install</span>
-              </a>
-            </li>
-          </ul>
-        )
-        break;
-      default:
-      return (
-        <ul className="dropdown-menu dropdown-menu-right">
-        <li>
-          <a href="#">
-            <span>Update</span>
-          </a>
-        </li>
-        <li>
-          <a href="#">
-            <span>Uninstall</span>
-          </a>
-        </li>
-      </ul>
-      )
-    }
-  }
+  const actions = props.packageActions;
+  const doAction = props.doAction;
   return (
     <div className="dropdown">
       <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
-      {renderItems(props.mode)}
+      <ul className="dropdown-menu dropdown-menu-right">
+        {actions.map((action, idx)=>{
+          return (
+            <li key={idx}>
+              <a href="#" onClick={doAction}>
+                <span>{action}</span>
+              </a>
+            </li>
+          )
+        })}
+      </ul>
     </div>
   )
 }
