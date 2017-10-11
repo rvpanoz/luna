@@ -2,7 +2,7 @@ import config from '../../../config';
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
-import {StaticList} from '../../common/Statics';
+import PackageTabs from './partials/PackageTabs';
 import {showMessageBox, makeRequest} from '../../../utils';
 
 class PackageDetails extends React.Component {
@@ -93,6 +93,8 @@ class PackageDetails extends React.Component {
     ipcRenderer.on('view-by-version-reply', (event, pkg) => {
       this.props.setActive(pkg, false);
     });
+
+    //TODO
     // ipcRenderer.on('get-package-reply', (event, pkg) => {
     //   console.log(pkg);
     // });
@@ -124,48 +126,37 @@ class PackageDetails extends React.Component {
           </div>
         </div>
         <div className="package-details__info">
-          <div className="package-details__name">
-            <span>Author:&nbsp;{pkg.author}</span>
-            <br/>
-            <span>Latest:&nbsp;v{pkg['dist-tags'].latest}</span>
-            <br/>
-            <br/>
-            <div className="form-group">
-              <label htmlFor="selectVersion">
-                <span>Select version:</span>
-              </label>
-              <select onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
-                <option value="0">
-                  -
-                </option>
-                {pkg.versions.map((version, idx) => {
-                  return <option key={idx} value={version}>{version}</option>
-                })}
-              </select>
+          <div className="package-preview__props">
+            <div className="package-preview__prop" title="author">
+              <i className="fa fa-tags"></i>
+              <span className="package-preview__author" title={pkg.author}>Author:&nbsp;{pkg.author}</span>
             </div>
+            <div className="package-preview__prop">
+              <i className="fa fa-flag"></i>
+              <span className="package-preview__date" title={`v${pkg['dist-tags'].latest}`}>Latest:&nbsp;v{pkg['dist-tags'].latest}</span>
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="selectVersion">
+              <span>Select version</span>
+            </label>
+            <select onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
+              <option value="0">-</option>
+              {pkg.versions.map((version, idx) => {
+                return <option key={idx} value={version}>{version}</option>
+              })}
+            </select>
           </div>
           <div className="package-details__date"></div>
         </div>
         <div className="package-details__body">
           <Loader loading={this.props.isLoading}>
-            <div className="package-details__text">{pkg.description}</div>
-            <div className="package-details__tabs tab-wrap">
-              <input id="tab1" type="radio" name="tabs" defaultChecked/>
-              <label htmlFor="tab1">Dependencies</label>
-              <input id="tab2" type="radio" name="tabs"/>
-              <label htmlFor="tab2">DevDependencies</label>
-              <input id="tab3" type="radio" name="tabs"/>
-              <label htmlFor="tab3">Contributors</label>
-              <section id="devDependencies-content">
-                <StaticList data={pkg.devDependencies}/>
-              </section>
-              <section id="dependencies-content">
-                <StaticList data={pkg.dependencies}/>
-              </section>
-              <section id="contributors-content">
-                <StaticList data={pkg.maintainers}/>
-              </section>
-            </div>
+            <PackageTabs
+              description={pkg.description}
+              devDependencies={pkg.devDependencies}
+              dependencies={pkg.dependencies}
+              maintainers={pkg.maintainers}
+          />
           </Loader>
         </div>
       </div>
