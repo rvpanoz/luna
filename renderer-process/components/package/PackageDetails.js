@@ -2,6 +2,7 @@ import config from '../../../config';
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
+import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
 import {showMessageBox, makeRequest} from '../../../utils';
 
@@ -82,7 +83,6 @@ class PackageDetails extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     let pkg = this.props.active;
-    console.log(this.props.mode, pkg);
     if (pkg && pkg.name) {
       ipcRenderer.send('get-package', {
         pkgName: pkg.name,
@@ -115,15 +115,8 @@ class PackageDetails extends React.Component {
             {pkg.name}&nbsp;
             <span className="label label-success">v{pkg.version}</span>
           </div>
-          <div className="package-details__settings dropdown">
-            <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
-            <ul className="dropdown-menu dropdown-menu-right">
-              <li>
-                <a href="#">
-                  <span>Update</span>
-                </a>
-              </li>
-            </ul>
+          <div className="package-details__actions">
+            <PackageActions mode={this.props.mode} />
           </div>
         </div>
         <div className="package-details__info">

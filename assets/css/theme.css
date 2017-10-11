@@ -1529,7 +1529,7 @@ body.main-scrollable .main {
   color: #fff;
 }
 
-.package-details__settings {
+.package-details__actions {
   float: left;
   width: 30px;
   text-align: right;
@@ -1537,11 +1537,11 @@ body.main-scrollable .main {
   cursor: pointer;
 }
 
-.package-details__settings>.fa:hover {
+.package-details__actions>.fa:hover {
   color: #fff;
 }
 
-.package-details__settings .dropdown-menu>li .fa {
+.package-details__actions .dropdown-menu>li .fa {
   margin-right: 10px;
 }
 

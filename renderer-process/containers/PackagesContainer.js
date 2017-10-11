@@ -24,7 +24,10 @@ const PackagesPage = (props) => {
               active={props.active}
               setAppMessage={props.actions.setAppMessage}
             />
-            <PackagesListSearch />
+            <PackagesListSearch
+              setActive={props.actions.setActive}
+              toggleLoader={props.actions.toggleLoader}
+            />
             <PackagesList
               loading={props.loading}
               packages={props.packages}
@@ -36,7 +39,7 @@ const PackagesPage = (props) => {
             />
           </div>
           <div className="col-md-8">
-            <PackageContainer active={props.active} />
+            <PackageContainer active={props.active}/>
           </div>
         </div>
       </div>
@@ -45,11 +48,7 @@ const PackagesPage = (props) => {
 }
 
 function mapStateToProps(state) {
-  return {
-    loading: state.loading,
-    packages: state.packages,
-    active: state.active
-  }
+  return {loading: state.loading, packages: state.packages, active: state.active}
 }
 
 function mapDispatchToProps(dispatch) {
