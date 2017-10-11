@@ -1,17 +1,14 @@
 import config from '../../../config';
-import {remote, ipcRenderer} from 'electron';
+import { remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
-import {showMessageBox, makeRequest} from '../../../utils';
+import Actions from './actions';
 
 class PackageDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.install = this.install.bind(this);
-    this.update = this.update.bind(this);
-    this.uninstall = this.uninstall.bind(this);
     this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
   }
@@ -21,59 +18,16 @@ class PackageDetails extends React.Component {
     let target = e.currentTarget;
     let action = target.querySelector('span').innerHTML.toLowerCase();
 
+    //see actions.js e.g action = 'install'
     if(action && typeof action === 'string') {
-      if(typeof this[action] === 'function') {
-        this[action]();
+      if(typeof Actions[action] === 'function') {
+        let active = this.props.active;
+        let selectVersion = this.refs.selectVersion;
+        let version = (selectVersion && selectVersion.value !== "0") ? selectVersion.value : 'latest';
+        this.props.toggleMainLoader(true);
+        Actions[action](active, version);
       }
     }
-    return false;
-  }
-  update() {
-    let pkg = this.props.active;
-    let selectVersion = this.refs.selectVersion;
-    let version = (selectVersion && selectVersion.value !== "0") ? selectVersion.value : 'latest';
-
-    showMessageBox({
-      action: 'UPDATE',
-      name: pkg.name,
-      version: version
-    }, () => {
-      ipcRenderer.send('update-package', {
-        pkgName: pkg.name,
-        pkgVersion: version,
-        scope: 'g'
-      });
-      this.props.toggleMainLoader(true);
-    });
-  }
-  uninstall() {
-    let pkg = this.props.active;
-    showMessageBox({
-      action: 'UNINSTALL',
-      name: pkg.name
-    }, () => {
-      ipcRenderer.send('uninstall-package', {
-        pkgName: pkg.name,
-        scope: 'g'
-      });
-      this.props.toggleMainLoader(true);
-    });
-  }
-  install() {
-    let pkg = this.props.active,
-      version;
-    showMessageBox({
-      action: 'INSTALL',
-      name: pkg.name,
-      version: version || 'latest'
-    }, () => {
-      ipcRenderer.send('install-package', {
-        pkgName: pkg.name,
-        scope: 'g',
-        pkgVersion: version || 'latest'
-      });
-      this.props.toggleMainLoader(true);
-    });
     return false;
   }
   onChangeVersion(e) {
@@ -90,24 +44,17 @@ class PackageDetails extends React.Component {
     }
     return false;
   }
-  componentDidUpdate(prevProps, prevState) {
-    let pkg = this.props.active;
-    if (pkg && pkg.name) {
-      ipcRenderer.send('get-package', {
-        pkgName: pkg.name,
-        scope: 'g'
-      });
-    }
-  }
   componentDidMount() {
     ipcRenderer.on('view-by-version-reply', (event, pkg) => {
       this.props.setActive(pkg, false);
     });
 
-    //TODO
-    // ipcRenderer.on('get-package-reply', (event, pkg) => {
-    //   console.log(pkg);
-    // });
+    //WIP
+    ipcRenderer.on('update-package-close', (event, pkg) => {
+      console.log(pkg);
+
+    })
+
   }
   componentWillUnMount() {
     ipcRenderer.removeAllListeners('view-by-version-reply');
