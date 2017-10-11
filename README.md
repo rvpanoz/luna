@@ -9,5 +9,3 @@ Work in progress..
 - Update existing packages
 - Uninstall packages
 - more ... 
-
-![Luna](http://104.236.58.95/media/luna.png)
