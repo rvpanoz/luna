@@ -57,7 +57,7 @@ export default class SearchBox extends React.Component {
   render() {
     return (
       <div className="packages__search" ref="root">
-        <input className="form-control" type="text" placeholder="Search registry.." ref="searchInput"/>
+        <input className="form-control" type="text" placeholder="Search npm registry.." ref="searchInput"/>
       </div>
     )
   }

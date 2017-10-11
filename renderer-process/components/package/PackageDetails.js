@@ -24,8 +24,9 @@ class PackageDetails extends React.Component {
         let active = this.props.active;
         let selectVersion = this.refs.selectVersion;
         let version = (selectVersion && selectVersion.value !== "0") ? selectVersion.value : 'latest';
-        this.props.toggleMainLoader(true);
-        Actions[action](active, version);
+        Actions[action](active, version, () => {
+          this.props.toggleMainLoader(true);
+        });
       }
     }
     return false;
@@ -49,12 +50,20 @@ class PackageDetails extends React.Component {
       this.props.setActive(pkg, false);
     });
 
-    //WIP
     ipcRenderer.on('update-package-close', (event, pkg) => {
-      console.log(pkg);
-
-    })
-
+      let selectVersion = this.refs.selectVersion;
+      try {
+        if(pkg && pkg.dependencies) {
+          ipcRenderer.send('view-by-version', {
+            pkgName: Object.keys(pkg.dependencies)[0],
+            pkgVersion: (selectVersion && selectVersion.value !== "0") ? selectVersion.value : null,
+            score: 'g'
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    });
   }
   componentWillUnMount() {
     ipcRenderer.removeAllListeners('view-by-version-reply');

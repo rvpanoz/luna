@@ -15,7 +15,7 @@ class PackageItem extends React.Component {
       el.classList.add('selected');
       ipcRenderer.send('view-by-version', {
         pkgName: this.props.name,
-        version: this.props.version
+        pkgVersion: this.props.version
       });
     }
     return false;

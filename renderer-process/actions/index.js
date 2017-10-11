@@ -33,14 +33,7 @@ export function toggleMainLoader(isLoading) {
 }
 
 export function setPackages(data) {
-  let jsonData = isJson(data);
-  if(!jsonData) {
-    return {
-      type: types.SET_APP_MESSAGE,
-      app_message: jsonData
-    }
-  }
-
+  console.log(data);
   let packages = parse(data, 'dependencies');
   return {
     type: types.SET_PACKAGES,

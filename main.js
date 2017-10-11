@@ -9,6 +9,7 @@ import {
   ipcMain,
   dialog
 } from 'electron';
+import { isJson } from './utils';
 
 const cwd = process.cwd();
 const NODE_ENV = process.env.NODE_ENV;
@@ -86,54 +87,66 @@ function createMainWindow() {
 
 ipcMain.on('get-packages', (event, options) => {
   shell.doCmd('list', options, (data, type) => {
-    switch (true) {
-      case (type === 'close'):
-        event.sender.send('get-packages-close', data);
-        break;
-      case (type === 'error'):
-        logger.log(data);
-        event.sender.send('get-packages-error', data);
-        break;
-      default:
-        event.sender.send('search-packages-reply', data);
+    if(isJson(data)) {
+      switch (true) {
+        case (type === 'close'):
+          event.sender.send('get-packages-close', JSON.parse(data));
+          break;
+        case (type === 'error'):
+          logger.log(data);
+          event.sender.send('get-packages-error', JSON.parse(data));
+          break;
+        default:
+          event.sender.send('get-packages-reply', JSON.parse(data));
+      }
     }
   });
 });
 
 ipcMain.on('view-by-version', (event, options) => {
   shell.doCmd('view', options, (data) => {
-    event.sender.send('view-by-version-reply', JSON.parse(data));
+    if(isJson(data)) {
+      event.sender.send('view-by-version-reply', JSON.parse(data));
+    }
   });
 });
 
 ipcMain.on('get-package', (event, options) => {
   shell.doCmd('list', options, (data) => {
-    event.sender.send('get-package-reply', JSON.parse(data));
+    if(isJson(data)) {
+      event.sender.send('get-package-reply', JSON.parse(data));
+    }
   });
 });
 
 ipcMain.on('search-packages', (event, options) => {
   shell.doCmd('search', options, (data, type) => {
-    switch (true) {
-      case (type === 'close'):
-        event.sender.send('search-packages-close', data);
-        break;
-      case (type === 'error'):
-        logger.log(data);
-        event.sender.send('search-packages-error', data);
-        break;
-      default:
-        event.sender.send('search-packages-reply', data);
+    if(isJson(data)) {
+      switch (true) {
+        case (type === 'close'):
+          event.sender.send('search-packages-close', JSON.parse(data));
+          break;
+        case (type === 'error'):
+          logger.log(data);
+          event.sender.send('search-packages-error', JSON.parse(data));
+          break;
+        default:
+          event.sender.send('search-packages-reply', JSON.parse(data));
+      }
     }
   });
 });
 
 ipcMain.on('update-package', (event, options) => {
-  shell.doCmd('install', options, (data, end) => {
-    if (end) {
-      event.sender.send('update-package-close', data);
-    } else {
-      event.sender.send('update-package-reply', data);
+  shell.doCmd('install', options, (data, type) => {
+    if(isJson(data)) {
+      switch (type) {
+        case 'close':
+          event.sender.send('update-package-close', JSON.parse(data));
+          break;
+        default:
+          event.sender.send('update-package-reply', JSON.parse(data));
+      }
     }
   });
 });
@@ -182,7 +195,7 @@ app.on('ready', () => {
 
 app.on('gpu-process-crashed', (event, killed) => {
   throw new Error('gpu crached or is killed');
-})
+});
 
 process.on('uncaughtException', function(err) {
   console.log(err);

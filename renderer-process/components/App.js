@@ -14,8 +14,6 @@ import {Route} from 'react-router-dom';
 
 import AppMessageContainer from '../containers/AppMessageContainer';
 import SidebarContainer from '../containers/SidebarContainer';
-import Dashboard from '../components/Dashboard';
-import Analyze from '../containers/AnalyzePage';
 import PackagesContainer from '../containers/PackagesContainer';
 
 //configuration and store globals
@@ -38,7 +36,6 @@ const App = () => {
             <div className="main__scroll">
               <div className="main__cont">
                 <Route exact path="/" component={PackagesContainer}/>
-                <Route path="/analyze" component={Analyze}/>
               </div>
             </div>
           </div>
