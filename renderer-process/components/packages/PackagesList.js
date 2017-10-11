@@ -1,38 +1,33 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
-import PackageItem from './PackageItem';
-
-const listeners = ['get-packages-reply', 'search-packages-reply', 'view-by-version-reply'];
+import PackageListItem from './PackageListItem';
 
 class PackagesList extends React.Component {
   constructor(props) {
     super(props);
-    this.deSelectAll = this.deSelectAll.bind(this);
-  }
-  componentWillMount() {
-    ipcRenderer.send('get-packages', {scope: 'g'});
+    this.deselectAll = this.deselectAll.bind(this);
   }
   componentDidMount() {
+    //toggle loader
     this.props.toggleLoader(true);
-    ipcRenderer.on('get-packages-reply', (event, packages) => {
+
+    //ipcRenderer events
+    ipcRenderer.send('get-packages', {scope: 'g'});
+
+    //ipcRenderer listeners
+    ipcRenderer.on('get-packages-close', (event, packages) => {
       this.props.setPackages(packages);
-      this.props.toggleLoader(false);
-      this.props.setMode('global', ['Update', 'Uninstall']);
     });
     ipcRenderer.on('search-packages-close', (event, packages) => {
       this.props.setPackages(packages);
-      this.props.toggleLoader(false);
-      this.props.setMode('search', ['Install']);
-    });
-    ipcRenderer.on('view-by-version-reply', (event, pkg) => {
-      this.props.setActive(pkg);
     });
   }
   componentWillUnMount() {
-    ipcRenderer.removeAllListeners(listeners);
+    //clean up ipcRenderer listener
+    ipcRenderer.removeAllListeners(['get-packages-reply', 'search-packages-reply']);
   }
-  deSelectAll() {
+  deselectAll() {
     let list = this.refs.list;
     if (list) {
       let selected = list.querySelector('.selected');
@@ -43,15 +38,21 @@ class PackagesList extends React.Component {
   }
   render() {
     let packages = this.props.packages;
+    let peerDeps = {};
     return (
       <Loader loading={this.props.loading}>
         <div className="packages_list" ref="list">
           {(packages)
             ? packages.map((pkg, idx) => {
-              pkg.name = (pkg.from)
+              let hasPeerMissing = pkg.peerMissing;
+              if (hasPeerMissing) {
+                return;
+              }
+              let version = pkg.version;
+              let name = (pkg.from)
                 ? pkg.from.split("@")[0]
                 : pkg.name;
-              return <PackageItem deselect={this.deSelectAll} idx={idx} key={idx} {...pkg}/>
+              return <PackageListItem deselectAll={this.deselectAll} idx={idx} key={idx} name={name} version={version}/>
             })
             : null}
         </div>

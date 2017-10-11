@@ -11,7 +11,7 @@ class PackageItem extends React.Component {
     let el = this.refs[`root-${this.props.idx}`];
     let isSelected = el.classList.contains('selected');
     if(!isSelected) {
-      this.props.deselect();
+      this.props.deselectAll();
       el.classList.add('selected');
       ipcRenderer.send('view-by-version', {
         pkgName: this.props.name,

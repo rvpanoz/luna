@@ -437,7 +437,7 @@ body.main-scrollable .main {
   overflow-x: hidden;
 }
 .main__cont {
-  padding: 15px;
+  padding: 0 auto;
 }
 .main-heading {
   overflow: hidden;
@@ -1192,7 +1192,7 @@ body.main-scrollable .main {
   padding: 10px 10px 15px;
   cursor: pointer;
 }
-.packages-item:hover {
+.packages-item:hover, .packages-item.selected {
   background-color: rgba(36, 41, 44, 0.5);
 }
 .packages-item__head {
@@ -1251,6 +1251,9 @@ body.main-scrollable .main {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.package-details__text {
+  color: #fff;
 }
 .package-details__head:after {
   content: '';
@@ -1315,6 +1318,7 @@ body.main-scrollable .main {
 }
 .package-details__name span {
   padding-right: 5px;
+  color: #fff;
 }
 .package-details__name span:nth-of-type(1), span:nth-of-type(2), span:nth-of-type(3) {
   font-weight: bold;
@@ -3403,6 +3407,10 @@ table.dataTable thead > tr > td.sorting {
   border-bottom: 1px solid #fff;
 }
 
-.tab-wrap #tab2:checked~#contributors-content, .tab-wrap #tab1:checked~#dependencies-content {
+.tab-wrap #tab1:checked~#dependencies-content, .tab-wrap #tab3:checked~#contributors-content, .tab-wrap #tab2:checked~#devDependencies-content {
   display: block;
+}
+
+.select-mini {
+  width: 150px;
 }

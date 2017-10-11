@@ -37,7 +37,8 @@ export default class SearchBox extends React.Component {
       this.props.toggleLoader(true);
       this.props.setActive(null);
       ipcRenderer.send('search-packages', {
-        pkgName: searchInput.value
+        pkgName: searchInput.value,
+        score: 'g'
       });
     }
     return false;

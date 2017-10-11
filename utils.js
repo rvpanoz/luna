@@ -58,3 +58,22 @@ export function isJson(str) {
   }
   return true;
 }
+
+//using request module
+export function makeRequest(opts, cb) {
+  const Request = require('request');
+  let options = opts || {};
+
+  let callback = function(error, response, body) {
+    if(error) {
+      throw new Error(error);
+    }
+    if (response.statusCode == 200 && cb) {
+      cb(body);
+    } else {
+      return response.statusCode;
+    }
+  }
+
+  Request(options, callback);
+}
