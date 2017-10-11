@@ -2,6 +2,7 @@ import config from '../../../config';
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
+import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
 import {showMessageBox, makeRequest} from '../../../utils';
 
@@ -16,24 +17,33 @@ class PackageDetails extends React.Component {
   }
   doAction(e) {
     e.preventDefault();
+
     let target = e.currentTarget;
     let action = target.querySelector('span').innerHTML.toLowerCase();
-    if (this[action]) {
-      this[action]();
+
+    if(action && typeof action === 'string') {
+      if(typeof this[action] === 'function') {
+        this[action]();
+      }
     }
     return false;
   }
   update() {
     let pkg = this.props.active;
+    let selectVersion = this.refs.selectVersion;
+    let version = (selectVersion && selectVersion.value !== "0") ? selectVersion.value : 'latest';
+
     showMessageBox({
       action: 'UPDATE',
-      name: pkg.name
+      name: pkg.name,
+      version: version
     }, () => {
       ipcRenderer.send('update-package', {
         pkgName: pkg.name,
+        pkgVersion: version,
         scope: 'g'
       });
-      this.props.toggleMainLoader(true)
+      this.props.toggleMainLoader(true);
     });
   }
   uninstall() {
@@ -82,7 +92,6 @@ class PackageDetails extends React.Component {
   }
   componentDidUpdate(prevProps, prevState) {
     let pkg = this.props.active;
-    console.log(this.props.mode, pkg);
     if (pkg && pkg.name) {
       ipcRenderer.send('get-package', {
         pkgName: pkg.name,
@@ -108,6 +117,7 @@ class PackageDetails extends React.Component {
     if (!pkg) {
       return null;
     }
+
     return (
       <div className="package-details" ref="root">
         <div className="package-details__head">
@@ -115,15 +125,8 @@ class PackageDetails extends React.Component {
             {pkg.name}&nbsp;
             <span className="label label-success">v{pkg.version}</span>
           </div>
-          <div className="package-details__settings dropdown">
-            <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
-            <ul className="dropdown-menu dropdown-menu-right">
-              <li>
-                <a href="#">
-                  <span>Update</span>
-                </a>
-              </li>
-            </ul>
+          <div className="package-details__actions">
+            <PackageActions packageActions={this.props.packageActions} doAction={this.doAction}/>
           </div>
         </div>
         <div className="package-details__info">

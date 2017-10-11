@@ -2,11 +2,10 @@
 
 'use strict';
 
-const ipcRenderer = require('electron').ipcRenderer;
 const cp = require('child_process');
+const utils = require('./utils');
 const exec = cp.exec;
 const spawn = cp.spawn;
-const utils = require('./utils');
 
 exports.doCmd = function(cmd, options, cb) {
   const defaults = ['--depth=0', '--json'];
@@ -39,7 +38,6 @@ exports.doCmd = function(cmd, options, cb) {
     opts = defaults.concat();
   }
 
-  console.log(run.concat(params).concat(opts));
   let npmc = spawn('npm', run.concat(params).concat(opts), {
     maxBuffer: 1024 * 500
   });

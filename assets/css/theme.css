@@ -1529,7 +1529,7 @@ body.main-scrollable .main {
   color: #fff;
 }
 
-.package-details__settings {
+.package-details__actions {
   float: left;
   width: 30px;
   text-align: right;
@@ -1537,11 +1537,11 @@ body.main-scrollable .main {
   cursor: pointer;
 }
 
-.package-details__settings>.fa:hover {
+.package-details__actions>.fa:hover {
   color: #fff;
 }
 
-.package-details__settings .dropdown-menu>li .fa {
+.package-details__actions .dropdown-menu>li .fa {
   margin-right: 10px;
 }
 
@@ -1660,8 +1660,6 @@ body.main-scrollable .main {
 }
 
 .package-preview__props {
-  margin-bottom: 25px;
-  width: 50%;
   text-overflow: ellipsis;
   color: #88939C;
 }
@@ -1692,7 +1690,7 @@ body.main-scrollable .main {
   line-height: 16px;
   text-align: left;
   padding: 10px;
-  color: #5e6870;
+  color: #fff;
   background-color: rgba(36, 41, 44, 0.5);
   border-radius: 2px;
 }
