@@ -1646,7 +1646,14 @@ select option {
   line-height: 14px;
 }
 
-.tab__drop * {
+.tab-content {
+  padding: 15px 15px 5px;
+  background-color: #272c30;
+  border-radius: 4px;
+  border-top-left-radius: 0px;
+}
+
+.tabdrop * {
   outline: none;
   cursor: pointer !important;
 }
