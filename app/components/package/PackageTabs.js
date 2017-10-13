@@ -4,8 +4,9 @@ import styles from './PackageTabs.css';
 
 const PackageTabs = (props) => {
   let pkg = props.pkg;
+
   return (
-    <div className="package__tabs">
+    <div className={styles.package__tabs}>
       <ul className="nav nav-tabs" role="tablist">
         <li className="dropdown pull-right tab__drop hide">
           <a className="dropdown-toggle" data-toggle="dropdown" href="#">

@@ -1565,3 +1565,88 @@ select option {
 .select-mini {
   width: 150px;
 }
+
+.list-widget {
+  padding: 15px 0;
+}
+
+.list-widget__wrap {
+  height: 252px;
+}
+
+.list-widget__cont {
+  padding: 0px 20px;
+}
+
+.list-widget__item {
+  border-bottom: 1px solid rgba(36, 41, 44, 0.5);
+  margin-bottom: 15px;
+  overflow: hidden;
+}
+
+.list-widget__item:last-child {
+  margin-bottom: 0;
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.list-widget__ico {
+  float: left;
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: rgba(36, 41, 44, 0.5);
+  text-align: center;
+  font-size: 0;
+  white-space: nowrap;
+}
+
+.list-widget__ico:before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+.list-widget__ico .fa {
+  vertical-align: middle;
+  font-size: 20px;
+}
+
+.list-widget__item_user .list-widget__ico .fa:before {
+  content: "\f024";
+}
+
+.list-widget__item_product .list-widget__ico .fa:before {
+  content: "\f1b2";
+}
+
+.list-widget__item_order .list-widget__ico .fa:before {
+  content: "\f0d1";
+}
+
+.list-widget__item_subscriber .list-widget__ico .fa:before {
+  content: "\f004";
+}
+
+.list-widget__info {
+  float: left;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 55px;
+  margin-left: -40px;
+}
+
+.list-widget__text {
+  margin-bottom: 5px;
+}
+
+.list-widget__date {
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.tab__drop * {
+  outline: none;
+  cursor: pointer !important;
+}

@@ -4,8 +4,3 @@
   border-radius: 4px;
   border-top-left-radius: 0px;
 }
-
-.tab__drop * {
-  outline: none;
-  cursor: pointer !important;
-}
