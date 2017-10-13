@@ -6,7 +6,6 @@ const cp = require('child_process');
 const utils = require('./utils');
 const exec = cp.exec;
 const spawn = cp.spawn;
-
 const defaults = ['--depth=0', '--json'];
 
 const execute = (command, callback) => {
@@ -31,15 +30,16 @@ const execute = (command, callback) => {
 }
 
 exports.getPackages = (options, callback) => {
-  const opts = options || {}
-  const scope = opts.scope || '-g';
+  const opts = options || {};
   const cmd = 'list';
 
   let result = '';
   let run=[cmd], params=[], args = [];
 
-  if(scope) {
-    params.push(scope);
+  if(opts.params) {
+    opts.params.forEach((param, idx) => {
+      params.push(`-${param}`);
+    });
   }
 
   if(opts.arguments) {
@@ -57,7 +57,6 @@ exports.getPackages = (options, callback) => {
 
 exports.searchPackages = (options, callback) => {
   const opts = options || {}
-  const scope = opts.scope || '-g';
   const cmd = 'search';
 
   let run=[cmd], params=[], args = [];
@@ -68,6 +67,12 @@ exports.searchPackages = (options, callback) => {
     run.push(pkgName);
   } else {
     callback(1, 'searchPackages: Package name is missing.');
+  }
+
+  if(opts.params) {
+    opts.params.forEach((param, idx) => {
+      params.push(`-${param}`);
+    });
   }
 
   if(opts.arguments) {
@@ -83,6 +88,13 @@ exports.searchPackages = (options, callback) => {
   execute(command, callback);
 }
 
+exports.installPackage = (options, callback) => {
+
+}
+
+exports.uninstallPackage = (options, callback) => {
+
+}
 exports.doCmd = function(cmd, options, cb) {
   const defaults = ['--depth=0', '--json'];
 

@@ -30,10 +30,11 @@ class PackageItem extends React.Component {
       <div ref={`root-${this.props.idx}`} className={styles.packages__item} onClick={this.onItemClick}>
         <div className={styles.packages__item__head}>
           <div className={styles.packages__item__name}>
-            <span>&nbsp;{props.name}</span>
+            <span>{props.name}</span>&nbsp;
+            <span style={{float: 'right'}} className="label label-success">{props.version}</span>
           </div>
-          <div className={styles.packages__item__date}>
-            <span>{props.version}</span>
+          <div className={styles.packages__item__text}>
+            <span>&nbsp;{props.description}</span>
           </div>
         </div>
       </div>

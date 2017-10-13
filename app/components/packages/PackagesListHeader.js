@@ -12,7 +12,7 @@ class PackagesListHeader extends React.Component {
     this.props.setActive(null);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      scope: '-g'
+      params: ['-g', '-long']
     });
   }
   render() {
