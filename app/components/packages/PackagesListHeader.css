@@ -1,8 +1,5 @@
-.packages {
-  min-height: 100vh;
-  padding: 10px 15px;
-  border-radius: 2px;
-  background-color: rgba(36, 41, 44, 0.5);
+.packages__head {
+  display: block;
 }
 
 .packages__head:after {
@@ -54,15 +51,4 @@
 
 .packages__search {
   margin: 10px 0;
-}
-
-.packages__list {
-  margin-top: 15px;
-  max-height: 735px;
-}
-
-@media (max-width: 768px) {
-  .packages__list {
-    margin-bottom: 30px;
-  }
 }

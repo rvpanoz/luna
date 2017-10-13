@@ -1,5 +1,6 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import styles from './PackagesListItem.css';
 
 class PackageItem extends React.Component {
   constructor(props) {
@@ -26,12 +27,12 @@ class PackageItem extends React.Component {
       return null;
     }
     return (
-      <div ref={`root-${this.props.idx}`} className="packages-item new" onClick={this.onItemClick}>
-        <div className="packages-item__head">
-          <div className="packages-item__name">
+      <div ref={`root-${this.props.idx}`} className={styles.packages__item} onClick={this.onItemClick}>
+        <div className={styles.packages__item__head}>
+          <div className={styles.packages__item__name}>
             <span>&nbsp;{props.name}</span>
           </div>
-          <div className="packages-item__date">
+          <div className={styles.packages__item__date}>
             <span>{props.version}</span>
           </div>
         </div>

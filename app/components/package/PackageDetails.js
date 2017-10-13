@@ -4,6 +4,7 @@ import Loader from '../../common/Loader';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
 import Actions from './actions';
+import styles from './PackageDetails.css';
 
 class PackageDetails extends React.Component {
   constructor(props) {
@@ -74,7 +75,7 @@ class PackageDetails extends React.Component {
     }
 
     return (
-      <div className="package-details" ref="root">
+      <div className={styles.package_details} ref="root">
         <div className="package-details__head">
           <div className="package-details__title">
             {pkg.name}&nbsp;

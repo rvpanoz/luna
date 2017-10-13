@@ -1,8 +1,8 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
-import PackageListItem from './PackageListItem';
-import styles from './Packages.css';
+import PackageListItem from './PackagesListItem';
+import styles from './PackagesList.css';
 
 class PackagesList extends React.Component {
   constructor(props) {
@@ -45,7 +45,7 @@ class PackagesList extends React.Component {
     let packages = this.props.packages;
     return (
       <Loader loading={this.props.loading}>
-        <div className={styles.packages} ref="list">
+        <div className={styles.packages__list} ref="list">
           {(packages)
             ? packages.map((pkg, idx) => {
               let hasPeerMissing = pkg.peerMissing;

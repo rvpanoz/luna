@@ -1,5 +1,6 @@
 import React from 'react';
 import { remote, ipcRenderer} from 'electron';
+import styles from './PackagesListHeader.css';
 
 class PackagesListHeader extends React.Component {
   constructor(props) {
@@ -17,12 +18,12 @@ class PackagesListHeader extends React.Component {
   render() {
     let props = this.props;
     return (
-      <div className="packages__head">
-        <div className="packages__title">
+      <div className={styles.packages__head}>
+        <div className={styles.packages__title}>
           <span>{props.title}</span>
         </div>
-        <div className="packages__actions">
-          <div className="packages__action">
+        <div className={styles.packages__actions}>
+          <div className={styles.packages__action}>
             <i className="fa fa-fw fa-refresh" onClick={this._reload} title="Reload"></i>
           </div>
         </div>
