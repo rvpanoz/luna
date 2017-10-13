@@ -46,15 +46,6 @@ class PackageDetails extends React.Component {
     return false;
   }
   componentDidMount() {
-    ipcRenderer.on('ipc-event-reply', (event, data) => {
-      console.log(data);
-    });
-
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      scope: 'g'
-    });
-
     ipcRenderer.on('install-package-reply', (event, data) => {
       console.log(data);
     });

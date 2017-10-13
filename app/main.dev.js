@@ -52,52 +52,56 @@ const installExtensions = async () => {
 ipcMain.on('ipc-event', (event, options) => {
   const opts = options || {};
   const ipcEvent = opts.ipcEvent || false;
-  const data = opts.data;
 
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function callback(data, status) {
+    if(typeof data === 'boolean') {
+      event.sender.send(ipcEvent+'-error', data);
+    }
+    switch (true) {
+      case (status && status === 'close'):
+        event.sender.send(ipcEvent+'-close', data);
+        break;
+      default:
+        event.sender.send(ipcEvent+'-reply', data);
+    }
   }
 
   if(ipcEvent && typeof ipcEvent === 'string') {
     let cmdArr = ipcEvent.split('-');
     if(cmdArr.length === 2) {
       let cmd = cmdArr[0] + capitalizeFirstLetter(cmdArr[1]);
+      /**
+      * At this point we try to run a shell command
+      * eg. $_npm list -g --json --depth=0
+      * sending output to renderer via ipc events
+      **/
       if(shell[cmd]) {
-        console.log(opts);
-        // shell[cmd].apply(opts);
+        shell[cmd](opts, callback);
       }
     }
   }
 });
 
-ipcMain.on('get-packages', (event, options) => {
-  shell.doCmd('list', options, (data, type) => {
-    switch (true) {
-      case (type === 'close'):
-        event.sender.send('get-packages-close', data);
-        break;
-      case (type === 'error'):
-        logger.log(data);
-        event.sender.send('get-packages-error', data);
-        break;
-      default:
-        event.sender.send('search-packages-reply', data);
-    }
-  });
-});
 
+//TODO: REFACTOR
 ipcMain.on('view-version', (event, options) => {
   shell.doCmd('view', options, (data) => {
     event.sender.send('view-by-version-reply', JSON.parse(data));
   });
 });
 
+//TODO: REFACTOR
 ipcMain.on('get-package', (event, options) => {
   shell.doCmd('list', options, (data) => {
     event.sender.send('get-package-reply', JSON.parse(data));
   });
 });
 
+//TODO: REFACTOR
 ipcMain.on('search-packages', (event, options) => {
   shell.doCmd('search', options, (data, type) => {
     switch (true) {
@@ -114,6 +118,7 @@ ipcMain.on('search-packages', (event, options) => {
   });
 });
 
+//TODO: REFACTOR
 ipcMain.on('update-package', (event, options) => {
   shell.doCmd('install', options, (data, end) => {
     if (end) {
@@ -124,6 +129,7 @@ ipcMain.on('update-package', (event, options) => {
   });
 });
 
+//TODO: REFACTOR
 ipcMain.on('install-package', (event, options) => {
   shell.doCmd('install', options, (data, type) => {
     switch (true) {
@@ -139,6 +145,7 @@ ipcMain.on('install-package', (event, options) => {
   });
 });
 
+//TODO: REFACTOR
 ipcMain.on('uninstall-package', (event, options) => {
   shell.doCmd('uninstall', options, (data, end) => {
     if (end) {
@@ -152,7 +159,7 @@ ipcMain.on('uninstall-package', (event, options) => {
 /* =========================== */
 
 /**
- * Add event listeners...
+ * Add event listeners
  */
 
 app.on('window-all-closed', () => {
