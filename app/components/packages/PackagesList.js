@@ -2,6 +2,7 @@ import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
 import PackageListItem from './PackageListItem';
+import styles from './Packages.css';
 
 class PackagesList extends React.Component {
   constructor(props) {
@@ -12,10 +13,10 @@ class PackagesList extends React.Component {
     //toggle loader
     this.props.toggleLoader(true);
 
-    //ipcRenderer events
+    //ipcRenderer events -
     ipcRenderer.send('get-packages', {scope: 'g'});
 
-    //ipcRenderer listeners
+    //ipcRenderer listeners -
     ipcRenderer.on('get-packages-close', (event, packages) => {
       this.props.setPackages(packages);
       this.props.setMode('GLOBAL', ['Update', 'Uninstall']);
@@ -42,10 +43,9 @@ class PackagesList extends React.Component {
   }
   render() {
     let packages = this.props.packages;
-    let peerDeps = {};
     return (
       <Loader loading={this.props.loading}>
-        <div className="packages_list" ref="list">
+        <div className={styles.packages} ref="list">
           {(packages)
             ? packages.map((pkg, idx) => {
               let hasPeerMissing = pkg.peerMissing;

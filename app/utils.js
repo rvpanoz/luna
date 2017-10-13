@@ -9,9 +9,10 @@ export function isArray() {
   return (objectArray === '[object Array]');
 }
 
-export function parse(packages, key) {
+export function parse(data, key) {
   let arr = [];
 
+  let packages = JSON.parse(data);
   if (key && packages[key]) {
     packages = packages[key];
   }

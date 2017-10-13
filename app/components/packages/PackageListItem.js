@@ -22,6 +22,9 @@ class PackageItem extends React.Component {
   }
   render() {
     let props = this.props;
+    if(!props.name) {
+      return null;
+    }
     return (
       <div ref={`root-${this.props.idx}`} className="packages-item new" onClick={this.onItemClick}>
         <div className="packages-item__head">
