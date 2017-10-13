@@ -1,5 +1,0 @@
-{
-  "application/javascript": {
-    "presets": ["es2016-node5", "react"]
-  }
-}

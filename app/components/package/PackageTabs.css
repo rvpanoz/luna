@@ -1,0 +1,99 @@
+.package__preview {
+  margin-bottom: 15px;
+}
+
+.package__preview__cont {
+  padding: 10px 15px;
+  background-color: rgba(36, 41, 44, 0.5);
+  border-radius: 4px;
+}
+
+.package__preview__name {
+  font-size: 24px;
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.package__preview__data {
+  margin-bottom: 15px;
+}
+
+.package__preview__data:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.package__preview__photo {
+  float: left;
+  width: 100%;
+  max-width: 190px;
+  padding-right: 90px;
+  margin-right: -75px;
+  height: 100px;
+  position: relative;
+}
+
+.package__preview__info {
+  float: left;
+  width: 75px;
+  box-sizing: border-box;
+}
+
+.package__preview__type {
+  font-weight: 500;
+  font-size: 15px;
+  margin-bottom: 5px;
+  color: #88939C;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.package__preview__stat {
+  margin-bottom: 10px;
+}
+
+.package__preview__edit {
+  white-space: nowrap;
+}
+
+.package__preview__props {
+  text-overflow: ellipsis;
+  color: #88939C;
+}
+
+.package__preview__prop {
+  white-space: nowrap;
+  margin-bottom: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: #353c42;
+  padding: 4px 6px 2px;
+  border-radius: 2px;
+}
+
+.package__preview__prop:last-of-type {
+  margin-bottom: 0;
+}
+
+.package__preview__prop .fa {
+  width: 20px;
+  text-align: center;
+  margin-right: 6px;
+}
+
+.package__preview__note {
+  margin-top: 10px;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: left;
+  padding: 10px;
+  color: #fff;
+  background-color: rgba(36, 41, 44, 0.5);
+  border-radius: 2px;
+}
+
+.package__preview__actions {
+  text-align: right;
+}

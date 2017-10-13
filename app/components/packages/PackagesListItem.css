@@ -1,0 +1,79 @@
+
+.packages__item {
+  border-top: 1px solid rgba(36, 41, 44, 0.5);
+  padding: 10px 10px 15px;
+  cursor: pointer;
+}
+
+.packages__item:hover, .packages__item.selected {
+  background-color: rgba(36, 41, 44, 0.5);
+}
+
+.packages__item__head {
+  overflow: hidden;
+}
+
+.packages__item__check {
+  float: left;
+}
+
+.packages__item__check .checkbox {
+  padding-top: 0;
+  height: 20px;
+}
+
+.packages__item__check .checkbox label {
+  padding-left: 0;
+}
+
+.packages__item__name {
+  float: left;
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 30px;
+  margin-left: -20px;
+  padding-right: 70px;
+  margin-right: -60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.packages__item__name span {
+  padding-right: 10px;
+}
+
+.packages__item__name span:nth-of-type(1) {
+  font-weight: bold;
+}
+
+.packages__item.new .packages__item__name {
+  color: #fff;
+}
+
+.packages__item__date {
+  float: left;
+  width: 60px;
+  text-align: right;
+}
+
+.packages__item__body {
+  overflow: hidden;
+  padding-top: 5px;
+}
+
+.packages__item__tag {
+  float: left;
+  width: 20px;
+}
+
+.packages__item__text {
+  float: left;
+  box-sizing: border-box;
+  width: 100%;
+  padding-left: 30px;
+  margin-left: -20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
