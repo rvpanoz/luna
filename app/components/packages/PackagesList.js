@@ -14,13 +14,17 @@ class PackagesList extends React.Component {
     this.props.toggleLoader(true);
 
     //ipcRenderer events -
-    ipcRenderer.send('get-packages', {scope: 'g'});
+    // ipcRenderer.send('get-packages', {scope: 'g'});
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      scope: '-g'
+    });
 
     //ipcRenderer listeners -
     ipcRenderer.on('get-packages-close', (event, packages) => {
       this.props.setPackages(packages);
-      this.props.setMode('GLOBAL', ['Update', 'Uninstall']);
       this.props.toggleLoader(false);
+      this.props.setMode('GLOBAL', ['Update', 'Uninstall']);
     });
     ipcRenderer.on('search-packages-close', (event, packages) => {
       this.props.setPackages(packages);

@@ -38,7 +38,7 @@ class PackageDetails extends React.Component {
 
     if (version !== "0") {
       this.props.toggleMainLoader(true);
-      ipcRenderer.send('view-by-version', {
+      ipcRenderer.send('view-version', {
         pkgName: pkg.name,
         pkgVersion: version
       });
@@ -46,7 +46,11 @@ class PackageDetails extends React.Component {
     return false;
   }
   componentDidMount() {
-    ipcRenderer.on('view-by-version-reply', (event, pkg) => {
+    ipcRenderer.on('install-package-reply', (event, data) => {
+      console.log(data);
+    });
+
+    ipcRenderer.on('view-version-reply', (event, pkg) => {
       this.props.setActive(pkg, false);
     });
 
@@ -66,7 +70,7 @@ class PackageDetails extends React.Component {
     });
   }
   componentWillUnMount() {
-    ipcRenderer.removeAllListeners('view-by-version-reply');
+    ipcRenderer.removeAllListeners('view-version-reply', 'update-package-close', 'install-package-reply');
   }
   render() {
     let pkg = this.props.active;
