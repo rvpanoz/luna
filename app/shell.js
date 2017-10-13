@@ -9,8 +9,28 @@ const spawn = cp.spawn;
 
 const defaults = ['--depth=0', '--json'];
 
+const execute = (command, callback) => {
+  let result = '';
+  let npmc = spawn('npm', command, {
+    maxBuffer: 1024 * 500
+  });
+
+  npmc.stdout.on('data', (data) => {
+    result+=data.toString();
+    let dataToString = data.toString();
+    callback(dataToString);
+  });
+  npmc.stderr.on('data', (error) => {
+    let errorToString = error.toString();
+    callback(1, errorToString.toString());
+  });
+  npmc.on('close', () => {
+    console.log(`npm ${command.join(' ')} finished execution`);
+    callback(result, 'close');
+  });
+}
+
 exports.getPackages = (options, callback) => {
-  console.log(options);
   const opts = options || {}
   const scope = opts.scope || '-g';
   const cmd = 'list';
@@ -31,23 +51,36 @@ exports.getPackages = (options, callback) => {
     args = defaults.concat();
   }
 
-  let npmc = spawn('npm', run.concat(params).concat(args), {
-    maxBuffer: 1024 * 500
-  });
+  let command = run.concat(params).concat(args);
+  execute(command, callback);
+}
 
-  npmc.stdout.on('data', (data) => {
-    result+=data.toString();
-    let dataToString = data.toString();
-    callback(dataToString);
-  });
-  npmc.stderr.on('data', (error) => {
-    let errorToString = error.toString();
-    callback(1, errorToString.toString());
-  });
-  npmc.on('close', () => {
-    console.log(`npm ${run.join(" ")} ${params.join(" ")} ${args.join(" ")} finished execution`);
-    callback(result, 'close');
-  });
+exports.searchPackages = (options, callback) => {
+  const opts = options || {}
+  const scope = opts.scope || '-g';
+  const cmd = 'search';
+
+  let run=[cmd], params=[], args = [];
+  let pkgName = options.pkgName;
+  let result = '';
+
+  if(pkgName) {
+    run.push(pkgName);
+  } else {
+    callback(1, 'searchPackages: Package name is missing.');
+  }
+
+  if(opts.arguments) {
+    for(let z in opts.arguments) {
+      let v = opts.arguments[z];
+      args.push(`--${z}=${v}`);
+    }
+  } else {
+    args = defaults.concat();
+  }
+
+  let command = run.concat(params).concat(args);
+  execute(command, callback);
 }
 
 exports.doCmd = function(cmd, options, cb) {

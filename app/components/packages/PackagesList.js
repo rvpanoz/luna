@@ -14,7 +14,6 @@ class PackagesList extends React.Component {
     this.props.toggleLoader(true);
 
     //ipcRenderer events -
-    // ipcRenderer.send('get-packages', {scope: 'g'});
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       scope: '-g'
