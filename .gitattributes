@@ -1,2 +1,4 @@
-* linguist-vendored
-*.js linguist-vendored=false
+* text eol=lf
+*.png binary
+*.ico binary
+*.icns binary
