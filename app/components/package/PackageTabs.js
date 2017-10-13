@@ -43,21 +43,18 @@ const PackageTabs = (props) => {
             <div className="col-md-6">
               <div className={styles.package__preview__props}>
                 <div className={styles.package__preview__prop} title="author">
-                  <i className="fa fa-tags"></i>
-                  <span className={styles.package__preview__author} title={pkg.author}>
-                    Author:&nbsp;{pkg.author}
+                  <span className={styles.package__preview__author} title="Author">
+                    <i className="fa fa-tags"></i>&nbsp;{pkg.author}
                   </span>
                 </div>
                 <div className={styles.package__preview__prop} title="license">
-                  <i className="fa fa-balance-scale"></i>
-                  <span className={styles.package__preview__license} title={`v${pkg['dist-tags'].latest}`}>
-                    License:&nbsp;{pkg.license}
+                  <span className={styles.package__preview__license} title="License">
+                    <i className="fa fa-balance-scale"></i>&nbsp;{pkg.license}
                   </span>
                 </div>
                 <div className={styles.package__preview__prop} title="latest">
-                  <i className="fa fa-flag"></i>
-                  <span className={styles.package__preview__latest} title={`v${pkg['dist-tags'].latest}`}>
-                    Latest:&nbsp;v{pkg['dist-tags'].latest}
+                  <span className={styles.package__preview__latest} title="Latest version">
+                    <i className="fa fa-flag"></i>&nbsp;v{pkg['dist-tags'].latest}
                   </span>
                 </div>
               </div>
