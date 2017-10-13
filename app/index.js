@@ -2,14 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import App from './containers/App';
-import {HashRouter as Router, Route} from 'react-router-dom';
+import './app.global.css';
 
 const rootEl = document.getElementById('app-content');
 
-const render = Component => {
+const render = App => {
   ReactDOM.render(
     <AppContainer>
-      <Router><Component/></Router>
+      <App/>
     </AppContainer>, rootEl);
 }
 
