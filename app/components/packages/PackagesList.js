@@ -14,10 +14,9 @@ class PackagesList extends React.Component {
     this.props.toggleLoader(true);
 
     //ipcRenderer events -
-    // ipcRenderer.send('get-packages', {scope: 'g'});
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      scope: '-g'
+      params: ['-g', '-long']
     });
 
     //ipcRenderer listeners -
@@ -34,7 +33,7 @@ class PackagesList extends React.Component {
   }
   componentWillUnMount() {
     //clean up ipcRenderer listener
-    ipcRenderer.removeAllListeners(['get-packages-reply', 'search-packages-reply']);
+    ipcRenderer.removeAllListeners(['get-packages-close', 'search-packages-close']);
   }
   deselectAll() {
     let list = this.refs.list;
@@ -60,7 +59,7 @@ class PackagesList extends React.Component {
               let name = (pkg.from)
                 ? pkg.from.split("@")[0]
                 : pkg.name;
-              return <PackageListItem deselectAll={this.deselectAll} idx={idx} key={idx} name={name} version={version}/>
+              return <PackageListItem deselectAll={this.deselectAll} idx={idx} key={idx} name={name} description={pkg.description} version={version}/>
             })
             : null}
         </div>

@@ -6,32 +6,11 @@ const cp = require('child_process');
 const utils = require('./utils');
 const exec = cp.exec;
 const spawn = cp.spawn;
-
 const defaults = ['--depth=0', '--json'];
 
-exports.getPackages = (options, callback) => {
-  console.log(options);
-  const opts = options || {}
-  const scope = opts.scope || '-g';
-  const cmd = 'list';
-
+const execute = (command, callback) => {
   let result = '';
-  let run=[cmd], params=[], args = [];
-
-  if(scope) {
-    params.push(scope);
-  }
-
-  if(opts.arguments) {
-    for(let z in opts.arguments) {
-      let v = opts.arguments[z];
-      args.push(`--${z}=${v}`);
-    }
-  } else {
-    args = defaults.concat();
-  }
-
-  let npmc = spawn('npm', run.concat(params).concat(args), {
+  let npmc = spawn('npm', command, {
     maxBuffer: 1024 * 500
   });
 
@@ -45,11 +24,77 @@ exports.getPackages = (options, callback) => {
     callback(1, errorToString.toString());
   });
   npmc.on('close', () => {
-    console.log(`npm ${run.join(" ")} ${params.join(" ")} ${args.join(" ")} finished execution`);
+    console.log(`npm ${command.join(' ')} finished execution`);
     callback(result, 'close');
   });
 }
 
+exports.getPackages = (options, callback) => {
+  const opts = options || {};
+  const cmd = 'list';
+
+  let result = '';
+  let run=[cmd], params=[], args = [];
+
+  if(opts.params) {
+    opts.params.forEach((param, idx) => {
+      params.push(`-${param}`);
+    });
+  }
+
+  if(opts.arguments) {
+    for(let z in opts.arguments) {
+      let v = opts.arguments[z];
+      args.push(`--${z}=${v}`);
+    }
+  } else {
+    args = defaults.concat();
+  }
+
+  let command = run.concat(params).concat(args);
+  execute(command, callback);
+}
+
+exports.searchPackages = (options, callback) => {
+  const opts = options || {}
+  const cmd = 'search';
+
+  let run=[cmd], params=[], args = [];
+  let pkgName = options.pkgName;
+  let result = '';
+
+  if(pkgName) {
+    run.push(pkgName);
+  } else {
+    callback(1, 'searchPackages: Package name is missing.');
+  }
+
+  if(opts.params) {
+    opts.params.forEach((param, idx) => {
+      params.push(`-${param}`);
+    });
+  }
+
+  if(opts.arguments) {
+    for(let z in opts.arguments) {
+      let v = opts.arguments[z];
+      args.push(`--${z}=${v}`);
+    }
+  } else {
+    args = defaults.concat();
+  }
+
+  let command = run.concat(params).concat(args);
+  execute(command, callback);
+}
+
+exports.installPackage = (options, callback) => {
+
+}
+
+exports.uninstallPackage = (options, callback) => {
+
+}
 exports.doCmd = function(cmd, options, cb) {
   const defaults = ['--depth=0', '--json'];
 

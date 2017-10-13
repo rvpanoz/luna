@@ -32,8 +32,8 @@
   width: 100%;
   padding-left: 30px;
   margin-left: -20px;
-  padding-right: 70px;
   margin-right: -60px;
+  margin-bottom: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -47,7 +47,8 @@
   font-weight: bold;
 }
 
-.packages__item.new .packages__item__name {
+.packages__item .packages__item__name {
+  font-size: 16px;
   color: #fff;
 }
 
@@ -75,5 +76,5 @@
   margin-left: -20px;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: pre-wrap;
 }

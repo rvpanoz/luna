@@ -24,7 +24,10 @@ export default class SearchBox extends React.Component {
     let searchInput = this.refs.searchInput;
 
     searchInput.value = '';
-    ipcRenderer.send('get-packages', {scope: 'g'});
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      params: ['-g', '-long']
+    });
     return false;
   }
   _search(e) {
@@ -36,9 +39,10 @@ export default class SearchBox extends React.Component {
     if (searchInput.value.length) {
       this.props.toggleLoader(true);
       this.props.setActive(null);
-      ipcRenderer.send('search-packages', {
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'search-packages',
         pkgName: searchInput.value,
-        score: 'g'
+        params: ['-long']
       });
     }
     return false;

@@ -68,19 +68,23 @@ ipcMain.on('ipc-event', (event, options) => {
       default:
         event.sender.send(ipcEvent+'-reply', data);
     }
+    return;
   }
 
   if(ipcEvent && typeof ipcEvent === 'string') {
     let cmdArr = ipcEvent.split('-');
     if(cmdArr.length === 2) {
       let cmd = cmdArr[0] + capitalizeFirstLetter(cmdArr[1]);
-      /**
-      * At this point we try to run a shell command
-      * eg. $_npm list -g --json --depth=0
-      * sending output to renderer via ipc events
-      **/
       if(shell[cmd]) {
-        shell[cmd](opts, callback);
+        /**
+        * At this point we try to run a shell command
+        * sending output (using spawn mod) to renderer via ipc events
+        **/
+        try {
+          shell[cmd](opts, callback);
+        } catch (e) {
+          throw new Error(e);
+        }
       }
     }
   }

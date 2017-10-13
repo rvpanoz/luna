@@ -5,6 +5,7 @@
   max-height: 735px;
   border-radius: 2px;
   background-color: rgba(36, 41, 44, 0.5);
+  overflow: auto;
 }
 
 @media (max-width: 768px) {
