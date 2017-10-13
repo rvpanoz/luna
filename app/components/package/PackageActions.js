@@ -3,6 +3,7 @@ import React from 'react';
 const PackageActions = (props) => {
   const actions = props.packageActions;
   const doAction = props.doAction;
+  
   return (
     <div className="dropdown">
       <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>

@@ -14,7 +14,7 @@ class PackageItem extends React.Component {
     if(!isSelected) {
       this.props.deselectAll();
       el.classList.add('selected');
-      ipcRenderer.send('view-by-version', {
+      ipcRenderer.send('view-version', {
         pkgName: this.props.name,
         pkgVersion: this.props.version
       });

@@ -7,6 +7,44 @@ const utils = require('./utils');
 const exec = cp.exec;
 const spawn = cp.spawn;
 
+const defaults = ['--depth=0', '--json'];
+
+exports.getPackages = (options, cd) => {
+  const opts = options || {}
+  const scope = opts.scope || '-g';
+  const cmd = 'list';
+
+  let run=[cmd], params=[], args = [];
+
+  if(opts.arguments) {
+    for(let z in opts.arguments) {
+      let v = opts.arguments[z];
+      args.push(`--${z}=${v}`);
+    }
+  } else {
+    args = defaults.concat();
+  }
+
+  console.log(run.concat(params).concat(opts));
+  return 1;
+
+  let npmc = spawn('npm', run.concat(params).concat(opts), {
+    maxBuffer: 1024 * 500
+  });
+
+  npmc.stdout.on('data', (data) => {
+    result+=data.toString();
+    cb(data.toString(), 'reply');
+  });
+  npmc.stderr.on('data', (data) => {
+    cb(data.toString(), 'error');
+  });
+  npmc.on('close', () => {
+    console.log(`npm ${run.join(" ")} ${params.join(" ")} ${opts.join(" ")} finished execution`);
+    cb(result, 'close');
+  });
+}
+
 exports.doCmd = function(cmd, options, cb) {
   const defaults = ['--depth=0', '--json'];
 

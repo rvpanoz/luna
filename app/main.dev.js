@@ -31,6 +31,7 @@ if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true')
   require('module').globalPaths.push(p);
 }
 
+//devtools
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
@@ -48,6 +49,27 @@ const installExtensions = async () => {
  * IPC events
  */
 
+ipcMain.on('ipc-event', (event, options) => {
+  const opts = options || {};
+  const ipcEvent = opts.ipcEvent || false;
+  const data = opts.data;
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  if(ipcEvent && typeof ipcEvent === 'string') {
+    let cmdArr = ipcEvent.split('-');
+    if(cmdArr.length === 2) {
+      let cmd = cmdArr[0] + capitalizeFirstLetter(cmdArr[1]);
+      if(shell[cmd]) {
+        console.log(opts);
+        // shell[cmd].apply(opts);
+      }
+    }
+  }
+});
+
 ipcMain.on('get-packages', (event, options) => {
   shell.doCmd('list', options, (data, type) => {
     switch (true) {
@@ -64,7 +86,7 @@ ipcMain.on('get-packages', (event, options) => {
   });
 });
 
-ipcMain.on('view-by-version', (event, options) => {
+ipcMain.on('view-version', (event, options) => {
   shell.doCmd('view', options, (data) => {
     event.sender.send('view-by-version-reply', JSON.parse(data));
   });
@@ -103,11 +125,16 @@ ipcMain.on('update-package', (event, options) => {
 });
 
 ipcMain.on('install-package', (event, options) => {
-  shell.doCmd('install', options, (data, end) => {
-    if (end) {
-      event.sender.send('install-package-close', data);
-    } else {
-      event.sender.send('install-package-reply', data);
+  shell.doCmd('install', options, (data, type) => {
+    switch (true) {
+      case (type === 'reply'):
+        event.sender.send('install-package-reply', data);
+        break;
+      case (type === 'error'):
+        event.sender.send('install-package-error', data);
+        break;
+      default:
+        event.sender.send('install-package-close', data);
     }
   });
 });
