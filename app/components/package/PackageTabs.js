@@ -1,12 +1,13 @@
 import React from 'react';
 import {PackageTabsList} from './PackageTabsList';
+import styles from './PackageTabs.css';
 
 const PackageTabs = (props) => {
   let pkg = props.pkg;
   return (
-    <div className="package-tabs">
+    <div className="package__tabs">
       <ul className="nav nav-tabs" role="tablist">
-        <li className="dropdown pull-right tabdrop hide">
+        <li className="dropdown pull-right tab__drop hide">
           <a className="dropdown-toggle" data-toggle="dropdown" href="#">
             <i className="icon-align-justify"></i>
             <b className="caret"></b>
@@ -35,7 +36,7 @@ const PackageTabs = (props) => {
           </a>
         </li>
       </ul>
-      <div className="tab-content">
+      <div className={styles.tab__content}>
         <div className="tab-pane active" id="details" role="tabpanel">
           <div className="row">
             <div className="col-md-6">

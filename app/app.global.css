@@ -539,6 +539,13 @@ body.main-scrollable .main {
   color: #fff;
 }
 
+.packages {
+  min-height: 100vh;
+  padding: 10px 15px;
+  border-radius: 2px;
+  background-color: rgba(36, 41, 44, 0.5);
+}
+
 .no-padding {
   padding: 0;
 }
@@ -1019,18 +1026,6 @@ body.main-scrollable .main {
 .nav-pills .open>a, .nav-pills .open>a:focus, .nav-pills .open>a:hover {
   border-color: transparent;
   background-color: inherit;
-}
-
-.tab-content {
-  padding: 15px 15px 5px;
-  background-color: #272c30;
-  border-radius: 4px;
-  border-top-left-radius: 0px;
-}
-
-.tabdrop * {
-  outline: none;
-  cursor: pointer !important;
 }
 
 .tooltip .tooltip-inner {

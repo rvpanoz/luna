@@ -1,6 +1,6 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
-import PropTypes from 'prop-types';
+import styles from './PackagesListHeader.css';
 
 export default class SearchBox extends React.Component {
   constructor(props) {
@@ -32,6 +32,7 @@ export default class SearchBox extends React.Component {
       e.preventDefault();
     }
     let searchInput = this.refs.searchInput;
+
     if (searchInput.value.length) {
       this.props.toggleLoader(true);
       this.props.setActive(null);
@@ -56,7 +57,7 @@ export default class SearchBox extends React.Component {
   }
   render() {
     return (
-      <div className="packages__search" ref="root">
+      <div className={styles.packages__search} ref="root">
         <input className="form-control" type="text" placeholder="Search npm registry.." ref="searchInput"/>
       </div>
     )

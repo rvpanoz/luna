@@ -75,17 +75,17 @@ class PackageDetails extends React.Component {
     }
 
     return (
-      <div className={styles.package_details} ref="root">
-        <div className="package-details__head">
-          <div className="package-details__title">
+      <div className={styles.package__details} ref="root">
+        <div className={styles.package__details__head}>
+          <div className={styles.package__details__title}>
             {pkg.name}&nbsp;
             <span className="label label-success">v{pkg.version}</span>
           </div>
-          <div className="package-details__actions">
+          <div className={styles.package__details__actions}>
             <PackageActions packageActions={this.props.packageActions} doAction={this.doAction}/>
           </div>
         </div>
-        <div className="package-details__info">
+        <div className={styles.package__details__info}>
           <div className="form-group">
             <label htmlFor="selectVersion">
               <span>Select version</span>
@@ -97,9 +97,9 @@ class PackageDetails extends React.Component {
               })}
             </select>
           </div>
-          <div className="package-details__date"></div>
+          <div className={styles.package__details__date}></div>
         </div>
-        <div className="package-details__body">
+        <div className={styles.package__details__body}>
           <Loader loading={this.props.isLoading}>
             <PackageTabs pkg={pkg} />
           </Loader>
