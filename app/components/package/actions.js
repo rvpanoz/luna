@@ -20,14 +20,12 @@ const install = (pkg, version, cb) => {
 const update = (pkg, version, cb) => {
   showMessageBox({
     action: 'update',
-    name: pkg.name,
-    version: version
+    name: pkg.name
   }, () => {
     if(cb) cb();
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'update-package',
       pkgName: pkg.name,
-      pkgVersion: 'latest',
       params: ['g']
     });
   });

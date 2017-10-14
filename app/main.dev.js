@@ -114,9 +114,9 @@ app.on('ready', async () => {
 
   //create main window
   mainWindow = new BrowserWindow({
-    'min-width': 790,
+    width: screenSize.width,
     height: screenSize.height,
-    show: true,
+    show: false,
     resizable: true
   });
 
@@ -135,7 +135,7 @@ app.on('ready', async () => {
     });
   }
 
-  mainWindow.webContents.on('ready-to-show', () => {
+  mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
