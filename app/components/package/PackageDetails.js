@@ -23,7 +23,7 @@ class PackageDetails extends React.Component {
       if(typeof Actions[action] === 'function') {
         let active = this.props.active;
         let selectVersion = this.refs.selectVersion;
-        let version = (selectVersion && selectVersion.value !== "0") ? selectVersion.value : 'latest';
+        let version = (selectVersion && selectVersion.value !== "false") ? selectVersion.value : 'latest';
         Actions[action](active, version, () => {
           this.props.toggleMainLoader(true);
         });
@@ -36,21 +36,34 @@ class PackageDetails extends React.Component {
     let pkg = this.props.active;
     let version = target.value;
 
-    if (version !== "0") {
+    if (version !== "false") {
       this.props.toggleMainLoader(true);
-      ipcRenderer.send('view-version', {
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'view-package',
         pkgName: pkg.name,
-        pkgVersion: version
+        pkgVersion: version,
+        params: ['g']
       });
     }
     return false;
+  }
+  componentDidUpdate() {
+    let pkg = this.props.active;
+    if(pkg) {
+      let version = pkg.version;
+      let selectVersion = this.refs.selectVersion;
+
+      if(selectVersion) {
+        selectVersion.value=version.toString();
+      }
+    }
   }
   render() {
     let pkg = this.props.active;
     if (!pkg) {
       return null;
     }
-    console.log(pkg);
+
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>
@@ -68,7 +81,7 @@ class PackageDetails extends React.Component {
               <span>Select version</span>
             </label>
             <select onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
-              <option value="0">-</option>
+              <option value="false">-</option>
               {pkg.versions.map((version, idx) => {
                 return <option key={idx} value={version}>{version}</option>
               })}

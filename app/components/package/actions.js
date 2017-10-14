@@ -3,43 +3,46 @@ import { showMessageBox } from '../../utils';
 
 const install = (pkg, version, cb) => {
   showMessageBox({
-    action: 'INSTALL',
+    action: 'install',
     name: pkg.name,
-    version: version || 'latest'
+    version: version
   }, () => {
     if(cb) cb();
-    ipcRenderer.send('install-package', {
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'install-package',
       pkgName: pkg.name,
-      scope: 'g',
-      pkgVersion: version || 'latest'
+      pkgVersion: version,
+      params: ['g']
     });
   });
 }
 
 const update = (pkg, version, cb) => {
   showMessageBox({
-    action: 'UPDATE',
+    action: 'update',
     name: pkg.name,
     version: version
   }, () => {
     if(cb) cb();
-    ipcRenderer.send('update-package', {
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'update-package',
       pkgName: pkg.name,
-      pkgVersion: version,
-      scope: 'g'
+      pkgVersion: 'latest',
+      params: ['g']
     });
   });
 }
 
 const uninstall = (pkg, version, cb) => {
   showMessageBox({
-    action: 'UNINSTALL',
+    action: 'uninstall',
     name: pkg.name
   }, () => {
     if(cb) cb();
-    ipcRenderer.send('uninstall-package', {
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'uninstall-package',
       pkgName: pkg.name,
-      scope: 'g'
+      params: ['g']
     });
   });
 }

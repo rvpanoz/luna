@@ -23,18 +23,26 @@ export function parse(data, key) {
 }
 
 export function showMessageBox(opts, cb = {}) {
-  let pkgName = opts.name;
+  let name = opts.name;
   let action = opts.action;
   let version = opts.version;
-  let message;
+  let message = "Would you like to $action $name@version";
 
-  switch (action) {
-    case 'UNINSTALL':
-      message = `${action} ${pkgName} from your system.`;
-      break;
-    default:
-      message = `${action} ${pkgName} to ${version} version`;
+  if(!action || !name) {
+    console.error('showMessageBox: Missing action or name parameter');
+    return;
   }
+
+  message = message.replace('$action', action).replace('$name@version', () => {
+    if(name && version) {
+      return name + ' ' + version;
+    } else if(name && !version) {
+      return name;
+    } else {
+      return '';
+    }
+  });
+
   remote.dialog.showMessageBox(remote.getCurrentWindow(), {
     type: 'question',
     message: `${message}\nContinue? `,
