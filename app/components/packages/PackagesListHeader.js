@@ -1,6 +1,6 @@
 import React from 'react';
 import { remote, ipcRenderer} from 'electron';
-import styles from './PackagesListHeader.css';
+import styles from './Packages.css';
 
 class PackagesListHeader extends React.Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class PackagesListHeader extends React.Component {
     this.props.setActive(null);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      params: ['-g', '-long']
+      params: ['g', 'long']
     });
   }
   render() {

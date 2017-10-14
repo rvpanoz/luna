@@ -29,6 +29,12 @@ const execute = (command, callback) => {
   });
 }
 
+/**
+* Synopsis: Returns all the versions of packages that are installed,
+  as well as their dependencies
+* npm ls [[<@scope>/]<pkg> ...]
+* aliases: list, la, ll
+**/
 exports.getPackages = (options, callback) => {
   const opts = options || {};
   const cmd = 'list';
@@ -55,6 +61,11 @@ exports.getPackages = (options, callback) => {
   execute(command, callback);
 }
 
+/**
+* Synopsis: Search the registry for packages matching the search terms
+* npm search [-l|--long] [--json] [--parseable] [--no-description] [search terms ...]
+* aliases: s, se, find
+**/
 exports.searchPackages = (options, callback) => {
   const opts = options || {}
   const cmd = 'search';
@@ -88,6 +99,45 @@ exports.searchPackages = (options, callback) => {
   execute(command, callback);
 }
 
+/**
+* Synopsis: View registry info
+* npm view [<@scope>/]<name>[@<version>] [<field>[.<subfield>]...]
+* aliases: info, show, v
+**/
+exports.viewPackage = (options, callback) => {
+  const opts = options || {}
+  const cmd = 'view';
+
+  let run=[cmd], params=[], args = [];
+  let pkgName = options.pkgName;
+  let result = '';
+
+  if(pkgName) {
+    run.push(pkgName);
+  } else {
+    callback(1, 'viewPackage: Package name is missing.');
+  }
+
+  if(opts.params) {
+    opts.params.forEach((param, idx) => {
+      params.push(`-${param}`);
+    });
+  }
+
+  if(opts.arguments) {
+    for(let z in opts.arguments) {
+      let v = opts.arguments[z];
+      args.push(`--${z}=${v}`);
+    }
+  } else {
+    args = defaults.concat();
+  }
+
+  let command = run.concat(params).concat(args);
+  execute(command, callback);
+
+}
+
 exports.installPackage = (options, callback) => {
 
 }
@@ -95,6 +145,7 @@ exports.installPackage = (options, callback) => {
 exports.uninstallPackage = (options, callback) => {
 
 }
+
 exports.doCmd = function(cmd, options, cb) {
   const defaults = ['--depth=0', '--json'];
 

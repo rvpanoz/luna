@@ -45,39 +45,12 @@ class PackageDetails extends React.Component {
     }
     return false;
   }
-  componentDidMount() {
-    ipcRenderer.on('install-package-reply', (event, data) => {
-      console.log(data);
-    });
-
-    ipcRenderer.on('view-version-reply', (event, pkg) => {
-      this.props.setActive(pkg, false);
-    });
-
-    ipcRenderer.on('update-package-close', (event, pkg) => {
-      let selectVersion = this.refs.selectVersion;
-      try {
-        if(pkg && pkg.dependencies) {
-          ipcRenderer.send('view-by-version', {
-            pkgName: Object.keys(pkg.dependencies)[0],
-            pkgVersion: (selectVersion && selectVersion.value !== "0") ? selectVersion.value : null,
-            score: 'g'
-          });
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    });
-  }
-  componentWillUnMount() {
-    ipcRenderer.removeAllListeners('view-version-reply', 'update-package-close', 'install-package-reply');
-  }
   render() {
     let pkg = this.props.active;
     if (!pkg) {
       return null;
     }
-
+    console.log(pkg);
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>
