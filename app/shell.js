@@ -107,7 +107,7 @@ exports.searchPackages = (options, callback) => {
 
 /**
 * Synopsis: View registry info
-* npm view [<@scope>/]<name>[@<version>] [<field>[.<subfield>]...]
+* npm list [<@scope>/]<name>[@<version>] [<field>[.<subfield>]...]
 * aliases: info, show, v
 **/
 exports.viewPackage = (options, callback) => {
@@ -149,6 +149,11 @@ exports.viewPackage = (options, callback) => {
   execute(command, callback);
 }
 
+/**
+* Synopsis: This command installs a package, and any packages that it depends on.
+* npm install [<@scope>/]<name>@<version>
+* alias: npm i
+**/
 exports.installPackage = (options, callback) => {
   const opts = options || {}
   const cmd = 'install';
@@ -164,6 +169,47 @@ exports.installPackage = (options, callback) => {
     if (pkgVersion) {
       pkgName += "@" + pkgVersion;
     }
+    run.push(pkgName);
+  } else {
+    callback(1, 'installPackage: Package name is missing.');
+  }
+
+  if (opts.params) {
+    opts.params.forEach((param, idx) => {
+      params.push(`-${param}`);
+    });
+  }
+
+  if (opts.arguments) {
+    for (let z in opts.arguments) {
+      let v = opts.arguments[z];
+      args.push(`--${z}=${v}`);
+    }
+  } else {
+    args = defaults.concat();
+  }
+
+  let command = run.concat(params).concat(args);
+  execute(command, callback);
+}
+
+/**
+* Synopsis: This command will update all the packages listed
+* to the latest version.
+* npm update [-g] [<pkg>...]
+* aliases: up, upgrade
+**/
+exports.updatePackage = (options, callback) => {
+  const opts = options || {}
+  const cmd = 'update';
+
+  let run = [cmd],
+    params = [],
+    args = [];
+  let pkgName = opts.pkgName;
+  let result = '';
+
+  if (pkgName) {
     run.push(pkgName);
   } else {
     callback(1, 'installPackage: Package name is missing.');
@@ -222,3 +268,6 @@ exports.uninstallPackage = (options, callback) => {
   let command = run.concat(params).concat(args);
   execute(command, callback);
 }
+
+//TODO
+// npm outdated -g --depth=0
