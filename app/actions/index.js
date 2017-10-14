@@ -34,6 +34,7 @@ export function toggleMainLoader(isLoading) {
 
 export function setPackages(data) {
   let packages = parse(data, 'dependencies');
+  console.log(packages);
   return {
     type: types.SET_PACKAGES,
     packages

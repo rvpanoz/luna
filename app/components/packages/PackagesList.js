@@ -2,7 +2,7 @@ import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
 import PackageListItem from './PackagesListItem';
-import styles from './PackagesList.css';
+import styles from './Packages.css';
 
 class PackagesList extends React.Component {
   constructor(props) {
@@ -10,13 +10,24 @@ class PackagesList extends React.Component {
     this.deselectAll = this.deselectAll.bind(this);
   }
   componentDidMount() {
-    //toggle loader
     this.props.toggleLoader(true);
 
-    //ipcRenderer events -
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      params: ['-g', '-long']
+      params: ['g', 'long']
+    });
+
+    ipcRenderer.on('view-package-reply', (event, pkg) => {
+      let pkgData;
+      try {
+        pkgData = JSON.parse(pkg);
+      } catch (e) {
+        throw new Error(e)
+      }
+
+      if(pkgData) {
+        this.props.setActive(pkgData, false);
+      }
     });
 
     //ipcRenderer listeners -

@@ -1,6 +1,6 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
-import styles from './PackagesListHeader.css';
+import styles from './Packages.css';
 
 export default class SearchBox extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ export default class SearchBox extends React.Component {
     searchInput.value = '';
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      params: ['-g', '-long']
+      params: ['g', 'long']
     });
     return false;
   }

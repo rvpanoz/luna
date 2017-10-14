@@ -90,76 +90,6 @@ ipcMain.on('ipc-event', (event, options) => {
   }
 });
 
-
-//TODO: REFACTOR
-ipcMain.on('view-version', (event, options) => {
-  shell.doCmd('view', options, (data) => {
-    event.sender.send('view-by-version-reply', JSON.parse(data));
-  });
-});
-
-//TODO: REFACTOR
-ipcMain.on('get-package', (event, options) => {
-  shell.doCmd('list', options, (data) => {
-    event.sender.send('get-package-reply', JSON.parse(data));
-  });
-});
-
-//TODO: REFACTOR
-ipcMain.on('search-packages', (event, options) => {
-  shell.doCmd('search', options, (data, type) => {
-    switch (true) {
-      case (type === 'close'):
-        event.sender.send('search-packages-close', data);
-        break;
-      case (type === 'error'):
-        logger.log(data);
-        event.sender.send('search-packages-error', data);
-        break;
-      default:
-        event.sender.send('search-packages-reply', data);
-    }
-  });
-});
-
-//TODO: REFACTOR
-ipcMain.on('update-package', (event, options) => {
-  shell.doCmd('install', options, (data, end) => {
-    if (end) {
-      event.sender.send('update-package-close', data);
-    } else {
-      event.sender.send('update-package-reply', data);
-    }
-  });
-});
-
-//TODO: REFACTOR
-ipcMain.on('install-package', (event, options) => {
-  shell.doCmd('install', options, (data, type) => {
-    switch (true) {
-      case (type === 'reply'):
-        event.sender.send('install-package-reply', data);
-        break;
-      case (type === 'error'):
-        event.sender.send('install-package-error', data);
-        break;
-      default:
-        event.sender.send('install-package-close', data);
-    }
-  });
-});
-
-//TODO: REFACTOR
-ipcMain.on('uninstall-package', (event, options) => {
-  shell.doCmd('uninstall', options, (data, end) => {
-    if (end) {
-      event.sender.send('uninstall-package-close', data);
-    } else {
-      event.sender.send('uninstall-package-reply', data);
-    }
-  });
-});
-
 /* =========================== */
 
 /**
@@ -179,6 +109,7 @@ app.on('ready', async () => {
     await installExtensions();
   }
 
+  //get screen size
   let screenSize = electron.screen.getPrimaryDisplay().size;
 
   //create main window
@@ -189,6 +120,7 @@ app.on('ready', async () => {
     resizable: true
   });
 
+  //load app.html file
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   if (process.env.NODE_ENV === 'development' && debug) {
@@ -203,9 +135,7 @@ app.on('ready', async () => {
     });
   }
 
-  // @TODO: Use 'ready-to-show' event
-  //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.webContents.on('ready-to-show', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }

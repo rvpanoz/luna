@@ -1,6 +1,6 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
-import styles from './PackagesListItem.css';
+import styles from './Packages.css';
 
 class PackageItem extends React.Component {
   constructor(props) {
@@ -14,9 +14,9 @@ class PackageItem extends React.Component {
     if(!isSelected) {
       this.props.deselectAll();
       el.classList.add('selected');
-      ipcRenderer.send('view-version', {
-        pkgName: this.props.name,
-        pkgVersion: this.props.version
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'view-package',
+        pkgName: this.props.name
       });
     }
     return false;
