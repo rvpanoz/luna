@@ -5,9 +5,13 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
 
+import QuickMenu from '../components/sidebar/QuickMenu';
+
 const SidebarContainer = (props) => {
   return (
-    <div className="sidebar"></div>
+    <div className="sidebar">
+      <QuickMenu />
+    </div>
   )
 }
 

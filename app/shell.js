@@ -4,7 +4,6 @@
 
 const cp = require('child_process');
 const utils = require('./utils');
-const exec = cp.exec;
 const spawn = cp.spawn;
 const defaults = ['--depth=0', '--json'];
 

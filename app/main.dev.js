@@ -7,7 +7,7 @@
  */
 
 import electron from 'electron';
-import { app, BrowserWindow, remote, ipcMain } from 'electron';
+import {app, BrowserWindow, remote, ipcMain} from 'electron';
 import MenuBuilder from './menu';
 
 const config = require('./config');
@@ -32,17 +32,12 @@ if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true')
 }
 
 //devtools
-const installExtensions = async () => {
+const installExtensions = async() => {
   const installer = require('electron-devtools-installer');
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = [
-    'REACT_DEVELOPER_TOOLS',
-    'REDUX_DEVTOOLS'
-  ];
+  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
-  return Promise
-    .all(extensions.map(name => installer.default(installer[name], forceDownload)))
-    .catch(console.log);
+  return Promise.all(extensions.map(name => installer.default(installer[name], forceDownload))).catch(console.log);
 };
 
 /**
@@ -58,24 +53,24 @@ ipcMain.on('ipc-event', (event, options) => {
   }
 
   function callback(data, status) {
-    if(typeof data === 'boolean') {
-      event.sender.send(ipcEvent+'-error', data);
+    if (typeof data === 'boolean') {
+      event.sender.send(ipcEvent + '-error', data);
     }
     switch (true) {
-      case (status && status === 'close'):
-        event.sender.send(ipcEvent+'-close', data);
+      case(status && status === 'close'):
+        event.sender.send(ipcEvent + '-close', data);
         break;
       default:
-        event.sender.send(ipcEvent+'-reply', data);
+        event.sender.send(ipcEvent + '-reply', data);
     }
     return;
   }
 
-  if(ipcEvent && typeof ipcEvent === 'string') {
+  if (ipcEvent && typeof ipcEvent === 'string') {
     let cmdArr = ipcEvent.split('-');
-    if(cmdArr.length === 2) {
+    if (cmdArr.length === 2) {
       let cmd = cmdArr[0] + capitalizeFirstLetter(cmdArr[1]);
-      if(shell[cmd]) {
+      if (shell[cmd]) {
         /**
         * At this point we try to run a shell command
         * sending output (using spawn mod) to renderer via ipc events
@@ -104,7 +99,7 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('ready', async () => {
+app.on('ready', async() => {
   if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
     await installExtensions();
   }
@@ -113,27 +108,10 @@ app.on('ready', async () => {
   let screenSize = electron.screen.getPrimaryDisplay().size;
 
   //create main window
-  mainWindow = new BrowserWindow({
-    width: screenSize.width,
-    height: screenSize.height,
-    show: false,
-    resizable: true
-  });
+  mainWindow = new BrowserWindow({width: screenSize.width, height: screenSize.height, show: false, resizable: true});
 
   //load app.html file
   mainWindow.loadURL(`file://${__dirname}/app.html`);
-
-  if (process.env.NODE_ENV === 'development' && debug) {
-    //open devtools
-    mainWindow.openDevTools();
-
-    //inspect element on right click
-    ipcMain.on('inspect-element', function(event, coords) {
-      if (mainWindow) {
-        mainWindow.inspectElement(coords.x, coords.y);
-      }
-    });
-  }
 
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
@@ -141,6 +119,10 @@ app.on('ready', async () => {
     }
     mainWindow.show();
     mainWindow.focus();
+  });
+
+  mainWindow.on('show', () => {
+    //todo..
   });
 
   mainWindow.on('closed', () => {
