@@ -45,8 +45,10 @@ export default {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
     }),
 
+    // This plugin will cause the relative path of the module to be displayed when HMR is enabled
     new webpack.NamedModulesPlugin(),
 
+    //Automatically load modules instead of having to import or require them
     new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery", "window.jQuery": 'jquery'})
   ]
 };
