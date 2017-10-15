@@ -233,6 +233,11 @@ export default merge.smart(baseConfig, {
     new ExtractTextPlugin({
       filename: '[name].css'
     }),
+
+    /**
+    * Make jquery global in favor of Bootstrap.js
+    **/
+    new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery", "window.jQuery": 'jquery'})
   ],
 
   node: {

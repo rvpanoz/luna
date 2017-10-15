@@ -119,6 +119,7 @@ app.on('ready', async() => {
     }
     mainWindow.show();
     mainWindow.focus();
+    mainWindow.openDevTools()
   });
 
   mainWindow.on('show', () => {
