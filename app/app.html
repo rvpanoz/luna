@@ -9,7 +9,6 @@
           const link = document.createElement('link');
           link.rel = 'stylesheet';
           link.href = './dist/style.css';
-          // HACK: Writing the script path should be done with webpack
           document.getElementsByTagName('head')[0].appendChild(link);
         }
       }());
@@ -19,7 +18,6 @@
     <div id="app-content"></div>
     <script>
       {
-        window.$ = window.jQuery = require('jquery'); //for bootstrap.js
         const scripts = [];
 
         // Dynamically insert the DLL script in development env in the

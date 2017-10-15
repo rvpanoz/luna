@@ -45,6 +45,8 @@ export default {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
     }),
 
-    new webpack.NamedModulesPlugin()
-  ],
+    new webpack.NamedModulesPlugin(),
+
+    new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery", "window.jQuery": 'jquery'})
+  ]
 };
