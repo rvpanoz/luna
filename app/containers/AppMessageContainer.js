@@ -8,7 +8,7 @@ import AppMessage from '../common/AppMessage';
 const AppMessageContainer = (props) => {
   return (
     <div className="app-message">
-      <AppMessage open={props.open} message={props.appMessage}/>
+      <AppMessage show={props.open} appMessage={props.appMessage}/>
     </div>
   )
 }

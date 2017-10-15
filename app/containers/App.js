@@ -20,7 +20,6 @@ import PackagesContainer from './PackagesContainer';
 const store = configureStore();
 const rootEl = document.getElementById('app-content');
 
-console.log(store.getState());
 const App = () => {
   return (
     <Provider store={store}>

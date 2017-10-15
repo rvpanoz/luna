@@ -22,8 +22,8 @@ const global = (state = initialState, action) => {
       });
     case SET_APP_MESSAGE:
       return Object.assign({}, state, {
-        open: action.open,
-        appMessage: action.appMessage
+        appMessage: action.appMessage,
+        open: action.open
       });
     default:
       return state;

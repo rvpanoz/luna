@@ -65,6 +65,10 @@ body.main-scrollable .main {
   overflow-y: hidden;
 }
 
+.red {
+  color: red !important;
+}
+
 .wrapper {
   position: absolute;
   box-sizing: border-box;
@@ -1661,10 +1665,10 @@ select option {
 /** app message **/
 .app__message {
   position: absolute;
-  width: 120px;
+  width: 430px;
   height: 65px;
-  top: 0;
-  right: -120px;
+  top: 45px;
+  right: -430px;
   margin-top: -33px;
   z-index: 1000;
   -webkit-transition: right .2s;

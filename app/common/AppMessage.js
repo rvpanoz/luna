@@ -4,23 +4,18 @@ class AppMessage extends React.Component {
   constructor(props) {
     super(props)
   }
-  componentDidUpdate(props) {
-    console.log(props);
-    let root = this.refs.root;
-    if(root && props.open) {
-      root.classList.add('app__message__open');
-    }
-  }
   render() {
-    let open = this.props.open;
-    let message = this.props.message;
+    let show = this.props.show;
+    let message = this.props.appMessage;
 
-    if(!open && !message) {
+    if(!show) {
       return null;
     }
+
+    let open_cls = (show) ? 'app__message_open' : '';
     return (
-      <div className="app__message" ref="root">
-        {message}
+      <div className={`app__message ${open_cls}`} ref="root">
+        <span className="app__message__label red">{message}</span>
       </div>
     )
   }
