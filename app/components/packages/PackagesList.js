@@ -1,5 +1,6 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import {parse} from '../../utils';
 import Loader from '../../common/Loader';
 import PackageListItem from './PackagesListItem';
 import styles from './Packages.css';
@@ -31,7 +32,8 @@ class PackagesList extends React.Component {
     });
 
     //ipcRenderer listeners -
-    ipcRenderer.on('get-packages-close', (event, packages) => {
+    ipcRenderer.on('get-packages-close', (event, packagesString) => {
+      let packages = parse(packagesString, 'dependencies');
       this.props.setPackages(packages);
       this.props.toggleLoader(false);
       this.props.setMode('GLOBAL', ['Update', 'Uninstall']);
@@ -40,6 +42,10 @@ class PackagesList extends React.Component {
       this.props.setPackages(packages);
       this.props.setMode('SEARCH', ['Install']);
       this.props.toggleLoader(false);
+    });
+    ipcRenderer.on('get-packages-error', (event, errorMessage) => {
+      console.log(errorMessage);
+      this.props.setAppMessage(errorMessage, true);
     });
   }
   componentWillUnMount() {

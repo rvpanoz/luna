@@ -1,19 +1,45 @@
 import {
-  TOGGLE_LOADER,
   TOGGLE_MAIN_LOADER,
   SET_PACKAGES,
   SET_ACTIVE,
+  TOGGLE_LOADER,
   SET_MODE,
   SET_APP_MESSAGE
 } from '../constants/ActionTypes';
 import initialState from './initialState';
+import {combineReducers} from "redux";
 
-export default function packagesReducer(state = initialState, action) {
+const global = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_LOADER:
       return Object.assign({}, state, {
         loading: action.loading
       });
+    case SET_MODE:
+      return Object.assign({}, state, {
+        mode: action.mode,
+        packageActions: action.packageActions
+      });
+    case SET_APP_MESSAGE:
+      return Object.assign({}, state, {
+        open: action.open,
+        appMessage: action.appMessage
+      });
+    default:
+      return state;
+  }
+}
+
+const sidebar = (state = {
+  tabActive: 0
+}, action) => {
+    return Object.assign({}, state, {
+      tabActive: action.tabActive
+    });
+}
+
+const packages = (state = initialState, action) => {
+  switch (action.type) {
     case TOGGLE_MAIN_LOADER:
       return Object.assign({}, state, {
         isLoading: action.isLoading
@@ -28,17 +54,15 @@ export default function packagesReducer(state = initialState, action) {
         active: action.active,
         isLoading: action.isLoading || false
       });
-    case SET_MODE:
-      return Object.assign({}, state, {
-        mode: action.mode,
-        packageActions: action.packageActions
-      });
-    case SET_APP_MESSAGE:
-      return Object.assign({}, state, {
-        appMessage: action.appMessage,
-        appMessageType: action.appMessageType
-      });
     default:
       return state;
   }
 }
+
+const rootReducer = combineReducers({
+  global,
+  sidebar,
+  packages
+})
+
+export default rootReducer

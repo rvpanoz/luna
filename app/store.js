@@ -1,8 +1,8 @@
-import {createStore} from 'redux';
-import appReducer from './reducers';
+import {createStore} from "redux";
+import reducer from "./reducers";
 
 const configureStore = (initialState) => {
-  return createStore(appReducer, initialState);
+  return createStore(reducer, initialState);
 }
 
 export default configureStore;

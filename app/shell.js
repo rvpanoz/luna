@@ -17,13 +17,15 @@ const execute = (command, callback) => {
   npmc.stdout.on('data', (data) => {
     result += data.toString();
     let dataToString = data.toString();
-    callback(dataToString);
+    callback(dataToString, 'reply');
   });
+
   npmc.stderr.on('data', (error) => {
     let errorToString = error.toString();
-    console.log(errorToString);
-    callback(1, errorToString.toString());
+    console.log('ERROR: ' + errorToString);
+    callback(errorToString, 'error');
   });
+
   npmc.on('close', () => {
     console.log(`finish: npm ${command.join(' ')}`);
     callback(result, 'close');

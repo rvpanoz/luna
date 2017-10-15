@@ -53,12 +53,12 @@ ipcMain.on('ipc-event', (event, options) => {
   }
 
   function callback(data, status) {
-    if (typeof data === 'boolean') {
-      event.sender.send(ipcEvent + '-error', data);
-    }
     switch (true) {
       case(status && status === 'close'):
         event.sender.send(ipcEvent + '-close', data);
+        break;
+      case(status && status === 'error'):
+        event.sender.send(ipcEvent + '-error', data);
         break;
       default:
         event.sender.send(ipcEvent + '-reply', data);

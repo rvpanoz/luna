@@ -1,9 +1,10 @@
 export default {
   loading: false,
-  packages_loading: false,
+  isLoading: false,
+  mode: 'GLOBAL',
   packages: [],
   packageActions: [],
   active: null,
-  appMessage: null,
-  appMessageType: null
+  open: false,
+  appMessage: null
 };

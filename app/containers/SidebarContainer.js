@@ -17,7 +17,7 @@ const SidebarContainer = (props) => {
 
 function mapStateToProps(state) {
   return {
-    loading: false
+    tabActive: state.sidebar.tabActive
   }
 }
 
@@ -27,4 +27,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect()(SidebarContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarContainer)
