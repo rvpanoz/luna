@@ -7,7 +7,7 @@ import AppMessage from '../common/AppMessage';
 
 const AppMessageContainer = (props) => {
   return (
-    <div className="app-message">
+    <div className="notifications">
       <AppMessage show={props.open} appMessage={props.appMessage}/>
     </div>
   )

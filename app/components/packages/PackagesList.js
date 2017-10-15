@@ -52,6 +52,9 @@ class PackagesList extends React.Component {
     ipcRenderer.on('uninstall-package-reply', (event, pkg) => {
       this._reload();
     });
+    ipcRenderer.on('update-package-reply', (event, pkg) => {
+      this._reload();
+    });
 
     /**
     * ipcRenderer listener
@@ -94,6 +97,7 @@ class PackagesList extends React.Component {
   }
   //@private
   _reload() {
+    this.props.setAppMessage(null, false);
     this.props.toggleLoader(true);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',

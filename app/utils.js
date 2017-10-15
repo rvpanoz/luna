@@ -28,11 +28,6 @@ export function showMessageBox(opts, cb = {}) {
   let version = opts.version;
   let message = "Would you like to $action $name@version";
 
-  if(!action || !name) {
-    console.error('showMessageBox: Missing action or name parameter');
-    return;
-  }
-
   message = message.replace('$action', action).replace('$name@version', () => {
     if(name && version) {
       return name + ' v' + version;

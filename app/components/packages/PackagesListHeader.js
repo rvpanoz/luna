@@ -20,7 +20,8 @@ class PackagesListHeader extends React.Component {
     return (
       <div className={styles.packages__head}>
         <div className={styles.packages__title}>
-          <span>{props.title}</span>
+          <span>{props.title}</span>&nbsp;
+          <span className="label" style={{color: '#fff'}}>{props.total}</span>
         </div>
         <div className={styles.packages__actions}>
           <div className={styles.packages__action}>

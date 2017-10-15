@@ -40,7 +40,7 @@ const PackageTabs = (props) => {
       <div className="tab-content">
         <div className="tab-pane active" id="details" role="tabpanel">
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-12">
               <div className={styles.package__preview__props}>
                 <div className={styles.package__preview__prop} title="author">
                   <span className={styles.package__preview__author} title="Author">

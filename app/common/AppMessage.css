@@ -1,0 +1,245 @@
+.app_notifications {
+  display: block;
+  z-index: 1000;
+  position: absolute;
+  top: 70px;
+  right: 0;
+  bottom: 0;
+  padding: 15px;
+  font-size: 1.2em;
+  overflow-x: hidden;
+  overflow-y: auto;
+  pointer-events: none;
+}
+.app_notifications::-webkit-scrollbar {
+  display: none;
+}
+.app_notifications .app_notification .close-all {
+  display: none;
+}
+.app_notifications .app_notification:first-child .close-all {
+  display: block;
+}
+.app_notifications .app_notification:first-child .message {
+  padding-right: 125px;
+}
+.app_notifications .app_notification:only-child .close-all {
+  display: none;
+}
+.app_notifications .app_notification:only-child .message {
+  padding-right: inherit;
+}
+.app_notifications .app_notification:only-child.has-close .message {
+  padding-right: 39px;
+}
+.app_notification {
+  float: right;
+  clear: right;
+  position: relative;
+  width: 450px;
+  padding-left: 30px;
+  margin-bottom: 2px;
+  max-height: 800px;
+  word-wrap: break-word;
+  pointer-events: auto;
+}
+.app_notification.icon:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 100%;
+  padding-top: 15px;
+  text-align: center;
+  border-radius: 5 0 0 5;
+}
+.app_notification:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+}
+.app_notification .meta,
+.app_notification .close,
+.app_notification .detail,
+.app_notification .stack-toggle,
+.app_notification .stack-container {
+  display: none;
+}
+.app_notification.fatal .meta,
+.app_notification.has-description .meta,
+.app_notification.has-buttons .meta,
+.app_notification.has-close .close,
+.app_notification.has-detail .detail,
+.app_notification.has-stack .stack-toggle,
+.app_notification.has-stack .stack-container {
+  display: block;
+}
+.app_notification .item {
+  padding: 15px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+.app_notification .item.message {
+  border-top: none;
+}
+.app_notification .item.message p:last-child {
+  margin-bottom: 0;
+}
+.app_notification.has-close .message {
+  padding-right: 39px;
+}
+.app_notification .content {
+  border-radius: 0 5 5 0;
+}
+.app_notification .message {
+  max-height: 200px;
+  overflow-y: auto;
+}
+.app_notification .close-all.btn {
+  position: absolute;
+  top: 7px;
+  right: 38px;
+  background: none;
+}
+.app_notification .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 38px;
+  height: 38px;
+  line-height: 38px;
+  text-align: center;
+  font-size: 16px;
+  text-shadow: none;
+  color: black;
+  opacity: .4;
+}
+.app_notification .close:hover,
+.app_notification .close:focus {
+  opacity: 1;
+}
+.app_notification .close:active {
+  opacity: .2;
+}
+.app_notification .close:before {
+  margin: 0;
+}
+.app_notification.has-detail {
+  width: 450px;
+}
+.app_notification .detail {
+  font-size: .8em;
+  background-color: rgba(255, 255, 255, 0.3);
+  background-clip: padding-box;
+  max-height: 500px;
+  overflow-y: auto;
+}
+.app_notification .detail .line {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+.app_notification .detail .stack-toggle {
+  margin-top: 15px;
+}
+.app_notification .detail .stack-toggle .icon:before {
+  margin: 0;
+}
+.app_notification .detail .detail-content .line {
+  white-space: pre-wrap;
+}
+.app_notification .detail .stack-container {
+  margin-top: 15px;
+}
+.app_notification .detail .stack-container .line {
+  white-space: pre;
+}
+.app_notification .description {
+  font-size: .8em;
+}
+.app_notification .description p:last-child {
+  margin-bottom: 0;
+}
+.app_notification .btn-toolbar.btn-toolbar {
+  margin-top: 10px;
+  margin-bottom: -5px;
+  margin-left: 0;
+}
+.app_notification .btn-toolbar.btn-toolbar > .btn {
+  margin-left: 0;
+  margin-bottom: 5px;
+}
+.app_notification .btn-copy-report {
+  vertical-align: middle;
+}
+.app_notification .opening {
+  cursor: progress;
+}
+.app_notification {
+  -webkit-animation: notification-show 0.16s cubic-bezier(0.175, 0.885, 0.32, 1.27499);
+}
+.app_notification[type="fatal"] {
+  -webkit-animation: notification-show 0.16s cubic-bezier(0.175, 0.885, 0.32, 1.27499), notification-shake 4s 2s;
+  -webkit-animation-iteration-count: 1, 3;
+}
+.app_notification[type="fatal"]:hover {
+  -webkit-animation-play-state: paused;
+}
+.app_notification.remove,
+.app_notification.remove:hover {
+  -webkit-animation: notification-hide 0.12s cubic-bezier(0.34, 0.07, 1, 0.2), notification-shrink 0.24s 0.12s cubic-bezier(0.5, 0, 0, 1);
+  -webkit-animation-fill-mode: forwards;
+}
+@-webkit-keyframes notification-show {
+  0% {
+    opacity: 0;
+    transform: perspective(450px) translate(0, -30px) rotateX(90deg);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(450px) translate(0, 0) rotateX(0deg);
+  }
+}
+@-webkit-keyframes notification-hide {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+@-webkit-keyframes notification-shrink {
+  0% {
+    opacity: 0;
+    max-height: 800px;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 0;
+    max-height: 0;
+    transform: scale(0.8);
+  }
+}
+@-webkit-keyframes notification-shake {
+  0% {
+    transform: translateX(0);
+  }
+  2% {
+    transform: translateX(-4px);
+  }
+  4% {
+    transform: translateX(8px);
+  }
+  6% {
+    transform: translateX(-4px);
+  }
+  8% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

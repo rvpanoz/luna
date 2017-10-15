@@ -19,6 +19,7 @@ const PackagesPage = (props) => {
           <div className="col-md-4">
             <PackagesListHeader
               title="Packages"
+              total={props.packages.length}
               toggleLoader={props.actions.toggleLoader}
               setActive={props.actions.setActive}
               active={props.active}
@@ -38,7 +39,7 @@ const PackagesPage = (props) => {
               setAppMessage={props.actions.setAppMessage}
             />
           </div>
-          <div className="col-md-8">
+          <div className="col-md-5">
             <PackageContainer active={props.active}/>
           </div>
         </div>
