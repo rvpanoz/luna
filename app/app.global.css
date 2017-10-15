@@ -56,6 +56,10 @@ code {
   overflow: hidden;
 }
 
+.selected {
+  background-color: rgba(36, 41, 44, 0.5)
+}
+
 .wrapper {
   border-radius: 5px;
   margin-bottom: 10px;

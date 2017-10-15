@@ -19,6 +19,7 @@ const PackagesPage = (props) => {
           <div className="col-md-4">
             <PackagesListHeader
               title="Packages"
+              total={props.packages.length}
               toggleLoader={props.actions.toggleLoader}
               setActive={props.actions.setActive}
               active={props.active}

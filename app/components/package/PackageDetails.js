@@ -52,7 +52,6 @@ class PackageDetails extends React.Component {
     if(pkg) {
       let version = pkg.version;
       let selectVersion = this.refs.selectVersion;
-
       if(selectVersion) {
         selectVersion.value=version.toString();
       }
