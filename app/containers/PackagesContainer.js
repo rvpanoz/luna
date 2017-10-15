@@ -39,7 +39,7 @@ const PackagesPage = (props) => {
               setAppMessage={props.actions.setAppMessage}
             />
           </div>
-          <div className="col-md-8">
+          <div className="col-md-5">
             <PackageContainer active={props.active}/>
           </div>
         </div>
