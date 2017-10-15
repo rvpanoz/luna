@@ -38,7 +38,8 @@ class PackagesList extends React.Component {
       this.props.toggleLoader(false);
       this.props.setMode('GLOBAL', ['Update', 'Uninstall']);
     });
-    ipcRenderer.on('search-packages-close', (event, packages) => {
+    ipcRenderer.on('search-packages-close', (event, packagesString) => {
+      let packages = parse(packagesString, 'dependencies');
       this.props.setPackages(packages);
       this.props.setMode('SEARCH', ['Install']);
       this.props.toggleLoader(false);
