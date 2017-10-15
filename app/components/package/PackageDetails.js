@@ -25,7 +25,7 @@ class PackageDetails extends React.Component {
         let selectVersion = this.refs.selectVersion;
         let version = (selectVersion && selectVersion.value !== "false") ? selectVersion.value : 'latest';
         Actions[action](active, version, () => {
-          this.props.toggleMainLoader(true);
+          this.props.setActive(null);
         });
       }
     }
@@ -63,7 +63,7 @@ class PackageDetails extends React.Component {
     if (!pkg) {
       return null;
     }
-    
+
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>

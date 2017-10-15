@@ -26,10 +26,10 @@ const PackageContainer = (props) => {
 }
 function mapStateToProps(state) {
   return {
-    mode: state.mode,
-    packageActions: state.packageActions,
-    active: state.active,
-    isLoading: state.isLoading
+    mode: state.global.mode,
+    packageActions: state.global.packageActions,
+    active: state.packages.active,
+    isLoading: state.packages.isLoading
   };
 }
 

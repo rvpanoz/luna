@@ -48,7 +48,11 @@ const PackagesPage = (props) => {
 }
 
 function mapStateToProps(state) {
-  return {loading: state.loading, packages: state.packages, active: state.active}
+  return {
+    loading: state.global.loading,
+    packages: state.packages.packages,
+    active: state.packages.active
+  }
 }
 
 function mapDispatchToProps(dispatch) {

@@ -13,6 +13,7 @@ import configureStore from '../store';
 import {HashRouter as Router, Route} from 'react-router-dom';
 import Bootstrap from 'bootstrap/dist/js/bootstrap.js';
 
+import AppMessageContainer from './AppMessageContainer';
 import SidebarContainer from './SidebarContainer';
 import PackagesContainer from './PackagesContainer';
 
@@ -35,6 +36,7 @@ const App = () => {
             </div>
           </div>
         </div>
+        <AppMessageContainer />
       </div>
     </Provider>
   );

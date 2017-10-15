@@ -2,19 +2,19 @@ import * as types from '../constants/ActionTypes';
 import modes from '../constants/Modes';
 import { parse, isJson } from '../utils';
 
+export function setAppMessage(appMessage, open) {
+  return {
+    type: types.SET_APP_MESSAGE,
+    appMessage,
+    open
+  }
+}
+
 export function setActivePage(activePage, pageTitle) {
   return {
     type: types.SET_ACTIVE_PAGE,
     activePage,
     pageTitle
-  }
-}
-
-export function setAppMessage(appMessage, appMessageType) {
-  return {
-    type: types.SET_APP_MESSAGE,
-    appMessage,
-    appMessageType
   }
 }
 
@@ -32,9 +32,7 @@ export function toggleMainLoader(isLoading) {
   };
 }
 
-export function setPackages(data) {
-  let packages = parse(data, 'dependencies');
-  console.log(packages);
+export function setPackages(packages) {
   return {
     type: types.SET_PACKAGES,
     packages

@@ -7,13 +7,13 @@ const install = (pkg, version, cb) => {
     name: pkg.name,
     version: version
   }, () => {
-    if(cb) cb();
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'install-package',
       pkgName: pkg.name,
       pkgVersion: version,
       params: ['g']
     });
+    if(cb) cb();
   });
 }
 
@@ -22,12 +22,12 @@ const update = (pkg, version, cb) => {
     action: 'update',
     name: pkg.name
   }, () => {
-    if(cb) cb();
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'update-package',
       pkgName: pkg.name,
       params: ['g']
     });
+    if(cb) cb();
   });
 }
 
@@ -36,12 +36,12 @@ const uninstall = (pkg, version, cb) => {
     action: 'uninstall',
     name: pkg.name
   }, () => {
-    if(cb) cb();
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'uninstall-package',
       pkgName: pkg.name,
       params: ['g']
     });
+    if(cb) cb();
   });
 }
 

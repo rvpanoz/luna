@@ -5,15 +5,19 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
 
+import QuickMenu from '../components/sidebar/QuickMenu';
+
 const SidebarContainer = (props) => {
   return (
-    <div className="sidebar"></div>
+    <div className="sidebar">
+      <QuickMenu />
+    </div>
   )
 }
 
 function mapStateToProps(state) {
   return {
-    loading: false
+    tabActive: state.sidebar.tabActive
   }
 }
 
@@ -23,4 +27,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect()(SidebarContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarContainer)
