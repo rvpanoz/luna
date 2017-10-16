@@ -11,8 +11,10 @@ import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import configureStore from '../store';
 import {HashRouter as Router, Route} from 'react-router-dom';
-import AppMessageContainer from './AppMessageContainer';
-import SidebarContainer from './SidebarContainer';
+
+//container components
+import AppHeader from '../common/AppHeader';
+import Sidebar from '../common/Sidebar';
 import PackagesContainer from './PackagesContainer';
 
 const store = configureStore();
@@ -22,8 +24,9 @@ const App = () => {
   return (
     <Provider store={store}>
       <div className="wrapper">
+        <AppHeader />
         <div className="dashboard">
-          <SidebarContainer/>
+          <Sidebar/>
           <div className="main">
             <div className="main__scroll">
               <div className="main__cont">
@@ -34,7 +37,6 @@ const App = () => {
             </div>
           </div>
         </div>
-        <AppMessageContainer />
       </div>
     </Provider>
   );

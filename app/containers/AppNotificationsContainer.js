@@ -3,12 +3,13 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
 
-import AppMessage from '../common/AppMessage';
+//components
+import AppNotifications from '../common/AppNotifications';
 
-const AppMessageContainer = (props) => {
+const AppNotificationsContainer = (props) => {
   return (
     <div className="notifications">
-      <AppMessage show={props.open} appMessage={props.appMessage}/>
+      <AppNotifications show={props.open} appMessage={props.appMessage}/>
     </div>
   )
 }
@@ -26,4 +27,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AppMessageContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(AppNotificationsContainer);
