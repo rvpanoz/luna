@@ -9,7 +9,7 @@ import AppNotifications from '../common/AppNotifications';
 const AppNotificationsContainer = (props) => {
   return (
     <div className="notifications">
-      <AppNotifications show={props.open} appMessage={props.appMessage}/>
+      <AppNotifications notifications={props.notifications}/>
     </div>
   )
 }
@@ -17,7 +17,7 @@ const AppNotificationsContainer = (props) => {
 function mapStateToProps(state) {
   return {
     open: state.global.open,
-    appMessage: state.global.appMessage
+    notifications: state.global.notifications
   }
 }
 

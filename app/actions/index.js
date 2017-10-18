@@ -2,11 +2,18 @@ import * as types from '../constants/ActionTypes';
 import modes from '../constants/Modes';
 import { parse, isJson } from '../utils';
 
-export function setAppMessage(appMessage, open) {
+export function addNotification(notificationType, notificationMessage) {
   return {
-    type: types.SET_APP_MESSAGE,
-    appMessage,
-    open
+    type: types.ADD_NOTIFICATION,
+    notificationType,
+    notificationMessage
+  }
+}
+
+export function clearNotifications(notifications) {
+  return {
+    type: types.CLEAR_NOTIFICATIONS,
+    notifications
   }
 }
 

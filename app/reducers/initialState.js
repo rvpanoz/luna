@@ -4,6 +4,7 @@ export default {
   mode: 'GLOBAL',
   packages: [],
   packageActions: [],
+  notifications: [],
   active: null,
   open: false,
   appMessage: null
