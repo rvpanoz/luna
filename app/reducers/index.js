@@ -50,12 +50,6 @@ const global = (state = initialState, action) => {
   }
 }
 
-const sidebar = (state = {
-  tabActive: 0
-}, action) => {
-  return Object.assign({}, state, {tabActive: action.tabActive});
-}
-
 const packages = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_MAIN_LOADER:
@@ -75,6 +69,6 @@ const packages = (state = initialState, action) => {
   }
 }
 
-const rootReducer = combineReducers({global, sidebar, packages})
+const rootReducer = combineReducers({global, packages})
 
 export default rootReducer

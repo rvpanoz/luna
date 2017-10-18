@@ -29,13 +29,6 @@ class PackagesList extends React.Component {
       }
     }
   }
-  parseError(error) {
-    if(error && typeof error === 'string') {
-      let errorArr = error.split(',');
-      let errorMsg = errorArr[1].replace('required by', '').replace(/\s/g,'');
-      return errorMsg;
-    }
-  }
   componentDidMount() {
     this.props.toggleLoader(true);
 
@@ -45,7 +38,7 @@ class PackagesList extends React.Component {
     **/
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      params: ['g', 'long']
+      params: ['g', 'long', 'parseable']
     });
 
     /**
@@ -64,7 +57,11 @@ class PackagesList extends React.Component {
     * Set errorMessage from npm list stderr output
     **/
     ipcRenderer.on('get-packages-error', (event, errorMessage) => {
-      this.props.addNotification('error', this.parseError(errorMessage));
+      //split errorMessage by new line(new error)
+      let errorLinesArr = errorMessage.match(/[^\r\n]+/g);
+      errorLinesArr.forEach((errorStr, idx) => {
+        this.props.addNotification('error', errorStr);
+      });
     });
 
     /**
