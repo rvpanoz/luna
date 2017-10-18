@@ -1,5 +1,6 @@
 'use strict';
 
+import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -11,7 +12,7 @@ import PackagesListSearch from '../components/packages/PackagesListSearch';
 import PackagesList from '../components/packages/PackagesList';
 import PackageContainer from '../containers/PackageContainer';
 
-const PackagesPage = (props) => {
+const PackagesContainer = (props) => {
   return (
     <div className="packages">
       <div className="container-fluid half-padding">
@@ -37,6 +38,8 @@ const PackagesPage = (props) => {
               setActive={props.actions.setActive}
               setMode={props.actions.setMode}
               setAppMessage={props.actions.setAppMessage}
+              addNotification={props.actions.addNotification}
+              clearNotifications={props.actions.clearNotifications}
             />
           </div>
           <div className="col-md-5">
@@ -62,4 +65,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PackagesPage);
+export default connect(mapStateToProps, mapDispatchToProps)(PackagesContainer);

@@ -1,20 +1,40 @@
+import initialState from './initialState';
+import {combineReducers} from "redux";
 import {
   TOGGLE_MAIN_LOADER,
   SET_PACKAGES,
   SET_ACTIVE,
   TOGGLE_LOADER,
   SET_MODE,
-  SET_APP_MESSAGE
+  SET_APP_MESSAGE,
+  ADD_NOTIFICATION,
+  CLEAR_NOTIFICATIONS
 } from '../constants/ActionTypes';
-import initialState from './initialState';
-import {combineReducers} from "redux";
 
 const global = (state = initialState, action) => {
   switch (action.type) {
-    case TOGGLE_LOADER:
-      return Object.assign({}, state, {
-        loading: action.loading
+    case CLEAR_NOTIFICATIONS:
+      return Object.assing({}, state, {
+        notifications: []
       });
+    case ADD_NOTIFICATION:
+      let notifications = state.notifications;
+      console.log(...notifications);
+      return (notifications.length) ? {
+        ...state,
+        notifications: [...state.notifications, {
+          notificationType: action.notificationType,
+          notificationMessage: action.notificationMessage
+        }]
+      } :
+      Object.assign({}, state, {
+        notifications: [{
+          notificationType: action.notificationType,
+          notificationMessage: action.notificationMessage
+        }]
+      })
+    case TOGGLE_LOADER:
+      return Object.assign({}, state, {loading: action.loading});
     case SET_MODE:
       return Object.assign({}, state, {
         mode: action.mode,
@@ -33,17 +53,13 @@ const global = (state = initialState, action) => {
 const sidebar = (state = {
   tabActive: 0
 }, action) => {
-    return Object.assign({}, state, {
-      tabActive: action.tabActive
-    });
+  return Object.assign({}, state, {tabActive: action.tabActive});
 }
 
 const packages = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_MAIN_LOADER:
-      return Object.assign({}, state, {
-        isLoading: action.isLoading
-      });
+      return Object.assign({}, state, {isLoading: action.isLoading});
     case SET_PACKAGES:
       return Object.assign({}, state, {
         packages: action.packages,
@@ -59,10 +75,6 @@ const packages = (state = initialState, action) => {
   }
 }
 
-const rootReducer = combineReducers({
-  global,
-  sidebar,
-  packages
-})
+const rootReducer = combineReducers({global, sidebar, packages})
 
 export default rootReducer

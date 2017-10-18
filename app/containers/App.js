@@ -13,8 +13,8 @@ import configureStore from '../store';
 import {HashRouter as Router, Route} from 'react-router-dom';
 
 //container components
-import AppHeader from '../common/AppHeader';
 import Sidebar from '../common/Sidebar';
+import AppHeader from '../common/AppHeader';
 import PackagesContainer from './PackagesContainer';
 
 const store = configureStore();
@@ -24,7 +24,7 @@ const App = () => {
   return (
     <Provider store={store}>
       <div className="wrapper">
-        <AppHeader />
+        <AppHeader title="Luna"/>
         <div className="dashboard">
           <Sidebar/>
           <div className="main">
