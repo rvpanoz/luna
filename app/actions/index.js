@@ -10,9 +10,10 @@ export function addNotification(notificationType, notificationMessage) {
   }
 }
 
-export function clearNotifications() {
+export function clearNotifications(notifications) {
   return {
-    type: types.CLEAR_NOTIFICATIONS
+    type: types.CLEAR_NOTIFICATIONS,
+    notifications
   }
 }
 

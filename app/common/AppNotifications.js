@@ -28,16 +28,14 @@ class AppNotifications extends React.Component {
     }
   }
   render() {
-    let props = this.props;
-    if(!props.notifications) {
-      return null;
-    }
+    let notifications = this.props.notifications;
+
     return (
       <div className="notifications-bar">
         <div className="notification" onClick={this.showNotifications}>
           <i className="fa fa-bell-o"></i>
           <div className="top-count common-count">
-            <div className="value">{props.notifications.length}</div>
+            <div className="value">{(notifications) ? notifications.length : 0}</div>
           </div>
         </div>
         <div className="notification-dropdown dd" ref="notificationsDropdown">
@@ -45,11 +43,11 @@ class AppNotifications extends React.Component {
           <div className="header">
             <div className="heading">Notifications</div>
             <div className="inner-count common-count">
-              <div className="value">{props.notifications.length}</div>
+              <div className="value">{(notifications) ? notifications.length : 0}</div>
             </div>
           </div>
           <div className="items">
-            { props.notifications.map((noti, idx) => {
+            { (notifications) ? notifications.map((noti, idx) => {
                 return (
                   <div className="noti noti--red" key={idx}>
                     <div className="noti-icon">
@@ -65,7 +63,7 @@ class AppNotifications extends React.Component {
                     </button>
                   </div>
                 )
-              })
+              }) : null
             }
           </div>
         </div>

@@ -14,12 +14,11 @@ import {
 const global = (state = initialState, action) => {
   switch (action.type) {
     case CLEAR_NOTIFICATIONS:
-      return Object.assing({}, state, {
+      return Object.assign({}, state, {
         notifications: []
       });
     case ADD_NOTIFICATION:
       let notifications = state.notifications;
-      console.log(...notifications);
       return (notifications.length) ? {
         ...state,
         notifications: [...state.notifications, {

@@ -5,11 +5,11 @@ import styles from './Packages.css';
 class PackagesListHeader extends React.Component {
   constructor(props) {
     super(props);
-    this._reload = this._reload.bind(this);
+    this.reload = this.reload.bind(this);
   }
-  _reload(e) {
+  reload() {
     this.props.toggleLoader(true);
-    this.props.setActive(null);
+    this.props.clearNotifications();
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       params: ['g', 'long']
@@ -25,7 +25,7 @@ class PackagesListHeader extends React.Component {
         </div>
         <div className={styles.packages__actions}>
           <div className={styles.packages__action}>
-            <i className="fa fa-fw fa-refresh" onClick={this._reload} title="Reload"></i>
+            <i className="fa fa-fw fa-refresh" onClick={this.reload} title="Reload"></i>
           </div>
         </div>
       </div>

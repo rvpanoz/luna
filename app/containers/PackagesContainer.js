@@ -25,6 +25,7 @@ const PackagesContainer = (props) => {
               setActive={props.actions.setActive}
               active={props.active}
               setAppMessage={props.actions.setAppMessage}
+              clearNotifications={props.actions.clearNotifications}
             />
             <PackagesListSearch
               setActive={props.actions.setActive}

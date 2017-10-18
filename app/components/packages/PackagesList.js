@@ -8,17 +8,7 @@ import styles from './Packages.css';
 class PackagesList extends React.Component {
   constructor(props) {
     super(props);
-    this.reload = this.reload.bind(this);
     this.deselectAll = this.deselectAll.bind(this);
-  }
-  reload() {
-    this.props.toggleLoader(true);
-    this.props.setActive(null);
-    this.props.clearNotifications();
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      params: ['g', 'long']
-    });
   }
   deselectAll() {
     let list = this.refs.list;
