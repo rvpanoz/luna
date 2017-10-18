@@ -81,13 +81,13 @@ class PackagesList extends React.Component {
 
     // package actions replies
     ipcRenderer.on('install-package-reply', (event, pkg) => {
-      this.reload();
+      this.props.reload();
     });
     ipcRenderer.on('uninstall-package-reply', (event, pkg) => {
-      this.reload();
+      this.props.reload();
     });
     ipcRenderer.on('update-package-reply', (event, pkg) => {
-      this.reload();
+      this.props.reload();
     });
   }
   componentWillUnMount() {
