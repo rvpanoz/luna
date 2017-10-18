@@ -1,4 +1,5 @@
 import React from 'react';
+import AppNotificationItem from './AppNotificationItem';
 
 class AppNotifications extends React.Component {
   constructor(props) {
@@ -31,43 +32,20 @@ class AppNotifications extends React.Component {
     let notifications = this.props.notifications;
 
     return (
-      <div className="notifications-bar">
-        <div className="notification" onClick={this.showNotifications}>
-          <i className="fa fa-bell-o"></i>
-          <div className="top-count common-count">
-            <div className="value">{(notifications) ? notifications.length : 0}</div>
-          </div>
-        </div>
-        <div className="notification-dropdown dd" ref="notificationsDropdown">
-          <div className="arrow-up"></div>
-          <div className="header">
-            <div className="heading">Notifications</div>
-            <div className="inner-count common-count">
-              <div className="value">{(notifications) ? notifications.length : 0}</div>
-            </div>
-          </div>
-          <div className="items">
+      <ul className="nav navbar-nav navbar-right">
+        <li className="dropdown">
+          <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <span className="navbar-notification"></span>
+            <span className="hidden-xs">Messages</span> <i className="fa fa-envelope visible-xs-inline-block"></i>
+          </a>
+          <div className="dropdown-menu navbar-messages">
             { (notifications) ? notifications.map((noti, idx) => {
-                return (
-                  <div className="noti noti--red" key={idx}>
-                    <div className="noti-icon">
-                      <i className="fa fa-times"></i>
-                    </div>
-                    <div className="noti-body">
-                      <p>{noti.notificationMessage}</p>
-                      <button className="noti-button" id="js-helpMe">Fix it!</button>
-                      <button className="noti-button js-notiClose">Don't care.</button>
-                    </div>
-                    <button className="noti-close js-notiClose">
-                      <i className="fa fa-times"></i>
-                    </button>
-                  </div>
-                )
+              return <AppNotificationItem key={idx} notification={noti}/>
               }) : null
             }
           </div>
-        </div>
-      </div>
+        </li>
+      </ul>
     )
   }
 }

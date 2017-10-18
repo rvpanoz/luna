@@ -26,7 +26,7 @@ class QuickMenu extends React.Component {
     super(props)
   }
   render() {
-    let menuItems = ['fa-home', 'fa-feed', 'fa-cog'];
+    let menuItems = ['fa-feed', 'fa-cog'];
     return (
       <div className="quickmenu">
         <QuickMenuList items={menuItems} />
