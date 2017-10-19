@@ -7,29 +7,29 @@ import {
   TOGGLE_LOADER,
   SET_MODE,
   SET_APP_MESSAGE,
-  ADD_NOTIFICATION,
-  CLEAR_NOTIFICATIONS
+  ADD_MESSAGE,
+  CLEAR_MESSAGES
 } from '../constants/ActionTypes';
 
 const global = (state = initialState, action) => {
   switch (action.type) {
-    case CLEAR_NOTIFICATIONS:
+    case CLEAR_MESSAGES:
       return Object.assign({}, state, {
-        notifications: []
+        messages: []
       });
-    case ADD_NOTIFICATION:
-      let notifications = state.notifications;
-      return (notifications.length) ? {
+    case ADD_MESSAGE:
+      let messages = state.messages;
+      return (messages.length) ? {
         ...state,
-        notifications: [...state.notifications, {
-          notificationType: action.notificationType,
-          notificationMessage: action.notificationMessage
+        messages: [...state.messages, {
+          level: action.level,
+          body: action.body
         }]
       } :
       Object.assign({}, state, {
-        notifications: [{
-          notificationType: action.notificationType,
-          notificationMessage: action.notificationMessage
+        messages: [{
+          level: action.level,
+          body: action.body
         }]
       })
     case TOGGLE_LOADER:

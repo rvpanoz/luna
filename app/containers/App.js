@@ -15,6 +15,7 @@ import {HashRouter as Router, Route} from 'react-router-dom';
 //container components
 import Sidebar from '../common/Sidebar';
 import AppHeader from '../common/AppHeader';
+import AppMessagesContainer from './AppMessagesContainer';
 import PackagesContainer from './PackagesContainer';
 
 const store = configureStore();
@@ -26,7 +27,7 @@ const App = () => {
       <div className="wrapper">
         <AppHeader title="Luna"/>
         <div className="dashboard">
-          <Sidebar/>
+          <Sidebar />
           <div className="main">
             <div className="main__scroll">
               <div className="main__cont">
@@ -37,6 +38,7 @@ const App = () => {
             </div>
           </div>
         </div>
+        <AppMessagesContainer />
       </div>
     </Provider>
   );

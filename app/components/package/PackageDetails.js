@@ -26,6 +26,7 @@ class PackageDetails extends React.Component {
         let version = (selectVersion && selectVersion.value !== "false") ? selectVersion.value : 'latest';
         Actions[action](active, version, () => {
           this.props.setActive(null);
+          this.props.toggleMainLoader(true);
         });
       }
     }
@@ -46,16 +47,6 @@ class PackageDetails extends React.Component {
       });
     }
     return false;
-  }
-  componentDidUpdate() {
-    let pkg = this.props.active;
-    if(pkg) {
-      let version = pkg.version;
-      let selectVersion = this.refs.selectVersion;
-      if(selectVersion) {
-        selectVersion.value=version.toString();
-      }
-    }
   }
   render() {
     let pkg = this.props.active;
@@ -79,7 +70,7 @@ class PackageDetails extends React.Component {
             <label htmlFor="selectVersion">
               <span>Select version</span>
             </label>
-            <select onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
+            <select value={pkg.version} onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
               <option value="false">-</option>
               {pkg.versions.map((version, idx) => {
                 return <option key={idx} value={version}>{version}</option>

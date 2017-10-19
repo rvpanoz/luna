@@ -22,7 +22,7 @@ class PackagesContainer extends React.Component {
       e.preventDefault();
     }
     this.props.actions.toggleLoader(true);
-    this.props.actions.clearNotifications();
+    this.props.actions.clearMessages();
     this.props.actions.setActive(null);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
@@ -57,9 +57,8 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('get-packages-error', (event, errorMessage) => {
       //split errorMessage by new line(new error)
       let errorLinesArr = errorMessage.match(/[^\r\n]+/g);
-      console.log('GET_ERROR', this.props.notifications);
       errorLinesArr.forEach((errorStr, idx) => {
-        this.props.actions.addNotification('error', errorStr);
+        this.props.actions.addMessage('error', errorStr);
       });
     });
 
@@ -94,21 +93,21 @@ class PackagesContainer extends React.Component {
     });
     ipcRenderer.on('install-package-error', (event, errorStr) => {
       console.log('INSTALL_ERROR', errorStr);
-      this.props.actions.addNotification('error', errorStr);
+      this.props.actions.addMessage('error', errorStr);
     });
     ipcRenderer.on('uninstall-package-reply', (event, pkg) => {
       this.reload();
     });
     ipcRenderer.on('uninstall-package-error', (event, errorStr) => {
       console.log('UNINSTALL_ERROR', errorStr);
-      this.props.actions.addNotification('error', errorStr);
+      this.props.actions.addMessage('error', errorStr);
     });
     ipcRenderer.on('update-package-reply', (event, pkg) => {
       this.reload();
     });
     ipcRenderer.on('update-package-error', (event, errorStr) => {
       console.log('UPDATE_ERROR', errorStr);
-      this.props.actions.addNotification('error', errorStr);
+      this.props.actions.addMessage('error', errorStr);
     });
   }
   componentWillUnMount() {
@@ -143,10 +142,11 @@ class PackagesContainer extends React.Component {
                 loading={props.loading}
                 packages={props.packages}
                 toggleLoader={props.actions.toggleLoader}
+                toggleMainLoader={props.actions.toggleMainLoader}
                 reload={this.reload}
               />
             </div>
-            <div className="col-md-5">
+            <div className="col-md-6">
               <PackageContainer active={props.active}/>
             </div>
           </div>
