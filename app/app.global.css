@@ -2,6 +2,8 @@
 
 @import "~font-awesome/css/font-awesome.css";
 @import "~bootstrap/dist/css/bootstrap.css";
+@import '~animate.css/animate.css';
+
 html {
   height: 100%;
 }
@@ -1937,7 +1939,7 @@ select option {
   font-style: italic;
 }
 
-/*** Header2 ***/
+/*** AppHeader ***/
 
 .navbar {
   border: 0;
@@ -1973,278 +1975,103 @@ select option {
   color: #fff;
 }
 
-.navbar-default .navbar-collapse, .navbar-default .navbar-form {
-  border-color: transparent;
+.messages {
+  position: fixed;
+    top: 39px;
+    right: 6px;
+    width: 425px;
+    z-index: 9999;
 }
 
-.navbar-default .navbar-nav>li>a, .navbar-default .navbar-text {
-  color: hsla(0, 0%, 100%, .7);
-}
-
-.navbar-nav>li>a {
-  text-transform: uppercase;
-  font-weight: 500;
-  font-size: 12px;
-  -webkit-transition: color .15s;
-  transition: color .15s;
-}
-
-.nav>li, .nav>li>a {
-  position: relative;
-  display: block;
-}
-
-.dropdown, .dropup {
-  position: relative;
-}
-
-.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus, .navbar-default .navbar-nav>.open>a:hover {
-  background-color: transparent;
-  color: #fff;
-}
-
-.navbar-default .navbar-nav>li>a, .navbar-default .navbar-text {
-  color: hsla(0, 0%, 100%, .7);
-}
-
-.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
-  background-color: transparent;
-  border-color: #2196f3;
-}
-
-.navbar-nav>li>a {
-  text-transform: uppercase;
-  font-weight: 500;
-  font-size: 12px;
-  -webkit-transition: color .15s;
-  transition: color .15s;
-}
-
-.nav>li>a {
-  padding: 20px 12px;
-}
-
-.nav>li, .nav>li>a {
-  position: relative;
-  display: block;
-}
-
-.open>a {
-  outline: 0;
-}
-/*** Navbar notification ***/
-.navbar-notification {
-  position: absolute;
-  top: 18.5px;
-  right: 7px;
-  width: 7px;
-  height: 7px;
-  line-height: 7px;
-  text-align: center;
-  border-radius: 50%;
-  background-color: #ef5350;
-  font-size: 11px;
-  color: white;
-}
-/*** Navbar: messages ***/
-.navbar-messages {
-  min-width: 380px;
-  padding: 0;
-}
-.navbar-messages p.has-error {
-  color: #ef5350;
-}
-.navbar-messages > a {
-  display: block;
-  padding: 8px 16px;
-}
-.navbar-messages > a:before,
-.navbar-messages > a:after {
-  content: " ";
+.message {
   display: table;
-}
-.navbar-messages > a:after {
-  clear: both;
-}
-.navbar-messages > a:before,
-.navbar-messages > a:after {
-  content: " ";
-  display: table;
-}
-.navbar-messages > a:after {
-  clear: both;
-}
-.navbar-messages > a:hover,
-.navbar-messages > a:focus {
-  text-decoration: none;
-}
-.navbar-messages__item {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-.navbar-messages__item:hover,
-.navbar-messages__item:focus {
-  background-color: #f9f9f9;
-}
-.navbar-messages__avatar {
-  display: block;
-  float: left;
-  margin: 5px 10px 0 0;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-}
-.navbar-messages__avatar > img {
+  position: relative;
+  margin: 40px auto 0;
   width: 100%;
-  height: auto;
-}
-.navbar-messages__body {
-  overflow: hidden;
-}
-.navbar-messages__sender {
-  color: #212121;
-  font-weight: 700;
-  margin: 5px 0;
-}
-.navbar-messages__sender > small {
-  float: right;
-  margin-left: 5px;
-  font-size: 12px;
-  color: #9e9e9e;
-}
-.navbar-messages__content {
-  color: #757575;
-}
-.navbar-messages__view-all {
-  padding: 12px 20px !important;
-  background-color: #f9f9f9;
-  border-radius: 0 0 2px 2px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  color: #757575;
-}
-.navbar-messages__view-all:hover,
-.navbar-messages__view-all:focus {
-  color: #212121;
-  text-decoration: none;
-}
-/*** Navbar: alerts ***/
-.navbar-alerts {
-  min-width: 280px;
-  padding: 0;
-}
-.navbar-alerts > a {
-  display: block;
-  padding: 8px 16px;
-}
-.navbar-alerts > a:before,
-.navbar-alerts > a:after {
-  content: " ";
-  display: table;
-}
-.navbar-alerts > a:after {
-  clear: both;
-}
-.navbar-alerts > a:before,
-.navbar-alerts > a:after {
-  content: " ";
-  display: table;
-}
-.navbar-alerts > a:after {
-  clear: both;
-}
-.navbar-alerts > a:hover,
-.navbar-alerts > a:focus {
-  text-decoration: none;
-}
-.navbar-alerts__item {
-  line-height: 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  color: #757575;
-}
-.navbar-alerts__item:hover,
-.navbar-alerts__item:focus {
-  background-color: #f9f9f9;
-  color: #757575;
-}
-.navbar-alerts__item > span {
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  text-align: center;
-  display: inline-block;
-  padding: 0;
-  margin-right: 10px;
-  border-radius: 50%;
-  vertical-align: middle;
-}
-.navbar-alerts__item > small {
-  float: right;
-  margin-left: 5px;
-  font-size: 12px;
-  color: #9e9e9e;
-}
-.navbar-alerts__view-all {
-  padding: 12px 20px !important;
-  background-color: #f9f9f9;
-  border-radius: 0 0 2px 2px;
-  text-align: center;
-  font-size: 12px;
-  font-weight: 500;
-  text-transform: uppercase;
-  color: #757575;
-}
-.navbar-alerts__view-all:hover,
-.navbar-alerts__view-all:focus {
-  color: #212121;
-  text-decoration: none;
+  background-color: #0074D9;
+  color: #fff;
+  transition: all 0.2s ease;
 }
 
-/*** Navbar: Form ***/
-.navbar-form .input-group {
-  margin-bottom: 0;
+.message--orange {
+  background-color: #F39C12;
 }
-.navbar-form .input-group .form-control {
-  padding: 8px 50px 8px 16px;
-  border: 0;
-  border-radius: 2px;
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
+
+.message--red {
+  background-color: #FF4136;
 }
-.navbar-form .input-group .form-control::-moz-placeholder {
-  color: rgba(255, 255, 255, 0.7);
+
+.message--green {
+  background-color: #2ECC40;
+}
+
+.message-icon {
+  display: table-cell;
+  vertical-align: middle;
+  width: 60px;
+  padding: 30px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.message-icon>i {
+  width: 20px;
+  font-size: 20px;
+}
+
+.message-body {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 30px 20px 30px 10px;
+}
+
+.message-body>p {
+  line-height: 1.2;
+  margin-top: 6px;
+}
+
+.message-button {
+  position: relative;
+  margin: 15px 5px -10px;
+  background-color: rgba(0, 0, 0, 0.25);
+  border: none;
+  padding: 10px 15px;
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+}
+
+.message-button:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.message-button:active {
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0px rgba(0, 0, 0, 0.4);
+  top: 3px;
+}
+
+.message-close {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  right: 5px;
+  top: 5px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.message:hover .message-close {
   opacity: 1;
 }
-.navbar-form .input-group .form-control:-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-.navbar-form .input-group .form-control::-webkit-input-placeholder {
-  color: rgba(255, 255, 255, 0.7);
-}
-.navbar-form .input-group .form-control:focus {
-  border-color: #FFAB00;
-}
-.navbar-form .input-group .form-control + .input-group-btn {
-  -webkit-transform: translateX(-100%);
-          transform: translateX(-100%);
-  z-index: 10;
-}
-.navbar-form .input-group .form-control + .input-group-btn > .btn:after {
-  display: none;
-}
-.navbar-form .input-group .form-control + .input-group-btn > .btn:hover {
-  background-color: transparent;
-  color: white;
-}
-.navbar-form .input-group .form-control + .input-group-btn > .btn:focus,
-.navbar-form .input-group .form-control + .input-group-btn > .btn:active,
-.navbar-form .input-group .form-control + .input-group-btn > .btn:active:focus {
-  background-color: transparent;
-  color: white;
+
+.message-close:hover {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-  color: #fff;
+.u-italic {
+  font-style: italic;
 }

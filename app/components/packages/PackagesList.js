@@ -36,7 +36,13 @@ class PackagesList extends React.Component {
               let name = (pkg.from)
                 ? pkg.from.split("@")[0]
                 : pkg.name;
-              return <PackageListItem deselectAll={this.deselectAll} idx={idx} key={idx} name={name} description={pkg.description} version={version}/>
+              return <PackageListItem
+                      toggleMainLoader={this.props.toggleMainLoader}
+                      deselectAll={this.deselectAll}
+                      idx={idx} key={idx}
+                      name={name}
+                      description={pkg.description}
+                      version={version}/>
             })
             : null}
         </div>

@@ -2,18 +2,18 @@ import * as types from '../constants/ActionTypes';
 import modes from '../constants/Modes';
 import { parse, isJson } from '../utils';
 
-export function addNotification(notificationType, notificationMessage) {
+export function addMessage(level, body) {
   return {
-    type: types.ADD_NOTIFICATION,
-    notificationType,
-    notificationMessage
+    type: types.ADD_MESSAGE,
+    level,
+    body
   }
 }
 
-export function clearNotifications(notifications) {
+export function clearMessages(messages) {
   return {
-    type: types.CLEAR_NOTIFICATIONS,
-    notifications
+    type: types.CLEAR_MESSAGES,
+    messages
   }
 }
 
