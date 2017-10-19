@@ -16,7 +16,7 @@ class PackagesListHeader extends React.Component {
         </div>
         <div className={styles.packages__actions}>
           <div className={styles.packages__action}>
-            <i className="fa fa-fw fa-refresh" onClick={this.props.reload} title="Reload"></i>
+            <i className="fa fa-fw fa-refresh" onClick={props.reload} title="Reload"></i>
           </div>
         </div>
       </div>

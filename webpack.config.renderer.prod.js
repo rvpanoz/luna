@@ -33,7 +33,7 @@ export default merge.smart(baseConfig, {
         test: /\.global\.css$/,
         use: ExtractTextPlugin.extract({
           use: 'css-loader',
-          fallback: 'style-loader',
+          fallback: 'style-loader'
         })
       },
       // Pipe other styles through css modules and append to style.css
@@ -43,7 +43,7 @@ export default merge.smart(baseConfig, {
           use: {
             loader: 'css-loader',
             options: {
-              modules: false,
+              modules: true,
               importLoaders: 1,
               localIdentName: '[name]__[local]__[hash:base64:5]'
             }

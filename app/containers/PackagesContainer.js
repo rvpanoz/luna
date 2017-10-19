@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
 
-//components
 import PackagesListHeader from '../components/packages/PackagesListHeader';
 import PackagesListSearch from '../components/packages/PackagesListSearch';
 import PackagesList from '../components/packages/PackagesList';
@@ -18,7 +17,10 @@ class PackagesContainer extends React.Component {
     super(props);
     this.reload = this.reload.bind(this);
   }
-  reload() {
+  reload(e) {
+    if(e) {
+      e.preventDefault();
+    }
     this.props.actions.toggleLoader(true);
     this.props.actions.clearNotifications();
     this.props.actions.setActive(null);
@@ -44,8 +46,8 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('get-packages-close', (event, packagesString) => {
       let packages = parse(packagesString, 'dependencies');
       this.props.actions.setPackages(packages);
-      this.props.actions.toggleLoader(false);
       this.props.actions.setMode('GLOBAL');
+      this.props.actions.toggleLoader(false);
     });
 
     /**
@@ -55,6 +57,7 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('get-packages-error', (event, errorMessage) => {
       //split errorMessage by new line(new error)
       let errorLinesArr = errorMessage.match(/[^\r\n]+/g);
+      console.log('GET_ERROR', this.props.notifications);
       errorLinesArr.forEach((errorStr, idx) => {
         this.props.actions.addNotification('error', errorStr);
       });
@@ -89,11 +92,23 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('install-package-reply', (event, pkg) => {
       this.reload();
     });
+    ipcRenderer.on('install-package-error', (event, errorStr) => {
+      console.log('INSTALL_ERROR', errorStr);
+      this.props.actions.addNotification('error', errorStr);
+    });
     ipcRenderer.on('uninstall-package-reply', (event, pkg) => {
       this.reload();
     });
+    ipcRenderer.on('uninstall-package-error', (event, errorStr) => {
+      console.log('UNINSTALL_ERROR', errorStr);
+      this.props.actions.addNotification('error', errorStr);
+    });
     ipcRenderer.on('update-package-reply', (event, pkg) => {
       this.reload();
+    });
+    ipcRenderer.on('update-package-error', (event, errorStr) => {
+      console.log('UPDATE_ERROR', errorStr);
+      this.props.actions.addNotification('error', errorStr);
     });
   }
   componentWillUnMount() {
@@ -118,7 +133,7 @@ class PackagesContainer extends React.Component {
                 title="Packages"
                 total={props.packages.length}
                 toggleLoader={props.actions.toggleLoader}
-                reload={props.actions.reload}
+                reload={this.reload}
               />
               <PackagesListSearch
                 setActive={props.actions.setActive}
@@ -128,7 +143,7 @@ class PackagesContainer extends React.Component {
                 loading={props.loading}
                 packages={props.packages}
                 toggleLoader={props.actions.toggleLoader}
-                reload={props.actions.reload}
+                reload={this.reload}
               />
             </div>
             <div className="col-md-5">

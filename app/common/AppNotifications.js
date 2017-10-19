@@ -3,11 +3,12 @@ import AppNotificationItem from './AppNotificationItem';
 
 class AppNotifications extends React.Component {
   constructor(props) {
-    super(props)
-    this.showNotifications = this.showNotifications.bind(this);
-    this.hideNotifications = this.hideNotifications.bind(this);
+    super(props);
+    this.openMessages = this.openMessages.bind(this);
+    // this.showNotifications = this.showNotifications.bind(this);
+    // this.hideNotifications = this.hideNotifications.bind(this);
   }
-  hideNotifications() {
+  _hideNotifications() {
     let notificationsDropdown = this.refs.notificationsDropdown;
 
     if (notificationsDropdown) {
@@ -15,7 +16,7 @@ class AppNotifications extends React.Component {
       notificationsDropdown.classList.remove('dropdown-transition');
     }
   }
-  showNotifications(e) {
+  _showNotifications(e) {
     e.preventDefault();
 
     let notificationsDropdown = this.refs.notificationsDropdown;
@@ -28,17 +29,27 @@ class AppNotifications extends React.Component {
       }
     }
   }
+  openMessages(e) {
+    let notifications = this.props.notifications;
+    if(!notifications.length) {
+      let dropdown = this.refs.dropdown;
+      if(dropdown) {
+        e.stopPropagation();
+        $(dropdown).toggleClass('open');
+      }
+    }
+  }
   render() {
     let notifications = this.props.notifications;
 
     return (
       <ul className="nav navbar-nav navbar-right">
-        <li className="dropdown">
-          <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-            <span className="navbar-notification"></span>
-            <span className="hidden-xs">Messages</span> <i className="fa fa-envelope visible-xs-inline-block"></i>
+        <li className="dropdown" ref="dropdown">
+          <a href="#" className="dropdown-toggle" onClick={this.openMessages} data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            {(notifications.length) ? <span className="navbar-notification"></span> : null}
+            <span>Messages</span> <i className="fa fa-envelope"></i>
           </a>
-          <div className="dropdown-menu navbar-messages">
+          <div className="dropdown-menu navbar-messages" ref="messages">
             { (notifications) ? notifications.map((noti, idx) => {
               return <AppNotificationItem key={idx} notification={noti}/>
               }) : null
