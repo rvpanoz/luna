@@ -2,6 +2,7 @@
 
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import {parse} from '../utils';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
@@ -20,10 +21,90 @@ class PackagesContainer extends React.Component {
   reload() {
     this.props.actions.toggleLoader(true);
     this.props.actions.clearNotifications();
+    this.props.actions.setActive(null);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       params: ['g', 'long']
     });
+  }
+  componentDidMount() {
+    /**
+    * ipcRenderer event
+    * Get installed packages
+    **/
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      params: ['g', 'long', 'parseable']
+    });
+
+    /**
+    * ipcRenderer listener
+    * Set packages from npm list
+    **/
+    ipcRenderer.on('get-packages-close', (event, packagesString) => {
+      let packages = parse(packagesString, 'dependencies');
+      this.props.actions.setPackages(packages);
+      this.props.actions.toggleLoader(false);
+      this.props.actions.setMode('GLOBAL');
+    });
+
+    /**
+    * ipcRenderer listener
+    * Set errorMessage from npm list stderr output
+    **/
+    ipcRenderer.on('get-packages-error', (event, errorMessage) => {
+      //split errorMessage by new line(new error)
+      let errorLinesArr = errorMessage.match(/[^\r\n]+/g);
+      errorLinesArr.forEach((errorStr, idx) => {
+        this.props.actions.addNotification('error', errorStr);
+      });
+    });
+
+    /**
+    * ipcRenderer listener
+    * Set packages from npm search <pkgname>
+    **/
+    ipcRenderer.on('search-packages-close', (event, packagesString) => {
+      let packages = parse(packagesString, 'dependencies');
+      this.props.actions.setPackages(packages);
+      this.props.actions.setMode('SEARCH', ['Install']);
+      this.props.actions.toggleLoader(false);
+    });
+
+    // set active package
+    ipcRenderer.on('view-package-reply', (event, pkg) => {
+      let pkgData;
+      try {
+        pkgData = JSON.parse(pkg);
+      } catch (e) {
+        throw new Error(e);
+      }
+
+      if(pkgData) {
+        this.props.actions.setActive(pkgData, false);
+      }
+    });
+
+    // package actions replies
+    ipcRenderer.on('install-package-reply', (event, pkg) => {
+      this.reload();
+    });
+    ipcRenderer.on('uninstall-package-reply', (event, pkg) => {
+      this.reload();
+    });
+    ipcRenderer.on('update-package-reply', (event, pkg) => {
+      this.reload();
+    });
+  }
+  componentWillUnMount() {
+    ipcRenderer.removeAllListeners([
+      'get-packages-close',
+      'search-packages-close',
+      'get-packages-error',
+      'install-package-reply',
+      'uninstall-package-reply',
+      'update-package-reply'
+    ]);
   }
   render() {
     let props = this.props;
@@ -37,11 +118,7 @@ class PackagesContainer extends React.Component {
                 title="Packages"
                 total={props.packages.length}
                 toggleLoader={props.actions.toggleLoader}
-                setActive={props.actions.setActive}
-                active={props.active}
-                setAppMessage={props.actions.setAppMessage}
-                clearNotifications={props.actions.clearNotifications}
-                reload={this.reload}
+                reload={props.actions.reload}
               />
               <PackagesListSearch
                 setActive={props.actions.setActive}
@@ -50,14 +127,8 @@ class PackagesContainer extends React.Component {
               <PackagesList
                 loading={props.loading}
                 packages={props.packages}
-                setPackages={props.actions.setPackages}
                 toggleLoader={props.actions.toggleLoader}
-                setActive={props.actions.setActive}
-                setMode={props.actions.setMode}
-                setAppMessage={props.actions.setAppMessage}
-                addNotification={props.actions.addNotification}
-                clearNotifications={props.actions.clearNotifications}
-                reload={this.reload}
+                reload={props.actions.reload}
               />
             </div>
             <div className="col-md-5">
