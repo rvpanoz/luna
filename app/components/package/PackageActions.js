@@ -3,7 +3,7 @@ import React from 'react';
 const PackageActions = (props) => {
   const actions = props.packageActions;
   const doAction = props.doAction;
-  
+
   return (
     <div className="dropdown">
       <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
@@ -12,7 +12,7 @@ const PackageActions = (props) => {
           return (
             <li key={idx}>
               <a href="#" onClick={doAction}>
-                <span>{action}</span>
+                <span className="fa fa-fw fa-trash"></span>&nbsp;{action}
               </a>
             </li>
           )

@@ -8,7 +8,8 @@ import {
   SET_MODE,
   SET_APP_MESSAGE,
   ADD_MESSAGE,
-  CLEAR_MESSAGES
+  CLEAR_MESSAGES,
+  TOGGLE_RELOAD
 } from '../constants/ActionTypes';
 
 const global = (state = initialState, action) => {
@@ -39,11 +40,6 @@ const global = (state = initialState, action) => {
         mode: action.mode,
         packageActions: action.packageActions
       });
-    case SET_APP_MESSAGE:
-      return Object.assign({}, state, {
-        appMessage: action.appMessage,
-        open: action.open
-      });
     default:
       return state;
   }
@@ -51,6 +47,10 @@ const global = (state = initialState, action) => {
 
 const packages = (state = initialState, action) => {
   switch (action.type) {
+    case TOGGLE_RELOAD:
+      return Object.assign({}, state, {
+        status: action.status
+      })
     case TOGGLE_MAIN_LOADER:
       return Object.assign({}, state, {isLoading: action.isLoading});
     case SET_PACKAGES:

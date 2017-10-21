@@ -3,7 +3,6 @@
 @import "~font-awesome/css/font-awesome.css";
 @import "~bootstrap/dist/css/bootstrap.css";
 @import '~animate.css/animate.css';
-
 html {
   height: 100%;
 }
@@ -61,6 +60,11 @@ code {
 
 .scrollable {
   overflow: hidden;
+}
+.scroll-wrapper {
+  overflow: hidden !important;
+    padding: 0 !important;
+    position: relative;
 }
 
 .selected {
@@ -282,7 +286,7 @@ ol, ul {
 }
 
 .sidebar {
-  width: 200px;
+  width: 12%;
   z-index: 100;
   overflow: hidden;
   background-color: #30363c;
@@ -316,6 +320,9 @@ ol, ul {
 }
 
 .sidebar>.scrollable .scroll-content {
+  height: auto;
+  margin-bottom: 0px;
+  margin-right: 0px;
   overflow-x: hidden !important;
 }
 
@@ -335,8 +342,8 @@ ol, ul {
   vertical-align: top;
   font-size: 14px;
   overflow: hidden;
-  -webkit-transition: margin .2s;
-  transition: margin .2s;
+  -webkit-transition: margin .1s;
+  transition: margin .1s;
 }
 
 .sidebar__title {
@@ -434,25 +441,6 @@ ol, ul {
   padding: 0px 20px 6px 32px;
 }
 
-.sidestat__cont {
-  padding: 0 20px;
-  margin-top: 10px;
-}
-
-.sidestat__item {
-  margin-bottom: 25px;
-}
-
-.sidestat__value {
-  font-size: 20px;
-  color: #fff;
-  line-height: 20px;
-}
-
-.sidestat__text {
-  margin-bottom: 5px;
-}
-
 .quickmenu {
   background-color: rgba(36, 41, 44, 0.5);
   min-width: 200px;
@@ -501,14 +489,13 @@ ol, ul {
 }
 
 .main {
-  width: 100%;
+  width: 85%;
   box-sizing: border-box;
   display: inline-block;
   height: 100%;
   font-size: 14px;
   white-space: normal;
-  padding-left: 200px;
-  margin-left: -200px;
+  padding-left: 15px;
   overflow-y: auto;
 }
 
@@ -525,7 +512,7 @@ ol, ul {
 }
 
 .main__cont {
-  padding: 0 auto;
+  padding: 0;
 }
 
 .main-heading {
@@ -1976,102 +1963,35 @@ select option {
 }
 
 .messages {
-  position: fixed;
-    top: 39px;
-    right: 6px;
-    width: 425px;
-    z-index: 9999;
+  margin-bottom: 10px;
 }
-
-.message {
-  display: table;
+.messages__list {
+  padding: 0 10px;
+}
+.messages__item {
+  border-bottom: 1px solid rgba(36, 41, 44, 0.5);
+  padding: 5px 10px 5px;
   position: relative;
-  margin: 40px auto 0;
-  width: 100%;
-  background-color: #0074D9;
+}
+.messages__item:hover {
+  background-color: rgba(38, 44, 47, 0.5);
+}
+.messages__item.new .messages__title span {
   color: #fff;
-  transition: all 0.2s ease;
 }
-
-.message--orange {
-  background-color: #F39C12;
+.messages__title .fa {
+  margin-right: 5px;
 }
-
-.message--red {
-  background-color: #FF4136;
+.messages__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
-
-.message--green {
-  background-color: #2ECC40;
-}
-
-.message-icon {
-  display: table-cell;
-  vertical-align: middle;
-  width: 60px;
-  padding: 30px;
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0.25);
-}
-
-.message-icon>i {
-  width: 20px;
-  font-size: 20px;
-}
-
-.message-body {
-  display: table-cell;
-  vertical-align: middle;
-  padding: 30px 20px 30px 10px;
-}
-
-.message-body>p {
-  line-height: 1.2;
-  margin-top: 6px;
-}
-
-.message-button {
-  position: relative;
-  margin: 15px 5px -10px;
-  background-color: rgba(0, 0, 0, 0.25);
-  border: none;
-  padding: 10px 15px;
-  color: #fff;
-  outline: none;
-  cursor: pointer;
-}
-
-.message-button:hover {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.message-button:active {
-  background: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0px rgba(0, 0, 0, 0.4);
-  top: 3px;
-}
-
-.message-close {
+.messages__link {
+  display: block;
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.3);
-  color: #fff;
-  border: none;
-  outline: none;
-  font-size: 20px;
-  right: 5px;
-  top: 5px;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.message:hover .message-close {
-  opacity: 1;
-}
-
-.message-close:hover {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.u-italic {
-  font-style: italic;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }

@@ -24,6 +24,7 @@ class PackagesContainer extends React.Component {
     this.props.actions.toggleLoader(true);
     this.props.actions.clearMessages();
     this.props.actions.setActive(null);
+    this.props.actions.toggleReload('lock');
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       params: ['g', 'long']
@@ -36,7 +37,7 @@ class PackagesContainer extends React.Component {
     **/
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      params: ['g', 'long', 'parseable']
+      params: ['g', 'long']
     });
 
     /**
@@ -45,9 +46,15 @@ class PackagesContainer extends React.Component {
     **/
     ipcRenderer.on('get-packages-close', (event, packagesString) => {
       let packages = parse(packagesString, 'dependencies');
+
       this.props.actions.setPackages(packages);
       this.props.actions.setMode('GLOBAL');
       this.props.actions.toggleLoader(false);
+      this.props.actions.toggleReload('open');
+    });
+
+    ipcRenderer.on('get-outdated-close', (event, packagesOutdatedString) => {
+      console.log(packagesOutdatedString);
     });
 
     /**

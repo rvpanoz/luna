@@ -6,6 +6,5 @@ export default {
   packageActions: [],
   messages: [],
   active: null,
-  open: false,
-  appMessage: null
+  sidebar: null
 };

@@ -2,6 +2,13 @@ import * as types from '../constants/ActionTypes';
 import modes from '../constants/Modes';
 import { parse, isJson } from '../utils';
 
+export function toggleReload(status) {
+  return {
+    type: types.TOGGLE_RELOAD,
+    status
+  }
+}
+
 export function addMessage(level, body) {
   return {
     type: types.ADD_MESSAGE,
