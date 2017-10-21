@@ -51,7 +51,6 @@ class SidebarContainer extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    active: state.sidebar.active,
     messages: state.global.messages
   }
 }

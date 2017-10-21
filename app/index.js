@@ -15,7 +15,7 @@ const render = App => {
     </AppContainer>, rootEl);
 }
 
-render(App)
+render(App);
 
 // Webpack Hot Module Replacement API
 if (module.hot) {

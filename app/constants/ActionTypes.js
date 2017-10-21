@@ -6,4 +6,3 @@ export const SET_MODE = 'SET_MODE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
 export const TOGGLE_RELOAD = 'TOGGLE_RELOAD';
-export const SET_SIDEBAR_CONTENT = 'SET_SIDEBAR_CONTENT';
