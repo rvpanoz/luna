@@ -33,7 +33,43 @@ const execute = (command, callback) => {
 }
 
 /**
-* Synopsis: Returns all the versions of packages that are installed,
+* Check the registry to see if any (or, specific) installed packages are currently outdated.
+*
+**/
+exports.getOutdated = (options, callback) => {
+  const opts = options || {};
+  const cmd = 'outdated';
+
+  let result = '';
+  let run = [cmd],
+    params = [],
+    args = [];
+
+  if (opts.pkgName) {
+    run.push(pkgName);
+  }
+
+  if (opts.params) {
+    opts.params.forEach((param, idx) => {
+      params.push(`-${param}`);
+    });
+  }
+
+  if (opts.arguments) {
+    for (let z in opts.arguments) {
+      let v = opts.arguments[z];
+      args.push(`--${z}=${v}`);
+    }
+  } else {
+    args = defaults.concat();
+  }
+
+  let command = run.concat(params).concat(args);
+  execute(command, callback);
+}
+
+/**
+* Returns all the versions of packages that are installed,
   as well as their dependencies
 * npm ls [[<@scope>/]<pkg> ...]
 * aliases: list, la, ll

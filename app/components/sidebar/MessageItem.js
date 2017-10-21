@@ -22,17 +22,11 @@ class AppMessageItem extends React.Component {
   render() {
     let message = this.props.message;
     return (
-      <div className="message message--red animated" ref="root">
-        <div className="message-icon" style={{display: 'none'}}>
-          <i className="fa fa-times"></i>
+      <div className="messages__item animated" ref="root">
+        <div className="messages__title"></div>
+        <div className="messages__text">
+          {message.body}
         </div>
-        <div className="message-body">
-          <p>{message.body}</p>
-          <button onClick={this.close} className="message-button js-messageClose">Don't care.</button>
-        </div>
-        <button className="message-close js-messageClose">
-          <i className="fa fa-times"></i>
-        </button>
       </div>
     )
   }

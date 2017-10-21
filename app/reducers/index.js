@@ -8,7 +8,9 @@ import {
   SET_MODE,
   SET_APP_MESSAGE,
   ADD_MESSAGE,
-  CLEAR_MESSAGES
+  CLEAR_MESSAGES,
+  TOGGLE_RELOAD,
+  SET_SIDEBAR_CONTENT
 } from '../constants/ActionTypes';
 
 const global = (state = initialState, action) => {
@@ -49,8 +51,24 @@ const global = (state = initialState, action) => {
   }
 }
 
+const sidebar = (state = initialState.sidebar, action) => {
+  switch (action.type) {
+    case SET_SIDEBAR_CONTENT:
+      return Object.assign({}, state, {
+        active: action.active
+      });
+      break;
+    default:
+      return state;
+  }
+}
+
 const packages = (state = initialState, action) => {
   switch (action.type) {
+    case TOGGLE_RELOAD:
+      return Object.assign({}, state, {
+        status: action.status
+      })
     case TOGGLE_MAIN_LOADER:
       return Object.assign({}, state, {isLoading: action.isLoading});
     case SET_PACKAGES:
@@ -68,6 +86,6 @@ const packages = (state = initialState, action) => {
   }
 }
 
-const rootReducer = combineReducers({global, packages})
+const rootReducer = combineReducers({global, sidebar, packages})
 
 export default rootReducer

@@ -7,5 +7,8 @@ export default {
   messages: [],
   active: null,
   open: false,
-  appMessage: null
+  appMessage: null,
+  sidebar: {
+    active: 1
+  }
 };
