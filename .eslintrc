@@ -6,8 +6,8 @@
   },
   "extends": "airbnb",
   "env": {
-    "browser": true,
-    "node": true,
+    "browser": "true",
+    "node": "true",
     "$": "true"
   },
   "rules": {

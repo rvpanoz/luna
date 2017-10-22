@@ -2,8 +2,10 @@ import React from 'react';
 
 const QuickMenuListItem = (props) => {
   let idx = props.idx;
+  let indi = (props.faClass==='fa-feed') ? 'new' : null;
+  
   return (
-    <div onClick={props.onClick} className={`quickmenu__item ${(idx===0)?'active':null}`}>
+    <div onClick={props.onClick} className={`quickmenu__item ${indi} ${(idx===0)?'active':null}`}>
       <div className={`fa fa-fw ${props.faClass}`}></div>
     </div>
   )

@@ -58,7 +58,10 @@ class PackageDetails extends React.Component {
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>
           <div className={styles.package__details__title}>
-            {pkg.name}&nbsp;
+            <div className={styles.package__details__tag}>
+              <i className="fa fa-fw fa-tag"></i>
+            </div>
+            &nbsp;{pkg.name}&nbsp;
             <span className="label label-success">v{pkg.version}</span>
           </div>
           <div className={styles.package__details__actions}>

@@ -61,10 +61,11 @@ code {
 .scrollable {
   overflow: hidden;
 }
+
 .scroll-wrapper {
   overflow: hidden !important;
-    padding: 0 !important;
-    position: relative;
+  padding: 0 !important;
+  position: relative;
 }
 
 .selected {
@@ -274,7 +275,6 @@ ol, ul {
   border-top: 0px solid transparent;
   height: 100%;
   width: 100%;
-  margin-top: 15px;
   white-space: nowrap;
   font-size: 0;
 }
@@ -286,7 +286,7 @@ ol, ul {
 }
 
 .sidebar {
-  width: 12%;
+  width: 200px;
   z-index: 100;
   overflow: hidden;
   background-color: #30363c;
@@ -489,7 +489,7 @@ ol, ul {
 }
 
 .main {
-  width: 85%;
+  width: 100%;
   box-sizing: border-box;
   display: inline-block;
   height: 100%;
@@ -512,7 +512,7 @@ ol, ul {
 }
 
 .main__cont {
-  padding: 0;
+  padding: 15px;
 }
 
 .main-heading {
@@ -570,7 +570,7 @@ ol, ul {
 
 .packages {
   min-height: 100vh;
-  padding: 10px 15px;
+  padding: 10px 35px;
   border-radius: 2px;
   background-color: rgba(36, 41, 44, 0.5);
 }
@@ -1965,28 +1965,35 @@ select option {
 .messages {
   margin-bottom: 10px;
 }
+
 .messages__list {
   padding: 0 10px;
 }
+
 .messages__item {
   border-bottom: 1px solid rgba(36, 41, 44, 0.5);
   padding: 5px 10px 5px;
   position: relative;
 }
+
 .messages__item:hover {
   background-color: rgba(38, 44, 47, 0.5);
 }
+
 .messages__item.new .messages__title span {
   color: #fff;
 }
+
 .messages__title .fa {
   margin-right: 5px;
 }
+
 .messages__text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
 }
+
 .messages__link {
   display: block;
   position: absolute;
