@@ -153,7 +153,7 @@ class PackagesContainer extends React.Component {
                 reload={this.reload}
               />
             </div>
-            <div className="col-md-6 col-xs-10">
+            <div className="col-md-7 col-xs-10">
               <PackageContainer active={props.active}/>
             </div>
           </div>

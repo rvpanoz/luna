@@ -274,7 +274,6 @@ ol, ul {
   border-top: 0px solid transparent;
   height: 100%;
   width: 100%;
-  margin-top: 15px;
   white-space: nowrap;
   font-size: 0;
 }
@@ -512,7 +511,7 @@ ol, ul {
 }
 
 .main__cont {
-  padding: 0;
+  padding: 15px;
 }
 
 .main-heading {
@@ -570,7 +569,7 @@ ol, ul {
 
 .packages {
   min-height: 100vh;
-  padding: 10px 15px;
+  padding: 10px 35px;
   border-radius: 2px;
   background-color: rgba(36, 41, 44, 0.5);
 }

@@ -28,11 +28,13 @@ const App = () => {
         <div className="dashboard">
           <SidebarContainer items={['fa-bars', 'fa-feed', 'fa-cog']}/>
           <div className="main">
-            <div className="main__scroll">
-              <div className="main__cont">
-                <Router>
-                  <Route exact path="/" component={PackagesContainer}/>
-                </Router>
+            <div className="scroll-wrapper main__scroll" style={{position: 'relative'}}>
+              <div className="main__scroll">
+                <div className="main__cont">
+                  <Router>
+                    <Route exact path="/" component={PackagesContainer}/>
+                  </Router>
+                </div>
               </div>
             </div>
           </div>
