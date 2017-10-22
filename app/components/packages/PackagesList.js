@@ -33,6 +33,7 @@ class PackagesList extends React.Component {
                 return;
               }
               let version = pkg.version;
+              let readme = pkg.readme;
               let name = (pkg.from)
                 ? pkg.from.split("@")[0]
                 : pkg.name;
@@ -41,6 +42,7 @@ class PackagesList extends React.Component {
                       deselectAll={this.deselectAll}
                       idx={idx} key={idx}
                       name={name}
+                      readme={readme}
                       description={pkg.description}
                       version={version}/>
             })

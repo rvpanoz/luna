@@ -28,9 +28,9 @@ const App = () => {
         <div className="dashboard">
           <SidebarContainer items={['fa-bars', 'fa-feed', 'fa-cog']}/>
           <div className="main">
-            <div className="scroll-wrapper main__scroll" style={{position: 'relative'}}>
+            <div className="scroll-wrapper" style={{position: 'relative'}}>
               <div className="main__scroll">
-                <div className="main__cont">
+                <div className="main__cont clearfix">
                   <Router>
                     <Route exact path="/" component={PackagesContainer}/>
                   </Router>

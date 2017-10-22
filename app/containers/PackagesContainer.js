@@ -48,15 +48,24 @@ class PackagesContainer extends React.Component {
     **/
     ipcRenderer.on('get-packages-close', (event, packagesString) => {
       let packages = parse(packagesString, 'dependencies');
-
+      console.log(packages);
       this.props.actions.setPackages(packages);
       this.props.actions.setMode('GLOBAL');
-      this.props.actions.toggleLoader(false);
-      this.props.actions.toggleReload('open');
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'get-outdated',
+        cmd: 'outdated',
+        params: ['g', 'long']
+      });
     });
 
     ipcRenderer.on('get-outdated-close', (event, packagesOutdatedString) => {
-      console.log(packagesOutdatedString);
+      if(packagesOutdatedString) {
+        let packagesOutdated = parse(packagesOutdatedString);
+        console.log(packagesOutdated);
+      }
+
+      this.props.actions.toggleLoader(false);
+      this.props.actions.toggleReload('open');
     });
 
     /**

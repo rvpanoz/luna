@@ -2,6 +2,13 @@ import * as types from '../constants/ActionTypes';
 import modes from '../constants/Modes';
 import { parse, isJson } from '../utils';
 
+export function setOutdatedPackages(packagesOutdated) {
+  return {
+    type: types.SET_OUTDATED_PACKAGES,
+    packagesOutdated
+  }
+}
+
 export function toggleReload(status) {
   return {
     type: types.TOGGLE_RELOAD,

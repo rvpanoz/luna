@@ -58,12 +58,22 @@ code {
   background-color: rgba(36, 41, 44, 0.5);
 }
 
+.clearfix:before, .clearfix:after {
+  content: ".";
+  display: block;
+  height: 0;
+  overflow: hidden;
+}
+
+.clearfix:after {
+  clear: both;
+}
+
 .scrollable {
   overflow: hidden;
 }
 
 .scroll-wrapper {
-  overflow: hidden !important;
   padding: 0 !important;
   position: relative;
 }
@@ -496,7 +506,7 @@ ol, ul {
   font-size: 14px;
   white-space: normal;
   padding-left: 15px;
-  overflow-y: auto;
+  overflow: auto;
 }
 
 @media (max-width: 768px) {
@@ -508,7 +518,7 @@ ol, ul {
 
 .main>.main__scroll {
   height: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .main__cont {
@@ -1564,7 +1574,9 @@ select option {
 .list-widget {
   padding: 15px 0;
   max-height: 700px;
-  overflow: auto;
+  overflow-y: scroll;
+  visibility: visible;
+  clear:both;
 }
 
 .list-widget__wrap {
