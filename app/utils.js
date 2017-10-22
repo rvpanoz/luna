@@ -9,14 +9,19 @@ export function isArray() {
   return (objectArray === '[object Array]');
 }
 
-export function parse(data, key) {
-  let arr = [];
+export function parse(data, key, all) {
+  let arr = [], packages;
 
-  let packages = JSON.parse(data);
-  if (key && packages[key]) {
-    packages = packages[key];
+  try {
+    packages = JSON.parse(data);
+    if (key && packages[key]) {
+      packages = packages[key];
+    }
+  } catch(e) {
+    console.error(e);
+    return false;
   }
-
+  
   return Object.keys(packages).map(function(pkey) {
     return packages[pkey];
   });

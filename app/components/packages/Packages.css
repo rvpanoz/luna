@@ -1,13 +1,11 @@
 /** List general **/
 
 .packages__list {
-  position: absolute;
   visibility: visible;
-  clear:both;
   overflow-y: scroll;
   padding: 10px 15px;
   margin-top: 15px;
-  max-height: 900px;
+  min-height: 900px;
   border-radius: 2px;
   background-color: rgba(36, 41, 44, 0.5);
 }

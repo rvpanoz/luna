@@ -32,23 +32,14 @@ class PackagesContainer extends React.Component {
     });
   }
   componentDidMount() {
-    /**
-    * ipcRenderer event
-    * Get installed packages
-    **/
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: 'list',
       params: ['g', 'long']
     });
 
-    /**
-    * ipcRenderer listener
-    * Set packages from npm list
-    **/
     ipcRenderer.on('get-packages-close', (event, packagesString) => {
       let packages = parse(packagesString, 'dependencies');
-      console.log(packages);
       this.props.actions.setPackages(packages);
       this.props.actions.setMode('GLOBAL');
       ipcRenderer.send('ipc-event', {
@@ -60,30 +51,21 @@ class PackagesContainer extends React.Component {
 
     ipcRenderer.on('get-outdated-close', (event, packagesOutdatedString) => {
       if(packagesOutdatedString) {
-        let packagesOutdated = parse(packagesOutdatedString);
-        console.log(packagesOutdated);
+        let packagesOutdated = JSON.parse(packagesOutdatedString);
+        let packages = Object.keys(packagesOutdated);
+        this.props.actions.setOutdatedPackages(packages);
       }
-
       this.props.actions.toggleLoader(false);
       this.props.actions.toggleReload('open');
     });
 
-    /**
-    * ipcRenderer listener
-    * Set errorMessage from npm list stderr output
-    **/
     ipcRenderer.on('get-packages-error', (event, errorMessage) => {
-      //split errorMessage by new line(new error)
       let errorLinesArr = errorMessage.match(/[^\r\n]+/g);
       errorLinesArr.forEach((errorStr, idx) => {
         this.props.actions.addMessage('error', errorStr);
       });
     });
 
-    /**
-    * ipcRenderer listener
-    * Set packages from npm search <pkgname>
-    **/
     ipcRenderer.on('search-packages-close', (event, packagesString) => {
       let packages = parse(packagesString, 'dependencies');
       this.props.actions.setPackages(packages);
@@ -91,7 +73,6 @@ class PackagesContainer extends React.Component {
       this.props.actions.toggleLoader(false);
     });
 
-    // set active package
     ipcRenderer.on('view-package-reply', (event, pkg) => {
       let pkgData;
       try {
@@ -105,26 +86,30 @@ class PackagesContainer extends React.Component {
       }
     });
 
-    // package actions replies
     ipcRenderer.on('install-package-close', (event, pkg) => {
       this.reload();
     });
+
     ipcRenderer.on('install-package-error', (event, errorStr) => {
-      console.log('INSTALL_ERROR', errorStr);
+      console.error('INSTALL_ERROR', errorStr);
       this.props.actions.addMessage('error', errorStr);
     });
+
     ipcRenderer.on('uninstall-package-close', (event, pkg) => {
       this.reload();
     });
+
     ipcRenderer.on('uninstall-package-error', (event, errorStr) => {
-      console.log('UNINSTALL_ERROR', errorStr);
+      console.error('UNINSTALL_ERROR', errorStr);
       this.props.actions.addMessage('error', errorStr);
     });
+
     ipcRenderer.on('update-package-close', (event, pkg) => {
       this.reload();
     });
+
     ipcRenderer.on('update-package-error', (event, errorStr) => {
-      console.log('UPDATE_ERROR', errorStr);
+      console.error('UPDATE_ERROR', errorStr);
       this.props.actions.addMessage('error', errorStr);
     });
   }
