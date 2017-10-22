@@ -69,8 +69,7 @@ exports.getOutdated = (options, callback) => {
 }
 
 /**
-* Returns all the versions of packages that are installed,
-  as well as their dependencies
+* Returns all the versions of packages that are installed, as well as their dependencies
 * npm ls [[<@scope>/]<pkg> ...]
 * aliases: list, la, ll
 **/
@@ -231,8 +230,7 @@ exports.installPackage = (options, callback) => {
 }
 
 /**
-* Synopsis: This command will update all the packages listed
-* to the latest version.
+* Synopsis: This command will update all the packages listed to the latest version.
 * npm update [-g] [<pkg>...]
 * aliases: up, upgrade
 **/
@@ -271,6 +269,10 @@ exports.updatePackage = (options, callback) => {
   execute(command, callback);
 }
 
+/**
+* Synopsis: This command will uninstall package
+* npm uninstall [-g] [<pkg>...]
+**/
 exports.uninstallPackage = (options, callback) => {
   const opts = options || {}
   const cmd = 'uninstall';
@@ -305,6 +307,3 @@ exports.uninstallPackage = (options, callback) => {
   let command = run.concat(params).concat(args);
   execute(command, callback);
 }
-
-//TODO
-// npm outdated -g --depth=0
