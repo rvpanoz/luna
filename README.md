@@ -12,4 +12,4 @@ If anyone wants to help me build the project feel free to contact me .. :)
 - Uninstall packages
 - more ...
 
-![Luna](http://104.236.58.95/media/luna1.png)
+![Luna](http://104.236.58.95/media/luna.png)
