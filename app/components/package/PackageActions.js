@@ -27,7 +27,8 @@ const PackageActions = (props) => {
           return (
             <li key={idx}>
               <a href="#" onClick={doAction}>
-                <span className={`fa fa-fw ${faClass}`}></span>&nbsp;{action}
+                <span className={`fa fa-fw ${faClass}`}></span>&nbsp;
+                <b>{action}</b>
               </a>
             </li>
           )

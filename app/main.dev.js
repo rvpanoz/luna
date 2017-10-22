@@ -66,22 +66,14 @@ ipcMain.on('ipc-event', (event, options) => {
     return;
   }
 
-  if (ipcEvent && typeof ipcEvent === 'string') {
-    let cmdArr = ipcEvent.split('-');
-    if (cmdArr.length === 2) {
-      let cmd = cmdArr[0] + capitalizeFirstLetter(cmdArr[1]);
-      if (shell[cmd]) {
-        /**
-        * At this point we try to run a shell command
-        * sending output (using spawn mod) to renderer via ipc events
-        **/
-        try {
-          shell[cmd](opts, callback);
-        } catch (e) {
-          throw new Error(e);
-        }
-      }
-    }
+  /**
+  * At this point we try to run a shell command
+  * sending output using spawn to renderer via ipc events
+  **/
+  try {
+    shell.doCommand(opts, callback);
+  } catch (e) {
+    throw new Error(e);
   }
 });
 
