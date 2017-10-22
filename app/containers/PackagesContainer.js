@@ -27,6 +27,7 @@ class PackagesContainer extends React.Component {
     this.props.actions.toggleReload('lock');
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
+      cmd: 'list',
       params: ['g', 'long']
     });
   }
@@ -37,6 +38,7 @@ class PackagesContainer extends React.Component {
     **/
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
+      cmd: 'list',
       params: ['g', 'long']
     });
 
@@ -95,21 +97,21 @@ class PackagesContainer extends React.Component {
     });
 
     // package actions replies
-    ipcRenderer.on('install-package-reply', (event, pkg) => {
+    ipcRenderer.on('install-package-close', (event, pkg) => {
       this.reload();
     });
     ipcRenderer.on('install-package-error', (event, errorStr) => {
       console.log('INSTALL_ERROR', errorStr);
       this.props.actions.addMessage('error', errorStr);
     });
-    ipcRenderer.on('uninstall-package-reply', (event, pkg) => {
+    ipcRenderer.on('uninstall-package-close', (event, pkg) => {
       this.reload();
     });
     ipcRenderer.on('uninstall-package-error', (event, errorStr) => {
       console.log('UNINSTALL_ERROR', errorStr);
       this.props.actions.addMessage('error', errorStr);
     });
-    ipcRenderer.on('update-package-reply', (event, pkg) => {
+    ipcRenderer.on('update-package-close', (event, pkg) => {
       this.reload();
     });
     ipcRenderer.on('update-package-error', (event, errorStr) => {

@@ -32,6 +32,47 @@ const execute = (command, callback) => {
   });
 }
 
+exports.doCommand = (options, callback) => {
+  const opts = options || {};
+  const cmd = opts.cmd;
+
+  if (!cmd) {
+    throw new Error('Shell: Command is missing');
+  }
+
+  let result = '';
+  let run = [cmd],
+    params = [],
+    args = [];
+  let pkgName = opts.pkgName;
+  let pkgVersion = opts.pkgVersion;
+
+  if (pkgName) {
+    if (pkgVersion) {
+      pkgName += "@" + pkgVersion;
+    }
+    run.push(pkgName);
+  }
+
+  if (opts.params) {
+    opts.params.forEach((param, idx) => {
+      params.push(`-${param}`);
+    });
+  }
+
+  if (opts.arguments) {
+    for (let z in opts.arguments) {
+      let v = opts.arguments[z];
+      args.push(`--${z}=${v}`);
+    }
+  } else {
+    args = defaults.concat();
+  }
+
+  let command = run.concat(params).concat(args);
+  execute(command, callback);
+}
+
 /**
 * Check the registry to see if any (or, specific) installed packages are currently outdated.
 *

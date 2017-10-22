@@ -16,9 +16,9 @@ class PackageDetails extends React.Component {
     e.preventDefault();
 
     let target = e.currentTarget;
-    let action = target.querySelector('span').innerHTML.toLowerCase();
+    let action = target.querySelector('b').innerHTML.trim();
 
-    //see actions.js e.g action = 'install'
+    //see actions.js availabel actions = ['Install', 'Update', 'Uninstall']
     if(action && typeof action === 'string') {
       if(typeof Actions[action] === 'function') {
         let active = this.props.active;
@@ -41,6 +41,7 @@ class PackageDetails extends React.Component {
       this.props.toggleMainLoader(true);
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'view-package',
+        cmd: 'view',
         pkgName: pkg.name,
         pkgVersion: version,
         params: ['g']

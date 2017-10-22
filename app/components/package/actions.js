@@ -1,7 +1,7 @@
 import { remote, ipcRenderer } from 'electron';
 import { showMessageBox } from '../../utils';
 
-const install = (pkg, version, cb) => {
+const Install = (pkg, version, cb) => {
   showMessageBox({
     action: 'install',
     name: pkg.name,
@@ -9,6 +9,7 @@ const install = (pkg, version, cb) => {
   }, () => {
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'install-package',
+      cmd: 'install',
       pkgName: pkg.name,
       pkgVersion: version,
       params: ['g']
@@ -17,13 +18,14 @@ const install = (pkg, version, cb) => {
   });
 }
 
-const update = (pkg, version, cb) => {
+const Update = (pkg, version, cb) => {
   showMessageBox({
     action: 'update',
     name: pkg.name
   }, () => {
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'update-package',
+      cmd: 'update',
       pkgName: pkg.name,
       params: ['g']
     });
@@ -31,13 +33,14 @@ const update = (pkg, version, cb) => {
   });
 }
 
-const uninstall = (pkg, version, cb) => {
+const Uninstall = (pkg, version, cb) => {
   showMessageBox({
     action: 'uninstall',
     name: pkg.name
   }, () => {
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'uninstall-package',
+      cmd: 'uninstall',
       pkgName: pkg.name,
       params: ['g']
     });
@@ -46,7 +49,7 @@ const uninstall = (pkg, version, cb) => {
 }
 
 module.exports = {
-  install,
-  update,
-  uninstall
+  Install,
+  Update,
+  Uninstall
 }
