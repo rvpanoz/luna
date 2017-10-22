@@ -61,10 +61,11 @@ code {
 .scrollable {
   overflow: hidden;
 }
+
 .scroll-wrapper {
   overflow: hidden !important;
-    padding: 0 !important;
-    position: relative;
+  padding: 0 !important;
+  position: relative;
 }
 
 .selected {
@@ -1964,28 +1965,35 @@ select option {
 .messages {
   margin-bottom: 10px;
 }
+
 .messages__list {
   padding: 0 10px;
 }
+
 .messages__item {
   border-bottom: 1px solid rgba(36, 41, 44, 0.5);
   padding: 5px 10px 5px;
   position: relative;
 }
+
 .messages__item:hover {
   background-color: rgba(38, 44, 47, 0.5);
 }
+
 .messages__item.new .messages__title span {
   color: #fff;
 }
+
 .messages__title .fa {
   margin-right: 5px;
 }
+
 .messages__text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: normal;
 }
+
 .messages__link {
   display: block;
   position: absolute;
