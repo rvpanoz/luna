@@ -286,7 +286,7 @@ ol, ul {
 }
 
 .sidebar {
-  width: 12%;
+  width: 200px;
   z-index: 100;
   overflow: hidden;
   background-color: #30363c;
@@ -489,7 +489,7 @@ ol, ul {
 }
 
 .main {
-  width: 85%;
+  width: 100%;
   box-sizing: border-box;
   display: inline-block;
   height: 100%;
