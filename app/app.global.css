@@ -2057,21 +2057,6 @@ select option {
 .outdated__item_user .outdated__ico .fa:before {
   content: "\f024";
 }
-.outdated__item_product .outdated__ico .fa:before {
-  content: "\f1b2";
-}
-.outdated__item_order .outdated__ico .fa:before {
-  content: "\f0d1";
-}
-.outdated__item_subscriber .outdated__ico .fa:before {
-  content: "\f004";
-}
-.outdated__item_mail .outdated__ico .fa:before {
-  content: "\f003";
-}
-.outdated__item_payment .outdated__ico .fa:before {
-  content: "\f155";
-}
 .outdated__info {
   float: left;
   width: 100%;
@@ -2080,12 +2065,12 @@ select option {
   margin-left: -28px;
 }
 .outdated__text {
-  font-size: 12px;
-  line-height: 14px;
+  font-size: 14px;
 }
-.outdated__date {
+.outdated__version {
   padding-left: 3px;
 }
+
 .ss-widget {
   padding: 0 20px;
   margin-bottom: 10px;

@@ -34,7 +34,7 @@ class SidebarContainer extends React.Component {
             <div className="scrollable scroll-content">
               <div className="sidebar__cont" ref="sidebarContent">
                 <div className="sidebar__menu active">
-                  <Analyze/>
+                  <Analyze packagesOutdated={props.packagesOutdated} packagesInstalled={props.packages}/>
                 </div>
                 <div className="sidebar__menu">
                   <Messages messages={props.messages}/>
@@ -56,6 +56,7 @@ class SidebarContainer extends React.Component {
 function mapStateToProps(state) {
   return {
     messages: state.global.messages,
+    packages: state.packages.packages,
     packagesOutdated: state.packages.packagesOutdated
   }
 }
