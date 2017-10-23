@@ -54,7 +54,7 @@ class PackageDetails extends React.Component {
     if (!pkg) {
       return null;
     }
-
+    
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>

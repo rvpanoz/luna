@@ -3,6 +3,7 @@ export default {
   isLoading: false,
   mode: 'GLOBAL',
   packages: [],
+  packagesOutdated: [],
   packageActions: [],
   messages: [],
   active: null,

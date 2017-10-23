@@ -17,6 +17,7 @@ exports.doCommand = (options, callback) => {
 
   const execute = (command, callback) => {
     console.log(`running: npm ${command.join(' ')}`);
+
     let result = '';
     let npmc = spawn('npm', command, {
       maxBuffer: 1024 * 500

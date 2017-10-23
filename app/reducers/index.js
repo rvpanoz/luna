@@ -47,10 +47,6 @@ const global = (state = initialState, action) => {
 
 const packages = (state = initialState, action) => {
   switch (action.type) {
-    case TOGGLE_RELOAD:
-      return Object.assign({}, state, {
-        status: action.status
-      })
     case TOGGLE_MAIN_LOADER:
       return Object.assign({}, state, {isLoading: action.isLoading});
     case SET_PACKAGES:
