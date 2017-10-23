@@ -155,6 +155,7 @@
   },
   "dependencies": {
     "animate.css": "^3.5.2",
+    "async": "^2.5.0",
     "bootstrap": "^3.3.7",
     "devtron": "^1.4.0",
     "electron-debug": "^1.2.0",

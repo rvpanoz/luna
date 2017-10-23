@@ -24,7 +24,7 @@ class PackagesContainer extends React.Component {
     this.props.actions.toggleLoader(true);
     this.props.actions.clearMessages();
     this.props.actions.setActive(null);
-    this.props.actions.toggleReload('lock');
+
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: 'list',
@@ -56,10 +56,9 @@ class PackagesContainer extends React.Component {
         this.props.actions.setOutdatedPackages(packages);
       }
       this.props.actions.toggleLoader(false);
-      this.props.actions.toggleReload('open');
     });
 
-    ipcRenderer.on('get-packages-error', (event, errorMessage) => {
+    ipcRenderer.on('ipcEvent-error', (event, errorMessage) => {
       let errorLinesArr = errorMessage.match(/[^\r\n]+/g);
       errorLinesArr.forEach((errorStr, idx) => {
         this.props.actions.addMessage('error', errorStr);
@@ -90,27 +89,12 @@ class PackagesContainer extends React.Component {
       this.reload();
     });
 
-    ipcRenderer.on('install-package-error', (event, errorStr) => {
-      console.error('INSTALL_ERROR', errorStr);
-      this.props.actions.addMessage('error', errorStr);
-    });
-
     ipcRenderer.on('uninstall-package-close', (event, pkg) => {
       this.reload();
     });
 
-    ipcRenderer.on('uninstall-package-error', (event, errorStr) => {
-      console.error('UNINSTALL_ERROR', errorStr);
-      this.props.actions.addMessage('error', errorStr);
-    });
-
     ipcRenderer.on('update-package-close', (event, pkg) => {
       this.reload();
-    });
-
-    ipcRenderer.on('update-package-error', (event, errorStr) => {
-      console.error('UPDATE_ERROR', errorStr);
-      this.props.actions.addMessage('error', errorStr);
     });
   }
   componentWillUnMount() {
@@ -118,9 +102,9 @@ class PackagesContainer extends React.Component {
       'get-packages-close',
       'search-packages-close',
       'get-packages-error',
-      'install-package-reply',
-      'uninstall-package-reply',
-      'update-package-reply'
+      'install-package-close',
+      'uninstall-package-close',
+      'update-package-close'
     ]);
   }
   render() {

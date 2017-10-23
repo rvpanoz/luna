@@ -58,7 +58,7 @@ ipcMain.on('ipc-event', (event, options) => {
         event.sender.send(ipcEvent + '-close', data);
         break;
       case(status && status === 'error'):
-        event.sender.send(ipcEvent + '-error', data);
+        event.sender.send('ipcEvent-error', data);
         break;
       default:
         event.sender.send(ipcEvent + '-reply', data);
