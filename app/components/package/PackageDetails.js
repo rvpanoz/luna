@@ -20,10 +20,10 @@ class PackageDetails extends React.Component {
 
     //see actions.js availabel actions = ['Install', 'Update', 'Uninstall']
     if(action && typeof action === 'string') {
+      let active = this.props.active;
+      let selectVersion = this.refs.selectVersion;
+      let version = (selectVersion && selectVersion.value !== "false") ? selectVersion.value : 'latest';
       if(typeof Actions[action] === 'function') {
-        let active = this.props.active;
-        let selectVersion = this.refs.selectVersion;
-        let version = (selectVersion && selectVersion.value !== "false") ? selectVersion.value : 'latest';
         Actions[action](active, version, () => {
           this.props.setActive(null);
           this.props.toggleMainLoader(true);
@@ -54,7 +54,7 @@ class PackageDetails extends React.Component {
     if (!pkg) {
       return null;
     }
-    
+
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>

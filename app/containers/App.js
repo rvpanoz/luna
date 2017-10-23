@@ -26,7 +26,7 @@ const App = () => {
       <div className="wrapper">
         <AppHeader title="Luna"/>
         <div className="dashboard">
-          <SidebarContainer items={['fa-bars', 'fa-feed', 'fa-cog']}/>
+          <SidebarContainer items={['fa-bars', 'fa-feed','fa-flag', 'fa-cog']}/>
           <div className="main">
             <div className="main__cont">
               <Router>

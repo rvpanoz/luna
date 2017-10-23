@@ -23,6 +23,7 @@ class PackagesList extends React.Component {
   }
   render() {
     let packages = this.props.packages;
+
     return (
       <Loader loading={this.props.loading}>
         <div className={styles.packages__list} ref="list">

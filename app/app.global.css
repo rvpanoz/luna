@@ -1954,7 +1954,7 @@ select option {
 
 .navbar {
   position: relative;
-  min-height: 65px;
+  min-height: 0px;
   margin-bottom: 0;
   border: 1px solid transparent;
 }
@@ -2018,21 +2018,21 @@ select option {
   left: 0;
 }
 
-.ra-widget__cont {
+.outdated__cont {
   padding: 0 20px;
 }
-.ra-widget__item {
+.outdated__item {
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(36, 41, 44, 0.5);
   margin-bottom: 10px;
   overflow: hidden;
 }
-.ra-widget__item:last-child {
+.outdated__item:last-child {
   margin-bottom: 0;
   border-bottom: 0;
   padding-bottom: 0;
 }
-.ra-widget__ico {
+.outdated__ico {
   float: left;
   width: 28px;
   height: 28px;
@@ -2044,46 +2044,46 @@ select option {
   font-size: 0;
   white-space: nowrap;
 }
-.ra-widget__ico:before {
+.outdated__ico:before {
   content: '';
   display: inline-block;
   vertical-align: middle;
   height: 100%;
 }
-.ra-widget__ico .fa {
+.outdated__ico .fa {
   vertical-align: middle;
   font-size: 16px;
 }
-.ra-widget__item_user .ra-widget__ico .fa:before {
+.outdated__item_user .outdated__ico .fa:before {
   content: "\f024";
 }
-.ra-widget__item_product .ra-widget__ico .fa:before {
+.outdated__item_product .outdated__ico .fa:before {
   content: "\f1b2";
 }
-.ra-widget__item_order .ra-widget__ico .fa:before {
+.outdated__item_order .outdated__ico .fa:before {
   content: "\f0d1";
 }
-.ra-widget__item_subscriber .ra-widget__ico .fa:before {
+.outdated__item_subscriber .outdated__ico .fa:before {
   content: "\f004";
 }
-.ra-widget__item_mail .ra-widget__ico .fa:before {
+.outdated__item_mail .outdated__ico .fa:before {
   content: "\f003";
 }
-.ra-widget__item_payment .ra-widget__ico .fa:before {
+.outdated__item_payment .outdated__ico .fa:before {
   content: "\f155";
 }
-.ra-widget__info {
+.outdated__info {
   float: left;
   width: 100%;
   box-sizing: border-box;
   padding-left: 35px;
   margin-left: -28px;
 }
-.ra-widget__text {
+.outdated__text {
   font-size: 12px;
   line-height: 14px;
 }
-.ra-widget__date {
+.outdated__date {
   padding-left: 3px;
 }
 .ss-widget {

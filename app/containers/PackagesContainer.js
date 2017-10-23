@@ -30,6 +30,12 @@ class PackagesContainer extends React.Component {
       cmd: 'list',
       params: ['g', 'long']
     });
+
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-outdated',
+      cmd: 'outdated',
+      params: ['g', 'long']
+    });
   }
   componentDidMount() {
     ipcRenderer.send('ipc-event', {
@@ -38,24 +44,30 @@ class PackagesContainer extends React.Component {
       params: ['g', 'long']
     });
 
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-outdated',
+      cmd: 'outdated',
+      params: ['g', 'long']
+    });
+
     ipcRenderer.on('get-packages-close', (event, packagesString) => {
       let packages = parse(packagesString, 'dependencies');
       this.props.actions.setPackages(packages);
       this.props.actions.setMode('GLOBAL');
-      ipcRenderer.send('ipc-event', {
-        ipcEvent: 'get-outdated',
-        cmd: 'outdated',
-        params: ['g', 'long']
-      });
+      this.props.actions.toggleLoader(false);
     });
 
-    ipcRenderer.on('get-outdated-close', (event, packagesOutdatedString) => {
-      if(packagesOutdatedString) {
-        let packagesOutdated = JSON.parse(packagesOutdatedString);
-        let packages = Object.keys(packagesOutdated);
-        this.props.actions.setOutdatedPackages(packages);
+    ipcRenderer.on('get-outdated-close', (event, packagesOutdated) => {
+      try {
+        if(!packagesOutdated) {
+          this.props.actions.setPackagesOutdated([]);
+          return;
+        }
+        let outdated = JSON.parse(packagesOutdated);
+        this.props.actions.setPackagesOutdated(outdated);
+      } catch (e) {
+        console.error(e);
       }
-      this.props.actions.toggleLoader(false);
     });
 
     ipcRenderer.on('ipcEvent-error', (event, errorMessage) => {
@@ -85,15 +97,7 @@ class PackagesContainer extends React.Component {
       }
     });
 
-    ipcRenderer.on('install-package-close', (event, pkg) => {
-      this.reload();
-    });
-
-    ipcRenderer.on('uninstall-package-close', (event, pkg) => {
-      this.reload();
-    });
-
-    ipcRenderer.on('update-package-close', (event, pkg) => {
+    ipcRenderer.on('action-close', (event, pkg) => {
       this.reload();
     });
   }
@@ -102,9 +106,8 @@ class PackagesContainer extends React.Component {
       'get-packages-close',
       'search-packages-close',
       'get-packages-error',
-      'install-package-close',
-      'uninstall-package-close',
-      'update-package-close'
+      'action-close',
+      'view-package-reply'
     ]);
   }
   render() {
@@ -128,6 +131,7 @@ class PackagesContainer extends React.Component {
               <PackagesList
                 loading={props.loading}
                 packages={props.packages}
+                packagesInfo={props.packagesInfo}
                 toggleLoader={props.actions.toggleLoader}
                 toggleMainLoader={props.actions.toggleMainLoader}
                 reload={this.reload}
@@ -147,6 +151,7 @@ function mapStateToProps(state) {
   return {
     loading: state.global.loading,
     packages: state.packages.packages,
+    packagesInfo: state.packages.packagesInfo,
     active: state.packages.active
   }
 }

@@ -2,9 +2,16 @@ import * as types from '../constants/ActionTypes';
 import modes from '../constants/Modes';
 import { parse, isJson } from '../utils';
 
+export function setPackagesOutdated(packagesOutdated) {
+  return {
+    type: types.SET_PACKAGES_OUTDATED,
+    packagesOutdated
+  }
+}
+
 export function setOutdatedPackages(packagesOutdated) {
   return {
-    type: types.SET_OUTDATED_PACKAGES,
+    type: types.SET_PACKAGES_OUTDATED,
     packagesOutdated
   }
 }

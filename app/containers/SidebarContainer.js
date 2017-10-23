@@ -5,6 +5,7 @@ import QuickMenu from '../components/sidebar/QuickMenu';
 import Messages from '../components/sidebar/Messages';
 import Analyze from '../components/sidebar/Analyze';
 import Settings from '../components/sidebar/Settings';
+import OutdatedList from '../components/sidebar/OutdatedList';
 
 class SidebarContainer extends React.Component {
   constructor(props) {
@@ -39,6 +40,9 @@ class SidebarContainer extends React.Component {
                   <Messages messages={props.messages}/>
                 </div>
                 <div className="sidebar__menu">
+                  <OutdatedList packages={props.packagesOutdated}/>
+                </div>
+                <div className="sidebar__menu">
                   <Settings/>
                 </div>
               </div>
@@ -51,7 +55,8 @@ class SidebarContainer extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    messages: state.global.messages
+    messages: state.global.messages,
+    packagesOutdated: state.packages.packagesOutdated
   }
 }
 
