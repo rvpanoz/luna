@@ -14,7 +14,6 @@ const defaults = ['--depth=0', '--json'];
 exports.doCommand = (options, callback) => {
   const opts = options || {};
   const cmd = opts.cmd;
-
   const execute = (command, callback) => {
     console.log(`running: npm ${command.join(' ')}`);
 
@@ -31,7 +30,6 @@ exports.doCommand = (options, callback) => {
 
     npmc.stderr.on('data', (error) => {
       let errorToString = error.toString();
-      console.log('ERROR: ' + errorToString);
       callback(errorToString, 'error');
     });
 
@@ -45,7 +43,6 @@ exports.doCommand = (options, callback) => {
     throw new Error('Shell: Command is missing');
   }
 
-  let result = '';
   let run = [cmd],
     params = [],
     args = [];
