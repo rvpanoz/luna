@@ -5,6 +5,18 @@ class Analyze extends React.Component {
     super(props)
   }
   render() {
+    let installed = this.props.packagesInstalled;
+    let outdated = this.props.packagesOutdated;
+    let t1=installed.length,t2=0;
+
+    if(outdated instanceof Array && outdated.length) {
+      t2 = outdated.length;
+    } else {
+      if(outdated) {
+        t2 = Object.keys(outdated).length;
+      }
+    }
+
     return (
       <section className="sidebar__analyze">
         <div className="sidebar__btn">
@@ -15,7 +27,7 @@ class Analyze extends React.Component {
         <div className="sidebar__title">Packages</div>
         <ul className="nav nav-menu">
           <li className="active">
-            <a href="inbox.html">
+            <a href="#">
               <div className="nav-menu__ico">
                 <i className="fa fa-fw fa-inbox"></i>
               </div>
@@ -24,13 +36,13 @@ class Analyze extends React.Component {
               </div>
               <div className="nav-menu__right">
                 <i className="badge badge-default">
-                  <b>17</b>
+                  <b>{t1}</b>
                 </i>
               </div>
             </a>
           </li>
           <li>
-            <a href="sent.html">
+            <a href="#">
               <div className="nav-menu__ico">
                 <i className="fa fa-fw fa-upload"></i>
               </div>
@@ -38,7 +50,9 @@ class Analyze extends React.Component {
                 <span>Outdated</span>
               </div>
               <div className="nav-menu__right">
-                <i className="badge badge-default">7</i>
+                <i className="badge badge-default">
+                  {t2}
+                </i>
               </div>
             </a>
           </li>
