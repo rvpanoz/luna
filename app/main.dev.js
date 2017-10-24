@@ -53,15 +53,15 @@ ipcMain.on('ipc-event', (event, options) => {
   }
 
   function callback(data, status) {
-    switch (true) {
-      case(status && status === 'close'):
+    switch (status) {
+      case 'close':
         if(['install','update','uninstall'].indexOf(ipcEvent) > -1) {
           event.sender.send('action-close', data);
         } else {
           event.sender.send(ipcEvent + '-close', data);
         }
         break;
-      case(status && status === 'error'):
+      case 'error':
         event.sender.send('ipcEvent-error', data);
         break;
       default:

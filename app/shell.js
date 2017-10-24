@@ -7,46 +7,56 @@
 
 const cp = require('child_process');
 const utils = require('./utils');
+const Q = require("q");
 const spawn = cp.spawn;
 const defaults = ['--depth=0', '--json'];
 
-exports.doCommand = (options, callback) => {
-  const opts = options || {};
-  const cmd = opts.cmd;
+const runCommand = function(command, callback) {
+  const deferred = Q.defer();
+  const cwd = process.cwd();
 
-
-  const execute = (command, callback) => {
-    console.log(`running: npm ${command.join(' ')}`);
-
-    let result = '';
-    let npmc = spawn('npm', command, {
-      maxBuffer: 1024 * 500
-    });
-
-    npmc.stdout.on('data', (data) => {
-      result += data.toString();
-      let dataToString = data.toString();
-      callback(dataToString, 'reply');
-    });
-
-    npmc.stderr.on('data', (error) => {
-      let errorToString = error.toString();
-      callback(errorToString, 'error');
-    });
-
-    npmc.on('close', () => {
-      console.log(`finish: npm ${command.join(' ')}`);
-      callback(result, 'close');
-    });
+  if (!command || typeof command !== 'object') {
+    return Q.reject(new Error("shell[doCommand]:cmd must be given and must be an array"));
   }
 
-  if (!cmd) {
-    throw new Error('Shell: Command is missing');
+  let result = '';
+
+  console.log(`running: npm ${command.join(" ")}`);
+  let npmc = spawn('npm', command, {
+    maxBuffer: 1024 * 500
+  });
+
+  npmc.stdout.on('data', (data) => {
+    let dataToString = data.toString();
+    result += dataToString;
+  });
+
+  npmc.stderr.on('data', (error) => {
+    let errorToString = error.toString();
+    callback(errorToString, 'error');
+  });
+
+  npmc.on('close', () => {
+    console.log(`finish: npm ${command.join(' ')}`);
+    deferred.resolve({
+      data: result,
+      status: 'close'
+    });
+  });
+
+  return deferred.promise;
+}
+
+exports.doCommand = function(options, callback) {
+  let opts = options || {};
+
+  if (!opts.cmd) {
+    throw new Error('shell[doCommand]: cmd parameter must given');
   }
 
-  let run = [cmd],
+  let run = [opts.cmd],
     params = [],
-    args = [];
+    args;
   let pkgName = opts.pkgName;
   let pkgVersion = opts.pkgVersion;
 
@@ -58,9 +68,10 @@ exports.doCommand = (options, callback) => {
   }
 
   if (opts.params) {
-    opts.params.forEach((param, idx) => {
+    for (let z = 0; z < opts.params.length; z++) {
+      let param = opts.params[z];
       params.push(`-${param}`);
-    });
+    }
   }
 
   if (opts.arguments) {
@@ -73,5 +84,9 @@ exports.doCommand = (options, callback) => {
   }
 
   let command = run.concat(params).concat(args);
-  execute(command, callback);
+  runCommand(command, callback).then((response) => {
+    callback(response.data, response.status);
+  }).catch((error) => {
+    throw new Error(error);
+  });
 }

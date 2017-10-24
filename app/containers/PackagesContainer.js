@@ -75,7 +75,7 @@ class PackagesContainer extends React.Component {
       this.props.actions.toggleLoader(false);
     });
 
-    ipcRenderer.on('view-package-reply', (event, pkg) => {
+    ipcRenderer.on('view-package-close', (event, pkg) => {
       let pkgData, self = this;
       try {
         pkgData = JSON.parse(pkg);
