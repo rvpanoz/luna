@@ -9,13 +9,6 @@ export function setPackagesOutdated(packagesOutdated) {
   }
 }
 
-export function setOutdatedPackages(packagesOutdated) {
-  return {
-    type: types.SET_PACKAGES_OUTDATED,
-    packagesOutdated
-  }
-}
-
 export function addMessage(level, body) {
   return {
     type: types.ADD_MESSAGE,
