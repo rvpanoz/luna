@@ -44,7 +44,7 @@ class PackageDetails extends React.Component {
         cmd: 'view',
         pkgName: pkg.name,
         pkgVersion: version,
-        params: ['g']
+        params: ['g', 'long']
       });
     }
     return false;
@@ -54,7 +54,7 @@ class PackageDetails extends React.Component {
     if (!pkg) {
       return null;
     }
-
+    
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>

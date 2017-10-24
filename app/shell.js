@@ -1,4 +1,7 @@
-//run shell commands
+/**
+* Run shell commands
+* npm [cmd] [[<@scope>/]<pkg> ...]
+**/
 
 'use strict';
 
@@ -7,13 +10,11 @@ const utils = require('./utils');
 const spawn = cp.spawn;
 const defaults = ['--depth=0', '--json'];
 
-/**
-* Run shell commands
-* npm [cmd] [[<@scope>/]<pkg> ...]
-**/
 exports.doCommand = (options, callback) => {
   const opts = options || {};
   const cmd = opts.cmd;
+
+
   const execute = (command, callback) => {
     console.log(`running: npm ${command.join(' ')}`);
 

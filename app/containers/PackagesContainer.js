@@ -17,14 +17,7 @@ class PackagesContainer extends React.Component {
     super(props);
     this.reload = this.reload.bind(this);
   }
-  reload(e) {
-    if(e) {
-      e.preventDefault();
-    }
-    this.props.actions.toggleLoader(true);
-    this.props.actions.clearMessages();
-    this.props.actions.setActive(null);
-
+  fetch() {
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: 'list',
@@ -37,19 +30,17 @@ class PackagesContainer extends React.Component {
       params: ['g', 'long']
     });
   }
+  reload(e) {
+    if(e) {
+      e.preventDefault();
+    }
+    this.props.actions.toggleLoader(true);
+    this.props.actions.clearMessages();
+    this.props.actions.setActive(null);
+    this.fetch();
+  }
   componentDidMount() {
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      cmd: 'list',
-      params: ['g', 'long']
-    });
-
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-outdated',
-      cmd: 'outdated',
-      params: ['g', 'long']
-    });
-
+    this.fetch();
     ipcRenderer.on('get-packages-close', (event, packagesString) => {
       let packages = parse(packagesString, 'dependencies');
       this.props.actions.setPackages(packages);
@@ -85,7 +76,7 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on('view-package-reply', (event, pkg) => {
-      let pkgData;
+      let pkgData, self = this;
       try {
         pkgData = JSON.parse(pkg);
       } catch (e) {

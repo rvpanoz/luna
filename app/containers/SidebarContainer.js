@@ -27,9 +27,11 @@ class SidebarContainer extends React.Component {
   }
   render() {
     let props = this.props;
+    let items = ['fa-bars', 'fa-feed','fa-flag', 'fa-cog'];
+
     return (
       <div className="sidebar">
-        <QuickMenu items={props.items} handleSidebarContent={this.handleSidebarContent}/>
+        <QuickMenu items={items} handleSidebarContent={this.handleSidebarContent}/>
         <div className="scroll-wrapper scrollable" style={{position: 'relative'}}>
             <div className="scrollable scroll-content">
               <div className="sidebar__cont" ref="sidebarContent">

@@ -1,11 +1,10 @@
 export default {
+  mode: 'GLOBAL',
   loading: false,
   isLoading: false,
-  mode: 'GLOBAL',
+  active: null,
   packages: [],
   packagesOutdated: [],
   packageActions: [],
-  messages: [],
-  active: null,
-  sidebar: null
+  messages: []
 };
