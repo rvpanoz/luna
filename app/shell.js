@@ -67,13 +67,13 @@ exports.doCommand = function(options, callback) {
     run.push(pkgName);
   }
 
-  if (opts.params) {
-    for (let z = 0; z < opts.params.length; z++) {
-      let param = opts.params[z];
-      params.push(`-${param}`);
-    }
+  //setup params e.g -g, -long etc
+  for (let z = 0; z < opts.params.length; z++) {
+    let param = opts.params[z];
+    params.push(`-${param}`);
   }
 
+  //setup arguments e.g --depth, --json etc
   if (opts.arguments) {
     for (let z in opts.arguments) {
       let v = opts.arguments[z];
@@ -83,10 +83,11 @@ exports.doCommand = function(options, callback) {
     args = defaults.concat();
   }
 
+  //try to execute the command
   let command = run.concat(params).concat(args);
   runCommand(command, callback).then((response) => {
     callback(response.data, response.status);
   }).catch((error) => {
-    throw new Error(error);
+    throw new Error(e);
   });
 }
