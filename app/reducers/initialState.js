@@ -1,10 +1,14 @@
 export default {
-  mode: 'GLOBAL',
-  loading: false,
-  isLoading: false,
-  active: null,
-  packages: [],
-  packagesOutdated: [],
-  packageActions: [],
-  messages: []
+  global: {
+    mode: 'GLOBAL',
+    loading: false,
+    messages: []
+  },
+  packages: {
+    isLoading: false,
+    active: null,
+    packages: [],
+    packagesOutdated: [],
+    packageActions: []
+  }
 };
