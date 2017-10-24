@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
 import Loader from '../common/Loader';
-
 import {showMessageBox} from '../utils';
 import PackageDetails from '../components/package/PackageDetails';
 

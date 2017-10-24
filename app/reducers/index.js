@@ -7,7 +7,6 @@ import {
   SET_ACTIVE,
   SET_MODE,
   SET_PACKAGES_OUTDATED,
-  SET_PACKAGE_INFO,
   ADD_MESSAGE,
   CLEAR_MESSAGES
 } from '../constants/ActionTypes';
