@@ -1,8 +1,26 @@
+import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 
 class Analyze extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
+    this.openPackage = this.openPackage.bind(this);
+  }
+  openPackage(e) {
+    e.preventDefault();
+    remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
+      title: 'Open package json file',
+      filters: [{
+        name: 'json',
+        extensions: ['json']
+      }],
+      openFile: true
+    }, (file) => {
+      if(file) {
+        ipcRenderer.send('analyze-json', file[0]);
+      }
+      return false;
+    });
   }
   render() {
     let installed = this.props.packagesInstalled;
@@ -20,7 +38,7 @@ class Analyze extends React.Component {
     return (
       <section className="sidebar__analyze">
         <div className="sidebar__btn">
-          <a className="btn btn-block btn-default" href="#">
+          <a className="btn btn-block btn-default" onClick={this.openPackage} href="#">
             Analyze package
           </a>
         </div>

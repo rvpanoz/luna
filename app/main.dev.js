@@ -44,6 +44,24 @@ const installExtensions = async() => {
  * IPC events
  */
 
+ipcMain.on('analyze-json', (event, filePath) => {
+  if (!filePath) {
+    throw new Error('filePath is not defined');
+  }
+  const fs = require('fs');
+  fs.readFile(filePath, 'utf8', (err, fileContent) => {
+    if (err) {
+      if (err.code === 'ENOENT') {
+        console.error('package.json does not exist');
+        return;
+      }
+      throw err;
+    }
+
+    event.sender.send('analyze-json-close', JSON.parse(fileContent));
+  });
+});
+
 ipcMain.on('ipc-event', (event, options) => {
   const opts = options || {};
   const ipcEvent = opts.ipcEvent || false;
@@ -55,7 +73,7 @@ ipcMain.on('ipc-event', (event, options) => {
   function callback(data, command, status) {
     switch (status) {
       case 'close':
-        if(['install','update','uninstall'].indexOf(ipcEvent) > -1) {
+        if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
           event.sender.send('action-close', data, command);
         } else {
           event.sender.send(ipcEvent + '-close', data, command);
@@ -101,7 +119,8 @@ app.on('ready', async() => {
   }
 
   const Screen = electron.screen;
-  let x, y;
+  let x,
+    y;
   let screenSize = Screen.getPrimaryDisplay().size;
   let displays = electron.screen.getAllDisplays()
   let externalDisplay = displays.find((display) => {
