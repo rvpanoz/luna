@@ -82,7 +82,6 @@ code {
 }
 
 .wrapper {
-  border-radius: 5px;
   margin-bottom: 10px;
 }
 
@@ -521,7 +520,9 @@ ol, ul {
 }
 
 .main__cont {
+  position: relative;
   padding: 15px;
+  height: 100%;
 }
 
 .main-heading {

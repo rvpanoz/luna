@@ -51,6 +51,7 @@ class PackagesContainer extends React.Component {
         default:
           packages = parse(packagesStr, 'dependencies');
           this.props.actions.setPackages(packages);
+          this.props.actions.setTotalInstalled(packages.length);
           this.props.actions.setMode('GLOBAL');
           this.props.actions.toggleLoader(false);
       }
@@ -100,7 +101,7 @@ class PackagesContainer extends React.Component {
           <div className="row">
             <div className="col-md-4 col-xs-10">
               <PackagesListHeader title="Packages" total={props.packages.length} toggleLoader={props.actions.toggleLoader} reload={this.reload}/>
-              <PackagesListSearch setActive={props.actions.setActive} toggleLoader={props.actions.toggleLoader}/>
+              <PackagesListSearch setActive={props.actions.setActive} toggleLoader={props.actions.toggleLoader} fetch={props.actions.fetch}/>
               <PackagesList loading={props.loading} packages={props.packages} packagesInfo={props.packagesInfo} toggleLoader={props.actions.toggleLoader} toggleMainLoader={props.actions.toggleMainLoader} reload={this.reload}/>
             </div>
             <div className="col-md-7 col-xs-10">

@@ -2,6 +2,7 @@ import initialState from './initialState';
 import {
   TOGGLE_MAIN_LOADER,
   SET_PACKAGES,
+  TOTAL_INSTALLED,
   SET_ACTIVE,
   SET_PACKAGES_OUTDATED
 } from '../constants/ActionTypes';
@@ -21,6 +22,10 @@ const packagesReducer = (state = initialState.packages, action) => {
       return Object.assign({}, state, {
         packages: action.packages,
         loading: false
+      });
+    case TOTAL_INSTALLED:
+      return Object.assign({}, state, {
+        totalInstalled: action.totalInstalled,
       });
     case SET_PACKAGES_OUTDATED:
       return Object.assign({}, state, {
