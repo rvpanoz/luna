@@ -44,7 +44,7 @@ class PackagesList extends React.Component {
                       idx={idx} key={idx}
                       name={name}
                       readme={readme}
-                      description={pkg.description}
+                      description={(pkg.description) ? pkg.description : null}
                       version={version}/>
             })
             : null}

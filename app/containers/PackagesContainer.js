@@ -57,6 +57,12 @@ class PackagesContainer extends React.Component {
       }
     });
 
+    ipcRenderer.on('analyze-json-close', (event, content) => {
+      console.log(content);
+      let packages = content.dependencies;
+      // this.props.actions.setPackages(packages);
+    });
+
     ipcRenderer.on('ipcEvent-error', (event, errorMessage) => {
       let errorLinesArr = errorMessage.match(/[^\r\n]+/g);
       errorLinesArr.forEach((errorStr, idx) => {
@@ -90,7 +96,9 @@ class PackagesContainer extends React.Component {
       'search-packages-close',
       'ipcEvent-error',
       'action-close',
-      'view-package-reply']);
+      'analyze-json-close',
+      'view-package-reply'
+    ]);
   }
   render() {
     let props = this.props;
@@ -104,7 +112,7 @@ class PackagesContainer extends React.Component {
               <PackagesListSearch setActive={props.actions.setActive} toggleLoader={props.actions.toggleLoader} fetch={props.actions.fetch}/>
               <PackagesList loading={props.loading} packages={props.packages} packagesInfo={props.packagesInfo} toggleLoader={props.actions.toggleLoader} toggleMainLoader={props.actions.toggleMainLoader} reload={this.reload}/>
             </div>
-            <div className="col-md-7 col-xs-10">
+            <div className="col-md-8 col-xs-10">
               <PackageContainer active={props.active}/>
             </div>
           </div>
