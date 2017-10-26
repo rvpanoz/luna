@@ -9,7 +9,7 @@ const Install = (pkg, version, cb) => {
   }, () => {
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'install',
-      cmd: 'install',
+      cmd: ['install'],
       pkgName: pkg.name,
       pkgVersion: version,
       params: ['g']
@@ -25,7 +25,7 @@ const Update = (pkg, version, cb) => {
   }, () => {
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'update',
-      cmd: 'install',
+      cmd: ['install'],
       pkgName: pkg.name,
       pkgVersion: 'latest',
       params: ['g']
@@ -41,7 +41,7 @@ const Uninstall = (pkg, version, cb) => {
   }, () => {
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'uninstall',
-      cmd: 'uninstall',
+      cmd: ['uninstall'],
       pkgName: pkg.name,
       params: ['g']
     });

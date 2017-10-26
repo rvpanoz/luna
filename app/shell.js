@@ -6,20 +6,20 @@
 'use strict';
 
 const cp = require('child_process');
-const utils = require('./utils');
 const Q = require("q");
 const spawn = cp.spawn;
 const defaults = ['--depth=0', '--json'];
 
-const runCommand = function(command, callback) {
+import {parse, isArray} from './utils';
+
+function runCommand(command, callback) {
   const deferred = Q.defer();
   const cwd = process.cwd();
+  let result = '';
 
   if (!command || typeof command !== 'object') {
     return Q.reject(new Error("shell[doCommand]:cmd must be given and must be an array"));
   }
-
-  let result = '';
 
   console.log(`running: npm ${command.join(" ")}`);
   let npmc = spawn('npm', command, {
@@ -33,15 +33,12 @@ const runCommand = function(command, callback) {
 
   npmc.stderr.on('data', (error) => {
     let errorToString = error.toString();
-    callback(errorToString, 'error');
+    callback(errorToString, null, 'error');
   });
 
   npmc.on('close', () => {
     console.log(`finish: npm ${command.join(' ')}`);
-    deferred.resolve({
-      data: result,
-      status: 'close'
-    });
+    deferred.resolve({data: result, status: 'close', cmd: command[0]});
   });
 
   return deferred.promise;
@@ -54,17 +51,27 @@ exports.doCommand = function(options, callback) {
     throw new Error('shell[doCommand]: cmd parameter must given');
   }
 
-  let run = [opts.cmd],
+  let run = [],
     params = [],
-    args;
+    args = [],
+    pkgInfo = [];
   let pkgName = opts.pkgName;
   let pkgVersion = opts.pkgVersion;
 
   if (pkgName) {
     if (pkgVersion) {
-      pkgName += "@" + pkgVersion;
+      pkgInfo.push(pkgName + "@" + pkgVersion);
+    } else {
+      pkgInfo.push(pkgName);
     }
-    run.push(pkgName);
+  }
+
+  if (typeof opts.cmd === 'object') {
+    for (let z = 0; z < opts.cmd.length; z++) {
+      run.push(opts.cmd[z]);
+    }
+  } else {
+    throw new Error('shell[doCommand]: cmd parameter must be given and must be an array');
   }
 
   //setup params e.g -g, -long etc
@@ -83,11 +90,25 @@ exports.doCommand = function(options, callback) {
     args = defaults.concat();
   }
 
-  //try to execute the command
-  let command = run.concat(params).concat(args);
-  runCommand(command, callback).then((response) => {
-    callback(response.data, response.status);
-  }).catch((error) => {
-    throw new Error(e);
+  function combine() {
+    let promises = [];
+    run.forEach((cmd, idx) => {
+      promises.push(function() {
+        let command = [cmd].concat(pkgInfo).concat(params).concat(args);
+        return runCommand(command, callback);
+      }());
+    });
+    return promises;
+  }
+
+  Q.allSettled(combine()).then(function(results) {
+    results.forEach(function(result) {
+      if (result.state === "fulfilled") {
+        callback(result.value.data, result.value.cmd, result.value.status);
+      } else {
+        let reason = result.reason;
+        console.log(reason);
+      }
+    });
   });
 }

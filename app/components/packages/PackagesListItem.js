@@ -18,7 +18,7 @@ class PackageItem extends React.Component {
       el.classList.add('selected');
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'view-package',
-        cmd: 'view',
+        cmd: ['view'],
         pkgName: this.props.name,
         pkgVersion: this.props.version,
         params: ['g', 'long']

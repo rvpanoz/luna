@@ -11,7 +11,6 @@ export function isArray() {
 
 export function parse(data, key, all) {
   let arr = [], packages;
-
   try {
     packages = JSON.parse(data);
     if (key && packages[key]) {
@@ -21,7 +20,7 @@ export function parse(data, key, all) {
     console.error(e);
     return false;
   }
-  
+
   return Object.keys(packages).map(function(pkey) {
     return packages[pkey];
   });

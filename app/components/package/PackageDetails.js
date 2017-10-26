@@ -41,7 +41,7 @@ class PackageDetails extends React.Component {
       this.props.toggleMainLoader(true);
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'view-package',
-        cmd: 'view',
+        cmd: ['view'],
         pkgName: pkg.name,
         pkgVersion: version,
         params: ['g', 'long']
@@ -54,7 +54,7 @@ class PackageDetails extends React.Component {
     if (!pkg) {
       return null;
     }
-    
+
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>
