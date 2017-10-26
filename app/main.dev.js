@@ -52,20 +52,20 @@ ipcMain.on('ipc-event', (event, options) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  function callback(data, status) {
+  function callback(data, command, status) {
     switch (status) {
       case 'close':
         if(['install','update','uninstall'].indexOf(ipcEvent) > -1) {
-          event.sender.send('action-close', data);
+          event.sender.send('action-close', data, command);
         } else {
-          event.sender.send(ipcEvent + '-close', data);
+          event.sender.send(ipcEvent + '-close', data, command);
         }
         break;
       case 'error':
         event.sender.send('ipcEvent-error', data);
         break;
       default:
-        event.sender.send(ipcEvent + '-reply', data);
+        event.sender.send(ipcEvent + '-reply', data, command);
     }
     return;
   }
@@ -100,11 +100,28 @@ app.on('ready', async() => {
     await installExtensions();
   }
 
-  //get screen size
-  let screenSize = electron.screen.getPrimaryDisplay().size;
+  const Screen = electron.screen;
+  let x, y;
+  let screenSize = Screen.getPrimaryDisplay().size;
+  let displays = electron.screen.getAllDisplays()
+  let externalDisplay = displays.find((display) => {
+    return display.bounds.x !== 0 || display.bounds.y !== 0
+  })
+
+  if (externalDisplay) {
+    x = externalDisplay.bounds.x + 50;
+    y = externalDisplay.bounds.y + 50;
+  }
 
   //create main window
-  mainWindow = new BrowserWindow({width: screenSize.width, height: screenSize.height, show: false, resizable: true});
+  mainWindow = new BrowserWindow({
+    width: screenSize.width,
+    height: screenSize.height,
+    x: x,
+    y: y,
+    show: false,
+    resizable: true
+  });
 
   //load app.html file
   mainWindow.loadURL(`file://${__dirname}/app.html`);

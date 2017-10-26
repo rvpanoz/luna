@@ -26,7 +26,7 @@ export default class SearchBox extends React.Component {
     searchInput.value = '';
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      cmd: 'list',
+      cmd: ['list'],
       params: ['g', 'long']
     });
     return false;
@@ -42,7 +42,7 @@ export default class SearchBox extends React.Component {
       this.props.setActive(null);
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'search-packages',
-        cmd: 'search',
+        cmd: ['search'],
         pkgName: searchInput.value,
         params: ['-long']
       });
