@@ -82,7 +82,6 @@ code {
 }
 
 .wrapper {
-  border-radius: 5px;
   margin-bottom: 10px;
 }
 
@@ -295,7 +294,7 @@ ol, ul {
 }
 
 .sidebar {
-  width: 200px;
+  width: 250px;
   z-index: 100;
   overflow: hidden;
   background-color: #30363c;
@@ -521,7 +520,9 @@ ol, ul {
 }
 
 .main__cont {
+  position: relative;
   padding: 15px;
+  height: 100%;
 }
 
 .main-heading {
@@ -2065,7 +2066,13 @@ select option {
   margin-left: -28px;
 }
 .outdated__text {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
   font-size: 14px;
+}
+.outdated__text a {
+  color: #fff;
 }
 .outdated__version {
   padding-left: 3px;

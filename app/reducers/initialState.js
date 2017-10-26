@@ -6,6 +6,7 @@ export default {
   },
   packages: {
     isLoading: false,
+    totalInstalled: 0,
     active: null,
     packages: [],
     packagesOutdated: [],

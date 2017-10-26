@@ -24,11 +24,7 @@ export default class SearchBox extends React.Component {
     let searchInput = this.refs.searchInput;
 
     searchInput.value = '';
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      cmd: ['list'],
-      params: ['g', 'long']
-    });
+    this.props.fetch();
     return false;
   }
   _search(e) {

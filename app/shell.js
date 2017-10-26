@@ -23,8 +23,11 @@ function runCommand(command, callback) {
 
   console.log(`running: npm ${command.join(" ")}`);
   let npmc = spawn('npm', command, {
-    maxBuffer: 1024 * 500
+    stdio: ['pipe', 'pipe', 'pipe'],
+    encoding: 'utf8'
   });
+
+  let errors = 0;
 
   npmc.stdout.on('data', (data) => {
     let dataToString = data.toString();
@@ -33,12 +36,17 @@ function runCommand(command, callback) {
 
   npmc.stderr.on('data', (error) => {
     let errorToString = error.toString();
+    console.log(errorToString)
     callback(errorToString, null, 'error');
   });
 
   npmc.on('close', () => {
     console.log(`finish: npm ${command.join(' ')}`);
-    deferred.resolve({data: result, status: 'close', cmd: command[0]});
+    deferred.resolve({
+      data: result,
+      status: 'close',
+      cmd: command[0]
+    });
   });
 
   return deferred.promise;

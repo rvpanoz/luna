@@ -19,8 +19,12 @@ class OutdatedListItem extends React.Component {
         </div>
         <div className="outdated__info">
           <div className="outdated__text">
-            <a href="#">{pkg.name}</a><br/>has an updated version.
-            <span className="label label-danger">v{pkg.details.latest}</span>
+            <div className="fl">
+              <span className="label label-danger">Latest:&nbsp;{pkg.details.latest}</span>
+            </div>
+            <div className="fr">
+              <a href="#">{pkg.name}</a>
+            </div>
           </div>
         </div>
       </div>

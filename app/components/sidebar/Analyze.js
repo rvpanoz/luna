@@ -7,7 +7,7 @@ class Analyze extends React.Component {
   render() {
     let installed = this.props.packagesInstalled;
     let outdated = this.props.packagesOutdated;
-    let t1=installed.length,t2=0;
+    let t1=installed,t2=0;
 
     if(outdated instanceof Array && outdated.length) {
       t2 = outdated.length;
