@@ -17,15 +17,6 @@ class PackagesContainer extends React.Component {
     super(props);
     this.reload = this.reload.bind(this);
   }
-  fetch() {
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      cmd: [
-        'list', 'outdated'
-      ],
-      params: ['g', 'long']
-    });
-  }
   reload(e) {
     if (e) {
       e.preventDefault();
@@ -33,10 +24,27 @@ class PackagesContainer extends React.Component {
     this.props.actions.toggleLoader(true);
     this.props.actions.clearMessages();
     this.props.actions.setActive(null);
-    this.fetch();
+
+    // get installed packages
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      cmd: [
+        'list', 'outdated'
+      ],
+      params: ['g', 'long', 'parseable']
+    });
   }
   componentDidMount() {
-    this.fetch();
+    // get installed packages
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      cmd: [
+        'list', 'outdated'
+      ],
+      params: ['g', 'long', 'parseable']
+    });
+
+    // response when packages are fetched
     ipcRenderer.on('get-packages-close', (event, packagesStr, command) => {
       let packages;
       switch (command) {
@@ -82,7 +90,7 @@ class PackagesContainer extends React.Component {
       if (pkg) {
         this.props.actions.setActive(pkg, false);
       } else {
-        throw new Error('Package cannot be parsed')
+        throw new Error('Package cannot be parsed');
       }
     });
 
@@ -104,16 +112,31 @@ class PackagesContainer extends React.Component {
     let props = this.props;
 
     return (
-      <div className="packages">
-        <div className="container-fluid half-padding">
+      <div className="container-fluid">
+        <div className="packages">
           <div className="row">
             <div className="col-md-4 col-xs-10">
-              <PackagesListHeader title="Packages" total={props.packages.length} toggleLoader={props.actions.toggleLoader} reload={this.reload}/>
-              <PackagesListSearch setActive={props.actions.setActive} toggleLoader={props.actions.toggleLoader} fetch={props.actions.fetch}/>
-              <PackagesList loading={props.loading} packages={props.packages} packagesInfo={props.packagesInfo} toggleLoader={props.actions.toggleLoader} toggleMainLoader={props.actions.toggleMainLoader} reload={this.reload}/>
+              <PackagesListHeader
+                title="Packages"
+                total={props.packages.length}
+                toggleLoader={props.actions.toggleLoader}
+                reload={this.reload}
+              />
+              <PackagesListSearch
+                setActive={props.actions.setActive}
+                toggleLoader={props.actions.toggleLoader}
+                fetch={props.actions.fetch}
+              />
+              <PackagesList
+                loading={props.loading}
+                packages={props.packages}
+                packagesInfo={props.packagesInfo}
+                toggleLoader={props.actions.toggleLoader}
+                toggleMainLoader={props.actions.toggleMainLoader}
+                reload={this.reload}/>
             </div>
             <div className="col-md-8 col-xs-10">
-              <PackageContainer active={props.active}/>
+              <PackageContainer active={props.active} setModal={props.setModal}/>
             </div>
           </div>
         </div>
@@ -123,7 +146,13 @@ class PackagesContainer extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return {loading: state.global.loading, packages: state.packages.packages, packagesInfo: state.packages.packagesInfo, active: state.packages.active}
+  return {
+    loading: state.global.loading,
+    packages: state.packages.packages,
+    packagesInfo: state.packages.packagesInfo,
+    modalStatus: state.packages.modalStatus,
+    active: state.packages.active
+  }
 }
 
 function mapDispatchToProps(dispatch) {

@@ -1,15 +1,59 @@
+'use strict';
+
+import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as actions from '../actions';
+import Notifications from './header/Notifications';
 
 const AppHeader = (props) => {
+  let total_messages = props.notifications && props.notifications.length;
   return (
     <nav className="navbar navbar-default">
       <div className="container-fluid">
-        <div className="collapse navbar-collapse" id="navbar_main">
-
+        <div className="collapse navbar-collapse" className="main-header">
+          <div className="row">
+            <div className="col-md-6 col-xs-12 col-md-offset-6">
+              <div className="pull-right">
+                <ul className="notification-info pull-left">
+                  <li className="notifications dropdown">
+                    <a data-toggle="dropdown" className="dropdown-toggle" href="#">
+                      <i className="fa fa-bell"></i>
+                      <span className="badge badge-danger">{total_messages}</span>
+                    </a>
+                    <ul className="dropdown-menu pull-right">
+                      <li className="first">
+                        <div className="small">
+                          You have&nbsp;<strong>{total_messages}</strong>&nbsp;new notifications.
+                        </div>
+                      </li>
+                      <li>
+                        <Notifications notifications={props.notifications} />
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </nav>
   )
 }
 
-export default AppHeader
+function mapStateToProps(state) {
+  return {
+    mode: state.global.mode,
+    notifications: state.global.messages
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AppHeader);
