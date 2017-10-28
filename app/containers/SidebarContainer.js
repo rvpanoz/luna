@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import * as actions from '../actions';
 import QuickMenu from '../components/sidebar/QuickMenu';
 import Analyze from '../components/sidebar/Analyze';
 import Settings from '../components/sidebar/Settings';
@@ -38,7 +39,7 @@ class SidebarContainer extends React.Component {
                   <Analyze packagesOutdated={props.packagesOutdated} packagesInstalled={props.packagesInstalled}/>
                 </div>
                 <div className="sidebar__menu">
-                  <OutdatedList packages={props.packagesOutdated}/>
+                  <OutdatedList packages={props.packagesOutdated} toggleMainLoader={props.actions.toggleMainLoader} setActive={props.actions.setActive}/>
                 </div>
                 <div className="sidebar__menu">
                   <Settings/>
@@ -60,4 +61,10 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps)(SidebarContainer)
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarContainer)

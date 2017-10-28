@@ -31,7 +31,7 @@ class PackagesContainer extends React.Component {
       cmd: [
         'list', 'outdated'
       ],
-      params: ['g', 'long', 'parseable']
+      params: ['g', 'parseable']
     });
   }
   componentDidMount() {
@@ -41,7 +41,7 @@ class PackagesContainer extends React.Component {
       cmd: [
         'list', 'outdated'
       ],
-      params: ['g', 'long', 'parseable']
+      params: ['g', 'parseable']
     });
 
     // response when packages are fetched
@@ -57,6 +57,10 @@ class PackagesContainer extends React.Component {
           this.props.actions.setPackagesOutdated(packages);
           break;
         default:
+          let notifications = parse(packagesStr, 'problems');
+          notifications.forEach((notification, idx) => {
+            this.props.actions.addMessage('error', notification);
+          });
           packages = parse(packagesStr, 'dependencies');
           this.props.actions.setPackages(packages);
           this.props.actions.setTotalInstalled(packages.length);
@@ -72,10 +76,7 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on('ipcEvent-error', (event, errorMessage) => {
-      let errorLinesArr = errorMessage.match(/[^\r\n]+/g);
-      errorLinesArr.forEach((errorStr, idx) => {
-        this.props.actions.addMessage('error', errorStr);
-      });
+      console.log(errorMessage);
     });
 
     ipcRenderer.on('search-packages-close', (event, packagesStr) => {
