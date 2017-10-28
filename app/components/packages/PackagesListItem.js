@@ -38,9 +38,6 @@ class PackageItem extends React.Component {
             <span>{props.name}&nbsp;</span>
             <span style={{float: 'right'}} className="label label-success">{props.version}</span>
           </div>
-          <div className={styles.packages__item__text}>
-            <span>&nbsp;{props.description}</span>
-          </div>
         </div>
       </div>
     )

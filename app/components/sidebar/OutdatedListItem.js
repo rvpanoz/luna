@@ -11,6 +11,8 @@ class messagesListItem extends React.Component {
   updatePackage(e) {
     e.preventDefault();
     let pkg = this.props.package;
+    this.props.setActive(null);
+    this.props.toggleMainLoader(true);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'view-package',
       cmd: ['view'],
