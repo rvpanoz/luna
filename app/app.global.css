@@ -25,9 +25,6 @@ body:before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: #94525A;
-  background: -webkit-radial-gradient(95% 10%, farthest-corner, #94525A, #181528);
-  background: radial-gradient(farthest-corner at 95% 10%, #94525A, #181528);
 }
 
 ::-webkit-scrollbar {
@@ -576,7 +573,7 @@ ol, ul {
 
 .packages {
   position: relative;
-  min-height: 100vh;
+  min-height: 990px;
   padding: 10px 35px;
   height: 100%;
   width: 90%;
