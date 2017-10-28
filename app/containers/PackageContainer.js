@@ -13,13 +13,17 @@ const PackageContainer = (props) => {
   return (
     <Loader loading={props.isLoading}>
       <div className="package-container">
-        <PackageDetails
-          active={props.active}
-          packageActions={props.packageActions}
-          mode={props.mode}
-          setActive={props.actions.setActive}
-          toggleMainLoader={props.actions.toggleMainLoader}
-          isLoading={props.isLoading}/>
+        <div className="package-details">
+          <PackageDetails
+            active={props.active}
+            packageActions={props.packageActions}
+            mode={props.mode}
+            setActive={props.actions.setActive}
+            setModal={props.actions.setModal}
+            toggleMainLoader={props.actions.toggleMainLoader}
+            isLoading={props.isLoading}
+          />
+        </div>
       </div>
     </Loader>
   )

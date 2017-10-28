@@ -1,8 +1,23 @@
+'use strict';
+
+import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 
-class OutdatedListItem extends React.Component {
+class messagesListItem extends React.Component {
   constructor(props) {
     super(props);
+    this.updatePackage = this.updatePackage.bind(this);
+  }
+  updatePackage(e) {
+    e.preventDefault();
+    let pkg = this.props.package;
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'view-package',
+      cmd: ['view'],
+      pkgName: pkg.name,
+      pkgVersion: pkg.details.current,
+      params: ['g', 'long']
+    });
   }
   componentDidMount() {
     let el = this.refs.root;
@@ -13,23 +28,18 @@ class OutdatedListItem extends React.Component {
   render() {
     let pkg = this.props.package;
     return (
-      <div className="outdated__item outdated__item_user animated" ref="root">
-        <div className="outdated__ico">
-          <i className="fa fa-fw"></i>
+      <div className="lm-widget__item new animated" ref="root">
+        <div className="lm-widget__title">
+          <i className="label label-danger">{pkg.details.latest}</i>&nbsp;
+          <span>{pkg.name}</span>
         </div>
-        <div className="outdated__info">
-          <div className="outdated__text">
-            <div className="fl">
-              <span className="label label-danger">Latest:&nbsp;{pkg.details.latest}</span>
-            </div>
-            <div className="fr">
-              <a href="#">{pkg.name}</a>
-            </div>
-          </div>
+        <div className="lm-widget__text">
+          <small>current:&nbsp;{pkg.details.current}</small>
         </div>
+        <a className="lm-widget__link" href="#" onClick={this.updatePackage}></a>
       </div>
     )
   }
 }
 
-export default OutdatedListItem;
+export default messagesListItem;

@@ -12,6 +12,7 @@ import {HashRouter as Router, Route} from 'react-router-dom';
 import SidebarContainer from './SidebarContainer';
 import AppHeader from '../common/AppHeader';
 import PackagesContainer from './PackagesContainer';
+import PackageAnalyzeContainer from './PackageAnalyzeContainer';
 
 const store = configureStore();
 const rootEl = document.getElementById('app-content');
@@ -20,13 +21,16 @@ const App = () => {
   return (
     <Provider store={store}>
       <div className="wrapper">
-        <AppHeader title="Luna"/>
+        <AppHeader />
         <div className="dashboard">
           <SidebarContainer/>
           <div className="main">
             <div className="main__cont">
               <Router>
-                <Route exact path="/" component={PackagesContainer}/>
+                <div>
+                  <Route exact path="/" component={PackagesContainer}/>
+                  <Route path="/analyze" component={PackageAnalyzeContainer}/>
+                </div>
               </Router>
             </div>
           </div>

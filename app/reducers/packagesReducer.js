@@ -4,6 +4,7 @@ import {
   SET_PACKAGES,
   TOTAL_INSTALLED,
   SET_ACTIVE,
+  SET_MODAL_STATUS,
   SET_PACKAGES_OUTDATED
 } from '../constants/ActionTypes';
 
@@ -22,6 +23,10 @@ const packagesReducer = (state = initialState.packages, action) => {
       return Object.assign({}, state, {
         packages: action.packages,
         loading: false
+      });
+    case SET_MODAL_STATUS:
+      return Object.assign({}, state, {
+        modalStatus: action.modalStatus
       });
     case TOTAL_INSTALLED:
       return Object.assign({}, state, {

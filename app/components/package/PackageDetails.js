@@ -1,9 +1,10 @@
-import { remote, ipcRenderer} from 'electron';
+import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import Loader from '../../common/Loader';
+import AppModal from '../../common/AppModal';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
-import Actions from './actions';
+import {showMessageBox} from '../../utils';
 import styles from './PackageDetails.css';
 
 class PackageDetails extends React.Component {
@@ -16,19 +17,30 @@ class PackageDetails extends React.Component {
     e.preventDefault();
 
     let target = e.currentTarget;
-    let action = target.querySelector('b').innerHTML.trim();
+    let action = target.querySelector('b').innerHTML.trim().toLowerCase();
 
-    //see actions.js availabel actions = ['Install', 'Update', 'Uninstall']
-    if(action && typeof action === 'string') {
+    if (action && typeof action === 'string') {
       let active = this.props.active;
       let selectVersion = this.refs.selectVersion;
-      let version = (selectVersion && selectVersion.value !== "false") ? selectVersion.value : 'latest';
-      if(typeof Actions[action] === 'function') {
-        Actions[action](active, version, () => {
+      let version = (selectVersion && selectVersion.value !== "false")
+        ? selectVersion.value
+        : 'latest';
+
+      showMessageBox({
+          action: action,
+          name: active.name,
+          version: version
+        }, () => {
+          ipcRenderer.send('ipc-event', {
+            ipcEvent: action,
+            cmd: [(action === 'uninstall') ? 'uninstall' : 'install'],
+            pkgName: active.name,
+            pkgVersion: (action === 'uninstall') ? null : version,
+            params: ['g']
+          });
           this.props.setActive(null);
           this.props.toggleMainLoader(true);
         });
-      }
     }
     return false;
   }
@@ -81,11 +93,14 @@ class PackageDetails extends React.Component {
               })}
             </select>
           </div>
-          <div className={styles.package__details__date}></div>
+          <div className={styles.package__details__name}>
+            {(pkg.deprecated === false) ? <label className="label label-danger">Deprecated</label> : null}
+          </div>
+          <div className={styles.package__details__date} ref="npmLog"></div>
         </div>
         <div className={styles.package__details__body}>
           <Loader loading={this.props.isLoading}>
-            <PackageTabs pkg={pkg} />
+            <PackageTabs pkg={pkg}/>
           </Loader>
         </div>
       </div>

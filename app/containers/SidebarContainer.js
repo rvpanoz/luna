@@ -2,7 +2,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import QuickMenu from '../components/sidebar/QuickMenu';
-import Messages from '../components/sidebar/Messages';
 import Analyze from '../components/sidebar/Analyze';
 import Settings from '../components/sidebar/Settings';
 import OutdatedList from '../components/sidebar/OutdatedList';
@@ -27,7 +26,7 @@ class SidebarContainer extends React.Component {
   }
   render() {
     let props = this.props;
-    let items = ['fa-bars', 'fa-feed','fa-flag', 'fa-cog'];
+    let items = ['fa-bars', 'fa-feed', 'fa-cog'];
 
     return (
       <div className="sidebar">
@@ -37,9 +36,6 @@ class SidebarContainer extends React.Component {
               <div className="sidebar__cont" ref="sidebarContent">
                 <div className="sidebar__menu active">
                   <Analyze packagesOutdated={props.packagesOutdated} packagesInstalled={props.packagesInstalled}/>
-                </div>
-                <div className="sidebar__menu">
-                  <Messages messages={props.messages}/>
                 </div>
                 <div className="sidebar__menu">
                   <OutdatedList packages={props.packagesOutdated}/>

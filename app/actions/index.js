@@ -2,6 +2,13 @@ import * as types from '../constants/ActionTypes';
 import modes from '../constants/Modes';
 import { parse, isJson } from '../utils';
 
+export function setModal(modalStatus) {
+  return {
+    type: types.SET_MODAL_STATUS,
+    modalStatus
+  }
+}
+
 export function setTotalInstalled(totalInstalled) {
   return {
     type: types.TOTAL_INSTALLED,
