@@ -36,6 +36,7 @@ function runCommand(command, callback) {
 
   npmc.stderr.on('data', (error) => {
     let errorToString = error.toString();
+    console.log(errorToString);
     callback(errorToString, null, 'error');
   });
 

@@ -25,26 +25,19 @@ class PackagesContainer extends React.Component {
     this.props.actions.clearMessages();
     this.props.actions.setActive(null);
 
-    // get installed packages
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      cmd: [
-        'list', 'outdated'
-      ],
+      cmd: ['list', 'outdated'],
       params: ['g', 'parseable']
     });
   }
   componentDidMount() {
-    // get installed packages
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      cmd: [
-        'list', 'outdated'
-      ],
+      cmd: ['list', 'outdated'],
       params: ['g', 'parseable']
     });
 
-    // response when packages are fetched
     ipcRenderer.on('get-packages-close', (event, packagesStr, command) => {
       let packages;
       switch (command) {
@@ -59,7 +52,9 @@ class PackagesContainer extends React.Component {
         default:
           let notifications = parse(packagesStr, 'problems');
           notifications.forEach((notification, idx) => {
-            this.props.actions.addMessage('error', notification);
+            if(typeof notification === 'string') {
+              this.props.actions.addMessage('error', notification);
+            }
           });
           packages = parse(packagesStr, 'dependencies');
           this.props.actions.setPackages(packages);

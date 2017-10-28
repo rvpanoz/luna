@@ -8,9 +8,7 @@ export default class Notifications extends React.Component {
   render() {
     let notifications = this.props.notifications;
     if(!notifications.length) {
-      return (
-        <ul></ul>
-      )
+      return null;
     }
     return (
       <ul className="dropdown-list">
