@@ -1,6 +1,6 @@
-# Luna (WIP)
+# Luna
 
-NPM management application. (Work in progress)
+NPM management application.
 
 ## Features
 
@@ -10,4 +10,4 @@ NPM management application. (Work in progress)
 - Uninstall packages
 - more ...
 
-![Luna](https://user-images.githubusercontent.com/14031616/31898900-f62dc20a-b822-11e7-9737-18db9ec8150d.gif)
+![Luna](http://104.236.58.95/media/luna.png)
