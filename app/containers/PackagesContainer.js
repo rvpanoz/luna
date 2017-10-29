@@ -28,6 +28,9 @@ class PackagesContainer extends React.Component {
     this.props.actions.clearMessages();
     this.props.actions.setActive(null);
     this.fetch();
+    setTimeout(() => {
+      this.props.actions.setModal(false);
+    }, 3000);
   }
   fetch() {
     ipcRenderer.send('ipc-event', {
@@ -39,7 +42,7 @@ class PackagesContainer extends React.Component {
   loadList(packages) {
     let notifications = parse(packages, 'problems');
     notifications.forEach((notification, idx) => {
-      if(typeof notification === 'string') {
+      if (typeof notification === 'string') {
         this.props.actions.addMessage('error', notification);
       }
     });
@@ -60,7 +63,9 @@ class PackagesContainer extends React.Component {
   componentDidMount() {
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
-      cmd: ['list', 'outdated'],
+      cmd: [
+        'list', 'outdated'
+      ],
       params: ['g', 'parseable']
     });
 
@@ -75,13 +80,7 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on('analyze-json-close', (event, content) => {
-      console.log(content);
       let packages = content.dependencies;
-      // this.props.setPackages(packages);
-    });
-
-    ipcRenderer.on('ipcEvent-error', (event, errorMessage) => {
-      console.log(errorMessage);
     });
 
     ipcRenderer.on('search-packages-close', (event, packagesStr) => {
@@ -95,7 +94,7 @@ class PackagesContainer extends React.Component {
       let pkg;
       try {
         pkg = JSON.parse(packageStr);
-      } catch(e) {
+      } catch (e) {
         console.error(e);
       }
 
@@ -107,11 +106,7 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on('action-close', (event, pkg) => {
-      // this.reload();
-      // setTimeout(() => {
-      //   this.props.actions.setModal(false);
-      // }, 3000);
-
+      this.reload();
     });
   }
   componentWillUnMount() {
@@ -126,35 +121,19 @@ class PackagesContainer extends React.Component {
   }
   render() {
     let props = this.props;
-
     return (
-      <div className="container-fluid">
         <div className="packages">
           <div className="row">
-            <div className="col-md-4 col-xs-10">
-              <PackagesListHeader
-                title="Packages"
-                total={props.packages.length}
-                toggleLoader={props.actions.toggleLoader}
-              />
-              <PackagesListSearch
-                setActive={props.actions.setActive}
-                toggleLoader={props.actions.toggleLoader}
-              />
-              <PackagesList
-                loading={props.loading}
-                packages={props.packages}
-                packagesInfo={props.packagesInfo}
-                toggleLoader={props.actions.toggleLoader}
-                toggleMainLoader={props.actions.toggleMainLoader}
-              />
+            <div className="col-md-4">
+              <PackagesListHeader title="Packages" total={props.packages.length} reload={this.reload} toggleLoader={props.actions.toggleLoader}/>
+              <PackagesListSearch setActive={props.actions.setActive} toggleLoader={props.actions.toggleLoader} reload={this.reload}/>
+              <PackagesList loading={props.loading} packages={props.packages} toggleLoader={props.actions.toggleLoader} toggleMainLoader={props.actions.toggleMainLoader}/>
             </div>
-            <div className="col-md-8 col-xs-10">
-              <PackageContainer active={props.active} />
+            <div className="col-md-8">
+              <PackageContainer active={props.active}/>
             </div>
           </div>
         </div>
-      </div>
     )
   }
 }
@@ -163,7 +142,6 @@ function mapStateToProps(state) {
   return {
     loading: state.global.loading,
     packages: state.packages.packages,
-    packagesInfo: state.packages.packagesInfo,
     active: state.packages.active
   }
 }

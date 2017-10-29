@@ -20,6 +20,11 @@ class PackagesList extends React.Component {
   }
   componentDidMount() {
     this.props.toggleLoader(true);
+    let list = this.refs.list;
+    list.style['max-height'] = (document.documentElement.clientHeight - 200) + "px";
+  }
+  componentDidUpdate(newProps) {
+    console.log(newProps);
   }
   render() {
     let packages = this.props.packages;

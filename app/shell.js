@@ -23,7 +23,9 @@ function runCommand(command, callback) {
 
   console.log(`running: npm ${command.join(" ")}`);
   let npmc = spawn('npm', command, {
-    stdio: ['pipe', 'pipe', 'pipe'],
+    shell: true,
+    env: process.env,
+    stdio: 'pipe',
     encoding: 'utf8'
   });
 
@@ -36,7 +38,6 @@ function runCommand(command, callback) {
 
   npmc.stderr.on('data', (error) => {
     let errorToString = error.toString();
-    console.log(errorToString);
     callback(errorToString, null, 'error');
   });
 

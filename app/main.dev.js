@@ -154,6 +154,14 @@ app.on('ready', async() => {
     mainWindow.openDevTools();
   });
 
+  mainWindow.webContents.on('crashed', () => {
+    //todo..
+  });
+
+  mainWindow.on('unresponsive', () => {
+    //todo..
+  });
+
   mainWindow.on('show', () => {
     //todo..
   });

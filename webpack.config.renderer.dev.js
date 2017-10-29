@@ -249,6 +249,7 @@ export default merge.smart(baseConfig, {
     port,
     publicPath,
     compress: true,
+    quiet: true,
     noInfo: true,
     stats: 'errors-only',
     inline: true,
