@@ -71,7 +71,7 @@
     "email": "rvpanoz@gmail.com",
     "url": "https://github.com/rvpanoz"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "keywords": [
     "electron",
     "npm",
