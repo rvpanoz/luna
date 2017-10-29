@@ -1,5 +1,6 @@
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
+import moment from 'moment';
 import Loader from '../../common/Loader';
 import AppModal from '../../common/AppModal';
 import PackageActions from './PackageActions';
@@ -67,7 +68,7 @@ class PackageDetails extends React.Component {
     if (!pkg) {
       return null;
     }
-    console.log(pkg);
+    
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>
@@ -94,10 +95,9 @@ class PackageDetails extends React.Component {
               })}
             </select>
           </div>
-          <div className={styles.package__details__name}>
-            {(pkg.deprecated === false) ? <label className="label label-danger">Deprecated</label> : null}
+          <div className={styles.package__details__date}>
+            Updated:&nbsp; {moment(pkg.time.modified).format('DD/MM/YYYY')}
           </div>
-          <div className={styles.package__details__date} ref="npmLog"></div>
         </div>
         <div className={styles.package__details__body}>
           <Loader loading={this.props.isLoading}>

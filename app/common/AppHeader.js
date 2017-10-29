@@ -15,7 +15,17 @@ const AppHeader = (props) => {
       <div className="container-fluid">
         <div className="collapse navbar-collapse" className="main-header">
           <div className="row">
-            <div className="col-md-6 col-xs-12 col-md-offset-6">
+            <div className="col-md-4">
+              <a className="navbar-brand" href="#">
+                <div className="logo text-nowrap">
+                  <div className="logo__img">
+                    <i className="fa fa-chevron-right"></i>
+                  </div>
+                  <span className="logo__text">Luna</span>
+                </div>
+              </a>
+            </div>
+            <div className="col-md-6 col-xs-12 col-md-offset-2">
               <div className="pull-right">
                 <ul className="notification-info pull-left">
                   <li className="notifications dropdown">

@@ -249,7 +249,7 @@ ol, ul {
 
 .logo {
   padding: 0 0 0 20px;
-  height: 75px;
+  height: 35px;
   font-size: 0;
 }
 
@@ -265,7 +265,7 @@ ol, ul {
   vertical-align: middle;
   font-size: 25px;
   width: 15px;
-  color: orange;
+  color: #ed4949;
 }
 
 .logo__text {
@@ -1865,8 +1865,7 @@ select option {
 
 .navbar-brand {
   font-size: 18px;
-  width: 240px;
-  border-right: 1px solid hsla(0, 0%, 100%, .12);
+  width: 250px;
 }
 
 .navbar-brand {

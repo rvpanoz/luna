@@ -81,10 +81,11 @@
 }
 
 .package__details__date {
+  float: right;
+  font-size: 12px;
   line-height: 20px;
   padding: 10px 0;
-  text-align: right;
-  font-weight: bold;
+  text-align: left;
 }
 
 .package__details__body {
