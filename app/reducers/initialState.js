@@ -6,7 +6,8 @@ export default {
   },
   packages: {
     isLoading: false,
-    modalStatus: false,
+    showModal: false,
+    modalTitle: 'Please wait..',
     totalInstalled: 0,
     active: null,
     packages: [],

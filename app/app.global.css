@@ -82,10 +82,6 @@ code {
   margin-bottom: 10px;
 }
 
-body.main-scrollable .main {
-  overflow: hidden;
-}
-
 .main-header {
   padding: 10px;
 }
@@ -285,7 +281,7 @@ ol, ul {
 }
 
 .dashboard {
-  border-top: 0px solid transparent;
+  border-top: 20px solid transparent;
   height: 100%;
   width: 100%;
   white-space: nowrap;
@@ -496,15 +492,7 @@ ol, ul {
   height: 100%;
   font-size: 14px;
   white-space: normal;
-  padding-left: 15px;
   overflow: auto;
-}
-
-@media (max-width: 768px) {
-  .main {
-    padding-left: 0;
-    margin-left: 0;
-  }
 }
 
 .main>.main__scroll {
@@ -514,19 +502,12 @@ ol, ul {
 
 .main__cont {
   position: relative;
-  padding: 15px;
   height: 100%;
 }
 
 .main-heading {
   overflow: hidden;
   margin-bottom: 15px;
-}
-
-@media (max-width: 768px) {
-  .main-heading {
-    display: none;
-  }
 }
 
 .main-heading .main-title {

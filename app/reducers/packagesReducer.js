@@ -26,7 +26,7 @@ const packagesReducer = (state = initialState.packages, action) => {
       });
     case SET_MODAL_STATUS:
       return Object.assign({}, state, {
-        modalStatus: action.modalStatus
+        showModal: action.showModal
       });
     case TOTAL_INSTALLED:
       return Object.assign({}, state, {

@@ -1,11 +1,10 @@
 import * as types from '../constants/ActionTypes';
-import modes from '../constants/Modes';
-import { parse, isJson } from '../utils';
+import * as Modes from '../constants/Modes';
 
-export function setModal(modalStatus) {
+export function setModal(showModal) {
   return {
     type: types.SET_MODAL_STATUS,
-    modalStatus
+    showModal
   }
 }
 
@@ -15,6 +14,7 @@ export function setTotalInstalled(totalInstalled) {
     totalInstalled
   }
 }
+
 export function setPackagesOutdated(packagesOutdated) {
   return {
     type: types.SET_PACKAGES_OUTDATED,
@@ -74,7 +74,7 @@ export function setActive(active, isLoading) {
   }
 }
 
-export function setMode(mode = modes.GLOBAL, packageActions=['Update', 'Uninstall']) {
+export function setMode(mode = Modes.GLOBAL, packageActions=['Update', 'Uninstall']) {
   return {
     type: types.SET_MODE,
     mode,

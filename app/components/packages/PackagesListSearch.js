@@ -24,7 +24,7 @@ export default class SearchBox extends React.Component {
     let searchInput = this.refs.searchInput;
 
     searchInput.value = '';
-    this.props.fetch();
+    this.props.reload();
     return false;
   }
   _search(e) {

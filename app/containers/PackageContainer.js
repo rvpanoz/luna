@@ -6,33 +6,39 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
 import Loader from '../common/Loader';
+import AppModal from '../common/AppModal';
 import {showMessageBox} from '../utils';
 import PackageDetails from '../components/package/PackageDetails';
 
 const PackageContainer = (props) => {
   return (
-    <Loader loading={props.isLoading}>
-      <div className="package-container">
-        <div className="package-details">
-          <PackageDetails
-            active={props.active}
-            packageActions={props.packageActions}
-            mode={props.mode}
-            setActive={props.actions.setActive}
-            setModal={props.actions.setModal}
-            toggleMainLoader={props.actions.toggleMainLoader}
-            isLoading={props.isLoading}
-          />
+    <div className="package-container">
+      {(props.showModal === false) ?
+      <Loader loading={props.isLoading}>
+          <div className="package-details">
+            <PackageDetails
+              active={props.active}
+              packageActions={props.packageActions}
+              setActive={props.actions.setActive}
+              setModal={props.actions.setModal}
+              toggleMainLoader={props.actions.toggleMainLoader}
+              isLoading={props.isLoading}
+            />
         </div>
+      </Loader>
+      : <div className="modal-container">
+        <AppModal title={props.modalTitle} showModal={props.showModal}/>
       </div>
-    </Loader>
+    }
+    </div>
   )
-
 }
+
 function mapStateToProps(state) {
   return {
-    mode: state.global.mode,
+    modalTitle: state.packages.modalTitle,
     packageActions: state.global.packageActions,
+    showModal: state.packages.showModal,
     active: state.packages.active,
     isLoading: state.packages.isLoading
   };

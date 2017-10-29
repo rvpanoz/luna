@@ -17,7 +17,7 @@ class PackageDetails extends React.Component {
     e.preventDefault();
 
     let target = e.currentTarget;
-    let action = target.querySelector('b').innerHTML.trim().toLowerCase();
+    let action = target.dataset.action.toLowerCase();
 
     if (action && typeof action === 'string') {
       let active = this.props.active;
@@ -31,6 +31,9 @@ class PackageDetails extends React.Component {
           name: active.name,
           version: version
         }, () => {
+          // this.props.setModal(true);
+          this.props.setActive(null);
+          this.props.toggleMainLoader(true);
           ipcRenderer.send('ipc-event', {
             ipcEvent: action,
             cmd: [(action === 'uninstall') ? 'uninstall' : 'install'],
@@ -38,8 +41,6 @@ class PackageDetails extends React.Component {
             pkgVersion: (action === 'uninstall') ? null : version,
             params: ['g']
           });
-          this.props.setActive(null);
-          this.props.toggleMainLoader(true);
         });
     }
     return false;
@@ -66,7 +67,7 @@ class PackageDetails extends React.Component {
     if (!pkg) {
       return null;
     }
-
+    console.log(pkg);
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>

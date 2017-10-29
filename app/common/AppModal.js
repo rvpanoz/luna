@@ -1,15 +1,25 @@
+import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 
 class AppModal extends React.Component {
   constructor(props) {
     super(props)
   }
-  componentDidUpdate(props) {
-    let root = this.refs.root;
-    if(root) {
-      console.log(props.isVisible);
-      $(root).modal((props.isVisible === true ? 'show' : 'hide'));
+  componentDidMount() {
+    let rootEl = this.refs.root;
+    if(rootEl) {
+      $(rootEl).modal({
+        backdrop: false,
+        show: this.props.showModal
+      });
+      ipcRenderer.on('ipcEvent-error', (event, errorMessage) => {
+        let messageEl = this.refs.message;
+        messageEl.innerHTML+="<br/>" + errorMessage;
+      });
     }
+  }
+  componentWillUnMount() {
+    ipcRenderer.removeAllListeners(['ipcEvent-error']);
   }
   render() {
     return (
@@ -20,11 +30,11 @@ class AppModal extends React.Component {
               <button className="close" type="button">
                 <span aria-hidden="true">×</span>
               </button>
-              <h4 className="modal-title">Title</h4>
+              <h4 className="modal-title">{this.props.title}</h4>
             </div>
             <div className="modal-body">
-              <div className="alert alert-danger" role="alert">
-                Messages goes here...
+              <div className="alert alert-danger" role="alert" ref="message">
+
               </div>
             </div>
             <div className="modal-footer">

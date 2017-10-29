@@ -21,23 +21,21 @@ const App = () => {
   return (
     <Provider store={store}>
       <div className="wrapper">
-        <AppHeader />
+        <AppHeader/>
         <div className="dashboard">
           <SidebarContainer/>
           <div className="main">
-            <div className="main__cont">
-              <Router>
-                <div>
-                  <Route exact path="/" component={PackagesContainer}/>
-                  <Route path="/analyze" component={PackageAnalyzeContainer}/>
-                </div>
-              </Router>
-            </div>
+            <Router>
+              <div className="main__cont main__scroll">
+                <Route exact path="/" component={PackagesContainer}/>
+                <Route path="/analyze" component={PackageAnalyzeContainer}/>
+              </div>
+            </Router>
           </div>
         </div>
       </div>
     </Provider>
-  );
+  )
 }
 
 export default App;

@@ -8,10 +8,10 @@ import * as actions from '../actions';
 import Notifications from './header/Notifications';
 
 const AppHeader = (props) => {
-  console.log(props.notifications);
   let total_messages = props.notifications && props.notifications.length;
+
   return (
-    <nav className="navbar navbar-default">
+    <nav className="navbar navbar-default header-navbar">
       <div className="container-fluid">
         <div className="collapse navbar-collapse" className="main-header">
           <div className="row">
