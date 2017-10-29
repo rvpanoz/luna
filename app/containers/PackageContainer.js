@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
 import Loader from '../common/Loader';
+import AppModal from '../common/AppModal';
 import {showMessageBox} from '../utils';
 import PackageDetails from '../components/package/PackageDetails';
 
@@ -24,6 +25,9 @@ const PackageContainer = (props) => {
             isLoading={props.isLoading}
           />
         </div>
+        <div className="modal-container">
+          <AppModal isVisible={props.showModal}/>
+        </div>
       </div>
     </Loader>
   )
@@ -33,6 +37,7 @@ function mapStateToProps(state) {
   return {
     mode: state.global.mode,
     packageActions: state.global.packageActions,
+    showModal: state.packages.showModal,
     active: state.packages.active,
     isLoading: state.packages.isLoading
   };

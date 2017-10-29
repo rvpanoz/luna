@@ -1,10 +1,10 @@
 import * as types from '../constants/ActionTypes';
 import * as Modes from '../constants/Modes';
 
-export function setModal(status) {
+export function setModal(showModal) {
   return {
     type: types.SET_MODAL_STATUS,
-    showModal: status
+    showModal
   }
 }
 

@@ -92,7 +92,13 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on('view-package-close', (event, packageStr) => {
-      let pkg = JSON.parse(packageStr);
+      let pkg;
+      try {
+        pkg = JSON.parse(packageStr);
+      } catch(e) {
+        console.error(e);
+      }
+
       if (pkg) {
         this.props.actions.setActive(pkg, false);
       } else {
@@ -101,7 +107,11 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on('action-close', (event, pkg) => {
-      this.reload();
+      // this.reload();
+      // setTimeout(() => {
+      //   this.props.actions.setModal(false);
+      // }, 3000);
+
     });
   }
   componentWillUnMount() {
@@ -140,7 +150,7 @@ class PackagesContainer extends React.Component {
               />
             </div>
             <div className="col-md-8 col-xs-10">
-              <PackageContainer active={props.active} setModal={props.actions.setModal}/>
+              <PackageContainer active={props.active} />
             </div>
           </div>
         </div>
@@ -154,7 +164,6 @@ function mapStateToProps(state) {
     loading: state.global.loading,
     packages: state.packages.packages,
     packagesInfo: state.packages.packagesInfo,
-    showModal: state.global.showModal,
     active: state.packages.active
   }
 }

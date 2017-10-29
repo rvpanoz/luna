@@ -31,6 +31,7 @@ class PackageDetails extends React.Component {
           name: active.name,
           version: version
         }, () => {
+          this.props.setModal(true);
           ipcRenderer.send('ipc-event', {
             ipcEvent: action,
             cmd: [(action === 'uninstall') ? 'uninstall' : 'install'],
@@ -38,8 +39,8 @@ class PackageDetails extends React.Component {
             pkgVersion: (action === 'uninstall') ? null : version,
             params: ['g']
           });
-          this.props.setActive(null);
-          this.props.toggleMainLoader(true);
+          // this.props.setActive(null);
+          // this.props.toggleMainLoader(true);
         });
     }
     return false;

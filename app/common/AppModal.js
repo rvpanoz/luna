@@ -1,8 +1,17 @@
+import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 
 class AppModal extends React.Component {
   constructor(props) {
     super(props)
+  }
+  componentDidMount() {
+    ipcRenderer.on('ipcEvent-error', (event, errorMessage) => {
+      console.log(errorMessage);
+    });
+  }
+  componentWillUnMount() {
+    ipcRenderer.removeAllListeners(['ipcEvent-error']);
   }
   componentDidUpdate(props) {
     let root = this.refs.root;
