@@ -6,7 +6,7 @@ import {parse} from '../utils';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
-console.log(actions);
+
 import PackagesListHeader from '../components/packages/PackagesListHeader';
 import PackagesListSearch from '../components/packages/PackagesListSearch';
 import PackagesList from '../components/packages/PackagesList';
@@ -17,14 +17,16 @@ class PackagesContainer extends React.Component {
     super(props);
     this.fetch = this.fetch.bind(this);
     this.reload = this.reload.bind(this);
+    this.loadList = this.loadList.bind(this);
+    this.loadOutdated = this.loadOutdated.bind(this);
   }
   reload(e) {
     if (e) {
       e.preventDefault();
     }
-    this.props.toggleLoader(true);
-    this.props.clearMessages();
-    this.props.setActive(null);
+    this.props.actions.toggleLoader(true);
+    this.props.actions.clearMessages();
+    this.props.actions.setActive(null);
     this.fetch();
   }
   fetch() {
@@ -34,6 +36,27 @@ class PackagesContainer extends React.Component {
       params: ['g', 'parseable']
     });
   }
+  loadList(packages) {
+    let notifications = parse(packages, 'problems');
+    notifications.forEach((notification, idx) => {
+      if(typeof notification === 'string') {
+        this.props.actions.addMessage('error', notification);
+      }
+    });
+    let packagesData = parse(packages, 'dependencies');
+    this.props.actions.setPackages(packagesData);
+    this.props.actions.setTotalInstalled(packagesData.length);
+    this.props.actions.setMode('GLOBAL');
+    this.props.actions.toggleLoader(false);
+  }
+  loadOutdated(packages) {
+    if (!packages) {
+      this.props.actions.setPackagesOutdated([]);
+      return;
+    }
+    let outdatedData = JSON.parse(packages);
+    this.props.actions.setPackagesOutdated(outdatedData);
+  }
   componentDidMount() {
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
@@ -41,29 +64,13 @@ class PackagesContainer extends React.Component {
       params: ['g', 'parseable']
     });
 
-    ipcRenderer.on('get-packages-close', (event, packagesStr, command) => {
-      let packages;
+    ipcRenderer.on('get-packages-close', (event, packages, command) => {
       switch (command) {
         case 'outdated':
-          if (!packagesStr) {
-            this.props.setPackagesOutdated([]);
-            return;
-          }
-          packages = JSON.parse(packagesStr);
-          this.props.setPackagesOutdated(packages);
+          this.loadOutdated(packages);
           break;
         default:
-          let notifications = parse(packagesStr, 'problems');
-          notifications.forEach((notification, idx) => {
-            if(typeof notification === 'string') {
-              this.props.addMessage('error', notification);
-            }
-          });
-          packages = parse(packagesStr, 'dependencies');
-          this.props.setPackages(packages);
-          this.props.setTotalInstalled(packages.length);
-          this.props.setMode('GLOBAL');
-          this.props.toggleLoader(false);
+          this.loadList(packages);
       }
     });
 
@@ -72,22 +79,22 @@ class PackagesContainer extends React.Component {
       let packages = content.dependencies;
       // this.props.setPackages(packages);
     });
-    
+
     ipcRenderer.on('ipcEvent-error', (event, errorMessage) => {
       console.log(errorMessage);
     });
 
     ipcRenderer.on('search-packages-close', (event, packagesStr) => {
       let packages = parse(packagesStr, 'dependencies');
-      this.props.setPackages(packages);
-      this.props.setMode('SEARCH', ['Install']);
-      this.props.toggleLoader(false);
+      this.props.actions.setPackages(packages);
+      this.props.actions.setMode('SEARCH', ['Install']);
+      this.props.actions.toggleLoader(false);
     });
 
     ipcRenderer.on('view-package-close', (event, packageStr) => {
       let pkg = JSON.parse(packageStr);
       if (pkg) {
-        this.props.setActive(pkg, false);
+        this.props.actions.setActive(pkg, false);
       } else {
         throw new Error('Package cannot be parsed');
       }
@@ -118,22 +125,22 @@ class PackagesContainer extends React.Component {
               <PackagesListHeader
                 title="Packages"
                 total={props.packages.length}
-                toggleLoader={props.toggleLoader}
+                toggleLoader={props.actions.toggleLoader}
               />
               <PackagesListSearch
-                setActive={props.setActive}
-                toggleLoader={props.toggleLoader}
+                setActive={props.actions.setActive}
+                toggleLoader={props.actions.toggleLoader}
               />
               <PackagesList
                 loading={props.loading}
                 packages={props.packages}
                 packagesInfo={props.packagesInfo}
-                toggleLoader={props.toggleLoader}
-                toggleMainLoader={props.toggleMainLoader}
+                toggleLoader={props.actions.toggleLoader}
+                toggleMainLoader={props.actions.toggleMainLoader}
               />
             </div>
             <div className="col-md-8 col-xs-10">
-              <PackageContainer active={props.active} setModal={props.setModal}/>
+              <PackageContainer active={props.active} setModal={props.actions.setModal}/>
             </div>
           </div>
         </div>
@@ -154,15 +161,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addMessage: actions.addMessage,
-    setPackages: actions.setPackages,
-    setPackagesOutdated: actions.setPackagesOutdated,
-    setModal: actions.setModal,
-    setMode: actions.setMode,
-    setTotalInstalled: actions.setTotalInstalled,
-    toggleLoader: actions.toggleLoader,
-    toggleMainLoader: actions.toggleMainLoader,
-    setActive: actions.setActive
+    actions: bindActionCreators(actions, dispatch)
   };
 }
 
