@@ -15,7 +15,7 @@ You can **install**, **view**, **update**, **uninstall** your npm global package
 
 ### Debian based (Debian, Ubuntu, Linux Mint)
 
-1. Download `luna_1.0.0_amd64.deb` from the [luna page](http://104.236.58.95/luna/releases/latest).
+1. Download [luna_1.0.0_amd64.deb](http://104.236.58.95/luna/releases/latest/luna_1.0.0_amd64.deb)
 2. Run `sudo dpkg --install luna_1.0.0_amd64.deb` on the downloaded package.
 3. Launch Luna
 
