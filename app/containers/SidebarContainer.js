@@ -37,6 +37,7 @@ class SidebarContainer extends React.Component {
               <div className="sidebar__cont" ref="sidebarContent">
                 <div className="sidebar__menu active">
                   <Analyze
+                    mode={props.mode}
                     toggleLoader={props.actions.toggleLoader}
                     setMode={props.actions.setMode}
                     setActive={props.actions.setActive}

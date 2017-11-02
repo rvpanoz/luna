@@ -67,12 +67,12 @@ export function setActive(active, isLoading) {
   }
 }
 
-export function setMode(mode = Modes.GLOBAL, directory = null, packageActions=['Update', 'Uninstall']) {
+export function setMode(mode, loading, directory) {
   return {
     type: types.SET_MODE,
     mode,
     directory,
-    packageActions
+    loading
   }
 }
 

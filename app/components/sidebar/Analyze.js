@@ -1,5 +1,4 @@
 import {remote, ipcRenderer} from 'electron';
-import {loadData} from '../../utils';
 import React from 'react';
 
 class Analyze extends React.Component {
@@ -8,13 +7,18 @@ class Analyze extends React.Component {
     this._updateMode = this._updateMode.bind(this);
     this._openPackage = this._openPackage.bind(this);
   }
-  _updateMode(filePath) {
+  _updateMode(directory) {
     this.props.toggleLoader(true);
     this.props.clearMessages();
     this.props.setTotalInstalled(0);
     this.props.setActive(null);
-    this.props.setMode('LOCAL', filePath);
-    loadData('LOCAL', filePath);
+    this.props.setMode('LOCAL', directory);
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      cmd: ['list', 'outdated'],
+      mode: this.props.mode,
+      directory: directory
+    });
   }
   _openPackage(e) {
     e.preventDefault();
