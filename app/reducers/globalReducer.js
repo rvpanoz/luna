@@ -6,6 +6,8 @@ import {
   TOGGLE_LOADER
 } from '../constants/ActionTypes';
 
+const packageActions = ['Update', 'Uninstall'];
+
 const globalReducer = (state = initialState.global, action) => {
   switch (action.type) {
     case CLEAR_MESSAGES:
@@ -37,7 +39,7 @@ const globalReducer = (state = initialState.global, action) => {
     case SET_MODE:
       return Object.assign({}, state, {
         mode: action.mode,
-        packageActions: action.packageActions
+        packageActions: (action.mode === 'SEARCH' ? ['Install'] : packageActions)
       });
     default:
       return state;

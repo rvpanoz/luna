@@ -58,7 +58,7 @@ ipcMain.on('analyze-json', (event, filePath) => {
       throw err;
     }
 
-    event.sender.send('analyze-json-close', JSON.parse(fileContent));
+    event.sender.send('analyze-json-close', filePath, JSON.parse(fileContent));
   });
 });
 

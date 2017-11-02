@@ -36,13 +36,31 @@ class SidebarContainer extends React.Component {
             <div className="scrollable scroll-content">
               <div className="sidebar__cont" ref="sidebarContent">
                 <div className="sidebar__menu active">
-                  <Analyze packagesOutdated={props.packagesOutdated} packagesInstalled={props.packagesInstalled}/>
+                  <Analyze
+                    toggleLoader={props.actions.toggleLoader}
+                    setMode={props.actions.setMode}
+                    setActive={props.actions.setActive}
+                    packagesOutdated={props.packagesOutdated}
+                    packagesInstalled={props.packagesInstalled}
+                    clearMessages={props.actions.clearMessages}
+                    setTotalInstalled={props.actions.setTotalInstalled}
+                  />
                 </div>
                 <div className="sidebar__menu">
-                  <OutdatedList packages={props.packagesOutdated} toggleMainLoader={props.actions.toggleMainLoader} setActive={props.actions.setActive}/>
+                  <OutdatedList
+                    packages={props.packagesOutdated}
+                    toggleMainLoader={props.actions.toggleMainLoader}
+                    setActive={props.actions.setActive}
+                  />
                 </div>
                 <div className="sidebar__menu">
-                  <Settings/>
+                  <Settings
+                    mode={props.mode}
+                    setMode={props.actions.setMode}
+                    toggleLoader={props.actions.toggleLoader}
+                    setActive={props.actions.setActive}
+                    clearMessages={props.actions.clearMessages}
+                  />
                 </div>
               </div>
           </div>
@@ -54,6 +72,7 @@ class SidebarContainer extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    mode: state.global.mode,
     messages: state.global.messages,
     packages: state.packages.packages,
     packagesInstalled: state.packages.totalInstalled,

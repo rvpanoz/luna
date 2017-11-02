@@ -1,12 +1,22 @@
 //utilities
 
 'use strict';
-import { remote } from 'electron';
+
+import { remote, ipcRenderer } from 'electron';
 
 export function isArray() {
   let objectArray;
   objectArray = Object.prototype.toString().call(arguments[0]);
   return (objectArray === '[object Array]');
+}
+
+export function loadData(mode, directory) {
+  ipcRenderer.send('ipc-event', {
+    ipcEvent: 'get-packages',
+    cmd: ['list', 'outdated'],
+    mode: mode,
+    directory: directory
+  });
 }
 
 export function parse(data, key, all) {

@@ -10,17 +10,26 @@ import Loader from '../common/Loader';
 const PackageAnalyzeContainer = (props) => {
   return (
     <Loader loading={props.isLoading}>
-      <div className="package-analyze">
-
+      <div className="analyze">
+        <div className="row">
+          <div className="col-md-12">
+            <div className="panel panel-danger">
+              <div className="panel-heading">
+                <h3 className="panel-title">Blank Page</h3>
+              </div>
+              <div className="panel-body">
+                <p>This is a blank page.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </Loader>
   )
-
 }
+
 function mapStateToProps(state) {
-  return {
-    mode: state.global.mode
-  };
+  return {mode: state.global.mode};
 }
 
 function mapDispatchToProps(dispatch) {

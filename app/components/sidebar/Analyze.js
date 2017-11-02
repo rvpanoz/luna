@@ -1,25 +1,34 @@
 import {remote, ipcRenderer} from 'electron';
+import {loadData} from '../../utils';
 import React from 'react';
 
 class Analyze extends React.Component {
   constructor(props) {
     super(props);
-    this.openPackage = this.openPackage.bind(this);
+    this._updateMode = this._updateMode.bind(this);
+    this._openPackage = this._openPackage.bind(this);
   }
-  openPackage(e) {
+  _updateMode(filePath) {
+    this.props.toggleLoader(true);
+    this.props.clearMessages();
+    this.props.setTotalInstalled(0);
+    this.props.setActive(null);
+    this.props.setMode('LOCAL', filePath);
+    loadData('LOCAL', filePath);
+  }
+  _openPackage(e) {
     e.preventDefault();
     remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
-      title: 'Open package json file',
+      title: 'Open package.json file',
       filters: [{
         name: 'json',
         extensions: ['json']
       }],
       openFile: true
-    }, (file) => {
-      if(file) {
-        ipcRenderer.send('analyze-json', file[0]);
+    }, (btnIdx) => {
+      if(Boolean(btnIdx) === true) {
+        this._updateMode();
       }
-      return false;
     });
   }
   render() {
@@ -38,7 +47,7 @@ class Analyze extends React.Component {
     return (
       <section className="sidebar__analyze">
         <div className="sidebar__btn">
-          <a className="btn btn-block btn-default" onClick={this.openPackage} href="#">
+          <a className="btn btn-block btn-default" onClick={this._openPackage} href="#">
             Analyze package
           </a>
         </div>

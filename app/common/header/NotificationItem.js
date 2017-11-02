@@ -11,7 +11,6 @@ class NotificationItem extends React.Component {
         <a href="#">
           <i className="fa fa-envelope pull-right"></i>
           <span className="block-line strong">{notification.body}</span>
-          <span className="block-line small">{notification.level}</span>
         </a>
       </li>
     )

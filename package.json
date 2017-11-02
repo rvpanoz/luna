@@ -71,7 +71,7 @@
     "email": "rvpanoz@gmail.com",
     "url": "https://github.com/rvpanoz"
   },
-  "license": "MIT",
+  "license": "Apache-2.0",
   "keywords": [
     "electron",
     "npm",
@@ -106,6 +106,7 @@
     "electron": "^1.6.10",
     "electron-builder": "^19.8.0",
     "electron-devtools-installer": "^2.2.0",
+    "enzyme": "^3.1.0",
     "express": "^4.15.3",
     "extract-text-webpack-plugin": "^3.0.1",
     "fbjs-scripts": "^0.8.0",
@@ -151,6 +152,7 @@
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "^5.0.0-alpha.6",
+    "react-toggle-switch": "^3.0.3",
     "redux": "^3.7.1",
     "redux-thunk": "^2.2.0",
     "source-map-support": "^0.4.15"

@@ -1,8 +1,11 @@
+/**
+* Packages Container Component
+**/
 'use strict';
 
 import {remote, ipcRenderer} from 'electron';
 import React from 'react';
-import {parse} from '../utils';
+import {loadData, parse} from '../utils';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as actions from '../actions';
@@ -15,31 +18,20 @@ import PackageContainer from '../containers/PackageContainer';
 class PackagesContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.fetch = this.fetch.bind(this);
-    this.reload = this.reload.bind(this);
-    this.loadList = this.loadList.bind(this);
-    this.loadOutdated = this.loadOutdated.bind(this);
+    this._loadData = this._loadData.bind(this);
+    this._setupList = this._setupList.bind(this);
+    this._setupOutdated = this._setupOutdated.bind(this);
   }
-  reload(e) {
-    if (e) {
+  _loadData(e, directory) {
+    if(e) {
       e.preventDefault();
     }
     this.props.actions.toggleLoader(true);
     this.props.actions.clearMessages();
     this.props.actions.setActive(null);
-    this.fetch();
-    setTimeout(() => {
-      this.props.actions.setModal(false);
-    }, 3000);
+    loadData(this.props.mode, directory);
   }
-  fetch() {
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      cmd: ['list', 'outdated'],
-      params: ['g', 'parseable']
-    });
-  }
-  loadList(packages) {
+  _setupList(packages) {
     let notifications = parse(packages, 'problems');
     notifications.forEach((notification, idx) => {
       if (typeof notification === 'string') {
@@ -49,44 +41,32 @@ class PackagesContainer extends React.Component {
     let packagesData = parse(packages, 'dependencies');
     this.props.actions.setPackages(packagesData);
     this.props.actions.setTotalInstalled(packagesData.length);
-    this.props.actions.setMode('GLOBAL');
-    this.props.actions.toggleLoader(false);
   }
-  loadOutdated(packages) {
+  _setupOutdated(packages) {
     if (!packages) {
       this.props.actions.setPackagesOutdated([]);
       return;
     }
     let outdatedData = JSON.parse(packages);
     this.props.actions.setPackagesOutdated(outdatedData);
+    this.props.actions.toggleLoader(false);
   }
   componentDidMount() {
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      cmd: [
-        'list', 'outdated'
-      ],
-      params: ['g', 'parseable']
-    });
-
+    this._loadData();
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
       switch (command) {
         case 'outdated':
-          this.loadOutdated(packages);
+          this._setupOutdated(packages);
           break;
         default:
-          this.loadList(packages);
+          this._setupList(packages);
       }
-    });
-
-    ipcRenderer.on('analyze-json-close', (event, content) => {
-      let packages = content.dependencies;
     });
 
     ipcRenderer.on('search-packages-close', (event, packagesStr) => {
       let packages = parse(packagesStr, 'dependencies');
       this.props.actions.setPackages(packages);
-      this.props.actions.setMode('SEARCH', ['Install']);
+      this.props.actions.setMode('SEARCH');
       this.props.actions.toggleLoader(false);
     });
 
@@ -106,7 +86,7 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on('action-close', (event, pkg) => {
-      this.reload();
+      this.loadData();
     });
   }
   componentWillUnMount() {
@@ -125,8 +105,8 @@ class PackagesContainer extends React.Component {
         <div className="packages">
           <div className="row">
             <div className="col-md-4">
-              <PackagesListHeader title="Packages" total={props.packages.length} reload={this.reload} toggleLoader={props.actions.toggleLoader}/>
-              <PackagesListSearch setActive={props.actions.setActive} toggleLoader={props.actions.toggleLoader} reload={this.reload}/>
+              <PackagesListHeader title="Packages" total={props.packages.length} toggleLoader={props.actions.toggleLoader}/>
+              <PackagesListSearch setActive={props.actions.setActive} toggleLoader={props.actions.toggleLoader} />
               <PackagesList loading={props.loading} packages={props.packages} toggleLoader={props.actions.toggleLoader} toggleMainLoader={props.actions.toggleMainLoader}/>
             </div>
             <div className="col-md-8">
@@ -140,6 +120,7 @@ class PackagesContainer extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    mode: state.global.mode,
     loading: state.global.loading,
     packages: state.packages.packages,
     active: state.packages.active

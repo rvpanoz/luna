@@ -12,7 +12,7 @@ const defaults = ['--depth=0', '--json'];
 
 import {parse, isArray} from './utils';
 
-function runCommand(command, callback) {
+function runCommand(command, environment, callback) {
   const deferred = Q.defer();
   const cwd = process.cwd();
   let result = '';
@@ -26,7 +26,7 @@ function runCommand(command, callback) {
     shell: true,
     env: process.env,
     stdio: 'pipe',
-    encoding: 'utf8'
+    cwd: (environment.mode === 'LOCAL') ? environment.directory : cwd
   });
 
   let errors = 0;
@@ -38,6 +38,7 @@ function runCommand(command, callback) {
 
   npmc.stderr.on('data', (error) => {
     let errorToString = error.toString();
+    console.log(errorToString);
     callback(errorToString, null, 'error');
   });
 
@@ -61,6 +62,8 @@ exports.doCommand = function(options, callback) {
   }
 
   let run = [],
+    mode = opts.mode || 'GLOBAL',
+    directory = opts.directory,
     params = [],
     args = [],
     pkgInfo = [];
@@ -83,10 +86,13 @@ exports.doCommand = function(options, callback) {
     throw new Error('shell[doCommand]: cmd parameter must be given and must be an array');
   }
 
-  //setup params e.g -g, -long etc
-  for (let z = 0; z < opts.params.length; z++) {
-    let param = opts.params[z];
-    params.push(`-${param}`);
+  switch (true) {
+    case (opts.mode === 'LOCAL'):
+      directory = opts.directory;
+      break;
+    default:
+      params.push('-g');
+      break;
   }
 
   //setup arguments e.g --depth, --json etc
@@ -101,10 +107,14 @@ exports.doCommand = function(options, callback) {
 
   function combine() {
     let promises = [];
+    let env = {
+      mode: mode,
+      dir: directory
+    }
     run.forEach((cmd, idx) => {
       promises.push(function() {
         let command = [cmd].concat(pkgInfo).concat(params).concat(args);
-        return runCommand(command, callback);
+        return runCommand(command, env, callback);
       }());
     });
     return promises;

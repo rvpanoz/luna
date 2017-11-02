@@ -2,6 +2,7 @@
 
 @import "~font-awesome/css/font-awesome.css";
 @import "~bootstrap/dist/css/bootstrap.css";
+@import "~react-toggle-switch/dist/css/switch.min.css";
 @import '~animate.css/animate.css';
 html {
   height: 100%;
@@ -777,21 +778,7 @@ ol, ul {
   color: #5e6870;
 }
 
-.btn-default:hover,
-.btn-default:focus,
-.btn-default:active,
-.btn-default:active:focus,
-.btn-default:active:hover,
-.btn-default.active,
-.btn-default.active:hover,
-.btn-default.active:active,
-.btn-default.active:focus,
-.btn-default.focus,
-.btn-default.active.focus,
-.open>.btn-default.dropdown-toggle.btn-default,
-.open>.btn-default.dropdown-toggle.btn-default:focus,
-.open>.btn-default.dropdown-toggle.btn-default:active,
-.open>.btn-default.dropdown-toggle.btn-default:hover {
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default:active:focus, .btn-default:active:hover, .btn-default.active, .btn-default.active:hover, .btn-default.active:active, .btn-default.active:focus, .btn-default.focus, .btn-default.active.focus, .open>.btn-default.dropdown-toggle.btn-default, .open>.btn-default.dropdown-toggle.btn-default:focus, .open>.btn-default.dropdown-toggle.btn-default:active, .open>.btn-default.dropdown-toggle.btn-default:hover {
   color: #5e6870;
 }
 
@@ -800,15 +787,7 @@ ol, ul {
   border-color: #1e59d9;
 }
 
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active,
-.btn-primary:active:focus,
-.btn-primary:active:hover,
-.btn-primary.active,
-.btn-primary.active:hover,
-.btn-primary.active:active,
-.btn-primary.active:focus, .btn-primary.focus, .btn-primary.active.focus, .open>.btn-primary.dropdown-toggle.btn-primary, .open>.btn-primary.dropdown-toggle.btn-primary:focus, .open>.btn-primary.dropdown-toggle.btn-primary:active, .open>.btn-primary.dropdown-toggle.btn-primary:hover {
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary:active:focus, .btn-primary:active:hover, .btn-primary.active, .btn-primary.active:hover, .btn-primary.active:active, .btn-primary.active:focus, .btn-primary.focus, .btn-primary.active.focus, .open>.btn-primary.dropdown-toggle.btn-primary, .open>.btn-primary.dropdown-toggle.btn-primary:focus, .open>.btn-primary.dropdown-toggle.btn-primary:active, .open>.btn-primary.dropdown-toggle.btn-primary:hover {
   background-color: #1847ac;
   border-color: #1847ac;
   outline: none;
@@ -1883,31 +1862,39 @@ select option {
 .lm-widget {
   margin-bottom: 10px;
 }
+
 .lm-widget__list {
   padding: 0 10px;
 }
+
 .lm-widget__title {
   font-size: 11pt;
 }
+
 .lm-widget__item {
   border-bottom: 1px solid rgba(36, 41, 44, 0.5);
   padding: 5px 10px 5px;
   position: relative;
 }
+
 .lm-widget__item:hover {
   background-color: rgba(38, 44, 47, 0.5);
 }
+
 .lm-widget__item.new .lm-widget__title span {
   color: #fff;
 }
+
 .lm-widget__title .fa {
   margin-right: 5px;
 }
+
 .lm-widget__text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .lm-widget__link {
   display: block;
   position: absolute;
@@ -2120,4 +2107,25 @@ ul.notification-info .notifications.dropdown>a {
 .notifications.dropdown .dropdown-menu li .block-line {
   display: block;
   margin-top: 5px;
+}
+
+.switch {
+  border: 2px solid #fff;
+  width: 42px;
+  height: 22px;
+  background-color: #ed4949;
+  border-radius: 12px;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  top: 5px;
+}
+
+.switch-toggle {
+  width: 18px;
+  height: 18px;
+}
+
+.switch.on .switch-toggle {
+  left: 20px;
 }

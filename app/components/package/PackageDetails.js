@@ -2,7 +2,6 @@ import {remote, ipcRenderer} from 'electron';
 import React from 'react';
 import moment from 'moment';
 import Loader from '../../common/Loader';
-import AppModal from '../../common/AppModal';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
 import {showMessageBox} from '../../utils';
@@ -32,7 +31,6 @@ class PackageDetails extends React.Component {
           name: active.name,
           version: version
         }, () => {
-          // this.props.setModal(true);
           this.props.setActive(null);
           this.props.toggleMainLoader(true);
           ipcRenderer.send('ipc-event', {
@@ -68,7 +66,7 @@ class PackageDetails extends React.Component {
     if (!pkg) {
       return null;
     }
-    
+
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>
