@@ -10,39 +10,7 @@ import styles from './PackageDetails.css';
 class PackageDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
-  }
-  doAction(e) {
-    e.preventDefault();
-
-    let target = e.currentTarget;
-    let action = target.dataset.action.toLowerCase();
-
-    if (action && typeof action === 'string') {
-      let active = this.props.active;
-      let selectVersion = this.refs.selectVersion;
-      let version = (selectVersion && selectVersion.value !== "false")
-        ? selectVersion.value
-        : 'latest';
-
-      showMessageBox({
-          action: action,
-          name: active.name,
-          version: version
-        }, () => {
-          this.props.setActive(null);
-          this.props.toggleMainLoader(true);
-          ipcRenderer.send('ipc-event', {
-            ipcEvent: action,
-            cmd: [(action === 'uninstall') ? 'uninstall' : 'install'],
-            pkgName: active.name,
-            pkgVersion: (action === 'uninstall') ? null : version,
-            params: ['g']
-          });
-        });
-    }
-    return false;
   }
   onChangeVersion(e) {
     let target = e.currentTarget;
@@ -78,7 +46,12 @@ class PackageDetails extends React.Component {
             <span className="label label-success">v{pkg.version}</span>
           </div>
           <div className={styles.package__details__actions}>
-            <PackageActions packageActions={this.props.packageActions} doAction={this.doAction}/>
+            <PackageActions
+              active={this.props.active}
+              actions={this.props.packageActions}
+              setActive={this.props.setActive}
+              toggleMainLoader={this.props.toggleMainLoader}
+            />
           </div>
         </div>
         <div className={styles.package__details__info}>

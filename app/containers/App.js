@@ -23,7 +23,7 @@ const App = () => {
         <AppHeader/>
         <div className="dashboard">
           <SidebarContainer/>
-          <div className="main">
+          <div className="main container-fluid">
             <div className="main__cont main__scroll">
               <PackagesContainer />
             </div>

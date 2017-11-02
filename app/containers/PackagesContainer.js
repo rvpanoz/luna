@@ -46,13 +46,13 @@ class PackagesContainer extends React.Component {
     this.props.setPackagesOutdated(outdatedData);
     this.props.toggleLoader(false);
   }
-  loadData(mode='GLOBAL', directory) {
+  loadData() {
     this.props.setActive(null);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['list', 'outdated'],
-      mode: mode,
-      directory: directory || false
+      mode: this.props.mode,
+      directory: this.props.directory
     });
   }
   componentDidMount() {
@@ -74,7 +74,6 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('search-packages-close', (event, packagesStr) => {
       let packages = parse(packagesStr, 'dependencies');
       this.props.setPackages(packages);
-      this.props.setMode('SEARCH');
       this.props.toggleLoader(false);
     });
 
@@ -114,20 +113,24 @@ class PackagesContainer extends React.Component {
           <div className="row">
             <div className="col-md-4">
               <PackagesListHeader
-                title="Packages"
+                mode={props.mode}
+                directory={props.directory}
                 total={props.packages.length}
-                toggleLoader={props.toggleLoader}
                 loadData={this.loadData}
                 setMode={props.setMode}
+                toggleLoader={props.toggleLoader}
               />
               <PackagesListSearch
                 setActive={props.setActive}
-                toggleLoader={props.toggleLoader} />
+                toggleLoader={props.toggleLoader}
+                setMode={props.setMode}
+              />
               <PackagesList
                 loading={props.loading}
                 packages={props.packages}
                 toggleLoader={props.toggleLoader}
-                toggleMainLoader={props.toggleMainLoader}/>
+                toggleMainLoader={props.toggleMainLoader}
+              />
             </div>
             <div className="col-md-8">
               <PackageContainer active={props.active}/>
@@ -141,6 +144,7 @@ class PackagesContainer extends React.Component {
 function mapStateToProps(state) {
   return {
     mode: state.global.mode,
+    directory: state.global.directory,
     loading: state.global.loading,
     packages: state.packages.packages,
     active: state.packages.active
@@ -170,8 +174,8 @@ function mapDispatchToProps(dispatch) {
     setTotalInstalled:(total)=>{
       return dispatch(actions.setTotalInstalled(total));
     },
-    addMessage:(message)=>{
-      return dispatch(actions.addMessage(message));
+    addMessage:(level, message)=>{
+      return dispatch(actions.addMessage(level, message));
     }
   };
 }

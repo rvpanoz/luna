@@ -1,6 +1,7 @@
 export default {
   global: {
     mode: 'GLOBAL',
+    directory: null,
     loading: false,
     messages: []
   },

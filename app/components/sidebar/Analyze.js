@@ -8,10 +8,6 @@ class Analyze extends React.Component {
     this._openPackage = this._openPackage.bind(this);
   }
   _updateMode(directory) {
-    this.props.toggleLoader(true);
-    this.props.clearMessages();
-    this.props.setTotalInstalled(0);
-    this.props.setActive(null);
     this.props.setMode('LOCAL', directory);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
@@ -24,14 +20,15 @@ class Analyze extends React.Component {
     e.preventDefault();
     remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
       title: 'Open package.json file',
+      buttonLabel: 'Analyze',
       filters: [{
         name: 'json',
         extensions: ['json']
       }],
       openFile: true
-    }, (btnIdx) => {
-      if(Boolean(btnIdx) === true) {
-        this._updateMode();
+    }, (filePath) => {
+      if(filePath) {
+        this._updateMode(filePath);
       }
     });
   }

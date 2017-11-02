@@ -4,6 +4,12 @@
 
 import { remote, ipcRenderer } from 'electron';
 
+export function capitalizeFirst(str) {
+  let firstToUpper = str.charAt(0).toUpperCase();
+  let strExceptFirstChar = str.slice(1);
+  return firstToUpper + strExceptFirstChar;
+}
+
 export function isArray() {
   let objectArray;
   objectArray = Object.prototype.toString().call(arguments[0]);
@@ -46,14 +52,10 @@ export function showMessageBox(opts, cb = {}) {
   remote.dialog.showMessageBox(remote.getCurrentWindow(), {
     type: 'question',
     message: `${message}\nContinue? `,
-    buttons: ['OK', 'CANCEL']
+    buttons: ['CANCEL', action]
   }, (btnIdx) => {
-    switch (btnIdx) {
-      case 0:
-        cb();
-        break;
-      default:
-        return;
+    if(Boolean(btnIdx) === true) {
+      cb();
     }
   });
 }
@@ -65,23 +67,4 @@ export function isJson(str) {
     return false;
   }
   return true;
-}
-
-//using request module
-export function makeRequest(opts, cb) {
-  const Request = require('request');
-  let options = opts || {};
-
-  let callback = function(error, response, body) {
-    if(error) {
-      throw new Error(error);
-    }
-    if (response.statusCode == 200 && cb) {
-      cb(body);
-    } else {
-      return response.statusCode;
-    }
-  }
-
-  Request(options, callback);
 }
