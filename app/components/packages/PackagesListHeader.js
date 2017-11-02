@@ -11,12 +11,13 @@ class PackagesListHeader extends React.Component {
   _fetch(e) {
     e.preventDefault();
     this.props.toggleLoader(true);
-    this.props.loadData(this.props.mode, this.props.directory);
+    this.props.loadData();
   }
   _setGlobalMode(e) {
     e.preventDefault();
+    this.props.toggleLoader(true);
     this.props.setMode('GLOBAL', null);
-    this.props.loadData(this.props.mode);
+    this.props.loadData();
   }
   render() {
     let props = this.props;

@@ -13,10 +13,8 @@ class Settings extends React.Component {
         <div className="ss-widget">
           <div className="ss-widget__cont">
             <div className="ss-widget__row">
-              <div className="ss-widget__cell">Setting1</div>
-              <div className="ss-widget__cell">
-
-              </div>
+              <div className="ss-widget__cell"></div>
+              <div className="ss-widget__cell"></div>
             </div>
           </div>
         </div>

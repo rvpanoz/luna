@@ -22,15 +22,16 @@ export function parse(data, key, all) {
     packages = JSON.parse(data);
     if (key && packages[key]) {
       packages = packages[key];
+      return Object.keys(packages).map(function(pkey) {
+        return packages[pkey];
+      });
+    } else {
+      return [];
     }
   } catch(e) {
     console.error(e);
     return false;
   }
-
-  return Object.keys(packages).map(function(pkey) {
-    return packages[pkey];
-  });
 }
 
 export function showMessageBox(opts, cb = {}) {

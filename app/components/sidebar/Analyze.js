@@ -28,7 +28,7 @@ class Analyze extends React.Component {
       openFile: true
     }, (filePath) => {
       if(filePath) {
-        this._updateMode(filePath);
+        this._updateMode(filePath[0]);
       }
     });
   }

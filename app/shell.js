@@ -5,6 +5,7 @@
 
 'use strict';
 
+const path = require('path');
 const cp = require('child_process');
 const Q = require("q");
 const spawn = cp.spawn;
@@ -12,9 +13,10 @@ const defaults = ['--depth=0', '--json'];
 
 import {parse, isArray} from './utils';
 
-function runCommand(command, environment, callback) {
+function runCommand(command, mode, directory, callback) {
   const deferred = Q.defer();
   const cwd = process.cwd();
+
   let result = '';
 
   if (!command || typeof command !== 'object') {
@@ -23,10 +25,8 @@ function runCommand(command, environment, callback) {
 
   console.log(`running: npm ${command.join(" ")}`);
   let npmc = spawn('npm', command, {
-    shell: true,
     env: process.env,
-    stdio: 'pipe',
-    cwd: (environment.mode === 'LOCAL') ? environment.directory : cwd
+    cwd: directory ? path.dirname(directory) : cwd
   });
 
   let errors = 0;
@@ -38,7 +38,6 @@ function runCommand(command, environment, callback) {
 
   npmc.stderr.on('data', (error) => {
     let errorToString = error.toString();
-    console.log(errorToString);
     callback(errorToString, null, 'error');
   });
 
@@ -56,13 +55,12 @@ function runCommand(command, environment, callback) {
 
 exports.doCommand = function(options, callback) {
   let opts = options || {};
-
   if (!opts.cmd) {
     throw new Error('shell[doCommand]: cmd parameter must given');
   }
 
   let run = [],
-    mode = opts.mode || 'GLOBAL',
+    mode = opts.mode,
     directory = opts.directory,
     params = [],
     args = [],
@@ -86,15 +84,10 @@ exports.doCommand = function(options, callback) {
     throw new Error('shell[doCommand]: cmd parameter must be given and must be an array');
   }
 
-  switch (true) {
-    case (opts.mode === 'LOCAL'):
-      directory = opts.directory;
-      break;
-    default:
-      params.push('-g');
-      break;
+  if(mode === 'GLOBAL') {
+    params.push('-g');
   }
-
+  console.log(mode, params);
   //setup arguments e.g --depth, --json etc
   if (opts.arguments) {
     for (let z in opts.arguments) {
@@ -107,14 +100,10 @@ exports.doCommand = function(options, callback) {
 
   function combine() {
     let promises = [];
-    let env = {
-      mode: mode,
-      dir: directory
-    }
     run.forEach((cmd, idx) => {
       promises.push(function() {
         let command = [cmd].concat(pkgInfo).concat(params).concat(args);
-        return runCommand(command, env, callback);
+        return runCommand(command, mode, directory, callback);
       }());
     });
     return promises;

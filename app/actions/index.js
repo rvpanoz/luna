@@ -67,12 +67,11 @@ export function setActive(active, isLoading) {
   }
 }
 
-export function setMode(mode, loading, directory) {
+export function setMode(mode, directory) {
   return {
     type: types.SET_MODE,
     mode,
-    directory,
-    loading
+    directory
   }
 }
 

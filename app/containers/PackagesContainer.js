@@ -22,20 +22,26 @@ class PackagesContainer extends React.Component {
     this.loadData = this.loadData.bind(this);
     this._setupList = this._setupList.bind(this);
     this._setupOutdated = this._setupOutdated.bind(this);
-
-    //default mode
-    this.props.setMode('GLOBAL', modes.GLOBALACTIONS);
   }
   _setupList(packages) {
+    let packagesData = parse(packages, 'dependencies');
+
+    this.props.setPackages(packagesData);
+    this.props.setTotalInstalled(packagesData.length);
+    this.props.toggleLoader(false);
+
+    //notifications
     let notifications = parse(packages, 'problems');
+    if(!notifications.length) {
+      this.props.clearMessages();
+      this.props.setPackagesOutdated([]);
+      return;
+    }
     notifications.forEach((notification, idx) => {
       if (typeof notification === 'string') {
         this.props.addMessage('error', notification);
       }
     });
-    let packagesData = parse(packages, 'dependencies');
-    this.props.setPackages(packagesData);
-    this.props.setTotalInstalled(packagesData.length);
   }
   _setupOutdated(packages) {
     if (!packages) {
@@ -48,6 +54,7 @@ class PackagesContainer extends React.Component {
   }
   loadData() {
     this.props.setActive(null);
+    console.log(this.props.mode);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['list', 'outdated'],
@@ -61,6 +68,9 @@ class PackagesContainer extends React.Component {
 
     // npm list && npm outdated listener
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
+      if(!packages) {
+        return;
+      }
       switch (command) {
         case 'outdated':
           this._setupOutdated(packages);
@@ -176,6 +186,9 @@ function mapDispatchToProps(dispatch) {
     },
     addMessage:(level, message)=>{
       return dispatch(actions.addMessage(level, message));
+    },
+    clearMessages:()=>{
+      return dispatch(actions.clearMessages())
     }
   };
 }
