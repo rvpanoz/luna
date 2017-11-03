@@ -38,7 +38,24 @@ class PackageActions extends React.Component {
     return false;
   }
   render() {
-    let actions = this.props.actions;
+    let mode = this.props.mode, actions = [];
+
+    switch (mode) {
+      case 'SEARCH':
+        actions.push({
+          text: 'Install',
+          iconCls: 'download'
+        });
+        break;
+      default:
+        actions.push({
+          text: 'Update',
+          iconCls: 'refresh'
+        }, {
+          text: 'Uninstall',
+          iconCls: 'trash'
+        });
+    }
     return (
       <div className="dropdown">
         <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
@@ -49,7 +66,8 @@ class PackageActions extends React.Component {
               return (
                 <li key={idx}>
                   <a href="#" data-action={action} onClick={this.doAction}>
-                    <b>{action}</b>
+                    <i className={`fa fa-${action.iconCls}`} />&nbsp;
+                    <b>{action.text}</b>
                   </a>
                 </li>
               )

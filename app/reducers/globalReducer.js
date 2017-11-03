@@ -38,7 +38,7 @@ const globalReducer = (state = initialState.global, action) => {
       return Object.assign({}, state, {
         mode: action.mode,
         directory: action.directory,
-        packageActions: (action.mode === 'SEARCH' ? ['Install'] : ['Update', 'Uninstall']),
+        packageActions: (action.mode === 'LOCAL' ? ['Install'] : ['Update', 'Uninstall']),
         messages: [],
         loading: true
       });

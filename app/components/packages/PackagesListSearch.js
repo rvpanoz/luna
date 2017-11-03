@@ -7,7 +7,6 @@ export default class SearchBox extends React.Component {
     super(props);
     this._search = this._search.bind(this);
     this._onKeyUp = this._onKeyUp.bind(this);
-    this._clearSearch = this._clearSearch.bind(this);
   }
   _onKeyUp(e) {
     let key = e.which || e.keyCode || 0;
@@ -19,14 +18,6 @@ export default class SearchBox extends React.Component {
     }
     return false;
   }
-  _clearSearch(e) {
-    let target = e.target;
-    let searchInput = this.refs.searchInput;
-
-    searchInput.value = '';
-    this.props.fetch();
-    return false;
-  }
   _search(e) {
     if (e) {
       e.preventDefault();
@@ -35,12 +26,11 @@ export default class SearchBox extends React.Component {
     if (searchInput.value.length) {
       this.props.toggleLoader(true);
       this.props.setActive(null);
-      this.props.setMode('SEARCH');
+      this.props.setMode('SEARCH');;
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'search-packages',
         cmd: ['search'],
-        pkgName: searchInput.value,
-        params: ['-long']
+        pkgName: searchInput.value
       });
     }
     return false;

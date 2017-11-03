@@ -15,6 +15,13 @@ export function setPackagesOutdated(packagesOutdated) {
   }
 }
 
+export function setPackageActions(packageActions) {
+  return {
+    type: types.SET_PACKAGE_ACTIONS,
+    packageActions
+  }
+}
+
 export function addMessage(level, body) {
   return {
     type: types.ADD_MESSAGE,

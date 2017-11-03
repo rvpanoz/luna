@@ -87,7 +87,7 @@ exports.doCommand = function(options, callback) {
   if(mode === 'GLOBAL') {
     params.push('-g');
   }
-  console.log(mode, params);
+  
   //setup arguments e.g --depth, --json etc
   if (opts.arguments) {
     for (let z in opts.arguments) {

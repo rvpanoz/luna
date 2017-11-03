@@ -47,8 +47,8 @@ class PackageDetails extends React.Component {
           </div>
           <div className={styles.package__details__actions}>
             <PackageActions
+              mode={this.props.mode}
               active={this.props.active}
-              actions={this.props.packageActions}
               setActive={this.props.setActive}
               toggleMainLoader={this.props.toggleMainLoader}
             />

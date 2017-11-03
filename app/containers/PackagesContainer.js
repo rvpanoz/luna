@@ -54,7 +54,6 @@ class PackagesContainer extends React.Component {
   }
   loadData() {
     this.props.setActive(null);
-    console.log(this.props.mode);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['list', 'outdated'],
@@ -82,7 +81,7 @@ class PackagesContainer extends React.Component {
 
     // npm search listener
     ipcRenderer.on('search-packages-close', (event, packagesStr) => {
-      let packages = parse(packagesStr, 'dependencies');
+      let packages = JSON.parse(packagesStr);
       this.props.setPackages(packages);
       this.props.toggleLoader(false);
     });
@@ -165,6 +164,9 @@ function mapDispatchToProps(dispatch) {
   return {
     setPackages:(packages)=>{
       return dispatch(actions.setPackages(packages));
+    },
+    setPackageActions:(packageActions)=>{
+      return dispatch(actions.setPackageActions(packageActions));
     },
     setActive:(pkg)=> {
       return dispatch(actions.setActive(pkg));
