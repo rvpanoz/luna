@@ -26,7 +26,6 @@
   float: left;
   box-sizing: border-box;
   width: 50%;
-  padding-right: 60px;
 }
 
 .packages__title span {
@@ -34,9 +33,20 @@
   color: #fff;
 }
 
+.packages__title span.mode {
+  font-size: 12px !important;
+  color: #fff;
+}
+
+.packages__mode {
+  display: inline-block;
+  float: left;
+  margin: 0 0 20px;
+}
+
 .packages__actions {
   float: right;
-  width: 110px;
+  width: 50%;
   cursor: pointer;
   line-height: 25px;
   font-size: 0;
@@ -63,7 +73,7 @@
 }
 
 .packages__search {
-  margin: 10px 0;
+  margin: 20px 0;
 }
 
 /** List item **/
