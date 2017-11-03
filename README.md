@@ -21,9 +21,6 @@ Luna is only available for 64-bit Linux systems.
 2. Run `sudo dpkg --install luna_1.0.0_amd64.deb` on the downloaded package.
 3. Launch Luna
 
-The Linux version does not currently automatically update so you will need to
-repeat these steps to upgrade to future releases.
-
 ### Windows
 
 Work in progress..
