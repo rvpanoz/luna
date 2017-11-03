@@ -7,6 +7,7 @@ You can **install**, **view**, **update**, **uninstall** your npm global package
 
 - Install new packages
 - View package detail info
+- Get notifications for missing dependencies
 - Analyze package.json file
 - Update existing packages
 - Uninstall packages
