@@ -10,24 +10,8 @@ class PackageActions extends React.Component {
   }
   render() {
     let props = this.props;
-    let wantsInstall = props.wantsInstall, actions = [];
+    let actions = props.packageActions;
 
-    switch (wantsInstall) {
-      case (true):
-        actions.push({
-          text: 'Install',
-          iconCls: 'download'
-        });
-        break;
-      default:
-        actions.push({
-          text: 'Update',
-          iconCls: 'refresh'
-        }, {
-          text: 'Uninstall',
-          iconCls: 'trash'
-        });
-    }
     return (
       <div className="dropdown">
         <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>

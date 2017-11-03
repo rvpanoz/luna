@@ -93,6 +93,7 @@ class PackageDetails extends React.Component {
               setActive={this.props.setActive}
               toggleMainLoader={this.props.toggleMainLoader}
               doAction={this.doAction}
+              packageActions={this.props.packageActions}
             />
           </div>
         </div>

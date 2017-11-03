@@ -138,6 +138,7 @@ class PackagesContainer extends React.Component {
                 setMode={props.setMode}
                 mode={props.mode}
                 directory={props.directory}
+                setPackageActions={props.setPackageActions}
               />
               <PackagesList
                 mode={props.mode}
