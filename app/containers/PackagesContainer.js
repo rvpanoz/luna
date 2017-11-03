@@ -118,9 +118,9 @@ class PackagesContainer extends React.Component {
   render() {
     let props = this.props;
     return (
-        <div className="packages">
+        <div className="packages container-fluid">
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-lg-4 col-md-4">
               <PackagesListHeader
                 mode={props.mode}
                 directory={props.directory}
@@ -141,7 +141,7 @@ class PackagesContainer extends React.Component {
                 toggleMainLoader={props.toggleMainLoader}
               />
             </div>
-            <div className="col-md-8">
+            <div className="col-lg-8 col-md-8">
               <PackageContainer active={props.active}/>
             </div>
           </div>

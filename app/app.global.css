@@ -553,12 +553,16 @@ ol, ul {
   color: #fff;
 }
 
+.package-container {
+  position: relative;
+  width: inherit;
+}
+
 .packages {
   position: relative;
   min-height: 990px;
   padding: 10px 35px;
   height: 100%;
-  width: 90%;
   border-radius: 2px;
   background-color: rgba(36, 41, 44, 0.5);
 }

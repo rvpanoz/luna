@@ -15,17 +15,15 @@ const PackageContainer = (props) => {
     <div className="package-container">
       {(props.showModal === false) ?
       <Loader loading={props.isLoading}>
-          <div className="package-details">
-            <PackageDetails
-              mode={props.mode}
-              active={props.active}
-              packageActions={props.packageActions}
-              setActive={props.actions.setActive}
-              setModal={props.actions.setModal}
-              toggleMainLoader={props.actions.toggleMainLoader}
-              isLoading={props.isLoading}
-            />
-        </div>
+        <PackageDetails
+          mode={props.mode}
+          active={props.active}
+          packageActions={props.packageActions}
+          setActive={props.actions.setActive}
+          setModal={props.actions.setModal}
+          toggleMainLoader={props.actions.toggleMainLoader}
+          isLoading={props.isLoading}
+        />
       </Loader>
       : <div className="modal-container">
         <AppModal title={props.modalTitle} showModal={props.showModal}/>
