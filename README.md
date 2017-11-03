@@ -17,7 +17,7 @@ You can **install**, **view**, **update**, **uninstall** your npm global package
 
 1. clone the repository
 2. run `npm install` to install application's dependencies and devDependencies. 
-(* if you encounter error **gyp WARN EACCES**, try `sudo npm install --allow-root` - maybe you have to delete the node_modules first)
+(* if you get error **gyp WARN EACCES**, run `sudo npm install --allow-root` - maybe you have to delete the node_modules folders first.)
 3. run `npm run dev`
 
 ### Debian based (Debian, Ubuntu, Linux Mint)
