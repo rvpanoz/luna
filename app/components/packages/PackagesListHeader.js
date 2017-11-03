@@ -15,9 +15,17 @@ class PackagesListHeader extends React.Component {
   }
   _setGlobalMode(e) {
     e.preventDefault();
+    if(this.props.mode === 'GLOBAL') {
+      return;
+    }
     this.props.toggleLoader(true);
     this.props.setMode('GLOBAL', null);
-    this.props.loadData();
+    this.props.setActive(null);
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      cmd: ['list', 'outdated'],
+      mode: 'GLOBAL'
+    });
   }
   render() {
     let props = this.props;
@@ -51,7 +59,12 @@ class PackagesListHeader extends React.Component {
           </div>
         </div>
         <div className={styles.packages__mode}>
-          <span className="label label-info mode">{props.mode}</span>
+          <div className="mode">
+            <span className="label label-info">{props.mode}</span>
+          </div>
+          <div className="directory">
+            <span className={styles.directory}>{props.directory}</span>
+          </div>
         </div>
       </div>
     )

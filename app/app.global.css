@@ -2133,3 +2133,8 @@ ul.notification-info .notifications.dropdown>a {
 .switch.on .switch-toggle {
   left: 20px;
 }
+
+.block {
+  display: block;
+  width: 100%;
+}

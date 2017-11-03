@@ -33,15 +33,24 @@
   color: #fff;
 }
 
-.packages__title span.mode {
+.packages__mode span.directory {
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.packages__mode span.mode {
+  display: block;
+  height: 60px !important;
   font-size: 12px !important;
   color: #fff;
 }
 
 .packages__mode {
-  display: inline-block;
-  float: left;
-  margin: 0 0 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px 0 20px;
 }
 
 .packages__actions {

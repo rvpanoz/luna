@@ -127,6 +127,7 @@ class PackagesContainer extends React.Component {
                 total={props.packages.length}
                 loadData={this.loadData}
                 setMode={props.setMode}
+                setActive={props.setActive}
                 toggleLoader={props.toggleLoader}
               />
               <PackagesListSearch
