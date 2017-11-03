@@ -11,14 +11,16 @@ class messagesListItem extends React.Component {
   updatePackage(e) {
     e.preventDefault();
     let pkg = this.props.package;
+    let mode = this.props.mode;
+    
     this.props.setActive(null);
     this.props.toggleMainLoader(true);
     ipcRenderer.send('ipc-event', {
+      mode: mode,
       ipcEvent: 'view-package',
       cmd: ['view'],
       pkgName: pkg.name,
-      pkgVersion: pkg.details.current,
-      params: ['g', 'long']
+      pkgVersion: pkg.details.current
     });
   }
   componentDidMount() {

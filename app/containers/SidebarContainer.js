@@ -49,6 +49,7 @@ class SidebarContainer extends React.Component {
                 </div>
                 <div className="sidebar__menu">
                   <OutdatedList
+                    mode={props.mode}
                     packages={props.packagesOutdated}
                     toggleMainLoader={props.actions.toggleMainLoader}
                     setActive={props.actions.setActive}

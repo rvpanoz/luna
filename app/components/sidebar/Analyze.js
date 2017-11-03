@@ -8,11 +8,12 @@ class Analyze extends React.Component {
     this._openPackage = this._openPackage.bind(this);
   }
   _updateMode(directory) {
+    this.props.setActive(null);
     this.props.setMode('LOCAL', directory);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['list', 'outdated'],
-      mode: this.props.mode,
+      mode: 'LOCAL',
       directory: directory
     });
   }

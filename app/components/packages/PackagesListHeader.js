@@ -50,7 +50,7 @@ class PackagesListHeader extends React.Component {
                 <li className="dropdown-header">Actions</li>
                 <li>
                   <a href="#" onClick={this._setGlobalMode}>
-                    <i className="fa fa-fw fa-reply"></i>
+                    <i className="fa fa-fw fa-reply"></i>&nbsp;
                     <span>Switch to global mode</span>
                   </a>
                 </li>

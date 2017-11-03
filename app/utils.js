@@ -4,12 +4,6 @@
 
 import { remote, ipcRenderer } from 'electron';
 
-export function capitalizeFirst(str) {
-  let firstToUpper = str.charAt(0).toUpperCase();
-  let strExceptFirstChar = str.slice(1);
-  return firstToUpper + strExceptFirstChar;
-}
-
 export function isArray() {
   let objectArray;
   objectArray = Object.prototype.toString().call(arguments[0]);

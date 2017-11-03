@@ -1,44 +1,16 @@
+'use strict';
+
 import React from 'react';
-import {showMessageBox, capitalizeFirst} from '../../utils';
+import {remote, ipcRenderer} from 'electron';
+import {showMessageBox} from '../../utils';
 
 class PackageActions extends React.Component {
   constructor(props) {
     super(props);
-    this.doAction = this.doAction.bind(this);
-  }
-  doAction(e) {
-    e.preventDefault();
-
-    let target = e.currentTarget;
-    let action = target.dataset.action.toLowerCase();
-
-    if (action && typeof action === 'string') {
-      let active = this.props.active;
-      let selectVersion = this.refs.selectVersion;
-      let version = (selectVersion && selectVersion.value !== "false")
-        ? selectVersion.value
-        : 'latest';
-
-      showMessageBox({
-          action: capitalizeFirst(action),
-          name: active.name,
-          version: version
-        }, () => {
-          this.props.setActive(null);
-          this.props.toggleMainLoader(true);
-          ipcRenderer.send('ipc-event', {
-            ipcEvent: action,
-            cmd: [(action === 'uninstall') ? 'uninstall' : 'install'],
-            pkgName: active.name,
-            pkgVersion: (action === 'uninstall') ? null : version,
-            params: ['g']
-          });
-        });
-    }
-    return false;
   }
   render() {
-    let mode = this.props.mode, actions = [];
+    let props = this.props;
+    let mode = props.mode, actions = [];
 
     switch (mode) {
       case 'SEARCH':
@@ -65,7 +37,7 @@ class PackageActions extends React.Component {
             actions.map((action, idx)=>{
               return (
                 <li key={idx}>
-                  <a href="#" data-action={action} onClick={this.doAction}>
+                  <a href="#" data-action={action.text} onClick={props.doAction}>
                     <i className={`fa fa-${action.iconCls}`} />&nbsp;
                     <b>{action.text}</b>
                   </a>
