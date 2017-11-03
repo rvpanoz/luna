@@ -13,6 +13,13 @@ You can **install**, **view**, **update**, **uninstall** your npm global package
 
 ![Luna](http://104.236.58.95/media/luna.png)
 
+## Development ##
+
+1. clone the repository
+2. run `npm install` to install application's dependencies and devDependencies. 
+(* if you encounter error **gyp WARN EACCES**, try `sudo npm install --allow-root` - maybe you have to delete the node_modules first)
+3. run `npm run dev`
+
 ### Debian based (Debian, Ubuntu, Linux Mint)
 
 Luna is only available for 64-bit Linux systems.
@@ -21,9 +28,6 @@ Luna is only available for 64-bit Linux systems.
 2. Run `sudo dpkg --install luna_1.0.0_amd64.deb` on the downloaded package.
 3. Launch Luna
 
-* if you encounter error **gyp WARN EACCES** when running **npm install** after you clone the repository,
-then use **sudo npm install --allow-root**
-
 ### Windows
 
-Work in progress..
+Work in progress.. :)
