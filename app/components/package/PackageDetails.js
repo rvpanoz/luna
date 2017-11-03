@@ -10,7 +10,46 @@ import styles from './PackageDetails.css';
 class PackageDetails extends React.Component {
   constructor(props) {
     super(props);
+    this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
+  }
+  doAction(e) {
+    e.preventDefault();
+
+    let target = e.currentTarget;
+    let action = target.dataset.action;
+    let mode = this.props.mode;
+
+    if (action && typeof action === 'string') {
+      let active = this.props.active;
+      let selectVersion = this.refs.selectVersion;
+      let version;
+      if(action === 'Uninstall') {
+        version = null;
+      } else {
+        version = (selectVersion && selectVersion.value !== "false")
+          ? selectVersion.value
+          : 'latest';
+      }
+
+      showMessageBox({
+          action: action,
+          name: active.name,
+          version: version
+        }, () => {
+          this.props.setActive(null);
+          this.props.toggleMainLoader(true);
+          ipcRenderer.send('ipc-event', {
+            mode: this.props.mode,
+            directory: this.props.directory,
+            ipcEvent: action,
+            cmd: [(action === 'Uninstall') ? 'uninstall' : 'install'],
+            pkgName: active.name,
+            pkgVersion: (action === 'Uninstall') ? null : version
+          });
+        });
+    }
+    return false;
   }
   onChangeVersion(e) {
     let target = e.currentTarget;
@@ -20,11 +59,12 @@ class PackageDetails extends React.Component {
     if (version !== "false") {
       this.props.toggleMainLoader(true);
       ipcRenderer.send('ipc-event', {
+        mode: this.props.mode,
+        directory: this.props.directory,
         ipcEvent: 'view-package',
         cmd: ['view'],
         pkgName: pkg.name,
-        pkgVersion: version,
-        params: ['g', 'long']
+        pkgVersion: version
       });
     }
     return false;
@@ -48,9 +88,12 @@ class PackageDetails extends React.Component {
           <div className={styles.package__details__actions}>
             <PackageActions
               mode={this.props.mode}
+              directory={this.props.directory}
               active={this.props.active}
               setActive={this.props.setActive}
               toggleMainLoader={this.props.toggleMainLoader}
+              doAction={this.doAction}
+              packageActions={this.props.packageActions}
             />
           </div>
         </div>

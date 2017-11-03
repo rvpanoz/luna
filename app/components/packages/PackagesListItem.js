@@ -21,7 +21,8 @@ class PackageItem extends React.Component {
         cmd: ['view'],
         pkgName: this.props.name,
         pkgVersion: this.props.version,
-        params: ['g', 'long']
+        mode: this.props.mode,
+        directory: this.props.directory
       });
     }
     return false;

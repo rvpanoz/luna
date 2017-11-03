@@ -23,7 +23,13 @@ export default class OutdatedPackages extends React.Component {
           <div className="lm-widget__list">
             {(packages && packages.length)
               ? packages.map((pkg, idx) => {
-                return <OutdatedListItem key={idx} package={pkg} setActive={this.props.setActive} toggleMainLoader={this.props.toggleMainLoader}/>
+                return <OutdatedListItem
+                        key={idx}
+                        package={pkg}
+                        setActive={this.props.setActive}
+                        toggleMainLoader={this.props.toggleMainLoader}
+                        mode={this.props.mode}
+                      />
               })
               : null
             }

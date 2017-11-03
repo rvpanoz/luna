@@ -66,14 +66,10 @@ ipcMain.on('ipc-event', (event, options) => {
   const opts = options || {};
   const ipcEvent = opts.ipcEvent || false;
 
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
   function callback(data, command, status) {
     switch (status) {
       case 'close':
-        if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
+        if (['Install', 'Update', 'Uninstall'].indexOf(ipcEvent) > -1) {
           event.sender.send('action-close', data, command);
         } else {
           event.sender.send(ipcEvent + '-close', data, command);

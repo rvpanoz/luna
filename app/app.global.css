@@ -555,7 +555,7 @@ ol, ul {
 
 .package-container {
   position: relative;
-  width: inherit;
+  width: 85%;
 }
 
 .packages {

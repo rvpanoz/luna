@@ -4,12 +4,6 @@
 
 import { remote, ipcRenderer } from 'electron';
 
-export function capitalizeFirst(str) {
-  let firstToUpper = str.charAt(0).toUpperCase();
-  let strExceptFirstChar = str.slice(1);
-  return firstToUpper + strExceptFirstChar;
-}
-
 export function isArray() {
   let objectArray;
   objectArray = Object.prototype.toString().call(arguments[0]);
@@ -43,7 +37,7 @@ export function showMessageBox(opts, cb = {}) {
   message = message.replace('$action', action).replace('$name@version', () => {
     if(name && version) {
       return name + ' to version ' + version;
-    } else if(name && !version) {
+    } else if(name) {
       return name;
     } else {
       return '';
@@ -68,4 +62,8 @@ export function isJson(str) {
     return false;
   }
   return true;
+}
+
+export function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }

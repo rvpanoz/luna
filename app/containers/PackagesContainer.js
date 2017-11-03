@@ -54,6 +54,8 @@ class PackagesContainer extends React.Component {
   }
   loadData() {
     this.props.setActive(null);
+    this.props.toggleLoader(true);
+    this.props.toggleMainLoader(false);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['list', 'outdated'],
@@ -118,7 +120,7 @@ class PackagesContainer extends React.Component {
   render() {
     let props = this.props;
     return (
-        <div className="packages container-fluid">
+        <div className="packages">
           <div className="row">
             <div className="col-lg-4 col-md-4">
               <PackagesListHeader
@@ -134,8 +136,13 @@ class PackagesContainer extends React.Component {
                 setActive={props.setActive}
                 toggleLoader={props.toggleLoader}
                 setMode={props.setMode}
+                mode={props.mode}
+                directory={props.directory}
+                setPackageActions={props.setPackageActions}
               />
               <PackagesList
+                mode={props.mode}
+                directory={props.directory}
                 loading={props.loading}
                 packages={props.packages}
                 toggleLoader={props.toggleLoader}

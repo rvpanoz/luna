@@ -13,6 +13,12 @@ export default {
     active: null,
     packages: [],
     packagesOutdated: [],
-    packageActions: ['Update', 'Uninstall']
+    packageActions: [{
+      text: 'Update',
+      iconCls: 'refresh'
+    }, {
+      text: 'Uninstall',
+      iconCls: 'trash'
+    }]
   }
 };
