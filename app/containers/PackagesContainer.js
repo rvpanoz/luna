@@ -54,6 +54,8 @@ class PackagesContainer extends React.Component {
   }
   loadData() {
     this.props.setActive(null);
+    this.props.toggleLoader(true);
+    this.props.toggleMainLoader(false);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['list', 'outdated'],

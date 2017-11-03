@@ -6,6 +6,7 @@ export const SET_MODAL_STATUS = 'SET_MODAL_STATUS';
 export const SET_PACKAGE_ACTIONS = 'SET_PACKAGE_ACTIONS';
 export const TOTAL_INSTALLED = 'TOTAL_INSTALLED';
 export const SET_ACTIVE = 'SET_ACTIVE';
+export const DO_INSTALL = 'DO_INSTALL';
 export const SET_MODE = 'SET_MODE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';

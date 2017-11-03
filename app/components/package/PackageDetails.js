@@ -18,13 +18,19 @@ class PackageDetails extends React.Component {
 
     let target = e.currentTarget;
     let action = target.dataset.action;
+    let mode = this.props.mode;
 
     if (action && typeof action === 'string') {
       let active = this.props.active;
       let selectVersion = this.refs.selectVersion;
-      let version = (selectVersion && selectVersion.value !== "false")
-        ? selectVersion.value
-        : 'latest';
+      let version;
+      if(action === 'Uninstall') {
+        version = null;
+      } else {
+        version = (selectVersion && selectVersion.value !== "false")
+          ? selectVersion.value
+          : 'latest';
+      }
 
       showMessageBox({
           action: action,

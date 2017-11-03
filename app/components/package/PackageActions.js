@@ -10,10 +10,10 @@ class PackageActions extends React.Component {
   }
   render() {
     let props = this.props;
-    let mode = props.mode, actions = [];
+    let wantsInstall = props.wantsInstall, actions = [];
 
-    switch (mode) {
-      case 'SEARCH':
+    switch (wantsInstall) {
+      case (true):
         actions.push({
           text: 'Install',
           iconCls: 'download'

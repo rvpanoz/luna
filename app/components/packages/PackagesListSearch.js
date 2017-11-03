@@ -26,7 +26,6 @@ export default class SearchBox extends React.Component {
     if (searchInput.value.length) {
       this.props.toggleLoader(true);
       this.props.setActive(null);
-      this.props.setMode('SEARCH');
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'search-packages',
         cmd: ['search'],

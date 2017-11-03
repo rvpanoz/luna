@@ -17,16 +17,22 @@ const packagesReducer = (state = initialState.packages, action) => {
         loading: false
       })
     case TOGGLE_MAIN_LOADER:
-      return Object.assign({}, state, {isLoading: action.isLoading});
+      return Object.assign({}, state, {
+        isLoading: action.isLoading
+      });
     case SET_PACKAGES:
       return Object.assign({}, state, {
         packages: action.packages,
         loading: false
       });
     case SET_MODAL_STATUS:
-      return Object.assign({}, state, {showModal: action.showModal});
+      return Object.assign({}, state, {
+        showModal: action.showModal
+      });
     case TOTAL_INSTALLED:
-      return Object.assign({}, state, {totalInstalled: action.totalInstalled});
+      return Object.assign({}, state, {
+        totalInstalled: action.totalInstalled
+      });
     case SET_PACKAGES_OUTDATED:
       return Object.assign({}, state, {
         packagesOutdated: action.packages,
