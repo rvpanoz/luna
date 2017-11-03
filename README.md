@@ -21,6 +21,9 @@ Luna is only available for 64-bit Linux systems.
 2. Run `sudo dpkg --install luna_1.0.0_amd64.deb` on the downloaded package.
 3. Launch Luna
 
+* if you encounter error **gyp WARN EACCES** when running **npm install** after you clone the repository,
+then use **sudo npm install --allow-root**
+
 ### Windows
 
 Work in progress..
