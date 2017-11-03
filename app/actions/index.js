@@ -1,13 +1,6 @@
 import * as types from '../constants/ActionTypes';
 import * as Modes from '../constants/Modes';
 
-export function setModal(showModal) {
-  return {
-    type: types.SET_MODAL_STATUS,
-    showModal
-  }
-}
-
 export function setTotalInstalled(totalInstalled) {
   return {
     type: types.TOTAL_INSTALLED,
@@ -74,10 +67,17 @@ export function setActive(active, isLoading) {
   }
 }
 
-export function setMode(mode = Modes.GLOBAL, packageActions=['Update', 'Uninstall']) {
+export function setMode(mode, directory) {
   return {
     type: types.SET_MODE,
     mode,
-    packageActions
+    directory
+  }
+}
+
+export function setModal(showModal) {
+  return {
+    type: types.SET_MODAL_STATUS,
+    showModal
   }
 }

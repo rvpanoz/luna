@@ -10,6 +10,14 @@ class Settings extends React.Component {
         <div className="sidebar__title">
           Settings
         </div>
+        <div className="ss-widget">
+          <div className="ss-widget__cont">
+            <div className="ss-widget__row">
+              <div className="ss-widget__cell"></div>
+              <div className="ss-widget__cell"></div>
+            </div>
+          </div>
+        </div>
       </section>
     )
   }

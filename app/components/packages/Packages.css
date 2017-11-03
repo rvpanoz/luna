@@ -25,9 +25,8 @@
 .packages__title {
   float: left;
   box-sizing: border-box;
-  width: 100%;
+  width: 50%;
   padding-right: 60px;
-  margin-right: -50px;
 }
 
 .packages__title span {
@@ -36,8 +35,8 @@
 }
 
 .packages__actions {
-  float: left;
-  width: 50px;
+  float: right;
+  width: 110px;
   cursor: pointer;
   line-height: 25px;
   font-size: 0;

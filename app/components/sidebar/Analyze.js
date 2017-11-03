@@ -4,22 +4,32 @@ import React from 'react';
 class Analyze extends React.Component {
   constructor(props) {
     super(props);
-    this.openPackage = this.openPackage.bind(this);
+    this._updateMode = this._updateMode.bind(this);
+    this._openPackage = this._openPackage.bind(this);
   }
-  openPackage(e) {
+  _updateMode(directory) {
+    this.props.setMode('LOCAL', directory);
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      cmd: ['list', 'outdated'],
+      mode: this.props.mode,
+      directory: directory
+    });
+  }
+  _openPackage(e) {
     e.preventDefault();
     remote.dialog.showOpenDialog(remote.getCurrentWindow(), {
-      title: 'Open package json file',
+      title: 'Open package.json file',
+      buttonLabel: 'Analyze',
       filters: [{
         name: 'json',
         extensions: ['json']
       }],
       openFile: true
-    }, (file) => {
-      if(file) {
-        ipcRenderer.send('analyze-json', file[0]);
+    }, (filePath) => {
+      if(filePath) {
+        this._updateMode(filePath[0]);
       }
-      return false;
     });
   }
   render() {
@@ -38,7 +48,7 @@ class Analyze extends React.Component {
     return (
       <section className="sidebar__analyze">
         <div className="sidebar__btn">
-          <a className="btn btn-block btn-default" onClick={this.openPackage} href="#">
+          <a className="btn btn-block btn-default" onClick={this._openPackage} href="#">
             Analyze package
           </a>
         </div>

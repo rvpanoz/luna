@@ -5,6 +5,7 @@
 
 'use strict';
 
+const path = require('path');
 const cp = require('child_process');
 const Q = require("q");
 const spawn = cp.spawn;
@@ -12,9 +13,10 @@ const defaults = ['--depth=0', '--json'];
 
 import {parse, isArray} from './utils';
 
-function runCommand(command, callback) {
+function runCommand(command, mode, directory, callback) {
   const deferred = Q.defer();
   const cwd = process.cwd();
+
   let result = '';
 
   if (!command || typeof command !== 'object') {
@@ -23,10 +25,8 @@ function runCommand(command, callback) {
 
   console.log(`running: npm ${command.join(" ")}`);
   let npmc = spawn('npm', command, {
-    shell: true,
     env: process.env,
-    stdio: 'pipe',
-    encoding: 'utf8'
+    cwd: directory ? path.dirname(directory) : cwd
   });
 
   let errors = 0;
@@ -55,12 +55,13 @@ function runCommand(command, callback) {
 
 exports.doCommand = function(options, callback) {
   let opts = options || {};
-
   if (!opts.cmd) {
     throw new Error('shell[doCommand]: cmd parameter must given');
   }
 
   let run = [],
+    mode = opts.mode,
+    directory = opts.directory,
     params = [],
     args = [],
     pkgInfo = [];
@@ -83,12 +84,10 @@ exports.doCommand = function(options, callback) {
     throw new Error('shell[doCommand]: cmd parameter must be given and must be an array');
   }
 
-  //setup params e.g -g, -long etc
-  for (let z = 0; z < opts.params.length; z++) {
-    let param = opts.params[z];
-    params.push(`-${param}`);
+  if(mode === 'GLOBAL') {
+    params.push('-g');
   }
-
+  console.log(mode, params);
   //setup arguments e.g --depth, --json etc
   if (opts.arguments) {
     for (let z in opts.arguments) {
@@ -104,7 +103,7 @@ exports.doCommand = function(options, callback) {
     run.forEach((cmd, idx) => {
       promises.push(function() {
         let command = [cmd].concat(pkgInfo).concat(params).concat(args);
-        return runCommand(command, callback);
+        return runCommand(command, mode, directory, callback);
       }());
     });
     return promises;
