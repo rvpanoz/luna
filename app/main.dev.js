@@ -7,7 +7,7 @@
  */
 
 import electron from 'electron';
-import {app, BrowserWindow, remote, ipcMain} from 'electron';
+import {app, BrowserWindow, remote, ipcMain, dialog} from 'electron';
 import MenuBuilder from './menu';
 
 const config = require('./config');
@@ -15,6 +15,7 @@ const cwd = process.cwd();
 const NODE_ENV = process.env.NODE_ENV;
 const platform = process.platform;
 const shell = require('./shell');
+const { execSync } = require('child_process');
 
 let debug = /--debug/.test(process.argv[2]);
 let mainWindow = null;
@@ -126,6 +127,18 @@ app.on('ready', async() => {
   if (externalDisplay) {
     x = externalDisplay.bounds.x + 50;
     y = externalDisplay.bounds.y + 50;
+  }
+
+  try {
+    execSync('npm -v', {
+      stdio: 'ignore'
+    });
+  } catch (e) {
+    if(mainWindow !== null) {
+      mainWindow.close();
+    }
+    dialog.showErrorBox('Error', 'NPM is not installed on your system');
+    return;
   }
 
   //create main window
