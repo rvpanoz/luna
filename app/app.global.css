@@ -1,15 +1,15 @@
-/*@import url('https://fonts.googleapis.com/css?family=Roboto');*/
-
 @import "~font-awesome/css/font-awesome.css";
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "~react-toggle-switch/dist/css/switch.min.css";
 @import '~animate.css/animate.css';
+
 html {
   height: 100%;
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11pt;
   min-height: 100%;
   min-width: 320px;
   box-sizing: border-box;
@@ -270,7 +270,7 @@ ol, ul {
 }
 
 .logo__text {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   display: inline-block;
   vertical-align: middle;
   white-space: normal;
@@ -1787,7 +1787,7 @@ select option {
   border: none;
   padding: 10px 15px;
   font-size: 16px;
-  font-family: 'Roboto';
+  font-family: 'Montserrat';
   color: #fff;
   outline: none;
   cursor: pointer;
