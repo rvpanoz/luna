@@ -46,7 +46,7 @@ const PackageTabs = (props) => {
       <div className="tab-content">
         <div className="tab-pane active" id="details" role="tabpanel">
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-6">
               <div className={styles.package__preview__props}>
                 <div className={styles.package__preview__prop} title="homepage">
                   <span className={styles.package__preview__homepage} title="Homepage">
@@ -60,23 +60,34 @@ const PackageTabs = (props) => {
                     <a onClick={props.navigate} data-url={(pkg.bugs && pkg.bugs.url) ? pkg.bugs.url : null} href="#">Issues</a>
                   </span>
                 </div>
-                <div className={styles.package__preview__prop} title="author">
-                  <span className={styles.package__preview__author} title="Author">
-                    <i className="fa fa-tags"></i>&nbsp;{pkg.author}
-                  </span>
-                </div>
-                <div className={styles.package__preview__prop} title="license">
-                  <span className={styles.package__preview__license} title="License">
-                    <i className="fa fa-balance-scale"></i>&nbsp;{pkg.license}
-                  </span>
-                </div>
-                <div className={styles.package__preview__prop} title="latest">
-                  <span className={styles.package__preview__latest} title="Latest version">
-                    <i className="fa fa-flag"></i>&nbsp;v{pkg['dist-tags'].latest}
-                  </span>
-                </div>
               </div>
+            </div>
+            <div className="col-md-6">
+              <div className={styles.package__preview__prop} title="license">
+                <span className={styles.package__preview__license} title="License">
+                  <i className="fa fa-balance-scale"></i>&nbsp;{pkg.license}
+                </span>
+              </div>
+              <div className={styles.package__preview__prop} title="latest">
+                <span className={styles.package__preview__latest} title="Latest version">
+                  <i className="fa fa-flag"></i>&nbsp;v{pkg['dist-tags'].latest}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-12">
+              <div className={styles.package__keywords} title="keywords">
+                {(pkg.keywords) ? pkg.keywords.map((keyword, idx) => {
+                  return <span key={idx} className="label label-danger">{keyword}</span>
+                }) : null}
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-md-12">
               <div className={styles.package__preview__note}>
+                <h3>{pkg.author}</h3>
                 {pkg.description}
               </div>
             </div>

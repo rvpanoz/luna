@@ -97,3 +97,14 @@
 .package__preview__actions {
   text-align: right;
 }
+
+.package__keywords {
+  margin: 15px 0;
+  padding: 10px 0;
+}
+
+.package__keywords span {
+  margin: 0 2.5px;
+  padding: 2.5px;
+  font-size: 11pt;
+}
