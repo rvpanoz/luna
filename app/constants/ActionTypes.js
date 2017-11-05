@@ -10,3 +10,4 @@ export const DO_INSTALL = 'DO_INSTALL';
 export const SET_MODE = 'SET_MODE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES';
+export const ADD_COMMAND_OPTION = 'ADD_COMMAND_OPTION';

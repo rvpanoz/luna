@@ -11,14 +11,22 @@ import Loader from '../../common/Loader';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
 import { showMessageBox, isUrl } from '../../utils';
+import {OPTIONS} from '../../constants/Command';
 import styles from './PackageDetails.css';
 
 class PackageDetails extends React.Component {
   constructor(props) {
     super(props);
+    this.addOption = this.addOption.bind(this);
     this.navigate = this.navigate.bind(this);
     this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
+  }
+  addOption(e) {
+    let option = e.target.dataset.option;
+    if(option && typeof option === 'string') {
+      this.props.addCommandOption(option);
+    }
   }
   navigate(e) {
     e.preventDefault();
@@ -30,7 +38,6 @@ class PackageDetails extends React.Component {
   }
   doAction(e) {
     e.preventDefault();
-
     let target = e.currentTarget;
     let action = target.dataset.action;
     let mode = this.props.mode;
@@ -38,7 +45,7 @@ class PackageDetails extends React.Component {
     if (action && typeof action === 'string') {
       let active = this.props.active;
       let selectVersion = this.refs.selectVersion;
-      let version;
+      let version, options = this.props.cmdOptions;
       if(action === 'Uninstall') {
         version = null;
       } else {
@@ -60,7 +67,8 @@ class PackageDetails extends React.Component {
             ipcEvent: action,
             cmd: [(action === 'Uninstall') ? 'uninstall' : 'install'],
             pkgName: active.name,
-            pkgVersion: (action === 'Uninstall') ? null : version
+            pkgVersion: (action === 'Uninstall') ? null : version,
+            pkgOptions: options
           });
         });
     }
@@ -112,24 +120,41 @@ class PackageDetails extends React.Component {
           </div>
         </div>
         <div className={styles.package__details__info}>
-          <div className="form-group">
-            <label htmlFor="selectVersion">
-              <span>Select version</span>
-            </label>
-            <select value={pkg.version} onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
-              <option value="false">-</option>
-              {pkg.versions.map((version, idx) => {
-                return <option key={idx} value={version}>{version}</option>
-              })}
-            </select>
+          <div className={styles.package__details__info__top}>
+            <div className={styles.package__details__version}>
+              <div className="form-group">
+                <label htmlFor="selectVersion">
+                  <span>Select version</span>
+                </label>
+                <select value={pkg.version} onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
+                  <option value="false">-</option>
+                  {pkg.versions.map((version, idx) => {
+                    return <option key={idx} value={version}>{version}</option>
+                  })}
+                </select>
+              </div>
+            </div>
+            <div className={styles.package__details__date}>
+              Updated:&nbsp; {moment(pkg.time.modified).format('DD/MM/YYYY')}
+            </div>
           </div>
-          <div className={styles.package__details__date}>
-            Updated:&nbsp; {moment(pkg.time.modified).format('DD/MM/YYYY')}
+          <div className={styles.package__details__options} title="options">
+            {
+              OPTIONS.map((option, idx) => {
+                let opt = option.split('*');
+                return (
+                  <label key={idx} className="with-square-checkbox" title={opt[1]}>
+                    <input type="checkbox" onChange={this.addOption} data-option={opt[0]}/>
+                    <span>{opt[0]}</span>
+                  </label>
+                )
+              })
+            }
           </div>
         </div>
         <div className={styles.package__details__body}>
           <Loader loading={this.props.isLoading}>
-            <PackageTabs pkg={pkg} navigate={this.navigate}/>
+            <PackageTabs pkg={pkg} navigate={this.navigate} addOption={this.addOption}/>
           </Loader>
         </div>
       </div>

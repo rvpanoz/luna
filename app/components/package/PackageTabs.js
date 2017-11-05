@@ -76,7 +76,7 @@ const PackageTabs = (props) => {
             </div>
           </div>
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-6">
               <div className={styles.package__keywords} title="keywords">
                 {(pkg.keywords) ? pkg.keywords.map((keyword, idx) => {
                   return <span key={idx} className="label label-danger">{keyword}</span>
