@@ -24,6 +24,8 @@ const PackageContainer = (props) => {
           setModal={props.actions.setModal}
           toggleMainLoader={props.actions.toggleMainLoader}
           isLoading={props.isLoading}
+          cmdOptions={props.cmdOptions}
+          addCommandOption={props.actions.addCommandOption}
         />
       </Loader>
       : <div className="modal-container">
@@ -38,6 +40,7 @@ function mapStateToProps(state) {
   return {
     mode: state.global.mode,
     directory: state.global.directory,
+    cmdOptions: state.global.cmdOptions,
     packageActions: state.packages.packageActions,
     showModal: state.packages.showModal,
     active: state.packages.active,

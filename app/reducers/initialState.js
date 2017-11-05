@@ -3,7 +3,8 @@ export default {
     mode: 'GLOBAL',
     directory: null,
     loading: false,
-    messages: []
+    messages: [],
+    cmdOptions: []
   },
   packages: {
     isLoading: false,

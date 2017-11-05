@@ -1,6 +1,13 @@
 import * as types from '../constants/ActionTypes';
 import * as Modes from '../constants/Modes';
 
+export function addCommandOption(option) {
+  return {
+    type: types.ADD_COMMAND_OPTION,
+    option
+  }
+}
+
 export function setTotalInstalled(totalInstalled) {
   return {
     type: types.TOTAL_INSTALLED,

@@ -59,6 +59,12 @@
   overflow: hidden;
 }
 
+.package__details__info__top {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+}
+
 .package__details__name {
   float: left;
   width: 100%;
@@ -81,11 +87,31 @@
 }
 
 .package__details__date {
-  float: right;
+  position: relative;
+  width: 50%;
   font-size: 12px;
   line-height: 20px;
   padding: 10px 0;
-  text-align: left;
+  text-align: right;
+}
+
+.package__details__version {
+  position: relative;
+  width: 50%;
+  margin: 0;
+  padding: 10px 0;
+}
+
+.package__details__options {
+  position: relative;
+  margin: 15px 0;
+  padding: 10px 0;
+}
+
+.package__details__options label {
+  margin: 10px 10px 5px;
+  padding-right: 10px;
+  float: left;
 }
 
 .package__details__body {

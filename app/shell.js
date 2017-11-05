@@ -88,6 +88,15 @@ exports.doCommand = function(options, callback) {
     params.push('-g');
   }
 
+  //setup options e.g --save-dev
+  let cmdOptions = opts.pkgOptions;
+  if(cmdOptions) {
+    for (let z=0;z<cmdOptions.length;z++) {
+      let opt = cmdOptions[z];
+      args.push(`--${opt}`);
+    }
+  }
+
   //setup arguments e.g --depth, --json etc
   if (opts.arguments) {
     for (let z in opts.arguments) {
@@ -95,7 +104,7 @@ exports.doCommand = function(options, callback) {
       args.push(`--${z}=${v}`);
     }
   } else {
-    args = defaults.concat();
+    args = args.concat(defaults.concat());
   }
 
   function combine() {

@@ -48,10 +48,9 @@ export function showMessageBox(opts, cb = {}) {
       return '';
     }
   });
-
   remote.dialog.showMessageBox(remote.getCurrentWindow(), {
     type: 'question',
-    message: `${message}\nContinue? `,
+    message: message,
     buttons: ['CANCEL', action]
   }, (btnIdx) => {
     if(Boolean(btnIdx) === true) {

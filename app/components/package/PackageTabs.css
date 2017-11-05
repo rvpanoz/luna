@@ -84,8 +84,7 @@
 }
 
 .package__preview__note {
-  margin-top: 10px;
-  font-size: 14px;
+  font-size: 11pt;
   line-height: 16px;
   text-align: left;
   padding: 10px;
@@ -98,13 +97,21 @@
   text-align: right;
 }
 
-.package__keywords {
+.package__keywords, .package__options {
+  position: relative;
   margin: 15px 0;
   padding: 10px 0;
 }
 
+.package__options label {
+  margin: 10px 10px 5px;
+  padding-right: 10px;
+  float: left;
+}
+
 .package__keywords span {
-  margin: 0 2.5px;
+  margin: 2px 2.5px;
   padding: 2.5px;
   font-size: 11pt;
+  float: left;
 }

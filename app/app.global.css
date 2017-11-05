@@ -2138,3 +2138,31 @@ ul.notification-info .notifications.dropdown>a {
   display: block;
   width: 100%;
 }
+
+/** checkbox **/
+label.with-square-checkbox {
+  cursor: pointer;
+}
+label.with-square-checkbox span {
+  line-height: 24px;
+}
+label.with-square-checkbox span::before {
+  margin-right: 4px;
+  padding-left: 1px;
+  width: 25px;
+  height: 25px;
+  border: 2px solid grey;
+  display: inline-block;
+  line-height: 15px;
+  content: '';
+  float: left;
+}
+label.with-square-checkbox input[type="checkbox"] {
+  display: none;
+}
+label.with-square-checkbox input[type="checkbox"]:checked + span::before {
+  font-family: 'Glyphicons Halflings';
+  font-size: 14pt;
+  content: '\e013';
+  color: #20c05c;
+}
