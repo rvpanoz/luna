@@ -1,17 +1,32 @@
-import {remote, ipcRenderer} from 'electron';
+/**
+* PackageDetails
+**/
+
+'use strict';
+
+import {remote, ipcRenderer, shell} from 'electron';
 import React from 'react';
 import moment from 'moment';
 import Loader from '../../common/Loader';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
-import {showMessageBox} from '../../utils';
+import { showMessageBox, isUrl } from '../../utils';
 import styles from './PackageDetails.css';
 
 class PackageDetails extends React.Component {
   constructor(props) {
     super(props);
+    this.navigate = this.navigate.bind(this);
     this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
+  }
+  navigate(e) {
+    e.preventDefault();
+    let url = e.target.dataset.url;
+    if(isUrl(url)) {
+      shell.openExternal(url);
+    }
+    return false;
   }
   doAction(e) {
     e.preventDefault();
@@ -74,7 +89,6 @@ class PackageDetails extends React.Component {
     if (!pkg) {
       return null;
     }
-
     return (
       <div className={styles.package__details} ref="root">
         <div className={styles.package__details__head}>
@@ -115,7 +129,7 @@ class PackageDetails extends React.Component {
         </div>
         <div className={styles.package__details__body}>
           <Loader loading={this.props.isLoading}>
-            <PackageTabs pkg={pkg}/>
+            <PackageTabs pkg={pkg} navigate={this.navigate}/>
           </Loader>
         </div>
       </div>

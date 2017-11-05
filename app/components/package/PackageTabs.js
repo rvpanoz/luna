@@ -1,3 +1,9 @@
+/**
+* PackageTabs
+**/
+
+'use strict';
+
 import React from 'react';
 import {PackageTabsList} from './PackageTabsList';
 import styles from './PackageTabs.css';
@@ -42,6 +48,18 @@ const PackageTabs = (props) => {
           <div className="row">
             <div className="col-md-12">
               <div className={styles.package__preview__props}>
+                <div className={styles.package__preview__prop} title="homepage">
+                  <span className={styles.package__preview__homepage} title="Homepage">
+                    <i className="fa fa-home"></i>&nbsp;
+                    <a onClick={props.navigate} data-url={pkg.homepage} href="#">Homepage</a>
+                  </span>
+                </div>
+                <div className={styles.package__preview__prop} title="issues">
+                  <span className={styles.package__preview__issues} title="Issues">
+                    <i className="fa fa-bug"></i>&nbsp;
+                    <a onClick={props.navigate} data-url={(pkg.bugs && pkg.bugs.url) ? pkg.bugs.url : null} href="#">Issues</a>
+                  </span>
+                </div>
                 <div className={styles.package__preview__prop} title="author">
                   <span className={styles.package__preview__author} title="Author">
                     <i className="fa fa-tags"></i>&nbsp;{pkg.author}

@@ -19,7 +19,7 @@ const AppHeader = (props) => {
               <a className="navbar-brand" href="#">
                 <div className="logo text-nowrap">
                   <div className="logo__img">
-                    <i className="fa fa-chevron-right"></i>
+                    <img className="img" src="./img/box.png"/>
                   </div>
                   <span className="logo__text">Luna</span>
                 </div>

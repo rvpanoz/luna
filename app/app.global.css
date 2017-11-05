@@ -265,7 +265,7 @@ ol, ul {
   display: inline-block;
   vertical-align: middle;
   font-size: 25px;
-  width: 15px;
+  width: 32px;
   color: #ed4949;
 }
 
@@ -341,7 +341,7 @@ ol, ul {
 
 .sidebar__title {
   display: inline-block;
-  padding: 10px 20px 5px;
+  padding: 10px 15px 5px;
   font-weight: bold;
   font-size: 13pt;
   color: #fff;

@@ -4,6 +4,11 @@
 
 import { remote, ipcRenderer } from 'electron';
 
+export function isUrl(url) {
+  let matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
+  return matcher.test(url);
+}
+
 export function isArray() {
   let objectArray;
   objectArray = Object.prototype.toString().call(arguments[0]);
