@@ -12,7 +12,7 @@ You can **install**, **view**, **update**, **uninstall** your npm global package
 - Update existing packages
 - Uninstall packages
 
-![Luna - NPM management tool](http://104.236.58.95/media/luna.png)
+![Luna - NPM management tool](http://104.236.58.95/media/luna-latest.png)
 
 ## Development ##
 
