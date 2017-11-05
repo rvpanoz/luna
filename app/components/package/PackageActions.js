@@ -16,7 +16,7 @@ class PackageActions extends React.Component {
       <div className="dropdown">
         <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
         <ul className="dropdown-menu dropdown-menu-right">
-          <li className="dropdown-header">Do action</li>
+          <li className="dropdown-header">Actions</li>
           {
             actions.map((action, idx)=>{
               return (
