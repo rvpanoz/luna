@@ -38,7 +38,7 @@ class PackagesList extends React.Component {
               let version = pkg.version;
               let readme = pkg.readme;
               let name = (pkg.from)
-                ? pkg.from.split("@")[0]
+                ? pkg.from
                 : pkg.name;
               return <PackageListItem
                       toggleMainLoader={this.props.toggleMainLoader}
