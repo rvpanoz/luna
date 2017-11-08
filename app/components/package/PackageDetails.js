@@ -17,18 +17,11 @@ import styles from './PackageDetails.css';
 class PackageDetails extends React.Component {
   constructor(props) {
     super(props);
-    this.addOption = this.addOption.bind(this);
-    this.navigate = this.navigate.bind(this);
+    this.doNavigate = this.doNavigate.bind(this);
     this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
   }
-  addOption(e) {
-    let option = e.target.dataset.option;
-    if(option && typeof option === 'string') {
-      this.props.addCommandOption(option);
-    }
-  }
-  navigate(e) {
+  doNavigate(e) {
     e.preventDefault();
     let url = e.target.dataset.url;
     if(isUrl(url)) {
@@ -42,7 +35,7 @@ class PackageDetails extends React.Component {
     let action = target.dataset.action;
     let mode = this.props.mode;
 
-    if (action && typeof action === 'string') {
+    if (action) {
       let active = this.props.active;
       let selectVersion = this.refs.selectVersion;
       let version, options = this.props.cmdOptions;
@@ -72,6 +65,7 @@ class PackageDetails extends React.Component {
           });
         });
     }
+
     return false;
   }
   onChangeVersion(e) {
@@ -116,6 +110,7 @@ class PackageDetails extends React.Component {
               toggleMainLoader={this.props.toggleMainLoader}
               doAction={this.doAction}
               packageActions={this.props.packageActions}
+              addCommandOption={this.props.addCommandOption}
             />
           </div>
         </div>
@@ -138,23 +133,10 @@ class PackageDetails extends React.Component {
               Updated:&nbsp; {moment(pkg.time.modified).format('DD/MM/YYYY')}
             </div>
           </div>
-          <div className={styles.package__details__options} title="options">
-            {
-              OPTIONS.map((option, idx) => {
-                let opt = option.split('*');
-                return (
-                  <label key={idx} className="with-square-checkbox" title={opt[1]}>
-                    <input type="checkbox" onChange={this.addOption} data-option={opt[0]}/>
-                    <span>{opt[0]}</span>
-                  </label>
-                )
-              })
-            }
-          </div>
         </div>
         <div className={styles.package__details__body}>
           <Loader loading={this.props.isLoading}>
-            <PackageTabs pkg={pkg} navigate={this.navigate} addOption={this.addOption}/>
+            <PackageTabs pkg={pkg} navigate={this.doNavigate} addOption={this.addOption}/>
           </Loader>
         </div>
       </div>

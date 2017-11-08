@@ -13,25 +13,19 @@ import PackageDetails from '../components/package/PackageDetails';
 const PackageContainer = (props) => {
   return (
     <div className="package-container">
-      {(props.showModal === false) ?
       <Loader loading={props.isLoading}>
         <PackageDetails
           mode={props.mode}
           directory={props.directory}
           active={props.active}
           packageActions={props.packageActions}
-          setActive={props.actions.setActive}
-          setModal={props.actions.setModal}
-          toggleMainLoader={props.actions.toggleMainLoader}
+          setActive={props.setActive}
+          toggleMainLoader={props.toggleMainLoader}
           isLoading={props.isLoading}
           cmdOptions={props.cmdOptions}
-          addCommandOption={props.actions.addCommandOption}
+          addCommandOption={props.addCommandOption}
         />
       </Loader>
-      : <div className="modal-container">
-        <AppModal title={props.modalTitle} showModal={props.showModal}/>
-      </div>
-    }
     </div>
   )
 }
@@ -42,7 +36,6 @@ function mapStateToProps(state) {
     directory: state.global.directory,
     cmdOptions: state.global.cmdOptions,
     packageActions: state.packages.packageActions,
-    showModal: state.packages.showModal,
     active: state.packages.active,
     isLoading: state.packages.isLoading
   };
@@ -50,7 +43,15 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    addCommandOption: (option) => {
+      return dispatch(actions.addCommandOption(option))
+    },
+    toggleMainLoader: (bool) => {
+      return dispatch(actions.toggleMainLoader(bool))
+    },
+    setActive: (pkg) => {
+      return dispatch(actions.setActive(pkg));
+    }
   };
 }
 

@@ -10,6 +10,8 @@ class Analyze extends React.Component {
   _updateMode(directory) {
     this.props.setActive(null);
     this.props.setMode('LOCAL', directory);
+    this.props.setPackageActions();
+    this.props.setPackagesOutdated([]);
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['list', 'outdated'],
@@ -29,6 +31,7 @@ class Analyze extends React.Component {
       openFile: true
     }, (filePath) => {
       if(filePath) {
+        this.props.toggleLoader(true);
         this._updateMode(filePath[0]);
       }
     });
@@ -38,7 +41,7 @@ class Analyze extends React.Component {
     let outdated = this.props.packagesOutdated;
     let t1=installed,t2=0;
 
-    if(outdated instanceof Array && outdated.length) {
+    if(Array.isArray(outdated)) {
       t2 = outdated.length;
     } else {
       if(outdated) {

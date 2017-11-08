@@ -1,7 +1,6 @@
 @import "~font-awesome/css/font-awesome.css";
 @import "~bootstrap/dist/css/bootstrap.css";
-@import "~react-toggle-switch/dist/css/switch.min.css";
-@import '~animate.css/animate.css';
+@import "~awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css";
 
 html {
   height: 100%;
@@ -76,7 +75,7 @@ code {
 }
 
 .selected {
-  background-color: rgba(36, 41, 44, 0.5)
+  background-color: rgba(36, 41, 44, 36)
 }
 
 .wrapper {
@@ -2165,4 +2164,12 @@ label.with-square-checkbox input[type="checkbox"]:checked + span::before {
   font-size: 14pt;
   content: '\e013';
   color: #20c05c;
+}
+
+.abc-checkbox label::after {
+  top: -2px !important;
+}
+
+.abc-checkbox label {
+  padding-left: 10px !important;
 }

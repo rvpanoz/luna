@@ -10,7 +10,6 @@ class PackagesListHeader extends React.Component {
   }
   _fetch(e) {
     e.preventDefault();
-    this.props.toggleLoader(true);
     this.props.loadData();
   }
   _setGlobalMode(e) {
@@ -21,6 +20,7 @@ class PackagesListHeader extends React.Component {
     this.props.toggleLoader(true);
     this.props.setMode('GLOBAL', null);
     this.props.setActive(null);
+    this.props.setPackageActions();
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['list', 'outdated'],

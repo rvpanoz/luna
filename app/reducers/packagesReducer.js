@@ -1,3 +1,10 @@
+/**
+* Packages reducer - handles state management
+* for packages operations
+**/
+
+'use strict';
+
 import initialState from './initialState';
 import {
   TOGGLE_MAIN_LOADER,
@@ -12,42 +19,44 @@ import {
 const packagesReducer = (state = initialState.packages, action) => {
   switch (action.type) {
     case SET_PACKAGES_OUTDATED:
-      return Object.assign({}, state, {
-        packagesOutdated: action.packagesOutdated,
-        loading: false
-      })
+      return {
+        ...state,
+        packagesOutdated: action.packagesOutdated
+      }
     case TOGGLE_MAIN_LOADER:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         isLoading: action.isLoading
-      });
+      }
     case SET_PACKAGES:
-      return Object.assign({}, state, {
-        packages: action.packages,
-        loading: false
-      });
-    case SET_MODAL_STATUS:
-      return Object.assign({}, state, {
-        showModal: action.showModal
-      });
+      return {
+        ...state,
+        packages: action.packages
+      }
     case TOTAL_INSTALLED:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         totalInstalled: action.totalInstalled
-      });
-    case SET_PACKAGES_OUTDATED:
-      return Object.assign({}, state, {
-        packagesOutdated: action.packages,
-        loading: false
-      });
+      }
     case SET_PACKAGE_ACTIONS:
-      return Object.assign({}, state, {
-        packageActions: action.packageActions
-      });
+      const packageActions_default = [{
+        text: 'Update',
+        iconCls: 'refresh'
+      }, {
+        text: 'Uninstall',
+        iconCls: 'trash'
+      }];
+
+      return {
+        ...state,
+        packageActions: (action.packageActions) ? action.packageActions : packageActions_default
+      }
     case SET_ACTIVE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         active: action.active,
-        loading: false,
         isLoading: false
-      });
+      }
     default:
       return state;
   }

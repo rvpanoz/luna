@@ -9,12 +9,6 @@ export function isUrl(url) {
   return matcher.test(url);
 }
 
-export function isArray() {
-  let objectArray;
-  objectArray = Object.prototype.toString().call(arguments[0]);
-  return (objectArray === '[object Array]');
-}
-
 export function parse(data, key, all) {
   let arr = [], packages;
   try {

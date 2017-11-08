@@ -1,15 +1,26 @@
-import initialState from './initialState';
-import {SET_MODE, ADD_MESSAGE, CLEAR_MESSAGES, TOGGLE_LOADER, ADD_COMMAND_OPTION} from '../constants/ActionTypes';
+/**
+* Global reducer - handles state management
+* for global operations
+**/
 
-const globalReducer = (state = initialState.global, action) => {
+'use strict';
+
+import initialState from './initialState';
+import {
+  SET_MODE,
+  ADD_MESSAGE,
+  CLEAR_MESSAGES,
+  TOGGLE_LOADER,
+  ADD_COMMAND_OPTION
+} from '../constants/ActionTypes';
+
+const globalReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_COMMAND_OPTION:
-      let cmdOptions = state.cmdOptions;
-      let filtered = [];
+      if (state.cmdOptions.length) {
+        let optionIndex = state.cmdOptions.indexOf(action.option);
 
-      if (cmdOptions.length) {
-        let optionIndex = cmdOptions.indexOf(action.option);
-        if(optionIndex === -1) {
+        if (optionIndex === -1) {
           return {
             ...state,
             cmdOptions: [
@@ -20,21 +31,22 @@ const globalReducer = (state = initialState.global, action) => {
         } else {
           return {
             ...state,
-            cmdOptions: [
-              ...state.cmdOptions.slice(0, optionIndex),
-            ]
+            cmdOptions: [...state.cmdOptions.slice(0, optionIndex)]
           }
         }
       } else {
-        return Object.assign({}, state, {
+        return {
+          ...state,
           cmdOptions: [action.option]
-        });
+        }
       }
     case CLEAR_MESSAGES:
-      return Object.assign({}, state, {messages: []});
+      return {
+        ...state,
+        messages: []
+      }
     case ADD_MESSAGE:
-      let messages = state.messages;
-      return (messages.length)
+      return (state.messages.length)
         ? {
           ...state,
           messages: [
@@ -43,24 +55,24 @@ const globalReducer = (state = initialState.global, action) => {
               body: action.body
             }
           ]
-        }
-        : Object.assign({}, state, {
-          messages: [
-            {
+        } : {
+          ...state,
+          messages: [{
               level: action.level,
               body: action.body
-            }
-          ]
-        });
+          }]
+        };
     case TOGGLE_LOADER:
-      return Object.assign({}, state, {loading: action.loading});
+      return {
+        ...state,
+        loading: action.loading
+      }
     case SET_MODE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         mode: action.mode,
-        directory: action.directory,
-        messages: [],
-        loading: true
-      });
+        directory: action.directory
+      }
     default:
       return state;
   }
