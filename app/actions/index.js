@@ -1,3 +1,7 @@
+/**
+* Redux actions
+*/
+
 import * as types from '../constants/ActionTypes';
 import * as Modes from '../constants/Modes';
 

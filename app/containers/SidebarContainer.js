@@ -1,6 +1,13 @@
+/**
+* Sidebar container
+**/
+
+'use strict';
+
 import React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { UI } from '../constants/UI';
 import * as actions from '../actions';
 import QuickMenu from '../components/sidebar/QuickMenu';
 import Analyze from '../components/sidebar/Analyze';
@@ -27,8 +34,7 @@ class SidebarContainer extends React.Component {
   }
   render() {
     let props = this.props;
-    let items = ['fa-bars', 'fa-feed', 'fa-cog'];
-
+    let items = UI.itemIcons;
     return (
       <div className="sidebar">
         <QuickMenu items={items} handleSidebarContent={this.handleSidebarContent}/>
@@ -38,30 +44,32 @@ class SidebarContainer extends React.Component {
                 <div className="sidebar__menu active">
                   <Analyze
                     mode={props.mode}
-                    toggleLoader={props.actions.toggleLoader}
-                    setMode={props.actions.setMode}
-                    setActive={props.actions.setActive}
+                    toggleLoader={props.toggleLoader}
+                    setMode={props.setMode}
+                    setActive={props.setActive}
+                    setPackagesOutdated={props.setPackagesOutdated}
                     packagesOutdated={props.packagesOutdated}
                     packagesInstalled={props.packagesInstalled}
-                    clearMessages={props.actions.clearMessages}
-                    setTotalInstalled={props.actions.setTotalInstalled}
+                    clearMessages={props.clearMessages}
+                    setTotalInstalled={props.setTotalInstalled}
+                    setPackageActions={props.setPackageActions}
                   />
                 </div>
                 <div className="sidebar__menu">
                   <OutdatedList
                     mode={props.mode}
                     packages={props.packagesOutdated}
-                    toggleMainLoader={props.actions.toggleMainLoader}
-                    setActive={props.actions.setActive}
+                    toggleMainLoader={props.toggleMainLoader}
+                    setActive={props.setActive}
                   />
                 </div>
                 <div className="sidebar__menu">
                   <Settings
                     mode={props.mode}
-                    setMode={props.actions.setMode}
-                    toggleLoader={props.actions.toggleLoader}
-                    setActive={props.actions.setActive}
-                    clearMessages={props.actions.clearMessages}
+                    setMode={props.setMode}
+                    toggleLoader={props.toggleLoader}
+                    setActive={props.setActive}
+                    clearMessages={props.clearMessages}
                   />
                 </div>
               </div>
@@ -75,6 +83,7 @@ class SidebarContainer extends React.Component {
 function mapStateToProps(state) {
   return {
     mode: state.global.mode,
+    directory: state.global.directory,
     messages: state.global.messages,
     packages: state.packages.packages,
     packagesInstalled: state.packages.totalInstalled,
@@ -84,7 +93,36 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch)
+    setPackages: (packages) => {
+      return dispatch(actions.setPackages(packages));
+    },
+    setPackageActions: (packageActions) => {
+      return dispatch(actions.setPackageActions(packageActions));
+    },
+    setActive: (pkg) => {
+      return dispatch(actions.setActive(pkg));
+    },
+    toggleLoader: (bool) => {
+      return dispatch(actions.toggleLoader(bool))
+    },
+    toggleMainLoader: (bool) => {
+      return dispatch(actions.toggleMainLoader(bool))
+    },
+    setMode: (mode, directory = null, loading = true) => {
+      return dispatch(actions.setMode(mode, directory, loading))
+    },
+    setPackagesOutdated: (packages) => {
+      return dispatch(actions.setPackagesOutdated(packages));
+    },
+    setTotalInstalled: (total) => {
+      return dispatch(actions.setTotalInstalled(total));
+    },
+    addMessage: (level, message) => {
+      return dispatch(actions.addMessage(level, message));
+    },
+    clearMessages: () => {
+      return dispatch(actions.clearMessages())
+    }
   }
 }
 

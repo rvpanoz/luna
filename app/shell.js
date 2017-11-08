@@ -26,7 +26,9 @@ function runCommand(command, mode, directory, callback) {
   console.log(`running: npm ${command.join(" ")}`);
   let npmc = spawn('npm', command, {
     env: process.env,
-    cwd: directory ? path.dirname(directory) : cwd
+    cwd: directory
+      ? path.dirname(directory)
+      : cwd
   });
 
   let errors = 0;
@@ -43,11 +45,7 @@ function runCommand(command, mode, directory, callback) {
 
   npmc.on('close', () => {
     console.log(`finish: npm ${command.join(' ')}`);
-    deferred.resolve({
-      data: result,
-      status: 'close',
-      cmd: command[0]
-    });
+    deferred.resolve({data: result, status: 'close', cmd: command[0]});
   });
 
   return deferred.promise;
@@ -84,16 +82,22 @@ exports.doCommand = function(options, callback) {
     throw new Error('shell[doCommand]: cmd parameter must be given and must be an array');
   }
 
-  if(mode === 'GLOBAL') {
+  if (mode === 'GLOBAL') {
     params.push('-g');
   }
 
   //setup options e.g --save-dev
   let cmdOptions = opts.pkgOptions;
-  if(cmdOptions) {
-    for (let z=0;z<cmdOptions.length;z++) {
-      let opt = cmdOptions[z];
-      args.push(`--${opt}`);
+  if (cmdOptions) {
+    switch (true) {
+      case(cmdOptions.length > 0):
+        for (let z = 0; z < cmdOptions.length; z++) {
+          let opt = cmdOptions[z];
+          args.push(`--${opt}`);
+        }
+        break;
+      default:
+        args.push(`--no-save`);
     }
   }
 

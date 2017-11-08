@@ -3,7 +3,7 @@ import React from 'react';
 const QuickMenuListItem = (props) => {
   let idx = props.idx;
   let indi = (props.faClass==='fa-feed') ? 'new' : null;
-  
+
   return (
     <div onClick={props.onClick} className={`quickmenu__item ${indi} ${(idx===0)?'active':null}`}>
       <div className={`fa fa-fw ${props.faClass}`}></div>
@@ -37,11 +37,14 @@ class QuickMenuList extends React.Component {
     return (
       <div className="quickmenu__list" ref="menuList">
         {items.map((faClass, idx) => {
-          return <QuickMenuListItem
-                    onClick={this.onItemClick}
-                    faClass={faClass}
-                    key={idx}
-                    idx={idx}/>
+          return (
+            <QuickMenuListItem
+              onClick={this.onItemClick}
+              faClass={faClass}
+              key={idx}
+              idx={idx}
+            />
+          )
         })}
       </div>
     )

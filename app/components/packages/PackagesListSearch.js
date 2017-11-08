@@ -30,6 +30,7 @@ export default class SearchBox extends React.Component {
         text: 'Install',
         iconCls: 'download'
       }]);
+      
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'search-packages',
         cmd: ['search'],

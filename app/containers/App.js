@@ -11,7 +11,6 @@ import configureStore from '../store';
 import SidebarContainer from './SidebarContainer';
 import AppHeader from '../common/AppHeader';
 import PackagesContainer from './PackagesContainer';
-import PackageAnalyzeContainer from './PackageAnalyzeContainer';
 
 const store = configureStore();
 const rootEl = document.getElementById('app-content');

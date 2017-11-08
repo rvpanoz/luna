@@ -6,11 +6,11 @@ export default class OutdatedPackages extends React.Component {
     super(props)
   }
   render() {
-    let packagesObj = this.props.packages;
+    let outdatedPackages = this.props.packages;
     let packages = [];
-    for (let x in packagesObj) {
+    for (let x in outdatedPackages) {
       let name = x;
-      let details = packagesObj[name];
+      let details = outdatedPackages[name];
       packages.push({name, details});
     }
 
@@ -23,13 +23,15 @@ export default class OutdatedPackages extends React.Component {
           <div className="lm-widget__list">
             {(packages && packages.length)
               ? packages.map((pkg, idx) => {
-                return <OutdatedListItem
+                return (
+                    <OutdatedListItem
                         key={idx}
                         package={pkg}
                         setActive={this.props.setActive}
                         toggleMainLoader={this.props.toggleMainLoader}
                         mode={this.props.mode}
                       />
+                    )
               })
               : null
             }

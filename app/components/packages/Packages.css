@@ -3,10 +3,8 @@
 .packages__list {
   visibility: visible;
   overflow-y: scroll;
-  padding: 10px 15px;
-  margin-top: 15px;
+  padding: 10px 0;
   border-radius: 2px;
-  background-color: rgba(36, 41, 44, 0.5);
   clear: both;
   z-index: 999;
 }
