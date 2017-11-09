@@ -35,35 +35,38 @@ class PackageActions extends React.Component {
     let props = this.props;
     let actions = props.packageActions;
 
-    return (<div className="dropdown">
-      <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
-      <ul className="dropdown-menu dropdown-menu-right" ref="dropdownMenu">
-        {
-          actions.map((action, idx) => {
-            return (<li key={idx}>
-              <a href="#" data-action={action.text} onClick={props.doAction}>
-                <i className={`fa fa-${action.iconCls}`}/>&nbsp;
-                <b>{action.text}</b>
-              </a>
-            </li>)
-          })
-        }
-        <li className="dropdown-header">Options</li>
-        {
-          OPTIONS.map((option, idx) => {
-            let opt = option.split('*');
-            return (<li key={idx} title={opt[1]}>
-              <div className="form-check abc-checkbox">
-                <input className="form-check-input" id={`m${idx}`} type="checkbox" data-option={opt[0]}/>
-                <label className="form-check-label" htmlFor={`m${idx}`}>
-                  {opt[0]}
-                </label>
-              </div>
-            </li>)
-          })
-        }
-      </ul>
-    </div>)
+    return (
+      <div className="dropdown">
+        <i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown"></i>
+        <ul className="dropdown-menu dropdown-menu-right" ref="dropdownMenu">
+          <li className="dropdown-header">Actions</li>
+          {
+            actions.map((action, idx) => {
+              return (<li key={idx}>
+                <a href="#" data-action={action.text} onClick={props.doAction}>
+                  <i className={`fa fa-${action.iconCls}`}/>&nbsp;
+                  <b>{action.text}</b>
+                </a>
+              </li>)
+            })
+          }
+          <li className="dropdown-header">Options</li>
+          {
+            OPTIONS.map((option, idx) => {
+              let opt = option.split('*');
+              return (<li key={idx} title={opt[1]}>
+                <div className="form-check abc-checkbox">
+                  <input className="form-check-input" id={`m${idx}`} type="checkbox" data-option={opt[0]}/>
+                  <label className="form-check-label" htmlFor={`m${idx}`}>
+                    {opt[0]}
+                  </label>
+                </div>
+              </li>)
+            })
+          }
+        </ul>
+      </div>
+    )
   }
 }
 

@@ -1,12 +1,26 @@
+/**
+* Quickmenu components
+**/
+
+'use strict';
+
 import React from 'react';
 
 const QuickMenuListItem = (props) => {
-  let idx = props.idx;
-  let indi = (props.faClass==='fa-feed') ? 'new' : null;
+  let idx = props.idx, faClass = props.faClass;
+  let packages = props.packagesOutdated;
+  let isOutdatedArray = Array.isArray(packages), indi = null;
+
+  if(isOutdatedArray) {
+    indi = (isOutdatedArray.length) ? 'new' : null;
+  } else if (typeof packages === 'object') {
+    indi = 'new';
+  }
+
 
   return (
-    <div onClick={props.onClick} className={`quickmenu__item ${indi} ${(idx===0)?'active':null}`}>
-      <div className={`fa fa-fw ${props.faClass}`}></div>
+    <div onClick={props.onClick} className={`quickmenu__item ${(faClass === 'fa-feed') ? indi : null} ${(idx===0)?'active':null}`}>
+      <div className={`fa fa-fw ${faClass}`}></div>
     </div>
   )
 }
@@ -39,6 +53,7 @@ class QuickMenuList extends React.Component {
         {items.map((faClass, idx) => {
           return (
             <QuickMenuListItem
+              packagesOutdated = {props.packagesOutdated}
               onClick={this.onItemClick}
               faClass={faClass}
               key={idx}
@@ -61,6 +76,7 @@ class QuickMenu extends React.Component {
       <div className="quickmenu">
         <div className="quickmenu__cont">
           <QuickMenuList
+            packagesOutdated={this.props.packagesOutdated}
             items={menuItems}
             handleSidebarContent={this.props.handleSidebarContent}
           />

@@ -12,7 +12,7 @@ class messagesListItem extends React.Component {
     e.preventDefault();
     let pkg = this.props.package;
     let mode = this.props.mode;
-    
+
     this.props.setActive(null);
     this.props.toggleMainLoader(true);
     ipcRenderer.send('ipc-event', {
