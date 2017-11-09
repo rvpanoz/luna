@@ -37,7 +37,11 @@ class SidebarContainer extends React.Component {
     let items = UI.itemIcons;
     return (
       <div className="sidebar">
-        <QuickMenu items={items} handleSidebarContent={this.handleSidebarContent}/>
+        <QuickMenu
+          items={items}
+          handleSidebarContent={this.handleSidebarContent}
+          packagesOutdated={props.packagesOutdated}
+        />
         <div className="scroll-wrapper scrollable" style={{position: 'relative'}}>
             <div className="scrollable scroll-content">
               <div className="sidebar__cont" ref="sidebarContent">
