@@ -2,8 +2,7 @@
   "name": "luna",
   "productName": "Luna",
   "version": "1.0.0-beta",
-  "description": "Luna is a tool for developers to organize npm packages.\n
-  You can install, view, update, uninstall your npm global packagesor manage your packages from a local directory.",
+  "description": "Luna is a tool for developers to organize npm packages. You can install, view, update, uninstall your npm global packagesor manage your packages from a local directory.",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors",
