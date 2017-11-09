@@ -68,6 +68,10 @@ exports.doCommand = function(options, callback) {
 
   if (pkgName) {
     if (pkgVersion) {
+      let hasAt = pkgName.indexOf('@');
+      if(hasAt > -1) {
+        pkgName = pkgName.replace('@','');
+      }
       pkgInfo.push(pkgName + "@" + pkgVersion);
     } else {
       pkgInfo.push(pkgName);
