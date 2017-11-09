@@ -140,6 +140,10 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('action-close', (event, pkg) => {
       this.loadData();
     });
+
+    ipcRenderer.on('ipcEvent-error', (event, error) => {
+      console.error(error);
+    });
   }
 
   componentWillUnMount() {
@@ -148,7 +152,8 @@ class PackagesContainer extends React.Component {
       'get-packages-close',
       'search-packages-close',
       'action-close',
-      'view-package-reply'
+      'view-package-reply',
+      'ipcEvent-error'
     ]);
   }
 

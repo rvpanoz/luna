@@ -17,7 +17,7 @@ function runCommand(command, mode, directory, callback) {
   const deferred = Q.defer();
   const cwd = process.cwd();
 
-  let result = '';
+  let result = '', error = '';
 
   if (!command || typeof command !== 'object') {
     return Q.reject(new Error("shell[doCommand]:cmd must be given and must be an array"));
@@ -40,12 +40,18 @@ function runCommand(command, mode, directory, callback) {
 
   npmc.stderr.on('data', (error) => {
     let errorToString = error.toString();
+    error += errorToString + " | ";
     callback(errorToString, null, 'error');
   });
 
   npmc.on('close', () => {
     console.log(`finish: npm ${command.join(' ')}`);
-    deferred.resolve({data: result, status: 'close', cmd: command[0]});
+    deferred.resolve({
+      status: 'close',
+      error: (error.length) ? error : null,
+      data: result,
+      cmd: command[0]
+    });
   });
 
   return deferred.promise;
