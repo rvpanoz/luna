@@ -1,9 +1,9 @@
 # Luna - NPM management developer tool.
 
 Luna is a tool for developers to manage npm packages.
-You can **install**, **view**, **update**, **uninstall** your npm global packages or manage your packages from a local directory. Hence the application has a notification system to inform you about missing dependencies and outdated packages.
+You can ***install***, ***view***, ***update***, ***uninstall*** your npm global packages or manage your packages from a local directory. Hence the application has a notification system to inform you about missing dependencies and outdated packages.
 
-*** if you want to helpme make this software better and more useful feel free to contact me *** 
+***if you want to help me make this software better and more useful feel free to contact me*** 
 
 ## Features
 
