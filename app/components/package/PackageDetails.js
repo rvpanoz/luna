@@ -87,19 +87,30 @@ class PackageDetails extends React.Component {
     return false;
   }
   render() {
-    let pkg = this.props.active;
+    let pkg = this.props.active, packageJSON = this.props.packageJSON, dep = false;
     if (!pkg) {
       return null;
     }
+
+    if(packageJSON) {
+      dep = 'dependencies';
+      let dependencies = packageJSON.dependencies || null;
+      let devDependencies = packageJSON.devDependencies || null;
+      if(devDependencies && devDependencies[pkg.name]) {
+        dep='devDependencies';
+      }
+    }
+
     return (
-      <div className={styles.package__details} ref="root">
+      <div className={styles.package__details} ref="rootEl">
         <div className={styles.package__details__head}>
           <div className={styles.package__details__title}>
             <div className={styles.package__details__tag}>
               <i className="fa fa-fw fa-tag"></i>
             </div>
             &nbsp;{pkg.name}&nbsp;
-            <span className="label label-success">v{pkg.version}</span>
+            <span className="label label-success">v{pkg.version}</span>&nbsp;
+            {(dep) ? <span className="label label-info">{dep}</span> : null}
           </div>
           <div className={styles.package__details__actions}>
             <PackageActions

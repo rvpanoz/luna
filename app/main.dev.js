@@ -62,7 +62,13 @@ ipcMain.on('analyze-json', (event, filePath) => {
       throw err;
     }
 
-    event.sender.send('analyze-json-close', filePath, JSON.parse(fileContent));
+    let content = false;
+    try {
+      content = JSON.parse(fileContent);
+      event.sender.send('analyze-json-close', filePath, content);
+    } catch (e) {
+      throw new Error('Error: Unable to parse package.json file.');
+    }
   });
 });
 

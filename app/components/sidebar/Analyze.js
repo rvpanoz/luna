@@ -12,12 +12,7 @@ class Analyze extends React.Component {
     this.props.setMode('LOCAL', directory);
     this.props.setPackageActions();
     this.props.setPackagesOutdated([]);
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      cmd: ['list', 'outdated'],
-      mode: 'LOCAL',
-      directory: directory
-    });
+    ipcRenderer.send('analyze-json', directory);
   }
   _openPackage(e) {
     e.preventDefault();

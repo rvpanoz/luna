@@ -5,6 +5,13 @@
 import * as types from '../constants/ActionTypes';
 import * as Modes from '../constants/Modes';
 
+export function setPackageJSON(packageJSON) {
+  return {
+    type: types.SET_PACKAGE_JSON,
+    packageJSON
+  }
+}
+
 export function addCommandOption(option) {
   return {
     type: types.ADD_COMMAND_OPTION,
@@ -52,7 +59,8 @@ export function setMode(mode, directory) {
   return {
     type: types.SET_MODE,
     mode,
-    directory
+    directory,
+    packageJSON: null
   }
 }
 
@@ -91,12 +99,4 @@ export function toggleMainLoader(isLoading) {
     type: types.TOGGLE_MAIN_LOADER,
     isLoading
   };
-}
-
-export function toggleModal(showModal, runningCommand) {
-  return {
-    type: types.TOGGLE_MODAL,
-    showModal,
-    runningCommand
-  }
 }
