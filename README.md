@@ -16,7 +16,7 @@ You can **install**, **view**, **update**, **uninstall** your npm global package
 
 ## Development ##
 
-Luna is build with ReactJS library, Redux for store management and bundled with Webpack 3. :boom: 
+Luna is created with the ReactJS library for the UI part, Redux for store management and Webpack 3 for bundling. :boom: 
 Build on Electron.
 
 How to start developing:
