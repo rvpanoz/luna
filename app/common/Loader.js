@@ -1,6 +1,8 @@
 /**
- * Loader
+ * Common Loader component
  */
+
+'use strict';
 
 import React from 'react';
 

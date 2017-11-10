@@ -1,3 +1,9 @@
+/**
+* Starting point - index.js
+**/
+
+'use strict';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';

@@ -11,7 +11,7 @@ const Q = require("q");
 const spawn = cp.spawn;
 const defaults = ['--depth=0', '--json'];
 
-import {parse, isArray} from './utils';
+import { parse } from './utils';
 
 function runCommand(command, mode, directory, callback) {
   const deferred = Q.defer();

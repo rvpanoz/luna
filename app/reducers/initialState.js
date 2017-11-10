@@ -1,7 +1,9 @@
 export default {
   mode: 'GLOBAL',
+  runningCommand: '',
   directory: null,
   loading: false,
+  showModal: false,
   messages: [],
   cmdOptions: [],
   packages: {

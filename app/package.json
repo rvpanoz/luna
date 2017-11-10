@@ -1,7 +1,7 @@
 {
   "name": "luna",
   "productName": "Luna",
-  "version": "1.0.0",
+  "version": "1.0.0-beta",
   "description": "Manage your NPM packages.",
   "main": "./main.prod.js",
   "author": {

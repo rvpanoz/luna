@@ -11,6 +11,7 @@ import {
   ADD_MESSAGE,
   CLEAR_MESSAGES,
   TOGGLE_LOADER,
+  TOGGLE_MODAL,
   ADD_COMMAND_OPTION
 } from '../constants/ActionTypes';
 
@@ -72,6 +73,11 @@ const globalReducer = (state = initialState, action) => {
         ...state,
         mode: action.mode,
         directory: action.directory
+      }
+    case TOGGLE_MODAL:
+      return {
+        ...state,
+        showModal: action.showModal
       }
     default:
       return state;

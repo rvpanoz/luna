@@ -1,4 +1,10 @@
-import {createStore} from "redux";
+/**
+* Redux store
+**/
+
+'use strict';
+
+import { createStore } from "redux";
 import reducer from "./reducers";
 
 const configureStore = (initialState) => {

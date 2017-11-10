@@ -33,6 +33,7 @@ class PackageActions extends React.Component {
   }
   render() {
     let props = this.props;
+    let modeGlobal = props.mode === 'GLOBAL';
     let actions = props.packageActions;
 
     return (
@@ -50,9 +51,9 @@ class PackageActions extends React.Component {
               </li>)
             })
           }
-          <li className="dropdown-header">Options</li>
+          <li className="dropdown-header" style={{display: (modeGlobal) ? 'none' : 'inherit'}}>Options</li>
           {
-            OPTIONS.map((option, idx) => {
+            (!modeGlobal) ? OPTIONS.map((option, idx) => {
               let opt = option.split('*');
               return (<li key={idx} title={opt[1]}>
                 <div className="form-check abc-checkbox">
@@ -62,7 +63,7 @@ class PackageActions extends React.Component {
                   </label>
                 </div>
               </li>)
-            })
+            }) : null
           }
         </ul>
       </div>
