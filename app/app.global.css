@@ -1,6 +1,7 @@
 @import "~font-awesome/css/font-awesome.css";
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "~awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css";
+@import "~animate.css/animate.css";
 
 html {
   height: 100%;
@@ -1448,12 +1449,6 @@ select option {
   25% {
     transform: scale(2);
   }
-}
-
-.license {
-  background-image: url("./img/license.png");
-  background-position: center;
-  background-repeat: no-repeat;
 }
 
 .select-mini {

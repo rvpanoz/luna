@@ -16,7 +16,7 @@ import OutdatedList from '../components/sidebar/OutdatedList';
 
 class SidebarContainer extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.handleSidebarContent = this.handleSidebarContent.bind(this);
   }
   handleSidebarContent(idx) {

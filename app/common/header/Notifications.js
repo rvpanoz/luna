@@ -1,3 +1,9 @@
+/**
+* Notifications list component
+**/
+
+'use strict';
+
 import React from 'react';
 import NotificationItem from './NotificationItem';
 

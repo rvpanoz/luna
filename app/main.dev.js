@@ -6,10 +6,13 @@
  *
  */
 
+'use strict';
+
 import electron from 'electron';
-import {app, BrowserWindow, remote, ipcMain, dialog} from 'electron';
+import { app, BrowserWindow, remote, ipcMain, dialog } from 'electron';
 import MenuBuilder from './menu';
 
+const path = require('path');
 const config = require('./config');
 const cwd = process.cwd();
 const NODE_ENV = process.env.NODE_ENV;
@@ -148,7 +151,8 @@ app.on('ready', async() => {
     x: x,
     y: y,
     show: false,
-    resizable: true
+    resizable: true,
+    icon: path.join(__dirname, 'resources/icons/32x32.png')
   });
 
   //load app.html file
@@ -184,5 +188,5 @@ app.on('ready', async() => {
 });
 
 process.on('uncaughtException', function(err) {
-  console.log(err);
+  console.error(err);
 });

@@ -2,6 +2,7 @@
 * Packages Container Component - handles state.packages slice
 * pass state as props to children
 **/
+
 'use strict';
 
 import { remote, ipcRenderer } from 'electron';
@@ -12,6 +13,7 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 import { modes } from '../constants/Modes';
 
+import AppModal from '../common/AppModal';
 import PackagesListHeader from '../components/packages/PackagesListHeader';
 import PackagesListSearch from '../components/packages/PackagesListSearch';
 import PackagesList from '../components/packages/PackagesList';
@@ -142,7 +144,7 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on('ipcEvent-error', (event, error) => {
-      console.error(error);
+      //TODO
     });
   }
 
@@ -191,6 +193,9 @@ class PackagesContainer extends React.Component {
             <PackageContainer />
           </div>
         </div>
+        <div className="app-modal">
+          <AppModal show={props.showModal} toggleModal={props.toggleModal}/>
+        </div>
       </div>)
     }
 }
@@ -200,6 +205,7 @@ function mapStateToProps(state) {
     mode: state.global.mode,
     directory: state.global.directory,
     loading: state.global.loading,
+    showModal: state.global.showModal,
     packages: state.packages.packages,
     active: state.packages.active,
     totalInstalled: state.packages.totalInstalled
@@ -219,6 +225,9 @@ function mapDispatchToProps(dispatch) {
     },
     toggleLoader: (bool) => {
       return dispatch(actions.toggleLoader(bool))
+    },
+    toggleModal: (bool) => {
+      return dispatch(actions.toggleModal(bool))
     },
     toggleMainLoader: (bool) => {
       return dispatch(actions.toggleMainLoader(bool))

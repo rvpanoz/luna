@@ -33,6 +33,29 @@ export function setPackageActions(packageActions) {
   }
 }
 
+export function setPackages(packages) {
+  return {
+    type: types.SET_PACKAGES,
+    packages
+  }
+}
+
+export function setActive(active, isLoading) {
+  return {
+    type: types.SET_ACTIVE,
+    active,
+    isLoading
+  }
+}
+
+export function setMode(mode, directory) {
+  return {
+    type: types.SET_MODE,
+    mode,
+    directory
+  }
+}
+
 export function addMessage(level, body) {
   return {
     type: types.ADD_MESSAGE,
@@ -70,32 +93,10 @@ export function toggleMainLoader(isLoading) {
   };
 }
 
-export function setPackages(packages) {
+export function toggleModal(showModal, runningCommand) {
   return {
-    type: types.SET_PACKAGES,
-    packages
-  }
-}
-
-export function setActive(active, isLoading) {
-  return {
-    type: types.SET_ACTIVE,
-    active,
-    isLoading
-  }
-}
-
-export function setMode(mode, directory) {
-  return {
-    type: types.SET_MODE,
-    mode,
-    directory
-  }
-}
-
-export function setModal(showModal) {
-  return {
-    type: types.SET_MODAL_STATUS,
-    showModal
+    type: types.TOGGLE_MODAL,
+    showModal,
+    runningCommand
   }
 }

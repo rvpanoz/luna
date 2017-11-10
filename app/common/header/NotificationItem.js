@@ -1,3 +1,9 @@
+/**
+* NotificationItem component
+**/
+
+'use strict';
+
 import React from 'react';
 
 class NotificationItem extends React.Component {

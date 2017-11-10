@@ -4,14 +4,14 @@
 
 'use strict';
 
-import {remote, ipcRenderer, shell} from 'electron';
+import { remote, ipcRenderer, shell } from 'electron';
 import React from 'react';
 import moment from 'moment';
 import Loader from '../../common/Loader';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
 import { showMessageBox, isUrl } from '../../utils';
-import {OPTIONS} from '../../constants/Command';
+import { OPTIONS } from '../../constants/Command';
 import styles from './PackageDetails.css';
 
 class PackageDetails extends React.Component {
@@ -33,9 +33,9 @@ class PackageDetails extends React.Component {
     e.preventDefault();
     let target = e.currentTarget;
     let action = target.dataset.action;
-    let mode = this.props.mode;
 
     if (action) {
+      let mode = this.props.mode;
       let active = this.props.active;
       let selectVersion = this.refs.selectVersion;
       let version, options = this.props.cmdOptions;

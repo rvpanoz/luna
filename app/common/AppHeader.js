@@ -1,3 +1,6 @@
+/**
+* Common AppHeader component
+**/
 'use strict';
 
 import {remote, ipcRenderer} from 'electron';
@@ -8,7 +11,11 @@ import * as actions from '../actions';
 import Notifications from './header/Notifications';
 
 const AppHeader = (props) => {
-  let total_messages = props.notifications && props.notifications.length;
+  let total_messages = 0;
+
+  if(props.notifications && props.notifications.length) {
+    total_messages = props.notifications.length;
+  }
 
   return (
     <nav className="navbar navbar-default header-navbar">
