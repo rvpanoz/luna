@@ -1,4 +1,4 @@
-# Luna - NPM management application.
+# Luna - NPM management developer tool.
 
 Luna is a tool for developers to manage npm packages.
 You can **install**, **view**, **update**, **uninstall** your npm global packages or manage your packages from a local directory. Hence the application has a notification system to inform you about missing dependencies and outdated packages.
@@ -18,8 +18,9 @@ You can **install**, **view**, **update**, **uninstall** your npm global package
 
 1. clone the repository
 2. run `npm install` to install application's dependencies and devDependencies. 
-(* if you get error **gyp WARN EACCES**, run `sudo npm install --allow-root` - maybe you have to delete the node_modules folders first.)
 3. run `npm run dev`
+
+** if are on linux and get error **gyp WARN EACCES**, run `sudo npm install --allow-root` - maybe you have to delete the node_modules folders first.**
 
 ### Debian based (Debian, Ubuntu, Linux Mint)
 
