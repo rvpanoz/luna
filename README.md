@@ -16,6 +16,11 @@ You can **install**, **view**, **update**, **uninstall** your npm global package
 
 ## Development ##
 
+Luna is build with ReactJS library, Redux for store management and bundled with Webpack 3. :boom: 
+Build on Electron.
+
+How to start developing:
+
 1. clone the repository
 2. run `npm install` to install application's dependencies and devDependencies. 
 3. run `npm run dev`
