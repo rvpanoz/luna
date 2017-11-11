@@ -137,6 +137,11 @@ class PackagesContainer extends React.Component {
 
     // npm install | uninstall | update listener
     ipcRenderer.on('action-close', (event, pkg) => {
+      let mode = this.props.mode, directory = this.props.directory;
+      if(mode === 'LOCAL' && directory) {
+        ipcRenderer.send('analyze-json', directory);
+        return;
+      }
       this.loadData();
     });
 
