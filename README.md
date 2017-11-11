@@ -31,13 +31,13 @@ How to start developing:
 
 ### Debian based (Debian, Ubuntu, Linux Mint)
 
-1. Download [luna_1.0.0_amd64.deb](http://104.236.58.95/luna/releases/latest/luna_1.0.0-beta_amd64.deb)
+1. Download [luna_1.0.0-beta_amd64.deb](http://104.236.58.95/luna/releases/latest/luna_1.0.0-beta_amd64.deb)
 2. Run `sudo dpkg --install luna_1.0.0-beta_amd64.deb` on the downloaded package.
 3. Launch Luna
 
 ### Windows
 
-1. Download [luna_1.0.0_setup.exe](http://104.236.58.95/luna/releases/latest/luna_1.0.0-beta_amd64.exe)
+1. Download [luna_1.0.0-beta_amd64.exe](http://104.236.58.95/luna/releases/latest/luna_1.0.0-beta_amd64.exe)
 2. Run `luna_1.0.0-beta_amd64.exe`
 3. Launch Luna
 
