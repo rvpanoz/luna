@@ -1,6 +1,6 @@
 export default {
   mode: 'GLOBAL',
-  runningCommand: '',
+  packageJSON: null,
   directory: null,
   loading: false,
   showModal: false,

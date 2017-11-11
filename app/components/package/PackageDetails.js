@@ -17,9 +17,28 @@ import styles from './PackageDetails.css';
 class PackageDetails extends React.Component {
   constructor(props) {
     super(props);
+    this._packageGroups = ['dependencies', 'devDependencies', 'optionalDependencies'];
+    this._getPackageGroup = this._getPackageGroup.bind(this);
     this.doNavigate = this.doNavigate.bind(this);
     this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
+  }
+  _getPackageGroup() {
+    let packageJSON = this.props.packageJSON;
+    let pkg = this.props.active;
+    let found = false;
+    if(packageJSON && typeof packageJSON === 'object') {
+      let name = pkg.name;
+      for(let z=0;z<this._packageGroups.length;z++) {
+        let group = this._packageGroups[z];
+        found = (packageJSON[group] && packageJSON[group][name]) ? group : false;
+        if(found) {
+          break;
+        }
+      }
+    }
+
+    return found;
   }
   doNavigate(e) {
     e.preventDefault();
@@ -87,19 +106,28 @@ class PackageDetails extends React.Component {
     return false;
   }
   render() {
+    let mode = this.props.mode;
     let pkg = this.props.active;
+    let group = '';
+
     if (!pkg) {
       return null;
     }
+
+    if(mode === 'LOCAL') {
+      group = this._getPackageGroup();
+    }
+
     return (
-      <div className={styles.package__details} ref="root">
+      <div className={styles.package__details} ref="rootEl">
         <div className={styles.package__details__head}>
           <div className={styles.package__details__title}>
             <div className={styles.package__details__tag}>
               <i className="fa fa-fw fa-tag"></i>
             </div>
             &nbsp;{pkg.name}&nbsp;
-            <span className="label label-success">v{pkg.version}</span>
+            <span className="label label-success">v{pkg.version}</span>&nbsp;
+            {(group && group.length) ? <span className="label label-info">{group}</span> : null}
           </div>
           <div className={styles.package__details__actions}>
             <PackageActions

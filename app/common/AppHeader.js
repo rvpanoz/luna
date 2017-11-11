@@ -1,12 +1,13 @@
 /**
 * Common AppHeader component
 **/
+
 'use strict';
 
-import {remote, ipcRenderer} from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 import Notifications from './header/Notifications';
 

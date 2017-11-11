@@ -24,8 +24,7 @@ const PackageContainer = (props) => {
           packageActions={props.packageActions}
           setActive={props.setActive}
           toggleMainLoader={props.toggleMainLoader}
-          runningCommand={props.runningCommand}
-          toggleModal={props.toggleModal}
+          packageJSON={props.packageJSON}
           isLoading={props.isLoading}
           cmdOptions={props.cmdOptions}
           addCommandOption={props.addCommandOption}
@@ -39,8 +38,8 @@ function mapStateToProps(state) {
   return {
     mode: state.global.mode,
     directory: state.global.directory,
+    packageJSON: state.global.packageJSON,
     cmdOptions: state.global.cmdOptions,
-    runningCommand: state.global.runningCommand,
     packageActions: state.packages.packageActions,
     active: state.packages.active,
     isLoading: state.packages.isLoading
@@ -57,9 +56,6 @@ function mapDispatchToProps(dispatch) {
     },
     setActive: (pkg) => {
       return dispatch(actions.setActive(pkg));
-    },
-    toggleModal: (bool, command) => {
-      return dispatch(actions.toggleModal(bool, command));
     }
   };
 }

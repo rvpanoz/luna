@@ -12,8 +12,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 import { modes } from '../constants/Modes';
-
-import AppModal from '../common/AppModal';
 import PackagesListHeader from '../components/packages/PackagesListHeader';
 import PackagesListSearch from '../components/packages/PackagesListSearch';
 import PackagesList from '../components/packages/PackagesList';
@@ -33,7 +31,6 @@ class PackagesContainer extends React.Component {
   // parse packages string and set list packages
   _setupList(packages) {
     let total = 0;
-
     let packagesData = parse(packages, 'dependencies');
     this.props.setPackages(packagesData);
 
@@ -146,6 +143,12 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('ipcEvent-error', (event, error) => {
       //TODO
     });
+
+    // update packageJSON state object and load data
+    ipcRenderer.on('analyze-json-close', (event, filePath, content) => {
+      this.props.setPackageJSON(content);
+      this.loadData();
+    });
   }
 
   componentWillUnMount() {
@@ -155,7 +158,8 @@ class PackagesContainer extends React.Component {
       'search-packages-close',
       'action-close',
       'view-package-reply',
-      'ipcEvent-error'
+      'ipcEvent-error',
+      'analyze-json-close'
     ]);
   }
 
@@ -193,9 +197,6 @@ class PackagesContainer extends React.Component {
             <PackageContainer />
           </div>
         </div>
-        <div className="app-modal">
-          <AppModal show={props.showModal} toggleModal={props.toggleModal}/>
-        </div>
       </div>)
     }
 }
@@ -205,7 +206,6 @@ function mapStateToProps(state) {
     mode: state.global.mode,
     directory: state.global.directory,
     loading: state.global.loading,
-    showModal: state.global.showModal,
     packages: state.packages.packages,
     active: state.packages.active,
     totalInstalled: state.packages.totalInstalled
@@ -220,14 +220,14 @@ function mapDispatchToProps(dispatch) {
     setPackageActions: (packageActions) => {
       return dispatch(actions.setPackageActions(packageActions));
     },
+    setPackageJSON: (content) => {
+      return dispatch(actions.setPackageJSON(content));
+    },
     setActive: (pkg) => {
       return dispatch(actions.setActive(pkg));
     },
     toggleLoader: (bool) => {
       return dispatch(actions.toggleLoader(bool))
-    },
-    toggleModal: (bool) => {
-      return dispatch(actions.toggleModal(bool))
     },
     toggleMainLoader: (bool) => {
       return dispatch(actions.toggleMainLoader(bool))

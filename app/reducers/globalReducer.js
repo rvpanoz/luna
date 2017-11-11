@@ -8,19 +8,20 @@
 import initialState from './initialState';
 import {
   SET_MODE,
+  SET_PACKAGE_JSON,
   ADD_MESSAGE,
   CLEAR_MESSAGES,
   TOGGLE_LOADER,
-  TOGGLE_MODAL,
   ADD_COMMAND_OPTION
 } from '../constants/ActionTypes';
 
-const globalReducer = (state = initialState, action) => {
+let {packages, ..._initialiteStateWithoutProps} = initialState;
+
+const globalReducer = (state = _initialiteStateWithoutProps, action) => {
   switch (action.type) {
     case ADD_COMMAND_OPTION:
       if (state.cmdOptions.length) {
         let optionIndex = state.cmdOptions.indexOf(action.option);
-
         if (optionIndex === -1) {
           return {
             ...state,
@@ -74,10 +75,10 @@ const globalReducer = (state = initialState, action) => {
         mode: action.mode,
         directory: action.directory
       }
-    case TOGGLE_MODAL:
+    case SET_PACKAGE_JSON:
       return {
         ...state,
-        showModal: action.showModal
+        packageJSON: action.packageJSON
       }
     default:
       return state;
