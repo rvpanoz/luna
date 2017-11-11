@@ -8,10 +8,7 @@ class Analyze extends React.Component {
     this._openPackage = this._openPackage.bind(this);
   }
   _updateMode(directory) {
-    this.props.setActive(null);
     this.props.setMode('LOCAL', directory);
-    this.props.setPackageActions();
-    this.props.setPackagesOutdated([]);
     ipcRenderer.send('analyze-json', directory);
   }
   _openPackage(e) {
@@ -26,7 +23,6 @@ class Analyze extends React.Component {
       openFile: true
     }, (filePath) => {
       if(filePath) {
-        this.props.toggleLoader(true);
         this._updateMode(filePath[0]);
       }
     });
