@@ -37,7 +37,7 @@ How to start developing:
 
 ### Windows
 
-1. Download [luna_1.0.0_setup.exe](http://104.236.58.95/luna/releases/latest/luna_1.0.0-beta_setup.exe)
+1. Download [luna_1.0.0_setup.exe](http://104.236.58.95/luna/releases/latest/luna_1.0.0-beta_amd64.exe)
 2. Run `luna_1.0.0_setup.exe`
 3. Launch Luna
 
