@@ -1,7 +1,7 @@
 # Luna - NPM management developer tool.
 
 Luna is a tool for developers to manage npm packages.
-You can ***install***, ***view***, ***update***, ***uninstall*** your npm global packages or manage your packages from a local directory. Hence the application has a notification system to inform you about missing dependencies and outdated packages.
+You can ***install***, ***view***, ***update***, ***uninstall*** your npm global packages or manage your packages from a local directory. Also the application has a notification system to inform you about missing dependencies and outdated packages.
 
 ***if you want to help me make this software better and more useful feel free to contact me*** 
 
@@ -31,13 +31,13 @@ How to start developing:
 
 ### Debian based (Debian, Ubuntu, Linux Mint)
 
-1. Download [luna_1.0.0-beta_amd64.deb](http://104.236.58.95/luna/releases/latest/luna_1.0.0-beta_amd64.deb)
-2. Run `sudo dpkg --install luna_1.0.0-beta_amd64.deb` on the downloaded package.
+1. Download [luna_1.1.0-beta_amd64.deb](http://104.236.58.95/luna/releases/latest/luna_1.1.0-beta_amd64.deb)
+2. Run `sudo dpkg --install luna_1.1.0-beta_amd64.deb` on the downloaded package.
 3. Launch Luna
 
 ### Windows
 
-1. Download [luna_1.0.0-beta_amd64.exe](http://104.236.58.95/luna/releases/latest/luna_1.0.0-beta_amd64.exe)
-2. Run `luna_1.0.0-beta_amd64.exe`
+1. Download [luna_1.0.0-beta_x64.exe](http://104.236.58.95/luna/releases/latest/luna_1.0.0-beta_x64.exe)
+2. Run `luna_1.1.0-beta_x64.exe`
 3. Launch Luna
 
