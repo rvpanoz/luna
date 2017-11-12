@@ -131,6 +131,7 @@ class PackageDetails extends React.Component {
           </div>
           <div className={styles.package__details__actions}>
             <PackageActions
+              group={group}
               mode={this.props.mode}
               directory={this.props.directory}
               active={this.props.active}
