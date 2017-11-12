@@ -8,7 +8,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { UI } from '../constants/UI';
-import * as actions from '../actions';
+import * as globalActions from '../actions/global_actions';
+import * as packagesActions from '../actions/packages_actions';
+
 import QuickMenu from '../components/sidebar/QuickMenu';
 import Analyze from '../components/sidebar/Analyze';
 import Settings from '../components/sidebar/Settings';
@@ -98,34 +100,37 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setPackages: (packages) => {
-      return dispatch(actions.setPackages(packages));
+      return dispatch(packagesActions.setPackages(packages));
     },
-    setPackageActions: (packageActions) => {
-      return dispatch(actions.setPackageActions(packageActions));
+    setPackageActions: (actions) => {
+      return dispatch(packagesActions.setPackageActions(actions));
+    },
+    setPackageJSON: (content) => {
+      return dispatch(globalActions.setPackageJSON(content));
     },
     setActive: (pkg) => {
-      return dispatch(actions.setActive(pkg));
+      return dispatch(packagesActions.setActive(pkg));
     },
     toggleLoader: (bool) => {
-      return dispatch(actions.toggleLoader(bool))
+      return dispatch(globalActions.toggleLoader(bool));
     },
     toggleMainLoader: (bool) => {
-      return dispatch(actions.toggleMainLoader(bool))
+      return dispatch(packagesActions.toggleMainLoader(bool));
     },
-    setMode: (mode, directory = null, loading = true) => {
-      return dispatch(actions.setMode(mode, directory, loading))
+    setMode: (mode, directory) => {
+      return dispatch(globalActions.setMode(mode, directory));
     },
     setPackagesOutdated: (packages) => {
-      return dispatch(actions.setPackagesOutdated(packages));
+      return dispatch(packagesActions.setPackagesOutdated(packages));
     },
     setTotalInstalled: (total) => {
-      return dispatch(actions.setTotalInstalled(total));
+      return dispatch(packagesActions.setTotalInstalled(total));
     },
     addMessage: (level, message) => {
-      return dispatch(actions.addMessage(level, message));
+      return dispatch(globalActions.addMessage(level, message));
     },
     clearMessages: () => {
-      return dispatch(actions.clearMessages())
+      return dispatch(globalActions.clearMessages());
     }
   }
 }

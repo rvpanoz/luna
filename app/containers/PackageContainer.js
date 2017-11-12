@@ -8,7 +8,9 @@ import { remote, ipcRenderer } from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../actions';
+import * as globalActions from '../actions/global_actions';
+import * as packagesActions from '../actions/packages_actions';
+
 import Loader from '../common/Loader';
 import { showMessageBox } from '../utils';
 import PackageDetails from '../components/package/PackageDetails';
@@ -49,13 +51,13 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     addCommandOption: (option) => {
-      return dispatch(actions.addCommandOption(option));
+      return dispatch(globalActions.addCommandOption(option));
     },
     toggleMainLoader: (bool) => {
-      return dispatch(actions.toggleMainLoader(bool));
+      return dispatch(packagesActions.toggleMainLoader(bool));
     },
     setActive: (pkg) => {
-      return dispatch(actions.setActive(pkg));
+      return dispatch(packagesActions.setActive(pkg));
     }
   };
 }
