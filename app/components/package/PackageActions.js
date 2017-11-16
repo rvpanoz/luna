@@ -1,13 +1,32 @@
 'use strict';
 
 import React from 'react';
-import {remote, ipcRenderer} from 'electron';
-import {showMessageBox} from '../../utils';
-import {OPTIONS} from '../../constants/Command';
+import { remote, ipcRenderer } from 'electron';
+import { showMessageBox } from '../../utils';
+import { OPTIONS } from '../../constants/Command';
 
 class PackageActions extends React.Component {
   constructor(props) {
     super(props);
+  }
+  _onChange(e) {
+    return true;
+  }
+  _checkGroup(option) {
+    let group = this.props.group, check = false;
+    if(group && typeof group === 'string') {
+      switch (group) {
+        case 'devDependencies':
+          check = (option === 'save-dev');
+          break;
+        case 'optionalDependencies':
+          check = (option === 'save-optional');
+          break;
+        default:
+          check = (option === 'save')
+      }
+    }
+    return check;
   }
   componentDidMount() {
     let dp = this.refs.dropdownMenu;
@@ -57,7 +76,7 @@ class PackageActions extends React.Component {
               let opt = option.split('*');
               return (<li key={idx} title={opt[1]}>
                 <div className="form-check abc-checkbox">
-                  <input className="form-check-input" id={`m${idx}`} type="checkbox" data-option={opt[0]}/>
+                  <input className="form-check-input" checked={this._checkGroup(opt[0])} onChange={this._onChange} id={`m${idx}`} type="checkbox" data-option={opt[0]}/>
                   <label className="form-check-label" htmlFor={`m${idx}`}>
                     {opt[0]}
                   </label>
