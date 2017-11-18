@@ -23,7 +23,7 @@ class PackageActions extends React.Component {
           check = (option === 'save-optional');
           break;
         default:
-          check = (option === 'save')
+          check = (option === 'save');
       }
     }
     return check;
