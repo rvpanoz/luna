@@ -3,14 +3,11 @@
 import React from 'react';
 import { remote, ipcRenderer } from 'electron';
 import { showMessageBox } from '../../utils';
-import { OPTIONS } from '../../constants/Command';
+import { APP_CONSTANTS } from '../../constants/AppConstants';
 
 class PackageActions extends React.Component {
   constructor(props) {
     super(props);
-  }
-  _onChange(e) {
-    return true;
   }
   _checkGroup(option) {
     let group = this.props.group, check = false;
@@ -28,6 +25,9 @@ class PackageActions extends React.Component {
     }
     return check;
   }
+  componentDidUpdate(props) {
+    let group = props.group;
+  }
   componentDidMount() {
     let dp = this.refs.dropdownMenu;
     if(dp) {
@@ -35,11 +35,14 @@ class PackageActions extends React.Component {
         let target = e.target;
         if(target.tagName === 'LABEL' || target.tagName === 'INPUT') {
           e.stopPropagation();
-          if (target.dataset.option) {
-            let option = target.dataset.option;
-            this.props.addCommandOption(option);
-          }
-          return false;
+        }
+      });
+
+      dp.addEventListener('change', (e) => {
+        let target = e.target;
+        if (target.dataset.option) {
+          let option = target.dataset.option;
+          this.props.addCommandOption(option);
         }
       });
     }
@@ -48,11 +51,11 @@ class PackageActions extends React.Component {
     let dp = this.refs.dropdownMenu;
     if(dp) {
       dp.removeEventListener('click');
+      dp.removeEventListener('change');
     }
   }
   render() {
     let props = this.props;
-    let modeGlobal = props.mode === 'GLOBAL';
     let actions = props.packageActions;
 
     return (
@@ -70,13 +73,13 @@ class PackageActions extends React.Component {
               </li>)
             })
           }
-          <li className="dropdown-header" style={{display: (modeGlobal) ? 'none' : 'inherit'}}>Options</li>
+          <li className="dropdown-header" style={{display: (props.mode === 'GLOBAL') ? 'none' : 'inherit'}}>Options</li>
           {
-            (!modeGlobal) ? OPTIONS.map((option, idx) => {
+            (!(props.mode === 'GLOBAL')) ? APP_CONSTANTS.COMMAND_OPTIONS.map((option, idx) => {
               let opt = option.split('*');
               return (<li key={idx} title={opt[1]}>
                 <div className="form-check abc-checkbox">
-                  <input className="form-check-input" checked={this._checkGroup(opt[0])} onChange={this._onChange} id={`m${idx}`} type="checkbox" data-option={opt[0]}/>
+                  <input className="form-check-input" defaultChecked={this._checkGroup(opt[0])} id={`m${idx}`} type="checkbox" data-option={opt[0]}/>
                   <label className="form-check-label" htmlFor={`m${idx}`}>
                     {opt[0]}
                   </label>

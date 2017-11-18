@@ -3,7 +3,6 @@
 */
 
 import * as types from '../constants/ActionTypes';
-import * as Modes from '../constants/Modes';
 
 export function setPackageJSON(packageJSON) {
   return {

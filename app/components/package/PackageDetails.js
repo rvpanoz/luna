@@ -11,7 +11,7 @@ import Loader from '../../common/Loader';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
 import { showMessageBox, isUrl } from '../../utils';
-import { OPTIONS } from '../../constants/Command';
+import {APP_CONSTANTS} from '../../constants/AppConstants';
 import styles from './PackageDetails.css';
 
 class PackageDetails extends React.Component {
@@ -37,8 +37,27 @@ class PackageDetails extends React.Component {
         }
       }
     }
-
     return found;
+  }
+  componentWillUpdate(nextProps) {
+    let mode = nextProps.mode;
+    let pkg = nextProps.active;
+
+    if(pkg) {
+      let packageJSON = nextProps.packageJSON;
+      if(mode === APP_CONSTANTS.APP_MODES.LOCAL && packageJSON) {
+        let packageGroups = APP_CONSTANTS.PACKAGE_GROUPS;
+        for(let z = 0;z<packageGroups.length;z++) {
+          let groupName = packageGroups[z];
+          var group = packageJSON[groupName];
+          while(group) {
+            let pkgName = pkg.name;
+            console.log(pkgName, group);
+            group = null;
+          }
+        }
+      }
+    }
   }
   doNavigate(e) {
     e.preventDefault();

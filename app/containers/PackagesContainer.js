@@ -12,7 +12,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as globalActions from '../actions/global_actions';
 import * as packagesActions from '../actions/packages_actions';
-import { modes } from '../constants/Modes';
 import PackagesListHeader from '../components/packages/PackagesListHeader';
 import PackagesListSearch from '../components/packages/PackagesListSearch';
 import PackagesList from '../components/packages/PackagesList';
@@ -147,7 +146,7 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on('ipcEvent-error', (event, error) => {
-      //TODO
+      console.error(error);
     });
 
     // update packageJSON state object and load data

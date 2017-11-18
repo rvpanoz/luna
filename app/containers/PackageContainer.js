@@ -1,5 +1,5 @@
 /**
-* Package container component
+* Package inner container component
 **/
 
 'use strict';
