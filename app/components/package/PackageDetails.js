@@ -11,26 +11,26 @@ import Loader from '../../common/Loader';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
 import { showMessageBox, isUrl } from '../../utils';
-import {APP_CONSTANTS} from '../../constants/AppConstants';
+import { PACKAGE_GROUPS } from '../../constants/AppConstants';
 import styles from './PackageDetails.css';
 
 class PackageDetails extends React.Component {
   constructor(props) {
     super(props);
-    this._packageGroups = ['dependencies', 'devDependencies', 'optionalDependencies'];
     this._getPackageGroup = this._getPackageGroup.bind(this);
     this.doNavigate = this.doNavigate.bind(this);
     this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
   }
   _getPackageGroup() {
+    let packageGroups = PACKAGE_GROUPS;
     let packageJSON = this.props.packageJSON;
     let pkg = this.props.active;
     let found = false;
     if(packageJSON && typeof packageJSON === 'object') {
       let name = pkg.name;
-      for(let z=0;z<this._packageGroups.length;z++) {
-        let group = this._packageGroups[z];
+      for(let z=0;z < packageGroups.length;z++) {
+        let group = packageGroups[z];
         found = (packageJSON[group] && packageJSON[group][name]) ? group : false;
         if(found) {
           break;
@@ -39,20 +39,29 @@ class PackageDetails extends React.Component {
     }
     return found;
   }
-  componentWillUpdate(nextProps) {
+  componentWillUpdate() {
+    //TODO
+  }
+  componentDidUpdate() {
+    //TODO
+  }
+  componentWillReceiveProps(nextProps) {
     let mode = nextProps.mode;
     let pkg = nextProps.active;
 
+    // clear command options
+    // this.props.clearCommandOptions();
+
     if(pkg) {
       let packageJSON = nextProps.packageJSON;
-      if(mode === APP_CONSTANTS.APP_MODES.LOCAL && packageJSON) {
-        let packageGroups = APP_CONSTANTS.PACKAGE_GROUPS;
+      if(mode === 'LOCAL' && packageJSON) {
+        let packageGroups = PACKAGE_GROUPS;
         for(let z = 0;z<packageGroups.length;z++) {
           let groupName = packageGroups[z];
+          let pkgName = pkg.name;
           var group = packageJSON[groupName];
-          while(group) {
-            let pkgName = pkg.name;
-            console.log(pkgName, group);
+          while(group && group[pkgName]) {
+            console.log(pkgName, groupName);
             group = null;
           }
         }
@@ -138,56 +147,58 @@ class PackageDetails extends React.Component {
     }
 
     return (
-      <div className={styles.package__details} ref="rootEl">
-        <div className={styles.package__details__head}>
-          <div className={styles.package__details__title}>
-            <div className={styles.package__details__tag}>
-              <i className="fa fa-fw fa-tag"></i>
+      <Loader loading={this.props.isLoading}>
+        <div className={styles.package__details} ref="rootEl">
+          <div className={styles.package__details__head}>
+            <div className={styles.package__details__title}>
+              <div className={styles.package__details__tag}>
+                <i className="fa fa-fw fa-tag"></i>
+              </div>
+              &nbsp;{pkg.name}&nbsp;
+              <span className="label label-success">v{pkg.version}</span>&nbsp;
+              {(group && group.length) ? <span className="label label-info">{group}</span> : null}
             </div>
-            &nbsp;{pkg.name}&nbsp;
-            <span className="label label-success">v{pkg.version}</span>&nbsp;
-            {(group && group.length) ? <span className="label label-info">{group}</span> : null}
+            <div className={styles.package__details__actions}>
+              <PackageActions
+                group={group}
+                mode={this.props.mode}
+                directory={this.props.directory}
+                active={this.props.active}
+                setActive={this.props.setActive}
+                toggleMainLoader={this.props.toggleMainLoader}
+                doAction={this.doAction}
+                packageActions={this.props.packageActions}
+                addCommandOption={this.props.addCommandOption}
+              />
+            </div>
           </div>
-          <div className={styles.package__details__actions}>
-            <PackageActions
-              group={group}
-              mode={this.props.mode}
-              directory={this.props.directory}
-              active={this.props.active}
-              setActive={this.props.setActive}
-              toggleMainLoader={this.props.toggleMainLoader}
-              doAction={this.doAction}
-              packageActions={this.props.packageActions}
-              addCommandOption={this.props.addCommandOption}
-            />
-          </div>
-        </div>
-        <div className={styles.package__details__info}>
-          <div className={styles.package__details__info__top}>
-            <div className={styles.package__details__version}>
-              <div className="form-group">
-                <label htmlFor="selectVersion">
-                  <span>Select version</span>
-                </label>
-                <select value={pkg.version} onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
-                  <option value="false">-</option>
-                  {pkg.versions.map((version, idx) => {
-                    return <option key={idx} value={version}>{version}</option>
-                  })}
-                </select>
+          <div className={styles.package__details__info}>
+            <div className={styles.package__details__info__top}>
+              <div className={styles.package__details__version}>
+                <div className="form-group">
+                  <label htmlFor="selectVersion">
+                    <span>Select version</span>
+                  </label>
+                  <select value={pkg.version} onChange={this.onChangeVersion} className="form-control input-sm select-mini" ref="selectVersion">
+                    <option value="false">-</option>
+                    {pkg.versions.map((version, idx) => {
+                      return <option key={idx} value={version}>{version}</option>
+                    })}
+                  </select>
+                </div>
+              </div>
+              <div className={styles.package__details__date}>
+                Updated:&nbsp; {moment(pkg.time.modified).format('DD/MM/YYYY')}
               </div>
             </div>
-            <div className={styles.package__details__date}>
-              Updated:&nbsp; {moment(pkg.time.modified).format('DD/MM/YYYY')}
-            </div>
+          </div>
+          <div className={styles.package__details__body}>
+            <Loader loading={this.props.isLoading}>
+              <PackageTabs pkg={pkg} navigate={this.doNavigate} addOption={this.addOption}/>
+            </Loader>
           </div>
         </div>
-        <div className={styles.package__details__body}>
-          <Loader loading={this.props.isLoading}>
-            <PackageTabs pkg={pkg} navigate={this.doNavigate} addOption={this.addOption}/>
-          </Loader>
-        </div>
-      </div>
+      </Loader>
     )
   }
 }

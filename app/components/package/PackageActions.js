@@ -3,7 +3,7 @@
 import React from 'react';
 import { remote, ipcRenderer } from 'electron';
 import { showMessageBox } from '../../utils';
-import { APP_CONSTANTS } from '../../constants/AppConstants';
+import { COMMAND_OPTIONS } from '../../constants/AppConstants';
 
 class PackageActions extends React.Component {
   constructor(props) {
@@ -75,7 +75,7 @@ class PackageActions extends React.Component {
           }
           <li className="dropdown-header" style={{display: (props.mode === 'GLOBAL') ? 'none' : 'inherit'}}>Options</li>
           {
-            (!(props.mode === 'GLOBAL')) ? APP_CONSTANTS.COMMAND_OPTIONS.map((option, idx) => {
+            (!(props.mode === 'GLOBAL')) ? COMMAND_OPTIONS.map((option, idx) => {
               let opt = option.split('*');
               return (<li key={idx} title={opt[1]}>
                 <div className="form-check abc-checkbox">
