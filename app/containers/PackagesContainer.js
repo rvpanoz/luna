@@ -195,6 +195,7 @@ class PackagesContainer extends React.Component {
               loading={props.loading}
               packages={props.packages}
               toggleLoader={props.toggleLoader}
+              setActive={props.setActive}
               toggleMainLoader={props.toggleMainLoader}
             />
           </div>

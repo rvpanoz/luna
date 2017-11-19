@@ -17,34 +17,39 @@ import styles from './PackageDetails.css';
 class PackageDetails extends React.Component {
   constructor(props) {
     super(props);
-    this._getPackageGroup = this._getPackageGroup.bind(this);
     this.doNavigate = this.doNavigate.bind(this);
     this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
   }
-  _getPackageGroup() {
-    let packageGroups = PACKAGE_GROUPS;
-    let packageJSON = this.props.packageJSON;
-    let pkg = this.props.active;
-    let found = false;
-    if(packageJSON && typeof packageJSON === 'object') {
-      let name = pkg.name;
-      for(let z=0;z < packageGroups.length;z++) {
-        let group = packageGroups[z];
-        found = (packageJSON[group] && packageJSON[group][name]) ? group : false;
-        if(found) {
-          break;
-        }
-      }
-    }
-    return found;
-  }
+
+  /** WIP **/
   componentWillUpdate() {
     //TODO
   }
+
+  /** WIP **/
   componentDidUpdate() {
-    //TODO
+    let mode = this.props.mode;
+    let groupName = this.refs.groupName;
+
+    if(mode === 'LOCAL' && groupName) {
+      let packageGroups = PACKAGE_GROUPS;
+      let packageJSON = this.props.packageJSON;
+      let pkg = this.props.active;
+      let found = false;
+
+      //NOTE: somehow packageJSON is undefined
+      packageGroups.some((group, idx) => {
+        found = (packageJSON[group] && packageJSON[group][name]) ? group : false;
+        if(found) {
+          groupName.innerHTML = group;
+          return true;
+        }
+      });
+    }
   }
+
+  /** WIP **/
   componentWillReceiveProps(nextProps) {
     let mode = nextProps.mode;
     let pkg = nextProps.active;
@@ -142,10 +147,6 @@ class PackageDetails extends React.Component {
       return null;
     }
 
-    if(mode === 'LOCAL') {
-      group = this._getPackageGroup();
-    }
-
     return (
       <Loader loading={this.props.isLoading}>
         <div className={styles.package__details} ref="rootEl">
@@ -156,7 +157,7 @@ class PackageDetails extends React.Component {
               </div>
               &nbsp;{pkg.name}&nbsp;
               <span className="label label-success">v{pkg.version}</span>&nbsp;
-              {(group && group.length) ? <span className="label label-info">{group}</span> : null}
+              <span className="label label-info" ref="groupName"></span>
             </div>
             <div className={styles.package__details__actions}>
               <PackageActions

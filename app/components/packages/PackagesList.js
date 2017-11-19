@@ -41,6 +41,7 @@ class PackagesList extends React.Component {
                 ? pkg.from.split("@")[0]
                 : pkg.name;
               return <PackageListItem
+                      setActive={this.props.setActive}
                       toggleMainLoader={this.props.toggleMainLoader}
                       deselectAll={this.deselectAll}
                       idx={idx} key={idx}
