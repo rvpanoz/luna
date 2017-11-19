@@ -17,17 +17,12 @@ import styles from './PackageDetails.css';
 class PackageDetails extends React.Component {
   constructor(props) {
     super(props);
+    this._group = null;
     this.doNavigate = this.doNavigate.bind(this);
     this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
   }
 
-  /** WIP **/
-  componentWillUpdate() {
-    //TODO
-  }
-
-  /** WIP **/
   componentDidUpdate() {
     let mode = this.props.mode;
     let groupName = this.refs.groupName;
@@ -35,27 +30,29 @@ class PackageDetails extends React.Component {
     if(mode === 'LOCAL' && groupName) {
       let packageGroups = PACKAGE_GROUPS;
       let packageJSON = this.props.packageJSON;
+
+      if(!packageJSON) {
+        throw new Error('PackageJSON is missing');
+      }
+
       let pkg = this.props.active;
       let found = false;
 
-      //NOTE: somehow packageJSON is undefined
       let groups = packageGroups.some((group, idx) => {
         found = (packageJSON[group] && packageJSON[group][pkg.name]) ? group : false;
         if(found) {
           groupName.innerHTML = group;
+          this._group = group;
           return true;
         }
       });
     }
   }
-
   /** WIP **/
   componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps');
     let mode = nextProps.mode;
     let pkg = nextProps.active;
-
-    // clear command options
-    // this.props.clearCommandOptions();
 
     if(pkg) {
       let packageJSON = nextProps.packageJSON;
@@ -66,7 +63,17 @@ class PackageDetails extends React.Component {
           let pkgName = pkg.name;
           var group = packageJSON[groupName];
           while(group && group[pkgName]) {
-            console.log(pkgName, groupName);
+            switch (group) {
+              case 'dependencies':
+                this.props.addCommandOption('save');
+                break;
+              case 'devDependencies':
+                this.props.addCommandOption('save-dev');
+              case 'optionalDependencies':
+                this.props.addCommandOption('save-optional');
+              default:
+            }
+
             //set command actions based on related group
             group = null;
           }
@@ -74,6 +81,11 @@ class PackageDetails extends React.Component {
       }
     }
   }
+  componentWillMount() {
+    // clear command options
+    this.props.clearCommandOptions();
+  }
+
   doNavigate(e) {
     e.preventDefault();
     let url = e.target.dataset.url;
@@ -162,7 +174,7 @@ class PackageDetails extends React.Component {
             </div>
             <div className={styles.package__details__actions}>
               <PackageActions
-                group={group}
+                group={this._group}
                 mode={this.props.mode}
                 directory={this.props.directory}
                 active={this.props.active}
@@ -170,6 +182,7 @@ class PackageDetails extends React.Component {
                 toggleMainLoader={this.props.toggleMainLoader}
                 doAction={this.doAction}
                 packageActions={this.props.packageActions}
+                cmdOptions={this.props.cmdOptions}
                 addCommandOption={this.props.addCommandOption}
               />
             </div>

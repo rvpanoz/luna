@@ -18,6 +18,12 @@ export function addCommandOption(option) {
   }
 }
 
+export function clearCommandOptions() {
+  return {
+    type: types.CLEAR_COMMAND_OPTIONS
+  }
+}
+
 export function setMode(mode, directory) {
   return {
     type: types.SET_MODE,

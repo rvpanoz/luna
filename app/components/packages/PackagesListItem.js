@@ -15,7 +15,7 @@ class PackageItem extends React.Component {
     if(!isSelected) {
       this.props.deselectAll();
       this.props.toggleMainLoader(true);
-      this.props.setActive(null);
+      // this.props.setActive(null);
       el.classList.add('selected');
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'view-package',

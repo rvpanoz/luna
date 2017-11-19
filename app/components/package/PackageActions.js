@@ -10,23 +10,24 @@ class PackageActions extends React.Component {
     super(props);
   }
   _checkGroup(option) {
-    let group = this.props.group, check = false;
-    if(group && typeof group === 'string') {
-      switch (group) {
-        case 'devDependencies':
-          check = (option === 'save-dev');
-          break;
-        case 'optionalDependencies':
-          check = (option === 'save-optional');
-          break;
-        default:
-          check = (option === 'save');
-      }
-    }
-    return check;
+    // let group = this.props._group, check = false;
+    // switch (group) {
+    //   case 'devDependencies':
+    //     check = (option === 'save-dev');
+    //     break;
+    //   case 'optionalDependencies':
+    //     check = (option === 'save-optional');
+    //     break;
+    //   default:
+    //     check = (option === 'save');
+    // }
+    // return check;
+
+    console.log(this.props.cmdOptions);
+    return false;
   }
   componentDidUpdate(props) {
-    let group = props.group;
+
   }
   componentDidMount() {
     let dp = this.refs.dropdownMenu;

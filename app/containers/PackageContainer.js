@@ -29,6 +29,7 @@ const PackageContainer = (props) => {
         isLoading={props.isLoading}
         cmdOptions={props.cmdOptions}
         addCommandOption={props.addCommandOption}
+        clearCommandOptions={props.clearCommandOptions}
       />
     </div>
   )
@@ -50,6 +51,9 @@ function mapDispatchToProps(dispatch) {
   return {
     addCommandOption: (option) => {
       return dispatch(globalActions.addCommandOption(option));
+    },
+    clearCommandOptions: () => {
+      return dispatch(globalActions.clearCommandOptions());
     },
     toggleMainLoader: (bool) => {
       return dispatch(packagesActions.toggleMainLoader(bool));
