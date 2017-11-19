@@ -39,8 +39,8 @@ class PackageDetails extends React.Component {
       let found = false;
 
       //NOTE: somehow packageJSON is undefined
-      packageGroups.some((group, idx) => {
-        found = (packageJSON[group] && packageJSON[group][name]) ? group : false;
+      let groups = packageGroups.some((group, idx) => {
+        found = (packageJSON[group] && packageJSON[group][pkg.name]) ? group : false;
         if(found) {
           groupName.innerHTML = group;
           return true;
@@ -67,6 +67,7 @@ class PackageDetails extends React.Component {
           var group = packageJSON[groupName];
           while(group && group[pkgName]) {
             console.log(pkgName, groupName);
+            //set command actions based on related group
             group = null;
           }
         }
