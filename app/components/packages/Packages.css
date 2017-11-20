@@ -116,7 +116,7 @@
   float: left;
   box-sizing: border-box;
   width: 100%;
-  padding-left: 30px;
+  padding: 0px 0 0px 20px;
   margin-left: -20px;
   margin-right: -60px;
   margin-bottom: 15px;
