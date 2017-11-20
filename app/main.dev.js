@@ -158,7 +158,7 @@ app.on('ready', async() => {
     y: y,
     show: false,
     resizable: true,
-    icon: path.join(__dirname, 'resources/icons/32x32.png')
+    icon: path.join(__dirname, 'resources/icon.ico')
   });
 
   //load app.html file
