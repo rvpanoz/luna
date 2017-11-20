@@ -10,9 +10,9 @@ import React from 'react';
 import { parse } from '../utils';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { APP_MODES } from '../constants/AppConstants';
 import * as globalActions from '../actions/global_actions';
 import * as packagesActions from '../actions/packages_actions';
-import { modes } from '../constants/Modes';
 import PackagesListHeader from '../components/packages/PackagesListHeader';
 import PackagesListSearch from '../components/packages/PackagesListSearch';
 import PackagesList from '../components/packages/PackagesList';
@@ -139,7 +139,7 @@ class PackagesContainer extends React.Component {
     // npm install | uninstall | update listener
     ipcRenderer.on('action-close', (event, pkg) => {
       let mode = this.props.mode, directory = this.props.directory;
-      if(mode === 'LOCAL' && directory) {
+      if(mode === APP_MODES.LOCAL && directory) {
         ipcRenderer.send('analyze-json', directory);
         return;
       }
@@ -147,13 +147,18 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on('ipcEvent-error', (event, error) => {
-      //TODO
+      // console.error(error);
     });
 
     // update packageJSON state object and load data
     ipcRenderer.on('analyze-json-close', (event, filePath, content) => {
       this.props.setPackageJSON(content);
-      this.loadData();
+      this.props.toggleLoader(true);
+
+      //TODO: ... remove setTimeout
+      setTimeout(()=>{
+        this.loadData();
+      }, 3000);
     });
   }
 
@@ -196,6 +201,7 @@ class PackagesContainer extends React.Component {
               loading={props.loading}
               packages={props.packages}
               toggleLoader={props.toggleLoader}
+              setActive={props.setActive}
               toggleMainLoader={props.toggleMainLoader}
             />
           </div>

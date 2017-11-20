@@ -1,5 +1,5 @@
 /**
-* Package container component
+* Package inner container component
 **/
 
 'use strict';
@@ -18,20 +18,19 @@ import PackageDetails from '../components/package/PackageDetails';
 const PackageContainer = (props) => {
   return (
     <div className="package-container">
-      <Loader loading={props.isLoading}>
-        <PackageDetails
-          mode={props.mode}
-          directory={props.directory}
-          active={props.active}
-          packageActions={props.packageActions}
-          setActive={props.setActive}
-          toggleMainLoader={props.toggleMainLoader}
-          packageJSON={props.packageJSON}
-          isLoading={props.isLoading}
-          cmdOptions={props.cmdOptions}
-          addCommandOption={props.addCommandOption}
-        />
-      </Loader>
+      <PackageDetails
+        mode={props.mode}
+        directory={props.directory}
+        active={props.active}
+        packageActions={props.packageActions}
+        setActive={props.setActive}
+        toggleMainLoader={props.toggleMainLoader}
+        packageJSON={props.packageJSON}
+        isLoading={props.isLoading}
+        cmdOptions={props.cmdOptions}
+        addCommandOption={props.addCommandOption}
+        clearCommandOptions={props.clearCommandOptions}
+      />
     </div>
   )
 }
@@ -52,6 +51,9 @@ function mapDispatchToProps(dispatch) {
   return {
     addCommandOption: (option) => {
       return dispatch(globalActions.addCommandOption(option));
+    },
+    clearCommandOptions: () => {
+      return dispatch(globalActions.clearCommandOptions());
     },
     toggleMainLoader: (bool) => {
       return dispatch(packagesActions.toggleMainLoader(bool));

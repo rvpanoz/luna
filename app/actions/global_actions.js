@@ -3,7 +3,6 @@
 */
 
 import * as types from '../constants/ActionTypes';
-import * as Modes from '../constants/Modes';
 
 export function setPackageJSON(packageJSON) {
   return {
@@ -16,6 +15,12 @@ export function addCommandOption(option) {
   return {
     type: types.ADD_COMMAND_OPTION,
     option
+  }
+}
+
+export function clearCommandOptions() {
+  return {
+    type: types.CLEAR_COMMAND_OPTIONS
   }
 }
 

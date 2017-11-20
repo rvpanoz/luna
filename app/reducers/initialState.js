@@ -1,6 +1,5 @@
 export default {
   mode: 'GLOBAL',
-  packageJSON: null,
   directory: null,
   loading: false,
   showModal: false,
@@ -19,5 +18,13 @@ export default {
       text: 'Uninstall',
       iconCls: 'trash'
     }]
+  },
+  packageJSON: {
+    license: null,
+    author: "",
+    name: "",
+    dependencies: [],
+    devDependencies: [],
+    optionalDependencies: []
   }
 };
