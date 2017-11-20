@@ -1,33 +1,48 @@
+/**
+* Package actions inner component
+**/
+
 'use strict';
 
 import React from 'react';
 import { remote, ipcRenderer } from 'electron';
 import { showMessageBox } from '../../utils';
-import { COMMAND_OPTIONS } from '../../constants/AppConstants';
+import { APP_MODES, PACKAGE_GROUPS, COMMAND_OPTIONS } from '../../constants/AppConstants';
 
 class PackageActions extends React.Component {
   constructor(props) {
     super(props);
+    this._setupUI = this._setupUI.bind(this);
   }
-  _checkGroup(option) {
-    // let group = this.props._group, check = false;
-    // switch (group) {
-    //   case 'devDependencies':
-    //     check = (option === 'save-dev');
-    //     break;
-    //   case 'optionalDependencies':
-    //     check = (option === 'save-optional');
-    //     break;
-    //   default:
-    //     check = (option === 'save');
-    // }
-    // return check;
+  _setupUI() {
+    let mode = this.props.mode;
+    let pkg = this.props.active;
 
-    console.log(this.props.cmdOptions);
-    return false;
-  }
-  componentDidUpdate(props) {
+    if(pkg && mode === APP_MODES.LOCAL) {
+      let packageJSON = this.props.packageJSON;
 
+      //clear command options
+      this.props.clearCommandOptions();
+
+      PACKAGE_GROUPS.forEach((groupName, idx) => {
+        if(packageJSON[groupName] && packageJSON[groupName][pkg.name]) {
+          switch (groupName) {
+            case 'dependencies':
+              this.props.addCommandOption('save');
+              this.refs['opt-save'].checked = true;
+              break;
+            case 'devDependencies':
+              this.props.addCommandOption('save-dev');
+              this.refs['opt-save-dev'].checked = true;
+            case 'optionalDependencies':
+              this.props.addCommandOption('save-optional');
+              this.refs['opt-save-optional'].checked = true;
+            default:
+
+          }
+        }
+      });
+    }
   }
   componentDidMount() {
     let dp = this.refs.dropdownMenu;
@@ -47,6 +62,8 @@ class PackageActions extends React.Component {
         }
       });
     }
+
+    this._setupUI();
   }
   componentWillUnMount() {
     let dp = this.refs.dropdownMenu;
@@ -76,11 +93,14 @@ class PackageActions extends React.Component {
           }
           <li className="dropdown-header" style={{display: (props.mode === 'GLOBAL') ? 'none' : 'inherit'}}>Options</li>
           {
-            (!(props.mode === 'GLOBAL')) ? COMMAND_OPTIONS.map((option, idx) => {
+            (!(props.mode === APP_MODES.GLOBAL)) ? COMMAND_OPTIONS.map((option, idx) => {
               let opt = option.split('*');
               return (<li key={idx} title={opt[1]}>
                 <div className="form-check abc-checkbox">
-                  <input className="form-check-input" defaultChecked={this._checkGroup(opt[0])} id={`m${idx}`} type="checkbox" data-option={opt[0]}/>
+                  <input className="form-check-input"
+                    id={`m${idx}`} type="checkbox"
+                    ref={`opt-${opt[0]}`}
+                    data-option={opt[0]}/>
                   <label className="form-check-label" htmlFor={`m${idx}`}>
                     {opt[0]}
                   </label>

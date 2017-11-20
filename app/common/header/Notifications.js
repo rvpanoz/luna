@@ -9,11 +9,11 @@ import NotificationItem from './NotificationItem';
 
 export default class Notifications extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
   render() {
     let notifications = this.props.notifications;
-    if(!notifications.length) {
+    if(!notifications || !notifications.length) {
       return null;
     }
     return (

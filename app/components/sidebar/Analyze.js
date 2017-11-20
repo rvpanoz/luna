@@ -1,4 +1,9 @@
-import {remote, ipcRenderer} from 'electron';
+/**
+* Analyze packageJson
+**/
+
+import { APP_MODES} from '../../constants/AppConstants';
+import { remote, ipcRenderer } from 'electron';
 import React from 'react';
 
 class Analyze extends React.Component {
@@ -8,7 +13,7 @@ class Analyze extends React.Component {
     this._openPackage = this._openPackage.bind(this);
   }
   _updateMode(directory) {
-    this.props.setMode('LOCAL', directory);
+    this.props.setMode(APP_MODES.LOCAL, directory);
     ipcRenderer.send('analyze-json', directory);
   }
   _openPackage(e) {

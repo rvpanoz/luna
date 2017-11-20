@@ -11,7 +11,7 @@ import Loader from '../../common/Loader';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
 import { showMessageBox, isUrl } from '../../utils';
-import { PACKAGE_GROUPS } from '../../constants/AppConstants';
+import { APP_MODES, PACKAGE_GROUPS } from '../../constants/AppConstants';
 import styles from './PackageDetails.css';
 
 class PackageDetails extends React.Component {
@@ -22,13 +22,11 @@ class PackageDetails extends React.Component {
     this.doAction = this.doAction.bind(this);
     this.onChangeVersion = this.onChangeVersion.bind(this);
   }
-
   componentDidUpdate() {
     let mode = this.props.mode;
     let groupName = this.refs.groupName;
 
-    if(mode === 'LOCAL' && groupName) {
-      let packageGroups = PACKAGE_GROUPS;
+    if(mode === APP_MODES.LOCAL && groupName) {
       let packageJSON = this.props.packageJSON;
 
       if(!packageJSON) {
@@ -38,54 +36,16 @@ class PackageDetails extends React.Component {
       let pkg = this.props.active;
       let found = false;
 
-      let groups = packageGroups.some((group, idx) => {
+      let groups = PACKAGE_GROUPS.some((group, idx) => {
         found = (packageJSON[group] && packageJSON[group][pkg.name]) ? group : false;
         if(found) {
-          groupName.innerHTML = group;
           this._group = group;
+          groupName.innerHTML = group;
           return true;
         }
       });
     }
   }
-  /** WIP **/
-  componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps');
-    let mode = nextProps.mode;
-    let pkg = nextProps.active;
-
-    if(pkg) {
-      let packageJSON = nextProps.packageJSON;
-      if(mode === 'LOCAL' && packageJSON) {
-        let packageGroups = PACKAGE_GROUPS;
-        for(let z = 0;z<packageGroups.length;z++) {
-          let groupName = packageGroups[z];
-          let pkgName = pkg.name;
-          var group = packageJSON[groupName];
-          while(group && group[pkgName]) {
-            switch (group) {
-              case 'dependencies':
-                this.props.addCommandOption('save');
-                break;
-              case 'devDependencies':
-                this.props.addCommandOption('save-dev');
-              case 'optionalDependencies':
-                this.props.addCommandOption('save-optional');
-              default:
-            }
-
-            //set command actions based on related group
-            group = null;
-          }
-        }
-      }
-    }
-  }
-  componentWillMount() {
-    // clear command options
-    this.props.clearCommandOptions();
-  }
-
   doNavigate(e) {
     e.preventDefault();
     let url = e.target.dataset.url;
@@ -112,6 +72,7 @@ class PackageDetails extends React.Component {
           : 'latest';
       }
 
+      //show confirmation dialog
       showMessageBox({
           action: action,
           name: active.name,
@@ -130,7 +91,6 @@ class PackageDetails extends React.Component {
           });
         });
     }
-
     return false;
   }
   onChangeVersion(e) {
@@ -182,7 +142,9 @@ class PackageDetails extends React.Component {
                 toggleMainLoader={this.props.toggleMainLoader}
                 doAction={this.doAction}
                 packageActions={this.props.packageActions}
+                packageJSON={this.props.packageJSON}
                 cmdOptions={this.props.cmdOptions}
+                clearCommandOptions={this.props.clearCommandOptions}
                 addCommandOption={this.props.addCommandOption}
               />
             </div>
