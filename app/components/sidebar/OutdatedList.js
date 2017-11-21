@@ -33,7 +33,7 @@ export default class OutdatedPackages extends React.Component {
                       />
                     )
               })
-              : null
+              : <small style={{paddingLeft: '11px'}}>Everything is updated!</small>
             }
           </div>
         </div>
