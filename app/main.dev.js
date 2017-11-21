@@ -146,7 +146,7 @@ app.on('ready', async() => {
     if(mainWindow !== null) {
       mainWindow.close();
     }
-    dialog.showErrorBox('Error', 'NPM is not installed on your system');
+    dialog.showErrorBox('Fatal error', "NPM is not installed on your system.\nPlease visit https://www.npmjs.com for more details.");
     return;
   }
 
@@ -154,8 +154,8 @@ app.on('ready', async() => {
   mainWindow = new BrowserWindow({
     width: screenSize.width,
     height: screenSize.height,
-    x: x,
-    y: y,
+    x: 0,
+    y: 0,
     show: false,
     resizable: true,
     icon: path.join(__dirname, 'resources/icon.ico')
