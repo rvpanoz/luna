@@ -14,6 +14,7 @@ class Analyze extends React.Component {
   }
   _updateMode(directory) {
     this.props.setMode(APP_MODES.LOCAL, directory);
+    this.props.setActive(null);
     ipcRenderer.send('analyze-json', directory);
   }
   _openPackage(e) {
