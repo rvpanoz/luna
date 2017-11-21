@@ -14,7 +14,7 @@ class Settings extends React.Component {
           <div className="ss-widget__cont">
             <div className="ss-widget__row">
               <div className="ss-widget__cell">
-                
+                <small>No available settings</small>
               </div>
               <div className="ss-widget__cell"></div>
             </div>

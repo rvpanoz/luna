@@ -80,7 +80,7 @@ const PackageTabs = (props) => {
               <div className={styles.package__keywords} title="keywords">
                 {(pkg.keywords) ? pkg.keywords.map((keyword, idx) => {
                   return <span key={idx} className="label label-danger">{keyword}</span>
-                }) : null}
+                }) : 'No keywords'}
               </div>
             </div>
           </div>

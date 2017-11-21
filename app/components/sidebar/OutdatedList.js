@@ -17,7 +17,7 @@ export default class OutdatedPackages extends React.Component {
     return (
       <section className="sidebar__packages">
         <div className="sidebar__title">
-          Outdated packages
+          Outdated
         </div>
         <div className="lm-widget">
           <div className="lm-widget__list">
@@ -33,7 +33,7 @@ export default class OutdatedPackages extends React.Component {
                       />
                     )
               })
-              : null
+              : <small style={{paddingLeft: '11px'}}>Everything is updated!</small>
             }
           </div>
         </div>
