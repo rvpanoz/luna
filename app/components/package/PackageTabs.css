@@ -84,6 +84,7 @@
 }
 
 .package__preview__note {
+  padding-bottom: 15px;
   font-size: 11pt;
   line-height: 16px;
   text-align: left;

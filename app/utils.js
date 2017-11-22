@@ -33,7 +33,7 @@ export function showMessageBox(opts, cb = {}) {
   let version = opts.version;
   let message = "Would you like to $action $name@version";
 
-  message = message.replace('$action', action).replace('$name@version', () => {
+  message = message.replace('$action', action.toLowerCase()).replace('$name@version', () => {
     if(name && version) {
       return name + ' to version ' + version;
     } else if(name) {
@@ -43,6 +43,7 @@ export function showMessageBox(opts, cb = {}) {
     }
   });
   remote.dialog.showMessageBox(remote.getCurrentWindow(), {
+    title: 'Confirmation',
     type: 'question',
     message: message,
     buttons: ['CANCEL', action]

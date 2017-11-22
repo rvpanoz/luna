@@ -11,7 +11,7 @@ import Loader from '../../common/Loader';
 import PackageActions from './PackageActions';
 import PackageTabs from './PackageTabs';
 import { showMessageBox, isUrl } from '../../utils';
-import { APP_MODES, PACKAGE_GROUPS } from '../../constants/AppConstants';
+import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from '../../constants/AppConstants';
 import styles from './PackageDetails.css';
 
 class PackageDetails extends React.Component {
@@ -64,7 +64,7 @@ class PackageDetails extends React.Component {
       let active = this.props.active;
       let selectVersion = this.refs.selectVersion;
       let version, options = this.props.cmdOptions;
-      if(action === 'Uninstall') {
+      if(action === APP_ACTIONS.UNINSTALL) {
         version = null;
       } else {
         version = (selectVersion && selectVersion.value !== "false")
