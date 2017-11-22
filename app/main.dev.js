@@ -150,12 +150,13 @@ app.on('ready', async() => {
     return;
   }
 
+  let showDisplay = process.en
   //create main window
   mainWindow = new BrowserWindow({
     width: screenSize.width,
     height: screenSize.height,
-    x: x,
-    y: y,
+    x: 0,
+    y: 0,
     show: false,
     resizable: true,
     icon: path.join(__dirname, 'resources/icon.ico')
