@@ -71,7 +71,7 @@
     "email": "rvpanoz@gmail.com",
     "url": "https://github.com/rvpanoz"
   },
-  "license": "Apache-2.0",
+  "license": "GPL-3",
   "keywords": [
     "electron",
     "npm",
@@ -118,7 +118,6 @@
     "minimist": "^1.2.0",
     "node-sass": "^4.5.3",
     "react-addons-test-utils": "^15.6.0",
-    "react-test-renderer": "^15.6.1",
     "redux-logger": "^3.0.6",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
@@ -161,5 +160,6 @@
     "node": ">=7.x",
     "npm": ">=4.x",
     "yarn": ">=0.21.3"
-  }
+  },
+  "optionalDependencies": {}
 }

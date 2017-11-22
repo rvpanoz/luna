@@ -154,8 +154,8 @@ app.on('ready', async() => {
   mainWindow = new BrowserWindow({
     width: screenSize.width,
     height: screenSize.height,
-    x: 0,
-    y: 0,
+    x: x,
+    y: y,
     show: false,
     resizable: true,
     icon: path.join(__dirname, 'resources/icon.ico')
