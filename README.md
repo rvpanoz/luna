@@ -1,4 +1,4 @@
-# Luna - NPM management developer tool.
+# Luna - NPM management :boom:
 
 Luna is a tool for developers to manage npm packages.
 You can ***install***, ***view***, ***update***, ***uninstall*** your npm global packages or manage your packages from a local directory. Also the application has a notification system to inform you about missing dependencies and outdated packages.
@@ -18,8 +18,7 @@ if you want to help me make this software better and more useful feel free to ad
 
 ## Development ##
 
-Luna is created with the ReactJS library, Redux for store management, Webpack 3 for bundling. Build on Electron.
-:boom:
+Luna is created with the ReactJS library, Redux for store management, Webpack 3 for bundling and Electron for building.
 
 How to start developing:
 
