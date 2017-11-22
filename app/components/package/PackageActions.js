@@ -5,9 +5,9 @@
 'use strict';
 
 import React from 'react';
-import {remote, ipcRenderer} from 'electron';
-import {showMessageBox} from '../../utils';
-import {APP_MODES, PACKAGE_GROUPS, COMMAND_OPTIONS} from '../../constants/AppConstants';
+import { remote, ipcRenderer} from 'electron';
+import { showMessageBox} from '../../utils';
+import { APP_MODES, PACKAGE_GROUPS, COMMAND_OPTIONS } from '../../constants/AppConstants';
 
 class PackageActions extends React.Component {
   constructor(props) {
