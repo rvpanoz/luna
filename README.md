@@ -14,7 +14,7 @@ if you want to help me make this software better and more useful feel free to ad
 - Update existing packages
 - Uninstall packages
 
-![Luna - NPM management tool](http://104.236.58.95/media/luna-1.0.0-beta.png)
+![Luna - NPM management tool](http://104.236.58.95/luna/luna-preview1.png)
 
 ## Development ##
 
