@@ -42,6 +42,9 @@ class PackageActions extends React.Component {
         return false;
       }
 
+      // clear options
+      this.props.clearCommandOptions();
+
       switch (packageGroup) {
         case 'dependencies':
           this.props.addCommandOption('save');
@@ -56,10 +59,20 @@ class PackageActions extends React.Component {
           this.refs['opt-save-optional'].checked = true;
           break;
         default:
-          this.props.clearCommandOptions();
           this.refs['opt-save'].checked = false;
           this.refs['opt-save-dev'].checked = false;
           this.refs['opt-save-optional'].checked = false;
+      }
+      
+      // save-exact fix
+      let groupDependencies = packageJSON[packageGroup];
+      let version = groupDependencies[pkg.name];
+
+      if(!isNaN(version.charAt(0))) {
+        this.props.addCommandOption('save-exact');
+        this.refs['opt-save-exact'].checked = true;
+      } else {
+        this.refs['opt-save-exact'].checked = false;
       }
     }
   }
