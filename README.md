@@ -26,7 +26,7 @@ How to start developing:
 2. run `npm install` to install application's dependencies and devDependencies. 
 3. run `npm run dev`
 
-* if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --allow-root` - maybe you have to delete the node_modules folders first.
+if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --allow-root` - maybe you have to delete the node_modules folders first.
 
 ### Debian based (Debian, Ubuntu, Linux Mint)
 
