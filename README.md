@@ -1,4 +1,4 @@
-# Luna - NPM management :boom:
+# Luna - NPM management application :boom:
 
 Luna is a tool for developers to manage npm packages.
 You can ***install***, ***view***, ***update***, ***uninstall*** your npm global packages or manage your packages from a local directory. Also the application has a notification system to inform you about missing dependencies and outdated packages.
