@@ -85,8 +85,11 @@
 
 /** List item **/
 
-.packages__item {
+.packages__item:not(:first-child) {
   border-top: 1px solid rgba(36, 41, 44, 0.5);
+}
+
+.packages__item {
   padding: 10px 10px 15px;
   cursor: pointer;
 }
