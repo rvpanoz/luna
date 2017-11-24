@@ -24,9 +24,7 @@ const AppHeader = (props) => {
             <div className="col-md-4">
               <a className="navbar-brand" href="#">
                 <div className="logo text-nowrap">
-                  <div className="logo__img">
-                    <img className="img" src="./img/luna-icon-32x32.png"/>
-                  </div>
+                  <div className="logo__img"></div>
                   <span className="logo__text">Luna</span>
                 </div>
               </a>
