@@ -6,6 +6,7 @@
 
 import React from 'react';
 import NotificationItem from './NotificationItem';
+import styles from './Notifications.css';
 
 export default class Notifications extends React.Component {
   constructor(props) {
