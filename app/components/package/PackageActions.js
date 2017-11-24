@@ -63,7 +63,7 @@ class PackageActions extends React.Component {
           this.refs['opt-save-dev'].checked = false;
           this.refs['opt-save-optional'].checked = false;
       }
-      
+
       // save-exact fix
       let groupDependencies = packageJSON[packageGroup];
       let version = groupDependencies[pkg.name];
