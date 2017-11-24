@@ -52,6 +52,10 @@ i:hover {
   color: #fff;
 }
 
+span.fa-bell {
+  font-size: 16pt;
+}
+
 code {
   background-color: rgba(36, 41, 44, 0.5);
 }
@@ -243,6 +247,12 @@ code {
 ol, ul {
   margin-top: 0;
   margin-bottom: 9px;
+}
+
+h3.center {
+  position: relative;
+  top: 35%;
+  left: 35%;
 }
 
 .logo {
@@ -493,7 +503,7 @@ ol, ul {
 }
 
 .main {
-  margin-top: 28px;
+  margin-top: 0px;
   width: 100%;
   box-sizing: border-box;
   display: inline-block;
@@ -568,7 +578,7 @@ ol, ul {
 .packages {
   position: relative;
   min-height: 990px;
-  padding: 10px 35px;
+  padding: 30px 35px;
   height: 100%;
   border-radius: 2px;
   background-color: rgba(36, 41, 44, 0.5);
@@ -1651,180 +1661,6 @@ select option {
   transition: transform 0.4s, opacity 0.4s;
 }
 
-.notification-dropdown .header {
-  background: #ffffff;
-  width: 100%;
-  height: 44px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-  border-bottom: 1px solid #D5DFE4;
-  font-size: 14px;
-  line-height: 18px;
-}
-
-.notification-dropdown .header .container {
-  width: 115px;
-  margin: 0px auto;
-  padding-top: 12px;
-}
-
-.notification-dropdown .items {
-  background: #E9EFF2;
-  width: 100%;
-  max-height: 256px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  overflow-y: auto;
-}
-
-.notification-dropdown .items .list-item {
-  padding: 14px;
-  font-size: 13px;
-  line-height: 18px;
-  border-bottom: 1px solid #D5DFE4;
-  height: 35px;
-  cursor: pointer;
-}
-
-.notification-dropdown .items .list-item:hover {
-  background: #DDECF3;
-}
-
-.new-item {
-  background: #DDECF3;
-}
-
-.notification-dropdown .items .list-item:last-child {
-  border-bottom: 0px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.notification-dropdown .items .list-item .image {
-  margin-right: 12px;
-}
-
-.notification-dropdown .items .list-item img {
-  width: 35px;
-  height: auto;
-  border-radius: 30px;
-}
-
-.notification-dropdown .items .list-item .text {
-  color: #a0b6c3;
-  width: 178px;
-  position: relative;
-  top: -1px;
-}
-
-.notification-dropdown .items .list-item .text b {
-  margin-right: 4px;
-  color: #6F7A87;
-}
-
-/*** ****/
-
-.notification-dropdown .items .noti {
-  display: table;
-  position: relative;
-  margin: 40px auto 0;
-  width: 100%;
-  background-color: #0074D9;
-  color: #fff;
-  transition: all 0.2s ease;
-}
-
-.notification-dropdown .items .noti.is-hidden {
-  opacity: 0;
-  height: 0;
-  font-size: 0;
-  padding: 0;
-  margin: 0 auto;
-  display: block;
-}
-
-.notification-dropdown .items .noti--orange {
-  background-color: #F39C12;
-}
-
-.notification-dropdown .items .noti--red {
-  background-color: #FF4136;
-}
-
-.notification-dropdown .items .noti--green {
-  background-color: #2ECC40;
-}
-
-.notification-dropdown .items .noti-icon {
-  display: table-cell;
-  vertical-align: middle;
-  width: 60px;
-  padding: 30px;
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0.25);
-}
-
-.notification-dropdown .items .noti-icon>i {
-  width: 20px;
-  font-size: 20px;
-}
-
-.notification-dropdown .items .noti-body {
-  display: table-cell;
-  vertical-align: middle;
-  padding: 30px 20px 30px 10px;
-}
-
-.notification-dropdown .items .noti-body>p {
-  line-height: 1.2;
-  margin-top: 6px;
-}
-
-.notification-dropdown .items .noti-button {
-  position: relative;
-  margin: 15px 5px -10px;
-  background-color: rgba(0, 0, 0, 0.25);
-  box-shadow: 0 3px rgba(0, 0, 0, 0.4);
-  border: none;
-  padding: 10px 15px;
-  font-size: 16px;
-  font-family: 'Montserrat';
-  color: #fff;
-  outline: none;
-  cursor: pointer;
-}
-
-.notification-dropdown .items .noti-button:hover {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.notification-dropdown .items .noti-button:active {
-  background: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 0px rgba(0, 0, 0, 0.4);
-  top: 3px;
-}
-
-.notification-dropdown .items .noti-close {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.3);
-  color: #fff;
-  border: none;
-  outline: none;
-  font-size: 20px;
-  right: 5px;
-  top: 5px;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.notification-dropdown .items .noti:hover .notification-dropdown .items .noti-close {
-  opacity: 1;
-}
-
-.notification-dropdown .items .noti-close:hover {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
 .u-italic {
   font-style: italic;
 }
@@ -2014,6 +1850,7 @@ select option {
 
 /** header notifications **/
 
+/** Notifications **/
 ul.notification-info {
   list-style: none outside none;
   margin: 0;
@@ -2113,6 +1950,180 @@ ul.notification-info .notifications.dropdown>a {
   display: block;
   margin-top: 5px;
 }
+
+.notification-dropdown .header {
+  background: #ffffff;
+  width: 100%;
+  height: 44px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-bottom: 1px solid #D5DFE4;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.notification-dropdown .header .container {
+  width: 115px;
+  margin: 0px auto;
+  padding-top: 12px;
+}
+
+.notification-dropdown .items {
+  background: #E9EFF2;
+  width: 100%;
+  max-height: 256px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  overflow-y: auto;
+}
+
+.notification-dropdown .items .list-item {
+  padding: 14px;
+  font-size: 13px;
+  line-height: 18px;
+  border-bottom: 1px solid #D5DFE4;
+  height: 35px;
+  cursor: pointer;
+}
+
+.notification-dropdown .items .list-item:hover {
+  background: #DDECF3;
+}
+
+.new-item {
+  background: #DDECF3;
+}
+
+.notification-dropdown .items .list-item:last-child {
+  border-bottom: 0px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.notification-dropdown .items .list-item .image {
+  margin-right: 12px;
+}
+
+.notification-dropdown .items .list-item img {
+  width: 35px;
+  height: auto;
+  border-radius: 30px;
+}
+
+.notification-dropdown .items .list-item .text {
+  color: #a0b6c3;
+  width: 178px;
+  position: relative;
+  top: -1px;
+}
+
+.notification-dropdown .items .list-item .text b {
+  margin-right: 4px;
+  color: #6F7A87;
+}
+
+.notification-dropdown .items .noti {
+  display: table;
+  position: relative;
+  margin: 40px auto 0;
+  width: 100%;
+  background-color: #0074D9;
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.notification-dropdown .items .noti.is-hidden {
+  opacity: 0;
+  height: 0;
+  font-size: 0;
+  padding: 0;
+  margin: 0 auto;
+  display: block;
+}
+
+.notification-dropdown .items .noti--orange {
+  background-color: #F39C12;
+}
+
+.notification-dropdown .items .noti--red {
+  background-color: #FF4136;
+}
+
+.notification-dropdown .items .noti--green {
+  background-color: #2ECC40;
+}
+
+.notification-dropdown .items .noti-icon {
+  display: table-cell;
+  vertical-align: middle;
+  width: 60px;
+  padding: 30px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.notification-dropdown .items .noti-icon>i {
+  width: 20px;
+  font-size: 20px;
+}
+
+.notification-dropdown .items .noti-body {
+  display: table-cell;
+  vertical-align: middle;
+  padding: 30px 20px 30px 10px;
+}
+
+.notification-dropdown .items .noti-body>p {
+  line-height: 1.2;
+  margin-top: 6px;
+}
+
+.notification-dropdown .items .noti-button {
+  position: relative;
+  margin: 15px 5px -10px;
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: 0 3px rgba(0, 0, 0, 0.4);
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-family: 'Montserrat';
+  color: #fff;
+  outline: none;
+  cursor: pointer;
+}
+
+.notification-dropdown .items .noti-button:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.notification-dropdown .items .noti-button:active {
+  background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0px rgba(0, 0, 0, 0.4);
+  top: 3px;
+}
+
+.notification-dropdown .items .noti-close {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  right: 5px;
+  top: 5px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.notification-dropdown .items .noti:hover .notification-dropdown .items .noti-close {
+  opacity: 1;
+}
+
+.notification-dropdown .items .noti-close:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/** /Notifications **/
 
 .switch {
   border: 2px solid #fff;

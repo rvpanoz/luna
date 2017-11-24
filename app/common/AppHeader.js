@@ -34,7 +34,7 @@ const AppHeader = (props) => {
                 <ul className="notification-info pull-left">
                   <li className="notifications dropdown">
                     <a data-toggle="dropdown" className="dropdown-toggle" href="#">
-                      <i className="fa fa-bell"></i>
+                      <span className="fa fa-bell"></span>
                       <span className="badge badge-danger">{total_messages}</span>
                     </a>
                     <ul className="dropdown-menu pull-right">

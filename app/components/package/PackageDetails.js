@@ -117,7 +117,13 @@ class PackageDetails extends React.Component {
     let group = '';
 
     if (!pkg) {
-      return null;
+      return (
+        <Loader loading={this.props.isLoading}>
+          <div style={{width:'100%',height:'100vh',display:'block', position:'relative'}}>
+            <h3 className="center">No dependency selected</h3>
+          </div>
+        </Loader>
+      );
     }
 
     return (

@@ -10,27 +10,25 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as globalActions from '../actions/global_actions';
 import * as packagesActions from '../actions/packages_actions';
-
-import Loader from '../common/Loader';
 import { showMessageBox } from '../utils';
 import PackageDetails from '../components/package/PackageDetails';
 
 const PackageContainer = (props) => {
   return (
     <div className="package-container">
-      <PackageDetails
-        mode={props.mode}
-        directory={props.directory}
-        active={props.active}
-        packageActions={props.packageActions}
-        setActive={props.setActive}
-        toggleMainLoader={props.toggleMainLoader}
-        packageJSON={props.packageJSON}
-        isLoading={props.isLoading}
-        cmdOptions={props.cmdOptions}
-        addCommandOption={props.addCommandOption}
-        clearCommandOptions={props.clearCommandOptions}
-      />
+    <PackageDetails
+      mode={props.mode}
+      directory={props.directory}
+      active={props.active}
+      packageActions={props.packageActions}
+      setActive={props.setActive}
+      toggleMainLoader={props.toggleMainLoader}
+      packageJSON={props.packageJSON}
+      isLoading={props.isLoading}
+      cmdOptions={props.cmdOptions}
+      addCommandOption={props.addCommandOption}
+      clearCommandOptions={props.clearCommandOptions}
+    />
     </div>
   )
 }
