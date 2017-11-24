@@ -263,7 +263,9 @@ ol, ul {
   vertical-align: middle;
   font-size: 25px;
   width: 32px;
+  height: 32px;
   color: #ed4949;
+  background-image: url('./img/luna-icon-32x32.png');
 }
 
 .logo__text {

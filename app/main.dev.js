@@ -150,7 +150,7 @@ app.on('ready', async() => {
     return;
   }
 
-  let showDisplay = process.en
+
   //create main window
   mainWindow = new BrowserWindow({
     width: screenSize.width,
@@ -169,9 +169,15 @@ app.on('ready', async() => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
+
+    //show mainWindow
     mainWindow.show();
     mainWindow.focus();
-    mainWindow.openDevTools();
+
+    //detTools in development
+    if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
+      mainWindow.openDevTools();
+    }
   });
 
   mainWindow.webContents.on('crashed', () => {
