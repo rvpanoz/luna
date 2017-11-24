@@ -2,7 +2,6 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 @import "~awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css";
 @import "~animate.css/animate.css";
-
 html {
   height: 100%;
 }
@@ -291,7 +290,7 @@ h3.center {
 }
 
 .dashboard {
-  border-top: 0px solid transparent;
+  border-top: 30px solid transparent;
   height: 100%;
   width: 100%;
   white-space: nowrap;
@@ -300,7 +299,6 @@ h3.center {
 
 .sidebar {
   width: 200px;
-  z-index: 100;
   overflow: hidden;
   background-color: #30363c;
   position: relative;
@@ -1851,6 +1849,7 @@ select option {
 /** header notifications **/
 
 /** Notifications **/
+
 ul.notification-info {
   list-style: none outside none;
   margin: 0;
@@ -2152,12 +2151,15 @@ ul.notification-info .notifications.dropdown>a {
 }
 
 /** checkbox **/
+
 label.with-square-checkbox {
   cursor: pointer;
 }
+
 label.with-square-checkbox span {
   line-height: 24px;
 }
+
 label.with-square-checkbox span::before {
   margin-right: 4px;
   padding-left: 1px;
@@ -2169,10 +2171,12 @@ label.with-square-checkbox span::before {
   content: '';
   float: left;
 }
+
 label.with-square-checkbox input[type="checkbox"] {
   display: none;
 }
-label.with-square-checkbox input[type="checkbox"]:checked + span::before {
+
+label.with-square-checkbox input[type="checkbox"]:checked+span::before {
   font-family: 'Glyphicons Halflings';
   font-size: 14pt;
   content: '\e013';
@@ -2185,4 +2189,86 @@ label.with-square-checkbox input[type="checkbox"]:checked + span::before {
 
 .abc-checkbox label {
   padding-left: 10px !important;
+}
+
+/** pre **/
+
+/* CSS Simple Pre Code */
+
+pre {
+  background: #333;
+  white-space: pre;
+  word-wrap: break-word;
+  overflow: auto;
+}
+
+pre.code {
+  margin: 20px 25px;
+  border-radius: 4px;
+  border: 1px solid #292929;
+  position: relative;
+}
+
+pre.code label {
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 13px;
+  color: #ddd;
+  position: absolute;
+  left: 1px;
+  top: 25px;
+  text-align: center;
+  width: 60px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+pre.code code {
+  display: block;
+  margin: 0 0 0 60px;
+  padding: 15px 16px 14px;
+  border-left: 1px solid #555;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 19px;
+  color: #ddd;
+}
+
+pre::after {
+  content: " ";
+  padding: 0;
+  width: auto;
+  height: auto;
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  font-size: 12px;
+  color: #ddd;
+  line-height: 20px;
+  overflow: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+pre:hover::after {
+  opacity: 0;
+  visibility: visible;
+}
+
+pre.code-css code {
+  color: #91a7ff;
+}
+
+pre.code-html code {
+  color: #aed581;
+}
+
+pre.code-javascript code {
+  color: #ffa726;
+}
+
+pre.code-jquery code {
+  color: #4dd0e1;
 }

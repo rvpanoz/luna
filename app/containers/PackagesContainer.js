@@ -111,6 +111,10 @@ class PackagesContainer extends React.Component {
 
       // close loader
       this.props.toggleLoader(false);
+
+      if(this.props.showModal === true) {
+        this.props.toggleModal(false, '');
+      }
     });
 
     //  npm search listener
@@ -218,6 +222,7 @@ function mapStateToProps(state) {
     mode: state.global.mode,
     directory: state.global.directory,
     loading: state.global.loading,
+    showModal: state.global.showModal,
     packages: state.packages.packages,
     active: state.packages.active,
     totalInstalled: state.packages.totalInstalled
@@ -240,6 +245,9 @@ function mapDispatchToProps(dispatch) {
     },
     toggleLoader: (bool) => {
       return dispatch(globalActions.toggleLoader(bool));
+    },
+    toggleModal: (bool) => {
+      return dispatch(globalActions.toggleModal(bool));
     },
     toggleMainLoader: (bool) => {
       return dispatch(packagesActions.toggleMainLoader(bool));

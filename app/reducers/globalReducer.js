@@ -12,6 +12,7 @@ import {
   ADD_MESSAGE,
   CLEAR_MESSAGES,
   TOGGLE_LOADER,
+  TOGGLE_MODAL,
   ADD_COMMAND_OPTION,
   CLEAR_COMMAND_OPTIONS
 } from '../constants/ActionTypes';
@@ -20,6 +21,12 @@ let {packages, ..._initialiteStateWithoutProps} = initialState;
 
 const globalReducer = (state = _initialiteStateWithoutProps, action) => {
   switch (action.type) {
+    case TOGGLE_MODAL:
+      return {
+        ...state,
+        showModal: action.showModal,
+        runningNpmCommand: action.runningNpmCommand
+      }
     case ADD_COMMAND_OPTION:
       if (state.cmdOptions && state.cmdOptions.length) {
         let optionIndex = state.cmdOptions.indexOf(action.option);

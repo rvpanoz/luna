@@ -56,3 +56,11 @@ export function toggleLoader(loading) {
     loading
   };
 }
+
+export function toggleModal(bool, runningNpmCommand) {
+  return {
+    type: types.TOGGLE_MODAL,
+    showModal: bool,
+    runningNpmCommand: runningNpmCommand
+  };
+}
