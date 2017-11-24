@@ -81,7 +81,7 @@ class PackageDetails extends React.Component {
         name: active.name,
         version: version
       }, () => {
-        let runningNpmCommand = [`npm ${action.toLowerCase()} `, active.name, options.join(" ")].join('');
+        let runningNpmCommand = [`npm ${action.toLowerCase()} `, active.name, `--${options.join(" --")}`].join(' ');
         this.props.setActive(null);
         this.props.toggleModal(true, runningNpmCommand);
         ipcRenderer.send('ipc-event', {
