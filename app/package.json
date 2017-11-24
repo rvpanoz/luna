@@ -1,6 +1,6 @@
 {
   "name": "luna",
-  "productName": "Luna",
+  "productName": "luna",
   "version": "1.1.0-beta",
   "description": "Manage your NPM packages.",
   "main": "./main.prod.js",
@@ -12,6 +12,6 @@
   "scripts": {
     "postinstall": "npm rebuild --runtime=electron --target=1.6.6 --disturl=https://atom.io/download/atom-shell --build-from-source"
   },
-  "license": "Apache-2.0",
+  "license": "GPL-3",
   "dependencies": {}
 }

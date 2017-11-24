@@ -3,6 +3,7 @@ export default {
   directory: null,
   loading: false,
   showModal: false,
+  runningNpmCommand: '',
   messages: [],
   cmdOptions: [],
   packages: {
