@@ -290,6 +290,8 @@ h3.center {
 }
 
 .dashboard {
+  display: flex;
+  flex-direction: row;
   border-top: 30px solid transparent;
   height: 100%;
   width: 100%;
@@ -501,10 +503,11 @@ h3.center {
 }
 
 .main {
-  margin-top: 0px;
-  width: 100%;
+  position: relative;
+  width: 85%;
   box-sizing: border-box;
   display: inline-block;
+  margin-top: 0px;
   height: 100%;
   font-size: 14px;
   white-space: normal;

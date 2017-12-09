@@ -24,7 +24,9 @@ function runCommand(command, mode, directory, callback) {
   }
 
   console.log(`running: npm ${command.join(" ")}`);
-  let npmc = spawn('npm', command, {
+  
+  //on windows use npm.cmd
+  let npmc = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', command, {
     env: process.env,
     cwd: directory
       ? path.dirname(directory)
