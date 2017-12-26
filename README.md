@@ -40,3 +40,10 @@ if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --a
 2. Run `luna_1.1.0-beta_x64.exe`
 3. Launch Luna
 
+## Contributing
+
+1. Fork it (<https://github.com/rvpanoz/luna/fork>)
+2. Create your feature branch (`git checkout -b feature/cool`)
+3. Commit your changes (`git commit -am 'Add some cool feautures'`)
+4. Push to the branch (`git push origin feature/cool`)
+5. Create a new Pull Request
