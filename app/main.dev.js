@@ -138,17 +138,17 @@ app.on('ready', async() => {
     y = externalDisplay.bounds.y + 50;
   }
 
-  try {
-    execSync('npm -v', {
-      stdio: 'ignore'
-    });
-  } catch (e) {
-    if(mainWindow !== null) {
-      mainWindow.close();
-    }
-    dialog.showErrorBox('Fatal error', "NPM is not installed on your system.\nPlease visit https://www.npmjs.com for more details.");
-    return;
-  }
+  // try {
+  //   execSync('npm -v', {
+  //     stdio: 'ignore'
+  //   });
+  // } catch (e) {
+  //   if(mainWindow !== null) {
+  //     mainWindow.close();
+  //   }
+  //   dialog.showErrorBox('Fatal error', "NPM is not installed on your system.\nPlease visit https://www.npmjs.com for more details.");
+  //   return;
+  // }
 
 
   //create main window
