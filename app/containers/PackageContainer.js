@@ -1,24 +1,23 @@
 /**
-* Package inner container component
-**/
+ * Package inner container component
+ **/
 
-'use strict';
+"use strict";
 
-import { remote, ipcRenderer } from 'electron';
-import React from 'react';
-import AppModal from 'react-modal';
-import { AppModalStyles } from '../constants/AppConstants'
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as globalActions from '../actions/global_actions';
-import * as packagesActions from '../actions/packages_actions';
-import { showMessageBox } from '../utils';
-import PackageDetails from '../components/package/PackageDetails';
+import { remote, ipcRenderer } from "electron";
+import React from "react";
+import AppModal from "react-modal";
+import { AppModalStyles } from "../constants/AppConstants";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as globalActions from "../actions/global_actions";
+import * as packagesActions from "../actions/packages_actions";
+import { showMessageBox } from "../utils";
+import PackageDetails from "../components/package/PackageDetails";
 
-const PackageContainer = (props) => {
-
+const PackageContainer = props => {
   function _closeModal() {
-    props.toggleModal(false, '');
+    props.toggleModal(false, "");
     return false;
   }
 
@@ -38,18 +37,22 @@ const PackageContainer = (props) => {
         addCommandOption={props.addCommandOption}
         clearCommandOptions={props.clearCommandOptions}
       />
-      <AppModal isOpen={props.showModal} contentLabel="running npm command" style={AppModalStyles}>
-          <h3>Please wait..</h3>
-          <div className="m-wrapper" style={{padding:'5%', margin:'0 auto'}}>
-            <pre className='code code-html'>
-              <label>running</label>
-              <code>{props.runningNpmCommand}</code>
-              </pre>
-          </div>
+      <AppModal
+        isOpen={props.showModal}
+        contentLabel="running npm command"
+        style={AppModalStyles}
+      >
+        <h3>Please wait..</h3>
+        <div className="m-wrapper" style={{ padding: "5%", margin: "0 auto" }}>
+          <pre className="code code-html">
+            <label>running</label>
+            <code>{props.runningNpmCommand}</code>
+          </pre>
+        </div>
       </AppModal>
     </div>
-  )
-}
+  );
+};
 
 function mapStateToProps(state) {
   return {
@@ -68,16 +71,16 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addCommandOption: (option) => {
+    addCommandOption: option => {
       return dispatch(globalActions.addCommandOption(option));
     },
     clearCommandOptions: () => {
       return dispatch(globalActions.clearCommandOptions());
     },
-    toggleMainLoader: (bool) => {
+    toggleMainLoader: bool => {
       return dispatch(packagesActions.toggleMainLoader(bool));
     },
-    setActive: (pkg) => {
+    setActive: pkg => {
       return dispatch(packagesActions.setActive(pkg));
     },
     toggleModal: (bool, runningNpmCommand) => {

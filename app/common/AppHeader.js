@@ -1,18 +1,18 @@
 /**
-* Common AppHeader component
-**/
+ * Common AppHeader component
+ **/
 
-'use strict';
+"use strict";
 
-import { remote, ipcRenderer } from 'electron';
-import React from 'react';
-import { connect } from 'react-redux';
-import Notifications from './header/Notifications';
+import { remote, ipcRenderer } from "electron";
+import React from "react";
+import { connect } from "react-redux";
+import Notifications from "./header/Notifications";
 
-const AppHeader = (props) => {
+const AppHeader = props => {
   let total_messages = 0;
 
-  if(props.notifications && props.notifications.length) {
+  if (props.notifications && props.notifications.length) {
     total_messages = props.notifications.length;
   }
 
@@ -24,7 +24,7 @@ const AppHeader = (props) => {
             <div className="col-md-4">
               <a className="navbar-brand" href="#">
                 <div className="logo text-nowrap">
-                  <div className="logo__img"></div>
+                  <div className="logo__img" />
                   <span className="logo__text">Luna</span>
                 </div>
               </a>
@@ -33,15 +33,22 @@ const AppHeader = (props) => {
               <div className="pull-right">
                 <ul className="notification-info pull-left">
                   <li className="notifications dropdown">
-                    <a data-toggle="dropdown" className="dropdown-toggle" href="#">
-                      <span className="fa fa-bell"></span>
-                      <span className="badge badge-danger">{total_messages}</span>
+                    <a
+                      data-toggle="dropdown"
+                      className="dropdown-toggle"
+                      href="#"
+                    >
+                      <span className="fa fa-bell" />
+                      <span className="badge badge-danger">
+                        {total_messages}
+                      </span>
                     </a>
                     <ul className="dropdown-menu pull-right">
                       <li className="first">
-                        <div className="small">
-                          You have&nbsp;<strong>{total_messages}</strong>&nbsp;new notifications.
-                        </div>
+                        <p>
+                          You have&nbsp;<strong>{total_messages}</strong>&nbsp;new
+                          notifications.
+                        </p>
                       </li>
                       <li>
                         <Notifications notifications={props.notifications} />
@@ -55,8 +62,8 @@ const AppHeader = (props) => {
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
 function mapStateToProps(state) {
   return {
