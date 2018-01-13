@@ -350,6 +350,7 @@ h3.center {
 
 .sidebar__cont .sidebar__packages {
   display: inline-block;
+  width: 100%;
   max-height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;

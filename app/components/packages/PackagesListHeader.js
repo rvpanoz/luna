@@ -1,10 +1,12 @@
 import React from 'react';
-import {remote, ipcRenderer} from 'electron';
+import { remote, ipcRenderer } from 'electron';
+import { APP_MODES } from '../../constants/AppConstants';
 import styles from './Packages.css';
 
 class PackagesListHeader extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props);
     this._fetch = this._fetch.bind(this);
     this._setGlobalMode = this._setGlobalMode.bind(this);
   }
@@ -14,17 +16,17 @@ class PackagesListHeader extends React.Component {
   }
   _setGlobalMode(e) {
     e.preventDefault();
-    if(this.props.mode === 'GLOBAL') {
+    if(this.props.mode === APP_MODES.GLOBAL) {
       return;
     }
     this.props.toggleLoader(true);
-    this.props.setMode('GLOBAL', null);
+    this.props.setMode(APP_MODES.GLOBAL, null);
     this.props.setActive(null);
     this.props.setPackageActions();
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['list', 'outdated'],
-      mode: 'GLOBAL'
+      mode: APP_MODES.GLOBAL
     });
   }
   render() {

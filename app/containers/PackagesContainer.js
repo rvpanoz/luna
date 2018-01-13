@@ -21,8 +21,6 @@ import PackageContainer from '../containers/PackageContainer';
 class PackagesContainer extends React.Component {
   constructor(props) {
     super(props);
-
-    // bind methods to this context
     this.loadData = this.loadData.bind(this);
     this._setupList = this._setupList.bind(this);
     this._setupOutdated = this._setupOutdated.bind(this);
@@ -180,6 +178,7 @@ class PackagesContainer extends React.Component {
 
   render() {
     let props = this.props;
+
     return (
       <div className="packages">
         <div className="row">
