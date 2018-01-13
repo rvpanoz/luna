@@ -32,13 +32,11 @@ if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --a
 
 1. Download [luna.deb](http://104.236.58.95/luna/releases/latest/luna.deb)
 2. Run `sudo dpkg --install luna.deb` on the downloaded package.
-3. Launch Luna
 
 ### Windows
 
 1. Download [luna](http://104.236.58.95/luna/releases/latest/luna.exe)
 2. Run `luna.exe`
-3. Launch Luna
 
 ## Contributing
 
