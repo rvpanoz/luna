@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
-import {remote, ipcRenderer} from 'electron';
-import React from 'react';
+import { remote, ipcRenderer } from "electron";
+import React from "react";
 
 class messagesListItem extends React.Component {
   constructor(props) {
@@ -15,10 +15,10 @@ class messagesListItem extends React.Component {
 
     this.props.setActive(null);
     this.props.toggleMainLoader(true);
-    ipcRenderer.send('ipc-event', {
+    ipcRenderer.send("ipc-event", {
       mode: mode,
-      ipcEvent: 'view-package',
-      cmd: ['view'],
+      ipcEvent: "view-package",
+      cmd: ["view"],
       pkgName: pkg.name,
       pkgVersion: pkg.details.current
     });
@@ -26,7 +26,7 @@ class messagesListItem extends React.Component {
   componentDidMount() {
     let el = this.refs.root;
     if (el) {
-      el.classList.add('fadeIn');
+      el.classList.add("fadeIn");
     }
   }
   render() {
@@ -34,15 +34,15 @@ class messagesListItem extends React.Component {
     return (
       <div className="lm-widget__item new animated" ref="root">
         <div className="lm-widget__title">
+          <span>{pkg.name}</span>&nbsp;
           <i className="label label-danger">{pkg.details.latest}</i>&nbsp;
-          <span>{pkg.name}</span>
         </div>
         <div className="lm-widget__text">
           <small>current:&nbsp;{pkg.details.current}</small>
         </div>
-        <a className="lm-widget__link" href="#" onClick={this.updatePackage}></a>
+        <a className="lm-widget__link" href="#" onClick={this.updatePackage} />
       </div>
-    )
+    );
   }
 }
 

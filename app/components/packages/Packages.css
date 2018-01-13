@@ -15,7 +15,7 @@
 }
 
 .packages__head:after {
-  content: '';
+  content: "";
   display: block;
   clear: both;
 }
@@ -71,11 +71,11 @@
   margin-right: 0;
 }
 
-.packages__action>.fa:hover {
+.packages__action > .fa:hover {
   color: #fff;
 }
 
-.packages__action .dropdown-menu>li .fa {
+.packages__action .dropdown-menu > li .fa {
   margin-right: 10px;
 }
 
@@ -94,7 +94,8 @@
   cursor: pointer;
 }
 
-.packages__item:hover, .packages__item.selected {
+.packages__item:hover,
+.packages__item.selected {
   background-color: rgba(36, 41, 44, 0.5);
 }
 
@@ -122,7 +123,6 @@
   padding: 0px 0 0px 20px;
   margin-left: -20px;
   margin-right: -60px;
-  margin-bottom: 15px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
