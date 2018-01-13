@@ -1,7 +1,7 @@
 {
   "name": "luna",
-  "productName": "Luna",
-  "version": "1.1.0-beta",
+  "productName": "luna",
+  "version": "1.2.0",
   "description": "Luna is a tool for developers to organize npm packages. You can install, view, update, uninstall your npm global packages or manage your packages from a local directory.",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
