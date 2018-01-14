@@ -11,6 +11,7 @@
 import electron from 'electron';
 import { app, BrowserWindow, remote, ipcMain, dialog } from 'electron';
 import MenuBuilder from './menu';
+import fixPath from 'fix-path';
 
 const path = require('path');
 const config = require('./config');
@@ -26,6 +27,7 @@ let mainWindow = null;
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
+  fixPath();
 }
 
 if (process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true') {
