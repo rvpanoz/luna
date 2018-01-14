@@ -1888,6 +1888,8 @@ select option {
   border-bottom: 1px solid rgba(36, 41, 44, 0.5);
   padding: 5px 10px 5px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .lm-widget__item:hover {

@@ -1,22 +1,22 @@
 /**
-* Packages Container Component - handles state.packages slice
-* pass state as props to children
-**/
+ * Packages Container Component - handles state.packages slice
+ * pass state as props to children
+ **/
 
-'use strict';
+"use strict";
 
-import { remote, ipcRenderer } from 'electron';
-import React from 'react';
-import { parse } from '../utils';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { APP_MODES } from '../constants/AppConstants';
-import * as globalActions from '../actions/global_actions';
-import * as packagesActions from '../actions/packages_actions';
-import PackagesListHeader from '../components/packages/PackagesListHeader';
-import PackagesListSearch from '../components/packages/PackagesListSearch';
-import PackagesList from '../components/packages/PackagesList';
-import PackageContainer from '../containers/PackageContainer';
+import { remote, ipcRenderer } from "electron";
+import React from "react";
+import { parse } from "../utils";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { APP_MODES } from "../constants/AppConstants";
+import * as globalActions from "../actions/global_actions";
+import * as packagesActions from "../actions/packages_actions";
+import PackagesListHeader from "../components/packages/PackagesListHeader";
+import PackagesListSearch from "../components/packages/PackagesListSearch";
+import PackagesList from "../components/packages/PackagesList";
+import PackageContainer from "../containers/PackageContainer";
 
 class PackagesContainer extends React.Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class PackagesContainer extends React.Component {
   // parse packages string and set list packages
   _setupList(packages) {
     let total = 0;
-    let packagesData = parse(packages, 'dependencies');
+    let packagesData = parse(packages, "dependencies");
     this.props.setPackages(packagesData);
 
     // clear notifications
@@ -45,9 +45,9 @@ class PackagesContainer extends React.Component {
     this.props.setTotalInstalled(total);
 
     // setup notifications
-    let notifications = parse(packages, 'problems');
+    let notifications = parse(packages, "problems");
     notifications.forEach((notification, idx) => {
-      this.props.addMessage('error', notification);
+      this.props.addMessage("error", notification);
     });
   }
 
@@ -63,9 +63,9 @@ class PackagesContainer extends React.Component {
 
   // send ipcRenderer event to view package
   _viewPackage(name, version) {
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'view-package',
-      cmd: ['view'],
+    ipcRenderer.send("ipc-event", {
+      ipcEvent: "view-package",
+      cmd: ["view"],
       pkgName: name,
       pkgVersion: version,
       mode: this.props.mode,
@@ -80,11 +80,14 @@ class PackagesContainer extends React.Component {
     this.props.setPackagesOutdated([]);
     this.props.toggleMainLoader(false);
     this.props.toggleLoader(true);
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      cmd: [
-        'list', 'outdated'
-      ],
+
+    if (this.props.showModal === true) {
+      this.props.toggleModal(false, "");
+    }
+
+    ipcRenderer.send("ipc-event", {
+      ipcEvent: "get-packages",
+      cmd: ["list", "outdated"],
       mode: this.props.mode,
       directory: this.props.directory
     });
@@ -95,12 +98,12 @@ class PackagesContainer extends React.Component {
     this.loadData();
 
     //  npm list && npm outdated listener
-    ipcRenderer.on('get-packages-close', (event, packages, command) => {
+    ipcRenderer.on("get-packages-close", (event, packages, command) => {
       if (!packages) {
         return;
       }
       switch (command) {
-        case 'outdated':
+        case "outdated":
           this._setupOutdated(packages);
           break;
         default:
@@ -109,21 +112,17 @@ class PackagesContainer extends React.Component {
 
       // close loader
       this.props.toggleLoader(false);
-
-      if(this.props.showModal === true) {
-        this.props.toggleModal(false, '');
-      }
     });
 
     //  npm search listener
-    ipcRenderer.on('search-packages-close', (event, packagesStr) => {
+    ipcRenderer.on("search-packages-close", (event, packagesStr) => {
       let packages = JSON.parse(packagesStr);
       this.props.setPackages(packages);
       this.props.toggleLoader(false);
     });
 
     //  npm view listener
-    ipcRenderer.on('view-package-close', (event, packageStr) => {
+    ipcRenderer.on("view-package-close", (event, packageStr) => {
       let pkg;
       try {
         pkg = JSON.parse(packageStr);
@@ -134,31 +133,32 @@ class PackagesContainer extends React.Component {
       if (pkg) {
         this.props.setActive(pkg, false);
       } else {
-        throw new Error('Package cannot be parsed');
+        throw new Error("Package cannot be parsed");
       }
     });
 
     // npm install | uninstall | update listener
-    ipcRenderer.on('action-close', (event, pkg) => {
-      let mode = this.props.mode, directory = this.props.directory;
-      if(mode === APP_MODES.LOCAL && directory) {
-        ipcRenderer.send('analyze-json', directory);
+    ipcRenderer.on("action-close", (event, pkg) => {
+      let mode = this.props.mode,
+        directory = this.props.directory;
+      if (mode === APP_MODES.LOCAL && directory) {
+        ipcRenderer.send("analyze-json", directory);
         return;
       }
       this.loadData();
     });
 
-    ipcRenderer.on('ipcEvent-error', (event, error) => {
+    ipcRenderer.on("ipcEvent-error", (event, error) => {
       // console.error(error);
     });
 
     // update packageJSON state object and load data
-    ipcRenderer.on('analyze-json-close', (event, filePath, content) => {
+    ipcRenderer.on("analyze-json-close", (event, filePath, content) => {
       this.props.setPackageJSON(content);
       this.props.toggleLoader(true);
 
       //TODO: ... remove setTimeout
-      setTimeout(()=>{
+      setTimeout(() => {
         this.loadData();
       }, 3000);
     });
@@ -167,12 +167,12 @@ class PackagesContainer extends React.Component {
   componentWillUnMount() {
     // remove listeners
     ipcRenderer.removeAllListeners([
-      'get-packages-close',
-      'search-packages-close',
-      'action-close',
-      'view-package-reply',
-      'ipcEvent-error',
-      'analyze-json-close'
+      "get-packages-close",
+      "search-packages-close",
+      "action-close",
+      "view-package-reply",
+      "ipcEvent-error",
+      "analyze-json-close"
     ]);
   }
 
@@ -212,8 +212,9 @@ class PackagesContainer extends React.Component {
             <PackageContainer />
           </div>
         </div>
-      </div>)
-    }
+      </div>
+    );
+  }
 }
 
 function mapStateToProps(state) {
@@ -225,39 +226,39 @@ function mapStateToProps(state) {
     packages: state.packages.packages,
     active: state.packages.active,
     totalInstalled: state.packages.totalInstalled
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    setPackages: (packages) => {
+    setPackages: packages => {
       return dispatch(packagesActions.setPackages(packages));
     },
-    setPackageActions: (actions) => {
+    setPackageActions: actions => {
       return dispatch(packagesActions.setPackageActions(actions));
     },
-    setPackageJSON: (content) => {
+    setPackageJSON: content => {
       return dispatch(globalActions.setPackageJSON(content));
     },
-    setActive: (pkg) => {
+    setActive: pkg => {
       return dispatch(packagesActions.setActive(pkg));
     },
-    toggleLoader: (bool) => {
+    toggleLoader: bool => {
       return dispatch(globalActions.toggleLoader(bool));
     },
-    toggleModal: (bool) => {
+    toggleModal: bool => {
       return dispatch(globalActions.toggleModal(bool));
     },
-    toggleMainLoader: (bool) => {
+    toggleMainLoader: bool => {
       return dispatch(packagesActions.toggleMainLoader(bool));
     },
-    setMode: (mode) => {
+    setMode: mode => {
       return dispatch(globalActions.setMode(mode));
     },
-    setPackagesOutdated: (packages) => {
+    setPackagesOutdated: packages => {
       return dispatch(packagesActions.setPackagesOutdated(packages));
     },
-    setTotalInstalled: (total) => {
+    setTotalInstalled: total => {
       return dispatch(packagesActions.setTotalInstalled(total));
     },
     addMessage: (level, message) => {
