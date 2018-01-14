@@ -1,65 +1,33 @@
 /**
-* Packages reducer - handles state management
-* for packages operations
-**/
+ Packages reducer
+ Handles state management for packages operations
+ **/
 
-'use strict';
+"use strict";
 
-import initialState from './initialState';
+import initialState from "./initialState";
+import * as R from "ramda";
+
 import {
   TOGGLE_MAIN_LOADER,
   SET_PACKAGES,
   TOTAL_INSTALLED,
   SET_ACTIVE,
-  SET_MODAL_STATUS,
   SET_PACKAGES_OUTDATED,
   SET_PACKAGE_ACTIONS
-} from '../constants/ActionTypes';
+} from "../constants/ActionTypes";
 
-const packagesReducer = (state = initialState.packages, action) => {
-  switch (action.type) {
-    case SET_PACKAGES_OUTDATED:
-      return {
-        ...state,
-        packagesOutdated: action.packagesOutdated
-      }
-    case TOGGLE_MAIN_LOADER:
-      return {
-        ...state,
-        isLoading: action.isLoading
-      }
-    case SET_PACKAGES:
-      return {
-        ...state,
-        packages: action.packages
-      }
-    case TOTAL_INSTALLED:
-      return {
-        ...state,
-        totalInstalled: action.totalInstalled
-      }
-    case SET_PACKAGE_ACTIONS:
-      const packageActions_default = [{
-        text: 'Update',
-        iconCls: 'refresh'
-      }, {
-        text: 'Uninstall',
-        iconCls: 'trash'
-      }];
+const createReducer = function(initialState, handlers) {
+  return (state = initialState, action) => R.propOr(R.identity, R.prop("type", action), handlers)(state, action);
+};
 
-      return {
-        ...state,
-        packageActions: (action.packageActions) ? action.packageActions : packageActions_default
-      }
-    case SET_ACTIVE:
-      return {
-        ...state,
-        active: action.active,
-        isLoading: false
-      }
-    default:
-      return state;
-  }
-}
+const reducer = createReducer(initialState.packages, {
+  [SET_PACKAGES]: (state, action) => R.assoc("packages", action.packages, state),
+  [SET_PACKAGES_OUTDATED]: (state, action) => R.assoc("outdated", action.outdated, state),
+  [SET_ACTIVE]: (state, action) => R.assoc("active", action.active, state),
+  [TOGGLE_MAIN_LOADER]: (state, action) => R.assoc("isLoading", action.isLoading, state),
+  [SET_PACKAGE_ACTIONS]: (state, action) => R.assoc("actions", action.actions || state.actions, state),
+  [TOTAL_INSTALLED]: (state, action) => R.assoc("total", action.total, state)
+});
 
-export default packagesReducer
+export default reducer;

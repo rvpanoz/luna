@@ -2,36 +2,35 @@
   "name": "luna",
   "productName": "luna",
   "version": "1.2.0",
-  "description": "Luna is a tool for developers to organize npm packages. You can install, view, update, uninstall your npm global packages or manage your packages from a local directory.",
+  "description":
+    "Luna is a tool for developers to organize npm packages. You can install, view, update, uninstall your npm global packages or manage your packages from a local directory.",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
-    "build-dll": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors",
-    "build-main": "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.main.prod.js --colors",
-    "build-renderer": "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.prod.js --colors",
+    "build-dll":
+      "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.dev.dll.js --colors",
+    "build-main":
+      "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.main.prod.js --colors",
+    "build-renderer":
+      "cross-env NODE_ENV=production node --trace-warnings -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.renderer.prod.js --colors",
     "dev": "cross-env START_HOT=1 npm run start-renderer-dev",
     "package": "npm run build && build --publish never",
     "package-all": "npm run build && build -mwl",
     "package-linux": "npm run build && build --linux",
     "package-win": "npm run build && build --win --x64",
-    "postinstall": "concurrently \"npm run build-dll\" \"electron-builder install-app-deps\" \"node node_modules/fbjs-scripts/node/check-dev-engines.js package.json\"",
+    "postinstall":
+      "concurrently \"npm run build-dll\" \"electron-builder install-app-deps\" \"node node_modules/fbjs-scripts/node/check-dev-engines.js package.json\"",
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=production electron ./app/",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r babel-register ./app/main.dev",
-    "start-renderer-dev": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.renderer.dev.js",
+    "start-renderer-dev":
+      "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.renderer.dev.js",
     "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 node --trace-warnings ./test/runTests.js"
   },
   "browserslist": "electron 1.7",
   "build": {
     "productName": "Luna",
     "appId": "org.devapp.Luna",
-    "files": [
-      "dist/",
-      "node_modules/",
-      "app.html",
-      "main.prod.js",
-      "main.prod.js.map",
-      "package.json"
-    ],
+    "files": ["dist/", "node_modules/", "app.html", "main.prod.js", "main.prod.js.map", "package.json"],
     "dmg": {
       "contents": [
         {
@@ -47,15 +46,10 @@
       ]
     },
     "win": {
-      "target": [
-        "nsis"
-      ]
+      "target": ["nsis"]
     },
     "linux": {
-      "target": [
-        "deb",
-        "AppImage"
-      ]
+      "target": ["deb", "AppImage"]
     },
     "directories": {
       "buildResources": "resources",
@@ -72,15 +66,7 @@
     "url": "https://github.com/rvpanoz"
   },
   "license": "GPL-3.0",
-  "keywords": [
-    "electron",
-    "npm",
-    "react",
-    "redux",
-    "managenent",
-    "packages",
-    "desktop"
-  ],
+  "keywords": ["electron", "npm", "react", "redux", "managenent", "packages", "desktop"],
   "homepage": "https://github.com/rvpanoz/luna#readme",
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -153,9 +139,7 @@
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "^4.0.8",
-    "react-toggle-switch": "^3.0.3",
     "redux": "^3.7.1",
-    "redux-thunk": "^2.2.0",
     "source-map-support": "^0.4.15"
   },
   "devEngines": {

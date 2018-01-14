@@ -27,7 +27,7 @@ const PackageContainer = props => {
         mode={props.mode}
         directory={props.directory}
         active={props.active}
-        packageActions={props.packageActions}
+        actions={props.actions}
         setActive={props.setActive}
         toggleMainLoader={props.toggleMainLoader}
         toggleModal={props.toggleModal}
@@ -37,11 +37,7 @@ const PackageContainer = props => {
         addCommandOption={props.addCommandOption}
         clearCommandOptions={props.clearCommandOptions}
       />
-      <AppModal
-        isOpen={props.showModal}
-        contentLabel="running npm command"
-        style={AppModalStyles}
-      >
+      <AppModal isOpen={props.showModal} contentLabel="running npm command" style={AppModalStyles}>
         <h3>Please wait..</h3>
         <div className="m-wrapper" style={{ padding: "5%", margin: "0 auto" }}>
           <pre className="code code-html">
@@ -60,7 +56,7 @@ function mapStateToProps(state) {
     directory: state.global.directory,
     packageJSON: state.global.packageJSON,
     cmdOptions: state.global.cmdOptions,
-    packageActions: state.packages.packageActions,
+    actions: state.packages.actions,
     active: state.packages.active,
     isLoading: state.packages.isLoading,
     toggleModal: state.global.toggleModal,
