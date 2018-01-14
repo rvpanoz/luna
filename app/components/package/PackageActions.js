@@ -8,11 +8,7 @@ import React from "react";
 import { remote, ipcRenderer } from "electron";
 import { showMessageBox } from "../../utils";
 
-import {
-  APP_MODES,
-  PACKAGE_GROUPS,
-  COMMAND_OPTIONS
-} from "../../constants/AppConstants";
+import { APP_MODES, PACKAGE_GROUPS, COMMAND_OPTIONS } from "../../constants/AppConstants";
 
 class PackageActions extends React.Component {
   constructor(props) {
@@ -106,7 +102,7 @@ class PackageActions extends React.Component {
   }
   render() {
     let props = this.props;
-    let actions = props.packageActions;
+    let { actions } = props;
 
     return (
       <div className="dropdown">

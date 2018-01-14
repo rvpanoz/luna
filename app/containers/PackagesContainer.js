@@ -131,7 +131,8 @@ class PackagesContainer extends React.Component {
       }
 
       if (pkg) {
-        this.props.setActive(pkg, false);
+        this.props.setActive(pkg);
+        this.props.toggleMainLoader(false);
       } else {
         throw new Error("Package cannot be parsed");
       }
@@ -225,7 +226,7 @@ function mapStateToProps(state) {
     showModal: state.global.showModal,
     packages: state.packages.packages,
     active: state.packages.active,
-    totalInstalled: state.packages.totalInstalled
+    totalInstalled: state.packages.total
   };
 }
 

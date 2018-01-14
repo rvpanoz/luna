@@ -11,11 +11,7 @@ import Loader from "../../common/Loader";
 import PackageActions from "./PackageActions";
 import PackageTabs from "./PackageTabs";
 import { showMessageBox, isUrl } from "../../utils";
-import {
-  APP_MODES,
-  APP_ACTIONS,
-  PACKAGE_GROUPS
-} from "../../constants/AppConstants";
+import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from "../../constants/AppConstants";
 import styles from "./PackageDetails.css";
 
 class PackageDetails extends React.Component {
@@ -48,10 +44,7 @@ class PackageDetails extends React.Component {
       if (action === APP_ACTIONS.UNINSTALL) {
         version = null;
       } else {
-        version =
-          selectVersion && selectVersion.value !== "false"
-            ? selectVersion.value
-            : "latest";
+        version = selectVersion && selectVersion.value !== "false" ? selectVersion.value : "latest";
       }
 
       //show confirmation dialog
@@ -115,8 +108,7 @@ class PackageDetails extends React.Component {
       let found = false;
 
       let groups = PACKAGE_GROUPS.some((group, idx) => {
-        found =
-          packageJSON[group] && packageJSON[group][pkg.name] ? group : false;
+        found = packageJSON[group] && packageJSON[group][pkg.name] ? group : false;
         if (found) {
           this._group = group;
           groupName.innerHTML = group;
@@ -168,7 +160,7 @@ class PackageDetails extends React.Component {
                 setActive={this.props.setActive}
                 toggleMainLoader={this.props.toggleMainLoader}
                 doAction={this.doAction}
-                packageActions={this.props.packageActions}
+                actions={this.props.actions}
                 packageJSON={this.props.packageJSON}
                 cmdOptions={this.props.cmdOptions}
                 clearCommandOptions={this.props.clearCommandOptions}
@@ -206,11 +198,7 @@ class PackageDetails extends React.Component {
             </div>
           </div>
           <div className={styles.package__details__body}>
-            <PackageTabs
-              pkg={pkg}
-              navigate={this.doNavigate}
-              addOption={this.addOption}
-            />
+            <PackageTabs pkg={pkg} navigate={this.doNavigate} addOption={this.addOption} />
           </div>
         </div>
       </Loader>
