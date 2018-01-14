@@ -1,11 +1,13 @@
 /**
-* Packages reducer - handles state management
-* for packages operations
-**/
+ * Packages reducer - handles state management
+ * for packages operations
+ **/
 
-'use strict';
+"use strict";
 
-import initialState from './initialState';
+import initialState from "./initialState";
+import { assoc, evolve, not, cond } from "ramda";
+
 import {
   TOGGLE_MAIN_LOADER,
   SET_PACKAGES,
@@ -14,52 +16,45 @@ import {
   SET_MODAL_STATUS,
   SET_PACKAGES_OUTDATED,
   SET_PACKAGE_ACTIONS
-} from '../constants/ActionTypes';
+} from "../constants/ActionTypes";
 
-const packagesReducer = (state = initialState.packages, action) => {
-  switch (action.type) {
-    case SET_PACKAGES_OUTDATED:
-      return {
-        ...state,
-        packagesOutdated: action.packagesOutdated
-      }
-    case TOGGLE_MAIN_LOADER:
-      return {
-        ...state,
-        isLoading: action.isLoading
-      }
-    case SET_PACKAGES:
-      return {
-        ...state,
-        packages: action.packages
-      }
-    case TOTAL_INSTALLED:
-      return {
-        ...state,
-        totalInstalled: action.totalInstalled
-      }
-    case SET_PACKAGE_ACTIONS:
-      const packageActions_default = [{
-        text: 'Update',
-        iconCls: 'refresh'
-      }, {
-        text: 'Uninstall',
-        iconCls: 'trash'
-      }];
-
-      return {
-        ...state,
-        packageActions: (action.packageActions) ? action.packageActions : packageActions_default
-      }
-    case SET_ACTIVE:
-      return {
-        ...state,
-        active: action.active,
-        isLoading: false
-      }
-    default:
-      return state;
+function switchcase (cases, defaultCase, key) => {
+  if (cases.hasOwnProperty(key)) {
+    return cases[key]
+  } else {
+    return defaultCase
   }
 }
 
-export default packagesReducer
+// const switchcase = action => {
+//   switch (action.type) {
+//     case SET_PACKAGES_OUTDATED:
+//       return assoc("outdated", action.outdated, state);
+//     case TOGGLE_MAIN_LOADER:
+//       return assoc("isLoading", action.isLoading, state);
+//     case SET_PACKAGES:
+//       return assoc("packages", action.packages, state);
+//     case TOTAL_INSTALLED:
+//       return assoc("totalInstalled", action.total, state);
+//     case SET_PACKAGE_ACTIONS:
+//       return assoc("packageActions", action.actions ? action.actions : state.actions, state);
+//     case SET_ACTIVE:
+//       return evolve(
+//         {
+//           active: () => action.active,
+//           isLoading: not
+//         },
+//         state
+//       );
+//     default:
+//       return state;
+//   }
+// };
+
+const reducer = (state = initialState.packages, action) => {
+  switchcase({
+    'SET_PACKAGES_OUTDATED': action.outdated
+  })(state)(action.type);
+};
+
+export default reducer;

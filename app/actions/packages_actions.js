@@ -1,45 +1,44 @@
 /**
-* Redux actions
-*/
+ * Redux actions
+ */
 
-'use strict';
+"use strict";
 
-import * as types from '../constants/ActionTypes';
+import * as types from "../constants/ActionTypes";
 
-export function setTotalInstalled(totalInstalled) {
+export function setTotalInstalled(total) {
   return {
     type: types.TOTAL_INSTALLED,
-    totalInstalled
-  }
+    total
+  };
 }
 
-export function setPackagesOutdated(packagesOutdated) {
+export function setPackagesOutdated(outdated) {
   return {
     type: types.SET_PACKAGES_OUTDATED,
-    packagesOutdated
-  }
+    outdated
+  };
 }
 
-export function setPackageActions(packageActions) {
+export function setPackageActions(actions) {
   return {
     type: types.SET_PACKAGE_ACTIONS,
-    packageActions
-  }
+    actions
+  };
 }
 
 export function setPackages(packages) {
   return {
     type: types.SET_PACKAGES,
     packages
-  }
+  };
 }
 
-export function setActive(active, isLoading) {
+export function setActive(active) {
   return {
     type: types.SET_ACTIVE,
-    active,
-    isLoading
-  }
+    active
+  };
 }
 
 export function toggleMainLoader(isLoading) {

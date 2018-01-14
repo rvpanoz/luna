@@ -1,24 +1,27 @@
 export default {
-  mode: 'GLOBAL',
+  mode: "GLOBAL",
   directory: null,
   loading: false,
   showModal: false,
-  runningNpmCommand: '',
+  runningNpmCommand: "",
   messages: [],
   cmdOptions: [],
   packages: {
     isLoading: false,
-    totalInstalled: 0,
+    total: 0,
     active: null,
     packages: [],
-    packagesOutdated: [],
-    packageActions: [{
-      text: 'Update',
-      iconCls: 'refresh'
-    }, {
-      text: 'Uninstall',
-      iconCls: 'trash'
-    }]
+    outdated: [],
+    actions: [
+      {
+        text: "Update",
+        iconCls: "refresh"
+      },
+      {
+        text: "Uninstall",
+        iconCls: "trash"
+      }
+    ]
   },
   packageJSON: {
     license: null,
