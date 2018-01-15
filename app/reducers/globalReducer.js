@@ -20,18 +20,7 @@ import {
 
 let { packages, globalState } = initialState
 
-const createReducer = (globalState, handlers) => (state = globalState, action) =>
-	R.propOr(R.identity, R.prop('type', action), handlers)(state, action)
-
-const reducer = createReducer(globalState, {
-	[SET_MODE]: (state, action) => R.assoc('mode', action.mode, state),
-	[SET_PACKAGE_JSON]: (state, action) => R.assoc('packageJSON', action.packageJSON, state),
-	[TOGGLE_LOADER]: (state, action) => R.assoc('loading', action.loading, state),
-	[TOGGLE_MODAL]: (state, action) => R.assoc('showModal', action.showModal, state),
-  [ADD_MESSAGE]: (state, action) => .
-})
-
-const globalReducer = (state = initialiteStateWithoutProps, action) => {
+const reducer = (state = globalState, action) => {
 	switch (action.type) {
 		case TOGGLE_MODAL:
 			return {
