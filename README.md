@@ -35,7 +35,7 @@ if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --a
 
 ### Windows
 
-1. Download [luna_1.2.0](http://104.236.58.95/luna/releases/latest/luna_1.2.0.exe)
+1. Download [luna_1.2.0.exe](http://104.236.58.95/luna/releases/latest/luna_1.2.0.exe)
 2. Run `luna_1.2.0.exe`
 
 ## Contributing
