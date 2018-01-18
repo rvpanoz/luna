@@ -21,13 +21,26 @@ class SidebarContainer extends React.Component {
 	constructor(props) {
 		super(props)
 		this._updateMode = this._updateMode.bind(this)
-		this.openPackage = this.openPackage.bind(this)
 		this.handleSidebarContent = this.handleSidebarContent.bind(this)
+		this.openPackage = this.openPackage.bind(this)
 	}
 	_updateMode(directory) {
 		this.props.setMode(APP_MODES.LOCAL, directory)
 		this.props.setActive(null)
 		ipcRenderer.send('analyze-json', directory)
+	}
+	handleSidebarContent(idx) {
+		let sidebarContent = this.refs.sidebarContent
+		let menus = sidebarContent.querySelectorAll('.sidebar__menu')
+
+		for (let i = 0; i < menus.length; i++) {
+			menus[i].classList.remove('active')
+		}
+
+		if (menus && menus[idx]) {
+			menus[idx].classList.add('active')
+			menus[0].style['margin-left'] = '-' + idx * menus[idx].offsetWidth + 'px'
+		}
 	}
 	openPackage(e) {
 		e.preventDefault()
@@ -51,50 +64,34 @@ class SidebarContainer extends React.Component {
 			}
 		)
 	}
-	handleSidebarContent(idx) {
-		let sidebarContent = this.refs.sidebarContent
-		let menus = sidebarContent.querySelectorAll('.sidebar__menu')
-
-		for (let i = 0; i < menus.length; i++) {
-			menus[i].classList.remove('active')
-		}
-
-		if (menus && menus[idx]) {
-			menus[idx].classList.add('active')
-			menus[0].style['margin-left'] = '-' + idx * menus[idx].offsetWidth + 'px'
-		}
-	}
 	render() {
-		let props = this.props
-		let items = QUICKMENU.ICONS
+		const { packagesOutdated, toggleMainLoader, toggleLoader, clearMessages, setActive, setMode, mode } = this.props
+		const items = QUICKMENU.ICONS
+		console.log(packagesOutdated)
 		return (
 			<div className="sidebar">
-				<QuickMenu
-					items={items}
-					handleSidebarContent={this.handleSidebarContent}
-					packagesOutdated={props.packagesOutdated}
-				/>
+				<QuickMenu items={items} packagesOutdated={packagesOutdated} handleSidebarContent={this.handleSidebarContent} />
 				<div className="scroll-wrapper scrollable" style={{ position: 'relative' }}>
 					<div className="scrollable scroll-content">
 						<div className="sidebar__cont" ref="sidebarContent">
 							<div className="sidebar__menu active">
-								<AnalyzeSection openPackage={this.openPackage} {...props} />
+								<AnalyzeSection openPackage={this.openPackage} {...this.props} />
 							</div>
 							<div className="sidebar__menu">
 								<OutdatedList
-									mode={props.mode}
-									packages={props.packagesOutdated}
-									toggleMainLoader={props.toggleMainLoader}
-									setActive={props.setActive}
+									mode={mode}
+									packagesOutdated={packagesOutdated}
+									toggleMainLoader={toggleMainLoader}
+									setActive={setActive}
 								/>
 							</div>
 							<div className="sidebar__menu">
 								<Settings
-									mode={props.mode}
-									setMode={props.setMode}
-									toggleLoader={props.toggleLoader}
-									setActive={props.setActive}
-									clearMessages={props.clearMessages}
+									mode={mode}
+									setMode={setMode}
+									toggleLoader={toggleLoader}
+									setActive={setActive}
+									clearMessages={clearMessages}
 								/>
 							</div>
 						</div>

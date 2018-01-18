@@ -94,12 +94,15 @@ class PackagesContainer extends React.Component {
 
 	// sent ipcRenderer event to load packages
 	loadData() {
+		const { mode, directory } = this.props
+
+		//clear UI
 		this._clearUI()
 		ipcRenderer.send('ipc-event', {
 			ipcEvent: 'get-packages',
 			cmd: ['list', 'outdated'],
-			mode: this.props.mode,
-			directory: this.props.directory
+			mode: mode,
+			directory: directory
 		})
 	}
 
