@@ -24,7 +24,6 @@ export default {
 
   output: {
     path: path.join(__dirname, 'app'),
-    filename: 'renderer.dev.js',
     // https://github.com/webpack/webpack/issues/1114
     libraryTarget: 'commonjs2'
   },
@@ -36,19 +35,15 @@ export default {
     extensions: ['.js', '.jsx', '.json'],
     modules: [
       path.join(__dirname, 'app'),
-      'node_modules'
+      'node_modules',
     ],
   },
 
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'production'
     }),
 
-    // This plugin will cause the relative path of the module to be displayed when HMR is enabled
     new webpack.NamedModulesPlugin(),
-
-    //Automatically load modules instead of having to import or require them
-    new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery", "window.jQuery": 'jquery'})
-  ]
+  ],
 };
