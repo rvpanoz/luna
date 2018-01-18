@@ -21,13 +21,14 @@ import {
 const createReducer = (initialState, handlers) => (state = initialState, action) =>
 	R.propOr(R.identity, R.prop('type', action), handlers)(state, action)
 
-const reducer = createReducer(initialState.packages, {
+const handlers = {
 	[SET_PACKAGES]: (state, action) => R.assoc('packages', action.packages, state),
 	[SET_PACKAGES_OUTDATED]: (state, action) => R.assoc('outdated', action.outdated, state),
 	[SET_ACTIVE]: (state, action) => R.assoc('active', action.active, state),
 	[TOGGLE_MAIN_LOADER]: (state, action) => R.assoc('isLoading', action.isLoading, state),
 	[SET_PACKAGE_ACTIONS]: (state, action) => R.assoc('actions', action.actions || state.actions, state),
 	[TOTAL_INSTALLED]: (state, action) => R.assoc('total', action.total, state)
-})
+}
 
+const reducer = createReducer(initialState.packages, handlers)
 export default reducer
