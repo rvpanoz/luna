@@ -11,7 +11,7 @@ import App from './containers/App';
 import './app.global.css';
 
 //see webpack.renderer.config for jquery
-//import Bootstrap from 'bootstrap/dist/js/bootstrap.js';
+import Bootstrap from 'bootstrap/dist/js/bootstrap.js';
 
 const rootEl = document.getElementById('app-content');
 const render = App => {

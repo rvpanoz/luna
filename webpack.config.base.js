@@ -45,5 +45,9 @@ export default {
     }),
 
     new webpack.NamedModulesPlugin(),
+
+    //Automatically load modules instead of having to import or require them
+    new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery", "window.jQuery": 'jquery'})
+
   ],
 };
