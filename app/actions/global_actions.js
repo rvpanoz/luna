@@ -1,66 +1,66 @@
 /**
-* Redux actions
-*/
+ * Redux actions
+ */
 
-'use strict';
+'use strict'
 
-import * as types from '../constants/ActionTypes';
+import * as types from '../constants/ActionTypes'
 
 export function setPackageJSON(packageJSON) {
-  return {
-    type: types.SET_PACKAGE_JSON,
-    packageJSON
-  }
+	return {
+		type: types.SET_PACKAGE_JSON,
+		packageJSON
+	}
 }
 
 export function addCommandOption(option) {
-  return {
-    type: types.ADD_COMMAND_OPTION,
-    option
-  }
+	return {
+		type: types.ADD_COMMAND_OPTION,
+		option
+	}
 }
 
 export function clearCommandOptions() {
-  return {
-    type: types.CLEAR_COMMAND_OPTIONS
-  }
+	return {
+		type: types.CLEAR_COMMAND_OPTIONS
+	}
 }
 
 export function setMode(mode, directory) {
-  return {
-    type: types.SET_MODE,
-    mode,
-    directory,
-    packageJSON: null
-  }
+	return {
+		type: types.SET_MODE,
+		mode,
+		directory,
+		packageJSON: null
+	}
 }
 
 export function addMessage(level, body) {
-  return {
-    type: types.ADD_MESSAGE,
-    level,
-    body
-  }
+	return {
+		type: types.ADD_MESSAGE,
+		level,
+		body
+	}
 }
 
 export function clearMessages(messages) {
-  return {
-    type: types.CLEAR_MESSAGES,
-    messages
-  }
+	return {
+		type: types.CLEAR_MESSAGES,
+		messages
+	}
 }
 
 export function toggleLoader(loading) {
-  return {
-    type: types.TOGGLE_LOADER,
-    loading
-  };
+	return {
+		type: types.TOGGLE_LOADER,
+		loading
+	}
 }
 
-export function toggleModal(bool, runningNpmCommand) {
-  return {
-    type: types.TOGGLE_MODAL,
-    showModal: bool,
-    runningNpmCommand: runningNpmCommand
-  };
+export function toggleModal(bool, npmCmd) {
+	return {
+		type: types.TOGGLE_MODAL,
+		showModal: bool,
+		npmCmd: npmCmd
+	}
 }
