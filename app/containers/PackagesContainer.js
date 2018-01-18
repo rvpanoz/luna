@@ -54,6 +54,7 @@ class PackagesContainer extends React.Component {
 
 		// setup notifications
 		let notifications = parse(packages, 'problems')
+		console.log(notifications)
 		notifications.forEach((notification, idx) => {
 			this.props.addMessage('error', notification)
 		})

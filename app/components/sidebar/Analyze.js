@@ -56,7 +56,7 @@ class Analyze extends React.Component {
 		return (
 			<section className="sidebar__analyze">
 				<div className="sidebar__btn">
-					<a className="btn btn-block btn-danger" onClick={this._openPackage} href="#">
+					<a className="btn btn-block btn-default" onClick={this._openPackage} href="#">
 						Analyze package
 					</a>
 				</div>
