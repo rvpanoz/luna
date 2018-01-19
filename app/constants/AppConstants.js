@@ -2,6 +2,10 @@
  * APP constants
  **/
 
+export const APP_GLOBALS = {
+	title: 'npman'
+}
+
 //app modes
 export const APP_MODES = {
 	GLOBAL: 'GLOBAL',
