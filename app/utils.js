@@ -1,16 +1,22 @@
 //utilities
 
-'use strict';
+"use strict";
 
-import { remote, ipcRenderer } from 'electron';
+import { remote, ipcRenderer } from "electron";
 
 export function isUrl(url) {
   let matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
   return matcher.test(url);
 }
 
+export const switchcase = (cases) => (defaultCase) => (key) =>
+  cases.hasOwnProperty(key) && typeof cases[key] === "function"
+    ? cases[key].apply(undefined)
+    : defaultCase;
+
 export function parse(data, key, all) {
-  let arr = [], packages;
+  let arr = [],
+    packages;
   try {
     packages = JSON.parse(data);
     if (key && packages[key]) {
@@ -21,7 +27,7 @@ export function parse(data, key, all) {
     } else {
       return [];
     }
-  } catch(e) {
+  } catch (e) {
     console.error(e);
     return false;
   }
@@ -33,25 +39,29 @@ export function showMessageBox(opts, cb = {}) {
   let version = opts.version;
   let message = "Would you like to $action $name@version";
 
-  message = message.replace('$action', action.toLowerCase()).replace('$name@version', () => {
-    if(name && version) {
-      return name + ' to version ' + version;
-    } else if(name) {
+  message = message.replace("$action", action.toLowerCase()).replace("$name@version", () => {
+    if (name && version) {
+      return name + " to version " + version;
+    } else if (name) {
       return name;
     } else {
-      return '';
+      return "";
     }
   });
-  remote.dialog.showMessageBox(remote.getCurrentWindow(), {
-    title: 'Confirmation',
-    type: 'question',
-    message: message,
-    buttons: ['CANCEL', action]
-  }, (btnIdx) => {
-    if(Boolean(btnIdx) === true) {
-      cb();
+  remote.dialog.showMessageBox(
+    remote.getCurrentWindow(),
+    {
+      title: "Confirmation",
+      type: "question",
+      message: message,
+      buttons: ["CANCEL", action]
+    },
+    (btnIdx) => {
+      if (Boolean(btnIdx) === true) {
+        cb();
+      }
     }
-  });
+  );
 }
 
 export function isJson(str) {

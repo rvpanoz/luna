@@ -6,29 +6,37 @@
 
 import React from "react";
 import { remote, ipcRenderer } from "electron";
-import { showMessageBox } from "../../utils";
-
+import { switchcase, showMessageBox } from "../../utils";
 import { APP_MODES, PACKAGE_GROUPS, COMMAND_OPTIONS } from "../../constants/AppConstants";
 
 class PackageActions extends React.Component {
   constructor(props) {
     super(props);
+    this._addCommandOption = this._addCommandOption.bind(this);
     this._setupUI = this._setupUI.bind(this);
   }
+  _addCommandOption(opt) {
+    const { addCommandOption } = this.props;
+    const options = {
+      dependencies: "save",
+      devDependencies: "save-dev",
+      optionalDependencies: "save-optional"
+    };
+    console.log(options[opt]);
+    addCommandOption(options[opt]);
+    this.refs[`opt-${options[opt]}`].checked = true;
+  }
   _setupUI() {
-    let mode = this.props.mode;
-    let pkg = this.props.active;
+    const { packageJSON, mode, active, addCommandOption, clearCommandOptions } = this.props;
     let packageGroup = null;
 
-    if (pkg && mode === APP_MODES.LOCAL) {
-      let packageJSON = this.props.packageJSON;
-
-      //update state (glbal.cmdOptions)
-      this.props.clearCommandOptions();
-
-      //is in a group? (dependencies, devDependencies etc)
+    if (active && mode === APP_MODES.LOCAL) {
+      /**
+        Check to see if package is in a group
+        e.g dependencies, devDependencies, optionalDependencies
+      **/
       PACKAGE_GROUPS.some((groupName, idx) => {
-        if (packageJSON[groupName] && packageJSON[groupName][pkg.name]) {
+        if (packageJSON[groupName] && packageJSON[groupName][active.name]) {
           packageGroup = groupName;
           return true;
         }
@@ -39,33 +47,20 @@ class PackageActions extends React.Component {
       }
 
       // clear options
-      this.props.clearCommandOptions();
+      clearCommandOptions();
 
-      switch (packageGroup) {
-        case "dependencies":
-          this.props.addCommandOption("save");
-          this.refs["opt-save"].checked = true;
-          break;
-        case "devDependencies":
-          this.props.addCommandOption("save-dev");
-          this.refs["opt-save-dev"].checked = true;
-          break;
-        case "optionalDependencies":
-          this.props.addCommandOption("save-optional");
-          this.refs["opt-save-optional"].checked = true;
-          break;
-        default:
-          this.refs["opt-save"].checked = false;
-          this.refs["opt-save-dev"].checked = false;
-          this.refs["opt-save-optional"].checked = false;
-      }
+      switchcase({
+        dependencies: () => this._addCommandOption("dependencies"),
+        devDependencies: () => this._addCommandOption("devDependencies"),
+        optionalDependencies: this._addCommandOption("optionalDependencies")
+      })(() => this._addCommandOption("dependencies"))(packageGroup);
 
       // save-exact fix
-      let groupDependencies = packageJSON[packageGroup];
-      let version = groupDependencies[pkg.name];
+      const groupDependencies = packageJSON[packageGroup];
+      const version = groupDependencies[active.name];
 
       if (!isNaN(version.charAt(0))) {
-        this.props.addCommandOption("save-exact");
+        addCommandOption("save-exact");
         this.refs["opt-save-exact"].checked = true;
       } else {
         this.refs["opt-save-exact"].checked = false;
@@ -75,14 +70,14 @@ class PackageActions extends React.Component {
   componentDidMount() {
     let dp = this.refs.dropdownMenu;
     if (dp) {
-      dp.addEventListener("click", e => {
+      dp.addEventListener("click", (e) => {
         let target = e.target;
         if (target.tagName === "LABEL" || target.tagName === "INPUT") {
           e.stopPropagation();
         }
       });
 
-      dp.addEventListener("change", e => {
+      dp.addEventListener("change", (e) => {
         let target = e.target;
         if (target.dataset.option) {
           let option = target.dataset.option;
@@ -101,8 +96,7 @@ class PackageActions extends React.Component {
     }
   }
   render() {
-    let props = this.props;
-    let { actions } = props;
+    let { actions, mode, doAction } = this.props;
 
     return (
       <div className="dropdown">
@@ -112,7 +106,7 @@ class PackageActions extends React.Component {
           {actions.map((action, idx) => {
             return (
               <li key={idx}>
-                <a href="#" data-action={action.text} onClick={props.doAction}>
+                <a href="#" data-action={action.text} onClick={doAction}>
                   <i className={`fa fa-${action.iconCls}`} />&nbsp;
                   <b>{action.text}</b>
                 </a>
@@ -122,12 +116,12 @@ class PackageActions extends React.Component {
           <li
             className="dropdown-header"
             style={{
-              display: props.mode === "GLOBAL" ? "none" : "inherit"
+              display: mode === "GLOBAL" ? "none" : "inherit"
             }}
           >
             Options
           </li>
-          {!(props.mode === APP_MODES.GLOBAL)
+          {!(mode === APP_MODES.GLOBAL)
             ? COMMAND_OPTIONS.map((option, idx) => {
                 let opt = option.split("*");
                 return (
