@@ -7,6 +7,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import createMuiTheme from 'material-ui/styles/createMuiTheme'
+import { pinkA700, lightBlue900, red } from 'material-ui/colors'
+
+const muiTheme = createMuiTheme({
+	palette: {
+		primary: lightBlue900,
+		accent: pinkA700,
+		error: red,
+		type: 'dark'
+	}
+})
 
 const styles = (theme) => ({
 	root: {
@@ -16,15 +28,21 @@ const styles = (theme) => ({
 	}
 })
 
-const Layout = (props) => {
-	const { classes, children } = props
+class Layout extends React.Component {
+	constructor(props) {
+		super(props)
+	}
+	render() {
+		const { classes, children } = this.props
+		const muiThemeProvider = React.createElement(<MuiThemeProvider theme={muiTheme}>{children}</MuiThemeProvider>)
 
-	const RootEl = React.createElement('section', {
-		className: classes.root,
-		children
-	})
+		return React.createElement('section', {
+			className: classes.root,
+			children
+		})
 
-	return RootEl
+		return RootEl
+	}
 }
 
 Layout.propTypes = {

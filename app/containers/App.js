@@ -9,16 +9,16 @@ import { Provider } from 'react-redux'
 import configureStore from '../store'
 import PropTypes from 'prop-types'
 import Layout from './Layout'
-
+import Header from '../common/Header'
+import Main from './Main'
 const store = configureStore()
 
-const App = (props) => {
-	const { classes } = props
+const App = () => {
 	return (
 		<Provider store={store}>
 			<Layout>
-				<header />
-				<main />
+				<Header />
+				<Main />
 			</Layout>
 		</Provider>
 	)

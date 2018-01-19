@@ -21,7 +21,7 @@ import PackagesListSearch from '../components/packages/PackagesListSearch'
 import PackagesList from '../components/packages/PackagesList'
 import PackageContainer from '../containers/PackageContainer'
 
-class PackagesContainer extends React.Component {
+class Main extends React.Component {
 	constructor(props) {
 		super(props)
 		this._autoBind(['loadData', '_setupList', '_setupOutdated', '_viewPackage', '_clearUI'])
@@ -260,4 +260,4 @@ function mapDispatchToProps(dispatch) {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PackagesContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(Main)
