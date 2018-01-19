@@ -2,34 +2,30 @@
  * App Component
  */
 
-'use strict';
+'use strict'
 
-import React from 'react';
-import { Provider } from 'react-redux';
-import configureStore from '../store';
-import SidebarContainer from './SidebarContainer';
-import AppHeader from '../common/AppHeader';
-import PackagesContainer from './PackagesContainer';
+import React from 'react'
+import { Provider } from 'react-redux'
+import configureStore from '../store'
+import PropTypes from 'prop-types'
+import { withStyles } from 'material-ui/styles'
 
-const store = configureStore();
-const rootEl = document.getElementById('app-content');
+const store = configureStore()
+const styles = (theme) => ({
+	root: {
+		display: 'flex',
+		flexGrow: 1,
+		marginTop: 30
+	}
+})
 
-const App = () => {
-  return (
-    <Provider store={store}>
-      <div className="wrapper">
-        <AppHeader/>
-        <div className="dashboard">
-          <SidebarContainer/>
-          <div className="main">
-            <div className="main__cont main__scroll">
-              <PackagesContainer />
-            </div>
-          </div>
-        </div>
-      </div>
-    </Provider>
-  )
+const App = (props) => {
+	const { classes } = props
+	return (
+		<Provider store={store}>
+			<div className={classes.root} />
+		</Provider>
+	)
 }
 
-export default App;
+export default withStyles(styles)(App)
