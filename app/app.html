@@ -2,45 +2,37 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-    <title>Luna</title>
+    <title>luna - npm management</title>
     <script>
-      (function() {
+    (function() {
         if (!process.env.HOT) {
           const link = document.createElement('link');
           link.rel = 'stylesheet';
           link.href = './dist/style.css';
+          // HACK: Writing the script path should be done with webpack
           document.getElementsByTagName('head')[0].appendChild(link);
         }
       }());
     </script>
   </head>
-  <body class="main-scrollable">
-    <div id="app-content"></div>
+  <body>
+    <div id="root"></div>
     <script>
-      {
-        const scripts = [];
+    (function() {
+      const scripts = []
 
-        // Dynamically insert the DLL script in development env in the
-        // renderer process
-        if (process.env.NODE_ENV === 'development') {
-          scripts.push('../dll/renderer.dev.dll.js');
-        }
+  // Dynamically insert the DLL script in development env in the
+  // renderer process
+  if (process.env.NODE_ENV === 'development') {
+  	scripts.push('../dll/renderer.dev.dll.js')
+  }
 
-        // Dynamically insert the bundled app script in the renderer process
-        const port = process.env.PORT || 1212;
-        scripts.push(
-          (process.env.HOT)
-            ? 'http://localhost:' + port + '/dist/renderer.dev.js'
-            : './dist/renderer.prod.js'
-        );
+  // Dynamically insert the bundled app script in the renderer process
+  const port = process.env.PORT || 1212
+  scripts.push(process.env.HOT ? 'http://localhost:' + port + '/dist/renderer.dev.js' : './dist/renderer.prod.js')
+  document.write(scripts.map((script) => '<script defer src=' + script + '><\/script>').join(''))
+})()
 
-        document.write(
-          scripts
-            .map(script => '<script defer src="' + script + '"><\/script>')
-            .join('')
-        );
-      }
-    </script>
+</script>
   </body>
 </html>

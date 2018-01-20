@@ -6,42 +6,50 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import * as R from 'ramda'
+import Grid from 'material-ui/Grid'
 import { withStyles } from 'material-ui/styles'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import createMuiTheme from 'material-ui/styles/createMuiTheme'
-import { pinkA700, lightBlue900, red } from 'material-ui/colors'
-
-const muiTheme = createMuiTheme({
-	palette: {
-		primary: lightBlue900,
-		accent: pinkA700,
-		error: red,
-		type: 'dark'
-	}
-})
 
 const styles = (theme) => ({
 	root: {
 		display: 'flex',
-		flexGrow: 1,
-		marginTop: 30
+		flexGrow: 2,
+		flexDirection: 'column'
 	}
 })
 
 class Layout extends React.Component {
 	constructor(props) {
 		super(props)
+		this.AppHeader = null
+		this.AppMain = null
+		this.getElementByPosition = this.getElementByPosition.bind(this)
+	}
+	getElementByPosition(position) {
+		const { children } = this.props
+		return R.filter(
+			R.where({
+				props: R.propEq('position', position)
+			})
+		)(children)[0]
+	}
+	componentWillMount() {
+		this.AppHeader = this.getElementByPosition('header')
+		this.AppMain = this.getElementByPosition('main')
 	}
 	render() {
 		const { classes, children } = this.props
-		const muiThemeProvider = React.createElement(<MuiThemeProvider theme={muiTheme}>{children}</MuiThemeProvider>)
 
-		return React.createElement('section', {
-			className: classes.root,
-			children
-		})
-
-		return RootEl
+		return (
+			<Grid container className={classes.root}>
+				<Grid item xs={12}>
+					{this.AppHeader}
+				</Grid>
+				<Grid item xs={12}>
+					{this.AppMain}
+				</Grid>
+			</Grid>
+		)
 	}
 }
 

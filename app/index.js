@@ -1,31 +1,27 @@
-/**
- * Starting point - index.js
- **/
-
-'use strict'
-
 import React from 'react'
-import ReactDOM from 'react-dom'
+import { render } from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
-import App from './containers/App'
+import Root from './containers/App'
+import configureStore from './store'
 import './app.global.css'
-const rootEl = document.getElementById('app-content')
 
-const render = (App) => {
-	ReactDOM.render(
-		<AppContainer>
-			<App />
-		</AppContainer>,
-		rootEl
-	)
-}
+const store = configureStore()
 
-render(App)
+render(
+	<AppContainer>
+		<Root store={store} history={history} />
+	</AppContainer>,
+	document.getElementById('root')
+)
 
-// Webpack Hot Module Replacement API
 if (module.hot) {
 	module.hot.accept('./containers/App', () => {
-		const NextApp = require('./containers/App').default
-		render(NextApp)
+		const NextRoot = require('./containers/App')
+		render(
+			<AppContainer>
+				<NextRoot store={store} history={history} />
+			</AppContainer>,
+			document.getElementById('root')
+		)
 	})
 }

@@ -14,12 +14,7 @@ import { bindActionCreators } from 'redux'
 import { APP_MODES } from '../constants/AppConstants'
 import * as globalActions from '../actions/global_actions'
 import * as packagesActions from '../actions/packages_actions'
-
-//components
-import PackagesListHeader from '../components/packages/PackagesListHeader'
-import PackagesListSearch from '../components/packages/PackagesListSearch'
-import PackagesList from '../components/packages/PackagesList'
-import PackageContainer from '../containers/PackageContainer'
+import styles from './Main.css'
 
 class Main extends React.Component {
 	constructor(props) {
@@ -191,41 +186,9 @@ class Main extends React.Component {
 	}
 
 	render() {
-		let props = this.props
-
 		return (
-			<div className="packages">
-				<div className="row">
-					<div className="col-lg-4 col-md-4">
-						<PackagesListHeader
-							mode={props.mode}
-							directory={props.directory}
-							total={props.totalInstalled}
-							loadData={this.loadData}
-							toggleLoader={props.toggleLoader}
-							setMode={props.setMode}
-							setActive={props.setActive}
-							setPackageActions={props.setPackageActions}
-						/>
-						<PackagesListSearch
-							setActive={props.setActive}
-							toggleLoader={props.toggleLoader}
-							mode={props.mode}
-							directory={props.directory}
-							setPackageActions={props.setPackageActions}
-						/>
-						<PackagesList
-							loading={props.loading}
-							packages={props.packages}
-							toggleLoader={props.toggleLoader}
-							setActive={props.setActive}
-							toggleMainLoader={props.toggleMainLoader}
-						/>
-					</div>
-					<div className="col-lg-8 col-md-8">
-						<PackageContainer />
-					</div>
-				</div>
+			<div className={styles.packages}>
+				<span>lol33</span>
 			</div>
 		)
 	}

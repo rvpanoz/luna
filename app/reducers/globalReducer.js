@@ -1,6 +1,6 @@
 /**
  Global reducer:
- Handles state management for global operations
+ Handles state management for global operations.
  **/
 
 'use strict'
