@@ -16,7 +16,7 @@ const styles = (theme) => {
 	return {
 		root: {
 			display: 'flex',
-			flexGrow: 2,
+			flexGrow: 1,
 			flexDirection: 'column'
 		}
 	}

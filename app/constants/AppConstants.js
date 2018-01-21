@@ -3,7 +3,7 @@
  **/
 
 export const APP_GLOBALS = {
-	title: 'npman'
+	title: 'luna'
 }
 
 //app modes
