@@ -1,3 +1,7 @@
+body {
+	overflow: hidden;
+}
+
 .packages {
-  position: relative;
+	position: relative;
 }

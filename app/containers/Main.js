@@ -16,6 +16,9 @@ import * as globalActions from '../actions/global_actions'
 import * as packagesActions from '../actions/packages_actions'
 import styles from './Main.css'
 
+//components
+import WithHeaderList from '../components/packages/WithHeaderList'
+
 class Main extends React.Component {
 	constructor(props) {
 		super(props)
@@ -186,9 +189,11 @@ class Main extends React.Component {
 	}
 
 	render() {
+		const {loading} = this.props
+		
 		return (
 			<div className={styles.packages}>
-				
+				<WithHeaderList list="ListView" />
 			</div>
 		)
 	}
