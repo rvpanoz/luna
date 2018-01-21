@@ -2,9 +2,6 @@
 logs
 *.log
 
-# experiments
-exp
-
 # Runtime data
 pids
 *.pid

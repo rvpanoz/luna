@@ -24,12 +24,11 @@ export default {
 		]
 	},
 
-	output: {
-		path: path.join(__dirname, 'app'),
-		filename: 'renderer.dev.js',
-		// https://github.com/webpack/webpack/issues/1114
-		libraryTarget: 'commonjs2'
-	},
+  output: {
+    path: path.join(__dirname, 'app'),
+    // https://github.com/webpack/webpack/issues/1114
+    libraryTarget: 'commonjs2'
+  },
 
 	/**
 	 * Determine the array of extensions that should be used to resolve modules.
@@ -39,12 +38,11 @@ export default {
 		modules: [path.join(__dirname, 'app'), 'node_modules']
 	},
 
-	plugins: [
-		new webpack.DefinePlugin({
-			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production')
-		}),
+  plugins: [
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'production'
+    }),
 
-		// This plugin will cause the relative path of the module to be displayed when HMR is enabled
-		new webpack.NamedModulesPlugin()
-	]
-}
+    new webpack.NamedModulesPlugin(),
+  ],
+};

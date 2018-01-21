@@ -15,10 +15,10 @@ import { pinkA700, lightBlue900, red } from 'material-ui/colors'
 //Components
 import Layout from './Layout'
 import Header from '../common/Header'
+import Sidebar from './Sidebar'
 import Main from './Main'
 
 export default function App(props) {
-	console.log(props)
 	const { store } = props
 
 	//create material-ui custom theme
@@ -27,7 +27,7 @@ export default function App(props) {
 			primary: lightBlue900,
 			accent: pinkA700,
 			error: red,
-			type: 'dark'
+			type: 'light'
 		}
 	})
 	return (
@@ -35,6 +35,7 @@ export default function App(props) {
 			<MuiThemeProvider theme={muiTheme}>
 				<Layout>
 					<Header position="header" title="npman" />
+					<Sidebar position="sidebar" />
 					<Main position="main" />
 				</Layout>
 			</MuiThemeProvider>

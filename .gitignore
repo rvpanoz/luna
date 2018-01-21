@@ -28,9 +28,6 @@ build/Release
 node_modules
 app/node_modules
 
-# tests
-test
-
 # OSX
 .DS_Store
 
@@ -47,7 +44,6 @@ app/renderer.prod.js.map
 app/style.css
 app/style.css.map
 dist
-dev
 dll
 main.js
 main.js.map

@@ -188,7 +188,7 @@ class Main extends React.Component {
 	render() {
 		return (
 			<div className={styles.packages}>
-				<span>lol33</span>
+				__packages__
 			</div>
 		)
 	}

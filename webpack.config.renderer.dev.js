@@ -108,31 +108,27 @@ export default merge.smart(baseConfig, {
 			sourceType: 'var'
 		}),
 
-		/**
-		 * https://webpack.js.org/concepts/hot-module-replacement/
-		 */
-		new webpack.HotModuleReplacementPlugin({
-			// @TODO: Waiting on https://github.com/jantimon/html-webpack-plugin/issues/533
-			// multiStep: true
-		}),
+    new webpack.HotModuleReplacementPlugin({
+      multiStep: true
+    }),
 
 		new webpack.NoEmitOnErrorsPlugin(),
 
-		/**
-		 * Create global constants which can be configured at compile time.
-		 *
-		 * Useful for allowing different behaviour between development builds and
-		 * release builds
-		 *
-		 * NODE_ENV should be production so that modules do not perform certain
-		 * development checks
-		 *
-		 * By default, use 'development' as NODE_ENV. This can be overriden with
-		 * 'staging', for example, by changing the ENV variables in the npm scripts
-		 */
-		new webpack.DefinePlugin({
-			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
-		}),
+    /**
+     * Create global constants which can be configured at compile time.
+     *
+     * Useful for allowing different behaviour between development builds and
+     * release builds
+     *
+     * NODE_ENV should be production so that modules do not perform certain
+     * development checks
+     *
+     * By default, use 'development' as NODE_ENV. This can be overriden with
+     * 'staging', for example, by changing the ENV variables in the npm scripts
+     */
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'development'
+    }),
 
 		new webpack.LoaderOptionsPlugin({
 			debug: true
@@ -148,34 +144,37 @@ export default merge.smart(baseConfig, {
 		__filename: false
 	},
 
-	devServer: {
-		port,
-		publicPath,
-		compress: true,
-		quiet: false,
-		noInfo: false,
-		stats: 'errors-only',
-		inline: false,
-		lazy: false,
-		hot: true,
-		headers: { 'Access-Control-Allow-Origin': '*' },
-		contentBase: path.join(__dirname, 'dist'),
-		watchOptions: {
-			aggregateTimeout: 300,
-			ignored: /node_modules/,
-			poll: 100
-		},
-		historyApiFallback: {
-			verbose: true,
-			disableDotRule: false
-		},
-		before() {
-			if (process.env.START_HOT) {
-				console.log(chalk.green('Starting Main Process...'))
-				spawn('npm', ['run', 'start-main-dev'], { shell: true, env: process.env, stdio: 'inherit' })
-					.on('close', (code) => process.exit(code))
-					.on('error', (spawnError) => console.error(spawnError))
-			}
-		}
-	}
-})
+  devServer: {
+    port,
+    publicPath,
+    compress: true,
+    noInfo: true,
+    stats: 'errors-only',
+    inline: true,
+    lazy: false,
+    hot: true,
+    headers: { 'Access-Control-Allow-Origin': '*' },
+    contentBase: path.join(__dirname, 'dist'),
+    watchOptions: {
+      aggregateTimeout: 300,
+      ignored: /node_modules/,
+      poll: 100
+    },
+    historyApiFallback: {
+      verbose: true,
+      disableDotRule: false,
+    },
+    before() {
+      if (process.env.START_HOT) {
+        console.log('Starting Main Process...');
+        spawn(
+          'npm',
+          ['run', 'start-main-dev'],
+          { shell: true, env: process.env, stdio: 'inherit' }
+        )
+          .on('close', code => process.exit(code))
+          .on('error', spawnError => console.error(spawnError));
+      }
+    }
+  },
+});

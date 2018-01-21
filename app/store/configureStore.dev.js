@@ -3,14 +3,28 @@
  **/
 
 'use strict'
-
+import { createHashHistory } from 'history'
 import { createStore, applyMiddleware, compose } from 'redux'
+import { createLogger } from 'redux-logger'
 import rootReducer from '../reducers'
 
-const configureStore = (initialState) => {
+const history = createHashHistory()
+
+const configureStore = (initialState?: counterStateType) => {
 	// Redux Configuration
 	const middleware = []
 	const enhancers = []
+
+	// Logging Middleware
+	const logger = createLogger({
+		level: 'info',
+		collapsed: true
+	})
+
+	// Skip redux logs in console during the tests
+	if (process.env.NODE_ENV !== 'test') {
+		middleware.push(logger)
+	}
 
 	// Create Store
 	const store = createStore(
@@ -26,4 +40,4 @@ const configureStore = (initialState) => {
 	return store
 }
 
-export default configureStore
+export default { configureStore, history }
