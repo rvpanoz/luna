@@ -31,16 +31,13 @@ class Layout extends React.Component {
     const { children } = this.props;
     const isChildrenArray = Array.isArray(children);
 
-    if (isChildrenArray) {
-      return R.filter(
-        R.where({
-          props: R.propEq("position", position)
-        }),
-        children
-      )[0];
-    } else {
-      return children;
-    }
+    return R.filter(
+      R.where({
+        props: R.propOr({
+          position: R.propEq("position", position)
+        })
+      })
+    )(children);
   }
   componentWillMount() {
     this.AppHeader = this.getElementByPosition("header");
