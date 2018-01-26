@@ -1,15 +1,27 @@
 import React from "react";
 import List, { ListItem, ListItemIcon, ListItemText } from "material-ui/List";
 import Icon from "material-ui/Icon";
+import { withStyles } from "material-ui/styles";
+import pink from "material-ui/colors/pink";
+
+const styles = {
+  iconHover: {
+    "&:hover": {
+      fill: pink[200]
+    }
+  }
+};
 
 const AppHeaderContent = (props) => {
+  const { classes } = props;
+
   return (
     <List>
       <ListItem button>
         <ListItemIcon>
-          <Icon>send</Icon>
+          <Icon className={classes.iconHover}>send</Icon>
         </ListItemIcon>
-        <ListItemText primary="Analyze" secondary="Open a package.json" />
+        <ListItemText primary="Analyze" secondary="Open package.json" />
       </ListItem>
       <ListItem button>
         <ListItemIcon>
@@ -27,4 +39,4 @@ const AppHeaderContent = (props) => {
   );
 };
 
-export default AppHeaderContent;
+export default withStyles(styles)(AppHeaderContent);
