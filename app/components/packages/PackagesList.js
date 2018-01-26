@@ -21,6 +21,7 @@ class PackagesList extends React.Component {
     return (
       <section>
         <h3 className={styles.heading}>Packages</h3>
+        <Divider />
         <Loader loading={loading}>
           <List>
             {packages

@@ -2,6 +2,7 @@
 export const TOGGLE_LOADER = "TOGGLE_LOADER";
 export const TOGGLE_MAIN_LOADER = "TOGGLE_MAIN_LOADER";
 export const TOGGLE_MODAL = "TOGGLE_MODAL";
+export const MENU_OPEN = "MENU_OPEN";
 
 //setters
 export const SET_PACKAGES = "SET_PACKAGES";

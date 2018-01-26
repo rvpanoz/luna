@@ -16,7 +16,7 @@ import * as globalActions from "../actions/global_actions";
 import * as packagesActions from "../actions/packages_actions";
 import PackagesList from "../components/packages/PackagesList";
 
-class Main extends React.Component {
+class PackagesContainer extends React.Component {
   constructor(props) {
     super(props);
     this._autoBind(["loadData", "_setupList", "_setupOutdated", "_viewPackage", "_clearUI"]);
@@ -32,9 +32,10 @@ class Main extends React.Component {
 
   // parse packages string and set list packages
   _setupList(packages) {
-    let total = 0;
     let packagesData = parse(packages, "dependencies");
     this.props.setPackages(packagesData);
+
+    let total = 0;
 
     // clear notifications
     this.props.clearMessages();
@@ -234,4 +235,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(PackagesContainer);

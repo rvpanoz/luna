@@ -6,6 +6,13 @@
 
 import * as types from "../constants/ActionTypes";
 
+export function setMenuStatus(status) {
+  return {
+    type: types.MENU_OPEN,
+    status
+  };
+}
+
 export function setActiveSidebarTab(value) {
   return {
     type: types.SET_ACTIVE_SIDEBAR,

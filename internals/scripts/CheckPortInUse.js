@@ -3,7 +3,6 @@ import detectPort from "detect-port";
 
 (function CheckPortInUse() {
   const port: string = process.env.PORT || "1213";
-  console.log(process.env.PORT);
 
   detectPort(port, (err: ?Error, availablePort: number) => {
     if (port !== String(availablePort)) {

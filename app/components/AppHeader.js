@@ -1,42 +1,97 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { withStyles } from 'material-ui/styles'
-import AppBar from 'material-ui/AppBar'
-import Toolbar from 'material-ui/Toolbar'
-import MenuIcon from 'material-ui/Menu'
-import IconButton from 'material-ui/IconButton'
-import Icon from 'material-ui/Icon'
-import Typography from 'material-ui/Typography'
+"use strict";
 
-const styles = {
-	root: {
-		width: '100%'
-	},
-	flex: {
-		flex: 1
-	}
+import React from "react";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import AppBar from "material-ui/AppBar";
+import Toolbar from "material-ui/Toolbar";
+import Drawer from "material-ui/Drawer";
+import { withStyles } from "material-ui/styles";
+import Typography from "material-ui/Typography";
+import Divider from "material-ui/Divider";
+import classNames from "classnames";
+import MenuIcon from "material-ui-icons/Menu";
+import IconButton from "material-ui/IconButton";
+import ChevronLeftIcon from "material-ui-icons/ChevronLeft";
+import ChevronRightIcon from "material-ui-icons/ChevronRight";
+
+const drawerWidth = 240;
+
+const styles = (theme) => ({
+  appBar: {
+    position: "absolute",
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  menuButton: {
+    marginLeft: 12,
+    marginRight: 36
+  },
+  hide: {
+    display: "none"
+  }
+});
+
+class AppHeader extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  handleDrawerOpen() {}
+  handleDrawerClose() {}
+  render() {
+    const { title, open, handleDrawerOpen, handleDrawerClose, classes, theme } = this.props;
+
+    return (
+      <section>
+        <AppBar className={classNames(classes.appBar, open && classes.appBarShift)}>
+          <Toolbar disableGutters={!open}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              className={classNames(classes.menuButton, open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography type="title" color="inherit" noWrap>
+              {title}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          type="permanent"
+          classes={{
+            paper: classNames(classes.drawerPaper, !open && classes.drawerPaperClose)
+          }}
+          open={open}
+        >
+          <div className={classes.drawerInner}>
+            <div className={classes.drawerHeader}>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              </IconButton>
+            </div>
+            <Divider />
+          </div>
+        </Drawer>
+      </section>
+    );
+  }
 }
 
-const AppHeader = (props) => {
-	const { classes, title } = props
-	return (
-		<div className={classes.root}>
-			<AppBar position="static">
-				<Toolbar>
-					<Typography type="title" color="inherit" className={classes.flex}>
-						{title}
-					</Typography>
-					<IconButton aria-haspopup="true" onClick={(e) => false} color="inherit">
-						<Icon color="accent">notifications</Icon>
-					</IconButton>
-				</Toolbar>
-			</AppBar>
-		</div>
-	)
-}
+function mapStateToProps(state) {}
 
-AppHeader.propTypes = {
-	title: PropTypes.string.isRequired
-}
+function mapDispatchToProps(dispatch) {}
 
-export default withStyles(styles)(AppHeader)
+export default compose(withStyles(styles), connect())(AppHeader);

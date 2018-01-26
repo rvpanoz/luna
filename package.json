@@ -189,11 +189,13 @@
 		"webpack-merge": "^4.1.1"
 	},
 	"dependencies": {
+		"classnames": "^2.2.5",
 		"devtron": "^1.4.0",
 		"electron-debug": "^1.5.0",
 		"font-awesome": "^4.7.0",
 		"history": "^4.7.2",
 		"material-ui": "^1.0.0-beta.29",
+		"material-ui-icons": "^1.0.0-beta.17",
 		"moment": "^2.20.1",
 		"ramda": "^0.25.0",
 		"react": "^16.2.0",
