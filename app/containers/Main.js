@@ -189,17 +189,11 @@ class Main extends React.Component {
 	}
 
 	render() {
-		const {loading, packages, toggleLoader, setActive, toggleMainLoader} = this.props
+		const {loading} = this.props
 
 		return (
 			<div className={styles.packages}>
-			<PackagesList
-						loading={loading}
-						packages={packages}
-						toggleLoader={toggleLoader}
-						setActive={setActive}
-						toggleMainLoader={toggleMainLoader}
-					/>
+				<ListView />
 			</div>
 		)
 	}
