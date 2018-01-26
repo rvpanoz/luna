@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 import * as R from 'ramda'
 import Grid from 'material-ui/Grid'
 import AppHeader from '../components/AppHeader'
+import Main from './Main'
 
 class Layout extends React.Component {
 	constructor(props) {
@@ -31,7 +32,10 @@ class Layout extends React.Component {
 						<AppHeader title="luna" />
 					</Grid>
 					<Grid item xs={12} sm={3} />
-					<Grid item xs={12} sm={9} />
+					<Grid item xs={12} sm={3}>
+						<Main />
+					</Grid>
+					<Grid item xs={12} sm={6} />
 				</Grid>
 			</div>
 		)

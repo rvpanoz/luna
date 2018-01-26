@@ -1,50 +1,54 @@
 import { remote, ipcRenderer } from 'electron'
 import React from 'react'
-import styles from './Packages.css'
+import { withStyles } from 'material-ui/styles'
+import { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
+import IconButton from 'material-ui/IconButton'
 
-class PackageItem extends React.Component {
+class PackageListItem extends React.Component {
 	constructor(props) {
 		super(props)
 		this._needsUpdates = true
 		this.onItemClick = this.onItemClick.bind(this)
 	}
 	onItemClick(e) {
+		const { name, version, mode, directory } = this.props
 		e.preventDefault()
-		let el = this.refs[`root-${this.props.idx}`]
-		let isSelected = el.classList.contains('selected')
-		if (!isSelected) {
-			this.props.deselectAll()
-			this.props.toggleMainLoader(true)
-			el.classList.add('selected')
-			ipcRenderer.send('ipc-event', {
-				ipcEvent: 'view-package',
-				cmd: ['view'],
-				pkgName: this.props.name,
-				pkgVersion: this.props.version,
-				mode: this.props.mode,
-				directory: this.props.directory
-			})
-		}
+		this.props.toggleMainLoader(true)
+		ipcRenderer.send('ipc-event', {
+			ipcEvent: 'view-package',
+			cmd: ['view'],
+			pkgName: this.props.name,
+			pkgVersion: this.props.version,
+			mode,
+			directory
+		})
 		return false
 	}
 	render() {
-		let props = this.props
-		if (!props.name) {
+		const { name, version } = this.props
+		const { classes } = this.props
+		if (!name) {
 			return null
 		}
 		return (
-			<div ref={`root-${this.props.idx}`} className={styles.packages__item} onClick={this.onItemClick}>
-				<div className={styles.packages__item__head}>
-					<div className={styles.packages__item__name}>
-						<span>{props.name}&nbsp;</span>
-						<span style={{ float: 'right', color: '#fff' }} className="label label-danger">
-							{props.version}
-						</span>
-					</div>
-				</div>
-			</div>
+			<ListItem button>
+				<ListItemText primary={name} secondary={version} />
+				<ListItemSecondaryAction>
+					<IconButton aria-label="Delete">delete</IconButton>
+				</ListItemSecondaryAction>
+			</ListItem>
 		)
 	}
 }
 
-export default PackageItem
+// <div ref={`root-${this.props.idx}`} className={styles.packages__item} onClick={this.onItemClick}>
+// 	<div className={styles.packages__item__head}>
+// 		<div className={styles.packages__item__name}>
+// 			<span>{props.name}&nbsp;</span>
+// 			<span style={{ float: 'right', color: '#fff' }} className="label label-danger">
+// 				{props.version}
+// 			</span>
+// 		</div>
+// 	</div>
+// </div>
+export default withStyles()(PackageListItem)

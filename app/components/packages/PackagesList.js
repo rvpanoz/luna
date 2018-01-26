@@ -2,7 +2,16 @@ import { remote, ipcRenderer } from 'electron'
 import React from 'react'
 import Loader from '../../common/Loader'
 import PackageListItem from './PackagesListItem'
-import styles from './Packages.css'
+import { withStyles } from 'material-ui/styles'
+import List from 'material-ui/List'
+
+const styles = (theme) => ({
+	root: {
+		width: '100%',
+		maxWidth: 360,
+		backgroundColor: theme.palette.background.paper
+	}
+})
 
 class PackagesList extends React.Component {
 	constructor(props) {
@@ -24,35 +33,37 @@ class PackagesList extends React.Component {
 		this.props.toggleLoader(true)
 	}
 	render() {
-		let packages = this.props.packages
+		const { packages, loading, toggleMainLoader, setActive } = this.props
 
 		return (
-			<Loader loading={this.props.loading}>
-				<div className={styles.packages__list} ref="list">
-					{packages
-						? packages.map((pkg, idx) => {
-								let hasPeerMissing = pkg.peerMissing
-								if (hasPeerMissing) {
-									return
-								}
-								let version = pkg.version
-								let readme = pkg.readme
-								let name = pkg.from ? pkg.from.split('@')[0] : pkg.name
-								return (
-									<PackageListItem
-										setActive={this.props.setActive}
-										toggleMainLoader={this.props.toggleMainLoader}
-										deselectAll={this.deselectAll}
-										idx={idx}
-										key={idx}
-										name={name}
-										readme={readme}
-										description={pkg.description ? pkg.description : null}
-										version={version}
-									/>
-								)
-							})
-						: null}
+			<Loader loading={loading}>
+				<div ref="list">
+					<List>
+						{packages
+							? packages.map((pkg, idx) => {
+									let hasPeerMissing = pkg.peerMissing
+									if (hasPeerMissing) {
+										return
+									}
+									let version = pkg.version
+									let readme = pkg.readme
+									let name = pkg.from ? pkg.from.split('@')[0] : pkg.name
+									return (
+										<PackageListItem
+											setActive={setActive}
+											toggleMainLoader={toggleMainLoader}
+											deselectAll={this.deselectAll}
+											idx={idx}
+											key={idx}
+											name={name}
+											readme={readme}
+											description={pkg.description ? pkg.description : null}
+											version={version}
+										/>
+									)
+								})
+							: null}
+					</List>
 				</div>
 			</Loader>
 		)
