@@ -1,22 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import ListView from './ListView'
 
 const WithHeaderList = (props) => {
-	debugger
-	const _wrapped = props.list || null
-	const Component = _wrapped ? require(`./${_wrapped}`) : null
-
 	return class extends React.Component {
 		constructor(props) {
 			super(props)
 		}
 		render() {
-			return <Component />
+			return <ListView />
 		}
 	}
 }
 
-WithHeaderList.PropTypes = {
+WithHeaderList.propTypes = {
 	list: PropTypes.string.isRequired
 }
 
