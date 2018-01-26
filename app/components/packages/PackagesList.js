@@ -5,14 +5,6 @@ import PackageListItem from './PackagesListItem'
 import { withStyles } from 'material-ui/styles'
 import List from 'material-ui/List'
 
-const styles = (theme) => ({
-	root: {
-		width: '100%',
-		maxWidth: 360,
-		backgroundColor: theme.palette.background.paper
-	}
-})
-
 class PackagesList extends React.Component {
 	constructor(props) {
 		super(props)
@@ -26,11 +18,6 @@ class PackagesList extends React.Component {
 				selected.classList.remove('selected')
 			}
 		}
-	}
-	componentDidMount() {
-		let list = this.refs.list
-		list.style['max-height'] = window.innerHeight - 250 + 'px'
-		this.props.toggleLoader(true)
 	}
 	render() {
 		const { packages, loading, toggleMainLoader, setActive } = this.props

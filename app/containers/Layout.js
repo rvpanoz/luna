@@ -10,6 +10,7 @@ import * as R from 'ramda'
 import Grid from 'material-ui/Grid'
 import AppHeader from '../components/AppHeader'
 import Main from './Main'
+import styles from './Layout.css'
 
 class Layout extends React.Component {
 	constructor(props) {

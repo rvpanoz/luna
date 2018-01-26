@@ -41,14 +41,4 @@ class PackageListItem extends React.Component {
 	}
 }
 
-// <div ref={`root-${this.props.idx}`} className={styles.packages__item} onClick={this.onItemClick}>
-// 	<div className={styles.packages__item__head}>
-// 		<div className={styles.packages__item__name}>
-// 			<span>{props.name}&nbsp;</span>
-// 			<span style={{ float: 'right', color: '#fff' }} className="label label-danger">
-// 				{props.version}
-// 			</span>
-// 		</div>
-// 	</div>
-// </div>
 export default withStyles()(PackageListItem)
