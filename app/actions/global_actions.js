@@ -6,10 +6,10 @@
 
 import * as types from "../constants/ActionTypes";
 
-export function setMenuStatus(status) {
+export function handleDrawer(status) {
   return {
     type: types.MENU_OPEN,
-    status
+    menuOpen: status
   };
 }
 

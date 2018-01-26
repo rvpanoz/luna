@@ -57,7 +57,7 @@ const handlers = {
     }),
   [MENU_OPEN]: (state, action) =>
     merge(state, {
-      menuOpen: action.bool
+      menuOpen: action.menuOpen
     })
 };
 

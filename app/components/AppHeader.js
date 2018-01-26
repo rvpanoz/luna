@@ -1,6 +1,7 @@
 "use strict";
 
 import React from "react";
+import PropTypes from "prop-types";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import AppBar from "material-ui/AppBar";
@@ -15,6 +16,7 @@ import MenuIcon from "material-ui-icons/Menu";
 import IconButton from "material-ui/IconButton";
 import ChevronLeftIcon from "material-ui-icons/ChevronLeft";
 import ChevronRightIcon from "material-ui-icons/ChevronRight";
+import AppHeaderContent from "./AppHeaderContent";
 
 const drawerWidth = 240;
 
@@ -35,6 +37,25 @@ const styles = (theme) => ({
       duration: theme.transitions.duration.enteringScreen
     })
   },
+  drawerInner: {
+    // Make the items inside not wrap when transitioning:
+    width: drawerWidth
+  },
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: "0 8px",
+    ...theme.mixins.toolbar
+  },
+  drawerPaperClose: {
+    width: 60,
+    overflowX: "hidden",
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
   menuButton: {
     marginLeft: 12,
     marginRight: 36
@@ -45,23 +66,21 @@ const styles = (theme) => ({
 });
 
 class AppHeader extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
   }
-  handleDrawerOpen() {}
-  handleDrawerClose() {}
   render() {
-    const { title, open, handleDrawerOpen, handleDrawerClose, classes, theme } = this.props;
+    const { title, menuOpen, handleDrawerOpen, handleDrawerClose, classes, theme } = this.props;
 
     return (
       <section>
-        <AppBar className={classNames(classes.appBar, open && classes.appBarShift)}>
+        <AppBar className={classNames(classes.appBar, menuOpen && classes.appBarShift)}>
           <Toolbar disableGutters={!open}>
             <IconButton
               color="inherit"
-              aria-label="open drawer"
+              aria-label="open menu"
               onClick={handleDrawerOpen}
-              className={classNames(classes.menuButton, open && classes.hide)}
+              className={classNames(classes.menuButton, menuOpen && classes.hide)}
             >
               <MenuIcon />
             </IconButton>
@@ -73,9 +92,9 @@ class AppHeader extends React.Component {
         <Drawer
           type="permanent"
           classes={{
-            paper: classNames(classes.drawerPaper, !open && classes.drawerPaperClose)
+            paper: classNames(classes.drawerPaper, !menuOpen && classes.drawerPaperClose)
           }}
-          open={open}
+          open={menuOpen}
         >
           <div className={classes.drawerInner}>
             <div className={classes.drawerHeader}>
@@ -84,6 +103,7 @@ class AppHeader extends React.Component {
               </IconButton>
             </div>
             <Divider />
+            <AppHeaderContent />
           </div>
         </Drawer>
       </section>
@@ -99,9 +119,14 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    handleDrawerOpen: () => dispatch(globalActions.handleDrawerOpen(false)),
-    handleDrawerClose: () => dispatch(globalActions.handleDrawerClose(true))
+    handleDrawerOpen: () => dispatch(globalActions.handleDrawer(true)),
+    handleDrawerClose: () => dispatch(globalActions.handleDrawer(false))
   };
 }
 
-export default compose(withStyles(styles), connect())(AppHeader);
+AppHeader.propTypes = {
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired
+};
+
+export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(AppHeader);

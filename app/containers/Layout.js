@@ -7,6 +7,8 @@ import Typography from "material-ui/Typography";
 import Divider from "material-ui/Divider";
 import IconButton from "material-ui/IconButton";
 
+import PackagesContainer from "./Packages";
+
 const drawerWidth = 240;
 
 const styles = (theme) => ({
@@ -38,46 +40,12 @@ const styles = (theme) => ({
       duration: theme.transitions.duration.enteringScreen
     })
   },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 36
-  },
-  hide: {
-    display: "none"
-  },
-  drawerPaper: {
-    position: "relative",
-    height: "100%",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  drawerPaperClose: {
-    width: 60,
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  drawerInner: {
-    // Make the items inside not wrap when transitioning:
-    width: drawerWidth
-  },
-  drawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar
-  },
   content: {
     width: "100%",
     flexGrow: 1,
     backgroundColor: theme.palette.background.default,
     padding: 24,
+    marginLeft: 50,
     height: "calc(100% - 56px)",
     marginTop: 56,
     [theme.breakpoints.up("sm")]: {
@@ -98,9 +66,9 @@ class Layout extends React.Component {
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
-          <AppHeader theme={theme} />
+          <AppHeader theme={theme} title="Luna" />
           <main className={classes.content}>
-            <Typography noWrap />
+            <PackagesContainer />
           </main>
         </div>
       </div>
