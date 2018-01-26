@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
 import Drawer from "material-ui/Drawer";
+import * as globalActions from "../actions/global_actions";
 import { withStyles } from "material-ui/styles";
 import Typography from "material-ui/Typography";
 import Divider from "material-ui/Divider";
@@ -90,8 +91,17 @@ class AppHeader extends React.Component {
   }
 }
 
-function mapStateToProps(state) {}
+function mapStateToProps(state) {
+  return {
+    menuOpen: state.global.menuOpen
+  };
+}
 
-function mapDispatchToProps(dispatch) {}
+function mapDispatchToProps(dispatch) {
+  return {
+    handleDrawerOpen: () => dispatch(globalActions.handleDrawerOpen(false)),
+    handleDrawerClose: () => dispatch(globalActions.handleDrawerClose(true))
+  };
+}
 
 export default compose(withStyles(styles), connect())(AppHeader);

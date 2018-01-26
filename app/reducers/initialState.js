@@ -3,7 +3,7 @@ export default {
   directory: null,
   loading: false,
   showModal: false,
-  activeSidebarTab: 1,
+  menuOpen: false,
   npmCmd: "",
   messages: [],
   cmdOptions: [],

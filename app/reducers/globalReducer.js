@@ -16,7 +16,8 @@ import {
   TOGGLE_LOADER,
   TOGGLE_MODAL,
   ADD_COMMAND_OPTION,
-  CLEAR_COMMAND_OPTIONS
+  CLEAR_COMMAND_OPTIONS,
+  MENU_OPEN
 } from "../constants/ActionTypes";
 
 let { packages, ...globalState } = initialState;
@@ -54,9 +55,9 @@ const handlers = {
     merge(state, {
       cmdOptions: prepend(action.option, state.cmdOptions)
     }),
-  [SET_ACTIVE_SIDEBAR]: (state, action) =>
+  [MENU_OPEN]: (state, action) =>
     merge(state, {
-      activeSidebarTab: action.value
+      menuOpen: action.bool
     })
 };
 

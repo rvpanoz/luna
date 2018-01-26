@@ -56,21 +56,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addCommandOption: (option) => {
-      return dispatch(globalActions.addCommandOption(option));
-    },
-    clearCommandOptions: () => {
-      return dispatch(globalActions.clearCommandOptions());
-    },
-    toggleMainLoader: (bool) => {
-      return dispatch(packagesActions.toggleMainLoader(bool));
-    },
-    setActive: (pkg) => {
-      return dispatch(packagesActions.setActive(pkg));
-    },
-    toggleModal: (bool, npmCmd) => {
-      return dispatch(globalActions.toggleModal(bool, npmCmd));
-    }
+    addCommandOption: (option) => dispatch(globalActions.addCommandOption(option)),
+    clearCommandOptions: () => dispatch(globalActions.clearCommandOptions()),
+    toggleMainLoader: (bool) => dispatch(packagesActions.toggleMainLoader(bool)),
+    setActive: (pkg) => dispatch(packagesActions.setActive(pkg)),
+    toggleModal: (bool, npmCmd) => dispatch(globalActions.toggleModal(bool, npmCmd))
   };
 }
 
