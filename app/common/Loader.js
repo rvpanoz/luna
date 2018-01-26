@@ -2,21 +2,14 @@
  * Common Loader component
  */
 
-'use strict';
+"use strict";
 
-import React from 'react';
+import React from "react";
+import Loader from "material-ui/Progress/CircularProgress";
 
-const Loader = (props) => {
-  let loading = props.loading;
-  return (
-    (loading) ?
-    <div className="loader">
-      <div className="line"></div>
-      <div className="line"></div>
-      <div className="line"></div>
-    </div>
-    : props.children
-  )
-}
+const AppLoader = (props) => {
+  const { loading } = props;
+  return loading ? <Loader /> : props.children;
+};
 
-export default Loader;
+export default AppLoader;

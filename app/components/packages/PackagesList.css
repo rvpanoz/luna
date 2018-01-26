@@ -14,6 +14,15 @@
   display: block;
 }
 
+.heading {
+  color: rgba(0, 0, 0, 0.54);
+  margin: 1em 0 0.7em;
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  line-height: 1.35417em;
+}
+
 .packages__head:after {
   content: "";
   display: block;
