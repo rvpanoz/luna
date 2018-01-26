@@ -194,6 +194,7 @@
 		"font-awesome": "^4.7.0",
 		"history": "^4.7.2",
 		"material-ui": "^1.0.0-beta.29",
+		"moment": "^2.20.1",
 		"ramda": "^0.25.0",
 		"react": "^16.2.0",
 		"react-dom": "^16.2.0",
