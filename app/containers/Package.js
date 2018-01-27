@@ -10,9 +10,17 @@ import Loader from '../common/Loader'
 import { showMessageBox, isUrl } from '../utils'
 import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from '../constants/AppConstants'
 import { connect } from 'react-redux'
+import { compose } from 'redux'
 import { bindActionCreators } from 'redux'
 import * as globalActions from '../actions/global_actions'
 import * as packagesActions from '../actions/packages_actions'
+import PropTypes from 'prop-types'
+import { withStyles } from 'material-ui/styles'
+import classnames from 'classnames'
+import Typography from 'material-ui/Typography'
+import Divider from 'material-ui/Divider'
+import Card, { CardHeader, CardMedia, CardContent, CardActions } from 'material-ui/Card'
+import { packageStyles } from './styles'
 
 class Package extends React.Component {
 	constructor(props) {
@@ -118,7 +126,7 @@ class Package extends React.Component {
 		}
 	}
 	render() {
-		let { mode, active, isLoading } = this.props
+		let { mode, active, isLoading, classes } = this.props
 		let group = ''
 
 		if (!active) {
@@ -132,7 +140,7 @@ class Package extends React.Component {
 							position: 'relative'
 						}}
 					>
-						<h3 className="center">No dependency selected</h3>
+						<h3 className={classnames(classes.heading, classes.center)}>No package selected</h3>
 					</div>
 				</Loader>
 			)
@@ -140,37 +148,45 @@ class Package extends React.Component {
 
 		return (
 			<Loader loading={isLoading}>
-				<div ref="rootEl" />
+				<div ref="rootEl">
+					<h3 className={classes.heading}>Packages</h3>
+					<Divider />
+					<Card>
+						<CardHeader>header</CardHeader>
+						<CardContent>content</CardContent>
+						<CardActions>actions</CardActions>
+					</Card>
+				</div>
 			</Loader>
 		)
 	}
 }
 
-const _PackageContainer = (props) => {
-	function _closeModal() {
-		props.toggleModal(false, '')
-		return false
-	}
-
-	return (
-		<div className="package-container">
-			<PackageDetails
-				mode={props.mode}
-				directory={props.directory}
-				active={props.active}
-				actions={props.actions}
-				setActive={props.setActive}
-				toggleMainLoader={props.toggleMainLoader}
-				toggleModal={props.toggleModal}
-				packageJSON={props.packageJSON}
-				isLoading={props.isLoading}
-				cmdOptions={props.cmdOptions}
-				addCommandOption={props.addCommandOption}
-				clearCommandOptions={props.clearCommandOptions}
-			/>
-		</div>
-	)
-}
+// const _PackageContainer = (props) => {
+// 	function _closeModal() {
+// 		props.toggleModal(false, '')
+// 		return false
+// 	}
+//
+// 	return (
+// 		<div className="package-container">
+// 			<PackageDetails
+// 				mode={props.mode}
+// 				directory={props.directory}
+// 				active={props.active}
+// 				actions={props.actions}
+// 				setActive={props.setActive}
+// 				toggleMainLoader={props.toggleMainLoader}
+// 				toggleModal={props.toggleModal}
+// 				packageJSON={props.packageJSON}
+// 				isLoading={props.isLoading}
+// 				cmdOptions={props.cmdOptions}
+// 				addCommandOption={props.addCommandOption}
+// 				clearCommandOptions={props.clearCommandOptions}
+// 			/>
+// 		</div>
+// 	)
+// }
 
 function mapStateToProps(state) {
 	return {
@@ -197,4 +213,6 @@ function mapDispatchToProps(dispatch) {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Package)
+export default compose(withStyles(packageStyles, { withTheme: true }), connect(mapStateToProps, mapDispatchToProps))(
+	Package
+)

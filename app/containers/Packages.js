@@ -21,7 +21,7 @@ import PackageContainer from './Package'
 class PackagesContainer extends React.Component {
 	constructor(props) {
 		super(props)
-		this._autoBind(['loadData', '_setupList', '_setupOutdated', '_viewPackage', '_clearUI'])
+		this._autoBind(['loadData', 'setGlobalMode', '_setupList', '_setupOutdated', '_viewPackage', '_clearUI'])
 	}
 	_autoBind(handlers) {
 		R.forEach((handler) => {
@@ -71,6 +71,22 @@ class PackagesContainer extends React.Component {
 		if (showModal) {
 			toggleModal(false)
 		}
+	}
+	setGlobalMode(e) {
+		const { mode, toggleLoader, setMode, setActive, setPackageActions } = this.props
+		e.preventDefault()
+		if (mode === APP_MODES.GLOBAL) {
+			return
+		}
+		toggleLoader(true)
+		setMode(APP_MODES.GLOBAL, null)
+		setActive(null)
+		setPackageActions()
+		ipcRenderer.send('ipc-event', {
+			ipcEvent: 'get-packages',
+			cmd: ['list', 'outdated'],
+			mode: APP_MODES.GLOBAL
+		})
 	}
 	loadData() {
 		const { mode, directory } = this.props
@@ -153,7 +169,7 @@ class PackagesContainer extends React.Component {
 		])
 	}
 	render() {
-		const { loading, packages, toggleLoader, setActive, toggleMainLoader } = this.props
+		const { loading, mode, directory, packages, toggleLoader, setActive, toggleMainLoader, totalInstalled } = this.props
 
 		return (
 			<Grid container justify="space-between">
@@ -164,6 +180,11 @@ class PackagesContainer extends React.Component {
 						toggleLoader={toggleLoader}
 						setActive={setActive}
 						toggleMainLoader={toggleMainLoader}
+						mode={mode}
+						directory={directory}
+						setGlobalMode={this.setGlobalMode}
+						loadData={this.loadData}
+						totalInstalled={totalInstalled}
 					/>
 				</Grid>
 				<Grid item xs={7}>

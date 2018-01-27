@@ -6,8 +6,8 @@ import Loader from '../../common/Loader'
 import PackageListItem from './PackagesListItem'
 import { withStyles } from 'material-ui/styles'
 import List from 'material-ui/List'
-import Divider from 'material-ui/Divider'
-import styles from './PackagesList.css'
+import { packagesListStyles } from '../styles'
+import PackagesListHeader from './PackagesListHeader'
 
 class PackagesList extends React.Component {
 	constructor(props) {
@@ -18,12 +18,28 @@ class PackagesList extends React.Component {
 		toggleLoader(true)
 	}
 	render() {
-		const { packages, loading, toggleMainLoader, setActive } = this.props
+		const {
+			packages,
+			loading,
+			mode,
+			toggleMainLoader,
+			setActive,
+			setGlobalMode,
+			loadData,
+			totalInstalled,
+			directory,
+			classes
+		} = this.props
 
 		return (
 			<section>
-				<h3 className={styles.heading}>Packages</h3>
-				<Divider />
+				<PackagesListHeader
+					mode={mode}
+					setGlobalMode={setGlobalMode}
+					loadData={loadData}
+					directory={directory}
+					totalInstalled={totalInstalled}
+				/>
 				<Loader loading={loading}>
 					<List>
 						{packages
@@ -57,4 +73,4 @@ class PackagesList extends React.Component {
 	}
 }
 
-export default PackagesList
+export default withStyles(packagesListStyles)(PackagesList)

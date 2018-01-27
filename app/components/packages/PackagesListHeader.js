@@ -1,81 +1,78 @@
+'use strict'
+
 import React from 'react'
 import { remote, ipcRenderer } from 'electron'
 import { APP_MODES } from '../../constants/AppConstants'
-import styles from './Packages.css'
+import { withStyles } from 'material-ui/styles'
+import Divider from 'material-ui/Divider'
+import Avatar from 'material-ui/Avatar'
+import classnames from 'classnames'
+import { packagesListStyles } from '../styles'
+import IconButton from 'material-ui/IconButton'
+import Menu, { MenuItem } from 'material-ui/Menu'
+import MoreVertIcon from 'material-ui-icons/MoreVert'
+
+const ITEM_HEIGHT = 48
+const options = ['Global mode', 'Refresh']
 
 class PackagesListHeader extends React.Component {
 	constructor(props) {
 		super(props)
-		this.loadData = this.loadData.bind(this)
-		this.setGlobalMode = this.setGlobalMode.bind(this)
+		this._anchorEl = null
+		this.handleClick = this.handleClick.bind(this)
+		this.handleClose = this.handleClose.bind(this)
 	}
-	loadData(e) {
-		e.preventDefault()
-		this.props.loadData()
-		return false
+	handleClick(e) {
+		this._anchorEl = e.currentTarget
+		this.forceUpdate()
 	}
-	setGlobalMode(e) {
-		e.preventDefault()
-		if (this.props.mode === APP_MODES.GLOBAL) {
-			return
-		}
-		this.props.toggleLoader(true)
-		this.props.setMode(APP_MODES.GLOBAL, null)
-		this.props.setActive(null)
-		this.props.setPackageActions()
-		ipcRenderer.send('ipc-event', {
-			ipcEvent: 'get-packages',
-			cmd: ['list', 'outdated'],
-			mode: APP_MODES.GLOBAL
-		})
+	handleClose(e) {
+		this._anchorEl = null
+		this.forceUpdate()
 	}
 	render() {
-		let props = this.props
+		const { classes, totalInstalled } = this.props
+		let anchorEl = this._anchorEl
+
 		return (
-			<div style={{ marginBottom: '15px' }}>
-				<div className={styles.packages__head}>
-					<div className={styles.packages__title}>
-						<span>Packages&nbsp;</span>
-						<span
-							className="label"
-							style={{
-								display: 'inline-block',
-								minWidth: '45px',
-								color: '#fff'
+			<section>
+				<div className={classes.flex}>
+					<h3 className={classes.heading}>Packages</h3>
+					<Avatar className={classes.purpleAvatar}>{totalInstalled}</Avatar>
+					<div style={{ marginLeft: 'auto' }}>
+						<IconButton
+							aria-label="More"
+							aria-owns={anchorEl ? 'long-menu' : null}
+							aria-haspopup="true"
+							onClick={this.handleClick}
+							className={classes.iconbutton}
+						>
+							<MoreVertIcon />
+						</IconButton>
+						<Menu
+							id="long-menu"
+							anchorEl={anchorEl}
+							open={Boolean(anchorEl)}
+							onClose={(e) => false}
+							PaperProps={{
+								style: {
+									maxHeight: ITEM_HEIGHT * 4.5,
+									width: 200
+								}
 							}}
 						>
-							{props.total}
-						</span>
-					</div>
-					<div className={styles.packages__actions}>
-						<div className={styles.packages__action}>
-							<i className="fa fa-fw fa-refresh" onClick={this.loadData} title="Reload" />
-						</div>
-						<div className={`${styles.packages__action} dropdown`}>
-							<i className="fa fa-fw fa-cog dropdown-toggle" data-toggle="dropdown" />
-							<ul className="dropdown-menu dropdown-menu-right">
-								<li className="dropdown-header">Actions</li>
-								<li>
-									<a href="#" onClick={this.setGlobalMode}>
-										<i className="fa fa-fw fa-reply" />&nbsp;
-										<span>Switch to global mode</span>
-									</a>
-								</li>
-							</ul>
-						</div>
+							{options.map((option) => (
+								<MenuItem key={option} selected={option === 'Global mode'} onClick={this.handleClose}>
+									{option}
+								</MenuItem>
+							))}
+						</Menu>
 					</div>
 				</div>
-				<div className={styles.packages__mode}>
-					<div className="mode">
-						<span className="label label-info">{props.mode}</span>
-					</div>
-					<div className="directory">
-						<span className={styles.directory}>{props.directory}</span>
-					</div>
-				</div>
-			</div>
+				<Divider />
+			</section>
 		)
 	}
 }
 
-export default PackagesListHeader
+export default withStyles(packagesListStyles)(PackagesListHeader)
