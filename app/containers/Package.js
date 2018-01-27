@@ -18,8 +18,12 @@ import PropTypes from 'prop-types'
 import { withStyles } from 'material-ui/styles'
 import classnames from 'classnames'
 import Typography from 'material-ui/Typography'
+import Avatar from 'material-ui/Avatar'
+import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider'
-import Card, { CardHeader, CardMedia, CardContent, CardActions } from 'material-ui/Card'
+import MoreVertIcon from 'material-ui-icons/MoreVert'
+
+import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card'
 import { packageStyles } from './styles'
 
 class Package extends React.Component {
@@ -55,7 +59,6 @@ class Package extends React.Component {
 				version = selectVersion && selectVersion.value !== 'false' ? selectVersion.value : 'latest'
 			}
 
-			//show confirmation dialog
 			showMessageBox(
 				{
 					action: action,
@@ -102,32 +105,32 @@ class Package extends React.Component {
 		return false
 	}
 	componentDidUpdate() {
-		let mode = this.props.mode
-		let groupName = this.refs.groupName
+		const { mode, packageJSON } = this.props
 
-		if (mode === APP_MODES.LOCAL && groupName) {
-			let packageJSON = this.props.packageJSON
-
+		if (mode === APP_MODES.LOCAL) {
 			if (!packageJSON) {
 				throw new Error('PackageJSON is missing')
 			}
 
-			let pkg = this.props.active
+			const pkg = this.props.active
+			if (!pkg) {
+				return
+			}
 			let found = false
 
 			let groups = PACKAGE_GROUPS.some((group, idx) => {
 				found = packageJSON[group] && packageJSON[group][pkg.name] ? group : false
 				if (found) {
 					this._group = group
-					groupName.innerHTML = group
+					// groupName.innerHTML = group
 					return true
 				}
 			})
 		}
+		console.log(this._group)
 	}
 	render() {
 		let { mode, active, isLoading, classes } = this.props
-		let group = ''
 
 		if (!active) {
 			return (
@@ -149,12 +152,23 @@ class Package extends React.Component {
 		return (
 			<Loader loading={isLoading}>
 				<div ref="rootEl">
-					<h3 className={classes.heading}>Packages</h3>
+					<h3 className={classes.heading}>{active.name}</h3>
 					<Divider />
-					<Card>
-						<CardHeader>header</CardHeader>
-						<CardContent>content</CardContent>
-						<CardActions>actions</CardActions>
+					<Card className={classes.card}>
+						<CardHeader
+							avatar={
+								<Avatar aria-label="Recipe" className={classes.avatar}>
+									P
+								</Avatar>
+							}
+							action={
+								<IconButton>
+									<MoreVertIcon />
+								</IconButton>
+							}
+							title={this._group}
+							subheader={active.version}
+						/>
 					</Card>
 				</div>
 			</Loader>

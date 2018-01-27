@@ -33,7 +33,7 @@ export function layoutStyles(theme) {
 export function packageStyles(theme) {
 	return {
 		card: {
-			maxWidth: 400
+			maxWidth: '100%'
 		},
 		media: {
 			height: 194

@@ -149,6 +149,8 @@ class PackagesContainer extends React.Component {
 			// console.error(error);
 		})
 		ipcRenderer.on('analyze-json-close', (event, filePath, content) => {
+			this.props.setMode(APP_MODES.LOCAL, filePath)
+			this.props.setActive(null)
 			this.props.setPackageJSON(content)
 			this.props.toggleLoader(true)
 
