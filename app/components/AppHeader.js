@@ -1,3 +1,7 @@
+/**
+AppHeader with mini drawer
+**/
+
 'use strict'
 
 import React from 'react'
@@ -17,53 +21,7 @@ import IconButton from 'material-ui/IconButton'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
 import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import AppHeaderContent from './AppHeaderContent'
-
-const drawerWidth = 240
-
-const styles = (theme) => ({
-	appBar: {
-		position: 'fixed',
-		zIndex: theme.zIndex.drawer + 1,
-		transition: theme.transitions.create(['width', 'margin'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen
-		})
-	},
-	appBarShift: {
-		marginLeft: drawerWidth,
-		width: `calc(100% - ${drawerWidth}px)`,
-		transition: theme.transitions.create(['width', 'margin'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen
-		})
-	},
-	drawerInner: {
-		// Make the items inside not wrap when transitioning:
-		width: drawerWidth
-	},
-	drawerHeader: {
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'flex-end',
-		padding: '0 8px',
-		...theme.mixins.toolbar
-	},
-	drawerPaperClose: {
-		width: 60,
-		overflowX: 'hidden',
-		transition: theme.transitions.create('width', {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.leavingScreen
-		})
-	},
-	menuButton: {
-		marginLeft: 12,
-		marginRight: 36
-	},
-	hide: {
-		display: 'none'
-	}
-})
+import { appHeaderStyles } from './styles'
 
 class AppHeader extends React.Component {
 	constructor() {
@@ -129,4 +87,4 @@ AppHeader.propTypes = {
 	theme: PropTypes.object.isRequired
 }
 
-export default compose(withStyles(styles), connect(mapStateToProps, mapDispatchToProps))(AppHeader)
+export default compose(withStyles(appHeaderStyles), connect(mapStateToProps, mapDispatchToProps))(AppHeader)

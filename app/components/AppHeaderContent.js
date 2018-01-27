@@ -3,14 +3,7 @@ import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
 import Icon from 'material-ui/Icon'
 import { withStyles } from 'material-ui/styles'
 import pink from 'material-ui/colors/pink'
-
-const styles = {
-	iconHover: {
-		'&:hover': {
-			fill: pink[200]
-		}
-	}
-}
+import { appHeaderContentStyles } from './styles'
 
 const AppHeaderContent = (props) => {
 	const { classes } = props
@@ -39,4 +32,4 @@ const AppHeaderContent = (props) => {
 	)
 }
 
-export default withStyles(styles)(AppHeaderContent)
+export default withStyles(appHeaderContentStyles)(AppHeaderContent)
