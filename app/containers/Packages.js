@@ -169,7 +169,17 @@ class PackagesContainer extends React.Component {
 		])
 	}
 	render() {
-		const { loading, mode, directory, packages, toggleLoader, setActive, toggleMainLoader, totalInstalled } = this.props
+		const {
+			loading,
+			mode,
+			directory,
+			packages,
+			setPackageActions,
+			toggleLoader,
+			setActive,
+			toggleMainLoader,
+			totalInstalled
+		} = this.props
 
 		return (
 			<Grid container justify="space-between">
@@ -185,6 +195,7 @@ class PackagesContainer extends React.Component {
 						setGlobalMode={this.setGlobalMode}
 						loadData={this.loadData}
 						totalInstalled={totalInstalled}
+						setPackageActions={setPackageActions}
 					/>
 				</Grid>
 				<Grid item xs={7}>

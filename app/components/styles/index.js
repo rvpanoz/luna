@@ -62,9 +62,14 @@ export function appHeaderContentStyles(theme) {
 
 export function packagesListStyles(theme) {
 	return {
-		flex: {
+		flexRow: {
 			display: 'flex',
 			flexDirection: 'row',
+			justifyContent: 'flex-start'
+		},
+		flexColumn: {
+			display: 'flex',
+			flexDirection: 'column',
 			justifyContent: 'flex-start'
 		},
 		heading: {
@@ -92,6 +97,11 @@ export function packagesListStyles(theme) {
 			position: 'relative',
 			top: '15px',
 			marginLeft: 'auto'
+		},
+		textField: {
+			marginLeft: theme.spacing.unit,
+			marginRight: theme.spacing.unit,
+			width: 200
 		}
 	}
 }

@@ -11,9 +11,9 @@ import { packagesListStyles } from '../styles'
 import IconButton from 'material-ui/IconButton'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
+import PackagesListSearch from './PackagesListSearch'
 
 const ITEM_HEIGHT = 48
-const options = ['Global mode', 'Refresh']
 
 class PackagesListHeader extends React.Component {
 	constructor(props) {
@@ -31,12 +31,21 @@ class PackagesListHeader extends React.Component {
 		this.forceUpdate()
 	}
 	render() {
-		const { classes, totalInstalled } = this.props
+		const {
+			classes,
+			totalInstalled,
+			setGlobalMode,
+			mode,
+			directory,
+			setActive,
+			toggleLoader,
+			setPackageActions
+		} = this.props
 		let anchorEl = this._anchorEl
 
 		return (
-			<section>
-				<div className={classes.flex}>
+			<section className={classes.flexColumn}>
+				<div className={classes.flexRow}>
 					<h3 className={classes.heading}>Packages</h3>
 					<Avatar className={classes.purpleAvatar}>{totalInstalled}</Avatar>
 					<div style={{ marginLeft: 'auto' }}>
@@ -53,7 +62,7 @@ class PackagesListHeader extends React.Component {
 							id="long-menu"
 							anchorEl={anchorEl}
 							open={Boolean(anchorEl)}
-							onClose={(e) => false}
+							onClose={this.handleClose}
 							PaperProps={{
 								style: {
 									maxHeight: ITEM_HEIGHT * 4.5,
@@ -61,15 +70,19 @@ class PackagesListHeader extends React.Component {
 								}
 							}}
 						>
-							{options.map((option) => (
-								<MenuItem key={option} selected={option === 'Global mode'} onClick={this.handleClose}>
-									{option}
-								</MenuItem>
-							))}
+							<MenuItem key="1" onClick={setGlobalMode}>
+								Global mode
+							</MenuItem>
 						</Menu>
 					</div>
 				</div>
-				<Divider />
+				<PackagesListSearch
+					mode={mode}
+					directory={directory}
+					setPackageActions={setPackageActions}
+					toggleLoader={toggleLoader}
+					setActive={setActive}
+				/>
 			</section>
 		)
 	}

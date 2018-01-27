@@ -1,32 +1,28 @@
+'use strict'
+
 import { remote, ipcRenderer } from 'electron'
 import React from 'react'
-import styles from './Packages.css'
+import { withStyles } from 'material-ui/styles'
+import TextField from 'material-ui/TextField'
+import { packagesListStyles } from '../styles'
 
-export default class SearchBox extends React.Component {
+class PackagesListSearch extends React.Component {
 	constructor(props) {
 		super(props)
-		this._search = this._search.bind(this)
-		this._onKeyUp = this._onKeyUp.bind(this)
+		this.handleChange = this.handleChange.bind(this)
 	}
-	_onKeyUp(e) {
-		let key = e.which || e.keyCode || 0
-		let searchInput = this.refs.searchInput
-		let value = searchInput.value.replace(/\s/g, '')
 
-		if (value.length && key === 13) {
-			this._search()
-		}
-		return false
-	}
-	_search(e) {
+	handleChange(e) {
 		if (e) {
 			e.preventDefault()
 		}
-		let searchInput = this.refs.searchInput
-		if (searchInput.value.length) {
-			this.props.toggleLoader(true)
-			this.props.setActive(null)
-			this.props.setPackageActions([
+		const { mode, directory, toggleLoader, setActive, setPackageActions } = this.props
+		const value = e.target.value
+
+		if (value && value.length > 2) {
+			toggleLoader(true)
+			setActive(null)
+			setPackageActions([
 				{
 					text: 'Install',
 					iconCls: 'download'
@@ -36,9 +32,7 @@ export default class SearchBox extends React.Component {
 			ipcRenderer.send('ipc-event', {
 				ipcEvent: 'search-packages',
 				cmd: ['search'],
-				mode: this.props.mode,
-				directory: this.props.directory,
-				pkgName: searchInput.value
+				pkgName: value
 			})
 		}
 		return false
@@ -50,10 +44,20 @@ export default class SearchBox extends React.Component {
 		}
 	}
 	render() {
+		const { classes } = this.props
 		return (
-			<div className={styles.packages__search} ref="root">
-				<input className="form-control" type="text" placeholder="Search npm registry.." ref="searchInput" />
+			<div ref="root">
+				<TextField
+					id="search"
+					label="Search npm"
+					type="search"
+					className={classes.textField}
+					margin="normal"
+					onChange={this.handleChange}
+				/>
 			</div>
 		)
 	}
 }
+
+export default withStyles(packagesListStyles)(PackagesListSearch)

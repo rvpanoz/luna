@@ -23,7 +23,9 @@ class PackagesList extends React.Component {
 			loading,
 			mode,
 			toggleMainLoader,
+			toggleLoader,
 			setActive,
+			setPackageActions,
 			setGlobalMode,
 			loadData,
 			totalInstalled,
@@ -38,7 +40,10 @@ class PackagesList extends React.Component {
 					setGlobalMode={setGlobalMode}
 					loadData={loadData}
 					directory={directory}
+					setActive={setActive}
 					totalInstalled={totalInstalled}
+					toggleLoader={toggleLoader}
+					setPackageActions={setPackageActions}
 				/>
 				<Loader loading={loading}>
 					<List>
