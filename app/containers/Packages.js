@@ -23,7 +23,6 @@ class PackagesContainer extends React.Component {
 		super(props)
 		this._autoBind(['loadData', '_setupList', '_setupOutdated', '_viewPackage', '_clearUI'])
 	}
-
 	_autoBind(handlers) {
 		R.forEach((handler) => {
 			if (typeof this[handler] === 'function') {
@@ -31,33 +30,20 @@ class PackagesContainer extends React.Component {
 			}
 		}, handlers)
 	}
-
-	// parse packages string and set list packages
 	_setupList(packages) {
 		let packagesData = parse(packages, 'dependencies')
 		this.props.setPackages(packagesData)
-
 		let total = 0
-
-		// clear notifications
 		this.props.clearMessages()
-
-		// set total installed packages
 		total = packagesData.filter((pkg, idx) => {
 			return !pkg.peerMissing && pkg.from
 		}).length
-
-		// update totals
 		this.props.setTotalInstalled(total)
-
-		// setup notifications
 		let notifications = parse(packages, 'problems')
 		notifications.forEach((notification, idx) => {
 			this.props.addMessage('error', notification)
 		})
 	}
-
-	// parse and set outdated packages
 	_setupOutdated(packages) {
 		if (!packages) {
 			this.props.setPackagesOutdated([])
@@ -66,8 +52,6 @@ class PackagesContainer extends React.Component {
 		let outdatedData = JSON.parse(packages)
 		this.props.setPackagesOutdated(outdatedData)
 	}
-
-	// send ipcRenderer event to view package
 	_viewPackage(name, version) {
 		ipcRenderer.send('ipc-event', {
 			ipcEvent: 'view-package',
@@ -78,7 +62,6 @@ class PackagesContainer extends React.Component {
 			directory: this.props.directory
 		})
 	}
-
 	_clearUI() {
 		let { showModal, setActive, setPackageActions, toggleMainLoader, toggleModal, setPackagesOutdated } = this.props
 		setActive(null)
@@ -89,8 +72,6 @@ class PackagesContainer extends React.Component {
 			toggleModal(false)
 		}
 	}
-
-	// sent ipcRenderer event to load packages
 	loadData() {
 		const { mode, directory } = this.props
 		this._clearUI()
@@ -101,12 +82,8 @@ class PackagesContainer extends React.Component {
 			directory: directory
 		})
 	}
-
 	componentDidMount() {
-		//  npm list && npm outdated
 		this.loadData()
-
-		//  npm list && npm outdated listener
 		ipcRenderer.on('get-packages-close', (event, packages, command) => {
 			if (!packages) {
 				return
@@ -122,15 +99,11 @@ class PackagesContainer extends React.Component {
 			// close loader
 			this.props.toggleLoader(false)
 		})
-
-		//  npm search listener
 		ipcRenderer.on('search-packages-close', (event, packagesStr) => {
 			let packages = JSON.parse(packagesStr)
 			this.props.setPackages(packages)
 			this.props.toggleLoader(false)
 		})
-
-		//  npm view listener
 		ipcRenderer.on('view-package-close', (event, packageStr) => {
 			let pkg
 			try {
@@ -147,7 +120,6 @@ class PackagesContainer extends React.Component {
 			}
 		})
 
-		// npm install | uninstall | update listener
 		ipcRenderer.on('action-close', (event, pkg) => {
 			let mode = this.props.mode,
 				directory = this.props.directory
@@ -157,12 +129,9 @@ class PackagesContainer extends React.Component {
 			}
 			this.loadData()
 		})
-
 		ipcRenderer.on('ipcEvent-error', (event, error) => {
 			// console.error(error);
 		})
-
-		// update packageJSON state object and load data
 		ipcRenderer.on('analyze-json-close', (event, filePath, content) => {
 			this.props.setPackageJSON(content)
 			this.props.toggleLoader(true)
@@ -173,9 +142,7 @@ class PackagesContainer extends React.Component {
 			}, 3000)
 		})
 	}
-
 	componentWillUnMount() {
-		// remove listeners
 		ipcRenderer.removeAllListeners([
 			'get-packages-close',
 			'search-packages-close',
@@ -185,7 +152,6 @@ class PackagesContainer extends React.Component {
 			'analyze-json-close'
 		])
 	}
-
 	render() {
 		const { loading, packages, toggleLoader, setActive, toggleMainLoader } = this.props
 
