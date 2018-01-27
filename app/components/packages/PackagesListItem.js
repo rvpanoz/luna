@@ -1,3 +1,5 @@
+'use strict'
+
 import { remote, ipcRenderer } from 'electron'
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
@@ -11,14 +13,14 @@ class PackageListItem extends React.Component {
 		this.onItemClick = this.onItemClick.bind(this)
 	}
 	onItemClick(e) {
-		const { name, version, mode, directory } = this.props
+		const { name, version, mode, directory, toggleMainLoader } = this.props
 		e.preventDefault()
-		this.props.toggleMainLoader(true)
+		toggleMainLoader(true)
 		ipcRenderer.send('ipc-event', {
 			ipcEvent: 'view-package',
 			cmd: ['view'],
-			pkgName: this.props.name,
-			pkgVersion: this.props.version,
+			pkgName: name,
+			pkgVersion: version,
 			mode,
 			directory
 		})
@@ -31,7 +33,7 @@ class PackageListItem extends React.Component {
 			return null
 		}
 		return (
-			<ListItem button>
+			<ListItem button onClick={this.onItemClick}>
 				<ListItemText primary={name} secondary={version} />
 				<ListItemSecondaryAction>
 					<IconButton aria-label="Delete">delete</IconButton>
