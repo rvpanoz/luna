@@ -1,3 +1,5 @@
+import pink from 'material-ui/colors/pink'
+
 export function appHeaderStyles(theme) {
 	const drawerWidth = 240
 	return {
