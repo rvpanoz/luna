@@ -36,18 +36,16 @@ class PackagesContainer extends React.Component {
 		const packagesData = parse(packages, 'dependencies')
 
 		R.forEach((pkg) => {
-			let name = ''
-			if (pkg && pkg.from) {
-				name = pkg.from
-				let hasAt = name.indexOf('@')
-				if (hasAt > -1) {
-					name = name.slice(0, hasAt)
-				}
-				let outdatedPackage = outdated[name]
-				while (outdatedPackage) {
-					pkg['latest'] = outdatedPackage.latest
-					outdatedPackage = null
-				}
+			if(!pkg.from) {
+				return;
+			}
+			const pkgName = R.split('@')(pkg.from)[0]
+			const outdatedKeys = Object.keys(outdated)
+
+			let outdatedPackage = R.prop(pkgName, outdated)
+			while (outdatedPackage) {
+				pkg['latest'] = outdatedPackage.latest
+				outdatedPackage = null
 			}
 		}, packagesData)
 
