@@ -122,12 +122,10 @@ class Package extends React.Component {
 				found = packageJSON[group] && packageJSON[group][pkg.name] ? group : false
 				if (found) {
 					this._group = group
-					// groupName.innerHTML = group
 					return true
 				}
 			})
 		}
-		console.log(this._group)
 	}
 	render() {
 		let { mode, active, isLoading, classes } = this.props

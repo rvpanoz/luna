@@ -16,6 +16,7 @@ class AppHeaderContent extends React.Component {
 		this.updateMode = this.updateMode.bind(this)
 	}
 	updateMode(directory) {
+		console.log(directory)
 		ipcRenderer.send('analyze-json', directory)
 	}
 	openPackage(e) {

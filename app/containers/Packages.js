@@ -21,6 +21,7 @@ import PackageContainer from './Package'
 class PackagesContainer extends React.Component {
 	constructor(props) {
 		super(props)
+		this._outdated = []
 		this._autoBind(['loadData', 'setGlobalMode', '_setupList', '_setupOutdated', '_viewPackage', '_clearUI'])
 	}
 	_autoBind(handlers) {
@@ -31,27 +32,47 @@ class PackagesContainer extends React.Component {
 		}, handlers)
 	}
 	_setupList(packages) {
-		let packagesData = parse(packages, 'dependencies')
+		const outdated = this._outdated
+		const packagesData = parse(packages, 'dependencies')
+
+		R.forEach((pkg) => {
+			let name = ''
+			if (pkg && pkg.from) {
+				name = pkg.from
+				let hasAt = name.indexOf('@')
+				if (hasAt > -1) {
+					name = name.slice(0, hasAt)
+				}
+				let outdatedPackage = outdated[name]
+				while (outdatedPackage) {
+					pkg['latest'] = outdatedPackage.latest
+					outdatedPackage = null
+				}
+			}
+		}, packagesData)
+
 		this.props.setPackages(packagesData)
-		let total = 0
+
 		this.props.clearMessages()
-		total = packagesData.filter((pkg, idx) => {
+		const total = packagesData.filter((pkg, idx) => {
 			return !pkg.peerMissing && pkg.from
 		}).length
 		this.props.setTotalInstalled(total)
+
+		//setup notifications
 		let notifications = parse(packages, 'problems')
 		notifications.forEach((notification, idx) => {
 			this.props.addMessage('error', notification)
 		})
 	}
-	_setupOutdated(packages) {
-		if (!packages) {
-			this.props.setPackagesOutdated([])
-			return
-		}
-		let outdatedData = JSON.parse(packages)
-		this.props.setPackagesOutdated(outdatedData)
-	}
+	// _setupOutdated(packages) {
+	// 	if (!packages) {
+	// 		this.props.setPackagesOutdated([])
+	// 		return
+	// 	}
+	// 	const data = JSON.parse(packages)
+	// 	this.props.setPackagesOutdated(data)
+	// }
 	_viewPackage(name, version) {
 		ipcRenderer.send('ipc-event', {
 			ipcEvent: 'view-package',
@@ -90,36 +111,49 @@ class PackagesContainer extends React.Component {
 	}
 	loadData() {
 		const { mode, directory } = this.props
-		this._clearUI()
+
 		ipcRenderer.send('ipc-event', {
 			ipcEvent: 'get-packages',
-			cmd: ['list', 'outdated'],
+			cmd: ['outdated', 'list'],
 			mode: mode,
 			directory: directory
 		})
 	}
+	componentWillUpdate() {
+		console.log('willUpdate')
+	}
 	componentDidMount() {
+		const { setMode, setActive, setPackageJSON, toggleLoader } = this.props
+		console.log('Packages mounted')
+
+		//send an ipcRenderer event to get the packages
 		this.loadData()
+		// this._clearUI()
+
 		ipcRenderer.on('get-packages-close', (event, packages, command) => {
 			if (!packages) {
 				return
 			}
+
 			switch (command) {
 				case 'outdated':
-					this._setupOutdated(packages)
+					this._outdated = JSON.parse(packages)
+					// this._setupOutdated(packages)
 					break
 				default:
 					this._setupList(packages)
 			}
 
 			// close loader
-			this.props.toggleLoader(false)
+			toggleLoader(false)
 		})
+
 		ipcRenderer.on('search-packages-close', (event, packagesStr) => {
 			let packages = JSON.parse(packagesStr)
 			this.props.setPackages(packages)
 			this.props.toggleLoader(false)
 		})
+
 		ipcRenderer.on('view-package-close', (event, packageStr) => {
 			let pkg
 			try {
@@ -145,19 +179,17 @@ class PackagesContainer extends React.Component {
 			}
 			this.loadData()
 		})
-		ipcRenderer.on('ipcEvent-error', (event, error) => {
-			// console.error(error);
-		})
-		ipcRenderer.on('analyze-json-close', (event, filePath, content) => {
-			this.props.setMode(APP_MODES.LOCAL, filePath)
-			this.props.setActive(null)
-			this.props.setPackageJSON(content)
-			this.props.toggleLoader(true)
 
-			//TODO: ... remove setTimeout
-			setTimeout(() => {
-				this.loadData()
-			}, 3000)
+		ipcRenderer.on('ipcEvent-error', (event, error) => {
+			// console.error(error)
+		})
+
+		ipcRenderer.on('analyze-json-close', (event, directory, content) => {
+			setMode(APP_MODES.LOCAL, directory)
+			setActive(null)
+			setPackageJSON(content)
+			toggleLoader(true)
+			this.loadData()
 		})
 	}
 	componentWillUnMount() {
@@ -212,7 +244,6 @@ function mapStateToProps(state) {
 	return {
 		mode: state.global.mode,
 		directory: state.global.directory,
-		loading: state.global.loading,
 		showModal: state.global.showModal,
 		packages: state.packages.packages,
 		active: state.packages.active,
@@ -229,7 +260,7 @@ function mapDispatchToProps(dispatch) {
 		toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
 		toggleModal: (bool) => dispatch(globalActions.toggleModal(bool)),
 		toggleMainLoader: (bool) => dispatch(packagesActions.toggleMainLoader(bool)),
-		setMode: (mode) => dispatch(globalActions.setMode(mode)),
+		setMode: (mode, directory) => dispatch(globalActions.setMode(mode, directory)),
 		setPackagesOutdated: (packages) => dispatch(packagesActions.setPackagesOutdated(packages)),
 		setTotalInstalled: (total) => dispatch(packagesActions.setTotalInstalled(total)),
 		addMessage: (level, message) => dispatch(globalActions.addMessage(level, message)),

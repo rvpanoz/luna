@@ -102,6 +102,12 @@ export function packagesListStyles(theme) {
 			marginLeft: theme.spacing.unit,
 			marginRight: theme.spacing.unit,
 			width: 200
+		},
+		directory: {
+			margin: theme.spacing.unit + 5
+		},
+		chip: {
+			margin: theme.spacing.unit
 		}
 	}
 }

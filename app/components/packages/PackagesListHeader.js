@@ -6,9 +6,11 @@ import { APP_MODES } from '../../constants/AppConstants'
 import { withStyles } from 'material-ui/styles'
 import Divider from 'material-ui/Divider'
 import Avatar from 'material-ui/Avatar'
+import Typography from 'material-ui/Typography'
 import classnames from 'classnames'
 import { packagesListStyles } from '../styles'
 import IconButton from 'material-ui/IconButton'
+import Chip from 'material-ui/Chip'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
 import PackagesListSearch from './PackagesListSearch'
@@ -75,6 +77,13 @@ class PackagesListHeader extends React.Component {
 							</MenuItem>
 						</Menu>
 					</div>
+					<Divider />
+				</div>
+				<div className={classes.flexRow}>
+					<Chip label={mode} className={classes.chip} />
+					<Typography align="right" paragraph={true} type="subheading" className={classes.directory}>
+						{directory}
+					</Typography>
 				</div>
 				<PackagesListSearch
 					mode={mode}

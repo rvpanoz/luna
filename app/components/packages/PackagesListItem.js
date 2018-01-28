@@ -2,9 +2,11 @@
 
 import { remote, ipcRenderer } from 'electron'
 import React from 'react'
-import { withStyles } from 'material-ui/styles'
+import * as R from 'ramda'
 import { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
 import IconButton from 'material-ui/IconButton'
+import Avatar from 'material-ui/Avatar'
+import Icon from 'material-ui/Icon'
 
 class PackageListItem extends React.Component {
 	constructor(props) {
@@ -27,20 +29,26 @@ class PackageListItem extends React.Component {
 		return false
 	}
 	render() {
-		const { name, version } = this.props
-		const { classes } = this.props
+		const { classes, name, version, latest } = this.props
+
 		if (!name) {
 			return null
 		}
+
+		let versionL = R.propOr('1', 'latest')
+		console.log(versionL(this.props))
 		return (
 			<ListItem button onClick={this.onItemClick}>
+				<Avatar>
+					<Icon>{latest ? 'update' : 'done'}</Icon>
+				</Avatar>
 				<ListItemText primary={name} secondary={version} />
 				<ListItemSecondaryAction>
-					<IconButton aria-label="Delete">delete</IconButton>
+					<IconButton aria-label="Uninstall">delete</IconButton>
 				</ListItemSecondaryAction>
 			</ListItem>
 		)
 	}
 }
 
-export default withStyles()(PackageListItem)
+export default PackageListItem

@@ -1,19 +1,26 @@
+/**
+PackagesList
+**/
+
 'use strict'
 
 import { remote, ipcRenderer } from 'electron'
 import React from 'react'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
 import Loader from '../../common/Loader'
 import PackageListItem from './PackagesListItem'
 import { withStyles } from 'material-ui/styles'
+import * as globalActions from '../../actions/global_actions'
 import List from 'material-ui/List'
 import { packagesListStyles } from '../styles'
 import PackagesListHeader from './PackagesListHeader'
 
 class PackagesList extends React.Component {
-	constructor(props) {
-		super(props)
+	constructor() {
+		super()
 	}
-	componentWillMount() {
+	componentDidMount() {
 		const { toggleLoader } = this.props
 		toggleLoader(true)
 	}
@@ -27,7 +34,6 @@ class PackagesList extends React.Component {
 			setActive,
 			setPackageActions,
 			setGlobalMode,
-			loadData,
 			totalInstalled,
 			directory,
 			classes
@@ -38,7 +44,6 @@ class PackagesList extends React.Component {
 				<PackagesListHeader
 					mode={mode}
 					setGlobalMode={setGlobalMode}
-					loadData={loadData}
 					directory={directory}
 					setActive={setActive}
 					totalInstalled={totalInstalled}
@@ -49,13 +54,14 @@ class PackagesList extends React.Component {
 					<List>
 						{packages
 							? packages.map((pkg, idx) => {
-									let hasPeerMissing = pkg.peerMissing
+									const hasPeerMissing = pkg.peerMissing
 									if (hasPeerMissing) {
 										return
 									}
-									let version = pkg.version
-									let readme = pkg.readme
-									let name = pkg.from ? pkg.from.split('@')[0] : pkg.name
+									const version = pkg.version
+									const readme = pkg.readme
+									const name = pkg.from ? pkg.from.split('@')[0] : pkg.name
+									const latest = pkg.latest
 									return (
 										<PackageListItem
 											setActive={setActive}
@@ -67,6 +73,7 @@ class PackagesList extends React.Component {
 											readme={readme}
 											description={pkg.description ? pkg.description : null}
 											version={version}
+											latest={latest}
 										/>
 									)
 								})
@@ -78,4 +85,19 @@ class PackagesList extends React.Component {
 	}
 }
 
-export default withStyles(packagesListStyles)(PackagesList)
+function mapStateToProps(state) {
+	return {
+		loading: state.global.loading
+	}
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool))
+	}
+}
+
+export default compose(
+	withStyles(packagesListStyles, { withTheme: true }),
+	connect(mapStateToProps, mapDispatchToProps)
+)(PackagesList)
