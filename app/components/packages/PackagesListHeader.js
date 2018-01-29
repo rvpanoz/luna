@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { APP_MODES } from "../../constants/AppConstants";
 import { withStyles } from "material-ui/styles";
+import * as globalActions from "../../actions/global_actions";
 import * as packagesActions from "../../actions/packages_actions";
 import Divider from "material-ui/Divider";
 import Avatar from "material-ui/Avatar";
@@ -21,11 +22,12 @@ import PackagesListSearch from "./PackagesListSearch";
 const ITEM_HEIGHT = 48;
 
 class PackagesListHeader extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this._anchorEl = null;
     this.handleClick = this.handleClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.setGlobalMode = this.setGlobalMode.bind(this);
   }
   handleClick(e) {
     this._anchorEl = e.currentTarget;
@@ -35,37 +37,16 @@ class PackagesListHeader extends React.Component {
     this._anchorEl = null;
     this.forceUpdate();
   }
-  componentWillUpdate() {
-    console.log("componentWillUpdate");
-    const { total } = this.props;
-    console.log(total);
-  }
-  componentWillReceiveProps() {
-    console.log("componentWillReceiveProps");
-    const { total } = this.props;
-    console.log(total);
-    // const total = packagesData.filter((pkg, idx) => {
-    //   return !pkg.peerMissing && pkg.from;
-    // }).length;
-    // setTotalInstalled(total);
-  }
-  componentDidUpdate() {
-    console.log("componentDidUpdate");
-    const { total } = this.props;
-    console.log(total);
+  setGlobalMode(e) {
+    const { mode, toggleLoader, setMode, fetch } = this.props;
+    e.preventDefault();
+    if (mode === APP_MODES.GLOBAL) return;
+    toggleLoader(true);
+    setMode(APP_MODES.GLOBAL);
+    fetch();
   }
   render() {
-    const {
-      classes,
-      packages,
-      setGlobalMode,
-      mode,
-      directory,
-      setActive,
-      toggleLoader,
-      setPackageActions,
-      total
-    } = this.props;
+    const { classes, setActive, toggleLoader, total, mode, directory } = this.props;
     let anchorEl = this._anchorEl;
 
     return (
@@ -95,7 +76,7 @@ class PackagesListHeader extends React.Component {
                 }
               }}
             >
-              <MenuItem key="1" onClick={setGlobalMode}>
+              <MenuItem key="1" onClick={this.setGlobalMode}>
                 Global mode
               </MenuItem>
             </Menu>
@@ -116,7 +97,6 @@ class PackagesListHeader extends React.Component {
         <PackagesListSearch
           mode={mode}
           directory={directory}
-          setPackageActions={setPackageActions}
           toggleLoader={toggleLoader}
           setActive={setActive}
         />
@@ -127,7 +107,9 @@ class PackagesListHeader extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    total: state.packages.total
+    total: state.packages.total,
+    mode: state.global.mode,
+    directory: state.global.directory
   };
 }
 

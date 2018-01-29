@@ -9,9 +9,8 @@ import Avatar from "material-ui/Avatar";
 import Icon from "material-ui/Icon";
 
 class PackageListItem extends React.Component {
-  constructor(props) {
-    super(props);
-    this._needsUpdates = true;
+  constructor() {
+    super();
     this.onItemClick = this.onItemClick.bind(this);
   }
   onItemClick(e) {

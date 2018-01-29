@@ -22,7 +22,7 @@ class PackagesContainer extends React.Component {
     super();
     this._outdated = [];
     this._autoBind([
-      "loadData",
+      "fetch",
       "setGlobalMode",
       "_setupList",
       "_setupOutdated",
@@ -39,8 +39,8 @@ class PackagesContainer extends React.Component {
   }
   _setupList(packages) {
     const outdated = this._outdated;
+    const { setPackages, setTotal, clearMessages } = this.props;
     const packagesData = parse(packages, "dependencies");
-    const { setPackages, clearMessages } = this.props;
 
     const data = R.map((pkg) => {
       if (!pkg.from) return;
@@ -56,8 +56,9 @@ class PackagesContainer extends React.Component {
       }
     }, packagesData);
 
-    //update state packages
+    //update state
     setPackages(data);
+    setTotal(data.length);
     clearMessages();
 
     // TODO - setup notifications
@@ -77,56 +78,27 @@ class PackagesContainer extends React.Component {
     });
   }
   _clearUI() {
-    const {
-      showModal,
-      setActive,
-      setPackageActions,
-      toggleMainLoader,
-      toggleModal,
-      setPackagesOutdated
-    } = this.props;
+    const { setActive, setPackageActions, toggleMainLoader, toggleModal } = this.props;
 
     setActive(null);
     setPackageActions();
-    setPackagesOutdated([]);
     toggleMainLoader(false);
 
     if (showModal) {
       toggleModal(false);
     }
   }
-  setGlobalMode(e) {
-    const { mode, toggleLoader, setMode, setActive, setPackageActions } = this.props;
-    e.preventDefault();
-    if (mode === APP_MODES.GLOBAL) {
-      return;
-    }
-    toggleLoader(true);
-    setMode(APP_MODES.GLOBAL, null);
-    setActive(null);
-    setPackageActions();
-    ipcRenderer.send("ipc-event", {
-      ipcEvent: "get-packages",
-      cmd: ["list", "outdated"],
-      mode: APP_MODES.GLOBAL
-    });
-  }
-  loadData() {
+  fetch() {
     const { mode, directory } = this.props;
-
     ipcRenderer.send("ipc-event", {
       ipcEvent: "get-packages",
       cmd: ["outdated", "list"],
-      mode: mode,
+      mode: mode || APP_MODES.GLOBAL,
       directory: directory
     });
   }
   componentDidMount() {
-    const { setMode, setActive, setPackageJSON, toggleLoader } = this.props;
-
-    //send an ipcRenderer event to get the packages
-    this.loadData();
-    // this._clearUI()
+    const { toggleLoader } = this.props;
 
     ipcRenderer.on("get-packages-close", (event, packages, command) => {
       if (!packages) {
@@ -136,13 +108,11 @@ class PackagesContainer extends React.Component {
       switch (command) {
         case "outdated":
           this._outdated = JSON.parse(packages);
-          // this._setupOutdated(packages)
           break;
         default:
           this._setupList(packages);
       }
 
-      // close loader
       toggleLoader(false);
     });
 
@@ -187,7 +157,7 @@ class PackagesContainer extends React.Component {
       setActive(null);
       setPackageJSON(content);
       toggleLoader(true);
-      this.loadData();
+      this.fetch();
     });
   }
   componentWillUnMount() {
@@ -201,32 +171,16 @@ class PackagesContainer extends React.Component {
     ]);
   }
   render() {
-    const {
-      loading,
-      mode,
-      directory,
-      packages,
-      setPackageActions,
-      toggleLoader,
-      setActive,
-      toggleMainLoader,
-      totalInstalled
-    } = this.props;
+    const { packages, setActive, setMode, toggleMainLoader } = this.props;
 
     return (
       <Grid container justify="space-between">
         <Grid item xs={5}>
           <PackagesList
-            loading={loading}
             packages={packages}
-            toggleLoader={toggleLoader}
-            setActive={setActive}
+            fetch={this.fetch}
             toggleMainLoader={toggleMainLoader}
-            mode={mode}
-            directory={directory}
-            setGlobalMode={this.setGlobalMode}
-            loadData={this.loadData}
-            setPackageActions={setPackageActions}
+            setMode={setMode}
           />
         </Grid>
         <Grid item xs={7}>
@@ -255,6 +209,7 @@ function mapDispatchToProps(dispatch) {
     setActive: (pkg) => dispatch(packagesActions.setActive(pkg)),
     toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
     toggleModal: (bool) => dispatch(globalActions.toggleModal(bool)),
+    setTotal: (total) => dispatch(packagesActions.setTotal(total)),
     toggleMainLoader: (bool) => dispatch(packagesActions.toggleMainLoader(bool)),
     setMode: (mode, directory) => dispatch(globalActions.setMode(mode, directory)),
     setPackagesOutdated: (packages) => dispatch(packagesActions.setPackagesOutdated(packages)),

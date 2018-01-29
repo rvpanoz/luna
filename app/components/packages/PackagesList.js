@@ -21,33 +21,33 @@ class PackagesList extends React.Component {
     super();
   }
   componentDidMount() {
-    const { toggleLoader } = this.props;
+    const { toggleLoader, fetch } = this.props;
     toggleLoader(true);
+    fetch();
   }
   render() {
     const {
       packages,
+      total,
       loading,
       mode,
+      directory,
+      classes,
       toggleMainLoader,
       toggleLoader,
-      setActive,
-      setPackageActions,
-      setGlobalMode,
-      directory,
-      classes
+      setMode,
+      fetch
     } = this.props;
 
     return (
       <section>
         <PackagesListHeader
           mode={mode}
-          total={packages.length}
-          setGlobalMode={setGlobalMode}
+          total={total}
           directory={directory}
-          setActive={setActive}
           toggleLoader={toggleLoader}
-          setPackageActions={setPackageActions}
+          setMode={setMode}
+          fetch={fetch}
         />
         <Loader loading={loading}>
           <List>
@@ -63,7 +63,8 @@ class PackagesList extends React.Component {
                   const latest = pkg.latest;
                   return (
                     <PackageListItem
-                      setActive={setActive}
+                      mode={mode}
+                      directory={directory}
                       toggleMainLoader={toggleMainLoader}
                       idx={idx}
                       key={idx}
@@ -86,7 +87,9 @@ class PackagesList extends React.Component {
 function mapStateToProps(state) {
   return {
     loading: state.global.loading,
-    packages: state.packages.packages
+    total: state.packages.total,
+    mode: state.global.mode,
+    directory: state.global.directory
   };
 }
 
