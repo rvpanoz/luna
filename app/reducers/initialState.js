@@ -12,7 +12,6 @@ export default {
     total: 0,
     active: null,
     packages: [],
-    outdated: [],
     actions: [
       {
         text: "Update",

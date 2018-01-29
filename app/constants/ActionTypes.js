@@ -14,7 +14,7 @@ export const SET_MODE = "SET_MODE";
 export const SET_ACTIVE_SIDEBAR = "SET_ACTIVE_SIDEBAR";
 
 //various
-export const TOTAL_INSTALLED = "TOTAL_INSTALLED";
+export const SET_TOTAL = "SET_TOTAL";
 export const DO_INSTALL = "DO_INSTALL";
 export const ADD_MESSAGE = "ADD_MESSAGE";
 export const CLEAR_MESSAGES = "CLEAR_MESSAGES";
