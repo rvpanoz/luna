@@ -71,10 +71,9 @@ export function toggleLoader(loading) {
   };
 }
 
-export function toggleModal(bool, npmCmd) {
+export function toggleSettings(bool) {
   return {
     type: types.TOGGLE_MODAL,
-    showModal: bool,
-    npmCmd: npmCmd
+    settingsModal: bool
   };
 }

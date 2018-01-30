@@ -4,12 +4,15 @@ import { remote, ipcRenderer } from "electron";
 import React from "react";
 import List, { ListItem, ListItemIcon, ListItemText } from "material-ui/List";
 import Icon from "material-ui/Icon";
+import * as globalActions from "../actions/global_actions";
 import { APP_MODES } from "../constants/AppConstants";
 import { withStyles } from "material-ui/styles";
 import { appHeaderContentStyles } from "./styles";
 import Modal from "material-ui/Modal";
+import Divider from "material-ui/Divider";
 import TextField from "material-ui/TextField";
 import Typography from "material-ui/Typography";
+import Button from "material-ui/Button";
 
 class AppHeaderContent extends React.Component {
   constructor() {
@@ -94,13 +97,15 @@ class AppHeaderContent extends React.Component {
           </ListItem>
         </List>
         <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={true}
+          aria-labelledby="settings"
+          aria-describedby="set npm settings"
+          open={false}
           onClose={this.handleModal}
         >
           <div style={this.getModalStyles()} className={classes.paper}>
             <form className={classes.container} noValidate autoComplete="off">
+              <h3 className={classes.heading}>Settings</h3>
+              <Divider />
               <TextField
                 id="npm-registry"
                 label="Registry"
@@ -117,6 +122,7 @@ class AppHeaderContent extends React.Component {
                 onChange={this.handleChange}
                 margin="normal"
               />
+              <Button className={classes.button}>Save</Button>
             </form>
           </div>
         </Modal>

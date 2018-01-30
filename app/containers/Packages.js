@@ -40,7 +40,6 @@ class PackagesContainer extends React.Component {
   _setupList(packages) {
     const outdated = this._outdated;
     const { setPackages, setTotal, clearMessages } = this.props;
-    const packagesData = parse(packages, "dependencies");
 
     const data = R.map((pkg) => {
       if (!pkg.from) return;
@@ -54,7 +53,7 @@ class PackagesContainer extends React.Component {
       } else {
         return pkg;
       }
-    }, packagesData);
+    }, packages);
 
     //update state
     setPackages(data);
@@ -83,10 +82,6 @@ class PackagesContainer extends React.Component {
     setActive(null);
     setPackageActions();
     toggleMainLoader(false);
-
-    if (showModal) {
-      toggleModal(false);
-    }
   }
   fetch() {
     const { mode, directory } = this.props;
@@ -98,7 +93,7 @@ class PackagesContainer extends React.Component {
     });
   }
   componentDidMount() {
-    const { toggleLoader } = this.props;
+    const { setActive, toggleMainLoader, setMode, setPackages, toggleLoader } = this.props;
 
     ipcRenderer.on("get-packages-close", (event, packages, command) => {
       if (!packages) {
@@ -110,7 +105,8 @@ class PackagesContainer extends React.Component {
           this._outdated = JSON.parse(packages);
           break;
         default:
-          this._setupList(packages);
+          const data = parse(packages, "dependencies");
+          this._setupList(data);
       }
 
       toggleLoader(false);
@@ -118,8 +114,8 @@ class PackagesContainer extends React.Component {
 
     ipcRenderer.on("search-packages-close", (event, packagesStr) => {
       let packages = JSON.parse(packagesStr);
-      this.props.setPackages(packages);
-      this.props.toggleLoader(false);
+      setPackages(packages);
+      toggleLoader(false);
     });
 
     ipcRenderer.on("view-package-close", (event, packageStr) => {
@@ -131,8 +127,8 @@ class PackagesContainer extends React.Component {
       }
 
       if (pkg) {
-        this.props.setActive(pkg);
-        this.props.toggleMainLoader(false);
+        setActive(pkg);
+        toggleMainLoader(false);
       } else {
         throw new Error("Package cannot be parsed");
       }

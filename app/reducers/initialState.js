@@ -2,7 +2,7 @@ export default {
   mode: "GLOBAL",
   directory: null,
   loading: false,
-  showModal: false,
+  settingsModal: false,
   menuOpen: false,
   npmCmd: "",
   messages: [],

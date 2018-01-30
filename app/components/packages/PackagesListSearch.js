@@ -48,7 +48,7 @@ class PackagesListSearch extends React.Component {
     return (
       <TextField
         id="search"
-        label="Search"
+        label="Search npm"
         type="search"
         className={classes.textField}
         margin="normal"

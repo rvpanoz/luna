@@ -1,7 +1,7 @@
 //toggles
 export const TOGGLE_LOADER = "TOGGLE_LOADER";
 export const TOGGLE_MAIN_LOADER = "TOGGLE_MAIN_LOADER";
-export const TOGGLE_MODAL = "TOGGLE_MODAL";
+export const TOGGLE_SETTINGS = "TOGGLE_SETTINGS";
 export const MENU_OPEN = "MENU_OPEN";
 
 //setters

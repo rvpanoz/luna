@@ -64,10 +64,25 @@ export function appHeaderContentStyles(theme) {
       boxShadow: theme.shadows[5],
       padding: theme.spacing.unit * 4
     },
+    container: {
+      display: "flex",
+      flexWrap: "wrap"
+    },
+    heading: {
+      color: "rgba(0, 0, 0, 0.54)",
+      margin: "1em 0 0.7em",
+      fontSize: "1.5rem",
+      fontWeight: 400,
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      lineHeight: "1.35417em"
+    },
     textField: {
       marginLeft: theme.spacing.unit,
       marginRight: theme.spacing.unit,
       width: 200
+    },
+    button: {
+      margin: theme.spacing.unit
     }
   };
 }
