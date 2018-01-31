@@ -141,7 +141,7 @@ class PackagesContainer extends React.Component {
         ipcRenderer.send("analyze-json", directory);
         return;
       }
-      this.loadData();
+      this.fetch();
     });
 
     ipcRenderer.on("ipcEvent-error", (event, error) => {

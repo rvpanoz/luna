@@ -7,11 +7,13 @@ import { ListItem, ListItemSecondaryAction, ListItemText } from "material-ui/Lis
 import IconButton from "material-ui/IconButton";
 import Avatar from "material-ui/Avatar";
 import Icon from "material-ui/Icon";
+import { showMessageBox } from "../../utils";
 
 class PackageListItem extends React.Component {
   constructor() {
     super();
     this.onItemClick = this.onItemClick.bind(this);
+    this.uninstallPackage = this.uninstallPackage.bind(this);
   }
   onItemClick(e) {
     const { name, version, mode, directory, toggleMainLoader } = this.props;
@@ -25,6 +27,30 @@ class PackageListItem extends React.Component {
       mode,
       directory
     });
+    return false;
+  }
+  uninstallPackage(e) {
+    e.preventDefault();
+    const { name, mode, directory } = this.props;
+
+    if (name) {
+      showMessageBox(
+        {
+          action: "uninstall",
+          name: name
+        },
+        () => {
+          ipcRenderer.send("ipc-event", {
+            mode: mode,
+            directory: directory,
+            ipcEvent: "Uninstall",
+            cmd: ["uninstall"],
+            pkgName: name
+          });
+        }
+      );
+    }
+
     return false;
   }
   render() {
@@ -41,7 +67,9 @@ class PackageListItem extends React.Component {
         </Avatar>
         <ListItemText primary={name} secondary={version} />
         <ListItemSecondaryAction>
-          <IconButton aria-label="Uninstall">delete</IconButton>
+          <IconButton onClick={this.uninstallPackage} aria-label="Uninstall">
+            delete
+          </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
     );

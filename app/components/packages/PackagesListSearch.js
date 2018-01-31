@@ -20,15 +20,6 @@ class PackagesListSearch extends React.Component {
     const value = e.target.value;
 
     if (value && value.length > 2) {
-      toggleLoader(true);
-      setActive(null);
-      setPackageActions([
-        {
-          text: "Install",
-          iconCls: "download"
-        }
-      ]);
-
       ipcRenderer.send("ipc-event", {
         ipcEvent: "search-packages",
         cmd: ["search"],

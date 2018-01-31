@@ -12,6 +12,7 @@ import Modal from "material-ui/Modal";
 import Divider from "material-ui/Divider";
 import TextField from "material-ui/TextField";
 import Typography from "material-ui/Typography";
+import Tooltip from "material-ui/Tooltip";
 import Button from "material-ui/Button";
 
 class AppHeaderContent extends React.Component {
@@ -78,21 +79,19 @@ class AppHeaderContent extends React.Component {
       <section>
         <List>
           <ListItem button onClick={this.openPackage}>
-            <ListItemIcon>
-              <Icon className={classes.iconHover}>send</Icon>
-            </ListItemIcon>
+            <Tooltip title="Analyze package.json file" placement="right-start">
+              <ListItemIcon>
+                <Icon className={classes.iconHover}>send</Icon>
+              </ListItemIcon>
+            </Tooltip>
             <ListItemText primary="Analyze" secondary="Open package.json" />
           </ListItem>
           <ListItem button>
-            <ListItemIcon>
-              <Icon>list</Icon>
-            </ListItemIcon>
-            <ListItemText primary="Outdated" secondary="Outdated packages" />
-          </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <Icon>settings</Icon>
-            </ListItemIcon>
+            <Tooltip title="Open application settings" placement="right-start">
+              <ListItemIcon>
+                <Icon>settings</Icon>
+              </ListItemIcon>
+            </Tooltip>
             <ListItemText primary="Settings" secondary="Application settings" />
           </ListItem>
         </List>
