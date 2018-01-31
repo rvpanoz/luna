@@ -95,7 +95,7 @@ class PackagesContainer extends React.Component {
     ipcRenderer.send("ipc-event", {
       ipcEvent: "get-packages",
       cmd: ["outdated", "list"],
-      mode: mode || APP_MODES.GLOBAL,
+      mode: mode,
       directory: directory
     });
   }
@@ -110,6 +110,7 @@ class PackagesContainer extends React.Component {
     } = this.props;
 
     ipcRenderer.on("get-packages-close", (event, packages, command) => {
+      console.log(command);
       if (!packages) {
         return;
       }
@@ -147,8 +148,7 @@ class PackagesContainer extends React.Component {
     });
 
     ipcRenderer.on("action-close", (event, pkg) => {
-      let mode = this.props.mode,
-        directory = this.props.directory;
+      const { mode, directory } = this.props;
       if (mode === APP_MODES.LOCAL && directory) {
         ipcRenderer.send("analyze-json", directory);
         return;
