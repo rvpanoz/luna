@@ -42,7 +42,7 @@ class PackagesListHeader extends React.Component {
     e.preventDefault();
     if (mode === APP_MODES.GLOBAL) return;
     toggleLoader(true);
-    setMode(APP_MODES.GLOBAL);
+    setMode(APP_MODES.GLOBAL, null);
     fetch();
   }
   render() {

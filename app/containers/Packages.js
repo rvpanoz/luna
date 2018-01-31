@@ -83,6 +83,13 @@ class PackagesContainer extends React.Component {
     setPackageActions();
     toggleMainLoader(false);
   }
+  _setupOutdated(packages) {
+    try {
+      this._outdated = JSON.parse(packages);
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
   fetch() {
     const { mode, directory } = this.props;
     ipcRenderer.send("ipc-event", {
@@ -93,20 +100,25 @@ class PackagesContainer extends React.Component {
     });
   }
   componentDidMount() {
-    const { setActive, toggleMainLoader, setMode, setPackages, toggleLoader } = this.props;
+    const {
+      setActive,
+      toggleMainLoader,
+      setMode,
+      setPackages,
+      toggleLoader,
+      setPackageJSON
+    } = this.props;
 
     ipcRenderer.on("get-packages-close", (event, packages, command) => {
       if (!packages) {
         return;
       }
 
-      switch (command) {
-        case "outdated":
-          this._outdated = JSON.parse(packages);
-          break;
-        default:
-          const data = parse(packages, "dependencies");
-          this._setupList(data);
+      if (command === "outdated") {
+        this._outdated = this._setupOutdated(packages);
+      } else {
+        const data = parse(packages, "dependencies");
+        this._setupList(data);
       }
 
       toggleLoader(false);
