@@ -18,26 +18,28 @@ import IconButton from 'material-ui/IconButton'
 import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
 import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import AppHeaderContent from './AppHeaderContent'
-import { appHeaderStyles } from './styles'
+import SearchBox from './SearchBox'
+
+import { appHeaderStyles } from '../styles'
 
 const AppHeader = (props) => {
 	const { menuOpen, classes, handleDrawerOpen, handleDrawerClose, title, theme } = props
 	return (
 		<section>
 			<AppBar className={classNames(classes.appBar, menuOpen && classes.appBarShift)}>
-				<Toolbar disableGutters={!menuOpen}>
-					<IconButton
-						color="inherit"
-						aria-label="open menu"
-						onClick={handleDrawerOpen}
-						className={classNames(classes.menuButton, menuOpen && classes.hide)}
-					>
-						<MenuIcon />
-					</IconButton>
-					<Typography type="title" color="inherit" noWrap>
-						{title}
-					</Typography>
-				</Toolbar>
+				<div style={{ display: 'flex', flexDirection: 'row' }}>
+					<Toolbar disableGutters={!menuOpen}>
+						<IconButton
+							color="inherit"
+							aria-label="open menu"
+							onClick={handleDrawerOpen}
+							className={classNames(classes.menuButton, menuOpen && classes.hide)}
+						>
+							<MenuIcon />
+						</IconButton>
+					</Toolbar>
+					<SearchBox />
+				</div>
 			</AppBar>
 			<Drawer
 				type="permanent"
