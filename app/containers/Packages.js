@@ -14,6 +14,7 @@ import { APP_MODES } from "../constants/AppConstants";
 import * as globalActions from "../actions/global_actions";
 import * as packagesActions from "../actions/packages_actions";
 import Grid from "material-ui/Grid";
+import { SnackbarContent } from "material-ui/Snackbar";
 import PackagesList from "../components/packages/PackagesList";
 import PackageContainer from "./Package";
 
