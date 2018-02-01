@@ -169,15 +169,17 @@ class PackagesContainer extends React.Component {
     ]);
   }
   render() {
-    const { packages, setActive, setMode, toggleMainLoader } = this.props;
+    const { mode, directory, packages, setActive, setMode, toggleMainLoader } = this.props;
 
     return (
       <Grid container justify="space-between">
-        <Grid item xs={5}>
+        <Grid item xs={3}>
           <PackagesList packages={packages} toggleMainLoader={toggleMainLoader} setMode={setMode} />
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={6}>
           <PackageContainer />
+        </Grid>
+        <Grid item xs={3}>
         </Grid>
       </Grid>
     );

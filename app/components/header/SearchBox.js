@@ -36,12 +36,18 @@ class PackagesListSearch extends React.Component {
 	}
 	render() {
 		const { classes } = this.props
-
+		console.log(classes)
 		return (
 			<TextField
 				id="search"
-				className={classes.searchBox}
+				color="secondary"
 				label="Search npm"
+				InputLabelProps={
+					{className: classes.searchBoxLabel}
+				}
+				inputProps={
+					{className: classes.searchBoxInput}
+				}
 				type="search"
 				margin="normal"
 				onChange={this.handleChange}

@@ -35,10 +35,9 @@ class Layout extends React.Component {
           />
           <main className={classes.content}>
             <Grid container justify="space-between">
-              <Grid item xs={10}>
+              <Grid item xs={12}>
                 <PackagesContainer />
               </Grid>
-              <Grid item xs={2} />
             </Grid>
           </main>
         </div>

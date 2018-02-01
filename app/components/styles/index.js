@@ -47,11 +47,15 @@ export function appHeaderStyles(theme) {
     hide: {
       display: "none"
     },
-    searchBox: {
+    searchBoxLabel: {
+      color: '#fff'
+    },
+    searchBoxInput: {
       marginLeft: theme.spacing.unit,
       marginRight: theme.spacing.unit,
       width: 200,
-      color: "white"
+      color:'#fff',
+      backgroundColor: "none"
     }
   };
 }
