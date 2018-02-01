@@ -36,9 +36,10 @@ class PackagesListSearch extends React.Component {
 	}
 	render() {
 		const { classes } = this.props
-		console.log(classes)
+
 		return (
 			<TextField
+				error
 				id="search"
 				color="secondary"
 				label="Search npm"
@@ -48,8 +49,6 @@ class PackagesListSearch extends React.Component {
 				inputProps={
 					{className: classes.searchBoxInput}
 				}
-				type="search"
-				margin="normal"
 				onChange={this.handleChange}
 			/>
 		)
