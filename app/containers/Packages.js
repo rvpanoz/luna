@@ -110,7 +110,6 @@ class PackagesContainer extends React.Component {
 
     ipcRenderer.on("search-packages-close", (event, packagesStr) => {
       try {
-        toggleLoader(true);
         const packages = JSON.parse(packagesStr);
         setPackages(packages);
         toggleLoader(false);

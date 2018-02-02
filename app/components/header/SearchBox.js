@@ -7,8 +7,8 @@ import TextField from "material-ui/TextField";
 import { appHeaderStyles } from "../styles";
 
 class SearchBox extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -20,6 +20,7 @@ class SearchBox extends React.Component {
     const value = e.target.value;
 
     if (value && value.length > 2) {
+      toggleLoader(true);
       ipcRenderer.send("ipc-event", {
         ipcEvent: "search-packages",
         cmd: ["search"],

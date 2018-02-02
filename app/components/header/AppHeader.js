@@ -8,6 +8,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
+import { toggleLoader } from "actions/global_actions";
 import { APP_MODES } from "constants/AppConstants";
 import Drawer from "material-ui/Drawer";
 import { compose } from "redux";
@@ -41,7 +42,8 @@ class AppHeader extends React.Component {
       title,
       mode,
       directory,
-      theme
+      theme,
+      toggleLoader
     } = this.props;
 
     return (
@@ -64,7 +66,7 @@ class AppHeader extends React.Component {
               </Icon>
               <span className={classes.mode}>{firstToUpper(mode)}</span>
             </div>
-            <SearchBox />
+            <SearchBox toggleLoader={toggleLoader} />
           </div>
         </AppBar>
         <Drawer
@@ -96,11 +98,18 @@ function mapStateToProps(state) {
   };
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    toggleLoader: (bool) => dispatch(toggleLoader(bool))
+  };
+}
+
 AppHeader.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 };
 
-export default compose(withStyles(appHeaderStyles, { withTheme: true }), connect(mapStateToProps))(
-  AppHeader
-);
+export default compose(
+  withStyles(appHeaderStyles, { withTheme: true }),
+  connect(mapStateToProps, mapDispatchToProps)
+)(AppHeader);
