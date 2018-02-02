@@ -48,7 +48,6 @@ class Layout extends React.Component {
   }
 
   handleModal() {
-    console.log("closing settings..");
     const { closeSettings } = this.props;
     closeSettings();
   }
@@ -134,7 +133,14 @@ class Layout extends React.Component {
                     value={(settings && settings["https-proxy"]) || ""}
                     margin="normal"
                   />
-                  <Button className={classes.button}>Save</Button>
+                  <div
+                    style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}
+                  >
+                    <Button className={classes.button}>Save</Button>
+                    <Button onClick={this.handleModal} className={classes.button}>
+                      Close
+                    </Button>
+                  </div>
                 </form>
               </div>
             </Modal>
