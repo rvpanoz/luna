@@ -26,8 +26,7 @@ class PackagesListHeader extends React.Component {
     this._anchorEl = null;
     this.handleClick = this.handleClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.setGlobalMode = this.setGlobalMode.bind(this);
-    this.sortList = this.sortList.bind(this);
+    this._setGlobalMode = this._setGlobalMode.bind(this);
   }
   handleClick(e) {
     this._anchorEl = e.currentTarget;
@@ -37,7 +36,7 @@ class PackagesListHeader extends React.Component {
     this._anchorEl = null;
     this.forceUpdate();
   }
-  setGlobalMode(e) {
+  _setGlobalMode(e) {
     const { mode, toggleLoader, setMode } = this.props;
     e.preventDefault();
     if (mode === APP_MODES.GLOBAL) return;
@@ -49,9 +48,6 @@ class PackagesListHeader extends React.Component {
       mode: APP_MODES.GLOBAL,
       directory: null
     });
-  }
-  sortList(field) {
-    //todo..
   }
   render() {
     const { classes, setActive, toggleLoader, total, mode, directory } = this.props;
@@ -84,10 +80,10 @@ class PackagesListHeader extends React.Component {
                 }
               }}
             >
-              <MenuItem key="1" onClick={this.sortList("name")}>
+              <MenuItem key="1" onClick={(e) => console.log(e.target)}>
                 Sort by name
               </MenuItem>
-              <MenuItem key="2" onClick={this.sortList("outdated")}>
+              <MenuItem key="2" onClick={(e) => console.log(e.target)}>
                 Sort by outdated
               </MenuItem>
             </Menu>

@@ -45,11 +45,11 @@ class Package extends React.Component {
     e.preventDefault();
     const target = e.currentTarget;
     const action = target.dataset.action;
-    const { mode, active } = this.props;
+    const { mode, active, setActive, toggleModal } = this.props;
     const options = this.props.cmdOptions;
 
     if (action) {
-      let selectVersion = this.refs.selectVersion;
+      const selectVersion = this.refs.selectVersion;
       let version;
 
       if (action === APP_ACTIONS.UNINSTALL) {
@@ -65,15 +65,15 @@ class Package extends React.Component {
           version: version
         },
         () => {
-          let npmCmd = [`npm ${action.toLowerCase()} `, active.name];
-          if (this.props.mode === APP_MODES.LOCAL) {
+          const npmCmd = [`npm ${action.toLowerCase()} `, active.name];
+          if (mode === APP_MODES.LOCAL) {
             npmCmd.push(` --${options.join(" --")}`);
           }
-          this.props.setActive(null);
-          this.props.toggleModal(true, npmCmd);
+          setActive(null);
+          toggleModal(true, npmCmd);
           ipcRenderer.send("ipc-event", {
-            mode: this.props.mode,
-            directory: this.props.directory,
+            mode,
+            directory,
             ipcEvent: action,
             cmd: [action === "Uninstall" ? "uninstall" : "install"],
             pkgName: active.name,

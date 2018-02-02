@@ -26,6 +26,35 @@ export function layoutStyles(theme) {
         height: "calc(100% - 64px)",
         marginTop: 64
       }
+    },
+    paper: {
+      position: "absolute",
+      width: theme.spacing.unit * 50,
+      backgroundColor: theme.palette.background.paper,
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing.unit * 4
+    },
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      flexWrap: "wrap"
+    },
+    heading: {
+      color: "rgba(0, 0, 0, 0.54)",
+      margin: "1em 0 0.7em",
+      fontSize: "1.5rem",
+      fontWeight: 400,
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      lineHeight: "1.35417em"
+    },
+    textField: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+      width: 300
+    },
+    button: {
+      margin: theme.spacing.unit,
+      fontStyle: "normal"
     }
   };
 }
