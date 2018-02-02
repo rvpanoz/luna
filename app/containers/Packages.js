@@ -41,6 +41,7 @@ class PackagesContainer extends React.Component {
   _setupList(packages) {
     const outdated = this._outdated;
     const { setPackages, setTotal, clearMessages } = this.props;
+    const packagesData = parse(packages, "dependencies");
 
     const data = R.map((pkg) => {
       if (!pkg.from) return;
@@ -54,7 +55,7 @@ class PackagesContainer extends React.Component {
       } else {
         return pkg;
       }
-    }, packages);
+    }, packagesData);
 
     //update state
     setPackages(data);
@@ -100,19 +101,22 @@ class PackagesContainer extends React.Component {
       }
 
       if (command === "outdated") {
-        this._outdated = this._setupOutdated(packages);
+        this._setupOutdated(packages);
       } else {
-        const data = parse(packages, "dependencies");
-        this._setupList(data);
+        this._setupList(packages);
       }
-
       toggleLoader(false);
     });
 
     ipcRenderer.on("search-packages-close", (event, packagesStr) => {
-      let packages = JSON.parse(packagesStr);
-      setPackages(packages);
-      toggleLoader(false);
+      try {
+        toggleLoader(true);
+        const packages = JSON.parse(packagesStr);
+        setPackages(packages);
+        toggleLoader(false);
+      } catch (e) {
+        throw new Error(e);
+      }
     });
 
     ipcRenderer.on("view-package-close", (event, packageStr) => {
@@ -179,8 +183,7 @@ class PackagesContainer extends React.Component {
         <Grid item xs={6}>
           <PackageContainer />
         </Grid>
-        <Grid item xs={3}>
-        </Grid>
+        <Grid item xs={3} />
       </Grid>
     );
   }

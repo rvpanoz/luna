@@ -7,6 +7,7 @@ import { ListItem, ListItemSecondaryAction, ListItemText } from "material-ui/Lis
 import IconButton from "material-ui/IconButton";
 import Avatar from "material-ui/Avatar";
 import Icon from "material-ui/Icon";
+import Chip from "material-ui/Chip";
 import { showMessageBox } from "../../utils";
 
 class PackageListItem extends React.Component {

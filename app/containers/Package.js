@@ -22,7 +22,6 @@ import Avatar from "material-ui/Avatar";
 import IconButton from "material-ui/IconButton";
 import Divider from "material-ui/Divider";
 import MoreVertIcon from "material-ui-icons/MoreVert";
-
 import Card, { CardHeader, CardContent, CardActions } from "material-ui/Card";
 import { packageStyles } from "./styles";
 
@@ -44,15 +43,15 @@ class Package extends React.Component {
   }
   doAction(e) {
     e.preventDefault();
-    let target = e.currentTarget;
-    let action = target.dataset.action;
+    const target = e.currentTarget;
+    const action = target.dataset.action;
+    const { mode, active } = this.props;
+    const options = this.props.cmdOptions;
 
     if (action) {
-      let mode = this.props.mode;
-      let active = this.props.active;
       let selectVersion = this.refs.selectVersion;
-      let version,
-        options = this.props.cmdOptions;
+      let version;
+
       if (action === APP_ACTIONS.UNINSTALL) {
         version = null;
       } else {
