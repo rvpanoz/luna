@@ -49,7 +49,10 @@ class Layout extends React.Component {
 
   handleModal() {
     console.log("closing settings..");
+    const { closeSettings } = this.props;
+    closeSettings();
   }
+
   componentDidMount() {
     const { setSettings } = this.props;
 
@@ -117,10 +120,18 @@ class Layout extends React.Component {
                   />
                   <br />
                   <TextField
-                    id="npm-proxy"
-                    label="Proxy"
+                    id="npm-proxy-http"
+                    label="Proxy http"
                     className={classes.textField}
                     value={(settings && settings.proxy) || ""}
+                    margin="normal"
+                  />
+                  <br />
+                  <TextField
+                    id="npm-proxy-https"
+                    label="Proxy https"
+                    className={classes.textField}
+                    value={(settings && settings["https-proxy"]) || ""}
                     margin="normal"
                   />
                   <Button className={classes.button}>Save</Button>
@@ -145,6 +156,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setSettings: (settings) => dispatch(globalActions.setSettings(settings)),
+    closeSettings: () => dispatch(globalActions.toggleSettings(false)),
     handleDrawerOpen: () => dispatch(globalActions.handleDrawer(true)),
     handleDrawerClose: () => dispatch(globalActions.handleDrawer(false))
   };
