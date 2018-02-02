@@ -1,5 +1,6 @@
 import deepOrange from "material-ui/colors/deepOrange";
 import deepPurple from "material-ui/colors/deepPurple";
+import pink from "material-ui/colors/pink";
 
 export function appHeaderStyles(theme) {
   const drawerWidth = 240;
@@ -48,18 +49,26 @@ export function appHeaderStyles(theme) {
       display: "none"
     },
     info: {
-      margin: theme.spacing.unit,
+      display: "flex",
+      flexDirection: "row",
+      margin: theme.spacing.unit
     },
     searchBoxLabel: {
-      color: '#fff'
+      color: "#fff"
     },
     searchBoxInput: {
       width: 200,
-      color:'#fff'
+      color: "#fff"
     },
-    chip: {
-      margin: theme.spacing.unit,
+    modeIcon: {
+      margin: theme.spacing.unit + 10
     },
+    mode: {
+      fontFamily: "'Open Sans', sans-serif",
+      fontWeight: "bold",
+      textAlign: "center",
+      marginTop: theme.spacing.unit + 15
+    }
   };
 }
 
@@ -128,10 +137,10 @@ export function packagesListStyles(theme) {
       color: "#fff",
       backgroundColor: deepOrange[500]
     },
-    purpleAvatar: {
+    pinkAvatar: {
       margin: 20,
       color: "#fff",
-      backgroundColor: deepPurple[500]
+      backgroundColor: pink[700]
     },
     iconbutton: {
       position: "relative",

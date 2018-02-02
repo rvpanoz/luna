@@ -57,7 +57,7 @@ class PackagesListHeader extends React.Component {
       <section className={classes.flexColumn}>
         <div className={classes.flexRow}>
           <h3 className={classes.heading}>Packages</h3>
-          <Avatar className={classes.purpleAvatar}>{total}</Avatar>
+          <Avatar className={classes.pinkAvatar}>{total}</Avatar>
           <div style={{ marginLeft: "auto" }}>
             <IconButton
               aria-label="More"

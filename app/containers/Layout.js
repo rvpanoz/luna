@@ -16,8 +16,8 @@ import PackagesContainer from "./Packages";
 import { layoutStyles } from "./styles";
 
 class Layout extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
   }
 
   render() {
