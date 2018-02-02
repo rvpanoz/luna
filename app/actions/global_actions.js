@@ -71,9 +71,9 @@ export function toggleLoader(loading) {
   };
 }
 
-export function toggleSettings(settingsOpen) {
+export function toggleSettings(bool) {
   return {
     type: types.TOGGLE_SETTINGS,
-    settingsOpen
+    settingsOpen: bool
   };
 }

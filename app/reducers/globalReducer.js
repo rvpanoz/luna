@@ -40,7 +40,7 @@ const handlers = {
   [TOGGLE_LOADER]: (state, action) => assoc("loading", action.loading, state),
   [TOGGLE_SETTINGS]: (state, action) =>
     merge(state, {
-      settingsModal: action.settingsModal
+      settingsOpen: action.settingsOpen
     }),
   [SET_PACKAGE_JSON]: (state, action) => assoc("packageJSON", action.packageJSON, state),
   [ADD_MESSAGE]: (state, action) =>

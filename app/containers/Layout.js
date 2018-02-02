@@ -12,12 +12,12 @@ import { connect } from "react-redux";
 import { withStyles } from "material-ui/styles";
 import * as globalActions from "actions/global_actions";
 import AppHeader from "../components/header/AppHeader";
-import Modal from "material-ui/Modal";
-import Divider from "material-ui/Divider";
 import Grid from "material-ui/Grid";
 import TextField from "material-ui/TextField";
-import Typography from "material-ui/Typography";
 import Button from "material-ui/Button";
+import Modal from "material-ui/Modal";
+import Typography from "material-ui/Typography";
+import Divider from "material-ui/Divider";
 import PackagesContainer from "./Packages";
 import { layoutStyles } from "./styles";
 
@@ -26,7 +26,6 @@ class Layout extends React.Component {
     super();
     this.handleModal = this.handleModal.bind(this);
   }
-
   getModalStyles() {
     function rand() {
       return Math.floor(Math.random() * 20) - 10;
@@ -51,7 +50,6 @@ class Layout extends React.Component {
   handleModal() {
     console.log("closing settings..");
   }
-
   componentDidMount() {
     const { setSettings } = this.props;
 
@@ -75,12 +73,13 @@ class Layout extends React.Component {
     const {
       classes,
       theme,
-      settingsOpen,
       settings,
       menuOpen,
       handleDrawerOpen,
+      settingsOpen,
       handleDrawerClose
     } = this.props;
+
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
@@ -98,37 +97,37 @@ class Layout extends React.Component {
               </Grid>
             </Grid>
           </main>
-        </div>
-        <div className="app-modal">
-          <Modal
-            aria-labelledby="settings"
-            aria-describedby="set npm settings"
-            open={settingsOpen}
-            onClose={this.handleModal}
-          >
-            <div style={this.getModalStyles()} className={classes.paper}>
-              <form className={classes.container} noValidate autoComplete="off">
-                <h3 className={classes.heading}>Settings</h3>
-                <Divider />
-                <TextField
-                  id="npm-registry"
-                  label="Registry"
-                  className={classes.textField}
-                  value={settings && settings.registry}
-                  margin="normal"
-                />
-                <br />
-                <TextField
-                  id="npm-proxy"
-                  label="Proxy"
-                  className={classes.textField}
-                  value={settings && settings.proxy}
-                  margin="normal"
-                />
-                <Button className={classes.button}>Save</Button>
-              </form>
-            </div>
-          </Modal>
+          <div className="app-modal">
+            <Modal
+              aria-labelledby="settings"
+              aria-describedby="set npm settings"
+              open={settingsOpen}
+              onClose={this.handleModal}
+            >
+              <div style={this.getModalStyles()} className={classes.paper}>
+                <form className={classes.container} noValidate autoComplete="off">
+                  <h3 className={classes.heading}>Settings</h3>
+                  <Divider />
+                  <TextField
+                    id="npm-registry"
+                    label="Registry"
+                    className={classes.textField}
+                    value={(settings && settings.registry) || ""}
+                    margin="normal"
+                  />
+                  <br />
+                  <TextField
+                    id="npm-proxy"
+                    label="Proxy"
+                    className={classes.textField}
+                    value={(settings && settings.proxy) || ""}
+                    margin="normal"
+                  />
+                  <Button className={classes.button}>Save</Button>
+                </form>
+              </div>
+            </Modal>
+          </div>
         </div>
       </div>
     );
@@ -138,14 +137,14 @@ class Layout extends React.Component {
 function mapStateToProps(state) {
   return {
     menuOpen: state.global.menuOpen,
-    settings: state.global.settings,
-    settingsOpen: state.global.settingsOpen
+    settingsOpen: state.global.settingsOpen,
+    settings: state.global.settings
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    setSettings: (settings, bool) => dispatch(globalActions.setSettings(settings)),
+    setSettings: (settings) => dispatch(globalActions.setSettings(settings)),
     handleDrawerOpen: () => dispatch(globalActions.handleDrawer(true)),
     handleDrawerClose: () => dispatch(globalActions.handleDrawer(false))
   };
