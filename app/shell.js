@@ -1,56 +1,55 @@
 /**
-* Run shell commands
-* npm [cmd] [[<@scope>/]<pkg> ...]
-**/
+ * Run shell commands
+ * npm [cmd] [[<@scope>/]<pkg> ...]
+ **/
 
-'use strict';
+"use strict";
 
-const path = require('path');
-const cp = require('child_process');
+const path = require("path");
+const cp = require("child_process");
 const Q = require("q");
 const spawn = cp.spawn;
-const defaults = ['--depth=0', '--json'];
+const defaults = ["--depth=0", "--json"];
 
-import { parse } from './utils';
+import { parse } from "./utils";
 
 function runCommand(command, mode, directory, callback) {
   const deferred = Q.defer();
   const cwd = process.cwd();
 
-  let result = '', error = '';
+  let result = "",
+    error = "";
 
-  if (!command || typeof command !== 'object') {
+  if (!command || typeof command !== "object") {
     return Q.reject(new Error("shell[doCommand]:cmd must be given and must be an array"));
   }
 
   console.log(`running: npm ${command.join(" ")}`);
-  
+
   //on windows use npm.cmd
-  let npmc = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', command, {
+  let npmc = spawn(/^win/.test(process.platform) ? "npm.cmd" : "npm", command, {
     env: process.env,
-    cwd: directory
-      ? path.dirname(directory)
-      : cwd
+    cwd: directory ? path.dirname(directory) : cwd
   });
 
   let errors = 0;
 
-  npmc.stdout.on('data', (data) => {
+  npmc.stdout.on("data", (data) => {
     let dataToString = data.toString();
     result += dataToString;
   });
 
-  npmc.stderr.on('data', (error) => {
+  npmc.stderr.on("data", (error) => {
     let errorToString = error.toString();
     error += errorToString + " | ";
-    callback(errorToString, null, 'error');
+    callback(errorToString, null, "error");
   });
 
-  npmc.on('close', () => {
-    console.log(`finish: npm ${command.join(' ')}`);
+  npmc.on("close", () => {
+    console.log(`finish: npm ${command.join(" ")}`);
     deferred.resolve({
-      status: 'close',
-      error: (error.length) ? error : null,
+      status: "close",
+      error: error.length ? error : null,
       data: result,
       cmd: command[0]
     });
@@ -62,7 +61,7 @@ function runCommand(command, mode, directory, callback) {
 exports.doCommand = function(options, callback) {
   let opts = options || {};
   if (!opts.cmd) {
-    throw new Error('shell[doCommand]: cmd parameter must given');
+    throw new Error("shell[doCommand]: cmd parameter must given");
   }
 
   let run = [],
@@ -76,9 +75,9 @@ exports.doCommand = function(options, callback) {
 
   if (pkgName) {
     if (pkgVersion) {
-      let hasAt = pkgName.indexOf('@');
-      if(hasAt > -1) {
-        pkgName = pkgName.replace('@','');
+      let hasAt = pkgName.indexOf("@");
+      if (hasAt > -1) {
+        pkgName = pkgName.replace("@", "");
       }
       pkgInfo.push(pkgName + "@" + pkgVersion);
     } else {
@@ -86,23 +85,24 @@ exports.doCommand = function(options, callback) {
     }
   }
 
-  if (typeof opts.cmd === 'object') {
+  if (typeof opts.cmd === "object") {
     for (let z = 0; z < opts.cmd.length; z++) {
       run.push(opts.cmd[z]);
     }
   } else {
-    throw new Error('shell[doCommand]: cmd parameter must be given and must be an array');
+    run.push(opts.cmd);
+    // throw new Error("shell[doCommand]: cmd parameter must be given and must be an array");
   }
 
-  if (mode === 'GLOBAL') {
-    params.push('-g');
+  if (mode === "GLOBAL") {
+    params.push("-g");
   }
 
   //setup options e.g --save-dev
   let cmdOptions = opts.pkgOptions;
   if (cmdOptions) {
     switch (true) {
-      case(cmdOptions.length > 0):
+      case cmdOptions.length > 0:
         for (let z = 0; z < cmdOptions.length; z++) {
           let opt = cmdOptions[z];
           args.push(`--${opt}`);
@@ -126,10 +126,15 @@ exports.doCommand = function(options, callback) {
   function combine() {
     let promises = [];
     run.forEach((cmd, idx) => {
-      promises.push(function() {
-        let command = [cmd].concat(pkgInfo).concat(params).concat(args);
-        return runCommand(command, mode, directory, callback);
-      }());
+      promises.push(
+        (function() {
+          let command = [cmd]
+            .concat(pkgInfo)
+            .concat(params)
+            .concat(args);
+          return runCommand(command, mode, directory, callback);
+        })()
+      );
     });
     return promises;
   }
@@ -144,4 +149,4 @@ exports.doCommand = function(options, callback) {
       }
     });
   });
-}
+};

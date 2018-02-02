@@ -8,7 +8,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppBar from "material-ui/AppBar";
 import Toolbar from "material-ui/Toolbar";
-import { toggleLoader } from "actions/global_actions";
+import { toggleLoader, toggleSettings } from "actions/global_actions";
 import { APP_MODES } from "constants/AppConstants";
 import Drawer from "material-ui/Drawer";
 import { compose } from "redux";
@@ -43,7 +43,8 @@ class AppHeader extends React.Component {
       mode,
       directory,
       theme,
-      toggleLoader
+      toggleLoader,
+      toggleSettings
     } = this.props;
 
     return (
@@ -83,7 +84,7 @@ class AppHeader extends React.Component {
               </IconButton>
             </div>
             <Divider />
-            <AppHeaderContent />
+            <AppHeaderContent toggleSettings={toggleSettings} />
           </div>
         </Drawer>
       </section>
@@ -100,6 +101,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    toggleSettings: (bool) => dispatch(toggleSettings(bool)),
     toggleLoader: (bool) => dispatch(toggleLoader(bool))
   };
 }

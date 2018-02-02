@@ -17,7 +17,8 @@ import {
   TOGGLE_SETTINGS,
   ADD_COMMAND_OPTION,
   CLEAR_COMMAND_OPTIONS,
-  MENU_OPEN
+  MENU_OPEN,
+  SET_SETTINGS
 } from "../constants/ActionTypes";
 
 const { packages, ...globalState } = initialState;
@@ -27,6 +28,10 @@ const createReducer = (globalState, handlers) => (state = globalState, action) =
   propOr(identity, prop("type", action), handlers)(state, action);
 
 const handlers = {
+  [SET_SETTINGS]: (state, action) =>
+    merge(state, {
+      settings: action.settings
+    }),
   [SET_MODE]: (state, action) =>
     merge(state, {
       mode: action.mode,

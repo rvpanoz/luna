@@ -4,19 +4,19 @@
 
 "use strict";
 
-import * as types from "../constants/ActionTypes";
+import * as types from "constants/ActionTypes";
+
+export function setSettings(settings) {
+  return {
+    type: types.SET_SETTINGS,
+    settings
+  };
+}
 
 export function handleDrawer(status) {
   return {
     type: types.MENU_OPEN,
     menuOpen: status
-  };
-}
-
-export function setActiveSidebarTab(value) {
-  return {
-    type: types.SET_ACTIVE_SIDEBAR,
-    value
   };
 }
 
@@ -71,9 +71,9 @@ export function toggleLoader(loading) {
   };
 }
 
-export function toggleSettings(bool) {
+export function toggleSettings(settingsOpen) {
   return {
-    type: types.TOGGLE_MODAL,
-    settingsModal: bool
+    type: types.TOGGLE_SETTINGS,
+    settingsOpen
   };
 }

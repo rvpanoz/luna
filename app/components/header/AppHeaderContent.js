@@ -16,11 +16,11 @@ class AppHeaderContent extends React.Component {
     super();
     this.openPackage = this.openPackage.bind(this);
     this.updateMode = this.updateMode.bind(this);
+    this.toggleAppSettings = this.toggleAppSettings.bind(this);
   }
   updateMode(directory) {
     ipcRenderer.send("analyze-json", directory);
   }
-  openSettings() {}
   handleChange(e) {
     // console.log(e.target.value);
   }
@@ -46,6 +46,11 @@ class AppHeaderContent extends React.Component {
       }
     );
   }
+  toggleAppSettings(e) {
+    e.preventDefault();
+    const { toggleSettings } = this.props;
+    toggleSettings(true);
+  }
   render() {
     const { classes } = this.props;
 
@@ -60,7 +65,7 @@ class AppHeaderContent extends React.Component {
             </Tooltip>
             <ListItemText primary="Analyze" secondary="Open package.json" />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={this.toggleAppSettings}>
             <Tooltip title="Open application settings" placement="right-start">
               <ListItemIcon>
                 <Icon>settings</Icon>

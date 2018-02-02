@@ -4,12 +4,13 @@ Layout component
 
 "use strict";
 
+import { remote, ipcRenderer } from "electron";
 import React from "react";
 import PropTypes from "prop-types";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { withStyles } from "material-ui/styles";
-import * as globalActions from "../actions/global_actions";
+import * as globalActions from "actions/global_actions";
 import AppHeader from "../components/header/AppHeader";
 import Modal from "material-ui/Modal";
 import Divider from "material-ui/Divider";
@@ -47,15 +48,39 @@ class Layout extends React.Component {
     };
   }
 
-  handleModal() {}
+  handleModal() {
+    console.log("closing settings..");
+  }
 
   componentDidMount() {
-    //get Settings
+    const { setSettings } = this.props;
+
+    ipcRenderer.send("ipc-event", {
+      ipcEvent: "get-settings",
+      cmd: "config",
+      pkgName: "list" //hack
+    });
+
+    ipcRenderer.on("get-settings-close", (event, settings) => {
+      try {
+        const settingsList = JSON.parse(settings);
+        setSettings(settingsList);
+      } catch (e) {
+        throw new Error(e);
+      }
+    });
   }
 
   render() {
-    const { classes, theme, menuOpen, handleDrawerOpen, handleDrawerClose } = this.props;
-
+    const {
+      classes,
+      theme,
+      settingsOpen,
+      settings,
+      menuOpen,
+      handleDrawerOpen,
+      handleDrawerClose
+    } = this.props;
     return (
       <div className={classes.root}>
         <div className={classes.appFrame}>
@@ -78,7 +103,7 @@ class Layout extends React.Component {
           <Modal
             aria-labelledby="settings"
             aria-describedby="set npm settings"
-            open={true}
+            open={settingsOpen}
             onClose={this.handleModal}
           >
             <div style={this.getModalStyles()} className={classes.paper}>
@@ -89,7 +114,7 @@ class Layout extends React.Component {
                   id="npm-registry"
                   label="Registry"
                   className={classes.textField}
-                  value="https://registry.npmjs.org/"
+                  value={settings && settings.registry}
                   margin="normal"
                 />
                 <br />
@@ -97,7 +122,7 @@ class Layout extends React.Component {
                   id="npm-proxy"
                   label="Proxy"
                   className={classes.textField}
-                  value="http://proxy.company.com:8989"
+                  value={settings && settings.proxy}
                   margin="normal"
                 />
                 <Button className={classes.button}>Save</Button>
@@ -112,12 +137,15 @@ class Layout extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    menuOpen: state.global.menuOpen
+    menuOpen: state.global.menuOpen,
+    settings: state.global.settings,
+    settingsOpen: state.global.settingsOpen
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    setSettings: (settings, bool) => dispatch(globalActions.setSettings(settings)),
     handleDrawerOpen: () => dispatch(globalActions.handleDrawer(true)),
     handleDrawerClose: () => dispatch(globalActions.handleDrawer(false))
   };
