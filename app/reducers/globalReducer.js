@@ -3,9 +3,6 @@
  Handles state management for global operations.
  * */
 
-
-import initialState from './initialState';
-import { identity, merge, evolve, assoc, propOr, prop, prepend } from 'ramda';
 import {
   SET_MODE,
   SET_PACKAGE_JSON,
@@ -18,7 +15,9 @@ import {
   CLEAR_COMMAND_OPTIONS,
   MENU_OPEN,
   SET_SETTINGS
-} from '../constants/ActionTypes';
+} from 'constants/ActionTypes';
+import initialState from './initialState';
+import { identity, merge, evolve, assoc, propOr, prop, prepend } from 'ramda';
 
 const { packages, ...globalState } = initialState;
 

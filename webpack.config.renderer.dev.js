@@ -70,10 +70,10 @@ export default merge.smart(baseConfig, {
 				}
 			},
 			{
-      	test: /\.js$/,
-      	exclude: /node_modules/,
-      	use: ['eslint-loader']
-    	},
+				test: /\.js|.jsx$/,
+				exclude: /node_modules/,
+				use: ['eslint-loader']
+			},
 			{
 				test: /\.global\.css$/,
 				use: [

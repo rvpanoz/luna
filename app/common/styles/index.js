@@ -1,4 +1,4 @@
-export function loaderStyles(theme) {
+function loaderStyles() {
   return {
     loader: {
       position: 'fixed',
@@ -7,3 +7,5 @@ export function loaderStyles(theme) {
     }
   };
 }
+
+export default loaderStyles;
