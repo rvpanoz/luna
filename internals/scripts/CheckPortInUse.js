@@ -1,8 +1,8 @@
-import chalk from "chalk";
-import detectPort from "detect-port";
+import chalk from 'chalk'
+import detectPort from 'detect-port'
 
-(function CheckPortInUse() {
-  const port: string = process.env.PORT || "1213";
+;(function CheckPortInUse() {
+  const port: string = process.env.PORT || '1213'
 
   detectPort(port, (err: ?Error, availablePort: number) => {
     if (port !== String(availablePort)) {
@@ -10,9 +10,9 @@ import detectPort from "detect-port";
         chalk.whiteBright.bgRed.bold(
           `Port "${port}" on "localhost" is already in use. Please use another port. ex: PORT=4343 npm run dev`
         )
-      );
+      )
     } else {
-      process.exit(0);
+      process.exit(0)
     }
-  });
-})();
+  })
+})()

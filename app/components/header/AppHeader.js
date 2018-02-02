@@ -37,7 +37,6 @@ class AppHeader extends React.Component {
 			classes,
 			handleDrawerOpen,
 			handleDrawerClose,
-			title,
 			mode,
 			directory,
 			theme,

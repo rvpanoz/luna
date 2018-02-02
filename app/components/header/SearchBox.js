@@ -1,4 +1,4 @@
-import { remote, ipcRenderer } from 'electron'
+import { ipcRenderer } from 'electron'
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
 import TextField from 'material-ui/TextField'
@@ -19,7 +19,7 @@ class SearchBox extends React.Component {
 		if (e) {
 			e.preventDefault()
 		}
-		const { mode, directory, toggleLoader, setActive, setPackageActions } = this.props
+		const { toggleLoader } = this.props
 		const value = e.target.value
 
 		if (value && value.length > 2) {
