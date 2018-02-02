@@ -1,11 +1,11 @@
 export default {
-  mode: "GLOBAL",
+  mode: 'GLOBAL',
   directory: null,
   loading: false,
   settingsOpen: false,
   settings: null,
   menuOpen: false,
-  npmCmd: "",
+  npmCmd: '',
   messages: [],
   cmdOptions: [],
   packages: {
@@ -15,19 +15,19 @@ export default {
     packages: [],
     actions: [
       {
-        text: "Update",
-        iconCls: "refresh"
+        text: 'Update',
+        iconCls: 'refresh'
       },
       {
-        text: "Uninstall",
-        iconCls: "trash"
+        text: 'Uninstall',
+        iconCls: 'trash'
       }
     ]
   },
   packageJSON: {
     license: null,
-    author: "",
-    name: "",
+    author: '',
+    name: '',
     dependencies: [],
     devDependencies: [],
     optionalDependencies: []

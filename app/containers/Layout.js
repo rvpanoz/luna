@@ -1,25 +1,23 @@
 /**
 Layout component
-**/
+* */
 
-"use strict";
-
-import { remote, ipcRenderer } from "electron";
-import React from "react";
-import PropTypes from "prop-types";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import { withStyles } from "material-ui/styles";
-import * as globalActions from "actions/global_actions";
-import AppHeader from "../components/header/AppHeader";
-import Grid from "material-ui/Grid";
-import TextField from "material-ui/TextField";
-import Button from "material-ui/Button";
-import Modal from "material-ui/Modal";
-import Typography from "material-ui/Typography";
-import Divider from "material-ui/Divider";
-import PackagesContainer from "./Packages";
-import { layoutStyles } from "./styles";
+import { remote, ipcRenderer } from 'electron';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { withStyles } from 'material-ui/styles';
+import * as globalActions from 'actions/global_actions';
+import AppHeader from '../components/header/AppHeader';
+import Grid from 'material-ui/Grid';
+import TextField from 'material-ui/TextField';
+import Button from 'material-ui/Button';
+import Modal from 'material-ui/Modal';
+import Typography from 'material-ui/Typography';
+import Divider from 'material-ui/Divider';
+import PackagesContainer from './Packages';
+import { layoutStyles } from './styles';
 
 class Layout extends React.Component {
   constructor() {
@@ -35,14 +33,14 @@ class Layout extends React.Component {
     const left = 50 + rand();
 
     return {
-      position: "absolute",
+      position: 'absolute',
       width: 8 * 50,
-      top: "50%",
-      left: "50%",
-      transform: `translate(-50%, -50%)`,
-      border: "1px solid #e5e5e5",
-      backgroundColor: "#fff",
-      boxShadow: "0 5px 15px rgba(0, 0, 0, .5)",
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      border: '1px solid #e5e5e5',
+      backgroundColor: '#fff',
+      boxShadow: '0 5px 15px rgba(0, 0, 0, .5)',
       padding: 8 * 4
     };
   }
@@ -55,13 +53,13 @@ class Layout extends React.Component {
   componentDidMount() {
     const { setSettings } = this.props;
 
-    ipcRenderer.send("ipc-event", {
-      ipcEvent: "get-settings",
-      cmd: "config",
-      pkgName: "list" //hack
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-settings',
+      cmd: 'config',
+      pkgName: 'list' // hack
     });
 
-    ipcRenderer.on("get-settings-close", (event, settings) => {
+    ipcRenderer.on('get-settings-close', (event, settings) => {
       try {
         const settingsList = JSON.parse(settings);
         setSettings(settingsList);
@@ -114,7 +112,7 @@ class Layout extends React.Component {
                     id="npm-registry"
                     label="Registry"
                     className={classes.textField}
-                    value={(settings && settings.registry) || ""}
+                    value={(settings && settings.registry) || ''}
                     margin="normal"
                   />
                   <br />
@@ -122,7 +120,7 @@ class Layout extends React.Component {
                     id="npm-proxy-http"
                     label="Proxy http"
                     className={classes.textField}
-                    value={(settings && settings.proxy) || ""}
+                    value={(settings && settings.proxy) || ''}
                     margin="normal"
                   />
                   <br />
@@ -130,15 +128,15 @@ class Layout extends React.Component {
                     id="npm-proxy-https"
                     label="Proxy https"
                     className={classes.textField}
-                    value={(settings && settings["https-proxy"]) || ""}
+                    value={(settings && settings['https-proxy']) || ''}
                     margin="normal"
                   />
                   <div
-                    style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}
+                    style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}
                   >
                     <Button className={classes.button}>Save</Button>
                     <Button onClick={this.handleModal} className={classes.button}>
-                      Close
+											Close
                     </Button>
                   </div>
                 </form>

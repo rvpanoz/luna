@@ -2,7 +2,6 @@
  * Redux actions
  */
 
-"use strict";
 
 import * as types from "../constants/ActionTypes";
 

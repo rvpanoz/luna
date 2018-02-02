@@ -1,20 +1,18 @@
 /**
 PackagesList
-**/
+* */
 
-"use strict";
-
-import { remote, ipcRenderer } from "electron";
-import React from "react";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import Loader from "../../common/Loader";
-import PackageListItem from "./PackagesListItem";
-import { withStyles } from "material-ui/styles";
-import * as globalActions from "../../actions/global_actions";
-import List from "material-ui/List";
-import { packagesListStyles } from "../styles";
-import PackagesListHeader from "./PackagesListHeader";
+import { remote, ipcRenderer } from 'electron';
+import React from 'react';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import Loader from '../../common/Loader';
+import PackageListItem from './PackagesListItem';
+import { withStyles } from 'material-ui/styles';
+import * as globalActions from '../../actions/global_actions';
+import List from 'material-ui/List';
+import { packagesListStyles } from '../styles';
+import PackagesListHeader from './PackagesListHeader';
 
 class PackagesList extends React.Component {
   constructor() {
@@ -23,11 +21,11 @@ class PackagesList extends React.Component {
   }
   getPackages() {
     const { mode, directory } = this.props;
-    ipcRenderer.send("ipc-event", {
-      ipcEvent: "get-packages",
-      cmd: ["outdated", "list"],
-      mode: mode,
-      directory: directory
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      cmd: ['outdated', 'list'],
+      mode,
+      directory
     });
   }
   componentDidMount() {
@@ -60,32 +58,32 @@ class PackagesList extends React.Component {
         <Loader loading={loading}>
           <List>
             {packages
-              ? packages.map((pkg, idx) => {
-                  if (!pkg) return;
-                  const hasPeerMissing = pkg.peerMissing;
-                  if (hasPeerMissing) {
-                    return;
-                  }
-                  const version = pkg.version;
-                  const readme = pkg.readme;
-                  const name = pkg.from ? pkg.from.split("@")[0] : pkg.name;
-                  const latest = pkg.latest;
-                  return (
-                    <PackageListItem
-                      mode={mode}
-                      directory={directory}
-                      toggleMainLoader={toggleMainLoader}
-                      idx={idx}
-                      key={idx}
-                      name={name}
-                      readme={readme}
-                      description={pkg.description ? pkg.description : null}
-                      version={version}
-                      latest={latest}
-                    />
-                  );
-                })
-              : null}
+							? packages.map((pkg, idx) => {
+									if (!pkg) return;
+									const hasPeerMissing = pkg.peerMissing;
+									if (hasPeerMissing) {
+										return;
+									}
+									const version = pkg.version;
+									const readme = pkg.readme;
+									const name = pkg.from ? pkg.from.split('@')[0] : pkg.name;
+									const latest = pkg.latest;
+									return (
+  <PackageListItem
+    mode={mode}
+    directory={directory}
+    toggleMainLoader={toggleMainLoader}
+    idx={idx}
+    key={idx}
+    name={name}
+    readme={readme}
+    description={pkg.description ? pkg.description : null}
+    version={version}
+    latest={latest}
+  />
+									);
+								})
+							: null}
           </List>
         </Loader>
       </section>

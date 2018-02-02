@@ -43,10 +43,12 @@ app/renderer.prod.js
 app/renderer.prod.js.map
 app/style.css
 app/style.css.map
+app/store/index.js
 dist
 dll
 main.js
 main.js.map
+utils.js
 
 .idea
 npm-debug.log.*

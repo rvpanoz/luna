@@ -2,9 +2,7 @@
  * Redux actions
  */
 
-"use strict";
-
-import * as types from "constants/ActionTypes";
+import * as types from 'constants/ActionTypes';
 
 export function setSettings(settings) {
   return {

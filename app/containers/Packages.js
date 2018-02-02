@@ -1,39 +1,37 @@
 /**
  * Packages Container Component - handles state.packages slice
  * pass state as props to children
- **/
+ * */
 
-"use strict";
-
-import { remote, ipcRenderer } from "electron";
-import React from "react";
-import { parse } from "../utils";
-import * as R from "ramda";
-import { connect } from "react-redux";
-import { APP_MODES } from "../constants/AppConstants";
-import * as globalActions from "../actions/global_actions";
-import * as packagesActions from "../actions/packages_actions";
-import Grid from "material-ui/Grid";
-import { SnackbarContent } from "material-ui/Snackbar";
-import PackagesList from "../components/packages/PackagesList";
-import PackageContainer from "./Package";
+import { remote, ipcRenderer } from 'electron';
+import React from 'react';
+import { parse } from '../utils';
+import * as R from 'ramda';
+import { connect } from 'react-redux';
+import { APP_MODES } from '../constants/AppConstants';
+import * as globalActions from '../actions/global_actions';
+import * as packagesActions from '../actions/packages_actions';
+import Grid from 'material-ui/Grid';
+import { SnackbarContent } from 'material-ui/Snackbar';
+import PackagesList from '../components/packages/PackagesList';
+import PackageContainer from './Package';
 
 class PackagesContainer extends React.Component {
   constructor() {
     super();
     this._outdated = [];
     this._autoBind([
-      "fetch",
-      "setGlobalMode",
-      "_setupList",
-      "_setupOutdated",
-      "_viewPackage",
-      "_clearUI"
+      'fetch',
+      'setGlobalMode',
+      '_setupList',
+      '_setupOutdated',
+      '_viewPackage',
+      '_clearUI'
     ]);
   }
   _autoBind(handlers) {
     R.forEach((handler) => {
-      if (typeof this[handler] === "function") {
+      if (typeof this[handler] === 'function') {
         this[handler] = this[handler].bind(this);
       }
     }, handlers);
@@ -41,30 +39,29 @@ class PackagesContainer extends React.Component {
   _setupList(packages) {
     const outdated = this._outdated;
     const { setPackages, setTotal, clearMessages } = this.props;
-    const packagesData = parse(packages, "dependencies");
+    const packagesData = parse(packages, 'dependencies');
 
     const data = R.map((pkg) => {
       if (!pkg.from) return;
-      const pkgName = R.split("@")(pkg.from)[0];
+      const pkgName = R.split('@')(pkg.from)[0];
       const outdatedPackage = R.prop(pkgName, outdated);
 
-      if (outdatedPackage && typeof outdatedPackage === "object") {
+      if (outdatedPackage && typeof outdatedPackage === 'object') {
         return R.merge(pkg, {
           latest: outdatedPackage.latest
         });
-      } else {
-        return pkg;
       }
+      return pkg;
     }, packagesData);
 
-    //update state
+    // update state
     setPackages(data);
     setTotal(data.length);
   }
   _viewPackage(name, version) {
-    ipcRenderer.send("ipc-event", {
-      ipcEvent: "view-package",
-      cmd: ["view"],
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'view-package',
+      cmd: ['view'],
       pkgName: name,
       pkgVersion: version,
       mode: this.props.mode,
@@ -72,7 +69,9 @@ class PackagesContainer extends React.Component {
     });
   }
   _clearUI() {
-    const { setActive, setPackageActions, toggleMainLoader, clearMessages } = this.props;
+    const {
+      setActive, setPackageActions, toggleMainLoader, clearMessages
+    } = this.props;
     setActive(null);
     clearMessages();
     setPackageActions();
@@ -95,12 +94,12 @@ class PackagesContainer extends React.Component {
       setPackageJSON
     } = this.props;
 
-    ipcRenderer.on("get-packages-close", (event, packages, command) => {
+    ipcRenderer.on('get-packages-close', (event, packages, command) => {
       if (!packages) {
         return;
       }
 
-      if (command === "outdated") {
+      if (command === 'outdated') {
         this._setupOutdated(packages);
       } else {
         this._setupList(packages);
@@ -108,7 +107,7 @@ class PackagesContainer extends React.Component {
       toggleLoader(false);
     });
 
-    ipcRenderer.on("search-packages-close", (event, packagesStr) => {
+    ipcRenderer.on('search-packages-close', (event, packagesStr) => {
       try {
         const packages = JSON.parse(packagesStr);
         setPackages(packages);
@@ -118,7 +117,7 @@ class PackagesContainer extends React.Component {
       }
     });
 
-    ipcRenderer.on("view-package-close", (event, packageStr) => {
+    ipcRenderer.on('view-package-close', (event, packageStr) => {
       let pkg;
       try {
         pkg = JSON.parse(packageStr);
@@ -130,49 +129,51 @@ class PackagesContainer extends React.Component {
         setActive(pkg);
         toggleMainLoader(false);
       } else {
-        throw new Error("Package cannot be parsed");
+        throw new Error('Package cannot be parsed');
       }
     });
 
-    ipcRenderer.on("action-close", (event, pkg) => {
+    ipcRenderer.on('action-close', (event, pkg) => {
       const { mode, directory } = this.props;
       if (mode === APP_MODES.LOCAL && directory) {
-        ipcRenderer.send("analyze-json", directory);
+        ipcRenderer.send('analyze-json', directory);
         return;
       }
       this.fetch();
     });
 
-    ipcRenderer.on("ipcEvent-error", (event, error) => {
+    ipcRenderer.on('ipcEvent-error', (event, error) => {
       // console.error(error)
     });
 
-    ipcRenderer.on("analyze-json-close", (event, directory, content) => {
+    ipcRenderer.on('analyze-json-close', (event, directory, content) => {
       setMode(APP_MODES.LOCAL, directory);
       setActive(null);
       setPackageJSON(content);
       toggleLoader(true);
-      ipcRenderer.send("ipc-event", {
-        ipcEvent: "get-packages",
-        cmd: ["outdated", "list"],
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'get-packages',
+        cmd: ['outdated', 'list'],
         mode: APP_MODES.LOCAL,
-        directory: directory
+        directory
       });
     });
   }
   componentWillUnMount() {
     alert(2);
     ipcRenderer.removeAllListeners([
-      "get-packages-close",
-      "search-packages-close",
-      "action-close",
-      "view-package-reply",
-      "ipcEvent-error",
-      "analyze-json-close"
+      'get-packages-close',
+      'search-packages-close',
+      'action-close',
+      'view-package-reply',
+      'ipcEvent-error',
+      'analyze-json-close'
     ]);
   }
   render() {
-    const { mode, directory, packages, setActive, setMode, toggleMainLoader } = this.props;
+    const {
+      mode, directory, packages, setActive, setMode, toggleMainLoader
+    } = this.props;
 
     return (
       <Grid container justify="space-between">

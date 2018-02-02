@@ -1,29 +1,27 @@
 /**
  * Package container
- **/
+ * */
 
-"use strict";
-
-import { remote, ipcRenderer } from "electron";
-import React from "react";
-import Loader from "../common/Loader";
-import { showMessageBox, isUrl } from "../utils";
-import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from "constants/AppConstants";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { bindActionCreators } from "redux";
-import * as globalActions from "actions/global_actions";
-import * as packagesActions from "actions/packages_actions";
-import PropTypes from "prop-types";
-import { withStyles } from "material-ui/styles";
-import classnames from "classnames";
-import Typography from "material-ui/Typography";
-import Avatar from "material-ui/Avatar";
-import IconButton from "material-ui/IconButton";
-import Divider from "material-ui/Divider";
-import MoreVertIcon from "material-ui-icons/MoreVert";
-import Card, { CardHeader, CardContent, CardActions } from "material-ui/Card";
-import { packageStyles } from "./styles";
+import { remote, ipcRenderer } from 'electron';
+import React from 'react';
+import Loader from '../common/Loader';
+import { showMessageBox, isUrl } from '../utils';
+import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
+import { bindActionCreators } from 'redux';
+import * as globalActions from 'actions/global_actions';
+import * as packagesActions from 'actions/packages_actions';
+import PropTypes from 'prop-types';
+import { withStyles } from 'material-ui/styles';
+import classnames from 'classnames';
+import Typography from 'material-ui/Typography';
+import Avatar from 'material-ui/Avatar';
+import IconButton from 'material-ui/IconButton';
+import Divider from 'material-ui/Divider';
+import MoreVertIcon from 'material-ui-icons/MoreVert';
+import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card';
+import { packageStyles } from './styles';
 
 class Package extends React.Component {
   constructor() {
@@ -35,7 +33,7 @@ class Package extends React.Component {
   }
   doNavigate(e) {
     e.preventDefault();
-    let url = e.target.dataset.url;
+    const url = e.target.dataset.url;
     if (isUrl(url)) {
       shell.openExternal(url);
     }
@@ -45,7 +43,9 @@ class Package extends React.Component {
     e.preventDefault();
     const target = e.currentTarget;
     const action = target.dataset.action;
-    const { mode, active, setActive, toggleModal } = this.props;
+    const {
+      mode, active, setActive, toggleModal
+    } = this.props;
     const options = this.props.cmdOptions;
 
     if (action) {
@@ -55,29 +55,29 @@ class Package extends React.Component {
       if (action === APP_ACTIONS.UNINSTALL) {
         version = null;
       } else {
-        version = selectVersion && selectVersion.value !== "false" ? selectVersion.value : "latest";
+        version = selectVersion && selectVersion.value !== 'false' ? selectVersion.value : 'latest';
       }
 
       showMessageBox(
         {
-          action: action,
+          action,
           name: active.name,
-          version: version
+          version
         },
         () => {
           const npmCmd = [`npm ${action.toLowerCase()} `, active.name];
           if (mode === APP_MODES.LOCAL) {
-            npmCmd.push(` --${options.join(" --")}`);
+            npmCmd.push(` --${options.join(' --')}`);
           }
           setActive(null);
           toggleModal(true, npmCmd);
-          ipcRenderer.send("ipc-event", {
+          ipcRenderer.send('ipc-event', {
             mode,
             directory,
             ipcEvent: action,
-            cmd: [action === "Uninstall" ? "uninstall" : "install"],
+            cmd: [action === 'Uninstall' ? 'uninstall' : 'install'],
             pkgName: active.name,
-            pkgVersion: action === "Uninstall" ? null : version,
+            pkgVersion: action === 'Uninstall' ? null : version,
             pkgOptions: options
           });
         }
@@ -86,17 +86,17 @@ class Package extends React.Component {
     return false;
   }
   onChangeVersion(e) {
-    let target = e.currentTarget;
-    let pkg = this.props.active;
-    let version = target.value;
+    const target = e.currentTarget;
+    const pkg = this.props.active;
+    const version = target.value;
 
-    if (version !== "false") {
+    if (version !== 'false') {
       this.props.toggleMainLoader(true);
-      ipcRenderer.send("ipc-event", {
+      ipcRenderer.send('ipc-event', {
         mode: this.props.mode,
         directory: this.props.directory,
-        ipcEvent: "view-package",
-        cmd: ["view"],
+        ipcEvent: 'view-package',
+        cmd: ['view'],
         pkgName: pkg.name,
         pkgVersion: version
       });
@@ -108,7 +108,7 @@ class Package extends React.Component {
 
     if (mode === APP_MODES.LOCAL) {
       if (!packageJSON) {
-        throw new Error("PackageJSON is missing");
+        throw new Error('PackageJSON is missing');
       }
 
       const pkg = this.props.active;
@@ -117,7 +117,7 @@ class Package extends React.Component {
       }
       let found = false;
 
-      let groups = PACKAGE_GROUPS.some((group, idx) => {
+      const groups = PACKAGE_GROUPS.some((group, idx) => {
         found = packageJSON[group] && packageJSON[group][pkg.name] ? group : false;
         if (found) {
           this._group = group;
@@ -127,17 +127,19 @@ class Package extends React.Component {
     }
   }
   render() {
-    let { mode, active, isLoading, classes } = this.props;
+    const {
+      mode, active, isLoading, classes
+    } = this.props;
 
     if (!active) {
       return (
         <Loader loading={isLoading}>
           <div
             style={{
-              width: "100%",
-              display: "block",
-              position: "relative"
-            }}
+							width: '100%',
+							display: 'block',
+							position: 'relative'
+						}}
           >
             <h3 className={classnames(classes.heading, classes.center)}>No package selected</h3>
           </div>
@@ -154,14 +156,14 @@ class Package extends React.Component {
             <CardHeader
               avatar={
                 <Avatar aria-label="Recipe" className={classes.avatar}>
-                  P
+									P
                 </Avatar>
-              }
+							}
               action={
                 <IconButton>
                   <MoreVertIcon />
                 </IconButton>
-              }
+							}
               title={this._group}
               subheader={active.version}
             />

@@ -1,12 +1,11 @@
 /**
  Global reducer:
  Handles state management for global operations.
- **/
+ * */
 
-"use strict";
 
-import initialState from "./initialState";
-import { identity, merge, evolve, assoc, propOr, prop, prepend } from "ramda";
+import initialState from './initialState';
+import { identity, merge, evolve, assoc, propOr, prop, prepend } from 'ramda';
 import {
   SET_MODE,
   SET_PACKAGE_JSON,
@@ -19,13 +18,13 @@ import {
   CLEAR_COMMAND_OPTIONS,
   MENU_OPEN,
   SET_SETTINGS
-} from "../constants/ActionTypes";
+} from '../constants/ActionTypes';
 
 const { packages, ...globalState } = initialState;
 
-//currying
+// currying
 const createReducer = (globalState, handlers) => (state = globalState, action) =>
-  propOr(identity, prop("type", action), handlers)(state, action);
+  propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
   [SET_SETTINGS]: (state, action) =>
@@ -37,12 +36,12 @@ const handlers = {
       mode: action.mode,
       directory: action.directory
     }),
-  [TOGGLE_LOADER]: (state, action) => assoc("loading", action.loading, state),
+  [TOGGLE_LOADER]: (state, action) => assoc('loading', action.loading, state),
   [TOGGLE_SETTINGS]: (state, action) =>
     merge(state, {
       settingsOpen: action.settingsOpen
     }),
-  [SET_PACKAGE_JSON]: (state, action) => assoc("packageJSON", action.packageJSON, state),
+  [SET_PACKAGE_JSON]: (state, action) => assoc('packageJSON', action.packageJSON, state),
   [ADD_MESSAGE]: (state, action) =>
     merge(state, {
       messages: prepend(
@@ -53,8 +52,8 @@ const handlers = {
         state.messages
       )
     }),
-  [CLEAR_MESSAGES]: (state, action) => assoc("messages", [], state),
-  [CLEAR_COMMAND_OPTIONS]: (state, action) => assoc("cmdOptions", [], state),
+  [CLEAR_MESSAGES]: (state, action) => assoc('messages', [], state),
+  [CLEAR_COMMAND_OPTIONS]: (state, action) => assoc('cmdOptions', [], state),
   [ADD_COMMAND_OPTION]: (state, action) =>
     merge(state, {
       cmdOptions: prepend(action.option, state.cmdOptions)

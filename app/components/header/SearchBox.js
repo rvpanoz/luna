@@ -1,10 +1,8 @@
-"use strict";
-
-import { remote, ipcRenderer } from "electron";
-import React from "react";
-import { withStyles } from "material-ui/styles";
-import TextField from "material-ui/TextField";
-import { appHeaderStyles } from "../styles";
+import { remote, ipcRenderer } from 'electron';
+import React from 'react';
+import { withStyles } from 'material-ui/styles';
+import TextField from 'material-ui/TextField';
+import { appHeaderStyles } from '../styles';
 
 class SearchBox extends React.Component {
   constructor() {
@@ -16,23 +14,25 @@ class SearchBox extends React.Component {
     if (e) {
       e.preventDefault();
     }
-    const { mode, directory, toggleLoader, setActive, setPackageActions } = this.props;
+    const {
+      mode, directory, toggleLoader, setActive, setPackageActions
+    } = this.props;
     const value = e.target.value;
 
     if (value && value.length > 2) {
       toggleLoader(true);
-      ipcRenderer.send("ipc-event", {
-        ipcEvent: "search-packages",
-        cmd: ["search"],
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'search-packages',
+        cmd: ['search'],
         pkgName: value
       });
     }
     return false;
   }
   componentDidMount() {
-    let root = this.refs.root;
+    const root = this.refs.root;
     if (root) {
-      root.addEventListener("keypress", this._onKeyUp);
+      root.addEventListener('keypress', this._onKeyUp);
     }
   }
   render() {

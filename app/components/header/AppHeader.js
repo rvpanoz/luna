@@ -1,33 +1,31 @@
 /**
 AppHeader with mini drawer
-**/
+* */
 
-"use strict";
+import React from 'react';
+import PropTypes from 'prop-types';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import { toggleLoader, toggleSettings } from 'actions/global_actions';
+import { APP_MODES } from 'constants/AppConstants';
+import Drawer from 'material-ui/Drawer';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { withStyles } from 'material-ui/styles';
+import Typography from 'material-ui/Typography';
+import Divider from 'material-ui/Divider';
+import classNames from 'classnames';
+import Chip from 'material-ui/Chip';
+import Icon from 'material-ui/Icon';
+import MenuIcon from 'material-ui-icons/Menu';
+import IconButton from 'material-ui/IconButton';
+import ChevronLeftIcon from 'material-ui-icons/ChevronLeft';
+import ChevronRightIcon from 'material-ui-icons/ChevronRight';
+import AppHeaderContent from './AppHeaderContent';
+import SearchBox from './SearchBox';
+import { firstToUpper } from '../../utils';
 
-import React from "react";
-import PropTypes from "prop-types";
-import AppBar from "material-ui/AppBar";
-import Toolbar from "material-ui/Toolbar";
-import { toggleLoader, toggleSettings } from "actions/global_actions";
-import { APP_MODES } from "constants/AppConstants";
-import Drawer from "material-ui/Drawer";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import { withStyles } from "material-ui/styles";
-import Typography from "material-ui/Typography";
-import Divider from "material-ui/Divider";
-import classNames from "classnames";
-import Chip from "material-ui/Chip";
-import Icon from "material-ui/Icon";
-import MenuIcon from "material-ui-icons/Menu";
-import IconButton from "material-ui/IconButton";
-import ChevronLeftIcon from "material-ui-icons/ChevronLeft";
-import ChevronRightIcon from "material-ui-icons/ChevronRight";
-import AppHeaderContent from "./AppHeaderContent";
-import SearchBox from "./SearchBox";
-import { firstToUpper } from "../../utils";
-
-import { appHeaderStyles } from "../styles";
+import { appHeaderStyles } from '../styles';
 
 class AppHeader extends React.Component {
   constructor() {
@@ -50,7 +48,7 @@ class AppHeader extends React.Component {
     return (
       <section>
         <AppBar className={classNames(classes.appBar, menuOpen && classes.appBarShift)}>
-          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <Toolbar disableGutters={!menuOpen}>
               <IconButton
                 color="inherit"
@@ -63,7 +61,7 @@ class AppHeader extends React.Component {
             </Toolbar>
             <div className={classes.info}>
               <Icon className={classes.modeIcon}>
-                {mode === APP_MODES.GLOBAL ? "language" : "home"}
+                {mode === APP_MODES.GLOBAL ? 'language' : 'home'}
               </Icon>
               <span className={classes.mode}>{firstToUpper(mode)}</span>
             </div>
@@ -73,14 +71,14 @@ class AppHeader extends React.Component {
         <Drawer
           type="permanent"
           classes={{
-            paper: classNames(classes.drawerPaper, !menuOpen && classes.drawerPaperClose)
-          }}
+						paper: classNames(classes.drawerPaper, !menuOpen && classes.drawerPaperClose)
+					}}
           open={menuOpen}
         >
           <div className={classes.drawerInner}>
             <div className={classes.drawerHeader}>
               <IconButton onClick={handleDrawerClose}>
-                {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
               </IconButton>
             </div>
             <Divider />

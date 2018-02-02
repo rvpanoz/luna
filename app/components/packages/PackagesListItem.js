@@ -1,14 +1,12 @@
-"use strict";
-
-import { remote, ipcRenderer } from "electron";
-import React from "react";
-import * as R from "ramda";
-import { ListItem, ListItemSecondaryAction, ListItemText } from "material-ui/List";
-import IconButton from "material-ui/IconButton";
-import Avatar from "material-ui/Avatar";
-import Icon from "material-ui/Icon";
-import Chip from "material-ui/Chip";
-import { showMessageBox } from "../../utils";
+import { remote, ipcRenderer } from 'electron';
+import React from 'react';
+import * as R from 'ramda';
+import { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List';
+import IconButton from 'material-ui/IconButton';
+import Avatar from 'material-ui/Avatar';
+import Icon from 'material-ui/Icon';
+import Chip from 'material-ui/Chip';
+import { showMessageBox } from '../../utils';
 
 class PackageListItem extends React.Component {
   constructor() {
@@ -17,12 +15,14 @@ class PackageListItem extends React.Component {
     this.uninstallPackage = this.uninstallPackage.bind(this);
   }
   onItemClick(e) {
-    const { name, version, mode, directory, toggleMainLoader } = this.props;
+    const {
+      name, version, mode, directory, toggleMainLoader
+    } = this.props;
     e.preventDefault();
     toggleMainLoader(true);
-    ipcRenderer.send("ipc-event", {
-      ipcEvent: "view-package",
-      cmd: ["view"],
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'view-package',
+      cmd: ['view'],
       pkgName: name,
       pkgVersion: version,
       mode,
@@ -37,15 +37,15 @@ class PackageListItem extends React.Component {
     if (name) {
       showMessageBox(
         {
-          action: "uninstall",
-          name: name
+          action: 'uninstall',
+          name
         },
         () => {
-          ipcRenderer.send("ipc-event", {
-            mode: mode,
-            directory: directory,
-            ipcEvent: "Uninstall",
-            cmd: ["uninstall"],
+          ipcRenderer.send('ipc-event', {
+            mode,
+            directory,
+            ipcEvent: 'Uninstall',
+            cmd: ['uninstall'],
             pkgName: name
           });
         }
@@ -55,7 +55,9 @@ class PackageListItem extends React.Component {
     return false;
   }
   render() {
-    const { classes, name, version, latest } = this.props;
+    const {
+      classes, name, version, latest
+    } = this.props;
 
     if (!name) {
       return null;
@@ -64,12 +66,12 @@ class PackageListItem extends React.Component {
     return (
       <ListItem button onClick={this.onItemClick}>
         <Avatar>
-          <Icon>{latest ? "update" : "done"}</Icon>
+          <Icon>{latest ? 'update' : 'done'}</Icon>
         </Avatar>
         <ListItemText primary={name} secondary={version} />
         <ListItemSecondaryAction>
           <IconButton onClick={this.uninstallPackage} aria-label="Uninstall">
-            delete
+						delete
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>

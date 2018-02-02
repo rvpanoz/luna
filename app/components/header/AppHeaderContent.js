@@ -1,15 +1,13 @@
-"use strict";
-
-import { remote, ipcRenderer } from "electron";
-import React from "react";
-import List, { ListItem, ListItemIcon, ListItemText } from "material-ui/List";
-import Icon from "material-ui/Icon";
-import * as globalActions from "actions/global_actions";
-import { APP_MODES } from "constants/AppConstants";
-import { withStyles } from "material-ui/styles";
-import Divider from "material-ui/Divider";
-import Tooltip from "material-ui/Tooltip";
-import { appHeaderContentStyles } from "../styles";
+import { remote, ipcRenderer } from 'electron';
+import React from 'react';
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import Icon from 'material-ui/Icon';
+import * as globalActions from 'actions/global_actions';
+import { APP_MODES } from 'constants/AppConstants';
+import { withStyles } from 'material-ui/styles';
+import Divider from 'material-ui/Divider';
+import Tooltip from 'material-ui/Tooltip';
+import { appHeaderContentStyles } from '../styles';
 
 class AppHeaderContent extends React.Component {
   constructor() {
@@ -19,7 +17,7 @@ class AppHeaderContent extends React.Component {
     this.toggleAppSettings = this.toggleAppSettings.bind(this);
   }
   updateMode(directory) {
-    ipcRenderer.send("analyze-json", directory);
+    ipcRenderer.send('analyze-json', directory);
   }
   handleChange(e) {
     // console.log(e.target.value);
@@ -29,12 +27,12 @@ class AppHeaderContent extends React.Component {
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
       {
-        title: "Open package.json file",
-        buttonLabel: "Analyze",
+        title: 'Open package.json file',
+        buttonLabel: 'Analyze',
         filters: [
           {
-            name: "json",
-            extensions: ["json"]
+            name: 'json',
+            extensions: ['json']
           }
         ],
         openFile: true
