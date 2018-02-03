@@ -4,15 +4,15 @@
  * */
 
 import { remote, ipcRenderer } from 'electron'
-import React from 'react'
 import { parse } from '../utils'
 import * as R from 'ramda'
 import { connect } from 'react-redux'
 import { APP_MODES } from '../constants/AppConstants'
-import * as globalActions from '../actions/global_actions'
-import * as packagesActions from '../actions/packages_actions'
-import Grid from 'material-ui/Grid'
+import * as globalActions from 'actions/globalActions'
+import * as packagesActions from 'actions/packagesActions'
 import { SnackbarContent } from 'material-ui/Snackbar'
+import React from 'react'
+import Grid from 'material-ui/Grid'
 import PackagesList from '../components/packages/PackagesList'
 import PackageContainer from './Package'
 

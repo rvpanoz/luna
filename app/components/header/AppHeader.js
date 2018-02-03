@@ -2,16 +2,16 @@
 AppHeader with mini drawer
 **/
 
+import { toggleLoader, toggleSettings } from 'actions/globalActions'
+import { APP_MODES } from 'constants/AppConstants'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { withStyles } from 'material-ui/styles'
 import React from 'react'
 import PropTypes from 'prop-types'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
-import { toggleLoader, toggleSettings } from 'actions/global_actions'
-import { APP_MODES } from 'constants/AppConstants'
 import Drawer from 'material-ui/Drawer'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import { withStyles } from 'material-ui/styles'
 import Typography from 'material-ui/Typography'
 import Divider from 'material-ui/Divider'
 import classNames from 'classnames'
@@ -26,9 +26,7 @@ import SearchBox from './SearchBox'
 import { firstToUpper } from '../../utils'
 import { appHeaderStyles } from '../styles'
 
-const {
-	object
-} = PropTypes
+const { object } = PropTypes
 
 class AppHeader extends React.Component {
   constructor() {
@@ -129,8 +127,7 @@ function mapDispatchToProps(dispatch) {
 
 AppHeader.propTypes = {
   classes: object.isRequired,
-  theme: object.isRequired,
-	menuOpen:
+  theme: object.isRequired
 }
 
 export default compose(
