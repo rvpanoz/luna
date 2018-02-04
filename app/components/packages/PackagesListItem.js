@@ -5,11 +5,12 @@ import {
   ListItemSecondaryAction,
   ListItemText
 } from 'material-ui/List'
+import { showMessageBox } from '../../utils'
 import IconButton from 'material-ui/IconButton'
 import Avatar from 'material-ui/Avatar'
+import Typography from 'material-ui/Typography'
 import Icon from 'material-ui/Icon'
 import Chip from 'material-ui/Chip'
-import { showMessageBox } from '../../utils'
 
 class PackageListItem extends React.Component {
   constructor() {
@@ -32,6 +33,7 @@ class PackageListItem extends React.Component {
   }
   render() {
     const { name, version, latest } = this.props
+    let secondaryText = version
 
     if (!name) {
       return null
@@ -41,13 +43,15 @@ class PackageListItem extends React.Component {
       <ListItem button onClick={this.onItemClick}>
         <ListItemText primary={name} secondary={version} />
         <ListItemSecondaryAction>
-          <IconButton
-            color="accent"
-            onClick={this.uninstallPackage}
-            aria-label="Uninstall"
-          >
-            delete
-          </IconButton>
+          {latest ? (
+            <IconButton
+              color="accent"
+              onClick={this.update}
+              aria-label="Update"
+            >
+              update
+            </IconButton>
+          ) : null}
         </ListItemSecondaryAction>
       </ListItem>
     )

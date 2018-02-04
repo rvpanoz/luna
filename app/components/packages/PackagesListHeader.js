@@ -5,6 +5,7 @@ import { APP_MODES } from 'constants/AppConstants'
 import { withStyles } from 'material-ui/styles'
 import * as packagesActions from 'actions/packagesActions'
 import { packagesListStyles } from '../styles'
+import { autoBind } from '../../utils'
 import React from 'react'
 import Divider from 'material-ui/Divider'
 import Avatar from 'material-ui/Avatar'
@@ -20,9 +21,7 @@ class PackagesListHeader extends React.Component {
   constructor() {
     super()
     this._anchorEl = null
-    this.handleClick = this.handleClick.bind(this)
-    this.handleClose = this.handleClose.bind(this)
-    this.setGlobalMode = this.setGlobalMode.bind(this)
+    autoBind(['handleClick', 'handleClose', 'setGlobalMode'], this)
   }
   handleClick(e) {
     this._anchorEl = e.currentTarget
@@ -33,10 +32,12 @@ class PackagesListHeader extends React.Component {
     this.forceUpdate()
   }
   setGlobalMode(e) {
-    const { mode, toggleLoader, setMode } = this.props
+    const { mode, toggleLoader, setMode, setActive } = this.props
 
     toggleLoader(true)
+    setActive(null)
     setMode(APP_MODES.GLOBAL, null)
+
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['outdated', 'list'],

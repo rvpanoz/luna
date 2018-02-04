@@ -10,7 +10,7 @@ import { CircularProgress } from 'material-ui/Progress'
 const AppLoader = (props) => {
   const { loading, classes } = props
   return loading ? (
-    <CircularProgress className={classes.loader} color="primary" />
+    <CircularProgress className={classes.loader} color="accent" />
   ) : (
     props.children
   )

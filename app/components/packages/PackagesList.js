@@ -9,7 +9,7 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { packagesListStyles } from '../styles'
 import React from 'react'
-import Loader from '../../common/Loader'
+import Loader from 'common/Loader'
 import PackageListItem from './PackagesListItem'
 import * as globalActions from 'actions/globalActions'
 import List from 'material-ui/List'
@@ -48,6 +48,7 @@ class PackagesList extends React.Component {
       toggleMainLoader,
       toggleLoader,
       setMode,
+      setActive,
       setPackages
     } = this.props
 
@@ -57,6 +58,7 @@ class PackagesList extends React.Component {
           directory={directory}
           mode={mode}
           setMode={setMode}
+          setActive={setActive}
           setPackages={setPackages}
           toggleLoader={toggleLoader}
           packages={packages}

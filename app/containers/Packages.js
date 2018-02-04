@@ -6,7 +6,7 @@
 import { remote, ipcRenderer } from 'electron'
 import { autoBind, parse } from '../utils'
 import { connect } from 'react-redux'
-import { APP_MODES } from '../constants/AppConstants'
+import { APP_MODES } from 'constants/AppConstants'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
 import * as R from 'ramda'
@@ -18,9 +18,6 @@ import PackageContainer from './Package'
 class PackagesContainer extends React.Component {
   constructor() {
     super()
-    this.state = {
-      outdated: null
-    }
     autoBind(
       ['_setupPackages', '_setupOutdated', '_viewPackage', '_clearUI'],
       this
@@ -111,8 +108,8 @@ class PackagesContainer extends React.Component {
       setTotal,
       clearMessages
     } = this.props
+
     const packagesData = parse(packages, 'dependencies')
-    console.log(packagesData)
     const data = R.map((pkg) => {
       if (!pkg.from) return
       const pkgName = R.split('@')(pkg.from)[0]
@@ -189,6 +186,7 @@ class PackagesContainer extends React.Component {
             packages={packages}
             toggleMainLoader={toggleMainLoader}
             setMode={setMode}
+            setActive={setActive}
             setPackages={setPackages}
           />
         </Grid>
