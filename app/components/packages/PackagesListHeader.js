@@ -22,20 +22,19 @@ class PackagesListHeader extends React.Component {
     this._anchorEl = null
     this.handleClick = this.handleClick.bind(this)
     this.handleClose = this.handleClose.bind(this)
-    this._setGlobalMode = this._setGlobalMode.bind(this)
+    this.setGlobalMode = this.setGlobalMode.bind(this)
   }
   handleClick(e) {
     this._anchorEl = e.currentTarget
     this.forceUpdate()
   }
-  handleClose(e) {
+  handleClose() {
     this._anchorEl = null
     this.forceUpdate()
   }
-  _setGlobalMode(e) {
+  setGlobalMode(e) {
     const { mode, toggleLoader, setMode } = this.props
-    e.preventDefault()
-    if (mode === APP_MODES.GLOBAL) return
+
     toggleLoader(true)
     setMode(APP_MODES.GLOBAL, null)
     ipcRenderer.send('ipc-event', {
@@ -44,6 +43,7 @@ class PackagesListHeader extends React.Component {
       mode: APP_MODES.GLOBAL,
       directory: null
     })
+    this.handleClose()
   }
   render() {
     const { classes, total, mode, directory } = this.props
@@ -53,7 +53,9 @@ class PackagesListHeader extends React.Component {
       <section className={classes.flexColumn}>
         <div className={classes.flexRow}>
           <h3 className={classes.heading}>Packages</h3>
-          <Avatar className={classes.pinkAvatar}>{total}</Avatar>
+          <Avatar className={classes.avatar} color="primary">
+            {total}
+          </Avatar>
           <div style={{ marginLeft: 'auto' }}>
             <IconButton
               aria-label="More"
@@ -76,11 +78,8 @@ class PackagesListHeader extends React.Component {
                 }
               }}
             >
-              <MenuItem key="1" onClick={(e) => console.log(e.target)}>
-                Sort by name
-              </MenuItem>
-              <MenuItem key="2" onClick={(e) => console.log(e.target)}>
-                Sort by outdated
+              <MenuItem key="1" onClick={this.setGlobalMode}>
+                Show globals
               </MenuItem>
             </Menu>
           </div>

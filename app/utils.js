@@ -1,4 +1,6 @@
 import { remote } from 'electron';
+import * as R from 'ramda';
+import React from 'react';
 
 export function isUrl(url) {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
@@ -15,6 +17,16 @@ export function firstToUpper(str) {
   return `${firstCharToUpperCase}${str.slice(1, str.length).toLowerCase()}`;
 }
 
+export function autoBind(handlers, ctx) {
+  const isReactComponent = (ctx instanceof React.Component);
+  if(!isReactComponent) return;
+  R.forEach((handler) => {
+    if (typeof ctx[handler] === 'function') {
+      ctx[handler] = ctx[handler].bind(ctx)
+    }
+  }, handlers)
+}
+
 export function parse(data, key, all) {
   let arr = [],
     packages;
@@ -27,7 +39,6 @@ export function parse(data, key, all) {
     return [];
   } catch (e) {
     console.error(e);
-    return false;
   }
 }
 

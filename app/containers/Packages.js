@@ -4,13 +4,12 @@
  * */
 
 import { remote, ipcRenderer } from 'electron'
-import { parse } from '../utils'
-import * as R from 'ramda'
+import { autoBind, parse } from '../utils'
 import { connect } from 'react-redux'
 import { APP_MODES } from '../constants/AppConstants'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
-import { SnackbarContent } from 'material-ui/Snackbar'
+import * as R from 'ramda'
 import React from 'react'
 import Grid from 'material-ui/Grid'
 import PackagesList from '../components/packages/PackagesList'
@@ -19,21 +18,20 @@ import PackageContainer from './Package'
 class PackagesContainer extends React.Component {
   constructor() {
     super()
-    this._outdated = []
-    this._autoBind([
-      'fetch',
-      'setGlobalMode',
-      '_setupList',
-      '_setupOutdated',
-      '_viewPackage',
-      '_clearUI'
-    ])
+    this.state = {
+      outdated: null
+    }
+    autoBind(
+      ['_setupPackages', '_setupOutdated', '_viewPackage', '_clearUI'],
+      this
+    )
   }
   componentDidMount() {
     const {
       setActive,
       toggleMainLoader,
       setMode,
+      setTotal,
       setPackages,
       toggleLoader,
       setPackageJSON
@@ -47,7 +45,7 @@ class PackagesContainer extends React.Component {
       if (command === 'outdated') {
         this._setupOutdated(packages)
       } else {
-        this._setupList(packages)
+        this._setupPackages(packages)
       }
       toggleLoader(false)
     })
@@ -56,6 +54,7 @@ class PackagesContainer extends React.Component {
       try {
         const packages = JSON.parse(packagesStr)
         setPackages(packages)
+        setTotal(packages.length)
         toggleLoader(false)
       } catch (e) {
         throw new Error(e)
@@ -80,11 +79,12 @@ class PackagesContainer extends React.Component {
 
     ipcRenderer.on('action-close', (event, pkg) => {
       const { mode, directory } = this.props
-      if (mode === APP_MODES.LOCAL && directory) {
-        ipcRenderer.send('analyze-json', directory)
-        return
-      }
-      this.fetch()
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'get-packages',
+        cmd: ['outdated', 'list'],
+        mode,
+        directory
+      })
     })
 
     ipcRenderer.on('ipcEvent-error', (event, error) => {
@@ -104,22 +104,19 @@ class PackagesContainer extends React.Component {
       })
     })
   }
-  _autoBind(handlers) {
-    R.forEach((handler) => {
-      if (typeof this[handler] === 'function') {
-        this[handler] = this[handler].bind(this)
-      }
-    }, handlers)
-  }
-  _setupList(packages) {
-    const outdated = this._outdated
-    const { setPackages, setTotal, clearMessages } = this.props
+  _setupPackages(packages) {
+    const {
+      setPackages,
+      packagesOutdated,
+      setTotal,
+      clearMessages
+    } = this.props
     const packagesData = parse(packages, 'dependencies')
-
+    console.log(packagesData)
     const data = R.map((pkg) => {
       if (!pkg.from) return
       const pkgName = R.split('@')(pkg.from)[0]
-      const outdatedPackage = R.prop(pkgName, outdated)
+      const outdatedPackage = R.prop(pkgName, packagesOutdated)
 
       if (outdatedPackage && typeof outdatedPackage === 'object') {
         return R.merge(pkg, {
@@ -156,14 +153,15 @@ class PackagesContainer extends React.Component {
     toggleMainLoader(false)
   }
   _setupOutdated(packages) {
+    const { setPackagesOutdated } = this.props
     try {
-      this._outdated = JSON.parse(packages)
+      const packagesOutdated = JSON.parse(packages)
+      setPackagesOutdated(packagesOutdated)
     } catch (e) {
       throw new Error(e)
     }
   }
-  componentWillUnMount() {
-    alert(2)
+  componentWillUnmount() {
     ipcRenderer.removeAllListeners([
       'get-packages-close',
       'search-packages-close',
@@ -180,6 +178,7 @@ class PackagesContainer extends React.Component {
       packages,
       setActive,
       setMode,
+      setPackages,
       toggleMainLoader
     } = this.props
 
@@ -190,6 +189,7 @@ class PackagesContainer extends React.Component {
             packages={packages}
             toggleMainLoader={toggleMainLoader}
             setMode={setMode}
+            setPackages={setPackages}
           />
         </Grid>
         <Grid item xs={6}>
@@ -207,6 +207,7 @@ function mapStateToProps(state) {
     directory: state.global.directory,
     showModal: state.global.showModal,
     packages: state.packages.packages,
+    packagesOutdated: state.packages.outdated,
     active: state.packages.active
   }
 }

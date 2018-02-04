@@ -47,7 +47,8 @@ class PackagesList extends React.Component {
       directory,
       toggleMainLoader,
       toggleLoader,
-      setMode
+      setMode,
+      setPackages
     } = this.props
 
     return (
@@ -56,7 +57,9 @@ class PackagesList extends React.Component {
           directory={directory}
           mode={mode}
           setMode={setMode}
+          setPackages={setPackages}
           toggleLoader={toggleLoader}
+          packages={packages}
           total={total}
         />
         <Loader loading={loading}>
@@ -66,19 +69,15 @@ class PackagesList extends React.Component {
                   if (!pkg) {
                     return
                   }
-                  const hasPeerMissing = pkg.peerMissing
+                  const { hasPeerMissing, readme, latest, version } = pkg
                   if (hasPeerMissing) {
                     return
                   }
-                  const version = pkg.version
-                  const readme = pkg.readme
                   const name = pkg.from ? pkg.from.split('@')[0] : pkg.name
-                  const latest = pkg.latest
                   return (
                     <PackageListItem
                       description={pkg.description ? pkg.description : null}
                       directory={directory}
-                      idx={idx}
                       key={idx}
                       latest={latest}
                       mode={mode}

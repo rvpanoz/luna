@@ -16,6 +16,7 @@ import AppHeader from '../components/header/AppHeader'
 import Grid from 'material-ui/Grid'
 import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
+import { SnackbarContent } from 'material-ui/Snackbar'
 import Modal from 'material-ui/Modal'
 import Typography from 'material-ui/Typography'
 import Divider from 'material-ui/Divider'
@@ -64,6 +65,13 @@ class Layout extends React.Component {
   }
   saveNpmConfig(e) {
     const { settings } = this.props
+    const registry = settings.registry
+    const cmd = 'set registry [0]'
+
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'set-registry',
+      cmd: [cmd.replace('[0]', registry)]
+    })
     //todo..
   }
   getModalStyles() {
