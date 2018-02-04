@@ -3,7 +3,7 @@
  * */
 
 import { remote, ipcRenderer } from 'electron'
-import { showMessageBox, isUrl } from '../utils'
+import { showMessageBox, isUrl, autoBind } from '../utils'
 import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
@@ -11,25 +11,31 @@ import { bindActionCreators } from 'redux'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import React from 'react'
-import Loader from '../common/Loader'
+import Loader from 'common/Loader'
+import Chip from 'material-ui/Chip'
 import classnames from 'classnames'
 import Typography from 'material-ui/Typography'
 import Avatar from 'material-ui/Avatar'
 import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider'
+import Collapse from 'material-ui/transitions/Collapse'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
 import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card'
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
 import { packageStyles } from './styles'
 
 class Package extends React.Component {
   constructor() {
     super()
     this._group = null
-    this.doNavigate = this.doNavigate.bind(this)
-    this.doAction = this.doAction.bind(this)
-    this.onChangeVersion = this.onChangeVersion.bind(this)
+    this._expanded = false
+    autoBind(
+      ['doNavigate', 'doAction', 'onChangeVersion', 'handleExpandClick'],
+      this
+    )
   }
   doAction(e) {
     e.preventDefault()
@@ -80,21 +86,25 @@ class Package extends React.Component {
   }
   onChangeVersion(e) {
     const target = e.currentTarget
-    const pkg = this.props.active
+    const { active, mode, directory, toggleMainLoader } = this.props
     const version = target.value
 
     if (version !== 'false') {
-      this.props.toggleMainLoader(true)
+      toggleMainLoader(true)
       ipcRenderer.send('ipc-event', {
-        mode: this.props.mode,
-        directory: this.props.directory,
+        mode,
+        directory,
         ipcEvent: 'view-package',
         cmd: ['view'],
-        pkgName: pkg.name,
+        pkgName: active.name,
         pkgVersion: version
       })
     }
     return false
+  }
+  handleChange(e, value) {
+    this._expanded = value
+    this.forceUpdate()
   }
   componentDidUpdate() {
     const { mode, packageJSON } = this.props
@@ -104,15 +114,15 @@ class Package extends React.Component {
         throw new Error('PackageJSON is missing')
       }
 
-      const pkg = this.props.active
-      if (!pkg) {
+      const { active } = this.props
+      if (!active) {
         return
       }
       let found = false
 
       const groups = PACKAGE_GROUPS.some((group, idx) => {
-        found =
-          packageJSON[group] && packageJSON[group][pkg.name] ? group : false
+        const { name } = active
+        found = packageJSON[group] && packageJSON[group][name] ? group : false
         if (found) {
           this._group = group
           return true
@@ -128,25 +138,21 @@ class Package extends React.Component {
     }
     return false
   }
+  handleExpandClick(e) {
+    this._expanded = !this._expanded
+    this.forceUpdate()
+  }
   render() {
-    const { mode, active, isLoading, classes } = this.props
+    const { mode, active, isLoading, classes, latest } = this.props
+    const group = this._group
 
     if (!active) {
-      return (
-        <Loader loading={isLoading}>
-          <div
-            style={{
-              width: '100%',
-              display: 'block',
-              position: 'relative'
-            }}
-          >
-            <h3 className={classnames(classes.heading, classes.center)}>
-              No package selected
-            </h3>
-          </div>
-        </Loader>
-      )
+      return null
+    }
+
+    function buildTitle() {
+      const author = active.author
+      return <Typography component="div">{author}</Typography>
     }
 
     return (
@@ -158,49 +164,64 @@ class Package extends React.Component {
             <CardHeader
               avatar={
                 <Avatar aria-label="Recipe" className={classes.avatar}>
-                  P
+                  {active.license}
                 </Avatar>
               }
-              action={
-                <IconButton>
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title={this._group}
+              title={buildTitle()}
               subheader={active.version}
             />
+            <CardContent>
+              {group ? <Chip label={group} className={classes.chip} /> : null}
+              <Divider />
+              <Typography component="div" className={classes.description}>
+                {active.description}
+              </Typography>
+            </CardContent>
+            <CardActions className={classes.actions} disableActionSpacing>
+              <IconButton aria-label="Add to favorites">add</IconButton>
+              <IconButton aria-label="Uninstall">delete</IconButton>
+              <IconButton
+                className={classnames(classes.expand, {
+                  [classes.expandOpen]: this._expanded
+                })}
+                onClick={this.handleExpandClick}
+                aria-expanded={this._expanded}
+                aria-label="Show more"
+              >
+                <ExpandMoreIcon />
+              </IconButton>
+            </CardActions>
+            <Collapse in={this._expanded} timeout="auto" unmountOnExit>
+              <CardContent>
+                <Typography paragraph type="body2">
+                  Details:
+                </Typography>
+                <Typography paragraph>
+                  Updated:&nbsp;
+                  {moment(active.time.modified).format('DD/MM/YYYY')}
+                </Typography>
+                <Typography paragraph>{active.description}</Typography>
+                <Typography paragraph>
+                  Add rice and stir very gently to distribute. Top with
+                  artichokes and peppers, and cook without stirring, until most
+                  of the liquid is absorbed, 15 to 18 minutes. Reduce heat to
+                  medium-low, add reserved shrimp and mussels, tucking them down
+                  into the rice, and cook again without stirring, until mussels
+                  have opened and rice is just tender, 5 to 7 minutes more.
+                  (Discard any mussels that don’t open.)
+                </Typography>
+                <Typography>
+                  Set aside off of the heat to let rest for 10 minutes, and then
+                  serve.
+                </Typography>
+              </CardContent>
+            </Collapse>
           </Card>
         </div>
       </Loader>
     )
   }
 }
-
-// const _PackageContainer = (props) => {
-// 	function _closeModal() {
-// 		props.toggleModal(false, '')
-// 		return false
-// 	}
-//
-// 	return (
-// 		<div className="package-container">
-// 			<PackageDetails
-// 				mode={props.mode}
-// 				directory={props.directory}
-// 				active={props.active}
-// 				actions={props.actions}
-// 				setActive={props.setActive}
-// 				toggleMainLoader={props.toggleMainLoader}
-// 				toggleModal={props.toggleModal}
-// 				packageJSON={props.packageJSON}
-// 				isLoading={props.isLoading}
-// 				cmdOptions={props.cmdOptions}
-// 				addCommandOption={props.addCommandOption}
-// 				clearCommandOptions={props.clearCommandOptions}
-// 			/>
-// 		</div>
-// 	)
-// }
 
 function mapStateToProps(state) {
   return {

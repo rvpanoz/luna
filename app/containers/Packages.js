@@ -59,18 +59,17 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('view-package-close', (event, packageStr) => {
-      let pkg
       try {
-        pkg = JSON.parse(packageStr)
+        const pkg = JSON.parse(packageStr)
+        console.log(pkg)
+        if (pkg) {
+          setActive(pkg)
+          toggleMainLoader(false)
+        } else {
+          throw new Error('Package cannot be parsed')
+        }
       } catch (e) {
         throw new Error(e)
-      }
-
-      if (pkg) {
-        setActive(pkg)
-        toggleMainLoader(false)
-      } else {
-        throw new Error('Package cannot be parsed')
       }
     })
 
@@ -144,6 +143,7 @@ class PackagesContainer extends React.Component {
       toggleMainLoader,
       clearMessages
     } = this.props
+
     setActive(null)
     clearMessages()
     setPackageActions()
@@ -190,10 +190,10 @@ class PackagesContainer extends React.Component {
             setPackages={setPackages}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={7}>
           <PackageContainer />
         </Grid>
-        <Grid item xs={3} />
+        <Grid item xs={2} />
       </Grid>
     )
   }

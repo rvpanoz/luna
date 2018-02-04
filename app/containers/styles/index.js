@@ -1,4 +1,5 @@
 import red from 'material-ui/colors/red'
+import deepPurple from 'material-ui/colors/deepPurple'
 
 export function layoutStyles(theme) {
   return {
@@ -64,8 +65,14 @@ export function packageStyles(theme) {
     card: {
       maxWidth: '100%'
     },
-    media: {
-      height: 194
+    chip: {
+      backgroundColor: deepPurple[500],
+      color: '#fff',
+      marginTop: '10px',
+      marginBottom: '10px'
+    },
+    description: {
+      marginTop: 10
     },
     actions: {
       display: 'flex'
@@ -95,6 +102,19 @@ export function packageStyles(theme) {
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
       lineHeight: '1.35417em'
+    },
+    actions: {
+      display: 'flex'
+    },
+    expand: {
+      transform: 'rotate(0deg)',
+      transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest
+      }),
+      marginLeft: 'auto'
+    },
+    expandOpen: {
+      transform: 'rotate(180deg)'
     }
   }
 }
