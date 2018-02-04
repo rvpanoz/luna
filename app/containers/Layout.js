@@ -8,7 +8,9 @@ import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import { layoutStyles } from './styles'
+import { NPM_CONFIG_VALUES } from 'constants/AppConstants'
 import React from 'react'
+import { merge } from 'ramda'
 import PropTypes from 'prop-types'
 import AppHeader from '../components/header/AppHeader'
 import Grid from 'material-ui/Grid'
@@ -23,6 +25,8 @@ class Layout extends React.Component {
   constructor() {
     super()
     this.handleModal = this.handleModal.bind(this)
+    this.onChangeNpmSetting = this.onChangeNpmSetting.bind(this)
+    this.saveNpmConfig = this.saveNpmConfig.bind(this)
   }
   handleModal() {
     const { closeSettings } = this.props
@@ -45,6 +49,22 @@ class Layout extends React.Component {
         throw new Error(e)
       }
     })
+  }
+  onChangeNpmSetting(e) {
+    const { setSettings, settings } = this.props
+    const inputEl = e.currentTarget
+    const setting = inputEl && inputEl.getAttribute('setting')
+    const value = inputEl && inputEl.value
+
+    let stateObj = {}
+    if (value && setting) {
+      stateObj[setting] = value
+      setSettings(merge(settings, stateObj))
+    }
+  }
+  saveNpmConfig(e) {
+    const { settings } = this.props
+    //todo..
   }
   getModalStyles() {
     function rand() {
@@ -110,26 +130,35 @@ class Layout extends React.Component {
                   <h3 className={classes.heading}>Settings</h3>
                   <Divider />
                   <TextField
-                    id="npm-registry"
+                    inputProps={{
+                      setting: NPM_CONFIG_VALUES.REGISTRY
+                    }}
                     label="Registry"
+                    defaultValue={settings && settings.registry}
                     className={classes.textField}
-                    value={(settings && settings.registry) || ''}
+                    onChange={this.onChangeNpmSetting}
                     margin="normal"
                   />
                   <br />
                   <TextField
-                    id="npm-proxy-http"
+                    inputProps={{
+                      setting: NPM_CONFIG_VALUES.PROXY
+                    }}
+                    defaultValue={settings && settings.proxy}
                     label="Proxy http"
                     className={classes.textField}
-                    value={(settings && settings.proxy) || ''}
+                    onChange={this.onChangeNpmSetting}
                     margin="normal"
                   />
                   <br />
                   <TextField
-                    id="npm-proxy-https"
+                    inputProps={{
+                      setting: NPM_CONFIG_VALUES.HTTPS_PROXY
+                    }}
                     label="Proxy https"
+                    defaultValue={settings && settings['https-proxy']}
                     className={classes.textField}
-                    value={(settings && settings['https-proxy']) || ''}
+                    onChange={this.onChangeNpmSetting}
                     margin="normal"
                   />
                   <div
@@ -139,7 +168,12 @@ class Layout extends React.Component {
                       justifyContent: 'flex-end'
                     }}
                   >
-                    <Button className={classes.button}>Save</Button>
+                    <Button
+                      className={classes.button}
+                      onClick={this.saveNpmConfig}
+                    >
+                      Save
+                    </Button>
                     <Button
                       onClick={this.handleModal}
                       className={classes.button}

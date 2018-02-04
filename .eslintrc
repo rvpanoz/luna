@@ -1,7 +1,25 @@
 {
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "node": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+        "jsx": true,
+    }
+  },
   "plugins": [
     "react"
   ],
-  "extends": ["eslint:all", "plugin:react/all"]
+  "rules": {
+    "no-console": "off",
+    "strict": ["error", "global"],
+    "curly": "warn"
+  }
 }
