@@ -44,6 +44,7 @@ class PackagesListHeader extends React.Component {
       mode: APP_MODES.GLOBAL,
       directory: null
     })
+
     this.handleClose()
   }
   render() {

@@ -44,6 +44,7 @@ class PackagesContainer extends React.Component {
       } else {
         this._setupPackages(packages)
       }
+
       toggleLoader(false)
     })
 
@@ -59,14 +60,12 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('view-package-close', (event, packageStr) => {
-      toggleMainLoader(true)
       try {
         const pkg = JSON.parse(packageStr)
-        setActive(pkg || null)
+        setActive(pkg)
+        toggleMainLoader(false)
       } catch (e) {
         throw new Error(e)
-      } finally {
-        toggleMainLoader(false)
       }
     })
 
@@ -85,10 +84,10 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
+      toggleLoader(true)
       setMode(APP_MODES.LOCAL, directory)
       setActive(null)
       setPackageJSON(content)
-      toggleLoader(true)
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'get-packages',
         cmd: ['outdated', 'list'],
@@ -187,10 +186,10 @@ class PackagesContainer extends React.Component {
             setPackages={setPackages}
           />
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={5}>
           <PackageContainer />
         </Grid>
-        <Grid item xs={2} />
+        <Grid item xs={4} />
       </Grid>
     )
   }

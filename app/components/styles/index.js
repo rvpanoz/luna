@@ -1,5 +1,7 @@
 import deepOrange from 'material-ui/colors/deepOrange'
+import deepPurple from 'material-ui/colors/deepPurple'
 import pink from 'material-ui/colors/pink'
+import red from 'material-ui/colors/red'
 
 export function appHeaderStyles(theme) {
   const drawerWidth = 240
@@ -120,6 +122,87 @@ export function packagesListStyles(theme) {
     },
     chip: {
       margin: theme.spacing.unit
+    }
+  }
+}
+
+export function packageStyles(theme) {
+  return {
+    card: {
+      maxWidth: '100%'
+    },
+    cardContent: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start'
+    },
+    chip: {
+      backgroundColor: pink[500],
+      color: '#fff',
+      marginRight: '5px',
+      marginTop: '5px'
+    },
+    description: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-end'
+      marginTop: 3
+    },
+    actions: {
+      display: 'flex'
+    },
+    author: {
+      flexGrow: 1
+    },
+    keywords: {
+      flexGrow: 1,
+      marginTop: 10
+    },
+    expand: {
+      transform: 'rotate(0deg)',
+      transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest
+      }),
+      marginLeft: 'auto'
+    },
+    expandOpen: {
+      transform: 'rotate(180deg)'
+    },
+    updated: {
+      fontSize: 12,
+      fontWeight: 300,
+      color: theme.palette.primary.light,
+      margin: '1em 0 0.7em'
+    },
+    center: {
+      position: 'absolute',
+      top: '25%',
+      left: '50%'
+    },
+    avatar: {
+      backgroundColor: pink[500]
+    },
+    heading: {
+      color: 'rgba(0, 0, 0, 0.54)',
+      margin: '1em 0 0.7em',
+      fontSize: '1.1rem',
+      fontWeight: 400,
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      lineHeight: '1.35417em'
+    },
+    actions: {
+      display: 'flex'
+    },
+    expand: {
+      transform: 'rotate(0deg)',
+      transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest
+      }),
+      marginLeft: 'auto'
+    },
+    expandOpen: {
+      transform: 'rotate(180deg)'
     }
   }
 }

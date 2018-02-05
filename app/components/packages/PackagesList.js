@@ -22,8 +22,9 @@ class PackagesList extends React.Component {
   }
 
   getPackages() {
-    const { mode, directory } = this.props
+    const { mode, directory, toggleLoader } = this.props
 
+    toggleLoader(true)
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',
       cmd: ['outdated', 'list'],
@@ -33,8 +34,6 @@ class PackagesList extends React.Component {
   }
 
   componentDidMount() {
-    const { toggleLoader } = this.props
-    toggleLoader(true)
     this.getPackages()
   }
 

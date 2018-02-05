@@ -18,6 +18,8 @@ class PackageListItem extends React.Component {
     this.onItemClick = this.onItemClick.bind(this)
   }
   onItemClick(e) {
+    e.preventDefault()
+
     const {
       name,
       version,
@@ -26,9 +28,8 @@ class PackageListItem extends React.Component {
       toggleMainLoader,
       latest
     } = this.props
-    e.preventDefault()
-    toggleMainLoader(true)
 
+    toggleMainLoader(true)
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'view-package',
       cmd: ['view'],
@@ -37,7 +38,6 @@ class PackageListItem extends React.Component {
       mode,
       directory
     })
-    return false
   }
   render() {
     const { name, version, latest } = this.props
