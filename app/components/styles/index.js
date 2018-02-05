@@ -129,7 +129,8 @@ export function packagesListStyles(theme) {
 export function packageStyles(theme) {
   return {
     card: {
-      maxWidth: '100%'
+      maxWidth: '100%',
+      backgroundColor: theme.palette.background.paper
     },
     cardContent: {
       width: '100%',
@@ -144,10 +145,7 @@ export function packageStyles(theme) {
       marginTop: '5px'
     },
     description: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-end'
-      marginTop: 3
+      marginTop: 10
     },
     actions: {
       display: 'flex'

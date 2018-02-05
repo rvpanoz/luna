@@ -17,6 +17,8 @@ import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider'
 import Loader from 'common/Loader'
 
+import FolderList from '../common/FolderList'
+
 class PackageCard extends React.Component {
   constructor() {
     super()
@@ -148,6 +150,8 @@ class PackageCard extends React.Component {
     return (
       <section>
         <Loader loading={isLoading}>
+          <h3 className={classes.heading}>{name}</h3>
+          <Divider />
           <Card className={classes.card}>
             <CardHeader
               avatar={
@@ -164,25 +168,19 @@ class PackageCard extends React.Component {
               subheader={group || active.version}
             />
             <CardContent>
-              <div className={classes.description}>
-                <section>
-                  <h3 className={classes.heading}>Description</h3>
-                  <Divider />
-                  <br />
-                  <Typography>{active.description}</Typography>
-                </section>
-                <section>
-                  <Typography component="span" className={classes.updated}>
-                    {`updated ${moment(active.time.modified).format(
-                      'DD/MM/YYYY'
-                    )}`}
-                  </Typography>
-                </section>
-              </div>
-              <div className={classes.group} />
+              <section>
+                <h3 className={classes.heading}>Description</h3>
+                <Divider />
+                <Typography className={classes.description}>
+                  {active.description}
+                </Typography>
+              </section>
+              <section>
+                <FolderList active={active} />
+              </section>
             </CardContent>
             <CardActions className={classes.actions} disableActionSpacing>
-              <IconButton aria-label="Add to favorites">add</IconButton>
+              <IconButton aria-label="Install">add</IconButton>
               <IconButton aria-label="Uninstall">delete</IconButton>
               <IconButton
                 className={classnames(classes.expand, {
@@ -197,26 +195,31 @@ class PackageCard extends React.Component {
             </CardActions>
             <Collapse in={this._expanded} timeout="auto" unmountOnExit>
               <CardContent className={classes.cardContent}>
-                <div className={classes.author}>
+                <section>
                   <h3 className={classes.heading}>Author</h3>
                   <Divider />
-                  <br />
-                  <Typography>{active.author}</Typography>
-                </div>
-                <div className={classes.keywords}>
-                  <h3 className={classes.heading}>Keywords</h3>
-                  <Divider />
-                  <br />
-                  <div className={classes.keywordItems}>
-                    {active && active.keywords
-                      ? active.keywords.map((keyword) => {
-                          return (
-                            <Chip className={classes.chip} label={keyword} />
-                          )
-                        })
-                      : null}
+                  <Typography className={classes.author}>
+                    {active.author}
+                  </Typography>
+                </section>
+                {active && active.keywords ? (
+                  <div className={classes.keywords}>
+                    <h3 className={classes.heading}>Keywords</h3>
+                    <Divider />
+                    <br />
+                    <div className={classes.keywordItems}>
+                      {active.keywords.map((keyword, idx) => {
+                        return (
+                          <Chip
+                            className={classes.chip}
+                            key={idx}
+                            label={keyword}
+                          />
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
+                ) : null}
               </CardContent>
             </Collapse>
           </Card>
