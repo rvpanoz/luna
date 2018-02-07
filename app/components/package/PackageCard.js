@@ -176,7 +176,11 @@ class PackageCard extends React.Component {
                 </Typography>
               </section>
               <section>
-                <FolderList active={active} />
+                <FolderList
+                  author={active.author}
+                  home={active.homepage}
+                  issues={active.bugs.url}
+                />
               </section>
             </CardContent>
             <CardActions className={classes.actions} disableActionSpacing>

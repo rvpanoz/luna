@@ -1,5 +1,6 @@
 import { withStyles } from 'material-ui'
 import { folderListStyles } from './styles'
+import * as R from 'ramda'
 import React from 'react'
 import PropTypes from 'prop-types'
 import List, { ListItem, ListItemText } from 'material-ui/List'
@@ -9,37 +10,43 @@ import BugReport from 'material-ui-icons/BugReport'
 
 const { array } = PropTypes
 
-const FolderList = (props) => {
-  const { classes, active } = props
+const filterWithKeys = (pred, obj) =>
+  R.pipe(R.toPairs, R.filter(R.apply(pred)), R.fromPairs)(obj)
 
-  const data = [
-    {
-      text: 'Home',
-      url: active.homepage
-    },
-    {
-      text: 'Issues',
-      url: active.bugs && active.bugs.url
-    }
-  ]
+const FolderList = (props) => {
+  const { classes } = props
+  const data = filterWithKeys((key, val) => key !== 'classes', props)
 
   return (
-    <div className={classes.root}>
-      <List className={classes.list}>
-        {data.map((item, idx) => {
-          return (
-            <ListItem key={idx}>
-              <Avatar>
-                {item.text === 'Home' && <Home />}
-                {item.text === 'Issues' && <BugReport />}
-              </Avatar>
-              <ListItemText primary={item.text} secondary={item.url} />
-            </ListItem>
-          )
-        })}
-      </List>
-    </div>
+    <List className={classes.root}>
+      {R.mapObjIndexed((value, key) => {
+        return (
+          <ListItem key={key}>
+            <Avatar>
+              {key === 'Home' && <Home />}
+              {key === 'Issues' && <BugReport />}
+            </Avatar>
+            <ListItemText primary={key} secondary={value} />
+          </ListItem>
+        )
+      })(data)}
+    </List>
   )
 }
+
+// <List className={classes.list}>
+//   {data.map((key, value) => {
+//     console.log(key, value)
+//     return (
+//       <ListItem key={key}>
+//         <Avatar>
+//           {key === 'Home' && <Home />}
+//           {key === 'Issues' && <BugReport />}
+//         </Avatar>
+//         <ListItemText primary={key} secondary={value} />
+//       </ListItem>
+//     )
+//   })}
+// </List>
 
 export default withStyles(folderListStyles)(FolderList)
