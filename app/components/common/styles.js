@@ -9,7 +9,7 @@ export function folderListStyles(theme) {
     list: {
       position: 'relative',
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'stretch'
     }
   }

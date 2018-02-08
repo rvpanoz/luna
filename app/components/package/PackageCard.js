@@ -177,9 +177,20 @@ class PackageCard extends React.Component {
               </section>
               <section>
                 <FolderList
-                  author={active.author}
-                  home={active.homepage}
-                  issues={active.bugs.url}
+                  data={[
+                    {
+                      prop: 'Home',
+                      value: active.homepage
+                    },
+                    {
+                      prop: 'Issues',
+                      value: active.bugs.url
+                    },
+                    {
+                      prop: 'Author',
+                      value: active.author
+                    }
+                  ]}
                 />
               </section>
             </CardContent>

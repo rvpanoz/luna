@@ -7,46 +7,36 @@ import List, { ListItem, ListItemText } from 'material-ui/List'
 import Avatar from 'material-ui/Avatar'
 import Home from 'material-ui-icons/Home'
 import BugReport from 'material-ui-icons/BugReport'
+import Assistant from 'material-ui-icons/Assistant'
 
-const { array } = PropTypes
-
-const filterWithKeys = (pred, obj) =>
-  R.pipe(R.toPairs, R.filter(R.apply(pred)), R.fromPairs)(obj)
+const { array, object } = PropTypes
 
 const FolderList = (props) => {
-  const { classes } = props
-  const data = filterWithKeys((key, val) => key !== 'classes', props)
+  const { classes, data } = props
 
   return (
-    <List className={classes.root}>
-      {R.mapObjIndexed((value, key) => {
+    <List className={classes.list}>
+      {data.map((folderItem, key) => {
         return (
           <ListItem key={key}>
             <Avatar>
-              {key === 'Home' && <Home />}
-              {key === 'Issues' && <BugReport />}
+              {folderItem.prop === 'Home' && <Home />}
+              {folderItem.prop === 'Issues' && <BugReport />}
+              {folderItem.prop === 'Author' && <Assistant />}
             </Avatar>
-            <ListItemText primary={key} secondary={value} />
+            <ListItemText
+              primary={folderItem.prop}
+              secondary={folderItem.value}
+            />
           </ListItem>
         )
-      })(data)}
+      })}
     </List>
   )
 }
 
-// <List className={classes.list}>
-//   {data.map((key, value) => {
-//     console.log(key, value)
-//     return (
-//       <ListItem key={key}>
-//         <Avatar>
-//           {key === 'Home' && <Home />}
-//           {key === 'Issues' && <BugReport />}
-//         </Avatar>
-//         <ListItemText primary={key} secondary={value} />
-//       </ListItem>
-//     )
-//   })}
-// </List>
-
+FolderList.propTypes = {
+  classes: object.isRequired,
+  data: array.isRequired
+}
 export default withStyles(folderListStyles)(FolderList)
