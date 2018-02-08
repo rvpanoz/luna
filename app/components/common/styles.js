@@ -14,3 +14,9 @@ export function folderListStyles(theme) {
     }
   }
 }
+
+export function linkStyles(theme) {
+  return {
+    root: {}
+  }
+}

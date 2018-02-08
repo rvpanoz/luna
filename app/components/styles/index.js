@@ -179,7 +179,7 @@ export function packageStyles(theme) {
       left: '50%'
     },
     avatar: {
-      backgroundColor: pink[500]
+      backgroundColor: theme.palette.secondary.dark
     },
     heading: {
       color: 'rgba(0, 0, 0, 0.54)',
@@ -188,6 +188,9 @@ export function packageStyles(theme) {
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
       lineHeight: '1.35417em'
+    },
+    headingTail: {
+      marginTop: 15
     },
     actions: {
       display: 'flex'
@@ -201,6 +204,9 @@ export function packageStyles(theme) {
     },
     expandOpen: {
       transform: 'rotate(180deg)'
+    },
+    folderList: {
+      width: '100%'
     }
   }
 }

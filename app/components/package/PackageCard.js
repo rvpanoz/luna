@@ -1,10 +1,10 @@
 import { withStyles } from 'material-ui/styles'
 import { packageStyles } from '../styles'
 import { showMessageBox, isUrl, autoBind } from '../../utils'
+import { remote, ipcRenderer, shell } from 'electron'
+import List, { ListItem, ListItemText } from 'material-ui/List'
 import React from 'react'
 import moment from 'moment'
-import { remote, ipcRenderer } from 'electron'
-import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
 import Collapse from 'material-ui/transitions/Collapse'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
 import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card'
@@ -16,13 +16,14 @@ import Avatar from 'material-ui/Avatar'
 import IconButton from 'material-ui/IconButton'
 import Divider from 'material-ui/Divider'
 import Loader from 'common/Loader'
-
-import FolderList from '../common/FolderList'
+import InfoIcon from 'material-ui-icons/Info'
+import Home from 'material-ui-icons/Home'
+import BugReport from 'material-ui-icons/BugReport'
+import LinkIcon from 'material-ui-icons/Link'
 
 class PackageCard extends React.Component {
   constructor() {
     super()
-    this._group = null
     this._expanded = false
     autoBind(
       ['doNavigate', 'doAction', 'onChangeVersion', 'handleExpandClick'],
@@ -98,33 +99,9 @@ class PackageCard extends React.Component {
     this._expanded = value
     this.forceUpdate()
   }
-  componentDidUpdate() {
-    const { mode, packageJSON } = this.props
-
-    if (mode === APP_MODES.LOCAL) {
-      if (!packageJSON) {
-        throw new Error('PackageJSON is missing')
-      }
-
-      const { active } = this.props
-      if (!active) {
-        return
-      }
-      let found = false
-
-      const groups = PACKAGE_GROUPS.some((group, idx) => {
-        const { name } = active
-        found = packageJSON[group] && packageJSON[group][name] ? group : false
-        if (found) {
-          this._group = group
-          return true
-        }
-      })
-    }
-  }
   doNavigate(e) {
     e.preventDefault()
-    const url = e.target.dataset.url
+    const url = e.currentTarget.dataset.url
     if (isUrl(url)) {
       shell.openExternal(url)
     }
@@ -135,8 +112,8 @@ class PackageCard extends React.Component {
     this.forceUpdate()
   }
   render() {
-    const { classes, active, isLoading, mode } = this.props
-    const group = this._group
+    const { classes, active, isLoading, mode, group } = this.props
+    const { doNavigate } = this
 
     if (!active) {
       return null
@@ -145,6 +122,17 @@ class PackageCard extends React.Component {
     function buildTitle() {
       const { name, author, version } = active
       return group ? `${name} - v${version}` : name
+    }
+
+    function buildLink(item, url) {
+      return (
+        <React.Fragment>
+          <span>{url}</span>
+          <a title="Navigate" href="#" onClick={doNavigate} data-url={url}>
+            <LinkIcon color="accent" />
+          </a>
+        </React.Fragment>
+      )
     }
 
     return (
@@ -176,22 +164,30 @@ class PackageCard extends React.Component {
                 </Typography>
               </section>
               <section>
-                <FolderList
-                  data={[
-                    {
-                      prop: 'Home',
-                      value: active.homepage
-                    },
-                    {
-                      prop: 'Issues',
-                      value: active.bugs.url
-                    },
-                    {
-                      prop: 'Author',
-                      value: active.author
+                <h3
+                  className={classnames(classes.heading, classes.headingTail)}
+                >
+                  Details
+                </h3>
+                <Divider />
+                <List className={classes.list}>
+                  {[{ text: 'Homepage' }, { text: 'Issues' }].map(
+                    (item, key) => {
+                      return (
+                        <ListItem key={key}>
+                          <Avatar>
+                            {item.text === 'Homepage' && <Home />}
+                            {item.text === 'Issues' && <BugReport />}
+                          </Avatar>
+                          <ListItemText
+                            primary={item.text}
+                            secondary={buildLink(item.text, item.url)}
+                          />
+                        </ListItem>
+                      )
                     }
-                  ]}
-                />
+                  )}
+                </List>
               </section>
             </CardContent>
             <CardActions className={classes.actions} disableActionSpacing>
