@@ -48,7 +48,9 @@ export default merge.smart(baseConfig, {
     alias: {
       actions: path.resolve(__dirname, 'app/actions'),
       constants: path.resolve(__dirname, 'app/constants'),
-      common: path.resolve(__dirname, 'app/common')
+      common: path.resolve(__dirname, 'app/common'),
+      components: path.resolve(__dirname, 'app/components'),
+      containers: path.resolve(__dirname, 'app/containers')
     }
   },
 

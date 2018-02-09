@@ -9,7 +9,7 @@ import * as packagesActions from 'actions/packagesActions'
 import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
 import PropTypes from 'prop-types'
 import React from 'react'
-import PackageCard from '../components/package/PackageCard'
+import PackageCard from 'components/package/PackageCard'
 
 class PackageContainer extends React.Component {
   constructor() {
@@ -52,16 +52,14 @@ class PackageContainer extends React.Component {
     } = this.props
 
     return (
-      <div ref="rootEl">
-        <PackageCard
-          active={active}
-          latest={latest}
-          isLoading={isLoading}
-          mode={mode}
-          group={group}
-          packageJSON={packageJSON}
-        />
-      </div>
+      <PackageCard
+        active={active}
+        latest={latest}
+        isLoading={isLoading}
+        mode={mode}
+        group={group}
+        packageJSON={packageJSON}
+      />
     )
   }
 }
