@@ -4,11 +4,15 @@
 
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
+import { styles } from './styles'
+import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
-import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
+import Loader from 'common/Loader'
 import PropTypes from 'prop-types'
 import React from 'react'
+import Divider from 'material-ui/Divider'
 import PackageCard from 'components/package/PackageCard'
 
 class PackageContainer extends React.Component {
@@ -51,15 +55,24 @@ class PackageContainer extends React.Component {
       packageJSON
     } = this.props
 
+    if (!active) {
+      return null
+    }
+    console.log(active)
     return (
-      <PackageCard
-        active={active}
-        latest={latest}
-        isLoading={isLoading}
-        mode={mode}
-        group={group}
-        packageJSON={packageJSON}
-      />
+      <section className={classes.root}>
+        <Loader loading={isLoading}>
+          <h3 className={classes.heading}>{active.name}</h3>
+          <PackageCard
+            active={active}
+            latest={latest}
+            isLoading={isLoading}
+            mode={mode}
+            group={group}
+            packageJSON={packageJSON}
+          />
+        </Loader>
+      </section>
     )
   }
 }
@@ -95,4 +108,7 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PackageContainer)
+export default compose(
+  withStyles(styles, { withTheme: true }),
+  connect(mapStateToProps, mapDispatchToProps)
+)(PackageContainer)

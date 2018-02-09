@@ -1,7 +1,7 @@
 import red from 'material-ui/colors/red'
 import deepPurple from 'material-ui/colors/deepPurple'
 
-export function layoutStyles(theme) {
+export function styles(theme) {
   return {
     root: {
       width: '100%',
@@ -42,7 +42,7 @@ export function layoutStyles(theme) {
     },
     heading: {
       color: 'rgba(0, 0, 0, 0.54)',
-      margin: '1em 0 0.7em',
+      margin: '1em 0 1em',
       fontSize: '1.5rem',
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
