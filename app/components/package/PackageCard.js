@@ -1,54 +1,71 @@
-import { withStyles } from 'material-ui/styles'
-import { packageStyles } from '../styles'
-import { showMessageBox, isUrl, autoBind } from '../../utils'
-import { remote, ipcRenderer, shell } from 'electron'
-import List, { ListItem, ListItemText } from 'material-ui/List'
-import React from 'react'
-import moment from 'moment'
-import Collapse from 'material-ui/transitions/Collapse'
-import MoreVertIcon from 'material-ui-icons/MoreVert'
-import Card, { CardHeader, CardContent, CardActions } from 'material-ui/Card'
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
-import Chip from 'material-ui/Chip'
-import classnames from 'classnames'
-import Typography from 'material-ui/Typography'
-import Avatar from 'material-ui/Avatar'
-import IconButton from 'material-ui/IconButton'
-import Divider from 'material-ui/Divider'
-import Loader from 'common/Loader'
-import InfoIcon from 'material-ui-icons/Info'
-import Home from 'material-ui-icons/Home'
-import BugReport from 'material-ui-icons/BugReport'
-import LinkIcon from 'material-ui-icons/Link'
+import { withStyles } from "material-ui/styles";
+import { packageStyles } from "../styles";
+import { showMessageBox, isUrl, autoBind } from "../../utils";
+import { remote, ipcRenderer, shell } from "electron";
+import List, { ListItem, ListItemText } from "material-ui/List";
+import React from "react";
+import moment from "moment";
+import Collapse from "material-ui/transitions/Collapse";
+import MoreVertIcon from "material-ui-icons/MoreVert";
+import Card, { CardHeader, CardContent, CardActions } from "material-ui/Card";
+import ExpandMoreIcon from "material-ui-icons/ExpandMore";
+import Chip from "material-ui/Chip";
+import classnames from "classnames";
+import Typography from "material-ui/Typography";
+import Avatar from "material-ui/Avatar";
+import IconButton from "material-ui/IconButton";
+import Divider from "material-ui/Divider";
+import Loader from "common/Loader";
+import InfoIcon from "material-ui-icons/Info";
+import Home from "material-ui-icons/Home";
+import BugReport from "material-ui-icons/BugReport";
+import LinkIcon from "material-ui-icons/Link";
 
 class PackageCard extends React.Component {
   constructor() {
-    super()
-    this._expanded = false
+    super();
+    this._expanded = false;
     autoBind(
-      ['doNavigate', 'doAction', 'onChangeVersion', 'handleExpandClick'],
+      ["doNavigate", "doAction", "onChangeVersion", "handleExpandClick", "runCommand"],
       this
-    )
+    );
+  }
+  runCommand(action, version) {
+    const { mode, directory } = this.props;
+    let cmd = [`npm ${action.toLowerCase()} `, active.name];
+
+    if (mode === APP_MODES.LOCAL) {
+      cmd.push(` --${options.join(" --")}`);
+    }
+    setActive(null);
+    //WIP todo
+    // toggleModal(true, cmd);
+    ipcRenderer.send("ipc-event", {
+      mode,
+      directory,
+      ipcEvent: action,
+      cmd: [action === "Uninstall" ? "uninstall" : "install"],
+      pkgName: active.name,
+      pkgVersion: action === "Uninstall" ? null : version,
+      pkgOptions: options
+    });
   }
   doAction(e) {
-    e.preventDefault()
+    e.preventDefault();
 
-    const target = e.currentTarget
-    const action = target.dataset.action
-    const { mode, active, setActive, toggleModal } = this.props
-    const options = this.props.cmdOptions
+    const target = e.currentTarget;
+    const action = target.dataset.action;
+    const { mode, active, setActive, toggleModal } = this.props;
+    const options = this.props.cmdOptions;
 
     if (action) {
-      const selectVersion = this.refs.selectVersion
-      let version
+      const selectVersion = this.refs.selectVersion;
+      let version;
 
       if (action === APP_ACTIONS.UNINSTALL) {
-        version = null
+        version = null;
       } else {
-        version =
-          selectVersion && selectVersion.value !== 'false'
-            ? selectVersion.value
-            : 'latest'
+        version = selectVersion && selectVersion.value !== "false" ? selectVersion.value : "latest";
       }
 
       showMessageBox(
@@ -57,71 +74,55 @@ class PackageCard extends React.Component {
           name: active.name,
           version
         },
-        () => {
-          const npmCmd = [`npm ${action.toLowerCase()} `, active.name]
-          if (mode === APP_MODES.LOCAL) {
-            npmCmd.push(` --${options.join(' --')}`)
-          }
-          setActive(null)
-          toggleModal(true, npmCmd)
-          ipcRenderer.send('ipc-event', {
-            mode,
-            directory,
-            ipcEvent: action,
-            cmd: [action === 'Uninstall' ? 'uninstall' : 'install'],
-            pkgName: active.name,
-            pkgVersion: action === 'Uninstall' ? null : version,
-            pkgOptions: options
-          })
-        }
-      )
+        () => this.runCommand(action, version)
+      );
     }
-    return false
+    return false;
   }
   onChangeVersion(e) {
-    const target = e.currentTarget
-    const { active, mode, directory, toggleMainLoader } = this.props
-    const version = target.value
+    const target = e.currentTarget;
+    const { active, mode, directory, toggleMainLoader } = this.props;
+    const version = target.value;
 
-    if (version !== 'false') {
-      ipcRenderer.send('ipc-event', {
+    if (version !== "false") {
+      ipcRenderer.send("ipc-event", {
         mode,
         directory,
-        ipcEvent: 'view-package',
-        cmd: ['view'],
+        ipcEvent: "view-package",
+        cmd: ["view"],
         pkgName: active.name,
         pkgVersion: version
-      })
+      });
     }
-    return false
+    return false;
   }
   handleChange(e, value) {
-    this._expanded = value
-    this.forceUpdate()
+    this._expanded = value;
+    this.forceUpdate();
   }
   doNavigate(e) {
-    e.preventDefault()
-    const url = e.currentTarget.dataset.url
+    e.preventDefault();
+    const url = e.currentTarget.dataset.url;
     if (isUrl(url)) {
-      shell.openExternal(url)
+      shell.openExternal(url);
     }
-    return false
+    return false;
   }
   handleExpandClick(e) {
-    this._expanded = !this._expanded
-    this.forceUpdate()
+    this._expanded = !this._expanded;
+    this.forceUpdate();
   }
   render() {
-    const { classes, active, isLoading, mode, group } = this.props
-    const { doNavigate } = this
+    const { classes, active, isLoading, mode, group } = this.props;
+    const { doNavigate } = this;
 
     if (!active) {
-      return null
+      return null;
     }
 
     function buildTitle() {
-      const { name, author, version } = active
-      return group ? `${name} - v${version}` : name
+      const { name, author, version } = active;
+      return group ? `${name} - v${version}` : name;
     }
 
     function buildLink(item, url) {
@@ -132,7 +133,7 @@ class PackageCard extends React.Component {
             <LinkIcon color="accent" />
           </a>
         </React.Fragment>
-      )
+      );
     }
 
     return (
@@ -159,34 +160,29 @@ class PackageCard extends React.Component {
               <section>
                 <h3 className={classes.heading}>Description</h3>
                 <Divider />
-                <Typography className={classes.description}>
-                  {active.description}
-                </Typography>
+                <Typography className={classes.description}>{active.description}</Typography>
               </section>
               <section>
-                <h3
-                  className={classnames(classes.heading, classes.headingTail)}
-                >
-                  Details
-                </h3>
+                <h3 className={classnames(classes.heading, classes.headingTail)}>Details</h3>
                 <Divider />
                 <List className={classes.list}>
-                  {[{ text: 'Homepage' }, { text: 'Issues' }].map(
-                    (item, key) => {
-                      return (
-                        <ListItem key={key}>
-                          <Avatar>
-                            {item.text === 'Homepage' && <Home />}
-                            {item.text === 'Issues' && <BugReport />}
-                          </Avatar>
-                          <ListItemText
-                            primary={item.text}
-                            secondary={buildLink(item.text, item.url)}
-                          />
-                        </ListItem>
-                      )
-                    }
-                  )}
+                  {[
+                    { text: "Homepage", url: active.homepage },
+                    { text: "Issues", url: active.bugs.url }
+                  ].map((item, key) => {
+                    return (
+                      <ListItem key={key}>
+                        <Avatar>
+                          {item.text === "Homepage" && <Home />}
+                          {item.text === "Issues" && <BugReport />}
+                        </Avatar>
+                        <ListItemText
+                          primary={item.text}
+                          secondary={buildLink(item.text, item.url)}
+                        />
+                      </ListItem>
+                    );
+                  })}
                 </List>
               </section>
             </CardContent>
@@ -209,9 +205,7 @@ class PackageCard extends React.Component {
                 <section>
                   <h3 className={classes.heading}>Author</h3>
                   <Divider />
-                  <Typography className={classes.author}>
-                    {active.author}
-                  </Typography>
+                  <Typography className={classes.author}>{active.author}</Typography>
                 </section>
                 {active && active.keywords ? (
                   <div className={classes.keywords}>
@@ -220,13 +214,7 @@ class PackageCard extends React.Component {
                     <br />
                     <div className={classes.keywordItems}>
                       {active.keywords.map((keyword, idx) => {
-                        return (
-                          <Chip
-                            className={classes.chip}
-                            key={idx}
-                            label={keyword}
-                          />
-                        )
+                        return <Chip className={classes.chip} key={idx} label={keyword} />;
                       })}
                     </div>
                   </div>
@@ -236,8 +224,8 @@ class PackageCard extends React.Component {
           </Card>
         </Loader>
       </section>
-    )
+    );
   }
 }
 
-export default withStyles(packageStyles)(PackageCard)
+export default withStyles(packageStyles)(PackageCard);
