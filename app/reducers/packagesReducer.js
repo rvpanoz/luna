@@ -15,7 +15,8 @@ import {
   SET_PACKAGES_OUTDATED,
   SET_PACKAGE_ACTIONS,
   SET_PACKAGE_GROUP,
-  SET_TAB_INDEX
+  SET_TAB_INDEX,
+  SET_VERSION
 } from '../constants/ActionTypes'
 
 // currying
@@ -29,6 +30,7 @@ const handlers = {
     assoc('isLoading', action.isLoading, state),
   [TOGGLE_EXPANDED]: (state, action) =>
     assoc('expanded', !state.expanded, state),
+  [SET_VERSION]: (state, action) => assoc('version', action.version, state),
   [SET_TAB_INDEX]: (state, action) => assoc('tabIndex', action.tabIndex, state),
   [SET_PACKAGE_GROUP]: (state, action) => assoc('group', action.group, state),
   [SET_PACKAGES]: (state, action) => assoc('packages', action.packages, state),

@@ -5,11 +5,11 @@ export function styles(theme) {
   return {
     root: {
       position: 'relative',
-      display: 'flex',
       width: '100%',
       height: '100%',
       zIndex: 1,
-      backgroundColor: theme.palette.background.contentFrame
+      backgroundColor: theme.palette.background.contentFrame,
+      overflow: 'hidden'
     },
     content: {
       width: '100%',
@@ -34,7 +34,6 @@ export function styles(theme) {
       padding: theme.spacing.unit * 4
     },
     heading: {
-      color: theme.palette.primary.dark,
       margin: '1.5em 0 1em',
       fontSize: '1.5rem',
       fontWeight: 400,

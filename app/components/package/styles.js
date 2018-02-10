@@ -3,8 +3,7 @@ import pink from 'material-ui/colors/pink'
 export function styles(theme) {
   return {
     card: {
-      maxWidth: '100%',
-      backgroundColor: theme.palette.background.paper
+      maxWidth: '100%'
     },
     cardContent: {
       width: '100%',
@@ -25,7 +24,6 @@ export function styles(theme) {
       marginTop: 15
     },
     chip: {
-      backgroundColor: pink[500],
       color: '#fff',
       marginRight: '5px',
       marginTop: '5px'

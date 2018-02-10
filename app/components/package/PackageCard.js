@@ -13,6 +13,7 @@ import LinkIcon from 'material-ui-icons/Link'
 import CardHeader from './CardHeader'
 import CardContent from './CardContent'
 import CardActions from './CardActions'
+import CardDetails from './CardDetails'
 
 class PackageCard extends React.Component {
   constructor() {
@@ -82,12 +83,12 @@ class PackageCard extends React.Component {
     }
     return false
   }
-  onChangeVersion(e) {
-    const target = e.currentTarget
-    const { active, mode, directory, toggleMainLoader } = this.props
-    const version = target.value
+  onChangeVersion(e, value) {
+    const { active, mode, directory, toggleMainLoader, setVersion } = this.props
+    const version = e.target.value
 
-    if (version !== 'false') {
+    if (version && version !== 'false') {
+      setVersion(version)
       ipcRenderer.send('ipc-event', {
         mode,
         directory,
@@ -133,9 +134,11 @@ class PackageCard extends React.Component {
       active,
       isLoading,
       mode,
+      version,
       group,
       tabIndex,
-      expanded
+      expanded,
+      cmdOptions
     } = this.props
     const { doNavigate } = this
 
@@ -144,27 +147,31 @@ class PackageCard extends React.Component {
     }
 
     return (
-      <section>
+      <section className={classes.root}>
         <h3 className={classes.heading}>{name}</h3>
         <Divider />
         <Card className={classes.card}>
-          <CardHeader active={active} classes={classes} />
+          <CardHeader
+            active={active}
+            classes={classes}
+            cmdOptions={cmdOptions}
+            group={group}
+          />
           <CardContent
             active={active}
             classes={classes}
             handleChange={this.handleChange}
             buildLink={this._buildLink}
             tabIndex={tabIndex}
+            onChangeVersion={this.onChangeVersion}
+            version={version}
           />
-
           <CardActions
             handleExpandClick={this.handleExpandClick}
             expanded={expanded}
             classes={classes}
           />
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <div>test</div>
-          </Collapse>
+          <Collapse in={expanded} timeout="auto" unmountOnExit />
         </Card>
       </section>
     )

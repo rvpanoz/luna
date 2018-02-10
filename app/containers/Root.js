@@ -14,7 +14,11 @@ const AppTheme = themeA()
 
 const App = (props) => {
   const { store } = props
-  const theme = createMuiTheme(AppTheme)
+  const theme = createMuiTheme({
+    palette: {
+      type: 'light'
+    }
+  })
 
   console.log(theme)
   return (

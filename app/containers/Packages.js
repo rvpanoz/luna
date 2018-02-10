@@ -187,9 +187,10 @@ class PackagesContainer extends React.Component {
             setPackages={setPackages}
           />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={6}>
           <PackageContainer />
         </Grid>
+        <Grid item xs={3} />
       </Grid>
     )
   }

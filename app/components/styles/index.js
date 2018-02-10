@@ -9,7 +9,6 @@ export function appHeaderStyles(theme) {
     appBar: {
       position: 'fixed',
       zIndex: theme.zIndex.drawer + 1,
-      backgroundColor: theme.palette.primary.dark,
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
@@ -96,7 +95,6 @@ export function packagesListStyles(theme) {
       justifyContent: 'flex-start'
     },
     heading: {
-      color: theme.palette.secondary.dark,
       margin: '1em 0 0.7em',
       fontSize: '1.5rem',
       fontWeight: 400,
@@ -104,8 +102,7 @@ export function packagesListStyles(theme) {
       lineHeight: '1.35417em'
     },
     avatar: {
-      margin: 20,
-      color: '#fff'
+      margin: 20
     },
     iconbutton: {
       position: 'relative',

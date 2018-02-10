@@ -15,6 +15,7 @@ export default {
     packages: [],
     group: null,
     expanded: false,
+    version: '',
     tabIndex: 0,
     actions: [
       {

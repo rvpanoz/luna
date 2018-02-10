@@ -12,6 +12,7 @@ import HomeIcon from 'material-ui-icons/Home'
 import Assistant from 'material-ui-icons/Assistant'
 import BugReport from 'material-ui-icons/BugReport'
 import PermIdentity from 'material-ui-icons/PermIdentity'
+import CardDetails from './CardDetails'
 
 const { object } = PropTypes
 
@@ -28,7 +29,15 @@ TabContainer.propTypes = {
 }
 
 const CardContent = (props) => {
-  const { classes, active, handleChange, tabIndex, buildLink } = props
+  const {
+    classes,
+    active,
+    handleChange,
+    tabIndex,
+    buildLink,
+    version,
+    onChangeVersion
+  } = props
 
   if (!active) {
     return null
@@ -48,6 +57,12 @@ const CardContent = (props) => {
           Details
         </h3>
         <Divider />
+        <CardDetails
+          active={active}
+          classes={classes}
+          onChangeVersion={onChangeVersion}
+          version={version}
+        />
         <div className={classes.detailsTabs}>
           <AppBar
             position="static"
@@ -64,12 +79,16 @@ const CardContent = (props) => {
             >
               <Tab label="Homepage" icon={<HomeIcon />} />
               <Tab label="Issues" icon={<BugReport />} />
+              <Tab label="Author" icon={<Assistant />} />
+              <Tab label="License" icon={<PermIdentity />} />
             </Tabs>
           </AppBar>
           {tabIndex === 0 && <TabContainer>{active.homepage}</TabContainer>}
-          {tabIndex === 1 && <TabContainer>{active.bugs.url}</TabContainer>}
-          {tabIndex === 2 && <TabContainer>Item Three</TabContainer>}
-          {tabIndex === 3 && <TabContainer>Item Four</TabContainer>}
+          {tabIndex === 1 && (
+            <TabContainer>{active.bugs && active.bugs.url}</TabContainer>
+          )}
+          {tabIndex === 2 && <TabContainer>{active.author}</TabContainer>}
+          {tabIndex === 3 && <TabContainer>{active.license}</TabContainer>}
         </div>
       </section>
     </MuiCardContent>

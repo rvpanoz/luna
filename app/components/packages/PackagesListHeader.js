@@ -80,7 +80,7 @@ class PackagesListHeader extends React.Component {
                 }
               }}
             >
-              <MenuItem key="1" onClick={this.setGlobalMode}>
+              <MenuItem key="show-globals" onClick={this.setGlobalMode}>
                 Show globals
               </MenuItem>
             </Menu>

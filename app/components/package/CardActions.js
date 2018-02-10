@@ -10,6 +10,10 @@ const { object, func } = PropTypes
 const CardActions = (props) => {
   const { classes, expanded, handleExpandClick } = props
 
+  function handleChange(version) {
+    return false
+  }
+
   return (
     <MuiCardActions className={classes.actions}>
       <IconButton aria-label="Install">add</IconButton>

@@ -4,6 +4,13 @@
 
 import * as types from 'constants/ActionTypes'
 
+export function setVersion(version) {
+  return {
+    type: types.SET_VERSION,
+    version
+  }
+}
+
 export function setActiveTab(tabIndex) {
   return {
     type: types.SET_TAB_INDEX,
