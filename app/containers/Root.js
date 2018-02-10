@@ -2,44 +2,31 @@
  * Root Component
  */
 
-import React from 'react';
-import { Provider } from 'react-redux';
-import Reboot from 'material-ui/Reboot';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import createMuiTheme from 'material-ui/styles/createMuiTheme';
-import Layout from './Layout';
+import React from 'react'
+import { Provider } from 'react-redux'
+import Reboot from 'material-ui/Reboot'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import createMuiTheme from 'material-ui/styles/createMuiTheme'
+import Layout from './Layout'
+import { themeA } from '../themes'
 
-const fontWeightMedium = 500;
+const AppTheme = themeA()
+
 const App = (props) => {
-  const { store } = props;
-  const muiTheme = createMuiTheme({
-    palette: {
-      type: 'light'
-    },
-    typography: {
-      // Use the system font.
-      fontFamily:
-				'-apple-system,system-ui,BlinkMacSystemFont,' +
-				'"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',
-      fontWeightMedium,
-      body1: {
-        fontWeight: fontWeightMedium
-      },
-      button: {
-        fontStyle: 'italic'
-      }
-    }
-  });
+  const { store } = props
+  const theme = createMuiTheme(AppTheme)
+
+  console.log(theme)
   return (
-    <section>
+    <section id="root">
       <Reboot />
       <Provider store={store}>
-        <MuiThemeProvider theme={muiTheme}>
+        <MuiThemeProvider theme={theme}>
           <Layout />
         </MuiThemeProvider>
       </Provider>
     </section>
-  );
-};
+  )
+}
 
-export default App;
+export default App

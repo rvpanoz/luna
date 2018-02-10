@@ -3,11 +3,8 @@ import { styles } from './styles'
 import { showMessageBox, isUrl, autoBind } from '../../utils'
 import { remote, ipcRenderer, shell } from 'electron'
 import React from 'react'
-import moment from 'moment'
 import Collapse from 'material-ui/transitions/Collapse'
-import IconButton from 'material-ui/IconButton'
-import Card, { CardActions } from 'material-ui/Card'
-import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
+import Card from 'material-ui/Card'
 import Chip from 'material-ui/Chip'
 import classnames from 'classnames'
 import Divider from 'material-ui/Divider'
@@ -15,19 +12,20 @@ import InfoIcon from 'material-ui-icons/Info'
 import LinkIcon from 'material-ui-icons/Link'
 import CardHeader from './CardHeader'
 import CardContent from './CardContent'
+import CardActions from './CardActions'
 
 class PackageCard extends React.Component {
   constructor() {
     super()
-    this._expanded = false
     autoBind(
       [
         'doNavigate',
         'doAction',
         'onChangeVersion',
         'handleExpandClick',
+        'handleChange',
         'runCommand',
-        'buildLink'
+        '_buildLink'
       ],
       this
     )
@@ -101,10 +99,6 @@ class PackageCard extends React.Component {
     }
     return false
   }
-  handleChange(e, value) {
-    this._expanded = value
-    this.forceUpdate()
-  }
   doNavigate(e) {
     e.preventDefault()
     const url = e.currentTarget.dataset.url
@@ -114,21 +108,35 @@ class PackageCard extends React.Component {
     return false
   }
   handleExpandClick(e) {
-    this._expanded = !this._expanded
+    const { toggleExpanded } = this.props
+    toggleExpanded()
     this.forceUpdate()
   }
-  buildLink(item, url) {
+  handleChange(e, value) {
+    const { setActiveTab } = this.props
+    setActiveTab(value)
+    this.forceUpdate()
+  }
+  _buildLink(item, url) {
     return (
       <React.Fragment>
         <span>{url}</span>
-        <a title="Navigate" href="#" onClick={this.doNavigate} data-url={url}>
+        <a title="navigate" href="#" onClick={this.doNavigate} data-url={url}>
           <LinkIcon color="accent" />
         </a>
       </React.Fragment>
     )
   }
   render() {
-    const { classes, active, isLoading, mode, group } = this.props
+    const {
+      classes,
+      active,
+      isLoading,
+      mode,
+      group,
+      tabIndex,
+      expanded
+    } = this.props
     const { doNavigate } = this
 
     if (!active) {
@@ -144,24 +152,19 @@ class PackageCard extends React.Component {
           <CardContent
             active={active}
             classes={classes}
-            buildLink={this.buildLink}
+            handleChange={this.handleChange}
+            buildLink={this._buildLink}
+            tabIndex={tabIndex}
           />
 
-          <CardActions className={classes.actions} disableActionSpacing>
-            <IconButton aria-label="Install">add</IconButton>
-            <IconButton aria-label="Uninstall">delete</IconButton>
-            <IconButton
-              className={classnames(classes.expand, {
-                [classes.expandOpen]: this._expanded
-              })}
-              onClick={this.handleExpandClick}
-              aria-expanded={this._expanded}
-              aria-label="Show more"
-            >
-              <ExpandMoreIcon />
-            </IconButton>
-          </CardActions>
-          <Collapse in={this._expanded} timeout="auto" unmountOnExit />
+          <CardActions
+            handleExpandClick={this.handleExpandClick}
+            expanded={expanded}
+            classes={classes}
+          />
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <div>test</div>
+          </Collapse>
         </Card>
       </section>
     )

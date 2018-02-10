@@ -9,7 +9,7 @@ export function appHeaderStyles(theme) {
     appBar: {
       position: 'fixed',
       zIndex: theme.zIndex.drawer + 1,
-      backgroundColor: 'rgb(225, 0, 80)',
+      backgroundColor: theme.palette.primary.dark,
       transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
@@ -96,7 +96,7 @@ export function packagesListStyles(theme) {
       justifyContent: 'flex-start'
     },
     heading: {
-      color: 'rgba(0, 0, 0, 0.54)',
+      color: theme.palette.secondary.dark,
       margin: '1em 0 0.7em',
       fontSize: '1.5rem',
       fontWeight: 400,

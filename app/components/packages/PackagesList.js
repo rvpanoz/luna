@@ -23,7 +23,6 @@ class PackagesList extends React.Component {
 
   getPackages() {
     const { mode, directory, toggleLoader } = this.props
-
     toggleLoader(true)
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',

@@ -12,6 +12,18 @@ export function styles(theme) {
       flexDirection: 'column',
       justifyContent: 'flex-start'
     },
+    detailsAppBar: {
+      maxHeight: 65
+    },
+    detailsTabs: {
+      flexGrow: 1,
+      width: '100%',
+      marginTop: theme.spacing.unit * 3,
+      backgroundColor: theme.palette.background.paper
+    },
+    detailsAvatar: {
+      marginTop: 15
+    },
     chip: {
       backgroundColor: pink[500],
       color: '#fff',
@@ -64,7 +76,7 @@ export function styles(theme) {
       lineHeight: '1.35417em'
     },
     headingTail: {
-      marginTop: 15
+      marginTop: 25
     },
     actions: {
       display: 'flex'

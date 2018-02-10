@@ -95,7 +95,6 @@ class Layout extends React.Component {
   render() {
     const {
       classes,
-      theme,
       settings,
       menuOpen,
       handleDrawerOpen,
@@ -105,70 +104,59 @@ class Layout extends React.Component {
 
     return (
       <div className={classes.root}>
-        <div className={classes.appFrame}>
-          <AppHeader
-            title="Luna"
-            theme={theme}
-            menuOpen={menuOpen}
-            handleDrawerOpen={handleDrawerOpen}
-            handleDrawerClose={handleDrawerClose}
-          />
-          <main className={classes.content}>
-            <Grid container justify="space-between">
-              <Grid item xs={12}>
-                <PackagesContainer />
-              </Grid>
+        <AppHeader
+          menuOpen={menuOpen}
+          handleDrawerOpen={handleDrawerOpen}
+          handleDrawerClose={handleDrawerClose}
+        />
+        <main className={classes.content}>
+          <Grid container direction="row" justify="space-between">
+            <Grid item xs={12} md={12} lg={12}>
+              <PackagesContainer />
             </Grid>
-          </main>
-          <div className="app-modal">
-            <Modal
-              aria-labelledby="settings"
-              aria-describedby="set npm settings"
-              open={settingsOpen}
-              onClose={this.handleModal}
-            >
-              <div style={this.getModalStyles()} className={classes.paper}>
-                <form
-                  className={classes.container}
-                  noValidate
-                  autoComplete="off"
+          </Grid>
+        </main>
+        <div className="app-modal">
+          <Modal
+            aria-labelledby="settings"
+            aria-describedby="set npm settings"
+            open={settingsOpen}
+            onClose={this.handleModal}
+          >
+            <div style={this.getModalStyles()} className={classes.paper}>
+              <form className={classes.container} noValidate autoComplete="off">
+                <h3 className={classes.heading}>Settings</h3>
+                <Divider />
+                <TextField
+                  inputProps={{
+                    setting: NPM_CONFIG_VALUES.REGISTRY
+                  }}
+                  label="Registry"
+                  defaultValue={settings && settings.registry}
+                  className={classes.textField}
+                  onChange={this.onChangeNpmSetting}
+                  margin="normal"
+                />
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end'
+                  }}
                 >
-                  <h3 className={classes.heading}>Settings</h3>
-                  <Divider />
-                  <TextField
-                    inputProps={{
-                      setting: NPM_CONFIG_VALUES.REGISTRY
-                    }}
-                    label="Registry"
-                    defaultValue={settings && settings.registry}
-                    className={classes.textField}
-                    onChange={this.onChangeNpmSetting}
-                    margin="normal"
-                  />
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: 'flex-end'
-                    }}
+                  <Button
+                    className={classes.button}
+                    onClick={this.setNpmRegistry}
                   >
-                    <Button
-                      className={classes.button}
-                      onClick={this.setNpmRegistry}
-                    >
-                      Save
-                    </Button>
-                    <Button
-                      onClick={this.handleModal}
-                      className={classes.button}
-                    >
-                      Close
-                    </Button>
-                  </div>
-                </form>
-              </div>
-            </Modal>
-          </div>
+                    Save
+                  </Button>
+                  <Button onClick={this.handleModal} className={classes.button}>
+                    Close
+                  </Button>
+                </div>
+              </form>
+            </div>
+          </Modal>
         </div>
       </div>
     )

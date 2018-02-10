@@ -4,24 +4,22 @@ import deepPurple from 'material-ui/colors/deepPurple'
 export function styles(theme) {
   return {
     root: {
-      width: '100%',
-      height: '100%',
-      zIndex: 1
-    },
-    appFrame: {
       position: 'relative',
       display: 'flex',
       width: '100%',
-      height: '100%'
+      height: '100%',
+      zIndex: 1,
+      backgroundColor: theme.palette.background.contentFrame
     },
     content: {
       width: '100%',
       flexGrow: 1,
       overflow: 'hidden',
-      backgroundColor: theme.palette.background.default,
+      position: 'relative',
+      backgroundColor: theme.palette.background.main,
       padding: 24,
       marginLeft: 50,
-      height: 'calc(100% - 56px)',
+      height: 'calc(100vh - 56px)',
       marginTop: 56,
       [theme.breakpoints.up('sm')]: {
         height: 'calc(100% - 64px)',
@@ -35,14 +33,9 @@ export function styles(theme) {
       boxShadow: theme.shadows[5],
       padding: theme.spacing.unit * 4
     },
-    container: {
-      display: 'flex',
-      flexDirection: 'column',
-      flexWrap: 'wrap'
-    },
     heading: {
-      color: 'rgba(0, 0, 0, 0.54)',
-      margin: '1em 0 1em',
+      color: theme.palette.primary.dark,
+      margin: '1.5em 0 1em',
       fontSize: '1.5rem',
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',

@@ -19,7 +19,7 @@ class PackageContainer extends React.Component {
   constructor() {
     super()
   }
-  componentWillMount() {
+  componentDidMount() {
     //TODO.. NOT WORKING HERE
     const { mode, packageJSON, setPackageGroup } = this.props
 
@@ -48,17 +48,21 @@ class PackageContainer extends React.Component {
     const {
       mode,
       group,
+      expanded,
       active,
       isLoading,
       classes,
       latest,
-      packageJSON
+      packageJSON,
+      toggleExpanded,
+      setActiveTab,
+      tabIndex
     } = this.props
 
     if (!active) {
       return null
     }
-    console.log(active)
+
     return (
       <section className={classes.root}>
         <Loader loading={isLoading}>
@@ -69,7 +73,11 @@ class PackageContainer extends React.Component {
             isLoading={isLoading}
             mode={mode}
             group={group}
+            expanded={expanded}
             packageJSON={packageJSON}
+            toggleExpanded={toggleExpanded}
+            setActiveTab={setActiveTab}
+            tabIndex={tabIndex}
           />
         </Loader>
       </section>
@@ -89,12 +97,17 @@ function mapStateToProps(state) {
     toggleModal: state.global.toggleModal,
     showModal: state.global.showModal,
     npmCmd: state.global.npmCmd,
-    group: state.packages.group
+    group: state.packages.group,
+    expanded: state.packages.expanded,
+    tabIndex: state.packages.tabIndex
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    setActiveTab: (tabIndex) =>
+      dispatch(packagesActions.setActiveTab(tabIndex)),
+    toggleExpanded: (value) => dispatch(packagesActions.toggleExpanded(value)),
     setPackageGroup: (group) =>
       dispatch(packagesActions.setPackageGroup(group)),
     addCommandOption: (option) =>

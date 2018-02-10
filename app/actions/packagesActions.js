@@ -4,6 +4,19 @@
 
 import * as types from 'constants/ActionTypes'
 
+export function setActiveTab(tabIndex) {
+  return {
+    type: types.SET_TAB_INDEX,
+    tabIndex
+  }
+}
+
+export function toggleExpanded() {
+  return {
+    type: types.TOGGLE_EXPANDED
+  }
+}
+
 export function setTotal(total) {
   return {
     type: types.SET_TOTAL,
