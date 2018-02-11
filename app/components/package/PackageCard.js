@@ -2,6 +2,13 @@ import { withStyles } from 'material-ui/styles'
 import { styles } from './styles'
 import { showMessageBox, isUrl, autoBind } from '../../utils'
 import { remote, ipcRenderer, shell } from 'electron'
+import List, { ListItem, ListItemText } from 'material-ui/List'
+import {
+  APP_MODES,
+  APP_ACTIONS,
+  PACKAGE_GROUPS,
+  COMMAND_OPTIONS
+} from 'constants/AppConstants'
 import React from 'react'
 import Collapse from 'material-ui/transitions/Collapse'
 import Card from 'material-ui/Card'
@@ -26,10 +33,80 @@ class PackageCard extends React.Component {
         'handleExpandClick',
         'handleChange',
         'runCommand',
+        '_setupGroup',
+        '_setupCmdOptions',
         '_buildLink'
       ],
       this
     )
+  }
+  _setupCmdOptions(group) {
+    const {
+      addCommandOption,
+      active,
+      clearCommandOptions,
+      packageJSON
+    } = this.props
+
+    // clear options
+    clearCommandOptions()
+
+    switch (group) {
+      case 'dependencies':
+        addCommandOption('save')
+        break
+      case 'devDependencies':
+        addCommandOption('save-dev')
+        break
+      case 'optionalDependencies':
+        addCommandOption('save-optional')
+        break
+      default:
+    }
+
+    // save-exact fix
+    const groupDependencies = packageJSON[group]
+    const name = groupDependencies[active.name]
+
+    if (!isNaN(name.charAt(0))) {
+      addCommandOption('save-exact')
+    }
+  }
+  _setupGroup() {
+    const {
+      mode,
+      packageJSON,
+      setPackageGroup,
+      addCommandOption,
+      clearCommandOptions,
+      active,
+      group
+    } = this.props
+
+    if (mode === APP_MODES.LOCAL) {
+      if (!packageJSON) {
+        throw new Error('PackageJSON is missing')
+      }
+
+      if (!active) {
+        return
+      }
+
+      let found = false
+
+      const groups = Object.keys(PACKAGE_GROUPS).some((group, idx) => {
+        const { name } = active
+        found = packageJSON[group] && packageJSON[group][name] ? group : false
+        if (found) {
+          setPackageGroup(group)
+          this._setupCmdOptions(group)
+          return true
+        }
+      })
+    }
+  }
+  componentDidMount() {
+    this._setupGroup()
   }
   runCommand(action, version) {
     const { mode, directory } = this.props
@@ -39,8 +116,6 @@ class PackageCard extends React.Component {
       cmd.push(` --${options.join(' --')}`)
     }
     setActive(null)
-    //WIP todo
-    // toggleModal(true, cmd);
     ipcRenderer.send('ipc-event', {
       mode,
       directory,
@@ -129,17 +204,7 @@ class PackageCard extends React.Component {
     )
   }
   render() {
-    const {
-      classes,
-      active,
-      isLoading,
-      mode,
-      version,
-      group,
-      tabIndex,
-      expanded,
-      cmdOptions
-    } = this.props
+    const { classes, active, group, expanded, ...props } = this.props
     const { doNavigate } = this
 
     if (!active) {
@@ -151,27 +216,54 @@ class PackageCard extends React.Component {
         <h3 className={classes.heading}>{name}</h3>
         <Divider />
         <Card className={classes.card}>
-          <CardHeader
-            active={active}
-            classes={classes}
-            cmdOptions={cmdOptions}
-            group={group}
-          />
+          <CardHeader active={active} classes={classes} group={group} />
           <CardContent
-            active={active}
             classes={classes}
+            active={active}
+            group={group}
             handleChange={this.handleChange}
             buildLink={this._buildLink}
-            tabIndex={tabIndex}
             onChangeVersion={this.onChangeVersion}
-            version={version}
+            {...props}
           />
           <CardActions
             handleExpandClick={this.handleExpandClick}
             expanded={expanded}
             classes={classes}
           />
-          <Collapse in={expanded} timeout="auto" unmountOnExit />
+          <Collapse
+            in={expanded}
+            timeout="auto"
+            unmountOnExit
+            className={classes.collapseContent}
+          >
+            <h3 className={classes.heading}>Maintainers</h3>
+            <Divider />
+            <List>
+              {active &&
+                active.maintainers.map((item, idx) => {
+                  return (
+                    <ListItem key={idx}>
+                      <ListItemText primary={item} secondary="Jan 9, 2014" />
+                    </ListItem>
+                  )
+                })}
+            </List>
+            <h3 className={classes.heading}>Dependencies</h3>
+            <Divider />
+            <List>
+              {active &&
+                active.dependencies &&
+                Object.keys(active.dependencies).map((item, idx) => {
+                  console.log(item)
+                  return (
+                    <ListItem key={idx}>
+                      <ListItemText primary={item} secondary="Jan 9, 2014" />
+                    </ListItem>
+                  )
+                })}
+            </List>
+          </Collapse>
         </Card>
       </section>
     )

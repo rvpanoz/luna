@@ -19,23 +19,20 @@ export const APP_ACTIONS = {
   UNINSTALL: 'UNINSTALL'
 }
 
-export const QUICKMENU = {
-  ICONS: ['fa-bars', 'fa-feed', 'fa-cog']
-}
-
 // package groups (in package.json)
-export const PACKAGE_GROUPS = [
-  'dependencies',
-  'devDependencies',
-  'optionalDependencies'
-]
+export const PACKAGE_GROUPS = {
+  dependencies: 'save',
+  devDependencies: 'save-dev',
+  optionalDependencies: 'save-optional'
+}
 
 // command options when perfoming an APP action
 export const COMMAND_OPTIONS = [
   'save*Package will appear in your dependencies',
   'save-dev*Package will appear in your devDependencies',
+  'save-optional*Package will appear in your optionalDependencies',
   "save-exact*Saved dependencies will be configured with an exact version rather than using npm's default semver range operator",
-  'save-optional*Saved dependencies will also be added to your bundleDependencies list'
+  'save-bundled*Saved dependencies will also be added to your bundleDependencies list'
 ]
 
 //npm config allowed values

@@ -15,21 +15,30 @@ import {
   CLEAR_COMMAND_OPTIONS,
   MENU_OPEN,
   SET_SETTINGS
-} from 'constants/ActionTypes';
-import initialState from './initialState';
-import { identity, merge, evolve, assoc, propOr, prop, prepend } from 'ramda';
+} from 'constants/ActionTypes'
+import initialState from './initialState'
+import {
+  identity,
+  merge,
+  evolve,
+  assoc,
+  propOr,
+  prop,
+  prepend,
+  contains,
+  remove
+} from 'ramda'
 
-const { packages, ...globalState } = initialState;
+const { packages, ...globalState } = initialState
 
 // currying
-const createReducer = (globalState, handlers) => (state = globalState, action) =>
-  propOr(identity, prop('type', action), handlers)(state, action);
+const createReducer = (globalState, handlers) => (
+  state = globalState,
+  action
+) => propOr(identity, prop('type', action), handlers)(state, action)
 
 const handlers = {
-  [SET_SETTINGS]: (state, action) =>
-    merge(state, {
-      settings: action.settings
-    }),
+  [SET_SETTINGS]: (state, action) => assoc('settings', action.settings, state),
   [SET_MODE]: (state, action) =>
     merge(state, {
       mode: action.mode,
@@ -37,10 +46,9 @@ const handlers = {
     }),
   [TOGGLE_LOADER]: (state, action) => assoc('loading', action.loading, state),
   [TOGGLE_SETTINGS]: (state, action) =>
-    merge(state, {
-      settingsOpen: action.settingsOpen
-    }),
-  [SET_PACKAGE_JSON]: (state, action) => assoc('packageJSON', action.packageJSON, state),
+    assoc('settingsOpen', action.settingsOpen, state),
+  [SET_PACKAGE_JSON]: (state, action) =>
+    assoc('packageJSON', action.packageJSON, state),
   [ADD_MESSAGE]: (state, action) =>
     merge(state, {
       messages: prepend(
@@ -53,15 +61,17 @@ const handlers = {
     }),
   [CLEAR_MESSAGES]: (state, action) => assoc('messages', [], state),
   [CLEAR_COMMAND_OPTIONS]: (state, action) => assoc('cmdOptions', [], state),
-  [ADD_COMMAND_OPTION]: (state, action) =>
-    merge(state, {
-      cmdOptions: prepend(action.option, state.cmdOptions)
-    }),
-  [MENU_OPEN]: (state, action) =>
-    merge(state, {
-      menuOpen: action.menuOpen
+  [ADD_COMMAND_OPTION]: (state, action) => {
+    const idx = state.cmdOptions.indexOf(action.option)
+    return merge(state, {
+      cmdOptions:
+        idx !== -1
+          ? remove(idx, 1, state.cmdOptions)
+          : prepend(action.option, state.cmdOptions)
     })
-};
+  },
+  [MENU_OPEN]: (state, action) => assoc('menuOpen', action.menuOpen, state)
+}
 
-const reducer = createReducer(globalState, handlers);
-export default reducer;
+const reducer = createReducer(globalState, handlers)
+export default reducer

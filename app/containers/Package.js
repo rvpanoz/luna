@@ -4,12 +4,6 @@
 
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import {
-  APP_MODES,
-  APP_ACTIONS,
-  PACKAGE_GROUPS,
-  COMMAND_OPTIONS
-} from 'constants/AppConstants'
 import { styles } from './styles'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
@@ -21,84 +15,8 @@ import Divider from 'material-ui/Divider'
 import PackageCard from 'components/package/PackageCard'
 
 class PackageContainer extends React.Component {
-  static getDerivedStateFromProps(nextProps) {
-    const {
-      mode,
-      active,
-      clearCommandOptions,
-      addCommandOption,
-      packageJSON
-    } = nextProps
-
-    if (active && mode === APP_MODES.LOCAL) {
-      //is in a group? (dependencies, devDependencies etc)
-      PACKAGE_GROUPS.some((groupName, idx) => {
-        if (packageJSON[groupName] && packageJSON[groupName][active.name]) {
-          const packageGroup = groupName
-          return true
-        }
-      })
-
-      if (packageGroup == undefined) {
-        return
-      }
-
-      // clear options
-      clearCommandOptions()
-
-      switch (packageGroup) {
-        case 'dependencies':
-          addCommandOption('save')
-          break
-        case 'devDependencies':
-          addCommandOption('save-dev')
-          break
-        case 'optionalDependencies':
-          addCommandOption('save-optional')
-          break
-        default:
-      }
-
-      // save-exact fix
-      const groupDependencies = packageJSON[packageGroup]
-      const version = groupDependencies[active.name]
-
-      if (!isNaN(version.charAt(0))) {
-        addCommandOption('save-exact')
-      }
-    }
-  }
   constructor() {
     super()
-  }
-  componentWillReceiveProps() {
-    const { mode, packageJSON, setPackageGroup, active } = this.props
-
-    if (mode === APP_MODES.LOCAL) {
-      if (!packageJSON) {
-        throw new Error('PackageJSON is missing')
-      }
-
-      if (!active) {
-        return
-      }
-
-      let found = false
-
-      const groups = PACKAGE_GROUPS.some((group, idx) => {
-        const { name } = active
-        found = packageJSON[group] && packageJSON[group][name] ? group : false
-        if (found) {
-          setPackageGroup(group)
-          return true
-        }
-      })
-    }
-
-    // this._setupUI()
-  }
-  componentDidMount() {
-    // this._setupUI()
   }
   render() {
     const { classes, active, isLoading, ...props } = this.props
@@ -107,7 +25,6 @@ class PackageContainer extends React.Component {
       return null
     }
 
-    console.log(props)
     return (
       <section className={classes.root}>
         <Loader loading={isLoading}>

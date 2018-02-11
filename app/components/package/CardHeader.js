@@ -68,8 +68,8 @@ class CardHeader extends React.Component {
                 }
               }}
             >
-              <MenuItem key="show-globals" onClick={this.setGlobalMode}>
-                Show globals
+              <MenuItem key="item-a" onClick={(e) => console.log(e)}>
+                Action_A
               </MenuItem>
             </Menu>
           </div>
@@ -80,28 +80,6 @@ class CardHeader extends React.Component {
     )
   }
 }
-
-// <Menu
-//   id="long-menu"
-//   anchorEl={this._anchorEl}
-//   open={Boolean(this._anchorEl)}
-//   onClose={this.handleClose}
-//   PaperProps={{
-//     style: {
-//       maxHeight: ITEM_HEIGHT * 4.5,
-//       width: 200
-//     }
-//   }}
-// />
-// {actions.map((action, key) => (
-//   <MenuItem
-//     key={key}
-//     selected={action.text === 'save'}
-//     onClick={this.handleClose}
-//   >
-//     {action.text}
-//   </MenuItem>
-// ))}
 
 CardHeader.propTypes = {
   classes: object,

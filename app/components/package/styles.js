@@ -20,6 +20,14 @@ export function styles(theme) {
       marginTop: theme.spacing.unit * 3,
       backgroundColor: theme.palette.background.paper
     },
+    collapseContent: {
+      margin: theme.spacing.unit * 2
+    },
+    details: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'space-between'
+    },
     detailsAvatar: {
       marginTop: 15
     },
@@ -62,6 +70,11 @@ export function styles(theme) {
       top: '25%',
       left: '50%'
     },
+    textField: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+      width: 200
+    },
     avatar: {
       backgroundColor: theme.palette.secondary.dark
     },
@@ -88,9 +101,6 @@ export function styles(theme) {
     },
     expandOpen: {
       transform: 'rotate(180deg)'
-    },
-    folderList: {
-      width: '100%'
     }
   }
 }

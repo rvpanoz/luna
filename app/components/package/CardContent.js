@@ -32,11 +32,15 @@ const CardContent = (props) => {
   const {
     classes,
     active,
+    mode,
     handleChange,
     tabIndex,
     buildLink,
     version,
-    onChangeVersion
+    cmdOptions,
+    onChangeVersion,
+    addCommandOption,
+    clearCommandOptions
   } = props
 
   if (!active) {
@@ -49,7 +53,7 @@ const CardContent = (props) => {
         <h3 className={classes.heading}>Description</h3>
         <Divider />
         <Typography className={classes.description}>
-          {active.description}
+          {active.description ? active.description : 'No description available'}
         </Typography>
       </section>
       <section>
@@ -62,6 +66,10 @@ const CardContent = (props) => {
           classes={classes}
           onChangeVersion={onChangeVersion}
           version={version}
+          cmdOptions={cmdOptions}
+          mode={mode}
+          addCommandOption={addCommandOption}
+          clearCommandOptions={clearCommandOptions}
         />
         <div className={classes.detailsTabs}>
           <AppBar
@@ -94,27 +102,6 @@ const CardContent = (props) => {
     </MuiCardContent>
   )
 }
-
-// <List className={classes.list}>
-//   {[
-//     { text: 'Homepage', url: active.homepage },
-//     { text: 'Author', url: active.author },
-//     { text: 'License', url: active.license },
-//     { text: 'Issues', url: active.bugs.url }
-//   ].map((item, key) => {
-//     return (
-//       <ListItem key={key}>
-//         <Avatar>
-//           {item.text === 'Homepage' && <Home />}
-//           {item.text === 'Issues' && <BugReport />}
-//           {item.text === 'Author' && <Assistant />}
-//           {item.text === 'License' && <PermIdentity />}
-//         </Avatar>
-//         <ListItemText primary={item.text} secondary={item.url} />
-//       </ListItem>
-//     )
-//   })}
-// </List>
 
 CardContent.propTypes = {
   classes: object,
