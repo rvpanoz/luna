@@ -11,16 +11,10 @@ import { styles } from './styles'
 import { NPM_CONFIG_VALUES } from 'constants/AppConstants'
 import { merge } from 'ramda'
 import { autoBind } from '../utils'
+import Grid from 'material-ui/Grid'
 import React from 'react'
 import PropTypes from 'prop-types'
-import AppHeader from 'components/header/AppHeader'
-import Grid from 'material-ui/Grid'
-import TextField from 'material-ui/TextField'
-import Button from 'material-ui/Button'
-import { SnackbarContent } from 'material-ui/Snackbar'
-import Modal from 'material-ui/Modal'
-import Typography from 'material-ui/Typography'
-import Divider from 'material-ui/Divider'
+import AppActions from './AppActions'
 import PackagesContainer from './Packages'
 
 class Layout extends React.Component {
@@ -104,11 +98,9 @@ class Layout extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppHeader
-          menuOpen={menuOpen}
-          handleDrawerOpen={handleDrawerOpen}
-          handleDrawerClose={handleDrawerClose}
-        />
+        <header className={classes.header}>
+          <AppActions />
+        </header>
         <main className={classes.content}>
           <Grid container direction="row" justify="space-between">
             <Grid item xs={12} md={12} lg={12}>
@@ -116,48 +108,6 @@ class Layout extends React.Component {
             </Grid>
           </Grid>
         </main>
-        <div className="app-modal">
-          <Modal
-            aria-labelledby="settings"
-            aria-describedby="set npm settings"
-            open={settingsOpen}
-            onClose={this.handleModal}
-          >
-            <div style={this.getModalStyles()} className={classes.paper}>
-              <form className={classes.container} noValidate autoComplete="off">
-                <h3 className={classes.heading}>Settings</h3>
-                <Divider />
-                <TextField
-                  inputProps={{
-                    setting: NPM_CONFIG_VALUES.REGISTRY
-                  }}
-                  label="Registry"
-                  defaultValue={settings && settings.registry}
-                  className={classes.textField}
-                  onChange={this.onChangeNpmSetting}
-                  margin="normal"
-                />
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'flex-end'
-                  }}
-                >
-                  <Button
-                    className={classes.button}
-                    onClick={this.setNpmRegistry}
-                  >
-                    Save
-                  </Button>
-                  <Button onClick={this.handleModal} className={classes.button}>
-                    Close
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </Modal>
-        </div>
       </div>
     )
   }

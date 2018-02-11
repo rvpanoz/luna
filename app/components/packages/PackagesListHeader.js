@@ -80,8 +80,8 @@ class PackagesListHeader extends React.Component {
                 }
               }}
             >
-              <MenuItem key="show-globals" onClick={this.setGlobalMode}>
-                Show globals
+              <MenuItem key="sort-a" onClick={(e) => console.log(e)}>
+                Sort by outdated
               </MenuItem>
             </Menu>
           </div>
