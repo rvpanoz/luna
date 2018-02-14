@@ -51,6 +51,7 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('search-packages-close', (event, packagesStr) => {
       try {
         const packages = JSON.parse(packagesStr)
+
         setPackages(packages)
         setTotal(packages.length)
         toggleLoader(false)
@@ -62,6 +63,7 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('view-package-close', (event, packageStr) => {
       try {
         const pkg = JSON.parse(packageStr)
+
         setActive(pkg)
         toggleMainLoader(false)
       } catch (e) {
@@ -71,6 +73,7 @@ class PackagesContainer extends React.Component {
 
     ipcRenderer.on('action-close', (event, pkg) => {
       const { mode, directory } = this.props
+
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'get-packages',
         cmd: ['outdated', 'list'],

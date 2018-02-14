@@ -1,7 +1,8 @@
 export function searchBoxStyles(theme) {
   return {
-    searchBoxLabel: {
-      color: theme.palette.accent
+    root: {
+      margin: 0,
+      padding: 0
     }
   }
 }

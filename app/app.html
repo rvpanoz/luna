@@ -7,17 +7,17 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <script>
     ;(function() {
-	if (!process.env.HOT) {
-		const link = document.createElement('link')
-		link.rel = 'stylesheet'
-		link.href = './dist/style.css'
-		// HACK: Writing the script path should be done with webpack
-		document.getElementsByTagName('head')[0].appendChild(link)
-	}
+  if (!process.env.HOT) {
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = './dist/style.css'
+    // HACK: Writing the script path should be done with webpack
+    document.getElementsByTagName('head')[0].appendChild(link)
+  }
 })()
 </script>
   </head>
-  <body>
+  <body style="overflow: hidden">
     <div id="root"></div>
     <script type="text/javascript" src="./startup.js"></script>
   </body>

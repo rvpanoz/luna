@@ -21,7 +21,7 @@ class PackagesListHeader extends React.Component {
   constructor() {
     super()
     this._anchorEl = null
-    autoBind(['handleClick', 'handleClose', 'setGlobalMode'], this)
+    autoBind(['handleClick', 'handleClose'], this)
   }
   handleClick(e) {
     this._anchorEl = e.currentTarget
@@ -30,22 +30,6 @@ class PackagesListHeader extends React.Component {
   handleClose() {
     this._anchorEl = null
     this.forceUpdate()
-  }
-  setGlobalMode(e) {
-    const { mode, toggleLoader, setMode, setActive } = this.props
-
-    toggleLoader(true)
-    setActive(null)
-    setMode(APP_MODES.GLOBAL, null)
-
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      cmd: ['outdated', 'list'],
-      mode: APP_MODES.GLOBAL,
-      directory: null
-    })
-
-    this.handleClose()
   }
   render() {
     const { classes, total, mode, directory } = this.props

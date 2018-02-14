@@ -22,6 +22,7 @@ class AppHeaderContent extends React.Component {
   }
   openPackage(e) {
     e.preventDefault()
+
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
       {

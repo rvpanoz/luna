@@ -119,6 +119,11 @@ export function packagesListStyles(theme) {
     },
     chip: {
       margin: theme.spacing.unit
+    },
+    list: {
+      visibility: 'visible',
+      overflowY: 'scroll',
+      clear: 'both'
     }
   }
 }

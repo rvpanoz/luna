@@ -40,6 +40,7 @@ class PackagesList extends React.Component {
     const {
       packages,
       total,
+      classes,
       loading,
       mode,
       directory,
@@ -63,33 +64,35 @@ class PackagesList extends React.Component {
           total={total}
         />
         <Loader loading={loading}>
-          <List>
-            {packages
-              ? packages.map((pkg, idx) => {
-                  if (!pkg) {
-                    return
-                  }
-                  const { hasPeerMissing, readme, latest, version } = pkg
-                  if (hasPeerMissing) {
-                    return
-                  }
-                  const name = pkg.from ? pkg.from.split('@')[0] : pkg.name
-                  return (
-                    <PackageListItem
-                      description={pkg.description ? pkg.description : null}
-                      directory={directory}
-                      key={idx}
-                      latest={latest}
-                      mode={mode}
-                      name={name}
-                      readme={readme}
-                      toggleMainLoader={toggleMainLoader}
-                      version={version}
-                    />
-                  )
-                })
-              : null}
-          </List>
+          <div className={classes.list}>
+            <List>
+              {packages
+                ? packages.map((pkg, idx) => {
+                    if (!pkg) {
+                      return
+                    }
+                    const { hasPeerMissing, readme, latest, version } = pkg
+                    if (hasPeerMissing) {
+                      return
+                    }
+                    const name = pkg.from ? pkg.from.split('@')[0] : pkg.name
+                    return (
+                      <PackageListItem
+                        description={pkg.description ? pkg.description : null}
+                        directory={directory}
+                        key={idx}
+                        latest={latest}
+                        mode={mode}
+                        name={name}
+                        readme={readme}
+                        toggleMainLoader={toggleMainLoader}
+                        version={version}
+                      />
+                    )
+                  })
+                : null}
+            </List>
+          </div>
         </Loader>
       </section>
     )
