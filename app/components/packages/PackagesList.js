@@ -64,7 +64,7 @@ class PackagesList extends React.Component {
           total={total}
         />
         <Loader loading={loading}>
-          <div className={classes.list}>
+          <section className={classes.list}>
             <List>
               {packages
                 ? packages.map((pkg, idx) => {
@@ -92,7 +92,7 @@ class PackagesList extends React.Component {
                   })
                 : null}
             </List>
-          </div>
+          </section>
         </Loader>
       </section>
     )

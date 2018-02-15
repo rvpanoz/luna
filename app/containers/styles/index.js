@@ -8,23 +8,17 @@ export function styles(theme) {
       width: '100%',
       height: '100%',
       zIndex: 1,
-      backgroundColor: theme.palette.background.contentFrame,
       overflow: 'hidden'
     },
     content: {
       width: '100%',
+      height: '100%',
       flexGrow: 1,
       overflow: 'hidden',
       position: 'relative',
-      backgroundColor: theme.palette.background.main,
       padding: 24,
       marginLeft: 50,
-      height: 'calc(100vh - 56px)',
       marginTop: 56,
-      [theme.breakpoints.up('sm')]: {
-        height: 'calc(100% - 64px)',
-        marginTop: 64
-      }
     },
     paper: {
       position: 'absolute',
