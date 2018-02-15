@@ -156,20 +156,14 @@ class AppActions extends React.Component {
         {mode === APP_MODES.LOCAL ? (
           <Snackbar
             resumeHideDuration={5}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             open={snackBarOpen}
             onClose={this.handleClose}
             SnackbarContentProps={{
               'aria-describedby': 'workspace'
             }}
             action={<SnackbarAction updateMode={this.updateMode} />}
-            message={
-              <span id="workspace">
-                Working in {firstToUpper(APP_MODES.LOCAL)} mode
-                {<Divider />}
-                {directory}
-              </span>
-            }
+            message={<span id="workspace">{directory}</span>}
           />
         ) : null}
       </div>

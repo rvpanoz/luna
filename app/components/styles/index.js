@@ -120,10 +120,14 @@ export function packagesListStyles(theme) {
     chip: {
       margin: theme.spacing.unit
     },
+    lcontainer: {
+      overflowY: 'auto'
+    },
     list: {
       visibility: 'visible',
-      overflowY: 'scroll',
-      clear: 'both'
+      overflow: 'auto',
+      clear: 'both',
+      maxHeight: '750px'
     }
   }
 }

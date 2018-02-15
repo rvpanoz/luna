@@ -64,8 +64,8 @@ class PackagesList extends React.Component {
           total={total}
         />
         <Loader loading={loading}>
-          <section className={classes.list}>
-            <List>
+          <section className={classes.lcontainer}>
+            <List className={classes.list}>
               {packages
                 ? packages.map((pkg, idx) => {
                     if (!pkg) {

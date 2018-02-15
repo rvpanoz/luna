@@ -181,7 +181,7 @@ class PackagesContainer extends React.Component {
 
     return (
       <Grid container justify="space-between">
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <PackagesList
             packages={packages}
             toggleMainLoader={toggleMainLoader}
@@ -193,7 +193,6 @@ class PackagesContainer extends React.Component {
         <Grid item xs={6}>
           <PackageContainer />
         </Grid>
-        <Grid item xs={3} />
       </Grid>
     )
   }
