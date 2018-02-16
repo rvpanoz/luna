@@ -14,16 +14,15 @@ import Loader from "common/Loader";
 import PackageListItem from "./PackagesListItem";
 import * as globalActions from "actions/globalActions";
 import List from "material-ui/List";
-import PackagesListHeader from "./PackagesListHeader";
 
 class PackagesList extends React.Component {
   constructor() {
     super();
-    this.getPackages = this.getPackages.bind(this);
   }
 
-  getPackages() {
+  componentDidMount() {
     const { mode, directory, toggleLoader } = this.props;
+
     toggleLoader(true);
     ipcRenderer.send("ipc-event", {
       ipcEvent: "get-packages",
@@ -31,10 +30,6 @@ class PackagesList extends React.Component {
       mode,
       directory
     });
-  }
-
-  componentDidMount() {
-    this.getPackages();
   }
 
   render() {
@@ -54,16 +49,6 @@ class PackagesList extends React.Component {
 
     return (
       <section>
-        <PackagesListHeader
-          directory={directory}
-          mode={mode}
-          setMode={setMode}
-          setActive={setActive}
-          setPackages={setPackages}
-          toggleLoader={toggleLoader}
-          packages={packages}
-          total={total}
-        />
         <Loader loading={loading}>
           <section className={classes.lcontainer}>
             <List className={classes.list}>

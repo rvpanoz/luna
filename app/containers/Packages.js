@@ -12,8 +12,15 @@ import * as packagesActions from "actions/packagesActions";
 import * as R from "ramda";
 import React from "react";
 import Grid from "material-ui/Grid";
-import PackagesList from "../components/packages/PackagesList";
+import List from "components/packages/List";
+import withHeaderList from "../components/packages/WithHeaderList";
 import PackageContainer from "./Package";
+
+const WithHeaderList = withHeaderList(List, {
+  title: "Packages",
+  dir: "asc",
+  sort: "name"
+});
 
 class PackagesContainer extends React.Component {
   constructor() {
@@ -155,26 +162,12 @@ class PackagesContainer extends React.Component {
     ]);
   }
   render() {
-    const {
-      mode,
-      directory,
-      packages,
-      setActive,
-      setMode,
-      setPackages,
-      toggleMainLoader
-    } = this.props;
+    const { props } = this.props;
 
     return (
       <Grid container>
         <Grid item xs={4}>
-          <PackagesList
-            packages={packages}
-            toggleMainLoader={toggleMainLoader}
-            setMode={setMode}
-            setActive={setActive}
-            setPackages={setPackages}
-          />
+          <WithHeaderList {...props} />
         </Grid>
         <Grid item xs={6}>
           <PackageContainer />
@@ -191,7 +184,8 @@ function mapStateToProps(state) {
     showModal: state.global.showModal,
     packages: state.packages.packages,
     packagesOutdated: state.packages.outdated,
-    active: state.packages.active
+    active: state.packages.active,
+    total: state.packages.total
   };
 }
 

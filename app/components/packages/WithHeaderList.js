@@ -1,16 +1,25 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import Header from './Header';
+import React from "react";
+import PropTypes from "prop-types";
+import Header from "./ListHeader";
+import List from "./List";
 
-const WithHeaderList = (List) => {
-  render() {
-    return (
-      <div>
-        <Header/>
-        <List/>
-      </div>
-    )
-  }
+function withHeaderList(List, options) {
+  return class extends React.Component {
+    constructor(props) {
+      super(props);
+    }
+    render() {
+      const { props } = this.props;
+      const { title } = options;
+
+      return (
+        <section>
+          <Header {...props} title={title} />
+          <List {...props} />
+        </section>
+      );
+    }
+  };
 }
 
-export default WithHeaderList
+export default withHeaderList;
