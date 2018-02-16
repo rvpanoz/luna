@@ -1,15 +1,15 @@
-import deepOrange from 'material-ui/colors/deepOrange'
-import deepPurple from 'material-ui/colors/deepPurple'
-import pink from 'material-ui/colors/pink'
-import red from 'material-ui/colors/red'
+import deepOrange from "material-ui/colors/deepOrange";
+import deepPurple from "material-ui/colors/deepPurple";
+import pink from "material-ui/colors/pink";
+import red from "material-ui/colors/red";
 
 export function appHeaderStyles(theme) {
-  const drawerWidth = 240
+  const drawerWidth = 240;
   return {
     appBar: {
-      position: 'fixed',
+      position: "fixed",
       zIndex: theme.zIndex.drawer + 1,
-      transition: theme.transitions.create(['width', 'margin'], {
+      transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       })
@@ -17,7 +17,7 @@ export function appHeaderStyles(theme) {
     appBarShift: {
       marginLeft: drawerWidth,
       width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(['width', 'margin'], {
+      transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen
       })
@@ -27,16 +27,16 @@ export function appHeaderStyles(theme) {
       width: drawerWidth
     },
     drawerHeader: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-      padding: '0 8px',
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-end",
+      padding: "0 8px",
       ...theme.mixins.toolbar
     },
     drawerPaperClose: {
       width: 60,
-      overflowX: 'hidden',
-      transition: theme.transitions.create('width', {
+      overflowX: "hidden",
+      transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       })
@@ -46,68 +46,68 @@ export function appHeaderStyles(theme) {
       marginRight: 36
     },
     hide: {
-      display: 'none'
+      display: "none"
     },
     info: {
-      display: 'flex',
-      flexDirection: 'row',
+      display: "flex",
+      flexDirection: "row",
       margin: theme.spacing.unit
     },
     searchBoxLabel: {
-      color: '#fff'
+      color: "#fff"
     },
     searchBoxInput: {
       width: 200,
-      color: '#fff'
+      color: "#fff"
     },
     modeIcon: {
       margin: theme.spacing.unit + 10
     },
     mode: {
       fontFamily: "'Open Sans', sans-serif",
-      fontWeight: 'bold',
-      textAlign: 'center',
+      fontWeight: "bold",
+      textAlign: "center",
       marginTop: theme.spacing.unit + 15
     }
-  }
+  };
 }
 
 export function appHeaderContentStyles() {
   return {
     iconHover: {
-      '&:hover': {
-        fill: 'rgb(225, 0, 80)'
+      "&:hover": {
+        fill: "rgb(225, 0, 80)"
       }
     }
-  }
+  };
 }
 
 export function packagesListStyles(theme) {
   return {
     flexRow: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start'
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "flex-start"
     },
     flexColumn: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-start'
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "flex-start"
     },
     heading: {
-      margin: '1em 0 0.7em',
-      fontSize: '1.5rem',
+      margin: "1em 0 0.7em",
+      fontSize: "1.5rem",
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-      lineHeight: '1.35417em'
+      lineHeight: "1.35417em"
     },
     avatar: {
       margin: 20
     },
     iconbutton: {
-      position: 'relative',
-      top: '15px',
-      marginLeft: 'auto'
+      position: "relative",
+      top: "15px",
+      marginLeft: "auto"
     },
     textField: {
       marginLeft: theme.spacing.unit,
@@ -121,13 +121,14 @@ export function packagesListStyles(theme) {
       margin: theme.spacing.unit
     },
     lcontainer: {
-      overflowY: 'auto'
+      overflowY: "auto"
     },
     list: {
-      visibility: 'visible',
-      overflow: 'auto',
-      clear: 'both',
-      maxHeight: '750px'
+      visibility: "visible",
+      overflowX: "hidden",
+      overflowY: "auto",
+      clear: "both",
+      maxHeight: "750px"
     }
-  }
+  };
 }
