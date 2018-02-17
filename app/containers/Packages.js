@@ -3,29 +3,32 @@
  * pass state as props to children
  * */
 
-import { remote, ipcRenderer } from "electron";
-import { autoBind, parse } from "../utils";
-import { connect } from "react-redux";
-import { APP_MODES } from "constants/AppConstants";
-import * as globalActions from "actions/globalActions";
-import * as packagesActions from "actions/packagesActions";
-import * as R from "ramda";
-import React from "react";
-import Grid from "material-ui/Grid";
-import List from "components/packages/List";
-import withHeaderList from "../components/packages/WithHeaderList";
-import PackageContainer from "./Package";
+import { remote, ipcRenderer } from 'electron'
+import { autoBind, parse } from '../utils'
+import { connect } from 'react-redux'
+import { APP_MODES } from 'constants/AppConstants'
+import * as globalActions from 'actions/globalActions'
+import * as packagesActions from 'actions/packagesActions'
+import * as R from 'ramda'
+import React from 'react'
+import Grid from 'material-ui/Grid'
+import List from 'components/packages/List'
+import withHeaderList from '../components/packages/WithHeaderList'
+import PackageContainer from './Package'
 
 const WithHeaderList = withHeaderList(List, {
-  title: "Packages",
-  dir: "asc",
-  sort: "name"
-});
+  title: 'Packages',
+  dir: 'asc',
+  sort: 'name'
+})
 
 class PackagesContainer extends React.Component {
   constructor() {
-    super();
-    autoBind(["_setupPackages", "_setupOutdated", "_viewPackage", "_clearUI"], this);
+    super()
+    autoBind(
+      ['_setupPackages', '_setupOutdated', '_viewPackage', '_clearUI'],
+      this
+    )
   }
   componentDidMount() {
     const {
@@ -36,149 +39,176 @@ class PackagesContainer extends React.Component {
       setPackages,
       toggleLoader,
       setPackageJSON
-    } = this.props;
+    } = this.props
 
-    ipcRenderer.on("get-packages-close", (event, packages, command) => {
+    ipcRenderer.on('get-packages-close', (event, packages, command) => {
       if (!packages) {
-        return;
+        return
       }
 
-      if (command === "outdated") {
-        this._setupOutdated(packages);
+      if (command === 'outdated') {
+        this._setupOutdated(packages)
       } else {
-        this._setupPackages(packages);
+        this._setupPackages(packages)
       }
 
-      toggleLoader(false);
-    });
+      toggleLoader(false)
+    })
 
-    ipcRenderer.on("search-packages-close", (event, packagesStr) => {
+    ipcRenderer.on('search-packages-close', (event, packagesStr) => {
       try {
-        const packages = JSON.parse(packagesStr);
+        const packages = JSON.parse(packagesStr)
 
-        setPackages(packages);
-        setTotal(packages.length);
-        toggleLoader(false);
+        setPackages(packages)
+        setTotal(packages.length)
+        toggleLoader(false)
       } catch (e) {
-        throw new Error(e);
+        throw new Error(e)
       }
-    });
+    })
 
-    ipcRenderer.on("view-package-close", (event, packageStr) => {
+    ipcRenderer.on('view-package-close', (event, packageStr) => {
       try {
-        const pkg = JSON.parse(packageStr);
+        const pkg = JSON.parse(packageStr)
 
-        setActive(pkg);
-        toggleMainLoader(false);
+        setActive(pkg)
+        toggleMainLoader(false)
       } catch (e) {
-        throw new Error(e);
+        throw new Error(e)
       }
-    });
+    })
 
-    ipcRenderer.on("action-close", (event, pkg) => {
-      const { mode, directory } = this.props;
+    ipcRenderer.on('action-close', (event, pkg) => {
+      const { mode, directory } = this.props
 
-      ipcRenderer.send("ipc-event", {
-        ipcEvent: "get-packages",
-        cmd: ["outdated", "list"],
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'get-packages',
+        cmd: ['outdated', 'list'],
         mode,
         directory
-      });
-    });
+      })
+    })
 
-    ipcRenderer.on("ipcEvent-error", (event, error) => {
+    ipcRenderer.on('ipcEvent-error', (event, error) => {
       // console.error(error)
-    });
+    })
 
-    ipcRenderer.on("analyze-json-close", (event, directory, content) => {
-      toggleLoader(true);
-      setMode(APP_MODES.LOCAL, directory);
-      setActive(null);
-      setPackageJSON(content);
-      ipcRenderer.send("ipc-event", {
-        ipcEvent: "get-packages",
-        cmd: ["outdated", "list"],
+    ipcRenderer.on('analyze-json-close', (event, directory, content) => {
+      toggleLoader(true)
+      setMode(APP_MODES.LOCAL, directory)
+      setActive(null)
+      setPackageJSON(content)
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'get-packages',
+        cmd: ['outdated', 'list'],
         mode: APP_MODES.LOCAL,
         directory
-      });
-    });
+      })
+    })
   }
   _setupPackages(packages) {
-    const { setActive, setPackages, packagesOutdated, setTotal, clearMessages } = this.props;
+    const {
+      setActive,
+      setPackages,
+      packagesOutdated,
+      setTotal,
+      clearMessages
+    } = this.props
 
-    const packagesData = parse(packages, "dependencies");
+    const packagesData = parse(packages, 'dependencies')
     const data = R.map((pkg) => {
-      if (!pkg.from) return;
-      const pkgName = R.split("@")(pkg.from)[0];
-      const outdatedPackage = R.prop(pkgName, packagesOutdated);
+      if (!pkg.from) return
+      const pkgName = R.split('@')(pkg.from)[0]
+      const outdatedPackage = R.prop(pkgName, packagesOutdated)
 
-      if (outdatedPackage && typeof outdatedPackage === "object") {
+      if (outdatedPackage && typeof outdatedPackage === 'object') {
         return R.merge(pkg, {
           latest: outdatedPackage.latest
-        });
+        })
       }
-      return pkg;
-    }, packagesData);
+      return pkg
+    }, packagesData)
 
     // update state
-    setPackages(data);
-    setTotal(data.length);
+    setPackages(data)
+    setTotal(data.length)
   }
   _viewPackage(name, version) {
-    ipcRenderer.send("ipc-event", {
-      ipcEvent: "view-package",
-      cmd: ["view"],
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'view-package',
+      cmd: ['view'],
       pkgName: name,
       pkgVersion: version,
       mode: this.props.mode,
       directory: this.props.directory
-    });
+    })
   }
   _clearUI() {
-    const { setActive, setPackageActions, toggleMainLoader, clearMessages } = this.props;
+    const {
+      setActive,
+      setPackageActions,
+      toggleMainLoader,
+      clearMessages
+    } = this.props
 
-    setActive(null);
-    clearMessages();
-    setPackageActions();
-    toggleMainLoader(false);
+    setActive(null)
+    clearMessages()
+    setPackageActions()
+    toggleMainLoader(false)
   }
   _setupOutdated(packages) {
-    const { setPackagesOutdated } = this.props;
+    const { setPackagesOutdated } = this.props
     try {
-      const packagesOutdated = JSON.parse(packages);
-      setPackagesOutdated(packagesOutdated);
+      const packagesOutdated = JSON.parse(packages)
+      setPackagesOutdated(packagesOutdated)
     } catch (e) {
-      throw new Error(e);
+      throw new Error(e)
     }
   }
   componentWillUnmount() {
     ipcRenderer.removeAllListeners([
-      "get-packages-close",
-      "search-packages-close",
-      "action-close",
-      "view-package-reply",
-      "ipcEvent-error",
-      "analyze-json-close"
-    ]);
+      'get-packages-close',
+      'search-packages-close',
+      'action-close',
+      'view-package-reply',
+      'ipcEvent-error',
+      'analyze-json-close'
+    ])
   }
   render() {
-    const { props } = this.props;
+    const {
+      toggleLoader,
+      toggleMainLoader,
+      mode,
+      loading,
+      directory,
+      packages,
+      ...rest
+    } = this.props
 
     return (
       <Grid container>
         <Grid item xs={4}>
-          <WithHeaderList {...props} />
+          <WithHeaderList
+            loading={loading}
+            toggleLoader={toggleLoader}
+            toggleMainLoader={toggleMainLoader}
+            mode={mode}
+            directory={directory}
+            packages={packages}
+          />
         </Grid>
         <Grid item xs={6}>
           <PackageContainer />
         </Grid>
       </Grid>
-    );
+    )
   }
 }
 
 function mapStateToProps(state) {
   return {
+    loading: state.global.loading,
     mode: state.global.mode,
     directory: state.global.directory,
     showModal: state.global.showModal,
@@ -186,24 +216,30 @@ function mapStateToProps(state) {
     packagesOutdated: state.packages.outdated,
     active: state.packages.active,
     total: state.packages.total
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
     setPackages: (packages) => dispatch(packagesActions.setPackages(packages)),
-    setPackageActions: (actions) => dispatch(packagesActions.setPackageActions(actions)),
-    setPackageJSON: (content) => dispatch(globalActions.setPackageJSON(content)),
+    setPackageActions: (actions) =>
+      dispatch(packagesActions.setPackageActions(actions)),
+    setPackageJSON: (content) =>
+      dispatch(globalActions.setPackageJSON(content)),
     setActive: (active) => dispatch(packagesActions.setActive(active)),
     toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
     toggleModal: (bool) => dispatch(globalActions.toggleModal(bool)),
     setTotal: (total) => dispatch(packagesActions.setTotal(total)),
-    toggleMainLoader: (bool) => dispatch(packagesActions.toggleMainLoader(bool)),
-    setMode: (mode, directory) => dispatch(globalActions.setMode(mode, directory)),
-    setPackagesOutdated: (packages) => dispatch(packagesActions.setPackagesOutdated(packages)),
-    addMessage: (level, message) => dispatch(globalActions.addMessage(level, message)),
+    toggleMainLoader: (bool) =>
+      dispatch(packagesActions.toggleMainLoader(bool)),
+    setMode: (mode, directory) =>
+      dispatch(globalActions.setMode(mode, directory)),
+    setPackagesOutdated: (packages) =>
+      dispatch(packagesActions.setPackagesOutdated(packages)),
+    addMessage: (level, message) =>
+      dispatch(globalActions.addMessage(level, message)),
     clearMessages: () => dispatch(globalActions.clearMessages())
-  };
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PackagesContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(PackagesContainer)

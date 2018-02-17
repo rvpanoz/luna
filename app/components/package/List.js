@@ -6,7 +6,7 @@ function renderItem(item) {
   console.log(item)
   return (
     <ListItem key={item}>
-      <ListItemText primary={item} secondary="Jan 9, 2014" />
+      <ListItemText primary={item} secondary"Jan 9, 2014" />
     </ListItem>
   )
 }
@@ -19,7 +19,7 @@ function buildItems(items) {
     items.map((item, idx) => {
       return (
         <ListItem key={idx}>
-          <ListItemText primary={item} secondary="Jan 9, 2014" />
+          <ListItemText primary={item} secondary"Jan 9, 2014" />
         </ListItem>
       )
     })

@@ -60,7 +60,7 @@ class AppHeaderContent extends React.Component {
                 <Icon className={classes.iconHover}>archive</Icon>
               </ListItemIcon>
             </Tooltip>
-            <ListItemText primary="Analyze" secondary="Open package.json" />
+            <ListItemText primary="Analyze" secondary"Open package.json" />
           </ListItem>
           <ListItem button onClick={this.toggleAppSettings}>
             <Tooltip title="Open application settings" placement="right-start">
@@ -68,7 +68,7 @@ class AppHeaderContent extends React.Component {
                 <Icon>settings</Icon>
               </ListItemIcon>
             </Tooltip>
-            <ListItemText primary="Settings" secondary="Application settings" />
+            <ListItemText primary="Settings" secondary"Application settings" />
           </ListItem>
         </List>
       </section>

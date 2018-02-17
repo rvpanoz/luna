@@ -14,13 +14,9 @@ const AppTheme = themeA()
 
 const App = (props) => {
   const { store } = props
-  const theme = createMuiTheme({
-    palette: {
-      type: 'light'
-    }
-  })
-
+  const theme = createMuiTheme(themeA)
   console.log(theme)
+
   return (
     <section id="root">
       <Reboot />
