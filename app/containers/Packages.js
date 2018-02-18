@@ -179,6 +179,7 @@ class PackagesContainer extends React.Component {
     const {
       toggleLoader,
       toggleMainLoader,
+      setPackages,
       mode,
       loading,
       directory,
@@ -196,6 +197,7 @@ class PackagesContainer extends React.Component {
             mode={mode}
             directory={directory}
             packages={packages}
+            setPackages={setPackages}
           />
         </Grid>
         <Grid item xs={6}>

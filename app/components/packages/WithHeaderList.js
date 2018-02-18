@@ -3,6 +3,8 @@ HOC for List and ListHeader
 **/
 
 import { ipcRenderer } from 'electron'
+import { autoBind } from '../../utils'
+import * as R from 'ramda'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Header from './ListHeader'
@@ -12,6 +14,7 @@ function withHeaderList(List, options = {}) {
   return class WithHeaderList extends React.Component {
     constructor(props) {
       super(props)
+      autoBind(['sortBy'], this)
     }
     componentDidMount() {
       const { mode, directory, toggleLoader } = this.props
@@ -24,13 +27,24 @@ function withHeaderList(List, options = {}) {
         directory
       })
     }
+    sortBy(prop, dir) {
+      console.log(this.props.packages)
+      const { packages, setPackages } = this.props
+
+      const comparator = R.comparator((a, b) =>
+        R.gt(R.propOr(R.F, prop, b), R.propOr(R.F, prop, a))
+      )
+
+      const sortedByLatest = R.sort(comparator, packages)
+      setPackages(sortedByLatest)
+    }
     render() {
       const { loading, packages, toggleMainLoader, ...rest } = this.props
       const { title } = options
 
       return (
         <section>
-          <Header {...rest} title={title} />
+          <Header sortBy={this.sortBy} title={title} />
           <List
             packages={packages}
             loading={loading}

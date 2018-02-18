@@ -1,39 +1,47 @@
-import { ipcRenderer } from "electron";
-import { connect } from "react-redux";
-import { compose } from "redux";
-import { APP_MODES } from "constants/AppConstants";
-import { withStyles } from "material-ui/styles";
-import * as packagesActions from "actions/packagesActions";
-import { packagesListStyles } from "../styles";
-import { autoBind } from "../../utils";
-import React from "react";
-import Divider from "material-ui/Divider";
-import Avatar from "material-ui/Avatar";
-import Typography from "material-ui/Typography";
-import IconButton from "material-ui/IconButton";
-import Chip from "material-ui/Chip";
-import Menu, { MenuItem } from "material-ui/Menu";
-import MoreVertIcon from "material-ui-icons/MoreVert";
+import { withStyles } from 'material-ui/styles'
+import { packagesListStyles } from '../styles'
+import { autoBind } from '../../utils'
+import React from 'react'
+import Divider from 'material-ui/Divider'
+import Avatar from 'material-ui/Avatar'
+import Typography from 'material-ui/Typography'
+import IconButton from 'material-ui/IconButton'
+import Chip from 'material-ui/Chip'
+import Menu, { MenuItem } from 'material-ui/Menu'
+import MoreVertIcon from 'material-ui-icons/MoreVert'
 
-const ITEM_HEIGHT = 48;
+const ITEM_HEIGHT = 48
 
 class ListHeader extends React.Component {
   constructor() {
-    super();
-    this._anchorEl = null;
-    autoBind(["handleClick", "handleClose"], this);
+    super()
+    this._anchorEl = null
+    autoBind(
+      ['handleClick', 'handleClose', 'handleSortByLatest', 'handleSortByName'],
+      this
+    )
   }
   handleClick(e) {
-    this._anchorEl = e.currentTarget;
-    this.forceUpdate();
+    this._anchorEl = e.currentTarget
+    this.forceUpdate()
   }
   handleClose() {
-    this._anchorEl = null;
-    this.forceUpdate();
+    this._anchorEl = null
+    this.forceUpdate()
+  }
+  handleSortByName() {
+    const { sortBy } = this.props
+    sortBy('from')
+    this.handleClose()
+  }
+  handleSortByLatest() {
+    const { sortBy } = this.props
+    sortBy('latest')
+    this.handleClose()
   }
   render() {
-    const { classes, total, mode, directory, title } = this.props;
-    const anchorEl = this._anchorEl;
+    const { classes, total, mode, directory, title } = this.props
+    const anchorEl = this._anchorEl
 
     return (
       <section className={classes.flexColumn}>
@@ -42,10 +50,10 @@ class ListHeader extends React.Component {
           <Avatar className={classes.avatar} color="secondary">
             {total}
           </Avatar>
-          <div style={{ marginLeft: "auto" }}>
+          <div style={{ marginLeft: 'auto' }}>
             <IconButton
               aria-label="More"
-              aria-owns={anchorEl ? "long-menu" : null}
+              aria-owns={anchorEl ? 'long-menu' : null}
               aria-haspopup="true"
               onClick={this.handleClick}
               className={classes.iconbutton}
@@ -64,23 +72,31 @@ class ListHeader extends React.Component {
                 }
               }}
             >
-              <MenuItem key="sort-a" onClick={(e) => console.log(e)}>
+              <MenuItem key="sort-name" onClick={this.handleSortByName}>
+                Sort by name
+              </MenuItem>
+              <MenuItem key="sort-latest" onClick={this.handleSortByLatest}>
                 Sort by outdated
               </MenuItem>
             </Menu>
           </div>
           <Divider />
         </div>
-        <div className={classes.flexRow} style={{ display: "none" }}>
+        <div className={classes.flexRow} style={{ display: 'none' }}>
           <Chip label={mode} className={classes.chip} />
-          <Typography align="right" paragraph type="subheading" className={classes.directory}>
+          <Typography
+            align="right"
+            paragraph
+            type="subheading"
+            className={classes.directory}
+          >
             {directory}
           </Typography>
         </div>
         <Divider />
       </section>
-    );
+    )
   }
 }
 
-export default withStyles(packagesListStyles)(ListHeader);
+export default withStyles(packagesListStyles)(ListHeader)
