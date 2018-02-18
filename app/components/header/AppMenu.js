@@ -49,7 +49,7 @@ const styles = (theme) => ({
 const SnackbarAction = (props) => {
   const { updateMode } = props
   return (
-    <Button color="secondary" size="small" onClick={(e) => updateMode()}>
+    <Button color="accent" size="small" onClick={(e) => updateMode()}>
       global
     </Button>
   )

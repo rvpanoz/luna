@@ -61,11 +61,14 @@ class PackageListItem extends React.Component {
 
     return (
       <ListItem button onClick={this.onItemClick}>
-        <ListItemText primary={name} secondary={version} />
+        <ListItemText
+          primary={`${name} ${version}`}
+          secondary={`${latest ? ` \nlatest: ${latest}` : 'up to date'}`}
+        />
         <ListItemSecondaryAction>
           {latest ? (
             <IconButton
-              color="primary"
+              color="accent"
               onClick={this.onUpdate}
               aria-label="Update"
             >
