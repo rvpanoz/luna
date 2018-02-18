@@ -186,7 +186,7 @@
     "electron-debug": "^1.5.0",
     "font-awesome": "^4.7.0",
     "history": "^4.7.2",
-    "material-ui": "^1.0.0-beta.33",
+    "material-ui": "^1.0.0-beta.34",
     "material-ui-icons": "^1.0.0-beta.17",
     "moment": "^2.20.1",
     "ramda": "^0.25.0",

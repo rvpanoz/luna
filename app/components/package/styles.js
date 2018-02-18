@@ -62,7 +62,7 @@ export function styles(theme) {
     updated: {
       fontSize: 12,
       fontWeight: 300,
-      color: theme.palette.primary.light,
+      color: theme.palette.primary.dark,
       margin: '1em 0 0.7em'
     },
     center: {

@@ -213,8 +213,6 @@ class PackageCard extends React.Component {
 
     return (
       <section className={classes.root}>
-        <h3 className={classes.heading}>{name}</h3>
-        <Divider />
         <Card className={classes.card}>
           <CardHeader active={active} classes={classes} group={group} />
           <CardContent
@@ -255,7 +253,6 @@ class PackageCard extends React.Component {
               {active &&
                 active.dependencies &&
                 Object.keys(active.dependencies).map((item, idx) => {
-                  console.log(item)
                   return (
                     <ListItem key={idx}>
                       <ListItemText primary={item} secondary="Jan 9, 2014" />

@@ -11,6 +11,7 @@ import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
 import * as R from 'ramda'
 import React from 'react'
+import Loader from 'common/Loader'
 import Grid from 'material-ui/Grid'
 import List from 'components/packages/List'
 import withHeaderList from '../components/packages/WithHeaderList'
@@ -25,10 +26,7 @@ const WithHeaderList = withHeaderList(List, {
 class PackagesContainer extends React.Component {
   constructor() {
     super()
-    autoBind(
-      ['_setupPackages', '_setupOutdated', '_viewPackage', '_clearUI'],
-      this
-    )
+    autoBind(['setupPackagesFromResponse', 'setupOutdated', 'clearUI'], this)
   }
   componentDidMount() {
     const {
@@ -47,9 +45,9 @@ class PackagesContainer extends React.Component {
       }
 
       if (command === 'outdated') {
-        this._setupOutdated(packages)
+        this.setupOutdated(packages)
       } else {
-        this._setupPackages(packages)
+        this.setupPackagesFromResponse(packages)
       }
 
       toggleLoader(false)
@@ -70,12 +68,22 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('view-package-close', (event, packageStr) => {
       try {
         const pkg = JSON.parse(packageStr)
-
         setActive(pkg)
         toggleMainLoader(false)
       } catch (e) {
         throw new Error(e)
       }
+    })
+
+    ipcRenderer.on('update-package-close', (event, pkg) => {
+      const { mode, directory } = this.props
+
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'get-packages',
+        cmd: ['outdated', 'list'],
+        mode,
+        directory
+      })
     })
 
     ipcRenderer.on('action-close', (event, pkg) => {
@@ -90,7 +98,7 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('ipcEvent-error', (event, error) => {
-      // console.error(error)
+      console.error(error)
     })
 
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
@@ -106,7 +114,8 @@ class PackagesContainer extends React.Component {
       })
     })
   }
-  _setupPackages(packages) {
+
+  setupPackagesFromResponse(packages) {
     const {
       setActive,
       setPackages,
@@ -121,29 +130,24 @@ class PackagesContainer extends React.Component {
       const pkgName = R.split('@')(pkg.from)[0]
       const outdatedPackage = R.prop(pkgName, packagesOutdated)
 
-      if (outdatedPackage && typeof outdatedPackage === 'object') {
-        return R.merge(pkg, {
+      if (
+        outdatedPackage &&
+        typeof outdatedPackage === 'object' &&
+        pkg.version !== outdatedPackage.latest
+      ) {
+        const _pkg = R.merge(pkg, {
           latest: outdatedPackage.latest
         })
+        return _pkg
       }
+
       return pkg
     }, packagesData)
 
-    // update state
     setPackages(data)
     setTotal(data.length)
   }
-  _viewPackage(name, version) {
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'view-package',
-      cmd: ['view'],
-      pkgName: name,
-      pkgVersion: version,
-      mode: this.props.mode,
-      directory: this.props.directory
-    })
-  }
-  _clearUI() {
+  clearUI() {
     const {
       setActive,
       setPackageActions,
@@ -156,7 +160,7 @@ class PackagesContainer extends React.Component {
     setPackageActions()
     toggleMainLoader(false)
   }
-  _setupOutdated(packages) {
+  setupOutdated(packages) {
     const { setPackagesOutdated } = this.props
     try {
       const packagesOutdated = JSON.parse(packages)
@@ -169,6 +173,7 @@ class PackagesContainer extends React.Component {
     ipcRenderer.removeAllListeners([
       'get-packages-close',
       'search-packages-close',
+      'update-package-close',
       'action-close',
       'view-package-reply',
       'ipcEvent-error',
@@ -181,7 +186,9 @@ class PackagesContainer extends React.Component {
       toggleMainLoader,
       setPackages,
       mode,
+      total,
       loading,
+      isLoading,
       directory,
       packages,
       ...rest
@@ -195,13 +202,16 @@ class PackagesContainer extends React.Component {
             toggleLoader={toggleLoader}
             toggleMainLoader={toggleMainLoader}
             mode={mode}
+            total={total}
             directory={directory}
             packages={packages}
             setPackages={setPackages}
           />
         </Grid>
         <Grid item xs={6}>
-          <PackageContainer />
+          <Loader loading={isLoading}>
+            <PackageContainer />
+          </Loader>
         </Grid>
       </Grid>
     )
@@ -211,6 +221,7 @@ class PackagesContainer extends React.Component {
 function mapStateToProps(state) {
   return {
     loading: state.global.loading,
+    isLoading: state.packages.isLoading,
     mode: state.global.mode,
     directory: state.global.directory,
     showModal: state.global.showModal,

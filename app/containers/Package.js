@@ -8,7 +8,6 @@ import { styles } from './styles'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
-import Loader from 'common/Loader'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
@@ -27,10 +26,7 @@ class PackageContainer extends React.Component {
 
     return (
       <section className={classes.root}>
-        <Loader loading={isLoading}>
-          <h3 className={classes.heading}>{active.name}</h3>
-          <PackageCard isLoading={isLoading} active={active} {...props} />
-        </Loader>
+        <PackageCard isLoading={isLoading} active={active} {...props} />
       </section>
     )
   }

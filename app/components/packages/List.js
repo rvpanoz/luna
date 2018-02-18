@@ -11,7 +11,7 @@ import { packagesListStyles } from '../styles'
 import classnames from 'classnames'
 import React from 'react'
 import Loader from 'common/Loader'
-import PackageListItem from './PackagesListItem'
+import ListItem from './ListItem'
 import * as globalActions from 'actions/globalActions'
 import List from 'material-ui/List'
 
@@ -47,7 +47,7 @@ class PackagesList extends React.Component {
                     }
                     const name = pkg.from ? pkg.from.split('@')[0] : pkg.name
                     return (
-                      <PackageListItem
+                      <ListItem
                         description={pkg.description ? pkg.description : null}
                         directory={directory}
                         key={idx}
