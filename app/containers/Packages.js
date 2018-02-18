@@ -50,6 +50,7 @@ class PackagesContainer extends React.Component {
         this.setupPackagesFromResponse(packages)
       }
 
+      toggleMainLoader(false)
       toggleLoader(false)
     })
 

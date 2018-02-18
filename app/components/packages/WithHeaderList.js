@@ -28,7 +28,6 @@ function withHeaderList(List, options = {}) {
       })
     }
     sortBy(prop, dir) {
-      console.log(this.props.packages)
       const { packages, setPackages } = this.props
 
       const comparator = R.comparator((a, b) =>
