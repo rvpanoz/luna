@@ -16,14 +16,20 @@ const SnackbarAction = (props) => {
 }
 
 const SnackBar = (props) => {
-  const { snackBarOpen, handleClose, action, actionText, message } = props
+  const {
+    snackBarOpen,
+    handleSnackBarClose,
+    action,
+    actionText,
+    message
+  } = props
 
   return (
     <Snackbar
       resumeHideDuration={5}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       open={snackBarOpen}
-      onClose={handleClose}
+      onClose={handleSnackBarClose}
       SnackbarContentProps={{
         'aria-describedby': 'message'
       }}

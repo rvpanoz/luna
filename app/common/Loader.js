@@ -4,7 +4,7 @@
 
 import React from 'react'
 import { withStyles } from 'material-ui/styles'
-import { loaderStyles } from './styles'
+import { loaderStyles } from '../styles/common'
 import { CircularProgress } from 'material-ui/Progress'
 
 const AppLoader = (props) => {

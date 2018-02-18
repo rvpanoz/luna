@@ -33,8 +33,7 @@ class PackagesContainer extends React.Component {
         'setupOutdated',
         'setGlobalMode',
         'handleSnackBar',
-        'handleSnackBarClose',
-        'clearUI'
+        'handleSnackBarClose'
       ],
       this
     )
@@ -185,24 +184,6 @@ class PackagesContainer extends React.Component {
     setPackages(data)
     setTotal(data.length)
   }
-  clearUI() {
-    console.log('clearing UI..')
-    const {
-      setActive,
-      setPackageActions,
-      toggleMainLoader,
-      toggleLoader,
-      clearMessages,
-      setPackages
-    } = this.props
-
-    setPackages([])
-    setActive(null)
-    clearMessages()
-    setPackageActions()
-    toggleLoader(false)
-    toggleMainLoader(false)
-  }
   setupOutdated(packages) {
     const { setPackagesOutdated } = this.props
     try {
@@ -264,10 +245,10 @@ class PackagesContainer extends React.Component {
             </Loader>
           </Grid>
         </Grid>
-        {snackBarOpen ? (
+        {snackbar ? (
           <SnackBar
             snackBarOpen={snackBarOpen}
-            handleClose={this.handleSnackBarClose}
+            handleSnackBarClose={this.handleSnackBarClose}
             action={this.setGlobalMode}
             actionText={snackbar.actionText}
             message={snackbar.message}
