@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron'
 import { withStyles } from 'material-ui/styles'
 import { packagesListStyles } from '../styles'
 import { autoBind } from '../../utils'
@@ -17,7 +18,13 @@ class ListHeader extends React.Component {
     super()
     this._anchorEl = null
     autoBind(
-      ['handleClick', 'handleClose', 'handleSortByLatest', 'handleSortByName'],
+      [
+        'handleClick',
+        'handleClose',
+        'handleSortByLatest',
+        'handleSortByName',
+        'reload'
+      ],
       this
     )
   }
@@ -39,6 +46,17 @@ class ListHeader extends React.Component {
     sortBy('latest')
     this.handleClose()
   }
+  reload(e) {
+    const { mode, directory, toggleLoader } = this.props
+    toggleLoader(true)
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      cmd: ['outdated', 'list'],
+      mode,
+      directory
+    })
+    this.handleClose()
+  }
   render() {
     const { classes, total, mode, directory, title } = this.props
     const anchorEl = this._anchorEl
@@ -47,7 +65,7 @@ class ListHeader extends React.Component {
       <section className={classes.flexColumn}>
         <div className={classes.flexRow}>
           <h3 className={classes.heading}>{title}</h3>
-          <Avatar className={classes.avatar} color="secondary">
+          <Avatar className={classes.avatar} color="accent">
             {total}
           </Avatar>
           <div style={{ marginLeft: 'auto' }}>
@@ -77,6 +95,10 @@ class ListHeader extends React.Component {
               </MenuItem>
               <MenuItem key="sort-latest" onClick={this.handleSortByLatest}>
                 Sort by outdated
+              </MenuItem>
+              <Divider />
+              <MenuItem key="reload" onClick={this.reload}>
+                Reload
               </MenuItem>
             </Menu>
           </div>

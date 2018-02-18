@@ -1,36 +1,38 @@
-import red from "material-ui/colors/red";
-import deepPurple from "material-ui/colors/deepPurple";
+import red from 'material-ui/colors/red'
+import deepPurple from 'material-ui/colors/deepPurple'
 
 export function styles(theme) {
   return {
     root: {
-      position: "relative",
-      width: "100%",
-      height: "100%",
+      position: 'relative',
+      width: '100%',
+      height: '100%',
       zIndex: 1,
-      overflow: "hidden"
+      overflow: 'hidden'
     },
     content: {
-      width: "100%",
-      height: "100%",
+      width: '100%',
+      height: '100%',
       flexGrow: 1,
-      overflow: "hidden",
-      position: "relative",
-      padding: 24
+      overflow: 'hidden',
+      position: 'relative',
+      marginTop: 75,
+      marginLeft: 50,
+      padding: 25
     },
     paper: {
-      position: "absolute",
+      position: 'absolute',
       width: theme.spacing.unit * 50,
       backgroundColor: theme.palette.background.paper,
       boxShadow: theme.shadows[5],
       padding: theme.spacing.unit * 4
     },
     heading: {
-      margin: "1.5em 0 1em",
-      fontSize: "1.5rem",
+      margin: '1.5em 0 1em',
+      fontSize: '1.5rem',
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-      lineHeight: "1.35417em"
+      lineHeight: '1.35417em'
     },
     textField: {
       marginLeft: theme.spacing.unit,
@@ -39,7 +41,7 @@ export function styles(theme) {
     },
     button: {
       margin: theme.spacing.unit,
-      fontStyle: "normal"
+      fontStyle: 'normal'
     }
-  };
+  }
 }

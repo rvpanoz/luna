@@ -5,6 +5,8 @@ export default {
   settingsOpen: false,
   settings: null,
   menuOpen: false,
+  snackBarOpen: false,
+  snackbar: null,
   npmCmd: '',
   messages: [],
   cmdOptions: [],

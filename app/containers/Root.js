@@ -22,7 +22,7 @@ const App = (props) => {
       <Reboot />
       <Provider store={store}>
         <MuiThemeProvider theme={theme}>
-          <Layout />
+          <Layout theme={theme} />
         </MuiThemeProvider>
       </Provider>
     </section>

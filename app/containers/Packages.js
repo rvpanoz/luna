@@ -16,6 +16,7 @@ import Grid from 'material-ui/Grid'
 import List from 'components/packages/List'
 import withHeaderList from '../components/packages/WithHeaderList'
 import PackageContainer from './Package'
+import SnackBar from '../common/SnackBar'
 
 const WithHeaderList = withHeaderList(List, {
   title: 'Packages',
@@ -26,7 +27,17 @@ const WithHeaderList = withHeaderList(List, {
 class PackagesContainer extends React.Component {
   constructor() {
     super()
-    autoBind(['setupPackagesFromResponse', 'setupOutdated', 'clearUI'], this)
+    autoBind(
+      [
+        'setupPackagesFromResponse',
+        'setupOutdated',
+        'setGlobalMode',
+        'handleSnackBar',
+        'handleSnackBarClose',
+        'clearUI'
+      ],
+      this
+    )
   }
   componentDidMount() {
     const {
@@ -36,7 +47,9 @@ class PackagesContainer extends React.Component {
       setTotal,
       setPackages,
       toggleLoader,
-      setPackageJSON
+      setPackageJSON,
+      setupSnackbar,
+      toggleSnackbar
     } = this.props
 
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
@@ -107,6 +120,11 @@ class PackagesContainer extends React.Component {
       setMode(APP_MODES.LOCAL, directory)
       setActive(null)
       setPackageJSON(content)
+      setupSnackbar({
+        actionText: 'global',
+        message: directory
+      })
+      toggleSnackbar(true)
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'get-packages',
         cmd: ['outdated', 'list'],
@@ -115,7 +133,26 @@ class PackagesContainer extends React.Component {
       })
     })
   }
+  setGlobalMode(directory) {
+    const {
+      toggleLoader,
+      setPackages,
+      toggleSnackbar,
+      setActive,
+      setMode
+    } = this.props
 
+    setPackages([])
+    toggleSnackbar(false)
+    toggleLoader(true)
+    setActive(null)
+    setMode(APP_MODES.GLOBAL)
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      cmd: ['outdated', 'list'],
+      mode: APP_MODES.GLOBAL
+    })
+  }
   setupPackagesFromResponse(packages) {
     const {
       setActive,
@@ -149,16 +186,21 @@ class PackagesContainer extends React.Component {
     setTotal(data.length)
   }
   clearUI() {
+    console.log('clearing UI..')
     const {
       setActive,
       setPackageActions,
       toggleMainLoader,
-      clearMessages
+      toggleLoader,
+      clearMessages,
+      setPackages
     } = this.props
 
+    setPackages([])
     setActive(null)
     clearMessages()
     setPackageActions()
+    toggleLoader(false)
     toggleMainLoader(false)
   }
   setupOutdated(packages) {
@@ -181,6 +223,10 @@ class PackagesContainer extends React.Component {
       'analyze-json-close'
     ])
   }
+  handleSnackBarClose() {
+    const { toggleSnackbar } = this.props
+    toggleSnackbar(false)
+  }
   render() {
     const {
       toggleLoader,
@@ -192,29 +238,42 @@ class PackagesContainer extends React.Component {
       isLoading,
       directory,
       packages,
+      snackBarOpen,
+      snackbar,
       ...rest
     } = this.props
 
     return (
-      <Grid container>
-        <Grid item xs={4}>
-          <WithHeaderList
-            loading={loading}
-            toggleLoader={toggleLoader}
-            toggleMainLoader={toggleMainLoader}
-            mode={mode}
-            total={total}
-            directory={directory}
-            packages={packages}
-            setPackages={setPackages}
+      <section>
+        <Grid container>
+          <Grid item xs={4} md={3} lg={3}>
+            <WithHeaderList
+              loading={loading}
+              toggleLoader={toggleLoader}
+              toggleMainLoader={toggleMainLoader}
+              mode={mode}
+              total={total}
+              directory={directory}
+              packages={packages}
+              setPackages={setPackages}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <Loader loading={isLoading}>
+              <PackageContainer />
+            </Loader>
+          </Grid>
+        </Grid>
+        {snackBarOpen ? (
+          <SnackBar
+            snackBarOpen={snackBarOpen}
+            handleClose={this.handleSnackBarClose}
+            action={this.setGlobalMode}
+            actionText={snackbar.actionText}
+            message={snackbar.message}
           />
-        </Grid>
-        <Grid item xs={6}>
-          <Loader loading={isLoading}>
-            <PackageContainer />
-          </Loader>
-        </Grid>
-      </Grid>
+        ) : null}
+      </section>
     )
   }
 }
@@ -229,12 +288,17 @@ function mapStateToProps(state) {
     packages: state.packages.packages,
     packagesOutdated: state.packages.outdated,
     active: state.packages.active,
-    total: state.packages.total
+    total: state.packages.total,
+    snackBarOpen: state.global.snackBarOpen,
+    snackbar: state.global.snackbar
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    setupSnackbar: (snackbarOptions) =>
+      dispatch(globalActions.setupSnackbar(snackbarOptions)),
+    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
     setPackages: (packages) => dispatch(packagesActions.setPackages(packages)),
     setPackageActions: (actions) =>
       dispatch(packagesActions.setPackageActions(actions)),

@@ -11,10 +11,12 @@ import {
   CLEAR_MESSAGES,
   TOGGLE_LOADER,
   TOGGLE_SETTINGS,
+  TOGGLE_SNACKBAR,
   ADD_COMMAND_OPTION,
   CLEAR_COMMAND_OPTIONS,
   MENU_OPEN,
-  SET_SETTINGS
+  SET_SETTINGS,
+  SETUP_SNACKBAR
 } from 'constants/ActionTypes'
 import initialState from './initialState'
 import {
@@ -38,12 +40,16 @@ const createReducer = (globalState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action)
 
 const handlers = {
+  [SETUP_SNACKBAR]: (state, action) =>
+    assoc('snackbar', action.snackbarOptions, state),
   [SET_SETTINGS]: (state, action) => assoc('settings', action.settings, state),
   [SET_MODE]: (state, action) =>
     merge(state, {
       mode: action.mode,
       directory: action.directory
     }),
+  [TOGGLE_SNACKBAR]: (state, action) =>
+    assoc('snackBarOpen', action.snackBarOpen, state),
   [TOGGLE_LOADER]: (state, action) => assoc('loading', action.loading, state),
   [TOGGLE_SETTINGS]: (state, action) =>
     assoc('settingsOpen', action.settingsOpen, state),

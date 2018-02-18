@@ -2,35 +2,35 @@
 AppHeader with mini drawer
 **/
 
-import { toggleLoader, toggleSettings } from "actions/globalActions";
-import { setActive } from "actions/packagesActions";
-import { APP_MODES } from "constants/AppConstants";
-import { compose } from "redux";
-import { connect } from "react-redux";
-import { withStyles } from "material-ui/styles";
-import React from "react";
-import PropTypes from "prop-types";
-import AppBar from "material-ui/AppBar";
-import Toolbar from "material-ui/Toolbar";
-import Drawer from "material-ui/Drawer";
-import Typography from "material-ui/Typography";
-import Divider from "material-ui/Divider";
-import classNames from "classnames";
-import Icon from "material-ui/Icon";
-import MenuIcon from "material-ui-icons/Menu";
-import IconButton from "material-ui/IconButton";
-import ChevronLeftIcon from "material-ui-icons/ChevronLeft";
-import ChevronRightIcon from "material-ui-icons/ChevronRight";
-import AppHeaderContent from "./AppHeaderContent";
-import SearchBox from "./SearchBox";
-import { firstToUpper } from "../../utils";
-import { appHeaderStyles } from "../styles";
+import { toggleLoader, toggleSettings } from 'actions/globalActions'
+import { setActive } from 'actions/packagesActions'
+import { APP_MODES } from 'constants/AppConstants'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { withStyles } from 'material-ui/styles'
+import React from 'react'
+import PropTypes from 'prop-types'
+import AppBar from 'material-ui/AppBar'
+import Toolbar from 'material-ui/Toolbar'
+import Drawer from 'material-ui/Drawer'
+import Typography from 'material-ui/Typography'
+import Divider from 'material-ui/Divider'
+import classNames from 'classnames'
+import Icon from 'material-ui/Icon'
+import MenuIcon from 'material-ui-icons/Menu'
+import IconButton from 'material-ui/IconButton'
+import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
+import ChevronRightIcon from 'material-ui-icons/ChevronRight'
+import AppHeaderContent from './AppHeaderContent'
+import SearchBox from './SearchBox'
+import { firstToUpper } from '../../utils'
+import { appHeaderStyles } from '../styles'
 
-const { object } = PropTypes;
+const { object } = PropTypes
 
 class AppHeader extends React.Component {
   constructor() {
-    super();
+    super()
   }
   render() {
     const {
@@ -44,16 +44,21 @@ class AppHeader extends React.Component {
       setActive,
       toggleLoader,
       toggleSettings
-    } = this.props;
+    } = this.props
 
     return (
       <section>
-        <AppBar className={classNames(classes.appBar, menuOpen && classes.appBarShift)}>
+        <AppBar
+          className={classNames(
+            classes.appBar,
+            menuOpen && classes.appBarShift
+          )}
+        >
           <div
             style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between"
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between'
             }}
           >
             <Toolbar disableGutters={!menuOpen}>
@@ -61,14 +66,17 @@ class AppHeader extends React.Component {
                 color="inherit"
                 aria-label="open menu"
                 onClick={handleDrawerOpen}
-                className={classNames(classes.menuButton, menuOpen && classes.hide)}
+                className={classNames(
+                  classes.menuButton,
+                  menuOpen && classes.hide
+                )}
               >
                 <MenuIcon />
               </IconButton>
             </Toolbar>
             <div className={classes.info}>
               <Icon className={classes.modeIcon}>
-                {mode === APP_MODES.GLOBAL ? "language" : "home"}
+                {mode === APP_MODES.GLOBAL ? 'language' : 'home'}
               </Icon>
               <span className={classes.mode}>{firstToUpper(mode)}</span>
             </div>
@@ -78,14 +86,21 @@ class AppHeader extends React.Component {
         <Drawer
           type="permanent"
           classes={{
-            paper: classNames(classes.drawerPaper, !menuOpen && classes.drawerPaperClose)
+            paper: classNames(
+              classes.drawerPaper,
+              !menuOpen && classes.drawerPaperClose
+            )
           }}
           open={menuOpen}
         >
           <div className={classes.drawerInner}>
             <div className={classes.drawerHeader}>
               <IconButton onClick={handleDrawerClose}>
-                {theme.direction === "rtl" ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                {theme.direction === 'rtl' ? (
+                  <ChevronRightIcon />
+                ) : (
+                  <ChevronLeftIcon />
+                )}
               </IconButton>
             </div>
             <Divider />
@@ -93,7 +108,7 @@ class AppHeader extends React.Component {
           </div>
         </Drawer>
       </section>
-    );
+    )
   }
 }
 
@@ -101,7 +116,7 @@ function mapStateToProps(state) {
   return {
     mode: state.global.mode,
     directory: state.global.directory
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -109,15 +124,15 @@ function mapDispatchToProps(dispatch) {
     setActive: (active) => dispatch(setActive(active)),
     toggleSettings: (bool) => dispatch(toggleSettings(bool)),
     toggleLoader: (bool) => dispatch(toggleLoader(bool))
-  };
+  }
 }
 
 AppHeader.propTypes = {
   classes: object.isRequired,
   theme: object.isRequired
-};
+}
 
 export default compose(
   withStyles(appHeaderStyles, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
-)(AppHeader);
+)(AppHeader)

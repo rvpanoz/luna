@@ -8,19 +8,27 @@ import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import { styles } from './styles'
-import { NPM_CONFIG_VALUES } from 'constants/AppConstants'
+import { APP_MODES, NPM_CONFIG_VALUES } from 'constants/AppConstants'
 import { merge } from 'ramda'
 import { autoBind } from '../utils'
 import Grid from 'material-ui/Grid'
 import React from 'react'
 import PropTypes from 'prop-types'
-import AppMenu from 'components/header/AppMenu'
+import AppHeader from 'components/header/AppHeader'
 import PackagesContainer from './Packages'
 
 class Layout extends React.Component {
   constructor() {
     super()
-    autoBind(['handleModal', 'onChangeNpmSetting', 'setNpmRegistry'], this)
+    autoBind(
+      [
+        'handleModal',
+        'onChangeNpmSetting',
+        'setNpmRegistry',
+        'handleSnackBarClose'
+      ],
+      this
+    )
   }
   handleModal() {
     const { closeSettings } = this.props
@@ -66,11 +74,12 @@ class Layout extends React.Component {
       cmd: [cmd.replace('[0]', registry)]
     })
   }
-
   render() {
     const {
       classes,
       settings,
+      mode,
+      theme,
       menuOpen,
       handleDrawerOpen,
       settingsOpen,
@@ -79,9 +88,12 @@ class Layout extends React.Component {
 
     return (
       <div className={classes.root}>
-        <header className={classes.header}>
-          <AppMenu />
-        </header>
+        <AppHeader
+          menuOpen={menuOpen}
+          handleDrawerOpen={handleDrawerOpen}
+          handleDrawerClose={handleDrawerClose}
+          theme={theme}
+        />
         <main className={classes.content}>
           <Grid container direction="row" justify="space-between">
             <Grid item xs={12}>

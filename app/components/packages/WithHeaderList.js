@@ -44,6 +44,7 @@ function withHeaderList(List, options = {}) {
         mode,
         directory,
         total,
+        toggleLoader,
         toggleMainLoader,
         ...rest
       } = this.props
@@ -51,12 +52,20 @@ function withHeaderList(List, options = {}) {
 
       return (
         <section>
-          <Header sortBy={this.sortBy} total={total} title={title} />
+          <Header
+            sortBy={this.sortBy}
+            total={total}
+            title={title}
+            mode={mode}
+            directory={directory}
+            toggleLoader={toggleLoader}
+          />
           <List
             mode={mode}
             directory={directory}
             packages={packages}
             loading={loading}
+            toggleLoader={toggleLoader}
             toggleMainLoader={toggleMainLoader}
           />
         </section>

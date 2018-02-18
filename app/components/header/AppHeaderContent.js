@@ -55,20 +55,16 @@ class AppHeaderContent extends React.Component {
       <section>
         <List>
           <ListItem button onClick={this.openPackage}>
-            <Tooltip title="Analyze package.json file" placement="right-start">
-              <ListItemIcon>
-                <Icon className={classes.iconHover}>archive</Icon>
-              </ListItemIcon>
-            </Tooltip>
-            <ListItemText primary="Analyze" secondary"Open package.json" />
+            <ListItemIcon>
+              <Icon className={classes.iconHover}>archive</Icon>
+            </ListItemIcon>
+            <ListItemText primary="Analyze" secondary="Open package.json" />
           </ListItem>
           <ListItem button onClick={this.toggleAppSettings}>
-            <Tooltip title="Open application settings" placement="right-start">
-              <ListItemIcon>
-                <Icon>settings</Icon>
-              </ListItemIcon>
-            </Tooltip>
-            <ListItemText primary="Settings" secondary"Application settings" />
+            <ListItemIcon>
+              <Icon>settings</Icon>
+            </ListItemIcon>
+            <ListItemText primary="Settings" secondary="Application settings" />
           </ListItem>
         </List>
       </section>

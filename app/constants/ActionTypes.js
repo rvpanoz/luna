@@ -4,6 +4,7 @@ export const TOGGLE_MAIN_LOADER = 'TOGGLE_MAIN_LOADER'
 export const TOGGLE_SETTINGS = 'TOGGLE_SETTINGS'
 export const TOGGLE_EXPANDED = 'TOGGLE_EXPANDED'
 export const MENU_OPEN = 'MENU_OPEN'
+export const TOGGLE_SNACKBAR = 'TOGGLE_SNACKBAR'
 
 // setters
 export const SET_VERSION = 'SET_VERSION'
@@ -18,6 +19,7 @@ export const SET_ACTIVE = 'SET_ACTIVE'
 export const SET_MODE = 'SET_MODE'
 export const SET_ACTIVE_SIDEBAR = 'SET_ACTIVE_SIDEBAR'
 export const SET_TOTAL = 'SET_TOTAL'
+export const SETUP_SNACKBAR = 'SETUP_SNACKBAR'
 
 // various
 export const DO_INSTALL = 'DO_INSTALL'
