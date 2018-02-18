@@ -53,6 +53,7 @@ class ListHeader extends React.Component {
   }
   reload(e) {
     const { mode, directory, toggleLoader } = this.props
+
     toggleLoader(true)
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'get-packages',

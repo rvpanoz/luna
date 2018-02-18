@@ -16,10 +16,6 @@ import * as globalActions from 'actions/globalActions'
 import List from 'material-ui/List'
 
 class PackagesList extends React.Component {
-  constructor() {
-    super()
-  }
-
   render() {
     const {
       packages,

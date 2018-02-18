@@ -20,7 +20,16 @@ import Chip from 'material-ui/Chip'
 class PackageListItem extends React.Component {
   constructor() {
     super()
-    autoBind(['onItemClick', 'onUpdate', 'viewPackage'], this)
+    autoBind(
+      [
+        'onItemClick',
+        'onUpdate',
+        'viewPackage',
+        'primatyText',
+        'secondaryText'
+      ],
+      this
+    )
   }
   viewPackage() {
     const { name, version, mode, directory } = this.props
@@ -56,6 +65,14 @@ class PackageListItem extends React.Component {
     this.viewPackage()
     return false
   }
+  primaryText() {
+    const { name, version, latest } = this.props
+    return <span>{`${name} - ${version}`}</span>
+  }
+  secondaryText() {
+    const { version, latest } = this.props
+    return <span>{latest ? `\nlatest: ${latest}` : null}</span>
+  }
   render() {
     const { name, version, latest } = this.props
     let secondaryText = version
@@ -67,8 +84,8 @@ class PackageListItem extends React.Component {
     return (
       <ListItem button onClick={this.onItemClick}>
         <ListItemText
-          primary={`${name} ${version}`}
-          secondary={`${latest ? ` \nlatest: ${latest}` : 'up to date'}`}
+          primary={this.primaryText()}
+          secondary={this.secondaryText()}
         />
         <ListItemSecondaryAction>
           {latest ? (
