@@ -1,7 +1,7 @@
 import red from 'material-ui/colors/red'
 import deepPurple from 'material-ui/colors/deepPurple'
 
-export function styles(theme) {
+export function layoutStyles(theme) {
   return {
     root: {
       position: 'relative',
@@ -43,5 +43,12 @@ export function styles(theme) {
       margin: theme.spacing.unit,
       fontStyle: 'normal'
     }
+  }
+}
+
+export function packageStyles(theme) {
+  return {
+    root: {},
+    content: {}
   }
 }

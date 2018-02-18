@@ -1,5 +1,7 @@
 /**
 AppHeader with mini drawer
+*
+*
 **/
 
 import { toggleLoader, toggleSettings } from 'actions/globalActions'
@@ -24,7 +26,7 @@ import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import AppHeaderContent from './AppHeaderContent'
 import SearchBox from './SearchBox'
 import { firstToUpper } from '../../utils'
-import { appHeaderStyles } from '../styles'
+import { appHeaderStyles } from '../../styles/components'
 
 const { object } = PropTypes
 

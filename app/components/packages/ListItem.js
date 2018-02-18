@@ -1,3 +1,8 @@
+/**
+ * PackagesList
+ *
+ */
+
 import { remote, ipcRenderer } from 'electron'
 import React from 'react'
 import {

@@ -8,7 +8,7 @@ import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
-import { styles } from './styles'
+import { layoutStyles } from '../styles/containers'
 import { APP_MODES, NPM_CONFIG_VALUES } from 'constants/AppConstants'
 import { merge } from 'ramda'
 import { autoBind } from '../utils'
@@ -68,6 +68,6 @@ Layout.propTypes = {
 }
 
 export default compose(
-  withStyles(styles, { withTheme: true }),
+  withStyles(layoutStyles, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
 )(Layout)

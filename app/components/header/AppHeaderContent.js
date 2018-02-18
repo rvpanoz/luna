@@ -1,3 +1,9 @@
+/**
+ * AppHeader Menu content
+ *
+ *
+ */
+
 import { remote, ipcRenderer } from 'electron'
 import React from 'react'
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
@@ -5,7 +11,7 @@ import Icon from 'material-ui/Icon'
 import { withStyles } from 'material-ui/styles'
 import Divider from 'material-ui/Divider'
 import Tooltip from 'material-ui/Tooltip'
-import { appHeaderContentStyles } from '../styles'
+import { appHeaderContentStyles } from '../../styles/components'
 
 class AppHeaderContent extends React.Component {
   constructor() {

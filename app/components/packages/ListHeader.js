@@ -1,6 +1,11 @@
+/**
+ * ListHeader
+ *
+ */
+
 import { ipcRenderer } from 'electron'
 import { withStyles } from 'material-ui/styles'
-import { packagesListStyles } from '../styles'
+import { packagesListStyles } from '../../styles/components'
 import { autoBind } from '../../utils'
 import React from 'react'
 import Divider from 'material-ui/Divider'

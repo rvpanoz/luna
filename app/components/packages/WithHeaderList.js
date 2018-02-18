@@ -1,6 +1,7 @@
 /**
-HOC for List and ListHeader
-**/
+ * HOC for List and ListHeader
+ *
+ **/
 
 import { ipcRenderer } from 'electron'
 import { autoBind } from '../../utils'

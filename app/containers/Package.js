@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { styles } from './styles'
+import { packageStyles } from '../styles/containers'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
@@ -73,6 +73,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default compose(
-  withStyles(styles, { withTheme: true }),
+  withStyles(packageStyles, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
 )(PackageContainer)
