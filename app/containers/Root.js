@@ -1,5 +1,6 @@
 /**
  * Root Component
+ *
  */
 
 import React from 'react'
@@ -15,14 +16,13 @@ const AppTheme = themeA()
 const App = (props) => {
   const { store } = props
   const theme = createMuiTheme(themeA)
-  console.log(theme)
 
   return (
     <section id="root">
       <Reboot />
       <Provider store={store}>
         <MuiThemeProvider theme={theme}>
-          <Layout theme={theme} />
+          <Layout />
         </MuiThemeProvider>
       </Provider>
     </section>
