@@ -55,9 +55,8 @@ class SearchBox extends React.Component {
     const { classes } = this.props
 
     return (
-      <div ref="root">
+      <div ref="root" className={classes.root}>
         <TextField
-          error
           id="search"
           color="secondary"
           label="Search npm"

@@ -33,7 +33,8 @@ class PackagesContainer extends React.Component {
         'setupOutdated',
         'setGlobalMode',
         'handleSnackBar',
-        'handleSnackBarClose'
+        'handleSnackBarClose',
+        'reload'
       ],
       this
     )
@@ -152,6 +153,17 @@ class PackagesContainer extends React.Component {
       mode: APP_MODES.GLOBAL
     })
   }
+  reload(e) {
+    const { mode, directory, toggleLoader } = this.props
+
+    toggleLoader(true)
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'get-packages',
+      cmd: ['outdated', 'list'],
+      mode,
+      directory
+    })
+  }
   setupPackagesFromResponse(packages) {
     const {
       setActive,
@@ -237,6 +249,8 @@ class PackagesContainer extends React.Component {
               directory={directory}
               packages={packages}
               setPackages={setPackages}
+              setGlobalMode={this.setGlobalMode}
+              reload={this.reload}
             />
           </Grid>
           <Grid item xs={6}>

@@ -47,6 +47,8 @@ function withHeaderList(List, options = {}) {
         total,
         toggleLoader,
         toggleMainLoader,
+        setGlobalMode,
+        reload,
         ...rest
       } = this.props
       const { title } = options
@@ -55,6 +57,8 @@ function withHeaderList(List, options = {}) {
         <section>
           <Header
             sortBy={this.sortBy}
+            setGlobalMode={setGlobalMode}
+            reload={reload}
             total={total}
             title={title}
             mode={mode}

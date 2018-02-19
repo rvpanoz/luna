@@ -12,7 +12,6 @@ import Divider from 'material-ui/Divider'
 import Avatar from 'material-ui/Avatar'
 import Typography from 'material-ui/Typography'
 import IconButton from 'material-ui/IconButton'
-import Chip from 'material-ui/Chip'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
 
@@ -28,7 +27,8 @@ class ListHeader extends React.Component {
         'handleClose',
         'handleSortByLatest',
         'handleSortByName',
-        'reload'
+        '_reload',
+        '_setGlobalMode'
       ],
       this
     )
@@ -51,18 +51,17 @@ class ListHeader extends React.Component {
     sortBy('latest')
     this.handleClose()
   }
-  reload(e) {
-    const { mode, directory, toggleLoader } = this.props
-
-    toggleLoader(true)
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
-      cmd: ['outdated', 'list'],
-      mode,
-      directory
-    })
+  _setGlobalMode(e) {
+    const { setGlobalMode } = this.props
+    setGlobalMode()
     this.handleClose()
   }
+  _reload(e) {
+    const { reload } = this.props
+    reload()
+    this.handleClose()
+  }
+
   render() {
     const { classes, total, mode, directory, title } = this.props
     const anchorEl = this._anchorEl
@@ -71,8 +70,8 @@ class ListHeader extends React.Component {
       <section className={classes.flexColumn}>
         <div className={classes.flexRow}>
           <h3 className={classes.heading}>{title}</h3>
-          <Avatar className={classes.avatar} color="accent">
-            {total}
+          <Avatar className={classes.avatar} color="primary">
+            {0 || total}
           </Avatar>
           <div style={{ marginLeft: 'auto' }}>
             <IconButton
@@ -103,15 +102,17 @@ class ListHeader extends React.Component {
                 Sort by outdated
               </MenuItem>
               <Divider />
-              <MenuItem key="reload" onClick={this.reload}>
+              <MenuItem key="reload" onClick={this._reload}>
                 Reload
+              </MenuItem>
+              <MenuItem key="global" onClick={this._setGlobalMode}>
+                Show global packages
               </MenuItem>
             </Menu>
           </div>
           <Divider />
         </div>
-        <div className={classes.flexRow} style={{ display: 'none' }}>
-          <Chip label={mode} className={classes.chip} />
+        <div className={classes.flexRow}>
           <Typography
             align="right"
             paragraph

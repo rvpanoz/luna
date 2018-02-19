@@ -76,12 +76,6 @@ class AppHeader extends React.Component {
                 <MenuIcon />
               </IconButton>
             </Toolbar>
-            <div className={classes.info}>
-              <Icon className={classes.modeIcon}>
-                {mode === APP_MODES.GLOBAL ? 'language' : 'home'}
-              </Icon>
-              <span className={classes.mode}>{firstToUpper(mode)}</span>
-            </div>
             <SearchBox setActive={setActive} toggleLoader={toggleLoader} />
           </div>
         </AppBar>

@@ -114,12 +114,6 @@ export function packagesListStyles(theme) {
       marginRight: theme.spacing.unit,
       width: 200
     },
-    directory: {
-      margin: theme.spacing.unit + 5
-    },
-    chip: {
-      margin: theme.spacing.unit
-    },
     lcontainer: {
       overflowY: 'auto'
     },
@@ -136,7 +130,7 @@ export function packagesListStyles(theme) {
 export function searchBoxStyles(theme) {
   return {
     root: {
-      margin: 0,
+      margin: '0 10px',
       padding: 0
     }
   }
