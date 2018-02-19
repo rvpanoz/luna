@@ -11,12 +11,10 @@ import MoreVertIcon from 'material-ui-icons/MoreVert'
 import IconButton from 'material-ui/IconButton'
 import Avatar from 'material-ui/Avatar'
 import Menu, { MenuItem } from 'material-ui/Menu'
-import TextField from 'material-ui/TextField'
-import Input, { InputLabel } from 'material-ui/Input'
-import { FormControl } from 'material-ui/Form'
 import { ListItemText } from 'material-ui/List'
 import Select from 'material-ui/Select'
 import Checkbox from 'material-ui/Checkbox'
+import moment from 'moment'
 
 const { object } = PropTypes
 
@@ -33,6 +31,7 @@ class CardHeader extends React.Component {
     this.handleClick = this.handleClick.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.ariaLabel = this.ariaLabel.bind(this)
   }
   handleChange = (event) => {
     this.setState({ options: event.target.value })
@@ -60,6 +59,10 @@ class CardHeader extends React.Component {
     this._anchorEl = null
     this.forceUpdate()
   }
+  ariaLabel() {
+    const { active } = this.props
+    return `${active.name} - ${active.version}`
+  }
   render() {
     const ITEM_HEIGHT = 55
     const ITEM_PADDING_TOP = 8
@@ -82,7 +85,7 @@ class CardHeader extends React.Component {
       <section>
         <MuiCardHeader
           avatar={
-            <Avatar aria-label={active.name} className={classes.avatar}>
+            <Avatar aria-label={this.ariaLabel()} className={classes.avatar}>
               {active.name[0].toUpperCase()}
             </Avatar>
           }
@@ -116,48 +119,10 @@ class CardHeader extends React.Component {
             </div>
           }
           title={this.buildTitle()}
-          subheader={active.version}
+          subheader={`Updated: ${moment(active.time.modified).format(
+            'DD/MM/YYYY'
+          )}`}
         />
-        <div className={classes.headerActions}>
-          <TextField
-            select
-            label="Select Version"
-            className={classes.textField}
-            value={active.version}
-            onChange={onChangeVersion}
-            SelectProps={{
-              MenuProps: {
-                className: classes.menu
-              }
-            }}
-            helperText="preview the selected version"
-            margin="normal"
-          >
-            {active &&
-              active.versions.map((version, key) => (
-                <MenuItem key={key} value={version}>
-                  {version}
-                </MenuItem>
-              ))}
-          </TextField>
-          {mode === APP_MODES.LOCAL ? (
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="select-multiple-checkbox">
-                Options
-              </InputLabel>
-              <Select
-                multiple
-                value={this.state.options}
-                onChange={this.handleChange}
-                input={<Input id="select-options" />}
-                renderValue={(selected) => selected.join(', ')}
-                MenuProps={MenuProps}
-              >
-                {this.buildOptions()}
-              </Select>
-            </FormControl>
-          ) : null}
-        </div>
       </section>
     )
   }

@@ -12,15 +12,8 @@ import Typography from 'material-ui/Typography'
 import classnames from 'classnames'
 import AppBar from 'material-ui/AppBar'
 import Tabs, { Tab } from 'material-ui/Tabs'
-import Avatar from 'material-ui/Avatar'
-import HomeIcon from 'material-ui-icons/Home'
-import Assistant from 'material-ui-icons/Assistant'
-import BugReport from 'material-ui-icons/BugReport'
-import PermIdentity from 'material-ui-icons/PermIdentity'
-
-import FolderIcon from 'material-ui-icons/Folder'
-import PageviewIcon from 'material-ui-icons/Pageview'
-import AssignmentIcon from 'material-ui-icons/Assignment'
+import Chip from 'material-ui/Chip'
+import DoneIcon from 'material-ui-icons/Done'
 
 const { object } = PropTypes
 
@@ -62,37 +55,18 @@ const CardContent = (props) => {
       <Typography className={classes.headingTail}>
         {active.description}
       </Typography>
-      <List>
-        <ListItem>
-          <Avatar>
-            <HomeIcon />
-          </Avatar>
-          <ListItemText primary="Home" secondary={active.homepage} />
-        </ListItem>
-        <li>
-          <Divider inset />
-        </li>
-        <ListItem>
-          <Avatar>
-            <BugReport />
-          </Avatar>
-          <ListItemText primary="Issues" secondary={active.bugs.url} />
-        </ListItem>
-        <Divider inset component="li" />
-        <ListItem>
-          <Avatar>
-            <PermIdentity />
-          </Avatar>
-          <ListItemText primary="Licence" secondary={active.license} />
-        </ListItem>
-        <Divider inset component="li" />
-        <ListItem>
-          <Avatar>
-            <Assistant />
-          </Avatar>
-          <ListItemText primary="Author" secondary={active.author} />
-        </ListItem>
-      </List>
+      <h3 className={classes.heading}>Dist tags</h3>
+      <Divider />
+      <div className={classes.controls}>
+        <Chip
+          label={`latest: ${active['dist-tags'] && active['dist-tags'].latest}`}
+          className={classes.chip}
+        />
+        <Chip
+          label={`stable: ${active['dist-tags'] && active['dist-tags'].stable}`}
+          className={classes.chip}
+        />
+      </div>
     </MuiCardContent>
   )
 }

@@ -139,6 +139,9 @@ export function searchBoxStyles(theme) {
 
 export function packageCardStyles(theme) {
   return {
+    root: {
+      marginTop: 100
+    },
     button: {
       margin: theme.spacing.unit
     },
@@ -151,19 +154,21 @@ export function packageCardStyles(theme) {
       flexDirection: 'column',
       justifyContent: 'flex-start'
     },
-    headerActions: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      width: '100%',
-      marginTop: theme.spacing.unit * 3,
-      backgroundColor: theme.palette.background.paper
-    },
     collapseContent: {
       margin: theme.spacing.unit * 2
     },
     column: {
       flexBasis: '33.33%'
+    },
+    controls: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+      marginTop: theme.spacing.unit,
+      '& fieldset': {
+        margin: theme.spacing.unit
+      }
     },
     details: {
       display: 'flex',
@@ -179,7 +184,7 @@ export function packageCardStyles(theme) {
       maxWidth: 300
     },
     textField: {
-      marginLeft: theme.spacing.unit + 15,
+      margin: theme.spacing.unit,
       minWidth: 120,
       maxWidth: 300
     },

@@ -11,6 +11,7 @@ import * as packagesActions from 'actions/packagesActions'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
+import Grid from 'material-ui/Grid'
 import PackageCard from 'components/package/PackageCard'
 
 class PackageContainer extends React.Component {
@@ -23,7 +24,12 @@ class PackageContainer extends React.Component {
 
     return (
       <section className={classes.root}>
-        <PackageCard isLoading={isLoading} active={active} {...props} />
+        <Grid container direction="row" justify="flex-start">
+          <Grid item xs={10}>
+            <PackageCard isLoading={isLoading} active={active} {...props} />
+          </Grid>
+          <Grid item xs={2} />
+        </Grid>
       </section>
     )
   }

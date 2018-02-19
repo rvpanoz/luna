@@ -22,6 +22,7 @@ import classnames from 'classnames'
 import Divider from 'material-ui/Divider'
 import InfoIcon from 'material-ui-icons/Info'
 import LinkIcon from 'material-ui-icons/Link'
+import CardVersions from './CardVersions'
 import CardHeader from './CardHeader'
 import CardContent from './CardContent'
 import CardActions from './CardActions'
@@ -205,13 +206,12 @@ class PackageCard extends React.Component {
       group,
       mode,
       expanded,
-      onChangeVersion,
       addCommandOption,
       clearCommandOptions,
       cmdOptions,
       ...props
     } = this.props
-    const { doNavigate } = this
+    const { doNavigate, onChangeVersion } = this
 
     if (!active) {
       return null
@@ -225,7 +225,6 @@ class PackageCard extends React.Component {
             active={active}
             classes={classes}
             group={group}
-            onChangeVersion={onChangeVersion}
             cmdOptions={cmdOptions}
           />
           <CardContent
@@ -247,12 +246,19 @@ class PackageCard extends React.Component {
             unmountOnExit
             className={classes.collapseContent}
           >
-            <h3 className={classes.heading}>Options</h3>
+            <h3 className={classes.heading}>Versions and options</h3>
             <Divider />
-            <CardOptions
-              addCommandOption={addCommandOption}
-              clearCommandOptions={clearCommandOptions}
-            />
+            <section className={classes.controls}>
+              <CardVersions
+                classes={classes}
+                active={active}
+                onChangeVersion={onChangeVersion}
+              />
+              <CardOptions
+                cmdOptions={cmdOptions}
+                addCommandOption={addCommandOption}
+              />
+            </section>
           </Collapse>
         </Card>
       </section>

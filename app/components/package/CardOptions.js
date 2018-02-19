@@ -21,12 +21,12 @@ class CardOptions extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
   handleChange(e) {
-    const { addCommandOption, clearCommandOptions } = this.props
+    const { addCommandOption } = this.props
     const opt = e.currentTarget.value
     addCommandOption(opt)
   }
   render() {
-    const { group, cmdOptions } = this.props
+    const { cmdOptions } = this.props
 
     return (
       <FormControl component="fieldset">

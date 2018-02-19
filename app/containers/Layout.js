@@ -15,8 +15,11 @@ import { autoBind } from '../utils'
 import Grid from 'material-ui/Grid'
 import React from 'react'
 import PropTypes from 'prop-types'
+import Divider from 'material-ui/Divider'
+
+import Messages from 'components/common/Messages'
+import PackagesContainer from 'containers/Packages'
 import AppHeader from 'components/header/AppHeader'
-import PackagesContainer from './Packages'
 
 class Layout extends React.Component {
   render() {
@@ -39,9 +42,10 @@ class Layout extends React.Component {
         />
         <main className={classes.content}>
           <Grid container direction="row" justify="space-between">
-            <Grid item xs={12}>
+            <Grid item xs={11}>
               <PackagesContainer />
             </Grid>
+            <Grid item xs={1} />
           </Grid>
         </main>
       </div>

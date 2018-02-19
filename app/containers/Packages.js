@@ -239,7 +239,7 @@ class PackagesContainer extends React.Component {
     return (
       <section>
         <Grid container>
-          <Grid item xs={4} md={3} lg={3}>
+          <Grid item xs={4} md={4} lg={4}>
             <WithHeaderList
               loading={loading}
               toggleLoader={toggleLoader}
@@ -253,7 +253,7 @@ class PackagesContainer extends React.Component {
               reload={this.reload}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={8}>
             <Loader loading={isLoading}>
               <PackageContainer />
             </Loader>
