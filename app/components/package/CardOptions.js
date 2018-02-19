@@ -27,10 +27,10 @@ class CardOptions extends React.Component {
   }
   render() {
     const { group, cmdOptions } = this.props
-    console.log(cmdOptions)
+
     return (
       <FormControl component="fieldset">
-        <FormGroup>
+        <FormGroup row>
           {COMMAND_OPTIONS.map((option, idx) => {
             let opt = option.split('*')
             return (

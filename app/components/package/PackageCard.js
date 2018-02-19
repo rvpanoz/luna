@@ -1,5 +1,10 @@
+/**
+ * PackageCard component
+ *
+ */
+
 import { withStyles } from 'material-ui/styles'
-import { styles } from './styles'
+import { packageCardStyles } from '../../styles/components'
 import { showMessageBox, isUrl, autoBind } from '../../utils'
 import { remote, ipcRenderer, shell } from 'electron'
 import List, { ListItem, ListItemText } from 'material-ui/List'
@@ -20,7 +25,7 @@ import LinkIcon from 'material-ui-icons/Link'
 import CardHeader from './CardHeader'
 import CardContent from './CardContent'
 import CardActions from './CardActions'
-import CardDetails from './CardDetails'
+import CardOptions from './CardOptions'
 
 class PackageCard extends React.Component {
   constructor() {
@@ -193,18 +198,19 @@ class PackageCard extends React.Component {
     setActiveTab(value)
     this.forceUpdate()
   }
-  _buildLink(item, url) {
-    return (
-      <React.Fragment>
-        <span>{url}</span>
-        <a title="navigate" href="#" onClick={this.doNavigate} data-url={url}>
-          <LinkIcon color="primary" />
-        </a>
-      </React.Fragment>
-    )
-  }
   render() {
-    const { classes, active, group, expanded, ...props } = this.props
+    const {
+      classes,
+      active,
+      group,
+      mode,
+      expanded,
+      onChangeVersion,
+      addCommandOption,
+      clearCommandOptions,
+      cmdOptions,
+      ...props
+    } = this.props
     const { doNavigate } = this
 
     if (!active) {
@@ -214,13 +220,19 @@ class PackageCard extends React.Component {
     return (
       <section className={classes.root}>
         <Card className={classes.card}>
-          <CardHeader active={active} classes={classes} group={group} />
+          <CardHeader
+            mode={mode}
+            active={active}
+            classes={classes}
+            group={group}
+            onChangeVersion={onChangeVersion}
+            cmdOptions={cmdOptions}
+          />
           <CardContent
             classes={classes}
             active={active}
             group={group}
             handleChange={this.handleChange}
-            buildLink={this._buildLink}
             onChangeVersion={this.onChangeVersion}
             {...props}
           />
@@ -235,31 +247,12 @@ class PackageCard extends React.Component {
             unmountOnExit
             className={classes.collapseContent}
           >
-            <h3 className={classes.heading}>Maintainers</h3>
+            <h3 className={classes.heading}>Options</h3>
             <Divider />
-            <List>
-              {active &&
-                active.maintainers.map((item, idx) => {
-                  return (
-                    <ListItem key={idx}>
-                      <ListItemText primary={item} secondary="Jan 9, 2014" />
-                    </ListItem>
-                  )
-                })}
-            </List>
-            <h3 className={classes.heading}>Dependencies</h3>
-            <Divider />
-            <List>
-              {active &&
-                active.dependencies &&
-                Object.keys(active.dependencies).map((item, idx) => {
-                  return (
-                    <ListItem key={idx}>
-                      <ListItemText primary={item} secondary="Jan 9, 2014" />
-                    </ListItem>
-                  )
-                })}
-            </List>
+            <CardOptions
+              addCommandOption={addCommandOption}
+              clearCommandOptions={clearCommandOptions}
+            />
           </Collapse>
         </Card>
       </section>
@@ -267,4 +260,4 @@ class PackageCard extends React.Component {
   }
 }
 
-export default withStyles(styles)(PackageCard)
+export default withStyles(packageCardStyles)(PackageCard)

@@ -3,16 +3,16 @@ const fontWeightMedium = 600
 export function themeA() {
   return {
     palette: {
-      type: 'light',
+      type: 'dark',
       primary: {
         contrastText: 'rgba(255, 255, 255, 0.87)',
-        dark: '#D8537E',
+        dark: '#0c1f2c',
         light: '#00b8d4',
         main: '#074b63'
       },
       secondary: {
         contrastText: 'rgba(255, 255, 255, 0.87)',
-        dark: '#D8537E',
+        dark: '#CB2140',
         light: '#00b8d4',
         main: '#074b63'
       },

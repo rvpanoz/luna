@@ -16,7 +16,7 @@ export function layoutStyles(theme) {
       flexGrow: 1,
       overflow: 'hidden',
       position: 'relative',
-      marginTop: 75,
+      marginTop: 50,
       marginLeft: 50,
       padding: 25
     },

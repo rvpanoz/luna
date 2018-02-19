@@ -1,32 +1,40 @@
-import { CardContent as MuiCardContent } from "material-ui/Card";
-import List, { ListItem, ListItemText } from "material-ui/List";
-import React from "react";
-import PropTypes from "prop-types";
-import Divider from "material-ui/Divider";
-import Typography from "material-ui/Typography";
-import classnames from "classnames";
-import AppBar from "material-ui/AppBar";
-import Tabs, { Tab } from "material-ui/Tabs";
-import Avatar from "material-ui/Avatar";
-import HomeIcon from "material-ui-icons/Home";
-import Assistant from "material-ui-icons/Assistant";
-import BugReport from "material-ui-icons/BugReport";
-import PermIdentity from "material-ui-icons/PermIdentity";
-import CardDetails from "./CardDetails";
+/**
+ * CardContent component
+ *
+ */
 
-const { object } = PropTypes;
+import { CardContent as MuiCardContent } from 'material-ui/Card'
+import List, { ListItem, ListItemText } from 'material-ui/List'
+import React from 'react'
+import PropTypes from 'prop-types'
+import Divider from 'material-ui/Divider'
+import Typography from 'material-ui/Typography'
+import classnames from 'classnames'
+import AppBar from 'material-ui/AppBar'
+import Tabs, { Tab } from 'material-ui/Tabs'
+import Avatar from 'material-ui/Avatar'
+import HomeIcon from 'material-ui-icons/Home'
+import Assistant from 'material-ui-icons/Assistant'
+import BugReport from 'material-ui-icons/BugReport'
+import PermIdentity from 'material-ui-icons/PermIdentity'
+
+import FolderIcon from 'material-ui-icons/Folder'
+import PageviewIcon from 'material-ui-icons/Pageview'
+import AssignmentIcon from 'material-ui-icons/Assignment'
+
+const { object } = PropTypes
 
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 8 * 3 }}>
       {props.children}
     </Typography>
-  );
+  )
 }
 
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired
-};
+}
 
 const CardContent = (props) => {
   const {
@@ -41,63 +49,57 @@ const CardContent = (props) => {
     onChangeVersion,
     addCommandOption,
     clearCommandOptions
-  } = props;
+  } = props
 
   if (!active) {
-    return null;
+    return null
   }
 
   return (
     <MuiCardContent className={classes.cardContent}>
-      <section>
-        <h3 className={classes.heading}>Description</h3>
-        <Divider />
-        <Typography className={classes.description}>
-          {active.description ? active.description : "No description available"}
-        </Typography>
-      </section>
-      <section>
-        <h3 className={classnames(classes.heading, classes.headingTail)}>Details</h3>
-        <Divider />
-        <CardDetails
-          active={active}
-          classes={classes}
-          onChangeVersion={onChangeVersion}
-          version={version}
-          cmdOptions={cmdOptions}
-          mode={mode}
-          addCommandOption={addCommandOption}
-          clearCommandOptions={clearCommandOptions}
-        />
-        <div className={classes.detailsTabs}>
-          <AppBar position="static" color="default" className={classes.detailsAppBar}>
-            <Tabs
-              value={tabIndex}
-              onChange={handleChange}
-              scrollable
-              scrollButtons="on"
-              indicatorColor="secondary"
-              textColor="primary"
-            >
-              <Tab label="Homepage" icon={<HomeIcon />} />
-              <Tab label="Issues" icon={<BugReport />} />
-              <Tab label="Author" icon={<Assistant />} />
-              <Tab label="License" icon={<PermIdentity />} />
-            </Tabs>
-          </AppBar>
-          {tabIndex === 0 && <TabContainer>{active.homepage}</TabContainer>}
-          {tabIndex === 1 && <TabContainer>{active.bugs && active.bugs.url}</TabContainer>}
-          {tabIndex === 2 && <TabContainer>{active.author}</TabContainer>}
-          {tabIndex === 3 && <TabContainer>{active.license}</TabContainer>}
-        </div>
-      </section>
+      <h3 className={classes.heading}>Description</h3>
+      <Divider />
+      <Typography className={classes.headingTail}>
+        {active.description}
+      </Typography>
+      <List>
+        <ListItem>
+          <Avatar>
+            <HomeIcon />
+          </Avatar>
+          <ListItemText primary="Home" secondary={active.homepage} />
+        </ListItem>
+        <li>
+          <Divider inset />
+        </li>
+        <ListItem>
+          <Avatar>
+            <BugReport />
+          </Avatar>
+          <ListItemText primary="Issues" secondary={active.bugs.url} />
+        </ListItem>
+        <Divider inset component="li" />
+        <ListItem>
+          <Avatar>
+            <PermIdentity />
+          </Avatar>
+          <ListItemText primary="Licence" secondary={active.license} />
+        </ListItem>
+        <Divider inset component="li" />
+        <ListItem>
+          <Avatar>
+            <Assistant />
+          </Avatar>
+          <ListItemText primary="Author" secondary={active.author} />
+        </ListItem>
+      </List>
     </MuiCardContent>
-  );
-};
+  )
+}
 
 CardContent.propTypes = {
   classes: object,
   active: object
-};
+}
 
-export default CardContent;
+export default CardContent

@@ -14,9 +14,6 @@ import Divider from 'material-ui/Divider'
 import PackageCard from 'components/package/PackageCard'
 
 class PackageContainer extends React.Component {
-  constructor() {
-    super()
-  }
   render() {
     const { classes, active, isLoading, ...props } = this.props
 

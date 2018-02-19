@@ -31,9 +31,6 @@ import { appHeaderStyles } from '../../styles/components'
 const { object } = PropTypes
 
 class AppHeader extends React.Component {
-  constructor() {
-    super()
-  }
   render() {
     const {
       menuOpen,
