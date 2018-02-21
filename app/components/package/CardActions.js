@@ -7,6 +7,7 @@ import { CardActions as MuiCardActions } from 'material-ui/Card'
 import React from 'react'
 import PropTypes from 'prop-types'
 import AddIcon from 'material-ui-icons/Add'
+import UpdateIcon from 'material-ui-icons/Update'
 import DeleteIcon from 'material-ui-icons/Delete'
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
 import IconButton from 'material-ui/IconButton'
@@ -24,10 +25,10 @@ const CardActions = (props) => {
       <Button
         variant="fab"
         color="accent"
-        aria-label="add"
+        aria-label="update"
         className={classes.button}
       >
-        <AddIcon />
+        <UpdateIcon />
         Install
       </Button>
       <Button

@@ -207,6 +207,7 @@ class PackageCard extends React.Component {
       addCommandOption,
       clearCommandOptions,
       cmdOptions,
+      actions,
       ...props
     } = this.props
     const { onNavigate, onChangeVersion } = this
@@ -241,6 +242,7 @@ class PackageCard extends React.Component {
             handleExpandClick={this.onExpandClick}
             expanded={expanded}
             classes={classes}
+            actions={actions}
           />
           <Collapse
             in={expanded}
