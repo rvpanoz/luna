@@ -4,30 +4,24 @@
  */
 
 import { CardContent as MuiCardContent } from 'material-ui/Card'
+import ListSubheader from 'material-ui/List/ListSubheader'
 import List, { ListItem, ListItemText } from 'material-ui/List'
+import { APP_INFO } from 'constants/AppConstants'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Divider from 'material-ui/Divider'
 import Typography from 'material-ui/Typography'
 import classnames from 'classnames'
-import AppBar from 'material-ui/AppBar'
-import Tabs, { Tab } from 'material-ui/Tabs'
-import Chip from 'material-ui/Chip'
-import DoneIcon from 'material-ui-icons/Done'
+import Avatar from 'material-ui/Avatar'
+import PermIdentity from 'material-ui-icons/PermIdentity'
+import HomeIcon from 'material-ui-icons/Home'
+import RefreshIcon from 'material-ui-icons/Refresh'
+import VerifiedUserIcon from 'material-ui-icons/VerifiedUser'
+import BugReport from 'material-ui-icons/BugReport'
+import CardOptions from './CardOptions'
+import CardVersions from './CardVersions'
 
 const { object } = PropTypes
-
-function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {props.children}
-    </Typography>
-  )
-}
-
-TabContainer.propTypes = {
-  children: PropTypes.node.isRequired
-}
 
 const CardContent = (props) => {
   const {
@@ -47,26 +41,103 @@ const CardContent = (props) => {
   if (!active) {
     return null
   }
+  console.log(active)
+
+  const dependencies = Object.keys(active.dependencies || {})
+  const { latest, stable } = active['dist-tags']
 
   return (
     <MuiCardContent className={classes.cardContent}>
+      <h3 className={classes.heading}>Versions and options</h3>
+      <Divider />
+      <section className={classes.controls}>
+        <CardVersions
+          classes={classes}
+          active={active}
+          onChangeVersion={onChangeVersion}
+        />
+        <CardOptions
+          cmdOptions={cmdOptions}
+          addCommandOption={addCommandOption}
+        />
+      </section>
       <h3 className={classes.heading}>Description</h3>
       <Divider />
       <Typography className={classes.headingTail}>
         {active.description}
       </Typography>
-      <h3 className={classes.heading}>Dist tags</h3>
+      <h3 className={classes.heading}>Details</h3>
       <Divider />
-      <div className={classes.controls}>
-        <Chip
-          label={`latest: ${active['dist-tags'] && active['dist-tags'].latest}`}
-          className={classes.chip}
-        />
-        <Chip
-          label={`stable: ${active['dist-tags'] && active['dist-tags'].stable}`}
-          className={classes.chip}
-        />
+      <div className={classes.content}>
+        <List>
+          <ListItem>
+            <Avatar>
+              <RefreshIcon />
+            </Avatar>
+            <ListItemText primary={latest} secondary="latest" />
+          </ListItem>
+          <ListItem>
+            <Avatar>
+              <PermIdentity />
+            </Avatar>
+            <ListItemText
+              primary={active.author || APP_INFO.NOT_AVAILABLE}
+              secondary="author"
+            />
+          </ListItem>
+          <ListItem>
+            <Avatar>
+              <VerifiedUserIcon />
+            </Avatar>
+            <ListItemText
+              primary="Licence"
+              secondary={active.license || APP_INFO.NOT_AVAILABLE}
+            />
+          </ListItem>
+          <ListItem>
+            <Avatar>
+              <HomeIcon />
+            </Avatar>
+            <ListItemText
+              primary={active.homepage || APP_INFO.NOT_AVAILABLE}
+              secondary="homepage"
+            />
+          </ListItem>
+          <ListItem>
+            <Avatar>
+              <BugReport />
+            </Avatar>
+            <ListItemText
+              primary={
+                (active.bugs && active.bugs.url) || APP_INFO.NOT_AVAILABLE
+              }
+              secondary="issues"
+            />
+          </ListItem>
+        </List>
+        <List
+          component="nav"
+          dense={true}
+          subheader={
+            <ListSubheader component="div">Dependencies</ListSubheader>
+          }
+        >
+          {dependencies &&
+            dependencies.map((dependency, idx) => {
+              const version = active.dependencies[dependency]
+              return (
+                <ListItem key={idx}>
+                  <ListItemText
+                    inset
+                    primary={dependency}
+                    secondary={version}
+                  />
+                </ListItem>
+              )
+            })}
+        </List>
       </div>
+      <div className={classes.keywords} />
     </MuiCardContent>
   )
 }

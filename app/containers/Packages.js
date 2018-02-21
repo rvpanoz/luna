@@ -239,7 +239,7 @@ class PackagesContainer extends React.Component {
     return (
       <section>
         <Grid container>
-          <Grid item xs={4} md={4} lg={4}>
+          <Grid item xs={12} md={4} lg={3}>
             <WithHeaderList
               loading={loading}
               toggleLoader={toggleLoader}

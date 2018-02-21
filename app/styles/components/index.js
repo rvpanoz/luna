@@ -96,7 +96,7 @@ export function packagesListStyles(theme) {
       justifyContent: 'flex-start'
     },
     heading: {
-      margin: '1em 0 0.7em',
+      margin: '1em 0 1.0em',
       fontSize: '1.5rem',
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -124,6 +124,11 @@ export function packagesListStyles(theme) {
       overflowY: 'auto',
       clear: 'both',
       maxHeight: '750px'
+    },
+    directory: {
+      fontSize: '0.9em',
+      overflowWrap: 'break-word',
+      overflow: 'hidden'
     }
   }
 }
@@ -140,7 +145,7 @@ export function searchBoxStyles(theme) {
 export function packageCardStyles(theme) {
   return {
     root: {
-      marginTop: 100
+      marginTop: 0
     },
     button: {
       margin: theme.spacing.unit
@@ -148,10 +153,10 @@ export function packageCardStyles(theme) {
     card: {
       maxWidth: '100%'
     },
-    cardContent: {
+    content: {
       width: '100%',
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       justifyContent: 'flex-start'
     },
     collapseContent: {

@@ -12,7 +12,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
-import PackageCard from 'components/package/PackageCard'
+import PackageCard from 'components/package/Card'
 
 class PackageContainer extends React.Component {
   render() {

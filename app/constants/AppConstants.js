@@ -19,6 +19,10 @@ export const APP_ACTIONS = {
   UNINSTALL: 'UNINSTALL'
 }
 
+export const APP_INFO = {
+  NOT_AVAILABLE: 'N/A'
+}
+
 // package groups (in package.json)
 export const PACKAGE_GROUPS = {
   dependencies: 'save',

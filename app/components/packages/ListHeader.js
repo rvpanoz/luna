@@ -71,7 +71,7 @@ class ListHeader extends React.Component {
         <div className={classes.flexRow}>
           <h3 className={classes.heading}>{title}</h3>
           <Avatar className={classes.avatar} color="primary">
-            {0 || total}
+            {total || 0}
           </Avatar>
           <div style={{ marginLeft: 'auto' }}>
             <IconButton
@@ -113,12 +113,7 @@ class ListHeader extends React.Component {
           <Divider />
         </div>
         <div className={classes.flexRow}>
-          <Typography
-            align="right"
-            paragraph
-            type="subheading"
-            className={classes.directory}
-          >
+          <Typography align="left" paragraph className={classes.directory}>
             {directory}
           </Typography>
         </div>

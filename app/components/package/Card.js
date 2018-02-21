@@ -22,117 +22,32 @@ import classnames from 'classnames'
 import Divider from 'material-ui/Divider'
 import InfoIcon from 'material-ui-icons/Info'
 import LinkIcon from 'material-ui-icons/Link'
-import CardVersions from './CardVersions'
 import CardHeader from './CardHeader'
 import CardContent from './CardContent'
 import CardActions from './CardActions'
-import CardOptions from './CardOptions'
+import CardDetails from './CardDetails'
 
 class PackageCard extends React.Component {
   constructor() {
     super()
     autoBind(
       [
-        'doNavigate',
-        'doAction',
+        'onNavigate',
+        'onAction',
         'onChangeVersion',
-        'handleExpandClick',
-        'handleChange',
+        'onExpandClick',
+        'onChange',
         'runCommand',
-        '_setupGroup',
-        '_setupCmdOptions',
-        '_buildLink'
+        'setupGroup',
+        'setupOptions'
       ],
       this
     )
   }
-  _setupCmdOptions(group) {
-    const {
-      addCommandOption,
-      active,
-      clearCommandOptions,
-      packageJSON
-    } = this.props
-
-    // clear options
-    clearCommandOptions()
-
-    switch (group) {
-      case 'dependencies':
-        addCommandOption('save')
-        break
-      case 'devDependencies':
-        addCommandOption('save-dev')
-        break
-      case 'optionalDependencies':
-        addCommandOption('save-optional')
-        break
-      default:
-    }
-
-    // save-exact fix
-    const groupDependencies = packageJSON[group]
-    const name = groupDependencies[active.name]
-
-    if (!isNaN(name.charAt(0))) {
-      addCommandOption('save-exact')
-    }
-  }
-  _setupGroup() {
-    const {
-      mode,
-      packageJSON,
-      setPackageGroup,
-      addCommandOption,
-      clearCommandOptions,
-      active,
-      group
-    } = this.props
-
-    if (mode === APP_MODES.LOCAL) {
-      if (!packageJSON) {
-        throw new Error('PackageJSON is missing')
-      }
-
-      if (!active) {
-        return
-      }
-
-      let found = false
-
-      const groups = Object.keys(PACKAGE_GROUPS).some((group, idx) => {
-        const { name } = active
-        found = packageJSON[group] && packageJSON[group][name] ? group : false
-        if (found) {
-          setPackageGroup(group)
-          this._setupCmdOptions(group)
-          return true
-        }
-      })
-    }
-  }
   componentDidMount() {
-    this._setupGroup()
+    this.setupGroup()
   }
-  runCommand(action, version) {
-    const { mode, directory } = this.props
-    let cmd = [`npm ${action.toLowerCase()} `, active.name]
-
-    if (mode === APP_MODES.LOCAL) {
-      cmd.push(` --${options.join(' --')}`)
-    }
-    setActive(null)
-    ipcRenderer.send('ipc-event', {
-      mode,
-      directory,
-      ipcEvent: action,
-      cmd: [action === 'Uninstall' ? 'uninstall' : 'install'],
-      pkgName: active.name,
-      pkgVersion: action === 'Uninstall' ? null : version,
-      pkgOptions: options
-    })
-  }
-  doAction(e) {
+  onAction(e) {
     e.preventDefault()
 
     const target = e.currentTarget
@@ -164,6 +79,24 @@ class PackageCard extends React.Component {
     }
     return false
   }
+  onNavigate(e) {
+    e.preventDefault()
+    const url = e.currentTarget.dataset.url
+    if (isUrl(url)) {
+      shell.openExternal(url)
+    }
+    return false
+  }
+  onExpandClick(e) {
+    const { toggleExpanded } = this.props
+    toggleExpanded()
+    this.forceUpdate()
+  }
+  onChangeChange(e, value) {
+    const { setActiveTab } = this.props
+    setActiveTab(value)
+    this.forceUpdate()
+  }
   onChangeVersion(e, value) {
     const { active, mode, directory, toggleMainLoader, setVersion } = this.props
     const version = e.target.value
@@ -181,23 +114,88 @@ class PackageCard extends React.Component {
     }
     return false
   }
-  doNavigate(e) {
-    e.preventDefault()
-    const url = e.currentTarget.dataset.url
-    if (isUrl(url)) {
-      shell.openExternal(url)
+  runCommand(action, version) {
+    const { mode, directory } = this.props
+    let cmd = [`npm ${action.toLowerCase()} `, active.name]
+
+    if (mode === APP_MODES.LOCAL) {
+      cmd.push(` --${options.join(' --')}`)
     }
-    return false
+    setActive(null)
+    ipcRenderer.send('ipc-event', {
+      mode,
+      directory,
+      ipcEvent: action,
+      cmd: [action === 'Uninstall' ? 'uninstall' : 'install'],
+      pkgName: active.name,
+      pkgVersion: action === 'Uninstall' ? null : version,
+      pkgOptions: options
+    })
   }
-  handleExpandClick(e) {
-    const { toggleExpanded } = this.props
-    toggleExpanded()
-    this.forceUpdate()
+  setupOptions(group) {
+    const {
+      addCommandOption,
+      active,
+      clearCommandOptions,
+      packageJSON
+    } = this.props
+
+    // clear options
+    clearCommandOptions()
+
+    switch (group) {
+      case 'dependencies':
+        addCommandOption('save')
+        break
+      case 'devDependencies':
+        addCommandOption('save-dev')
+        break
+      case 'optionalDependencies':
+        addCommandOption('save-optional')
+        break
+      default:
+    }
+
+    // save-exact fix
+    const groupDependencies = packageJSON[group]
+    const name = groupDependencies[active.name]
+
+    if (!isNaN(name.charAt(0))) {
+      addCommandOption('save-exact')
+    }
   }
-  handleChange(e, value) {
-    const { setActiveTab } = this.props
-    setActiveTab(value)
-    this.forceUpdate()
+  setupGroup() {
+    const {
+      mode,
+      packageJSON,
+      setPackageGroup,
+      addCommandOption,
+      clearCommandOptions,
+      active,
+      group
+    } = this.props
+
+    if (mode === APP_MODES.LOCAL) {
+      if (!packageJSON) {
+        throw new Error('PackageJSON is missing')
+      }
+
+      if (!active) {
+        return
+      }
+
+      let found = false
+
+      const groups = Object.keys(PACKAGE_GROUPS).some((group, idx) => {
+        const { name } = active
+        found = packageJSON[group] && packageJSON[group][name] ? group : false
+        if (found) {
+          setPackageGroup(group)
+          this.setupOptions(group)
+          return true
+        }
+      })
+    }
   }
   render() {
     const {
@@ -211,11 +209,12 @@ class PackageCard extends React.Component {
       cmdOptions,
       ...props
     } = this.props
-    const { doNavigate, onChangeVersion } = this
+    const { onNavigate, onChangeVersion } = this
 
     if (!active) {
       return null
     }
+    console.log(active)
 
     return (
       <section className={classes.root}>
@@ -226,17 +225,20 @@ class PackageCard extends React.Component {
             classes={classes}
             group={group}
             cmdOptions={cmdOptions}
+            onNavigate={this.onNavigate}
           />
           <CardContent
             classes={classes}
             active={active}
             group={group}
-            handleChange={this.handleChange}
+            handleChange={this.onChange}
             onChangeVersion={this.onChangeVersion}
+            addCommandOption={addCommandOption}
+            clearCommandOptions={clearCommandOptions}
             {...props}
           />
           <CardActions
-            handleExpandClick={this.handleExpandClick}
+            handleExpandClick={this.onExpandClick}
             expanded={expanded}
             classes={classes}
           />
@@ -246,19 +248,7 @@ class PackageCard extends React.Component {
             unmountOnExit
             className={classes.collapseContent}
           >
-            <h3 className={classes.heading}>Versions and options</h3>
-            <Divider />
-            <section className={classes.controls}>
-              <CardVersions
-                classes={classes}
-                active={active}
-                onChangeVersion={onChangeVersion}
-              />
-              <CardOptions
-                cmdOptions={cmdOptions}
-                addCommandOption={addCommandOption}
-              />
-            </section>
+            <CardDetails {...active} classes={classes} />
           </Collapse>
         </Card>
       </section>

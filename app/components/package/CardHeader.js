@@ -31,10 +31,9 @@ class CardHeader extends React.Component {
     this.handleClick = this.handleClick.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.ariaLabel = this.ariaLabel.bind(this)
   }
-  handleChange = (event) => {
-    this.setState({ options: event.target.value })
+  handleChange(e) {
+    this.setState({ options: e.target.value })
   }
   buildTitle() {
     const { active, group, actions } = this.props
@@ -59,15 +58,18 @@ class CardHeader extends React.Component {
     this._anchorEl = null
     this.forceUpdate()
   }
-  ariaLabel() {
-    const { active } = this.props
-    return `${active.name} - ${active.version}`
-  }
   render() {
     const ITEM_HEIGHT = 55
     const ITEM_PADDING_TOP = 8
     const anchorEl = this._anchorEl
-    const { classes, active, actions, mode, onChangeVersion } = this.props
+    const {
+      classes,
+      active,
+      actions,
+      mode,
+      onChangeVersion,
+      onNavigate
+    } = this.props
     const MenuProps = {
       PaperProps: {
         style: {
@@ -85,7 +87,7 @@ class CardHeader extends React.Component {
       <section>
         <MuiCardHeader
           avatar={
-            <Avatar aria-label={this.ariaLabel()} className={classes.avatar}>
+            <Avatar aria-label={active.name} className={classes.avatar}>
               {active.name[0].toUpperCase()}
             </Avatar>
           }
@@ -112,13 +114,16 @@ class CardHeader extends React.Component {
                   }
                 }}
               >
-                <MenuItem key="item-a" onClick={(e) => console.log(e)}>
-                  Action_A
+                <MenuItem key="item-a" onClick={onNavigate}>
+                  Homepage
+                </MenuItem>
+                <MenuItem key="item-b" onClick={onNavigate}>
+                  Issues
                 </MenuItem>
               </Menu>
             </div>
           }
-          title={this.buildTitle()}
+          title={`${this.buildTitle()} - ${active.version}`}
           subheader={`Updated: ${moment(active.time.modified).format(
             'DD/MM/YYYY'
           )}`}
