@@ -5,7 +5,7 @@ AppHeader with mini drawer
 **/
 
 import { toggleLoader, toggleSettings } from 'actions/globalActions'
-import { setActive } from 'actions/packagesActions'
+import { setActive, setPackageActions } from 'actions/packagesActions'
 import { APP_MODES } from 'constants/AppConstants'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
@@ -42,7 +42,8 @@ class AppHeader extends React.Component {
       theme,
       setActive,
       toggleLoader,
-      toggleSettings
+      toggleSettings,
+      setPackageActions
     } = this.props
 
     return (
@@ -73,7 +74,11 @@ class AppHeader extends React.Component {
                 <MenuIcon />
               </IconButton>
             </Toolbar>
-            <SearchBox setActive={setActive} toggleLoader={toggleLoader} />
+            <SearchBox
+              setActive={setActive}
+              toggleLoader={toggleLoader}
+              setPackageActions={setPackageActions}
+            />
           </div>
         </AppBar>
         <Drawer
@@ -115,6 +120,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setActive: (active) => dispatch(setActive(active)),
+    setPackageActions: (actions) => dispatch(setPackageActions(actions)),
     toggleSettings: (bool) => dispatch(toggleSettings(bool)),
     toggleLoader: (bool) => dispatch(toggleLoader(bool))
   }

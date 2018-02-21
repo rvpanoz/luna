@@ -18,28 +18,39 @@ import Button from 'material-ui/Button'
 const { object, func } = PropTypes
 
 const CardActions = (props) => {
-  const { classes, expanded, handleExpandClick } = props
+  const { classes, actions, expanded, handleExpandClick } = props
+
+  const renderIcon = (iconCls) => {
+    switch (iconCls) {
+      case 'update':
+        return <UpdateIcon />
+        break
+      case 'add':
+        return <AddIcon />
+      case 'trash':
+        return <DeleteIcon />
+      default:
+        return null
+    }
+  }
 
   return (
     <MuiCardActions className={classes.actions}>
-      <Button
-        variant="fab"
-        color="accent"
-        aria-label="update"
-        className={classes.button}
-      >
-        <UpdateIcon />
-        Install
-      </Button>
-      <Button
-        variant="fab"
-        aria-label="delete"
-        color="primary"
-        className={classes.button}
-      >
-        <DeleteIcon />
-        Uninstall
-      </Button>
+      {actions &&
+        actions.map((action, idx) => {
+          return (
+            <Button
+              key={idx}
+              variant="fab"
+              color={action.color}
+              aria-label={action.text}
+              className={classes.button}
+            >
+              {renderIcon(action.iconCls)}
+              {action.text}
+            </Button>
+          )
+        })}
       <IconButton
         className={classnames(classes.expand, {
           [classes.expandOpen]: expanded

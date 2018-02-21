@@ -41,7 +41,6 @@ const CardContent = (props) => {
   if (!active) {
     return null
   }
-  console.log(active)
 
   const dependencies = Object.keys(active.dependencies || {})
   const { latest, stable } = active['dist-tags']
@@ -69,7 +68,7 @@ const CardContent = (props) => {
       <h3 className={classes.heading}>Details</h3>
       <Divider />
       <div className={classes.content}>
-        <List>
+        <List dense={true}>
           <ListItem>
             <Avatar>
               <RefreshIcon />

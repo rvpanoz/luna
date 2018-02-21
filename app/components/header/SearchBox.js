@@ -34,12 +34,25 @@ class SearchBox extends React.Component {
     if (e) {
       e.preventDefault()
     }
-    const { toggleLoader, setActive, mode, directory } = this.props
+    const {
+      toggleLoader,
+      setActive,
+      mode,
+      directory,
+      setPackageActions
+    } = this.props
     const value = e.target.value
 
     if (value) {
       toggleLoader(true)
       setActive(null)
+      setPackageActions([
+        {
+          text: 'Install',
+          iconCls: 'add',
+          color: 'accent'
+        }
+      ])
       ipcRenderer.send('ipc-event', {
         ipcEvent: 'search-packages',
         cmd: ['search'],

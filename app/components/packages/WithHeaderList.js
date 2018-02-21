@@ -48,6 +48,7 @@ function withHeaderList(List, options = {}) {
         toggleLoader,
         toggleMainLoader,
         setGlobalMode,
+        setPackageActions,
         reload,
         ...rest
       } = this.props
@@ -58,6 +59,7 @@ function withHeaderList(List, options = {}) {
           <Header
             sortBy={this.sortBy}
             setGlobalMode={setGlobalMode}
+            setPackageActions={setPackageActions}
             reload={reload}
             total={total}
             title={title}

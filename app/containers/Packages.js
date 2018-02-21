@@ -46,6 +46,7 @@ class PackagesContainer extends React.Component {
       setMode,
       setTotal,
       setPackages,
+      setPackageActions,
       toggleLoader,
       setPackageJSON,
       setupSnackbar,
@@ -119,6 +120,7 @@ class PackagesContainer extends React.Component {
       toggleLoader(true)
       setMode(APP_MODES.LOCAL, directory)
       setActive(null)
+      setPackageActions([])
       setPackageJSON(content)
       setupSnackbar({
         actionText: 'global',
@@ -225,6 +227,7 @@ class PackagesContainer extends React.Component {
       toggleLoader,
       toggleMainLoader,
       setPackages,
+      setPackageActions,
       mode,
       total,
       loading,
@@ -249,6 +252,7 @@ class PackagesContainer extends React.Component {
               directory={directory}
               packages={packages}
               setPackages={setPackages}
+              setPackageActions={setPackageActions}
               setGlobalMode={this.setGlobalMode}
               reload={this.reload}
             />

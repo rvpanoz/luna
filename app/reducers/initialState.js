@@ -22,10 +22,12 @@ export default {
     actions: [
       {
         text: 'Update',
-        iconCls: 'refresh'
+        color: 'primary',
+        iconCls: 'update'
       },
       {
         text: 'Uninstall',
+        color: 'default',
         iconCls: 'trash'
       }
     ]
