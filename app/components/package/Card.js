@@ -215,7 +215,10 @@ class PackageCard extends React.Component {
     if (!active) {
       return null
     }
-    console.log(active)
+
+    /** TODO
+     actions are null when mode = local
+     **/
 
     return (
       <section className={classes.root}>
