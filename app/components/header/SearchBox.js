@@ -50,7 +50,7 @@ class SearchBox extends React.Component {
         {
           text: 'Install',
           iconCls: 'add',
-          color: 'accent'
+          color: 'secondary'
         }
       ])
       ipcRenderer.send('ipc-event', {

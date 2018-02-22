@@ -1,13 +1,13 @@
 export default {
-  mode: 'GLOBAL',
+  mode: "GLOBAL",
   directory: null,
+  settings: null,
+  snackbar: null,
   loading: false,
   settingsOpen: false,
-  settings: null,
   menuOpen: false,
   snackBarOpen: false,
-  snackbar: null,
-  npmCmd: '',
+  npmCmd: "",
   messages: [],
   cmdOptions: [],
   packages: {
@@ -17,27 +17,27 @@ export default {
     packages: [],
     group: null,
     expanded: false,
-    version: '',
+    version: "",
     tabIndex: 0,
     actions: [
       {
-        text: 'Update',
-        color: 'primary',
-        iconCls: 'update'
+        text: "Update",
+        color: "primary",
+        iconCls: "update"
       },
       {
-        text: 'Uninstall',
-        color: 'default',
-        iconCls: 'trash'
+        text: "Uninstall",
+        color: "default",
+        iconCls: "trash"
       }
     ]
   },
   packageJSON: {
     license: null,
-    author: '',
-    name: '',
+    author: "",
+    name: "",
     dependencies: [],
     devDependencies: [],
     optionalDependencies: []
   }
-}
+};

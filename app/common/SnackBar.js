@@ -9,7 +9,7 @@ const Info = (props) => {
 const SnackbarAction = (props) => {
   const { action, actionText } = props
   return (
-    <Button color="accent" size="small" onClick={(e) => action()}>
+    <Button color="secondary" size="small" onClick={(e) => action()}>
       {actionText}
     </Button>
   )
