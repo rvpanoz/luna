@@ -37,8 +37,6 @@ function runCommand(command, mode, directory, callback) {
     }
   )
 
-  const errors = 0
-
   npmc.stdout.on('data', (data) => {
     const dataToString = data.toString()
     result += dataToString
@@ -63,20 +61,29 @@ function runCommand(command, mode, directory, callback) {
   return deferred.promise
 }
 
+exports.install = function() {}
+
+exports.update = function() {}
+
+exports.uninstall = function() {}
+
+exports.view = function() {}
+
+exports.list = function() {}
+
 exports.doCommand = function(options, callback) {
   const opts = options || {}
   if (!opts.cmd) {
     throw new Error('shell[doCommand]: cmd parameter must given')
   }
 
+  const { mode, pkgVersion, pkgOptions, directory } = opts
+
   let run = [],
-    mode = opts.mode,
-    directory = opts.directory,
     params = [],
     args = [],
-    pkgInfo = []
-  let pkgName = opts.pkgName
-  const pkgVersion = opts.pkgVersion
+    pkgInfo = [],
+    pkgName = opts.pkgName
 
   if (pkgName) {
     if (pkgVersion) {
@@ -108,12 +115,11 @@ exports.doCommand = function(options, callback) {
   }
 
   // setup options e.g --save-dev
-  const cmdOptions = opts.pkgOptions
-  if (cmdOptions) {
+  if (pkgOptions) {
     switch (true) {
-      case cmdOptions.length > 0:
-        for (let z = 0; z < cmdOptions.length; z++) {
-          const opt = cmdOptions[z]
+      case pkgOptions.length > 0:
+        for (let z = 0; z < pkgOptions.length; z++) {
+          const opt = pkgOptions[z]
           args.push(`--${opt}`)
         }
         break
@@ -133,7 +139,7 @@ exports.doCommand = function(options, callback) {
   }
 
   function combine() {
-    const promises = []
+    let promises = []
     run.forEach((cmd, idx) => {
       promises.push(
         (function() {
