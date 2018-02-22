@@ -45,7 +45,9 @@ class PackageCard extends React.Component {
     )
   }
   componentDidMount() {
+    const { active, setVersion } = this.props
     this.setupGroup()
+    setVersion(active.version)
   }
   onAction(e) {
     e.preventDefault()
@@ -208,6 +210,7 @@ class PackageCard extends React.Component {
       clearCommandOptions,
       cmdOptions,
       actions,
+      version,
       ...props
     } = this.props
     const { onNavigate, onChangeVersion } = this
@@ -246,6 +249,9 @@ class PackageCard extends React.Component {
             expanded={expanded}
             classes={classes}
             actions={actions}
+            active={active}
+            mode={mode}
+            version={version}
           />
           <Collapse
             in={expanded}

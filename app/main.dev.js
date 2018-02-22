@@ -82,7 +82,7 @@ ipcMain.on('ipc-event', (event, options) => {
   function callback(data, command, status) {
     switch (status) {
       case 'close':
-        if (['Install', 'Update', 'Uninstall'].indexOf(ipcEvent) > -1) {
+        if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
           event.sender.send('action-close', data, command)
         } else {
           event.sender.send(`${ipcEvent}-close`, data, command)
@@ -101,6 +101,7 @@ ipcMain.on('ipc-event', (event, options) => {
    * sending output using spawn to renderer via ipc events
    * */
   try {
+    console.log(opts)
     shell.doCommand(opts, callback)
   } catch (e) {
     throw new Error(e)

@@ -11,7 +11,7 @@ const AppLoader = (props) => {
   const { loading, classes } = props
 
   return loading ? (
-    <CircularProgress className={classes.loader} color="secondary" />
+    <CircularProgress className={classes.loader} />
   ) : (
     props.children
   )

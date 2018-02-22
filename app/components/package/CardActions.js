@@ -3,6 +3,9 @@
  *
  */
 
+import { ipcRenderer } from 'electron'
+import { APP_ACTIONS, APP_MODES } from 'constants/AppConstants'
+import { showMessageBox } from '../../utils'
 import { CardActions as MuiCardActions } from 'material-ui/Card'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -17,10 +20,12 @@ import Button from 'material-ui/Button'
 
 const { object, func } = PropTypes
 
-const CardActions = (props) => {
-  const { classes, actions, expanded, handleExpandClick } = props
-
-  const renderIcon = (iconCls) => {
+class CardActions extends React.Component {
+  constructor() {
+    super()
+    this.doAction = this.doAction.bind(this)
+  }
+  renderIcon(iconCls) {
     switch (iconCls) {
       case 'update':
         return <UpdateIcon />
@@ -33,36 +38,73 @@ const CardActions = (props) => {
         return null
     }
   }
+  doAction(e) {
+    e.preventDefault()
+    const target = e.currentTarget
+    const action = target.textContent.trim().toLowerCase()
+    const { mode, directory, version, active, cmdOptions } = this.props
 
-  return (
-    <MuiCardActions className={classes.actions}>
-      {actions &&
-        actions.map((action, idx) => {
-          return (
-            <Button
-              key={idx}
-              variant="fab"
-              color={action.color}
-              aria-label={action.text}
-              className={classes.button}
-            >
-              {renderIcon(action.iconCls)}
-              {action.text}
-            </Button>
-          )
-        })}
-      <IconButton
-        className={classnames(classes.expand, {
-          [classes.expandOpen]: expanded
-        })}
-        onClick={handleExpandClick}
-        aria-expanded={expanded}
-        aria-label="Show more"
-      >
-        <ExpandMoreIcon />
-      </IconButton>
-    </MuiCardActions>
-  )
+    showMessageBox(
+      {
+        action: action,
+        name: active.name,
+        version: version
+      },
+      () => {
+        let npmCmd = [`npm ${action.toLowerCase()} `, active.name]
+        if (mode === APP_MODES.LOCAL) {
+          npmCmd.push(` --${cmdOptions.join(' --')}`)
+        }
+        ipcRenderer.send('ipc-event', {
+          mode,
+          directory,
+          ipcEvent: action,
+          cmd: [action],
+          pkgName: active.name,
+          pkgVersion: action === 'uninstall' ? null : version,
+          pkgOptions: cmdOptions
+        })
+      }
+    )
+
+    return false
+  }
+  render() {
+    const { classes, actions, expanded, handleExpandClick } = this.props
+
+    return (
+      <MuiCardActions className={classes.actions}>
+        {actions &&
+          actions.map((action, idx) => {
+            return (
+              <Button
+                ref={action.text}
+                key={idx}
+                action={action.text}
+                onClick={this.doAction}
+                variant="fab"
+                color={action.color}
+                aria-label={action.text}
+                className={classes.button}
+              >
+                {this.renderIcon(action.iconCls)}
+                {action.text}
+              </Button>
+            )
+          })}
+        <IconButton
+          className={classnames(classes.expand, {
+            [classes.expandOpen]: expanded
+          })}
+          onClick={handleExpandClick}
+          aria-expanded={expanded}
+          aria-label="Show more"
+        >
+          <ExpandMoreIcon />
+        </IconButton>
+      </MuiCardActions>
+    )
+  }
 }
 
 CardActions.propTypes = {

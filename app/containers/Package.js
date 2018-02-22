@@ -16,7 +16,7 @@ import PackageCard from 'components/package/Card'
 
 class PackageContainer extends React.Component {
   render() {
-    const { classes, active, isLoading, ...props } = this.props
+    const { classes, active, isLoading, version, ...props } = this.props
 
     if (!active) {
       return null
@@ -26,7 +26,12 @@ class PackageContainer extends React.Component {
       <section className={classes.root}>
         <Grid container direction="row" justify="flex-start">
           <Grid item xs={10}>
-            <PackageCard isLoading={isLoading} active={active} {...props} />
+            <PackageCard
+              isLoading={isLoading}
+              version={version}
+              active={active}
+              {...props}
+            />
           </Grid>
           <Grid item xs={2} />
         </Grid>
