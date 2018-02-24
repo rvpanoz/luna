@@ -1,6 +1,7 @@
 import { remote } from 'electron';
 import * as R from 'ramda';
 import React from 'react';
+import {Messages} from 'constants/AppMessages';
 
 export function isUrl(url) {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;

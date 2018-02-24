@@ -61,6 +61,7 @@ function runCommand(command, mode, directory, callback) {
   return deferred.promise
 }
 
+/** WIP **/
 exports.install = function() {}
 
 exports.update = function() {}

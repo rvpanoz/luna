@@ -101,7 +101,6 @@ ipcMain.on('ipc-event', (event, options) => {
    * sending output using spawn to renderer via ipc events
    * */
   try {
-    console.log(opts)
     shell.doCommand(opts, callback)
   } catch (e) {
     throw new Error(e)
