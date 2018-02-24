@@ -51,7 +51,8 @@ export default merge.smart(baseConfig, {
       common: path.resolve(__dirname, 'app/common'),
       components: path.resolve(__dirname, 'app/components'),
       containers: path.resolve(__dirname, 'app/containers'),
-      styles: path.resolve(__dirname, 'app/styles')
+      styles: path.resolve(__dirname, 'app/styles'),
+      utils: path.resolve(__dirname, 'app/utils')
     }
   },
 

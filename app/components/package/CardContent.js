@@ -44,7 +44,6 @@ const CardContent = (props) => {
 
   const dependencies = Object.keys(active.dependencies || {})
   const { latest, stable } = active['dist-tags']
-  console.log(mode && mode === APP_MODES.LOCAL)
 
   return (
     <MuiCardContent className={classes.cardContent}>

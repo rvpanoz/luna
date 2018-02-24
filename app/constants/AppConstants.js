@@ -20,7 +20,8 @@ export const APP_ACTIONS = {
 }
 
 export const APP_INFO = {
-  NOT_AVAILABLE: 'N/A'
+  NOT_AVAILABLE: 'N/A',
+  NO_NOTIFICATIONS: 'No notifications'
 }
 
 // package groups (in package.json)

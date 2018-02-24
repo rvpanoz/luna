@@ -1,8 +1,7 @@
 /**
-AppHeader with mini drawer
-*
-*
-**/
+ *AppHeader with mini drawer
+ *
+ **/
 
 import {
   toggleLoader,
@@ -29,9 +28,8 @@ import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
 import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import AppHeaderContent from './AppHeaderContent'
 import SearchBox from './SearchBox'
-import NotificationsIndicator from './NotificationsIndicator'
-import { firstToUpper } from '../../utils'
-import { appHeaderStyles } from '../../styles/components'
+import Notifications from './Notifications'
+import { appHeaderStyles } from 'styles/components'
 
 const { object } = PropTypes
 
@@ -50,7 +48,8 @@ class AppHeader extends React.Component {
       toggleSettings,
       toggleDrawer,
       setPackageActions,
-      drawerOpen
+      drawerOpen,
+      notifications
     } = this.props
 
     return (
@@ -86,9 +85,10 @@ class AppHeader extends React.Component {
               toggleLoader={toggleLoader}
               setPackageActions={setPackageActions}
             />
-            <NotificationsIndicator
+            <Notifications
               drawerOpen={drawerOpen}
               toggleDrawer={toggleDrawer}
+              notifications={notifications}
             />
           </div>
         </AppBar>
@@ -125,7 +125,8 @@ function mapStateToProps(state) {
   return {
     drawerOpen: state.global.drawerOpen,
     mode: state.global.mode,
-    directory: state.global.directory
+    directory: state.global.directory,
+    notifications: state.global.messages
   }
 }
 

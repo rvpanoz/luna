@@ -174,6 +174,7 @@ class PackagesContainer extends React.Component {
       setPackages,
       packagesOutdated,
       setTotal,
+      addMessage,
       clearMessages
     } = this.props
 
@@ -199,6 +200,12 @@ class PackagesContainer extends React.Component {
 
     setPackages(data)
     setTotal(data.length)
+    clearMessages()
+
+    const notifications = parse(packages, 'problems')
+    notifications.forEach((notification, idx) => {
+      addMessage('error', notification)
+    })
   }
   setupOutdated(packages) {
     const { setPackagesOutdated } = this.props
