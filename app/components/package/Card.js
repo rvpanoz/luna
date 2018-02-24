@@ -104,6 +104,7 @@ class PackageCard extends React.Component {
     const version = e.target.value
 
     if (version && version !== 'false') {
+      toggleMainLoader(true)
       setVersion(version)
       ipcRenderer.send('ipc-event', {
         mode,

@@ -56,7 +56,7 @@ class CardActions extends React.Component {
       {
         action: action,
         name: active.name,
-        version: version
+        version: action === 'uninstall' ? null : version
       },
       () => {
         toggleLoader(true)
