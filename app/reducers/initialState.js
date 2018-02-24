@@ -1,5 +1,5 @@
 export default {
-  mode: "GLOBAL",
+  mode: 'GLOBAL',
   directory: null,
   settings: null,
   snackbar: null,
@@ -7,7 +7,7 @@ export default {
   settingsOpen: false,
   menuOpen: false,
   snackBarOpen: false,
-  npmCmd: "",
+  npmCmd: '',
   messages: [],
   cmdOptions: [],
   packages: {
@@ -17,27 +17,28 @@ export default {
     packages: [],
     group: null,
     expanded: false,
-    version: "",
+    version: '',
     tabIndex: 0,
-    actions: [
+    defaultActions: [
       {
-        text: "Update",
-        color: "primary",
-        iconCls: "update"
+        text: 'Update',
+        color: 'primary',
+        iconCls: 'update'
       },
       {
-        text: "Uninstall",
-        color: "default",
-        iconCls: "trash"
+        text: 'Uninstall',
+        color: 'default',
+        iconCls: 'trash'
       }
-    ]
+    ],
+    actions: []
   },
   packageJSON: {
     license: null,
-    author: "",
-    name: "",
+    author: '',
+    name: '',
     dependencies: [],
     devDependencies: [],
     optionalDependencies: []
   }
-};
+}

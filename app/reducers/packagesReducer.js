@@ -38,7 +38,7 @@ const handlers = {
     assoc('outdated', action.outdated, state),
   [SET_ACTIVE]: (state, action) => assoc('active', action.active, state),
   [SET_PACKAGE_ACTIONS]: (state, action) =>
-    assoc('actions', action.actions || state.actions, state),
+    assoc('actions', action.actions || state.defaultActions, state),
   [SET_TOTAL]: (state, action) => assoc('total', action.total, state)
 }
 

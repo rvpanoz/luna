@@ -42,7 +42,15 @@ class CardActions extends React.Component {
     e.preventDefault()
     const target = e.currentTarget
     const action = target.textContent.trim().toLowerCase()
-    const { mode, directory, version, active, cmdOptions } = this.props
+    const {
+      mode,
+      directory,
+      version,
+      active,
+      toggleLoader,
+      cmdOptions,
+      setActive
+    } = this.props
 
     showMessageBox(
       {
@@ -51,6 +59,8 @@ class CardActions extends React.Component {
         version: version
       },
       () => {
+        toggleLoader(true)
+        setActive(null)
         let npmCmd = [`npm ${action.toLowerCase()} `, active.name]
         if (mode === APP_MODES.LOCAL) {
           npmCmd.push(` --${cmdOptions.join(' --')}`)
@@ -70,7 +80,13 @@ class CardActions extends React.Component {
     return false
   }
   render() {
-    const { classes, actions, expanded, handleExpandClick } = this.props
+    const {
+      classes,
+      actions,
+      defaultActions,
+      expanded,
+      handleExpandClick
+    } = this.props
 
     return (
       <MuiCardActions className={classes.actions}>

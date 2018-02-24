@@ -206,10 +206,13 @@ class PackageCard extends React.Component {
       group,
       mode,
       expanded,
+      setActive,
+      toggleLoader,
       addCommandOption,
       clearCommandOptions,
       cmdOptions,
       actions,
+      defaultActions,
       version,
       ...props
     } = this.props
@@ -218,10 +221,6 @@ class PackageCard extends React.Component {
     if (!active) {
       return null
     }
-
-    /** TODO
-     actions are null when mode = local
-     **/
 
     return (
       <section className={classes.root}>
@@ -249,11 +248,15 @@ class PackageCard extends React.Component {
             expanded={expanded}
             classes={classes}
             actions={actions}
+            defaultActions={defaultActions}
             active={active}
+            toggleLoader={toggleLoader}
             mode={mode}
+            setActive={setActive}
             version={version}
           />
           <Collapse
+            style={{ display: 'none' }}
             in={expanded}
             timeout="auto"
             unmountOnExit

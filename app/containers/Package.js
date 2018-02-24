@@ -47,6 +47,7 @@ function mapStateToProps(state) {
     packageJSON: state.global.packageJSON,
     cmdOptions: state.global.cmdOptions,
     actions: state.packages.actions,
+    defaultActions: state.packages.defaultActions,
     active: state.packages.active,
     isLoading: state.packages.isLoading,
     toggleModal: state.global.toggleModal,
@@ -74,6 +75,7 @@ function mapDispatchToProps(dispatch) {
     clearCommandOptions: () => dispatch(globalActions.clearCommandOptions()),
     toggleMainLoader: (bool) =>
       dispatch(packagesActions.toggleMainLoader(bool)),
+    toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
     setActive: (pkg) => dispatch(packagesActions.setActive(pkg)),
     toggleModal: (bool, npmCmd) =>
       dispatch(globalActions.toggleModal(bool, npmCmd))
