@@ -12,6 +12,7 @@ import {
   TOGGLE_LOADER,
   TOGGLE_SETTINGS,
   TOGGLE_SNACKBAR,
+  TOGGLE_DRAWER,
   ADD_COMMAND_OPTION,
   CLEAR_COMMAND_OPTIONS,
   MENU_OPEN,
@@ -50,6 +51,8 @@ const handlers = {
     }),
   [TOGGLE_SNACKBAR]: (state, action) =>
     assoc('snackBarOpen', action.snackBarOpen, state),
+  [TOGGLE_DRAWER]: (state, action) =>
+    assoc('drawerOpen', action.drawerOpen, state),
   [TOGGLE_LOADER]: (state, action) => assoc('loading', action.loading, state),
   [TOGGLE_SETTINGS]: (state, action) =>
     assoc('settingsOpen', action.settingsOpen, state),

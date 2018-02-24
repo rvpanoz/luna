@@ -7,6 +7,7 @@ export default {
   settingsOpen: false,
   menuOpen: false,
   snackBarOpen: false,
+  drawerOpen: false,
   npmCmd: '',
   messages: [],
   cmdOptions: [],

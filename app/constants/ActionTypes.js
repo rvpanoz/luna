@@ -3,8 +3,9 @@ export const TOGGLE_LOADER = 'TOGGLE_LOADER'
 export const TOGGLE_MAIN_LOADER = 'TOGGLE_MAIN_LOADER'
 export const TOGGLE_SETTINGS = 'TOGGLE_SETTINGS'
 export const TOGGLE_EXPANDED = 'TOGGLE_EXPANDED'
-export const MENU_OPEN = 'MENU_OPEN'
 export const TOGGLE_SNACKBAR = 'TOGGLE_SNACKBAR'
+export const TOGGLE_DRAWER = 'TOGGLE_DRAWER'
+export const MENU_OPEN = 'MENU_OPEN'
 
 // setters
 export const SET_VERSION = 'SET_VERSION'

@@ -4,6 +4,13 @@
 
 import * as types from 'constants/ActionTypes'
 
+export function toggleDrawer(bool) {
+  return {
+    type: types.TOGGLE_DRAWER,
+    drawerOpen: bool
+  }
+}
+
 export function setupSnackbar(snackbarOptions) {
   return {
     type: types.SETUP_SNACKBAR,

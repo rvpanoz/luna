@@ -23,7 +23,6 @@ export function appHeaderStyles(theme) {
       })
     },
     drawerInner: {
-      // Make the items inside not wrap when transitioning:
       width: drawerWidth
     },
     drawerHeader: {
@@ -136,6 +135,15 @@ export function searchBoxStyles(theme) {
   return {
     root: {
       margin: '0 10px',
+      padding: 0
+    }
+  }
+}
+
+export function notificationsStyles(theme) {
+  return {
+    root: {
+      margin: 10,
       padding: 0
     }
   }

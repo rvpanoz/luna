@@ -4,7 +4,11 @@ AppHeader with mini drawer
 *
 **/
 
-import { toggleLoader, toggleSettings } from 'actions/globalActions'
+import {
+  toggleLoader,
+  toggleSettings,
+  toggleDrawer
+} from 'actions/globalActions'
 import { setActive, setPackageActions } from 'actions/packagesActions'
 import { APP_MODES } from 'constants/AppConstants'
 import { compose } from 'redux'
@@ -25,6 +29,7 @@ import ChevronLeftIcon from 'material-ui-icons/ChevronLeft'
 import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import AppHeaderContent from './AppHeaderContent'
 import SearchBox from './SearchBox'
+import NotificationsIndicator from './NotificationsIndicator'
 import { firstToUpper } from '../../utils'
 import { appHeaderStyles } from '../../styles/components'
 
@@ -43,7 +48,9 @@ class AppHeader extends React.Component {
       setActive,
       toggleLoader,
       toggleSettings,
-      setPackageActions
+      toggleDrawer,
+      setPackageActions,
+      drawerOpen
     } = this.props
 
     return (
@@ -63,7 +70,7 @@ class AppHeader extends React.Component {
           >
             <Toolbar disableGutters={!menuOpen}>
               <IconButton
-                color="inherit"
+                color="accent"
                 aria-label="open menu"
                 onClick={handleDrawerOpen}
                 className={classNames(
@@ -78,6 +85,10 @@ class AppHeader extends React.Component {
               setActive={setActive}
               toggleLoader={toggleLoader}
               setPackageActions={setPackageActions}
+            />
+            <NotificationsIndicator
+              drawerOpen={drawerOpen}
+              toggleDrawer={toggleDrawer}
             />
           </div>
         </AppBar>
@@ -112,6 +123,7 @@ class AppHeader extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    drawerOpen: state.global.drawerOpen,
     mode: state.global.mode,
     directory: state.global.directory
   }
@@ -122,7 +134,8 @@ function mapDispatchToProps(dispatch) {
     setActive: (active) => dispatch(setActive(active)),
     setPackageActions: (actions) => dispatch(setPackageActions(actions)),
     toggleSettings: (bool) => dispatch(toggleSettings(bool)),
-    toggleLoader: (bool) => dispatch(toggleLoader(bool))
+    toggleLoader: (bool) => dispatch(toggleLoader(bool)),
+    toggleDrawer: (bool) => dispatch(toggleDrawer(bool))
   }
 }
 
