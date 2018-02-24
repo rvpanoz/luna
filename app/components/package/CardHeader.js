@@ -73,7 +73,7 @@ class CardHeader extends React.Component {
     const MenuProps = {
       PaperProps: {
         style: {
-          maxHeight: ITEM_HEIGHT * 4.5,
+          maxHeight: ITEM_HEIGHT * 4,
           width: 150
         }
       }

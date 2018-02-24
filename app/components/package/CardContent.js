@@ -6,7 +6,7 @@
 import { CardContent as MuiCardContent } from 'material-ui/Card'
 import ListSubheader from 'material-ui/List/ListSubheader'
 import List, { ListItem, ListItemText } from 'material-ui/List'
-import { APP_INFO } from 'constants/AppConstants'
+import { APP_INFO, APP_MODES } from 'constants/AppConstants'
 import React from 'react'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
@@ -44,6 +44,7 @@ const CardContent = (props) => {
 
   const dependencies = Object.keys(active.dependencies || {})
   const { latest, stable } = active['dist-tags']
+  console.log(mode && mode === APP_MODES.LOCAL)
 
   return (
     <MuiCardContent className={classes.cardContent}>
@@ -55,10 +56,12 @@ const CardContent = (props) => {
           active={active}
           onChangeVersion={onChangeVersion}
         />
-        <CardOptions
-          cmdOptions={cmdOptions}
-          addCommandOption={addCommandOption}
-        />
+        {mode && mode === APP_MODES.LOCAL ? (
+          <CardOptions
+            cmdOptions={cmdOptions}
+            addCommandOption={addCommandOption}
+          />
+        ) : null}
       </section>
       <h3 className={classes.heading}>Description</h3>
       <Divider />

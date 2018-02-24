@@ -230,7 +230,6 @@ class PackageCard extends React.Component {
             active={active}
             classes={classes}
             group={group}
-            cmdOptions={cmdOptions}
             onNavigate={this.onNavigate}
           />
           <CardContent
@@ -241,6 +240,8 @@ class PackageCard extends React.Component {
             onChangeVersion={this.onChangeVersion}
             addCommandOption={addCommandOption}
             clearCommandOptions={clearCommandOptions}
+            cmdOptions={cmdOptions}
+            mode={mode}
             {...props}
           />
           <CardActions
@@ -254,6 +255,7 @@ class PackageCard extends React.Component {
             mode={mode}
             setActive={setActive}
             version={version}
+            cmdOptions={cmdOptions}
           />
           <Collapse
             style={{ display: 'none' }}

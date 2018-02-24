@@ -10,7 +10,7 @@ import {
   FormControlLabel,
   FormHelperText
 } from 'material-ui/Form'
-import * as R from 'ramda'
+import { contains } from 'ramda'
 import Checkbox from 'material-ui/Checkbox'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -27,7 +27,7 @@ class CardOptions extends React.Component {
   }
   render() {
     const { cmdOptions } = this.props
-
+    console.log(cmdOptions)
     return (
       <FormControl component="fieldset">
         <FormGroup row>
@@ -38,7 +38,7 @@ class CardOptions extends React.Component {
                 key={idx}
                 control={
                   <Checkbox
-                    checked={cmdOptions && R.contains(opt[0], cmdOptions)}
+                    checked={cmdOptions && contains(opt[0], cmdOptions)}
                     onChange={this.handleChange}
                     value={opt[0]}
                   />

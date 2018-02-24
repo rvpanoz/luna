@@ -90,7 +90,7 @@ class PackageListItem extends React.Component {
         <ListItemSecondaryAction>
           {latest ? (
             <IconButton
-              color="secondary"
+              color="accent"
               onClick={this.onUpdate}
               aria-label="Update"
             >
