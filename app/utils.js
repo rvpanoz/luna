@@ -1,7 +1,7 @@
 import { remote } from 'electron';
 import * as R from 'ramda';
 import React from 'react';
-import {Messages} from 'constants/AppMessages';
+import {APP_INFO} from 'constants/AppConstants';
 
 export function isUrl(url) {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
@@ -47,7 +47,7 @@ export function showMessageBox(opts, cb = {}) {
   const name = opts.name;
   const action = opts.action;
   const version = opts.version;
-  let message = 'Would you like to $action $name@version';
+  let message = APP_INFO.CONFIRMATION;
 
   message = message.replace('$action', action.toLowerCase()).replace('$name@version', () => {
     if (name && version) {
@@ -63,7 +63,7 @@ export function showMessageBox(opts, cb = {}) {
       title: 'Confirmation',
       type: 'question',
       message,
-      buttons: ['CANCEL', action]
+      buttons: ['CANCEL', firstToUpper(action)]
     },
     (btnIdx) => {
       if (Boolean(btnIdx) === true) {

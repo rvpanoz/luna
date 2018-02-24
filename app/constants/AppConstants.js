@@ -21,7 +21,8 @@ export const APP_ACTIONS = {
 
 export const APP_INFO = {
   NOT_AVAILABLE: 'N/A',
-  NO_NOTIFICATIONS: 'No notifications'
+  NO_NOTIFICATIONS: 'No notifications',
+  CONFIRMATION: 'Would you like to $action $name@version'
 }
 
 // package groups (in package.json)
