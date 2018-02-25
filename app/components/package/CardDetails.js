@@ -2,11 +2,11 @@
  * Card details content (expanded)
  **/
 
+import { APP_INFO } from 'constants/AppConstants'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Chip from 'material-ui/Chip'
 import Divider from 'material-ui/Divider'
-import { APP_INFO } from 'constants/AppConstants'
 
 const CardDetails = (props) => {
   const { classes, keywords } = props
@@ -24,6 +24,13 @@ const CardDetails = (props) => {
       </div>
     </section>
   )
+}
+
+const { object, array } = PropTypes
+
+CardDetails.propTypes = {
+  classes: object.isRequired,
+  keywords: array
 }
 
 export default CardDetails

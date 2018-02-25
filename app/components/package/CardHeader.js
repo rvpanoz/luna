@@ -16,7 +16,7 @@ import Select from 'material-ui/Select'
 import Checkbox from 'material-ui/Checkbox'
 import moment from 'moment'
 
-const { object } = PropTypes
+const { array, object, string, func } = PropTypes
 
 class CardHeader extends React.Component {
   constructor() {
@@ -62,14 +62,7 @@ class CardHeader extends React.Component {
     const ITEM_HEIGHT = 55
     const ITEM_PADDING_TOP = 8
     const anchorEl = this._anchorEl
-    const {
-      classes,
-      active,
-      actions,
-      mode,
-      onChangeVersion,
-      onNavigate
-    } = this.props
+    const { classes, active, mode, onNavigate } = this.props
     const MenuProps = {
       PaperProps: {
         style: {
@@ -134,8 +127,10 @@ class CardHeader extends React.Component {
 }
 
 CardHeader.propTypes = {
-  classes: object,
-  active: object
+  classes: object.isRequired,
+  mode: string.isRequired,
+  onNavigate: func.isRequired,
+  active: object.isRequired
 }
 
 export default CardHeader

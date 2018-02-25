@@ -1,8 +1,11 @@
-import React from 'react'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import TextField from 'material-ui/TextField'
 import Input, { InputLabel } from 'material-ui/Input'
 import { FormControl } from 'material-ui/Form'
+import React from 'react'
+import PropTypes from 'prop-types'
+
+const { object, func } = PropTypes
 
 const CardVersions = (props) => {
   const { active, classes, onChangeVersion } = props
@@ -30,6 +33,12 @@ const CardVersions = (props) => {
         ))}
     </TextField>
   )
+}
+
+CardVersions.propTypes = {
+  active: object.isRequired,
+  classes: object.isRequired,
+  onChangeVersion: func.isRequired
 }
 
 export default CardVersions

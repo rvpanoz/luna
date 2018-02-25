@@ -21,16 +21,13 @@ import BugReport from 'material-ui-icons/BugReport'
 import CardOptions from './CardOptions'
 import CardVersions from './CardVersions'
 
-const { object } = PropTypes
+const { object, array, func, string } = PropTypes
 
 const CardContent = (props) => {
   const {
     classes,
     active,
     mode,
-    handleChange,
-    tabIndex,
-    buildLink,
     version,
     cmdOptions,
     onChangeVersion,
@@ -144,8 +141,12 @@ const CardContent = (props) => {
 }
 
 CardContent.propTypes = {
-  classes: object,
-  active: object
+  version: string,
+  cmdOptions: array,
+  classes: object.isRequired,
+  active: object.isRequired,
+  onChangeVersion: func.isRequired,
+  clearCommandOptions: func.isRequired
 }
 
 export default CardContent

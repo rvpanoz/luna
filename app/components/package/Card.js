@@ -15,6 +15,7 @@ import {
   COMMAND_OPTIONS
 } from 'constants/AppConstants'
 import React from 'react'
+import PropTypes from 'prop-types'
 import Collapse from 'material-ui/transitions/Collapse'
 import Card from 'material-ui/Card'
 import Chip from 'material-ui/Chip'
@@ -222,6 +223,27 @@ class PackageCard extends React.Component {
       </section>
     )
   }
+}
+
+const { array, bool, func, object, string, number } = PropTypes
+
+PackageCard.propTypes = {
+  classes: object.isRequired,
+  active: object.isRequired,
+  setupSnackbar: func.isRequired,
+  toggleSnackbar: func.isRequired,
+  mode: string.isRequired,
+  setActive: func.isRequired,
+  toggleLoader: func.isRequired,
+  addCommandOption: func.isRequired,
+  clearCommandOptions: func.isRequired,
+  actions: array.isRequired,
+  defaultActions: array.isRequired,
+  group: string,
+  directory: string,
+  expanded: bool,
+  cmdOptions: array,
+  version: string
 }
 
 export default withStyles(packageCardStyles)(PackageCard)

@@ -54,4 +54,10 @@ class CardOptions extends React.Component {
   }
 }
 
+const { array } = PropTypes
+
+CardOptions.propTypes = {
+  cmdOptions: array.isRequired
+}
+
 export default CardOptions

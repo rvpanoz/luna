@@ -18,7 +18,7 @@ import Icon from 'material-ui/Icon'
 import classnames from 'classnames'
 import Button from 'material-ui/Button'
 
-const { object, func } = PropTypes
+const { object, func, bool, array } = PropTypes
 
 class CardActions extends React.Component {
   constructor() {
@@ -131,7 +131,10 @@ class CardActions extends React.Component {
 
 CardActions.propTypes = {
   classes: object,
-  handleExpandClick: func.isRequired
+  handleExpandClick: func.isRequired,
+  actions: array.isRequired,
+  defaultActions: array.isRequired,
+  expanded: bool.isRequired
 }
 
 export default CardActions
