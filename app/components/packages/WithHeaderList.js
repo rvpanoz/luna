@@ -81,4 +81,20 @@ function withHeaderList(List, options = {}) {
   }
 }
 
+const { bool, string, func, array, object, number } = PropTypes
+
+withHeaderList.propTypes = {
+  loading: string,
+  toggleLoader: func.isRequired,
+  toggleMainLoader: func.isRequired,
+  mode: string.isRequired,
+  total: number,
+  directory: string,
+  packages: array.isRequired,
+  setPackages: func.isRequired,
+  setPackageActions: func.isRequired,
+  setGlobalMode: func.isRequired,
+  reload: func.isRequired
+}
+
 export default withHeaderList

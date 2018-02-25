@@ -4,13 +4,14 @@
  */
 
 import { remote, ipcRenderer } from 'electron'
+import { autoBind, showMessageBox } from '../../utils'
 import React from 'react'
 import {
   ListItem,
   ListItemSecondaryAction,
   ListItemText
 } from 'material-ui/List'
-import { autoBind, showMessageBox } from '../../utils'
+import PropTypes from 'prop-types'
 import IconButton from 'material-ui/IconButton'
 import Avatar from 'material-ui/Avatar'
 import Typography from 'material-ui/Typography'
@@ -109,6 +110,14 @@ class PackageListItem extends React.Component {
       </ListItem>
     )
   }
+}
+
+const { string } = PropTypes
+
+PackageListItem.propTypes = {
+  name: string.isRequired,
+  version: string.isRequired,
+  latest: string
 }
 
 export default PackageListItem

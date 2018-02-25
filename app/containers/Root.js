@@ -3,20 +3,19 @@
  *
  */
 
-import React from "react";
-import { Provider } from "react-redux";
-import Reboot from "material-ui/Reboot";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import createMuiTheme from "material-ui/styles/createMuiTheme";
-import Layout from "./Layout";
-import { themeA } from "../themes";
+import { Provider } from 'react-redux'
+import { themeA } from '../themes'
+import React from 'react'
+import Reboot from 'material-ui/Reboot'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import createMuiTheme from 'material-ui/styles/createMuiTheme'
+import Layout from './Layout'
 
-const AppTheme = themeA();
+const AppTheme = themeA()
 
 const App = (props) => {
-  const { store } = props;
-  const theme = createMuiTheme(themeA);
-  console.log(theme);
+  const { store } = props
+  const theme = createMuiTheme(themeA)
 
   return (
     <section id="root">
@@ -27,7 +26,7 @@ const App = (props) => {
         </MuiThemeProvider>
       </Provider>
     </section>
-  );
-};
+  )
+}
 
-export default App;
+export default App

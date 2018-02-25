@@ -5,9 +5,10 @@
 
 import { ipcRenderer } from 'electron'
 import { withStyles } from 'material-ui/styles'
-import { packagesListStyles } from '../../styles/components'
-import { autoBind } from '../../utils'
+import { packagesListStyles } from 'styles/components'
+import { autoBind } from 'utils'
 import React from 'react'
+import PropTypes from 'prop-types'
 import Divider from 'material-ui/Divider'
 import Avatar from 'material-ui/Avatar'
 import Typography from 'material-ui/Typography'
@@ -70,7 +71,7 @@ class ListHeader extends React.Component {
       <section className={classes.flexColumn}>
         <div className={classes.flexRow}>
           <h3 className={classes.heading}>{title}</h3>
-          <Avatar className={classes.avatar} color="primary">
+          <Avatar className={classes.avatar} color="accent">
             {total || 0}
           </Avatar>
           <div style={{ marginLeft: 'auto' }}>
@@ -121,6 +122,16 @@ class ListHeader extends React.Component {
       </section>
     )
   }
+}
+
+const { object, number, string } = PropTypes
+
+ListHeader.propTypes = {
+  classes: object.isRequired,
+  mode: string.isRequired,
+  total: number,
+  directory: string,
+  title: string
 }
 
 export default withStyles(packagesListStyles)(ListHeader)
