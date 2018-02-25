@@ -1,5 +1,5 @@
 /**
- *AppHeader with mini drawer
+ * AppHeader with mini drawer
  *
  **/
 
@@ -13,12 +13,12 @@ import { APP_MODES } from 'constants/AppConstants'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
+import { appHeaderStyles } from 'styles/components'
 import React from 'react'
 import PropTypes from 'prop-types'
 import AppBar from 'material-ui/AppBar'
 import Toolbar from 'material-ui/Toolbar'
 import Drawer from 'material-ui/Drawer'
-import Typography from 'material-ui/Typography'
 import Divider from 'material-ui/Divider'
 import classNames from 'classnames'
 import Icon from 'material-ui/Icon'
@@ -29,9 +29,8 @@ import ChevronRightIcon from 'material-ui-icons/ChevronRight'
 import AppHeaderContent from './AppHeaderContent'
 import SearchBox from './SearchBox'
 import Notifications from './Notifications'
-import { appHeaderStyles } from 'styles/components'
 
-const { object } = PropTypes
+const { object, func } = PropTypes
 
 class AppHeader extends React.Component {
   render() {
@@ -142,7 +141,9 @@ function mapDispatchToProps(dispatch) {
 
 AppHeader.propTypes = {
   classes: object.isRequired,
-  theme: object.isRequired
+  theme: object.isRequired,
+  handleDrawerOpen: func.isRequired,
+  handleDrawerClose: func.isRequired
 }
 
 export default compose(

@@ -5,9 +5,12 @@
 
 import { ipcRenderer } from 'electron'
 import { withStyles } from 'material-ui/styles'
+import { searchBoxStyles } from 'styles/components'
 import React from 'react'
+import PropTypes from 'prop-types'
 import TextField from 'material-ui/TextField'
-import { searchBoxStyles } from '../../styles/components'
+
+const { object } = PropTypes
 
 class SearchBox extends React.Component {
   constructor() {
@@ -79,6 +82,10 @@ class SearchBox extends React.Component {
       </div>
     )
   }
+}
+
+SearchBox.propTypes = {
+  classes: object.isRequired
 }
 
 export default withStyles(searchBoxStyles)(SearchBox)

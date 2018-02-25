@@ -16,7 +16,7 @@ import Button from 'material-ui/Button'
 import List, { ListItem, ListItemText } from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 
-const NotificationsLIst = (props) => {
+const NotificationsList = (props) => {
   const { notifications } = props
   const totalNotifications = notifications && notifications.length
 
@@ -45,7 +45,7 @@ const NotificationsLIst = (props) => {
   )
 }
 
-class NotificationsIndicator extends React.Component {
+class Notifications extends React.Component {
   constructor(props) {
     super(props)
     this.onClick = this.onClick.bind(this)
@@ -77,7 +77,7 @@ class NotificationsIndicator extends React.Component {
             onClick={this.onClick}
             onKeyDown={this.onClick}
           >
-            <NotificationsLIst notifications={notifications} />
+            <NotificationsList notifications={notifications} />
           </div>
         </Drawer>
       </div>
@@ -85,4 +85,13 @@ class NotificationsIndicator extends React.Component {
   }
 }
 
-export default withStyles(notificationsStyles)(NotificationsIndicator)
+const { array, bool, object, func, number } = PropTypes
+
+Notifications.propTypes = {
+  drawerOpen: bool.isRequired,
+  toggleDrawer: func.isRequired,
+  classes: object.isRequired,
+  notificationsTotal: number
+}
+
+export default withStyles(notificationsStyles)(Notifications)

@@ -5,13 +5,14 @@
  */
 
 import { remote, ipcRenderer } from 'electron'
+import { appHeaderContentStyles } from 'styles/components'
+import { withStyles } from 'material-ui/styles'
 import React from 'react'
+import PropTypes from 'prop-types'
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
 import Icon from 'material-ui/Icon'
-import { withStyles } from 'material-ui/styles'
 import Divider from 'material-ui/Divider'
 import Tooltip from 'material-ui/Tooltip'
-import { appHeaderContentStyles } from '../../styles/components'
 
 class AppHeaderContent extends React.Component {
   constructor() {
@@ -76,6 +77,12 @@ class AppHeaderContent extends React.Component {
       </section>
     )
   }
+}
+
+const { object } = PropTypes
+
+AppHeaderContent.propTypes = {
+  classes: object.isRequired
 }
 
 export default withStyles(appHeaderContentStyles)(AppHeaderContent)
