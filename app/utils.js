@@ -1,7 +1,12 @@
+/**
+* Utilities
+*
+**/
+
 import { remote } from 'electron';
+import { APP_INFO } from './constants/AppConstants';
 import * as R from 'ramda';
 import React from 'react';
-import {APP_INFO} from './constants/AppConstants';
 
 export function isUrl(url) {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;

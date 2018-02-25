@@ -106,7 +106,7 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('ipcEvent-error', (event, error) => {
-      console.error(error)
+      // console.error(error)
     })
 
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {

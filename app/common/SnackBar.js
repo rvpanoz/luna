@@ -18,13 +18,7 @@ const SnackbarAction = (props) => {
 }
 
 const SnackBar = (props) => {
-  const {
-    snackBarOpen,
-    handleSnackBarClose,
-    action,
-    actionText,
-    message
-  } = props
+  const { snackBarOpen, handleSnackBarClose, message } = props
 
   return (
     <Snackbar
@@ -35,11 +29,6 @@ const SnackBar = (props) => {
       SnackbarContentProps={{
         'aria-describedby': 'message'
       }}
-      action={
-        action ? (
-          <SnackbarAction action={action} actionText={actionText} />
-        ) : null
-      }
       message={<span id="message">{message}</span>}
     />
   )
@@ -49,8 +38,6 @@ const { bool, func, string } = PropTypes
 
 SnackBar.propTypes = {
   snackBarOpen: bool.isRequired,
-  action: func,
-  actionText: string,
   message: string.isRequired
 }
 

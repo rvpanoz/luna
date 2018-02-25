@@ -151,6 +151,7 @@ class PackageCard extends React.Component {
       active,
       group,
       mode,
+      directory,
       expanded,
       setActive,
       toggleLoader,
@@ -201,6 +202,7 @@ class PackageCard extends React.Component {
             active={active}
             toggleLoader={toggleLoader}
             mode={mode}
+            directory={directory}
             setActive={setActive}
             version={version}
             cmdOptions={cmdOptions}

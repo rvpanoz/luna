@@ -15,7 +15,7 @@ import { parse } from './utils'
 function runCommand(command, mode, directory, callback) {
   const deferred = Q.defer()
   const cwd = process.cwd()
-
+  console.log(directory)
   let result = '',
     error = ''
 
