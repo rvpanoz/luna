@@ -49,7 +49,9 @@ class CardActions extends React.Component {
       active,
       toggleLoader,
       cmdOptions,
-      setActive
+      setActive,
+      setupSnackbar,
+      toggleSnackbar
     } = this.props
 
     showMessageBox(
@@ -59,12 +61,16 @@ class CardActions extends React.Component {
         version: action === 'uninstall' ? null : version
       },
       () => {
-        toggleLoader(true)
-        setActive(null)
         let npmCmd = [`npm ${action.toLowerCase()} `, active.name]
         if (mode === APP_MODES.LOCAL) {
           npmCmd.push(` --${cmdOptions.join(' --')}`)
         }
+        toggleLoader(true)
+        setupSnackbar({
+          message: 'running ' + npmCmd.join(' ')
+        })
+        toggleSnackbar(true)
+        setActive(null)
         ipcRenderer.send('ipc-event', {
           mode,
           directory,

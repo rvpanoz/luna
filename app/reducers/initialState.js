@@ -1,11 +1,15 @@
 export default {
-  mode: 'GLOBAL',
   directory: null,
-  settings: null,
-  snackbar: null,
   loading: false,
+  snackbar: {
+    action: null,
+    actionText: '',
+    message: ''
+  },
+  settings: null,
   settingsOpen: false,
   menuOpen: false,
+  mode: 'GLOBAL',
   snackBarOpen: false,
   drawerOpen: false,
   npmCmd: '',

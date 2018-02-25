@@ -62,6 +62,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    setupSnackbar: (snackbarOptions) =>
+      dispatch(globalActions.setupSnackbar(snackbarOptions)),
+    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
     addCommandOption: (option) =>
       dispatch(globalActions.addCommandOption(option)),
     setVersion: (version) => dispatch(packagesActions.setVersion(version)),

@@ -49,38 +49,6 @@ class PackageCard extends React.Component {
     this.setupGroup()
     setVersion(active.version)
   }
-  onAction(e) {
-    e.preventDefault()
-
-    const target = e.currentTarget
-    const action = target.dataset.action
-    const { mode, active, setActive, toggleModal } = this.props
-    const options = this.props.cmdOptions
-
-    if (action) {
-      const selectVersion = this.refs.selectVersion
-      let version
-
-      if (action === APP_ACTIONS.UNINSTALL) {
-        version = null
-      } else {
-        version =
-          selectVersion && selectVersion.value !== 'false'
-            ? selectVersion.value
-            : 'latest'
-      }
-
-      showMessageBox(
-        {
-          action,
-          name: active.name,
-          version
-        },
-        () => this.runCommand(action, version)
-      )
-    }
-    return false
-  }
   onNavigate(e) {
     e.preventDefault()
     const url = e.currentTarget.dataset.url
@@ -92,11 +60,6 @@ class PackageCard extends React.Component {
   onExpandClick(e) {
     const { toggleExpanded } = this.props
     toggleExpanded()
-    this.forceUpdate()
-  }
-  onChangeChange(e, value) {
-    const { setActiveTab } = this.props
-    setActiveTab(value)
     this.forceUpdate()
   }
   onChangeVersion(e, value) {
@@ -116,24 +79,6 @@ class PackageCard extends React.Component {
       })
     }
     return false
-  }
-  runCommand(action, version) {
-    const { mode, directory } = this.props
-    let cmd = [`npm ${action.toLowerCase()} `, active.name]
-
-    if (mode === APP_MODES.LOCAL) {
-      cmd.push(` --${options.join(' --')}`)
-    }
-    setActive(null)
-    ipcRenderer.send('ipc-event', {
-      mode,
-      directory,
-      ipcEvent: action,
-      cmd: [action === 'Uninstall' ? 'uninstall' : 'install'],
-      pkgName: active.name,
-      pkgVersion: action === 'Uninstall' ? null : version,
-      pkgOptions: options
-    })
   }
   setupOptions(group) {
     const {
@@ -215,6 +160,8 @@ class PackageCard extends React.Component {
       actions,
       defaultActions,
       version,
+      setupSnackbar,
+      toggleSnackbar,
       ...props
     } = this.props
     const { onNavigate, onChangeVersion } = this
@@ -257,6 +204,8 @@ class PackageCard extends React.Component {
             setActive={setActive}
             version={version}
             cmdOptions={cmdOptions}
+            setupSnackbar={setupSnackbar}
+            toggleSnackbar={toggleSnackbar}
           />
           <Collapse
             style={{ display: 'none' }}

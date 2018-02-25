@@ -1,11 +1,13 @@
+/**
+ * SnackBar
+ *
+ **/
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import Snackbar from 'material-ui/Snackbar'
 import Button from 'material-ui/Button'
 
-const Info = (props) => {
-  const { action, actionText } = prop
-}
 const SnackbarAction = (props) => {
   const { action, actionText } = props
   return (
@@ -33,10 +35,23 @@ const SnackBar = (props) => {
       SnackbarContentProps={{
         'aria-describedby': 'message'
       }}
-      action={<SnackbarAction action={action} actionText={actionText} />}
+      action={
+        action ? (
+          <SnackbarAction action={action} actionText={actionText} />
+        ) : null
+      }
       message={<span id="message">{message}</span>}
     />
   )
+}
+
+const { bool, func, string } = PropTypes
+
+SnackBar.propTypes = {
+  snackBarOpen: bool.isRequired,
+  action: func,
+  actionText: string,
+  message: string.isRequired
 }
 
 export default SnackBar

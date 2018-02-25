@@ -50,7 +50,7 @@ class SearchBox extends React.Component {
         {
           text: 'Install',
           iconCls: 'add',
-          color: 'secondary'
+          color: 'accent'
         }
       ])
       ipcRenderer.send('ipc-event', {
@@ -71,7 +71,7 @@ class SearchBox extends React.Component {
       <div ref="root" className={classes.root}>
         <TextField
           id="search"
-          color="secondary"
+          color="accent"
           label="Search npm"
           InputLabelProps={{ className: classes.searchBoxLabel }}
           inputProps={{ className: classes.searchBoxInput }}

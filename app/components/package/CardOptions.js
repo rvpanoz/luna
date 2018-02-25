@@ -27,7 +27,7 @@ class CardOptions extends React.Component {
   }
   render() {
     const { cmdOptions } = this.props
-    console.log(cmdOptions)
+
     return (
       <FormControl component="fieldset">
         <FormGroup row>

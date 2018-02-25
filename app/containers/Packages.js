@@ -14,9 +14,8 @@ import React from 'react'
 import Loader from 'common/Loader'
 import Grid from 'material-ui/Grid'
 import List from 'components/packages/List'
-import withHeaderList from '../components/packages/WithHeaderList'
+import withHeaderList from 'components/packages/WithHeaderList'
 import PackageContainer from './Package'
-import SnackBar from '../common/SnackBar'
 
 const WithHeaderList = withHeaderList(List, {
   title: 'Packages',
@@ -28,14 +27,7 @@ class PackagesContainer extends React.Component {
   constructor() {
     super()
     autoBind(
-      [
-        'setupPackagesFromResponse',
-        'setupOutdated',
-        'setGlobalMode',
-        'handleSnackBar',
-        'handleSnackBarClose',
-        'reload'
-      ],
+      ['setupPackagesFromResponse', 'setupOutdated', 'setGlobalMode', 'reload'],
       this
     )
   }
@@ -124,6 +116,7 @@ class PackagesContainer extends React.Component {
       setPackageActions(null)
       setPackageJSON(content)
       setupSnackbar({
+        action: true,
         actionText: 'global',
         message: directory
       })
@@ -244,7 +237,6 @@ class PackagesContainer extends React.Component {
       directory,
       packages,
       snackBarOpen,
-      snackbar,
       ...rest
     } = this.props
 
@@ -272,15 +264,6 @@ class PackagesContainer extends React.Component {
             </Loader>
           </Grid>
         </Grid>
-        {snackbar ? (
-          <SnackBar
-            snackBarOpen={snackBarOpen}
-            handleSnackBarClose={this.handleSnackBarClose}
-            action={this.setGlobalMode}
-            actionText={snackbar.actionText}
-            message={snackbar.message}
-          />
-        ) : null}
       </section>
     )
   }
@@ -297,8 +280,7 @@ function mapStateToProps(state) {
     packagesOutdated: state.packages.outdated,
     active: state.packages.active,
     total: state.packages.total,
-    snackBarOpen: state.global.snackBarOpen,
-    snackbar: state.global.snackbar
+    snackBarOpen: state.global.snackBarOpen
   }
 }
 

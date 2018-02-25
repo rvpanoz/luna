@@ -47,15 +47,23 @@ class PackageListItem extends React.Component {
     e.preventDefault()
     const { name, mode, directory, toggleMainLoader } = this.props
 
-    toggleMainLoader(true)
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'update-package',
-      cmd: 'install',
-      pkgName: name,
-      pkgVersion: 'latest',
-      mode,
-      directory
-    })
+    showMessageBox(
+      {
+        action: 'update',
+        name
+      },
+      () => {
+        toggleMainLoader(true)
+        ipcRenderer.send('ipc-event', {
+          ipcEvent: 'update-package',
+          cmd: 'install',
+          pkgName: name,
+          pkgVersion: 'latest',
+          mode,
+          directory
+        })
+      }
+    )
   }
   onItemClick(e) {
     e.preventDefault()
