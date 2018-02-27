@@ -65,12 +65,12 @@ class CardActions extends React.Component {
         if (mode === APP_MODES.LOCAL) {
           npmCmd.push(` --${cmdOptions.join(' --')}`)
         }
+        setActive(null)
         toggleLoader(true)
         setupSnackbar({
           message: 'running ' + npmCmd.join(' ')
         })
         toggleSnackbar(true)
-        setActive(null)
         ipcRenderer.send('ipc-event', {
           mode,
           directory,

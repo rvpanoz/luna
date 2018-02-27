@@ -56,7 +56,7 @@ export function showMessageBox(opts, cb = {}) {
 
   message = message.replace('$action', action.toLowerCase()).replace('$name@version', () => {
     if (name && version) {
-      return `${name} to version ${version}`;
+      return `${name} ${version}`;
     } else if (name) {
       return name;
     }

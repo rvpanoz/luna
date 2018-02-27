@@ -26,12 +26,12 @@ export default {
     tabIndex: 0,
     defaultActions: [
       {
-        text: 'Update',
+        text: 'install',
         color: 'primary',
         iconCls: 'update'
       },
       {
-        text: 'Uninstall',
+        text: 'uninstall',
         color: 'default',
         iconCls: 'trash'
       }

@@ -67,9 +67,8 @@ class PackageListItem extends React.Component {
     )
   }
   onItemClick(e) {
-    e.preventDefault()
-
     const { toggleMainLoader } = this.props
+    e.preventDefault()
     toggleMainLoader(true)
     this.viewPackage()
     return false

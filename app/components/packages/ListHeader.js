@@ -12,6 +12,7 @@ import PropTypes from 'prop-types'
 import Divider from 'material-ui/Divider'
 import Avatar from 'material-ui/Avatar'
 import Typography from 'material-ui/Typography'
+import Icon from 'material-ui/Icon'
 import IconButton from 'material-ui/IconButton'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
@@ -24,12 +25,12 @@ class ListHeader extends React.Component {
     this._anchorEl = null
     autoBind(
       [
+        '_reload',
+        '_setGlobalMode',
         'handleClick',
         'handleClose',
         'handleSortByLatest',
-        'handleSortByName',
-        '_reload',
-        '_setGlobalMode'
+        'handleSortByName'
       ],
       this
     )
@@ -62,7 +63,6 @@ class ListHeader extends React.Component {
     reload()
     this.handleClose()
   }
-
   render() {
     const { classes, total, mode, directory, title } = this.props
     const anchorEl = this._anchorEl
@@ -97,17 +97,17 @@ class ListHeader extends React.Component {
               }}
             >
               <MenuItem key="sort-name" onClick={this.handleSortByName}>
-                Sort by name
+                <Icon color="accent">sort</Icon>Sort by name
               </MenuItem>
               <MenuItem key="sort-latest" onClick={this.handleSortByLatest}>
-                Sort by outdated
+                <Icon color="accent">sort</Icon>Sort by outdated
               </MenuItem>
               <Divider />
               <MenuItem key="reload" onClick={this._reload}>
-                Reload
+                <Icon color="accent">refresh</Icon>Reload
               </MenuItem>
               <MenuItem key="global" onClick={this._setGlobalMode}>
-                Show global packages
+                <Icon color="accent">list</Icon>Show globals
               </MenuItem>
             </Menu>
           </div>
