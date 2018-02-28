@@ -25,6 +25,8 @@ class ListHeader extends React.Component {
     this._anchorEl = null
     autoBind(
       [
+        '_updatedAll',
+        '_uninstallAll',
         '_reload',
         '_setGlobalMode',
         'handleClick',
@@ -63,6 +65,13 @@ class ListHeader extends React.Component {
     reload()
     this.handleClose()
   }
+  _updatedAll(e) {
+    const { selected } = this.props
+
+    if (selected.length) {
+      ipcRenderer.send('ipc-event', {})
+    }
+  }
   render() {
     const { classes, total, mode, directory, title } = this.props
     const anchorEl = this._anchorEl
@@ -91,7 +100,7 @@ class ListHeader extends React.Component {
               onClose={this.handleClose}
               PaperProps={{
                 style: {
-                  maxHeight: ITEM_HEIGHT * 4.5,
+                  maxHeight: ITEM_HEIGHT * 6.5,
                   width: 200
                 }
               }}
@@ -103,6 +112,12 @@ class ListHeader extends React.Component {
                 <Icon color="accent">sort</Icon>Sort by outdated
               </MenuItem>
               <Divider />
+              <MenuItem key="update-all" onClick={this._updatedAll}>
+                <Icon color="accent">update</Icon>Update selected
+              </MenuItem>
+              <MenuItem key="uninstall-all" onClick={this._uninstallAll}>
+                <Icon color="accent">remove</Icon>Uninstall selected
+              </MenuItem>
               <MenuItem key="reload" onClick={this._reload}>
                 <Icon color="accent">refresh</Icon>Reload
               </MenuItem>

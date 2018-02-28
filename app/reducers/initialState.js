@@ -1,18 +1,18 @@
 export default {
+  npmCmd: '',
+  mode: 'GLOBAL',
   directory: null,
-  loading: false,
+  settings: null,
+  loading: true,
+  settingsOpen: false,
+  menuOpen: false,
+  snackBarOpen: false,
+  drawerOpen: false,
   snackbar: {
     action: null,
     actionText: '',
     message: ''
   },
-  settings: null,
-  settingsOpen: false,
-  menuOpen: false,
-  mode: 'GLOBAL',
-  snackBarOpen: false,
-  drawerOpen: false,
-  npmCmd: '',
   messages: [],
   cmdOptions: [],
   packages: {

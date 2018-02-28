@@ -2,12 +2,13 @@
  * Electron's main process
  *
  * When running `npm run build` or `npm run build-main`, this file is compiled to
- * `./app/main.prod.js` using webpack. This gives us some performance wins.
+ * `./app/main.prod.js` using webpack.
  *
  */
 
-import electron from 'electron'
 import { app, BrowserWindow, ipcMain } from 'electron'
+import fs from 'fs'
+import electron from 'electron'
 import MenuBuilder from './menu'
 import fixPath from 'fix-path'
 
@@ -55,7 +56,6 @@ ipcMain.on('analyze-json', (event, filePath) => {
   if (!filePath) {
     throw new Error('filePath is not defined')
   }
-  const fs = require('fs')
   fs.readFile(filePath, 'utf8', (err, fileContent) => {
     if (err) {
       if (err.code === 'ENOENT') {
@@ -77,7 +77,7 @@ ipcMain.on('analyze-json', (event, filePath) => {
 
 ipcMain.on('ipc-event', (event, options) => {
   const opts = options || {}
-  const ipcEvent = opts.ipcEvent || false
+  const { ipcEvent } = opts || {}
 
   function callback(data, command, status) {
     switch (status) {

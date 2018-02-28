@@ -113,39 +113,7 @@ class PackageCard extends React.Component {
       addCommandOption('save-exact')
     }
   }
-  setupGroup() {
-    const {
-      mode,
-      packageJSON,
-      setPackageGroup,
-      addCommandOption,
-      clearCommandOptions,
-      active,
-      group
-    } = this.props
 
-    if (mode === APP_MODES.LOCAL) {
-      if (!packageJSON) {
-        throw new Error('PackageJSON is missing')
-      }
-
-      if (!active) {
-        return
-      }
-
-      let found = false
-
-      const groups = Object.keys(PACKAGE_GROUPS).some((group, idx) => {
-        const { name } = active
-        found = packageJSON[group] && packageJSON[group][name] ? group : false
-        if (found) {
-          setPackageGroup(group)
-          this.setupOptions(group)
-          return true
-        }
-      })
-    }
-  }
   render() {
     const {
       classes,
@@ -164,7 +132,7 @@ class PackageCard extends React.Component {
       version,
       setupSnackbar,
       toggleSnackbar,
-      ...props
+      ...rest
     } = this.props
     const { onNavigate, onChangeVersion } = this
 
@@ -192,7 +160,7 @@ class PackageCard extends React.Component {
             clearCommandOptions={clearCommandOptions}
             cmdOptions={cmdOptions}
             mode={mode}
-            {...props}
+            {...rest}
           />
           <CardActions
             handleExpandClick={this.onExpandClick}

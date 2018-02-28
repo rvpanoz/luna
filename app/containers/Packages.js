@@ -225,7 +225,7 @@ class PackagesContainer extends React.Component {
     toggleSnackbar(false)
   }
   render() {
-    const { isLoading, ...rest } = this.props
+    const { loading, ...rest } = this.props
 
     return (
       <section>
@@ -234,11 +234,12 @@ class PackagesContainer extends React.Component {
             <WithHeaderList
               setGlobalMode={this.setGlobalMode}
               reload={this.reload}
+              loading={loading}
               {...rest}
             />
           </Grid>
           <Grid item xs={8} md={8} lg={10}>
-            <Loader loading={isLoading}>
+            <Loader loading={loading}>
               <PackageContainer />
             </Loader>
           </Grid>

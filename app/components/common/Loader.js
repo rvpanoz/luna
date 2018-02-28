@@ -2,10 +2,10 @@
  * Common Loader component
  */
 
-import React from 'react'
 import { withStyles } from 'material-ui/styles'
-import { loaderStyles } from '../styles/common'
+import { loaderStyles } from './styles'
 import { CircularProgress } from 'material-ui/Progress'
+import React from 'react'
 
 const AppLoader = (props) => {
   const { loading, classes } = props

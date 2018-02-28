@@ -4,8 +4,9 @@
 
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { packageStyles } from '../styles/containers'
+import { packageStyles } from 'styles/containers'
 import { withStyles } from 'material-ui/styles'
+import { APP_MODES } from 'constants/AppConstants'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
 import PropTypes from 'prop-types'
@@ -13,8 +14,46 @@ import React from 'react'
 import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
 import PackageCard from 'components/package/Card'
+import CardHeader from './components/package/CardHeader'
 
 class PackageContainer extends React.Component {
+  constructor(props) {
+    super(props)
+    this.setupGroup = this.setupGroup.bind(this)
+  }
+  setupGroup() {
+    const {
+      mode,
+      packageJSON,
+      setPackageGroup,
+      addCommandOption,
+      clearCommandOptions,
+      active,
+      group
+    } = this.props
+
+    if (mode === APP_MODES.LOCAL) {
+      if (!packageJSON) {
+        throw new Error('PackageJSON is missing')
+      }
+
+      if (!active) {
+        return
+      }
+
+      let found = false
+
+      const groups = Object.keys(PACKAGE_GROUPS).some((group, idx) => {
+        const { name } = active
+        found = packageJSON[group] && packageJSON[group][name] ? group : false
+        if (found) {
+          setPackageGroup(group)
+          this.setupOptions(group)
+          return true
+        }
+      })
+    }
+  }
   render() {
     const { classes, active, isLoading, version, ...rest } = this.props
 
@@ -27,6 +66,7 @@ class PackageContainer extends React.Component {
         <Grid container direction="row" justify="flex-start">
           <Grid item xs={10}>
             <PackageCard
+              header={<CardHeader />}
               isLoading={isLoading}
               version={version}
               active={active}

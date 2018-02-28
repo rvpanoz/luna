@@ -78,7 +78,7 @@ exports.doCommand = function(options, callback) {
     throw new Error('shell[doCommand]: cmd parameter must given')
   }
 
-  const { mode, pkgVersion, pkgOptions, directory } = opts
+  const { mode, pkgVersion, pkgOptions, directory, multiple } = opts
 
   let run = [],
     params = [],
