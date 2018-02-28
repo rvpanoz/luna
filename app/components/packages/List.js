@@ -25,7 +25,10 @@ class PackagesList extends React.Component {
       mode,
       directory,
       toggleMainLoader,
-      toggleLoader
+      toggleLoader,
+      setSelectedPackage,
+      selected,
+      ...rest
     } = this.props
 
     return (
@@ -52,6 +55,8 @@ class PackagesList extends React.Component {
                       name={name}
                       readme={readme}
                       toggleMainLoader={toggleMainLoader}
+                      setSelectedPackage={setSelectedPackage}
+                      selected={selected}
                       version={version}
                     />
                   )

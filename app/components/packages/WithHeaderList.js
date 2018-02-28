@@ -39,42 +39,13 @@ function withHeaderList(List, options = {}) {
       setPackages(sortedByLatest)
     }
     render() {
-      const {
-        loading,
-        packages,
-        mode,
-        directory,
-        total,
-        toggleLoader,
-        toggleMainLoader,
-        setGlobalMode,
-        setPackageActions,
-        reload,
-        ...rest
-      } = this.props
+      const { ...rest } = this.props
       const { title } = options
 
       return (
         <section>
-          <Header
-            sortBy={this.sortBy}
-            setGlobalMode={setGlobalMode}
-            setPackageActions={setPackageActions}
-            reload={reload}
-            total={total}
-            title={title}
-            mode={mode}
-            directory={directory}
-            toggleLoader={toggleLoader}
-          />
-          <List
-            mode={mode}
-            directory={directory}
-            packages={packages}
-            loading={loading}
-            toggleLoader={toggleLoader}
-            toggleMainLoader={toggleMainLoader}
-          />
+          <Header title={title} sortBy={this.sortBy} {...rest} />
+          <List {...rest} />
         </section>
       )
     }

@@ -20,6 +20,7 @@ export default {
     total: 0,
     active: null,
     packages: [],
+    selected: [],
     group: null,
     expanded: false,
     version: '',

@@ -225,37 +225,16 @@ class PackagesContainer extends React.Component {
     toggleSnackbar(false)
   }
   render() {
-    const {
-      toggleLoader,
-      toggleMainLoader,
-      setPackages,
-      setPackageActions,
-      mode,
-      total,
-      loading,
-      isLoading,
-      directory,
-      packages,
-      snackBarOpen,
-      ...rest
-    } = this.props
+    const { isLoading, ...rest } = this.props
 
     return (
       <section>
         <Grid container>
           <Grid item xs={4} md={4} lg={2}>
             <WithHeaderList
-              loading={loading}
-              toggleLoader={toggleLoader}
-              toggleMainLoader={toggleMainLoader}
-              mode={mode}
-              total={total}
-              directory={directory}
-              packages={packages}
-              setPackages={setPackages}
-              setPackageActions={setPackageActions}
               setGlobalMode={this.setGlobalMode}
               reload={this.reload}
+              {...rest}
             />
           </Grid>
           <Grid item xs={8} md={8} lg={10}>
@@ -277,6 +256,7 @@ function mapStateToProps(state) {
     directory: state.global.directory,
     showModal: state.global.showModal,
     packages: state.packages.packages,
+    selected: state.packages.selected,
     packagesOutdated: state.packages.outdated,
     active: state.packages.active,
     total: state.packages.total,
@@ -286,6 +266,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    setSelectedPackage: (pkgName) =>
+      dispatch(packagesActions.setSelectedPackage(pkgName)),
     setupSnackbar: (snackbarOptions) =>
       dispatch(globalActions.setupSnackbar(snackbarOptions)),
     toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),

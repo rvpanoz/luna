@@ -4,6 +4,13 @@
 
 import * as types from 'constants/ActionTypes'
 
+export function setSelectedPackage(packageName) {
+  return {
+    type: types.SET_SELECTED_PACKAGE,
+    packageName
+  }
+}
+
 export function setVersion(version) {
   return {
     type: types.SET_VERSION,

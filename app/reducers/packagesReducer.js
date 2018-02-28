@@ -4,7 +4,7 @@
  * */
 
 import initialState from './initialState'
-import { identity, propOr, prop, assoc } from 'ramda'
+import { identity, merge, propOr, prop, assoc, prepend, remove } from 'ramda'
 
 import {
   TOGGLE_EXPANDED,
@@ -16,7 +16,8 @@ import {
   SET_PACKAGE_ACTIONS,
   SET_PACKAGE_GROUP,
   SET_TAB_INDEX,
-  SET_VERSION
+  SET_VERSION,
+  SET_SELECTED_PACKAGE
 } from '../constants/ActionTypes'
 
 // currying
@@ -39,7 +40,16 @@ const handlers = {
   [SET_ACTIVE]: (state, action) => assoc('active', action.active, state),
   [SET_PACKAGE_ACTIONS]: (state, action) =>
     assoc('actions', action.actions || state.defaultActions, state),
-  [SET_TOTAL]: (state, action) => assoc('total', action.total, state)
+  [SET_TOTAL]: (state, action) => assoc('total', action.total, state),
+  [SET_SELECTED_PACKAGE]: (state, action) => {
+    const idx = state.selected.indexOf(action.packageName)
+    return merge(state, {
+      selected:
+        idx !== -1
+          ? remove(idx, 1, state.selected)
+          : prepend(action.packageName, state.selected)
+    })
+  }
 }
 
 const reducer = createReducer(initialState.packages, handlers)

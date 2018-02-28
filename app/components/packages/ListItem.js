@@ -4,13 +4,14 @@
  */
 
 import { remote, ipcRenderer } from 'electron'
-import { autoBind, showMessageBox } from '../../utils'
+import { autoBind, showMessageBox } from 'utils'
 import React from 'react'
 import {
   ListItem,
   ListItemSecondaryAction,
   ListItemText
 } from 'material-ui/List'
+import Checkbox from 'material-ui/Checkbox'
 import PropTypes from 'prop-types'
 import IconButton from 'material-ui/IconButton'
 import Avatar from 'material-ui/Avatar'
@@ -23,6 +24,7 @@ class PackageListItem extends React.Component {
     super()
     autoBind(
       [
+        'onItemCheck',
         'onItemClick',
         'onUpdate',
         'viewPackage',
@@ -47,7 +49,6 @@ class PackageListItem extends React.Component {
   onUpdate(e) {
     e.preventDefault()
     const { name, mode, directory, toggleMainLoader } = this.props
-
     showMessageBox(
       {
         action: 'update',
@@ -66,6 +67,11 @@ class PackageListItem extends React.Component {
       }
     )
   }
+  onItemCheck(e) {
+    const { name, setSelectedPackage } = this.props
+    e.stopPropagation()
+    setSelectedPackage(name)
+  }
   onItemClick(e) {
     const { toggleMainLoader } = this.props
     e.preventDefault()
@@ -82,15 +88,20 @@ class PackageListItem extends React.Component {
     return <span>{latest ? `\nlatest ${latest}` : null}</span>
   }
   render() {
-    const { name, version, latest } = this.props
-    let secondaryText = version
+    const { name, version, latest, selected } = this.props
 
     if (!name) {
       return null
     }
 
     return (
-      <ListItem button onClick={this.onItemClick}>
+      <ListItem button dense onClick={this.onItemClick}>
+        <Checkbox
+          checked={selected.indexOf(name) !== -1}
+          tabIndex={-1}
+          disableRipple
+          onClick={this.onItemCheck}
+        />
         <ListItemText
           primary={this.primaryText()}
           secondary={this.secondaryText()}
