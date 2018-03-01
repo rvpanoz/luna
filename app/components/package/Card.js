@@ -4,9 +4,8 @@
  */
 
 import { withStyles } from 'material-ui/styles'
-import { packageCardStyles } from '../../styles/components'
-import { showMessageBox, isUrl, autoBind } from '../../utils'
-import { remote, ipcRenderer, shell } from 'electron'
+import { packageCardStyles } from 'styles/components'
+import { showMessageBox, isUrl, autoBind } from 'utils'
 import List, { ListItem, ListItemText } from 'material-ui/List'
 import {
   APP_MODES,
@@ -14,6 +13,7 @@ import {
   PACKAGE_GROUPS,
   COMMAND_OPTIONS
 } from 'constants/AppConstants'
+import { ipcRenderer } from 'electron'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Collapse from 'material-ui/transitions/Collapse'
@@ -50,13 +50,38 @@ class PackageCard extends React.Component {
     this.setupGroup()
     setVersion(active.version)
   }
-  onNavigate(e) {
-    e.preventDefault()
-    const url = e.currentTarget.dataset.url
-    if (isUrl(url)) {
-      shell.openExternal(url)
+  setupGroup() {
+    const {
+      mode,
+      packageJSON,
+      setPackageGroup,
+      addCommandOption,
+      clearCommandOptions,
+      active,
+      group
+    } = this.props
+
+    if (mode === APP_MODES.LOCAL) {
+      if (!packageJSON) {
+        throw new Error('PackageJSON is missing')
+      }
+
+      if (!active) {
+        return
+      }
+
+      let found = false
+
+      const groups = Object.keys(PACKAGE_GROUPS).some((group, idx) => {
+        const { name } = active
+        found = packageJSON[group] && packageJSON[group][name] ? group : false
+        if (found) {
+          setPackageGroup(group)
+          this.setupOptions(group)
+          return true
+        }
+      })
     }
-    return false
   }
   onExpandClick(e) {
     const { toggleExpanded } = this.props
@@ -132,6 +157,7 @@ class PackageCard extends React.Component {
       version,
       setupSnackbar,
       toggleSnackbar,
+      header,
       ...rest
     } = this.props
     const { onNavigate, onChangeVersion } = this
@@ -143,40 +169,22 @@ class PackageCard extends React.Component {
     return (
       <section className={classes.root}>
         <Card className={classes.card}>
-          <CardHeader
-            mode={mode}
-            active={active}
-            classes={classes}
-            group={group}
-            onNavigate={this.onNavigate}
-          />
+          <CardHeader classes={classes} mode={mode} active={active} />
           <CardContent
+            version={version}
             classes={classes}
             active={active}
-            group={group}
-            handleChange={this.onChange}
             onChangeVersion={this.onChangeVersion}
-            addCommandOption={addCommandOption}
             clearCommandOptions={clearCommandOptions}
-            cmdOptions={cmdOptions}
             mode={mode}
-            {...rest}
           />
           <CardActions
+            active={active}
             handleExpandClick={this.onExpandClick}
             expanded={expanded}
             classes={classes}
             actions={actions}
             defaultActions={defaultActions}
-            active={active}
-            toggleLoader={toggleLoader}
-            mode={mode}
-            directory={directory}
-            setActive={setActive}
-            version={version}
-            cmdOptions={cmdOptions}
-            setupSnackbar={setupSnackbar}
-            toggleSnackbar={toggleSnackbar}
           />
           <Collapse
             style={{ display: 'none' }}

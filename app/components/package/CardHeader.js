@@ -5,22 +5,33 @@
 
 import { CardHeader as MuiCardHeader } from 'material-ui/Card'
 import { APP_MODES } from 'constants/AppConstants'
+import Menu, { MenuItem } from 'material-ui/Menu'
+import { ListItemText } from 'material-ui/List'
 import React from 'react'
 import PropTypes from 'prop-types'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
 import IconButton from 'material-ui/IconButton'
 import Avatar from 'material-ui/Avatar'
-import Menu, { MenuItem } from 'material-ui/Menu'
-import { ListItemText } from 'material-ui/List'
 import Select from 'material-ui/Select'
 import Checkbox from 'material-ui/Checkbox'
 import moment from 'moment'
 
 const { array, object, string, func } = PropTypes
+const ITEM_HEIGHT = 55,
+  ITEM_PADDING_TOP = 8,
+  MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4,
+        width: 150
+      }
+    }
+  }
 
 class CardHeader extends React.Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+    console.log(props)
     this._anchorEl = null
 
     this.state = {
@@ -31,6 +42,14 @@ class CardHeader extends React.Component {
     this.handleClick = this.handleClick.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.handleChange = this.handleChange.bind(this)
+  }
+  onNavigate(e) {
+    e.preventDefault()
+    const url = e.currentTarget.dataset.url
+    if (isUrl(url)) {
+      shell.openExternal(url)
+    }
+    return false
   }
   handleChange(e) {
     this.setState({ options: e.target.value })
@@ -59,18 +78,7 @@ class CardHeader extends React.Component {
     this.forceUpdate()
   }
   render() {
-    const ITEM_HEIGHT = 55
-    const ITEM_PADDING_TOP = 8
-    const anchorEl = this._anchorEl
-    const { classes, active, mode, onNavigate } = this.props
-    const MenuProps = {
-      PaperProps: {
-        style: {
-          maxHeight: ITEM_HEIGHT * 4,
-          width: 150
-        }
-      }
-    }
+    const { classes, active, mode } = this.props
 
     if (!active) {
       return null
@@ -88,7 +96,7 @@ class CardHeader extends React.Component {
             <div style={{ marginLeft: 'auto' }}>
               <IconButton
                 aria-label="More"
-                aria-owns={anchorEl ? 'long-menu' : null}
+                aria-owns={this._anchorEl ? 'long-menu' : null}
                 aria-haspopup="true"
                 onClick={this.handleClick}
                 className={classes.iconbutton}
@@ -97,8 +105,8 @@ class CardHeader extends React.Component {
               </IconButton>
               <Menu
                 id="long-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
+                anchorEl={this._anchorEl}
+                open={Boolean(this._anchorEl)}
                 onClose={this.handleClose}
                 PaperProps={{
                   style: {
@@ -107,10 +115,14 @@ class CardHeader extends React.Component {
                   }
                 }}
               >
-                <MenuItem key="item-a" onClick={onNavigate}>
+                <MenuItem
+                  key="item-a"
+                  dataurl={active.homepage}
+                  onClick={this.onNavigate}
+                >
                   Homepage
                 </MenuItem>
-                <MenuItem key="item-b" onClick={onNavigate}>
+                <MenuItem key="item-b" onClick={this.onNavigate}>
                   Issues
                 </MenuItem>
               </Menu>
@@ -129,7 +141,6 @@ class CardHeader extends React.Component {
 CardHeader.propTypes = {
   classes: object.isRequired,
   mode: string.isRequired,
-  onNavigate: func.isRequired,
   active: object.isRequired
 }
 
