@@ -225,7 +225,7 @@ class PackagesContainer extends React.Component {
     toggleSnackbar(false)
   }
   render() {
-    const { loading, ...rest } = this.props
+    const { loading, isLoading, ...rest } = this.props
 
     return (
       <section>
@@ -239,7 +239,7 @@ class PackagesContainer extends React.Component {
             />
           </Grid>
           <Grid item xs={8} md={8} lg={10}>
-            <Loader loading={loading}>
+            <Loader loading={isLoading}>
               <PackageContainer />
             </Loader>
           </Grid>

@@ -31,7 +31,6 @@ const ITEM_HEIGHT = 55,
 class CardHeader extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props)
     this._anchorEl = null
 
     this.state = {

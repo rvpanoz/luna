@@ -29,59 +29,45 @@ import CardActions from './CardActions'
 import CardDetails from './CardDetails'
 
 class PackageCard extends React.Component {
-  constructor() {
-    super()
-    autoBind(
-      [
-        'onNavigate',
-        'onAction',
-        'onChangeVersion',
-        'onExpandClick',
-        'onChange',
-        'runCommand',
-        'setupGroup',
-        'setupOptions'
-      ],
-      this
-    )
+  constructor(props) {
+    super(props)
+    autoBind(['_setupOptions', 'onChangeVersion', 'onExpandClick'], this)
   }
-  componentDidMount() {
-    const { active, setVersion } = this.props
-    this.setupGroup()
-    setVersion(active.version)
-  }
-  setupGroup() {
-    const {
-      mode,
-      packageJSON,
-      setPackageGroup,
-      addCommandOption,
-      clearCommandOptions,
-      active,
-      group
-    } = this.props
-
+  componentDidUpdate(prevProps) {
+    const { active, mode, packageJSON, setPackageGroup, setVersion } = prevProps
+    console.log(active)
+    let groupName = ''
     if (mode === APP_MODES.LOCAL) {
-      if (!packageJSON) {
-        throw new Error('PackageJSON is missing')
-      }
+      const { name } = active
+      const group = Object.keys(PACKAGE_GROUPS).some((group, idx) => {
+        groupName = packageJSON[group] && packageJSON[group][name] ? group : ''
 
-      if (!active) {
-        return
-      }
-
-      let found = false
-
-      const groups = Object.keys(PACKAGE_GROUPS).some((group, idx) => {
-        const { name } = active
-        found = packageJSON[group] && packageJSON[group][name] ? group : false
-        if (found) {
-          setPackageGroup(group)
-          this.setupOptions(group)
-          return true
-        }
+        // switch (group) {
+        //   case 'dependencies':
+        //     addCommandOption('save')
+        //     break
+        //   case 'devDependencies':
+        //     addCommandOption('save-dev')
+        //     break
+        //   case 'optionalDependencies':
+        //     addCommandOption('save-optional')
+        //     break
+        //   default:
+        // }
+        //
+        // // save-exact fix
+        // const groupDependencies = packageJSON[group]
+        // const depName = groupDependencies[name]
+        //
+        // if (!isNaN(depName.charAt(0))) {
+        //   addCommandOption('save-exact')
+        // }
       })
+      console.log(groupName)
+      // setPackageGroup(groupName)
     }
+
+    // setVersion(active.version)
   }
   onExpandClick(e) {
     const { toggleExpanded } = this.props
@@ -106,39 +92,6 @@ class PackageCard extends React.Component {
     }
     return false
   }
-  setupOptions(group) {
-    const {
-      addCommandOption,
-      active,
-      clearCommandOptions,
-      packageJSON
-    } = this.props
-
-    // clear options
-    clearCommandOptions()
-
-    switch (group) {
-      case 'dependencies':
-        addCommandOption('save')
-        break
-      case 'devDependencies':
-        addCommandOption('save-dev')
-        break
-      case 'optionalDependencies':
-        addCommandOption('save-optional')
-        break
-      default:
-    }
-
-    // save-exact fix
-    const groupDependencies = packageJSON[group]
-    const name = groupDependencies[active.name]
-
-    if (!isNaN(name.charAt(0))) {
-      addCommandOption('save-exact')
-    }
-  }
-
   render() {
     const {
       classes,
@@ -157,24 +110,25 @@ class PackageCard extends React.Component {
       version,
       setupSnackbar,
       toggleSnackbar,
-      header,
       ...rest
     } = this.props
-    const { onNavigate, onChangeVersion } = this
-
-    if (!active) {
-      return null
-    }
 
     return (
       <section className={classes.root}>
         <Card className={classes.card}>
-          <CardHeader classes={classes} mode={mode} active={active} />
+          <CardHeader
+            classes={classes}
+            mode={mode}
+            active={active}
+            group={group}
+          />
           <CardContent
             version={version}
             classes={classes}
             active={active}
+            cmdOptions={cmdOptions}
             onChangeVersion={this.onChangeVersion}
+            addCommandOption={addCommandOption}
             clearCommandOptions={clearCommandOptions}
             mode={mode}
           />

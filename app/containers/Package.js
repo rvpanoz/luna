@@ -7,7 +7,7 @@ import { compose } from 'redux'
 import { remote, ipcRenderer, shell } from 'electron'
 import { packageStyles } from 'styles/containers'
 import { withStyles } from 'material-ui/styles'
-import { APP_MODES } from 'constants/AppConstants'
+import { APP_MODES, PACKAGE_GROUPS } from 'constants/AppConstants'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
 import PropTypes from 'prop-types'
@@ -15,15 +15,13 @@ import React from 'react'
 import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
 import PackageCard from 'components/package/Card'
-import CardHeader from 'components/package/CardHeader'
 
 class PackageContainer extends React.Component {
   constructor(props) {
     super(props)
   }
-
   render() {
-    const { classes, mode, active, isLoading, version, ...rest } = this.props
+    const { classes, active, ...rest } = this.props
 
     if (!active) {
       return null
@@ -33,13 +31,7 @@ class PackageContainer extends React.Component {
       <section className={classes.root}>
         <Grid container direction="row" justify="flex-start">
           <Grid item xs={10}>
-            <PackageCard
-              isLoading={isLoading}
-              version={version}
-              active={active}
-              mode={mode}
-              {...rest}
-            />
+            <PackageCard classes={classes} active={active} {...rest} />
           </Grid>
           <Grid item xs={2} />
         </Grid>

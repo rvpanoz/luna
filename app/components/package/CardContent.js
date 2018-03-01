@@ -31,8 +31,7 @@ const CardContent = (props) => {
     version,
     cmdOptions,
     onChangeVersion,
-    addCommandOption,
-    clearCommandOptions
+    addCommandOption
   } = props
 
   if (!active) {
