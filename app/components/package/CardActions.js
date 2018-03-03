@@ -133,6 +133,7 @@ CardActions.propTypes = {
   active: object.isRequired,
   classes: object.isRequired,
   handleExpandClick: func.isRequired,
+  setActive: func.isRequired,
   actions: array.isRequired,
   defaultActions: array.isRequired,
   expanded: bool.isRequired

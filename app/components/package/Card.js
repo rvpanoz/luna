@@ -136,9 +136,13 @@ class PackageCard extends React.Component {
             active={active}
             handleExpandClick={this.onExpandClick}
             expanded={expanded}
+            setActive={setActive}
+            toggleLoader={toggleLoader}
             classes={classes}
             actions={actions}
             defaultActions={defaultActions}
+            setupSnackbar={setupSnackbar}
+            toggleSnackbar={toggleSnackbar}
           />
           <Collapse
             style={{ display: 'none' }}

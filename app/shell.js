@@ -15,7 +15,7 @@ import { parse } from './utils'
 function runCommand(command, mode, directory, callback) {
   const deferred = Q.defer()
   const cwd = process.cwd()
-  console.log(directory)
+
   let result = '',
     error = ''
 
@@ -111,7 +111,7 @@ exports.doCommand = function(options, callback) {
       break
   }
 
-  if (mode === 'GLOBAL') {
+  if (!mode || mode === 'GLOBAL') {
     params.push('-g')
   }
 
