@@ -10,7 +10,8 @@ const Q = require('q')
 const spawn = cp.spawn
 const defaults = ['--depth=0', '--json']
 
-import { parse } from './utils'
+import commands from './commands'
+import * as R from 'ramda'
 
 function runCommand(command, mode, directory, callback) {
   const deferred = Q.defer()
@@ -19,7 +20,7 @@ function runCommand(command, mode, directory, callback) {
   let result = '',
     error = ''
 
-  if (!command || typeof command !== 'object') {
+  if (!command || !Array.isArray(command)) {
     return Q.reject(
       new Error('shell[doCommand]:cmd must be given and must be an array')
     )
@@ -61,24 +62,26 @@ function runCommand(command, mode, directory, callback) {
   return deferred.promise
 }
 
-/** WIP **/
 exports.install = function() {}
 
 exports.update = function() {}
 
 exports.uninstall = function() {}
 
-exports.view = function() {}
-
 exports.list = function() {}
+
+exports.outdated = function() {}
 
 exports.doCommand = function(options, callback) {
   const opts = options || {}
-  if (!opts.cmd) {
+  const { cmd, mode, pkgVersion, pkgOptions, directory, multiple } = opts
+
+  if (!cmd) {
     throw new Error('shell[doCommand]: cmd parameter must given')
   }
 
-  const { mode, pkgVersion, pkgOptions, directory, multiple } = opts
+  console.log(commands)
+  return commands['list'](opts)
 
   let run = [],
     params = [],
