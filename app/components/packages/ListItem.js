@@ -58,7 +58,7 @@ class PackageListItem extends React.Component {
         toggleMainLoader(true)
         ipcRenderer.send('ipc-event', {
           ipcEvent: 'update-package',
-          cmd: 'install',
+          cmd: ['install'],
           pkgName: name,
           pkgVersion: 'latest',
           mode,

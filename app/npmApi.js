@@ -5,30 +5,18 @@ const path = require('path')
 
 import * as R from 'ramda'
 
-// npm list [[<@scope>/]<pkg> ...]
-exports.list = function(opts, callback) {
-  const command = ['list']
+function runCommand(command, directory, callback) {
+  console.log(`running: npm ${command.join(' ')}`)
+
   const deferred = Q.defer()
   const cwd = process.cwd()
-  const { mode, directory, options } = opts
-  const defaults = ['--depth=0', '--json']
-
   let result = '',
     error = ''
-
-  if (!command || !Array.isArray(command)) {
-    return Q.reject(
-      new Error('shell[doCommand]:cmd must be given and must be an array')
-    )
-  }
-
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  console.log(`running: npm ${command.concat(commandArgs).join(' ')}`)
 
   // on windows use npm.cmd
   const npmc = spawn(
     /^win/.test(process.platform) ? 'npm.cmd' : 'npm',
-    command.concat(commandArgs),
+    command,
     {
       env: process.env,
       cwd: directory ? path.dirname(directory) : cwd
@@ -47,16 +35,33 @@ exports.list = function(opts, callback) {
   })
 
   npmc.on('close', () => {
-    console.log(`finished: npm ${command.concat(commandArgs).join(' ')}`)
+    console.log(`finished: npm ${command.join(' ')}`)
     deferred.resolve({
       status: 'close',
       error: error.length ? error : null,
       data: result,
-      cmd: command[0]
+      cmd: command
     })
   })
 
   return deferred.promise
+}
+
+// npm list [[<@scope>/]<pkg> ...]
+exports.list = function(opts, callback) {
+  const command = ['list']
+  const { mode, directory, options } = opts
+  const defaults = ['--depth=0', '--json']
+
+  if (!command || !Array.isArray(command)) {
+    return Q.reject(
+      new Error('shell[doCommand]:cmd must be given and must be an array')
+    )
+  }
+
+  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
+  const run = [].concat(command).concat(commandArgs)
+  return runCommand(run, directory, callback)
 }
 
 // npm list [[<@scope>/]<pkg> ...]
@@ -67,9 +72,6 @@ exports.outdated = function(opts, callback) {
   const { mode, directory, options } = opts
   const defaults = ['--depth=0', '--json']
 
-  let result = '',
-    error = ''
-
   if (!command || !Array.isArray(command)) {
     return Q.reject(
       new Error('shell[doCommand]:cmd must be given and must be an array')
@@ -77,43 +79,34 @@ exports.outdated = function(opts, callback) {
   }
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  console.log(`running: npm ${command.concat(commandArgs).join(' ')}`)
-
-  // on windows use npm.cmd
-  const npmc = spawn(
-    /^win/.test(process.platform) ? 'npm.cmd' : 'npm',
-    command.concat(commandArgs),
-    {
-      env: process.env,
-      cwd: directory ? path.dirname(directory) : cwd
-    }
-  )
-
-  npmc.stdout.on('data', (data) => {
-    const dataToString = data.toString()
-    result += dataToString
-  })
-
-  npmc.stderr.on('data', (error) => {
-    const errorToString = error.toString()
-    error += `${errorToString} | `
-    callback(errorToString, null, 'error')
-  })
-
-  npmc.on('close', () => {
-    console.log(`finished: npm ${command.concat(commandArgs).join(' ')}`)
-    deferred.resolve({
-      status: 'close',
-      error: error.length ? error : null,
-      data: result,
-      cmd: command[0]
-    })
-  })
-
-  return deferred.promise
+  const run = [].concat(command).concat(commandArgs)
+  return runCommand(run, directory, callback)
 }
 
-exports.view = function(opts, callback) {}
+exports.view = function(opts, callback) {
+  const command = ['view']
+  const deferred = Q.defer()
+  const cwd = process.cwd()
+  const { mode, directory, pkgName, pkgVersion } = opts
+  const defaults = ['--depth=0', '--json']
+
+  if (!pkgName) {
+    return Q.reject(new Error(`npmApi[${command}]:package name must be given`))
+  }
+
+  let result = '',
+    error = ''
+
+  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
+
+  //build npm command
+  const run = []
+    .concat(command)
+    .concat(pkgVersion ? [].concat([`${pkgName}@${pkgVersion}`]) : [pkgName])
+    .concat(commandArgs)
+
+  return runCommand(run, directory, callback)
+}
 
 exports.search = function(opts, callback) {
   const command = ['search']
@@ -124,43 +117,69 @@ exports.search = function(opts, callback) {
   let result = '',
     error = ''
 
-  if (!command || !Array.isArray(command)) {
+  if (!pkgName) {
     return Q.reject(
-      new Error('shell[doCommand]:cmd must be given and must be an array')
+      new Error(`npmApi[${command[0]}]:package name must be given`)
     )
   }
 
-  console.log(`running: npm ${[].concat(command, pkgName).join(' ')}`)
+  const run = [].concat(command, pkgName).concat(defaults)
+  return runCommand(run, null, callback)
+}
 
-  // on windows use npm.cmd
-  const npmc = spawn(
-    /^win/.test(process.platform) ? 'npm.cmd' : 'npm',
-    [].concat(command, pkgName).concat(defaults),
-    {
-      env: process.env
-    }
+exports.install = function(opts, callback) {
+  const command = ['install']
+  const deferred = Q.defer()
+  const cwd = process.cwd()
+  const { pkgName, mode, directory } = opts
+  const defaults = [],
+    pkgOptions = opts.pkgOptions || []
+
+  let result = '',
+    error = ''
+
+  if (!pkgName) {
+    return Q.reject(
+      new Error(`npmApi[${command[0]}]:package name must be given`)
+    )
+  }
+
+  console.log(
+    `running: npm ${[]
+      .concat(command, pkgName)
+      .concat(pkgOptions)
+      .join(' ')}`
   )
 
-  npmc.stdout.on('data', (data) => {
-    const dataToString = data.toString()
-    result += dataToString
-  })
+  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
+  const run = []
+    .concat(command, pkgName)
+    .concat(pkgOptions)
+    .concat(commandArgs)
+  return runCommand(run, directory, callback)
+}
 
-  npmc.stderr.on('data', (error) => {
-    const errorToString = error.toString()
-    error += `${errorToString} | `
-    callback(errorToString, null, 'error')
-  })
+exports.uninstall = function(opts, callback) {
+  const command = ['uninstall']
+  const deferred = Q.defer()
+  const cwd = process.cwd()
+  const { pkgName, mode, directory } = opts
+  const defaults = [],
+    pkgOptions = opts.pkgOptions || []
 
-  npmc.on('close', () => {
-    console.log(`finished: npm ${[].concat(command, pkgName).join(' ')}`)
-    deferred.resolve({
-      status: 'close',
-      error: error.length ? error : null,
-      data: result,
-      cmd: command[0]
-    })
-  })
+  let result = '',
+    error = ''
 
-  return deferred.promise
+  if (!pkgName) {
+    return Q.reject(
+      new Error(`npmApi[${command[0]}]:package name must be given`)
+    )
+  }
+
+  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
+  const run = []
+    .concat(command, pkgName)
+    .concat(pkgOptions)
+    .concat(commandArgs)
+  return runCommand(run, directory, callback)
 }

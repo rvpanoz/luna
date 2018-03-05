@@ -143,6 +143,9 @@ class PackageCard extends React.Component {
             defaultActions={defaultActions}
             setupSnackbar={setupSnackbar}
             toggleSnackbar={toggleSnackbar}
+            mode={mode}
+            directory={directory}
+            cmdOptions={cmdOptions}
           />
           <Collapse
             style={{ display: 'none' }}

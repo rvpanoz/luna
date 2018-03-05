@@ -40,6 +40,7 @@ class CardActions extends React.Component {
   }
   doAction(e) {
     e.preventDefault()
+
     const target = e.currentTarget
     const action = target.textContent.trim().toLowerCase()
     const {
@@ -62,7 +63,7 @@ class CardActions extends React.Component {
       },
       () => {
         let npmCmd = [`npm ${action.toLowerCase()} `, active.name]
-        if (mode === APP_MODES.LOCAL) {
+        if (mode === APP_MODES.LOCAL && cmdOptions) {
           npmCmd.push(` --${cmdOptions.join(' --')}`)
         }
         setActive(null)

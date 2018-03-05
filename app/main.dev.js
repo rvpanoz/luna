@@ -78,7 +78,7 @@ ipcMain.on('analyze-json', (event, filePath) => {
 ipcMain.on('ipc-event', (event, options) => {
   const opts = options || {}
   const { ipcEvent } = opts || {}
-  console.log(options)
+
   function callback(data, command, status) {
     switch (status) {
       case 'close':

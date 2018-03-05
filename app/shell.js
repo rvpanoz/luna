@@ -13,9 +13,14 @@ import * as R from 'ramda'
 exports.doCommand = function(options, callback) {
   const opts = options || {}
   const { cmd, ...rest } = opts
-
+  // console.log(options)
   function combine() {
     let promises = []
+
+    if (!cmd || !Array.isArray(cmd)) {
+      throw new Error('shell[doCommand]:cmd must be given and must be an array')
+    }
+
     cmd.forEach((c, idx) => {
       promises.push(
         (function() {
