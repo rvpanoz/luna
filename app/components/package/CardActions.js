@@ -62,21 +62,12 @@ class CardActions extends React.Component {
         version: action === 'uninstall' ? null : version
       },
       () => {
-        let npmCmd = [`npm ${action.toLowerCase()} `, active.name]
-        if (mode === APP_MODES.LOCAL && cmdOptions) {
-          npmCmd.push(` --${cmdOptions.join(' --')}`)
-        }
-        setActive(null)
         toggleLoader(true)
-        setupSnackbar({
-          message: 'running ' + npmCmd.join(' ')
-        })
-        toggleSnackbar(true)
         ipcRenderer.send('ipc-event', {
           mode,
           directory,
           ipcEvent: action,
-          cmd: [action],
+          cmd: [action === 'update' ? 'install' : action],
           pkgName: active.name,
           pkgVersion: action === 'uninstall' ? null : version,
           pkgOptions: cmdOptions

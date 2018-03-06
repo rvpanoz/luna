@@ -20,6 +20,12 @@ class PackageContainer extends React.Component {
   constructor(props) {
     super(props)
   }
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
+  }
+  componentDidUpdate(nextProps) {
+    console.log(nextProps)
+  }
   render() {
     const { classes, active, ...rest } = this.props
 
@@ -67,7 +73,6 @@ function mapDispatchToProps(dispatch) {
     toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
     addCommandOption: (option) =>
       dispatch(globalActions.addCommandOption(option)),
-    setVersion: (version) => dispatch(packagesActions.setVersion(version)),
     setActiveTab: (tabIndex) =>
       dispatch(packagesActions.setActiveTab(tabIndex)),
     toggleExpanded: (value) => dispatch(packagesActions.toggleExpanded(value)),

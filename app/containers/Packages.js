@@ -129,6 +129,27 @@ class PackagesContainer extends React.Component {
       })
     })
   }
+  componentWillReceiveProps(nextProps) {
+    const { active, setVersion } = nextProps
+
+    if (active && active.version) {
+      setVersion(active.version)
+    }
+  }
+  componentDidUpdate(nextProps) {
+    console.log(nextProps)
+  }
+  componentWillUnmount() {
+    ipcRenderer.removeAllListeners([
+      'get-packages-close',
+      'search-packages-close',
+      'update-package-close',
+      'action-close',
+      'view-package-reply',
+      'ipcEvent-error',
+      'analyze-json-close'
+    ])
+  }
   setGlobalMode(directory) {
     const {
       toggleLoader,
@@ -209,17 +230,6 @@ class PackagesContainer extends React.Component {
       throw new Error(e)
     }
   }
-  componentWillUnmount() {
-    ipcRenderer.removeAllListeners([
-      'get-packages-close',
-      'search-packages-close',
-      'update-package-close',
-      'action-close',
-      'view-package-reply',
-      'ipcEvent-error',
-      'analyze-json-close'
-    ])
-  }
   handleSnackBarClose() {
     const { toggleSnackbar } = this.props
     toggleSnackbar(false)
@@ -251,17 +261,17 @@ class PackagesContainer extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    snackBarOpen: state.global.snackBarOpen,
     loading: state.global.loading,
-    isLoading: state.packages.isLoading,
     mode: state.global.mode,
     directory: state.global.directory,
     showModal: state.global.showModal,
+    isLoading: state.packages.isLoading,
     packages: state.packages.packages,
     selected: state.packages.selected,
     packagesOutdated: state.packages.outdated,
     active: state.packages.active,
-    total: state.packages.total,
-    snackBarOpen: state.global.snackBarOpen
+    total: state.packages.total
   }
 }
 
@@ -278,6 +288,7 @@ function mapDispatchToProps(dispatch) {
     setPackageJSON: (content) =>
       dispatch(globalActions.setPackageJSON(content)),
     setActive: (active) => dispatch(packagesActions.setActive(active)),
+    setVersion: (version) => dispatch(packagesActions.setVersion(version)),
     toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
     toggleModal: (bool) => dispatch(globalActions.toggleModal(bool)),
     setTotal: (total) => dispatch(packagesActions.setTotal(total)),

@@ -15,10 +15,10 @@ const { object } = PropTypes
 class SearchBox extends React.Component {
   constructor() {
     super()
-    this._onKeyUp = this._onKeyUp.bind(this)
+    this.onKeyUp = this.onKeyUp.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
-  _onKeyUp(e) {
+  onKeyUp(e) {
     const el = e.target
     const key = e.which || e.keyCode || 0
 

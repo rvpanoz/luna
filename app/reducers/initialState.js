@@ -27,7 +27,7 @@ export default {
     tabIndex: 0,
     defaultActions: [
       {
-        text: 'install',
+        text: 'update',
         color: 'primary',
         iconCls: 'update'
       },

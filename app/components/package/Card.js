@@ -31,43 +31,7 @@ import CardDetails from './CardDetails'
 class PackageCard extends React.Component {
   constructor(props) {
     super(props)
-    autoBind(['_setupOptions', 'onChangeVersion', 'onExpandClick'], this)
-  }
-  componentDidUpdate(prevProps) {
-    const { active, mode, packageJSON, setPackageGroup, setVersion } = prevProps
-    console.log(active)
-    let groupName = ''
-    if (mode === APP_MODES.LOCAL) {
-      const { name } = active
-      const group = Object.keys(PACKAGE_GROUPS).some((group, idx) => {
-        groupName = packageJSON[group] && packageJSON[group][name] ? group : ''
-
-        // switch (group) {
-        //   case 'dependencies':
-        //     addCommandOption('save')
-        //     break
-        //   case 'devDependencies':
-        //     addCommandOption('save-dev')
-        //     break
-        //   case 'optionalDependencies':
-        //     addCommandOption('save-optional')
-        //     break
-        //   default:
-        // }
-        //
-        // // save-exact fix
-        // const groupDependencies = packageJSON[group]
-        // const depName = groupDependencies[name]
-        //
-        // if (!isNaN(depName.charAt(0))) {
-        //   addCommandOption('save-exact')
-        // }
-      })
-      console.log(groupName)
-      // setPackageGroup(groupName)
-    }
-
-    // setVersion(active.version)
+    autoBind(['onChangeVersion', 'onExpandClick'], this)
   }
   onExpandClick(e) {
     const { toggleExpanded } = this.props
