@@ -5,39 +5,128 @@
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { remote, ipcRenderer, shell } from 'electron'
-import { packageStyles } from 'styles/containers'
+import { packageCardStyles } from 'styles/components'
 import { withStyles } from 'material-ui/styles'
-import { APP_MODES, PACKAGE_GROUPS } from 'constants/AppConstants'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
+import { showMessageBox, isUrl, autoBind } from 'utils'
+import Collapse from 'material-ui/transitions/Collapse'
+import Card from 'material-ui/Card'
+import Chip from 'material-ui/Chip'
+import classnames from 'classnames'
+import InfoIcon from 'material-ui-icons/Info'
+import LinkIcon from 'material-ui-icons/Link'
+import CardHeader from 'components/package/CardHeader'
+import CardContent from 'components/package/CardContent'
+import CardActions from 'components/package/CardActions'
+import CardDetails from 'components/package/CardDetails'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
-import PackageCard from 'components/package/Card'
 
 class PackageContainer extends React.Component {
   constructor(props) {
     super(props)
+    autoBind(['onChangeVersion', 'onExpandClick'], this)
   }
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
+  onExpandClick(e) {
+    const { toggleExpanded } = this.props
+    toggleExpanded()
+    this.forceUpdate()
   }
-  componentDidUpdate(nextProps) {
-    console.log(nextProps)
+  onChangeVersion(e, value) {
+    const { active, mode, directory, toggleMainLoader, setVersion } = this.props
+    const version = e.target && e.target.value
+
+    if (version && version !== 'false') {
+      toggleMainLoader(true)
+      setVersion(version)
+      ipcRenderer.send('ipc-event', {
+        mode,
+        directory,
+        ipcEvent: 'view-package',
+        cmd: ['view'],
+        pkgName: active.name,
+        pkgVersion: version
+      })
+    }
+    return false
   }
   render() {
-    const { classes, active, ...rest } = this.props
+    const {
+      classes,
+      active,
+      group,
+      mode,
+      directory,
+      expanded,
+      setActive,
+      toggleLoader,
+      addCommandOption,
+      clearCommandOptions,
+      cmdOptions,
+      actions,
+      defaultActions,
+      version,
+      setupSnackbar,
+      toggleSnackbar,
+      ...rest
+    } = this.props
 
     if (!active) {
       return null
     }
-
+    console.log(version)
     return (
       <section className={classes.root}>
         <Grid container direction="row" justify="flex-start">
           <Grid item xs={10}>
-            <PackageCard classes={classes} active={active} {...rest} />
+            <section className={classes.root}>
+              <Card className={classes.card}>
+                <CardHeader
+                  classes={classes}
+                  mode={mode}
+                  active={active}
+                  group={group}
+                />
+                <CardContent
+                  version={version}
+                  classes={classes}
+                  active={active}
+                  cmdOptions={cmdOptions}
+                  onChangeVersion={this.onChangeVersion}
+                  addCommandOption={addCommandOption}
+                  clearCommandOptions={clearCommandOptions}
+                  mode={mode}
+                />
+                <CardActions
+                  active={active}
+                  handleExpandClick={this.onExpandClick}
+                  expanded={expanded}
+                  setActive={setActive}
+                  toggleLoader={toggleLoader}
+                  classes={classes}
+                  actions={actions}
+                  defaultActions={defaultActions}
+                  setupSnackbar={setupSnackbar}
+                  toggleSnackbar={toggleSnackbar}
+                  mode={mode}
+                  version={version}
+                  directory={directory}
+                  cmdOptions={cmdOptions}
+                />
+                <Collapse
+                  style={{ display: 'none' }}
+                  in={expanded}
+                  timeout="auto"
+                  unmountOnExit
+                  className={classes.collapseContent}
+                >
+                  <CardDetails {...active} classes={classes} />
+                </Collapse>
+              </Card>
+            </section>
           </Grid>
           <Grid item xs={2} />
         </Grid>
@@ -52,17 +141,17 @@ function mapStateToProps(state) {
     directory: state.global.directory,
     packageJSON: state.global.packageJSON,
     cmdOptions: state.global.cmdOptions,
-    actions: state.packages.actions,
-    defaultActions: state.packages.defaultActions,
-    active: state.packages.active,
-    isLoading: state.packages.isLoading,
     toggleModal: state.global.toggleModal,
     showModal: state.global.showModal,
     npmCmd: state.global.npmCmd,
     group: state.packages.group,
     expanded: state.packages.expanded,
     tabIndex: state.packages.tabIndex,
-    version: state.packages.version
+    version: state.packages.version,
+    actions: state.packages.actions,
+    defaultActions: state.packages.defaultActions,
+    active: state.packages.active,
+    isLoading: state.packages.isLoading
   }
 }
 
@@ -85,12 +174,13 @@ function mapDispatchToProps(dispatch) {
       dispatch(packagesActions.toggleMainLoader(bool)),
     toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
     setActive: (pkg) => dispatch(packagesActions.setActive(pkg)),
+    setVersion: (version) => dispatch(packagesActions.setVersion(version)),
     toggleModal: (bool, npmCmd) =>
       dispatch(globalActions.toggleModal(bool, npmCmd))
   }
 }
 
 export default compose(
-  withStyles(packageStyles, { withTheme: true }),
+  withStyles(packageCardStyles, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
 )(PackageContainer)

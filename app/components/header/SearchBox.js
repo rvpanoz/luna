@@ -30,7 +30,7 @@ class SearchBox extends React.Component {
   componentDidMount() {
     const root = this.refs.root
     if (root) {
-      root.addEventListener('keypress', this._onKeyUp)
+      root.addEventListener('keypress', this.onKeyUp)
     }
   }
   handleChange(e) {

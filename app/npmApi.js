@@ -131,9 +131,18 @@ exports.install = function(opts, callback) {
   const command = ['install']
   const deferred = Q.defer()
   const cwd = process.cwd()
-  const { pkgName, mode, directory } = opts
+  const { pkgName, mode, directory, pkgVersion } = opts
   const defaults = [],
     pkgOptions = opts.pkgOptions || []
+
+  function getName() {
+    let name = pkgName
+
+    if (pkgVersion) {
+      name = `${name}@${pkgVersion}`
+    }
+    return name
+  }
 
   let result = '',
     error = ''
@@ -153,7 +162,7 @@ exports.install = function(opts, callback) {
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
   const run = []
-    .concat(command, pkgName)
+    .concat(command, getName())
     .concat(pkgOptions)
     .concat(commandArgs)
   return runCommand(run, directory, callback)

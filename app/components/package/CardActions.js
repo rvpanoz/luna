@@ -5,7 +5,7 @@
 
 import { ipcRenderer } from 'electron'
 import { APP_ACTIONS, APP_MODES } from 'constants/AppConstants'
-import { showMessageBox } from '../../utils'
+import { showMessageBox } from 'utils'
 import { CardActions as MuiCardActions } from 'material-ui/Card'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -44,6 +44,7 @@ class CardActions extends React.Component {
     const target = e.currentTarget
     const action = target.textContent.trim().toLowerCase()
     const {
+      actions,
       mode,
       directory,
       version,
@@ -55,6 +56,10 @@ class CardActions extends React.Component {
       toggleSnackbar
     } = this.props
 
+    if (!action || ['install', 'uninstall', 'update'].indexOf(action) === -1) {
+      throw new Error(`doAction: action ${action} is invalid`)
+    }
+
     showMessageBox(
       {
         action: action,
@@ -62,6 +67,7 @@ class CardActions extends React.Component {
         version: action === 'uninstall' ? null : version
       },
       () => {
+        setActive(null)
         toggleLoader(true)
         ipcRenderer.send('ipc-event', {
           mode,

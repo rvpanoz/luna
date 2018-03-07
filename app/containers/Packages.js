@@ -136,9 +136,6 @@ class PackagesContainer extends React.Component {
       setVersion(active.version)
     }
   }
-  componentDidUpdate(nextProps) {
-    console.log(nextProps)
-  }
   componentWillUnmount() {
     ipcRenderer.removeAllListeners([
       'get-packages-close',
