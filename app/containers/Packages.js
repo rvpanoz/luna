@@ -50,7 +50,7 @@ class PackagesContainer extends React.Component {
         return
       }
 
-      if (command === 'outdated') {
+      if (command[0] === 'outdated') {
         this.setupOutdated(packages)
       } else {
         this.setupPackagesFromResponse(packages)
@@ -81,6 +81,17 @@ class PackagesContainer extends React.Component {
       } catch (e) {
         throw new Error(e)
       }
+    })
+
+    ipcRenderer.on('update-all-close', (event) => {
+      const { mode, directory } = this.props
+
+      ipcRenderer.send('ipc-event', {
+        ipcEvent: 'get-packages',
+        cmd: ['outdated', 'list'],
+        mode,
+        directory
+      })
     })
 
     ipcRenderer.on('update-package-close', (event, pkg) => {

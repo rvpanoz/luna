@@ -13,7 +13,8 @@ import * as R from 'ramda'
 exports.doCommand = function(options, callback) {
   const opts = options || {}
   const { cmd, ...rest } = opts
-  console.log(options)
+  // console.log(options)
+
   function combine() {
     let promises = []
 

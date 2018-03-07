@@ -168,6 +168,12 @@ exports.install = function(opts, callback) {
   return runCommand(run, directory, callback)
 }
 
+exports.update = function(opts, callback) {
+  const command = ['update']
+  const { mode, directory } = opts
+  return runCommand(command, directory, callback)
+}
+
 exports.uninstall = function(opts, callback) {
   const command = ['uninstall']
   const deferred = Q.defer()

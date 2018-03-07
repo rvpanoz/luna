@@ -40,11 +40,12 @@ class PackagesList extends React.Component {
                   if (!pkg) {
                     return
                   }
-                  const { hasPeerMissing, readme, latest, version } = pkg
+                  const { hasPeerMissing, latest, version } = pkg
                   if (hasPeerMissing) {
                     return
                   }
                   const name = pkg.from ? pkg.from.split('@')[0] : pkg.name
+
                   return (
                     <ListItem
                       description={pkg.description ? pkg.description : null}
@@ -53,7 +54,6 @@ class PackagesList extends React.Component {
                       latest={latest}
                       mode={mode}
                       name={name}
-                      readme={readme}
                       toggleMainLoader={toggleMainLoader}
                       setSelectedPackage={setSelectedPackage}
                       selected={selected}

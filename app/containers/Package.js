@@ -77,7 +77,7 @@ class PackageContainer extends React.Component {
     if (!active) {
       return null
     }
-    console.log(version)
+
     return (
       <section className={classes.root}>
         <Grid container direction="row" justify="flex-start">

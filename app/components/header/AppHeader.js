@@ -87,7 +87,10 @@ class AppHeader extends React.Component {
             <Notifications
               drawerOpen={drawerOpen}
               toggleDrawer={toggleDrawer}
+              toggleLoader={toggleLoader}
               notifications={notifications}
+              mode={mode}
+              directory={directory}
             />
           </div>
         </AppBar>

@@ -145,6 +145,10 @@ export function notificationsStyles(theme) {
     root: {
       margin: 10,
       padding: 0
+    },
+    updateAllButton: {
+      position: 'absolute',
+      bottom: 0
     }
   }
 }

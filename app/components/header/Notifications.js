@@ -3,9 +3,12 @@
  *
  **/
 
+import { ipcRenderer } from 'electron'
 import { withStyles } from 'material-ui/styles'
-import { notificationsStyles } from '../../styles/components'
+import { notificationsStyles } from 'styles/components'
 import { APP_INFO } from 'constants/AppConstants'
+import List, { ListItem, ListItemText } from 'material-ui/List'
+import { autoBind } from 'utils'
 import React from 'react'
 import PropTypes from 'prop-types'
 import IconButton from 'material-ui/IconButton'
@@ -13,7 +16,6 @@ import Badge from 'material-ui/Badge'
 import NotificationsIcon from 'material-ui-icons/Notifications'
 import Drawer from 'material-ui/Drawer'
 import Button from 'material-ui/Button'
-import List, { ListItem, ListItemText } from 'material-ui/List'
 import Divider from 'material-ui/Divider'
 
 const NotificationsList = (props) => {
@@ -48,20 +50,29 @@ const NotificationsList = (props) => {
 class Notifications extends React.Component {
   constructor(props) {
     super(props)
+    autoBind(['onClick', 'onUpdateAll'], this)
+    this.onClick = this.onClick.bind(this)
     this.onClick = this.onClick.bind(this)
   }
   onClick(e) {
     const { toggleDrawer, drawerOpen } = this.props
     toggleDrawer(!drawerOpen)
   }
+  onUpdateAll(e) {
+    e.preventDefault()
+    const { mode, directory, toggleLoader, toggleDrawer } = this.props
+
+    toggleLoader(true)
+    toggleDrawer(true)
+    ipcRenderer.send('ipc-event', {
+      mode,
+      directory,
+      ipcEvent: 'update-all',
+      cmd: ['update']
+    })
+  }
   render() {
-    const {
-      drawerOpen,
-      toggleDrawer,
-      notificationsTotal,
-      notifications,
-      classes
-    } = this.props
+    const { drawerOpen, toggleDrawer, notifications, classes } = this.props
 
     return (
       <div className={classes.root}>
@@ -78,6 +89,15 @@ class Notifications extends React.Component {
             onKeyDown={this.onClick}
           >
             <NotificationsList notifications={notifications} />
+            {notifications && notifications.length ? (
+              <Button
+                className={classes.updateAllButton}
+                color="primary"
+                onClick={this.onUpdateAll}
+              >
+                Update all
+              </Button>
+            ) : null}
           </div>
         </Drawer>
       </div>
