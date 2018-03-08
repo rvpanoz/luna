@@ -45,19 +45,6 @@ export function setPackageJSON(packageJSON) {
   }
 }
 
-export function addCommandOption(option) {
-  return {
-    type: types.ADD_COMMAND_OPTION,
-    option
-  }
-}
-
-export function clearCommandOptions() {
-  return {
-    type: types.CLEAR_COMMAND_OPTIONS
-  }
-}
-
 export function setMode(mode, directory) {
   return {
     type: types.SET_MODE,

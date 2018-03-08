@@ -129,49 +129,30 @@ exports.search = function(opts, callback) {
 
 exports.install = function(opts, callback) {
   const command = ['install']
-  const deferred = Q.defer()
-  const cwd = process.cwd()
-  const { pkgName, mode, directory, pkgVersion } = opts
+  const { pkgName, mode, directory, pkgVersion, multiple, packages } = opts
   const defaults = [],
     pkgOptions = opts.pkgOptions || []
 
-  function getName() {
-    let name = pkgName
-
-    if (pkgVersion) {
-      name = `${name}@${pkgVersion}`
-    }
-    return name
+  if (!pkgName && !multiple) {
+    throw new Error('npmApi:install package name cannot be empty or undefined')
   }
 
-  let result = '',
-    error = ''
-
-  if (!pkgName) {
-    return Q.reject(
-      new Error(`npmApi[${command[0]}]:package name must be given`)
-    )
+  function getNames() {
+    return multiple && packages && Array.isArray(packages)
+      ? packages.join(' ')
+      : pkgVersion ? `${pkgName}@${pkgVersion}` : pkgName
   }
-
-  console.log(
-    `running: npm ${[]
-      .concat(command, pkgName)
-      .concat(pkgOptions)
-      .join(' ')}`
-  )
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  const run = []
-    .concat(command, getName())
-    .concat(pkgOptions)
-    .concat(commandArgs)
-  return runCommand(run, directory, callback)
-}
+  const commandOpts = pkgOptions.length
+    ? pkgOptions.map((option) => `--${option}`)
+    : ['--no-save']
 
-exports.update = function(opts, callback) {
-  const command = ['update']
-  const { mode, directory } = opts
-  return runCommand(command, directory, callback)
+  const run = []
+    .concat(command, getNames())
+    .concat(commandArgs)
+    .concat(commandOpts)
+  return runCommand(run, directory, callback)
 }
 
 exports.uninstall = function(opts, callback) {

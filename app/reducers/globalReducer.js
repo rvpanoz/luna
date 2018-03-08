@@ -13,8 +13,6 @@ import {
   TOGGLE_SETTINGS,
   TOGGLE_SNACKBAR,
   TOGGLE_DRAWER,
-  ADD_COMMAND_OPTION,
-  CLEAR_COMMAND_OPTIONS,
   MENU_OPEN,
   SET_SETTINGS,
   SETUP_SNACKBAR
@@ -69,16 +67,6 @@ const handlers = {
       )
     }),
   [CLEAR_MESSAGES]: (state, action) => assoc('messages', [], state),
-  [CLEAR_COMMAND_OPTIONS]: (state, action) => assoc('cmdOptions', [], state),
-  [ADD_COMMAND_OPTION]: (state, action) => {
-    const idx = state.cmdOptions.indexOf(action.option)
-    return merge(state, {
-      cmdOptions:
-        idx !== -1
-          ? remove(idx, 1, state.cmdOptions)
-          : prepend(action.option, state.cmdOptions)
-    })
-  },
   [MENU_OPEN]: (state, action) => assoc('menuOpen', action.menuOpen, state)
 }
 

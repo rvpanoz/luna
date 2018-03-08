@@ -21,7 +21,12 @@ class CardOptions extends React.Component {
     this.handleChange = this.handleChange.bind(this)
   }
   handleChange(e) {
-    const { addCommandOption } = this.props
+    const {
+      cmdOptions,
+      addCommandOption,
+      removeCommandOption,
+      clearCommandOptions
+    } = this.props
     const opt = e.currentTarget.value
     addCommandOption(opt)
   }

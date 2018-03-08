@@ -25,8 +25,8 @@ class ListHeader extends React.Component {
     this._anchorEl = null
     autoBind(
       [
-        '_updatedAll',
-        '_uninstallAll',
+        '_updateSelected',
+        '_uninstallSelected',
         '_reload',
         '_setGlobalMode',
         'handleClick',
@@ -65,12 +65,21 @@ class ListHeader extends React.Component {
     reload()
     this.handleClose()
   }
-  _updatedAll(e) {
-    const { selected } = this.props
+  _uninstallSelected(e) {}
+  _updateSelected(e) {
+    const { mode, directory, selected } = this.props
 
-    if (selected.length) {
-      ipcRenderer.send('ipc-event', {})
+    if (selected && selected.length) {
+      ipcRenderer.send('ipc-event', {
+        mode,
+        directory,
+        ipcEvent: 'install',
+        cmd: ['install'],
+        multiple: true,
+        packages: selected
+      })
     }
+    return false
   }
   render() {
     const { classes, total, mode, directory, title } = this.props
@@ -112,10 +121,10 @@ class ListHeader extends React.Component {
                 <Icon color="accent">sort</Icon>Sort by outdated
               </MenuItem>
               <Divider />
-              <MenuItem key="update-all" onClick={this._updatedAll}>
+              <MenuItem key="update-all" onClick={this._updateSelected}>
                 <Icon color="accent">update</Icon>Update selected
               </MenuItem>
-              <MenuItem key="uninstall-all" onClick={this._uninstallAll}>
+              <MenuItem key="uninstall-all" onClick={this._uninstallSelected}>
                 <Icon color="accent">remove</Icon>Uninstall selected
               </MenuItem>
               <MenuItem key="reload" onClick={this._reload}>

@@ -14,13 +14,13 @@ export default {
     message: ''
   },
   messages: [],
-  cmdOptions: [],
   packages: {
     isLoading: false,
     total: 0,
     active: null,
     packages: [],
     selected: [],
+    cmdOptions: [],
     group: null,
     expanded: false,
     version: '',

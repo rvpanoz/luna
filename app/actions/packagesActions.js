@@ -38,6 +38,26 @@ export function setTotal(total) {
   }
 }
 
+export function addCommandOption(option) {
+  return {
+    type: types.ADD_COMMAND_OPTION,
+    option
+  }
+}
+
+export function removeCommandOption(option) {
+  return {
+    type: types.REMOVE_COMMAND_OPTION,
+    option
+  }
+}
+
+export function clearCommandOptions() {
+  return {
+    type: types.CLEAR_COMMAND_OPTIONS
+  }
+}
+
 export function setPackagesOutdated(outdated) {
   return {
     type: types.SET_PACKAGES_OUTDATED,

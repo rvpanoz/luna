@@ -29,7 +29,8 @@ export const APP_INFO = {
 export const PACKAGE_GROUPS = {
   dependencies: 'save',
   devDependencies: 'save-dev',
-  optionalDependencies: 'save-optional'
+  optionalDependencies: 'save-optional',
+  bundleDependencies: 'save-bundle'
 }
 
 // command options when perfoming an APP action
@@ -38,7 +39,7 @@ export const COMMAND_OPTIONS = [
   'save-dev*Package will appear in your devDependencies',
   'save-optional*Package will appear in your optionalDependencies',
   "save-exact*Saved dependencies will be configured with an exact version rather than using npm's default semver range operator",
-  'save-bundled*Saved dependencies will also be added to your bundleDependencies list'
+  'save-bundle*Saved dependencies will also be added to your bundleDependencies list'
 ]
 
 //npm config allowed values

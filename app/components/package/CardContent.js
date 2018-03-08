@@ -31,7 +31,8 @@ const CardContent = (props) => {
     version,
     cmdOptions,
     onChangeVersion,
-    addCommandOption
+    addCommandOption,
+    removeCommandOption
   } = props
 
   if (!active) {
@@ -55,6 +56,7 @@ const CardContent = (props) => {
           <CardOptions
             cmdOptions={cmdOptions}
             addCommandOption={addCommandOption}
+            removeCommandOption={removeCommandOption}
           />
         ) : null}
       </section>

@@ -58,19 +58,6 @@ class Notifications extends React.Component {
     const { toggleDrawer, drawerOpen } = this.props
     toggleDrawer(!drawerOpen)
   }
-  onUpdateAll(e) {
-    e.preventDefault()
-    const { mode, directory, toggleLoader, toggleDrawer } = this.props
-
-    toggleLoader(true)
-    toggleDrawer(true)
-    ipcRenderer.send('ipc-event', {
-      mode,
-      directory,
-      ipcEvent: 'update-all',
-      cmd: ['update']
-    })
-  }
   render() {
     const { drawerOpen, toggleDrawer, notifications, classes } = this.props
 
@@ -89,15 +76,6 @@ class Notifications extends React.Component {
             onKeyDown={this.onClick}
           >
             <NotificationsList notifications={notifications} />
-            {notifications && notifications.length ? (
-              <Button
-                className={classes.updateAllButton}
-                color="primary"
-                onClick={this.onUpdateAll}
-              >
-                Update all
-              </Button>
-            ) : null}
           </div>
         </Drawer>
       </div>

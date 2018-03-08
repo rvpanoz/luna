@@ -10,6 +10,7 @@ import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
 import { showMessageBox, isUrl, autoBind } from 'utils'
+import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
 import Collapse from 'material-ui/transitions/Collapse'
 import Card from 'material-ui/Card'
 import Chip from 'material-ui/Chip'
@@ -34,6 +35,33 @@ class PackageContainer extends React.Component {
     const { toggleExpanded } = this.props
     toggleExpanded()
     this.forceUpdate()
+  }
+  componentDidMount() {
+    const {
+      packageJSON,
+      active,
+      mode,
+      setPackageGroup,
+      addCommandOption,
+      clearCommandOptions
+    } = this.props
+
+    clearCommandOptions()
+
+    if (mode === APP_MODES.LOCAL && active) {
+      let found = false
+
+      Object.keys(PACKAGE_GROUPS).some((groupName, idx) => {
+        found =
+          packageJSON[groupName] && packageJSON[groupName][active.name]
+            ? groupName
+            : false
+        if (found) {
+          setPackageGroup(groupName)
+          return found
+        }
+      })
+    }
   }
   onChangeVersion(e, value) {
     const { active, mode, directory, toggleMainLoader, setVersion } = this.props
@@ -64,6 +92,7 @@ class PackageContainer extends React.Component {
       setActive,
       toggleLoader,
       addCommandOption,
+      removeCommandOption,
       clearCommandOptions,
       cmdOptions,
       actions,
@@ -97,6 +126,7 @@ class PackageContainer extends React.Component {
                   cmdOptions={cmdOptions}
                   onChangeVersion={this.onChangeVersion}
                   addCommandOption={addCommandOption}
+                  removeCommandOption={removeCommandOption}
                   clearCommandOptions={clearCommandOptions}
                   mode={mode}
                 />
@@ -140,10 +170,10 @@ function mapStateToProps(state) {
     mode: state.global.mode,
     directory: state.global.directory,
     packageJSON: state.global.packageJSON,
-    cmdOptions: state.global.cmdOptions,
     toggleModal: state.global.toggleModal,
     showModal: state.global.showModal,
     npmCmd: state.global.npmCmd,
+    cmdOptions: state.packages.cmdOptions,
     group: state.packages.group,
     expanded: state.packages.expanded,
     tabIndex: state.packages.tabIndex,
@@ -168,8 +198,10 @@ function mapDispatchToProps(dispatch) {
     setPackageGroup: (group) =>
       dispatch(packagesActions.setPackageGroup(group)),
     addCommandOption: (option) =>
-      dispatch(globalActions.addCommandOption(option)),
-    clearCommandOptions: () => dispatch(globalActions.clearCommandOptions()),
+      dispatch(packagesActions.addCommandOption(option)),
+    removeCommandOption: (option) =>
+      dispatch(packagesActions.removeCommandOption(option)),
+    clearCommandOptions: () => dispatch(packagesActions.clearCommandOptions()),
     toggleMainLoader: (bool) =>
       dispatch(packagesActions.toggleMainLoader(bool)),
     toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
