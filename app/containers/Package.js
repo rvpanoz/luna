@@ -155,7 +155,11 @@ class PackageContainer extends React.Component {
                   unmountOnExit
                   className={classes.collapseContent}
                 >
-                  <CardDetails {...active} classes={classes} />
+                  <CardDetails
+                    keywords={active.keywords}
+                    time={active.time}
+                    classes={classes}
+                  />
                 </Collapse>
               </Card>
             </section>

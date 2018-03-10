@@ -34,6 +34,15 @@ export const triggerEvent = (eventName, options) => {
   })
 }
 
+export const objectEntries = obj => {
+  let ownProps = Object.keys(obj),
+    i = ownProps.length,
+    resArray = new Array(i);
+
+  while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
+  return resArray;
+};
+
 export function isUrl(url) {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
   return matcher.test(url);
