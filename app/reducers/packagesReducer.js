@@ -65,6 +65,7 @@ const handlers = {
       packages: action.packages,
       group: null,
       cmdOptions: [],
+      selected: [],
       version: ''
     }),
   [SET_PACKAGES_OUTDATED]: (state, action) =>

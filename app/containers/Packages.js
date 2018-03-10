@@ -83,17 +83,8 @@ class PackagesContainer extends React.Component {
       }
     })
 
-    ipcRenderer.on('update-all-close', (event) => {
-      const { mode, directory } = this.props
-
-      triggerEvent('get-packages', {
-        cmd: ['outdated', 'list'],
-        mode,
-        directory
-      })
-    })
-
     ipcRenderer.on('update-package-close', (event, pkg) => {
+      console.log('ipcRenderer[update-package-close] callback')
       const { mode, directory } = this.props
 
       triggerEvent('get-packages', {
@@ -104,6 +95,7 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('action-close', (event, pkg) => {
+      console.log('ipcRenderer[action-close] callback')
       const { mode, directory } = this.props
 
       if (mode === APP_MODES.LOCAL && directory) {
@@ -122,6 +114,7 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
+      console.log('ipcRenderer[analyze-json-close] callback')
       toggleLoader(true)
       setMode(APP_MODES.LOCAL, directory)
       setActive(null)

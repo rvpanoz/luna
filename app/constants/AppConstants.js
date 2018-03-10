@@ -38,8 +38,7 @@ export const COMMAND_OPTIONS = [
   'save*Package will appear in your dependencies',
   'save-dev*Package will appear in your devDependencies',
   'save-optional*Package will appear in your optionalDependencies',
-  "save-exact*Saved dependencies will be configured with an exact version rather than using npm's default semver range operator",
-  'save-bundle*Saved dependencies will also be added to your bundleDependencies list'
+  "save-exact*Saved dependencies will be configured with an exact version rather than using npm's default semver range operator"
 ]
 
 //npm config allowed values

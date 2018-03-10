@@ -16,7 +16,9 @@ export const triggerEvent = (eventName, options) => {
     cmd,
     pkgName,
     pkgVersion,
-    pkgOptions
+    pkgOptions,
+    multiple,
+    packages
   } = options || {}
 
   ipcRenderer.send('ipc-event', {
@@ -24,6 +26,8 @@ export const triggerEvent = (eventName, options) => {
     cmd,
     directory,
     mode,
+    multiple,
+    packages,
     pkgName,
     pkgVersion,
     pkgOptions

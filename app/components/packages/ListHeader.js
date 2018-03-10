@@ -24,8 +24,6 @@ class ListHeader extends React.Component {
     this._anchorEl = null
     autoBind(
       [
-        '_updateSelected',
-        '_uninstallSelected',
         '_reload',
         '_setGlobalMode',
         'handleClick',
@@ -64,21 +62,6 @@ class ListHeader extends React.Component {
     reload()
     this.handleClose()
   }
-  _uninstallSelected(e) {}
-  _updateSelected(e) {
-    const { mode, directory, selected } = this.props
-
-    if (selected && selected.length) {
-      triggerEvent('install', {
-        mode,
-        directory,
-        cmd: ['install'],
-        multiple: true,
-        packages: selected
-      })
-    }
-    return false
-  }
   render() {
     const { classes, total, mode, directory, title } = this.props
     const anchorEl = this._anchorEl
@@ -113,23 +96,21 @@ class ListHeader extends React.Component {
               }}
             >
               <MenuItem key="sort-name" onClick={this.handleSortByName}>
-                <Icon color="accent">sort</Icon>Sort by name
+                <Icon color="accent">sort</Icon>
+                <span style={{ paddingLeft: '10px' }}>Sort by name</span>
               </MenuItem>
               <MenuItem key="sort-latest" onClick={this.handleSortByLatest}>
-                <Icon color="accent">sort</Icon>Sort by outdated
+                <Icon color="accent">sort</Icon>
+                <span style={{ paddingLeft: '10px' }}>Sort by outdated</span>
               </MenuItem>
               <Divider />
-              <MenuItem key="update-all" onClick={this._updateSelected}>
-                <Icon color="accent">update</Icon>Update selected
-              </MenuItem>
-              <MenuItem key="uninstall-all" onClick={this._uninstallSelected}>
-                <Icon color="accent">remove</Icon>Uninstall selected
-              </MenuItem>
               <MenuItem key="reload" onClick={this._reload}>
-                <Icon color="accent">refresh</Icon>Reload
+                <Icon color="accent">refresh</Icon>
+                <span style={{ paddingLeft: '10px' }}>Reload</span>
               </MenuItem>
               <MenuItem key="global" onClick={this._setGlobalMode}>
-                <Icon color="accent">list</Icon>Show globals
+                <Icon color="accent">list</Icon>
+                <span style={{ paddingLeft: '10px' }}>Show globals</span>
               </MenuItem>
             </Menu>
           </div>

@@ -157,25 +157,23 @@ exports.install = function(opts, callback) {
 
 exports.uninstall = function(opts, callback) {
   const command = ['uninstall']
-  const deferred = Q.defer()
-  const cwd = process.cwd()
-  const { pkgName, mode, directory } = opts
-  const defaults = [],
-    pkgOptions = opts.pkgOptions || []
+  const { pkgName, mode, directory, multiple, packages } = opts
+  const defaults = []
+  console.log(opts)
 
-  let result = '',
-    error = ''
-
-  if (!pkgName) {
-    return Q.reject(
-      new Error(`npmApi[${command[0]}]:package name must be given`)
-    )
+  function getNames() {
+    if (multiple && packages && Array.isArray(packages)) {
+      return packages.join(' ')
+    } else if (!pkgName && !multiple) {
+      throw new Error(
+        'npmApi:uninstall package name cannot be empty or undefined'
+      )
+    } else {
+      return pkgName
+    }
   }
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  const run = []
-    .concat(command, pkgName)
-    .concat(pkgOptions)
-    .concat(commandArgs)
+  const run = [].concat(command, getNames()).concat(commandArgs)
   return runCommand(run, directory, callback)
 }

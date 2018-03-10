@@ -9,7 +9,8 @@ import npmApi from './npmApi'
 exports.doCommand = function(options, callback) {
   const opts = options || {}
   const { cmd, ...rest } = opts
-  console.log(options)
+
+  console.log(opts)
   function combine() {
     let promises = []
 
