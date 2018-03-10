@@ -3,9 +3,8 @@
  *
  */
 
-import { ipcRenderer } from 'electron'
 import { APP_ACTIONS, APP_MODES } from 'constants/AppConstants'
-import { showMessageBox } from 'utils'
+import { triggerEvent, showMessageBox } from 'utils'
 import { CardActions as MuiCardActions } from 'material-ui/Card'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -69,10 +68,9 @@ class CardActions extends React.Component {
       () => {
         setActive(null)
         toggleLoader(true)
-        ipcRenderer.send('ipc-event', {
+        triggerEvent(action, {
           mode,
           directory,
-          ipcEvent: action,
           cmd: [action === 'update' ? 'install' : action],
           pkgName: active.name,
           pkgVersion: action === 'uninstall' ? null : version,

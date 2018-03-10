@@ -3,9 +3,9 @@
  *
  */
 
-import { ipcRenderer } from 'electron'
 import { withStyles } from 'material-ui/styles'
 import { searchBoxStyles } from 'styles/components'
+import { triggerEvent } from 'utils'
 import React from 'react'
 import PropTypes from 'prop-types'
 import TextField from 'material-ui/TextField'
@@ -44,9 +44,9 @@ class SearchBox extends React.Component {
       directory,
       setPackageActions
     } = this.props
-    const value = e.target.value
+    const pkgName = e.target.value
 
-    if (value) {
+    if (pkgName) {
       toggleLoader(true)
       setActive(null)
       setPackageActions([
@@ -56,10 +56,10 @@ class SearchBox extends React.Component {
           color: 'accent'
         }
       ])
-      ipcRenderer.send('ipc-event', {
-        ipcEvent: 'search-packages',
+
+      triggerEvent('search-packages', {
         cmd: ['search'],
-        pkgName: value,
+        pkgName,
         mode,
         directory
       })

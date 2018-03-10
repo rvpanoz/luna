@@ -4,7 +4,7 @@
  **/
 
 import { ipcRenderer } from 'electron'
-import { autoBind } from '../../utils'
+import { autoBind, triggerEvent } from 'utils'
 import * as R from 'ramda'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -21,8 +21,7 @@ function withHeaderList(List, options = {}) {
       const { mode, directory, toggleLoader } = this.props
 
       toggleLoader(true)
-      ipcRenderer.send('ipc-event', {
-        ipcEvent: 'get-packages',
+      triggerEvent('get-packages', {
         cmd: ['outdated', 'list'],
         mode,
         directory

@@ -3,10 +3,9 @@
  *
  */
 
-import { ipcRenderer } from 'electron'
 import { withStyles } from 'material-ui/styles'
 import { packagesListStyles } from 'styles/components'
-import { autoBind } from 'utils'
+import { autoBind, triggerEvent } from 'utils'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Divider from 'material-ui/Divider'
@@ -70,10 +69,9 @@ class ListHeader extends React.Component {
     const { mode, directory, selected } = this.props
 
     if (selected && selected.length) {
-      ipcRenderer.send('ipc-event', {
+      triggerEvent('install', {
         mode,
         directory,
-        ipcEvent: 'install',
         cmd: ['install'],
         multiple: true,
         packages: selected

@@ -3,10 +3,32 @@
 *
 **/
 
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import { APP_INFO } from './constants/AppConstants';
 import * as R from 'ramda';
 import React from 'react';
+
+export const triggerEvent = (eventName, options) => {
+  console.log(eventName, options)
+  const {
+    mode,
+    directory,
+    cmd,
+    pkgName,
+    pkgVersion,
+    pkgOptions
+  } = options || {}
+
+  ipcRenderer.send('ipc-event', {
+    ipcEvent: eventName,
+    cmd,
+    directory,
+    mode,
+    pkgName,
+    pkgVersion,
+    pkgOptions
+  })
+}
 
 export function isUrl(url) {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;

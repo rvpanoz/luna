@@ -4,12 +4,11 @@
 
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { remote, ipcRenderer, shell } from 'electron'
 import { packageCardStyles } from 'styles/components'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
-import { showMessageBox, isUrl, autoBind } from 'utils'
+import { showMessageBox, triggerEvent, autoBind } from 'utils'
 import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
 import Collapse from 'material-ui/transitions/Collapse'
 import Card from 'material-ui/Card'
@@ -70,10 +69,9 @@ class PackageContainer extends React.Component {
     if (version && version !== 'false') {
       toggleMainLoader(true)
       setVersion(version)
-      ipcRenderer.send('ipc-event', {
+      triggerEvent('view-package', {
         mode,
         directory,
-        ipcEvent: 'view-package',
         cmd: ['view'],
         pkgName: active.name,
         pkgVersion: version

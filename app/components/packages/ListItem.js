@@ -3,8 +3,8 @@
  *
  */
 
-import { remote, ipcRenderer } from 'electron'
-import { autoBind, showMessageBox } from 'utils'
+import { APP_MODES, PACKAGE_GROUPS } from 'constants/AppConstants'
+import { autoBind, triggerEvent, showMessageBox } from 'utils'
 import React from 'react'
 import {
   ListItem,
@@ -26,7 +26,7 @@ class PackageListItem extends React.Component {
       [
         'onItemCheck',
         'onItemClick',
-        'onUpdate',
+        'updatePackage',
         'viewPackage',
         'primatyText',
         'secondaryText'
@@ -36,9 +36,7 @@ class PackageListItem extends React.Component {
   }
   viewPackage() {
     const { name, version, mode, directory } = this.props
-
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'view-package',
+    triggerEvent('view-package', {
       cmd: ['view'],
       pkgName: name,
       pkgVersion: version,
@@ -46,9 +44,21 @@ class PackageListItem extends React.Component {
       directory
     })
   }
-  onUpdate(e) {
+  updatePackage(e) {
     e.preventDefault()
-    const { name, mode, directory, toggleMainLoader } = this.props
+    const { name, mode, directory, toggleMainLoader, packageJSON } = this.props
+    const groups = ['dependencies', 'devDependencies', 'optionalDependencies']
+
+    let pkgOptions = []
+    if (mode === APP_MODES.LOCAL) {
+      groups.some((group, idx) => {
+        while (packageJSON[group] && packageJSON[group][name]) {
+          pkgOptions.push(PACKAGE_GROUPS[group])
+          return
+        }
+      })
+    }
+
     showMessageBox(
       {
         action: 'update',
@@ -56,11 +66,11 @@ class PackageListItem extends React.Component {
       },
       () => {
         toggleMainLoader(true)
-        ipcRenderer.send('ipc-event', {
-          ipcEvent: 'update-package',
+        triggerEvent('update-package', {
           cmd: ['install'],
           pkgName: name,
           pkgVersion: 'latest',
+          pkgOptions,
           mode,
           directory
         })
@@ -95,7 +105,7 @@ class PackageListItem extends React.Component {
     }
 
     return (
-      <ListItem button dense onClick={this.onItemClick}>
+      <ListItem button onClick={this.onItemClick}>
         <Checkbox
           checked={selected.indexOf(name) !== -1}
           tabIndex={-1}
@@ -110,7 +120,7 @@ class PackageListItem extends React.Component {
           {latest ? (
             <IconButton
               color="accent"
-              onClick={this.onUpdate}
+              onClick={this.updatePackage}
               aria-label="Update"
             >
               <Icon>alarm</Icon>

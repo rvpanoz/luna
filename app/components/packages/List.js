@@ -3,11 +3,10 @@
  *
  */
 
-import { ipcRenderer } from 'electron'
 import { withStyles } from 'material-ui/styles'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
-import { packagesListStyles } from '../../styles/components'
+import { packagesListStyles } from 'styles/components'
 import classnames from 'classnames'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -17,19 +16,11 @@ import * as globalActions from 'actions/globalActions'
 import List from 'material-ui/List'
 
 class PackagesList extends React.Component {
+  constructor(props) {
+    super(props)
+  }
   render() {
-    const {
-      packages,
-      classes,
-      loading,
-      mode,
-      directory,
-      toggleMainLoader,
-      toggleLoader,
-      setSelectedPackage,
-      selected,
-      ...rest
-    } = this.props
+    const { packages, classes, loading, ...rest } = this.props
 
     return (
       <Loader loading={loading}>
@@ -49,15 +40,11 @@ class PackagesList extends React.Component {
                   return (
                     <ListItem
                       description={pkg.description ? pkg.description : null}
-                      directory={directory}
                       key={idx}
-                      latest={latest}
-                      mode={mode}
                       name={name}
-                      toggleMainLoader={toggleMainLoader}
-                      setSelectedPackage={setSelectedPackage}
-                      selected={selected}
+                      latest={latest}
                       version={version}
+                      {...rest}
                     />
                   )
                 })

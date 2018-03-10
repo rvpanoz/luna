@@ -4,7 +4,7 @@
  * */
 
 import { remote, ipcRenderer } from 'electron'
-import { autoBind, parse, sendEvent, onEvent } from '../utils'
+import { autoBind, parse, triggerEvent } from '../utils'
 import { connect } from 'react-redux'
 import { APP_MODES } from 'constants/AppConstants'
 import * as globalActions from 'actions/globalActions'
@@ -86,8 +86,7 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('update-all-close', (event) => {
       const { mode, directory } = this.props
 
-      ipcRenderer.send('ipc-event', {
-        ipcEvent: 'get-packages',
+      triggerEvent('get-packages', {
         cmd: ['outdated', 'list'],
         mode,
         directory
@@ -97,8 +96,7 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('update-package-close', (event, pkg) => {
       const { mode, directory } = this.props
 
-      ipcRenderer.send('ipc-event', {
-        ipcEvent: 'get-packages',
+      triggerEvent('get-packages', {
         cmd: ['outdated', 'list'],
         mode,
         directory
@@ -111,8 +109,7 @@ class PackagesContainer extends React.Component {
       if (mode === APP_MODES.LOCAL && directory) {
         ipcRenderer.send('analyze-json', directory)
       } else {
-        ipcRenderer.send('ipc-event', {
-          ipcEvent: 'get-packages',
+        triggerEvent('get-packages', {
           cmd: ['outdated', 'list'],
           mode,
           directory
@@ -121,7 +118,7 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('ipcEvent-error', (event, error) => {
-      // console.error(error)
+      console.error(error)
     })
 
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
@@ -136,8 +133,7 @@ class PackagesContainer extends React.Component {
         message: directory
       })
       toggleSnackbar(true)
-      ipcRenderer.send('ipc-event', {
-        ipcEvent: 'get-packages',
+      triggerEvent('get-packages', {
         cmd: ['outdated', 'list'],
         mode: APP_MODES.LOCAL,
         directory
@@ -176,8 +172,7 @@ class PackagesContainer extends React.Component {
     toggleLoader(true)
     setActive(null)
     setMode(APP_MODES.GLOBAL)
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
+    triggerEvent('get-packages', {
       cmd: ['outdated', 'list'],
       mode: APP_MODES.GLOBAL
     })
@@ -187,8 +182,7 @@ class PackagesContainer extends React.Component {
 
     toggleLoader(true)
     setActive(null)
-    ipcRenderer.send('ipc-event', {
-      ipcEvent: 'get-packages',
+    triggerEvent('get-packages', {
       cmd: ['outdated', 'list'],
       mode,
       directory
@@ -281,6 +275,7 @@ function mapStateToProps(state) {
     isLoading: state.packages.isLoading,
     packages: state.packages.packages,
     selected: state.packages.selected,
+    packageJSON: state.global.packageJSON,
     packagesOutdated: state.packages.outdated,
     active: state.packages.active,
     total: state.packages.total
