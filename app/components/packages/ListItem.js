@@ -95,7 +95,7 @@ class PackageListItem extends React.Component {
   }
   secondaryText() {
     const { version, latest } = this.props
-    return <span>{latest ? `\nlatest ${latest}` : null}</span>
+    return <span>{latest ? `\nlatest ${latest}` : version}</span>
   }
   render() {
     const { name, version, latest, selected } = this.props

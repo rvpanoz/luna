@@ -44,7 +44,7 @@ class PackageContainer extends React.Component {
       addCommandOption,
       clearCommandOptions
     } = this.props
-
+    console.log(active)
     clearCommandOptions()
 
     if (mode === APP_MODES.LOCAL && active) {

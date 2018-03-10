@@ -10,7 +10,6 @@ exports.doCommand = function(options, callback) {
   const opts = options || {}
   const { cmd, ...rest } = opts
 
-  console.log(opts)
   function combine() {
     let promises = []
 

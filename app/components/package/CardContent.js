@@ -38,7 +38,7 @@ const CardContent = (props) => {
   if (!active) {
     return null
   }
-
+  console.log(active)
   const dependencies = Object.keys(active.dependencies || {})
   const { latest, stable } = active['dist-tags']
 
@@ -63,7 +63,7 @@ const CardContent = (props) => {
       <h3 className={classes.heading}>Description</h3>
       <Divider />
       <Typography className={classes.headingTail}>
-        {active.description}
+        {active && active.description}
       </Typography>
       <h3 className={classes.heading}>Details and Dependencies</h3>
       <Divider />
@@ -123,13 +123,13 @@ const CardContent = (props) => {
         >
           {dependencies &&
             dependencies.map((dependency, idx) => {
-              const version = active.dependencies[dependency]
+              const version = active && active.dependencies[dependency]
               return (
                 <ListItem key={idx} className={classes.listItem}>
                   <ListItemText
                     inset
                     primary={dependency}
-                    secondary={version}
+                    secondary={version || null}
                   />
                 </ListItem>
               )
