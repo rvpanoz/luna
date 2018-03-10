@@ -1,6 +1,8 @@
 /**
  * Build config for development electron renderer process that uses
  * Hot-Module-Replacement
+ *
+ * https://webpack.js.org/concepts/hot-module-replacement/
  */
 
 import path from 'path'
@@ -14,8 +16,8 @@ import baseConfig from './webpack.config.base'
 import CheckNodeEnv from './internals/scripts/CheckNodeEnv'
 
 CheckNodeEnv('development')
-
-const port = process.env.port || 1213
+console.log(process.env.port)
+const port = process.env.port || 6129
 const publicPath = `http://localhost:${port}/dist`
 const dll = path.resolve(process.cwd(), 'dll')
 const manifest = path.resolve(dll, 'renderer.json')
@@ -48,7 +50,7 @@ export default merge.smart(baseConfig, {
     alias: {
       actions: path.resolve(__dirname, 'app/actions'),
       constants: path.resolve(__dirname, 'app/constants'),
-      common: path.resolve(__dirname, 'app/components/common'),
+      common: path.resolve(__dirname, 'app/common'),
       components: path.resolve(__dirname, 'app/components'),
       containers: path.resolve(__dirname, 'app/containers'),
       styles: path.resolve(__dirname, 'app/styles'),
@@ -71,6 +73,9 @@ export default merge.smart(baseConfig, {
           options: {
             cacheDirectory: true,
             plugins: [
+              // Here, we include babel plugins that are only required for the
+              // renderer process. The 'transform-*' plugins must be included
+              // before react-hot-loader/babel
               'transform-class-properties',
               'transform-es2015-classes',
               'react-hot-loader/babel'
@@ -78,11 +83,6 @@ export default merge.smart(baseConfig, {
           }
         }
       },
-      // {
-      // 	test: /\.js|.jsx$/,
-      // 	exclude: /node_modules/,
-      // 	use: ['eslint-loader']
-      // },
       {
         test: /\.global\.css$/,
         use: [
@@ -118,6 +118,10 @@ export default merge.smart(baseConfig, {
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
         use: 'url-loader'
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        use: 'file-loader'
       }
     ]
   },

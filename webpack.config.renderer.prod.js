@@ -57,11 +57,17 @@ export default merge.smart(baseConfig, {
           }
         }),
       },
-      
+
       // Common Image Formats
       {
         test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
         use: 'url-loader',
+      },
+
+			//fonts
+			{
+        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        use: 'file-loader'
       }
     ]
   },

@@ -113,11 +113,6 @@ class PackageContainer extends React.Component {
     return (
       <section className={classes.root}>
         <Grid container direction="row" justify="flex-start">
-          <Grid item xs={12}>
-            <Graph />
-          </Grid>
-        </Grid>
-        <Grid container direction="row" justify="flex-start">
           <Grid item xs={10}>
             <section className={classes.root}>
               <Card className={classes.card}>

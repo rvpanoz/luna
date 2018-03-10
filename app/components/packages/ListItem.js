@@ -99,7 +99,7 @@ class PackageListItem extends React.Component {
     let _group = ''
     if (mode === APP_MODES.LOCAL) {
       groups.forEach((group) => {
-        const inGroup = packageJSON[group][name]
+        const inGroup = packageJSON[group] && packageJSON[group][name]
         if (inGroup) {
           _group = group
         }
