@@ -181,11 +181,10 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
+    "d3": "^4.13.0",
     "devtron": "^1.4.0",
     "electron-debug": "^1.5.0",
-    "font-awesome": "^4.7.0",
     "history": "^4.7.2",
-    "lol-file-parser": "^1.0.0",
     "material-ui": "^1.0.0-beta.34",
     "material-ui-icons": "^1.0.0-beta.17",
     "moment": "^2.21.0",

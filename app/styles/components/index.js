@@ -190,6 +190,7 @@ export function packageCardStyles(theme) {
       visibility: 'visible',
       width: '100%',
       maxHeight: 200,
+      marginBottom: 20,
       overflowX: 'hidden',
       overflowY: 'auto'
     },

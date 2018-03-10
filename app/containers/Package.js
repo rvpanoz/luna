@@ -30,21 +30,18 @@ class PackageContainer extends React.Component {
     super(props)
     autoBind(['onChangeVersion', 'onExpandClick'], this)
   }
-  onExpandClick(e) {
-    const { toggleExpanded } = this.props
-    toggleExpanded()
-    this.forceUpdate()
-  }
   componentDidMount() {
     const {
+      expanded,
       packageJSON,
       active,
       mode,
       setPackageGroup,
       addCommandOption,
-      clearCommandOptions
+      clearCommandOptions,
+      toggleExpanded
     } = this.props
-    console.log(active)
+
     clearCommandOptions()
 
     if (mode === APP_MODES.LOCAL && active) {
@@ -60,6 +57,13 @@ class PackageContainer extends React.Component {
           return found
         }
       })
+    }
+  }
+  componentWillUnmount() {
+    const { expanded, toggleExpanded } = this.props
+
+    if (expanded) {
+      toggleExpanded()
     }
   }
   onChangeVersion(e, value) {
@@ -98,6 +102,7 @@ class PackageContainer extends React.Component {
       version,
       setupSnackbar,
       toggleSnackbar,
+      toggleExpanded,
       ...rest
     } = this.props
 
@@ -130,7 +135,7 @@ class PackageContainer extends React.Component {
                 />
                 <CardActions
                   active={active}
-                  handleExpandClick={this.onExpandClick}
+                  handleExpandClick={toggleExpanded}
                   expanded={expanded}
                   setActive={setActive}
                   toggleLoader={toggleLoader}
@@ -145,7 +150,6 @@ class PackageContainer extends React.Component {
                   cmdOptions={cmdOptions}
                 />
                 <Collapse
-                  style={{ display: 'none' }}
                   in={expanded}
                   timeout="auto"
                   unmountOnExit
