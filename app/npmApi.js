@@ -146,7 +146,7 @@ exports.install = function(opts, callback) {
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
   const commandOpts = pkgOptions.length
     ? pkgOptions.map((option) => `--${option}`)
-    : ['--no-save']
+    : []
 
   const run = []
     .concat(command, getNames())
@@ -159,7 +159,6 @@ exports.uninstall = function(opts, callback) {
   const command = ['uninstall']
   const { pkgName, mode, directory, multiple, packages } = opts
   const defaults = []
-  console.log(opts)
 
   function getNames() {
     if (multiple && packages && Array.isArray(packages)) {
