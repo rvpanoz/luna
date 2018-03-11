@@ -15,7 +15,8 @@ import Icon from 'material-ui/Icon'
 import IconButton from 'material-ui/IconButton'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
-
+import RefreshIcon from 'material-ui-icons/Refresh'
+import ListIcon from 'material-ui-icons/List'
 const ITEM_HEIGHT = 48
 
 class ListHeader extends React.Component {
@@ -26,6 +27,7 @@ class ListHeader extends React.Component {
       [
         '_reload',
         '_setGlobalMode',
+        'onUpdateSelected',
         'handleClick',
         'handleClose',
         'handleSortByLatest',
@@ -33,6 +35,30 @@ class ListHeader extends React.Component {
       ],
       this
     )
+  }
+  _setGlobalMode(e) {
+    const { setGlobalMode } = this.props
+    setGlobalMode()
+    this.handleClose()
+  }
+  _reload(e) {
+    const { reload } = this.props
+    reload()
+    this.handleClose()
+  }
+  onUpdateSelected(e) {
+    const { mode, directory, toggleLoader, selected } = this.props
+
+    if (selected.length) {
+      toggleLoader(true)
+      triggerEvent('install', {
+        cmd: ['install'],
+        mode,
+        directory,
+        multiple: true,
+        packages: selected
+      })
+    }
   }
   handleClick(e) {
     this._anchorEl = e.currentTarget
@@ -52,16 +78,6 @@ class ListHeader extends React.Component {
     sortBy('latest')
     this.handleClose()
   }
-  _setGlobalMode(e) {
-    const { setGlobalMode } = this.props
-    setGlobalMode()
-    this.handleClose()
-  }
-  _reload(e) {
-    const { reload } = this.props
-    reload()
-    this.handleClose()
-  }
   render() {
     const { classes, total, mode, directory, title } = this.props
     const anchorEl = this._anchorEl
@@ -73,6 +89,16 @@ class ListHeader extends React.Component {
           <Avatar className={classes.avatar} color="accent">
             {total || 0}
           </Avatar>
+          <IconButton
+            className={classes.iconbutton}
+            aria-label="Show globals"
+            aria-title="Show globals"
+          >
+            <ListIcon onClick={this._setGlobalMode} />
+          </IconButton>
+          <IconButton className={classes.iconbutton}>
+            <RefreshIcon onClick={this._reload} />
+          </IconButton>
           <div style={{ marginLeft: 'auto' }}>
             <IconButton
               aria-label="More"
@@ -95,13 +121,18 @@ class ListHeader extends React.Component {
                 }
               }}
             >
-              <MenuItem key="sort-name" onClick={this.handleSortByName}>
+              <MenuItem dense key="sort-name" onClick={this.handleSortByName}>
                 <Icon color="accent">sort</Icon>
                 <span style={{ paddingLeft: '10px' }}>Sort by name</span>
               </MenuItem>
               <MenuItem key="sort-latest" onClick={this.handleSortByLatest}>
                 <Icon color="accent">sort</Icon>
                 <span style={{ paddingLeft: '10px' }}>Sort by outdated</span>
+              </MenuItem>
+              <Divider />
+              <MenuItem key="updateAll" onClick={this.onUpdateSelected}>
+                <Icon color="accent">update</Icon>
+                <span style={{ paddingLeft: '10px' }}>Update selected</span>
               </MenuItem>
               <Divider />
               <MenuItem key="reload" onClick={this._reload}>
