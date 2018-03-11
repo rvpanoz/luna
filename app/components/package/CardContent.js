@@ -33,6 +33,11 @@ const CardContent = (props) => {
 
   return (
     <MuiCardContent className={classes.cardContent}>
+      <h3 className={classes.heading}>Description</h3>
+      <Divider />
+      <Typography component="div" className={classes.headingTail}>
+        {active && active.description}
+      </Typography>
       <h3 className={classes.heading}>Versions and options</h3>
       <Divider />
       <section className={classes.controls}>
@@ -49,11 +54,6 @@ const CardContent = (props) => {
           />
         ) : null}
       </section>
-      <h3 className={classes.heading}>Description</h3>
-      <Divider />
-      <Typography component="div" className={classes.headingTail}>
-        {active && active.description}
-      </Typography>
       <h3 className={classes.heading}>Details and Dependencies</h3>
       <Divider />
       <Typography component="div">

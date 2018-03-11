@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>Luna - manage your npm packages</title>
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
     <script>
     ;(function() {
   if (!process.env.HOT) {
@@ -14,50 +15,33 @@
   }
 })()
 </script>
-    <style>
-      body:before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        }
-        ::-webkit-scrollbar {
-           width: 12.5px;
-         }
-         ::-webkit-scrollbar-thumb {
-            border-radius: 1px;
-             background: #ff4081;
-           }
-    </style>
   </head>
   <body>
     <div id="root"></div>
     <script>
-      {
-        const scripts = [];
+    {
+  const scripts = []
 
-        // Dynamically insert the DLL script in development env in the
-        // renderer process
-        if (process.env.NODE_ENV === 'development') {
-          scripts.push('../dll/renderer.dev.dll.js');
-        }
+  // Dynamically insert the DLL script in development env in the
+  // renderer process
+  if (process.env.NODE_ENV === 'development') {
+    scripts.push('../dll/renderer.dev.dll.js')
+  }
 
-        // Dynamically insert the bundled app script in the renderer process
-        const port = process.env.PORT || 6129;
-        scripts.push(
-          (process.env.HOT)
-            ? 'http://localhost:' + port + '/dist/renderer.dev.js'
-            : './dist/renderer.prod.js'
-        );
+  // Dynamically insert the bundled app script in the renderer process
+  const port = process.env.PORT || 6129
+  scripts.push(
+    process.env.HOT
+      ? 'http://localhost:' + port + '/dist/renderer.dev.js'
+      : './dist/renderer.prod.js'
+  )
 
-        document.write(
-          scripts
-            .map(script => '<script defer src="' + script + '"><\/script>')
-            .join('')
-        );
-      }
-    </script>
+  document.write(
+    scripts
+      .map((script) => '<script defer src="' + script + '"><\/script>')
+      .join('')
+  )
+}
+</script>
   </body>
 </html>

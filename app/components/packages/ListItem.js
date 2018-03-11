@@ -51,9 +51,10 @@ class PackageListItem extends React.Component {
 
     let pkgOptions = []
     if (mode === APP_MODES.LOCAL) {
-      groups.forEach((group, idx) => {
-        while (packageJSON[group] && packageJSON[group][name]) {
+      groups.some((group, idx) => {
+        if (packageJSON[group] && packageJSON[group][name]) {
           pkgOptions.push(PACKAGE_GROUPS[group])
+          return true
         }
       })
     }
@@ -95,22 +96,21 @@ class PackageListItem extends React.Component {
   secondaryText() {
     const { name, mode, version, latest, packageJSON } = this.props
     const groups = ['dependencies', 'devDependencies', 'optionalDependencies']
-
     let _group = ''
+
     if (mode === APP_MODES.LOCAL) {
-      groups.forEach((group) => {
-        const inGroup = packageJSON[group] && packageJSON[group][name]
-        if (inGroup) {
+      const r = groups.some((group) => {
+        if (packageJSON[group] && packageJSON[group][name]) {
           _group = group
+          return true
         }
       })
     }
 
-    return (
-      <span>
-        {latest ? `\nlatest ${latest} - ${_group}` : `${version} - ${_group}`}
-      </span>
-    )
+    let textg = latest ? `\nlatest: ${latest}` : null
+    let textl = latest ? `\nlatest: ${latest} \n${_group}` : _group
+
+    return <span>{mode === APP_MODES.LOCAL ? textl : textg}</span>
   }
   render() {
     const { name, version, latest, selected } = this.props
