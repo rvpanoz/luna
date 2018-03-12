@@ -57,7 +57,7 @@ const CardContent = (props) => {
       <h3 className={classes.heading}>Details and Dependencies</h3>
       <Divider />
       <Typography component="div">
-        <CardInfo active={active} classes={classes} />
+        <CardInfo active={active} />
       </Typography>
     </MuiCardContent>
   )

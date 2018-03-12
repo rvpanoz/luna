@@ -8,7 +8,6 @@ const accent = purple['A200'] // #E040FB
 
 const themeA = {
   palette: {
-    type: 'dark',
     primary: {
       light: purple[100],
       main: purple[400],

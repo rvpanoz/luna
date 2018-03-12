@@ -46,6 +46,7 @@ class PackagesContainer extends React.Component {
     } = this.props
 
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
+      console.log(packages)
       if (!packages) {
         return
       }
@@ -110,11 +111,10 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('ipcEvent-error', (event, error) => {
-      console.error(error)
+      // console.error(error)
     })
 
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
-      console.log('ipcRenderer[analyze-json-close] callback')
       toggleLoader(true)
       setMode(APP_MODES.LOCAL, directory)
       setActive(null)

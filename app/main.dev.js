@@ -11,7 +11,6 @@ import fs from 'fs'
 import electron from 'electron'
 import MenuBuilder from './menu'
 import fixPath from 'fix-path'
-
 const path = require('path')
 const config = require('./config')
 
