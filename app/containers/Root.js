@@ -7,11 +7,8 @@ import { Provider } from 'react-redux'
 import { themeA } from '../themes'
 import React from 'react'
 import Reboot from 'material-ui/Reboot'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import createMuiTheme from 'material-ui/styles/createMuiTheme'
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
 import Layout from './Layout'
-
-const AppTheme = themeA()
 
 const App = (props) => {
   const { store } = props

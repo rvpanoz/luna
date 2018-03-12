@@ -94,18 +94,18 @@ export function packagesListStyles(theme) {
       justifyContent: 'flex-start'
     },
     heading: {
-      margin: '1em 0 1.0em',
+      margin: '0.5em 0 1.0em',
       fontSize: '1.5rem',
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
       lineHeight: '1.35417em'
     },
     avatar: {
-      margin: 20
+      margin: '0.5em'
     },
     iconbutton: {
       position: 'relative',
-      top: '15px',
+      top: '7px',
       marginLeft: 'auto'
     },
     textField: {

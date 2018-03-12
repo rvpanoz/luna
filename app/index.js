@@ -1,17 +1,17 @@
-import React from 'react';
+import { configureStore, history } from './store';
 import { render } from 'react-dom';
+import React from 'react';
 import { AppContainer } from 'react-hot-loader';
 import Root from './containers/Root';
-import { configureStore, history } from './store';
-import './fonts/index.global.css';
+import './index.global.css';
 
 const store = configureStore();
+const rootEl = document.getElementById('root');
 
 render(
   <AppContainer>
     <Root store={store} history={history} />
-  </AppContainer>,
-  document.getElementById('root')
+  </AppContainer>, rootEl
 );
 
 if (module.hot) {
@@ -19,9 +19,8 @@ if (module.hot) {
     const NextRoot = require('./containers/Root');
     render(
       <AppContainer>
-        <NextRoot store={store} history={history} />
-      </AppContainer>,
-      document.getElementById('root')
+          <NextRoot store={store} history={history} />
+      </AppContainer>, rootEl
     );
   });
 }

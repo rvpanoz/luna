@@ -9,25 +9,25 @@ body:before {
   left: 0;
   width: 100%;
   height: 100%;
-  }
-  ::-webkit-scrollbar {
-     width: 12.5px;
-   }
-   ::-webkit-scrollbar-thumb {
-      border-radius: 1px;
-       background: #ff4081;
-     }
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('Roboto-Regular.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+}
+::-webkit-scrollbar {
+  width: 12.5px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 7.5px;
+  background: #ff4081;
 }
 
 @font-face {
   font-family: 'Roboto';
-  src: url('Roboto-Light.ttf') format('truetype');
+  src: url('./fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Light.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -36,35 +36,38 @@ body:before {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: normal;
-  src: local(‘Material Icons’), local(‘MaterialIcons’), url('MaterialIcon.woff2') format('woff2');
+  src: local(‘Material Icons’), local(‘MaterialIcons’),
+    url('./fonts/MaterialIcon.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: normal;
-  src: url('MaterialIcons-Regular.svg') format('svg');
+  src: url('./fonts/MaterialIcons-Regular.svg') format('svg');
 }
 
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: normal;
-  src: local(‘Material Icons’), local(‘MaterialIcons-Regular’), url('MaterialIcons-Regular.woff2') format('woff2');
+  src: local(‘Material Icons’), local(‘MaterialIcons-Regular’),
+    url('./fonts/MaterialIcons-Regular.woff2') format('woff2');
 }
 
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: normal;
-  src: local(‘Material Icons’), local(‘MaterialIcons-Regular’), url('MaterialIcons-Regular.woff') format('woff');
+  src: local(‘Material Icons’), local(‘MaterialIcons-Regular’),
+    url('./fonts/MaterialIcons-Regular.woff') format('woff');
 }
 
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: normal;
-  src: url('MaterialIcons-Regular.ttf') format('truetype');
+  src: url('./fonts/MaterialIcons-Regular.ttf') format('truetype');
 }
 
 .material-icons {

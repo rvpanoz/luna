@@ -27,6 +27,7 @@ class ListHeader extends React.Component {
       [
         '_reload',
         '_setGlobalMode',
+        'onUninstallSelected',
         'onUpdateSelected',
         'handleClick',
         'handleClose',
@@ -46,6 +47,7 @@ class ListHeader extends React.Component {
     reload()
     this.handleClose()
   }
+  onUninstallSelected(e) {}
   onUpdateSelected(e) {
     const { mode, directory, toggleLoader, selected } = this.props
 
@@ -89,14 +91,10 @@ class ListHeader extends React.Component {
           <Avatar className={classes.avatar} color="accent">
             {total || 0}
           </Avatar>
-          <IconButton
-            className={classes.iconbutton}
-            aria-label="Show globals"
-            aria-title="Show globals"
-          >
+          <IconButton className={classes.iconbutton} aria-label="show globals">
             <ListIcon onClick={this._setGlobalMode} />
           </IconButton>
-          <IconButton className={classes.iconbutton}>
+          <IconButton className={classes.iconbutton} aria-label="reload">
             <RefreshIcon onClick={this._reload} />
           </IconButton>
           <div style={{ marginLeft: 'auto' }}>
@@ -121,7 +119,7 @@ class ListHeader extends React.Component {
                 }
               }}
             >
-              <MenuItem dense key="sort-name" onClick={this.handleSortByName}>
+              <MenuItem key="sort-name" onClick={this.handleSortByName}>
                 <Icon color="accent">sort</Icon>
                 <span style={{ paddingLeft: '10px' }}>Sort by name</span>
               </MenuItem>
@@ -130,28 +128,24 @@ class ListHeader extends React.Component {
                 <span style={{ paddingLeft: '10px' }}>Sort by outdated</span>
               </MenuItem>
               <Divider />
-              <MenuItem key="updateAll" onClick={this.onUpdateSelected}>
+              <MenuItem key="update-all" onClick={this.onUpdateSelected}>
                 <Icon color="accent">update</Icon>
-                <span style={{ paddingLeft: '10px' }}>Update selected</span>
+                <span style={{ paddingLeft: '10px' }}>Update</span>
               </MenuItem>
-              <Divider />
-              <MenuItem key="reload" onClick={this._reload}>
-                <Icon color="accent">refresh</Icon>
-                <span style={{ paddingLeft: '10px' }}>Reload</span>
-              </MenuItem>
-              <MenuItem key="global" onClick={this._setGlobalMode}>
-                <Icon color="accent">list</Icon>
-                <span style={{ paddingLeft: '10px' }}>Show globals</span>
+              <MenuItem key="uninstall-all" onClick={this.onUninstallSelected}>
+                <Icon color="accent">uninstall</Icon>
+                <span style={{ paddingLeft: '10px' }}>Uninstall1</span>
               </MenuItem>
             </Menu>
           </div>
-          <Divider />
         </div>
-        <div className={classes.flexRow}>
-          <Typography align="left" paragraph className={classes.directory}>
-            {directory}
-          </Typography>
-        </div>
+        {directory ? (
+          <div className={classes.flexRow}>
+            <Typography align="left" paragraph className={classes.directory}>
+              {directory}
+            </Typography>
+          </div>
+        ) : null}
         <Divider />
       </section>
     )
