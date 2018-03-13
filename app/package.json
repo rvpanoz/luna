@@ -1,18 +1,17 @@
 {
-	"name": "luna",
-	"productName": "luna",
-	"version": "1.2.0",
-	"description": "Manage your NPM packages.",
-	"main": "./main.prod.js",
-	"author": {
-		"name": "rvpanoz",
-		"email": "rvpanoz@gmail.com",
-		"url": "https://github.com/rvpanoz"
-	},
-	"scripts": {
-		"electron-rebuild": "node -r babel-register ../internals/scripts/ElectronRebuild.js",
-		"postinstall": "npm run electron-rebuild"
-	},
-	"license": "GPL-3.0",
-	"dependencies": {}
+  "name": "luna",
+  "productName": "luna",
+  "version": "1.2.0",
+  "description": "Manage your NPM packages.",
+  "main": "./main.prod.js",
+  "author": {
+    "name": "rvpanoz",
+    "email": "rvpanoz@gmail.com",
+    "url": "https://github.com/rvpanoz"
+  },
+  "scripts": {
+    "electron-rebuild": "node -r babel-register ../internals/scripts/ElectronRebuild.js",
+    "postinstall": "npm run electron-rebuild"
+  },
+  "license": "GPL-3.0"
 }

@@ -2,33 +2,33 @@
  * Package container
  * */
 
-import { connect } from 'react-redux'
-import { compose } from 'redux'
-import { packageCardStyles } from 'styles/components'
-import { withStyles } from 'material-ui/styles'
-import * as globalActions from 'actions/globalActions'
-import * as packagesActions from 'actions/packagesActions'
-import { showMessageBox, triggerEvent, autoBind } from 'utils'
-import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
-import Collapse from 'material-ui/transitions/Collapse'
-import Card from 'material-ui/Card'
-import Chip from 'material-ui/Chip'
-import classnames from 'classnames'
-import InfoIcon from 'material-ui-icons/Info'
-import LinkIcon from 'material-ui-icons/Link'
-import CardHeader from 'components/package/CardHeader'
-import CardContent from 'components/package/CardContent'
-import CardActions from 'components/package/CardActions'
-import CardDetails from 'components/package/CardDetails'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Divider from 'material-ui/Divider'
-import Grid from 'material-ui/Grid'
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { cardStyles } from "./styles";
+import { withStyles } from "material-ui/styles";
+import * as globalActions from "actions/globalActions";
+import * as packagesActions from "actions/packagesActions";
+import { showMessageBox, triggerEvent, autoBind } from "utils";
+import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from "constants/AppConstants";
+import Collapse from "material-ui/transitions/Collapse";
+import Card from "material-ui/Card";
+import Chip from "material-ui/Chip";
+import classnames from "classnames";
+import InfoIcon from "material-ui-icons/Info";
+import LinkIcon from "material-ui-icons/Link";
+import CardHeader from "components/package/CardHeader";
+import CardContent from "components/package/CardContent";
+import CardActions from "components/package/CardActions";
+import CardDetails from "components/package/CardDetails";
+import PropTypes from "prop-types";
+import React from "react";
+import Divider from "material-ui/Divider";
+import Grid from "material-ui/Grid";
 
 class PackageContainer extends React.Component {
   constructor(props) {
-    super(props)
-    autoBind(['onChangeVersion', 'onExpandClick'], this)
+    super(props);
+    autoBind(["onChangeVersion", "onExpandClick"], this);
   }
   componentDidMount() {
     const {
@@ -40,48 +40,45 @@ class PackageContainer extends React.Component {
       addCommandOption,
       clearCommandOptions,
       toggleExpanded
-    } = this.props
+    } = this.props;
 
-    clearCommandOptions()
+    clearCommandOptions();
 
     if (mode === APP_MODES.LOCAL && active) {
-      let found = false
+      let found = false;
 
       Object.keys(PACKAGE_GROUPS).some((groupName, idx) => {
-        found =
-          packageJSON[groupName] && packageJSON[groupName][active.name]
-            ? groupName
-            : false
+        found = packageJSON[groupName] && packageJSON[groupName][active.name] ? groupName : false;
         if (found) {
-          setPackageGroup(groupName)
-          return found
+          setPackageGroup(groupName);
+          return found;
         }
-      })
+      });
     }
   }
   componentWillUnmount() {
-    const { expanded, toggleExpanded } = this.props
+    const { expanded, toggleExpanded } = this.props;
 
     if (expanded) {
-      toggleExpanded()
+      toggleExpanded();
     }
   }
   onChangeVersion(e, value) {
-    const { active, mode, directory, toggleMainLoader, setVersion } = this.props
-    const version = e.target && e.target.value
+    const { active, mode, directory, toggleMainLoader, setVersion } = this.props;
+    const version = e.target && e.target.value;
 
-    if (version && version !== 'false') {
-      toggleMainLoader(true)
-      setVersion(version)
-      triggerEvent('view-package', {
+    if (version && version !== "false") {
+      toggleMainLoader(true);
+      setVersion(version);
+      triggerEvent("view-package", {
         mode,
         directory,
-        cmd: ['view'],
+        cmd: ["view"],
         pkgName: active.name,
         pkgVersion: version
-      })
+      });
     }
-    return false
+    return false;
   }
   render() {
     const {
@@ -104,10 +101,10 @@ class PackageContainer extends React.Component {
       toggleSnackbar,
       toggleExpanded,
       ...rest
-    } = this.props
+    } = this.props;
 
     if (!active) {
-      return null
+      return null;
     }
 
     return (
@@ -116,12 +113,7 @@ class PackageContainer extends React.Component {
           <Grid item xs={10}>
             <section className={classes.root}>
               <Card className={classes.card}>
-                <CardHeader
-                  classes={classes}
-                  mode={mode}
-                  active={active}
-                  group={group}
-                />
+                <CardHeader classes={classes} mode={mode} active={active} group={group} />
                 <CardContent
                   version={version}
                   classes={classes}
@@ -155,11 +147,7 @@ class PackageContainer extends React.Component {
                   unmountOnExit
                   className={classes.collapseContent}
                 >
-                  <CardDetails
-                    keywords={active.keywords}
-                    time={active.time}
-                    classes={classes}
-                  />
+                  <CardDetails keywords={active.keywords} time={active.time} classes={classes} />
                 </Collapse>
               </Card>
             </section>
@@ -167,7 +155,7 @@ class PackageContainer extends React.Component {
           <Grid item xs={2} />
         </Grid>
       </section>
-    )
+    );
   }
 }
 
@@ -188,37 +176,29 @@ function mapStateToProps(state) {
     defaultActions: state.packages.defaultActions,
     active: state.packages.active,
     isLoading: state.packages.isLoading
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    setupSnackbar: (snackbarOptions) =>
-      dispatch(globalActions.setupSnackbar(snackbarOptions)),
+    setupSnackbar: (snackbarOptions) => dispatch(globalActions.setupSnackbar(snackbarOptions)),
     toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
-    addCommandOption: (option) =>
-      dispatch(globalActions.addCommandOption(option)),
-    setActiveTab: (tabIndex) =>
-      dispatch(packagesActions.setActiveTab(tabIndex)),
+    addCommandOption: (option) => dispatch(globalActions.addCommandOption(option)),
+    setActiveTab: (tabIndex) => dispatch(packagesActions.setActiveTab(tabIndex)),
     toggleExpanded: (value) => dispatch(packagesActions.toggleExpanded(value)),
-    setPackageGroup: (group) =>
-      dispatch(packagesActions.setPackageGroup(group)),
-    addCommandOption: (option) =>
-      dispatch(packagesActions.addCommandOption(option)),
-    removeCommandOption: (option) =>
-      dispatch(packagesActions.removeCommandOption(option)),
+    setPackageGroup: (group) => dispatch(packagesActions.setPackageGroup(group)),
+    addCommandOption: (option) => dispatch(packagesActions.addCommandOption(option)),
+    removeCommandOption: (option) => dispatch(packagesActions.removeCommandOption(option)),
     clearCommandOptions: () => dispatch(packagesActions.clearCommandOptions()),
-    toggleMainLoader: (bool) =>
-      dispatch(packagesActions.toggleMainLoader(bool)),
+    toggleMainLoader: (bool) => dispatch(packagesActions.toggleMainLoader(bool)),
     toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
     setActive: (pkg) => dispatch(packagesActions.setActive(pkg)),
     setVersion: (version) => dispatch(packagesActions.setVersion(version)),
-    toggleModal: (bool, npmCmd) =>
-      dispatch(globalActions.toggleModal(bool, npmCmd))
-  }
+    toggleModal: (bool, npmCmd) => dispatch(globalActions.toggleModal(bool, npmCmd))
+  };
 }
 
 export default compose(
-  withStyles(packageCardStyles, { withTheme: true }),
+  withStyles(cardStyles, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
-)(PackageContainer)
+)(PackageContainer);
