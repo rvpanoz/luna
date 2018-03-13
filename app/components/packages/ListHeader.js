@@ -88,7 +88,7 @@ class ListHeader extends React.Component {
       <section className={classes.flexColumn}>
         <div className={classes.flexRow}>
           <h3 className={classes.heading}>{title}</h3>
-          <Avatar className={classes.avatar} color="accent">
+          <Avatar className={classes.avatar} color="secondary">
             {total || 0}
           </Avatar>
           <IconButton className={classes.iconbutton} aria-label="show globals">

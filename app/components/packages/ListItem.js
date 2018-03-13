@@ -3,120 +3,116 @@
  *
  */
 
-import { APP_MODES, PACKAGE_GROUPS } from 'constants/AppConstants'
-import { autoBind, triggerEvent, showMessageBox } from 'utils'
-import React from 'react'
-import {
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText
-} from 'material-ui/List'
-import Checkbox from 'material-ui/Checkbox'
-import PropTypes from 'prop-types'
-import IconButton from 'material-ui/IconButton'
-import Avatar from 'material-ui/Avatar'
-import Typography from 'material-ui/Typography'
-import Icon from 'material-ui/Icon'
-import Chip from 'material-ui/Chip'
+import { APP_MODES, PACKAGE_GROUPS } from "constants/AppConstants";
+import { autoBind, triggerEvent, showMessageBox } from "utils";
+import React from "react";
+import { ListItem, ListItemSecondaryAction, ListItemText } from "material-ui/List";
+import Checkbox from "material-ui/Checkbox";
+import PropTypes from "prop-types";
+import IconButton from "material-ui/IconButton";
+import Avatar from "material-ui/Avatar";
+import Typography from "material-ui/Typography";
+import Icon from "material-ui/Icon";
+import Chip from "material-ui/Chip";
 
 class PackageListItem extends React.Component {
   constructor() {
-    super()
+    super();
     autoBind(
       [
-        'onItemCheck',
-        'onItemClick',
-        'updatePackage',
-        'viewPackage',
-        'primatyText',
-        'secondaryText'
+        "onItemCheck",
+        "onItemClick",
+        "updatePackage",
+        "viewPackage",
+        "primatyText",
+        "secondaryText"
       ],
       this
-    )
+    );
   }
   viewPackage() {
-    const { name, version, mode, directory } = this.props
-    triggerEvent('view-package', {
-      cmd: ['view'],
+    const { name, version, mode, directory } = this.props;
+    triggerEvent("view-package", {
+      cmd: ["view"],
       pkgName: name,
       pkgVersion: version,
       mode,
       directory
-    })
+    });
   }
   updatePackage(e) {
-    e.preventDefault()
-    const { name, mode, directory, toggleMainLoader, packageJSON } = this.props
-    const groups = ['dependencies', 'devDependencies', 'optionalDependencies']
+    e.preventDefault();
+    const { name, mode, directory, toggleMainLoader, packageJSON } = this.props;
+    const groups = ["dependencies", "devDependencies", "optionalDependencies"];
 
-    let pkgOptions = []
+    let pkgOptions = [];
     if (mode === APP_MODES.LOCAL) {
       groups.some((group, idx) => {
         if (packageJSON[group] && packageJSON[group][name]) {
-          pkgOptions.push(PACKAGE_GROUPS[group])
-          return true
+          pkgOptions.push(PACKAGE_GROUPS[group]);
+          return true;
         }
-      })
+      });
     }
 
     showMessageBox(
       {
-        action: 'update',
+        action: "update",
         name
       },
       () => {
-        toggleMainLoader(true)
-        triggerEvent('update-package', {
-          cmd: ['install'],
+        toggleMainLoader(true);
+        triggerEvent("update-package", {
+          cmd: ["install"],
           pkgName: name,
-          pkgVersion: 'latest',
+          pkgVersion: "latest",
           pkgOptions,
           mode,
           directory
-        })
+        });
       }
-    )
+    );
   }
   onItemCheck(e) {
-    const { name, setSelectedPackage } = this.props
-    e.stopPropagation()
-    setSelectedPackage(name)
+    const { name, setSelectedPackage } = this.props;
+    e.stopPropagation();
+    setSelectedPackage(name);
   }
   onItemClick(e) {
-    const { toggleMainLoader } = this.props
-    e.preventDefault()
-    toggleMainLoader(true)
-    this.viewPackage()
-    return false
+    const { toggleMainLoader } = this.props;
+    e.preventDefault();
+    toggleMainLoader(true);
+    this.viewPackage();
+    return false;
   }
   primaryText() {
-    const { name, version, latest } = this.props
-    return <span>{`${name} - ${version}`}</span>
+    const { name, version, latest } = this.props;
+    return <span>{`${name} - ${version}`}</span>;
   }
   secondaryText() {
-    const { name, mode, version, latest, packageJSON } = this.props
-    const groups = ['dependencies', 'devDependencies', 'optionalDependencies']
-    let _group = ''
+    const { name, mode, version, latest, packageJSON } = this.props;
+    const groups = ["dependencies", "devDependencies", "optionalDependencies"];
+    let _group = "";
 
     if (mode === APP_MODES.LOCAL) {
       const r = groups.some((group) => {
         if (packageJSON[group] && packageJSON[group][name]) {
-          _group = group
-          return true
+          _group = group;
+          return true;
         }
-      })
+      });
     }
 
-    let textg = latest ? `\nlatest: ${latest}` : null
-    let textl = latest ? `\nlatest: ${latest} \n${_group}` : _group
+    let textg = latest ? `\nlatest: ${latest}` : null;
+    let textl = latest ? `\nlatest: ${latest} \n${_group}` : _group;
 
-    return <span>{mode === APP_MODES.LOCAL ? textl : textg}</span>
+    return <span>{mode === APP_MODES.LOCAL ? textl : textg}</span>;
   }
   render() {
-    const { name, version, latest, selected } = this.props
+    const { name, version, latest, selected } = this.props;
 
     if (!name) {
-      return null
+      return null;
     }
 
     return (
@@ -127,32 +123,25 @@ class PackageListItem extends React.Component {
           disableRipple
           onClick={this.onItemCheck}
         />
-        <ListItemText
-          primary={this.primaryText()}
-          secondary={this.secondaryText()}
-        />
+        <ListItemText primary={this.primaryText()} secondary={this.secondaryText()} />
         <ListItemSecondaryAction>
           {latest ? (
-            <IconButton
-              color="accent"
-              onClick={this.updatePackage}
-              aria-label="Update"
-            >
+            <IconButton color="secondary" onClick={this.updatePackage} aria-label="Update">
               <Icon>alarm</Icon>
             </IconButton>
           ) : null}
         </ListItemSecondaryAction>
       </ListItem>
-    )
+    );
   }
 }
 
-const { string } = PropTypes
+const { string } = PropTypes;
 
 PackageListItem.propTypes = {
   name: string.isRequired,
   version: string.isRequired,
   latest: string
-}
+};
 
-export default PackageListItem
+export default PackageListItem;

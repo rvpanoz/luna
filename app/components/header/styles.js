@@ -3,7 +3,7 @@ import deepPurple from "material-ui/colors/deepPurple";
 import pink from "material-ui/colors/pink";
 import red from "material-ui/colors/red";
 
-export function appHeaderStyles(theme) {
+export function headerStyles(theme) {
   const drawerWidth = 240;
   return {
     appBar: {
@@ -67,66 +67,11 @@ export function appHeaderStyles(theme) {
       fontWeight: "bold",
       textAlign: "center",
       marginTop: theme.spacing.unit + 15
-    }
-  };
-}
-
-export function appHeaderContentStyles() {
-  return {
+    },
     iconHover: {
       "&:hover": {
         fill: "rgb(225, 0, 80)"
       }
-    }
-  };
-}
-
-export function packagesListStyles(theme) {
-  return {
-    flexRow: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "flex-start"
-    },
-    flexColumn: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "flex-start"
-    },
-    heading: {
-      margin: "0.5em 0 1.0em",
-      fontSize: "1.5rem",
-      fontWeight: 400,
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-      lineHeight: "1.35417em"
-    },
-    avatar: {
-      margin: "0.5em"
-    },
-    iconbutton: {
-      position: "relative",
-      top: "7px",
-      marginLeft: "auto"
-    },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-      width: 200
-    },
-    lcontainer: {
-      overflowY: "auto"
-    },
-    list: {
-      visibility: "visible",
-      overflowX: "hidden",
-      overflowY: "auto",
-      clear: "both",
-      maxHeight: "750px"
-    },
-    directory: {
-      fontSize: "0.9em",
-      overflowWrap: "break-word",
-      overflow: "hidden"
     }
   };
 }
