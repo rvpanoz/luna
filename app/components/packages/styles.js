@@ -2,6 +2,7 @@ import deepOrange from "material-ui/colors/deepOrange";
 import deepPurple from "material-ui/colors/deepPurple";
 import pink from "material-ui/colors/pink";
 import red from "material-ui/colors/red";
+import { lighten } from "material-ui/styles/colorManipulator";
 
 export function listStyles(theme) {
   return {
@@ -52,6 +53,48 @@ export function listStyles(theme) {
       fontSize: "0.9em",
       overflowWrap: "break-word",
       overflow: "hidden"
+    }
+  };
+}
+
+export function tableListStyles(theme) {
+  return {
+    root: {
+      width: "100%",
+      marginTop: theme.spacing.unit * 3
+    },
+    table: {
+      minWidth: 800
+    },
+    tableWrapper: {
+      overflowX: "auto"
+    }
+  };
+}
+
+export function toolbarStyles(theme) {
+  return {
+    root: {
+      paddingRight: theme.spacing.unit
+    },
+    highlight:
+      theme.palette.type === "light"
+        ? {
+            color: theme.palette.secondary.main,
+            backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+          }
+        : {
+            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.secondary.dark
+          },
+    spacer: {
+      flex: "1 1 100%"
+    },
+    actions: {
+      color: theme.palette.text.secondary
+    },
+    title: {
+      flex: "0 0 auto"
     }
   };
 }

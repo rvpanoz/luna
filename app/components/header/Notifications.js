@@ -61,7 +61,7 @@ class Notifications extends React.Component {
     return (
       <div className={classes.root}>
         <IconButton onClick={this.onClick}>
-          <Badge badgeContent={notifications.length} color="primary`">
+          <Badge badgeContent={notifications.length} color="primary">
             <NotificationsIcon />
           </Badge>
         </IconButton>

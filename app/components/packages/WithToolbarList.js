@@ -8,9 +8,10 @@ import { autoBind, triggerEvent } from "utils";
 import * as R from "ramda";
 import React from "react";
 import PropTypes from "prop-types";
-import TableListHeader from "./TableListHeader";
+import Paper from "material-ui/Paper";
+import TableListToolbar from "./TableListToolbar";
 
-function withHeaderList(List, options = {}) {
+function withToolbarTableList(List, options = {}) {
   return class WithHeaderList extends React.Component {
     constructor(props) {
       super(props);
@@ -26,25 +27,15 @@ function withHeaderList(List, options = {}) {
         directory
       });
     }
-    sortBy(prop, dir) {
-      const { packages, setPackages } = this.props;
-
-      const comparator = R.comparator((a, b) =>
-        R.gt(R.propOr(R.F, prop, b), R.propOr(R.F, prop, a))
-      );
-
-      const sortedByLatest = R.sort(comparator, packages);
-      setPackages(sortedByLatest);
-    }
     render() {
-      const { ...rest } = this.props;
+      const { selected, ...rest } = this.props;
       const { title } = options;
 
       return (
-        <section>
-          <Header title={title} sortBy={this.sortBy} {...rest} />
+        <Paper>
+          <TableListToolbar numSelected={selected.length} />
           <List {...rest} />
-        </section>
+        </Paper>
       );
     }
   };
@@ -52,7 +43,7 @@ function withHeaderList(List, options = {}) {
 
 const { bool, string, func, array, object, number } = PropTypes;
 
-withHeaderList.propTypes = {
+withToolbarTableList.propTypes = {
   loading: string,
   toggleLoader: func.isRequired,
   toggleMainLoader: func.isRequired,
@@ -66,4 +57,4 @@ withHeaderList.propTypes = {
   reload: func.isRequired
 };
 
-export default withHeaderList;
+export default withToolbarTableList;
