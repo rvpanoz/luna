@@ -1,42 +1,42 @@
-import { withStyles } from "material-ui/styles";
-import { toolbarStyles } from "./styles";
-import React from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import Toolbar from "material-ui/Toolbar";
-import Typography from "material-ui/Typography";
-import Paper from "material-ui/Paper";
-import Checkbox from "material-ui/Checkbox";
-import IconButton from "material-ui/IconButton";
-import Tooltip from "material-ui/Tooltip";
-import DeleteIcon from "material-ui-icons/Delete";
-import FilterListIcon from "material-ui-icons/FilterList";
+import { withStyles } from 'material-ui/styles'
+import { toolbarStyles } from './styles'
+import React from 'react'
+import classNames from 'classnames'
+import PropTypes from 'prop-types'
+import Toolbar from 'material-ui/Toolbar'
+import Typography from 'material-ui/Typography'
+import Paper from 'material-ui/Paper'
+import Checkbox from 'material-ui/Checkbox'
+import IconButton from 'material-ui/IconButton'
+import Tooltip from 'material-ui/Tooltip'
+import DeleteIcon from 'material-ui-icons/Delete'
+import FilterListIcon from 'material-ui-icons/FilterList'
 
 class TableListToolbar extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
   render() {
-    const { classes, numSelected = 0 } = this.props;
+    const { classes, selected, title } = this.props
 
     return (
       <Toolbar
         className={classNames(classes.root, {
-          [classes.highlight]: numSelected > 0
+          [classes.highlight]: selected.length > 0
         })}
       >
         <div className={classes.title}>
-          {numSelected > 0 ? (
+          {selected.length > 0 ? (
             <Typography color="inherit" variant="subheading">
-              {numSelected} selected
+              {selected.length} selected
             </Typography>
           ) : (
-            <Typography variant="title">Packages</Typography>
+            <Typography variant="title">{title}</Typography>
           )}
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
-          {numSelected > 0 ? (
+          {selected > 0 ? (
             <Tooltip title="Delete">
               <IconButton aria-label="Delete">
                 <DeleteIcon />
@@ -51,13 +51,13 @@ class TableListToolbar extends React.Component {
           )}
         </div>
       </Toolbar>
-    );
+    )
   }
 }
 
 TableListToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired
-};
+  selected: PropTypes.array.isRequired
+}
 
-export default withStyles(toolbarStyles)(TableListToolbar);
+export default withStyles(toolbarStyles)(TableListToolbar)

@@ -16,15 +16,19 @@ export default {
   messages: [],
   packages: {
     isLoading: false,
+    expanded: false,
+    tabIndex: 0,
     total: 0,
     active: null,
+    group: null,
     packages: [],
     selected: [],
     cmdOptions: [],
-    group: null,
-    expanded: false,
     version: '',
-    tabIndex: 0,
+    order: 'asc',
+    orderBy: 'name',
+    page: 0,
+    rowsPerPage: 10,
     defaultActions: [
       {
         text: 'update',
