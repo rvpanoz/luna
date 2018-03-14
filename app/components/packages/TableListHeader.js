@@ -9,14 +9,15 @@ import {
   TableRow,
   TableSortLabel
 } from 'material-ui/Table'
+import Tooltip from 'material-ui/Tooltip'
 import Checkbox from 'material-ui/Checkbox'
 
 const columnData = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-  { id: 'version', numeric: true, disablePadding: false, label: 'Version' },
-  { id: 'latest', numeric: true, disablePadding: false, label: 'Latest' },
-  { id: 'updated', numeric: false, disablePadding: false, label: 'Updated' },
-  { id: 'action', numeric: false, disablePadding: false, label: 'Action' }
+  { id: 1, numeric: false, disablePadding: true, label: 'Name' },
+  { id: 2, numeric: false, disablePadding: true, label: 'Version' },
+  { id: 3, numeric: false, disablePadding: true, label: 'Latest' },
+  { id: 4, numeric: false, disablePadding: true, label: 'Updated' },
+  { id: 5, numeric: false, disablePadding: true, label: 'Action' }
 ]
 
 class TableListHeader extends React.Component {
@@ -43,7 +44,30 @@ class TableListHeader extends React.Component {
               onChange={onSelectAllClick}
             />
           </TableCell>
-          <TableCell key="key-1" numeric={false} />
+          {columnData.map((column) => {
+            return (
+              <TableCell
+                key={column.id}
+                numeric={column.numeric}
+                padding={column.disablePadding ? 'none' : 'default'}
+                sortDirection={orderBy === column.id ? order : false}
+              >
+                <Tooltip
+                  title="Sort"
+                  placement={column.numeric ? 'bottom-end' : 'bottom-start'}
+                  enterDelay={300}
+                >
+                  <TableSortLabel
+                    active={orderBy === column.id}
+                    direction={order}
+                    onClick={this.createSortHandler(column.id)}
+                  >
+                    {column.label}
+                  </TableSortLabel>
+                </Tooltip>
+              </TableCell>
+            )
+          }, this)}
         </TableRow>
       </TableHead>
     )

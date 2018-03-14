@@ -15,6 +15,7 @@ import Table, {
 } from 'material-ui/Table'
 import Checkbox from 'material-ui/Checkbox'
 import TableListHeader from './TableListHeader'
+import moment from 'moment'
 
 class TableList extends React.Component {
   constructor(props) {
@@ -63,12 +64,20 @@ class TableList extends React.Component {
           {packages
             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             .map((pkg, idx) => {
-              if (!pkg) return
+              if (!pkg) {
+                return
+              }
+              const { hasPeerMissing, latest, version } = pkg
+              if (hasPeerMissing) {
+                return
+              }
+              const name = pkg.from ? pkg.from.split('@')[0] : pkg.name
               const alreadySelected = isSelected(pkg.from)
+
               return (
                 <TableRow
                   hover
-                  onClick={(e) => handleClick(e, pkg.from)}
+                  onClick={(e) => handleClick(e, name)}
                   role="checkbox"
                   aria-checked={isSelected}
                   tabIndex={-1}
@@ -78,8 +87,12 @@ class TableList extends React.Component {
                   <TableCell padding="checkbox">
                     <Checkbox checked={alreadySelected} />
                   </TableCell>
-                  <TableCell padding="none">{pkg.from}</TableCell>
-                  <TableCell numeric>{pkg.version}</TableCell>
+                  <TableCell padding="none">{name}</TableCell>
+                  <TableCell padding="none">{version}</TableCell>
+                  <TableCell padding="none">{latest || version}</TableCell>
+                  <TableCell padding="none">
+                    {moment(pkg.time.modified).format('DD/MM/YYYY')}
+                  </TableCell>
                 </TableRow>
               )
             })}

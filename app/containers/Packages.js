@@ -54,6 +54,7 @@ class PackagesContainer extends React.Component {
     } = this.props
 
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
+      console.log(packages)
       if (!packages) {
         return
       }
@@ -198,7 +199,9 @@ class PackagesContainer extends React.Component {
       clearMessages
     } = this.props
 
+    /** WIP parsing **/
     const packagesData = parse(packages, 'dependencies')
+
     const data = R.map((pkg) => {
       if (!pkg.from) return
       const pkgName = R.split('@')(pkg.from)[0]

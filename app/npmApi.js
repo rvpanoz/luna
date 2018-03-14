@@ -51,7 +51,7 @@ function runCommand(command, directory, callback) {
 exports.list = function(opts, callback) {
   const command = ['list']
   const { mode, directory, options } = opts
-  const defaults = ['--depth=0', '--json']
+  const defaults = ['--depth=0', '--long=1', '--json']
 
   if (!command || !Array.isArray(command)) {
     return Q.reject(
@@ -60,7 +60,7 @@ exports.list = function(opts, callback) {
   }
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  const run = [].concat(command).concat(commandArgs)
+  const run = [].concat(command).concat(commandArgs.reverse())
   return runCommand(run, directory, callback)
 }
 
