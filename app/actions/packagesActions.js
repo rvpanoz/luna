@@ -4,10 +4,17 @@
 
 import * as types from 'constants/ActionTypes'
 
-export function setSelectedPackage(packageName) {
+export function setSelectedPackage(packageName, force) {
   return {
     type: types.SET_SELECTED_PACKAGE,
-    packageName
+    packageName,
+    force
+  }
+}
+
+export function clearSelected() {
+  return {
+    type: types.CLEAR_SELECTED
   }
 }
 
@@ -79,10 +86,12 @@ export function setPackageActions(actions) {
   }
 }
 
-export function setPackages(packages) {
+export function setPackages(packages, order, orderBy) {
   return {
     type: types.SET_PACKAGES,
-    packages
+    packages,
+    order,
+    orderBy
   }
 }
 

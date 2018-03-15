@@ -16,13 +16,12 @@ const columnData = [
   { id: 1, numeric: false, disablePadding: true, label: 'Name' },
   { id: 2, numeric: false, disablePadding: true, label: 'Version' },
   { id: 3, numeric: false, disablePadding: true, label: 'Latest' },
-  { id: 4, numeric: false, disablePadding: true, label: 'Updated' },
-  { id: 5, numeric: false, disablePadding: true, label: 'Action' }
+  { id: 4, numeric: false, disablePadding: true, label: 'License' }
 ]
 
 class TableListHeader extends React.Component {
-  createSortHandler = (property) => (event) => {
-    this.props.onRequestSort(event, property)
+  createSortHandler = (property) => (e) => {
+    this.props.onRequestSort(e, property)
   }
 
   render() {
@@ -40,7 +39,7 @@ class TableListHeader extends React.Component {
           <TableCell padding="checkbox">
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected === rowCount}
+              checked={numSelected > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
             />
           </TableCell>

@@ -5,6 +5,7 @@
 
 import { ipcRenderer } from 'electron'
 import { autoBind, triggerEvent } from 'utils'
+import Loader from 'common/Loader'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
@@ -14,10 +15,16 @@ function withToolbarTableList(List, options = {}) {
   return class WithToolbarList extends React.Component {
     constructor(props) {
       super(props)
-      this.handleSort = this.handleSort.bind(this)
-      this.handleSelectAllClick = this.handleSelectAllClick.bind(this)
-      this.handleClick = this.handleClick.bind(this)
-      this.isSelected = this.isSelected.bind(this)
+      autoBind(
+        [
+          'handleSort',
+          'handleChangePage',
+          'handleSelectAllClick',
+          'isSelected',
+          'handleClick'
+        ],
+        this
+      )
     }
     componentDidMount() {
       const { mode, directory, toggleLoader } = this.props
@@ -29,13 +36,12 @@ function withToolbarTableList(List, options = {}) {
       })
     }
     handleSelectAllClick(e, checked) {
+      const { packages, setSelectedPackage, clearSelected } = this.props
       if (checked) {
-        // this.setState({
-        //   selected: this.state.data.map(n => n.id)
-        // });
-        // return;
+        packages.forEach((pkg) => setSelectedPackage(pkg.name, true))
+      } else {
+        clearSelected()
       }
-      // this.setState({ selected: [] });
     }
     handleSort(e, property) {
       const _orderBy = property
@@ -55,38 +61,33 @@ function withToolbarTableList(List, options = {}) {
     }
     handleClick(e, name) {
       const { selected, setSelectedPackage } = this.props
-      const selectedIndex = selected.indexOf(name)
-
-      if (selectedIndex === -1) {
-        setSelectedPackage(name)
-      }
+      setSelectedPackage(name)
     }
     handleChangePage(e, page) {
-      this.setState({ page })
-    }
-    handleChangeRowsPerPage(e) {
-      this.setState({ rowsPerPage: event.target.value })
+      const { setPage } = this.props
+      setPage(page)
     }
     isSelected(name) {
       const { selected } = this.props
-
       return selected.indexOf(name) !== -1
     }
     render() {
-      const { selected, ...rest } = this.props
+      const { selected, loading, ...rest } = this.props
       const { title } = options
 
       return (
         <Paper style={{ width: '100%' }}>
-          <TableListToolbar title={title} selected={selected} />
-          <List
-            handleSort={this.handleSort}
-            handleClick={this.handleClick}
-            handleSelectAllClick={this.handleSelectAllClick}
-            isSelected={this.isSelected}
-            selected={selected}
-            {...rest}
-          />
+          <Loader loading={loading}>
+            <TableListToolbar title={title} selected={selected} />
+            <List
+              handleSort={this.handleSort}
+              handleClick={this.handleClick}
+              handleSelectAllClick={this.handleSelectAllClick}
+              isSelected={this.isSelected}
+              selected={selected}
+              {...rest}
+            />
+          </Loader>
         </Paper>
       )
     }
@@ -106,6 +107,8 @@ withToolbarTableList.propTypes = {
   setPackages: func.isRequired,
   setPackageActions: func.isRequired,
   setGlobalMode: func.isRequired,
+  setSelectedPackage: func.isRequired,
+  clearSelected: func.isRequired,
   reload: func.isRequired,
   order: number,
   orderBy: string,

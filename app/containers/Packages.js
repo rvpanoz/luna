@@ -54,7 +54,6 @@ class PackagesContainer extends React.Component {
     } = this.props
 
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
-      console.log(packages)
       if (!packages) {
         return
       }
@@ -199,36 +198,37 @@ class PackagesContainer extends React.Component {
       clearMessages
     } = this.props
 
-    /** WIP parsing **/
-    const packagesData = parse(packages, 'dependencies')
+    try {
+      const packagesData = parse(packages, 'dependencies')
+      const data = R.filter((pkg) => {
+        return !pkg.required
+      }, packagesData).map((pkg) => {
+        const { name, version } = pkg
+        const outdatedPackage = R.prop(name, packagesOutdated)
 
-    const data = R.map((pkg) => {
-      if (!pkg.from) return
-      const pkgName = R.split('@')(pkg.from)[0]
-      const outdatedPackage = R.prop(pkgName, packagesOutdated)
+        if (
+          outdatedPackage &&
+          typeof outdatedPackage === 'object' &&
+          version !== outdatedPackage.latest
+        ) {
+          return R.merge(pkg, {
+            latest: outdatedPackage.latest
+          })
+        }
+        return pkg
+      }, packagesData)
 
-      if (
-        outdatedPackage &&
-        typeof outdatedPackage === 'object' &&
-        pkg.version !== outdatedPackage.latest
-      ) {
-        const _pkg = R.merge(pkg, {
-          latest: outdatedPackage.latest
-        })
-        return _pkg
-      }
+      setPackages(data, 'asc', 'name')
+      setTotal(data.length)
+      clearMessages()
 
-      return pkg
-    }, packagesData)
-
-    setPackages(data)
-    setTotal(data.length)
-    clearMessages()
-
-    const notifications = parse(packages, 'problems')
-    notifications.forEach((notification, idx) => {
-      addMessage('error', notification)
-    })
+      const notifications = parse(packages, 'problems')
+      notifications.forEach((notification, idx) => {
+        addMessage('error', notification)
+      })
+    } catch (e) {
+      throw new Error(e)
+    }
   }
   setupOutdated(packages) {
     const { setPackagesOutdated } = this.props
@@ -291,12 +291,14 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setSelectedPackage: (pkgName) =>
-      dispatch(packagesActions.setSelectedPackage(pkgName)),
+    setSelectedPackage: (pkgName, force) =>
+      dispatch(packagesActions.setSelectedPackage(pkgName, force)),
+    clearSelected: () => dispatch(packagesActions.clearSelected()),
     setupSnackbar: (snackbarOptions) =>
       dispatch(globalActions.setupSnackbar(snackbarOptions)),
     toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
-    setPackages: (packages) => dispatch(packagesActions.setPackages(packages)),
+    setPackages: (packages, order, orderBy) =>
+      dispatch(packagesActions.setPackages(packages, order, orderBy)),
     setPackageActions: (actions) =>
       dispatch(packagesActions.setPackageActions(actions)),
     setPackageJSON: (content) =>

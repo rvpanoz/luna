@@ -20,6 +20,7 @@ import {
   SET_SELECTED_PACKAGE,
   ADD_COMMAND_OPTION,
   CLEAR_COMMAND_OPTIONS,
+  CLEAR_SELECTED,
   REMOVE_COMMAND_OPTION
 } from 'constants/ActionTypes'
 
@@ -45,6 +46,7 @@ const handlers = {
       cmdOptions: R.prepend(PACKAGE_GROUPS[action.group], state.cmdOptions)
     }),
   [CLEAR_COMMAND_OPTIONS]: (state, action) => R.assoc('cmdOptions', [], state),
+  [CLEAR_SELECTED]: (state, action) => R.assoc('selected', [], state),
   [REMOVE_COMMAND_OPTION]: (state, action) => {
     const idx = state.cmdOptions.indexOf(action.option)
     return R.merge(state, {
@@ -63,6 +65,8 @@ const handlers = {
   [SET_PACKAGES]: (state, action) =>
     R.merge(state, {
       packages: action.packages,
+      order: action.order || 'asc',
+      orderBy: action.orderBy || 'name',
       group: null,
       cmdOptions: [],
       selected: [],
@@ -79,7 +83,9 @@ const handlers = {
     return R.merge(state, {
       selected:
         idx !== -1
-          ? R.remove(idx, 1, state.selected)
+          ? action.force && action.force === true
+            ? state.selected
+            : R.remove(idx, 1, state.selected)
           : R.prepend(action.packageName, state.selected)
     })
   }

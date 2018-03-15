@@ -51,7 +51,7 @@ function runCommand(command, directory, callback) {
 exports.list = function(opts, callback) {
   const command = ['list']
   const { mode, directory, options } = opts
-  const defaults = ['--depth=0', '--long=1', '--json']
+  const defaults = ['--depth=0', '--long', '--json']
 
   if (!command || !Array.isArray(command)) {
     return Q.reject(
