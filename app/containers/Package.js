@@ -24,6 +24,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import Divider from "material-ui/Divider";
 import Grid from "material-ui/Grid";
+import Slide from "material-ui/transitions/Slide";
 
 class PackageContainer extends React.Component {
   constructor(props) {
@@ -100,6 +101,7 @@ class PackageContainer extends React.Component {
       setupSnackbar,
       toggleSnackbar,
       toggleExpanded,
+      slideIn,
       ...rest
     } = this.props;
 
@@ -107,52 +109,58 @@ class PackageContainer extends React.Component {
       return null;
     }
 
+    const hasError = active.error;
+    if (hasError) {
+      return "WIP package";
+    }
+
     return (
       <section className={classes.root}>
         <Grid container direction="row" justify="flex-start">
-          <Grid item xs={10}>
+          <Grid item xs={12}>
             <section className={classes.root}>
-              <Card className={classes.card}>
-                <CardHeader classes={classes} mode={mode} active={active} group={group} />
-                <CardContent
-                  version={version}
-                  classes={classes}
-                  active={active}
-                  cmdOptions={cmdOptions}
-                  onChangeVersion={this.onChangeVersion}
-                  addCommandOption={addCommandOption}
-                  removeCommandOption={removeCommandOption}
-                  clearCommandOptions={clearCommandOptions}
-                  mode={mode}
-                />
-                <CardActions
-                  active={active}
-                  handleExpandClick={toggleExpanded}
-                  expanded={expanded}
-                  setActive={setActive}
-                  toggleLoader={toggleLoader}
-                  classes={classes}
-                  actions={actions}
-                  defaultActions={defaultActions}
-                  setupSnackbar={setupSnackbar}
-                  toggleSnackbar={toggleSnackbar}
-                  mode={mode}
-                  version={version}
-                  directory={directory}
-                  cmdOptions={cmdOptions}
-                />
-                <Collapse
-                  in={expanded}
-                  timeout="auto"
-                  unmountOnExit
-                  className={classes.collapseContent}
-                >
-                  <CardDetails keywords={active.keywords} time={active.time} classes={classes} />
-                </Collapse>
-              </Card>
+              <Slide direction="left" in={!slideIn} mountOnEnter unmountOnExit>
+                <Card className={classes.card}>
+                  <CardHeader classes={classes} mode={mode} active={active} group={group} />
+                  <CardContent
+                    version={version}
+                    classes={classes}
+                    active={active}
+                    cmdOptions={cmdOptions}
+                    onChangeVersion={this.onChangeVersion}
+                    addCommandOption={addCommandOption}
+                    removeCommandOption={removeCommandOption}
+                    clearCommandOptions={clearCommandOptions}
+                    mode={mode}
+                  />
+                  <CardActions
+                    active={active}
+                    handleExpandClick={toggleExpanded}
+                    expanded={expanded}
+                    setActive={setActive}
+                    toggleLoader={toggleLoader}
+                    classes={classes}
+                    actions={actions}
+                    defaultActions={defaultActions}
+                    setupSnackbar={setupSnackbar}
+                    toggleSnackbar={toggleSnackbar}
+                    mode={mode}
+                    version={version}
+                    directory={directory}
+                    cmdOptions={cmdOptions}
+                  />
+                  <Collapse
+                    in={expanded}
+                    timeout="auto"
+                    unmountOnExit
+                    className={classes.collapseContent}
+                  >
+                    <CardDetails keywords={active.keywords} time={active.time} classes={classes} />
+                  </Collapse>
+                </Card>
+              </Slide>
             </section>
           </Grid>
-          <Grid item xs={2} />
         </Grid>
       </section>
     );

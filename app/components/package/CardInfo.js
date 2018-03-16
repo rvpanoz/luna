@@ -37,6 +37,13 @@ const styles = (theme) => ({
     "&:hover": {
       textDecoration: "underline"
     }
+  },
+  innerList: {
+    visibility: "visible",
+    overflowX: "hidden",
+    overflowY: "auto",
+    clear: "both",
+    maxHeight: "750px"
   }
 });
 
@@ -48,12 +55,37 @@ const CardInfo = (props) => {
   return (
     <section className={classes.root}>
       <div className={classes.inner}>
-        <Typography className={classes.rawItem} variant="caption">
-          {active.author}
-        </Typography>
-        <Avatar>
-          <PermIdentity />
-        </Avatar>
+        <List dense={true} className={classnames(classes.innerList, classes.innerListLong)}>
+          <ListItem>
+            <Avatar>
+              <HomeIcon />
+            </Avatar>
+            <ListItemText
+              primary={active.homepage || APP_INFO.NOT_AVAILABLE}
+              secondary="homepage"
+            />
+          </ListItem>
+          <ListItem>
+            <Avatar>
+              <BugReport />
+            </Avatar>
+            <ListItemText
+              primary={(active.bugs && active.bugs.url) || APP_INFO.NOT_AVAILABLE}
+              secondary="issues"
+            />
+          </ListItem>
+        </List>
+        <List className={classnames(classes.innerList, classes.innerListLong)} dense={true}>
+          {dependencies &&
+            dependencies.map((dependency, idx) => {
+              const version = active && active.dependencies[dependency];
+              return (
+                <ListItem key={idx} className={classes.listItem}>
+                  <ListItemText inset primary={dependency} secondary={version || null} />
+                </ListItem>
+              );
+            })}
+        </List>
       </div>
     </section>
   );
