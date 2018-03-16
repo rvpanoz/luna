@@ -18,6 +18,8 @@ import {
   SET_TAB_INDEX,
   SET_VERSION,
   SET_SELECTED_PACKAGE,
+  SET_ROWS_PER_PAGE,
+  SET_PAGE,
   ADD_COMMAND_OPTION,
   CLEAR_COMMAND_OPTIONS,
   CLEAR_SELECTED,
@@ -37,6 +39,9 @@ const handlers = {
     R.assoc('isLoading', action.isLoading, state),
   [TOGGLE_EXPANDED]: (state, action) =>
     R.assoc('expanded', !state.expanded, state),
+  [SET_PAGE]: (state, action) => R.assoc('page', action.pageNo, state),
+  [SET_ROWS_PER_PAGE]: (state, action) =>
+    R.assoc('rowsPerPage', action.rows, state),
   [SET_VERSION]: (state, action) => R.assoc('version', action.version, state),
   [SET_TAB_INDEX]: (state, action) =>
     R.assoc('tabIndex', action.tabIndex, state),

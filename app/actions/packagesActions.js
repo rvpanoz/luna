@@ -12,6 +12,20 @@ export function setSelectedPackage(packageName, force) {
   }
 }
 
+export function setRowsPerPage(rows) {
+  return {
+    type: types.SET_ROWS_PER_PAGE,
+    rows
+  }
+}
+
+export function setPage(pageNo) {
+  return {
+    type: types.SET_PAGE,
+    pageNo
+  }
+}
+
 export function clearSelected() {
   return {
     type: types.CLEAR_SELECTED

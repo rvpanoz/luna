@@ -3,17 +3,17 @@
  *
  */
 
-import { CardContent as MuiCardContent } from "material-ui/Card";
-import Typography from "material-ui/Typography";
-import { APP_INFO, APP_MODES } from "constants/AppConstants";
-import React from "react";
-import PropTypes from "prop-types";
-import Divider from "material-ui/Divider";
-import CardOptions from "./CardOptions";
-import CardVersions from "./CardVersions";
-import CardInfo from "./CardInfo";
+import { CardContent as MuiCardContent } from 'material-ui/Card'
+import Typography from 'material-ui/Typography'
+import { APP_INFO, APP_MODES } from 'constants/AppConstants'
+import React from 'react'
+import PropTypes from 'prop-types'
+import Divider from 'material-ui/Divider'
+import CardOptions from './CardOptions'
+import CardVersions from './CardVersions'
+import CardInfo from './CardInfo'
 
-const { object, array, func, string } = PropTypes;
+const { object, array, func, string } = PropTypes
 
 const CardContent = (props) => {
   const {
@@ -25,10 +25,10 @@ const CardContent = (props) => {
     onChangeVersion,
     addCommandOption,
     removeCommandOption
-  } = props;
+  } = props
 
   if (!active) {
-    return null;
+    return null
   }
 
   return (
@@ -41,7 +41,11 @@ const CardContent = (props) => {
       <h3 className={classes.heading}>Versions and options</h3>
       <Divider />
       <section className={classes.controls}>
-        <CardVersions classes={classes} active={active} onChangeVersion={onChangeVersion} />
+        <CardVersions
+          classes={classes}
+          active={active}
+          onChangeVersion={onChangeVersion}
+        />
         {mode && mode === APP_MODES.LOCAL ? (
           <CardOptions
             cmdOptions={cmdOptions}
@@ -50,9 +54,14 @@ const CardContent = (props) => {
           />
         ) : null}
       </section>
+      <h3 className={classes.heading}>Details and dependencies</h3>
+      <Divider />
+      <section className={classes.controls}>
+        <CardInfo active={active} classes={classes} />
+      </section>
     </MuiCardContent>
-  );
-};
+  )
+}
 
 CardContent.propTypes = {
   version: string,
@@ -61,6 +70,6 @@ CardContent.propTypes = {
   active: object.isRequired,
   onChangeVersion: func.isRequired,
   clearCommandOptions: func.isRequired
-};
+}
 
-export default CardContent;
+export default CardContent

@@ -106,14 +106,12 @@ export function cardStyles(theme) {
     },
     heading: {
       color: 'rgba(0, 0, 0, 0.54)',
-      margin: '1em 0 0.7em',
       fontSize: '1.1rem',
       fontWeight: 400,
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-      lineHeight: '1.35417em'
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
     },
     headingTail: {
-      marginTop: 15
+      margin: '0.9em 0 2em'
     },
     helper: {
       borderLeft: `2px solid ${theme.palette.divider}`,

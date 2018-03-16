@@ -9,6 +9,8 @@ export const MENU_OPEN = 'MENU_OPEN'
 
 // setters
 export const SET_SELECTED_PACKAGE = 'SET_SELECTED_PACKAGE'
+export const SET_PAGE = 'SET_PAGE'
+export const SET_ROWS_PER_PAGE = 'SET_ROWS_PER_PAGE'
 export const SET_VERSION = 'SET_VERSION'
 export const SET_TAB_INDEX = 'SET_TAB_INDEX'
 export const SET_SETTINGS = 'SET_SETTINGS'
