@@ -1,6 +1,5 @@
 /**
- * Packages Container Component - handles state.packages slice
- * pass state as props to children
+ * Packages Container Component
  * */
 
 import { remote, ipcRenderer } from 'electron'
