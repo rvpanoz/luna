@@ -24,7 +24,8 @@ function withToolbarTableList(List, options = {}) {
           'viewPackage',
           'isSelected',
           'showDetails',
-          'handleClick'
+          'handleClick',
+          'doAction'
         ],
         this
       )
@@ -80,10 +81,6 @@ function withToolbarTableList(List, options = {}) {
       const { selected } = this.props
       return selected.indexOf(name) !== -1
     }
-    showDetails(e, name, version) {
-      e.preventDefault()
-      console.log(arguments)
-    }
     viewPackage(e, name, version, mode, directory) {
       if (e) {
         e.preventDefault()
@@ -95,6 +92,53 @@ function withToolbarTableList(List, options = {}) {
         mode,
         directory
       })
+    }
+    doAction(e, action) {
+      e.preventDefault()
+      console.log(e)
+      return false
+
+      const {
+        actions,
+        mode,
+        directory,
+        version,
+        active,
+        toggleLoader,
+        cmdOptions,
+        setActive,
+        setupSnackbar,
+        toggleSnackbar
+      } = this.props
+
+      if (
+        !action ||
+        ['install', 'uninstall', 'update'].indexOf(action) === -1
+      ) {
+        throw new Error(`doAction: action ${action} is invalid`)
+      }
+
+      showMessageBox(
+        {
+          action: action,
+          name: active.name,
+          version: action === 'uninstall' ? null : version
+        },
+        () => {
+          setActive(null)
+          toggleLoader(true)
+          triggerEvent(action, {
+            mode,
+            directory,
+            cmd: [action === 'update' ? 'install' : action],
+            pkgName: active.name,
+            pkgVersion: action === 'uninstall' ? null : version,
+            pkgOptions: cmdOptions
+          })
+        }
+      )
+
+      return false
     }
     render() {
       const {
@@ -108,7 +152,12 @@ function withToolbarTableList(List, options = {}) {
 
       return (
         <Paper style={{ width: '100%' }}>
-          <TableListToolbar title={title} selected={selected} />
+          <TableListToolbar
+            title={title}
+            selected={selected}
+            doAction={this.doAction}
+            loading={loading}
+          />
           <List
             handleSort={this.handleSort}
             handleClick={this.handleClick}

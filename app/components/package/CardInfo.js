@@ -62,12 +62,6 @@ const CardInfo = (props) => {
           >
             <ListItem>
               <Avatar>
-                <RefreshIcon />
-              </Avatar>
-              <ListItemText primary={latest} secondary="latest" />
-            </ListItem>
-            <ListItem>
-              <Avatar>
                 <PermIdentity />
               </Avatar>
               <ListItemText
@@ -77,20 +71,11 @@ const CardInfo = (props) => {
             </ListItem>
             <ListItem>
               <Avatar>
-                <VerifiedUserIcon />
-              </Avatar>
-              <ListItemText
-                primary="Licence"
-                secondary={active.license || APP_INFO.NOT_AVAILABLE}
-              />
-            </ListItem>
-            <ListItem>
-              <Avatar>
                 <HomeIcon />
               </Avatar>
               <ListItemText
-                primary={active.homepage || APP_INFO.NOT_AVAILABLE}
-                secondary="homepage"
+                primary="Homepage"
+                secondary={<a href="{active.homepage}">Learn more</a>}
               />
             </ListItem>
             <ListItem>
@@ -98,10 +83,10 @@ const CardInfo = (props) => {
                 <BugReport />
               </Avatar>
               <ListItemText
-                primary={
-                  (active.bugs && active.bugs.url) || APP_INFO.NOT_AVAILABLE
+                primary="Issues"
+                secondary={
+                  <a href="{active.bugs && active.bug.url}">Learn more</a>
                 }
-                secondary="issues"
               />
             </ListItem>
           </List>

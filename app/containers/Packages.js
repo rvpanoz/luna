@@ -13,8 +13,6 @@ import React from 'react'
 import Grid from 'material-ui/Grid'
 import TableList from 'components/packages/TableList'
 import Loader from 'common/Loader'
-import List from 'components/packages/List'
-import withHeaderList from 'components/packages/WithHeaderList'
 import withToolbarList from 'components/packages/WithToolbarList'
 import PackageContainer from './Package'
 
@@ -82,7 +80,6 @@ class PackagesContainer extends React.Component {
       }
     })
     ipcRenderer.on('update-package-close', (event, pkg) => {
-      console.log('ipcRenderer[update-package-close] callback')
       const { mode, directory } = this.props
 
       triggerEvent('get-packages', {

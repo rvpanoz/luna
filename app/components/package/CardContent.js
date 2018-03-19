@@ -11,7 +11,6 @@ import PropTypes from 'prop-types'
 import Divider from 'material-ui/Divider'
 import CardOptions from './CardOptions'
 import CardVersions from './CardVersions'
-import CardInfo from './CardInfo'
 
 const { object, array, func, string } = PropTypes
 
@@ -33,12 +32,16 @@ const CardContent = (props) => {
 
   return (
     <MuiCardContent className={classes.cardContent}>
-      <h3 className={classes.heading}>Description</h3>
+      <Typography component="h3" className={classes.heading}>
+        Description
+      </Typography>
       <Divider />
       <Typography component="div" className={classes.headingTail}>
         {active && active.description}
       </Typography>
-      <h3 className={classes.heading}>Versions and options</h3>
+      <Typography component="h3" className={classes.heading}>
+        Version and options
+      </Typography>
       <Divider />
       <section className={classes.controls}>
         <CardVersions
@@ -53,11 +56,6 @@ const CardContent = (props) => {
             removeCommandOption={removeCommandOption}
           />
         ) : null}
-      </section>
-      <h3 className={classes.heading}>Details and dependencies</h3>
-      <Divider />
-      <section className={classes.controls}>
-        <CardInfo active={active} classes={classes} />
       </section>
     </MuiCardContent>
   )

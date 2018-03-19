@@ -18,6 +18,7 @@ import IconButton from 'material-ui/IconButton'
 import Checkbox from 'material-ui/Checkbox'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import InfoButton from 'material-ui-icons/Info'
+import RefreshIcon from 'material-ui-icons/Refresh'
 import TableListHeader from './TableListHeader'
 import Chip from 'material-ui/Chip'
 
@@ -86,7 +87,8 @@ const TableList = (props) => {
                   role="checkbox"
                   onClick={(e) => {
                     toggleMainLoader(true)
-                    viewPackage(e, name, version, mode, directory)
+                    const _version = version.replace(/\^/g, '')
+                    viewPackage(e, name, _version, mode, directory)
                   }}
                   aria-checked={isSelected}
                   tabIndex={-1}
@@ -103,6 +105,15 @@ const TableList = (props) => {
                   <TableCell padding="none">{version}</TableCell>
                   <TableCell padding="none">{latest || version}</TableCell>
                   <TableCell padding="none">{license}</TableCell>
+                  {latest ? (
+                    <TableCell padding="none">
+                      <IconButton>
+                        <RefreshIcon />
+                      </IconButton>
+                    </TableCell>
+                  ) : (
+                    <TableCell padding="none" />
+                  )}
                 </TableRow>
               )
             })}

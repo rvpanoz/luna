@@ -10,6 +10,7 @@ import Checkbox from 'material-ui/Checkbox'
 import IconButton from 'material-ui/IconButton'
 import Tooltip from 'material-ui/Tooltip'
 import DeleteIcon from 'material-ui-icons/Delete'
+import RefreshIcon from 'material-ui-icons/Refresh'
 import FilterListIcon from 'material-ui-icons/FilterList'
 
 class TableListToolbar extends React.Component {
@@ -17,7 +18,7 @@ class TableListToolbar extends React.Component {
     super(props)
   }
   render() {
-    const { classes, selected, title } = this.props
+    const { classes, selected, title, loading } = this.props
 
     return (
       <Toolbar
@@ -26,7 +27,9 @@ class TableListToolbar extends React.Component {
         })}
       >
         <div className={classes.title}>
-          {selected.length > 0 ? (
+          {loading ? (
+            'loading packages..'
+          ) : selected.length > 0 ? (
             <Typography color="inherit" variant="subheading">
               {selected.length} selected
             </Typography>
@@ -35,21 +38,30 @@ class TableListToolbar extends React.Component {
           )}
         </div>
         <div className={classes.spacer} />
-        <div className={classes.actions}>
-          {selected > 0 ? (
-            <Tooltip title="Delete">
-              <IconButton aria-label="Delete">
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          ) : (
-            <Tooltip title="Filter list">
-              <IconButton aria-label="Filter list">
-                <FilterListIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-        </div>
+        {loading ? null : (
+          <div className={classes.actions}>
+            {selected.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <Tooltip title="Delete">
+                  <IconButton aria-label="Delete">
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Update">
+                  <IconButton aria-label="Update">
+                    <RefreshIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+            ) : (
+              <Tooltip title="Filter list">
+                <IconButton aria-label="Filter list">
+                  <FilterListIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+        )}
       </Toolbar>
     )
   }

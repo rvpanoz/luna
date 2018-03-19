@@ -3,20 +3,20 @@
  *
  */
 
-import { CardHeader as MuiCardHeader } from "material-ui/Card";
-import { APP_MODES } from "constants/AppConstants";
-import Menu, { MenuItem } from "material-ui/Menu";
-import { ListItemText } from "material-ui/List";
-import React from "react";
-import PropTypes from "prop-types";
-import MoreVertIcon from "material-ui-icons/MoreVert";
-import IconButton from "material-ui/IconButton";
-import Avatar from "material-ui/Avatar";
-import Select from "material-ui/Select";
-import Checkbox from "material-ui/Checkbox";
-import moment from "moment";
+import { CardHeader as MuiCardHeader } from 'material-ui/Card'
+import { APP_MODES } from 'constants/AppConstants'
+import Menu, { MenuItem } from 'material-ui/Menu'
+import { ListItemText } from 'material-ui/List'
+import React from 'react'
+import PropTypes from 'prop-types'
+import MoreVertIcon from 'material-ui-icons/MoreVert'
+import IconButton from 'material-ui/IconButton'
+import Avatar from 'material-ui/Avatar'
+import Select from 'material-ui/Select'
+import Checkbox from 'material-ui/Checkbox'
+import moment from 'moment'
 
-const { array, object, string, func } = PropTypes;
+const { array, object, string, func } = PropTypes
 const ITEM_HEIGHT = 55,
   ITEM_PADDING_TOP = 8,
   MenuProps = {
@@ -26,57 +26,57 @@ const ITEM_HEIGHT = 55,
         width: 150
       }
     }
-  };
+  }
 
 class CardHeader extends React.Component {
   constructor(props) {
-    super(props);
-    this._anchorEl = null;
+    super(props)
+    this._anchorEl = null
 
     this.state = {
       options: []
-    };
+    }
 
-    this.buildTitle = this.buildTitle.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    this.buildTitle = this.buildTitle.bind(this)
+    this.handleClick = this.handleClick.bind(this)
+    this.handleClose = this.handleClose.bind(this)
   }
   onNavigate(e) {
-    e.preventDefault();
-    const url = e.currentTarget.dataset.url;
+    e.preventDefault()
+    const url = e.currentTarget.dataset.url
     if (isUrl(url)) {
-      shell.openExternal(url);
+      shell.openExternal(url)
     }
-    return false;
+    return false
   }
   buildTitle() {
-    const { active, group, actions } = this.props;
-    const { name, author, version } = active;
-    return group ? `${name} - ${group}` : name;
+    const { active, group, actions } = this.props
+    const { name, author, version } = active
+    return group ? `${name} - ${group}` : name
   }
   buildOptions() {
-    const { mode, cmdOptions } = this.props;
+    const { mode, cmdOptions } = this.props
 
     return cmdOptions.map((opt) => (
       <MenuItem key={opt} value={opt}>
         <Checkbox checked={this.state.options.indexOf(name) > -1} />
         <ListItemText primary={opt} />
       </MenuItem>
-    ));
+    ))
   }
   handleClick(e) {
-    this._anchorEl = e.currentTarget;
-    this.forceUpdate();
+    this._anchorEl = e.currentTarget
+    this.forceUpdate()
   }
   handleClose() {
-    this._anchorEl = null;
-    this.forceUpdate();
+    this._anchorEl = null
+    this.forceUpdate()
   }
   render() {
-    const { classes, active, mode, error } = this.props;
+    const { classes, active, mode, error } = this.props
 
     if (!active) {
-      return null;
+      return null
     }
 
     return (
@@ -84,14 +84,14 @@ class CardHeader extends React.Component {
         <MuiCardHeader
           avatar={
             <Avatar aria-label={active.name} className={classes.avatar}>
-              {active.name[0].toUpperCase()}
+              {active.name && active.name[0].toUpperCase()}
             </Avatar>
           }
           action={
-            <div style={{ marginLeft: "auto" }}>
+            <div style={{ marginLeft: 'auto' }}>
               <IconButton
                 aria-label="More"
-                aria-owns={this._anchorEl ? "long-menu" : null}
+                aria-owns={this._anchorEl ? 'long-menu' : null}
                 aria-haspopup="true"
                 onClick={this.handleClick}
                 className={classes.iconbutton}
@@ -116,10 +116,14 @@ class CardHeader extends React.Component {
             </div>
           }
           title={`${this.buildTitle()} - ${active.version}`}
-          subheader={`Updated: ${moment(active.time.modified).format("DD/MM/YYYY")}`}
+          subheader={`Updated: ${
+            active.time && active.time.modified
+              ? moment(active.time.modified).format('DD/MM/YYYY')
+              : null
+          }`}
         />
       </section>
-    );
+    )
   }
 }
 
@@ -127,6 +131,6 @@ CardHeader.propTypes = {
   classes: object.isRequired,
   mode: string.isRequired,
   active: object.isRequired
-};
+}
 
-export default CardHeader;
+export default CardHeader

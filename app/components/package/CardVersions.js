@@ -26,6 +26,7 @@ const CardVersions = (props) => {
       margin="normal"
     >
       {active &&
+        active.versions &&
         active.versions.map((version, key) => (
           <MenuItem key={key} value={version}>
             {version}

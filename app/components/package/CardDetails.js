@@ -7,17 +7,28 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Chip from 'material-ui/Chip'
 import Divider from 'material-ui/Divider'
+import Typography from 'material-ui/Typography'
+import CardInfo from './CardInfo'
 
 const CardDetails = (props) => {
-  const { classes, keywords } = props
+  const { classes, active } = props
 
   return (
     <section className={classes.details}>
-      <h3 className={classes.heading}>Keywords</h3>
+      <Typography component="h3" className={classes.heading}>
+        Details and dependencies
+      </Typography>
+      <Divider />
+      <div className={classes.info}>
+        <CardInfo active={active} classes={classes} />
+      </div>
+      <Typography component="h3" className={classes.heading}>
+        Keywords
+      </Typography>
       <Divider />
       <div className={classes.keywords}>
-        {keywords
-          ? keywords.map((keyword, idx) => {
+        {active && active.keywords
+          ? active.keywords.map((keyword, idx) => {
               return <Chip key={idx} label={keyword} className={classes.chip} />
             })
           : APP_INFO.NOT_AVAILABLE}

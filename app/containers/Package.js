@@ -162,11 +162,7 @@ class PackageContainer extends React.Component {
                     unmountOnExit
                     className={classes.collapseContent}
                   >
-                    <CardDetails
-                      keywords={active.keywords}
-                      time={active.time}
-                      classes={classes}
-                    />
+                    <CardDetails active={active} classes={classes} />
                   </Collapse>
                 </Card>
               </Slide>
