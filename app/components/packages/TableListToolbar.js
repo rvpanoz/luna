@@ -1,77 +1,93 @@
 /** Toolbar List component **/
 
-import { withStyles } from "material-ui/styles";
-import { toolbarStyles } from "./styles";
-import React from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import Toolbar from "material-ui/Toolbar";
-import Typography from "material-ui/Typography";
-import Paper from "material-ui/Paper";
-import Checkbox from "material-ui/Checkbox";
-import IconButton from "material-ui/IconButton";
-import Tooltip from "material-ui/Tooltip";
-import DeleteIcon from "material-ui-icons/Delete";
-import RefreshIcon from "material-ui-icons/Refresh";
-import FilterListIcon from "material-ui-icons/FilterList";
+import { withStyles } from 'material-ui/styles'
+import { toolbarStyles } from './styles'
+import React from 'react'
+import classNames from 'classnames'
+import PropTypes from 'prop-types'
+import Toolbar from 'material-ui/Toolbar'
+import Typography from 'material-ui/Typography'
+import Paper from 'material-ui/Paper'
+import Checkbox from 'material-ui/Checkbox'
+import IconButton from 'material-ui/IconButton'
+import Tooltip from 'material-ui/Tooltip'
+import DeleteIcon from 'material-ui-icons/Delete'
+import RefreshIcon from 'material-ui-icons/Refresh'
+import ListIcon from 'material-ui-icons/List'
+import FilterListIcon from 'material-ui-icons/FilterList'
+import UpdateIcon from 'material-ui-icons/Update'
 
-class TableListToolbar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    const { classes, selected, title, loading } = this.props;
+const TableListToolbar = (props) => {
+  const {
+    classes,
+    selected,
+    title,
+    loading,
+    handleReload,
+    handleGlobals,
+    handleUninstall,
+    handleUpdate
+  } = props
 
-    return (
-      <Toolbar
-        className={classNames(classes.root, {
-          [classes.highlight]: selected.length > 0
-        })}
-      >
-        <div className={classes.title}>
-          {loading ? (
-            "loading packages.."
-          ) : selected.length > 0 ? (
-            <Typography color="inherit" variant="subheading">
-              {selected.length} selected
-            </Typography>
-          ) : (
-            <Typography variant="title">{title}</Typography>
-          )}
-        </div>
-        <div className={classes.spacer} />
-        {loading ? null : (
-          <div className={classes.actions}>
-            {selected.length > 0 ? (
-              <div style={{ display: "flex", flexDirection: "row" }}>
-                <Tooltip title="Delete">
-                  <IconButton aria-label="Delete">
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Update">
-                  <IconButton aria-label="Update">
-                    <RefreshIcon />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            ) : (
-              <Tooltip title="Filter list">
-                <IconButton aria-label="Filter list">
-                  <FilterListIcon />
+  return (
+    <Toolbar
+      className={classNames(classes.root, {
+        [classes.highlight]: selected.length > 0
+      })}
+    >
+      <div className={classes.title}>
+        {loading ? (
+          'loading packages..'
+        ) : selected.length > 0 ? (
+          <Typography color="inherit" variant="subheading">
+            {selected.length} selected
+          </Typography>
+        ) : (
+          <Typography variant="title">{title}</Typography>
+        )}
+      </div>
+      <div className={classes.spacer} />
+      {loading ? null : (
+        <div className={classes.actions}>
+          {selected.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Tooltip title="Uninstall selected">
+                <IconButton
+                  aria-label="Uninstall-selected"
+                  onClick={handleUninstall}
+                >
+                  <DeleteIcon />
                 </IconButton>
               </Tooltip>
-            )}
-          </div>
-        )}
-      </Toolbar>
-    );
-  }
+              <Tooltip title="Update all">
+                <IconButton aria-label="Update-all" onClick={handleUpdate}>
+                  <UpdateIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Tooltip title="Reload list">
+                <IconButton aria-label="Reload list" onClick={handleReload}>
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Show globals">
+                <IconButton aria-label="Show globals" onClick={handleGlobals}>
+                  <ListIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          )}
+        </div>
+      )}
+    </Toolbar>
+  )
 }
 
 TableListToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   selected: PropTypes.array.isRequired
-};
+}
 
-export default withStyles(toolbarStyles)(TableListToolbar);
+export default withStyles(toolbarStyles)(TableListToolbar)

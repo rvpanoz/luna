@@ -120,7 +120,11 @@ export default merge.smart(baseConfig, {
         use: 'url-loader'
       },
       {
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
+        use: 'url-loader?limit=10000'
+      },
+      {
+        test: /\.((ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9]))|(ttf|eot)$/,
         use: 'file-loader'
       }
     ]

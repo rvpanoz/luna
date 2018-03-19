@@ -2,30 +2,33 @@
  * Packages Container Component
  * */
 
-import { remote, ipcRenderer } from "electron";
-import { autoBind, parse, triggerEvent } from "../utils";
-import { connect } from "react-redux";
-import { APP_MODES } from "constants/AppConstants";
-import * as globalActions from "actions/globalActions";
-import * as packagesActions from "actions/packagesActions";
-import * as R from "ramda";
-import React from "react";
-import Grid from "material-ui/Grid";
-import TableList from "components/packages/TableList";
-import Loader from "common/Loader";
-import withToolbarList from "components/packages/WithToolbarList";
-import PackageContainer from "./Package";
+import { remote, ipcRenderer } from 'electron'
+import { autoBind, parse, triggerEvent } from '../utils'
+import { connect } from 'react-redux'
+import { APP_MODES } from 'constants/AppConstants'
+import * as globalActions from 'actions/globalActions'
+import * as packagesActions from 'actions/packagesActions'
+import * as R from 'ramda'
+import React from 'react'
+import Grid from 'material-ui/Grid'
+import TableList from 'components/packages/TableList'
+import Loader from 'common/Loader'
+import withToolbarList from 'components/packages/WithToolbarList'
+import PackageContainer from './Package'
 
 const WithToolbarList = withToolbarList(TableList, {
-  title: "Packages",
-  dir: "asc",
-  sort: "name"
-});
+  title: 'Packages',
+  dir: 'asc',
+  sort: 'name'
+})
 
 class PackagesContainer extends React.Component {
   constructor() {
-    super();
-    autoBind(["setupPackagesFromResponse", "setupOutdated", "setGlobalMode", "reload"], this);
+    super()
+    autoBind(
+      ['setupPackagesFromResponse', 'setupOutdated', 'setGlobalMode', 'reload'],
+      this
+    )
   }
   componentDidMount() {
     const {
@@ -39,140 +42,137 @@ class PackagesContainer extends React.Component {
       setPackageJSON,
       setupSnackbar,
       toggleSnackbar
-    } = this.props;
+    } = this.props
 
-    ipcRenderer.on("get-packages-close", (event, packages, command) => {
+    ipcRenderer.on('get-packages-close', (event, packages, command) => {
       if (!packages) {
-        return;
+        return
       }
 
-      if (command[0] === "outdated") {
-        this.setupOutdated(packages);
+      if (command[0] === 'outdated') {
+        this.setupOutdated(packages)
       } else {
-        this.setupPackagesFromResponse(packages);
+        this.setupPackagesFromResponse(packages)
       }
 
-      setPackageActions(null);
-      toggleMainLoader(false);
-      toggleLoader(false);
-    });
-    ipcRenderer.on("search-packages-close", (event, packagesStr) => {
+      setPackageActions(null)
+      toggleMainLoader(false)
+      toggleLoader(false)
+    })
+    ipcRenderer.on('search-packages-close', (event, packagesStr) => {
       try {
-        const packages = JSON.parse(packagesStr);
+        const packages = JSON.parse(packagesStr)
 
-        setPackages(packages);
-        setTotal(packages.length);
-        toggleLoader(false);
+        setPackages(packages)
+        setTotal(packages.length)
+        toggleLoader(false)
       } catch (e) {
-        throw new Error(e);
+        throw new Error(e)
       }
-    });
-    ipcRenderer.on("view-package-close", (event, packageStr) => {
+    })
+    ipcRenderer.on('view-package-close', (event, packageStr) => {
       try {
-        const pkg = JSON.parse(packageStr);
-        setActive(pkg);
-        toggleMainLoader(false);
+        const pkg = JSON.parse(packageStr)
+        setActive(pkg)
+        toggleMainLoader(false)
       } catch (e) {
-        throw new Error(e);
+        throw new Error(e)
       }
-    });
-    ipcRenderer.on("update-package-close", (event, pkg) => {
-      const { mode, directory } = this.props;
+    })
+    ipcRenderer.on(
+      ['update-package-close', 'uninstall-packages-close'],
+      (event, pkg) => {
+        const { mode, directory } = this.props
 
-      triggerEvent("get-packages", {
-        cmd: ["outdated", "list"],
-        mode,
-        directory
-      });
-    });
-    ipcRenderer.on("action-close", (event, pkg) => {
-      console.log("ipcRenderer[action-close] callback");
-      const { mode, directory } = this.props;
-
-      if (mode === APP_MODES.LOCAL && directory) {
-        ipcRenderer.send("analyze-json", directory);
-      } else {
-        triggerEvent("get-packages", {
-          cmd: ["outdated", "list"],
+        triggerEvent('get-packages', {
+          cmd: ['outdated', 'list'],
           mode,
           directory
-        });
+        })
       }
-    });
-    ipcRenderer.on("ipcEvent-error", (event, error) => {
+    )
+    ipcRenderer.on('action-close', (event, pkg) => {
+      const { mode, directory } = this.props
+
+      if (mode === APP_MODES.LOCAL && directory) {
+        ipcRenderer.send('analyze-json', directory)
+      } else {
+        triggerEvent('get-packages', {
+          cmd: ['outdated', 'list'],
+          mode,
+          directory
+        })
+      }
+    })
+    ipcRenderer.on('ipcEvent-error', (event, error) => {
       // console.error(error)
-    });
-    ipcRenderer.on("analyze-json-close", (event, directory, content) => {
-      toggleLoader(true);
-      setMode(APP_MODES.LOCAL, directory);
-      setActive(null);
-      setPackageActions(null);
-      setPackageJSON(content);
+    })
+    ipcRenderer.on('analyze-json-close', (event, directory, content) => {
+      toggleLoader(true)
+      setMode(APP_MODES.LOCAL, directory)
+      setActive(null)
+      setPackageActions(null)
+      setPackageJSON(content)
       setupSnackbar({
         action: true,
-        actionText: "global",
+        actionText: 'global',
         message: directory
-      });
-      toggleSnackbar(true);
-      triggerEvent("get-packages", {
-        cmd: ["outdated", "list"],
+      })
+      toggleSnackbar(true)
+      triggerEvent('get-packages', {
+        cmd: ['outdated', 'list'],
         mode: APP_MODES.LOCAL,
         directory
-      });
-    });
-
-    //dev mock
-    // const narr = Array.apply(null, { length: 20 });
-    // const narr = ["parse-url", "ramda", "yarn", "react"];
-    // const mockData = narr.map((n, idx) => {
-    //   return {
-    //     name: n
-    //   };
-    // });
-    // setPackages(mockData);
-    //-dev mock
+      })
+    })
   }
   componentDidUpdate(nextProps) {
-    const { active, setVersion } = nextProps;
+    const { active, setVersion } = nextProps
 
     if (active && active.version) {
-      setVersion(active.version);
+      setVersion(active.version)
     }
   }
   componentWillUnmount() {
     ipcRenderer.removeAllListeners([
-      "get-packages-close",
-      "search-packages-close",
-      "update-package-close",
-      "action-close",
-      "view-package-reply",
-      "ipcEvent-error",
-      "analyze-json-close"
-    ]);
+      'get-packages-close',
+      'search-packages-close',
+      'update-package-close',
+      'action-close',
+      'view-package-reply',
+      'ipcEvent-error',
+      'analyze-json-close'
+    ])
   }
   setGlobalMode(directory) {
-    const { toggleLoader, setPackages, toggleSnackbar, setActive, setMode } = this.props;
+    const {
+      toggleLoader,
+      setPackages,
+      toggleSnackbar,
+      setActive,
+      setMode
+    } = this.props
 
-    setPackages([]);
-    toggleSnackbar(false);
-    toggleLoader(true);
-    setActive(null);
-    setMode(APP_MODES.GLOBAL);
-    triggerEvent("get-packages", {
-      cmd: ["outdated", "list"],
+    setPackages([])
+    toggleSnackbar(false)
+    toggleLoader(true)
+    setActive(null)
+    setMode(APP_MODES.GLOBAL)
+    triggerEvent('get-packages', {
+      cmd: ['outdated', 'list'],
       mode: APP_MODES.GLOBAL
-    });
+    })
   }
   reload(e) {
-    const { mode, directory, toggleLoader, setActive } = this.props;
+    const { mode, directory, toggleLoader, setActive } = this.props
 
-    toggleLoader(true);
-    setActive(null);
-    triggerEvent("get-packages", {
-      cmd: ["outdated", "list"],
+    toggleLoader(true)
+    setActive(null)
+    triggerEvent('get-packages', {
+      cmd: ['outdated', 'list'],
       mode,
       directory
-    });
+    })
   }
   setupPackagesFromResponse(packages) {
     const {
@@ -182,55 +182,55 @@ class PackagesContainer extends React.Component {
       setTotal,
       addMessage,
       clearMessages
-    } = this.props;
+    } = this.props
 
     try {
-      const packagesData = parse(packages, "dependencies");
+      const packagesData = parse(packages, 'dependencies')
       const data = R.filter((pkg) => {
-        return !pkg.required;
+        return !pkg.required
       }, packagesData).map((pkg) => {
-        const { name, version } = pkg;
-        const outdatedPackage = R.prop(name, packagesOutdated);
+        const { name, version } = pkg
+        const outdatedPackage = R.prop(name, packagesOutdated)
 
         if (
           outdatedPackage &&
-          typeof outdatedPackage === "object" &&
+          typeof outdatedPackage === 'object' &&
           version !== outdatedPackage.latest
         ) {
           return R.merge(pkg, {
             latest: outdatedPackage.latest
-          });
+          })
         }
-        return pkg;
-      }, packagesData);
+        return pkg
+      }, packagesData)
 
-      setPackages(data, "asc", "name");
-      setTotal(data.length);
-      clearMessages();
+      setPackages(data, 'asc', 'name')
+      setTotal(data.length)
+      clearMessages()
 
-      const notifications = parse(packages, "problems");
+      const notifications = parse(packages, 'problems')
       notifications.forEach((notification, idx) => {
-        addMessage("error", notification);
-      });
+        addMessage('error', notification)
+      })
     } catch (e) {
-      throw new Error(e);
+      throw new Error(e)
     }
   }
   setupOutdated(packages) {
-    const { setPackagesOutdated } = this.props;
+    const { setPackagesOutdated } = this.props
     try {
-      const packagesOutdated = JSON.parse(packages);
-      setPackagesOutdated(packagesOutdated);
+      const packagesOutdated = JSON.parse(packages)
+      setPackagesOutdated(packagesOutdated)
     } catch (e) {
-      throw new Error(e);
+      throw new Error(e)
     }
   }
   handleSnackBarClose() {
-    const { toggleSnackbar } = this.props;
-    toggleSnackbar(false);
+    const { toggleSnackbar } = this.props
+    toggleSnackbar(false)
   }
   render() {
-    const { loading, isLoading, setPage, setRowsPerPage, ...rest } = this.props;
+    const { loading, isLoading, setPage, setRowsPerPage, ...rest } = this.props
 
     return (
       <section>
@@ -252,7 +252,7 @@ class PackagesContainer extends React.Component {
           </Grid>
         </Grid>
       </section>
-    );
+    )
   }
 }
 
@@ -274,7 +274,7 @@ function mapStateToProps(state) {
     order: state.packages.order,
     page: state.packages.page,
     rowsPerPage: state.packages.rowsPerPage
-  };
+  }
 }
 
 function mapDispatchToProps(dispatch) {
@@ -284,23 +284,32 @@ function mapDispatchToProps(dispatch) {
     setSelectedPackage: (pkgName, force) =>
       dispatch(packagesActions.setSelectedPackage(pkgName, force)),
     clearSelected: () => dispatch(packagesActions.clearSelected()),
-    setupSnackbar: (snackbarOptions) => dispatch(globalActions.setupSnackbar(snackbarOptions)),
+    setupSnackbar: (snackbarOptions) =>
+      dispatch(globalActions.setupSnackbar(snackbarOptions)),
     toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
     setPackages: (packages, order, orderBy) =>
       dispatch(packagesActions.setPackages(packages, order, orderBy)),
-    setPackageActions: (actions) => dispatch(packagesActions.setPackageActions(actions)),
-    setPackageJSON: (content) => dispatch(globalActions.setPackageJSON(content)),
+    setPackageActions: (actions) =>
+      dispatch(packagesActions.setPackageActions(actions)),
+    setPackageJSON: (content) =>
+      dispatch(globalActions.setPackageJSON(content)),
     setActive: (active) => dispatch(packagesActions.setActive(active)),
     setVersion: (version) => dispatch(packagesActions.setVersion(version)),
     toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
     toggleModal: (bool) => dispatch(globalActions.toggleModal(bool)),
     setTotal: (total) => dispatch(packagesActions.setTotal(total)),
-    toggleMainLoader: (bool) => dispatch(packagesActions.toggleMainLoader(bool)),
-    setMode: (mode, directory) => dispatch(globalActions.setMode(mode, directory)),
-    setPackagesOutdated: (packages) => dispatch(packagesActions.setPackagesOutdated(packages)),
-    addMessage: (level, message) => dispatch(globalActions.addMessage(level, message)),
-    clearMessages: () => dispatch(globalActions.clearMessages())
-  };
+    toggleMainLoader: (bool) =>
+      dispatch(packagesActions.toggleMainLoader(bool)),
+    setMode: (mode, directory) =>
+      dispatch(globalActions.setMode(mode, directory)),
+    setPackagesOutdated: (packages) =>
+      dispatch(packagesActions.setPackagesOutdated(packages)),
+    addMessage: (level, message) =>
+      dispatch(globalActions.addMessage(level, message)),
+    clearMessages: () => dispatch(globalActions.clearMessages()),
+    removePackages: (packages) =>
+      dispatch(packagesActions.removePackages(packages))
+  }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PackagesContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(PackagesContainer)

@@ -4,6 +4,13 @@
 
 import * as types from 'constants/ActionTypes'
 
+export function removePackages(packages) {
+  return {
+    type: types.REMOVE_PACKAGES,
+    packages
+  }
+}
+
 export function setSelectedPackage(packageName, force) {
   return {
     type: types.SET_SELECTED_PACKAGE,

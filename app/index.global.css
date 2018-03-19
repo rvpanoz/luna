@@ -60,7 +60,7 @@ body:before {
   font-style: normal;
   font-weight: normal;
   src: local(‘Material Icons’), local(‘MaterialIcons-Regular’),
-    url('./fonts/MaterialIcons-Regular.woff') format('woff');
+    url('./fonts/MaterialIcons-Regular.woff') format('font-woff');
 }
 
 @font-face {

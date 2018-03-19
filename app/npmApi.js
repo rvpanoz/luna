@@ -144,14 +144,16 @@ exports.install = function(opts, callback) {
   }
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  const commandOpts = pkgOptions.length
-    ? pkgOptions.map((option) => `--${option}`)
-    : []
+  const commandOpts =
+    pkgOptions && pkgOptions.length
+      ? pkgOptions.map((option) => `--${option}`)
+      : []
 
   const run = []
-    .concat(command, getNames())
-    .concat(commandArgs)
+    .concat(command, commandArgs.join(' '))
+    .concat(getNames())
     .concat(commandOpts)
+
   return runCommand(run, directory, callback)
 }
 
@@ -173,6 +175,9 @@ exports.uninstall = function(opts, callback) {
   }
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  const run = [].concat(command, getNames()).concat(commandArgs)
+  const run = []
+    .concat(command, commandArgs.join(' '))
+    .concat(getNames())
+    .concat(commandOpts)
   return runCommand(run, directory, callback)
 }

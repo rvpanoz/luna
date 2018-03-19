@@ -1,6 +1,6 @@
-import { triggerEvent } from 'utils'
 import { withStyles } from 'material-ui/styles'
 import { tableListStyles } from './styles'
+import { autoBind, triggerEvent } from 'utils'
 import React from 'react'
 import Loader from 'common/Loader'
 import PropTypes from 'prop-types'
@@ -18,132 +18,183 @@ import IconButton from 'material-ui/IconButton'
 import Checkbox from 'material-ui/Checkbox'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import InfoButton from 'material-ui-icons/Info'
-import RefreshIcon from 'material-ui-icons/Refresh'
+import UpdateIcon from 'material-ui-icons/Update'
 import TableListHeader from './TableListHeader'
 import Chip from 'material-ui/Chip'
 
-const TableList = (props) => {
-  const {
-    classes,
-    order,
-    orderBy,
-    total,
-    selected,
-    packages,
-    page,
-    toggleMainLoader,
-    handleSort,
-    rowsPerPage,
-    isSelected,
-    handleClick,
-    handleSelectAllClick,
-    viewPackage,
-    handleChangeRowsPerPage,
-    handleChangePage,
-    mode,
-    directory,
-    loading
-  } = props
+class TableList extends React.PureComponent {
+  constructor(props) {
+    super(props)
+    autoBind(
+      [
+        'handleChangePage',
+        'handleChangeRowsPerPage',
+        'handleUpdate',
+        'viewPackage',
+        'handleClick',
+        'handleUpdate'
+      ],
+      this
+    )
+  }
+  handleUpdate(e) {
+    const { mode, directory, selected } = this.props
+    if (selected && selected.length) {
+      triggerEvent('update-packages', {
+        cmd: ['install'],
+        multiple: true,
+        packages: selected,
+        mode,
+        directory
+      })
+    }
+  }
+  handleChangePage(e, page) {
+    const { setPage } = this.props
+    setPage(page)
+  }
+  handleChangeRowsPerPage(e) {
+    const { setRowsPerPage } = this.props
+    setRowsPerPage(e.target.value)
+  }
+  handleClick(e, name) {
+    e.preventDefault()
+    const { selected, setSelectedPackage } = this.props
+    setSelectedPackage(name)
+    e.stopPropagation()
+  }
+  viewPackage(e, name, version, mode, directory) {
+    if (e) {
+      e.preventDefault()
+    }
+    triggerEvent('view-package', {
+      cmd: ['view'],
+      pkgName: name,
+      pkgVersion: version,
+      mode,
+      directory
+    })
+  }
+  render() {
+    const {
+      classes,
+      order,
+      orderBy,
+      total,
+      selected,
+      packages,
+      page,
+      toggleMainLoader,
+      handleSort,
+      rowsPerPage,
+      isSelected,
+      handleSelectAllClick,
+      mode,
+      directory,
+      loading,
+      update
+    } = this.props
 
-  const numSelected = selected.length
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, packages.length - page * rowsPerPage)
+    const numSelected = selected.length
+    const emptyRows =
+      rowsPerPage - Math.min(rowsPerPage, packages.length - page * rowsPerPage)
 
-  return (
-    <Loader loading={loading}>
-      <Table className={classes.table}>
-        <TableListHeader
-          order={order}
-          orderBy={orderBy}
-          rowCount={total}
-          numSelected={numSelected}
-          onRequestSort={handleSort}
-          onSelectAllClick={handleSelectAllClick}
-        />
-        <TableBody>
-          {packages
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map((pkg, idx) => {
-              if (!pkg) {
-                return
-              }
-              const {
-                hasPeerMissing,
-                latest,
-                license,
-                description,
-                version,
-                name
-              } = pkg
-              if (hasPeerMissing) {
-                return
-              }
-              const alreadySelected = isSelected(name)
+    return (
+      <Loader loading={loading}>
+        <Table className={classes.table}>
+          <TableListHeader
+            order={order}
+            orderBy={orderBy}
+            rowCount={total}
+            numSelected={numSelected}
+            onRequestSort={handleSort}
+            onSelectAllClick={handleSelectAllClick}
+          />
+          <TableBody>
+            {packages
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((pkg, idx) => {
+                if (!pkg) {
+                  return
+                }
+                const {
+                  hasPeerMissing,
+                  latest,
+                  license,
+                  description,
+                  version,
+                  name
+                } = pkg
+                if (hasPeerMissing) {
+                  return
+                }
+                const alreadySelected = isSelected(name)
 
-              return (
-                <TableRow
-                  className={classes.tableRow}
-                  hover
-                  role="checkbox"
-                  onClick={(e) => {
-                    toggleMainLoader(true)
-                    const _version = version.replace(/\^/g, '')
-                    viewPackage(e, name, _version, mode, directory)
-                  }}
-                  aria-checked={isSelected}
-                  tabIndex={-1}
-                  key={`pkgrow-${idx}`}
-                  selected={alreadySelected}
-                >
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      onClick={(e) => handleClick(e, name)}
-                      checked={alreadySelected}
-                    />
-                  </TableCell>
-                  <TableCell padding="none">{name}</TableCell>
-                  <TableCell padding="none">{version}</TableCell>
-                  <TableCell padding="none">{latest || version}</TableCell>
-                  <TableCell padding="none">{license}</TableCell>
-                  {latest ? (
-                    <TableCell padding="none">
-                      <IconButton>
-                        <RefreshIcon />
-                      </IconButton>
+                return (
+                  <TableRow
+                    className={classes.tableRow}
+                    hover
+                    role="checkbox"
+                    onClick={(e) => {
+                      const _version = version.replace(/\^/g, '')
+                      toggleMainLoader(true)
+                      this.viewPackage(e, name, _version, mode, directory)
+                    }}
+                    aria-checked={isSelected}
+                    tabIndex={-1}
+                    key={`pkgrow-${idx}`}
+                    selected={alreadySelected}
+                  >
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        onClick={(e) => this.handleClick(e, name)}
+                        checked={alreadySelected}
+                      />
                     </TableCell>
-                  ) : (
-                    <TableCell padding="none" />
-                  )}
-                </TableRow>
-              )
-            })}
-          {emptyRows > 0 && (
-            <TableRow style={{ height: 49 * emptyRows }}>
-              <TableCell colSpan={6} />
+                    <TableCell padding="none">{name}</TableCell>
+                    <TableCell padding="none">{version}</TableCell>
+                    <TableCell padding="none">{latest || version}</TableCell>
+                    <TableCell padding="none">{license}</TableCell>
+                    {latest ? (
+                      <TableCell padding="none">
+                        <IconButton onClick={this.handleUpdate}>
+                          <UpdateIcon />
+                        </IconButton>
+                      </TableCell>
+                    ) : (
+                      <TableCell padding="none" />
+                    )}
+                  </TableRow>
+                )
+              })}
+            {emptyRows > 0 && (
+              <TableRow style={{ height: 49 * emptyRows }}>
+                <TableCell colSpan={6} />
+              </TableRow>
+            )}
+          </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                colSpan={6}
+                count={packages.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                backIconButtonProps={{
+                  'aria-label': 'Previous Page'
+                }}
+                nextIconButtonProps={{
+                  'aria-label': 'Next Page'
+                }}
+                onChangePage={this.handleChangePage}
+                onChangeRowsPerPage={this.handleChangeRowsPerPage}
+              />
             </TableRow>
-          )}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TablePagination
-              colSpan={6}
-              count={packages.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              backIconButtonProps={{
-                'aria-label': 'Previous Page'
-              }}
-              nextIconButtonProps={{
-                'aria-label': 'Next Page'
-              }}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </Loader>
-  )
+          </TableFooter>
+        </Table>
+      </Loader>
+    )
+  }
 }
 
 export default withStyles(tableListStyles)(TableList)

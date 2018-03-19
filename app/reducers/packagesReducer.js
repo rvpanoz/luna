@@ -23,7 +23,8 @@ import {
   ADD_COMMAND_OPTION,
   CLEAR_COMMAND_OPTIONS,
   CLEAR_SELECTED,
-  REMOVE_COMMAND_OPTION
+  REMOVE_COMMAND_OPTION,
+  REMOVE_PACKAGES
 } from 'constants/ActionTypes'
 
 import { PACKAGE_GROUPS } from 'constants/AppConstants'
@@ -35,6 +36,10 @@ const createReducer = (initialState, handlers) => (
 ) => R.propOr(R.identity, R.prop('type', action), handlers)(state, action)
 
 const handlers = {
+  [REMOVE_PACKAGES]: (state, action) => {
+    //WIP: remove multiple packages
+    return R.filter(R.where({ name: R.contains(action.name) }))(state.packages)
+  },
   [TOGGLE_MAIN_LOADER]: (state, action) =>
     R.assoc('isLoading', action.isLoading, state),
   [TOGGLE_EXPANDED]: (state, action) =>
