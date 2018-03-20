@@ -52,7 +52,7 @@ function withToolbarTableList(List, options = {}) {
       e.stopPropagation()
     }
     handleUninstall(e) {
-      const { mode, directory, selected, removePackages } = this.props
+      const { reload, mode, directory, selected, removePackages } = this.props
       if (selected && selected.length) {
         triggerEvent('uninstall-packages', {
           cmd: ['uninstall'],
@@ -61,6 +61,7 @@ function withToolbarTableList(List, options = {}) {
           mode,
           directory
         })
+        // reload()
         // removePackages(selected) //WIP
       }
     }
@@ -94,11 +95,13 @@ function withToolbarTableList(List, options = {}) {
       return selected.indexOf(name) !== -1
     }
     render() {
+      console.log(this.props)
       const {
         selected,
         loading,
         handleChangePage,
         handleChangeRowsPerPage,
+        total,
         ...rest
       } = this.props
       const { title } = options
@@ -107,6 +110,7 @@ function withToolbarTableList(List, options = {}) {
         <Paper style={{ width: '100%' }}>
           <TableListToolbar
             title={title}
+            total={total}
             selected={selected}
             loading={loading}
             handleReload={this.handleReload}

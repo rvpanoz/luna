@@ -26,7 +26,8 @@ const TableListToolbar = (props) => {
     handleReload,
     handleGlobals,
     handleUninstall,
-    handleUpdate
+    handleUpdate,
+    total
   } = props;
 
   return (
@@ -47,7 +48,7 @@ const TableListToolbar = (props) => {
             {selected && selected.length} selected
           </Typography>
         ) : (
-          <Typography variant="title">{title}</Typography>
+          <Typography variant="title">{title} {total}</Typography>
         )}
       </div>
       <div className={classes.spacer} />

@@ -35,9 +35,7 @@ const createReducer = (initialState, handlers) => (state = initialState, action)
 
 const handlers = {
   [REMOVE_PACKAGES]: (state, action) => {
-    debugger;
-    const pname = 'http-server'
-    return state.packages.filter(name => name !== pname)
+    return R.reject(R.contains(R.__, action.packages), state.packages)
   },
   [TOGGLE_MAIN_LOADER]: (state, action) => R.assoc("isLoading", action.isLoading, state),
   [TOGGLE_EXPANDED]: (state, action) => R.assoc("expanded", !state.expanded, state),
