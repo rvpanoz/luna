@@ -1,21 +1,21 @@
 /** Toolbar List component **/
 
-import { withStyles } from 'material-ui/styles'
-import { toolbarStyles } from './styles'
-import React from 'react'
-import classNames from 'classnames'
-import PropTypes from 'prop-types'
-import Toolbar from 'material-ui/Toolbar'
-import Typography from 'material-ui/Typography'
-import Paper from 'material-ui/Paper'
-import Checkbox from 'material-ui/Checkbox'
-import IconButton from 'material-ui/IconButton'
-import Tooltip from 'material-ui/Tooltip'
-import DeleteIcon from 'material-ui-icons/Delete'
-import RefreshIcon from 'material-ui-icons/Refresh'
-import ListIcon from 'material-ui-icons/List'
-import FilterListIcon from 'material-ui-icons/FilterList'
-import UpdateIcon from 'material-ui-icons/Update'
+import { withStyles } from "material-ui/styles";
+import { toolbarStyles } from "./styles";
+import React from "react";
+import classNames from "classnames";
+import PropTypes from "prop-types";
+import Toolbar from "material-ui/Toolbar";
+import Typography from "material-ui/Typography";
+import Paper from "material-ui/Paper";
+import Checkbox from "material-ui/Checkbox";
+import IconButton from "material-ui/IconButton";
+import Tooltip from "material-ui/Tooltip";
+import DeleteIcon from "material-ui-icons/Delete";
+import RefreshIcon from "material-ui-icons/Refresh";
+import ListIcon from "material-ui-icons/List";
+import FilterListIcon from "material-ui-icons/FilterList";
+import UpdateIcon from "material-ui-icons/Update";
 
 const TableListToolbar = (props) => {
   const {
@@ -27,7 +27,7 @@ const TableListToolbar = (props) => {
     handleGlobals,
     handleUninstall,
     handleUpdate
-  } = props
+  } = props;
 
   return (
     <Toolbar
@@ -37,7 +37,11 @@ const TableListToolbar = (props) => {
     >
       <div className={classes.title}>
         {loading ? (
-          'loading packages..'
+          <div className="saving">
+            loading packages<span>.</span>
+            <span>.</span>
+            <span>.</span>
+          </div>
         ) : selected.length > 0 ? (
           <Typography color="inherit" variant="subheading">
             {selected.length} selected
@@ -50,12 +54,9 @@ const TableListToolbar = (props) => {
       {loading ? null : (
         <div className={classes.actions}>
           {selected.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ display: "flex", flexDirection: "row" }}>
               <Tooltip title="Uninstall selected">
-                <IconButton
-                  aria-label="Uninstall-selected"
-                  onClick={handleUninstall}
-                >
+                <IconButton aria-label="Uninstall-selected" onClick={handleUninstall}>
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>
@@ -66,7 +67,7 @@ const TableListToolbar = (props) => {
               </Tooltip>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ display: "flex", flexDirection: "row" }}>
               <Tooltip title="Reload list">
                 <IconButton aria-label="Reload list" onClick={handleReload}>
                   <RefreshIcon />
@@ -82,12 +83,12 @@ const TableListToolbar = (props) => {
         </div>
       )}
     </Toolbar>
-  )
-}
+  );
+};
 
 TableListToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   selected: PropTypes.array.isRequired
-}
+};
 
-export default withStyles(toolbarStyles)(TableListToolbar)
+export default withStyles(toolbarStyles)(TableListToolbar);
