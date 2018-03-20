@@ -4,10 +4,10 @@
 
 import * as types from "constants/ActionTypes";
 
-export function removePackage(name) {
+export function removePackages(packages) {
   return {
-    type: types.REMOVE_PACKAGE,
-    name
+    type: types.REMOVE_PACKAGES,
+    packages
   };
 }
 

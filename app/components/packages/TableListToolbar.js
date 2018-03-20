@@ -32,7 +32,7 @@ const TableListToolbar = (props) => {
   return (
     <Toolbar
       className={classNames(classes.root, {
-        [classes.highlight]: selected.length > 0
+        [classes.highlight]: selected && selected.length > 0
       })}
     >
       <div className={classes.title}>
@@ -44,7 +44,7 @@ const TableListToolbar = (props) => {
           </div>
         ) : selected.length > 0 ? (
           <Typography color="inherit" variant="subheading">
-            {selected.length} selected
+            {selected && selected.length} selected
           </Typography>
         ) : (
           <Typography variant="title">{title}</Typography>
@@ -53,7 +53,7 @@ const TableListToolbar = (props) => {
       <div className={classes.spacer} />
       {loading ? null : (
         <div className={classes.actions}>
-          {selected.length > 0 ? (
+          {selected && selected.length > 0 ? (
             <div style={{ display: "flex", flexDirection: "row" }}>
               <Tooltip title="Uninstall selected">
                 <IconButton aria-label="Uninstall-selected" onClick={handleUninstall}>

@@ -24,7 +24,7 @@ import {
   CLEAR_COMMAND_OPTIONS,
   CLEAR_SELECTED,
   REMOVE_COMMAND_OPTION,
-  REMOVE_PACKAGE
+  REMOVE_PACKAGES
 } from "constants/ActionTypes";
 
 import { PACKAGE_GROUPS } from "constants/AppConstants";
@@ -34,8 +34,10 @@ const createReducer = (initialState, handlers) => (state = initialState, action)
   R.propOr(R.identity, R.prop("type", action), handlers)(state, action);
 
 const handlers = {
-  [REMOVE_PACKAGE]: (state, action) => {
-    return R.filter(R.where({ name: !R.contains(action.name) }))(state.packages);
+  [REMOVE_PACKAGES]: (state, action) => {
+    debugger;
+    const pname = 'http-server'
+    return state.packages.filter(name => name !== pname)
   },
   [TOGGLE_MAIN_LOADER]: (state, action) => R.assoc("isLoading", action.isLoading, state),
   [TOGGLE_EXPANDED]: (state, action) => R.assoc("expanded", !state.expanded, state),

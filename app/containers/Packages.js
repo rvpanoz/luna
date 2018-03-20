@@ -230,7 +230,7 @@ class PackagesContainer extends React.Component {
     toggleSnackbar(false)
   }
   render() {
-    const { loading, isLoading, setPage, setRowsPerPage, ...rest } = this.props
+    const { loading, isLoading, ...rest } = this.props
 
     return (
       <section>
@@ -240,8 +240,6 @@ class PackagesContainer extends React.Component {
               setGlobalMode={this.setGlobalMode}
               reload={this.reload}
               loading={loading}
-              setPage={setPage}
-              setRowsPerPage={setRowsPerPage}
               {...rest}
             />
           </Grid>

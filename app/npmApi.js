@@ -178,6 +178,5 @@ exports.uninstall = function(opts, callback) {
   const run = []
     .concat(command, commandArgs.join(' '))
     .concat(getNames())
-    .concat(commandOpts)
   return runCommand(run, directory, callback)
 }

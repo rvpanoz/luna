@@ -61,7 +61,7 @@ function withToolbarTableList(List, options = {}) {
           mode,
           directory
         })
-        removePackages(selected)
+        // removePackages(selected) //WIP
       }
     }
     handleSelectAllClick(e, checked) {
