@@ -187,9 +187,12 @@ class PackagesContainer extends React.Component {
     try {
       const packagesData = parse(packages, 'dependencies')
       const data = R.filter((pkg) => {
-        return !(pkg.required || pkg.peerMissing || typeof pkg.error === 'object')
+        return !(
+          pkg.required ||
+          pkg.peerMissing ||
+          typeof pkg.error === 'object'
+        )
       }, packagesData).map((pkg) => {
-        console.log(pkg)
         const { name, version } = pkg
         const outdatedPackage = R.prop(name, packagesOutdated)
 
@@ -225,10 +228,6 @@ class PackagesContainer extends React.Component {
     } catch (e) {
       throw new Error(e)
     }
-  }
-  handleSnackBarClose() {
-    const { toggleSnackbar } = this.props
-    toggleSnackbar(false)
   }
   render() {
     const { loading, isLoading, ...rest } = this.props
@@ -272,7 +271,8 @@ function mapStateToProps(state) {
     orderBy: state.packages.orderBy,
     order: state.packages.order,
     page: state.packages.page,
-    rowsPerPage: state.packages.rowsPerPage
+    rowsPerPage: state.packages.rowsPerPage,
+    packagesActions: state.packages.actions
   }
 }
 

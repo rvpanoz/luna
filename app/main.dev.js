@@ -78,7 +78,10 @@ ipcMain.on('ipc-event', (event, options) => {
   const opts = options || {}
   const { ipcEvent } = opts || {}
 
-  function callback(data, command, status) {
+  function callback(data, command, status, error) {
+    if (error) {
+      console.log(error)
+    }
     switch (status) {
       case 'close':
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {

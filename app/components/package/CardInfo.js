@@ -44,6 +44,79 @@ const styles = (theme) => ({
     overflowY: 'auto',
     clear: 'both',
     maxHeight: '750px'
+  },
+  detailsAvatar: {
+    marginTop: 15
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+    maxWidth: 300
+  },
+  textField: {
+    margin: theme.spacing.unit,
+    minWidth: 120,
+    maxWidth: 300
+  },
+  chips: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  chip: {
+    margin: theme.spacing.unit / 4
+  },
+  description: {
+    marginTop: 10
+  },
+  listItem: {
+    paddingLeft: 0
+  },
+  actions: {
+    display: 'flex'
+  },
+  author: {
+    flexGrow: 1
+  },
+  keywords: {
+    flexGrow: 1,
+    marginTop: 10
+  },
+  expand: {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
+      duration: theme.transitions.duration.shortest
+    }),
+    marginLeft: 'auto'
+  },
+  expandOpen: {
+    transform: 'rotate(180deg)'
+  },
+  updated: {
+    fontSize: 12,
+    fontWeight: 300,
+    color: theme.palette.primary.dark,
+    margin: '1em 0 0.7em'
+  },
+  center: {
+    position: 'absolute',
+    top: '25%',
+    left: '50%'
+  },
+  avatar: {
+    backgroundColor: theme.palette.secondary.dark
+  },
+  heading: {
+    color: 'rgba(0, 0, 0, 0.54)',
+    fontSize: '1.1rem',
+    fontWeight: 400,
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
+  },
+  headingTail: {
+    margin: '0.9em 0 2em'
+  },
+  helper: {
+    borderLeft: `2px solid ${theme.palette.divider}`,
+    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
   }
 })
 

@@ -139,7 +139,7 @@ exports.install = function(opts, callback) {
 
   function getNames() {
     return multiple && packages && Array.isArray(packages)
-      ? packages.join(' ')
+      ? packages
       : pkgVersion ? `${pkgName}@${pkgVersion}` : pkgName
   }
 
@@ -164,7 +164,7 @@ exports.uninstall = function(opts, callback) {
 
   function getNames() {
     if (multiple && packages && Array.isArray(packages)) {
-      return packages.join(' ')
+      return packages
     } else if (!pkgName && !multiple) {
       throw new Error(
         'npmApi:uninstall package name cannot be empty or undefined'
@@ -175,8 +175,6 @@ exports.uninstall = function(opts, callback) {
   }
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  const run = []
-    .concat(command, commandArgs.join(' '))
-    .concat(getNames())
+  const run = [].concat(command, commandArgs.join('')).concat(getNames())
   return runCommand(run, directory, callback)
 }

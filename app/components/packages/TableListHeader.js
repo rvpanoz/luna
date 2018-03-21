@@ -16,8 +16,7 @@ const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'version', numeric: false, disablePadding: true, label: 'Version' },
   { id: 'latest', numeric: false, disablePadding: true, label: 'Latest' },
-  { id: 'license', numeric: false, disablePadding: true, label: 'License' },
-  { id: 'action' }
+  { id: 'license', numeric: false, disablePadding: true, label: 'License' }
 ]
 
 class TableListHeader extends React.Component {

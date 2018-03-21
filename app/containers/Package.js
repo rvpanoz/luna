@@ -24,7 +24,7 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
-import Slide from 'material-ui/transitions/Slide'
+import Fade from 'material-ui/transitions/Fade'
 
 class PackageContainer extends React.Component {
   constructor(props) {
@@ -110,7 +110,7 @@ class PackageContainer extends React.Component {
     if (!active) {
       return null
     }
-    console.log(active)
+
     const hasError = active.error
     if (hasError) {
       return 'WIP package'
@@ -121,7 +121,7 @@ class PackageContainer extends React.Component {
         <Grid container direction="row" justify="flex-start">
           <Grid item xs={12}>
             <section className={classes.root}>
-              <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+              <Fade in={true}>
                 <Card className={classes.card}>
                   <CardHeader
                     classes={classes}
@@ -165,7 +165,7 @@ class PackageContainer extends React.Component {
                     <CardDetails active={active} classes={classes} />
                   </Collapse>
                 </Card>
-              </Slide>
+              </Fade>
             </section>
           </Grid>
         </Grid>

@@ -95,7 +95,8 @@ class TableList extends React.PureComponent {
       update
     } = this.props
 
-    const numSelected = selected && Array.isArray(selected) ? selected.length : 0
+    const numSelected =
+      selected && Array.isArray(selected) ? selected.length : 0
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, packages.length - page * rowsPerPage)
 
@@ -156,17 +157,14 @@ class TableList extends React.PureComponent {
                     </TableCell>
                     <TableCell padding="none">{name}</TableCell>
                     <TableCell padding="none">{version}</TableCell>
-                    <TableCell padding="none">{latest || version}</TableCell>
+                    <TableCell padding="none">
+                      {latest ? (
+                        <Chip color="secondary" label={latest} />
+                      ) : (
+                        version
+                      )}
+                    </TableCell>
                     <TableCell padding="none">{license}</TableCell>
-                    {latest ? (
-                      <TableCell padding="none">
-                        <IconButton onClick={this.handleUpdate}>
-                          <UpdateIcon />
-                        </IconButton>
-                      </TableCell>
-                    ) : (
-                      <TableCell padding="none" />
-                    )}
                   </TableRow>
                 )
               })}

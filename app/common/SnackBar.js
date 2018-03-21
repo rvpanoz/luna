@@ -23,7 +23,7 @@ const SnackBar = (props) => {
   return (
     <Snackbar
       resumeHideDuration={5}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       open={snackBarOpen}
       onClose={handleSnackBarClose}
       SnackbarContentProps={{

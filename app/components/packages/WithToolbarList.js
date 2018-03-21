@@ -4,7 +4,7 @@
  **/
 
 import { remote } from 'electron'
-import {filter, contains} from 'ramda'
+import { filter, contains } from 'ramda'
 import { autoBind, triggerEvent } from 'utils'
 import Loader from 'common/Loader'
 import React from 'react'
@@ -22,6 +22,7 @@ function withToolbarTableList(List, options = {}) {
           'handleSort',
           'handleSelectAllClick',
           'handleUpdate',
+          'handleInstall',
           'handleReload',
           'handleGlobals',
           'handleUninstall',
@@ -32,8 +33,32 @@ function withToolbarTableList(List, options = {}) {
         this
       )
     }
+    _installSelected(selected) {
+      const { mode, directory, reload } = this.props
+
+      try {
+        triggerEvent('install-packages', {
+          cmd: ['install'],
+          multiple: true,
+          packages: selected,
+          mode,
+          directory
+        })
+
+        reload()
+      } catch (e) {
+        throw new Error(e)
+      }
+    }
     _uninstallSelected(selected) {
-      const { mode, directory, packages, setTotal, clearSelected, setPackages } = this.props
+      const {
+        mode,
+        directory,
+        packages,
+        setTotal,
+        clearSelected,
+        setPackages
+      } = this.props
 
       try {
         triggerEvent('uninstall-packages', {
@@ -44,7 +69,9 @@ function withToolbarTableList(List, options = {}) {
           directory
         })
 
-        const packagesRemaining = filter(pkg=>!contains(pkg.name, selected))(packages)
+        const packagesRemaining = filter(
+          (pkg) => !contains(pkg.name, selected)
+        )(packages)
         clearSelected()
         setPackages(packagesRemaining)
         setTotal(packagesRemaining.length)
@@ -74,7 +101,7 @@ function withToolbarTableList(List, options = {}) {
       e.stopPropagation()
     }
     handleUninstall(e) {
-      const {selected} = this.props
+      const { selected } = this.props
       if (selected && selected.length) {
         remote.dialog.showMessageBox(
           remote.getCurrentWindow(),
@@ -89,9 +116,9 @@ function withToolbarTableList(List, options = {}) {
               this._uninstallSelected(selected)
             }
           }
-        );
+        )
       }
-      return false;
+      return false
     }
     handleSelectAllClick(e, checked) {
       const { packages, setSelectedPackage, clearSelected } = this.props
@@ -100,6 +127,27 @@ function withToolbarTableList(List, options = {}) {
       } else {
         clearSelected()
       }
+    }
+    handleInstall(e) {
+      const { selected, toggleLoader } = this.props
+      if (selected && selected.length) {
+        remote.dialog.showMessageBox(
+          remote.getCurrentWindow(),
+          {
+            title: 'Confirmation',
+            type: 'question',
+            message: 'Would you like to install the selected packages?',
+            buttons: ['Cancel', 'Install']
+          },
+          (btnIdx) => {
+            if (Boolean(btnIdx) === true) {
+              toggleLoader()
+              this._installSelected(selected)
+            }
+          }
+        )
+      }
+      return false
     }
     handleSort(e, property) {
       const _orderBy = property
@@ -117,7 +165,6 @@ function withToolbarTableList(List, options = {}) {
 
       setPackages(sortedPackages, _order, _orderBy)
     }
-
     isSelected(name) {
       const { selected } = this.props
       return selected.indexOf(name) !== -1
@@ -129,6 +176,7 @@ function withToolbarTableList(List, options = {}) {
         handleChangePage,
         handleChangeRowsPerPage,
         total,
+        packagesActions,
         ...rest
       } = this.props
       const { title } = options
@@ -140,9 +188,11 @@ function withToolbarTableList(List, options = {}) {
             rowCount={total}
             selected={selected}
             loading={loading}
+            packagesActions={packagesActions}
             handleReload={this.handleReload}
             handleUpdate={this.handleUpdate}
             handleGlobals={this.handleGlobals}
+            handleInstall={this.handleInstall}
             handleUninstall={this.handleUninstall}
           />
           <List
