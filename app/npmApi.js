@@ -150,7 +150,7 @@ exports.install = function(opts, callback) {
       : []
 
   const run = []
-    .concat(command, commandArgs.join(' '))
+    .concat(command, commandArgs.join(''))
     .concat(getNames())
     .concat(commandOpts)
 

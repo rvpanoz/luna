@@ -44,6 +44,14 @@ class PackagesContainer extends React.Component {
       toggleSnackbar
     } = this.props
 
+    ipcRenderer.on('install-packages-close', (event) => {
+      toggleLoader(false)
+      triggerEvent('get-packages', {
+        cmd: ['outdated', 'list'],
+        mode,
+        directory
+      })
+    })
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
       if (!packages) {
         return
@@ -79,18 +87,15 @@ class PackagesContainer extends React.Component {
         throw new Error(e)
       }
     })
-    ipcRenderer.on(
-      ['update-package-close', 'uninstall-packages-close'],
-      (event, pkg) => {
-        const { mode, directory } = this.props
+    ipcRenderer.on('update-package-close', (event, pkg) => {
+      const { mode, directory } = this.props
 
-        triggerEvent('get-packages', {
-          cmd: ['outdated', 'list'],
-          mode,
-          directory
-        })
-      }
-    )
+      triggerEvent('get-packages', {
+        cmd: ['outdated', 'list'],
+        mode,
+        directory
+      })
+    })
     ipcRenderer.on('action-close', (event, pkg) => {
       const { mode, directory } = this.props
 

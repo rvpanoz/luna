@@ -34,8 +34,8 @@ function withToolbarTableList(List, options = {}) {
       )
     }
     _installSelected(selected) {
-      const { mode, directory, reload } = this.props
-
+      const { mode, directory, toggleLoader } = this.props
+      toggleLoader(true)
       try {
         triggerEvent('install-packages', {
           cmd: ['install'],
@@ -44,8 +44,6 @@ function withToolbarTableList(List, options = {}) {
           mode,
           directory
         })
-
-        reload()
       } catch (e) {
         throw new Error(e)
       }
@@ -171,6 +169,8 @@ function withToolbarTableList(List, options = {}) {
     }
     render() {
       const {
+        mode,
+        directory,
         selected,
         loading,
         handleChangePage,
@@ -184,6 +184,8 @@ function withToolbarTableList(List, options = {}) {
       return (
         <Paper style={{ width: '100%' }}>
           <TableListToolbar
+            mode={mode}
+            directory={directory}
             title={title}
             rowCount={total}
             selected={selected}

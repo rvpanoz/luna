@@ -39,6 +39,7 @@ const showSnackbar = () => {
 const TableListToolbar = (props) => {
   const {
     classes,
+    directory,
     selected,
     title,
     loading,
@@ -72,7 +73,7 @@ const TableListToolbar = (props) => {
               </Typography>
             ) : (
               <Typography variant="title">
-                {title} {rowCount}
+                {title} {rowCount} <br /> {directory || null}
               </Typography>
             )}
           </div>
