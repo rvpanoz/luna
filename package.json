@@ -182,7 +182,7 @@
     "devtron": "^1.4.0",
     "electron-debug": "^1.5.0",
     "history": "^4.7.2",
-    "material-ui": "^1.0.0-beta.37",
+    "material-ui": "^1.0.0-beta.38",
     "material-ui-icons": "^1.0.0-beta.36",
     "moment": "^2.21.0",
     "ramda": "^0.25.0",
