@@ -27,7 +27,7 @@ const TableListToolbar = (props) => {
     handleGlobals,
     handleUninstall,
     handleUpdate,
-    total
+    rowCount
   } = props;
 
   return (
@@ -43,12 +43,12 @@ const TableListToolbar = (props) => {
             <span>.</span>
             <span>.</span>
           </div>
-        ) : selected.length > 0 ? (
+        ) : selected && selected.length > 0 ? (
           <Typography color="inherit" variant="subheading">
-            {selected && selected.length} selected
+             {selected.length} selected
           </Typography>
         ) : (
-          <Typography variant="title">{title} {total}</Typography>
+          <Typography variant="title">{title} {rowCount}</Typography>
         )}
       </div>
       <div className={classes.spacer} />
@@ -89,7 +89,7 @@ const TableListToolbar = (props) => {
 
 TableListToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  selected: PropTypes.array.isRequired
+  selected: PropTypes.array
 };
 
 export default withStyles(toolbarStyles)(TableListToolbar);

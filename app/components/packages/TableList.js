@@ -80,7 +80,7 @@ class TableList extends React.PureComponent {
       classes,
       order,
       orderBy,
-      total,
+      rowCount,
       selected,
       packages,
       page,
@@ -95,7 +95,7 @@ class TableList extends React.PureComponent {
       update
     } = this.props
 
-    const numSelected = selected.length
+    const numSelected = selected && Array.isArray(selected) ? selected.length : 0
     const emptyRows =
       rowsPerPage - Math.min(rowsPerPage, packages.length - page * rowsPerPage)
 
@@ -105,7 +105,7 @@ class TableList extends React.PureComponent {
           <TableListHeader
             order={order}
             orderBy={orderBy}
-            rowCount={total}
+            rowCount={rowCount}
             numSelected={numSelected}
             onRequestSort={handleSort}
             onSelectAllClick={handleSelectAllClick}

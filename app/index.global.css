@@ -2,6 +2,10 @@
   font-family: Roboto, sans-serif;
 }
 
+body {
+  overflow: hidden;
+}
+
 body:before {
   content: "";
   position: fixed;

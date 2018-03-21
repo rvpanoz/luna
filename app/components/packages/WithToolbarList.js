@@ -4,6 +4,7 @@
  **/
 
 import { ipcRenderer } from 'electron'
+import {filter, contains} from 'ramda'
 import { autoBind, triggerEvent } from 'utils'
 import Loader from 'common/Loader'
 import React from 'react'
@@ -52,7 +53,7 @@ function withToolbarTableList(List, options = {}) {
       e.stopPropagation()
     }
     handleUninstall(e) {
-      const { reload, mode, directory, selected, removePackages } = this.props
+      const { reload, mode, directory, selected, packages, clearSelected, setPackages } = this.props
       if (selected && selected.length) {
         triggerEvent('uninstall-packages', {
           cmd: ['uninstall'],
@@ -61,9 +62,11 @@ function withToolbarTableList(List, options = {}) {
           mode,
           directory
         })
-        // reload()
-        // removePackages(selected) //WIP
+        clearSelected()
+        const packagesRemaining = filter(pkg=>!contains(pkg.name, selected))(packages)
+        setPackages(packagesRemaining)
       }
+      return false;
     }
     handleSelectAllClick(e, checked) {
       const { packages, setSelectedPackage, clearSelected } = this.props
@@ -95,7 +98,6 @@ function withToolbarTableList(List, options = {}) {
       return selected.indexOf(name) !== -1
     }
     render() {
-      console.log(this.props)
       const {
         selected,
         loading,
@@ -110,7 +112,7 @@ function withToolbarTableList(List, options = {}) {
         <Paper style={{ width: '100%' }}>
           <TableListToolbar
             title={title}
-            total={total}
+            rowCount={total}
             selected={selected}
             loading={loading}
             handleReload={this.handleReload}
@@ -125,6 +127,7 @@ function withToolbarTableList(List, options = {}) {
             isSelected={this.isSelected}
             selected={selected}
             loading={loading}
+            rowCount={total}
             {...rest}
           />
         </Paper>
@@ -149,6 +152,7 @@ withToolbarTableList.propTypes = {
   setSelectedPackage: func.isRequired,
   clearSelected: func.isRequired,
   reload: func.isRequired,
+  selected: array,
   order: number,
   orderBy: string,
   rowCount: number
