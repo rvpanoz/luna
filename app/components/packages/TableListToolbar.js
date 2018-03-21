@@ -39,7 +39,7 @@ const TableListToolbar = (props) => {
       <div className={classes.title}>
         {loading ? (
           <div className="saving">
-            loading packages<span>.</span>
+            Loading packages<span>.</span>
             <span>.</span>
             <span>.</span>
           </div>

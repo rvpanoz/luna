@@ -117,15 +117,18 @@ class TableList extends React.PureComponent {
                 if (!pkg) {
                   return
                 }
+
                 const {
-                  hasPeerMissing,
+                  peerMissing,
                   latest,
                   license,
                   description,
                   version,
                   name
                 } = pkg
-                if (hasPeerMissing) {
+
+                //exclude missing dependencies
+                if (peerMissing) {
                   return
                 }
                 const alreadySelected = isSelected(name)

@@ -3,7 +3,7 @@
  *
  **/
 
-import { ipcRenderer } from 'electron'
+import { remote } from 'electron'
 import {filter, contains} from 'ramda'
 import { autoBind, triggerEvent } from 'utils'
 import Loader from 'common/Loader'
@@ -18,6 +18,7 @@ function withToolbarTableList(List, options = {}) {
       super(props)
       autoBind(
         [
+          '_uninstallSelected',
           'handleSort',
           'handleSelectAllClick',
           'handleUpdate',
@@ -30,6 +31,26 @@ function withToolbarTableList(List, options = {}) {
         ],
         this
       )
+    }
+    _uninstallSelected(selected) {
+      const { mode, directory, packages, setTotal, clearSelected, setPackages } = this.props
+
+      try {
+        triggerEvent('uninstall-packages', {
+          cmd: ['uninstall'],
+          multiple: true,
+          packages: selected,
+          mode,
+          directory
+        })
+
+        const packagesRemaining = filter(pkg=>!contains(pkg.name, selected))(packages)
+        clearSelected()
+        setPackages(packagesRemaining)
+        setTotal(packagesRemaining.length)
+      } catch (e) {
+        throw new Error(e)
+      }
     }
     componentDidMount() {
       const { mode, directory, toggleLoader } = this.props
@@ -53,18 +74,22 @@ function withToolbarTableList(List, options = {}) {
       e.stopPropagation()
     }
     handleUninstall(e) {
-      const { reload, mode, directory, selected, packages, clearSelected, setPackages } = this.props
+      const {selected} = this.props
       if (selected && selected.length) {
-        triggerEvent('uninstall-packages', {
-          cmd: ['uninstall'],
-          multiple: true,
-          packages: selected,
-          mode,
-          directory
-        })
-        clearSelected()
-        const packagesRemaining = filter(pkg=>!contains(pkg.name, selected))(packages)
-        setPackages(packagesRemaining)
+        remote.dialog.showMessageBox(
+          remote.getCurrentWindow(),
+          {
+            title: 'Confirmation',
+            type: 'question',
+            message: 'Would you like to uninstall the selected packages?',
+            buttons: ['Cancel', 'Uninstall']
+          },
+          (btnIdx) => {
+            if (Boolean(btnIdx) === true) {
+              this._uninstallSelected(selected)
+            }
+          }
+        );
       }
       return false;
     }

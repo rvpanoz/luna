@@ -9,7 +9,6 @@ import * as R from 'ramda';
 import React from 'react';
 
 export const triggerEvent = (eventName, options) => {
-  console.log(eventName, options)
   const {
     mode,
     directory,

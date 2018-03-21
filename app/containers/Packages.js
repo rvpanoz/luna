@@ -187,8 +187,9 @@ class PackagesContainer extends React.Component {
     try {
       const packagesData = parse(packages, 'dependencies')
       const data = R.filter((pkg) => {
-        return !pkg.required
+        return !(pkg.required || pkg.peerMissing || typeof pkg.error === 'object')
       }, packagesData).map((pkg) => {
+        console.log(pkg)
         const { name, version } = pkg
         const outdatedPackage = R.prop(name, packagesOutdated)
 
