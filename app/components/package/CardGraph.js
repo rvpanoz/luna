@@ -1,14 +1,17 @@
 import {objectEntries} from 'utils'
 import React from 'react'
 import BrushChart from 'britecharts/dist/umd/brush.min';
+import 'britecharts/dist/css/britecharts.min.css'
 const d3Selection = require('d3-selection');
 const d3TimeFormat = require('d3-time-format');
-import 'britecharts/dist/css/common/common.min.css'
-import 'britecharts/dist/css/charts/brush.min.css'
+const semver2int = require('semver2int');
 
 class CardGraph extends React.Component {
   constructor(props) {
     super(props)
+    this.setState = {
+
+    }
     this.buildGraph = this.buildGraph.bind(this)
     this.generateData = this.generateData.bind(this)
   }
@@ -21,33 +24,36 @@ class CardGraph extends React.Component {
     const dataSet = data.map(item=>{
       if(item[0] !== 'modified' && item[0] !== 'created') {
         return {
-          value: item[0],
+          value: semver2int(item[0]) / 1000,
           date: item[1]
         }
       }
     }).filter(i=>typeof i === 'object')
 
-    console.log(dataSet);
-
-    return [{
-        value: 11,
-        date: '2011-01-06T00:00:00Z'
-    },
-    {
-        value: 2,
-        date: '2011-01-07T00:00:00Z'
-    }]
+    return dataSet;
   }
   buildGraph(container) {
     const brushContainer = d3Selection.select(container);
     const brushChart = new BrushChart();
     const containerWidth = brushContainer.node() ? brushContainer.node().getBoundingClientRect().width : false;
-    const dataset = this.generateData()
 
-  brushChart
-    .width(500)
-    .height(300)
-    brushContainer.datum(dataset).call(brushChart);
+    if(brushContainer.node()) {
+      const dataset = this.generateData()
+
+      brushChart
+        .width(containerWidth)
+        .height(400)
+        .on('customBrushStart', (brushExtent) => {
+                let format = d3TimeFormat.timeFormat('%m/%d/%Y');
+
+                // d3Selection.select('.js-start-date').text(format(brushExtent[0]));
+                // d3Selection.select('.js-end-date').text(format(brushExtent[1]));
+                //
+                // d3Selection.select('.js-date-range').classed('is-hidden', false);
+            })
+
+        brushContainer.datum(dataset).call(brushChart);
+    }
   }
   componentDidMount() {
     const container = this.refs && this.refs['graph-container']
@@ -55,11 +61,12 @@ class CardGraph extends React.Component {
     if(container) {
       this.buildGraph(container)
     }
-
   }
   render() {
     return (
-      <section ref="graph-container"/>
+      <section id="brush" className="britechart">
+        <div ref="graph-container" style={{position: 'relative', width: '100%'}}/>
+      </section>
     )
   }
 }
