@@ -34,8 +34,10 @@ function withToolbarTableList(List, options = {}) {
       )
     }
     _installSelected(selected) {
-      const { mode, directory, toggleLoader } = this.props
+      const { mode, directory, toggleLoader, clearSelected, setPackages } = this.props
       toggleLoader(true)
+      clearSelected()
+      setPackages([])
       try {
         triggerEvent('install-packages', {
           cmd: ['install'],

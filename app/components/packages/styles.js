@@ -67,6 +67,13 @@ export function tableListStyles(theme) {
       overflowX: "auto"
     },
     tableRow: {
+      border: 'none',
+      padding: '8px',
+      fontSize: '14px',
+     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+     fontWeight: '300',
+    lineHeight: '1.42857143',
+    verticalAlign: 'middle',
       "&:hover": {
         cursor: "pointer"
       }

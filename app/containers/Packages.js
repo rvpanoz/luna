@@ -33,6 +33,8 @@ class PackagesContainer extends React.Component {
   componentDidMount() {
     const {
       setActive,
+      mode,
+      directory,
       toggleMainLoader,
       setMode,
       setTotal,
@@ -45,13 +47,13 @@ class PackagesContainer extends React.Component {
     } = this.props
 
     ipcRenderer.on('install-packages-close', (event) => {
-      toggleLoader(false)
       triggerEvent('get-packages', {
         cmd: ['outdated', 'list'],
         mode,
         directory
       })
     })
+
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
       if (!packages) {
         return
@@ -67,6 +69,7 @@ class PackagesContainer extends React.Component {
       toggleMainLoader(false)
       toggleLoader(false)
     })
+
     ipcRenderer.on('search-packages-close', (event, packagesStr) => {
       try {
         const packages = JSON.parse(packagesStr)
@@ -78,6 +81,7 @@ class PackagesContainer extends React.Component {
         throw new Error(e)
       }
     })
+
     ipcRenderer.on('view-package-close', (event, packageStr) => {
       try {
         const pkg = JSON.parse(packageStr)
@@ -87,6 +91,7 @@ class PackagesContainer extends React.Component {
         throw new Error(e)
       }
     })
+
     ipcRenderer.on('update-package-close', (event, pkg) => {
       const { mode, directory } = this.props
 
@@ -96,6 +101,7 @@ class PackagesContainer extends React.Component {
         directory
       })
     })
+
     ipcRenderer.on('action-close', (event, pkg) => {
       const { mode, directory } = this.props
 
@@ -109,9 +115,11 @@ class PackagesContainer extends React.Component {
         })
       }
     })
+
     ipcRenderer.on('ipcEvent-error', (event, error) => {
       // console.error(error)
     })
+
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
       toggleLoader(true)
       setMode(APP_MODES.LOCAL, directory)

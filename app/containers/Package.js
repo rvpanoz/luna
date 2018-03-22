@@ -20,6 +20,7 @@ import CardHeader from 'components/package/CardHeader'
 import CardContent from 'components/package/CardContent'
 import CardActions from 'components/package/CardActions'
 import CardDetails from 'components/package/CardDetails'
+import CardGraph from 'components/package/CardGraph'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
@@ -162,7 +163,7 @@ class PackageContainer extends React.Component {
                     unmountOnExit
                     className={classes.collapseContent}
                   >
-                    <CardDetails active={active} classes={classes} />
+                  <CardGraph active={active}/>
                   </Collapse>
                 </Card>
               </Fade>
