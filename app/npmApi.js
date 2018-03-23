@@ -175,6 +175,9 @@ exports.uninstall = function(opts, callback) {
   }
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  const run = [].concat(command, commandArgs.join('')).concat(getNames())
+  const run = []
+    .concat(command)
+    .concat(commandArgs)
+    .concat(getNames())
   return runCommand(run, directory, callback)
 }

@@ -1,22 +1,24 @@
-import { objectEntries } from "utils";
-import React from "react";
-import moment from "moment";
-import List, { ListItem, ListItemText } from "material-ui/List";
+import { objectEntries } from 'utils'
+import React from 'react'
+import Typography from 'material-ui/Typography'
+import moment from 'moment'
+import List, { ListItem, ListItemText } from 'material-ui/List'
 
-import {
-  ResponsiveContainer,
-  ReferenceLine,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ScatterChart,
-  Scatter
-} from "recharts";
+// import {
+//   ResponsiveContainer,
+//   ReferenceLine,
+//   XAxis,
+//   YAxis,
+//   CartesianGrid,
+//   Tooltip,
+//   Legend,
+//   ScatterChart,
+//   Scatter
+// } from "recharts";
 
-const CustomizedTooltip = props => {
-  const { payload, active } = props;
+const apiBaseUrl = 'https://api.github.com'
+const CustomizedTooltip = (props) => {
+  const { payload, active } = props
 
   if (active && payload.length) {
     return (
@@ -28,68 +30,68 @@ const CustomizedTooltip = props => {
           />
         </ListItem>
       </List>
-    );
+    )
   } else {
-    return null;
+    return null
   }
-};
+}
 
 class CardGraph extends React.Component {
   constructor(props) {
-    super(props);
-    this.generateData = this.generateData.bind(this);
+    super(props)
+    this.generateData = this.generateData.bind(this)
   }
   generateData() {
-    const { active } = this.props;
+    const { active } = this.props
 
-    const data = objectEntries(active && active.time);
-    let v = 0;
+    const data = objectEntries(active && active.time)
+    let v = 0
 
     const graphData =
       data &&
       data
-        .map(item => {
-          if (item[0] !== "modified" && item[0] !== "created") {
+        .map((item) => {
+          if (item[0] !== 'modified' && item[0] !== 'created') {
             return {
               name: v++,
               originalValue: item[0],
-              value: moment(item[1]).format("DD/MM/YYYY")
-            };
+              value: moment(item[1]).format('DD/MM/YYYY')
+            }
           }
         })
-        .filter(i => typeof i === "object");
+        .filter((i) => typeof i === 'object')
 
-    return graphData;
+    return graphData
   }
   componentDidMount() {
-    const container = this.refs && this.refs["graph-container"];
+    const container = this.refs && this.refs['graph-container']
   }
   render() {
-    const { active } = this.props;
+    const { active } = this.props
 
-    if (!active || !active.time) {
-      return null;
+    if (!active) {
+      return null
     }
 
-    const data = this.generateData();
-    return (
-      <section className="chart-container">
-        <div
-          ref="graph-container"
-          style={{ position: "relative", width: "100%" }}
-        >
-          <ScatterChart style={{ width: "100%" }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <YAxis dataKey="name" name="Version" />
-            <XAxis dataKey="value" name="Date" />
-            <Tooltip content={<CustomizedTooltip payload={data} />} />
-            <Legend />
-            <Scatter name="Versions and dates" data={data} fill="#8884d8" />
-          </ScatterChart>
-        </div>
-      </section>
-    );
+    const data = this.generateData()
+    return <Typography component="div">{active.readme}</Typography>
   }
 }
 
-export default CardGraph;
+// <section className="chart-container">
+//   <div
+//     ref="graph-container"
+//     style={{ position: "relative", width: "100%" }}
+//   >
+//     <ScatterChart style={{ width: "100%" }}>
+//       <CartesianGrid strokeDasharray="3 3" />
+//       <YAxis dataKey="name" name="Version" />
+//       <XAxis dataKey="value" name="Date" />
+//       <Tooltip content={<CustomizedTooltip payload={data} />} />
+//       <Legend />
+//       <Scatter name="Versions and dates" data={data} fill="#8884d8" />
+//     </ScatterChart>
+//   </div>
+// </section>
+
+export default CardGraph

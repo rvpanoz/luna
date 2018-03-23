@@ -34,7 +34,13 @@ function withToolbarTableList(List, options = {}) {
       )
     }
     _installSelected(selected) {
-      const { mode, directory, toggleLoader, clearSelected, setPackages } = this.props
+      const {
+        mode,
+        directory,
+        toggleLoader,
+        clearSelected,
+        setPackages
+      } = this.props
       toggleLoader(true)
       clearSelected()
       setPackages([])
@@ -57,7 +63,8 @@ function withToolbarTableList(List, options = {}) {
         packages,
         setTotal,
         clearSelected,
-        setPackages
+        setPackages,
+        toggleLoader
       } = this.props
 
       try {
@@ -72,6 +79,7 @@ function withToolbarTableList(List, options = {}) {
         const packagesRemaining = filter(
           (pkg) => !contains(pkg.name, selected)
         )(packages)
+        toggleLoader(true)
         clearSelected()
         setPackages(packagesRemaining)
         setTotal(packagesRemaining.length)
@@ -179,6 +187,7 @@ function withToolbarTableList(List, options = {}) {
         handleChangeRowsPerPage,
         total,
         packagesActions,
+        rowsPerPage,
         ...rest
       } = this.props
       const { title } = options
@@ -207,6 +216,7 @@ function withToolbarTableList(List, options = {}) {
             selected={selected}
             loading={loading}
             rowCount={total}
+            rowsPerPage={rowsPerPage}
             {...rest}
           />
         </Paper>
@@ -234,7 +244,8 @@ withToolbarTableList.propTypes = {
   selected: array,
   order: number,
   orderBy: string,
-  rowCount: number
+  rowCount: number,
+  rowsPerPage: number
 }
 
 export default withToolbarTableList

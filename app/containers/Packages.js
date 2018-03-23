@@ -54,6 +54,15 @@ class PackagesContainer extends React.Component {
       })
     })
 
+    ipcRenderer.on('uninstall-packages-close', (event) => {
+      toggleLoader(false)
+      // triggerEvent('get-packages', {
+      //   cmd: ['outdated', 'list'],
+      //   mode,
+      //   directory
+      // })
+    })
+
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
       if (!packages) {
         return
@@ -117,7 +126,11 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('ipcEvent-error', (event, error) => {
-      // console.error(error)
+      const { setError, errors } = this.props
+      if (error) {
+        console.error(error)
+      }
+      // setError(error)
     })
 
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
@@ -285,12 +298,14 @@ function mapStateToProps(state) {
     order: state.packages.order,
     page: state.packages.page,
     rowsPerPage: state.packages.rowsPerPage,
-    packagesActions: state.packages.actions
+    packagesActions: state.packages.actions,
+    errors: state.packages.errors
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
+    setError: (error) => dispatch(packagesActions.setError(error)),
     setPage: (page) => dispatch(packagesActions.setPage(page)),
     setRowsPerPage: (rows) => dispatch(packagesActions.setRowsPerPage(rows)),
     setSelectedPackage: (pkgName, force) =>

@@ -21,6 +21,7 @@ export default {
     total: 0,
     active: null,
     group: null,
+    errors: [],
     packages: [],
     selected: [],
     cmdOptions: [],

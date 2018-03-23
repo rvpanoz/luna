@@ -79,6 +79,9 @@ ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent } = opts || {}
 
   function callback(data, command, status, error) {
+    if (error) {
+      console.log(error)
+    }
     switch (status) {
       case 'close':
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
@@ -144,6 +147,7 @@ app.on('ready', async () => {
 
   // create main window
   mainWindow = new BrowserWindow({
+    webPreferences: { webSecurity: false },
     width: screenSize.width,
     height: screenSize.height,
     x: x,
