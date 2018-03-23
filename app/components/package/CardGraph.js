@@ -1,74 +1,95 @@
-import {objectEntries} from 'utils'
-import React from 'react'
-import BrushChart from 'britecharts/dist/umd/brush.min';
-import 'britecharts/dist/css/britecharts.min.css'
-const d3Selection = require('d3-selection');
-const d3TimeFormat = require('d3-time-format');
-const semver2int = require('semver2int');
+import { objectEntries } from "utils";
+import React from "react";
+import moment from "moment";
+import List, { ListItem, ListItemText } from "material-ui/List";
+
+import {
+  ResponsiveContainer,
+  ReferenceLine,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ScatterChart,
+  Scatter
+} from "recharts";
+
+const CustomizedTooltip = props => {
+  const { payload, active } = props;
+
+  if (active && payload.length) {
+    return (
+      <List>
+        <ListItem>
+          <ListItemText
+            primary={payload[0].value}
+            secondary={payload[1].payload.originalValue}
+          />
+        </ListItem>
+      </List>
+    );
+  } else {
+    return null;
+  }
+};
 
 class CardGraph extends React.Component {
   constructor(props) {
-    super(props)
-    this.setState = {
-
-    }
-    this.buildGraph = this.buildGraph.bind(this)
-    this.generateData = this.generateData.bind(this)
+    super(props);
+    this.generateData = this.generateData.bind(this);
   }
   generateData() {
-    const {
-      active
-    } = this.props
+    const { active } = this.props;
 
     const data = objectEntries(active && active.time);
-    const dataSet = data.map(item=>{
-      if(item[0] !== 'modified' && item[0] !== 'created') {
-        return {
-          value: semver2int(item[0]) / 1000,
-          date: item[1]
-        }
-      }
-    }).filter(i=>typeof i === 'object')
+    let v = 0;
 
-    return dataSet;
-  }
-  buildGraph(container) {
-    const brushContainer = d3Selection.select(container);
-    const brushChart = new BrushChart();
-    const containerWidth = brushContainer.node() ? brushContainer.node().getBoundingClientRect().width : false;
+    const graphData =
+      data &&
+      data
+        .map(item => {
+          if (item[0] !== "modified" && item[0] !== "created") {
+            return {
+              name: v++,
+              originalValue: item[0],
+              value: moment(item[1]).format("DD/MM/YYYY")
+            };
+          }
+        })
+        .filter(i => typeof i === "object");
 
-    if(brushContainer.node()) {
-      const dataset = this.generateData()
-
-      brushChart
-        .width(containerWidth)
-        .height(400)
-        .on('customBrushStart', (brushExtent) => {
-                let format = d3TimeFormat.timeFormat('%m/%d/%Y');
-
-                // d3Selection.select('.js-start-date').text(format(brushExtent[0]));
-                // d3Selection.select('.js-end-date').text(format(brushExtent[1]));
-                //
-                // d3Selection.select('.js-date-range').classed('is-hidden', false);
-            })
-
-        brushContainer.datum(dataset).call(brushChart);
-    }
+    return graphData;
   }
   componentDidMount() {
-    const container = this.refs && this.refs['graph-container']
-
-    if(container) {
-      this.buildGraph(container)
-    }
+    const container = this.refs && this.refs["graph-container"];
   }
   render() {
+    const { active } = this.props;
+
+    if (!active || !active.time) {
+      return null;
+    }
+
+    const data = this.generateData();
     return (
-      <section id="brush" className="britechart">
-        <div ref="graph-container" style={{position: 'relative', width: '100%'}}/>
+      <section className="chart-container">
+        <div
+          ref="graph-container"
+          style={{ position: "relative", width: "100%" }}
+        >
+          <ScatterChart style={{ width: "100%" }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <YAxis dataKey="name" name="Version" />
+            <XAxis dataKey="value" name="Date" />
+            <Tooltip content={<CustomizedTooltip payload={data} />} />
+            <Legend />
+            <Scatter name="Versions and dates" data={data} fill="#8884d8" />
+          </ScatterChart>
+        </div>
       </section>
-    )
+    );
   }
 }
 
-export default CardGraph
+export default CardGraph;

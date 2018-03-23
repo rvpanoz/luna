@@ -48,10 +48,10 @@ class Layout extends React.Component {
         />
         <main className={classes.content}>
           <Grid container direction="row" justify="space-between">
-            <Grid item xs={9}>
+            <Grid item xs={11}>
               <PackagesContainer />
             </Grid>
-            <Grid item xs={3} />
+            <Grid item xs={1} />
           </Grid>
           {snackBarOpen ? (
             <SnackBar
@@ -77,7 +77,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
+    toggleSnackbar: bool => dispatch(globalActions.toggleSnackbar(bool)),
     handleDrawerOpen: () => dispatch(globalActions.handleDrawer(true)),
     handleDrawerClose: () => dispatch(globalActions.handleDrawer(false))
   };
