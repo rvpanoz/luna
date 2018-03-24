@@ -47,6 +47,8 @@ class PackagesContainer extends React.Component {
     } = this.props
 
     ipcRenderer.on('install-packages-close', (event) => {
+      const { mode, directory } = this.props
+
       triggerEvent('get-packages', {
         cmd: ['outdated', 'list'],
         mode,
@@ -55,6 +57,8 @@ class PackagesContainer extends React.Component {
     })
 
     ipcRenderer.on('uninstall-packages-close', (event) => {
+      const { mode, directory } = this.props
+
       toggleLoader(false)
       // triggerEvent('get-packages', {
       //   cmd: ['outdated', 'list'],
@@ -170,7 +174,7 @@ class PackagesContainer extends React.Component {
       'analyze-json-close'
     ])
   }
-  setGlobalMode(directory) {
+  setGlobalMode() {
     const {
       toggleLoader,
       setPackages,
@@ -187,17 +191,6 @@ class PackagesContainer extends React.Component {
     triggerEvent('get-packages', {
       cmd: ['outdated', 'list'],
       mode: APP_MODES.GLOBAL
-    })
-  }
-  reload(e) {
-    const { mode, directory, toggleLoader, setActive } = this.props
-
-    toggleLoader(true)
-    setActive(null)
-    triggerEvent('get-packages', {
-      cmd: ['outdated', 'list'],
-      mode,
-      directory
     })
   }
   setupPackagesFromResponse(packages) {
@@ -255,13 +248,24 @@ class PackagesContainer extends React.Component {
       throw new Error(e)
     }
   }
+  reload(e) {
+    const { mode, directory, toggleLoader, setActive } = this.props
+
+    toggleLoader(true)
+    setActive(null)
+    triggerEvent('get-packages', {
+      cmd: ['outdated', 'list'],
+      mode,
+      directory
+    })
+  }
   render() {
     const { loading, isLoading, ...rest } = this.props
 
     return (
       <section>
         <Grid container>
-          <Grid item xs={6} md={6} lg={6}>
+          <Grid item xs={5} md={5} lg={4}>
             <WithToolbarList
               setGlobalMode={this.setGlobalMode}
               reload={this.reload}
@@ -269,7 +273,7 @@ class PackagesContainer extends React.Component {
               {...rest}
             />
           </Grid>
-          <Grid item xs={6} md={6} lg={6}>
+          <Grid item xs={5} md={5} lg={4}>
             <Loader loading={isLoading}>
               <PackageContainer />
             </Loader>

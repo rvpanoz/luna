@@ -121,18 +121,22 @@ class TableList extends React.PureComponent {
                   }
 
                   const {
+                    missing,
                     peerMissing,
                     latest,
                     license,
                     description,
+                    deprecated,
                     version,
                     name
                   } = pkg
 
                   //exclude missing dependencies
-                  if (peerMissing) {
+                  if (peerMissing || missing === true) {
                     return
                   }
+
+                  // console.log(pkg)
                   const alreadySelected = isSelected(name)
 
                   return (
@@ -166,6 +170,11 @@ class TableList extends React.PureComponent {
                         )}
                       </TableCell>
                       <TableCell padding="none">{license}</TableCell>
+                      <TableCell padding="none">
+                        {deprecated === true ? (
+                          <Chip color="error" label="Deprecated" />
+                        ) : null}
+                      </TableCell>
                     </TableRow>
                   )
                 })}

@@ -20,14 +20,21 @@ class CardOptions extends React.Component {
     super()
     this.handleChange = this.handleChange.bind(this)
   }
+  componentDidMount() {
+    const { packageJSON, group, active, addCommandOption } = this.props
+    const { name } = active
+
+    if (group && packageJSON && typeof packageJSON === 'object') {
+      const pkgVersion = packageJSON[group][name]
+      if (pkgVersion && pkgVersion[0] === '^') {
+        addCommandOption('save-exact')
+      }
+    }
+  }
   handleChange(e) {
-    const {
-      cmdOptions,
-      addCommandOption,
-      removeCommandOption,
-      clearCommandOptions
-    } = this.props
     const opt = e.currentTarget.value
+    const { addCommandOption } = this.props
+
     addCommandOption(opt)
   }
   render() {
@@ -38,6 +45,7 @@ class CardOptions extends React.Component {
         <FormGroup row>
           {COMMAND_OPTIONS.map((option, idx) => {
             let opt = option.split('*')
+            console.log(option, opt)
             return (
               <FormControlLabel
                 key={idx}

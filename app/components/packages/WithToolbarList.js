@@ -6,6 +6,7 @@
 import { remote } from 'electron'
 import { filter, contains } from 'ramda'
 import { autoBind, triggerEvent } from 'utils'
+import { APP_MODES } from 'constants/AppConstants'
 import Loader from 'common/Loader'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -79,6 +80,7 @@ function withToolbarTableList(List, options = {}) {
         const packagesRemaining = filter(
           (pkg) => !contains(pkg.name, selected)
         )(packages)
+
         toggleLoader(true)
         clearSelected()
         setPackages(packagesRemaining)
@@ -104,8 +106,10 @@ function withToolbarTableList(List, options = {}) {
     }
     handleGlobals(e) {
       if (e) e.preventDefault()
-      const { setGlobalMode } = this.props
-      setGlobalMode()
+      const { mode, setGlobalMode } = this.props
+      if (mode === APP_MODES.LOCAL) {
+        setGlobalMode()
+      }
       e.stopPropagation()
     }
     handleUninstall(e) {

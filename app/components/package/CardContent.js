@@ -23,6 +23,8 @@ const CardContent = (props) => {
     cmdOptions,
     onChangeVersion,
     addCommandOption,
+    packageJSON,
+    group,
     removeCommandOption
   } = props
 
@@ -51,8 +53,11 @@ const CardContent = (props) => {
         />
         {mode && mode === APP_MODES.LOCAL ? (
           <CardOptions
-            cmdOptions={cmdOptions}
+            active={active}
             addCommandOption={addCommandOption}
+            group={group}
+            cmdOptions={cmdOptions}
+            packageJSON={packageJSON}
             removeCommandOption={removeCommandOption}
           />
         ) : null}

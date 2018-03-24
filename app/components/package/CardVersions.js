@@ -8,14 +8,14 @@ import PropTypes from 'prop-types'
 const { object, func } = PropTypes
 
 const CardVersions = (props) => {
-  const { active, classes, onChangeVersion } = props
+  const { active, classes, latest, onChangeVersion } = props
 
   return (
     <TextField
       select
       label="Select Version"
       className={classes.textField}
-      value={active.version}
+      value={active.latest || active.version}
       onChange={onChangeVersion}
       SelectProps={{
         MenuProps: {

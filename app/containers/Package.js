@@ -39,7 +39,6 @@ class PackageContainer extends React.Component {
       active,
       mode,
       setPackageGroup,
-      addCommandOption,
       clearCommandOptions,
       toggleExpanded
     } = this.props
@@ -105,6 +104,7 @@ class PackageContainer extends React.Component {
       setupSnackbar,
       toggleSnackbar,
       toggleExpanded,
+      packageJSON,
       ...rest
     } = this.props
 
@@ -140,6 +140,8 @@ class PackageContainer extends React.Component {
                     removeCommandOption={removeCommandOption}
                     clearCommandOptions={clearCommandOptions}
                     mode={mode}
+                    group={group}
+                    packageJSON={packageJSON}
                   />
                   <CardActions
                     active={active}
@@ -163,7 +165,7 @@ class PackageContainer extends React.Component {
                     unmountOnExit
                     className={classes.collapseContent}
                   >
-                  <CardGraph active={active}/>
+                    <CardGraph active={active} />
                   </Collapse>
                 </Card>
               </Fade>
@@ -201,14 +203,12 @@ function mapDispatchToProps(dispatch) {
       dispatch(globalActions.setupSnackbar(snackbarOptions)),
     toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
     addCommandOption: (option) =>
-      dispatch(globalActions.addCommandOption(option)),
+      dispatch(packagesActions.addCommandOption(option)),
     setActiveTab: (tabIndex) =>
       dispatch(packagesActions.setActiveTab(tabIndex)),
     toggleExpanded: (value) => dispatch(packagesActions.toggleExpanded(value)),
     setPackageGroup: (group) =>
       dispatch(packagesActions.setPackageGroup(group)),
-    addCommandOption: (option) =>
-      dispatch(packagesActions.addCommandOption(option)),
     removeCommandOption: (option) =>
       dispatch(packagesActions.removeCommandOption(option)),
     clearCommandOptions: () => dispatch(packagesActions.clearCommandOptions()),
