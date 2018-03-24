@@ -21,7 +21,6 @@ import CardHeader from 'components/package/CardHeader'
 import CardContent from 'components/package/CardContent'
 import CardActions from 'components/package/CardActions'
 import CardDetails from 'components/package/CardDetails'
-import CardGraph from 'components/package/CardGraph'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
@@ -127,7 +126,7 @@ class PackageContainer extends React.Component {
 
     const hasError = active.error
     if (hasError) {
-      return 'WIP package'
+      return null
     }
 
     return (
@@ -137,15 +136,9 @@ class PackageContainer extends React.Component {
             <section className={classes.root}>
               <Fade in={true}>
                 <Card className={classes.card}>
-                  <CardHeader
-                    classes={classes}
-                    mode={mode}
-                    active={active}
-                    group={group}
-                  />
+                  <CardHeader mode={mode} active={active} group={group} />
                   <CardContent
                     version={version}
-                    classes={classes}
                     active={active}
                     cmdOptions={cmdOptions}
                     onChangeVersion={this.onChangeVersion}
@@ -178,7 +171,7 @@ class PackageContainer extends React.Component {
                     unmountOnExit
                     className={classes.collapseContent}
                   >
-                    <CardGraph active={active} />
+                    wip...
                   </Collapse>
                 </Card>
               </Fade>

@@ -4,6 +4,7 @@
  */
 
 import { shell } from 'electron'
+import { withStyles } from 'material-ui/styles'
 import { CardHeader as MuiCardHeader } from 'material-ui/Card'
 import { APP_MODES } from 'constants/AppConstants'
 import Menu, { MenuItem } from 'material-ui/Menu'
@@ -29,6 +30,12 @@ const ITEM_HEIGHT = 55,
       }
     }
   }
+
+const styles = (theme) => {
+  avatar: {
+    backgroundColor: theme.palette.secondary.main
+  }
+}
 
 class CardHeader extends React.Component {
   constructor(props) {
@@ -73,7 +80,6 @@ class CardHeader extends React.Component {
                 aria-owns={this._anchorEl ? 'long-menu' : null}
                 aria-haspopup="true"
                 onClick={this.handleClick}
-                className={classes.iconbutton}
               >
                 <MoreVertIcon />
               </IconButton>
@@ -134,4 +140,4 @@ CardHeader.propTypes = {
   active: object.isRequired
 }
 
-export default CardHeader
+export default withStyles(styles)(CardHeader)
