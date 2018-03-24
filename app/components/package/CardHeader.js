@@ -3,10 +3,12 @@
  *
  */
 
+import { shell } from 'electron'
 import { CardHeader as MuiCardHeader } from 'material-ui/Card'
 import { APP_MODES } from 'constants/AppConstants'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import { ListItemText } from 'material-ui/List'
+import { isUrl } from 'utils'
 import React from 'react'
 import PropTypes from 'prop-types'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
@@ -32,37 +34,14 @@ class CardHeader extends React.Component {
   constructor(props) {
     super(props)
     this._anchorEl = null
-
-    this.state = {
-      options: []
-    }
-
     this.buildTitle = this.buildTitle.bind(this)
     this.handleClick = this.handleClick.bind(this)
     this.handleClose = this.handleClose.bind(this)
-  }
-  onNavigate(e) {
-    e.preventDefault()
-    const url = e.currentTarget.dataset.url
-    if (isUrl(url)) {
-      shell.openExternal(url)
-    }
-    return false
   }
   buildTitle() {
     const { active, group, actions } = this.props
     const { name, author, version } = active
     return group ? `${name} - ${group}` : name
-  }
-  buildOptions() {
-    const { mode, cmdOptions } = this.props
-
-    return cmdOptions.map((opt) => (
-      <MenuItem key={opt} value={opt}>
-        <Checkbox checked={this.state.options.indexOf(name) > -1} />
-        <ListItemText primary={opt} />
-      </MenuItem>
-    ))
   }
   handleClick(e) {
     this._anchorEl = e.currentTarget
@@ -110,8 +89,30 @@ class CardHeader extends React.Component {
                   }
                 }}
               >
-                <MenuItem key="item-a">Update</MenuItem>
-                <MenuItem key="item-b">Uninstall</MenuItem>
+                <MenuItem
+                  key="homepage"
+                  onClick={(e) => {
+                    const url = active.homepage || false
+                    if (isUrl(url)) {
+                      shell.openExternal(url)
+                    }
+                    return false
+                  }}
+                >
+                  Homepage
+                </MenuItem>
+                <MenuItem
+                  key="issues"
+                  onClick={(e) => {
+                    const url = active.bugs && active.bugs.url
+                    if (isUrl(url)) {
+                      shell.openExternal(url)
+                    }
+                    return false
+                  }}
+                >
+                  Issues
+                </MenuItem>
               </Menu>
             </div>
           }

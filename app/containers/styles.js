@@ -3,6 +3,14 @@ import deepPurple from 'material-ui/colors/deepPurple'
 import pink from 'material-ui/colors/pink'
 import red from 'material-ui/colors/red'
 
+const primaryColor = '#9c27b0'
+const warningColor = '#ff9800'
+const dangerColor = '#f44336'
+const successColor = '#4caf50'
+const infoColor = '#00acc1'
+const roseColor = '#e91e63'
+const grayColor = '#999999'
+
 export function cardStyles(theme) {
   return {
     root: {
@@ -36,16 +44,12 @@ export function cardStyles(theme) {
         margin: theme.spacing.unit
       }
     },
-    details: {
-      visibility: 'visible',
-      width: '100%',
-      maxHeight: 200,
-      marginBottom: 20,
-      overflowX: 'hidden',
-      overflowY: 'auto'
-    },
-    detailsAvatar: {
-      marginTop: 15
+    info: {
+      lineHeight: '22px',
+      color: grayColor,
+      fontSize: '12px',
+      display: 'inline-block',
+      margin: '0!important'
     },
     formControl: {
       margin: theme.spacing.unit,
@@ -66,6 +70,9 @@ export function cardStyles(theme) {
     },
     description: {
       marginTop: 10
+    },
+    details: {
+      marginBottom: 10
     },
     listItem: {
       paddingLeft: 0

@@ -1,97 +1,60 @@
+//TODO...
+
 import { objectEntries } from 'utils'
 import React from 'react'
-import Typography from 'material-ui/Typography'
 import moment from 'moment'
-import List, { ListItem, ListItemText } from 'material-ui/List'
+import semver2int from 'semver2int'
 
-// import {
-//   ResponsiveContainer,
-//   ReferenceLine,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   Legend,
-//   ScatterChart,
-//   Scatter
-// } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend
+} from 'recharts'
 
-const apiBaseUrl = 'https://api.github.com'
-const CustomizedTooltip = (props) => {
-  const { payload, active } = props
+const generateData = (dataTime) => {
+  const data = objectEntries(dataTime)
+  const graphData =
+    data &&
+    data
+      .map((item) => {
+        if (item[0] !== 'modified' && item[0] !== 'created') {
+          return {
+            version: semver2int(item[0]) / 10000,
+            date: moment(item[1]).format('DD/MM/YYYY')
+          }
+        }
+      })
+      .filter((i) => typeof i === 'object')
 
-  if (active && payload.length) {
-    return (
-      <List>
-        <ListItem>
-          <ListItemText
-            primary={payload[0].value}
-            secondary={payload[1].payload.originalValue}
-          />
-        </ListItem>
-      </List>
-    )
-  } else {
+  return graphData
+}
+
+const CardGraph = (props) => {
+  const { time } = props
+
+  if (!time) {
     return null
   }
+
+  return (
+    <LineChart
+      width={600}
+      height={300}
+      data={generateData(time)}
+      margin={{ top: 15, right: 0, left: 0, bottom: 5 }}
+    >
+      <XAxis dataKey="date" />
+      <YAxis />
+      <CartesianGrid strokeDasharray="3 3" />
+      <Tooltip />
+      <Legend />
+      <Line type="monotone" dataKey="version" stroke="#8884d8" />
+    </LineChart>
+  )
 }
-
-class CardGraph extends React.Component {
-  constructor(props) {
-    super(props)
-    this.generateData = this.generateData.bind(this)
-  }
-  generateData() {
-    const { active } = this.props
-
-    const data = objectEntries(active && active.time)
-    let v = 0
-
-    const graphData =
-      data &&
-      data
-        .map((item) => {
-          if (item[0] !== 'modified' && item[0] !== 'created') {
-            return {
-              name: v++,
-              originalValue: item[0],
-              value: moment(item[1]).format('DD/MM/YYYY')
-            }
-          }
-        })
-        .filter((i) => typeof i === 'object')
-
-    return graphData
-  }
-  componentDidMount() {
-    const container = this.refs && this.refs['graph-container']
-  }
-  render() {
-    const { active } = this.props
-
-    if (!active) {
-      return null
-    }
-
-    const data = this.generateData()
-    return <Typography component="div">{active.readme}</Typography>
-  }
-}
-
-// <section className="chart-container">
-//   <div
-//     ref="graph-container"
-//     style={{ position: "relative", width: "100%" }}
-//   >
-//     <ScatterChart style={{ width: "100%" }}>
-//       <CartesianGrid strokeDasharray="3 3" />
-//       <YAxis dataKey="name" name="Version" />
-//       <XAxis dataKey="value" name="Date" />
-//       <Tooltip content={<CustomizedTooltip payload={data} />} />
-//       <Legend />
-//       <Scatter name="Versions and dates" data={data} fill="#8884d8" />
-//     </ScatterChart>
-//   </div>
-// </section>
 
 export default CardGraph

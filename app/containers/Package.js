@@ -9,6 +9,7 @@ import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
 import { showMessageBox, triggerEvent, autoBind } from 'utils'
+import { contains } from 'ramda'
 import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
 import Collapse from 'material-ui/transitions/Collapse'
 import Card from 'material-ui/Card'
@@ -40,6 +41,7 @@ class PackageContainer extends React.Component {
       mode,
       setPackageGroup,
       clearCommandOptions,
+      addCommandOption,
       toggleExpanded
     } = this.props
 
@@ -58,6 +60,17 @@ class PackageContainer extends React.Component {
           return found
         }
       })
+
+      //save-exact fix
+      const { group } = this.props
+      const symbols = ['~', '^']
+
+      if (group) {
+        const pkgVersion = packageJSON[group][active.name]
+        if (pkgVersion && !contains(pkgVersion[0], symbols)) {
+          addCommandOption('save-exact')
+        }
+      }
     }
   }
   componentWillUnmount() {

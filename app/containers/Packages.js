@@ -207,8 +207,9 @@ class PackagesContainer extends React.Component {
       const packagesData = parse(packages, 'dependencies')
       const data = R.filter((pkg) => {
         return !(
+          pkg.missing ||
           pkg.required ||
-          pkg.peerMissing ||
+          !pkg._from ||
           typeof pkg.error === 'object'
         )
       }, packagesData).map((pkg) => {
@@ -273,7 +274,7 @@ class PackagesContainer extends React.Component {
               {...rest}
             />
           </Grid>
-          <Grid item xs={5} md={5} lg={4}>
+          <Grid item xs={7} md={7} lg={6}>
             <Loader loading={isLoading}>
               <PackageContainer />
             </Loader>

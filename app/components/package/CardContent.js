@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
 import Divider from 'material-ui/Divider'
 import CardOptions from './CardOptions'
 import CardVersions from './CardVersions'
+import CardGraph from './CardGraph'
 
 const { object, array, func, string } = PropTypes
 
@@ -61,6 +62,43 @@ const CardContent = (props) => {
             removeCommandOption={removeCommandOption}
           />
         ) : null}
+      </section>
+      <br />
+      <Typography component="h3" className={classes.heading}>
+        Details and stats
+      </Typography>
+      <Divider />
+      <section className={classes.details}>
+        <Typography
+          className={classes.info}
+          component="p"
+          gutterBottom={true}
+          variant="caption"
+        >
+          Author: {active.author || APP_INFO.NOT_AVAILABLE}
+        </Typography>
+        <br />
+        <CardGraph time={active.time} />
+        <Typography
+          align="left"
+          className={classes.info}
+          component="p"
+          gutterBottom={true}
+          variant="caption"
+        >
+          Homepage: {active.homepage || APP_INFO.NOT_AVAILABLE}
+        </Typography>
+        <br />
+        <Typography
+          align="left"
+          gutterBottom={true}
+          variant="caption"
+          className={classes.info}
+          component="p"
+        >
+          Issues:&nbsp;
+          {(active.bugs && active.bugs.url) || APP_INFO.NOT_AVAILABLE}
+        </Typography>
       </section>
     </MuiCardContent>
   )
