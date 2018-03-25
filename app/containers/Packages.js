@@ -294,23 +294,21 @@ class PackagesContainer extends React.Component {
     const { loading, isLoading, ...rest } = this.props
 
     return (
-      <section>
-        <Grid container>
-          <Grid item xs={5} md={5} lg={4}>
-            <WithToolbarList
-              setGlobalMode={this.setGlobalMode}
-              reload={this.reload}
-              loading={loading}
-              {...rest}
-            />
-          </Grid>
-          <Grid item xs={7} md={7} lg={6}>
-            <Loader loading={isLoading}>
-              <PackageContainer />
-            </Loader>
-          </Grid>
+      <Grid container>
+        <Grid item xs={5} md={5} lg={4}>
+          <WithToolbarList
+            setGlobalMode={this.setGlobalMode}
+            reload={this.reload}
+            loading={loading}
+            {...rest}
+          />
         </Grid>
-      </section>
+        <Grid item xs={6} md={6} lg={7}>
+          <Loader loading={isLoading}>
+            <PackageContainer />
+          </Loader>
+        </Grid>
+      </Grid>
     )
   }
 }

@@ -20,6 +20,9 @@ const shell = require('./shell')
 const debug = /--debug/.test(process.argv[2])
 let mainWindow = null
 
+const MIN_WIDTH = 1366
+const MIN_HEIGHT = 768
+
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support')
   sourceMapSupport.install()
@@ -145,11 +148,15 @@ app.on('ready', async () => {
     y = externalDisplay.bounds.y + 50
   }
 
+  if (MIN_WIDTH > screenSize.width) {
+    throw new Error('Fatal: LOW_RESOLUTION')
+  }
+
   // create main window
   mainWindow = new BrowserWindow({
     webPreferences: { webSecurity: false },
-    width: screenSize.width,
-    height: screenSize.height,
+    minWidth: MIN_WIDTH || screenSize.width,
+    minHeight: MIN_HEIGHT || screenSize.height,
     x: x,
     y: y,
     show: false,

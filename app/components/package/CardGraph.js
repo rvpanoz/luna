@@ -106,37 +106,35 @@ class CardGraph extends React.Component {
     const data = this._generateData()
 
     return (
-      <section className={classes.root}>
-        <Grid container>
-          <Grid item xs={9}>
-            <div style={{ backgroundColor: '#fff' }}>
-              <LineChart
-                width={600}
-                height={300}
-                data={data}
-                margin={{ top: 15, right: 0, left: 0, bottom: 5 }}
-              >
-                <XAxis dataKey="date" />
-                <YAxis />
-                <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip
-                  content={
-                    <CustomTooltip
-                      active={true}
-                      wrapperStyle={{ width: 100, backgroundColor: '#ccc' }}
-                    />
-                  }
-                />
-                <Legend />
-                <Line type="monotone" dataKey="version" stroke="#8884d8" />
-              </LineChart>
-            </div>
-          </Grid>
-          <Grid item xs={3}>
-            <CardTags active={active} />
-          </Grid>
+      <Grid container>
+        <Grid item xs={10} md={9} lg={10}>
+          <div style={{ backgroundColor: '#fff' }}>
+            <LineChart
+              width={600}
+              height={300}
+              data={data}
+              margin={{ top: 15, right: 0, left: 0, bottom: 5 }}
+            >
+              <XAxis dataKey="date" />
+              <YAxis />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip
+                content={
+                  <CustomTooltip
+                    active={true}
+                    wrapperStyle={{ width: 100, backgroundColor: '#ccc' }}
+                  />
+                }
+              />
+              <Legend />
+              <Line type="monotone" dataKey="version" stroke="#8884d8" />
+            </LineChart>
+          </div>
         </Grid>
-      </section>
+        <Grid item xs={2} md={3} lg={2}>
+          <CardTags active={active} />
+        </Grid>
+      </Grid>
     )
   }
 }

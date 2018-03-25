@@ -132,7 +132,7 @@ class PackageContainer extends React.Component {
     return (
       <section className={classes.root}>
         <Grid container direction="row" justify="flex-start">
-          <Grid item xs={12}>
+          <Grid item xs={12} md={12} lg={12}>
             <Fade in={true}>
               <Card className={classes.card}>
                 <CardHeader mode={mode} active={active} group={group} />
