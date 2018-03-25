@@ -14,6 +14,7 @@ import CardOptions from './CardOptions'
 import CardVersions from './CardVersions'
 import CardGraph from './CardGraph'
 
+const grayColor = '#999999'
 const { object, array, func, string } = PropTypes
 const styles = (theme) => {
   return {
@@ -38,6 +39,13 @@ const styles = (theme) => {
     },
     details: {
       marginBottom: 10
+    },
+    info: {
+      lineHeight: '22px',
+      color: grayColor,
+      fontSize: '12px',
+      display: 'inline-block',
+      margin: '0!important'
     }
   }
 }
@@ -55,7 +63,7 @@ class CardContent extends React.Component {
       packageJSON,
       group,
       removeCommandOption
-    } = props
+    } = this.props
 
     if (!active) {
       return null
@@ -75,11 +83,7 @@ class CardContent extends React.Component {
         </Typography>
         <Divider />
         <section className={classes.controls}>
-          <CardVersions
-            classes={classes}
-            active={active}
-            onChangeVersion={onChangeVersion}
-          />
+          <CardVersions active={active} onChangeVersion={onChangeVersion} />
           {mode && mode === APP_MODES.LOCAL ? (
             <CardOptions
               active={active}

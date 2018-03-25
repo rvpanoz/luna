@@ -1,4 +1,5 @@
 import { objectEntries } from 'utils'
+import { withStyles } from 'material-ui/styles'
 import List, {
   ListItem,
   ListItemSecondaryAction,
@@ -20,6 +21,14 @@ import {
   Tooltip,
   Legend
 } from 'recharts'
+
+const styles = (theme) => {
+  return {
+    root: {
+      width: '100%'
+    }
+  }
+}
 
 class CardGraph extends React.Component {
   constructor(props) {
@@ -48,26 +57,6 @@ class CardGraph extends React.Component {
     }
     return null
   }
-  _getTags() {
-    const { active } = this.props
-    const data = active['dist-tags'] && objectEntries(active['dist-tags'])
-
-    if (data) {
-      const tags =
-        data &&
-        data
-          .map((item) => {
-            return {
-              name: item[0],
-              version: item[1]
-            }
-          })
-          .filter((i) => typeof i === 'object')
-
-      return tags
-    }
-    return null
-  }
   render() {
     const { active, classes } = this.props
 
@@ -76,10 +65,9 @@ class CardGraph extends React.Component {
     }
 
     const data = this._generateData()
-    const tags = this._getTags()
 
     return (
-      <section>
+      <section className={classes.root}>
         <Grid container>
           <Grid item xs={9}>
             <LineChart
@@ -97,7 +85,7 @@ class CardGraph extends React.Component {
             </LineChart>
           </Grid>
           <Grid item xs={3}>
-            <CardTags active={active} classes={classes} />
+            <CardTags active={active} />
           </Grid>
         </Grid>
       </section>
@@ -105,4 +93,4 @@ class CardGraph extends React.Component {
   }
 }
 
-export default CardGraph
+export default withStyles(styles)(CardGraph)

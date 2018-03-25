@@ -1,6 +1,5 @@
-//WIP
-
 import { objectEntries } from 'utils'
+import { withStyles } from 'material-ui/styles'
 import List, {
   ListItem,
   ListItemSecondaryAction,
@@ -8,6 +7,23 @@ import List, {
 } from 'material-ui/List'
 import classnames from 'classnames'
 import React from 'react'
+
+const styles = (theme) => {
+  return {
+    innerList: {
+      clear: 'both',
+      visibility: 'visible',
+      overflowX: 'hidden',
+      overflowY: 'auto'
+    },
+    innerListLong: {
+      maxHeight: '300px'
+    },
+    innerListSmall: {
+      maxHeight: '200px'
+    }
+  }
+}
 
 class CardTags extends React.Component {
   constructor(props) {
@@ -65,4 +81,4 @@ class CardTags extends React.Component {
   }
 }
 
-export default CardTags
+export default withStyles(styles)(CardTags)

@@ -20,7 +20,6 @@ import LinkIcon from 'material-ui-icons/Link'
 import CardHeader from 'components/package/CardHeader'
 import CardContent from 'components/package/CardContent'
 import CardActions from 'components/package/CardActions'
-import CardDetails from 'components/package/CardDetails'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
@@ -155,7 +154,6 @@ class PackageContainer extends React.Component {
                     expanded={expanded}
                     setActive={setActive}
                     toggleLoader={toggleLoader}
-                    classes={classes}
                     actions={actions}
                     defaultActions={defaultActions}
                     setupSnackbar={setupSnackbar}
