@@ -25,7 +25,7 @@ const themeA = {
     secondary: {
       light: pink[100],
       main: pink[400],
-      dark: pink[700],
+      dark: pink[600],
       contrastText: '#000'
     }
   }
