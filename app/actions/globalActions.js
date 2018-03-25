@@ -54,11 +54,13 @@ export function setMode(mode, directory) {
   }
 }
 
-export function addMessage(level, body) {
+export function addMessage(level, body, requires, requiredBy) {
   return {
     type: types.ADD_MESSAGE,
     level,
-    body
+    body,
+    requires,
+    requiredBy
   }
 }
 

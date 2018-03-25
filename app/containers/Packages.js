@@ -43,7 +43,9 @@ class PackagesContainer extends React.Component {
       toggleLoader,
       setPackageJSON,
       setupSnackbar,
-      toggleSnackbar
+      toggleSnackbar,
+      addMessage,
+      clearMessages
     } = this.props
 
     ipcRenderer.on('install-packages-close', (event) => {
@@ -59,12 +61,11 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('uninstall-packages-close', (event) => {
       const { mode, directory } = this.props
 
-      toggleLoader(false)
-      // triggerEvent('get-packages', {
-      //   cmd: ['outdated', 'list'],
-      //   mode,
-      //   directory
-      // })
+      triggerEvent('get-packages', {
+        cmd: ['outdated', 'list'],
+        mode,
+        directory
+      })
     })
 
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
@@ -117,7 +118,7 @@ class PackagesContainer extends React.Component {
 
     ipcRenderer.on('action-close', (event, pkg) => {
       const { mode, directory } = this.props
-
+      console.log(2, new Date())
       if (mode === APP_MODES.LOCAL && directory) {
         ipcRenderer.send('analyze-json', directory)
       } else {
@@ -132,9 +133,8 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('ipcEvent-error', (event, error) => {
       const { setError, errors } = this.props
       if (error) {
-        console.error(error)
+        // const errors = error.split('\n')
       }
-      // setError(error)
     })
 
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
@@ -157,7 +157,7 @@ class PackagesContainer extends React.Component {
     })
   }
   componentDidUpdate(nextProps) {
-    const { active, setVersion } = nextProps
+    const { active, setVersion, clearMessages } = nextProps
 
     if (active && active.version) {
       setVersion(active.version)
@@ -203,18 +203,47 @@ class PackagesContainer extends React.Component {
       clearMessages
     } = this.props
 
+    clearMessages()
+
     try {
-      const packagesData = parse(packages, 'dependencies')
-      const data = R.filter((pkg) => {
-        return !(
-          pkg.missing ||
-          pkg.required ||
-          !pkg._from ||
-          typeof pkg.error === 'object'
-        )
-      }, packagesData).map((pkg) => {
-        const { name, version } = pkg
+      const data = parse(packages, 'dependencies')
+
+      if (!data || !Array.isArray(data)) {
+        throw new Error('Cannot parse packages')
+      }
+
+      const mappedPackages = data.map((pkg) => {
+        const hasError = typeof pkg.error === 'object'
+
+        if (hasError) {
+          return R.merge(pkg, {
+            _hasError: pkg.error
+          })
+        }
+
+        const {
+          name,
+          version,
+          peerMissing,
+          required,
+          missing,
+          _from,
+          link
+        } = pkg
+        let _hasPeerMissing = false
         const outdatedPackage = R.prop(name, packagesOutdated)
+
+        if (peerMissing && Array.isArray(peerMissing)) {
+          _hasPeerMissing = true
+          peerMissing.forEach((pm) => {
+            addMessage(
+              'error',
+              `Package ${pm['requiredBy']} requires ${pm['requires']}`,
+              pm['requires'],
+              pm['requiredBy']
+            )
+          })
+        }
 
         if (
           outdatedPackage &&
@@ -222,20 +251,21 @@ class PackagesContainer extends React.Component {
           version !== outdatedPackage.latest
         ) {
           return R.merge(pkg, {
-            latest: outdatedPackage.latest
+            latest: outdatedPackage.latest,
+            _hasPeerMissing
           })
         }
-        return pkg
-      }, packagesData)
-
-      setPackages(data, 'asc', 'name')
-      setTotal(data.length)
-      clearMessages()
-
-      const notifications = parse(packages, 'problems')
-      notifications.forEach((notification, idx) => {
-        addMessage('error', notification)
+        return R.merge(pkg, {
+          _hasPeerMissing
+        })
       })
+
+      const listPackages = R.filter((pkg) => {
+        return !pkg._hasPeerMissing && !pkg._hasError
+      }, mappedPackages)
+
+      setPackages(listPackages, 'asc', 'name')
+      setTotal(listPackages.length)
     } catch (e) {
       throw new Error(e)
     }
@@ -336,8 +366,8 @@ function mapDispatchToProps(dispatch) {
       dispatch(globalActions.setMode(mode, directory)),
     setPackagesOutdated: (packages) =>
       dispatch(packagesActions.setPackagesOutdated(packages)),
-    addMessage: (level, message) =>
-      dispatch(globalActions.addMessage(level, message)),
+    addMessage: (level, message, requires, requiredBy) =>
+      dispatch(globalActions.addMessage(level, message, requires, requiredBy)),
     clearMessages: () => dispatch(globalActions.clearMessages()),
     removePackages: (packages) =>
       dispatch(packagesActions.removePackages(packages))

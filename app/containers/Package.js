@@ -20,6 +20,7 @@ import LinkIcon from 'material-ui-icons/Link'
 import CardHeader from 'components/package/CardHeader'
 import CardContent from 'components/package/CardContent'
 import CardActions from 'components/package/CardActions'
+import Typography from 'material-ui/Typography'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
@@ -132,48 +133,54 @@ class PackageContainer extends React.Component {
       <section className={classes.root}>
         <Grid container direction="row" justify="flex-start">
           <Grid item xs={12}>
-            <section className={classes.root}>
-              <Fade in={true}>
-                <Card className={classes.card}>
-                  <CardHeader mode={mode} active={active} group={group} />
-                  <CardContent
-                    version={version}
-                    active={active}
-                    cmdOptions={cmdOptions}
-                    onChangeVersion={this.onChangeVersion}
-                    addCommandOption={addCommandOption}
-                    removeCommandOption={removeCommandOption}
-                    clearCommandOptions={clearCommandOptions}
-                    mode={mode}
-                    group={group}
-                    packageJSON={packageJSON}
-                  />
-                  <CardActions
-                    active={active}
-                    handleExpandClick={toggleExpanded}
-                    expanded={expanded}
-                    setActive={setActive}
-                    toggleLoader={toggleLoader}
-                    actions={actions}
-                    defaultActions={defaultActions}
-                    setupSnackbar={setupSnackbar}
-                    toggleSnackbar={toggleSnackbar}
-                    mode={mode}
-                    version={version}
-                    directory={directory}
-                    cmdOptions={cmdOptions}
-                  />
-                  <Collapse
-                    in={expanded}
-                    timeout="auto"
-                    unmountOnExit
-                    className={classes.collapseContent}
+            <Fade in={true}>
+              <Card className={classes.card}>
+                <CardHeader mode={mode} active={active} group={group} />
+                <CardContent
+                  version={version}
+                  active={active}
+                  cmdOptions={cmdOptions}
+                  onChangeVersion={this.onChangeVersion}
+                  addCommandOption={addCommandOption}
+                  removeCommandOption={removeCommandOption}
+                  clearCommandOptions={clearCommandOptions}
+                  mode={mode}
+                  group={group}
+                  packageJSON={packageJSON}
+                />
+                <CardActions
+                  active={active}
+                  handleExpandClick={toggleExpanded}
+                  expanded={expanded}
+                  setActive={setActive}
+                  toggleLoader={toggleLoader}
+                  actions={actions}
+                  defaultActions={defaultActions}
+                  setupSnackbar={setupSnackbar}
+                  toggleSnackbar={toggleSnackbar}
+                  mode={mode}
+                  version={version}
+                  directory={directory}
+                  cmdOptions={cmdOptions}
+                />
+                <Collapse
+                  in={expanded}
+                  timeout="auto"
+                  unmountOnExit
+                  className={classes.collapseContent}
+                >
+                  <Typography
+                    variant="caption"
+                    className={classes.secondaryHeading}
                   >
-                    wip...
-                  </Collapse>
-                </Card>
-              </Fade>
-            </section>
+                    Githead: {active.gitHead} <br />
+                    <a href="#sub-labels-and-columns" className={classes.link}>
+                      Learn more
+                    </a>
+                  </Typography>
+                </Collapse>
+              </Card>
+            </Fade>
           </Grid>
         </Grid>
       </section>

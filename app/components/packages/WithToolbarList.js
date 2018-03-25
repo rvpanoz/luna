@@ -78,7 +78,7 @@ function withToolbarTableList(List, options = {}) {
         })
 
         const packagesRemaining = filter(
-          (pkg) => !contains(pkg.name, selected)
+          (pkg) => pkg && !contains(pkg.name, selected)
         )(packages)
 
         toggleLoader(true)

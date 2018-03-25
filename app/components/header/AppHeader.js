@@ -90,6 +90,8 @@ class AppHeader extends React.Component {
               notifications={notifications}
               mode={mode}
               directory={directory}
+              setActive={setActive}
+              setPackageActions={setPackageActions}
             />
           </div>
         </AppBar>

@@ -149,7 +149,6 @@ exports.install = function(opts, callback) {
       ? pkgOptions.map((option) => `--${option}`)
       : []
 
-  console.log(mode)
   const run = []
     .concat(command)
     .concat(commandArgs)

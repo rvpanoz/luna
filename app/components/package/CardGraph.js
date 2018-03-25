@@ -30,11 +30,50 @@ const styles = (theme) => {
   }
 }
 
+//TODO: improve algorithm
+const formatValue = (value) => {
+  const parts = value.toString().split('.')
+  const base = parts[0] || '0'
+  const digits = parts[1] || [0, 0]
+
+  let semver = []
+  if (digits && digits.length === 4) {
+    semver = [].concat([digits[1], digits[3]])
+  } else if (digits && digits.length === 2) {
+    semver = [].concat([digits[1], digits[0]])
+  } else {
+    semver = [].concat(digits)
+  }
+
+  return `${base}.${semver.join('.')}`
+}
+
+const CustomTooltip = (props) => {
+  const { active } = props
+
+  if (active) {
+    const { payload, label } = props
+    const { value, dataKey } = payload[0]
+    const { date } = payload[0].payload
+    const fvalue = formatValue(value)
+
+    return (
+      <div className="custom-tooltip">
+        <p className="label">{`Version: ${fvalue}`}</p>
+        <p className="info">{`Date: ${date}`}</p>
+      </div>
+    )
+  }
+
+  return null
+}
+
 class CardGraph extends React.Component {
   constructor(props) {
     super(props)
     this._generateData = this._generateData.bind(this)
   }
+  componentDidMount() {}
   _generateData() {
     const { active } = this.props
     const data = active.time && objectEntries(active.time)
@@ -70,19 +109,28 @@ class CardGraph extends React.Component {
       <section className={classes.root}>
         <Grid container>
           <Grid item xs={9}>
-            <LineChart
-              width={500}
-              height={300}
-              data={data}
-              margin={{ top: 15, right: 0, left: 0, bottom: 5 }}
-            >
-              <XAxis dataKey="date" />
-              <YAxis />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="version" stroke="#8884d8" />
-            </LineChart>
+            <div style={{ backgroundColor: '#fff' }}>
+              <LineChart
+                width={600}
+                height={300}
+                data={data}
+                margin={{ top: 15, right: 0, left: 0, bottom: 5 }}
+              >
+                <XAxis dataKey="date" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip
+                  content={
+                    <CustomTooltip
+                      active={true}
+                      wrapperStyle={{ width: 100, backgroundColor: '#ccc' }}
+                    />
+                  }
+                />
+                <Legend />
+                <Line type="monotone" dataKey="version" stroke="#8884d8" />
+              </LineChart>
+            </div>
           </Grid>
           <Grid item xs={3}>
             <CardTags active={active} />

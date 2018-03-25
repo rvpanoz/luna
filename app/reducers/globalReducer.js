@@ -61,7 +61,9 @@ const handlers = {
       messages: prepend(
         {
           level: action.level,
-          body: action.body
+          body: action.body,
+          requires: action.requires,
+          requiredBy: action.requiredBy
         },
         state.messages
       )

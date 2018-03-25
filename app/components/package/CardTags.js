@@ -10,17 +10,15 @@ import React from 'react'
 
 const styles = (theme) => {
   return {
-    innerList: {
-      clear: 'both',
+    list: {
       visibility: 'visible',
       overflowX: 'hidden',
-      overflowY: 'auto'
-    },
-    innerListLong: {
-      maxHeight: '300px'
+      overflowY: 'scroll',
+      clear: 'both',
+      maxHeight: '750px'
     },
     innerListSmall: {
-      maxHeight: '200px'
+      maxHeight: '300px'
     }
   }
 }
@@ -51,7 +49,7 @@ class CardTags extends React.Component {
     return null
   }
   render() {
-    const { active } = this.props
+    const { active, classes } = this.props
 
     if (!active) {
       return null
@@ -59,24 +57,18 @@ class CardTags extends React.Component {
 
     const tags = this._getTags()
     return (
-      <List
-        dense={true}
-        subheader="Dist tags"
-        className={classnames('innerList', 'innerListSmall')}
-      >
-        {tags &&
-          tags.map((d, idx) => {
-            return (
-              <ListItem>
-                <ListItemText
-                  key={`tag-${idx}`}
-                  primary={d.name}
-                  secondary={d.version}
-                />
-              </ListItem>
-            )
-          })}
-      </List>
+      <div className={classnames(classes.list, classes.innerListSmall)}>
+        <List dense={true} subheader="Dist tags">
+          {tags &&
+            tags.map((d, idx) => {
+              return (
+                <ListItem key={`tag-${idx}`}>
+                  <ListItemText primary={d.name} secondary={d.version} />
+                </ListItem>
+              )
+            })}
+        </List>
+      </div>
     )
   }
 }

@@ -1,163 +1,3 @@
-import deepOrange from 'material-ui/colors/deepOrange'
-import deepPurple from 'material-ui/colors/deepPurple'
-import pink from 'material-ui/colors/pink'
-import red from 'material-ui/colors/red'
-
-const primaryColor = '#9c27b0'
-const warningColor = '#ff9800'
-const dangerColor = '#f44336'
-const successColor = '#4caf50'
-const infoColor = '#00acc1'
-const roseColor = '#e91e63'
-const grayColor = '#999999'
-
-export function cardStyles(theme) {
-  return {
-    root: {
-      marginTop: 0
-    },
-    button: {
-      margin: theme.spacing.unit
-    },
-    card: {
-      maxWidth: '100%'
-    },
-    content: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'flex-start'
-    },
-    collapseContent: {
-      margin: theme.spacing.unit * 2
-    },
-    column: {
-      flexBasis: '33.33%'
-    },
-    controls: {
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      width: '100%',
-      marginTop: theme.spacing.unit,
-      '& fieldset': {
-        margin: theme.spacing.unit
-      }
-    },
-    info: {
-      lineHeight: '22px',
-      color: grayColor,
-      fontSize: '12px',
-      display: 'inline-block',
-      margin: '0!important'
-    },
-    formControl: {
-      margin: theme.spacing.unit,
-      minWidth: 120,
-      maxWidth: 300
-    },
-    textField: {
-      margin: theme.spacing.unit,
-      minWidth: 120,
-      maxWidth: 300
-    },
-    chips: {
-      display: 'flex',
-      flexWrap: 'wrap'
-    },
-    chip: {
-      margin: theme.spacing.unit / 4
-    },
-    description: {
-      marginTop: 10
-    },
-    details: {
-      marginBottom: 10
-    },
-    listItem: {
-      paddingLeft: 0
-    },
-    actions: {
-      display: 'flex'
-    },
-    author: {
-      flexGrow: 1
-    },
-    keywords: {
-      flexGrow: 1,
-      marginTop: 10
-    },
-    expand: {
-      transform: 'rotate(0deg)',
-      transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest
-      }),
-      marginLeft: 'auto'
-    },
-    expandOpen: {
-      transform: 'rotate(180deg)'
-    },
-    updated: {
-      fontSize: 12,
-      fontWeight: 300,
-      color: theme.palette.primary.dark,
-      margin: '1em 0 0.7em'
-    },
-    center: {
-      position: 'absolute',
-      top: '25%',
-      left: '50%'
-    },
-    avatar: {
-      backgroundColor: theme.palette.secondary.dark
-    },
-    heading: {
-      color: 'rgba(0, 0, 0, 0.54)',
-      fontSize: '1.1rem',
-      fontWeight: 400,
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
-    },
-    headingTail: {
-      margin: '0.9em 0 2em'
-    },
-    helper: {
-      borderLeft: `2px solid ${theme.palette.divider}`,
-      padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
-    },
-    link: {
-      color: theme.palette.primary.main,
-      textDecoration: 'none',
-      '&:hover': {
-        textDecoration: 'underline'
-      }
-    },
-    innerList: {
-      clear: 'both',
-      visibility: 'visible',
-      overflowX: 'hidden',
-      overflowY: 'auto'
-    },
-    innerListLong: {
-      maxHeight: '300px'
-    },
-    innerListSmall: {
-      maxHeight: '200px'
-    },
-    actions: {
-      display: 'flex'
-    },
-    expand: {
-      transform: 'rotate(0deg)',
-      transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest
-      }),
-      marginLeft: 'auto'
-    },
-    expandOpen: {
-      transform: 'rotate(180deg)'
-    }
-  }
-}
 export function layoutStyles(theme) {
   return {
     root: {
@@ -199,6 +39,26 @@ export function layoutStyles(theme) {
     button: {
       margin: theme.spacing.unit,
       fontStyle: 'normal'
+    }
+  }
+}
+
+export function cardStyles(theme) {
+  return {
+    root: {
+      marginTop: 0
+    },
+    link: {
+      color: theme.palette.primary.main,
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'underline'
+      }
+    },
+    secondaryHeading: {
+      margin: theme.spacing.unit + 15,
+      fontSize: theme.typography.pxToRem(15),
+      color: theme.palette.text.secondary
     }
   }
 }

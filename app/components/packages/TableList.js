@@ -158,7 +158,20 @@ class TableList extends React.PureComponent {
                       <TableCell padding="none">{version}</TableCell>
                       <TableCell padding="none">
                         {latest ? (
-                          <Chip color="primary" label={latest} />
+                          <div
+                            style={{ display: 'flex', flexDirection: 'row' }}
+                          >
+                            <span
+                              style={{
+                                top: '5px',
+                                left: '0px',
+                                position: 'relative'
+                              }}
+                            >
+                              {latest}
+                            </span>
+                            <UpdateIcon color="primary" />
+                          </div>
                         ) : (
                           version
                         )}
