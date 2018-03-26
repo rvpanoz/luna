@@ -44,8 +44,7 @@ const formatValue = (value) => {
   } else {
     semver = [].concat(digits)
   }
-
-  return `${base}.${semver.join('.')}`
+  return `${Math.abs(base)}.${semver.join('.')}`
 }
 
 const CustomTooltip = (props) => {

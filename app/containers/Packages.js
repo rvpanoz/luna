@@ -158,7 +158,6 @@ class PackagesContainer extends React.Component {
   }
   componentDidUpdate(nextProps) {
     const { active, setVersion, clearMessages } = nextProps
-
     if (active && active.version) {
       setVersion(active.version)
     }
@@ -295,7 +294,7 @@ class PackagesContainer extends React.Component {
 
     return (
       <Grid container>
-        <Grid item xs={5} md={5} lg={4}>
+        <Grid item xs={4} sm={4} md={4} lg={4}>
           <WithToolbarList
             setGlobalMode={this.setGlobalMode}
             reload={this.reload}
@@ -303,7 +302,7 @@ class PackagesContainer extends React.Component {
             {...rest}
           />
         </Grid>
-        <Grid item xs={6} md={6} lg={7}>
+        <Grid item xs={8} sm={8} md={8} lg={8}>
           <Loader loading={isLoading}>
             <PackageContainer />
           </Loader>

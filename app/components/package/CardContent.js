@@ -110,6 +110,15 @@ class CardContent extends React.Component {
             Author: {active.author || APP_INFO.NOT_AVAILABLE}
           </Typography>
           <br />
+          <Typography
+            className={classes.info}
+            component="p"
+            gutterBottom={true}
+            variant="caption"
+          >
+            License: {active.license || APP_INFO.NOT_AVAILABLE}
+          </Typography>
+          <br />
           <CardGraph active={active} />
         </section>
       </MuiCardContent>

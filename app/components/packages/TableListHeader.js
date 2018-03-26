@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withStyles } from 'material-ui/styles'
+import classnames from 'classnames'
+import tableHeadStyles from 'styles/tableHeadStyles'
 import {
   TableCell,
   TableFooter,
@@ -9,14 +10,14 @@ import {
   TableRow,
   TableSortLabel
 } from 'material-ui/Table'
+import { withStyles } from 'material-ui/styles'
 import Tooltip from 'material-ui/Tooltip'
 import Checkbox from 'material-ui/Checkbox'
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'version', numeric: false, disablePadding: true, label: 'Version' },
-  { id: 'latest', numeric: false, disablePadding: true, label: 'Latest' },
-  { id: 'license', numeric: false, disablePadding: true, label: 'License' }
+  { id: 'latest', numeric: false, disablePadding: true, label: 'Latest' }
 ]
 
 class TableListHeader extends React.Component {
@@ -26,6 +27,7 @@ class TableListHeader extends React.Component {
 
   render() {
     const {
+      classes,
       onSelectAllClick,
       order,
       orderBy,
@@ -34,9 +36,12 @@ class TableListHeader extends React.Component {
     } = this.props
 
     return (
-      <TableHead>
+      <TableHead className={classes.primaryTableHeader}>
         <TableRow>
-          <TableCell padding="checkbox">
+          <TableCell
+            padding="checkbox"
+            className={classnames(classes.tableCell, classes.tableHeadCell)}
+          >
             <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={numSelected > 0 && numSelected === rowCount}
@@ -46,6 +51,7 @@ class TableListHeader extends React.Component {
           {columnData.map((column) => {
             return (
               <TableCell
+                className={classes.tableCell}
                 key={column.id}
                 numeric={column.numeric}
                 padding={column.disablePadding ? 'none' : 'default'}
@@ -82,4 +88,4 @@ TableListHeader.propTypes = {
   rowCount: PropTypes.number.isRequired
 }
 
-export default TableListHeader
+export default withStyles(tableHeadStyles)(TableListHeader)

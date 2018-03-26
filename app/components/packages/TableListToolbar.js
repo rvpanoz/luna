@@ -19,6 +19,7 @@ import ListIcon from 'material-ui-icons/List'
 import FilterListIcon from 'material-ui-icons/FilterList'
 import UpdateIcon from 'material-ui-icons/Update'
 import Snackbar from 'material-ui/Snackbar'
+import Divider from 'material-ui/Divider'
 
 const showSnackbar = () => {
   return (

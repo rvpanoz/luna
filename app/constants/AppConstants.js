@@ -2,6 +2,10 @@
  * APP constants
  * */
 
+export const GITHUB = {
+  baseUrl: 'https://api.github.com/repos/'
+}
+
 export const APP_GLOBALS = {
   title: 'luna'
 }

@@ -1,10 +1,57 @@
+import { GITHUB } from './constants/AppConstants'
 const cp = require('child_process')
 const spawn = cp.spawn
 const Q = require('q')
 const path = require('path')
+const request = require('request')
+const R = require('ramda')
 
-import * as R from 'ramda'
+// WIP fetch releases from GITHUB
+function fetchReleases(opts) {
+  const { repo } = opts
 
+  if (!repo || typeof repo !== 'object') {
+    throw new Error(
+      'fetchReleases: repo parameter is required or is not an object'
+    )
+  }
+
+  const headers = R.merge(
+    {
+      headers: {
+        'User-Agent': 'request'
+      }
+    },
+    opts.headers || {}
+  )
+
+  const { url } = repo || false
+
+  if (url) {
+    const repoName = url.replace('https://github.com/', '')
+    const urlParts = reponame.split('/')
+
+    console.log(`${GITHUB.baseUrl}/${urlParts[0]}`)
+    // const options = {
+    //   url: `${GITHUB.baseUrl}/${urlParts[0]}`,
+    //   headers
+    // }
+    //
+    // function callback(error, response, body) {
+    //   if (!error && response.statusCode == 200) {
+    //     var info = JSON.parse(body)
+    //     console.log(info.stargazers_count + ' Stars')
+    //     console.log(info.forks_count + ' Forks')
+    //   }
+    // }
+    //
+    // request(options, callback)
+  }
+
+  return void 0
+}
+
+/** Run npm command **/
 function runCommand(command, directory, callback) {
   console.log(`running: npm ${command.join(' ')}`)
 
@@ -83,7 +130,9 @@ exports.outdated = function(opts, callback) {
   return runCommand(run, directory, callback)
 }
 
+// npm view [<@scope>/]<name>[@<version>]
 exports.view = function(opts, callback) {
+  console.log(opts)
   const command = ['view']
   const deferred = Q.defer()
   const cwd = process.cwd()
@@ -105,9 +154,14 @@ exports.view = function(opts, callback) {
     .concat(pkgVersion ? [].concat([`${pkgName}@${pkgVersion}`]) : [pkgName])
     .concat(commandArgs)
 
+  // fetchReleases({
+  //   repo: opts && opts.repo,
+  //   name: pkgName
+  // })
   return runCommand(run, directory, callback)
 }
 
+// npm search [-l|--long] [--json]
 exports.search = function(opts, callback) {
   const command = ['search']
   const deferred = Q.defer()
@@ -127,6 +181,7 @@ exports.search = function(opts, callback) {
   return runCommand(run, null, callback)
 }
 
+// npm install [<@scope>/]<name>@<version>
 exports.install = function(opts, callback) {
   const command = ['install']
   const { pkgName, mode, directory, pkgVersion, multiple, packages } = opts
@@ -158,6 +213,7 @@ exports.install = function(opts, callback) {
   return runCommand(run, directory, callback)
 }
 
+// npm uninstall [<@scope>/]<pkg>[@<version>]
 exports.uninstall = function(opts, callback) {
   const command = ['uninstall']
   const { pkgName, mode, directory, multiple, packages } = opts

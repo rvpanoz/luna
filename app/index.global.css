@@ -1,9 +1,10 @@
-* {
+html {
   font-family: Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 body {
-  overflow: auto;
+  overflow: hidden;
 }
 
 body:before {
@@ -283,4 +284,12 @@ label {
      * would animate at the same time
      */
   animation-delay: 0.4s;
+}
+
+/** media queries **/
+
+@media screen and (min-width: 768px) {
+  body {
+    overflow: auto;
+  }
 }

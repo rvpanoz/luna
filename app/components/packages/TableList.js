@@ -1,6 +1,6 @@
 import { withStyles } from 'material-ui/styles'
-import { tableListStyles } from './styles'
 import { autoBind, triggerEvent } from 'utils'
+import tableStyles from 'styles/tableStyles'
 import React from 'react'
 import Loader from 'common/Loader'
 import PropTypes from 'prop-types'
@@ -16,7 +16,6 @@ import Table, {
 } from 'material-ui/Table'
 import IconButton from 'material-ui/IconButton'
 import Checkbox from 'material-ui/Checkbox'
-import Menu, { MenuItem } from 'material-ui/Menu'
 import InfoButton from 'material-ui-icons/Info'
 import UpdateIcon from 'material-ui-icons/Update'
 import TableListHeader from './TableListHeader'
@@ -63,7 +62,7 @@ class TableList extends React.PureComponent {
     setSelectedPackage(name)
     e.stopPropagation()
   }
-  viewPackage(e, name, version, mode, directory) {
+  viewPackage(e, name, version, mode, directory, repo) {
     if (e) {
       e.preventDefault()
     }
@@ -71,6 +70,7 @@ class TableList extends React.PureComponent {
       cmd: ['view'],
       pkgName: name,
       pkgVersion: version,
+      repo,
       mode,
       directory
     })
@@ -128,7 +128,8 @@ class TableList extends React.PureComponent {
                     description,
                     deprecated,
                     version,
-                    name
+                    name,
+                    repository
                   } = pkg
 
                   const alreadySelected = isSelected(name)
@@ -141,7 +142,14 @@ class TableList extends React.PureComponent {
                       onClick={(e) => {
                         const _version = version.replace(/\^/g, '')
                         toggleMainLoader(true)
-                        this.viewPackage(e, name, _version, mode, directory)
+                        this.viewPackage(
+                          e,
+                          name,
+                          _version,
+                          mode,
+                          directory,
+                          repository
+                        )
                       }}
                       aria-checked={isSelected}
                       tabIndex={-1}
@@ -154,30 +162,33 @@ class TableList extends React.PureComponent {
                           checked={alreadySelected}
                         />
                       </TableCell>
-                      <TableCell padding="none">{name}</TableCell>
-                      <TableCell padding="none">{version}</TableCell>
-                      <TableCell padding="none">
+                      <TableCell className={classes.tableCell}>
                         {latest ? (
                           <div
                             style={{ display: 'flex', flexDirection: 'row' }}
                           >
+                            <UpdateIcon color="primary" padding="false" />&nbsp;
                             <span
                               style={{
-                                top: '5px',
+                                top: '4px',
                                 left: '0px',
                                 position: 'relative'
                               }}
                             >
-                              {latest}
+                              {name}
                             </span>
-                            <UpdateIcon color="primary" />
                           </div>
                         ) : (
-                          version
+                          name
                         )}
                       </TableCell>
-                      <TableCell padding="none">{license}</TableCell>
-                      <TableCell padding="none">
+                      <TableCell className={classes.tableCell}>
+                        {version}
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        {latest || version}
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
                         {deprecated === true ? (
                           <Chip color="error" label="Deprecated" />
                         ) : null}
@@ -217,4 +228,4 @@ class TableList extends React.PureComponent {
   }
 }
 
-export default withStyles(tableListStyles)(TableList)
+export default withStyles(tableStyles)(TableList)
