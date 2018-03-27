@@ -186,7 +186,9 @@ class TableList extends React.PureComponent {
                         {version}
                       </TableCell>
                       <TableCell className={classes.tableCell}>
-                        {latest || version}
+                        {latest ? <span style={{
+                          color: 'red'
+                        }}>{latest}</span> : version}
                       </TableCell>
                     </TableRow>
                   )

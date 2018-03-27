@@ -43,7 +43,7 @@ const NotificationsList = (props) => {
                 secondary={
                   <Button
                     size="small"
-                    color="accent"
+                    color="primary"
                     onClick={(e) => {
                       if (requires && typeof requires === 'string') {
                         const indexOfAt = requires.indexOf('@')
@@ -55,7 +55,7 @@ const NotificationsList = (props) => {
                             {
                               text: 'Install',
                               iconCls: 'add',
-                              color: 'accent'
+                              color: 'secondary'
                             }
                           ])
                           triggerEvent('search-packages', {
@@ -113,7 +113,7 @@ class Notifications extends React.Component {
         <IconButton onClick={this.onClick}>
           <Badge
             badgeContent={notifications.length}
-            color="accent"
+            color="primary"
             className={classes.margin}
           >
             <NotificationsIcon />

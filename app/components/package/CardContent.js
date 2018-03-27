@@ -12,7 +12,8 @@ import PropTypes from 'prop-types'
 import Divider from 'material-ui/Divider'
 import CardOptions from './CardOptions'
 import CardVersions from './CardVersions'
-import CardGraph from './CardGraph'
+import InfoIcon from 'material-ui-icons/Info'
+import LinkIcon from 'material-ui-icons/Link'
 
 const grayColor = '#999999'
 const { object, array, func, string } = PropTypes

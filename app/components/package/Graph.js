@@ -10,7 +10,7 @@ import Grid from 'material-ui/Grid'
 import Typography from 'material-ui/Typography'
 import moment from 'moment'
 import semver2int from 'semver2int'
-import CardTags from 'components/package/CardTags'
+import CardTags from './CardTags'
 
 import {
   LineChart,
@@ -67,7 +67,7 @@ const CustomTooltip = (props) => {
   return null
 }
 
-class CardGraph extends React.Component {
+class Graph extends React.Component {
   constructor(props) {
     super(props)
     this._generateData = this._generateData.bind(this)
@@ -106,10 +106,10 @@ class CardGraph extends React.Component {
 
     return (
       <Grid container>
-        <Grid item xs={10} md={9} lg={10}>
+        <Grid item xs={10} sm={10} md={10} lg={10}>
           <div style={{ backgroundColor: '#fff' }}>
             <LineChart
-              width={600}
+              width={700}
               height={300}
               data={data}
               margin={{ top: 15, right: 0, left: 0, bottom: 5 }}
@@ -130,7 +130,7 @@ class CardGraph extends React.Component {
             </LineChart>
           </div>
         </Grid>
-        <Grid item xs={2} md={3} lg={2}>
+        <Grid item xs={2} sm={2} md={2} lg={2}>
           <CardTags active={active} />
         </Grid>
       </Grid>
@@ -138,4 +138,4 @@ class CardGraph extends React.Component {
   }
 }
 
-export default withStyles(styles)(CardGraph)
+export default withStyles(styles)(Graph)

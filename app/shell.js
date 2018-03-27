@@ -4,7 +4,7 @@
  * */
 
 import Q from "q";
-import npmApi from "./npmApi";
+import npmApi from "./apis/npm";
 
 exports.doCommand = function(options, callback) {
   const opts = options || {};

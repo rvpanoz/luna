@@ -11,22 +11,17 @@ import * as packagesActions from 'actions/packagesActions'
 import { showMessageBox, triggerEvent, autoBind } from 'utils'
 import { contains } from 'ramda'
 import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
-import Collapse from 'material-ui/transitions/Collapse'
-import Card, { CardActions, CardContent } from 'material-ui/Card';
 import Chip from 'material-ui/Chip'
 import classnames from 'classnames'
-import InfoIcon from 'material-ui-icons/Info'
-import LinkIcon from 'material-ui-icons/Link'
-// import CardHeader from 'components/package/CardHeader'
-// import CardContent from 'components/package/CardContent'
-// import CardActions from 'components/package/CardActions'
 import Typography from 'material-ui/Typography'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper'
+import PackageCard from 'components/package/PackageCard'
 import Fade from 'material-ui/transitions/Fade'
+import Graph from 'components/package/Graph'
 
 class PackageContainer extends React.Component {
   constructor(props) {
@@ -99,25 +94,8 @@ class PackageContainer extends React.Component {
   }
   render() {
     const {
-      classes,
       active,
-      group,
-      mode,
-      directory,
-      expanded,
-      setActive,
-      toggleLoader,
-      addCommandOption,
-      removeCommandOption,
-      clearCommandOptions,
-      cmdOptions,
-      actions,
-      defaultActions,
-      version,
-      setupSnackbar,
-      toggleSnackbar,
-      toggleExpanded,
-      packageJSON,
+      classes,
       ...rest
     } = this.props
 
@@ -131,93 +109,23 @@ class PackageContainer extends React.Component {
     }
 
     return (
-      <Paper className={classes.root}>
+      <section className={classes.root}>
         <Grid container direction="row" justify="flex-start">
-          <Grid item xs={3}>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography className={classes.title} color="textSecondary">
-                  {active.name && active.name[0].toUpperCase()}
-                </Typography>
-                <Typography variant="headline" component="h2">
-                heading2
-                </Typography>
-                <Typography className={classes.pos} color="textSecondary">
-                  adjective
-                </Typography>
-                <Typography component="p">
-                  well meaning and kindly.<br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={9}>
-            a9
+          <Grid item xs={12}>
+          <Fade in={true}>
+            <PackageCard active={active} onChangeVersion={this.onChangeVersion} {...rest}/>
+          </Fade>
           </Grid>
         </Grid>
         <Grid container direction="row" justify="flex-start">
-          <Grid item xs={3}>
-            b3
-          </Grid>
-          <Grid item xs={9}>
-            b9
+          <Grid item xs={12}>
+            <Graph active={active}/>
           </Grid>
         </Grid>
-      </Paper>
+      </section>
     )
   }
 }
-
-
-// <Fade in={true}>
-//   <Card className={classes.card}>
-//     <CardHeader mode={mode} active={active} group={group} />
-//     <CardContent
-//       version={version}
-//       active={active}
-//       cmdOptions={cmdOptions}
-//       onChangeVersion={this.onChangeVersion}
-//       addCommandOption={addCommandOption}
-//       removeCommandOption={removeCommandOption}
-//       clearCommandOptions={clearCommandOptions}
-//       mode={mode}
-//       group={group}
-//       packageJSON={packageJSON}
-//     />
-//     <CardActions
-//       active={active}
-//       handleExpandClick={toggleExpanded}
-//       expanded={expanded}
-//       setActive={setActive}
-//       toggleLoader={toggleLoader}
-//       actions={actions}
-//       defaultActions={defaultActions}
-//       setupSnackbar={setupSnackbar}
-//       toggleSnackbar={toggleSnackbar}
-//       mode={mode}
-//       version={version}
-//       directory={directory}
-//       cmdOptions={cmdOptions}
-//     />
-//     <Collapse
-//       in={expanded}
-//       timeout="auto"
-//       unmountOnExit
-//       className={classes.collapseContent}
-//     >
-//       <Typography
-//         variant="caption"
-//         className={classes.secondaryHeading}
-//       >
-//         Githead: {active.gitHead} <br />
-//         <a href="#sub-labels-and-columns" className={classes.link}>
-//           Learn more
-//         </a>
-//       </Typography>
-//     </Collapse>
-//   </Card>
-// </Fade>
 
 function mapStateToProps(state) {
   return {

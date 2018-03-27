@@ -1,57 +1,8 @@
-import { GITHUB } from './constants/AppConstants'
 const cp = require('child_process')
 const spawn = cp.spawn
 const Q = require('q')
 const path = require('path')
-const { URL } = require('url');
-const request = require('request')
-const R = require('ramda')
-
-// WIP fetch releases from GITHUB
-function fetchReleases(opts) {
-  const { repoUrl, pkgName } = opts
-
-  if (!repoUrl || !pkgName) {
-    throw new Error(
-      'fetchReleases: repoUrl and pkgName are required parameters'
-    )
-  }
-
-  const url = new URL(repoUrl);
-
-  if(!url) {
-    throw new Error('cannot parse repoUrl')
-  }
-
-  const repoName = url.pathname && url.pathname.split('/');
-
-  if(repoName && repoName[1]) {
-    const furl = new URL(`${repoName[1]}/${pkgName}/resources`, GITHUB.baseUrl);
-    const options = {
-      url: furl,
-      headers: R.merge(
-        {
-          'User-Agent': 'request'
-        },
-        opts.headers || {}
-      )
-    }
-
-    console.log(furl)
-
-    function callback(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var info = JSON.parse(body)
-        console.log(info.stargazers_count + ' Stars')
-        console.log(info.forks_count + ' Forks')
-      }
-    }
-
-    // request(options, callback)
-  }
-
-  return void 0
-}
+const github = require('./github')
 
 /** Run npm command **/
 function runCommand(command, directory, callback) {
@@ -156,10 +107,13 @@ exports.view = function(opts, callback) {
     .concat(pkgVersion ? [].concat([`${pkgName}@${pkgVersion}`]) : [pkgName])
     .concat(commandArgs)
 
-  fetchReleases({
+  //DEV
+  github.fetchStats({
     repoUrl: repo.url || '',
     pkgName
   })
+  //-DEV
+
   return runCommand(run, directory, callback)
 }
 

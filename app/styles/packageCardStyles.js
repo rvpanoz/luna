@@ -1,8 +1,7 @@
 export function cardStyles(theme) {
   return {
     root: {
-      width: '100%',
-      marginTop: 0
+      width: '100%'
     },
     secondaryHeading: {
       margin: theme.spacing.unit + 15,

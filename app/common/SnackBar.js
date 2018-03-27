@@ -11,7 +11,7 @@ import Button from 'material-ui/Button'
 const SnackbarAction = (props) => {
   const { action, actionText } = props
   return (
-    <Button color="accent" size="small" onClick={(e) => action()}>
+    <Button color="primary" size="small" onClick={(e) => action()}>
       {actionText}
     </Button>
   )
