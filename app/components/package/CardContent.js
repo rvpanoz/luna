@@ -14,6 +14,8 @@ import CardOptions from './CardOptions'
 import CardVersions from './CardVersions'
 import InfoIcon from 'material-ui-icons/Info'
 import LinkIcon from 'material-ui-icons/Link'
+import Grid from 'material-ui/Grid'
+import BarGraph from 'components/package/BarGraph'
 
 const grayColor = '#999999'
 const { object, array, func, string } = PropTypes
@@ -76,9 +78,16 @@ class CardContent extends React.Component {
           Description
         </Typography>
         <Divider />
-        <Typography component="div" className={classes.headingTail}>
-          {active && active.description}
-        </Typography>
+        <Grid container>
+          <Grid item xs={5}>
+            <Typography component="div" className={classes.headingTail}>
+              {active && active.description}
+            </Typography>
+          </Grid>
+          <Grid item xs={7}>
+            <BarGraph active={active} />
+          </Grid>
+        </Grid>
         <Typography component="h3" className={classes.heading}>
           Version and options
         </Typography>

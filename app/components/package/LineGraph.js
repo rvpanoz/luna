@@ -58,7 +58,7 @@ const CustomTooltip = (props) => {
 
     return (
       <div className="custom-tooltip">
-        <p className="label">{`Version: ${fvalue}`}</p>
+        <p className="label">{`Version: ${value}`}</p>
         <p className="info">{`Date: ${date}`}</p>
       </div>
     )
@@ -84,7 +84,7 @@ class Graph extends React.Component {
           .map((item) => {
             if (item[0] !== 'modified' && item[0] !== 'created') {
               return {
-                version: semver2int(item[0]) / 10000,
+                version: isNaN(item[0]) ? semver2int(item[0]) : 0,
                 date: moment(item[1]).format('DD/MM/YYYY')
               }
             }

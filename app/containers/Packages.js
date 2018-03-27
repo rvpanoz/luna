@@ -92,10 +92,16 @@ class PackagesContainer extends React.Component {
         throw new Error(e)
       }
     })
-    ipcRenderer.on('view-package-close', (event, packageStr, cmd, status, stats) => {
-      console.log(stats) // WIP
+    ipcRenderer.on('view-package-close', (event, data, command, stats) => {
       try {
-        const pkg = JSON.parse(packageStr)
+        let pkg = JSON.parse(data)
+
+        if (stats) {
+          const _stats = JSON.parse(stats)
+          pkg = R.merge(pkg, {
+            stats: _stats
+          })
+        }
         setActive(pkg)
         toggleMainLoader(false)
       } catch (e) {
@@ -113,7 +119,7 @@ class PackagesContainer extends React.Component {
     })
     ipcRenderer.on('action-close', (event, pkg) => {
       const { mode, directory } = this.props
-      console.log(2, new Date())
+
       if (mode === APP_MODES.LOCAL && directory) {
         ipcRenderer.send('analyze-json', directory)
       } else {
@@ -126,9 +132,7 @@ class PackagesContainer extends React.Component {
     })
     ipcRenderer.on('ipcEvent-error', (event, error) => {
       const { setError, errors } = this.props
-      if (error) {
-        // const errors = error.split('\n')
-      }
+      console.error(error)
     })
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
       toggleLoader(true)

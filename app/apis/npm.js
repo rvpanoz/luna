@@ -1,8 +1,10 @@
 const cp = require('child_process')
-const spawn = cp.spawn
 const Q = require('q')
 const path = require('path')
 const github = require('./github')
+const { merge } = require('ramda')
+
+const spawn = cp.spawn
 
 /** Run npm command **/
 function runCommand(command, directory, callback, opts) {
@@ -10,7 +12,7 @@ function runCommand(command, directory, callback, opts) {
 
   const deferred = Q.defer()
   const cwd = process.cwd()
-  const {repo, name} = opts || {}
+  const { repo, name } = opts || {}
   let result = '',
     error = ''
 
@@ -38,33 +40,32 @@ function runCommand(command, directory, callback, opts) {
   npmc.on('close', () => {
     console.log(`finished: npm ${command.join(' ')}`)
 
-    if(repo && repo.url) {
+    const results = {
+      status: 'close',
+      error: error.length ? error : null,
+      data: result,
+      cmd: command
+    }
 
-      const getActivity = github.fetchStats({
+    if (repo && repo.url) {
+      const getStats = github.fetchStats({
         repoUrl: repo.url || null,
         pkgName: name
       })
 
-      getActivity.then((activityData) => {
-        deferred.resolve({
-          status: 'close',
-          error: error.length ? error : null,
-          data: result,
-          stats: activityData,
-          cmd: command
+      getStats
+        .then((stats) => {
+          deferred.resolve(
+            merge(results, {
+              stats
+            })
+          )
         })
-      }).catch((e)=>{
-        throw new Error(e)
-      })
-
+        .catch((e) => {
+          throw new Error(e)
+        })
     } else {
-      deferred.resolve({
-        status: 'close',
-        error: error.length ? error : null,
-        data: result,
-        stats: null,
-        cmd: command
-      })
+      deferred.resolve(results)
     }
   })
 
@@ -113,7 +114,7 @@ exports.view = function(opts, callback) {
   const deferred = Q.defer()
   const cwd = process.cwd()
   const { mode, directory, pkgName, pkgVersion } = opts
-  const {repo} = opts || {}
+  const { repo } = opts || {}
   const defaults = ['--depth=0', '--json']
 
   if (!pkgName) {

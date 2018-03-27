@@ -59,7 +59,7 @@ const tableStyle = (theme) => ({
     overflowX: 'hidden',
     overflowY: 'auto',
     clear: 'both',
-    maxHeight: '850px'
+    maxHeight: '900px'
   },
   table: {
     marginBottom: '0',

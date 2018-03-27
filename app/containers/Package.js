@@ -21,7 +21,8 @@ import Grid from 'material-ui/Grid'
 import Paper from 'material-ui/Paper'
 import PackageCard from 'components/package/PackageCard'
 import Fade from 'material-ui/transitions/Fade'
-import Graph from 'components/package/Graph'
+import BarGraph from 'components/package/BarGraph'
+import Loader from 'common/Loader'
 
 class PackageContainer extends React.Component {
   constructor(props) {
@@ -93,11 +94,7 @@ class PackageContainer extends React.Component {
     return false
   }
   render() {
-    const {
-      active,
-      classes,
-      ...rest
-    } = this.props
+    const { active, classes, loading, ...rest } = this.props
 
     if (!active) {
       return null
@@ -110,18 +107,23 @@ class PackageContainer extends React.Component {
 
     return (
       <section className={classes.root}>
-        <Grid container direction="row" justify="flex-start">
-          <Grid item xs={12}>
-          <Fade in={true}>
-            <PackageCard active={active} onChangeVersion={this.onChangeVersion} {...rest}/>
-          </Fade>
+        <Loader loading={loading}>
+          <Grid container direction="row" justify="flex-start">
+            <Grid item xs={12}>
+              <Fade in={true}>
+                <PackageCard
+                  active={active}
+                  onChangeVersion={this.onChangeVersion}
+                  loading={loading}
+                  {...rest}
+                />
+              </Fade>
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid container direction="row" justify="flex-start">
-          <Grid item xs={12}>
-            <Graph active={active}/>
+          <Grid container direction="row" justify="flex-start">
+            <Grid item xs={12} />
           </Grid>
-        </Grid>
+        </Loader>
       </section>
     )
   }

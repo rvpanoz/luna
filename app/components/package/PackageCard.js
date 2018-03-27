@@ -1,15 +1,15 @@
-import {withStyles} from 'material-ui/styles'
+import { withStyles } from 'material-ui/styles'
 import packageCardStyles from 'styles/packageCardStyles'
 import React from 'react'
 import PropTypes from 'prop-types'
-import Card from 'material-ui/Card';
+import Card from 'material-ui/Card'
 import CardHeader from './CardHeader'
 import CardContent from './CardContent'
 import CardActions from './CardActions'
 import Collapse from 'material-ui/transitions/Collapse'
 import Typography from 'material-ui/Typography'
 
-const {object, string} = PropTypes;
+const { object, string } = PropTypes
 
 class PackageCard extends React.Component {
   constructor(props) {
@@ -42,7 +42,7 @@ class PackageCard extends React.Component {
     return (
       <section className={classes.root}>
         <Card className={classes.card}>
-          <CardHeader active={active} mode={mode}/>
+          <CardHeader active={active} mode={mode} />
           <CardContent
             version={version}
             active={active}
@@ -76,10 +76,7 @@ class PackageCard extends React.Component {
             unmountOnExit
             className={classes.collapseContent}
           >
-            <Typography
-              variant="caption"
-              className={classes.secondaryHeading}
-            >
+            <Typography variant="caption" className={classes.secondaryHeading}>
               Githead: {active.gitHead} <br />
               <a href="#sub-labels-and-columns" className={classes.link}>
                 Learn more

@@ -81,23 +81,26 @@ ipcMain.on('ipc-event', (event, options) => {
   const opts = options || {}
   const { ipcEvent } = opts || {}
 
-  function callback(data, command, status, error) {
-    if (error) {
-      console.log(error)
+  function callback(status, command, data, stats) {
+    const isStatus = status && typeof status === 'string'
+
+    if (!isStatus) {
+      throw new Error('FATAL ERROR: status is not valid')
     }
+
     switch (status) {
       case 'close':
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
           event.sender.send('action-close', data, command)
         } else {
-          event.sender.send(`${ipcEvent}-close`, data, command)
+          event.sender.send(`${ipcEvent}-close`, data, command, stats)
         }
         break
       case 'error':
         event.sender.send('ipcEvent-error', data)
         break
       default:
-        event.sender.send(`${ipcEvent}-reply`, data, command, status, stats)
+        event.sender.send(`${ipcEvent}-reply`, data, command)
     }
   }
 

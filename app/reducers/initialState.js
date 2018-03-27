@@ -29,7 +29,7 @@ export default {
     order: 'asc',
     orderBy: 'name',
     page: 0,
-    rowsPerPage: 10,
+    rowsPerPage: 15,
     defaultActions: [
       {
         text: 'update',
