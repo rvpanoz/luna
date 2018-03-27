@@ -4,7 +4,7 @@
  */
 
 import { withStyles } from "material-ui/styles";
-import { listStyles } from "./styles";
+import { listStyles } from "styles/listStyles";
 import { autoBind, triggerEvent } from "utils";
 import React from "react";
 import PropTypes from "prop-types";

@@ -5,7 +5,6 @@
  */
 
 import { remote, ipcRenderer } from "electron";
-import { headerContentStyles } from "./styles";
 import { withStyles } from "material-ui/styles";
 import React from "react";
 import PropTypes from "prop-types";
@@ -13,6 +12,14 @@ import List, { ListItem, ListItemIcon, ListItemText } from "material-ui/List";
 import Icon from "material-ui/Icon";
 import Divider from "material-ui/Divider";
 import Tooltip from "material-ui/Tooltip";
+
+const styles = {
+  iconHover: {
+    '&:hover': {
+      fill: 'rgb(225, 0, 80)'
+    }
+  }
+}
 
 class AppHeaderContent extends React.Component {
   constructor() {
@@ -23,9 +30,6 @@ class AppHeaderContent extends React.Component {
   }
   updateMode(directory) {
     ipcRenderer.send("analyze-json", directory);
-  }
-  handleChange(e) {
-    console.log(e.target.value);
   }
   openPackage(e) {
     e.preventDefault();
@@ -85,4 +89,4 @@ AppHeaderContent.propTypes = {
   classes: object.isRequired
 };
 
-export default withStyles(headerContentStyles)(AppHeaderContent);
+export default withStyles(styles)(AppHeaderContent);

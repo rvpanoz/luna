@@ -42,23 +42,3 @@ export function layoutStyles(theme) {
     }
   }
 }
-
-export function cardStyles(theme) {
-  return {
-    root: {
-      marginTop: 0
-    },
-    link: {
-      color: theme.palette.primary.main,
-      textDecoration: 'none',
-      '&:hover': {
-        textDecoration: 'underline'
-      }
-    },
-    secondaryHeading: {
-      margin: theme.spacing.unit + 15,
-      fontSize: theme.typography.pxToRem(15),
-      color: theme.palette.text.secondary
-    }
-  }
-}

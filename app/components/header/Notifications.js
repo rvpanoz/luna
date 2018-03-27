@@ -5,7 +5,7 @@
 
 import { triggerEvent } from 'utils'
 import { withStyles } from 'material-ui/styles'
-import { notificationsStyles } from './styles'
+import { notificationsStyles } from 'styles/headerStyles'
 import { APP_INFO } from 'constants/AppConstants'
 import List, { ListItem, ListItemText } from 'material-ui/List'
 import { autoBind } from 'utils'

@@ -4,15 +4,15 @@
  */
 
 import { Provider } from "react-redux";
-import { themeA } from "../themes";
+import main from "../themes/main"; //wip
+import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
 import React from "react";
 import CssBaseline from "material-ui/CssBaseline";
-import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
 import Layout from "./Layout";
 
 const App = (props) => {
   const { store } = props;
-  const theme = createMuiTheme(themeA);
+  const theme = createMuiTheme({}); //wip - use main
 
   return (
     <section id="root">

@@ -3,48 +3,50 @@ const cp = require('child_process')
 const spawn = cp.spawn
 const Q = require('q')
 const path = require('path')
+const { URL } = require('url');
 const request = require('request')
 const R = require('ramda')
 
 // WIP fetch releases from GITHUB
 function fetchReleases(opts) {
-  const { repo } = opts
+  const { repoUrl, pkgName } = opts
 
-  if (!repo || typeof repo !== 'object') {
+  if (!repoUrl || !pkgName) {
     throw new Error(
-      'fetchReleases: repo parameter is required or is not an object'
+      'fetchReleases: repoUrl and pkgName are required parameters'
     )
   }
 
-  const headers = R.merge(
-    {
-      headers: {
-        'User-Agent': 'request'
+  const url = new URL(repoUrl);
+
+  if(!url) {
+    throw new Error('cannot parse repoUrl')
+  }
+
+  const repoName = url.pathname && url.pathname.split('/');
+
+  if(repoName && repoName[1]) {
+    const furl = new URL(`${repoName[1]}/${pkgName}/resources`, GITHUB.baseUrl);
+    const options = {
+      url: furl,
+      headers: R.merge(
+        {
+          'User-Agent': 'request'
+        },
+        opts.headers || {}
+      )
+    }
+
+    console.log(furl)
+
+    function callback(error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var info = JSON.parse(body)
+        console.log(info.stargazers_count + ' Stars')
+        console.log(info.forks_count + ' Forks')
       }
-    },
-    opts.headers || {}
-  )
+    }
 
-  const { url } = repo || false
-
-  if (url) {
-    const repoName = url.replace('https://github.com/', '')
-    const urlParts = reponame.split('/')
-
-    console.log(`${GITHUB.baseUrl}/${urlParts[0]}`)
-    // const options = {
-    //   url: `${GITHUB.baseUrl}/${urlParts[0]}`,
-    //   headers
-    // }
-    //
-    // function callback(error, response, body) {
-    //   if (!error && response.statusCode == 200) {
-    //     var info = JSON.parse(body)
-    //     console.log(info.stargazers_count + ' Stars')
-    //     console.log(info.forks_count + ' Forks')
-    //   }
-    // }
-    //
     // request(options, callback)
   }
 
@@ -132,11 +134,11 @@ exports.outdated = function(opts, callback) {
 
 // npm view [<@scope>/]<name>[@<version>]
 exports.view = function(opts, callback) {
-  console.log(opts)
   const command = ['view']
   const deferred = Q.defer()
   const cwd = process.cwd()
   const { mode, directory, pkgName, pkgVersion } = opts
+  const {repo} = opts || {}
   const defaults = ['--depth=0', '--json']
 
   if (!pkgName) {
@@ -154,10 +156,10 @@ exports.view = function(opts, callback) {
     .concat(pkgVersion ? [].concat([`${pkgName}@${pkgVersion}`]) : [pkgName])
     .concat(commandArgs)
 
-  // fetchReleases({
-  //   repo: opts && opts.repo,
-  //   name: pkgName
-  // })
+  fetchReleases({
+    repoUrl: repo.url || '',
+    pkgName
+  })
   return runCommand(run, directory, callback)
 }
 

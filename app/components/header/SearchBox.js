@@ -4,7 +4,7 @@
  */
 
 import { withStyles } from "material-ui/styles";
-import { searchBoxStyles } from "./styles";
+import { searchBoxStyles } from "styles/headerStyles";
 import { triggerEvent } from "utils";
 import React from "react";
 import PropTypes from "prop-types";

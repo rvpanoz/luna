@@ -12,6 +12,23 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import TableListToolbar from './TableListToolbar'
+import Snackbar from 'material-ui/Snackbar'
+
+const showSnackbar = () => {
+  return (
+    <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      open={true}
+      message={
+        <div className="saving">
+          Loading packages<span>.</span>
+          <span>.</span>
+          <span>.</span>
+        </div>
+      }
+    />
+  )
+}
 
 function withToolbarTableList(List, options = {}) {
   return class WithToolbarList extends React.Component {
@@ -198,31 +215,36 @@ function withToolbarTableList(List, options = {}) {
 
       return (
         <Paper style={{ width: '100%' }}>
-          <TableListToolbar
-            mode={mode}
-            directory={directory}
-            title={title}
-            rowCount={total}
-            selected={selected}
-            loading={loading}
-            packagesActions={packagesActions}
-            handleReload={this.handleReload}
-            handleUpdate={this.handleUpdate}
-            handleGlobals={this.handleGlobals}
-            handleInstall={this.handleInstall}
-            handleUninstall={this.handleUninstall}
-          />
-          <List
-            handleSort={this.handleSort}
-            handleSelectAllClick={this.handleSelectAllClick}
-            showDetails={this.showDetails}
-            isSelected={this.isSelected}
-            selected={selected}
-            loading={loading}
-            rowCount={total}
-            rowsPerPage={rowsPerPage}
-            {...rest}
-          />
+          {loading ? (
+            showSnackbar()
+          ) : (<section>
+            <TableListToolbar
+              mode={mode}
+              directory={directory}
+              title={title}
+              rowCount={total}
+              selected={selected}
+              loading={loading}
+              packagesActions={packagesActions}
+              handleReload={this.handleReload}
+              handleUpdate={this.handleUpdate}
+              handleGlobals={this.handleGlobals}
+              handleInstall={this.handleInstall}
+              handleUninstall={this.handleUninstall}
+            />
+            <List
+              handleSort={this.handleSort}
+              handleSelectAllClick={this.handleSelectAllClick}
+              showDetails={this.showDetails}
+              isSelected={this.isSelected}
+              selected={selected}
+              loading={loading}
+              rowCount={total}
+              rowsPerPage={rowsPerPage}
+              {...rest}
+            />
+            </section>
+          )}
         </Paper>
       )
     }

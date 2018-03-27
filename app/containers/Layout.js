@@ -7,8 +7,9 @@ import { remote, ipcRenderer } from 'electron'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
-import { layoutStyles } from './styles'
+import { layoutStyles } from 'styles/layoutStyles'
 import { APP_MODES } from 'constants/AppConstants'
+import classnames from 'classnames'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
 import Grid from 'material-ui/Grid'
@@ -46,12 +47,8 @@ class Layout extends React.Component {
           handleDrawerOpen={handleDrawerOpen}
           handleDrawerClose={handleDrawerClose}
         />
-        <main className={classes.content}>
-          <Grid container direction="row" justify="space-between">
-            <Grid item xs={12}>
-              <PackagesContainer />
-            </Grid>
-          </Grid>
+        <main className={classnames(classes.content, 'page-content')}>
+          <PackagesContainer />
           {snackBarOpen ? (
             <SnackBar
               snackBarOpen={snackBarOpen}

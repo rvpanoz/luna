@@ -1,7 +1,6 @@
 /** Toolbar List component **/
 
 import { withStyles } from 'material-ui/styles'
-import { toolbarStyles } from './styles'
 import { filter } from 'ramda'
 import React from 'react'
 import classNames from 'classnames'
@@ -18,23 +17,34 @@ import RefreshIcon from 'material-ui-icons/Refresh'
 import ListIcon from 'material-ui-icons/List'
 import FilterListIcon from 'material-ui-icons/FilterList'
 import UpdateIcon from 'material-ui-icons/Update'
-import Snackbar from 'material-ui/Snackbar'
 import Divider from 'material-ui/Divider'
+import { lighten } from 'material-ui/styles/colorManipulator'
 
-const showSnackbar = () => {
-  return (
-    <Snackbar
-      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      open={true}
-      message={
-        <div className="saving">
-          Loading packages<span>.</span>
-          <span>.</span>
-          <span>.</span>
-        </div>
-      }
-    />
-  )
+const styles = (theme) => {
+  return {
+    root: {
+      paddingRight: theme.spacing.unit
+    },
+    highlight:
+      theme.palette.type === 'light'
+        ? {
+            color: theme.palette.secondary.main,
+            backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+          }
+        : {
+            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.secondary.dark
+          },
+    spacer: {
+      flex: '1 1 100%'
+    },
+    actions: {
+      color: theme.palette.text.secondary
+    },
+    title: {
+      flex: '0 0 auto'
+    }
+  }
 }
 
 const TableListToolbar = (props) => {
@@ -58,15 +68,7 @@ const TableListToolbar = (props) => {
   ).length
 
   return (
-    <section>
-      {loading ? (
-        showSnackbar()
-      ) : (
-        <Toolbar
-          className={classNames(classes.root, {
-            [classes.highlight]: selected && selected.length > 0
-          })}
-        >
+        <Toolbar className={classNames(classes.root, {[classes.highlight]: selected && selected.length > 0})}>
           <div className={classes.title}>
             {selected && selected.length > 0 ? (
               <Typography color="inherit" variant="subheading">
@@ -123,11 +125,8 @@ const TableListToolbar = (props) => {
                   </Tooltip>
                 </div>
               )}
-            </div>
-          )}
+            </div>)}
         </Toolbar>
-      )}
-    </section>
   )
 }
 
@@ -136,4 +135,4 @@ TableListToolbar.propTypes = {
   selected: PropTypes.array
 }
 
-export default withStyles(toolbarStyles)(TableListToolbar)
+export default withStyles(styles)(TableListToolbar)

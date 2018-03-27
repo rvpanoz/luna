@@ -4,7 +4,7 @@
 
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { cardStyles } from './styles'
+import {packageCardStyles } from 'styles/packageCardStyles'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
@@ -234,6 +234,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default compose(
-  withStyles(cardStyles, { withTheme: true }),
+  withStyles(packageCardStyles, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
 )(PackageContainer)

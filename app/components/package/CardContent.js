@@ -119,7 +119,6 @@ class CardContent extends React.Component {
             License: {active.license || APP_INFO.NOT_AVAILABLE}
           </Typography>
           <br />
-          <CardGraph active={active} />
         </section>
       </MuiCardContent>
     )

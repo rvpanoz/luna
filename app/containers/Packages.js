@@ -302,7 +302,7 @@ class PackagesContainer extends React.Component {
             {...rest}
           />
         </Grid>
-        <Grid item xs={8} sm={8} md={8} lg={8}>
+        <Grid item xs={7} sm={7} md={7} lg={7}>
           <Loader loading={isLoading}>
             <PackageContainer />
           </Loader>

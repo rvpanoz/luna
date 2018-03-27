@@ -188,11 +188,6 @@ class TableList extends React.PureComponent {
                       <TableCell className={classes.tableCell}>
                         {latest || version}
                       </TableCell>
-                      <TableCell className={classes.tableCell}>
-                        {deprecated === true ? (
-                          <Chip color="error" label="Deprecated" />
-                        ) : null}
-                      </TableCell>
                     </TableRow>
                   )
                 })}

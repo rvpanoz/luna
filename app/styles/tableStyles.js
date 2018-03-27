@@ -35,6 +35,32 @@ const tableStyle = (theme) => ({
   grayTableHeader: {
     color: grayColor
   },
+  root: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3
+  },
+  tableWrapper: {
+    overflowX: 'auto'
+  },
+  tableRow: {
+    border: 'none',
+    padding: '8px',
+    fontSize: '14px',
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontWeight: '300',
+    lineHeight: '1.42857143',
+    verticalAlign: 'middle',
+    '&:hover': {
+      cursor: 'pointer'
+    }
+  },
+  tablelist: {
+    visibility: 'visible',
+    overflowX: 'hidden',
+    overflowY: 'auto',
+    clear: 'both',
+    maxHeight: '850px'
+  },
   table: {
     marginBottom: '0',
     width: '100%',
@@ -51,7 +77,7 @@ const tableStyle = (theme) => ({
   tableRow: {
     '&:hover': {
       cursor: 'pointer',
-      background: theme.palette.secondary.light
+      background: theme.palette.primary.light
     }
   },
   tableCell: {
