@@ -97,7 +97,7 @@ ipcMain.on('ipc-event', (event, options) => {
         event.sender.send('ipcEvent-error', data)
         break
       default:
-        event.sender.send(`${ipcEvent}-reply`, data, command)
+        event.sender.send(`${ipcEvent}-reply`, data, command, status, stats)
     }
   }
 

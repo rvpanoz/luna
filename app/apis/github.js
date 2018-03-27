@@ -22,7 +22,7 @@ export function fetchStats(opts) {
 
   if(repoName && repoName[1]) {
     const furl = new URL(`${repoName[1]}/${pkgName}`, GITHUB.baseUrl);
-    console.log(furl.href)
+
     const options = {
       url: furl,
       headers: merge(
@@ -34,4 +34,6 @@ export function fetchStats(opts) {
     }
     return request(options)
   }
+
+  return void 0
 }

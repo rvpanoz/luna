@@ -92,8 +92,8 @@ class PackagesContainer extends React.Component {
         throw new Error(e)
       }
     })
-    ipcRenderer.on('view-package-close', (event, packageStr) => {
-      console.log(packageStr)
+    ipcRenderer.on('view-package-close', (event, packageStr, cmd, status, stats) => {
+      console.log(stats) // WIP
       try {
         const pkg = JSON.parse(packageStr)
         setActive(pkg)

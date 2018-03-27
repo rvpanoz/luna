@@ -31,7 +31,7 @@ exports.doCommand = function(options, callback) {
   Q.allSettled(combine()).then((results) => {
     results.forEach((result) => {
       if (result.state === "fulfilled") {
-        callback(result.value.data, result.value.cmd, result.value.status);
+        callback(result.value.data, result.value.cmd, result.value.status, result.value.stats || null);
       } else {
         const reason = result.reason;
         console.log("Reason", reason);

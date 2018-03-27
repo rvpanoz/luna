@@ -5,11 +5,12 @@ const path = require('path')
 const github = require('./github')
 
 /** Run npm command **/
-function runCommand(command, directory, callback, statsData) {
+function runCommand(command, directory, callback, opts) {
   console.log(`running: npm ${command.join(' ')}`)
 
   const deferred = Q.defer()
   const cwd = process.cwd()
+  const {repo, name} = opts || {}
   let result = '',
     error = ''
 
@@ -36,13 +37,35 @@ function runCommand(command, directory, callback, statsData) {
 
   npmc.on('close', () => {
     console.log(`finished: npm ${command.join(' ')}`)
-    deferred.resolve({
-      status: 'close',
-      error: error.length ? error : null,
-      data: result,
-      stats: statsData,
-      cmd: command
-    })
+
+    if(repo && repo.url) {
+
+      const getActivity = github.fetchStats({
+        repoUrl: repo.url || null,
+        pkgName: name
+      })
+
+      getActivity.then((activityData) => {
+        deferred.resolve({
+          status: 'close',
+          error: error.length ? error : null,
+          data: result,
+          stats: activityData,
+          cmd: command
+        })
+      }).catch((e)=>{
+        throw new Error(e)
+      })
+
+    } else {
+      deferred.resolve({
+        status: 'close',
+        error: error.length ? error : null,
+        data: result,
+        stats: null,
+        cmd: command
+      })
+    }
   })
 
   return deferred.promise
@@ -108,16 +131,9 @@ exports.view = function(opts, callback) {
     .concat(pkgVersion ? [].concat([`${pkgName}@${pkgVersion}`]) : [pkgName])
     .concat(commandArgs)
 
-  //DEV
-  const getActivity = github.fetchStats({
-    repoUrl: repo.url || null,
-    pkgName
-  })
-
-  getActivity.then((activityData) => {
-    return runCommand(run, directory, callback, activityData)
-  }).catch((e)=>{
-    throw new Error(e)
+  return runCommand(run, directory, callback, {
+    repo,
+    name: pkgName
   })
 }
 
