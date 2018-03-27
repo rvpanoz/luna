@@ -5,7 +5,7 @@ const path = require('path')
 const github = require('./github')
 
 /** Run npm command **/
-function runCommand(command, directory, callback) {
+function runCommand(command, directory, callback, statsData) {
   console.log(`running: npm ${command.join(' ')}`)
 
   const deferred = Q.defer()
@@ -40,6 +40,7 @@ function runCommand(command, directory, callback) {
       status: 'close',
       error: error.length ? error : null,
       data: result,
+      stats: statsData,
       cmd: command
     })
   })
@@ -108,13 +109,16 @@ exports.view = function(opts, callback) {
     .concat(commandArgs)
 
   //DEV
-  github.fetchStats({
-    repoUrl: repo.url || '',
+  const getActivity = github.fetchStats({
+    repoUrl: repo.url || null,
     pkgName
   })
-  //-DEV
 
-  return runCommand(run, directory, callback)
+  getActivity.then((activityData) => {
+    return runCommand(run, directory, callback, activityData)
+  }).catch((e)=>{
+    throw new Error(e)
+  })
 }
 
 // npm search [-l|--long] [--json]

@@ -1,4 +1,4 @@
-import request from 'request'
+import request from 'request-promise-native'
 import { GITHUB } from '../constants/AppConstants'
 import { URL } from 'url';
 import {merge} from 'ramda';
@@ -21,17 +21,8 @@ export function fetchStats(opts) {
   const repoName = url.pathname && url.pathname.split('/');
 
   if(repoName && repoName[1]) {
-    const furl = new URL(`${repoName[1]}/${pkgName}/stats/code_frequency`, GITHUB.baseUrl);
-    console.log(furl)
-
-    function callback(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        var info = JSON.parse(body)
-        console.log(info.stargazers_count + ' Stars')
-        console.log(info.forks_count + ' Forks')
-      }
-    }
-
+    const furl = new URL(`${repoName[1]}/${pkgName}`, GITHUB.baseUrl);
+    console.log(furl.href)
     const options = {
       url: furl,
       headers: merge(
@@ -41,9 +32,6 @@ export function fetchStats(opts) {
         opts.headers || {}
       )
     }
-
-    // request(options, callback)
+    return request(options)
   }
-
-  return void 0
 }
