@@ -1,6 +1,7 @@
 export function cardStyles(theme) {
   return {
     root: {
+      width: '100%',
       marginTop: 0
     },
     secondaryHeading: {
@@ -143,6 +144,18 @@ export function cardStyles(theme) {
     },
     expandOpen: {
       transform: 'rotate(180deg)'
-    }
+    },
+    bullet: {
+      display: 'inline-block',
+      margin: '0 2px',
+      transform: 'scale(0.8)',
+    },
+    title: {
+      marginBottom: 16,
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
   }
 }
