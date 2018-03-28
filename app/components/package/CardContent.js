@@ -16,6 +16,7 @@ import InfoIcon from "material-ui-icons/Info";
 import LinkIcon from "material-ui-icons/Link";
 import Grid from "material-ui/Grid";
 import BarGraph from "components/package/BarGraph";
+import LineGraph from "components/package/LineGraph";
 
 const grayColor = "#999999";
 const { object, array, func, string } = PropTypes;
@@ -114,7 +115,11 @@ class CardContent extends React.Component {
           </Typography>
           <br />
           <br />
-          <BarGraph active={active} />
+          {active.stats ? (
+            <BarGraph active={active} />
+          ) : active.time ? (
+            <LineGraph active={active} />
+          ) : null}
         </section>
       </MuiCardContent>
     );

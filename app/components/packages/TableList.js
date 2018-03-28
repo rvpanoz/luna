@@ -74,6 +74,8 @@ class TableList extends React.PureComponent {
       mode,
       directory
     });
+
+    return false;
   }
   render() {
     const {

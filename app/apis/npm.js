@@ -47,8 +47,6 @@ function runCommand(command, directory, callback, opts) {
       cmd: command
     };
 
-    console.log(repo);
-
     if (repo && repo.url) {
       const getStats = github.fetchStats({
         repoUrl: repo.url || null,

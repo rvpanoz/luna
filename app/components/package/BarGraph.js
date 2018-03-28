@@ -52,7 +52,6 @@ class BarGraph extends React.Component {
           "watchers_count",
           "network_count",
           "forks_count",
-          "open_issues_count",
           "subscribers_count"
         ],
         stats
@@ -63,7 +62,7 @@ class BarGraph extends React.Component {
         value: a[1]
       };
     });
-    console.log(data);
+
     return data;
   }
   render() {

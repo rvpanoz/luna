@@ -8,6 +8,7 @@ import Paper from "material-ui/Paper";
 import Typography from "material-ui/Typography";
 import CardVersions from "./CardVersions";
 import CardOptions from "./CardOptions";
+import CardTags from "./CardTags";
 import Divider from "material-ui/Divider";
 
 const grayColor = "#999999";
@@ -20,9 +21,6 @@ const styles = theme => {
       fontSize: "1.1rem",
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
-    },
-    headingTail: {
-      margin: "0.9em 0 2em"
     },
     controls: {
       display: "flex",
@@ -88,6 +86,8 @@ class PackageActions extends React.Component {
                   removeCommandOption={removeCommandOption}
                 />
               ) : null}
+              <br />
+              <CardTags active={active} />
             </section>
           </CardContent>
         </Card>
