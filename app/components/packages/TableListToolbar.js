@@ -84,22 +84,7 @@ const TableListToolbar = props => {
               <Typography variant="title">
                 {title} {rowCount}
               </Typography>
-              <Typography
-                variant="subtitle"
-                headlineMapping={{
-                  display4: "h1",
-                  display3: "h1",
-                  display2: "h1",
-                  display1: "h1",
-                  headline: "h1",
-                  title: "h2",
-                  subheading: "h3",
-                  body2: "aside",
-                  body1: "p"
-                }}
-              >
-                {directory || null}
-              </Typography>
+              <Typography variant="subheading">{directory || null}</Typography>
             </div>
           )}
         </div>

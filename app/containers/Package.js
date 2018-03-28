@@ -95,7 +95,8 @@ class PackageContainer extends React.Component {
         directory,
         cmd: ["view"],
         pkgName: active.name,
-        pkgVersion: version
+        pkgVersion: version,
+        repo: active.repository || null
       });
     }
     return false;
