@@ -27,13 +27,22 @@ const SnackbarAction = props => {
 };
 
 const SnackBar = props => {
-  const { classes, snackBarOpen, handleSnackBarClose, message } = props;
+  const {
+    classes,
+    snackBarOpen,
+    handleSnackBarClose,
+    message,
+    position = {
+      vertical: "top",
+      horizontal: "center"
+    }
+  } = props;
 
   return (
     <Snackbar
       className={classes.root}
       resumeHideDuration={5}
-      anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      anchorOrigin={position}
       open={snackBarOpen}
       onClose={handleSnackBarClose}
       SnackbarContentProps={{

@@ -150,7 +150,11 @@ class PackagesContainer extends React.Component {
       setupSnackbar({
         action: true,
         actionText: "global",
-        message: directory
+        message: directory,
+        position: {
+          vertical: "bottom",
+          horizontal: "center"
+        }
       });
       toggleSnackbar(true);
       triggerEvent("get-packages", {

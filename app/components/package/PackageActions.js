@@ -26,7 +26,7 @@ const styles = theme => {
     },
     controls: {
       display: "flex",
-      flexDirection: "row",
+      flexDirection: "column",
       justifyContent: "space-between",
       width: "100%",
       marginTop: theme.spacing.unit,
