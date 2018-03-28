@@ -3,42 +3,59 @@
  *
  **/
 
-import React from 'react'
-import PropTypes from 'prop-types'
-import Snackbar from 'material-ui/Snackbar'
-import Button from 'material-ui/Button'
+import { withStyles } from "material-ui/styles";
+import React from "react";
+import PropTypes from "prop-types";
+import Snackbar from "material-ui/Snackbar";
+import Button from "material-ui/Button";
 
-const SnackbarAction = (props) => {
-  const { action, actionText } = props
+const styles = theme => {
+  return {
+    root: {
+      marginTop: 5
+    }
+  };
+};
+
+const SnackbarAction = props => {
+  const { action, actionText } = props;
   return (
-    <Button color="primary" size="small" onClick={(e) => action()}>
+    <Button color="primary" size="small" onClick={e => action()}>
       {actionText}
     </Button>
-  )
-}
+  );
+};
 
-const SnackBar = (props) => {
-  const { snackBarOpen, handleSnackBarClose, message } = props
+const SnackBar = props => {
+  const { classes, snackBarOpen, handleSnackBarClose, message } = props;
 
   return (
     <Snackbar
+      className={classes.root}
       resumeHideDuration={5}
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      anchorOrigin={{ vertical: "top", horizontal: "center" }}
       open={snackBarOpen}
       onClose={handleSnackBarClose}
       SnackbarContentProps={{
-        'aria-describedby': 'message'
+        "aria-describedby": "message"
       }}
-      message={<span id="message">{message}</span>}
+      message={
+        <div className="saving">
+          {message}
+          <span>.</span>
+          <span>.</span>
+          <span>.</span>
+        </div>
+      }
     />
-  )
-}
+  );
+};
 
-const { bool, func, string } = PropTypes
+const { bool, func, string } = PropTypes;
 
 SnackBar.propTypes = {
   snackBarOpen: bool.isRequired,
   message: string.isRequired
-}
+};
 
-export default SnackBar
+export default withStyles(styles)(SnackBar);

@@ -33,6 +33,7 @@ class AppHeaderContent extends React.Component {
   }
   openPackage(e) {
     e.preventDefault();
+    const {handleDrawerClose} = this.props;
 
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
@@ -51,12 +52,14 @@ class AppHeaderContent extends React.Component {
         if (filePath) {
           this.updateMode(filePath[0]);
         }
+        handleDrawerClose()
       }
     );
   }
   toggleAppSettings(e) {
     e.preventDefault();
     const { toggleSettings } = this.props;
+
     toggleSettings(true);
   }
   render() {

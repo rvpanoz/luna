@@ -20,6 +20,9 @@ import { lighten } from 'material-ui/styles/colorManipulator'
 const styles = (theme) => {
   return {
     root: {
+      width: '100%'
+    },
+    tableListToolbar: {
       paddingRight: theme.spacing.unit
     },
     highlight:
@@ -65,7 +68,8 @@ const TableListToolbar = (props) => {
   ).length
 
   return (
-        <Toolbar className={classNames(classes.root, {[classes.highlight]: selected && selected.length > 0})}>
+    <section ref="root" className={classes.root}>
+        <Toolbar className={classNames(classes.tableListToolbar, {[classes.highlight]: selected && selected.length > 0})}>
           <div className={classes.title}>
             {selected && selected.length > 0 ? (
               <Typography color="inherit" variant="subheading">
@@ -124,6 +128,7 @@ const TableListToolbar = (props) => {
               )}
             </div>)}
         </Toolbar>
+      </section>
   )
 }
 

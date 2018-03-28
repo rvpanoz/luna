@@ -9,7 +9,6 @@ import {
   toggleDrawer
 } from 'actions/globalActions'
 import { setActive, setPackageActions } from 'actions/packagesActions'
-import { APP_MODES } from 'constants/AppConstants'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
@@ -116,7 +115,7 @@ class AppHeader extends React.Component {
               </IconButton>
             </div>
             <Divider />
-            <AppHeaderContent toggleSettings={toggleSettings} />
+            <AppHeaderContent toggleSettings={toggleSettings} handleDrawerClose={handleDrawerClose}/>
           </div>
         </Drawer>
       </section>

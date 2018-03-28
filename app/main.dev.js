@@ -160,8 +160,8 @@ app.on('ready', async () => {
     webPreferences: { webSecurity: false },
     minWidth: MIN_WIDTH || screenSize.width,
     minHeight: MIN_HEIGHT || screenSize.height,
-    x: x,
-    y: y,
+    x: 0, //x,
+    y: 0 ,//y,
     show: false,
     resizable: true,
     icon: path.join(__dirname, 'resources/icon.ico')
