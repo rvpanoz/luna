@@ -1,7 +1,7 @@
 # Luna - NPM management :boom:
 
 <img align="right" width="256" height="256"
-     title="Size Limit logo" src="./luna-icon.png">
+     title="luna-icon" src="./luna-icon.png">
 
 Luna is an Electron app for developers to manage npm packages. You can install, view, update, uninstall your npm global packages or manage your packages from a local directory.
 
@@ -16,4 +16,4 @@ Also the application has a notification system to inform you about missing depen
 * Update existing packages
 * Uninstall packages
 
-<img align="right" width="1920" height="1080" title="Size Limit logo" src="./luna-ui.png">
+<img align="right" width="700" height="480" title="luna-ui" src="./luna-ui.png">
