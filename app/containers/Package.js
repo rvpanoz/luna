@@ -130,6 +130,7 @@ class PackageContainer extends React.Component {
               <PackageActions
                 active={active}
                 onChangeVersion={this.onChangeVersion}
+                {...rest}
               />
             </Grid>
           </Grid>

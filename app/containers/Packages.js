@@ -98,13 +98,14 @@ class PackagesContainer extends React.Component {
       console.log("view-package-close");
       try {
         let pkg = JSON.parse(data);
-
+        console.log("stats", stats);
         if (stats) {
           const _stats = JSON.parse(stats);
           pkg = R.merge(pkg, {
             stats: _stats
           });
         }
+
         setActive(pkg);
         toggleMainLoader(false);
       } catch (e) {
