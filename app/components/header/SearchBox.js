@@ -1,6 +1,5 @@
 /**
  * SearchBox component
- *
  */
 
 import { withStyles } from "material-ui/styles";
@@ -37,7 +36,13 @@ class SearchBox extends React.Component {
     if (e) {
       e.preventDefault();
     }
-    const { toggleLoader, setActive, mode, directory, setPackageActions } = this.props;
+    const {
+      toggleLoader,
+      setActive,
+      mode,
+      directory,
+      setPackageActions
+    } = this.props;
     const pkgName = e.target.value;
 
     if (pkgName) {

@@ -1,3 +1,8 @@
+/**
+ * BarGraph component
+ * http://recharts.org/#/en-US/
+ */
+
 import { objectEntries, firstToUpper } from "utils";
 import { withStyles } from "material-ui/styles";
 import List, {
@@ -9,11 +14,6 @@ import React from "react";
 import Grid from "material-ui/Grid";
 import Typography from "material-ui/Typography";
 import moment from "moment";
-
-//deprecated
-import semver2int from "semver2int";
-import CardTags from "./CardTags";
-//
 
 import { pickAll } from "ramda";
 import {

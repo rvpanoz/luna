@@ -1,6 +1,5 @@
 /**
  * Notifications indicator
- *
  **/
 
 import { triggerEvent } from "utils";

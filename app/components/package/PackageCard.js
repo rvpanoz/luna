@@ -1,19 +1,23 @@
-import { withStyles } from 'material-ui/styles'
-import packageCardStyles from 'styles/packageCardStyles'
-import React from 'react'
-import PropTypes from 'prop-types'
-import Card from 'material-ui/Card'
-import CardHeader from './CardHeader'
-import CardContent from './CardContent'
-import CardActions from './CardActions'
-import Collapse from 'material-ui/transitions/Collapse'
-import Typography from 'material-ui/Typography'
+/**
+ * PackageCard component
+ */
 
-const { object, string } = PropTypes
+import { withStyles } from "material-ui/styles";
+import packageCardStyles from "styles/packageCardStyles";
+import React from "react";
+import PropTypes from "prop-types";
+import Card from "material-ui/Card";
+import CardHeader from "./CardHeader";
+import CardContent from "./CardContent";
+import CardActions from "./CardActions";
+import Collapse from "material-ui/transitions/Collapse";
+import Typography from "material-ui/Typography";
+
+const { object, string } = PropTypes;
 
 class PackageCard extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
   render() {
     const {
@@ -37,7 +41,7 @@ class PackageCard extends React.Component {
       actions,
       setActive,
       packageJSON
-    } = this.props
+    } = this.props;
 
     return (
       <section className={classes.root}>
@@ -85,7 +89,7 @@ class PackageCard extends React.Component {
           </Collapse>
         </Card>
       </section>
-    )
+    );
   }
 }
 
@@ -93,6 +97,6 @@ PackageCard.propTypes = {
   active: object.isRequired,
   classes: object.isRequired,
   mode: string.isRequired
-}
+};
 
-export default withStyles(packageCardStyles)(PackageCard)
+export default withStyles(packageCardStyles)(PackageCard);

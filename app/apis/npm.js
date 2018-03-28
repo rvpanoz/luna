@@ -1,3 +1,7 @@
+/**
+ * NPM cli commands
+ **/
+
 const cp = require("child_process");
 const Q = require("q");
 const path = require("path");

@@ -1,3 +1,8 @@
+/**
+ * LineGraph component
+ * http://recharts.org/#/en-US/
+ */
+
 import { objectEntries } from "utils";
 import { withStyles } from "material-ui/styles";
 import List, {

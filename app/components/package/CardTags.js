@@ -1,3 +1,7 @@
+/**
+ * CardTags component
+ */
+
 import { objectEntries } from "utils";
 import { withStyles } from "material-ui/styles";
 import List, {

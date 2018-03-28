@@ -12,7 +12,7 @@ import Button from "material-ui/Button";
 const styles = theme => {
   return {
     root: {
-      marginTop: 5
+      marginTop: 3
     }
   };
 };

@@ -1,7 +1,5 @@
 /**
  * AppHeader Menu content
- *
- *
  */
 
 import { remote, ipcRenderer } from "electron";
@@ -15,11 +13,11 @@ import Tooltip from "material-ui/Tooltip";
 
 const styles = {
   iconHover: {
-    '&:hover': {
-      fill: 'rgb(225, 0, 80)'
+    "&:hover": {
+      fill: "rgb(225, 0, 80)"
     }
   }
-}
+};
 
 class AppHeaderContent extends React.Component {
   constructor() {
@@ -33,7 +31,7 @@ class AppHeaderContent extends React.Component {
   }
   openPackage(e) {
     e.preventDefault();
-    const {handleDrawerClose} = this.props;
+    const { handleDrawerClose } = this.props;
 
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
@@ -48,11 +46,11 @@ class AppHeaderContent extends React.Component {
         ],
         openFile: true
       },
-      (filePath) => {
+      filePath => {
         if (filePath) {
           this.updateMode(filePath[0]);
         }
-        handleDrawerClose()
+        handleDrawerClose();
       }
     );
   }

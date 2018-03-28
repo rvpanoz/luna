@@ -1,10 +1,14 @@
+/**
+ * WIP settings
+ **/
+
 import { withStyles } from "material-ui/styles";
 import React from "react";
 import PropTypes from "prop-types";
 import Modal from "material-ui/Modal";
 import { styles } from "./styles";
 
-const Settings = (props) => {
+const Settings = props => {
   const { open, handleClose } = props;
 
   function getModalStyles() {

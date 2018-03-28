@@ -1,3 +1,7 @@
+/**
+ * PackageActions component
+ */
+
 import { packageCardStyles } from "styles/packageCardStyles";
 import { withStyles } from "material-ui/styles";
 import { APP_MODES } from "constants/AppConstants";

@@ -1,6 +1,5 @@
 /**
  * CardContent component
- *
  */
 
 import { CardContent as MuiCardContent } from "material-ui/Card";
