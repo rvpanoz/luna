@@ -15,5 +15,3 @@ Also the application has a notification system to inform you about missing depen
 * Analyze package.json file
 * Update existing packages
 * Uninstall packages
-
-<img align="right" width="1024" height="768" title="luna-ui" src="./luna-ui.png">
