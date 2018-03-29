@@ -54,12 +54,12 @@ class BarGraph extends React.Component {
           'forks_count',
           'subscribers_count'
         ],
-        stats
+        stats || {}
       )
     ).map((a, idx) => {
       return {
         name: firstToUpper(a[0].split('_')[0]),
-        value: a[1]
+        value: a[1] || 0
       }
     })
 
@@ -72,11 +72,11 @@ class BarGraph extends React.Component {
       return null
     }
 
-    const { stats } = active
-
-    if (!stats || typeof stats !== 'object') {
-      return <Typography variant="body2">No stats available</Typography>
-    }
+    // const { stats } = active
+    //
+    // if (!stats || typeof stats !== 'object') {
+    //   return <Typography variant="body2">No stats available</Typography>
+    // }
 
     const data = this.generateData()
 

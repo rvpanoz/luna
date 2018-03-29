@@ -94,12 +94,12 @@ function withToolbarTableList(List, options = {}) {
     componentDidMount() {
       const { mode, directory, toggleLoader } = this.props
 
-      // toggleLoader(true);
-      // triggerEvent("get-packages", {
-      //   cmd: ["outdated", "list"],
-      //   mode,
-      //   directory
-      // });
+      toggleLoader(true)
+      triggerEvent('get-packages', {
+        cmd: ['outdated', 'list'],
+        mode,
+        directory
+      })
     }
     handleReload(e) {
       if (e) e.preventDefault()
@@ -222,7 +222,7 @@ function withToolbarTableList(List, options = {}) {
       const { title } = options
 
       return loading ? (
-        <SnackBar snackBarOpen={true} message="Loading" />
+        <SnackBar snackBarOpen={true} message="Loading" loader={true} />
       ) : (
         <Paper style={{ width: '100%' }}>
           <TableListToolbar

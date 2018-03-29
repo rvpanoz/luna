@@ -14,7 +14,6 @@ import CardContent from './CardContent'
 import CardActions from './CardActions'
 import Collapse from 'material-ui/transitions/Collapse'
 import Typography from 'material-ui/Typography'
-
 const { object, string } = PropTypes
 
 class PackageCard extends React.Component {
@@ -44,7 +43,7 @@ class PackageCard extends React.Component {
       setActive,
       packageJSON
     } = this.props
-    console.log(classes)
+
     return (
       <section className={classes.root}>
         <Card className={classes.card}>

@@ -97,38 +97,57 @@ class PackageContainer extends React.Component {
     return false
   }
   render() {
-    const { active, classes, isLoading, loading, ...rest } = this.props
+    const {
+      active,
+      classes,
+      isLoading,
+      loading,
+      setupSnackbar,
+      toggleSnackbar,
+      ...rest
+    } = this.props
+    const error = active && active.error
 
-    if (!active) {
-      return null
-    }
+    toggleSnackbar(false)
 
-    const hasError = active.error
-    if (hasError) {
-      return null
+    if (error) {
+      setupSnackbar({
+        actionText: 'close',
+        loader: false,
+        message: error.detail,
+        position: {
+          vertical: 'bottom',
+          horizontal: 'center'
+        }
+      })
+      toggleSnackbar(true)
     }
 
     return (
-      <section className={classes.root}>
-        <Grid container direction="row" justify="flex-start">
-          <Grid item xs={9}>
-            <PackageCard
-              active={active}
-              onChangeVersion={this.onChangeVersion}
-              loading={loading}
-              isLoading={isLoading}
-              {...rest}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <PackageActions
-              active={active}
-              onChangeVersion={this.onChangeVersion}
-              {...rest}
-            />
-          </Grid>
-        </Grid>
-      </section>
+      <Loader loading={isLoading}>
+        {active ? (
+          <section className={classes.root}>
+            <Grid container direction="row" justify="flex-start">
+              <Grid item xs={9}>
+                <PackageCard
+                  active={active}
+                  onChangeVersion={this.onChangeVersion}
+                  loading={loading}
+                  isLoading={isLoading}
+                  {...rest}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <PackageActions
+                  active={active}
+                  onChangeVersion={this.onChangeVersion}
+                  {...rest}
+                />
+              </Grid>
+            </Grid>
+          </section>
+        ) : null}
+      </Loader>
     )
   }
 }
@@ -155,6 +174,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
     setupSnackbar: (snackbarOptions) =>
       dispatch(globalActions.setupSnackbar(snackbarOptions)),
     toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),

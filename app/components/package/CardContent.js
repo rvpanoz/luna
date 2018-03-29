@@ -106,7 +106,7 @@ class CardContent extends React.Component {
           </Typography>
           <br />
           <br />
-          {active.stats ? <BarGraph active={active} /> : null}
+          <BarGraph active={active} />
         </section>
       </MuiCardContent>
     )

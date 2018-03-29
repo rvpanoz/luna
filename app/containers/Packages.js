@@ -104,7 +104,7 @@ class PackagesContainer extends React.Component {
 
         try {
           let pkg = JSON.parse(data)
-          console.log(pkg.version)
+
           if (latest) {
             pkg = R.merge(pkg, {
               latest
@@ -161,8 +161,8 @@ class PackagesContainer extends React.Component {
       setPackageActions(null)
       setPackageJSON(content)
       setupSnackbar({
-        action: true,
-        actionText: 'global',
+        loader: false,
+        actionClose: false,
         message: directory,
         position: {
           vertical: 'bottom',
@@ -314,23 +314,19 @@ class PackagesContainer extends React.Component {
     const { loading, isLoading, ...rest } = this.props
 
     return (
-      <Loader loading={loading}>
-        <Grid container alignItems="flex-start">
-          <Grid item xs={4} sm={4} md={4} lg={4}>
-            <WithToolbarList
-              setGlobalMode={this.setGlobalMode}
-              reload={this.reload}
-              loading={loading}
-              {...rest}
-            />
-          </Grid>
-          <Grid item xs={7} sm={7} md={7} lg={7}>
-            <Loader loading={isLoading}>
-              <PackageContainer isLoading={isLoading} loading={loading} />
-            </Loader>
-          </Grid>
+      <Grid container alignItems="flex-start">
+        <Grid item xs={4} sm={4} md={4} lg={4}>
+          <WithToolbarList
+            setGlobalMode={this.setGlobalMode}
+            reload={this.reload}
+            loading={loading}
+            {...rest}
+          />
         </Grid>
-      </Loader>
+        <Grid item xs={7} sm={7} md={7} lg={7}>
+          <PackageContainer isLoading={isLoading} loading={loading} />
+        </Grid>
+      </Grid>
     )
   }
 }
