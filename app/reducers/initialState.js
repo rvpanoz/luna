@@ -1,6 +1,6 @@
 export default {
-  npmCmd: "",
-  mode: "GLOBAL",
+  npmCmd: '',
+  mode: 'GLOBAL',
   directory: null,
   settings: null,
   loading: false,
@@ -10,8 +10,8 @@ export default {
   drawerOpen: false,
   snackbar: {
     action: null,
-    actionText: "",
-    message: ""
+    actionText: '',
+    message: ''
   },
   messages: [],
   packages: {
@@ -25,31 +25,31 @@ export default {
     packages: [],
     selected: [],
     cmdOptions: [],
-    version: "",
-    order: "asc",
-    orderBy: "name",
+    version: '',
+    order: 'asc',
+    orderBy: 'name',
     page: 0,
-    rowsPerPage: 9,
+    rowsPerPage: 10,
     defaultActions: [
       {
-        text: "update",
-        color: "primary",
-        iconCls: "update"
+        text: 'update',
+        color: 'primary',
+        iconCls: 'update'
       },
       {
-        text: "uninstall",
-        color: "default",
-        iconCls: "trash"
+        text: 'uninstall',
+        color: 'default',
+        iconCls: 'trash'
       }
     ],
     actions: []
   },
   packageJSON: {
     license: null,
-    author: "",
-    name: "",
+    author: '',
+    name: '',
     dependencies: [],
     devDependencies: [],
     optionalDependencies: []
   }
-};
+}

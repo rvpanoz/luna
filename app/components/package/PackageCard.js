@@ -2,23 +2,24 @@
  * PackageCard component
  */
 
-import { withStyles } from "material-ui/styles";
-import packageCardStyles from "styles/packageCardStyles";
-import React from "react";
-import classnames from "classnames";
-import PropTypes from "prop-types";
-import Card from "material-ui/Card";
-import CardHeader from "./CardHeader";
-import CardContent from "./CardContent";
-import CardActions from "./CardActions";
-import Collapse from "material-ui/transitions/Collapse";
-import Typography from "material-ui/Typography";
+import { withStyles } from 'material-ui/styles'
+import { APP_INFO } from 'constants/AppConstants'
+import packageCardStyles from 'styles/packageCardStyles'
+import React from 'react'
+import classnames from 'classnames'
+import PropTypes from 'prop-types'
+import Card from 'material-ui/Card'
+import CardHeader from './CardHeader'
+import CardContent from './CardContent'
+import CardActions from './CardActions'
+import Collapse from 'material-ui/transitions/Collapse'
+import Typography from 'material-ui/Typography'
 
-const { object, string } = PropTypes;
+const { object, string } = PropTypes
 
 class PackageCard extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
   render() {
     const {
@@ -42,8 +43,8 @@ class PackageCard extends React.Component {
       actions,
       setActive,
       packageJSON
-    } = this.props;
-
+    } = this.props
+    console.log(classes)
     return (
       <section className={classes.root}>
         <Card className={classes.card}>
@@ -82,20 +83,17 @@ class PackageCard extends React.Component {
             className={classes.collapseContent}
           >
             <div className={classnames(classes.column, classes.helper)}>
-              <Typography
-                variant="caption"
-                className={classes.secondaryHeading}
-              >
-                Githead: {active.gitHead} <br />
-                <a href="#sub-labels-and-columns" className={classes.link}>
-                  Learn more
-                </a>
+              <Typography variant="caption" gutterBottom>
+                README: {active.readmeFilename || APP_INFO.NOT_AVAILABLE}
+              </Typography>
+              <Typography variant="caption" gutterBottom>
+                main: {active.main || APP_INFO.NOT_AVAILABLE}
               </Typography>
             </div>
           </Collapse>
         </Card>
       </section>
-    );
+    )
   }
 }
 
@@ -103,6 +101,6 @@ PackageCard.propTypes = {
   active: object.isRequired,
   classes: object.isRequired,
   mode: string.isRequired
-};
+}
 
-export default withStyles(packageCardStyles)(PackageCard);
+export default withStyles(packageCardStyles)(PackageCard)

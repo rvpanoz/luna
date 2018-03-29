@@ -2,41 +2,41 @@
  * CardContent component
  */
 
-import { CardContent as MuiCardContent } from "material-ui/Card";
-import { APP_INFO, APP_MODES } from "constants/AppConstants";
-import { withStyles } from "material-ui/styles";
-import React from "react";
-import Typography from "material-ui/Typography";
-import PropTypes from "prop-types";
-import Divider from "material-ui/Divider";
-import CardOptions from "./CardOptions";
-import CardVersions from "./CardVersions";
-import InfoIcon from "material-ui-icons/Info";
-import LinkIcon from "material-ui-icons/Link";
-import Grid from "material-ui/Grid";
-import BarGraph from "components/package/BarGraph";
-import LineGraph from "components/package/LineGraph";
+import { CardContent as MuiCardContent } from 'material-ui/Card'
+import { APP_INFO, APP_MODES } from 'constants/AppConstants'
+import { withStyles } from 'material-ui/styles'
+import React from 'react'
+import Typography from 'material-ui/Typography'
+import PropTypes from 'prop-types'
+import Divider from 'material-ui/Divider'
+import CardOptions from './CardOptions'
+import CardVersions from './CardVersions'
+import InfoIcon from 'material-ui-icons/Info'
+import LinkIcon from 'material-ui-icons/Link'
+import Grid from 'material-ui/Grid'
+import BarGraph from 'components/package/BarGraph'
+import LineGraph from 'components/package/LineGraph'
 
-const grayColor = "#999999";
-const { object, array, func, string } = PropTypes;
-const styles = theme => {
+const grayColor = '#999999'
+const { object, array, func, string } = PropTypes
+const styles = (theme) => {
   return {
     heading: {
-      color: "rgba(0, 0, 0, 0.54)",
-      fontSize: "1.1rem",
+      color: 'rgba(0, 0, 0, 0.54)',
+      fontSize: '1.1rem',
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
     },
     headingTail: {
-      margin: "0.9em 0 2em"
+      margin: '0.9em 0 2em'
     },
     controls: {
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      width: "100%",
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
       marginTop: theme.spacing.unit,
-      "& fieldset": {
+      '& fieldset': {
         margin: theme.spacing.unit
       }
     },
@@ -44,14 +44,14 @@ const styles = theme => {
       marginBottom: 10
     },
     info: {
-      lineHeight: "22px",
+      lineHeight: '22px',
       color: grayColor,
-      fontSize: "12px",
-      display: "inline-block",
-      margin: "0!important"
+      fontSize: '12px',
+      display: 'inline-block',
+      margin: '0!important'
     }
-  };
-};
+  }
+}
 
 class CardContent extends React.Component {
   render() {
@@ -66,10 +66,10 @@ class CardContent extends React.Component {
       packageJSON,
       group,
       removeCommandOption
-    } = this.props;
+    } = this.props
 
     if (!active) {
-      return null;
+      return null
     }
 
     return (
@@ -105,25 +105,11 @@ class CardContent extends React.Component {
             Author: {active.author || APP_INFO.NOT_AVAILABLE}
           </Typography>
           <br />
-          <Typography
-            className={classes.info}
-            component="p"
-            variant="body2"
-            gutterBottom={true}
-            variant="caption"
-          >
-            License: {active.license || APP_INFO.NOT_AVAILABLE}
-          </Typography>
           <br />
-          <br />
-          {active.stats ? (
-            <BarGraph active={active} />
-          ) : active.time ? (
-            <LineGraph active={active} />
-          ) : null}
+          {active.stats ? <BarGraph active={active} /> : null}
         </section>
       </MuiCardContent>
-    );
+    )
   }
 }
 
@@ -134,6 +120,6 @@ CardContent.propTypes = {
   active: object.isRequired,
   onChangeVersion: func.isRequired,
   clearCommandOptions: func.isRequired
-};
+}
 
-export default withStyles(styles)(CardContent);
+export default withStyles(styles)(CardContent)
