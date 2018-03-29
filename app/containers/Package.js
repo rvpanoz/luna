@@ -87,7 +87,7 @@ class PackageContainer extends React.Component {
     } = this.props;
 
     const version = (e.target && e.target.value) || value;
-    console.log(version);
+
     if (version && version !== "false") {
       toggleMainLoader(true);
       setVersion(version);

@@ -103,9 +103,31 @@ function withToolbarTableList(List, options = {}) {
     }
     handleReload(e) {
       if (e) e.preventDefault();
+
       const { reload } = this.props;
       reload();
       e.stopPropagation();
+    }
+    handleUpdate(e) {
+      const { selected } = this.props;
+
+      if (selected && selected.length) {
+        remote.dialog.showMessageBox(
+          remote.getCurrentWindow(),
+          {
+            title: "Confirmation",
+            type: "question",
+            message: "Would you like to update the selected packages?",
+            buttons: ["Cancel", "Update"]
+          },
+          btnIdx => {
+            if (Boolean(btnIdx) === true) {
+              this._installSelected(selected);
+            }
+          }
+        );
+      }
+      return false;
     }
     handleGlobals(e) {
       if (e) e.preventDefault();

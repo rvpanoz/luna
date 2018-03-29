@@ -49,6 +49,7 @@ class TableList extends React.PureComponent {
         directory
       });
     }
+    e.stopPropagation();
   }
   handleChangePage(e, page) {
     const { setPage } = this.props;

@@ -48,6 +48,7 @@ const NotificationsList = props => {
                         const indexOfAt = requires.indexOf("@");
                         if (indexOfAt > -1) {
                           const pkgName = requires.substr(0, indexOfAt);
+
                           toggleLoader(true);
                           setActive(null);
                           setPackageActions([
