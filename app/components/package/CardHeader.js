@@ -17,7 +17,9 @@ import Avatar from "material-ui/Avatar";
 import Select from "material-ui/Select";
 import Checkbox from "material-ui/Checkbox";
 import moment from "moment";
+import UpdateIcon from "material-ui-icons/Update";
 
+const grayColor = "#999999";
 const { array, object, string, func } = PropTypes;
 const ITEM_HEIGHT = 55,
   ITEM_PADDING_TOP = 8,
@@ -31,9 +33,25 @@ const ITEM_HEIGHT = 55,
   };
 
 const styles = theme => {
-  avatar: {
-    backgroundColor: theme.palette.secondary.main;
-  }
+  return {
+    avatar: {
+      backgroundColor: theme.palette.secondary.main
+    },
+    cardStats: {
+      lineHeight: "22px",
+      color: grayColor,
+      fontSize: "12px",
+      display: "inline-block",
+      margin: "0!important"
+    },
+    cardStatsIcon: {
+      position: "relative",
+      top: "4px",
+      marginRight: 5,
+      width: "16px",
+      height: "16px"
+    }
+  };
 };
 
 class CardHeader extends React.Component {
@@ -41,6 +59,7 @@ class CardHeader extends React.Component {
     super(props);
     this._anchorEl = null;
     this.buildTitle = this.buildTitle.bind(this);
+    this.buildSubHeader = this.buildSubHeader.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
@@ -48,6 +67,18 @@ class CardHeader extends React.Component {
     const { active, group, actions } = this.props;
     const { name, author, version } = active;
     return group ? `${name} - ${group}` : name;
+  }
+  buildSubHeader() {
+    const { active, classes } = this.props;
+
+    return (
+      <div className={classes.cardStats}>
+        <UpdateIcon className={classes.cardStatsIcon} />
+        Updated&nbsp;{active.time && active.time.modified
+          ? moment(active.time.modified).format("DD/MM/YYYY")
+          : null}
+      </div>
+    );
   }
   handleClick(e) {
     this._anchorEl = e.currentTarget;
@@ -122,11 +153,7 @@ class CardHeader extends React.Component {
             </div>
           }
           title={`${this.buildTitle()} - ${active.version}`}
-          subheader={`Updated: ${
-            active.time && active.time.modified
-              ? moment(active.time.modified).format("DD/MM/YYYY")
-              : null
-          }`}
+          subheader={this.buildSubHeader()}
         />
       </section>
     );

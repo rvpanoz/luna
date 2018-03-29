@@ -15,7 +15,6 @@ import Grid from "material-ui/Grid";
 import Typography from "material-ui/Typography";
 import moment from "moment";
 import semver2int from "semver2int";
-import CardTags from "./CardTags";
 
 import {
   LineChart,
@@ -55,9 +54,6 @@ const CustomTooltip = props => {
 };
 
 class Graph extends React.Component {
-  static mapping = {
-    t: 1
-  };
   constructor(props) {
     super(props);
     this.generateData = this.generateData.bind(this);
@@ -66,17 +62,17 @@ class Graph extends React.Component {
   generateData() {
     const { active } = this.props;
     const data = active.time && objectEntries(active.time);
-
-    console.log(this.mapping);
+    const regExp = RegExp("/^[a-zA-Z]+$/i");
 
     if (data) {
       const graphData =
         data &&
         data
           .map(item => {
+            // console.log(item[0], regExp.test(item[0]));
             if (item[0] !== "modified" && item[0] !== "created") {
               return {
-                version: item[0],
+                version: semver2int(item[0]),
                 date: moment(item[1]).format("DD/MM/YYYY")
               };
             }
@@ -99,7 +95,7 @@ class Graph extends React.Component {
     return (
       <div style={{ backgroundColor: "#fff" }}>
         <LineChart
-          width={600}
+          width={550}
           height={300}
           data={data}
           margin={{ top: 25, right: 10, left: 10, bottom: 5 }}

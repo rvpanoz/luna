@@ -2,37 +2,47 @@
  * PackageActions component
  */
 
-import { packageCardStyles } from 'styles/packageCardStyles'
-import { withStyles } from 'material-ui/styles'
-import { APP_MODES } from 'constants/AppConstants'
-import Card, { CardHeader, CardContent } from 'material-ui/Card'
-import React from 'react'
-import PropTypes from 'prop-types'
-import Paper from 'material-ui/Paper'
-import Typography from 'material-ui/Typography'
-import CardVersions from './CardVersions'
-import CardOptions from './CardOptions'
-import CardTags from './CardTags'
-import Divider from 'material-ui/Divider'
+import { packageCardStyles } from "styles/packageCardStyles";
+import { withStyles } from "material-ui/styles";
+import { APP_MODES } from "constants/AppConstants";
+import classnames from "classnames";
+import Card, { CardHeader, CardContent } from "material-ui/Card";
+import React from "react";
+import PropTypes from "prop-types";
+import Paper from "material-ui/Paper";
+import Typography from "material-ui/Typography";
+import CardVersions from "./CardVersions";
+import CardOptions from "./CardOptions";
+import CardTags from "./CardTags";
+import Divider from "material-ui/Divider";
 
-const grayColor = '#999999'
-const { object, array, func, string } = PropTypes
+const grayColor = "#999999";
+const { object, array, func, string } = PropTypes;
 
-const styles = (theme) => {
+const styles = theme => {
   return {
+    root: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-around",
+      placeContent: "space-around start"
+    },
+    margin: {
+      marginBottom: theme.spacing.unit + 10
+    },
     heading: {
-      color: 'rgba(0, 0, 0, 0.54)',
-      fontSize: '1.1rem',
+      color: "rgba(0, 0, 0, 0.54)",
+      fontSize: "1.1rem",
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
     },
     controls: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      width: '100%',
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      width: "100%",
       marginTop: theme.spacing.unit,
-      '& fieldset': {
+      "& fieldset": {
         margin: theme.spacing.unit
       }
     },
@@ -40,35 +50,36 @@ const styles = (theme) => {
       marginBottom: 10
     },
     info: {
-      lineHeight: '22px',
+      lineHeight: "22px",
       color: grayColor,
-      fontSize: '12px',
-      display: 'inline-block',
-      margin: '0!important'
+      fontSize: "12px",
+      display: "inline-block",
+      margin: "0!important"
     }
-  }
-}
+  };
+};
 
 class PackageActions extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
   render() {
     const {
       active,
       addCommandOption,
       classes,
+      cmdOptions,
       group,
       mode,
       packageJSON,
       removeCommandOption,
-      cmdOptions,
-      onChangeVersion
-    } = this.props
+      onChangeVersion,
+      setVersion
+    } = this.props;
 
     return (
       <section className={classes.root}>
-        <Card className={classes.card}>
+        <Card className={classnames(classes.card, classes.margin)}>
           <CardContent>
             <Typography
               component="h3"
@@ -79,7 +90,11 @@ class PackageActions extends React.Component {
             </Typography>
             <Divider />
             <section className={classes.controls}>
-              <CardVersions active={active} onChangeVersion={onChangeVersion} />
+              <CardVersions
+                active={active}
+                onChangeVersion={onChangeVersion}
+                setVersion={setVersion}
+              />
               {mode && mode === APP_MODES.LOCAL ? (
                 <CardOptions
                   active={active}
@@ -107,8 +122,8 @@ class PackageActions extends React.Component {
           </CardContent>
         </Card>
       </section>
-    )
+    );
   }
 }
 
-export default withStyles(styles)(PackageActions)
+export default withStyles(styles)(PackageActions);

@@ -9,6 +9,7 @@ import Input, { InputLabel } from "material-ui/Input";
 import { FormControl } from "material-ui/Form";
 import React from "react";
 import PropTypes from "prop-types";
+import semverCompare from "semver-compare";
 
 const { object, func } = PropTypes;
 const styles = theme => {
@@ -22,6 +23,20 @@ const styles = theme => {
 };
 
 class CardVersions extends React.Component {
+  constructor() {
+    super();
+  }
+  componentDidUpdate() {
+    const { active, setVersion } = this.props;
+    const { version, latest } = active;
+
+    console.log(latest);
+    if (latest) {
+      // const areEqual = semverCompare(latest, version);
+      // console.log(areEqual);
+      // setVersion(latest);
+    }
+  }
   render() {
     const { active, classes, latest, onChangeVersion } = this.props;
 
@@ -30,7 +45,7 @@ class CardVersions extends React.Component {
         select
         label="Select Version"
         className={classes.textField}
-        value={active.latest || active.version}
+        value={latest || active.version}
         onChange={onChangeVersion}
         SelectProps={{
           MenuProps: {

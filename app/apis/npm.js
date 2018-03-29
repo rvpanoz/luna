@@ -16,7 +16,7 @@ function runCommand(command, directory, callback, opts) {
 
   const deferred = Q.defer();
   const cwd = process.cwd();
-  const { repo, name } = opts || {};
+  const { repo, pkgName, latest } = opts || {};
   let result = "",
     error = "";
 
@@ -48,20 +48,21 @@ function runCommand(command, directory, callback, opts) {
       status: "close",
       error: error.length ? error : null,
       data: result,
-      cmd: command
+      cmd: command,
+      latest: latest
     };
 
     if (repo && repo.url) {
       const getStats = github.fetchStats({
         repoUrl: repo.url || null,
-        pkgName: name
+        pkgName
       });
 
       getStats
         .then(stats => {
           deferred.resolve(
             merge(results, {
-              stats
+              stats: stats
             })
           );
         })
@@ -118,8 +119,7 @@ exports.view = function(opts, callback) {
   const command = ["view"];
   const deferred = Q.defer();
   const cwd = process.cwd();
-  const { mode, directory, pkgName, pkgVersion } = opts;
-  const { repo } = opts || {};
+  const { mode, directory, pkgName, pkgVersion, repo, latest } = opts;
   const defaults = ["--depth=0", "--json"];
 
   if (!pkgName) {
@@ -134,12 +134,17 @@ exports.view = function(opts, callback) {
   //build npm command
   const run = []
     .concat(command)
-    .concat(pkgVersion ? [].concat([`${pkgName}@${pkgVersion}`]) : [pkgName])
+    .concat(
+      latest
+        ? [].concat([`${pkgName}@${latest}`])
+        : pkgVersion ? [].concat([`${pkgName}@${pkgVersion}`]) : [pkgName]
+    )
     .concat(commandArgs);
 
   return runCommand(run, directory, callback, {
     repo,
-    name: pkgName
+    pkgName,
+    latest
   });
 };
 

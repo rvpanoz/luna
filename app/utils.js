@@ -18,7 +18,8 @@ export const triggerEvent = (eventName, options) => {
     pkgOptions,
     multiple,
     packages,
-    repo
+    repo,
+    latest
   } = options || {}
 
   ipcRenderer.send('ipc-event', {
@@ -30,6 +31,7 @@ export const triggerEvent = (eventName, options) => {
     packages,
     pkgName,
     pkgVersion,
+    latest,
     pkgOptions,
     repo
   })

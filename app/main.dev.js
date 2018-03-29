@@ -6,101 +6,102 @@
  *
  */
 
-import { app, BrowserWindow, ipcMain } from 'electron'
-import fs from 'fs'
-import electron from 'electron'
-import MenuBuilder from './menu'
-import fixPath from 'fix-path'
-const path = require('path')
-const config = require('./config')
+import { app, BrowserWindow, ipcMain } from "electron";
+import fs from "fs";
+import electron from "electron";
+import MenuBuilder from "./menu";
+import fixPath from "fix-path";
+const path = require("path");
+const config = require("./config");
 
-const NODE_ENV = process.env.NODE_ENV
-const shell = require('./shell')
+const NODE_ENV = process.env.NODE_ENV;
+const shell = require("./shell");
 
-const debug = /--debug/.test(process.argv[2])
-let mainWindow = null
+const debug = /--debug/.test(process.argv[2]);
+let mainWindow = null;
 
-const MIN_WIDTH = 1366
-const MIN_HEIGHT = 768
+const MIN_WIDTH = 1366;
+const MIN_HEIGHT = 768;
 
-if (process.env.NODE_ENV === 'production') {
-  const sourceMapSupport = require('source-map-support')
-  sourceMapSupport.install()
-  fixPath()
+if (process.env.NODE_ENV === "production") {
+  const sourceMapSupport = require("source-map-support");
+  sourceMapSupport.install();
+  fixPath();
 }
 
 if (
-  process.env.NODE_ENV === 'development' ||
-  process.env.DEBUG_PROD === 'true'
+  process.env.NODE_ENV === "development" ||
+  process.env.DEBUG_PROD === "true"
 ) {
-  require('electron-debug')()
-  const path = require('path')
-  const p = path.join(__dirname, '..', 'app', 'node_modules')
-  require('module').globalPaths.push(p)
+  require("electron-debug")();
+  const path = require("path");
+  const p = path.join(__dirname, "..", "app", "node_modules");
+  require("module").globalPaths.push(p);
 }
 
 // devtools
 const installExtensions = async () => {
-  const installer = require('electron-devtools-installer')
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS']
+  const installer = require("electron-devtools-installer");
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  const extensions = ["REACT_DEVELOPER_TOOLS", "REDUX_DEVTOOLS"];
 
   return Promise.all(
-    extensions.map((name) => installer.default(installer[name], forceDownload))
-  ).catch(console.log)
-}
+    extensions.map(name => installer.default(installer[name], forceDownload))
+  ).catch(console.log);
+};
 
 /**
  * IPC events
  */
 
-ipcMain.on('analyze-json', (event, filePath) => {
+ipcMain.on("analyze-json", (event, filePath) => {
   if (!filePath) {
-    throw new Error('filePath is not defined')
+    throw new Error("filePath is not defined");
   }
-  fs.readFile(filePath, 'utf8', (err, fileContent) => {
+  fs.readFile(filePath, "utf8", (err, fileContent) => {
     if (err) {
-      if (err.code === 'ENOENT') {
-        console.error('package.json does not exist')
-        return
+      if (err.code === "ENOENT") {
+        console.error("package.json does not exist");
+        return;
       }
-      throw err
+      throw err;
     }
 
-    let content = false
+    let content = false;
     try {
-      content = JSON.parse(fileContent)
-      event.sender.send('analyze-json-close', filePath, content)
+      content = JSON.parse(fileContent);
+      event.sender.send("analyze-json-close", filePath, content);
     } catch (e) {
-      throw new Error('Error: Unable to parse package.json file.')
+      throw new Error("Error: Unable to parse package.json file.");
     }
-  })
-})
+  });
+});
 
-ipcMain.on('ipc-event', (event, options) => {
-  const opts = options || {}
-  const { ipcEvent } = opts || {}
+ipcMain.on("ipc-event", (event, options) => {
+  const opts = options || {};
+  const { ipcEvent } = opts || {};
 
-  function callback(status, command, data, stats) {
-    const isStatus = status && typeof status === 'string'
+  function callback(status, command, data, latest, stats) {
+    const isStatus = status && typeof status === "string";
 
     if (!isStatus) {
-      throw new Error('FATAL ERROR: status is not valid')
+      throw new Error("FATAL ERROR: status is not valid");
     }
 
     switch (status) {
-      case 'close':
-        if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
-          event.sender.send('action-close', data, command)
+      case "close":
+        if (["install", "update", "uninstall"].indexOf(ipcEvent) > -1) {
+          event.sender.send("action-close", data, command);
         } else {
-          event.sender.send(`${ipcEvent}-close`, data, command, stats)
+          console.log(96, latest, stats);
+          event.sender.send(`${ipcEvent}-close`, data, command, latest, stats);
         }
-        break
-      case 'error':
-        event.sender.send('ipcEvent-error', data)
-        break
+        break;
+      case "error":
+        event.sender.send("ipcEvent-error", data);
+        break;
       default:
-        event.sender.send(`${ipcEvent}-reply`, data, command)
+        event.sender.send(`${ipcEvent}-reply`, data, command);
     }
   }
 
@@ -109,11 +110,11 @@ ipcMain.on('ipc-event', (event, options) => {
    * sending output using spawn to renderer via ipc events
    * */
   try {
-    shell.doCommand(opts, callback)
+    shell.doCommand(opts, callback);
   } catch (e) {
-    throw new Error(e)
+    throw new Error(e);
   }
-})
+});
 
 /* =========================== */
 
@@ -121,38 +122,38 @@ ipcMain.on('ipc-event', (event, options) => {
  * Add event listeners
  */
 
-app.on('window-all-closed', () => {
+app.on("window-all-closed", () => {
   // Respect the OSX convention of having the application in memory even
   // after all windows have been closed
-  if (process.platform !== 'darwin') {
-    app.quit()
+  if (process.platform !== "darwin") {
+    app.quit();
   }
-})
+});
 
-app.on('ready', async () => {
+app.on("ready", async () => {
   if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
+    process.env.NODE_ENV === "development" ||
+    process.env.DEBUG_PROD === "true"
   ) {
-    await installExtensions()
+    await installExtensions();
   }
 
-  const Screen = electron.screen
+  const Screen = electron.screen;
   let x = 0,
-    y = 0
-  const screenSize = Screen.getPrimaryDisplay().size
-  const displays = electron.screen.getAllDisplays()
+    y = 0;
+  const screenSize = Screen.getPrimaryDisplay().size;
+  const displays = electron.screen.getAllDisplays();
   const externalDisplay = displays.find(
-    (display) => display.bounds.x !== 0 || display.bounds.y !== 0
-  )
+    display => display.bounds.x !== 0 || display.bounds.y !== 0
+  );
 
   if (externalDisplay) {
-    x = externalDisplay.bounds.x + 50
-    y = externalDisplay.bounds.y + 50
+    x = externalDisplay.bounds.x + 50;
+    y = externalDisplay.bounds.y + 50;
   }
 
   if (MIN_WIDTH > screenSize.width) {
-    throw new Error('Fatal: LOW_RESOLUTION')
+    throw new Error("Fatal: LOW_RESOLUTION");
   }
 
   // create main window
@@ -161,25 +162,25 @@ app.on('ready', async () => {
     minWidth: MIN_WIDTH || screenSize.width,
     minHeight: MIN_HEIGHT || screenSize.height,
     x: 0, //x,
-    y: 0 ,//y,
+    y: 0, //y,
     show: false,
     resizable: true,
-    icon: path.join(__dirname, 'resources/icon.ico')
-  })
+    icon: path.join(__dirname, "resources/icon.ico")
+  });
 
   // load app.html file
-  mainWindow.loadURL(`file://${__dirname}/app.html`)
+  mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.webContents.on("did-finish-load", () => {
     if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined')
+      throw new Error('"mainWindow" is not defined');
     }
 
     // show mainWindow
-    mainWindow.show()
-    mainWindow.focus()
+    mainWindow.show();
+    mainWindow.focus();
 
-    mainWindow.openDevTools()
+    mainWindow.openDevTools();
     // detTools in development
     // if (
     //   process.env.NODE_ENV === 'development' ||
@@ -187,28 +188,28 @@ app.on('ready', async () => {
     // ) {
     //   mainWindow.openDevTools()
     // }
-  })
+  });
 
-  mainWindow.webContents.on('crashed', () => {
+  mainWindow.webContents.on("crashed", () => {
     // todo..
-  })
+  });
 
-  mainWindow.on('unresponsive', () => {
+  mainWindow.on("unresponsive", () => {
     // todo..
-  })
+  });
 
-  mainWindow.on('show', () => {
+  mainWindow.on("show", () => {
     // todo..
-  })
+  });
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  })
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
 
-  const menuBuilder = new MenuBuilder(mainWindow)
-  menuBuilder.buildMenu()
-})
+  const menuBuilder = new MenuBuilder(mainWindow);
+  menuBuilder.buildMenu();
+});
 
-process.on('uncaughtException', (err) => {
-  console.error(err)
-})
+process.on("uncaughtException", err => {
+  console.error(err);
+});

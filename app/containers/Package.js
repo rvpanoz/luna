@@ -115,9 +115,9 @@ class PackageContainer extends React.Component {
 
     return (
       <section className={classes.root}>
-        <Loader loading={loading}>
-          <Grid container direction="row" justify="flex-start">
-            <Grid item xs={9}>
+        <Grid container direction="row" justify="flex-start">
+          <Grid item xs={9}>
+            <Loader loading={loading}>
               <Fade in={true}>
                 <PackageCard
                   active={active}
@@ -126,16 +126,16 @@ class PackageContainer extends React.Component {
                   {...rest}
                 />
               </Fade>
-            </Grid>
-            <Grid item xs={3}>
-              <PackageActions
-                active={active}
-                onChangeVersion={this.onChangeVersion}
-                {...rest}
-              />
-            </Grid>
+            </Loader>
           </Grid>
-        </Loader>
+          <Grid item xs={3}>
+            <PackageActions
+              active={active}
+              onChangeVersion={this.onChangeVersion}
+              {...rest}
+            />
+          </Grid>
+        </Grid>
       </section>
     );
   }
