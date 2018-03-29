@@ -80,7 +80,7 @@ class CardContent extends React.Component {
         <Divider />
         <Typography
           component="div"
-          variant="subheading"
+          variant="body2"
           className={classes.headingTail}
         >
           {active && active.description}
@@ -98,6 +98,7 @@ class CardContent extends React.Component {
           <Typography
             className={classes.info}
             component="p"
+            variant="body2"
             gutterBottom={true}
             variant="caption"
           >
@@ -107,6 +108,7 @@ class CardContent extends React.Component {
           <Typography
             className={classes.info}
             component="p"
+            variant="body2"
             gutterBottom={true}
             variant="caption"
           >

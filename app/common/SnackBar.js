@@ -26,39 +26,49 @@ const SnackbarAction = props => {
   );
 };
 
-const SnackBar = props => {
-  const {
-    classes,
-    snackBarOpen,
-    handleSnackBarClose,
-    message,
-    position = {
+class SnackBar extends React.Component {
+  static defaultProps = {
+    position: {
       vertical: "top",
       horizontal: "center"
     }
-  } = props;
+  };
 
-  return (
-    <Snackbar
-      className={classes.root}
-      resumeHideDuration={5}
-      anchorOrigin={position}
-      open={snackBarOpen}
-      onClose={handleSnackBarClose}
-      SnackbarContentProps={{
-        "aria-describedby": "message"
-      }}
-      message={
-        <div className="saving">
-          {message}
-          <span>.</span>
-          <span>.</span>
-          <span>.</span>
-        </div>
-      }
-    />
-  );
-};
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const {
+      classes,
+      snackBarOpen,
+      handleSnackBarClose,
+      message,
+      position
+    } = this.props;
+
+    return (
+      <Snackbar
+        className={classes.root}
+        resumeHideDuration={5}
+        anchorOrigin={position}
+        open={snackBarOpen}
+        onClose={handleSnackBarClose}
+        SnackbarContentProps={{
+          "aria-describedby": "message"
+        }}
+        message={
+          <div className="saving">
+            {message}
+            <span>.</span>
+            <span>.</span>
+            <span>.</span>
+          </div>
+        }
+      />
+    );
+  }
+}
 
 const { bool, func, string } = PropTypes;
 

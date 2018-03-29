@@ -101,7 +101,7 @@ class PackagesContainer extends React.Component {
       "view-package-close",
       (event, data, command, latest, stats) => {
         console.log("view-package-close");
-        console.log(data);
+
         try {
           let pkg = JSON.parse(data);
           console.log(pkg.version);

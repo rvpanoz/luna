@@ -80,8 +80,12 @@ class CardTags extends React.Component {
                 <ListItem key={`tag-${idx}`}>
                   <ListItemText primary={d.name} secondary={d.version} />
                   <ListItemSecondaryAction>
-                    <IconButton aria-label="Update">
-                      <UpdateIcon />
+                    <IconButton aria-label="Update" style={{ display: "none" }}>
+                      <UpdateIcon
+                        onClick={e => {
+                          console.log(e, d.name);
+                        }}
+                      />
                     </IconButton>
                   </ListItemSecondaryAction>
                 </ListItem>

@@ -2,8 +2,9 @@
  * CardActions component
  */
 
+import { remote } from "electron";
 import { APP_ACTIONS, APP_MODES } from "constants/AppConstants";
-import { triggerEvent, showMessageBox } from "utils";
+import { triggerEvent, firstToUpper } from "utils";
 import { CardActions as MuiCardActions } from "material-ui/Card";
 import { withStyles } from "material-ui/styles";
 import React from "react";
@@ -63,23 +64,30 @@ class CardActions extends React.Component {
       throw new Error(`doAction: action ${action} is invalid`);
     }
 
-    showMessageBox(
+    remote.dialog.showMessageBox(
+      remote.getCurrentWindow(),
       {
-        action: action,
-        name: active.name,
-        version: action === "uninstall" ? null : version
+        title: "Confirmation",
+        type: "question",
+        message:
+          action === "uninstall"
+            ? `Would you like to ${action} ${active.name}?`
+            : `Would you like to ${action} ${active.name + "@" + version}?`,
+        buttons: ["Cancel", firstToUpper(action)]
       },
-      () => {
-        setActive(null);
-        toggleLoader(true);
-        triggerEvent(action, {
-          mode,
-          directory,
-          cmd: [action === "update" ? "install" : action],
-          pkgName: active.name,
-          pkgVersion: action === "uninstall" ? null : version,
-          pkgOptions: cmdOptions
-        });
+      btnIdx => {
+        if (Boolean(btnIdx) === true) {
+          setActive(null);
+          toggleLoader(true);
+          triggerEvent(action, {
+            mode,
+            directory,
+            cmd: [action === "update" ? "install" : action],
+            pkgName: active.name,
+            pkgVersion: action === "uninstall" ? null : version,
+            pkgOptions: cmdOptions
+          });
+        }
       }
     );
 
