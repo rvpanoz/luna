@@ -9,11 +9,19 @@ import Input, { InputLabel } from "material-ui/Input";
 import { FormControl } from "material-ui/Form";
 import React from "react";
 import PropTypes from "prop-types";
+import Button from "material-ui/Button";
 import semverCompare from "semver-compare";
 
 const { object, func } = PropTypes;
 const styles = theme => {
   return {
+    root: {
+      display: "flex",
+      flexDirection: "column"
+    },
+    button: {
+      margin: theme.spacing.unit
+    },
     textField: {
       margin: theme.spacing.unit,
       minWidth: 120,
@@ -23,46 +31,60 @@ const styles = theme => {
 };
 
 class CardVersions extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
   }
   componentDidUpdate() {
     const { active, setVersion } = this.props;
     const { version, latest } = active;
-
-    console.log(latest);
-    if (latest) {
-      // const areEqual = semverCompare(latest, version);
-      // console.log(areEqual);
-      // setVersion(latest);
+    console.log(version, latest);
+    if (latest && typeof latest === "string") {
+      const notEqual = semverCompare(latest, version);
+      if (notEqual) {
+        setVersion(latest);
+      }
     }
   }
   render() {
-    const { active, classes, latest, onChangeVersion } = this.props;
+    const { active, classes, latest, onChangeVersion, version } = this.props;
 
     return (
-      <TextField
-        select
-        label="Select Version"
-        className={classes.textField}
-        value={latest || active.version}
-        onChange={onChangeVersion}
-        SelectProps={{
-          MenuProps: {
-            className: classes.menu
-          }
-        }}
-        helperText="preview the selected version"
-        margin="normal"
-      >
-        {active &&
-          active.versions &&
-          active.versions.map((version, key) => (
-            <MenuItem key={key} value={version}>
-              {version}
-            </MenuItem>
-          ))}
-      </TextField>
+      <div className={classes.root}>
+        <TextField
+          ref="versionInput"
+          select
+          label="Select Version"
+          className={classes.textField}
+          value={version || active.version}
+          onChange={onChangeVersion}
+          SelectProps={{
+            MenuProps: {
+              className: classes.menu
+            }
+          }}
+          helperText="preview the selected version"
+          margin="normal"
+        >
+          {active &&
+            active.versions &&
+            active.versions.map((version, key) => (
+              <MenuItem key={key} value={version}>
+                {version}
+              </MenuItem>
+            ))}
+        </TextField>
+        <Button
+          color="primary"
+          onClick={e => {
+            const version = this.refs && this.refs["versionInput"];
+            const { onChangeVersion } = this.props;
+
+            onChangeVersion(e, version.props && version.props.value);
+          }}
+        >
+          Preview
+        </Button>
+      </div>
     );
   }
 }

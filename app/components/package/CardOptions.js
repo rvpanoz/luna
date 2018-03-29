@@ -24,7 +24,6 @@ class CardOptions extends React.Component {
     super();
     this.handleChange = this.handleChange.bind(this);
   }
-  componentDidMount() {}
   handleChange(e) {
     const opt = e.currentTarget.value;
     const { addCommandOption } = this.props;

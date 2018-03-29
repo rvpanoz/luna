@@ -71,6 +71,7 @@ class PackageActions extends React.Component {
       cmdOptions,
       group,
       mode,
+      version,
       packageJSON,
       removeCommandOption,
       onChangeVersion,
@@ -92,6 +93,7 @@ class PackageActions extends React.Component {
             <section className={classes.controls}>
               <CardVersions
                 active={active}
+                version={version}
                 onChangeVersion={onChangeVersion}
                 setVersion={setVersion}
               />
@@ -100,6 +102,7 @@ class PackageActions extends React.Component {
                   active={active}
                   addCommandOption={addCommandOption}
                   group={group}
+                  version={version}
                   cmdOptions={cmdOptions}
                   packageJSON={packageJSON}
                   removeCommandOption={removeCommandOption}

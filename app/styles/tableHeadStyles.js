@@ -11,9 +11,9 @@ import {
   roseColor,
   grayColor,
   defaultFont
-} from './variables'
+} from "./variables";
 
-const tableHeadStyle = (theme) => ({
+const tableHeadStyle = theme => ({
   warningTableHeader: {
     color: warningColor
   },
@@ -36,16 +36,16 @@ const tableHeadStyle = (theme) => ({
     color: grayColor
   },
   tableHeadCell: {
-    color: 'inherit',
+    color: "inherit",
     ...defaultFont,
-    fontSize: '1em'
+    fontSize: "1em"
   },
   tableCell: {
     ...defaultFont,
-    lineHeight: '1.42857143',
-    padding: '12px 8px',
-    verticalAlign: 'middle'
+    lineHeight: "1.50",
+    padding: "0px 12px",
+    verticalAlign: "middle"
   }
-})
+});
 
-export default tableHeadStyle
+export default tableHeadStyle;

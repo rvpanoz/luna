@@ -142,7 +142,6 @@ class TableList extends React.PureComponent {
                   <TableRow
                     className={classes.tableRow}
                     hover
-                    padding="checkbox"
                     role="checkbox"
                     onClick={e => {
                       const _version = version.replace(/\^/g, "");
@@ -168,11 +167,13 @@ class TableList extends React.PureComponent {
                         checked={alreadySelected}
                       />
                     </TableCell>
-                    <TableCell className={classes.tableCell}>{name}</TableCell>
-                    <TableCell className={classes.tableCell}>
+                    <TableCell padding="none" className={classes.tableCell}>
+                      {name}
+                    </TableCell>
+                    <TableCell padding="none" className={classes.tableCell}>
                       {version}
                     </TableCell>
-                    <TableCell className={classes.tableCell}>
+                    <TableCell padding="none" className={classes.tableCell}>
                       {latest ? (
                         <span
                           style={{

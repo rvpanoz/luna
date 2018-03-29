@@ -134,11 +134,7 @@ exports.view = function(opts, callback) {
   //build npm command
   const run = []
     .concat(command)
-    .concat(
-      latest
-        ? [].concat([`${pkgName}@${latest}`])
-        : pkgVersion ? [].concat([`${pkgName}@${pkgVersion}`]) : [pkgName]
-    )
+    .concat(pkgVersion ? [].concat([`${pkgName}@${pkgVersion}`]) : [pkgName])
     .concat(commandArgs);
 
   return runCommand(run, directory, callback, {

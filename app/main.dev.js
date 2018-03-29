@@ -93,7 +93,6 @@ ipcMain.on("ipc-event", (event, options) => {
         if (["install", "update", "uninstall"].indexOf(ipcEvent) > -1) {
           event.sender.send("action-close", data, command);
         } else {
-          console.log(96, latest, stats);
           event.sender.send(`${ipcEvent}-close`, data, command, latest, stats);
         }
         break;

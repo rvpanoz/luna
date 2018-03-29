@@ -15,9 +15,9 @@ import Tooltip from "material-ui/Tooltip";
 import Checkbox from "material-ui/Checkbox";
 
 const columnData = [
-  { id: "name", numeric: false, disablePadding: true, label: "Name" },
-  { id: "version", numeric: false, disablePadding: true, label: "Version" },
-  { id: "latest", numeric: false, disablePadding: true, label: "Latest" }
+  { id: "name", numeric: false, disablePadding: false, label: "Name" },
+  { id: "version", numeric: false, disablePadding: false, label: "Version" },
+  { id: "latest", numeric: false, disablePadding: false, label: "Latest" }
 ];
 
 class TableListHeader extends React.Component {
