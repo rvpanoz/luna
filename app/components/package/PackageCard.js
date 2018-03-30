@@ -18,8 +18,6 @@ import Card from "material-ui/Card";
 import CardHeader from "./CardHeader";
 import CardContent from "./CardContent";
 import CardActions from "./CardActions";
-import CardDetails from "./CardDetails";
-import Collapse from "material-ui/transitions/Collapse";
 import Typography from "material-ui/Typography";
 const { object, string } = PropTypes;
 
@@ -93,7 +91,7 @@ class PackageCard extends React.Component {
 
     return (
       <section className={classes.root}>
-        <Card className={classes.card}>
+        <Card className={classes.card} raised={true}>
           <CardHeader active={active} mode={mode} group={group} />
           <CardContent
             version={version}
@@ -122,14 +120,6 @@ class PackageCard extends React.Component {
             directory={directory}
             cmdOptions={cmdOptions}
           />
-          <Collapse
-            in={expanded}
-            timeout="auto"
-            unmountOnExit
-            className={classes.collapseContent}
-          >
-            <CardDetails active={active} />
-          </Collapse>
         </Card>
       </section>
     );

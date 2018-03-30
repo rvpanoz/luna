@@ -33,12 +33,12 @@ export default {
     defaultActions: [
       {
         text: "update",
-        color: "primary",
+        color: "secondary",
         iconCls: "update"
       },
       {
         text: "uninstall",
-        color: "default",
+        color: "primary",
         iconCls: "trash"
       }
     ],

@@ -84,12 +84,12 @@ class BarGraph extends React.Component {
       <div style={{ backgroundColor: "#fff" }}>
         <BarChart
           width={500}
-          height={300}
+          height={275}
           data={data}
           barSize={20}
           barCategoryGapPercentage={"20%"}
           barGap={6}
-          margin={{ top: 15, right: 0, left: 0, bottom: 5 }}
+          margin={{ top: 5, right: 0, left: 0, bottom: 5 }}
         >
           <XAxis dataKey="name" />
           <YAxis />

@@ -68,6 +68,7 @@ class AppHeader extends React.Component {
               <IconButton
                 aria-label="open menu"
                 onClick={handleDrawerOpen}
+                style={{ color: "#fff" }}
                 className={classNames(
                   classes.menuButton,
                   menuOpen && classes.hide

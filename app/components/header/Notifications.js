@@ -112,7 +112,7 @@ class Notifications extends React.Component {
           <Badge
             badgeContent={notifications.length}
             className={classes.margin}
-            color="secondary"
+            style={{ color: "#fff" }}
           >
             <NotificationsIcon />
           </Badge>
