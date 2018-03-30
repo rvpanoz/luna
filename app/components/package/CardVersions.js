@@ -83,6 +83,7 @@ class CardVersions extends React.Component {
             const version = this.refs && this.refs['versionInput']
             const { onChangeVersion } = this.props
 
+            //BUG: version.props are undefined in production build
             onChangeVersion(e, version.props && version.props.value)
           }}
         >
