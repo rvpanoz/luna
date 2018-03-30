@@ -18,3 +18,6 @@ The application has a notification system to inform you about missing dependenci
 * Update existing packages
 * Uninstall packages
 * Visualization of package details such as
+
+<img align="right" width="100%" height="100%"
+     title="luna-ui" src="./luna-ui.png">
