@@ -52,7 +52,7 @@ const tableStyle = theme => ({
     verticalAlign: "middle",
     "&:hover": {
       cursor: "pointer",
-      background: theme.palette.primary.light
+      background: theme.palette.secondary.light
     }
   },
   tablelist: {
