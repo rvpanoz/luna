@@ -76,7 +76,7 @@ const TableListToolbar = (props) => {
   ).length
 
   return (
-    <section ref="root" className={classes.root}>
+    <section className={classes.root}>
       <Toolbar
         className={classNames(classes.tableListToolbar, {
           [classes.highlight]: selected && selected.length > 0
