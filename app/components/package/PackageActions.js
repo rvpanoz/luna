@@ -6,6 +6,7 @@ import { packageCardStyles } from "styles/packageCardStyles";
 import { withStyles } from "material-ui/styles";
 import { APP_MODES } from "constants/AppConstants";
 import classnames from "classnames";
+import { firstToUpper } from "utils";
 import Card, { CardHeader, CardContent } from "material-ui/Card";
 import React from "react";
 import PropTypes from "prop-types";
@@ -80,6 +81,20 @@ class PackageActions extends React.Component {
 
     return (
       <section className={classes.root}>
+        {group ? (
+          <Card className={classnames(classes.card, classes.margin)}>
+            <CardContent>
+              <Typography
+                component="h3"
+                className={classes.heading}
+                variant="subheading"
+              >
+                Group
+              </Typography>
+              <Typography veriant="display1">{firstToUpper(group)}</Typography>
+            </CardContent>
+          </Card>
+        ) : null}
         <Card className={classnames(classes.card, classes.margin)}>
           <CardContent>
             <Typography

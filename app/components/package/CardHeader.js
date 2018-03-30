@@ -17,6 +17,7 @@ import Avatar from "material-ui/Avatar";
 import Select from "material-ui/Select";
 import Checkbox from "material-ui/Checkbox";
 import moment from "moment";
+import Typography from "material-ui/Typography";
 import UpdateIcon from "material-ui-icons/Update";
 
 const grayColor = "#999999";
@@ -58,22 +59,15 @@ class CardHeader extends React.Component {
   constructor(props) {
     super(props);
     this._anchorEl = null;
-    this.buildTitle = this.buildTitle.bind(this);
     this.buildSubHeader = this.buildSubHeader.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
-  buildTitle() {
-    const { active, group, actions } = this.props;
-    const { name, author, version } = active;
-    return group ? `${name} - ${group}` : name;
-  }
   buildSubHeader() {
-    const { active, classes } = this.props;
+    const { active, group, classes } = this.props;
 
     return (
       <div className={classes.cardStats}>
-        <UpdateIcon className={classes.cardStatsIcon} />
         Updated&nbsp;{active.time && active.time.modified
           ? moment(active.time.modified).format("DD/MM/YYYY")
           : null}
@@ -96,66 +90,66 @@ class CardHeader extends React.Component {
     }
 
     return (
-      <section>
-        <MuiCardHeader
-          avatar={
-            <Avatar aria-label={active.name} className={classes.avatar}>
+      <MuiCardHeader
+        avatar={
+          <Avatar aria-label={active.name} className={classes.avatar}>
+            <Typography variant="title">
               {active.name && active.name[0].toUpperCase()}
-            </Avatar>
-          }
-          action={
-            <div style={{ marginLeft: "auto" }}>
-              <IconButton
-                aria-label="More"
-                aria-owns={this._anchorEl ? "long-menu" : null}
-                aria-haspopup="true"
-                onClick={this.handleClick}
-              >
-                <MoreVertIcon />
-              </IconButton>
-              <Menu
-                id="long-menu"
-                anchorEl={this._anchorEl}
-                open={Boolean(this._anchorEl)}
-                onClose={this.handleClose}
-                PaperProps={{
-                  style: {
-                    maxHeight: ITEM_HEIGHT * 4.5,
-                    width: 200
+            </Typography>
+          </Avatar>
+        }
+        action={
+          <div style={{ marginLeft: "auto" }}>
+            <IconButton
+              aria-label="More"
+              aria-owns={this._anchorEl ? "long-menu" : null}
+              aria-haspopup="true"
+              onClick={this.handleClick}
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              id="long-menu"
+              anchorEl={this._anchorEl}
+              open={Boolean(this._anchorEl)}
+              onClose={this.handleClose}
+              PaperProps={{
+                style: {
+                  maxHeight: ITEM_HEIGHT * 4.5,
+                  width: 200
+                }
+              }}
+            >
+              <MenuItem
+                key="homepage"
+                onClick={e => {
+                  const url = active.homepage || false;
+                  if (isUrl(url)) {
+                    shell.openExternal(url);
                   }
+                  return false;
                 }}
               >
-                <MenuItem
-                  key="homepage"
-                  onClick={e => {
-                    const url = active.homepage || false;
-                    if (isUrl(url)) {
-                      shell.openExternal(url);
-                    }
-                    return false;
-                  }}
-                >
-                  Homepage
-                </MenuItem>
-                <MenuItem
-                  key="issues"
-                  onClick={e => {
-                    const url = active.bugs && active.bugs.url;
-                    if (isUrl(url)) {
-                      shell.openExternal(url);
-                    }
-                    return false;
-                  }}
-                >
-                  Issues
-                </MenuItem>
-              </Menu>
-            </div>
-          }
-          title={`${this.buildTitle()} - ${active.version}`}
-          subheader={this.buildSubHeader()}
-        />
-      </section>
+                Homepage
+              </MenuItem>
+              <MenuItem
+                key="issues"
+                onClick={e => {
+                  const url = active.bugs && active.bugs.url;
+                  if (isUrl(url)) {
+                    shell.openExternal(url);
+                  }
+                  return false;
+                }}
+              >
+                Issues
+              </MenuItem>
+            </Menu>
+          </div>
+        }
+        title={`${active.name} \n${active.version}`}
+        subheader={this.buildSubHeader()}
+      />
     );
   }
 }
