@@ -24,7 +24,7 @@ body:before {
   background: #ff4081;
 }
 
-@font-face {
+/*@font-face {
   font-family: 'Roboto';
   src: url('./fonts/Roboto-Regular.ttf') format('truetype');
   font-weight: normal;
@@ -36,15 +36,15 @@ body:before {
   src: url('./fonts/Roboto-Light.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
-}
+}*/
 
-@font-face {
+/*@font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: normal;
   src: local(‘Material Icons’), local(‘MaterialIcons’),
     url('./fonts/MaterialIcon.woff2') format('woff2');
-}
+}*/
 
 @font-face {
   font-family: 'Material Icons';
@@ -53,7 +53,7 @@ body:before {
   src: url('./fonts/MaterialIcons-Regular.svg') format('svg');
 }
 
-@font-face {
+/*@font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: normal;
@@ -67,14 +67,14 @@ body:before {
   font-weight: normal;
   src: local(‘Material Icons’), local(‘MaterialIcons-Regular’),
     url('./fonts/MaterialIcons-Regular.woff') format('font-woff');
-}
+}*/
 
-@font-face {
+/*@font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: normal;
   src: url('./fonts/MaterialIcons-Regular.ttf') format('truetype');
-}
+}*/
 
 .material-icons {
   font-family: 'Material Icons';
@@ -224,7 +224,7 @@ label {
 .sticky {
   position: fixed;
   top: 0;
-  width: 100%
+  width: 100%;
 }
 
 /* Add some top padding to the page content to prevent sudden quick movement (as the header gets a new position at the top of the page (position:fixed and top:0) */
