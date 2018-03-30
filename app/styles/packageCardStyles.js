@@ -26,7 +26,8 @@ const packageCardStyles = (theme) => ({
     margin: theme.spacing.unit
   },
   card: {
-    maxWidth: '100%'
+    maxWidth: '100%',
+    minHeight: '668px'
   },
   content: {
     width: '100%',

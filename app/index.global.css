@@ -30,21 +30,15 @@ body:before {
   font-weight: normal;
   font-style: normal;
 }
+*/
 
 @font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Light.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}*/
-
-/*@font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: normal;
   src: local(‘Material Icons’), local(‘MaterialIcons’),
     url('./fonts/MaterialIcon.woff2') format('woff2');
-}*/
+}
 
 @font-face {
   font-family: 'Material Icons';
@@ -59,7 +53,7 @@ body:before {
   font-weight: normal;
   src: local(‘Material Icons’), local(‘MaterialIcons-Regular’),
     url('./fonts/MaterialIcons-Regular.woff2') format('woff2');
-}
+}*/
 
 @font-face {
   font-family: 'Material Icons';
@@ -67,7 +61,7 @@ body:before {
   font-weight: normal;
   src: local(‘Material Icons’), local(‘MaterialIcons-Regular’),
     url('./fonts/MaterialIcons-Regular.woff') format('font-woff');
-}*/
+}
 
 /*@font-face {
   font-family: 'Material Icons';
