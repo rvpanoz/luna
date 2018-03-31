@@ -1,15 +1,15 @@
-# Luna - NPM management Electron application :boom:
+# Luna - NPM management Electron application v2:boom:
 
 ---
 
 <img align="center" width="100%" height="100%"
      title="luna-icon" src="./luna.jpg">
 
-_Previous version 1.2.0 is now on `UI/bootstrap branch`. You can find more information at the notes section._
+_If you have installed the previous version v1.2.0 you have to remove the node_modules folder and make a clean npm install. Previous version 1.2.0 codebase is now on `UI/bootstrap branch`. You can find more information at the notes section._
 
 ## Description
 
-Luna is an Electron app for developers for handling npm packages.
+Luna is an electron app for developers for handling npm packages.
 
 ## Features
 
