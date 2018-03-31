@@ -5,12 +5,11 @@
 <img align="center" width="100%" height="100%"
      title="luna-icon" src="./luna.jpg">
 
-** Previous version 1.2.0 is now on UI/bootstrap branch. You can find more information at the notes section. **
+_Previous version 1.2.0 is now on `UI/bootstrap branch`. You can find more information at the notes section._
+
+## Description
 
 Luna is an Electron app for developers for handling npm packages.
-
-You can install, view, update, uninstall your npm global packages or manage your packages from a local directory.
-The application has a notification system to inform you about missing dependencies and outdated packages.
 
 ## Features
 
@@ -23,8 +22,6 @@ The application has a notification system to inform you about missing dependenci
 * Search npm for new packages
 * Get notifications for missing dependencies
 * Visualization of package details
-
-<img align="center" width="100%" height="100%" title="luna-ui" src="./luna-ui.png">
 
 ## Development
 
