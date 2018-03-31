@@ -92,7 +92,9 @@ class PackageActions extends React.Component {
                 Group
               </Typography>
               <Divider />
-              <Typography veriant="display1">{firstToUpper(group)}</Typography>
+              <Typography veriant="display1" className={classes.margin}>
+                {firstToUpper(group)}
+              </Typography>
             </CardContent>
           </Card>
         ) : null}

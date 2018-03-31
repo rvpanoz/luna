@@ -55,6 +55,7 @@ class Layout extends React.Component {
               handleSnackBarClose={this.handleSnackBarClose}
               actionText={snackbar.actionText}
               message={snackbar.message}
+              position={snackbar.position}
             />
           ) : null}
         </main>

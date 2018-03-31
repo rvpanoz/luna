@@ -80,6 +80,7 @@ class PackagesContainer extends React.Component {
         this.setupPackagesFromResponse(packages)
       }
 
+      setActive(null)
       setPackageActions(null)
       toggleMainLoader(false)
       toggleLoader(false)
@@ -90,6 +91,7 @@ class PackagesContainer extends React.Component {
       try {
         const packages = JSON.parse(packagesStr)
 
+        setActive(null)
         setPage(0)
         setPackages(packages)
         setTotal(packages.length)

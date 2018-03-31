@@ -2,22 +2,22 @@
  * CardVersions component
  */
 
-import Menu, { MenuItem } from "material-ui/Menu";
-import TextField from "material-ui/TextField";
-import { withStyles } from "material-ui/styles";
-import Input, { InputLabel } from "material-ui/Input";
-import { FormControl } from "material-ui/Form";
-import React from "react";
-import PropTypes from "prop-types";
-import Button from "material-ui/Button";
-import semverCompare from "semver-compare";
+import Menu, { MenuItem } from 'material-ui/Menu'
+import TextField from 'material-ui/TextField'
+import { withStyles } from 'material-ui/styles'
+import Input, { InputLabel } from 'material-ui/Input'
+import { FormControl } from 'material-ui/Form'
+import React from 'react'
+import PropTypes from 'prop-types'
+import Button from 'material-ui/Button'
+import semverCompare from 'semver-compare'
 
-const { object, func } = PropTypes;
-const styles = theme => {
+const { object, func } = PropTypes
+const styles = (theme) => {
   return {
     root: {
-      display: "flex",
-      flexDirection: "column"
+      display: 'flex',
+      flexDirection: 'column'
     },
     button: {
       margin: theme.spacing.unit
@@ -25,44 +25,42 @@ const styles = theme => {
     textField: {
       margin: theme.spacing.unit,
       minWidth: 120,
-      maxWidth: 300
+      maxWidth: 150
     }
-  };
-};
+  }
+}
 
 class CardVersions extends React.Component {
   constructor(props) {
-    super(props);
-    this._onChangeVersion = this._onChangeVersion.bind(this);
+    super(props)
+    this._onChangeVersion = this._onChangeVersion.bind(this)
   }
   _onChangeVersion(e) {
-    const { onChangeVersion, version } = this.props;
-    onChangeVersion(e, version);
+    const { onChangeVersion, version } = this.props
+    onChangeVersion(e, version)
   }
   componentDidUpdate() {
-    const { active, setVersion } = this.props;
-    const { version, latest } = active;
+    const { active, setVersion } = this.props
+    const { version, latest } = active
 
-    if (latest && typeof latest === "string") {
-      const notEqual = semverCompare(latest, version);
+    if (latest && typeof latest === 'string') {
+      const notEqual = semverCompare(latest, version)
       if (notEqual) {
-        setVersion(latest);
+        setVersion(latest)
       }
     }
   }
   render() {
-    const { active, classes, latest, onChangeVersion, version } = this.props;
+    const { active, classes, latest, onChangeVersion, version } = this.props
 
     if (!active || active.error) {
-      return null;
+      return null
     }
 
     return (
       <div className={classes.root}>
         <TextField
-          ref="versionInput"
           select
-          label="Select Version"
           className={classes.textField}
           value={version || active.version}
           onChange={onChangeVersion}
@@ -86,7 +84,7 @@ class CardVersions extends React.Component {
           Preview
         </Button>
       </div>
-    );
+    )
   }
 }
 
@@ -94,6 +92,6 @@ CardVersions.propTypes = {
   active: object.isRequired,
   classes: object.isRequired,
   onChangeVersion: func.isRequired
-};
+}
 
-export default withStyles(styles)(CardVersions);
+export default withStyles(styles)(CardVersions)
