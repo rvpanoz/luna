@@ -94,9 +94,6 @@ class Notifications extends React.Component {
     const { toggleDrawer, drawerOpen } = this.props
     toggleDrawer(!drawerOpen)
   }
-  handleCommands(e) {
-    console.log(e)
-  }
   render() {
     const {
       drawerOpen,
@@ -112,9 +109,6 @@ class Notifications extends React.Component {
 
     return (
       <div className={classes.root}>
-        <IconButton onClick={this.handleCommands}>
-          <CodeIcon className={classes.margin} style={{ color: '#fff' }} />
-        </IconButton>
         <IconButton onClick={this.handleDrawer}>
           <Badge
             badgeContent={notifications.length}

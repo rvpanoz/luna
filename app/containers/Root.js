@@ -3,16 +3,18 @@
  *
  */
 
-import { Provider } from "react-redux";
-import main from "../themes/main"; //wip
-import { MuiThemeProvider, createMuiTheme } from "material-ui/styles";
-import React from "react";
-import CssBaseline from "material-ui/CssBaseline";
-import Layout from "./Layout";
+import { Provider } from 'react-redux'
+import main from '../themes/main' //wip
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
+import React from 'react'
+import 'material-design-icons/iconfont/material-icons.css'
+import 'typeface-roboto/index.css'
+import CssBaseline from 'material-ui/CssBaseline'
+import Layout from './Layout'
 
 const App = (props) => {
-  const { store } = props;
-  const theme = createMuiTheme({}); //wip - use main
+  const { store } = props
+  const theme = createMuiTheme({}) //wip - use main
 
   return (
     <section id="root">
@@ -23,7 +25,7 @@ const App = (props) => {
         </MuiThemeProvider>
       </Provider>
     </section>
-  );
-};
+  )
+}
 
-export default App;
+export default App

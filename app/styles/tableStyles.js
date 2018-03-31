@@ -80,7 +80,8 @@ const tableStyle = (theme) => ({
     ...defaultFont,
     lineHeight: '1.42857143',
     padding: '12px 8px',
-    verticalAlign: 'middle'
+    verticalAlign: 'middle',
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
   },
   tableResponsive: {
     width: '100%',

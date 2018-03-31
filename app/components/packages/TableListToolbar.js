@@ -88,14 +88,14 @@ const TableListToolbar = props => {
               {selected.length} selected
             </Typography>
           ) : (
-            <section>
+            <div style={{ display: "flex", flexDirection: "column" }}>
               <Typography variant="title">
                 {title} {rowCount}
               </Typography>
               <Typography variant="subheading" className={classes.subtitle}>
                 {directory || null}
               </Typography>
-            </section>
+            </div>
           )}
         </div>
         <div className={classes.spacer} />

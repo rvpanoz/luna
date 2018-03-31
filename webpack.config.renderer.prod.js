@@ -30,7 +30,7 @@ export default merge.smart(baseConfig, {
     rules: [
       // Extract all .global.css to style.css as is
       {
-        test: /\.global\.css$/,
+        test: /\.css$/,
         use: ExtractTextPlugin.extract({
           publicPath: './',
           use: {
@@ -42,31 +42,13 @@ export default merge.smart(baseConfig, {
           fallback: 'style-loader',
         })
       },
-      // Pipe other styles through css modules and append to style.css
-      {
-        test: /^((?!\.global).)*\.css$/,
-        use: ExtractTextPlugin.extract({
-          use: {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              minimize: true,
-              importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]',
-            }
-          }
-        }),
-      },
-
       // Common Image Formats
-      {
-        test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
-        use: 'url-loader',
-      },
-
-			//fonts
 			{
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
+        use: 'url-loader?limit=10000'
+      },
+      {
+        test: /\.((ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9]))|(ttf|eot)$/,
         use: 'file-loader'
       }
     ]

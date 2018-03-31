@@ -31,6 +31,9 @@ const styles = (theme) => {
     margin: {
       marginBottom: theme.spacing.unit + 10
     },
+    marginTop: {
+      marginTop: theme.spacing.unit
+    },
     heading: {
       color: 'rgba(0, 0, 0, 0.54)',
       fontSize: '1.1rem',
@@ -92,7 +95,7 @@ class PackageActions extends React.Component {
                 Group
               </Typography>
               <Divider />
-              <Typography veriant="display1" className={classes.margin}>
+              <Typography veriant="display1" className={classes.marginTop}>
                 {firstToUpper(group)}
               </Typography>
             </CardContent>

@@ -184,14 +184,13 @@ app.on('ready', async () => {
     mainWindow.show()
     mainWindow.focus()
 
-    mainWindow.openDevTools()
-    // detTools in development
-    // if (
-    //   process.env.NODE_ENV === 'development' ||
-    //   process.env.DEBUG_PROD === 'true'
-    // ) {
-    //   mainWindow.openDevTools()
-    // }
+    // devTools in development
+    if (
+      process.env.NODE_ENV === 'development' ||
+      process.env.DEBUG_PROD === 'true'
+    ) {
+      mainWindow.openDevTools()
+    }
   })
 
   mainWindow.webContents.on('crashed', () => {
