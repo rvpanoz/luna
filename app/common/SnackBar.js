@@ -48,7 +48,7 @@ class SnackBar extends React.Component {
       loader,
       actionText
     } = this.props
-    console.log(this.props)
+    
     return (
       <Snackbar
         action={

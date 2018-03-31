@@ -22,6 +22,12 @@ export function toggleSnackbar(bool) {
     snackBarOpen: bool
   };
 }
+export function toggleDialog(bool) {
+  return {
+    type: types.TOGGLE_DIALOG,
+    dialogOpen: bool
+  };
+}
 export function setSettings(settings) {
   return {
     type: types.SET_SETTINGS,

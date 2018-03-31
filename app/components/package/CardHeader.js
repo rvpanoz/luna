@@ -2,26 +2,26 @@
  * CardHeader component
  */
 
-import { shell } from "electron";
-import { withStyles } from "material-ui/styles";
-import { CardHeader as MuiCardHeader } from "material-ui/Card";
-import { APP_MODES } from "constants/AppConstants";
-import Menu, { MenuItem } from "material-ui/Menu";
-import { ListItemText } from "material-ui/List";
-import { isUrl } from "utils";
-import React from "react";
-import PropTypes from "prop-types";
-import MoreVertIcon from "material-ui-icons/MoreVert";
-import IconButton from "material-ui/IconButton";
-import Avatar from "material-ui/Avatar";
-import Select from "material-ui/Select";
-import Checkbox from "material-ui/Checkbox";
-import moment from "moment";
-import Typography from "material-ui/Typography";
-import UpdateIcon from "material-ui-icons/Update";
+import { shell } from 'electron'
+import { withStyles } from 'material-ui/styles'
+import { CardHeader as MuiCardHeader } from 'material-ui/Card'
+import { APP_MODES } from 'constants/AppConstants'
+import Menu, { MenuItem } from 'material-ui/Menu'
+import { ListItemText } from 'material-ui/List'
+import { isUrl } from 'utils'
+import React from 'react'
+import PropTypes from 'prop-types'
+import MoreVertIcon from 'material-ui-icons/MoreVert'
+import IconButton from 'material-ui/IconButton'
+import Avatar from 'material-ui/Avatar'
+import Select from 'material-ui/Select'
+import Checkbox from 'material-ui/Checkbox'
+import moment from 'moment'
+import Typography from 'material-ui/Typography'
+import UpdateIcon from 'material-ui-icons/Update'
 
-const grayColor = "#999999";
-const { array, object, string, func } = PropTypes;
+const grayColor = '#999999'
+const { array, object, string, func } = PropTypes
 const ITEM_HEIGHT = 55,
   ITEM_PADDING_TOP = 8,
   MenuProps = {
@@ -31,78 +31,82 @@ const ITEM_HEIGHT = 55,
         width: 150
       }
     }
-  };
+  }
 
-const styles = theme => {
+const styles = (theme) => {
   return {
     avatar: {
-      backgroundColor: theme.palette.secondary.main
+      backgroundColor: theme.palette.primary.light
+    },
+    typo: {
+      fontSize: '14px',
+      color: '#fff'
     },
     cardStats: {
-      lineHeight: "22px",
+      lineHeight: '22px',
       color: grayColor,
-      fontSize: "12px",
-      display: "inline-block",
-      margin: "0!important"
+      fontSize: '12px',
+      display: 'inline-block',
+      margin: '0!important'
     },
     cardStatsIcon: {
-      position: "relative",
-      top: "4px",
+      position: 'relative',
+      top: '4px',
       marginRight: 5,
-      width: "16px",
-      height: "16px"
+      width: '16px',
+      height: '16px'
     }
-  };
-};
+  }
+}
 
 class CardHeader extends React.Component {
   constructor(props) {
-    super(props);
-    this._anchorEl = null;
-    this.buildSubHeader = this.buildSubHeader.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+    super(props)
+    this._anchorEl = null
+    this.buildSubHeader = this.buildSubHeader.bind(this)
+    this.handleClick = this.handleClick.bind(this)
+    this.handleClose = this.handleClose.bind(this)
   }
   buildSubHeader() {
-    const { active, group, classes } = this.props;
+    const { active, group, classes } = this.props
 
     return (
       <div className={classes.cardStats}>
         Updated&nbsp;{active.time && active.time.modified
-          ? moment(active.time.modified).format("DD/MM/YYYY")
+          ? moment(active.time.modified).format('DD/MM/YYYY')
           : null}
       </div>
-    );
+    )
   }
   handleClick(e) {
-    this._anchorEl = e.currentTarget;
-    this.forceUpdate();
+    this._anchorEl = e.currentTarget
+    this.forceUpdate()
   }
   handleClose() {
-    this._anchorEl = null;
-    this.forceUpdate();
+    this._anchorEl = null
+    this.forceUpdate()
   }
   render() {
-    const { classes, active, mode, error } = this.props;
+    const { classes, active, mode, error } = this.props
 
     if (!active) {
-      return null;
+      return null
     }
 
     return (
       <MuiCardHeader
         avatar={
           <Avatar aria-label={active.name} className={classes.avatar}>
-            <Typography variant="title">
+            <Typography variant="title" className={classes.typo}>
               {active.name && active.name[0].toUpperCase()}
             </Typography>
           </Avatar>
         }
         action={
-          <div style={{ marginLeft: "auto" }}>
+          <div style={{ marginLeft: 'auto' }}>
             <IconButton
               aria-label="More"
-              aria-owns={this._anchorEl ? "long-menu" : null}
+              aria-owns={this._anchorEl ? 'long-menu' : null}
               aria-haspopup="true"
               onClick={this.handleClick}
             >
@@ -122,24 +126,24 @@ class CardHeader extends React.Component {
             >
               <MenuItem
                 key="homepage"
-                onClick={e => {
-                  const url = active.homepage || false;
+                onClick={(e) => {
+                  const url = active.homepage || false
                   if (isUrl(url)) {
-                    shell.openExternal(url);
+                    shell.openExternal(url)
                   }
-                  return false;
+                  return false
                 }}
               >
                 Homepage
               </MenuItem>
               <MenuItem
                 key="issues"
-                onClick={e => {
-                  const url = active.bugs && active.bugs.url;
+                onClick={(e) => {
+                  const url = active.bugs && active.bugs.url
                   if (isUrl(url)) {
-                    shell.openExternal(url);
+                    shell.openExternal(url)
                   }
-                  return false;
+                  return false
                 }}
               >
                 Issues
@@ -150,7 +154,7 @@ class CardHeader extends React.Component {
         title={`${active.name} \n${active.version}`}
         subheader={this.buildSubHeader()}
       />
-    );
+    )
   }
 }
 
@@ -158,6 +162,6 @@ CardHeader.propTypes = {
   classes: object.isRequired,
   mode: string.isRequired,
   active: object.isRequired
-};
+}
 
-export default withStyles(styles)(CardHeader);
+export default withStyles(styles)(CardHeader)

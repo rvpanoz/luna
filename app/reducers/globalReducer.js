@@ -13,6 +13,7 @@ import {
   TOGGLE_SETTINGS,
   TOGGLE_SNACKBAR,
   TOGGLE_DRAWER,
+  TOGGLE_DIALOG,
   MENU_OPEN,
   SET_SETTINGS,
   SETUP_SNACKBAR
@@ -49,6 +50,8 @@ const handlers = {
     }),
   [TOGGLE_SNACKBAR]: (state, action) =>
     assoc('snackBarOpen', action.snackBarOpen, state),
+  [TOGGLE_DIALOG]: (state, action) =>
+    assoc('dialogOpen', action.dialogOpen, state),
   [TOGGLE_DRAWER]: (state, action) =>
     assoc('drawerOpen', action.drawerOpen, state),
   [TOGGLE_LOADER]: (state, action) => assoc('loading', action.loading, state),

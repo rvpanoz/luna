@@ -164,16 +164,6 @@ class PackagesContainer extends React.Component {
       toggleLoader(true)
       setMode(APP_MODES.LOCAL, directory)
       setPackageJSON(content)
-      setupSnackbar({
-        loader: false,
-        actionClose: false,
-        message: directory,
-        position: {
-          vertical: 'bottom',
-          horizontal: 'center'
-        }
-      })
-      toggleSnackbar(true)
       triggerEvent('get-packages', {
         cmd: ['outdated', 'list'],
         mode: APP_MODES.LOCAL,
