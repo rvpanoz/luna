@@ -23,6 +23,14 @@ Luna is an electron app for developers for handling npm packages.
 * Get notifications for missing dependencies
 * Visualization of package details
 
+Luna is alive thanks to these great libs and tools:
+
+1. Electron _https://electronjs.org/_
+2. ReactJS _https://reactjs.org/_
+3. Redux _https://redux.js.org/_
+4. Material-ui _https://material-ui-next.com/_
+5. Webpack _https://github.com/webpack/webpack_
+
 ## Development
 
 Luna is created with the ReactJS library, Redux for store management, Webpack 3 for bundling, Material-UI and Electron for building.
