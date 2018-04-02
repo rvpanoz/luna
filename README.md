@@ -23,6 +23,9 @@ Luna is an electron app for developers for handling npm packages.
 * Get notifications for missing dependencies
 * Visualization of package details
 
+<img align="center" width="100%" height="100%"
+     title="luna-icon" src="./luna-ui.png">
+
 Luna is alive thanks to these great libs and tools:
 
 1. Electron _https://electronjs.org/_
