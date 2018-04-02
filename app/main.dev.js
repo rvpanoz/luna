@@ -20,7 +20,7 @@ const shell = require('./shell')
 const debug = /--debug/.test(process.argv[2])
 let mainWindow = null
 
-const MIN_WIDTH = 1366
+const MIN_WIDTH = 1024
 const MIN_HEIGHT = 768
 
 if (process.env.NODE_ENV === 'production') {
