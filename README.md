@@ -44,6 +44,14 @@ Luna is created with the ReactJS library, Redux for store management, Webpack 3 
 
 if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --allow-root` - maybe you have to delete the node_modules folders first.
 
+## Linux based systems
+
+testing build process
+
+## Windows based systems
+
+testing build process
+
 ## Notes
 
 For the previous version of the application you can use the **UI/bootstrap branch**
@@ -55,11 +63,3 @@ You have to remove the node_modules folder and run a clean install then use:
 if you encounter permission problems on Linux try:
 
 `sudo npm install --allow-root`
-
-## Contributing
-
-1. Fork it (<https://github.com/rvpanoz/luna/fork>)
-2. Create your feature branch (`git checkout -b feature/yoohoo`)
-3. Commit your changes (`git commit -am 'Add some cool yoohoo feautures'`)
-4. Push to the branch (`git push origin feature/yoohoo`)
-5. Create a new Pull Request
