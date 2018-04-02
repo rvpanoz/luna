@@ -13,5 +13,5 @@
     "electron-rebuild": "node -r babel-register ../internals/scripts/ElectronRebuild.js",
     "postinstall": "npm run electron-rebuild"
   },
-  "license": "GPL-3.0"
+  "license": "GPLv3"
 }
