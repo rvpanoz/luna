@@ -37,10 +37,7 @@ Luna is alive thanks to these great libs and tools:
 ### Debian based (Debian, Ubuntu, Linux Mint)
 
 #### AppImage [download](http://104.236.58.95/luna/releases/v200/luna-2.0.0-x86_64.AppImage)
-
-#### .deb file [download](http://104.236.58.95/luna/releases/v200/luna_2.0.0_amd64.deb)
-
-Run `sudo dpkg --install luna_1.2.0_amd64.deb` on the downloaded package.
+#### .deb [download](http://104.236.58.95/luna/releases/v200/luna_2.0.0_amd64.deb)
 
 ### Windows
 
