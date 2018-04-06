@@ -34,32 +34,27 @@ Luna is alive thanks to these great libs and tools:
 4. Material-ui _https://material-ui-next.com/_
 5. Webpack _https://github.com/webpack/webpack_
 
-### Debian based (Debian, Ubuntu, Linux Mint)
-
-#### AppImage [download](http://104.236.58.95/luna/releases/v200/luna-2.0.0-x86_64.AppImage)
-#### .deb [download](http://104.236.58.95/luna/releases/v200/luna_2.0.0_amd64.deb)
-
 ### Windows
 
 Work in progress..
 
-## Development
+## Linux based systems
 
-Luna is created with the ReactJS library, Redux for store management, Webpack 3 for bundling, Material-UI and Electron for building.
+#### AppImage [download](http://104.236.58.95/luna/releases/v200/luna-2.0.0-x86_64.AppImage)
+#### .deb [download](http://104.236.58.95/luna/releases/v200/luna_2.0.0_amd64.deb)
+
+## Windows based systems
+
+Work in progress..
+
+## Development 
 
 1. clone the repository
 2. run `npm install` to install application's dependencies and devDependencies.
 3. run `npm run dev`
 
-if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --allow-root` - maybe you have to delete the node_modules folders first.
-
-## Linux based systems
-
-testing build process
-
-## Windows based systems
-
-testing build process
+if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --allow-root`
+maybe you have to delete the node_modules folders first.
 
 ## Notes
 
