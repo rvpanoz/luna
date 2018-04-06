@@ -71,13 +71,8 @@ class PackageContainer extends React.Component {
       <Loader loading={isLoading}>
         {active ? (
           <section className={classes.root}>
-            <Grid
-              container
-              justify="space-between"
-              alignItems="flex-start"
-              direction="row"
-            >
-              <Grid item xs={9}>
+            <Grid container>
+              <Grid item xs={9} sm={9} md={9} lg={9}>
                 <PackageCard
                   active={active}
                   onChangeVersion={this.onChangeVersion}
@@ -86,7 +81,7 @@ class PackageContainer extends React.Component {
                   {...rest}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={3} sm={3} md={3} lg={3}>
                 <PackageActions
                   active={active}
                   onChangeVersion={this.onChangeVersion}

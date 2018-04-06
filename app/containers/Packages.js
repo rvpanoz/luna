@@ -308,7 +308,7 @@ class PackagesContainer extends React.Component {
     const { loading, isLoading, ...rest } = this.props
 
     return (
-      <Grid container justify="space-between" alignItems="flex-start">
+      <Grid container spacing={24}>
         <Grid item xs={4} sm={4} md={4} lg={4}>
           <WithToolbarList
             setGlobalMode={this.setGlobalMode}
@@ -317,7 +317,7 @@ class PackagesContainer extends React.Component {
             {...rest}
           />
         </Grid>
-        <Grid item xs={7} sm={7} md={7} lg={7}>
+        <Grid item xs={8} sm={8} md={8} lg={8}>
           <PackageContainer isLoading={isLoading} loading={loading} />
         </Grid>
       </Grid>
