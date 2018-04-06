@@ -34,16 +34,14 @@ Luna is alive thanks to these great libs and tools:
 4. Material-ui _https://material-ui-next.com/_
 5. Webpack _https://github.com/webpack/webpack_
 
-### Windows
+## Downloads
 
-Work in progress..
-
-## Linux based systems
+### Linux based systems
 
 #### AppImage [download](http://104.236.58.95/luna/releases/v200/luna-2.0.0-x86_64.AppImage)
 #### .deb [download](http://104.236.58.95/luna/releases/v200/luna_2.0.0_amd64.deb)
 
-## Windows based systems
+### Windows based systems
 
 Work in progress..
 
