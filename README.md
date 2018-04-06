@@ -54,7 +54,7 @@ maybe you have to delete the node_modules folders first.
 
 ## Notes
 
-_If you have installed the previous version v1.2.0 you have to remove the node_modules folder and make a clean npm install. Previous version 1.2.0 codebase is now on `UI/bootstrap branch`. You can find more information at the notes section._
+_If you have installed the previous version v1.2.0 you have to remove the node_modules folder and make a clean npm install. Previous version 1.2.0 codebase is now on `UI/bootstrap branch`._
 
 For the previous version of the application you can use the **UI/bootstrap branch**
 You have to remove the node_modules folder and run a clean install then use:
