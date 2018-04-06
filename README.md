@@ -58,6 +58,7 @@ For the previous version of the application you can use the **UI/bootstrap branc
 You have to remove the node_modules folder and run a clean install then use:
 
 `git checkout UI/bootstrap`
+
 `npm install`
 
 if you encounter permission problems on Linux try:
