@@ -34,6 +34,18 @@ Luna is alive thanks to these great libs and tools:
 4. Material-ui _https://material-ui-next.com/_
 5. Webpack _https://github.com/webpack/webpack_
 
+### Debian based (Debian, Ubuntu, Linux Mint)
+
+#### AppImage [download](http://104.236.58.95/luna/releases/v200/luna-2.0.0-x86_64.AppImage)
+
+#### .deb file [download](http://104.236.58.95/luna/releases/v200/luna_2.0.0_amd64.deb)
+
+Run `sudo dpkg --install luna_1.2.0_amd64.deb` on the downloaded package.
+
+### Windows
+
+Work in progress..
+
 ## Development
 
 Luna is created with the ReactJS library, Redux for store management, Webpack 3 for bundling, Material-UI and Electron for building.
