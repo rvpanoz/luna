@@ -309,7 +309,7 @@ class PackagesContainer extends React.Component {
 
     return (
       <Grid container spacing={24}>
-        <Grid item xs={4} sm={4} md={4} lg={4}>
+        <Grid item xs={12} sm={4} md={4} lg={4}>
           <WithToolbarList
             setGlobalMode={this.setGlobalMode}
             reload={this.reload}
@@ -317,7 +317,7 @@ class PackagesContainer extends React.Component {
             {...rest}
           />
         </Grid>
-        <Grid item xs={8} sm={8} md={8} lg={8}>
+        <Grid item xs={12} sm={8} md={8} lg={8}>
           <PackageContainer isLoading={isLoading} loading={loading} />
         </Grid>
       </Grid>
