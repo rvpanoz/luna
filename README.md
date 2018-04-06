@@ -5,8 +5,6 @@
 <img align="center" width="100%" height="100%"
      title="luna-icon" src="./luna.jpg">
 
-_If you have installed the previous version v1.2.0 you have to remove the node_modules folder and make a clean npm install. Previous version 1.2.0 codebase is now on `UI/bootstrap branch`. You can find more information at the notes section._
-
 ## Description
 
 Luna is an electron app for developers for handling npm packages.
@@ -55,6 +53,8 @@ if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --a
 maybe you have to delete the node_modules folders first.
 
 ## Notes
+
+_If you have installed the previous version v1.2.0 you have to remove the node_modules folder and make a clean npm install. Previous version 1.2.0 codebase is now on `UI/bootstrap branch`. You can find more information at the notes section._
 
 For the previous version of the application you can use the **UI/bootstrap branch**
 You have to remove the node_modules folder and run a clean install then use:
