@@ -41,8 +41,6 @@ Luna is alive thanks to these great libs and tools:
 
 ### Windows
 
-Setup [download](http://104.236.58.95/luna/releases/v200/luna_setup 2.0.0.exe)
-
 ### macOS
 
 Work in progress.. help wanted
