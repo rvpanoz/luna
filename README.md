@@ -39,9 +39,13 @@ Luna is alive thanks to these great libs and tools:
 #### AppImage [download](http://104.236.58.95/luna/releases/v200/luna-2.0.0-x86_64.AppImage)
 #### .deb [download](http://104.236.58.95/luna/releases/v200/luna_2.0.0_amd64.deb)
 
-### Windows based systems
+### Windows
 
 Work in progress..
+
+### macOS 
+
+Work in progress.. help wanted
 
 ## Development 
 
