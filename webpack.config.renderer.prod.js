@@ -2,23 +2,23 @@
  * Build config for electron renderer process
  */
 
-import path from 'path';
-import webpack from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
-import merge from 'webpack-merge';
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
-import baseConfig from './webpack.config.base';
-import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
+import path from 'path'
+import webpack from 'webpack'
+import ExtractTextPlugin from 'extract-text-webpack-plugin'
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
+import merge from 'webpack-merge'
+import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
+import baseConfig from './webpack.config.base'
+import CheckNodeEnv from './internals/scripts/CheckNodeEnv'
 
 CheckNodeEnv('production')
 
 export default merge.smart(baseConfig, {
-	devtool: 'source-map',
+  devtool: 'source-map',
 
-	target: 'electron-renderer',
+  target: 'electron-renderer',
 
-	entry: './app/index',
+  entry: './app/index',
 
   output: {
     path: path.join(__dirname, 'app/dist'),
@@ -28,7 +28,7 @@ export default merge.smart(baseConfig, {
 
   module: {
     rules: [
-      // Extract all .global.css to style.css as is
+      // Extract all .css to style.css as is
       {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
@@ -36,14 +36,14 @@ export default merge.smart(baseConfig, {
           use: {
             loader: 'css-loader',
             options: {
-              minimize: true,
+              minimize: true
             }
           },
-          fallback: 'style-loader',
+          fallback: 'style-loader'
         })
       },
       // Common Image Formats
-			{
+      {
         test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
         use: 'url-loader?limit=10000'
       },
@@ -73,11 +73,12 @@ export default merge.smart(baseConfig, {
       sourceMap: true
     }),
 
-		new ExtractTextPlugin('style.css'),
+    new ExtractTextPlugin('style.css'),
 
-		new BundleAnalyzerPlugin({
-			analyzerMode: process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
-			openAnalyzer: process.env.OPEN_ANALYZER === 'true'
-		})
-	]
+    new BundleAnalyzerPlugin({
+      analyzerMode:
+        process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
+      openAnalyzer: process.env.OPEN_ANALYZER === 'true'
+    })
+  ]
 })
