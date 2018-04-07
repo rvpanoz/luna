@@ -71,7 +71,7 @@ class PackageContainer extends React.Component {
       <Loader loading={isLoading}>
         {active ? (
           <section className={classes.root}>
-            <Grid container spacing={8}>
+            <Grid container spacing={24}>
               <Grid item xs={12} sm={8} md={8} lg={8}>
                 <PackageCard
                   active={active}

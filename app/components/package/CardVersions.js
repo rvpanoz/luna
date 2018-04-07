@@ -24,8 +24,7 @@ const styles = (theme) => {
     },
     textField: {
       margin: theme.spacing.unit,
-      minWidth: 120,
-      maxWidth: 150
+      minWidth: 120
     }
   }
 }
@@ -80,7 +79,11 @@ class CardVersions extends React.Component {
               </MenuItem>
             ))}
         </TextField>
-        <Button color="secondary" onClick={this._onChangeVersion}>
+        <Button
+          color="primary"
+          className={classes.button}
+          onClick={this._onChangeVersion}
+        >
           Preview
         </Button>
       </div>
