@@ -4,7 +4,7 @@
  */
 
 import { Provider } from 'react-redux'
-import main from '../themes/main' //wip
+import main from '../themes/main'
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
 import React from 'react'
 import 'material-design-icons/iconfont/material-icons.css'
@@ -14,7 +14,7 @@ import Layout from './Layout'
 
 const App = (props) => {
   const { store } = props
-  const theme = createMuiTheme({}) //wip - use main
+  const theme = createMuiTheme({})
 
   return (
     <section id="root">
