@@ -23,8 +23,11 @@ const styles = (theme) => {
     actions: {
       display: 'flex'
     },
-    button: {
+    margin: {
       margin: theme.spacing.unit
+    },
+    buttonUninstall: {
+      color: theme.palette.info
     },
     expand: {
       transform: 'rotate(0deg)',
@@ -112,17 +115,17 @@ class CardActions extends React.Component {
               <Button
                 ref={action.text}
                 key={idx}
+                variant="raised"
+                color={action.color}
                 action={action.text}
                 onClick={this.doAction}
-                color={action.color}
                 aria-label={action.text}
-                className={classes.button}
               >
                 {action.iconCls === 'uninstall' && (
-                  <Delete className={classes.margin} />
+                  <Delete className={classes.margin} color="secondary" />
                 )}
                 {action.iconCls === 'update' && (
-                  <Update className={classes.margin} />
+                  <Update className={classes.margin} color="primary" />
                 )}
                 {action.text}
               </Button>

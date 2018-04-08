@@ -53,27 +53,30 @@ function runCommand(command, directory, callback, opts) {
       latest: latest
     }
 
-    if (repo && repo.url) {
-      const getStats = github.fetchStats({
-        repoUrl: repo.url || null,
-        pkgName
-      })
+    deferred.resolve(results)
 
-      getStats
-        .then((stats) => {
-          deferred.resolve(
-            merge(results, {
-              stats: stats
-            })
-          )
-        })
-        .catch((e) => {
-          console.log('Error fetching stats from github')
-          deferred.resolve(results)
-        })
-    } else {
-      deferred.resolve(results)
-    }
+    /* TODO uncomment */
+    // if (repo && repo.url) {
+    //   const getStats = github.fetchStats({
+    //     repoUrl: repo.url || null,
+    //     pkgName
+    //   })
+    //
+    //   getStats
+    //     .then((stats) => {
+    //       deferred.resolve(
+    //         merge(results, {
+    //           stats: stats
+    //         })
+    //       )
+    //     })
+    //     .catch((e) => {
+    //       console.log('Error fetching stats from github')
+    //       deferred.resolve(results)
+    //     })
+    // } else {
+    //   deferred.resolve(results)
+    // }
   })
 
   return deferred.promise
