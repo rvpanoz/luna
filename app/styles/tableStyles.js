@@ -53,7 +53,7 @@ const tableStyle = (theme) => ({
     '&:hover': {
       color: '#fff',
       cursor: 'pointer',
-      background: theme.palette.primary.light
+      background: theme.palette.secondary.light
     }
   },
   tablelist: {

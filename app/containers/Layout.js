@@ -42,7 +42,7 @@ class Layout extends React.Component {
     } = this.props
 
     return (
-      <div className={classes.root}>
+      <div className={classes.wrapper}>
         <AppHeader
           menuOpen={menuOpen}
           handleDrawerOpen={handleDrawerOpen}
