@@ -13,6 +13,10 @@ export function searchBoxStyles(theme) {
     },
     searchBoxLabel: {
       color: '#fff'
+    },
+    searchBoxInput: {
+      width: 200,
+      color: '#fff'
     }
   }
 }
@@ -34,6 +38,7 @@ export function notificationsStyles(theme) {
 
 export function headerStyles(theme) {
   const drawerWidth = 240
+
   return {
     appBar: {
       position: 'fixed',
@@ -42,7 +47,8 @@ export function headerStyles(theme) {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
       }),
-      backgroundColor: theme.palette.secondary.light
+      color: '#fff',
+      backgroundColor: theme.palette.primary.light
     },
     appBarShift: {
       marginLeft: drawerWidth,
@@ -60,7 +66,7 @@ export function headerStyles(theme) {
       alignItems: 'center',
       justifyContent: 'flex-end',
       padding: '0 8px',
-      ...theme.mixins.toolbar
+      minHeight: 68
     },
     drawerPaperClose: {
       width: 60,
@@ -81,13 +87,6 @@ export function headerStyles(theme) {
       display: 'flex',
       flexDirection: 'row',
       margin: theme.spacing.unit
-    },
-    searchBoxLabel: {
-      color: '#fff'
-    },
-    searchBoxInput: {
-      width: 200,
-      color: '#fff'
     },
     modeIcon: {
       margin: theme.spacing.unit + 10

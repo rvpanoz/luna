@@ -14,7 +14,7 @@ import Layout from './Layout'
 
 const App = (props) => {
   const { store } = props
-  const theme = createMuiTheme({})
+  const theme = createMuiTheme(main)
 
   return (
     <section id="root">
