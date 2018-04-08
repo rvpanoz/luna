@@ -48,7 +48,7 @@ const common = {
     A100: '#ff80ab',
     A200: '#ff4081',
     A400: '#f50057',
-    A700: '#c51162'
+    A700: '#a01744'
   },
   purple: {
     '50': '#f3e5f5',
@@ -304,15 +304,15 @@ export default {
     contrastDefaultColor: 'light'
   },
   secondary: {
-    ...common.blue,
+    ...common.indigo,
     contrastDefaultColor: 'light'
   },
   error: {
     ...common.red,
     contrastDefaultColor: 'light'
   },
-  grey: {
-    ...common.grey,
+  info: {
+    ...common.amber,
     contrastDefaultColor: 'light'
   },
   shades: {

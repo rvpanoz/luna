@@ -17,7 +17,7 @@ const App = (props) => {
   const theme = createMuiTheme(main)
 
   return (
-    <section id="root">
+    <section id="container">
       <CssBaseline />
       <Provider store={store}>
         <MuiThemeProvider theme={theme}>

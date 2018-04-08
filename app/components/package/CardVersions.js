@@ -11,6 +11,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Button from 'material-ui/Button'
 import semverCompare from 'semver-compare'
+import Refresh from 'material-ui-icons/Refresh'
 
 const { object, func } = PropTypes
 const styles = (theme) => {
@@ -19,7 +20,7 @@ const styles = (theme) => {
       display: 'flex',
       flexDirection: 'column'
     },
-    button: {
+    margin: {
       margin: theme.spacing.unit
     },
     textField: {
@@ -79,12 +80,8 @@ class CardVersions extends React.Component {
               </MenuItem>
             ))}
         </TextField>
-        <Button
-          color="primary"
-          className={classes.button}
-          onClick={this._onChangeVersion}
-        >
-          Preview
+        <Button color="primary" onClick={this._onChangeVersion}>
+          <Refresh className={classes.margin} color="primary" />Preview
         </Button>
       </div>
     )
