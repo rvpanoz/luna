@@ -23,6 +23,9 @@ const styles = (theme) => {
     margin: {
       margin: theme.spacing.unit
     },
+    button: {
+      maxWidth: 200
+    },
     textField: {
       margin: theme.spacing.unit,
       minWidth: 120
@@ -80,8 +83,12 @@ class CardVersions extends React.Component {
               </MenuItem>
             ))}
         </TextField>
-        <Button color="primary" onClick={this._onChangeVersion}>
-          <Refresh className={classes.margin} color="primary" />Preview
+        <Button
+          className={classes.button}
+          color="primary"
+          onClick={this._onChangeVersion}
+        >
+          Preview
         </Button>
       </div>
     )

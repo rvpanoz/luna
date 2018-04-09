@@ -8,7 +8,6 @@ export default {
   menuOpen: false,
   snackBarOpen: false,
   drawerOpen: false,
-  dialogOpen: false,
   snackbar: {
     action: null,
     actionText: '',
