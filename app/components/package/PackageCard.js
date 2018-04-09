@@ -85,6 +85,7 @@ class PackageCard extends React.Component {
       directory,
       actions,
       setActive,
+      settings,
       packageJSON
     } = this.props
 
@@ -103,6 +104,7 @@ class PackageCard extends React.Component {
             mode={mode}
             group={group}
             packageJSON={packageJSON}
+            fetchGithub={settings && settings.fetchGithub}
           />
           <CardActions
             active={active}
