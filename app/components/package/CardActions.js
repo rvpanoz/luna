@@ -61,7 +61,6 @@ class CardActions extends React.Component {
       toggleLoader,
       cmdOptions,
       setActive,
-      setupSnackbar,
       toggleSnackbar
     } = this.props
 

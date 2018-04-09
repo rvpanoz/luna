@@ -2,28 +2,28 @@
  * PackageCard component
  */
 
-import { withStyles } from "material-ui/styles";
+import { withStyles } from 'material-ui/styles'
 import {
   APP_MODES,
   APP_ACTIONS,
   PACKAGE_GROUPS,
   APP_INFO
-} from "constants/AppConstants";
-import { contains } from "ramda";
-import packageCardStyles from "styles/packageCardStyles";
-import React from "react";
-import classnames from "classnames";
-import PropTypes from "prop-types";
-import Card from "material-ui/Card";
-import CardHeader from "./CardHeader";
-import CardContent from "./CardContent";
-import CardActions from "./CardActions";
-import Typography from "material-ui/Typography";
-const { object, string } = PropTypes;
+} from 'constants/AppConstants'
+import { contains } from 'ramda'
+import packageCardStyles from 'styles/packageCardStyles'
+import React from 'react'
+import classnames from 'classnames'
+import PropTypes from 'prop-types'
+import Card from 'material-ui/Card'
+import CardHeader from './CardHeader'
+import CardContent from './CardContent'
+import CardActions from './CardActions'
+import Typography from 'material-ui/Typography'
+const { object, string } = PropTypes
 
 class PackageCard extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
   componentDidMount() {
     const {
@@ -35,32 +35,32 @@ class PackageCard extends React.Component {
       clearCommandOptions,
       addCommandOption,
       toggleExpanded
-    } = this.props;
+    } = this.props
 
-    clearCommandOptions();
+    clearCommandOptions()
 
     if (mode === APP_MODES.LOCAL && active) {
-      let found = false;
+      let found = false
 
       Object.keys(PACKAGE_GROUPS).some((groupName, idx) => {
         found =
           packageJSON[groupName] && packageJSON[groupName][active.name]
             ? groupName
-            : false;
+            : false
         if (found) {
-          setPackageGroup(groupName);
-          return found;
+          setPackageGroup(groupName)
+          return found
         }
-      });
+      })
 
       //save-exact fix
-      const { group } = this.props;
-      const symbols = ["~", "^"];
+      const { group } = this.props
+      const symbols = ['~', '^']
 
       if (group) {
-        const pkgVersion = packageJSON[group][active.name];
+        const pkgVersion = packageJSON[group][active.name]
         if (pkgVersion && !contains(pkgVersion[0], symbols)) {
-          addCommandOption("save-exact");
+          addCommandOption('save-exact')
         }
       }
     }
@@ -81,13 +81,12 @@ class PackageCard extends React.Component {
       toggleLoader,
       expanded,
       defaultActions,
-      setupSnackbar,
       toggleSnackbar,
       directory,
       actions,
       setActive,
       packageJSON
-    } = this.props;
+    } = this.props
 
     return (
       <section className={classes.root}>
@@ -113,7 +112,6 @@ class PackageCard extends React.Component {
             toggleLoader={toggleLoader}
             actions={actions}
             defaultActions={defaultActions}
-            setupSnackbar={setupSnackbar}
             toggleSnackbar={toggleSnackbar}
             mode={mode}
             version={version}
@@ -122,7 +120,7 @@ class PackageCard extends React.Component {
           />
         </Card>
       </section>
-    );
+    )
   }
 }
 
@@ -130,6 +128,6 @@ PackageCard.propTypes = {
   active: object.isRequired,
   classes: object.isRequired,
   mode: string.isRequired
-};
+}
 
-export default withStyles(packageCardStyles)(PackageCard);
+export default withStyles(packageCardStyles)(PackageCard)

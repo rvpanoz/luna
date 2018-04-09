@@ -10,16 +10,12 @@ export function toggleDrawer(bool) {
     drawerOpen: bool
   }
 }
-export function setupSnackbar(snackbarOptions) {
-  return {
-    type: types.SETUP_SNACKBAR,
-    snackbarOptions
-  }
-}
-export function toggleSnackbar(bool) {
+
+export function toggleSnackbar(bool, options) {
   return {
     type: types.TOGGLE_SNACKBAR,
-    snackBarOpen: bool
+    snackBarOpen: bool,
+    snackbarOptions: options
   }
 }
 export function toggleSettings(bool) {
