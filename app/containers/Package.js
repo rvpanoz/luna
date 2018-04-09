@@ -57,15 +57,7 @@ class PackageContainer extends React.Component {
     return false
   }
   render() {
-    const {
-      active,
-      classes,
-      isLoading,
-      loading,
-      setupSnackbar,
-      toggleSnackbar,
-      ...rest
-    } = this.props
+    const { active, classes, isLoading, loading, ...rest } = this.props
 
     return (
       <Loader loading={isLoading}>
@@ -118,10 +110,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
-    setupSnackbar: (snackbarOptions) =>
-      dispatch(globalActions.setupSnackbar(snackbarOptions)),
-    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
     addCommandOption: (option) =>
       dispatch(packagesActions.addCommandOption(option)),
     setActiveTab: (tabIndex) =>

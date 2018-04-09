@@ -32,14 +32,12 @@ class Layout extends React.Component {
     const { setSettings } = this.props
 
     ipcRenderer.on('settings_loaded', (event, settings) => {
-      console.log('settings_loaded', settings)
       if (settings && typeof settings === 'object') {
         setSettings(settings)
       }
     })
 
     ipcRenderer.on('settings_saved', (event, settings) => {
-      console.log('settings_saved', settings)
       if (settings && typeof settings === 'object') {
         setSettings(settings)
       }
@@ -56,6 +54,7 @@ class Layout extends React.Component {
       handleSettingsOpen,
       handleSettingsClose,
       settingsOpen,
+      toggleSnackbar,
       settings
     } = this.props
 
@@ -68,7 +67,7 @@ class Layout extends React.Component {
           handleSettingsOpen={handleSettingsOpen}
         />
         <main className={classnames(classes.content, 'page-content')}>
-          <PackagesContainer />
+          <PackagesContainer toggleSnackbar={toggleSnackbar} />
           {settingsOpen ? (
             <Settings
               open={settingsOpen}
@@ -102,7 +101,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setSettings: (settings) => dispatch(globalActions.setSettings(settings)),
-    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
+    toggleSnackbar: (bool, options) =>
+      dispatch(globalActions.toggleSnackbar(bool, options)),
     handleDrawerOpen: () => dispatch(globalActions.handleDrawer(true)),
     handleDrawerClose: () => dispatch(globalActions.handleDrawer(false)),
     handleSettingsOpen: () => dispatch(globalActions.toggleSettings(true)),

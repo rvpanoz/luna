@@ -43,7 +43,6 @@ class PackagesContainer extends React.Component {
       setPackageActions,
       toggleLoader,
       setPackageJSON,
-      setupSnackbar,
       toggleSnackbar,
       addMessage,
       clearMessages
@@ -138,7 +137,6 @@ class PackagesContainer extends React.Component {
       })
     })
     ipcRenderer.on('action-close', (event, pkg) => {
-      console.log('action-close')
       const { mode, directory } = this.props
 
       if (mode === APP_MODES.LOCAL && directory) {
@@ -356,9 +354,6 @@ function mapDispatchToProps(dispatch) {
     setSelectedPackage: (pkgName, force) =>
       dispatch(packagesActions.setSelectedPackage(pkgName, force)),
     clearSelected: () => dispatch(packagesActions.clearSelected()),
-    setupSnackbar: (snackbarOptions) =>
-      dispatch(globalActions.setupSnackbar(snackbarOptions)),
-    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
     setPackages: (packages, order, orderBy) =>
       dispatch(packagesActions.setPackages(packages, order, orderBy)),
     setPackageActions: (actions) =>
