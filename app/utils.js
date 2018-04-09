@@ -37,6 +37,7 @@ export const triggerEvent = (eventName, options) => {
   })
 }
 
+//object to array
 export const objectEntries = obj => {
   let ownProps = Object.keys(obj),
     i = ownProps.length,
@@ -46,21 +47,24 @@ export const objectEntries = obj => {
   return resArray;
 };
 
+//validate url
 export function isUrl(url) {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
   return matcher.test(url);
 }
 
+//switchcase currying
 export const switchcase = (cases) => (defaultCase) => (key) =>
   (cases.hasOwnProperty(key) && typeof cases[key] === 'function'
     ? cases[key].apply(undefined)
     : defaultCase);
 
+//convert first char to Uppercase
 export function firstToUpper(str) {
-  const firstCharToUpperCase = str[0].toUpperCase();
-  return `${firstCharToUpperCase}${str.slice(1, str.length).toLowerCase()}`;
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+//bind handler with the given context
 export function autoBind(handlers, ctx) {
   const isReactComponent = (ctx instanceof React.Component);
   if(!isReactComponent) return;
@@ -71,6 +75,7 @@ export function autoBind(handlers, ctx) {
   }, handlers)
 }
 
+//parse packages logic
 export function parse(data, key, all) {
   let arr = [],
     packages;
@@ -86,6 +91,7 @@ export function parse(data, key, all) {
   }
 }
 
+//deprecated
 export function showMessageBox(opts, cb = {}) {
   const name = opts.name;
   const action = opts.action;
@@ -116,6 +122,7 @@ export function showMessageBox(opts, cb = {}) {
   );
 }
 
+//utility fn
 export function isJson(str) {
   try {
     JSON.parse(str);
@@ -123,8 +130,4 @@ export function isJson(str) {
     return false;
   }
   return true;
-}
-
-export function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
 }

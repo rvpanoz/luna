@@ -9,19 +9,35 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import fs from 'fs'
 import electron from 'electron'
+import electronStore from 'electron-store'
 import MenuBuilder from './menu'
+import path from 'path'
+import config from './config'
+import shell from './shell'
 import fixPath from 'fix-path'
-const path = require('path')
-const config = require('./config')
+import { merge } from 'ramda'
 
+const defaultSettings = {
+  registry: 'https://registry.npmjs.org/',
+  fetchGithub: true
+}
+
+//NODE_EVN
 const NODE_ENV = process.env.NODE_ENV
-const shell = require('./shell')
 
+//get parameters
 const debug = /--debug/.test(process.argv[2])
-let mainWindow = null
+const needslog = /--log/.test(process.argv[3])
 
+//window min resolution
 const MIN_WIDTH = 1366
 const MIN_HEIGHT = 768
+
+// store initialization
+const Store = new electronStore()
+
+//main window
+let mainWindow = null
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support')
@@ -54,6 +70,7 @@ const installExtensions = async () => {
  * IPC events
  */
 
+//analyze directory
 ipcMain.on('analyze-json', (event, filePath) => {
   if (!filePath) {
     throw new Error('filePath is not defined')
@@ -75,6 +92,18 @@ ipcMain.on('analyze-json', (event, filePath) => {
       throw new Error('Error: Unable to parse package.json file.')
     }
   })
+})
+
+//user settings
+ipcMain.on('save-settings', (event, settings) => {
+  if (settings) {
+    try {
+      Store.set('user_settings', settings)
+      event.sender.send('settings_saved', Store.get('user_settings'))
+    } catch (e) {
+      throw new Error(e)
+    }
+  }
 })
 
 ipcMain.on('ipc-event', (event, options) => {
@@ -114,7 +143,8 @@ ipcMain.on('ipc-event', (event, options) => {
    * sending output using spawn to renderer via ipc events
    * */
   try {
-    shell.doCommand(opts, callback)
+    const settings = Store.get('user_settings')
+    shell.doCommand(merge(opts, settings || {}), callback)
   } catch (e) {
     throw new Error(e)
   }
@@ -175,10 +205,14 @@ app.on('ready', async () => {
   // load app.html file
   mainWindow.loadURL(`file://${__dirname}/app.html`)
 
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.webContents.on('did-finish-load', (event) => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined')
     }
+
+    //get user settings
+    const userSettings = Store.get('user_settings') || defaultSettings
+    event.sender.send('settings_loaded', userSettings)
 
     // show mainWindow
     mainWindow.show()
@@ -201,8 +235,8 @@ app.on('ready', async () => {
     // todo..
   })
 
-  mainWindow.on('show', () => {
-    // todo..
+  mainWindow.on('show', (event) => {
+    //todo..
   })
 
   mainWindow.on('closed', () => {

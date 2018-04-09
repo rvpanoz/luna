@@ -4,6 +4,7 @@
 
 import { remote, ipcRenderer } from 'electron'
 import { withStyles } from 'material-ui/styles'
+import { autoBind } from 'utils'
 import React from 'react'
 import PropTypes from 'prop-types'
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
@@ -22,10 +23,7 @@ const styles = {
 class AppHeaderContent extends React.Component {
   constructor() {
     super()
-    this.openPackage = this.openPackage.bind(this)
-    this.updateMode = this.updateMode.bind(this)
-    this.toggleAppSettings = this.toggleAppSettings.bind(this)
-    this.toggleDialog = this.toggleDialog.bind(this)
+    autoBind(['openPackage', 'updateMode', 'toggleSettings'], this)
   }
   updateMode(directory) {
     ipcRenderer.send('analyze-json', directory)
@@ -55,16 +53,9 @@ class AppHeaderContent extends React.Component {
       }
     )
   }
-  toggleAppSettings(e) {
-    e.preventDefault()
-    const { toggleSettings } = this.props
-
-    toggleSettings(true)
-  }
-  toggleDialog(e) {
-    const { handleDialogOpen } = this.props
-
-    handleDialogOpen(true)
+  toggleSettings(e) {
+    const { handleSettingsOpen } = this.props
+    handleSettingsOpen(true)
   }
   render() {
     const { classes } = this.props
@@ -78,7 +69,7 @@ class AppHeaderContent extends React.Component {
             </ListItemIcon>
             <ListItemText primary="Analyze" secondary="Open package.json" />
           </ListItem>
-          <ListItem button onClick={this.toggleDialog}>
+          <ListItem button onClick={this.toggleSettings}>
             <ListItemIcon>
               <Icon>settings</Icon>
             </ListItemIcon>
