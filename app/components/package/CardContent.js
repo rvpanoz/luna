@@ -15,6 +15,7 @@ import InfoIcon from 'material-ui-icons/Info'
 import LinkIcon from 'material-ui-icons/Link'
 import Grid from 'material-ui/Grid'
 import BarGraph from 'common/BarGraph'
+import TimeGraph from 'common/TimeGraph'
 
 const grayColor = '#999999'
 const { object, array, func, string } = PropTypes
@@ -104,7 +105,11 @@ class CardContent extends React.Component {
           >
             Author: {active.author || APP_INFO.NOT_AVAILABLE}
           </Typography>
-          {fetchGithub && <BarGraph active={active} />}
+          {fetchGithub ? (
+            <BarGraph active={active} />
+          ) : (
+            <TimeGraph active={active} />
+          )}
         </section>
       </MuiCardContent>
     )
