@@ -121,12 +121,6 @@ class CardActions extends React.Component {
                 onClick={this.doAction}
                 aria-label={action.text}
               >
-                {action.iconCls === 'uninstall' && (
-                  <Delete className={classes.margin} color="secondary" />
-                )}
-                {action.iconCls === 'update' && (
-                  <Update className={classes.margin} color="primary" />
-                )}
                 {action.text}
               </Button>
             )
