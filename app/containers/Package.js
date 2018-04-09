@@ -11,18 +11,13 @@ import * as packagesActions from 'actions/packagesActions'
 import { showMessageBox, triggerEvent, autoBind } from 'utils'
 import { contains } from 'ramda'
 import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
-import Chip from 'material-ui/Chip'
 import classnames from 'classnames'
-import Typography from 'material-ui/Typography'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
-import Paper from 'material-ui/Paper'
 import PackageCard from 'components/package/PackageCard'
 import PackageActions from 'components/package/PackageActions'
-import Fade from 'material-ui/transitions/Fade'
-import BarGraph from 'components/package/BarGraph'
 import Loader from 'common/Loader'
 
 class PackageContainer extends React.Component {
@@ -92,6 +87,7 @@ function mapStateToProps(state) {
   return {
     mode: state.global.mode,
     directory: state.global.directory,
+    settings: state.global.settings,
     packageJSON: state.global.packageJSON,
     toggleModal: state.global.toggleModal,
     showModal: state.global.showModal,
