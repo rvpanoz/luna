@@ -8,6 +8,33 @@ import { APP_INFO } from './constants/AppConstants';
 import * as R from 'ramda';
 import React from 'react';
 
+//accepts a semver version
+export const isBeta = (version) => {
+  if(!version) {
+    return null
+  }
+
+  return /beta/g.test(version)
+}
+
+//accepts a semver version
+export const isRC = (version) => {
+  if(!version) {
+    return null
+  }
+
+  return /rc/g.test(version)
+}
+
+//accepts a semver version
+export const isAlpha = (version) => {
+  if(!version) {
+    return null
+  }
+
+  return /alpha/g.test(version)
+}
+
 export const triggerEvent = (eventName, options) => {
   const {
     mode,
