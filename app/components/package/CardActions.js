@@ -23,7 +23,7 @@ const styles = (theme) => {
     actions: {
       display: 'flex'
     },
-    margin: {
+    button: {
       margin: theme.spacing.unit
     },
     buttonUninstall: {
@@ -120,6 +120,7 @@ class CardActions extends React.Component {
                 action={action.text}
                 onClick={this.doAction}
                 aria-label={action.text}
+                className={classes.button}
               >
                 {action.text}
               </Button>
