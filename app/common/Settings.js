@@ -24,7 +24,9 @@ const styles = {}
 class Settings extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      fetchGithub: false
+    }
     autoBind(['handleChange', 'saveSettings'], this)
   }
   componentDidMount() {
@@ -48,6 +50,10 @@ class Settings extends React.Component {
     const { classes, handleSettingsClose, open, settings } = this.props
     const { fetchGithub, registry } = this.state
 
+    if (!settings) {
+      return null
+    }
+
     return (
       <div>
         <Dialog
@@ -64,7 +70,7 @@ class Settings extends React.Component {
                 control={
                   <Switch
                     checked={fetchGithub}
-                    onChange={this.handleChange}
+                    onChange={(e) => this.handleChange(e)}
                     name="fetchGithub"
                     color="primary"
                   />

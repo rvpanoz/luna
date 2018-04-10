@@ -57,7 +57,6 @@ class PackagesContainer extends React.Component {
         directory
       })
     })
-
     ipcRenderer.on('uninstall-packages-close', (event) => {
       const { mode, directory } = this.props
 
@@ -67,7 +66,6 @@ class PackagesContainer extends React.Component {
         directory
       })
     })
-
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
       if (!packages) {
         return
@@ -85,7 +83,6 @@ class PackagesContainer extends React.Component {
       toggleLoader(false)
       toggleSnackbar(false)
     })
-
     ipcRenderer.on('search-packages-close', (event, packagesStr) => {
       try {
         const packages = JSON.parse(packagesStr)
@@ -95,11 +92,11 @@ class PackagesContainer extends React.Component {
         setPackages(packages)
         setTotal(packages.length)
         toggleLoader(false)
+        toggleSnackbar(false)
       } catch (e) {
         throw new Error(e)
       }
     })
-
     ipcRenderer.on(
       'view-package-close',
       (event, data, command, latest, stats) => {
@@ -126,7 +123,6 @@ class PackagesContainer extends React.Component {
         }
       }
     )
-
     ipcRenderer.on('update-package-close', (event, pkg) => {
       const { mode, directory } = this.props
 
@@ -150,11 +146,10 @@ class PackagesContainer extends React.Component {
       }
     })
     ipcRenderer.on('ipcEvent-error', (event, error) => {
-      const { setError, errors } = this.props
       console.error(error)
     })
     ipcRenderer.on('ipcEvent-reply', (event, data) => {
-      // console.error(data)
+      //todo..
     })
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
       setActive(null)

@@ -1,9 +1,16 @@
-html {
+html * {
   font-family: Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
+  background-color: #eeeeee;
+  color: #3c4858;
+  margin: 0;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  line-height: 1.5em;
   overflow: hidden;
 }
 
@@ -38,78 +45,6 @@ body:before {
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
-}
-
-/** general **/
-html * {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-body {
-  background-color: #eeeeee;
-  color: #3c4858;
-  margin: 0;
-  font-family: Roboto, Helvetica, Arial, sans-serif;
-  font-weight: 300;
-  line-height: 1.5em;
-}
-
-blockquote footer:before,
-blockquote small:before {
-  content: '\2014 \00A0';
-}
-
-h1 {
-  font-size: 3em;
-  line-height: 1.15em;
-}
-
-h2 {
-  font-size: 2.4em;
-}
-
-h3 {
-  font-size: 1.825em;
-  line-height: 1.4em;
-  margin: 20px 0 10px;
-}
-
-h4 {
-  font-size: 1.3em;
-  line-height: 1.4em;
-}
-
-h5 {
-  font-size: 1.25em;
-  line-height: 1.4em;
-  margin-bottom: 15px;
-}
-
-h6 {
-  font-size: 1em;
-  text-transform: uppercase;
-  font-weight: 500;
-}
-
-body {
-  background-color: #eeeeee;
-  color: #3c4858;
-}
-
-blockquote p {
-  font-style: italic;
-}
-
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
-  font-weight: 300;
-  line-height: 1.5em;
 }
 
 a {

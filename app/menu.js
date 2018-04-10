@@ -2,133 +2,133 @@
  * Applications menu
  **/
 
-import { app, Menu, shell, BrowserWindow } from "electron";
+import { app, Menu, shell, BrowserWindow } from 'electron'
 
 export default class MenuBuilder {
   constructor(mainWindow) {
-    this.mainWindow = mainWindow;
+    this.mainWindow = mainWindow
   }
 
   buildMenu() {
     if (
-      process.env.NODE_ENV === "development" ||
-      process.env.DEBUG_PROD === "true"
+      process.env.NODE_ENV === 'development' ||
+      process.env.DEBUG_PROD === 'true'
     ) {
-      this.setupDevelopmentEnvironment();
+      this.setupDevelopmentEnvironment()
     }
 
-    let template;
+    let template
 
-    if (process.platform === "darwin") {
-      template = this.buildDarwinTemplate();
+    if (process.platform === 'darwin') {
+      template = this.buildDarwinTemplate()
     } else {
-      template = this.buildDefaultTemplate();
+      template = this.buildDefaultTemplate()
     }
 
-    const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
+    const menu = Menu.buildFromTemplate(template)
+    Menu.setApplicationMenu(menu)
 
-    return menu;
+    return menu
   }
 
   setupDevelopmentEnvironment() {
-    this.mainWindow.openDevTools();
-    this.mainWindow.webContents.on("context-menu", (e, props) => {
-      const { x, y } = props;
+    this.mainWindow.openDevTools()
+    this.mainWindow.webContents.on('context-menu', (e, props) => {
+      const { x, y } = props
 
       Menu.buildFromTemplate([
         {
-          label: "Inspect element",
+          label: 'Inspect element',
           click: () => {
-            this.mainWindow.inspectElement(x, y);
+            this.mainWindow.inspectElement(x, y)
           }
         }
-      ]).popup(this.mainWindow);
-    });
+      ]).popup(this.mainWindow)
+    })
   }
 
   buildDarwinTemplate() {
     const Menu = {
-      label: "About"
-    };
+      label: 'About'
+    }
 
-    return [Menu];
+    return [Menu]
   }
 
   buildDefaultTemplate() {
     const templateDefault = [
       {
-        label: "&File",
+        label: '&File',
         submenu: [
           {
-            label: "&Close",
-            accelerator: "Ctrl+W",
+            label: '&Close',
+            accelerator: 'Ctrl+W',
             click: () => {
-              this.mainWindow.close();
+              this.mainWindow.close()
             }
           }
         ]
       },
       {
-        label: "&View",
+        label: '&View',
         submenu:
-          process.env.NODE_ENV === "development"
+          process.env.NODE_ENV === 'development'
             ? [
                 {
-                  label: "&Reload",
-                  accelerator: "Ctrl+R",
+                  label: '&Reload',
+                  accelerator: 'Ctrl+R',
                   click: () => {
-                    this.mainWindow.webContents.reload();
+                    this.mainWindow.webContents.reload()
                   }
                 },
                 {
-                  label: "Toggle &Full Screen",
-                  accelerator: "F11",
+                  label: 'Toggle &Full Screen',
+                  accelerator: 'F11',
                   click: () => {
                     this.mainWindow.setFullScreen(
                       !this.mainWindow.isFullScreen()
-                    );
+                    )
                   }
                 },
                 {
-                  label: "Toggle &Developer Tools",
-                  accelerator: "Alt+Ctrl+I",
+                  label: 'Toggle &Developer Tools',
+                  accelerator: 'Alt+Ctrl+I',
                   click: () => {
-                    this.mainWindow.toggleDevTools();
+                    this.mainWindow.toggleDevTools()
                   }
                 }
               ]
             : [
                 {
-                  label: "Toggle &Full Screen",
-                  accelerator: "F11",
+                  label: 'Toggle &Full Screen',
+                  accelerator: 'F11',
                   click: () => {
                     this.mainWindow.setFullScreen(
                       !this.mainWindow.isFullScreen()
-                    );
+                    )
                   }
                 }
               ]
       },
       {
-        label: "Help",
+        label: 'Help',
         submenu: [
           {
-            label: "Learn More",
+            label: 'Learn More',
             click() {
-              shell.openExternal("https://github.com/rvpanoz/luna");
+              shell.openExternal('https://github.com/rvpanoz/luna')
             }
           },
           {
-            label: "Search Issues",
+            label: 'Search Issues',
             click() {
-              shell.openExternal("https://github.com/rvpanoz/luna/issues");
+              shell.openExternal('https://github.com/rvpanoz/luna/issues')
             }
           }
         ]
       }
-    ];
+    ]
 
-    return templateDefault;
+    return templateDefault
   }
 }

@@ -67,13 +67,13 @@ class AppHeaderContent extends React.Component {
             <ListItemIcon>
               <Icon className={classes.iconHover}>archive</Icon>
             </ListItemIcon>
-            <ListItemText primary="Analyze" secondary="Open package.json" />
+            <ListItemText primary="Analyze" secondary="package.json" />
           </ListItem>
           <ListItem button onClick={this.toggleSettings}>
             <ListItemIcon>
               <Icon>settings</Icon>
             </ListItemIcon>
-            <ListItemText primary="Settings" secondary="Application settings" />
+            <ListItemText primary="Settings" />
           </ListItem>
         </List>
       </section>

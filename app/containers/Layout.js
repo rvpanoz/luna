@@ -43,15 +43,12 @@ class Layout extends React.Component {
       }
     })
 
-    ipcRenderer.on('throw-exception', (event, exceptionMessage) => {
-      toggleSnackbar(true, {
-        actionText: 'Dismiss',
-        message: exceptionMessage,
-        position: {
-          vertical: 'bottom',
-          horizontal: 'center'
-        }
-      })
+    ipcRenderer.on('view-log-close', (event, logContent) => {
+      console.log(logContent)
+    })
+
+    ipcRenderer.on('uncaught-exception', (event, exceptionError) => {
+      console.error('uncaught-exception', exceptionError)
     })
   }
   render() {
@@ -66,6 +63,7 @@ class Layout extends React.Component {
       handleSettingsClose,
       settingsOpen,
       toggleSnackbar,
+      loading,
       settings
     } = this.props
 
@@ -79,13 +77,11 @@ class Layout extends React.Component {
         />
         <main className={classnames(classes.content, 'page-content')}>
           <PackagesContainer toggleSnackbar={toggleSnackbar} />
-          {settingsOpen ? (
-            <Settings
-              open={settingsOpen}
-              settings={settings}
-              handleSettingsClose={handleSettingsClose}
-            />
-          ) : null}
+          <Settings
+            open={settingsOpen}
+            settings={settings || {}}
+            handleSettingsClose={handleSettingsClose}
+          />
           <SnackBar
             snackBarOpen={snackBarOpen}
             handleSnackBarClose={this.handleSnackBarClose}

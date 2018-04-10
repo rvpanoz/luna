@@ -1,21 +1,13 @@
 /**
-* Utilities
-*
-**/
+ * Utilities
+ *
+ **/
 
 import {ipcRenderer} from 'electron'
 import { APP_INFO } from './constants/AppConstants';
 import * as R from 'ramda';
 import React from 'react';
 
-export const sendException = (sender, exception) => {
-  if(!exception) {
-    throw new Error('FATAL: unable to handle exceptionError')
-  }
-
-  const exceptionError = (exception instanceof Error) ? exception : new Error(exception)
-  sender.send('throw-exception', exceptionError.message)
-}
 
 //accepts a semver version
 export const isBeta = (version) => {
@@ -56,7 +48,8 @@ export const triggerEvent = (eventName, options) => {
     packages,
     repo,
     latest
-  } = options || {}
+  } =
+    options || {}
 
   ipcRenderer.send('ipc-event', {
     ipcEvent: eventName,
@@ -74,36 +67,36 @@ export const triggerEvent = (eventName, options) => {
 }
 
 //object to array
-export const objectEntries = obj => {
+export const objectEntries = (obj) => {
   let ownProps = Object.keys(obj),
     i = ownProps.length,
-    resArray = new Array(i);
+    resArray = new Array(i)
 
-  while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
-  return resArray;
-};
+  while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]]
+  return resArray
+}
 
 //validate url
 export function isUrl(url) {
-  const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
-  return matcher.test(url);
+  const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/
+  return matcher.test(url)
 }
 
 //switchcase currying
 export const switchcase = (cases) => (defaultCase) => (key) =>
-  (cases.hasOwnProperty(key) && typeof cases[key] === 'function'
+  cases.hasOwnProperty(key) && typeof cases[key] === 'function'
     ? cases[key].apply(undefined)
-    : defaultCase);
+    : defaultCase
 
 //convert first char to Uppercase
 export function firstToUpper(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 //bind handler with the given context
 export function autoBind(handlers, ctx) {
-  const isReactComponent = (ctx instanceof React.Component);
-  if(!isReactComponent) return;
+  const isReactComponent = ctx instanceof React.Component
+  if (!isReactComponent) return
   R.forEach((handler) => {
     if (typeof ctx[handler] === 'function') {
       ctx[handler] = ctx[handler].bind(ctx)
@@ -114,25 +107,25 @@ export function autoBind(handlers, ctx) {
 //parse packages logic
 export function parse(data, key, all) {
   let arr = [],
-    packages;
+    packages
   try {
-    packages = JSON.parse(data);
+    packages = JSON.parse(data)
     if (key && packages[key]) {
-      packages = packages[key];
-      return Object.keys(packages).map((pkey) => packages[pkey]);
+      packages = packages[key]
+      return Object.keys(packages).map((pkey) => packages[pkey])
     }
-    return [];
+    return []
   } catch (e) {
-    console.error(e);
+    console.error(e)
   }
 }
 
 //utility fn
 export function isJson(str) {
   try {
-    JSON.parse(str);
+    JSON.parse(str)
   } catch (e) {
-    return false;
+    return false
   }
-  return true;
+  return true
 }

@@ -19,6 +19,7 @@ const styles = (theme) => {
 
 const SnackbarAction = (props) => {
   const { actionText, action } = props
+
   return (
     <Button color="primary" size="small" onClick={(e) => action(e)}>
       {actionText}
@@ -51,19 +52,13 @@ class SnackBar extends React.Component {
 
     return (
       <Snackbar
-        action={
-          actionText ? (
-            <SnackbarAction
-              actionText={actionText}
-              action={handleSnackBarClose}
-            />
-          ) : null
-        }
         className={classes.root}
         resumeHideDuration={5}
         anchorOrigin={position}
         open={snackBarOpen}
-        onClose={handleSnackBarClose}
+        onClose={(e) => {
+          handleSnackBarClose()
+        }}
         SnackbarContentProps={{
           'aria-describedby': 'message'
         }}
@@ -78,6 +73,14 @@ class SnackBar extends React.Component {
               </span>
             )}
           </div>
+        }
+        action={
+          actionText ? (
+            <SnackbarAction
+              actionText={actionText}
+              action={handleSnackBarClose}
+            />
+          ) : null
         }
       />
     )
