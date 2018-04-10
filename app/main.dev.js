@@ -7,20 +7,18 @@
  */
 
 import { app, BrowserWindow, ipcMain } from 'electron'
+import { merge } from 'ramda'
+import { sendException } from './utils'
+import fixPath from 'fix-path'
 import fs from 'fs'
 import electron from 'electron'
 import electronStore from 'electron-store'
-import MenuBuilder from './menu'
 import path from 'path'
+import MenuBuilder from './menu'
 import config from './config'
 import shell from './shell'
-import fixPath from 'fix-path'
-import { merge } from 'ramda'
 
-const defaultSettings = {
-  registry: 'https://registry.npmjs.org/',
-  fetchGithub: true
-}
+const { defaultSettings } = config
 
 //NODE_EVN
 const NODE_ENV = process.env.NODE_ENV
@@ -75,23 +73,22 @@ ipcMain.on('analyze-json', (event, filePath) => {
   if (!filePath) {
     throw new Error('filePath is not defined')
   }
-  fs.readFile(filePath, 'utf8', (err, fileContent) => {
-    if (err) {
-      if (err.code === 'ENOENT') {
-        console.error('package.json does not exist')
-        return
-      }
-      throw err
-    }
 
-    let content = false
-    try {
-      content = JSON.parse(fileContent)
+  try {
+    fs.readFile(filePath, 'utf8', (err, fileContent) => {
+      if (err) {
+        if (err.code === 'ENOENT') {
+          return
+        }
+        throw new Error(err)
+      }
+
+      const content = JSON.parse(fileContent)
       event.sender.send('analyze-json-close', filePath, content)
-    } catch (e) {
-      throw new Error('Error: Unable to parse package.json file.')
-    }
-  })
+    })
+  } catch (e) {
+    throw new Error(e)
+  }
 })
 
 //user settings
@@ -227,16 +224,16 @@ app.on('ready', async () => {
     }
   })
 
-  mainWindow.webContents.on('crashed', () => {
-    // todo..
+  mainWindow.webContents.on('crashed', (event) => {
+    //todo
   })
 
-  mainWindow.on('unresponsive', () => {
+  mainWindow.on('unresponsive', (event) => {
     // todo..
   })
 
   mainWindow.on('show', (event) => {
-    //todo..
+    // todo..
   })
 
   mainWindow.on('closed', () => {
@@ -248,5 +245,6 @@ app.on('ready', async () => {
 })
 
 process.on('uncaughtException', (err) => {
+  console.log('eeee')
   console.error(err)
 })

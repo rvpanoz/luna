@@ -29,7 +29,7 @@ class Layout extends React.Component {
     toggleSnackbar(false)
   }
   componentDidMount() {
-    const { setSettings } = this.props
+    const { setSettings, toggleSnackbar } = this.props
 
     ipcRenderer.on('settings_loaded', (event, settings) => {
       if (settings && typeof settings === 'object') {
@@ -41,6 +41,17 @@ class Layout extends React.Component {
       if (settings && typeof settings === 'object') {
         setSettings(settings)
       }
+    })
+
+    ipcRenderer.on('throw-exception', (event, exceptionMessage) => {
+      toggleSnackbar(true, {
+        actionText: 'Dismiss',
+        message: exceptionMessage,
+        position: {
+          vertical: 'bottom',
+          horizontal: 'center'
+        }
+      })
     })
   }
   render() {
@@ -79,6 +90,7 @@ class Layout extends React.Component {
             snackBarOpen={snackBarOpen}
             handleSnackBarClose={this.handleSnackBarClose}
             actionText={snackbar.actionText}
+            loader={snackbar.loader}
             message={snackbar.message}
             position={snackbar.position}
           />

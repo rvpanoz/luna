@@ -3,10 +3,19 @@
 *
 **/
 
-import { remote, ipcRenderer } from 'electron';
+import {ipcRenderer} from 'electron'
 import { APP_INFO } from './constants/AppConstants';
 import * as R from 'ramda';
 import React from 'react';
+
+export const sendException = (sender, exception) => {
+  if(!exception) {
+    throw new Error('FATAL: unable to handle exceptionError')
+  }
+
+  const exceptionError = (exception instanceof Error) ? exception : new Error(exception)
+  sender.send('throw-exception', exceptionError.message)
+}
 
 //accepts a semver version
 export const isBeta = (version) => {
@@ -116,37 +125,6 @@ export function parse(data, key, all) {
   } catch (e) {
     console.error(e);
   }
-}
-
-//deprecated
-export function showMessageBox(opts, cb = {}) {
-  const name = opts.name;
-  const action = opts.action;
-  const version = opts.version;
-  let message = APP_INFO.CONFIRMATION;
-
-  message = message.replace('$action', action.toLowerCase()).replace('$name@version', () => {
-    if (name && version) {
-      return `${name} ${version}`;
-    } else if (name) {
-      return name;
-    }
-    return '';
-  });
-  remote.dialog.showMessageBox(
-    remote.getCurrentWindow(),
-    {
-      title: 'Confirmation',
-      type: 'question',
-      message,
-      buttons: ['CANCEL', firstToUpper(action)]
-    },
-    (btnIdx) => {
-      if (Boolean(btnIdx) === true) {
-        cb();
-      }
-    }
-  );
 }
 
 //utility fn

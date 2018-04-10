@@ -20,7 +20,7 @@ const styles = (theme) => {
 const SnackbarAction = (props) => {
   const { actionText, action } = props
   return (
-    <Button color="secondary" size="small" onClick={(e) => action(e)}>
+    <Button color="primary" size="small" onClick={(e) => action(e)}>
       {actionText}
     </Button>
   )
@@ -48,7 +48,7 @@ class SnackBar extends React.Component {
       loader,
       actionText
     } = this.props
-    
+
     return (
       <Snackbar
         action={
@@ -84,11 +84,15 @@ class SnackBar extends React.Component {
   }
 }
 
-const { bool, func, string } = PropTypes
+const { bool, func, string, object } = PropTypes
 
 SnackBar.propTypes = {
   snackBarOpen: bool.isRequired,
-  message: string.isRequired
+  message: string,
+  position: object,
+  loader: bool,
+  action: func,
+  actionText: string
 }
 
 export default withStyles(styles)(SnackBar)

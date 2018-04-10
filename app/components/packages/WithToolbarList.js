@@ -93,8 +93,6 @@ function withToolbarTableList(List, options = {}) {
         setActive(null);
         setPackageActions([]);
         clearSelected();
-        // setPackages(packagesRemaining);
-        // setTotal(packagesRemaining.length);
       } catch (e) {
         throw new Error(e);
       }
@@ -223,15 +221,22 @@ function withToolbarTableList(List, options = {}) {
         handleChangePage,
         handleChangeRowsPerPage,
         total,
+        toggleSnackbar,
         packagesActions,
         rowsPerPage,
         ...rest
       } = this.props;
       const { title } = options;
 
-      return loading ? (
-        <SnackBar snackBarOpen={true} message="Loading" loader={true} />
-      ) : (
+      if(loading) {
+        toggleSnackbar(true, {
+          loader: true,
+          message: 'Loading'
+        })
+        return null
+      }
+
+      return (
         <Paper style={{ width: "100%" }}>
           <TableListToolbar
             mode={mode}
