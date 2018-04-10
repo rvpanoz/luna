@@ -80,7 +80,7 @@ class CardContent extends React.Component {
         <Divider />
         <Typography
           component="div"
-          variant="body2"
+          variant="body1"
           className={classes.headingTail}
         >
           {active && active.description}
@@ -103,6 +103,29 @@ class CardContent extends React.Component {
             variant="caption"
           >
             Author: {active.author || APP_INFO.NOT_AVAILABLE}
+          </Typography>
+          <br />
+          <Typography
+            className={classes.info}
+            component="p"
+            variant="body2"
+            gutterBottom={true}
+            variant="caption"
+          >
+            Dependencies:{' '}
+            {active.dependencies && Object.keys(active.dependencies).length}
+          </Typography>
+          <br />
+          <Typography
+            className={classes.info}
+            component="p"
+            variant="body2"
+            gutterBottom={true}
+            variant="caption"
+          >
+            DevDependencies:{' '}
+            {active.devDependencies &&
+              Object.keys(active.devDependencies).length}
           </Typography>
           <TimeGraph active={active} />
         </section>

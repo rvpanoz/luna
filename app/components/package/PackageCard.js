@@ -15,6 +15,7 @@ import React from 'react'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import Card from 'material-ui/Card'
+import Collapse from 'material-ui/transitions/Collapse'
 import CardHeader from './CardHeader'
 import CardContent from './CardContent'
 import CardActions from './CardActions'
@@ -113,6 +114,7 @@ class PackageCard extends React.Component {
             setActive={setActive}
             toggleLoader={toggleLoader}
             actions={actions}
+            expanded={expanded}
             defaultActions={defaultActions}
             toggleSnackbar={toggleSnackbar}
             mode={mode}
@@ -120,6 +122,9 @@ class PackageCard extends React.Component {
             directory={directory}
             cmdOptions={cmdOptions}
           />
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            test
+          </Collapse>
         </Card>
       </section>
     )

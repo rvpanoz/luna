@@ -1,33 +1,34 @@
 /** Toolbar List component **/
 
-import { withStyles } from "material-ui/styles";
-import { filter } from "ramda";
-import React from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import Toolbar from "material-ui/Toolbar";
-import Typography from "material-ui/Typography";
-import Checkbox from "material-ui/Checkbox";
-import IconButton from "material-ui/IconButton";
-import Tooltip from "material-ui/Tooltip";
-import AddIcon from "material-ui-icons/Add";
-import DeleteIcon from "material-ui-icons/Delete";
-import RefreshIcon from "material-ui-icons/Refresh";
-import ListIcon from "material-ui-icons/List";
-import UpdateIcon from "material-ui-icons/Update";
-import { lighten } from "material-ui/styles/colorManipulator";
+import { withStyles } from 'material-ui/styles'
+import { filter } from 'ramda'
+import React from 'react'
+import classNames from 'classnames'
+import PropTypes from 'prop-types'
+import Toolbar from 'material-ui/Toolbar'
+import Typography from 'material-ui/Typography'
+import Checkbox from 'material-ui/Checkbox'
+import IconButton from 'material-ui/IconButton'
+import Chip from 'material-ui/Chip'
+import Tooltip from 'material-ui/Tooltip'
+import AddIcon from 'material-ui-icons/Add'
+import DeleteIcon from 'material-ui-icons/Delete'
+import RefreshIcon from 'material-ui-icons/Refresh'
+import ListIcon from 'material-ui-icons/List'
+import UpdateIcon from 'material-ui-icons/Update'
+import { lighten } from 'material-ui/styles/colorManipulator'
 
-const grayColor = "#999999";
-const styles = theme => {
+const grayColor = '#999999'
+const styles = (theme) => {
   return {
     root: {
-      width: "100%"
+      width: '100%'
     },
     tableListToolbar: {
       paddingRight: theme.spacing.unit
     },
     highlight:
-      theme.palette.type === "light"
+      theme.palette.type === 'light'
         ? {
             color: theme.palette.secondary.main,
             backgroundColor: lighten(theme.palette.secondary.light, 0.85)
@@ -37,25 +38,25 @@ const styles = theme => {
             backgroundColor: theme.palette.secondary.dark
           },
     spacer: {
-      flex: "1 1 100%"
+      flex: '1 1 100%'
     },
     actions: {
       color: theme.palette.text.secondary
     },
     title: {
-      flex: "0 0 auto"
+      flex: '0 0 auto'
     },
     subtitle: {
-      lineHeight: "22px",
+      lineHeight: '22px',
       color: grayColor,
-      fontSize: "12px",
-      display: "inline-block",
-      margin: "0!important"
+      fontSize: '12px',
+      display: 'inline-block',
+      margin: '0!important'
     }
-  };
-};
+  }
+}
 
-const TableListToolbar = props => {
+const TableListToolbar = (props) => {
   const {
     classes,
     directory,
@@ -69,11 +70,11 @@ const TableListToolbar = props => {
     handleUpdate,
     rowCount,
     packagesActions
-  } = props;
+  } = props
 
-  const searchMode = filter(action => action.text === "Install")(
+  const searchMode = filter((action) => action.text === 'Install')(
     packagesActions
-  ).length;
+  ).length
 
   return (
     <section className={classes.root}>
@@ -88,11 +89,15 @@ const TableListToolbar = props => {
               {selected.length} selected
             </Typography>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              <Typography variant="title">
-                {title} {rowCount}
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <Typography variant="title" component="h3">
+                {title} {rowCount || 0}
               </Typography>
-              <Typography variant="subheading" className={classes.subtitle}>
+              <Typography
+                variant="subheading"
+                component="h4"
+                className={classes.subtitle}
+              >
                 {directory || null}
               </Typography>
             </div>
@@ -111,7 +116,7 @@ const TableListToolbar = props => {
                 </IconButton>
               </Tooltip>
             ) : !searchMode && selected.length ? (
-              <div style={{ display: "flex", flexDirection: "row" }}>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <Tooltip title="Uninstall selected">
                   <IconButton
                     aria-label="Uninstall-selected"
@@ -122,7 +127,7 @@ const TableListToolbar = props => {
                 </Tooltip>
               </div>
             ) : (
-              <div style={{ display: "flex", flexDirection: "row" }}>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <Tooltip title="Reload list">
                   <IconButton aria-label="Reload list" onClick={handleReload}>
                     <RefreshIcon />
@@ -139,12 +144,12 @@ const TableListToolbar = props => {
         )}
       </Toolbar>
     </section>
-  );
-};
+  )
+}
 
 TableListToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   selected: PropTypes.array
-};
+}
 
-export default withStyles(styles)(TableListToolbar);
+export default withStyles(styles)(TableListToolbar)

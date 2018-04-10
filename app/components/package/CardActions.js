@@ -125,6 +125,16 @@ class CardActions extends React.Component {
               </Button>
             )
           })}
+        <IconButton
+          className={classnames(classes.expand, {
+            [classes.expandOpen]: expanded
+          })}
+          onClick={(e) => handleExpandClick(e)}
+          aria-expanded={expanded}
+          aria-label="Show details"
+        >
+          <ExpandMoreIcon />
+        </IconButton>
       </MuiCardActions>
     )
   }
