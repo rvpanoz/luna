@@ -1,4 +1,4 @@
-# Luna - NPM management Electron application v2:boom:
+# Luna v2 - NPM management throught a modern UI
 
 ---
 
@@ -47,11 +47,14 @@ Setup [download](http://104.236.58.95/luna/releases/v200/luna_setup_2.0.0.exe)
 
 Work in progress.. help wanted
 
-## Development
+## Contribution
 
-1. clone the repository
-2. run `npm install` to install application's dependencies and devDependencies.
-3. run `npm run dev`
+If you'd like to make some changes yourself:
+
+1. Fork this repository to your own GitHub account and then clone it to your local device
+2. Install npm globally and run `npm install` to install application's required packages
+3. Build and start the application `npm run dev`
+4. Submit a pull request with your changes :boom:
 
 if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --allow-root`
 maybe you have to delete the node_modules folders first.
