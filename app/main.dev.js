@@ -8,15 +8,21 @@
 
 import { app, BrowserWindow, ipcMain } from 'electron'
 import { merge } from 'ramda'
-import { sendException } from './utils'
+import { APP_GLOBALS } from './constants/AppConstants'
 import fixPath from 'fix-path'
 import fs from 'fs'
 import electron from 'electron'
 import electronStore from 'electron-store'
+import electronLog from 'electron-log'
 import path from 'path'
 import MenuBuilder from './menu'
 import config from './config'
 import shell from './shell'
+
+const APP_PATHS = {
+  appData: app.getPath('appData'),
+  userData: app.getPath('userData')
+}
 
 const { defaultSettings } = config
 
@@ -65,7 +71,8 @@ const installExtensions = async () => {
 }
 
 /**
- * IPC events
+ * ipcMain event listeners
+ * communicate asynchronously from the main process to renderer processes.
  */
 
 //analyze directory
@@ -87,7 +94,8 @@ ipcMain.on('analyze-json', (event, filePath) => {
       event.sender.send('analyze-json-close', filePath, content)
     })
   } catch (e) {
-    throw new Error(e)
+    console.log(e)
+    throw new Error(e.message)
   }
 })
 
@@ -98,7 +106,7 @@ ipcMain.on('save-settings', (event, settings) => {
       Store.set('user_settings', settings)
       event.sender.send('settings_saved', Store.get('user_settings'))
     } catch (e) {
-      throw new Error(e)
+      throw new Error(e.message)
     }
   }
 })
@@ -143,7 +151,7 @@ ipcMain.on('ipc-event', (event, options) => {
     const settings = Store.get('user_settings')
     shell.doCommand(merge(opts, settings || {}), callback)
   } catch (e) {
-    throw new Error(e)
+    throw new Error(e.message)
   }
 })
 
@@ -245,6 +253,6 @@ app.on('ready', async () => {
 })
 
 process.on('uncaughtException', (err) => {
-  console.log('eeee')
-  console.error(err)
+  electronLog.error(`${err}`)
+  mainWindow.webContents.send('uncaught-exception', `${err}`)
 })
