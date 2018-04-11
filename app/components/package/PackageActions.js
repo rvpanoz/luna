@@ -158,7 +158,7 @@ class PackageActions extends React.Component {
             </section>
           </CardContent>
         </Card>
-        <Card className={classes.card}>
+        <Card className={classnames(classes.card, classes.margin)}>
           <CardContent>
             <Typography
               component="h3"
