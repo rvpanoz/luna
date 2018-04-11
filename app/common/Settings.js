@@ -1,53 +1,103 @@
 /**
- * WIP settings
+ * Settings modal
  **/
 
-import { withStyles } from "material-ui/styles";
-import React from "react";
-import PropTypes from "prop-types";
-import Modal from "material-ui/Modal";
-import { styles } from "./styles";
+import { ipcRenderer } from 'electron'
+import Dialog, {
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
+} from 'material-ui/Dialog'
+import { autoBind } from 'utils'
+import { assoc } from 'ramda'
+import { withStyles } from 'material-ui/styles'
+import React from 'react'
+import PropTypes from 'prop-types'
+import Button from 'material-ui/Button'
+import { FormGroup, FormControlLabel } from 'material-ui/Form'
+import Switch from 'material-ui/Switch'
+import Divider from 'material-ui/Divider'
 
-const Settings = props => {
-  const { open, handleClose } = props;
+const styles = {}
 
-  function getModalStyles() {
-    function rand() {
-      return Math.floor(Math.random() * 20) - 10;
+class Settings extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      fetchGithub: false
+    }
+    autoBind(['handleChange', 'saveSettings'], this)
+  }
+  componentWillReceiveProps(nextProps) {
+    const { settings } = nextProps
+
+    if (settings) {
+      this.setState({
+        fetchGithub: settings.fetchGithub
+      })
+    }
+  }
+  handleChange(e) {
+    const { name } = e.target
+    this.setState({ [name]: e.target.checked })
+  }
+  saveSettings() {
+    const { handleSettingsClose } = this.props
+
+    ipcRenderer.send('save-settings', this.state)
+    handleSettingsClose()
+  }
+  render() {
+    const { classes, handleSettingsClose, open, settings } = this.props
+    const { fetchGithub } = this.state
+
+    if (!settings) {
+      return null
     }
 
-    const top = 50 + rand();
-    const left = 50 + rand();
-
-    return {
-      position: "absolute",
-      width: 8 * 50,
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      border: "1px solid #e5e5e5",
-      backgroundColor: "#fff",
-      boxShadow: "0 5px 15px rgba(0, 0, 0, .5)",
-      padding: 8 * 4
-    };
+    return (
+      <div>
+        <Dialog
+          open={open}
+          onClose={handleSettingsClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Settings</DialogTitle>
+          <Divider light={true} />
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={fetchGithub}
+                    onChange={(e) => this.handleChange(e)}
+                    name="fetchGithub"
+                    color="primary"
+                  />
+                }
+                label="Fetch Github stats"
+              />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.saveSettings} color="primary">
+              Save
+            </Button>
+            <Button onClick={handleSettingsClose} color="accent">
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    )
   }
+}
 
-  return (
-    <div style={getModalStyles()}>
-      <Modal
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-        open={open}
-        onClose={handleClose}
-      >
-        <div>
-          this is a modal
-          <SimpleModalWrapped />
-        </div>
-      </Modal>
-    </div>
-  );
-};
+Settings.propTypes = {
+  classes: PropTypes.object.isRequired,
+  settings: PropTypes.object.isRequired
+}
 
-const ModalWrapper = withStyles(styles)(Settings);
-export default ModalWrapper;
+export default withStyles(styles)(Settings)

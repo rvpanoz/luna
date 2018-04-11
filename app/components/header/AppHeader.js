@@ -46,7 +46,7 @@ class AppHeader extends React.Component {
       toggleSettings,
       toggleDrawer,
       setPackageActions,
-      handleDialogOpen,
+      handleSettingsOpen,
       notifications
     } = this.props
 
@@ -117,9 +117,8 @@ class AppHeader extends React.Component {
             </div>
             <Divider />
             <AppHeaderContent
-              toggleSettings={toggleSettings}
               handleDrawerClose={handleDrawerClose}
-              handleDialogOpen={handleDialogOpen}
+              handleSettingsOpen={handleSettingsOpen}
             />
           </div>
         </Drawer>
@@ -152,7 +151,7 @@ AppHeader.propTypes = {
   theme: object.isRequired,
   handleDrawerOpen: func.isRequired,
   handleDrawerClose: func.isRequired,
-  handleDialogOpen: func.isRequired
+  handleSettingsOpen: func.isRequired
 }
 
 export default compose(

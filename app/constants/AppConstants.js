@@ -7,7 +7,7 @@ export const GITHUB = {
 }
 
 export const APP_GLOBALS = {
-  title: 'luna'
+  name: 'luna'
 }
 
 // app modes

@@ -8,21 +8,16 @@ import { packageCardStyles } from 'styles/packageCardStyles'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
-import { showMessageBox, triggerEvent, autoBind } from 'utils'
+import { triggerEvent, autoBind } from 'utils'
 import { contains } from 'ramda'
 import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
-import Chip from 'material-ui/Chip'
 import classnames from 'classnames'
-import Typography from 'material-ui/Typography'
 import PropTypes from 'prop-types'
 import React from 'react'
 import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
-import Paper from 'material-ui/Paper'
 import PackageCard from 'components/package/PackageCard'
 import PackageActions from 'components/package/PackageActions'
-import Fade from 'material-ui/transitions/Fade'
-import BarGraph from 'components/package/BarGraph'
 import Loader from 'common/Loader'
 
 class PackageContainer extends React.Component {
@@ -62,8 +57,7 @@ class PackageContainer extends React.Component {
       classes,
       isLoading,
       loading,
-      setupSnackbar,
-      toggleSnackbar,
+      settings,
       ...rest
     } = this.props
 
@@ -78,6 +72,7 @@ class PackageContainer extends React.Component {
                   onChangeVersion={this.onChangeVersion}
                   loading={loading}
                   isLoading={isLoading}
+                  settings={settings}
                   {...rest}
                 />
               </Grid>
@@ -85,6 +80,7 @@ class PackageContainer extends React.Component {
                 <PackageActions
                   active={active}
                   onChangeVersion={this.onChangeVersion}
+                  settings={settings}
                   {...rest}
                 />
               </Grid>
@@ -118,10 +114,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
-    setupSnackbar: (snackbarOptions) =>
-      dispatch(globalActions.setupSnackbar(snackbarOptions)),
-    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
     addCommandOption: (option) =>
       dispatch(packagesActions.addCommandOption(option)),
     setActiveTab: (tabIndex) =>

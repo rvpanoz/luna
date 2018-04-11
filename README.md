@@ -22,7 +22,7 @@ Luna is an electron app for developers for handling npm packages.
 * Visualization of package details
 
 <img align="center" width="100%" height="100%"
-     title="luna-icon" src="./luna-ui.png">
+     title="luna-icon" src="./luna-v2.1.0-preview.png">
 
 Luna is alive thanks to these great libs and tools:
 
@@ -45,7 +45,7 @@ Setup [download](http://104.236.58.95/luna/releases/v200/luna_setup_2.0.0.exe)
 
 ### macOS
 
-Work in progress.. help wanted
+Work in progress.
 
 ## Contribution
 
