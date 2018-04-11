@@ -16,6 +16,8 @@ import CardVersions from "./CardVersions";
 import CardOptions from "./CardOptions";
 import CardTags from "./CardTags";
 import Divider from "material-ui/Divider";
+import LicenseIcon from "material-ui-icons/PermIdentity";
+import GroupIcon from "material-ui-icons/Group";
 
 const grayColor = "#999999";
 const { object, array, func, string } = PropTypes;
@@ -52,6 +54,9 @@ const styles = theme => {
     },
     details: {
       marginBottom: 10
+    },
+    icon: {
+      margin: theme.spacing.unit
     },
     info: {
       lineHeight: "22px",

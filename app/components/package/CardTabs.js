@@ -11,7 +11,11 @@ import AppBar from "material-ui/AppBar";
 import Typography from "material-ui/Typography";
 import Tabs, { Tab } from "material-ui/Tabs";
 import classnames from "classnames";
-import { List as ListIcon } from "material-ui-icons";
+import {
+  List as ListIcon,
+  Group as GroupIcon,
+  PermIdentity as UserIcon
+} from "material-ui-icons";
 
 const styles = theme => {
   return {
@@ -60,11 +64,13 @@ class CardTabs extends React.Component {
             fullWidth
           >
             <Tab icon={<ListIcon />} label="Dependencies" />
-            <Tab icon={<ListIcon />} label="Dev Dependencies" />
+            <Tab icon={<GroupIcon />} label="Dev Dependencies" />
+            <Tab icon={<UserIcon />} label="Maintainers" />
           </Tabs>
         </AppBar>
-        {active === 0 && <TabContainer>Item One</TabContainer>}
-        {active === 1 && <TabContainer>Item Two</TabContainer>}
+        {active === 0 && <TabContainer>Dependendencies</TabContainer>}
+        {active === 1 && <TabContainer>DevDependencies</TabContainer>}
+        {active === 2 && <TabContainer>Maintainers</TabContainer>}
       </div>
     );
   }
