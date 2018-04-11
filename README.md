@@ -45,7 +45,7 @@ Setup [download](http://104.236.58.95/luna/releases/v200/luna_setup_2.0.0.exe)
 
 ### macOS
 
-Work in progress.. help wanted
+[Get latest version](https://github.com/rvpanoz/luna/releases/latest)
 
 ## Contribution
 
