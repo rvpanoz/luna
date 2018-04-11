@@ -45,6 +45,15 @@ class Layout extends React.Component {
 
     ipcRenderer.on('uncaught-exception', (event, exceptionError) => {
       console.error('uncaught-exception', exceptionError)
+      toggleSnackbar(true, {
+        loader: false,
+        actionText: 'Dismiss',
+        message: exceptionError,
+        position: {
+          vertical: 'bottom',
+          horizontal: 'center'
+        }
+      })
     })
   }
   render() {
