@@ -50,7 +50,7 @@ class Statslist extends React.Component {
 
     const data = objectEntries(
       pickAll(
-        ['stargazers_count', 'watchers_count', 'forks_count'],
+        ['stargazers_count', 'open_issues_count', 'forks_count'],
         stats || {}
       )
     ).map((a, idx) => {

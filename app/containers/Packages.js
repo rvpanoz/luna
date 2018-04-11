@@ -298,7 +298,7 @@ class PackagesContainer extends React.Component {
     })
   }
   render() {
-    const { loading, isLoading, ...rest } = this.props
+    const { loading, isLoading, settings, ...rest } = this.props
 
     return (
       <Grid container spacing={24}>
@@ -311,7 +311,11 @@ class PackagesContainer extends React.Component {
           />
         </Grid>
         <Grid item xs={12} sm={8} md={8} lg={8}>
-          <PackageContainer isLoading={isLoading} loading={loading} />
+          <PackageContainer
+            isLoading={isLoading}
+            loading={loading}
+            settings={settings}
+          />
         </Grid>
       </Grid>
     )

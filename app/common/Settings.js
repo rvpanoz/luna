@@ -10,7 +10,7 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog'
 import { autoBind } from 'utils'
-import { merge } from 'ramda'
+import { assoc } from 'ramda'
 import { withStyles } from 'material-ui/styles'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -29,11 +29,13 @@ class Settings extends React.Component {
     }
     autoBind(['handleChange', 'saveSettings'], this)
   }
-  componentDidMount() {
-    const { settings } = this.props
+  componentWillReceiveProps(nextProps) {
+    const { settings } = nextProps
 
     if (settings) {
-      this.setState(merge(this.state, settings))
+      this.setState({
+        fetchGithub: settings.fetchGithub
+      })
     }
   }
   handleChange(e) {
@@ -48,7 +50,7 @@ class Settings extends React.Component {
   }
   render() {
     const { classes, handleSettingsClose, open, settings } = this.props
-    const { fetchGithub, registry } = this.state
+    const { fetchGithub } = this.state
 
     if (!settings) {
       return null

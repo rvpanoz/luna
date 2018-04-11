@@ -52,7 +52,14 @@ class PackageContainer extends React.Component {
     return false
   }
   render() {
-    const { active, classes, isLoading, loading, ...rest } = this.props
+    const {
+      active,
+      classes,
+      isLoading,
+      loading,
+      settings,
+      ...rest
+    } = this.props
 
     return (
       <Loader loading={isLoading}>
@@ -65,6 +72,7 @@ class PackageContainer extends React.Component {
                   onChangeVersion={this.onChangeVersion}
                   loading={loading}
                   isLoading={isLoading}
+                  settings={settings}
                   {...rest}
                 />
               </Grid>
@@ -72,6 +80,7 @@ class PackageContainer extends React.Component {
                 <PackageActions
                   active={active}
                   onChangeVersion={this.onChangeVersion}
+                  settings={settings}
                   {...rest}
                 />
               </Grid>
@@ -87,7 +96,6 @@ function mapStateToProps(state) {
   return {
     mode: state.global.mode,
     directory: state.global.directory,
-    settings: state.global.settings,
     packageJSON: state.global.packageJSON,
     toggleModal: state.global.toggleModal,
     showModal: state.global.showModal,

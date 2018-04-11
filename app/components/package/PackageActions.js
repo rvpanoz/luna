@@ -85,7 +85,8 @@ class PackageActions extends React.Component {
       packageJSON,
       removeCommandOption,
       onChangeVersion,
-      setVersion
+      setVersion,
+      settings
     } = this.props
 
     const { license } = active
@@ -170,7 +171,7 @@ class PackageActions extends React.Component {
             <CardTags active={active} />
           </CardContent>
         </Card>
-        {active && active.stats ? (
+        {settings && settings.fetchGithub === true && active.stats ? (
           <Card className={classnames(classes.card, classes.margin)}>
             <CardContent>
               <Typography

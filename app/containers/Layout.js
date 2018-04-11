@@ -81,7 +81,10 @@ class Layout extends React.Component {
           handleSettingsOpen={handleSettingsOpen}
         />
         <main className={classnames(classes.content, 'page-content')}>
-          <PackagesContainer toggleSnackbar={toggleSnackbar} />
+          <PackagesContainer
+            toggleSnackbar={toggleSnackbar}
+            settings={settings}
+          />
           <Settings
             open={settingsOpen}
             settings={settings || {}}
