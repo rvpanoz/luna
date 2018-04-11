@@ -11,8 +11,10 @@ import AppBar from 'material-ui/AppBar'
 import Typography from 'material-ui/Typography'
 import Tabs, { Tab } from 'material-ui/Tabs'
 import List, { ListItem, ListItemText } from 'material-ui/List'
+import TimeGraph from 'common/TimeGraph'
 import classnames from 'classnames'
 import {
+  Timeline as TimelineIcon,
   List as ListIcon,
   Code as CodeIcon,
   Build as BuildIcon,
@@ -26,7 +28,10 @@ const styles = (theme) => {
       flexGrow: 1,
       marginTop: theme.spacing.unit * 3,
       backgroundColor: theme.palette.white,
-      height: 347
+      height: 500
+    },
+    graphContent: {
+      padding: theme.spacing.unit * 1.5
     },
     list: {
       visibility: 'visible',
@@ -36,7 +41,7 @@ const styles = (theme) => {
       maxHeight: '750px'
     },
     innerListSmall: {
-      maxHeight: '300px'
+      maxHeight: '400px'
     },
     heading: {
       color: 'rgba(0, 0, 0, 0.54)',
@@ -59,7 +64,7 @@ class CardTabs extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      active: 0
+      activeTab: 0
     }
     autoBind(['buildList', 'handleChange'], this)
   }
@@ -99,17 +104,12 @@ class CardTabs extends React.Component {
     }
   }
   handleChange(e, value) {
-    this.setState({ active: value })
+    this.setState({ activeTab: value })
   }
   render() {
-    const {
-      classes,
-      contributors,
-      dependencies,
-      devDependencies,
-      maintainers
-    } = this.props
-    const { active } = this.state
+    const { active, classes } = this.props
+    const { contributors, dependencies, devDependencies, maintainers } = active
+    const { activeTab } = this.state
 
     const dependenciesTotal = dependencies && Object.keys(dependencies).length
     const devDependenciesTotal =
@@ -121,7 +121,7 @@ class CardTabs extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Tabs
-            value={active}
+            value={activeTab}
             onChange={this.handleChange}
             indicatorColor="secondary"
             textColor="inherit"
@@ -135,6 +135,7 @@ class CardTabs extends React.Component {
               icon={<BuildIcon />}
               label={`Dev dependencies ${devDependenciesTotal || 0}`}
             />
+            <Tab icon={<TimelineIcon />} label="Statistics" />
             <Tab
               icon={<GroupIcon />}
               label={`Maintainers ${maintainersTotal || 0}`}
@@ -145,16 +146,28 @@ class CardTabs extends React.Component {
             />
           </Tabs>
         </AppBar>
-        {active === 0 && (
+        {activeTab === 0 && (
           <TabContainer>{this.buildList(dependencies)}</TabContainer>
         )}
-        {active === 1 && (
+        {activeTab === 1 && (
           <TabContainer>{this.buildList(devDependencies)}</TabContainer>
         )}
-        {active === 2 && (
+        {activeTab === 2 ? (
+          <div className={classes.graphContent}>
+            <Typography
+              component="h3"
+              variant="title"
+              className={classes.heading}
+            >
+              Versioning over time
+            </Typography>
+            <TimeGraph active={active} />
+          </div>
+        ) : null}
+        {activeTab === 3 && (
           <TabContainer>{this.buildList(maintainers, true)}</TabContainer>
         )}
-        {active === 3 && (
+        {activeTab === 4 && (
           <TabContainer>{this.buildList(contributors, true)}</TabContainer>
         )}
       </div>

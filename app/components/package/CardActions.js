@@ -39,9 +39,20 @@ const styles = (theme) => {
     },
     expandOpen: {
       transform: 'rotate(180deg)'
+    },
+    leftIcon: {
+      marginRight: theme.spacing.unit
+    },
+    rightIcon: {
+      marginLeft: theme.spacing.unit
+    },
+    iconSmall: {
+      fontSize: 20
     }
   }
 }
+
+function buildAction(action) {}
 
 class CardActions extends React.Component {
   constructor() {
@@ -113,7 +124,6 @@ class CardActions extends React.Component {
           actions.map((action, idx) => {
             return (
               <Button
-                ref={action.text}
                 key={idx}
                 variant="raised"
                 color={action.color}
@@ -122,6 +132,12 @@ class CardActions extends React.Component {
                 aria-label={action.text}
                 className={classes.button}
               >
+                {action.iconCls === 'update' && (
+                  <Update className={classes.leftIcon} />
+                )}
+                {action.iconCls === 'uninstall' && (
+                  <Delete className={classes.leftIcon} />
+                )}
                 {action.text}
               </Button>
             )

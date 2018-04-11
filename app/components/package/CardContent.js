@@ -104,12 +104,7 @@ class CardContent extends React.Component {
             Author: {active.author || APP_INFO.NOT_AVAILABLE}
           </Typography>
           <br />
-          <CardTabs
-            dependencies={active.dependencies}
-            devDependencies={active.devDependencies}
-            maintainers={active.maintainers}
-            contributors={active.contributors}
-          />
+          <CardTabs active={active} />
         </section>
       </MuiCardContent>
     )

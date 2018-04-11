@@ -22,7 +22,6 @@ import CardHeader from './CardHeader'
 import CardContent from './CardContent'
 import CardActions from './CardActions'
 import Typography from 'material-ui/Typography'
-import TimeGraph from 'common/TimeGraph'
 
 const { object, string } = PropTypes
 
@@ -136,7 +135,7 @@ class PackageCard extends React.Component {
                 Versioning over time
               </Typography>
               <Divider />
-              <TimeGraph active={active} />
+              TODO...
             </MuiCardContent>
           </Collapse>
         </Card>

@@ -173,7 +173,7 @@ class TimeGraph extends React.Component {
     return (
       <section className={classes.root}>
         <svg
-          width="700"
+          width="650"
           height="400"
           ref={(node) => {
             this.svgEl = node
