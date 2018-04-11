@@ -7,8 +7,6 @@ import { Provider } from 'react-redux'
 import main from '../themes/main'
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles'
 import React from 'react'
-import 'material-design-icons/iconfont/material-icons.css'
-import 'typeface-roboto/index.css'
 import CssBaseline from 'material-ui/CssBaseline'
 import Layout from './Layout'
 
