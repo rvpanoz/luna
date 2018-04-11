@@ -81,7 +81,7 @@ class CardTabs extends React.Component {
 
       return (
         <div className={classnames(classes.list, classes.innerListSmall)}>
-          <List>
+          <List dense={true}>
             {dataArr &&
               dataArr.map((item, idx) => {
                 const itemName = item[0]
@@ -127,6 +127,7 @@ class CardTabs extends React.Component {
             textColor="inherit"
             fullWidth
           >
+            <Tab icon={<TimelineIcon />} label="Statistics" />
             <Tab
               icon={<CodeIcon />}
               label={`Dependencies ${dependenciesTotal || 0}`}
@@ -135,7 +136,6 @@ class CardTabs extends React.Component {
               icon={<BuildIcon />}
               label={`Dev dependencies ${devDependenciesTotal || 0}`}
             />
-            <Tab icon={<TimelineIcon />} label="Statistics" />
             <Tab
               icon={<GroupIcon />}
               label={`Maintainers ${maintainersTotal || 0}`}
@@ -146,13 +146,13 @@ class CardTabs extends React.Component {
             />
           </Tabs>
         </AppBar>
-        {activeTab === 0 && (
+        {activeTab === 1 && (
           <TabContainer>{this.buildList(dependencies)}</TabContainer>
         )}
-        {activeTab === 1 && (
+        {activeTab === 2 && (
           <TabContainer>{this.buildList(devDependencies)}</TabContainer>
         )}
-        {activeTab === 2 ? (
+        {activeTab === 0 ? (
           <div className={classes.graphContent}>
             <Typography
               component="h3"

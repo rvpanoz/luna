@@ -91,7 +91,7 @@ class CardContent extends React.Component {
           component="h3"
           className={classes.heading}
         >
-          Details and stats
+          Details and statistics
         </Typography>
         <Divider />
         <section className={classes.details}>

@@ -18,10 +18,11 @@ import PropTypes from 'prop-types'
 import Card from 'material-ui/Card'
 import Divider from 'material-ui/Divider'
 import Collapse from 'material-ui/transitions/Collapse'
+import Typography from 'material-ui/Typography'
 import CardHeader from './CardHeader'
 import CardContent from './CardContent'
 import CardActions from './CardActions'
-import Typography from 'material-ui/Typography'
+import CardDetails from './CardDetails'
 
 const { object, string } = PropTypes
 
@@ -132,10 +133,10 @@ class PackageCard extends React.Component {
                 variant="title"
                 className={classes.heading}
               >
-                Versioning over time
+                Distribution
               </Typography>
               <Divider />
-              TODO...
+              <CardDetails dist={active && active.dist} />
             </MuiCardContent>
           </Collapse>
         </Card>
