@@ -3,7 +3,7 @@
 ---
 
 <img align="center" width="100%" height="100%"
-     title="luna-icon" src="./luna.jpg">
+     title="luna-icon" src="./luna-banner.png">
 
 ## Description
 
