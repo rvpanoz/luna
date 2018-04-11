@@ -56,11 +56,21 @@ class TimeGraph extends React.Component {
         .domain([0, d3.max(versions)])
         .range([height, 0])
 
+      const line = d3
+        .line()
+        // .curve(d3.curveCardinal)
+        .x(function(d) {
+          return scaleX(new Date(d.date))
+        })
+        .y(function(d) {
+          return scaleY(d.version)
+        })
+
       svg
         .append('g')
         .attr('class', 'axis axis--x')
         .attr('transform', 'translate(30,' + (height + MARGINS.top) + ')')
-        .call(d3.axisBottom(scaleX).ticks(d3.timeMonth.every(6)))
+        .call(d3.axisBottom(scaleX).ticks(d3.timeMonth.every(3)))
 
       svg
         .append('g')
@@ -78,44 +88,16 @@ class TimeGraph extends React.Component {
         .style('text-anchor', 'middle')
         .text('Semver version')
 
-      const tooltip = d3
-        .select('body')
-        .append('div')
-        .style('position', 'fixed')
-        .style('z-index', '999')
-
       svg
-        .append('g')
+        .append('path')
+        .datum(data)
         .attr('transform', 'translate(30, 10)')
-        .selectAll('.dot')
-        .data(data)
-        .enter()
-        .append('circle')
-        .attr('class', 'dot')
-        .attr('r', 2)
-        .attr('cx', function(d) {
-          return scaleX(new Date(d.date))
-        })
-        .attr('cy', function(d) {
-          return scaleY(d.version)
-        })
-        .style('fill', '#c2185b')
-        .on('mouseover', function(d) {
-          tooltip
-            .transition()
-            .duration(200)
-            .style('opacity', 0.9)
-          tooltip
-            .html(d.date + '<br/>' + d.version)
-            .style('left', d3.event.clientX + 'px')
-            .style('top', d3.event.clientY - 28 + 'px')
-        })
-        .on('mouseout', function(d) {
-          tooltip
-            .transition()
-            .duration(500)
-            .style('opacity', 0)
-        })
+        .attr('d', line)
+        .attr('fill', 'none')
+        .attr('stroke', 'steelblue')
+        .attr('stroke-linejoin', 'round')
+        .attr('stroke-linecap', 'round')
+        .attr('stroke-width', 1.5)
     }
   }
   componentDidMount() {
