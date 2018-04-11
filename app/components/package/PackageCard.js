@@ -10,16 +10,20 @@ import {
   APP_INFO
 } from 'constants/AppConstants'
 import { contains } from 'ramda'
+import { CardContent as MuiCardContent } from 'material-ui/Card'
 import packageCardStyles from 'styles/packageCardStyles'
 import React from 'react'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import Card from 'material-ui/Card'
+import Divider from 'material-ui/Divider'
 import Collapse from 'material-ui/transitions/Collapse'
 import CardHeader from './CardHeader'
 import CardContent from './CardContent'
 import CardActions from './CardActions'
 import Typography from 'material-ui/Typography'
+import TimeGraph from 'common/TimeGraph'
+
 const { object, string } = PropTypes
 
 class PackageCard extends React.Component {
@@ -123,7 +127,17 @@ class PackageCard extends React.Component {
             cmdOptions={cmdOptions}
           />
           <Collapse in={expanded} timeout="auto" unmountOnExit>
-            test
+            <MuiCardContent>
+              <Typography
+                component="h3"
+                variant="title"
+                className={classes.heading}
+              >
+                Versioning over time
+              </Typography>
+              <Divider />
+              <TimeGraph active={active} />
+            </MuiCardContent>
           </Collapse>
         </Card>
       </section>

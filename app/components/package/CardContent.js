@@ -14,7 +14,6 @@ import CardVersions from './CardVersions'
 import InfoIcon from 'material-ui-icons/Info'
 import LinkIcon from 'material-ui-icons/Link'
 import Grid from 'material-ui/Grid'
-import TimeGraph from 'common/TimeGraph'
 import CardTabs from './CardTabs'
 
 const grayColor = '#999999'
@@ -105,12 +104,11 @@ class CardContent extends React.Component {
             Author: {active.author || APP_INFO.NOT_AVAILABLE}
           </Typography>
           <br />
-          <TimeGraph active={active} />
-          <br />
           <CardTabs
             dependencies={active.dependencies}
             devDependencies={active.devDependencies}
             maintainers={active.maintainers}
+            contributors={active.contributors}
           />
         </section>
       </MuiCardContent>

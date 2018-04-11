@@ -21,7 +21,8 @@ const { object, func, bool, array } = PropTypes
 const styles = (theme) => {
   return {
     actions: {
-      display: 'flex'
+      display: 'flex',
+      marginTop: theme.spacing.unit + 20
     },
     button: {
       margin: theme.spacing.unit

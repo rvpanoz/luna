@@ -14,6 +14,8 @@ import List, { ListItem, ListItemText } from 'material-ui/List'
 import classnames from 'classnames'
 import {
   List as ListIcon,
+  Code as CodeIcon,
+  Build as BuildIcon,
   Group as GroupIcon,
   PermIdentity as UserIcon
 } from 'material-ui-icons'
@@ -23,7 +25,8 @@ const styles = (theme) => {
     root: {
       flexGrow: 1,
       marginTop: theme.spacing.unit * 3,
-      backgroundColor: theme.palette.white
+      backgroundColor: theme.palette.white,
+      height: 347
     },
     list: {
       visibility: 'visible',
@@ -62,9 +65,14 @@ class CardTabs extends React.Component {
   }
   buildList(data, onlyValues) {
     const { classes } = this.props
+    const dataType = data && typeof data
 
     try {
-      const dataArr = objectEntries(data)
+      const dataArr = data && objectEntries(data)
+
+      if (!dataArr || !dataArr.length) {
+        return 'No data'
+      }
 
       return (
         <div className={classnames(classes.list, classes.innerListSmall)}>
@@ -75,7 +83,7 @@ class CardTabs extends React.Component {
                 const itemValue = item[1]
 
                 return (
-                  <ListItem>
+                  <ListItem key={`itemk-${idx}`}>
                     <ListItemText
                       primary={onlyValues ? itemValue : itemName}
                       secondary={onlyValues ? null : itemValue}
@@ -94,29 +102,47 @@ class CardTabs extends React.Component {
     this.setState({ active: value })
   }
   render() {
-    const { classes, dependencies, devDependencies, maintainers } = this.props
+    const {
+      classes,
+      contributors,
+      dependencies,
+      devDependencies,
+      maintainers
+    } = this.props
     const { active } = this.state
 
-    const dependenciesTotal =
-      dependencies && `Dependencies (${Object.keys(dependencies).length})`
+    const dependenciesTotal = dependencies && Object.keys(dependencies).length
     const devDependenciesTotal =
-      devDependencies &&
-      `Dev dependencies (${Object.keys(devDependencies).length})`
-    const maintainersTotal =
-      maintainers && `Maintainers (${Object.keys(maintainers).length})`
+      devDependencies && Object.keys(devDependencies).length
+    const maintainersTotal = maintainers && maintainers.length
+    const contributorsTotal = contributors && contributors.length
+
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Tabs
             value={active}
             onChange={this.handleChange}
-            indicatorColor="primary"
+            indicatorColor="secondary"
             textColor="inherit"
             fullWidth
           >
-            <Tab icon={<ListIcon />} label={dependenciesTotal} />
-            <Tab icon={<GroupIcon />} label={devDependenciesTotal} />
-            <Tab icon={<UserIcon />} label={maintainersTotal} />
+            <Tab
+              icon={<CodeIcon />}
+              label={`Dependencies ${dependenciesTotal || 0}`}
+            />
+            <Tab
+              icon={<BuildIcon />}
+              label={`Dev dependencies ${devDependenciesTotal || 0}`}
+            />
+            <Tab
+              icon={<GroupIcon />}
+              label={`Maintainers ${maintainersTotal || 0}`}
+            />
+            <Tab
+              icon={<GroupIcon />}
+              label={`Contributors ${contributorsTotal || 0}`}
+            />
           </Tabs>
         </AppBar>
         {active === 0 && (
@@ -128,6 +154,9 @@ class CardTabs extends React.Component {
         {active === 2 && (
           <TabContainer>{this.buildList(maintainers, true)}</TabContainer>
         )}
+        {active === 3 && (
+          <TabContainer>{this.buildList(contributors, true)}</TabContainer>
+        )}
       </div>
     )
   }
@@ -137,7 +166,8 @@ CardTabs.propTypes = {
   classes: PropTypes.object.isRequired,
   dependencies: PropTypes.object,
   devDependencies: PropTypes.object,
-  maintainers: PropTypes.object
+  maintainers: PropTypes.array,
+  contributors: PropTypes.array
 }
 
 export default withStyles(styles)(CardTabs)
