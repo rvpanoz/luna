@@ -16,7 +16,8 @@ export function searchBoxStyles(theme) {
     },
     searchBoxInput: {
       width: 200,
-      color: '#fff'
+      color: '#fff',
+      borderBottom: '1px solid #fff !important;'
     }
   }
 }

@@ -43,16 +43,20 @@ const styles = (theme) => {
     actions: {
       color: theme.palette.text.secondary
     },
-    title: {
+    header: {
       flex: '0 0 auto'
     },
-    subtitle: {
-      lineHeight: '22px',
+    title: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start'
+    },
+    directory: {
       color: grayColor,
-      fontSize: '12px',
+      fontSize: '14px',
       display: 'inline-block',
-      margin: '0!important'
-    }
+      margin: '0 0 0 22px'
+    },
   }
 }
 
@@ -83,22 +87,15 @@ const TableListToolbar = (props) => {
           [classes.highlight]: selected && selected.length > 0
         })}
       >
-        <div className={classes.title}>
+        <div className={classes.header}>
           {selected && selected.length > 0 ? (
             <Typography color="inherit" variant="subheading">
               {selected.length} selected
             </Typography>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <Typography variant="title" component="h3">
+            <div className={classes.title}>
+              <Typography variant="title" color="inherit" component="h3">
                 {title} {rowCount || 0}
-              </Typography>
-              <Typography
-                variant="subheading"
-                component="h4"
-                className={classes.subtitle}
-              >
-                {directory || null}
               </Typography>
             </div>
           )}
@@ -143,6 +140,14 @@ const TableListToolbar = (props) => {
           </div>
         )}
       </Toolbar>
+      <Typography
+        color="inherit"
+        variant="subheading"
+        component="h4"
+        className={classes.directory}
+      >
+        {directory || null}
+      </Typography>
     </section>
   )
 }

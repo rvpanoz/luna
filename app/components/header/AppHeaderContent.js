@@ -67,7 +67,7 @@ class AppHeaderContent extends React.Component {
             <ListItemIcon>
               <Icon className={classes.iconHover}>archive</Icon>
             </ListItemIcon>
-            <ListItemText primary="Analyze" secondary="package.json" />
+            <ListItemText primary="Analyze"/>
           </ListItem>
           <ListItem button onClick={this.toggleSettings}>
             <ListItemIcon>

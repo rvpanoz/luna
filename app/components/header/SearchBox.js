@@ -73,7 +73,6 @@ class SearchBox extends React.Component {
       <div ref="root" className={classes.root}>
         <TextField
           id="search"
-          color="primary"
           type="search"
           label="Search npm"
           InputLabelProps={{ className: classes.searchBoxLabel }}

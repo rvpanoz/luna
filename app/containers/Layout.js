@@ -43,10 +43,6 @@ class Layout extends React.Component {
       }
     })
 
-    ipcRenderer.on('view-log-close', (event, logContent) => {
-      console.log(logContent)
-    })
-
     ipcRenderer.on('uncaught-exception', (event, exceptionError) => {
       console.error('uncaught-exception', exceptionError)
     })
