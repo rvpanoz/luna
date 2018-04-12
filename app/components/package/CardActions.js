@@ -21,10 +21,14 @@ const { object, func, bool, array } = PropTypes
 const styles = (theme) => {
   return {
     actions: {
-      display: 'flex'
+      display: 'flex',
+      marginTop: theme.spacing.unit + 20
     },
     button: {
       margin: theme.spacing.unit
+    },
+    buttonUninstall: {
+      color: theme.palette.info
     },
     expand: {
       transform: 'rotate(0deg)',
@@ -35,9 +39,20 @@ const styles = (theme) => {
     },
     expandOpen: {
       transform: 'rotate(180deg)'
+    },
+    leftIcon: {
+      marginRight: theme.spacing.unit
+    },
+    rightIcon: {
+      marginLeft: theme.spacing.unit
+    },
+    iconSmall: {
+      fontSize: 20
     }
   }
 }
+
+function buildAction(action) {}
 
 class CardActions extends React.Component {
   constructor() {
@@ -58,7 +73,6 @@ class CardActions extends React.Component {
       toggleLoader,
       cmdOptions,
       setActive,
-      setupSnackbar,
       toggleSnackbar
     } = this.props
 
@@ -110,24 +124,34 @@ class CardActions extends React.Component {
           actions.map((action, idx) => {
             return (
               <Button
-                ref={action.text}
                 key={idx}
+                variant="raised"
+                color={action.color}
                 action={action.text}
                 onClick={this.doAction}
-                color={action.color}
                 aria-label={action.text}
                 className={classes.button}
               >
-                {action.iconCls === 'uninstall' && (
-                  <Delete className={classes.margin} />
-                )}
                 {action.iconCls === 'update' && (
-                  <Update className={classes.margin} />
+                  <Update className={classes.leftIcon} />
+                )}
+                {action.iconCls === 'uninstall' && (
+                  <Delete className={classes.leftIcon} />
                 )}
                 {action.text}
               </Button>
             )
           })}
+        <IconButton
+          className={classnames(classes.expand, {
+            [classes.expandOpen]: expanded
+          })}
+          onClick={(e) => handleExpandClick(e)}
+          aria-expanded={expanded}
+          aria-label="Show details"
+        >
+          <ExpandMoreIcon />
+        </IconButton>
       </MuiCardActions>
     )
   }

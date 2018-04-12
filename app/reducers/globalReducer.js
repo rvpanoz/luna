@@ -15,8 +15,7 @@ import {
   TOGGLE_DRAWER,
   TOGGLE_DIALOG,
   MENU_OPEN,
-  SET_SETTINGS,
-  SETUP_SNACKBAR
+  SET_SETTINGS
 } from 'constants/ActionTypes'
 import initialState from './initialState'
 import {
@@ -40,8 +39,6 @@ const createReducer = (globalState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action)
 
 const handlers = {
-  [SETUP_SNACKBAR]: (state, action) =>
-    assoc('snackbar', action.snackbarOptions, state),
   [SET_SETTINGS]: (state, action) => assoc('settings', action.settings, state),
   [SET_MODE]: (state, action) =>
     merge(state, {
@@ -49,7 +46,10 @@ const handlers = {
       directory: action.directory
     }),
   [TOGGLE_SNACKBAR]: (state, action) =>
-    assoc('snackBarOpen', action.snackBarOpen, state),
+    merge(state, {
+      snackBarOpen: action.snackBarOpen,
+      snackbar: action.snackbarOptions ? action.snackbarOptions : state.snackbar
+    }),
   [TOGGLE_DIALOG]: (state, action) =>
     assoc('dialogOpen', action.dialogOpen, state),
   [TOGGLE_DRAWER]: (state, action) =>

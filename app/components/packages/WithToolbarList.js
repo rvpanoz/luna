@@ -3,36 +3,36 @@
  *
  **/
 
-import { remote } from "electron";
-import { filter, contains } from "ramda";
-import { autoBind, triggerEvent } from "utils";
-import { APP_MODES } from "constants/AppConstants";
-import React from "react";
-import PropTypes from "prop-types";
-import Paper from "material-ui/Paper";
-import TableListToolbar from "./TableListToolbar";
-import SnackBar from "common/SnackBar";
+import { remote } from 'electron'
+import { filter, contains } from 'ramda'
+import { autoBind, triggerEvent } from 'utils'
+import { APP_MODES } from 'constants/AppConstants'
+import React from 'react'
+import PropTypes from 'prop-types'
+import Paper from 'material-ui/Paper'
+import TableListToolbar from './TableListToolbar'
+import SnackBar from 'common/SnackBar'
 
 function withToolbarTableList(List, options = {}) {
   return class WithToolbarList extends React.Component {
     constructor(props) {
-      super(props);
+      super(props)
       autoBind(
         [
-          "_uninstallSelected",
-          "handleSort",
-          "handleSelectAllClick",
-          "handleUpdate",
-          "handleInstall",
-          "handleReload",
-          "handleGlobals",
-          "handleUninstall",
-          "isSelected",
-          "showDetails",
-          "doAction"
+          '_uninstallSelected',
+          'handleSort',
+          'handleSelectAllClick',
+          'handleUpdate',
+          'handleInstall',
+          'handleReload',
+          'handleGlobals',
+          'handleUninstall',
+          'isSelected',
+          'showDetails',
+          'doAction'
         ],
         this
-      );
+      )
     }
     _installSelected(selected) {
       const {
@@ -43,24 +43,24 @@ function withToolbarTableList(List, options = {}) {
         setPackages,
         setActive,
         setPackageActions
-      } = this.props;
+      } = this.props
 
-      toggleLoader(true);
-      setActive(null);
-      setPackageActions([]);
-      clearSelected();
-      setPackages([]);
+      toggleLoader(true)
+      setActive(null)
+      setPackageActions([])
+      clearSelected()
+      setPackages([])
 
       try {
-        triggerEvent("install-packages", {
-          cmd: ["install"],
+        triggerEvent('install-packages', {
+          cmd: ['install'],
           multiple: true,
           packages: selected,
           mode,
           directory
-        });
+        })
       } catch (e) {
-        throw new Error(e);
+        throw new Error(e)
       }
     }
     _uninstallSelected(selected) {
@@ -74,145 +74,153 @@ function withToolbarTableList(List, options = {}) {
         toggleLoader,
         setActive,
         setPackageActions
-      } = this.props;
+      } = this.props
 
       try {
-        triggerEvent("uninstall-packages", {
-          cmd: ["uninstall"],
+        triggerEvent('uninstall-packages', {
+          cmd: ['uninstall'],
           multiple: true,
           packages: selected,
           mode,
           directory
-        });
+        })
 
         const packagesRemaining = filter(
-          pkg => pkg && !contains(pkg.name, selected)
-        )(packages);
+          (pkg) => pkg && !contains(pkg.name, selected)
+        )(packages)
 
-        toggleLoader(true);
-        setActive(null);
-        setPackageActions([]);
-        clearSelected();
-        // setPackages(packagesRemaining);
-        // setTotal(packagesRemaining.length);
+        toggleLoader(true)
+        setActive(null)
+        setPackageActions([])
+        clearSelected()
       } catch (e) {
-        throw new Error(e);
+        throw new Error(e)
+      }
+    }
+    componentWillReceiveProps(nextProps) {
+      const { loading, toggleSnackbar } = nextProps
+
+      if (loading) {
+        toggleSnackbar(true, {
+          loader: true,
+          message: 'Loading packages'
+        })
       }
     }
     componentDidMount() {
-      const { mode, directory, toggleLoader } = this.props;
+      const { mode, directory, toggleLoader, toggleSnackbar } = this.props
 
-      toggleLoader(true);
-      triggerEvent("get-packages", {
-        cmd: ["outdated", "list"],
+      toggleLoader(true)
+      triggerEvent('get-packages', {
+        cmd: ['outdated', 'list'],
         mode,
         directory
-      });
+      })
     }
     handleReload(e) {
-      if (e) e.preventDefault();
+      if (e) e.preventDefault()
 
-      const { reload } = this.props;
-      reload();
-      e.stopPropagation();
+      const { reload } = this.props
+      reload()
+      e.stopPropagation()
     }
     handleUpdate(e) {
-      const { selected } = this.props;
+      const { selected } = this.props
 
       if (selected && selected.length) {
         remote.dialog.showMessageBox(
           remote.getCurrentWindow(),
           {
-            title: "Confirmation",
-            type: "question",
-            message: "Would you like to update the selected packages?",
-            buttons: ["Cancel", "Update"]
+            title: 'Confirmation',
+            type: 'question',
+            message: 'Would you like to update the selected packages?',
+            buttons: ['Cancel', 'Update']
           },
-          btnIdx => {
+          (btnIdx) => {
             if (Boolean(btnIdx) === true) {
-              this._installSelected(selected);
+              this._installSelected(selected)
             }
           }
-        );
+        )
       }
-      return false;
+      return false
     }
     handleGlobals(e) {
-      if (e) e.preventDefault();
-      const { mode, setGlobalMode } = this.props;
+      if (e) e.preventDefault()
+      const { mode, setGlobalMode } = this.props
       if (mode === APP_MODES.LOCAL) {
-        setGlobalMode();
+        setGlobalMode()
       }
-      e.stopPropagation();
+      e.stopPropagation()
     }
     handleUninstall(e) {
-      const { selected } = this.props;
+      const { selected } = this.props
       if (selected && selected.length) {
         remote.dialog.showMessageBox(
           remote.getCurrentWindow(),
           {
-            title: "Confirmation",
-            type: "question",
-            message: "Would you like to uninstall the selected packages?",
-            buttons: ["Cancel", "Uninstall"]
+            title: 'Confirmation',
+            type: 'question',
+            message: 'Would you like to uninstall the selected packages?',
+            buttons: ['Cancel', 'Uninstall']
           },
-          btnIdx => {
+          (btnIdx) => {
             if (Boolean(btnIdx) === true) {
-              this._uninstallSelected(selected);
+              this._uninstallSelected(selected)
             }
           }
-        );
+        )
       }
-      return false;
+      return false
     }
     handleSelectAllClick(e, checked) {
-      const { packages, setSelectedPackage, clearSelected } = this.props;
+      const { packages, setSelectedPackage, clearSelected } = this.props
       if (checked) {
-        packages.forEach(pkg => setSelectedPackage(pkg.name, true));
+        packages.forEach((pkg) => setSelectedPackage(pkg.name, true))
       } else {
-        clearSelected();
+        clearSelected()
       }
     }
     handleInstall(e) {
-      const { selected, toggleLoader } = this.props;
+      const { selected, toggleLoader } = this.props
       if (selected && selected.length) {
         remote.dialog.showMessageBox(
           remote.getCurrentWindow(),
           {
-            title: "Confirmation",
-            type: "question",
-            message: "Would you like to install the selected packages?",
-            buttons: ["Cancel", "Install"]
+            title: 'Confirmation',
+            type: 'question',
+            message: 'Would you like to install the selected packages?',
+            buttons: ['Cancel', 'Install']
           },
-          btnIdx => {
+          (btnIdx) => {
             if (Boolean(btnIdx) === true) {
-              toggleLoader();
-              this._installSelected(selected);
+              toggleLoader()
+              this._installSelected(selected)
             }
           }
-        );
+        )
       }
-      return false;
+      return false
     }
     handleSort(e, property) {
-      const _orderBy = property;
-      const { packages, setPackages, orderBy, order } = this.props;
-      let _order = "desc";
+      const _orderBy = property
+      const { packages, setPackages, orderBy, order } = this.props
+      let _order = 'desc'
 
-      if (orderBy === property && order === "desc") {
-        _order = "asc";
+      if (orderBy === property && order === 'desc') {
+        _order = 'asc'
       }
 
       const sortedPackages =
-        _order === "desc"
+        _order === 'desc'
           ? packages.sort((a, b) => (b[_orderBy] < a[_orderBy] ? -1 : 1))
-          : packages.sort((a, b) => (a[_orderBy] < b[_orderBy] ? -1 : 1));
+          : packages.sort((a, b) => (a[_orderBy] < b[_orderBy] ? -1 : 1))
 
-      setPackages(sortedPackages, _order, _orderBy);
+      setPackages(sortedPackages, _order, _orderBy)
     }
     isSelected(name) {
-      const { selected } = this.props;
-      return selected.indexOf(name) !== -1;
+      const { selected } = this.props
+      return selected.indexOf(name) !== -1
     }
     render() {
       const {
@@ -223,16 +231,23 @@ function withToolbarTableList(List, options = {}) {
         handleChangePage,
         handleChangeRowsPerPage,
         total,
+        toggleSnackbar,
         packagesActions,
         rowsPerPage,
         ...rest
-      } = this.props;
-      const { title } = options;
+      } = this.props
+      const { title } = options
 
-      return loading ? (
-        <SnackBar snackBarOpen={true} message="Loading" loader={true} />
-      ) : (
-        <Paper style={{ width: "100%" }}>
+      if (loading) {
+        return null
+      }
+
+      function getStyles() {
+        return loading ? { filter: 'blur(15px)' } : null
+      }
+
+      return (
+        <Paper square style={getStyles()}>
           <TableListToolbar
             mode={mode}
             directory={directory}
@@ -259,12 +274,12 @@ function withToolbarTableList(List, options = {}) {
             {...rest}
           />
         </Paper>
-      );
+      )
     }
-  };
+  }
 }
 
-const { bool, string, func, array, object, number } = PropTypes;
+const { bool, string, func, array, object, number } = PropTypes
 
 withToolbarTableList.propTypes = {
   loading: string,
@@ -285,6 +300,6 @@ withToolbarTableList.propTypes = {
   orderBy: string,
   rowCount: number,
   rowsPerPage: number
-};
+}
 
-export default withToolbarTableList;
+export default withToolbarTableList

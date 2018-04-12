@@ -51,9 +51,9 @@ const tableStyle = (theme) => ({
     lineHeight: '1.42857143',
     verticalAlign: 'middle',
     '&:hover': {
-      color: '#fff',
+      color: infoColor,
       cursor: 'pointer',
-      background: theme.palette.primary.light
+      background: theme.palette.info.light
     }
   },
   tablelist: {

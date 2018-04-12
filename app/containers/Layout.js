@@ -14,7 +14,7 @@ import classnames from 'classnames'
 import Grid from 'material-ui/Grid'
 import React from 'react'
 import PropTypes from 'prop-types'
-import Dialog from 'common/Dialog'
+import Settings from 'common/Settings'
 import SnackBar from 'common/SnackBar'
 import AppHeader from 'components/header/AppHeader'
 import PackagesContainer from 'containers/Packages'
@@ -28,6 +28,34 @@ class Layout extends React.Component {
     const { toggleSnackbar } = this.props
     toggleSnackbar(false)
   }
+  componentDidMount() {
+    const { setSettings, toggleSnackbar } = this.props
+
+    ipcRenderer.on('settings_loaded', (event, settings) => {
+      if (settings && typeof settings === 'object') {
+        setSettings(settings)
+      }
+    })
+
+    ipcRenderer.on('settings_saved', (event, settings) => {
+      if (settings && typeof settings === 'object') {
+        setSettings(settings)
+      }
+    })
+
+    ipcRenderer.on('uncaught-exception', (event, exceptionError) => {
+      console.error('uncaught-exception', exceptionError)
+      toggleSnackbar(true, {
+        loader: false,
+        actionText: 'Dismiss',
+        message: exceptionError,
+        position: {
+          vertical: 'bottom',
+          horizontal: 'center'
+        }
+      })
+    })
+  }
   render() {
     const {
       classes,
@@ -36,28 +64,37 @@ class Layout extends React.Component {
       snackBarOpen,
       handleDrawerOpen,
       handleDrawerClose,
-      handleDialogOpen,
-      handleDialogClose,
-      dialogOpen
+      handleSettingsOpen,
+      handleSettingsClose,
+      settingsOpen,
+      toggleSnackbar,
+      loading,
+      settings
     } = this.props
 
     return (
-      <div className={classes.root}>
+      <div className={classes.wrapper}>
         <AppHeader
           menuOpen={menuOpen}
           handleDrawerOpen={handleDrawerOpen}
           handleDrawerClose={handleDrawerClose}
-          handleDialogOpen={handleDialogOpen}
+          handleSettingsOpen={handleSettingsOpen}
         />
         <main className={classnames(classes.content, 'page-content')}>
-          <PackagesContainer />
-          {dialogOpen ? (
-            <Dialog open={dialogOpen} handleDialogClose={handleDialogClose} />
-          ) : null}
+          <PackagesContainer
+            toggleSnackbar={toggleSnackbar}
+            settings={settings}
+          />
+          <Settings
+            open={settingsOpen}
+            settings={settings || {}}
+            handleSettingsClose={handleSettingsClose}
+          />
           <SnackBar
             snackBarOpen={snackBarOpen}
             handleSnackBarClose={this.handleSnackBarClose}
             actionText={snackbar.actionText}
+            loader={snackbar.loader}
             message={snackbar.message}
             position={snackbar.position}
           />
@@ -69,20 +106,23 @@ class Layout extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    settings: state.global.settings,
     snackbar: state.global.snackbar,
     menuOpen: state.global.menuOpen,
-    dialogOpen: state.global.dialogOpen,
+    settingsOpen: state.global.settingsOpen,
     snackBarOpen: state.global.snackBarOpen
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
+    setSettings: (settings) => dispatch(globalActions.setSettings(settings)),
+    toggleSnackbar: (bool, options) =>
+      dispatch(globalActions.toggleSnackbar(bool, options)),
     handleDrawerOpen: () => dispatch(globalActions.handleDrawer(true)),
     handleDrawerClose: () => dispatch(globalActions.handleDrawer(false)),
-    handleDialogOpen: () => dispatch(globalActions.toggleDialog(true)),
-    handleDialogClose: () => dispatch(globalActions.toggleDialog(false))
+    handleSettingsOpen: () => dispatch(globalActions.toggleSettings(true)),
+    handleSettingsClose: () => dispatch(globalActions.toggleSettings(false))
   }
 }
 

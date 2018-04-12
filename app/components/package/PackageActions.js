@@ -15,7 +15,10 @@ import Typography from 'material-ui/Typography'
 import CardVersions from './CardVersions'
 import CardOptions from './CardOptions'
 import CardTags from './CardTags'
+import Statslist from './Statslist'
 import Divider from 'material-ui/Divider'
+import LicenseIcon from 'material-ui-icons/PermIdentity'
+import GroupIcon from 'material-ui-icons/Group'
 
 const grayColor = '#999999'
 const { object, array, func, string } = PropTypes
@@ -53,6 +56,9 @@ const styles = (theme) => {
     details: {
       marginBottom: 10
     },
+    icon: {
+      margin: theme.spacing.unit
+    },
     info: {
       lineHeight: '22px',
       color: grayColor,
@@ -79,8 +85,11 @@ class PackageActions extends React.Component {
       packageJSON,
       removeCommandOption,
       onChangeVersion,
-      setVersion
+      setVersion,
+      settings
     } = this.props
+
+    const { license } = active
 
     return (
       <section className={classes.root}>
@@ -97,6 +106,23 @@ class PackageActions extends React.Component {
               <Divider />
               <Typography veriant="display1" className={classes.marginTop}>
                 {firstToUpper(group)}
+              </Typography>
+            </CardContent>
+          </Card>
+        ) : null}
+        {license ? (
+          <Card className={classnames(classes.card, classes.margin)}>
+            <CardContent>
+              <Typography
+                component="h3"
+                className={classes.heading}
+                variant="subheading"
+              >
+                License
+              </Typography>
+              <Divider />
+              <Typography veriant="display1" className={classes.marginTop}>
+                {license}
               </Typography>
             </CardContent>
           </Card>
@@ -132,7 +158,7 @@ class PackageActions extends React.Component {
             </section>
           </CardContent>
         </Card>
-        <Card className={classes.card}>
+        <Card className={classnames(classes.card, classes.margin)}>
           <CardContent>
             <Typography
               component="h3"
@@ -145,6 +171,21 @@ class PackageActions extends React.Component {
             <CardTags active={active} />
           </CardContent>
         </Card>
+        {settings && settings.fetchGithub === true && active.stats ? (
+          <Card className={classnames(classes.card, classes.margin)}>
+            <CardContent>
+              <Typography
+                component="h3"
+                className={classes.heading}
+                variant="subheading"
+              >
+                Github stats
+              </Typography>
+              <Divider />
+              <Statslist stats={active.stats} />
+            </CardContent>
+          </Card>
+        ) : null}
       </section>
     )
   }

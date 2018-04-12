@@ -122,7 +122,6 @@ const packageCardStyles = (theme) => ({
   },
   heading: {
     color: 'rgba(0, 0, 0, 0.54)',
-    margin: '1em 0 0.7em',
     fontSize: '1.1rem',
     fontWeight: 400,
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',

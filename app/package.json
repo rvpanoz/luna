@@ -1,8 +1,8 @@
 {
   "name": "luna",
   "productName": "luna",
-  "version": "2.0.0",
-  "description": "Manage your NPM packages.",
+  "version": "2.1.0",
+  "description": "Luna is a management tool for developers to organize npm packages.",
   "main": "./main.prod.js",
   "author": {
     "name": "rvpanoz",

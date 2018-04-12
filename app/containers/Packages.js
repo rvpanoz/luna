@@ -43,7 +43,6 @@ class PackagesContainer extends React.Component {
       setPackageActions,
       toggleLoader,
       setPackageJSON,
-      setupSnackbar,
       toggleSnackbar,
       addMessage,
       clearMessages
@@ -58,7 +57,6 @@ class PackagesContainer extends React.Component {
         directory
       })
     })
-
     ipcRenderer.on('uninstall-packages-close', (event) => {
       const { mode, directory } = this.props
 
@@ -68,7 +66,6 @@ class PackagesContainer extends React.Component {
         directory
       })
     })
-
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
       if (!packages) {
         return
@@ -86,7 +83,6 @@ class PackagesContainer extends React.Component {
       toggleLoader(false)
       toggleSnackbar(false)
     })
-
     ipcRenderer.on('search-packages-close', (event, packagesStr) => {
       try {
         const packages = JSON.parse(packagesStr)
@@ -96,11 +92,11 @@ class PackagesContainer extends React.Component {
         setPackages(packages)
         setTotal(packages.length)
         toggleLoader(false)
+        toggleSnackbar(false)
       } catch (e) {
         throw new Error(e)
       }
     })
-
     ipcRenderer.on(
       'view-package-close',
       (event, data, command, latest, stats) => {
@@ -127,7 +123,6 @@ class PackagesContainer extends React.Component {
         }
       }
     )
-
     ipcRenderer.on('update-package-close', (event, pkg) => {
       const { mode, directory } = this.props
 
@@ -138,7 +133,6 @@ class PackagesContainer extends React.Component {
       })
     })
     ipcRenderer.on('action-close', (event, pkg) => {
-      console.log('action-close')
       const { mode, directory } = this.props
 
       if (mode === APP_MODES.LOCAL && directory) {
@@ -152,11 +146,10 @@ class PackagesContainer extends React.Component {
       }
     })
     ipcRenderer.on('ipcEvent-error', (event, error) => {
-      const { setError, errors } = this.props
       console.error(error)
     })
     ipcRenderer.on('ipcEvent-reply', (event, data) => {
-      // console.error(data)
+      //todo..
     })
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
       setActive(null)
@@ -305,7 +298,7 @@ class PackagesContainer extends React.Component {
     })
   }
   render() {
-    const { loading, isLoading, ...rest } = this.props
+    const { loading, isLoading, settings, ...rest } = this.props
 
     return (
       <Grid container spacing={24}>
@@ -318,7 +311,11 @@ class PackagesContainer extends React.Component {
           />
         </Grid>
         <Grid item xs={12} sm={8} md={8} lg={8}>
-          <PackageContainer isLoading={isLoading} loading={loading} />
+          <PackageContainer
+            isLoading={isLoading}
+            loading={loading}
+            settings={settings}
+          />
         </Grid>
       </Grid>
     )
@@ -356,9 +353,6 @@ function mapDispatchToProps(dispatch) {
     setSelectedPackage: (pkgName, force) =>
       dispatch(packagesActions.setSelectedPackage(pkgName, force)),
     clearSelected: () => dispatch(packagesActions.clearSelected()),
-    setupSnackbar: (snackbarOptions) =>
-      dispatch(globalActions.setupSnackbar(snackbarOptions)),
-    toggleSnackbar: (bool) => dispatch(globalActions.toggleSnackbar(bool)),
     setPackages: (packages, order, orderBy) =>
       dispatch(packagesActions.setPackages(packages, order, orderBy)),
     setPackageActions: (actions) =>

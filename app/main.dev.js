@@ -7,21 +7,41 @@
  */
 
 import { app, BrowserWindow, ipcMain } from 'electron'
+import { merge } from 'ramda'
+import { APP_GLOBALS } from './constants/AppConstants'
+import fixPath from 'fix-path'
 import fs from 'fs'
 import electron from 'electron'
+import electronStore from 'electron-store'
+import electronLog from 'electron-log'
+import path from 'path'
 import MenuBuilder from './menu'
-import fixPath from 'fix-path'
-const path = require('path')
-const config = require('./config')
+import config from './config'
+import shell from './shell'
 
+const APP_PATHS = {
+  appData: app.getPath('appData'),
+  userData: app.getPath('userData')
+}
+
+const { defaultSettings } = config
+
+//NODE_EVN
 const NODE_ENV = process.env.NODE_ENV
-const shell = require('./shell')
 
+//get parameters
 const debug = /--debug/.test(process.argv[2])
-let mainWindow = null
+const needslog = /--log/.test(process.argv[3])
 
+//window min resolution
 const MIN_WIDTH = 1366
 const MIN_HEIGHT = 768
+
+// store initialization
+const Store = new electronStore()
+
+//main window
+let mainWindow = null
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support')
@@ -51,30 +71,44 @@ const installExtensions = async () => {
 }
 
 /**
- * IPC events
+ * ipcMain event listeners
+ * communicate asynchronously from the main process to renderer processes.
  */
 
+//analyze directory
 ipcMain.on('analyze-json', (event, filePath) => {
   if (!filePath) {
     throw new Error('filePath is not defined')
   }
-  fs.readFile(filePath, 'utf8', (err, fileContent) => {
-    if (err) {
-      if (err.code === 'ENOENT') {
-        console.error('package.json does not exist')
-        return
-      }
-      throw err
-    }
 
-    let content = false
-    try {
-      content = JSON.parse(fileContent)
+  try {
+    fs.readFile(filePath, 'utf8', (err, fileContent) => {
+      if (err) {
+        if (err.code === 'ENOENT') {
+          return
+        }
+        throw new Error(err)
+      }
+
+      const content = JSON.parse(fileContent)
       event.sender.send('analyze-json-close', filePath, content)
+    })
+  } catch (e) {
+    console.log(e)
+    throw new Error(e.message)
+  }
+})
+
+//user settings
+ipcMain.on('save-settings', (event, settings) => {
+  if (settings) {
+    try {
+      Store.set('user_settings', settings)
+      event.sender.send('settings_saved', Store.get('user_settings'))
     } catch (e) {
-      throw new Error('Error: Unable to parse package.json file.')
+      throw new Error(e.message)
     }
-  })
+  }
 })
 
 ipcMain.on('ipc-event', (event, options) => {
@@ -114,9 +148,10 @@ ipcMain.on('ipc-event', (event, options) => {
    * sending output using spawn to renderer via ipc events
    * */
   try {
-    shell.doCommand(opts, callback)
+    const settings = Store.get('user_settings')
+    shell.doCommand(merge(opts, settings || {}), callback)
   } catch (e) {
-    throw new Error(e)
+    throw new Error(e.message)
   }
 })
 
@@ -175,10 +210,14 @@ app.on('ready', async () => {
   // load app.html file
   mainWindow.loadURL(`file://${__dirname}/app.html`)
 
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.webContents.on('did-finish-load', (event) => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined')
     }
+
+    //get user settings
+    const userSettings = Store.get('user_settings') || defaultSettings
+    event.sender.send('settings_loaded', userSettings)
 
     // show mainWindow
     mainWindow.show()
@@ -193,15 +232,15 @@ app.on('ready', async () => {
     }
   })
 
-  mainWindow.webContents.on('crashed', () => {
+  mainWindow.webContents.on('crashed', (event) => {
+    //todo
+  })
+
+  mainWindow.on('unresponsive', (event) => {
     // todo..
   })
 
-  mainWindow.on('unresponsive', () => {
-    // todo..
-  })
-
-  mainWindow.on('show', () => {
+  mainWindow.on('show', (event) => {
     // todo..
   })
 
@@ -214,5 +253,6 @@ app.on('ready', async () => {
 })
 
 process.on('uncaughtException', (err) => {
-  console.error(err)
+  electronLog.error(`${err}`)
+  mainWindow.webContents.send('uncaught-exception', `${err}`)
 })

@@ -1,44 +1,41 @@
+const drawerWidth = 240
+
 export function layoutStyles(theme) {
   return {
-    root: {
+    wrapper: {
       position: 'relative',
-      width: '100%',
+      top: 0,
       height: '100%',
-      zIndex: 1,
       overflow: 'hidden'
     },
     content: {
-      width: '100%',
-      height: '100%',
       flexGrow: 1,
-      overflow: 'hidden',
       position: 'relative',
       marginTop: 50,
       marginLeft: 50,
-      padding: 25
+      padding: 25,
+      width: '100%',
+      height: '100%'
     },
-    paper: {
-      position: 'absolute',
-      width: theme.spacing.unit * 50,
-      backgroundColor: theme.palette.background.paper,
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing.unit * 4
+    'body *, html *': {
+      boxSizing: 'border-box'
     },
-    heading: {
-      margin: '1.5em 0 1em',
-      fontSize: '1.5rem',
-      fontWeight: 400,
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-      lineHeight: '1.35417em'
+    'html, body': {
+      backgroundColor: theme.palette.shades['dark'].background.default,
+      fontSize: '18px',
+      margin: 0,
+      padding: 0,
+      fontFamily: '"Helvetica", "Arial", sans-serif'
     },
-    textField: {
-      marginLeft: theme.spacing.unit,
-      marginRight: theme.spacing.unit,
-      width: 300
+    a: {
+      color: theme.palette.common.teal['500'],
+      textDecoration: 'underline',
+      cursor: 'pointer'
     },
-    button: {
-      margin: theme.spacing.unit,
-      fontStyle: 'normal'
+    '.page-content': {
+      paddingTop: '65px',
+      flex: '1 1 100%',
+      margin: '0 auto'
     }
   }
 }
