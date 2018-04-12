@@ -12,13 +12,15 @@ Luna is an electron app for developers for handling npm packages.
 ## Features
 
 * Manage global packages
-* Analyze local directory using package.json
+* Analyze a local directory using package.json
 * Install new packages
 * Update existing packages
 * Uninstall packages
+* Preview selected version
 * View package detail info
 * Search npm for new packages
 * Get notifications for missing dependencies
+* Shows Github statistics
 * Visualization of package details
 
 <img align="center" width="100%" height="100%"
@@ -26,26 +28,28 @@ Luna is an electron app for developers for handling npm packages.
 
 Luna is alive thanks to these great libs and tools:
 
-1. Electron _https://electronjs.org/_
-2. ReactJS _https://reactjs.org/_
-3. Redux _https://redux.js.org/_
-4. Material-ui _https://material-ui-next.com/_
-5. Webpack _https://github.com/webpack/webpack_
+> Electron _https://electronjs.org/_
+
+> ReactJS _https://reactjs.org/_
+
+> Material-ui _https://material-ui-next.com/_
+
+> Webpack _https://github.com/webpack/webpack_
 
 ## Downloads
 
+Latest release
+
 ### Linux
+Debian [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna_2.1.0_amd64.deb)
+AppImage [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-x86_64.AppImage)
 
-1. Debian [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna_2.1.0_amd64.deb)
-2. AppImage [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-x86_64.AppImage)
-
-### Windows
-
+### Windows 
 [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna.Setup.2.1.0.exe)
 
-### macOS
-
+### MacOS
 [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-macOS.zip)
+
 
 ## Contribution
 
@@ -56,8 +60,9 @@ If you'd like to make some changes yourself:
 3. Build and start the application `npm run dev`
 4. Submit a pull request with your changes :boom:
 
-if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --allow-root`
+_if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --allow-root`
 maybe you have to delete the node_modules folders first.
+
 
 ## Notes
 
