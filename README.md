@@ -34,19 +34,18 @@ Luna is alive thanks to these great libs and tools:
 
 ## Downloads
 
-### Linux based systems
+### Linux
 
-1. Debian [download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna_2.1.0_amd64.deb)
-2. AppImage [download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-x86_64.AppImage)
+1. Debian [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna_2.1.0_amd64.deb)
+2. AppImage [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-x86_64.AppImage)
 
 ### Windows
 
-Setup [download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna.Setup.2.1.0.exe)
+[Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna.Setup.2.1.0.exe)
 
 ### macOS
 
-App [Download](https://github.com/rvpanoz/luna/releases/latest)
-DMG [Download](https://github.com/rvpanoz/luna/releases/latest)
+[Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-macOS.zip)
 
 ## Contribution
 
