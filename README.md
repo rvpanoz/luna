@@ -45,7 +45,8 @@ Setup [download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna.S
 
 ### macOS
 
-Work in progress.
+App [Download](https://github.com/rvpanoz/luna/releases/latest)
+DMG [Download](https://github.com/rvpanoz/luna/releases/latest)
 
 ## Contribution
 
