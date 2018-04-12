@@ -11,8 +11,8 @@ Luna is an electron app for developers for handling npm packages.
 
 * Manage global packages
 * Analyze a local directory using package.json
-* Install new packages
-* Update existing packages
+* Install new packages - multiple
+* Update existing packages - multiple
 * Uninstall packages
 * Preview selected version
 * View package detail info
