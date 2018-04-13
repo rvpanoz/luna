@@ -2,11 +2,10 @@
      <img align="center" width="100%" height="100%"
      title="luna-icon" src="./luna-banner.png">
 </p>
-<br/>
-<h1 align="center">Luna v2 - NPM management throught a modern UI</h1>
-<div align="center">
-  An <code>Electron</code> app for developers for handling npm packages. Supported platforms: OS X Windows and Linux
-</div>
+
+# Luna v2 - NPM management throught a modern UI</h1>
+
+An <code>Electron</code> app for developers for handling npm packages. Supported platforms: OS X Windows and Linux
      
 ## Features
 
@@ -14,7 +13,7 @@
 - Analyze a local directory using package.json
 - Install new packages - multiple
 - Update existing packages - multiple
-- Uninstall packages
+- Uninstall packages - multiple
 - Preview selected version
 - View package detail info
 - Search npm for new packages
