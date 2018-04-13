@@ -4,7 +4,6 @@
 </p>
 <br/>
 <h1 align="center">Luna v2 - NPM management throught a modern UI</h1>
-<br/>
 <div align="center">
   An <code>Electron</code> app for developers for handling npm packages. Supported platforms: OS X Windows and Linux
 </div>
