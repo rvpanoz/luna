@@ -1,25 +1,27 @@
-# Luna v2 - NPM management throught a modern UI
-
-<img align="center" width="100%" height="100%"
+<p align="center">
+     <img align="center" width="100%" height="100%"
      title="luna-icon" src="./luna-banner.png">
-
-## Description
-
-Luna is an electron app for developers for handling npm packages.
-
+</p>
+<br/>
+<h1 align="center">Luna v2 - NPM management throught a modern UI</h1>
+<br/>
+<div align="center">
+  An <code>Electron</code> app for developers for handling npm packages. Supported platforms: OS X Windows and Linux
+</div>
+     
 ## Features
 
-* Manage global packages
-* Analyze a local directory using package.json
-* Install new packages - multiple
-* Update existing packages - multiple
-* Uninstall packages
-* Preview selected version
-* View package detail info
-* Search npm for new packages
-* Get notifications for missing dependencies
-* Shows Github statistics
-* Visualization of package details
+- Manage global packages
+- Analyze a local directory using package.json
+- Install new packages - multiple
+- Update existing packages - multiple
+- Uninstall packages
+- Preview selected version
+- View package detail info
+- Search npm for new packages
+- Get notifications for missing dependencies
+- Shows Github statistics
+- Visualization of package versioning over time - d3js
 
 <img align="center" width="100%" height="100%"
      title="luna-icon" src="./luna-v2.1.0-preview.png">
@@ -33,6 +35,8 @@ Luna is alive thanks to these great libs and tools:
 > Material-ui _https://material-ui-next.com/_
 
 > Webpack _https://github.com/webpack/webpack_
+
+> d3js _https://d3js.org/
 
 ## Downloads
 
