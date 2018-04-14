@@ -21,20 +21,12 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 - Shows Github statistics
 - Visualization of package versioning over time - d3js
 
+***
+
+<div style="display:block;border-radius:5px; border: 2px solid transparent; border-image: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82); width:100%;height:100%;position:relative;">
 <img align="center" width="100%" height="100%"
      title="luna-icon" src="./luna-v2.1.0-preview.png">
-
-Luna is alive thanks to these great libs and tools:
-
-> Electron _https://electronjs.org/_
-
-> ReactJS _https://reactjs.org/_
-
-> Material-ui _https://material-ui-next.com/_
-
-> Webpack _https://github.com/webpack/webpack_
-
-> d3js _https://d3js.org/_
+</div>
 
 ## Downloads
 
@@ -76,3 +68,17 @@ You have to remove the node_modules folder and run a clean install then use:
 if you encounter permission problems on Linux try:
 
 `sudo npm install --allow-root`
+
+## Thanks
+
+Luna is alive thanks to these great libs and tools:
+
+> Electron _https://electronjs.org/_
+
+> ReactJS _https://reactjs.org/_
+
+> Material-ui _https://material-ui-next.com/_
+
+> Webpack _https://github.com/webpack/webpack_
+
+> d3js _https://d3js.org/_
