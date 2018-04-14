@@ -40,6 +40,7 @@ Luna is alive thanks to these great libs and tools:
 
 Latest release
 
+
 ### Linux
 Debian [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna_2.1.0_amd64.deb)
 
@@ -60,10 +61,6 @@ If you'd like to make some changes yourself:
 2. Install npm globally and run `npm install` to install application's required packages
 3. Build and start the application `npm run dev`
 4. Submit a pull request with your changes :boom:
-
-_if you are on linux and get error **gyp WARN EACCES**, run `sudo npm install --allow-root`
-maybe you have to delete the node_modules folders first.
-
 
 ## Notes
 
