@@ -5,7 +5,7 @@
 
 # Luna v2 - NPM management throught a modern UI</h1>
 
-An <code>Electron</code> app for developers for handling npm packages. Supported platforms: OS X Windows and Linux
+npm desktop manager for handling npm packages. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
      
 ## Features
 
@@ -34,7 +34,7 @@ Luna is alive thanks to these great libs and tools:
 
 > Webpack _https://github.com/webpack/webpack_
 
-> d3js _https://d3js.org/
+> d3js _https://d3js.org/_
 
 ## Downloads
 
