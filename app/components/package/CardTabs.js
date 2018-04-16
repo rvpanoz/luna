@@ -119,7 +119,7 @@ class CardTabs extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="secondary">
+        <AppBar position="static">
           <Tabs
             value={activeTab}
             onChange={this.handleChange}
