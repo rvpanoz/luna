@@ -2,17 +2,17 @@
  * Card tabs component
  **/
 
-import { withStyles } from 'material-ui/styles'
-import { APP_INFO } from 'constants/AppConstants'
-import { autoBind, objectEntries } from 'utils'
-import React from 'react'
-import PropTypes from 'prop-types'
-import AppBar from 'material-ui/AppBar'
-import Typography from 'material-ui/Typography'
-import Tabs, { Tab } from 'material-ui/Tabs'
-import List, { ListItem, ListItemText } from 'material-ui/List'
-import TimeGraph from 'common/TimeGraph'
-import classnames from 'classnames'
+import { withStyles } from "material-ui/styles";
+import { APP_INFO } from "constants/AppConstants";
+import { autoBind, objectEntries } from "utils";
+import React from "react";
+import PropTypes from "prop-types";
+import AppBar from "material-ui/AppBar";
+import Typography from "material-ui/Typography";
+import Tabs, { Tab } from "material-ui/Tabs";
+import List, { ListItem, ListItemText } from "material-ui/List";
+import TimeGraph from "common/TimeGraph";
+import classnames from "classnames";
 import {
   Timeline as TimelineIcon,
   List as ListIcon,
@@ -20,9 +20,9 @@ import {
   Build as BuildIcon,
   Group as GroupIcon,
   PermIdentity as UserIcon
-} from 'material-ui-icons'
+} from "material-ui-icons";
 
-const styles = (theme) => {
+const styles = theme => {
   return {
     root: {
       flexGrow: 1,
@@ -34,49 +34,49 @@ const styles = (theme) => {
       padding: theme.spacing.unit * 1.5
     },
     list: {
-      visibility: 'visible',
-      overflowX: 'hidden',
-      overflowY: 'scroll',
-      clear: 'both',
-      maxHeight: '750px'
+      visibility: "visible",
+      overflowX: "hidden",
+      overflowY: "scroll",
+      clear: "both",
+      maxHeight: "750px"
     },
     innerListSmall: {
-      maxHeight: '400px'
+      maxHeight: "400px"
     },
     heading: {
-      color: 'rgba(0, 0, 0, 0.54)',
-      fontSize: '1.1rem',
+      color: "rgba(0, 0, 0, 0.54)",
+      fontSize: "1.1rem",
       fontWeight: 400,
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
     }
-  }
-}
+  };
+};
 
 function TabContainer(props) {
   return (
     <Typography component="div" style={{ padding: 6 * 3 }}>
       {props.children}
     </Typography>
-  )
+  );
 }
 
 class CardTabs extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       activeTab: 0
-    }
-    autoBind(['buildList', 'handleChange'], this)
+    };
+    autoBind(["buildList", "handleChange"], this);
   }
   buildList(data, onlyValues) {
-    const { classes } = this.props
-    const dataType = data && typeof data
+    const { classes } = this.props;
+    const dataType = data && typeof data;
 
     try {
-      const dataArr = data && objectEntries(data)
+      const dataArr = data && objectEntries(data);
 
       if (!dataArr || !dataArr.length) {
-        return 'No data'
+        return "No data";
       }
 
       return (
@@ -84,8 +84,8 @@ class CardTabs extends React.Component {
           <List dense={true}>
             {dataArr &&
               dataArr.map((item, idx) => {
-                const itemName = item[0]
-                const itemValue = item[1]
+                const itemName = item[0];
+                const itemValue = item[1];
 
                 return (
                   <ListItem key={`itemk-${idx}`}>
@@ -94,32 +94,32 @@ class CardTabs extends React.Component {
                       secondary={onlyValues ? null : itemValue}
                     />
                   </ListItem>
-                )
+                );
               })}
           </List>
         </div>
-      )
+      );
     } catch (e) {
-      throw new Error(e)
+      throw new Error(e);
     }
   }
   handleChange(e, value) {
-    this.setState({ activeTab: value })
+    this.setState({ activeTab: value });
   }
   render() {
-    const { active, classes } = this.props
-    const { contributors, dependencies, devDependencies, maintainers } = active
-    const { activeTab } = this.state
+    const { active, classes } = this.props;
+    const { contributors, dependencies, devDependencies, maintainers } = active;
+    const { activeTab } = this.state;
 
-    const dependenciesTotal = dependencies && Object.keys(dependencies).length
+    const dependenciesTotal = dependencies && Object.keys(dependencies).length;
     const devDependenciesTotal =
-      devDependencies && Object.keys(devDependencies).length
-    const maintainersTotal = maintainers && maintainers.length
-    const contributorsTotal = contributors && contributors.length
+      devDependencies && Object.keys(devDependencies).length;
+    const maintainersTotal = maintainers && maintainers.length;
+    const contributorsTotal = contributors && contributors.length;
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" color="secondary">
           <Tabs
             value={activeTab}
             onChange={this.handleChange}
@@ -171,7 +171,7 @@ class CardTabs extends React.Component {
           <TabContainer>{this.buildList(contributors, true)}</TabContainer>
         )}
       </div>
-    )
+    );
   }
 }
 
@@ -181,6 +181,6 @@ CardTabs.propTypes = {
   devDependencies: PropTypes.object,
   maintainers: PropTypes.array,
   contributors: PropTypes.array
-}
+};
 
-export default withStyles(styles)(CardTabs)
+export default withStyles(styles)(CardTabs);
