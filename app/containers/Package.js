@@ -9,7 +9,6 @@ import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
 import { triggerEvent, autoBind } from 'utils'
-import { contains, find, propEq } from 'ramda'
 import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
@@ -24,22 +23,6 @@ class PackageContainer extends React.Component {
   constructor(props) {
     super(props)
     autoBind(['onChangeVersion', 'onExpandClick'], this)
-  }
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const { active, packages, setPackageActions } = nextProps
-
-    if (active && active.name) {
-      const inPackages = find(propEq('name', active.name))(packages)
-      if (!inPackages) {
-        return setPackageActions([
-          {
-            text: 'Install',
-            iconCls: 'add',
-            color: 'primary'
-          }
-        ])
-      }
-    }
   }
   componentWillUnmount() {
     const { expanded, toggleExpanded } = this.props
@@ -116,7 +99,6 @@ function mapStateToProps(state) {
     toggleModal: state.global.toggleModal,
     showModal: state.global.showModal,
     npmCmd: state.global.npmCmd,
-    packages: state.packages.packages,
     cmdOptions: state.packages.cmdOptions,
     group: state.packages.group,
     expanded: state.packages.expanded,

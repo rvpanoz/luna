@@ -51,7 +51,7 @@ class SearchBox extends React.Component {
       setPackageActions([
         {
           text: 'Install',
-          iconCls: 'add',
+          iconCls: 'install',
           color: 'primary'
         }
       ])

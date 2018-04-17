@@ -9,7 +9,7 @@ import {
   PACKAGE_GROUPS,
   APP_INFO
 } from 'constants/AppConstants'
-import { contains } from 'ramda'
+import { contains, find, propEq } from 'ramda'
 import { CardContent as MuiCardContent } from 'material-ui/Card'
 import packageCardStyles from 'styles/packageCardStyles'
 import React from 'react'
@@ -92,7 +92,8 @@ class PackageCard extends React.Component {
       actions,
       setActive,
       settings,
-      packageJSON
+      packageJSON,
+      packages = []
     } = this.props
 
     return (
@@ -114,6 +115,7 @@ class PackageCard extends React.Component {
             toggleMainLoader={toggleMainLoader}
           />
           <CardActions
+            isInstalled={find(propEq('name', active.name))(packages)}
             active={active}
             handleExpandClick={toggleExpanded}
             expanded={expanded}
