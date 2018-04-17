@@ -64,6 +64,7 @@ class CardContent extends React.Component {
       addCommandOption,
       packageJSON,
       group,
+      toggleMainLoader,
       fetchGithub,
       removeCommandOption
     } = this.props
@@ -104,7 +105,7 @@ class CardContent extends React.Component {
             Author: {active.author || APP_INFO.NOT_AVAILABLE}
           </Typography>
           <br />
-          <CardTabs active={active} />
+          <CardTabs active={active} toggleMainLoader={toggleMainLoader} />
         </section>
       </MuiCardContent>
     )

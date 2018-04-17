@@ -84,6 +84,7 @@ class PackageCard extends React.Component {
       group,
       toggleExpanded,
       toggleLoader,
+      toggleMainLoader,
       expanded,
       defaultActions,
       toggleSnackbar,
@@ -110,6 +111,7 @@ class PackageCard extends React.Component {
             group={group}
             packageJSON={packageJSON}
             fetchGithub={settings && settings.fetchGithub}
+            toggleMainLoader={toggleMainLoader}
           />
           <CardActions
             active={active}

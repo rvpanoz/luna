@@ -12,6 +12,7 @@ import IconButton from 'material-ui/IconButton'
 import Chip from 'material-ui/Chip'
 import Tooltip from 'material-ui/Tooltip'
 import AddIcon from 'material-ui-icons/Add'
+import Icon from 'material-ui/Icon'
 import DeleteIcon from 'material-ui-icons/Delete'
 import RefreshIcon from 'material-ui-icons/Refresh'
 import ListIcon from 'material-ui-icons/List'
@@ -52,11 +53,8 @@ const styles = (theme) => {
       justifyContent: 'flex-start'
     },
     directory: {
-      color: grayColor,
-      fontSize: '14px',
-      display: 'inline-block',
-      margin: '0 0 0 22px'
-    },
+      fontSize: 12
+    }
   }
 }
 
@@ -75,7 +73,6 @@ const TableListToolbar = (props) => {
     rowCount,
     packagesActions
   } = props
-
   const searchMode = filter((action) => action.text === 'Install')(
     packagesActions
   ).length
@@ -94,9 +91,20 @@ const TableListToolbar = (props) => {
             </Typography>
           ) : (
             <div className={classes.title}>
-              <Typography variant="title" color="inherit" component="h3">
+              <Typography variant="title" color="inherit" component="h2">
                 {title} {rowCount || 0}
               </Typography>
+              {directory ? (
+                <Typography
+                  className={classes.directory}
+                  variant="title"
+                  color="inherit"
+                  component="div"
+                >
+                  {' '}
+                  {directory}{' '}
+                </Typography>
+              ) : null}
             </div>
           )}
         </div>
@@ -140,14 +148,6 @@ const TableListToolbar = (props) => {
           </div>
         )}
       </Toolbar>
-      <Typography
-        color="inherit"
-        variant="subheading"
-        component="h4"
-        className={classes.directory}
-      >
-        {directory || null}
-      </Typography>
     </section>
   )
 }

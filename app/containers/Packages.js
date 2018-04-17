@@ -3,7 +3,7 @@
  * */
 
 import { remote, ipcRenderer } from 'electron'
-import { autoBind, parse, triggerEvent } from '../utils'
+import { autoBind, parse, triggerEvent } from 'utils'
 import { connect } from 'react-redux'
 import { APP_MODES } from 'constants/AppConstants'
 import * as globalActions from 'actions/globalActions'
