@@ -93,7 +93,7 @@ class PackageCard extends React.Component {
       setActive,
       settings,
       packageJSON,
-      packages = []
+      packages
     } = this.props
 
     return (

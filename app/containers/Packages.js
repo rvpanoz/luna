@@ -165,10 +165,7 @@ class PackagesContainer extends React.Component {
     })
   }
   componentDidUpdate(nextProps) {
-    const { active, setVersion, clearMessages } = nextProps
-    if (active && active.version) {
-      setVersion(active.version)
-    }
+    //hook
   }
   componentWillUnmount() {
     ipcRenderer.removeAllListeners([
@@ -315,6 +312,7 @@ class PackagesContainer extends React.Component {
             isLoading={isLoading}
             loading={loading}
             settings={settings}
+            {...rest}
           />
         </Grid>
       </Grid>
@@ -329,7 +327,7 @@ function mapStateToProps(state) {
     mode: state.global.mode,
     directory: state.global.directory,
     showModal: state.global.showModal,
-    isLoading: state.packages.isLoading,
+    // isLoading: state.packages.isLoading,
     packages: state.packages.packages,
     selected: state.packages.selected,
     packageJSON: state.global.packageJSON,

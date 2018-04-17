@@ -96,6 +96,7 @@ class CardActions extends React.Component {
       toggleLoader,
       cmdOptions,
       setActive,
+      isInstalled,
       toggleSnackbar
     } = this.props
 
@@ -123,7 +124,7 @@ class CardActions extends React.Component {
             directory,
             cmd: [action === 'update' ? 'install' : action],
             pkgName: active.name,
-            pkgVersion: action === 'uninstall' ? null : version,
+            pkgVersion: action === 'uninstall' || !isInstalled ? null : version,
             pkgOptions: cmdOptions
           })
         }
@@ -139,7 +140,7 @@ class CardActions extends React.Component {
       defaultActions,
       expanded,
       handleExpandClick,
-      isInstalled = true
+      isInstalled
     } = this.props
 
     return (
