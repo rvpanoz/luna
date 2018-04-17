@@ -122,13 +122,20 @@ class CardTabs extends React.Component {
   }
   viewPackage(e, itemName, itemValue) {
     const { toggleMainLoader } = this.props
+    let fixedItemValue
 
     if (itemName) {
+      if (itemValue.indexOf('.x') > -1) {
+        fixedItemValue = ''
+      } else {
+        fixedItemValue = itemValue && itemValue.replace(/\^|.x/g, '')
+      }
+
       toggleMainLoader(true)
       triggerEvent('view-package', {
         cmd: ['view'],
         pkgName: itemName,
-        pkgVersion: itemValue && itemValue.replace(/\^/g, '')
+        pkgVersion: fixedItemValue
       })
     }
 
@@ -150,7 +157,7 @@ class CardTabs extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="primary">
+        <AppBar position="static" color="secondary">
           <Tabs
             value={activeTab}
             onChange={this.handleChange}

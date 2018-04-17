@@ -1,4 +1,3 @@
-console.log()
 export default {
   npmCmd: '',
   mode: 'GLOBAL',
@@ -25,7 +24,7 @@ export default {
     errors: [],
     packages: [],
     selected: [],
-    cmdOptions: [],
+    cmdOptions: ['save'],
     version: '',
     order: 'asc',
     orderBy: 'name',
@@ -39,7 +38,7 @@ export default {
       },
       {
         text: 'uninstall',
-        color: 'default',
+        color: 'secondary',
         iconCls: 'uninstall'
       }
     ],

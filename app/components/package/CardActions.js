@@ -58,6 +58,7 @@ class CardActions extends React.Component {
     super(props)
     autoBind(['buildAction', 'doAction'], this)
   }
+  renderIcon(icon) {}
   buildAction(action, isInstalled, idx) {
     const { classes } = this.props
 
@@ -78,7 +79,7 @@ class CardActions extends React.Component {
             className={classnames(classes.leftIcon, classes.buttonUninstall)}
           />
         )}
-        {!isInstalled ? 'Install' : action.text}
+        {action.text}
       </Button>
     )
   }

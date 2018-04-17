@@ -265,7 +265,8 @@ class PackagesContainer extends React.Component {
       })
 
       const listPackages = R.filter((pkg) => {
-        return !pkg._hasPeerMissing && !pkg._hasError
+        // return !pkg._hasPeerMissing && !pkg._hasError
+        return !pkg._hasError
       }, mappedPackages)
 
       setPackages(listPackages, 'asc', 'name')
