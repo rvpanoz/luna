@@ -31,7 +31,7 @@ body:before {
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 0px;
-  background: #e91e63;
+  background: #999;
 }
 
 .material-icons {
@@ -116,6 +116,19 @@ label {
 /* Add some top padding to the page content to prevent sudden quick movement (as the header gets a new position at the top of the page (position:fixed and top:0) */
 .sticky + .content {
   padding-top: 102px;
+}
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  width: '60px';
+  height: '28px';
+  padding: '2px';
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: '0px';
+  border-radius: '8px';
+  pointer-events: 'none';
 }
 
 /** animations **/

@@ -57,12 +57,15 @@ class CardDetails extends React.Component {
           variant="caption"
         >
           Tarball:{' '}
-          {(
+          {dist.tarball ? (
             <a href="#" className={classes.link}>
               {dist.tarball}
             </a>
-          ) || APP_INFO.NOT_AVAILABLE}
+          ) : (
+            APP_INFO.NOT_AVAILABLE
+          )}
         </Typography>
+        <br />
         <Typography
           className={classes.info}
           component="p"
