@@ -1,9 +1,9 @@
 /**
  Table Head
 **/
-import React from "react";
-import PropTypes from "prop-types";
-import classnames from "classnames";
+import React from 'react'
+import PropTypes from 'prop-types'
+import classnames from 'classnames'
 
 import {
   TableCell,
@@ -12,36 +12,36 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel
-} from "material-ui/Table";
-import { withStyles } from "material-ui/styles";
-import Tooltip from "material-ui/Tooltip";
-import Checkbox from "material-ui/Checkbox";
-import defaultFont from "styles/variables";
+} from 'material-ui/Table'
+import { withStyles } from 'material-ui/styles'
+import Tooltip from 'material-ui/Tooltip'
+import Checkbox from 'material-ui/Checkbox'
+import defaultFont from 'styles/variables'
 
-const styles = theme => ({
+const styles = (theme) => ({
   tableHeadCell: {
-    color: "inherit",
+    color: 'inherit',
     ...defaultFont,
-    fontSize: "1em"
+    fontSize: '1em'
   },
   tableCell: {
     ...defaultFont,
-    lineHeight: "1.50",
-    padding: "0px 13px",
-    verticalAlign: "middle"
+    lineHeight: '1.50',
+    padding: '0px 7px',
+    verticalAlign: 'middle'
   }
-});
+})
 
 const columnData = [
-  { id: "name", numeric: false, disablePadding: false, label: "Name" },
-  { id: "version", numeric: false, disablePadding: false, label: "Version" },
-  { id: "latest", numeric: false, disablePadding: false, label: "Latest" }
-];
+  { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
+  { id: 'version', numeric: false, disablePadding: false, label: 'Version' },
+  { id: 'latest', numeric: false, disablePadding: false, label: 'Latest' }
+]
 
 class TableListHeader extends React.Component {
-  createSortHandler = property => e => {
-    this.props.onRequestSort(e, property);
-  };
+  createSortHandler = (property) => (e) => {
+    this.props.onRequestSort(e, property)
+  }
 
   render() {
     const {
@@ -51,7 +51,7 @@ class TableListHeader extends React.Component {
       orderBy,
       numSelected,
       rowCount
-    } = this.props;
+    } = this.props
 
     return (
       <TableHead className={classes.primaryTableHeader}>
@@ -66,18 +66,18 @@ class TableListHeader extends React.Component {
               onChange={onSelectAllClick}
             />
           </TableCell>
-          {columnData.map(column => {
+          {columnData.map((column) => {
             return (
               <TableCell
                 className={classes.tableCell}
                 key={column.id}
                 numeric={column.numeric}
-                padding={column.disablePadding ? "none" : "default"}
+                padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
               >
                 <Tooltip
                   title="Sort"
-                  placement={column.numeric ? "bottom-end" : "bottom-start"}
+                  placement={column.numeric ? 'bottom-end' : 'bottom-start'}
                   enterDelay={300}
                 >
                   <TableSortLabel
@@ -89,11 +89,11 @@ class TableListHeader extends React.Component {
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
-            );
+            )
           }, this)}
         </TableRow>
       </TableHead>
-    );
+    )
   }
 }
 
@@ -104,6 +104,6 @@ TableListHeader.propTypes = {
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired
-};
+}
 
-export default withStyles(styles)(TableListHeader);
+export default withStyles(styles)(TableListHeader)
