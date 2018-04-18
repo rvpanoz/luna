@@ -16,6 +16,9 @@ const styles = (theme) => {
       margin: '0 10px',
       padding: 0
     },
+    input: {
+      color: 'white'
+    },
     searchBoxLabel: {
       color: '#fff'
     },
@@ -95,6 +98,9 @@ class SearchBox extends React.Component {
           id="search"
           type="search"
           label="Search npm"
+          InputProps={{
+            className: classes.input
+          }}
           InputLabelProps={{ className: classes.searchBoxLabel }}
           inputProps={{ className: classes.searchBoxInput }}
         />
