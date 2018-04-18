@@ -89,7 +89,7 @@ class PackageActions extends React.Component {
 
     return (
       <section className={classes.root}>
-        {group ? (
+        {group && (
           <Card className={classnames(classes.card, classes.margin)}>
             <CardContent>
               <Typography
@@ -105,8 +105,8 @@ class PackageActions extends React.Component {
               </Typography>
             </CardContent>
           </Card>
-        ) : null}
-        {license ? (
+        )}
+        {license && (
           <Card className={classnames(classes.card, classes.margin)}>
             <CardContent>
               <Typography
@@ -118,11 +118,12 @@ class PackageActions extends React.Component {
               </Typography>
               <Divider />
               <Typography veriant="display1" className={classes.marginTop}>
-                {license}
+                {typeof license === 'string' && license}
+                {typeof license === 'object' && license.type}
               </Typography>
             </CardContent>
           </Card>
-        ) : null}
+        )}
         <Card className={classnames(classes.card, classes.margin)}>
           <CardContent>
             <Typography

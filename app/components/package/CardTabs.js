@@ -87,7 +87,7 @@ class CardTabs extends React.Component {
 
                 return (
                   <ListItem
-                    button={!!!onlyValues}
+                    button={!onlyValues}
                     key={`itemk-${idx}`}
                     onClick={(e) => {
                       if (!onlyValues) {
@@ -96,17 +96,21 @@ class CardTabs extends React.Component {
                       return false
                     }}
                   >
-                    <Tooltip
-                      enterDelay={300}
-                      leaveDelay={300}
-                      placement="left"
-                      title="Preview the selected package"
-                    >
-                      <ListItemText
-                        primary={onlyValues ? itemValue : itemName}
-                        secondary={onlyValues ? null : itemValue}
-                      />
-                    </Tooltip>
+                    {onlyValues ? (
+                      <ListItemText primary={itemValue} />
+                    ) : (
+                      <Tooltip
+                        enterDelay={300}
+                        leaveDelay={300}
+                        placement="left"
+                        title="Preview the selected package"
+                      >
+                        <ListItemText
+                          primary={itemName}
+                          secondary={itemValue}
+                        />
+                      </Tooltip>
+                    )}
                   </ListItem>
                 )
               })}
@@ -122,17 +126,10 @@ class CardTabs extends React.Component {
     let fixedItemValue
 
     if (itemName) {
-      if (itemValue.indexOf('.x') > -1) {
-        fixedItemValue = ''
-      } else {
-        fixedItemValue = itemValue && itemValue.replace(/\^|.x/g, '')
-      }
-
       toggleMainLoader(true)
       triggerEvent('view-package', {
         cmd: ['view'],
-        pkgName: itemName,
-        pkgVersion: fixedItemValue
+        pkgName: itemName
       })
     }
 
