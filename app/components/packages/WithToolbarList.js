@@ -147,10 +147,8 @@ function withToolbarTableList(List, options = {}) {
     }
     handleGlobals(e) {
       if (e) e.preventDefault();
-      const { mode, setGlobalMode } = this.props;
-      if (mode === APP_MODES.LOCAL) {
-        setGlobalMode();
-      }
+      const { setGlobalMode } = this.props;
+      setGlobalMode();
       e.stopPropagation();
     }
     handleUninstall(e) {

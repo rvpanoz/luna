@@ -45,7 +45,7 @@ class SearchBox extends React.Component {
     return false;
   }
   componentDidMount() {
-    const root = this.refs.root;
+    const root = this.root;
     if (root) {
       root.addEventListener("keypress", this.onKeyUp);
     }
@@ -88,7 +88,12 @@ class SearchBox extends React.Component {
     const { classes } = this.props;
 
     return (
-      <div ref="root" className={classes.root}>
+      <div
+        ref={node => {
+          this.root = node;
+        }}
+        className={classes.root}
+      >
         <TextField
           id="search"
           type="search"

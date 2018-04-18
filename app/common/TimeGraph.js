@@ -76,7 +76,7 @@ class TimeGraph extends React.Component {
             (height + MARGINS.top) +
             ")"
         )
-        .call(d3.axisBottom(scaleX).ticks(d3.timeMonth.every(4)));
+        .call(d3.axisBottom(scaleX).ticks(d3.timeMonth.every(6)));
 
       svg
         .append("g")
