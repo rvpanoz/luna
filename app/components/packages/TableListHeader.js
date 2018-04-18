@@ -1,7 +1,10 @@
+/**
+ Table Head
+**/
 import React from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
-import tableHeadStyles from "styles/tableHeadStyles";
+
 import {
   TableCell,
   TableFooter,
@@ -13,6 +16,21 @@ import {
 import { withStyles } from "material-ui/styles";
 import Tooltip from "material-ui/Tooltip";
 import Checkbox from "material-ui/Checkbox";
+import defaultFont from "styles/variables";
+
+const styles = theme => ({
+  tableHeadCell: {
+    color: "inherit",
+    ...defaultFont,
+    fontSize: "1em"
+  },
+  tableCell: {
+    ...defaultFont,
+    lineHeight: "1.50",
+    padding: "0px 13px",
+    verticalAlign: "middle"
+  }
+});
 
 const columnData = [
   { id: "name", numeric: false, disablePadding: false, label: "Name" },
@@ -88,4 +106,4 @@ TableListHeader.propTypes = {
   rowCount: PropTypes.number.isRequired
 };
 
-export default withStyles(tableHeadStyles)(TableListHeader);
+export default withStyles(styles)(TableListHeader);

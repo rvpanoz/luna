@@ -1,5 +1,5 @@
-@import '~material-design-icons/iconfont/material-icons.css';
-@import '~typeface-roboto';
+@import "~material-design-icons/iconfont/material-icons.css";
+@import "~typeface-roboto";
 
 html * {
   font-family: Roboto, sans-serif;
@@ -8,17 +8,11 @@ html * {
 }
 
 body {
-  background-color: 'inherit';
-  color: #3c4858;
-  margin: 0;
-  font-family: Roboto, Helvetica, Arial, sans-serif;
-  font-weight: 300;
-  line-height: 1.5em;
   overflow: hidden;
 }
 
 body:before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -35,7 +29,7 @@ body:before {
 }
 
 .material-icons {
-  font-family: 'Material Icons';
+  font-family: "Material Icons";
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -46,7 +40,7 @@ body:before {
   white-space: nowrap;
   word-wrap: normal;
   direction: ltr;
-  -webkit-font-feature-settings: 'liga';
+  -webkit-font-feature-settings: "liga";
   -webkit-font-smoothing: antialiased;
 }
 
@@ -80,11 +74,11 @@ button:active,
 button:focus,
 button:hover,
 button::-moz-focus-inner,
-input[type='reset']::-moz-focus-inner,
-input[type='button']::-moz-focus-inner,
-input[type='submit']::-moz-focus-inner,
+input[type="reset"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+input[type="submit"]::-moz-focus-inner,
 select::-moz-focus-inner,
-input[type='file'] > input[type='button']::-moz-focus-inner {
+input[type="file"] > input[type="button"]::-moz-focus-inner {
   outline: 0 !important;
 }
 
@@ -121,14 +115,14 @@ label {
 .tooltip {
   position: absolute;
   text-align: center;
-  width: '60px';
-  height: '28px';
-  padding: '2px';
+  width: "60px";
+  height: "28px";
+  padding: "2px";
   font: 12px sans-serif;
   background: lightsteelblue;
-  border: '0px';
-  border-radius: '8px';
-  pointer-events: 'none';
+  border: "0px";
+  border-radius: "8px";
+  pointer-events: "none";
 }
 
 /** animations **/

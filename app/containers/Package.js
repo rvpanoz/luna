@@ -2,53 +2,64 @@
  * Package container
  * */
 
-import { connect } from 'react-redux'
-import { compose } from 'redux'
-import { packageCardStyles } from 'styles/packageCardStyles'
-import { withStyles } from 'material-ui/styles'
-import * as globalActions from 'actions/globalActions'
-import * as packagesActions from 'actions/packagesActions'
-import { triggerEvent, autoBind } from 'utils'
-import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
-import classnames from 'classnames'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Divider from 'material-ui/Divider'
-import Grid from 'material-ui/Grid'
-import PackageCard from 'components/package/PackageCard'
-import PackageActions from 'components/package/PackageActions'
-import Loader from 'common/Loader'
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { withStyles } from "material-ui/styles";
+import * as globalActions from "actions/globalActions";
+import * as packagesActions from "actions/packagesActions";
+import { triggerEvent, autoBind } from "utils";
+import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from "constants/AppConstants";
+import classnames from "classnames";
+import PropTypes from "prop-types";
+import React from "react";
+import Divider from "material-ui/Divider";
+import Grid from "material-ui/Grid";
+import PackageCard from "components/package/PackageCard";
+import PackageActions from "components/package/PackageActions";
+import Loader from "common/Loader";
+
+const styles = {
+  root: {
+    width: "100%"
+  }
+};
 
 class PackageContainer extends React.Component {
   constructor(props) {
-    super(props)
-    autoBind(['onChangeVersion', 'onExpandClick'], this)
+    super(props);
+    autoBind(["onChangeVersion", "onExpandClick"], this);
   }
   componentWillUnmount() {
-    const { expanded, toggleExpanded } = this.props
+    const { expanded, toggleExpanded } = this.props;
 
     if (expanded) {
-      toggleExpanded()
+      toggleExpanded();
     }
   }
   onChangeVersion(e, value) {
-    const { active, mode, directory, toggleMainLoader, setVersion } = this.props
+    const {
+      active,
+      mode,
+      directory,
+      toggleMainLoader,
+      setVersion
+    } = this.props;
 
-    const version = (e && e.target.value) || value
+    const version = (e && e.target.value) || value;
 
-    if (version && version !== 'false') {
-      toggleMainLoader(true)
-      setVersion(version)
-      triggerEvent('view-package', {
+    if (version && version !== "false") {
+      toggleMainLoader(true);
+      setVersion(version);
+      triggerEvent("view-package", {
         mode,
         directory,
-        cmd: ['view'],
+        cmd: ["view"],
         pkgName: active.name,
         pkgVersion: version,
         repo: active.repository || null
-      })
+      });
     }
-    return false
+    return false;
   }
   render() {
     const {
@@ -58,7 +69,7 @@ class PackageContainer extends React.Component {
       loading,
       settings,
       ...rest
-    } = this.props
+    } = this.props;
 
     return (
       <Loader loading={isLoading}>
@@ -87,7 +98,7 @@ class PackageContainer extends React.Component {
           </section>
         ) : null}
       </Loader>
-    )
+    );
   }
 }
 
@@ -108,34 +119,31 @@ function mapStateToProps(state) {
     defaultActions: state.packages.defaultActions,
     active: state.packages.active,
     isLoading: state.packages.isLoading
-  }
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    addCommandOption: (option) =>
+    addCommandOption: option =>
       dispatch(packagesActions.addCommandOption(option)),
-    setActiveTab: (tabIndex) =>
-      dispatch(packagesActions.setActiveTab(tabIndex)),
-    toggleExpanded: (value) => dispatch(packagesActions.toggleExpanded(value)),
-    setPackageGroup: (group) =>
-      dispatch(packagesActions.setPackageGroup(group)),
-    setPackageActions: (actions) =>
+    setActiveTab: tabIndex => dispatch(packagesActions.setActiveTab(tabIndex)),
+    toggleExpanded: value => dispatch(packagesActions.toggleExpanded(value)),
+    setPackageGroup: group => dispatch(packagesActions.setPackageGroup(group)),
+    setPackageActions: actions =>
       dispatch(packagesActions.setPackageActions(actions)),
-    removeCommandOption: (option) =>
+    removeCommandOption: option =>
       dispatch(packagesActions.removeCommandOption(option)),
     clearCommandOptions: () => dispatch(packagesActions.clearCommandOptions()),
-    toggleMainLoader: (bool) =>
-      dispatch(packagesActions.toggleMainLoader(bool)),
-    toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
-    setActive: (pkg) => dispatch(packagesActions.setActive(pkg)),
-    setVersion: (version) => dispatch(packagesActions.setVersion(version)),
+    toggleMainLoader: bool => dispatch(packagesActions.toggleMainLoader(bool)),
+    toggleLoader: bool => dispatch(globalActions.toggleLoader(bool)),
+    setActive: pkg => dispatch(packagesActions.setActive(pkg)),
+    setVersion: version => dispatch(packagesActions.setVersion(version)),
     toggleModal: (bool, npmCmd) =>
       dispatch(globalActions.toggleModal(bool, npmCmd))
-  }
+  };
 }
 
 export default compose(
-  withStyles(packageCardStyles, { withTheme: true }),
+  withStyles(styles, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
-)(PackageContainer)
+)(PackageContainer);
