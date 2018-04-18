@@ -27,6 +27,17 @@ const WithToolbarList = withToolbarList(TableList, {
   sort: 'name'
 })
 
+const ipcListeners = [
+  'install-packages-close',
+  'uninstall-packages-close',
+  'get-packages-close',
+  'search-packages-close',
+  'view-package-close',
+  'action-close',
+  'ipcEvent-error',
+  'analyze-json-close'
+]
+
 class PackagesContainer extends React.Component {
   constructor() {
     super()
@@ -156,16 +167,11 @@ class PackagesContainer extends React.Component {
     //hook
   }
   componentWillUnmount() {
-    ;[
-      'install-packages-close',
-      'uninstall-packages-close',
-      'get-packages-close',
-      'search-packages-close',
-      'view-package-close',
-      'action-close',
-      'ipcEvent-error',
-      'analyze-json-close'
-    ].forEach((eventName) => ipcRenderer.removeListener(eventName))
+    try {
+      ipcListeners.forEach((eventName) => ipcRenderer.removeListener(eventName))
+    } catch (e) {
+      throw new Error(e)
+    }
   }
   setGlobalMode() {
     const {

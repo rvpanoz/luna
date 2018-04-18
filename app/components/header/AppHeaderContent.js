@@ -39,11 +39,11 @@ class AppHeaderContent extends React.Component {
         buttonLabel: 'Analyze',
         filters: [
           {
-            name: 'All files',
+            name: 'package.json',
             extensions: ['json']
           }
         ],
-        openFile: true
+        properties: ['openFile']
       },
       (filePath) => {
         if (filePath) {
