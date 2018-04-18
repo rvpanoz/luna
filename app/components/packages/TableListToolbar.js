@@ -2,22 +2,18 @@
 
 import { withStyles } from 'material-ui/styles'
 import { filter } from 'ramda'
+import { lighten } from 'material-ui/styles/colorManipulator'
 import React from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import Toolbar from 'material-ui/Toolbar'
 import Typography from 'material-ui/Typography'
-import Checkbox from 'material-ui/Checkbox'
 import IconButton from 'material-ui/IconButton'
-import Chip from 'material-ui/Chip'
 import Tooltip from 'material-ui/Tooltip'
 import AddIcon from 'material-ui-icons/Add'
-import Icon from 'material-ui/Icon'
 import DeleteIcon from 'material-ui-icons/Delete'
 import RefreshIcon from 'material-ui-icons/Refresh'
 import ListIcon from 'material-ui-icons/List'
-import UpdateIcon from 'material-ui-icons/Update'
-import { lighten } from 'material-ui/styles/colorManipulator'
 
 const grayColor = '#999999'
 const styles = (theme) => {

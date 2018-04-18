@@ -3,7 +3,6 @@
  **/
 
 import { withStyles } from 'material-ui/styles'
-import { APP_INFO } from 'constants/AppConstants'
 import { autoBind, objectEntries, triggerEvent } from 'utils'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -16,11 +15,9 @@ import TimeGraph from 'common/TimeGraph'
 import classnames from 'classnames'
 import {
   Timeline as TimelineIcon,
-  List as ListIcon,
   Code as CodeIcon,
   Build as BuildIcon,
-  Group as GroupIcon,
-  PermIdentity as UserIcon
+  Group as GroupIcon
 } from 'material-ui-icons'
 
 const styles = (theme) => {

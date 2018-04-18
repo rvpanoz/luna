@@ -1,5 +1,6 @@
 /**
- * SnackBar
+ * App messages
+ * render Snackbar
  *
  **/
 
@@ -38,7 +39,6 @@ class SnackBar extends React.Component {
   constructor(props) {
     super(props)
   }
-
   render() {
     const {
       classes,

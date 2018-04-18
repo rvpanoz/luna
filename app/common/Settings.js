@@ -1,59 +1,58 @@
 /**
- * Settings modal
+ * Settings dialog
  **/
 
-import { ipcRenderer } from "electron";
+import { ipcRenderer } from 'electron'
 import Dialog, {
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle
-} from "material-ui/Dialog";
-import { autoBind } from "utils";
-import { assoc } from "ramda";
-import { withStyles } from "material-ui/styles";
-import { FormGroup, FormControlLabel } from "material-ui/Form";
-import React from "react";
-import PropTypes from "prop-types";
-import Button from "material-ui/Button";
-import Switch from "material-ui/Switch";
-import Divider from "material-ui/Divider";
+} from 'material-ui/Dialog'
+import { autoBind } from 'utils'
+import { withStyles } from 'material-ui/styles'
+import { FormGroup, FormControlLabel } from 'material-ui/Form'
+import React from 'react'
+import PropTypes from 'prop-types'
+import Button from 'material-ui/Button'
+import Switch from 'material-ui/Switch'
+import Divider from 'material-ui/Divider'
 
-const styles = {};
+const styles = {}
 
 class Settings extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       fetchGithub: false
-    };
-    autoBind(["handleChange", "saveSettings"], this);
+    }
+    autoBind(['handleChange', 'saveSettings'], this)
   }
   componentWillReceiveProps(nextProps) {
-    const { settings } = nextProps;
+    const { settings } = nextProps
 
     if (settings) {
       this.setState({
         fetchGithub: settings.fetchGithub
-      });
+      })
     }
   }
   handleChange(e) {
-    const { name } = e.target;
-    this.setState({ [name]: e.target.checked });
+    const { name } = e.target
+    this.setState({ [name]: e.target.checked })
   }
   saveSettings() {
-    const { handleSettingsClose } = this.props;
+    const { handleSettingsClose } = this.props
 
-    ipcRenderer.send("save-settings", this.state);
-    handleSettingsClose();
+    ipcRenderer.send('save-settings', this.state)
+    handleSettingsClose()
   }
   render() {
-    const { classes, handleSettingsClose, open, settings } = this.props;
-    const { fetchGithub } = this.state;
+    const { classes, handleSettingsClose, open, settings } = this.props
+    const { fetchGithub } = this.state
 
     if (!settings) {
-      return null;
+      return null
     }
 
     return (
@@ -72,7 +71,7 @@ class Settings extends React.Component {
                 control={
                   <Switch
                     checked={fetchGithub}
-                    onChange={e => this.handleChange(e)}
+                    onChange={(e) => this.handleChange(e)}
                     name="fetchGithub"
                     color="primary"
                   />
@@ -91,13 +90,13 @@ class Settings extends React.Component {
           </DialogActions>
         </Dialog>
       </div>
-    );
+    )
   }
 }
 
 Settings.propTypes = {
   classes: PropTypes.object.isRequired,
   settings: PropTypes.object.isRequired
-};
+}
 
-export default withStyles(styles)(Settings);
+export default withStyles(styles)(Settings)

@@ -3,17 +3,12 @@
  */
 
 import { CardContent as MuiCardContent } from 'material-ui/Card'
-import { APP_INFO, APP_MODES } from 'constants/AppConstants'
+import { APP_INFO } from 'constants/AppConstants'
 import { withStyles } from 'material-ui/styles'
 import React from 'react'
 import Typography from 'material-ui/Typography'
 import PropTypes from 'prop-types'
 import Divider from 'material-ui/Divider'
-import CardOptions from './CardOptions'
-import CardVersions from './CardVersions'
-import InfoIcon from 'material-ui-icons/Info'
-import LinkIcon from 'material-ui-icons/Link'
-import Grid from 'material-ui/Grid'
 import CardTabs from './CardTabs'
 
 const grayColor = '#999999'

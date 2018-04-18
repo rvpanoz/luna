@@ -2,27 +2,25 @@
  * CardActions component
  */
 
-import { remote } from "electron";
-import { APP_ACTIONS, APP_MODES } from "constants/AppConstants";
-import { autoBind, triggerEvent, firstToUpper } from "utils";
-import { CardActions as MuiCardActions } from "material-ui/Card";
-import { withStyles } from "material-ui/styles";
-import React from "react";
-import PropTypes from "prop-types";
-import ExpandMoreIcon from "material-ui-icons/ExpandMore";
-import IconButton from "material-ui/IconButton";
-import Icon from "material-ui/Icon";
-import Delete from "material-ui-icons/Delete";
-import Update from "material-ui-icons/Update";
-import Add from "material-ui-icons/Add";
-import classnames from "classnames";
-import Button from "material-ui/Button";
+import { remote } from 'electron'
+import { autoBind, triggerEvent, firstToUpper } from 'utils'
+import { CardActions as MuiCardActions } from 'material-ui/Card'
+import { withStyles } from 'material-ui/styles'
+import React from 'react'
+import PropTypes from 'prop-types'
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
+import IconButton from 'material-ui/IconButton'
+import Delete from 'material-ui-icons/Delete'
+import Update from 'material-ui-icons/Update'
+import Add from 'material-ui-icons/Add'
+import classnames from 'classnames'
+import Button from 'material-ui/Button'
 
-const { object, func, bool, array } = PropTypes;
-const styles = theme => {
+const { object, func, bool, array } = PropTypes
+const styles = (theme) => {
   return {
     actions: {
-      display: "flex",
+      display: 'flex',
       marginTop: theme.spacing.unit + 20
     },
     button: {
@@ -32,14 +30,14 @@ const styles = theme => {
       color: theme.palette.error
     },
     expand: {
-      transform: "rotate(0deg)",
-      transition: theme.transitions.create("transform", {
+      transform: 'rotate(0deg)',
+      transition: theme.transitions.create('transform', {
         duration: theme.transitions.duration.shortest
       }),
-      marginLeft: "auto"
+      marginLeft: 'auto'
     },
     expandOpen: {
-      transform: "rotate(180deg)"
+      transform: 'rotate(180deg)'
     },
     leftIcon: {
       marginRight: theme.spacing.unit / 2
@@ -50,17 +48,17 @@ const styles = theme => {
     iconSmall: {
       fontSize: 20
     }
-  };
-};
+  }
+}
 
 class CardActions extends React.Component {
   constructor(props) {
-    super(props);
-    autoBind(["buildAction", "doAction"], this);
+    super(props)
+    autoBind(['buildAction', 'doAction'], this)
   }
   renderIcon(icon) {}
   buildAction(action, isInstalled, idx) {
-    const { classes } = this.props;
+    const { classes } = this.props
 
     return (
       <Button
@@ -72,22 +70,22 @@ class CardActions extends React.Component {
         aria-label={action.text}
         className={classes.button}
       >
-        {action.iconCls === "install" && <Add className={classes.leftIcon} />}
-        {action.iconCls === "update" && <Update className={classes.leftIcon} />}
-        {action.iconCls === "uninstall" && (
+        {action.iconCls === 'install' && <Add className={classes.leftIcon} />}
+        {action.iconCls === 'update' && <Update className={classes.leftIcon} />}
+        {action.iconCls === 'uninstall' && (
           <Delete
             className={classnames(classes.leftIcon, classes.buttonUninstall)}
           />
         )}
         {action.text}
       </Button>
-    );
+    )
   }
   doAction(e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    const target = e.currentTarget;
-    const action = target.textContent.trim().toLowerCase();
+    const target = e.currentTarget
+    const action = target.textContent.trim().toLowerCase()
     const {
       actions,
       mode,
@@ -99,40 +97,40 @@ class CardActions extends React.Component {
       setActive,
       isInstalled,
       toggleSnackbar
-    } = this.props;
+    } = this.props
 
-    if (!action || ["install", "uninstall", "update"].indexOf(action) === -1) {
-      throw new Error(`doAction: action ${action} is invalid`);
+    if (!action || ['install', 'uninstall', 'update'].indexOf(action) === -1) {
+      throw new Error(`doAction: action ${action} is invalid`)
     }
 
     remote.dialog.showMessageBox(
       remote.getCurrentWindow(),
       {
-        title: "Confirmation",
-        type: "question",
+        title: 'Confirmation',
+        type: 'question',
         message:
-          action === "uninstall"
+          action === 'uninstall'
             ? `Would you like to ${action} ${active.name}?`
-            : `Would you like to ${action} ${active.name + "@" + version}?`,
-        buttons: ["Cancel", firstToUpper(action)]
+            : `Would you like to ${action} ${active.name + '@' + version}?`,
+        buttons: ['Cancel', firstToUpper(action)]
       },
-      btnIdx => {
+      (btnIdx) => {
         if (Boolean(btnIdx) === true) {
-          setActive(null);
-          toggleLoader(true);
+          setActive(null)
+          toggleLoader(true)
           triggerEvent(action, {
             mode,
             directory,
-            cmd: [action === "update" ? "install" : action],
+            cmd: [action === 'update' ? 'install' : action],
             pkgName: active.name,
-            pkgVersion: action === "uninstall" || !isInstalled ? null : version,
+            pkgVersion: action === 'uninstall' || !isInstalled ? null : version,
             pkgOptions: cmdOptions
-          });
+          })
         }
       }
-    );
+    )
 
-    return false;
+    return false
   }
   render() {
     const {
@@ -142,31 +140,31 @@ class CardActions extends React.Component {
       expanded,
       handleExpandClick,
       isInstalled
-    } = this.props;
+    } = this.props
 
     return (
       <MuiCardActions className={classes.actions}>
         {isInstalled && actions
           ? actions.map((action, idx) => {
-              return this.buildAction(action, isInstalled, idx);
+              return this.buildAction(action, isInstalled, idx)
             })
           : this.buildAction({
-              color: "primary",
-              text: "Install",
-              iconCls: "install"
+              color: 'primary',
+              text: 'Install',
+              iconCls: 'install'
             })}
         <IconButton
           className={classnames(classes.expand, {
             [classes.expandOpen]: expanded
           })}
-          onClick={e => handleExpandClick(e)}
+          onClick={(e) => handleExpandClick(e)}
           aria-expanded={expanded}
           aria-label="Show details"
         >
           <ExpandMoreIcon />
         </IconButton>
       </MuiCardActions>
-    );
+    )
   }
 }
 
@@ -178,6 +176,6 @@ CardActions.propTypes = {
   actions: array.isRequired,
   defaultActions: array.isRequired,
   expanded: bool.isRequired
-};
+}
 
-export default withStyles(styles)(CardActions);
+export default withStyles(styles)(CardActions)

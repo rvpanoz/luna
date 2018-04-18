@@ -2,14 +2,11 @@
  * CardVersions component
  */
 
-import Menu, { MenuItem } from 'material-ui/Menu'
+import { MenuItem } from 'material-ui/Menu'
 import { withStyles } from 'material-ui/styles'
-import Input, { InputLabel } from 'material-ui/Input'
-import { FormControl } from 'material-ui/Form'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Button from 'material-ui/Button'
-import Refresh from 'material-ui-icons/Refresh'
 import semverCompare from 'semver-compare'
 import TextField from 'material-ui/TextField'
 
