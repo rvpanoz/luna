@@ -202,11 +202,13 @@ class PackageCard extends React.Component {
       packageJSON,
       active,
       mode,
+      group,
+      addCommandOption,
       setPackageGroup,
       clearCommandOptions,
-      addCommandOption,
       toggleExpanded
     } = this.props;
+    const { version } = active || {};
 
     clearCommandOptions();
 
@@ -219,21 +221,18 @@ class PackageCard extends React.Component {
             ? groupName
             : false;
         if (found) {
-          setPackageGroup(groupName);
+          const pkgVersion = packageJSON[found][active.name];
+          const symbols = ["~", "^"];
+
+          if (pkgVersion && !contains(pkgVersion[0], symbols)) {
+            setPackageGroup(groupName, "save-exact");
+          } else {
+            setPackageGroup(groupName);
+          }
+
           return found;
         }
       });
-
-      //save-exact fix
-      const { group } = this.props;
-      const symbols = ["~", "^"];
-
-      if (group) {
-        const pkgVersion = packageJSON[group][active.name];
-        if (pkgVersion && !contains(pkgVersion[0], symbols)) {
-          addCommandOption("save-exact");
-        }
-      }
     }
   }
   render() {

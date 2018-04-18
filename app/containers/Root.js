@@ -10,16 +10,16 @@ import React from "react";
 import CssBaseline from "material-ui/CssBaseline";
 import Layout from "./Layout";
 
-if (process.env.NODE_ENV === "development") {
-  const { whyDidYouUpdate } = require("why-did-you-update");
-
-  whyDidYouUpdate(React, {
-    include: /^Layout|Package/,
-    exclude: /^Connect|Proxy/,
-    groupByComponent: true,
-    collapseComponentGroups: false
-  });
-}
+// if (process.env.NODE_ENV === "development") {
+//   const { whyDidYouUpdate } = require("why-did-you-update");
+//
+//   whyDidYouUpdate(React, {
+//     include: /^Layout|Package/,
+//     exclude: /^Connect|Proxy/,
+//     groupByComponent: true,
+//     collapseComponentGroups: false
+//   });
+// }
 
 const App = props => {
   const { store } = props;

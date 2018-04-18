@@ -80,7 +80,7 @@ class Layout extends React.Component {
   }
   componentWillUnmount() {
     ["settings_saved", "settings_saved", "uncaught-exception"].forEach(
-      eventName => ipcRenderer.removeEvent(eventName)
+      eventName => ipcRenderer.removeListener(eventName)
     );
   }
   render() {

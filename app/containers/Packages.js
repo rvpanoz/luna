@@ -158,15 +158,15 @@ class PackagesContainer extends React.Component {
   }
   componentWillUnmount() {
     [
+      "install-packages-close",
+      "uninstall-packages-close",
       "get-packages-close",
       "search-packages-close",
-      "action-close",
       "view-package-close",
+      "action-close",
       "ipcEvent-error",
-      "analyze-json-close",
-      "install-package-close",
-      "uninstall-package-close"
-    ].forEach(eventName => ipcRenderer.removeEvent(eventName));
+      "analyze-json-close"
+    ].forEach(eventName => ipcRenderer.removeListener(eventName));
   }
   setGlobalMode() {
     const {

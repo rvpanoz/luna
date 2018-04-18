@@ -86,10 +86,11 @@ export function setPackagesOutdated(outdated) {
     outdated
   };
 }
-export function setPackageGroup(group) {
+export function setPackageGroup(group, option = null) {
   return {
     type: types.SET_PACKAGE_GROUP,
-    group
+    group,
+    option
   };
 }
 export function setPackageActions(actions) {

@@ -4,9 +4,9 @@
 
 import { withStyles } from "material-ui/styles";
 import { APP_MODES } from "constants/AppConstants";
-import classnames from "classnames";
 import { firstToUpper } from "utils";
 import Card, { CardHeader, CardContent } from "material-ui/Card";
+import classnames from "classnames";
 import React from "react";
 import PropTypes from "prop-types";
 import Paper from "material-ui/Paper";

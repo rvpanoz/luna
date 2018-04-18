@@ -109,7 +109,6 @@ function mapStateToProps(state) {
     packageJSON: state.global.packageJSON,
     toggleModal: state.global.toggleModal,
     showModal: state.global.showModal,
-    npmCmd: state.global.npmCmd,
     cmdOptions: state.packages.cmdOptions,
     group: state.packages.group,
     expanded: state.packages.expanded,
@@ -128,7 +127,8 @@ function mapDispatchToProps(dispatch) {
       dispatch(packagesActions.addCommandOption(option)),
     setActiveTab: tabIndex => dispatch(packagesActions.setActiveTab(tabIndex)),
     toggleExpanded: value => dispatch(packagesActions.toggleExpanded(value)),
-    setPackageGroup: group => dispatch(packagesActions.setPackageGroup(group)),
+    setPackageGroup: (group, option) =>
+      dispatch(packagesActions.setPackageGroup(group, option)),
     setPackageActions: actions =>
       dispatch(packagesActions.setPackageActions(actions)),
     removeCommandOption: option =>
@@ -138,8 +138,7 @@ function mapDispatchToProps(dispatch) {
     toggleLoader: bool => dispatch(globalActions.toggleLoader(bool)),
     setActive: pkg => dispatch(packagesActions.setActive(pkg)),
     setVersion: version => dispatch(packagesActions.setVersion(version)),
-    toggleModal: (bool, npmCmd) =>
-      dispatch(globalActions.toggleModal(bool, npmCmd))
+    toggleModal: bool => dispatch(globalActions.toggleModal(bool))
   };
 }
 

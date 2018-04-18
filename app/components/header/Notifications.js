@@ -70,8 +70,8 @@ const NotificationsList = props => {
                           setPackageActions([
                             {
                               text: "Install",
-                              iconCls: "add",
-                              color: "secondary"
+                              iconCls: "install",
+                              color: "primary"
                             }
                           ]);
                           triggerEvent("search-packages", {
