@@ -69,7 +69,10 @@ class Statslist extends React.Component {
             statsArr.map((d, idx) => {
               return (
                 <ListItem key={`tag-${idx}`}>
-                  <ListItemText primary={d.name} secondary={d.value} />
+                  <ListItemText
+                    primary={d.name === 'Open' ? 'Open issues' : d.name}
+                    secondary={d.value}
+                  />
                 </ListItem>
               )
             })}

@@ -125,8 +125,8 @@ class CardHeader extends React.Component {
                   const url = active.homepage || false
                   if (isUrl(url)) {
                     shell.openExternal(url)
+                    this.handleClose()
                   }
-                  return false
                 }}
               >
                 Homepage
@@ -137,8 +137,8 @@ class CardHeader extends React.Component {
                   const url = active.bugs && active.bugs.url
                   if (isUrl(url)) {
                     shell.openExternal(url)
+                    this.handleClose()
                   }
-                  return false
                 }}
               >
                 Issues
