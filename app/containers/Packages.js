@@ -18,7 +18,11 @@ import withToolbarList from 'components/packages/WithToolbarList'
 import PackageContainer from './Package'
 
 const styles = (theme) => {
-  return {}
+  return {
+    root: {
+      margin: '0 auto'
+    }
+  }
 }
 
 const WithToolbarList = withToolbarList(TableList, {
@@ -294,6 +298,7 @@ class PackagesContainer extends React.Component {
 
     return (
       <Grid
+        className={classes.root}
         container
         spacing={8}
         justify="space-between"
