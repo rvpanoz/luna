@@ -18,6 +18,7 @@ import path from 'path'
 import MenuBuilder from './menu'
 import config from './config'
 import shell from './shell'
+import mk from './mk'
 
 const APP_PATHS = {
   appData: app.getPath('appData'),
@@ -101,6 +102,7 @@ ipcMain.on('analyze-json', (event, filePath) => {
 
 //user settings
 ipcMain.on('save-settings', (event, settings) => {
+  throw new UserException('FATAL', 3030, 'extra info')
   if (settings) {
     try {
       Store.set('user_settings', settings)
