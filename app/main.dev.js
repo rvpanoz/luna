@@ -75,14 +75,6 @@ const installExtensions = async () => {
  * communicate asynchronously from the main process to renderer processes.
  */
 
-//download tar
-ipcMain.on('download-tar', (event, tarbalUrl) => {
-  if (!tarball) {
-    throw new Error('tarball url is not defined')
-  }
-
-})
-
 //analyze directory
 ipcMain.on('analyze-json', (event, filePath) => {
   if (!filePath) {

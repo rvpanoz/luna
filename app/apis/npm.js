@@ -42,6 +42,10 @@ function runCommand(command, directory, callback, opts) {
     callback('error', errorToString)
   })
 
+  npmc.on('exit', (code) => {
+    console.log(`Child exited with code ${code}`)
+  })
+
   npmc.on('close', () => {
     console.log(`finished: npm ${command.join(' ')}`)
 
