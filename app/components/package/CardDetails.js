@@ -2,8 +2,10 @@
  * Card details component
  **/
 
+import { remote, ipcRenderer } from 'electron'
 import { withStyles } from 'material-ui/styles'
 import { APP_INFO } from 'constants/AppConstants'
+import { autoBind } from 'utils'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from 'material-ui/Typography'
@@ -35,6 +37,31 @@ const styles = (theme) => {
 class CardDetails extends React.Component {
   constructor(props) {
     super()
+    autoBind(['downloadTar'], this)
+  }
+  downloadTar(e) {
+    e.preventDefault();
+
+    const {
+      tarball
+    } = this.props && this.props.dist
+
+    if(tarball) {
+      remote.dialog.showSaveDialog(
+        remote.getCurrentWindow(),
+        {
+          title: 'Save tarball file',
+          buttonLabel: 'Save',
+          defaultPath: `${tarball}`,
+        },
+        (filePath) => {
+          if (filePath) {
+            console.log(filePath)
+          }
+        }
+      )
+      // ipcRenderer.send('download-tar', tarball)
+    }
   }
   render() {
     const { dist, classes } = this.props
@@ -58,7 +85,7 @@ class CardDetails extends React.Component {
         >
           Tarball:{' '}
           {dist.tarball ? (
-            <a href="#" className={classes.link}>
+            <a href="#" onClick={this.downloadTar} className={classes.link}>
               {dist.tarball}
             </a>
           ) : (

@@ -27,15 +27,15 @@ const styles = (theme) => ({
   tableCell: {
     ...defaultFont,
     lineHeight: '1.50',
-    padding: '0px 7px',
+    padding: '0px 13px',
     verticalAlign: 'middle'
   }
 })
 
 const columnData = [
-  { id: 'name', numeric: false, disablePadding: false, label: 'Name' },
-  { id: 'version', numeric: false, disablePadding: false, label: 'Version' },
-  { id: 'latest', numeric: false, disablePadding: false, label: 'Latest' }
+  { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
+  { id: 'version', numeric: false, disablePadding: true, label: 'Version' },
+  { id: 'latest', numeric: false, disablePadding: true, label: 'Latest' }
 ]
 
 class TableListHeader extends React.Component {
@@ -57,7 +57,6 @@ class TableListHeader extends React.Component {
       <TableHead className={classes.primaryTableHeader}>
         <TableRow>
           <TableCell
-            padding="checkbox"
             className={classnames(classes.tableCell, classes.tableHeadCell)}
           >
             <Checkbox
