@@ -4,20 +4,11 @@
 
 import { objectEntries, firstToUpper } from 'utils'
 import { withStyles } from 'material-ui/styles'
-import Card, { CardHeader, CardContent } from 'material-ui/Card'
 import { pickAll } from 'ramda'
-import List, {
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText
-} from 'material-ui/List'
-import Typography from 'material-ui/Typography'
+import List, { ListItem, ListItemText } from 'material-ui/List'
 import classnames from 'classnames'
 import React from 'react'
 import PropTypes from 'prop-types'
-import IconButton from 'material-ui/IconButton'
-import InfoButton from 'material-ui-icons/Info'
-import UpdateIcon from 'material-ui-icons/Update'
 
 const styles = (theme) => {
   return {
@@ -78,7 +69,10 @@ class Statslist extends React.Component {
             statsArr.map((d, idx) => {
               return (
                 <ListItem key={`tag-${idx}`}>
-                  <ListItemText primary={d.name} secondary={d.value} />
+                  <ListItemText
+                    primary={d.name === 'Open' ? 'Open issues' : d.name}
+                    secondary={d.value}
+                  />
                 </ListItem>
               )
             })}

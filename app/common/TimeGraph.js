@@ -20,6 +20,7 @@ const MARGINS = {
 };
 
 const parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%SZ");
+
 const styles = theme => ({
   root: {
     width: "100%",

@@ -6,12 +6,10 @@
 import { remote } from 'electron'
 import { filter, contains } from 'ramda'
 import { autoBind, triggerEvent } from 'utils'
-import { APP_MODES } from 'constants/AppConstants'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import TableListToolbar from './TableListToolbar'
-import SnackBar from 'common/SnackBar'
 
 function withToolbarTableList(List, options = {}) {
   return class WithToolbarList extends React.Component {
@@ -147,10 +145,8 @@ function withToolbarTableList(List, options = {}) {
     }
     handleGlobals(e) {
       if (e) e.preventDefault()
-      const { mode, setGlobalMode } = this.props
-      if (mode === APP_MODES.LOCAL) {
-        setGlobalMode()
-      }
+      const { setGlobalMode } = this.props
+      setGlobalMode()
       e.stopPropagation()
     }
     handleUninstall(e) {

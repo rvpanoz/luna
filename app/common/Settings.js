@@ -1,5 +1,5 @@
 /**
- * Settings modal
+ * Settings dialog
  **/
 
 import { ipcRenderer } from 'electron'
@@ -10,12 +10,11 @@ import Dialog, {
   DialogTitle
 } from 'material-ui/Dialog'
 import { autoBind } from 'utils'
-import { assoc } from 'ramda'
 import { withStyles } from 'material-ui/styles'
+import { FormGroup, FormControlLabel } from 'material-ui/Form'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Button from 'material-ui/Button'
-import { FormGroup, FormControlLabel } from 'material-ui/Form'
 import Switch from 'material-ui/Switch'
 import Divider from 'material-ui/Divider'
 
@@ -64,10 +63,10 @@ class Settings extends React.Component {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Settings</DialogTitle>
+          <DialogTitle id="settings-title">Settings</DialogTitle>
           <Divider light={true} />
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <DialogContentText id="settings-text">
               <FormControlLabel
                 control={
                   <Switch

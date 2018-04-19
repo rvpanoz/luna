@@ -4,21 +4,23 @@
 
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { packageCardStyles } from 'styles/packageCardStyles'
 import { withStyles } from 'material-ui/styles'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
 import { triggerEvent, autoBind } from 'utils'
-import { contains } from 'ramda'
-import { APP_MODES, APP_ACTIONS, PACKAGE_GROUPS } from 'constants/AppConstants'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import React from 'react'
-import Divider from 'material-ui/Divider'
 import Grid from 'material-ui/Grid'
 import PackageCard from 'components/package/PackageCard'
 import PackageActions from 'components/package/PackageActions'
 import Loader from 'common/Loader'
+
+const styles = {
+  root: {
+    width: '100%'
+  }
+}
 
 class PackageContainer extends React.Component {
   constructor(props) {
@@ -99,7 +101,6 @@ function mapStateToProps(state) {
     packageJSON: state.global.packageJSON,
     toggleModal: state.global.toggleModal,
     showModal: state.global.showModal,
-    npmCmd: state.global.npmCmd,
     cmdOptions: state.packages.cmdOptions,
     group: state.packages.group,
     expanded: state.packages.expanded,
@@ -119,8 +120,10 @@ function mapDispatchToProps(dispatch) {
     setActiveTab: (tabIndex) =>
       dispatch(packagesActions.setActiveTab(tabIndex)),
     toggleExpanded: (value) => dispatch(packagesActions.toggleExpanded(value)),
-    setPackageGroup: (group) =>
-      dispatch(packagesActions.setPackageGroup(group)),
+    setPackageGroup: (group, option) =>
+      dispatch(packagesActions.setPackageGroup(group, option)),
+    setPackageActions: (actions) =>
+      dispatch(packagesActions.setPackageActions(actions)),
     removeCommandOption: (option) =>
       dispatch(packagesActions.removeCommandOption(option)),
     clearCommandOptions: () => dispatch(packagesActions.clearCommandOptions()),
@@ -129,12 +132,15 @@ function mapDispatchToProps(dispatch) {
     toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
     setActive: (pkg) => dispatch(packagesActions.setActive(pkg)),
     setVersion: (version) => dispatch(packagesActions.setVersion(version)),
-    toggleModal: (bool, npmCmd) =>
-      dispatch(globalActions.toggleModal(bool, npmCmd))
+    toggleModal: (bool) => dispatch(globalActions.toggleModal(bool))
   }
 }
 
+PackageContainer.propTypes = {
+  classes: PropTypes.object.isRequired
+}
+
 export default compose(
-  withStyles(packageCardStyles, { withTheme: true }),
+  withStyles(styles, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
 )(PackageContainer)

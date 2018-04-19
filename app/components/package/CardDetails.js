@@ -2,8 +2,10 @@
  * Card details component
  **/
 
+import { shell } from 'electron'
 import { withStyles } from 'material-ui/styles'
 import { APP_INFO } from 'constants/AppConstants'
+import { autoBind } from 'utils'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from 'material-ui/Typography'
@@ -35,6 +37,7 @@ const styles = (theme) => {
 class CardDetails extends React.Component {
   constructor(props) {
     super()
+    autoBind(['downloadTar'], this)
   }
   render() {
     const { dist, classes } = this.props
@@ -58,7 +61,7 @@ class CardDetails extends React.Component {
         >
           Tarball:{' '}
           {dist.tarball ? (
-            <a href="#" className={classes.link}>
+            <a href="#" onClick={(e) => shell.openExternal(dist.tarball)} className={classes.link}>
               {dist.tarball}
             </a>
           ) : (
@@ -77,6 +80,10 @@ class CardDetails extends React.Component {
       </div>
     )
   }
+}
+
+CardDetails.propTypes = {
+  classes: PropTypes.object.isRequired
 }
 
 export default withStyles(styles)(CardDetails)

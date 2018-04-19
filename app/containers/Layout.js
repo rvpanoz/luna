@@ -3,21 +3,42 @@
  *
  */
 
-import { remote, ipcRenderer } from 'electron'
+import { ipcRenderer } from 'electron'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
-import { layoutStyles } from 'styles/layoutStyles'
 import * as globalActions from 'actions/globalActions'
-import * as packagesActions from 'actions/packagesActions'
 import classnames from 'classnames'
-import Grid from 'material-ui/Grid'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Settings from 'common/Settings'
 import SnackBar from 'common/SnackBar'
 import AppHeader from 'components/header/AppHeader'
 import PackagesContainer from 'containers/Packages'
+
+const styles = (theme) => ({
+  wrapper: {
+    position: 'relative',
+    top: 0,
+    height: '100%',
+    overflow: 'hidden'
+  },
+  content: {
+    flexGrow: 1,
+    position: 'relative',
+    marginTop: 50,
+    marginLeft: 50,
+    padding: 25,
+    width: '100%',
+    height: '100%',
+    overflow: 'hidden'
+  },
+  '.page-content': {
+    marginTop: '65px',
+    flex: '1 1 100%',
+    margin: '0 5px'
+  }
+})
 
 class Layout extends React.Component {
   constructor() {
@@ -36,15 +57,14 @@ class Layout extends React.Component {
         setSettings(settings)
       }
     })
-
     ipcRenderer.on('settings_saved', (event, settings) => {
       if (settings && typeof settings === 'object') {
         setSettings(settings)
       }
     })
-
     ipcRenderer.on('uncaught-exception', (event, exceptionError) => {
       console.error('uncaught-exception', exceptionError)
+
       toggleSnackbar(true, {
         loader: false,
         actionText: 'Dismiss',
@@ -55,6 +75,11 @@ class Layout extends React.Component {
         }
       })
     })
+  }
+  componentWillUnmount() {
+    ;['settings_saved', 'settings_saved', 'uncaught-exception'].forEach(
+      (eventName) => ipcRenderer.removeListener(eventName)
+    )
   }
   render() {
     const {
@@ -132,6 +157,6 @@ Layout.propTypes = {
 }
 
 export default compose(
-  withStyles(layoutStyles, { withTheme: true }),
+  withStyles(styles, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
 )(Layout)

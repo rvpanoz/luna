@@ -2,63 +2,63 @@
  * AppHeader Menu content
  */
 
-import { remote, ipcRenderer } from "electron";
-import { withStyles } from "material-ui/styles";
-import { autoBind } from "utils";
-import React from "react";
-import PropTypes from "prop-types";
-import List, { ListItem, ListItemIcon, ListItemText } from "material-ui/List";
-import Icon from "material-ui/Icon";
-import Divider from "material-ui/Divider";
-import Tooltip from "material-ui/Tooltip";
+import { remote, ipcRenderer } from 'electron'
+import { withStyles } from 'material-ui/styles'
+import { autoBind } from 'utils'
+import React from 'react'
+import PropTypes from 'prop-types'
+import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List'
+import Icon from 'material-ui/Icon'
+import Divider from 'material-ui/Divider'
+import Tooltip from 'material-ui/Tooltip'
 
 const styles = {
   iconHover: {
-    "&:hover": {
-      fill: "rgb(225, 0, 80)"
+    '&:hover': {
+      fill: 'rgb(225, 0, 80)'
     }
   }
-};
+}
 
 class AppHeaderContent extends React.Component {
   constructor() {
-    super();
-    autoBind(["openPackage", "updateMode", "toggleSettings"], this);
+    super()
+    autoBind(['openPackage', 'updateMode', 'toggleSettings'], this)
   }
   updateMode(directory) {
-    ipcRenderer.send("analyze-json", directory);
+    ipcRenderer.send('analyze-json', directory)
   }
   openPackage(e) {
-    e.preventDefault();
-    const { handleDrawerClose } = this.props;
+    e.preventDefault()
+    const { handleDrawerClose } = this.props
 
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
       {
-        title: "Open package.json file",
-        buttonLabel: "Analyze",
+        title: 'Open package.json file',
+        buttonLabel: 'Analyze',
         filters: [
           {
-            name: "json",
-            extensions: ["json"]
+            name: 'package.json',
+            extensions: ['json']
           }
         ],
-        openFile: true
+        properties: ['openFile']
       },
-      filePath => {
+      (filePath) => {
         if (filePath) {
-          this.updateMode(filePath[0]);
+          this.updateMode(filePath[0])
         }
-        handleDrawerClose();
+        handleDrawerClose()
       }
-    );
+    )
   }
   toggleSettings(e) {
-    const { handleSettingsOpen } = this.props;
-    handleSettingsOpen(true);
+    const { handleSettingsOpen } = this.props
+    handleSettingsOpen(true)
   }
   render() {
-    const { classes } = this.props;
+    const { classes } = this.props
 
     return (
       <section>
@@ -77,14 +77,14 @@ class AppHeaderContent extends React.Component {
           </ListItem>
         </List>
       </section>
-    );
+    )
   }
 }
 
-const { object } = PropTypes;
+const { object } = PropTypes
 
 AppHeaderContent.propTypes = {
   classes: object.isRequired
-};
+}
 
-export default withStyles(styles)(AppHeaderContent);
+export default withStyles(styles)(AppHeaderContent)

@@ -1,7 +1,5 @@
-console.log()
 export default {
-  npmCmd: '',
-  mode: 'GLOBAL',
+  mode: "GLOBAL",
   directory: null,
   settings: null,
   loading: false,
@@ -11,8 +9,8 @@ export default {
   drawerOpen: false,
   snackbar: {
     action: null,
-    actionText: '',
-    message: ''
+    actionText: "",
+    message: ""
   },
   messages: [],
   packages: {
@@ -25,32 +23,32 @@ export default {
     errors: [],
     packages: [],
     selected: [],
-    cmdOptions: [],
-    version: '',
-    order: 'asc',
-    orderBy: 'name',
+    cmdOptions: ["save"],
+    version: "",
+    order: "asc",
+    orderBy: "name",
     page: 0,
     rowsPerPage: 10,
     defaultActions: [
       {
-        text: 'update',
-        color: 'primary',
-        iconCls: 'update'
+        text: "update",
+        color: "primary",
+        iconCls: "update"
       },
       {
-        text: 'uninstall',
-        color: 'default',
-        iconCls: 'uninstall'
+        text: "uninstall",
+        color: "secondary",
+        iconCls: "uninstall"
       }
     ],
     actions: []
   },
   packageJSON: {
     license: null,
-    author: '',
-    name: '',
+    author: "",
+    name: "",
     dependencies: [],
     devDependencies: [],
     optionalDependencies: []
   }
-}
+};

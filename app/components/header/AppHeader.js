@@ -11,7 +11,6 @@ import { setActive, setPackageActions } from 'actions/packagesActions'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
-import { headerStyles } from 'styles/headerStyles'
 import React from 'react'
 import PropTypes from 'prop-types'
 import AppBar from 'material-ui/AppBar'
@@ -29,6 +28,75 @@ import SearchBox from './SearchBox'
 import Notifications from './Notifications'
 
 const { object, func } = PropTypes
+
+const styles = (theme) => {
+  const drawerWidth = 240
+
+  return {
+    appBar: {
+      position: 'fixed',
+      zIndex: theme.zIndex.drawer + 1,
+      transition: theme.transitions.create(['width', 'margin'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      }),
+      color: theme.palette.white,
+      backgroundColor: theme.palette.primary.main
+    },
+    appBarShift: {
+      marginLeft: drawerWidth,
+      width: `calc(100% - ${drawerWidth}px)`,
+      transition: theme.transitions.create(['width', 'margin'], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen
+      })
+    },
+    drawerInner: {
+      width: drawerWidth
+    },
+    drawerHeader: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      padding: '0 8px',
+      minHeight: 68
+    },
+    drawerPaperClose: {
+      width: 60,
+      overflowX: 'hidden',
+      transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+      })
+    },
+    menuButton: {
+      marginLeft: 12,
+      marginRight: 36
+    },
+    hide: {
+      display: 'none'
+    },
+    info: {
+      display: 'flex',
+      flexDirection: 'row',
+      margin: theme.spacing.unit
+    },
+    modeIcon: {
+      margin: theme.spacing.unit + 10
+    },
+    mode: {
+      fontFamily: "'Open Sans', sans-serif",
+      fontWeight: 'bold',
+      textAlign: 'center',
+      marginTop: theme.spacing.unit + 15
+    },
+    iconHover: {
+      '&:hover': {
+        fill: 'rgb(225, 0, 80)'
+      }
+    }
+  }
+}
 
 class AppHeader extends React.Component {
   render() {
@@ -51,7 +119,7 @@ class AppHeader extends React.Component {
     } = this.props
 
     return (
-      <section>
+      <div className="header">
         <AppBar
           className={classNames(
             classes.appBar,
@@ -122,7 +190,7 @@ class AppHeader extends React.Component {
             />
           </div>
         </Drawer>
-      </section>
+      </div>
     )
   }
 }
@@ -155,6 +223,6 @@ AppHeader.propTypes = {
 }
 
 export default compose(
-  withStyles(headerStyles, { withTheme: true }),
+  withStyles(styles, { withTheme: true }),
   connect(mapStateToProps, mapDispatchToProps)
 )(AppHeader)

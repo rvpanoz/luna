@@ -3,17 +3,16 @@
  */
 
 import { remote } from 'electron'
-import { APP_ACTIONS, APP_MODES } from 'constants/AppConstants'
-import { triggerEvent, firstToUpper } from 'utils'
+import { autoBind, triggerEvent, firstToUpper } from 'utils'
 import { CardActions as MuiCardActions } from 'material-ui/Card'
 import { withStyles } from 'material-ui/styles'
 import React from 'react'
 import PropTypes from 'prop-types'
 import ExpandMoreIcon from 'material-ui-icons/ExpandMore'
 import IconButton from 'material-ui/IconButton'
-import Icon from 'material-ui/Icon'
 import Delete from 'material-ui-icons/Delete'
 import Update from 'material-ui-icons/Update'
+import Add from 'material-ui-icons/Add'
 import classnames from 'classnames'
 import Button from 'material-ui/Button'
 
@@ -28,7 +27,7 @@ const styles = (theme) => {
       margin: theme.spacing.unit
     },
     buttonUninstall: {
-      color: theme.palette.info
+      color: theme.palette.error
     },
     expand: {
       transform: 'rotate(0deg)',
@@ -41,7 +40,7 @@ const styles = (theme) => {
       transform: 'rotate(180deg)'
     },
     leftIcon: {
-      marginRight: theme.spacing.unit
+      marginRight: theme.spacing.unit / 2
     },
     rightIcon: {
       marginLeft: theme.spacing.unit
@@ -52,12 +51,35 @@ const styles = (theme) => {
   }
 }
 
-function buildAction(action) {}
-
 class CardActions extends React.Component {
-  constructor() {
-    super()
-    this.doAction = this.doAction.bind(this)
+  constructor(props) {
+    super(props)
+    autoBind(['buildAction', 'doAction'], this)
+  }
+  renderIcon(icon) {}
+  buildAction(action, isInstalled, idx) {
+    const { classes } = this.props
+
+    return (
+      <Button
+        key={`act-${idx}`}
+        variant="raised"
+        color={action.color}
+        action={action.text}
+        onClick={this.doAction}
+        aria-label={action.text}
+        className={classes.button}
+      >
+        {action.iconCls === 'install' && <Add className={classes.leftIcon} />}
+        {action.iconCls === 'update' && <Update className={classes.leftIcon} />}
+        {action.iconCls === 'uninstall' && (
+          <Delete
+            className={classnames(classes.leftIcon, classes.buttonUninstall)}
+          />
+        )}
+        {action.text}
+      </Button>
+    )
   }
   doAction(e) {
     e.preventDefault()
@@ -73,6 +95,7 @@ class CardActions extends React.Component {
       toggleLoader,
       cmdOptions,
       setActive,
+      isInstalled,
       toggleSnackbar
     } = this.props
 
@@ -100,7 +123,7 @@ class CardActions extends React.Component {
             directory,
             cmd: [action === 'update' ? 'install' : action],
             pkgName: active.name,
-            pkgVersion: action === 'uninstall' ? null : version,
+            pkgVersion: action === 'uninstall' || !isInstalled ? null : version,
             pkgOptions: cmdOptions
           })
         }
@@ -115,33 +138,21 @@ class CardActions extends React.Component {
       actions,
       defaultActions,
       expanded,
-      handleExpandClick
+      handleExpandClick,
+      isInstalled
     } = this.props
 
     return (
       <MuiCardActions className={classes.actions}>
-        {actions &&
-          actions.map((action, idx) => {
-            return (
-              <Button
-                key={idx}
-                variant="raised"
-                color={action.color}
-                action={action.text}
-                onClick={this.doAction}
-                aria-label={action.text}
-                className={classes.button}
-              >
-                {action.iconCls === 'update' && (
-                  <Update className={classes.leftIcon} />
-                )}
-                {action.iconCls === 'uninstall' && (
-                  <Delete className={classes.leftIcon} />
-                )}
-                {action.text}
-              </Button>
-            )
-          })}
+        {isInstalled && actions
+          ? actions.map((action, idx) => {
+              return this.buildAction(action, isInstalled, idx)
+            })
+          : this.buildAction({
+              color: 'primary',
+              text: 'Install',
+              iconCls: 'install'
+            })}
         <IconButton
           className={classnames(classes.expand, {
             [classes.expandOpen]: expanded

@@ -2,19 +2,27 @@
  * Common Loader component
  */
 
-import { withStyles } from 'material-ui/styles'
-import { loaderStyles } from './styles'
-import { CircularProgress } from 'material-ui/Progress'
-import React from 'react'
+import { withStyles } from "material-ui/styles";
+import { CircularProgress } from "material-ui/Progress";
+import React from "react";
 
-const AppLoader = (props) => {
-  const { loading, classes } = props
+const styles = {
+  root: {
+    width: "100%",
+    position: "fixed",
+    top: "50%",
+    left: "50%"
+  }
+};
+
+const AppLoader = props => {
+  const { loading, classes } = props;
 
   return loading ? (
     <CircularProgress className={classes.root} />
   ) : (
     props.children
-  )
-}
+  );
+};
 
-export default withStyles(loaderStyles)(AppLoader)
+export default withStyles(styles)(AppLoader);

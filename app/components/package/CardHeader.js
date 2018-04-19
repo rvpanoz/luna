@@ -5,20 +5,15 @@
 import { shell } from 'electron'
 import { withStyles } from 'material-ui/styles'
 import { CardHeader as MuiCardHeader } from 'material-ui/Card'
-import { APP_MODES } from 'constants/AppConstants'
 import Menu, { MenuItem } from 'material-ui/Menu'
-import { ListItemText } from 'material-ui/List'
 import { isUrl } from 'utils'
 import React from 'react'
 import PropTypes from 'prop-types'
 import MoreVertIcon from 'material-ui-icons/MoreVert'
 import IconButton from 'material-ui/IconButton'
 import Avatar from 'material-ui/Avatar'
-import Select from 'material-ui/Select'
-import Checkbox from 'material-ui/Checkbox'
 import moment from 'moment'
 import Typography from 'material-ui/Typography'
-import UpdateIcon from 'material-ui-icons/Update'
 
 const grayColor = '#999999'
 const { array, object, string, func } = PropTypes
@@ -130,8 +125,8 @@ class CardHeader extends React.Component {
                   const url = active.homepage || false
                   if (isUrl(url)) {
                     shell.openExternal(url)
+                    this.handleClose()
                   }
-                  return false
                 }}
               >
                 Homepage
@@ -142,8 +137,8 @@ class CardHeader extends React.Component {
                   const url = active.bugs && active.bugs.url
                   if (isUrl(url)) {
                     shell.openExternal(url)
+                    this.handleClose()
                   }
-                  return false
                 }}
               >
                 Issues

@@ -3,15 +3,14 @@
  *
  **/
 
-import {ipcRenderer} from 'electron'
-import { APP_INFO } from './constants/AppConstants';
-import * as R from 'ramda';
-import React from 'react';
-
+import { ipcRenderer } from 'electron'
+import { APP_INFO } from './constants/AppConstants'
+import * as R from 'ramda'
+import React from 'react'
 
 //accepts a semver version
 export const isBeta = (version) => {
-  if(!version) {
+  if (!version) {
     return null
   }
 
@@ -20,7 +19,7 @@ export const isBeta = (version) => {
 
 //accepts a semver version
 export const isRC = (version) => {
-  if(!version) {
+  if (!version) {
     return null
   }
 
@@ -29,7 +28,7 @@ export const isRC = (version) => {
 
 //accepts a semver version
 export const isAlpha = (version) => {
-  if(!version) {
+  if (!version) {
     return null
   }
 

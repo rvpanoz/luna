@@ -2,23 +2,19 @@
  * PackageActions component
  */
 
-import { packageCardStyles } from 'styles/packageCardStyles'
 import { withStyles } from 'material-ui/styles'
 import { APP_MODES } from 'constants/AppConstants'
-import classnames from 'classnames'
 import { firstToUpper } from 'utils'
-import Card, { CardHeader, CardContent } from 'material-ui/Card'
+import Card, { CardContent } from 'material-ui/Card'
+import classnames from 'classnames'
 import React from 'react'
 import PropTypes from 'prop-types'
-import Paper from 'material-ui/Paper'
 import Typography from 'material-ui/Typography'
 import CardVersions from './CardVersions'
 import CardOptions from './CardOptions'
 import CardTags from './CardTags'
 import Statslist from './Statslist'
 import Divider from 'material-ui/Divider'
-import LicenseIcon from 'material-ui-icons/PermIdentity'
-import GroupIcon from 'material-ui-icons/Group'
 
 const grayColor = '#999999'
 const { object, array, func, string } = PropTypes
@@ -86,14 +82,15 @@ class PackageActions extends React.Component {
       removeCommandOption,
       onChangeVersion,
       setVersion,
-      settings
+      settings,
+      toggleMainLoader
     } = this.props
 
     const { license } = active
 
     return (
       <section className={classes.root}>
-        {group ? (
+        {group && (
           <Card className={classnames(classes.card, classes.margin)}>
             <CardContent>
               <Typography
@@ -109,8 +106,8 @@ class PackageActions extends React.Component {
               </Typography>
             </CardContent>
           </Card>
-        ) : null}
-        {license ? (
+        )}
+        {license && (
           <Card className={classnames(classes.card, classes.margin)}>
             <CardContent>
               <Typography
@@ -122,11 +119,12 @@ class PackageActions extends React.Component {
               </Typography>
               <Divider />
               <Typography veriant="display1" className={classes.marginTop}>
-                {license}
+                {typeof license === 'string' && license}
+                {typeof license === 'object' && license.type}
               </Typography>
             </CardContent>
           </Card>
-        ) : null}
+        )}
         <Card className={classnames(classes.card, classes.margin)}>
           <CardContent>
             <Typography
@@ -164,11 +162,11 @@ class PackageActions extends React.Component {
               component="h3"
               className={classes.heading}
               variant="subheading"
-            >
+              >
               Dist tags
             </Typography>
             <Divider />
-            <CardTags active={active} />
+            <CardTags active={active} toggleMainLoader={toggleMainLoader}/>
           </CardContent>
         </Card>
         {settings && settings.fetchGithub === true && active.stats ? (

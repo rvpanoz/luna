@@ -2,9 +2,11 @@
  * Packages Container Component
  * */
 
-import { remote, ipcRenderer } from 'electron'
-import { autoBind, parse, triggerEvent } from '../utils'
+import { ipcRenderer } from 'electron'
+import { autoBind, parse, triggerEvent } from 'utils'
 import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { withStyles } from 'material-ui/styles'
 import { APP_MODES } from 'constants/AppConstants'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
@@ -14,7 +16,14 @@ import Grid from 'material-ui/Grid'
 import TableList from 'components/packages/TableList'
 import withToolbarList from 'components/packages/WithToolbarList'
 import PackageContainer from './Package'
-import Loader from 'common/Loader'
+
+const styles = (theme) => {
+  return {
+    root: {
+      margin: '0 auto'
+    }
+  }
+}
 
 const WithToolbarList = withToolbarList(TableList, {
   title: 'Packages',
@@ -22,13 +31,39 @@ const WithToolbarList = withToolbarList(TableList, {
   sort: 'name'
 })
 
+const ipcListeners = [
+  'install-packages-close',
+  'uninstall-packages-close',
+  'get-packages-close',
+  'search-packages-close',
+  'view-package-close',
+  'action-close',
+  'ipcEvent-error',
+  'analyze-json-close'
+]
+
 class PackagesContainer extends React.Component {
   constructor() {
     super()
     autoBind(
-      ['setupPackagesFromResponse', 'setupOutdated', 'setGlobalMode', 'reload'],
+      [
+        'listPackages',
+        'reload',
+        'setupPackagesFromResponse',
+        'setupOutdated',
+        'setGlobalMode'
+      ],
       this
     )
+  }
+  listPackages(event, opts) {
+    const { mode, directory } = this.props
+
+    triggerEvent('get-packages', {
+      cmd: ['outdated', 'list'],
+      mode,
+      directory
+    })
   }
   componentDidMount() {
     const {
@@ -48,24 +83,8 @@ class PackagesContainer extends React.Component {
       clearMessages
     } = this.props
 
-    ipcRenderer.on('install-packages-close', (event) => {
-      const { mode, directory } = this.props
-
-      triggerEvent('get-packages', {
-        cmd: ['outdated', 'list'],
-        mode,
-        directory
-      })
-    })
-    ipcRenderer.on('uninstall-packages-close', (event) => {
-      const { mode, directory } = this.props
-
-      triggerEvent('get-packages', {
-        cmd: ['outdated', 'list'],
-        mode,
-        directory
-      })
-    })
+    ipcRenderer.on('install-packages-close', this.listPackages)
+    ipcRenderer.on('uninstall-packages-close', this.listPackages)
     ipcRenderer.on('get-packages-close', (event, packages, command) => {
       if (!packages) {
         return
@@ -123,33 +142,17 @@ class PackagesContainer extends React.Component {
         }
       }
     )
-    ipcRenderer.on('update-package-close', (event, pkg) => {
-      const { mode, directory } = this.props
-
-      triggerEvent('get-packages', {
-        cmd: ['outdated', 'list'],
-        mode,
-        directory
-      })
-    })
     ipcRenderer.on('action-close', (event, pkg) => {
       const { mode, directory } = this.props
 
       if (mode === APP_MODES.LOCAL && directory) {
         ipcRenderer.send('analyze-json', directory)
       } else {
-        triggerEvent('get-packages', {
-          cmd: ['outdated', 'list'],
-          mode,
-          directory
-        })
+        this.listPackages(event)
       }
     })
     ipcRenderer.on('ipcEvent-error', (event, error) => {
       console.error(error)
-    })
-    ipcRenderer.on('ipcEvent-reply', (event, data) => {
-      //todo..
     })
     ipcRenderer.on('analyze-json-close', (event, directory, content) => {
       setActive(null)
@@ -165,21 +168,14 @@ class PackagesContainer extends React.Component {
     })
   }
   componentDidUpdate(nextProps) {
-    const { active, setVersion, clearMessages } = nextProps
-    if (active && active.version) {
-      setVersion(active.version)
-    }
+    //hook
   }
   componentWillUnmount() {
-    ipcRenderer.removeAllListeners([
-      'get-packages-close',
-      'search-packages-close',
-      'update-package-close',
-      'action-close',
-      'view-package-close',
-      'ipcEvent-error',
-      'analyze-json-close'
-    ])
+    try {
+      ipcListeners.forEach((eventName) => ipcRenderer.removeListener(eventName))
+    } catch (e) {
+      throw new Error(e)
+    }
   }
   setGlobalMode() {
     const {
@@ -298,10 +294,16 @@ class PackagesContainer extends React.Component {
     })
   }
   render() {
-    const { loading, isLoading, settings, ...rest } = this.props
+    const { classes, loading, isLoading, settings, ...rest } = this.props
 
     return (
-      <Grid container spacing={24}>
+      <Grid
+        className={classes.root}
+        container
+        spacing={8}
+        justify="space-between"
+        alignItems="flex-start"
+      >
         <Grid item xs={12} sm={4} md={4} lg={4}>
           <WithToolbarList
             setGlobalMode={this.setGlobalMode}
@@ -315,6 +317,7 @@ class PackagesContainer extends React.Component {
             isLoading={isLoading}
             loading={loading}
             settings={settings}
+            {...rest}
           />
         </Grid>
       </Grid>
@@ -329,7 +332,7 @@ function mapStateToProps(state) {
     mode: state.global.mode,
     directory: state.global.directory,
     showModal: state.global.showModal,
-    isLoading: state.packages.isLoading,
+    // isLoading: state.packages.isLoading,
     packages: state.packages.packages,
     selected: state.packages.selected,
     packageJSON: state.global.packageJSON,
@@ -378,4 +381,7 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PackagesContainer)
+export default compose(
+  withStyles(styles, { withTheme: true }),
+  connect(mapStateToProps, mapDispatchToProps)
+)(PackagesContainer)
