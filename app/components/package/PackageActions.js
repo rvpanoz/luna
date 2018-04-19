@@ -82,7 +82,8 @@ class PackageActions extends React.Component {
       removeCommandOption,
       onChangeVersion,
       setVersion,
-      settings
+      settings,
+      toggleMainLoader
     } = this.props
 
     const { license } = active
@@ -161,11 +162,11 @@ class PackageActions extends React.Component {
               component="h3"
               className={classes.heading}
               variant="subheading"
-            >
+              >
               Dist tags
             </Typography>
             <Divider />
-            <CardTags active={active} />
+            <CardTags active={active} toggleMainLoader={toggleMainLoader}/>
           </CardContent>
         </Card>
         {settings && settings.fetchGithub === true && active.stats ? (

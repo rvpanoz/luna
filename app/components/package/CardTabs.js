@@ -123,7 +123,6 @@ class CardTabs extends React.Component {
   }
   viewPackage(e, itemName, itemValue) {
     const { toggleMainLoader } = this.props
-    let fixedItemValue
 
     if (itemName) {
       toggleMainLoader(true)

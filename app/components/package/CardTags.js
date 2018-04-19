@@ -4,6 +4,7 @@
 
 import { objectEntries } from 'utils'
 import { withStyles } from 'material-ui/styles'
+import { autoBind, triggerEvent } from 'utils'
 import List, {
   ListItem,
   ListItemSecondaryAction,
@@ -11,8 +12,9 @@ import List, {
 } from 'material-ui/List'
 import classnames from 'classnames'
 import React from 'react'
+import Tooltip from 'material-ui/Tooltip'
 import IconButton from 'material-ui/IconButton'
-import UpdateIcon from 'material-ui-icons/Update'
+import InfoIcon from 'material-ui-icons/Description'
 
 const styles = (theme) => {
   return {
@@ -38,7 +40,7 @@ const styles = (theme) => {
 class CardTags extends React.Component {
   constructor(props) {
     super(props)
-    this.getTags = this.getTags.bind(this)
+    autoBind(['getTags', 'viewPackage'], this)
   }
   getTags() {
     const { active, classes } = this.props
@@ -60,6 +62,21 @@ class CardTags extends React.Component {
     }
     return null
   }
+  viewPackage(e, itemName, itemValue) {
+    const { active, toggleMainLoader } = this.props
+    const { name } = active;
+
+    if (name && itemName) {
+      toggleMainLoader(true)
+      triggerEvent('view-package', {
+        cmd: ['view'],
+        pkgName: name,
+        pkgVersion: itemName
+      })
+    }
+
+    return false
+  }
   render() {
     const { active, classes } = this.props
 
@@ -77,13 +94,20 @@ class CardTags extends React.Component {
                 <ListItem key={`tag-${idx}`}>
                   <ListItemText primary={d.name} secondary={d.version} />
                   <ListItemSecondaryAction>
-                    <IconButton aria-label="Update" style={{ display: 'none' }}>
-                      <UpdateIcon
+                  <Tooltip
+                    enterDelay={300}
+                    leaveDelay={300}
+                    placement="left"
+                    title="Preview tag"
+                  >
+                    <IconButton aria-label="Preview">
+                      <InfoIcon
                         onClick={(e) => {
-                          console.log(e, d.name)
+                          this.viewPackage(e, d.name)
                         }}
                       />
                     </IconButton>
+                    </Tooltip>
                   </ListItemSecondaryAction>
                 </ListItem>
               )
