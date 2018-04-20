@@ -6,52 +6,50 @@
 # Luna v2 - NPM management throught a modern UI</h1>
 
 npm desktop manager for handling npm packages. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
-     
+
 ## Features
 
-- Manage global packages
-- Analyze a local directory using package.json
-- Install new packages - multiple
-- Update existing packages - multiple
-- Uninstall packages - multiple
-- Preview selected version
-- View package detail info
-- Search npm for new packages
-- Get notifications for missing dependencies
-- Shows Github statistics
-- Visualization of package versioning over time - d3js
+* Manage global packages
+* Analyze a local directory using package.json
+* Search npm for new packages
+* Install new packages - multiple
+* Uninstall packages - multiple
+* Update existing packages
+* Preview package versions
+* Get notifications for missing dependencies
 
-***
+---
 
 <div style="display:block;border-radius:5px; border: 2px solid transparent; border-image: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82); width:100%;height:100%;position:relative;">
 <img align="center" width="100%" height="100%"
-     title="luna-icon" src="./luna-v2.1.0-preview.png">
+     title="luna-icon" src="./resources/img/luna-v2.1.0-preview.png">
 </div>
 
 ## Downloads
 
 Latest release
 
-
 ### Linux
+
 Debian [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna_2.1.0_amd64.deb)
 
 AppImage [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-x86_64.AppImage)
 
-### Windows 
+### Windows
+
 [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna.Setup.2.1.0.exe)
 
 ### MacOS
-[Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-macOS.zip)
 
+[Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-macOS.zip)
 
 ## Contribution
 
-If you'd like to make some changes yourself:
+If you'd like to make some changes:
 
 1. Fork this repository to your own GitHub account and then clone it to your local device
-2. Install npm globally and run `npm install` to install application's required packages
-3. Build and start the application `npm run dev`
+2. Install npm globally and run `npm install` to install application's dependencies
+3. Build and start the application with `npm run dev`
 4. Submit a pull request with your changes :boom:
 
 ## Notes
@@ -71,14 +69,14 @@ if you encounter permission problems on Linux try:
 
 ## Thanks
 
-Luna is alive thanks to these great libs and tools:
+Luna is alive thanks to these great libs and frameworks:
 
-> Electron _https://electronjs.org/_
+_Electron https://electronjs.org/_
 
-> ReactJS _https://reactjs.org/_
+_ReactJS https://reactjs.org/_
 
-> Material-ui _https://material-ui-next.com/_
+_Material-ui https://material-ui-next.com/_
 
-> Webpack _https://github.com/webpack/webpack_
+> _Webpack https://github.com/webpack/webpack_
 
-> d3js _https://d3js.org/_
+> _d3js https://d3js.org/_
