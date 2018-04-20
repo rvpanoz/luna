@@ -16,16 +16,15 @@ import electronStore from 'electron-store'
 import electronLog from 'electron-log'
 import path from 'path'
 import MenuBuilder from './menu'
-import config from './config'
-import shell from './shell'
 import mk from './mk'
+import shell from './shell'
 
 const APP_PATHS = {
   appData: app.getPath('appData'),
   userData: app.getPath('userData')
 }
 
-const { defaultSettings } = config
+const { defaultSettings } = mk.config
 
 //NODE_EVN
 const NODE_ENV = process.env.NODE_ENV
@@ -102,7 +101,6 @@ ipcMain.on('analyze-json', (event, filePath) => {
 
 //user settings
 ipcMain.on('save-settings', (event, settings) => {
-  throw new UserException('FATAL', 3030, 'extra info')
   if (settings) {
     try {
       Store.set('user_settings', settings)
@@ -172,89 +170,96 @@ app.on('window-all-closed', () => {
 })
 
 app.on('ready', async () => {
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
-  ) {
-    await installExtensions()
-  }
-
-  const Screen = electron.screen
-  let x = 0,
-    y = 0
-  const screenSize = Screen.getPrimaryDisplay().size
-  const displays = electron.screen.getAllDisplays()
-  const externalDisplay = displays.find(
-    (display) => display.bounds.x !== 0 || display.bounds.y !== 0
-  )
-
-  if (externalDisplay) {
-    x = externalDisplay.bounds.x + 50
-    y = externalDisplay.bounds.y + 50
-  }
-
-  if (MIN_WIDTH > screenSize.width) {
-    throw new Error('Fatal: LOW_RESOLUTION')
-  }
-
-  // create main window
-  mainWindow = new BrowserWindow({
-    webPreferences: { webSecurity: false },
-    minWidth: MIN_WIDTH || screenSize.width,
-    minHeight: MIN_HEIGHT || screenSize.height,
-    x: x,
-    y: y,
-    show: false,
-    resizable: true,
-    icon: path.join(__dirname, 'resources/icon.ico')
-  })
-
-  // load app.html file
-  mainWindow.loadURL(`file://${__dirname}/app.html`)
-
-  mainWindow.webContents.on('did-finish-load', (event) => {
-    if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined')
-    }
-
-    //get user settings
-    const userSettings = Store.get('user_settings') || defaultSettings
-    event.sender.send('settings_loaded', userSettings)
-
-    // show mainWindow
-    mainWindow.show()
-    mainWindow.focus()
-
-    // devTools in development
+  try {
     if (
       process.env.NODE_ENV === 'development' ||
       process.env.DEBUG_PROD === 'true'
     ) {
-      mainWindow.openDevTools()
+      await installExtensions()
     }
-  })
 
-  mainWindow.webContents.on('crashed', (event) => {
-    //todo
-  })
+    const Screen = electron.screen
+    let x = 0,
+      y = 0
+    const screenSize = Screen.getPrimaryDisplay().size
+    const displays = electron.screen.getAllDisplays()
+    const externalDisplay = displays.find(
+      (display) => display.bounds.x !== 0 || display.bounds.y !== 0
+    )
 
-  mainWindow.on('unresponsive', (event) => {
-    // todo..
-  })
+    if (externalDisplay) {
+      x = externalDisplay.bounds.x + 50
+      y = externalDisplay.bounds.y + 50
+    }
 
-  mainWindow.on('show', (event) => {
-    // todo..
-  })
+    if (MIN_WIDTH > screenSize.width) {
+      throw new Error(
+        `Fatal: LOW_RESOLUTION ${screenSize.width}x${screenSize.height}`
+      )
+    }
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  })
+    // create main window
+    mainWindow = new BrowserWindow({
+      webPreferences: { webSecurity: false },
+      minWidth: MIN_WIDTH || screenSize.width,
+      minHeight: MIN_HEIGHT || screenSize.height,
+      x: x,
+      y: y,
+      show: false,
+      resizable: true,
+      icon: path.join(__dirname, 'resources/icon.ico')
+    })
 
-  const menuBuilder = new MenuBuilder(mainWindow)
-  menuBuilder.buildMenu()
+    // load app.html file
+    mainWindow.loadURL(`file://${__dirname}/app.html`)
+
+    mainWindow.webContents.on('did-finish-load', (event) => {
+      if (!mainWindow) {
+        throw new Error('"mainWindow" is not defined')
+      }
+
+      //get user settings
+      const userSettings = Store.get('user_settings') || defaultSettings
+      event.sender.send('settings_loaded', userSettings)
+
+      // show mainWindow
+      mainWindow.show()
+      mainWindow.focus()
+
+      // devTools in development
+      if (
+        process.env.NODE_ENV === 'development' ||
+        process.env.DEBUG_PROD === 'true'
+      ) {
+        mainWindow.openDevTools()
+      }
+    })
+
+    mainWindow.webContents.on('crashed', (event) => {
+      //todo
+    })
+
+    mainWindow.on('unresponsive', (event) => {
+      // todo..
+    })
+
+    mainWindow.on('show', (event) => {
+      // todo..
+    })
+
+    mainWindow.on('closed', () => {
+      mainWindow = null
+    })
+
+    const menuBuilder = new MenuBuilder(mainWindow)
+    menuBuilder.buildMenu()
+  } catch (e) {
+    throw new Error(e)
+  }
 })
 
 process.on('uncaughtException', (err) => {
+  console.log(err)
   electronLog.error(`${err}`)
   mainWindow.webContents.send('uncaught-exception', `${err}`)
 })

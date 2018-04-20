@@ -2,12 +2,11 @@
  * NPM cli commands
  **/
 
+const { merge } = require('ramda')
 const cp = require('child_process')
 const Q = require('q')
 const path = require('path')
 const github = require('./github')
-const { merge } = require('ramda')
-
 const spawn = cp.spawn
 
 /** Run npm command **/

@@ -1,25 +1,12 @@
 //MK
 
-import { merge } from 'ramda'
-import { objectEntries } from './utils'
-
-function UserException(msg, code) {
-  Error.captureStackTrace(this, this.constructor)
-  this.name = this.constructor.name
-  this.message = msg || ''
-  this.code = code || 999
-  this.parts = objectEntries(arguments).map((arg) => arg[1])
-}
-
-merge(UserException.prototype, {
-  toString: function() {
-    let s = this.message.toString()
-    return s.format.apply(s, this.parts)
-  }
-})
-
 global.mk = {
-  config: {},
+  config: {
+    defaultSettings: {
+      registry: 'https://registry.npmjs.org/',
+      fetchGithub: true
+    }
+  },
   logToFile: false,
   log() {
     const dt = new Date()
@@ -54,5 +41,4 @@ global.mk = {
   }
 }
 
-global.UserException = UserException
 export default global.mk
