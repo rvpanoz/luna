@@ -1,6 +1,6 @@
 <p align="center">
      <img align="center" width="100%" height="100%"
-     title="luna-icon" src="./resource/img/luna-banner.png">
+     title="luna-icon" src="./resources/img/luna-banner.png">
 </p>
 
 # Luna v2 - NPM management throught a modern UI</h1>
