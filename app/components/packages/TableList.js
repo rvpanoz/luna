@@ -23,7 +23,7 @@ import defaultFont from 'styles/variables'
 const styles = (theme) => ({
   root: {
     width: '100%',
-    marginTop: '-23px'
+    marginTop: 15
   },
   tableWrapper: {
     overflowX: 'auto'
@@ -33,11 +33,8 @@ const styles = (theme) => ({
   },
   tableRow: {
     border: 'none',
-    padding: '8px',
-    fontSize: '14px',
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    fontWeight: '300',
-    lineHeight: '1.42857143',
+    padding: theme.spacing.unit,
+    lineHeight: '1.4',
     verticalAlign: 'middle',
     '&:hover': {
       color: infoColor,
@@ -50,32 +47,26 @@ const styles = (theme) => ({
     overflowX: 'hidden',
     overflowY: 'auto',
     clear: 'both',
-    maxHeight: '850px'
+    maxHeight: 850
   },
   table: {
-    marginBottom: '0',
+    marginBottom: 0,
     width: '100%',
     maxWidth: '100%',
     backgroundColor: 'transparent',
-    borderSpacing: '0',
+    borderSpacing: 0,
     borderCollapse: 'collapse'
   },
   tableHeadCell: {
-    color: 'inherit',
     ...defaultFont,
-    fontSize: '1em'
+    color: theme.palette.info.dark,
+    fontSize: 12
   },
   tableCell: {
     ...defaultFont,
-    lineHeight: '1.42857143',
+    lineHeight: '1.4em',
     padding: '12px 8px',
-    verticalAlign: 'middle',
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
-  },
-  tableResponsive: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    overflowX: 'auto'
+    verticalAlign: 'middle'
   }
 })
 
@@ -122,9 +113,13 @@ class TableList extends React.PureComponent {
     e.stopPropagation()
   }
   viewPackage(e, name, version, mode, directory, repo, latest) {
+    const { toggleMainLoader } = this.props
+
     if (e) {
       e.preventDefault()
     }
+
+    toggleMainLoader(true)
     triggerEvent('view-package', {
       cmd: ['view'],
       pkgName: name,
@@ -146,7 +141,6 @@ class TableList extends React.PureComponent {
       selected,
       packages,
       page,
-      toggleMainLoader,
       handleSort,
       rowsPerPage,
       isSelected,
@@ -202,7 +196,6 @@ class TableList extends React.PureComponent {
                     role="checkbox"
                     onClick={(e) => {
                       const _version = version.replace(/\^/g, '')
-                      toggleMainLoader(true)
                       this.viewPackage(
                         e,
                         name,
