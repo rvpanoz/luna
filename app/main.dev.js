@@ -17,6 +17,8 @@ import MenuBuilder from './menu'
 import mk from './mk'
 import shell from './shell'
 
+mk.logToFile = true
+
 const APP_PATHS = {
   appData: app.getPath('appData'),
   userData: app.getPath('userData')
@@ -117,11 +119,16 @@ ipcMain.on('ipc-event', (event, options) => {
     const isStatus = status && typeof status === 'string'
 
     if (!isStatus) {
-      mk.log('FATAL: status is not valid')
-      throw new Error('status is not valid')
+      mk.log('FATAL: command status is not valid')
+      throw new Error('command status is not valid')
     }
 
     const args = arguments
+
+    if (args.length === 1) {
+      console.log(args)
+      return
+    }
 
     if (args.length === 2) {
       event.sender.send('ipcEvent-reply', args[1])

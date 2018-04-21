@@ -8,10 +8,12 @@ import npmApi from './apis/npm'
 import mk from './mk'
 
 exports.doCommand = function(options, callback) {
-  const opts = options || {}
-  const { cmd, ...rest } = opts
+  const { cmd, ...rest } = options || {}
 
-  function combine() {
+  /**
+   helper fn to setup promises array
+  **/
+  const combine = () => {
     let promises = []
 
     if (!cmd || !Array.isArray(cmd)) {
@@ -31,6 +33,9 @@ exports.doCommand = function(options, callback) {
     return promises
   }
 
+  /**
+
+  **/
   Q.allSettled(combine()).then((results) => {
     results.forEach((result) => {
       if (result.state === 'fulfilled') {
@@ -44,6 +49,7 @@ exports.doCommand = function(options, callback) {
         )
       } else {
         mk.log(`${result.state} ${result.reason}`)
+        callback(result)
       }
     })
   })

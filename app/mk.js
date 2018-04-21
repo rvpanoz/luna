@@ -1,7 +1,7 @@
 //MK
 
 global.mk = {
-  logToFile: false,
+  logToFile: true,
   config: {
     defaultSettings: {
       registry: 'https://registry.npmjs.org/',

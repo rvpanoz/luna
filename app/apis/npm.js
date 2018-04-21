@@ -3,18 +3,19 @@
  **/
 
 import { merge } from 'ramda'
+import { fetchStats } from './github'
 import cp from 'child_process'
 import Q from 'q'
 import path from 'path'
-import github from './github'
 import mk from '../mk'
 
 const spawn = cp.spawn
 
+mk.logToFile = false
+
 /** Run npm command **/
 function runCommand(command, directory, callback, opts) {
-  mk.logToFile = false
-  mk.log(`running: npm ${command.join(' ')}`)
+  mk.log(`RUNNING: npm ${command.join(' ')}`)
 
   const deferred = Q.defer()
   const cwd = process.cwd()
@@ -45,12 +46,11 @@ function runCommand(command, directory, callback, opts) {
   })
 
   npmc.on('exit', (code) => {
-    console.log(`Child exited with code ${code}`)
+    mk.log(`INFO: Child exited with code ${code}`)
   })
 
   npmc.on('close', () => {
-    mk.logToFile = false
-    mk.log(`finished: npm ${command.join(' ')}`)
+    mk.log(`FINISHED: npm ${command.join(' ')}`)
 
     const results = {
       status: 'close',
@@ -63,7 +63,7 @@ function runCommand(command, directory, callback, opts) {
     //github stats
     if (opts && opts.fetchGithub === true) {
       if (repo && repo.url) {
-        const getStats = github.fetchStats({
+        const getStats = fetchStats({
           repoUrl: repo.url || null,
           pkgName
         })
