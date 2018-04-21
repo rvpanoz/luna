@@ -3,7 +3,7 @@
      title="luna-icon" src="./resources/img/luna-banner.png">
 </p>
 
-# Luna v2 - NPM management throught a modern UI</h1>
+# Luna v2 - NPM management through a modern UI</h1>
 
 npm desktop manager for handling npm packages. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
 
