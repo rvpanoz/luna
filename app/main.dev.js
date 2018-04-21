@@ -6,14 +6,12 @@
  *
  */
 
-import { app, BrowserWindow, ipcMain } from 'electron'
+import electron, { app, BrowserWindow, ipcMain } from 'electron'
 import { merge } from 'ramda'
 import { APP_GLOBALS } from './constants/AppConstants'
 import fixPath from 'fix-path'
 import fs from 'fs'
-import electron from 'electron'
 import electronStore from 'electron-store'
-import electronLog from 'electron-log'
 import path from 'path'
 import MenuBuilder from './menu'
 import mk from './mk'
@@ -119,7 +117,8 @@ ipcMain.on('ipc-event', (event, options) => {
     const isStatus = status && typeof status === 'string'
 
     if (!isStatus) {
-      throw new Error('FATAL ERROR: status is not valid')
+      mk.log('FATAL: status is not valid')
+      throw new Error('status is not valid')
     }
 
     const args = arguments
@@ -193,14 +192,14 @@ app.on('ready', async () => {
     }
 
     if (MIN_WIDTH > screenSize.width) {
+      mk.log(`FATAL: low_resolution ${screenSize.width}x${screenSize.height}`)
       throw new Error(
-        `Fatal: LOW_RESOLUTION ${screenSize.width}x${screenSize.height}`
+        `Resolution ${screenSize.width}x${screenSize.height} is not supported.`
       )
     }
 
     // create main window
     mainWindow = new BrowserWindow({
-      webPreferences: { webSecurity: false },
       minWidth: MIN_WIDTH || screenSize.width,
       minHeight: MIN_HEIGHT || screenSize.height,
       x: x,
@@ -215,6 +214,7 @@ app.on('ready', async () => {
 
     mainWindow.webContents.on('did-finish-load', (event) => {
       if (!mainWindow) {
+        mk.log('FATAL: mainWindow" is not defined')
         throw new Error('"mainWindow" is not defined')
       }
 
@@ -226,7 +226,7 @@ app.on('ready', async () => {
       mainWindow.show()
       mainWindow.focus()
 
-      // devTools in development
+      // open devTools in development
       if (
         process.env.NODE_ENV === 'development' ||
         process.env.DEBUG_PROD === 'true'
@@ -236,11 +236,11 @@ app.on('ready', async () => {
     })
 
     mainWindow.webContents.on('crashed', (event) => {
-      //todo
+      // todo error reporting //
     })
 
     mainWindow.on('unresponsive', (event) => {
-      // todo..
+      // todo error reporting //
     })
 
     mainWindow.on('show', (event) => {
@@ -249,6 +249,7 @@ app.on('ready', async () => {
 
     mainWindow.on('closed', () => {
       mainWindow = null
+      mk.log('mainWindow is closed')
     })
 
     const menuBuilder = new MenuBuilder(mainWindow)
@@ -259,7 +260,6 @@ app.on('ready', async () => {
 })
 
 process.on('uncaughtException', (err) => {
-  console.log(err)
-  electronLog.error(`${err}`)
+  mk.log(`${err}`)
   mainWindow.webContents.send('uncaught-exception', `${err}`)
 })
