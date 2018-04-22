@@ -20,7 +20,7 @@ import Checkbox from 'material-ui/Checkbox'
 const styles = (theme) => ({
   root: {
     maxWidth: 400,
-    padding: theme.spacing.unit + 15,
+    padding: theme.spacing.unit,
     margin: theme.spacing.unit,
     '& > h2': {
       color: theme.palette.secondary.light,
@@ -35,7 +35,7 @@ const styles = (theme) => ({
 })
 
 const ListFilters = (props) => {
-  const { classes } = props
+  const { classes, filters, onAddFilter } = props
 
   return (
     <div className={classes.root}>
@@ -56,8 +56,8 @@ const ListFilters = (props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={true}
-                  onChange={(e) => console.log(e)}
+                  checked={filters && filters.indexOf('dependencies') > -1}
+                  onChange={(e) => onAddFilter('dependencies')}
                   value="dependencies"
                 />
               }
@@ -66,8 +66,8 @@ const ListFilters = (props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={true}
-                  onChange={(e) => console.log(e)}
+                  checked={filters && filters.indexOf('devDependencies') > -1}
+                  onChange={(e) => onAddFilter('devDependencies')}
                   value="devDependencies"
                 />
               }
@@ -76,8 +76,10 @@ const ListFilters = (props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={true}
-                  onChange={(e) => console.log(e)}
+                  checked={
+                    filters && filters.indexOf('optionalDependencies') > -1
+                  }
+                  onChange={(e) => onAddFilter('optionalDependencies')}
                   value="optionalDependencies"
                 />
               }
@@ -105,6 +107,11 @@ const ListFilters = (props) => {
       </div>
     </div>
   )
+}
+
+ListFilters.propTypes = {
+  classes: PropTypes.object.isRequired,
+  filters: PropTypes.array.isRequired
 }
 
 export default withStyles(styles)(ListFilters)

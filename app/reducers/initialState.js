@@ -24,6 +24,7 @@ export default {
     errors: [],
     packages: [],
     selected: [],
+    filters: [],
     nprotected: ['npm'],
     cmdOptions: ['save'],
     version: '',

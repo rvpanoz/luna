@@ -119,6 +119,8 @@ class TableListToolbar extends React.Component {
       handleUpdate,
       rowCount,
       showFilters,
+      addFilter,
+      filters,
       packagesActions
     } = this.props
 
@@ -170,7 +172,7 @@ class TableListToolbar extends React.Component {
               anchorEl={anchorEl}
               onClose={this.handleFiltersClose}
             >
-              <ListFilters />
+              <ListFilters onAddFilter={addFilter} filters={filters} />
             </Popover>
           </div>
           <div className={classes.spacer} />

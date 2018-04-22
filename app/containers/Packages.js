@@ -347,6 +347,7 @@ function mapStateToProps(state) {
     directory: state.global.directory,
     showModal: state.global.showModal,
     showFilters: state.packages.showFilters,
+    filters: state.packages.filters,
     packages: state.packages.packages,
     selected: state.packages.selected,
     packageJSON: state.global.packageJSON,
@@ -390,6 +391,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(packagesActions.setPackagesOutdated(packages)),
     addMessage: (level, message, requires, requiredBy) =>
       dispatch(globalActions.addMessage(level, message, requires, requiredBy)),
+    addFilter: (filterName) => dispatch(packagesActions.addFilter(filterName)),
     clearMessages: () => dispatch(globalActions.clearMessages()),
     removePackages: (packages) =>
       dispatch(packagesActions.removePackages(packages))

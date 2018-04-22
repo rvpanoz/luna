@@ -80,6 +80,13 @@ export function setTotal(total) {
   }
 }
 
+export function addFilter(filterName) {
+  return {
+    type: types.ADD_FILTER,
+    filterName
+  }
+}
+
 export function addCommandOption(option) {
   return {
     type: types.ADD_COMMAND_OPTION,

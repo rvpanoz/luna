@@ -233,6 +233,8 @@ function withToolbarTableList(List, options = {}) {
         packagesActions,
         rowsPerPage,
         showFilters,
+        addFilter,
+        filters,
         ...rest
       } = this.props
       const { title } = options
@@ -255,6 +257,8 @@ function withToolbarTableList(List, options = {}) {
             selected={selected}
             loading={loading}
             showFilters={showFilters}
+            filters={filters}
+            addFilter={addFilter}
             toggleFilters={toggleFilters}
             packagesActions={packagesActions}
             handleReload={this.handleReload}

@@ -21,6 +21,7 @@ import {
   SET_SELECTED_PACKAGE,
   SET_ROWS_PER_PAGE,
   SET_PAGE,
+  ADD_FILTER,
   ADD_COMMAND_OPTION,
   CLEAR_COMMAND_OPTIONS,
   CLEAR_SELECTED,
@@ -78,6 +79,15 @@ const handlers = {
         idx !== -1
           ? R.remove(idx, 1, state.cmdOptions)
           : R.prepend(action.option, state.cmdOptions)
+    })
+  },
+  [ADD_FILTER]: (state, action) => {
+    const idx = state.filters.indexOf(action.filterName)
+    return R.merge(state, {
+      filters:
+        idx !== -1
+          ? R.remove(idx, 1, state.filters)
+          : R.prepend(action.filterName, state.filters)
     })
   },
   [SET_ERROR]: (state, action) => {
