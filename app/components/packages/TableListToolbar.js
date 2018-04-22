@@ -19,7 +19,6 @@ import ListIcon from 'material-ui-icons/List'
 import FilterListIcon from 'material-ui-icons/FilterList'
 import ListFilters from './ListFilters'
 
-const grayColor = '#999999'
 const styles = (theme) => {
   return {
     root: {
@@ -60,18 +59,6 @@ const styles = (theme) => {
     }
   }
 }
-
-// anchorReference={anchorReference}
-// anchorPosition={{ top: positionTop, left: positionLeft }}
-// onClose={this.handleClose}
-// anchorOrigin={{
-//   vertical: anchorOriginVertical,
-//   horizontal: anchorOriginHorizontal
-// }}
-// transformOrigin={{
-//   vertical: transformOriginVertical,
-//   horizontal: transformOriginHorizontal
-// }}
 
 class TableListToolbar extends React.Component {
   constructor(props) {
@@ -120,6 +107,7 @@ class TableListToolbar extends React.Component {
       rowCount,
       showFilters,
       addFilter,
+      applyFilters,
       filters,
       packagesActions
     } = this.props
@@ -172,7 +160,11 @@ class TableListToolbar extends React.Component {
               anchorEl={anchorEl}
               onClose={this.handleFiltersClose}
             >
-              <ListFilters onAddFilter={addFilter} filters={filters} />
+              <ListFilters
+                onAddFilter={addFilter}
+                filters={filters}
+                applyFilters={applyFilters}
+              />
             </Popover>
           </div>
           <div className={classes.spacer} />

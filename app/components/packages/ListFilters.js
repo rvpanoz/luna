@@ -8,6 +8,9 @@ import PropTypes from 'prop-types'
 import Typography from 'material-ui/Typography'
 import Divider from 'material-ui/Divider'
 import TextField from 'material-ui/TextField'
+import Button from 'material-ui/Button'
+import Filter from 'material-ui-icons/Filter'
+
 import {
   FormLabel,
   FormControl,
@@ -31,11 +34,14 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between'
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit / 2
   }
 })
 
 const ListFilters = (props) => {
-  const { classes, filters, onAddFilter } = props
+  const { classes, filters, onAddFilter, applyFilters } = props
 
   return (
     <div className={classes.root}>
@@ -104,6 +110,10 @@ const ListFilters = (props) => {
           </FormGroup>
           <FormHelperText />
         </FormControl>
+        <Button color="primary" onClick={applyFilters}>
+          <Filter className={classes.leftIcon} />
+          Apply
+        </Button>
       </div>
     </div>
   )

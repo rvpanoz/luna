@@ -19,6 +19,7 @@ function withToolbarTableList(List, options = {}) {
       autoBind(
         [
           '_uninstallSelected',
+          'applyFilters',
           'handleSort',
           'handleSelectAllClick',
           'handleInstall',
@@ -115,6 +116,10 @@ function withToolbarTableList(List, options = {}) {
         mode,
         directory
       })
+    }
+    applyFilters(e) {
+      const { filters } = this.props
+      console.log(filters)
     }
     handleReload(e) {
       if (e) e.preventDefault()
@@ -261,6 +266,7 @@ function withToolbarTableList(List, options = {}) {
             addFilter={addFilter}
             toggleFilters={toggleFilters}
             packagesActions={packagesActions}
+            applyFilters={this.applyFilters}
             handleReload={this.handleReload}
             handleUpdate={this.handleUpdate}
             handleGlobals={this.handleGlobals}
