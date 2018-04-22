@@ -346,7 +346,7 @@ function mapStateToProps(state) {
     mode: state.global.mode,
     directory: state.global.directory,
     showModal: state.global.showModal,
-    // isLoading: state.packages.isLoading,
+    showFilters: state.packages.showFilters,
     packages: state.packages.packages,
     selected: state.packages.selected,
     packageJSON: state.global.packageJSON,
@@ -380,6 +380,7 @@ function mapDispatchToProps(dispatch) {
     setVersion: (version) => dispatch(packagesActions.setVersion(version)),
     toggleLoader: (bool) => dispatch(globalActions.toggleLoader(bool)),
     toggleModal: (bool) => dispatch(globalActions.toggleModal(bool)),
+    toggleFilters: (bool) => dispatch(packagesActions.toggleFilters(bool)),
     setTotal: (total) => dispatch(packagesActions.setTotal(total)),
     toggleMainLoader: (bool) =>
       dispatch(packagesActions.toggleMainLoader(bool)),

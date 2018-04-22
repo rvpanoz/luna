@@ -10,6 +10,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import TableListToolbar from './TableListToolbar'
+import Popover from 'material-ui/Popover'
 
 function withToolbarTableList(List, options = {}) {
   return class WithToolbarList extends React.Component {
@@ -20,7 +21,6 @@ function withToolbarTableList(List, options = {}) {
           '_uninstallSelected',
           'handleSort',
           'handleSelectAllClick',
-          'handleUpdate',
           'handleInstall',
           'handleReload',
           'handleGlobals',
@@ -115,9 +115,6 @@ function withToolbarTableList(List, options = {}) {
         mode,
         directory
       })
-    }
-    handleFilters(e) {
-      console.log('handleFilters')
     }
     handleReload(e) {
       if (e) e.preventDefault()
@@ -232,15 +229,17 @@ function withToolbarTableList(List, options = {}) {
         handleChangeRowsPerPage,
         total,
         toggleSnackbar,
+        toggleFilters,
         packagesActions,
         rowsPerPage,
+        showFilters,
         ...rest
       } = this.props
       const { title } = options
 
-      if (loading) {
-        return null
-      }
+      // if (loading) {
+      //   return null
+      // }
 
       function getStyles() {
         return loading ? { filter: 'blur(15px)' } : null
@@ -255,6 +254,8 @@ function withToolbarTableList(List, options = {}) {
             rowCount={total}
             selected={selected}
             loading={loading}
+            showFilters={showFilters}
+            toggleFilters={toggleFilters}
             packagesActions={packagesActions}
             handleReload={this.handleReload}
             handleUpdate={this.handleUpdate}

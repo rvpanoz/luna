@@ -60,6 +60,13 @@ export function setActiveTab(tabIndex) {
   }
 }
 
+export function toggleFilters(showFilters) {
+  return {
+    type: types.TOGGLE_FILTERS,
+    showFilters
+  }
+}
+
 export function toggleExpanded() {
   return {
     type: types.TOGGLE_EXPANDED

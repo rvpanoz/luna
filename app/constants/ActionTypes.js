@@ -5,6 +5,7 @@ export const TOGGLE_SETTINGS = 'TOGGLE_SETTINGS'
 export const TOGGLE_EXPANDED = 'TOGGLE_EXPANDED'
 export const TOGGLE_SNACKBAR = 'TOGGLE_SNACKBAR'
 export const TOGGLE_DRAWER = 'TOGGLE_DRAWER'
+export const TOGGLE_FILTERS = 'TOGGLE_FILTERS'
 export const MENU_OPEN = 'MENU_OPEN'
 
 // setters

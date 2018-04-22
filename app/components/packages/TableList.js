@@ -28,7 +28,7 @@ import {
   Reorder as ReorderIcon,
   Code as CodeIcon,
   Build as BuildIcon,
-  Group as GroupIcon
+  List as ListIcon
 } from 'material-ui-icons'
 
 const styles = (theme) => ({
@@ -269,18 +269,25 @@ class TableList extends React.PureComponent {
                     </TableCell>
                     <TableCell padding="none" className={classes.tableCell}>
                       {_group === null && (
-                        <Avatar
-                          className={cn(classes.avatar, classes.gloAvatar)}
+                        <Tooltip
+                          enterDelay={300}
+                          leaveDelay={300}
+                          placement="top"
+                          title="global package"
                         >
-                          <GroupIcon />
-                        </Avatar>
+                          <Avatar
+                            className={cn(classes.avatar, classes.gloAvatar)}
+                          >
+                            <ListIcon variant="mini" />
+                          </Avatar>
+                        </Tooltip>
                       )}
                       {_group === 'dependencies' && (
                         <Tooltip
                           enterDelay={300}
                           leaveDelay={300}
                           placement="top"
-                          title="in dependencies"
+                          title="Dependency"
                         >
                           <Avatar
                             className={cn(classes.avatar, classes.depAvatar)}
@@ -294,7 +301,7 @@ class TableList extends React.PureComponent {
                           enterDelay={300}
                           leaveDelay={300}
                           placement="top"
-                          title="in Dev dependencies"
+                          title="Dev Dependency"
                         >
                           <Avatar
                             className={cn(classes.avatar, classes.devAvatar)}
@@ -308,7 +315,7 @@ class TableList extends React.PureComponent {
                           enterDelay={300}
                           leaveDelay={300}
                           placement="top"
-                          title="in Optional dependencies"
+                          title="Optional Dependency"
                         >
                           <Avatar
                             className={cn(classes.avatar, classes.optAvatar)}

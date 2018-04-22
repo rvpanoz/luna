@@ -16,6 +16,7 @@ export default {
   packages: {
     isLoading: false,
     expanded: false,
+    showFilters: false,
     tabIndex: 0,
     total: 0,
     active: null,
