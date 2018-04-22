@@ -24,6 +24,7 @@ function withToolbarTableList(List, options = {}) {
           'handleInstall',
           'handleReload',
           'handleGlobals',
+          'handleFilters',
           'handleUninstall',
           'isSelected',
           'showDetails',
@@ -114,6 +115,9 @@ function withToolbarTableList(List, options = {}) {
         mode,
         directory
       })
+    }
+    handleFilters(e) {
+      console.log('handleFilters')
     }
     handleReload(e) {
       if (e) e.preventDefault()
@@ -283,6 +287,7 @@ withToolbarTableList.propTypes = {
   toggleMainLoader: func.isRequired,
   mode: string.isRequired,
   total: number,
+  packageJSON: object,
   directory: string,
   packages: array.isRequired,
   setPackages: func.isRequired,

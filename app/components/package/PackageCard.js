@@ -2,32 +2,32 @@
  * PackageCard component
  */
 
-import { withStyles } from "material-ui/styles";
+import { withStyles } from 'material-ui/styles'
 import {
   APP_MODES,
   APP_ACTIONS,
   PACKAGE_GROUPS,
   APP_INFO
-} from "constants/AppConstants";
-import { contains, find, propEq } from "ramda";
-import { CardContent as MuiCardContent } from "material-ui/Card";
-import React from "react";
-import classnames from "classnames";
-import PropTypes from "prop-types";
-import Card from "material-ui/Card";
-import Divider from "material-ui/Divider";
-import Collapse from "material-ui/transitions/Collapse";
-import Typography from "material-ui/Typography";
-import CardHeader from "./CardHeader";
-import CardContent from "./CardContent";
-import CardActions from "./CardActions";
-import CardDetails from "./CardDetails";
+} from 'constants/AppConstants'
+import { contains, find, propEq } from 'ramda'
+import { CardContent as MuiCardContent } from 'material-ui/Card'
+import React from 'react'
+import classnames from 'classnames'
+import PropTypes from 'prop-types'
+import Card from 'material-ui/Card'
+import Divider from 'material-ui/Divider'
+import Collapse from 'material-ui/transitions/Collapse'
+import Typography from 'material-ui/Typography'
+import CardHeader from './CardHeader'
+import CardContent from './CardContent'
+import CardActions from './CardActions'
+import CardDetails from './CardDetails'
 
-const { object, string } = PropTypes;
+const { object, string } = PropTypes
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    width: "100%"
+    width: '100%'
   },
   secondaryHeading: {
     margin: theme.spacing.unit + 15,
@@ -38,32 +38,31 @@ const styles = theme => ({
     margin: theme.spacing.unit
   },
   card: {
-    maxWidth: "100%",
-    minHeight: "668px"
+    maxWidth: '100%'
   },
   content: {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start"
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-start'
   },
   collapseContent: {
     margin: theme.spacing.unit * 2
   },
   column: {
-    flexBasis: "33.33%"
+    flexBasis: '33.33%'
   },
   helper: {
     borderLeft: `2px solid ${theme.palette.divider}`,
     padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
   },
   controls: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
     marginTop: theme.spacing.unit,
-    "& fieldset": {
+    '& fieldset': {
       margin: theme.spacing.unit
     }
   },
@@ -72,12 +71,12 @@ const styles = theme => ({
     color: theme.palette.text.secondary
   },
   details: {
-    visibility: "visible",
-    width: "100%",
+    visibility: 'visible',
+    width: '100%',
     maxHeight: 200,
     marginBottom: 20,
-    overflowX: "hidden",
-    overflowY: "auto"
+    overflowX: 'hidden',
+    overflowY: 'auto'
   },
   formControl: {
     margin: theme.spacing.unit,
@@ -99,7 +98,7 @@ const styles = theme => ({
     paddingLeft: 0
   },
   actions: {
-    display: "flex"
+    display: 'flex'
   },
   author: {
     flexGrow: 1
@@ -109,35 +108,35 @@ const styles = theme => ({
     marginTop: 10
   },
   expand: {
-    transform: "rotate(0deg)",
-    transition: theme.transitions.create("transform", {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest
     }),
-    marginLeft: "auto"
+    marginLeft: 'auto'
   },
   expandOpen: {
-    transform: "rotate(180deg)"
+    transform: 'rotate(180deg)'
   },
   updated: {
     fontSize: 12,
     fontWeight: 300,
     color: theme.palette.primary.dark,
-    margin: "1em 0 0.7em"
+    margin: '1em 0 0.7em'
   },
   center: {
-    position: "absolute",
-    top: "25%",
-    left: "50%"
+    position: 'absolute',
+    top: '25%',
+    left: '50%'
   },
   avatar: {
     backgroundColor: theme.palette.secondary.dark
   },
   heading: {
-    color: "rgba(0, 0, 0, 0.54)",
-    fontSize: "1.1rem",
+    color: 'rgba(0, 0, 0, 0.54)',
+    fontSize: '1.1rem',
     fontWeight: 400,
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    lineHeight: "1.35417em"
+    lineHeight: '1.35417em'
   },
   headingTail: {
     marginTop: 15
@@ -148,40 +147,40 @@ const styles = theme => ({
   },
   link: {
     color: theme.palette.primary.main,
-    textDecoration: "none",
-    "&:hover": {
-      textDecoration: "underline"
+    textDecoration: 'none',
+    '&:hover': {
+      textDecoration: 'underline'
     }
   },
   innerList: {
-    clear: "both",
-    visibility: "visible",
-    overflowX: "hidden",
-    overflowY: "auto"
+    clear: 'both',
+    visibility: 'visible',
+    overflowX: 'hidden',
+    overflowY: 'auto'
   },
   innerListLong: {
-    maxHeight: "300px"
+    maxHeight: '300px'
   },
   innerListSmall: {
-    maxHeight: "200px"
+    maxHeight: '200px'
   },
   actions: {
-    display: "flex"
+    display: 'flex'
   },
   expand: {
-    transform: "rotate(0deg)",
-    transition: theme.transitions.create("transform", {
+    transform: 'rotate(0deg)',
+    transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest
     }),
-    marginLeft: "auto"
+    marginLeft: 'auto'
   },
   expandOpen: {
-    transform: "rotate(180deg)"
+    transform: 'rotate(180deg)'
   },
   bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)"
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)'
   },
   title: {
     marginBottom: 16,
@@ -190,11 +189,11 @@ const styles = theme => ({
   pos: {
     marginBottom: 12
   }
-});
+})
 
 class PackageCard extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
   componentDidMount() {
     const {
@@ -207,32 +206,32 @@ class PackageCard extends React.Component {
       setPackageGroup,
       clearCommandOptions,
       toggleExpanded
-    } = this.props;
-    const { version } = active || {};
+    } = this.props
+    const { version } = active || {}
 
-    clearCommandOptions();
+    clearCommandOptions()
 
     if (mode === APP_MODES.LOCAL && active) {
-      let found = false;
+      let found = false
 
       Object.keys(PACKAGE_GROUPS).some((groupName, idx) => {
         found =
           packageJSON[groupName] && packageJSON[groupName][active.name]
             ? groupName
-            : false;
+            : false
         if (found) {
-          const pkgVersion = packageJSON[found][active.name];
-          const symbols = ["~", "^"];
+          const pkgVersion = packageJSON[found][active.name]
+          const symbols = ['~', '^']
 
           if (pkgVersion && !contains(pkgVersion[0], symbols)) {
-            setPackageGroup(groupName, "save-exact");
+            setPackageGroup(groupName, 'save-exact')
           } else {
-            setPackageGroup(groupName);
+            setPackageGroup(groupName)
           }
 
-          return found;
+          return found
         }
-      });
+      })
     }
   }
   render() {
@@ -259,7 +258,7 @@ class PackageCard extends React.Component {
       settings,
       packageJSON,
       packages
-    } = this.props;
+    } = this.props
 
     return (
       <section className={classes.root}>
@@ -280,7 +279,7 @@ class PackageCard extends React.Component {
             toggleMainLoader={toggleMainLoader}
           />
           <CardActions
-            isInstalled={find(propEq("name", active.name))(packages)}
+            isInstalled={find(propEq('name', active.name))(packages)}
             active={active}
             handleExpandClick={toggleExpanded}
             expanded={expanded}
@@ -310,7 +309,7 @@ class PackageCard extends React.Component {
           </Collapse>
         </Card>
       </section>
-    );
+    )
   }
 }
 
@@ -318,6 +317,6 @@ PackageCard.propTypes = {
   active: object.isRequired,
   classes: object.isRequired,
   mode: string.isRequired
-};
+}
 
-export default withStyles(styles)(PackageCard);
+export default withStyles(styles)(PackageCard)

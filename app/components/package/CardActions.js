@@ -21,7 +21,7 @@ const styles = (theme) => {
   return {
     actions: {
       display: 'flex',
-      marginTop: theme.spacing.unit + 20
+      marginTop: theme.spacing.unit
     },
     button: {
       margin: theme.spacing.unit

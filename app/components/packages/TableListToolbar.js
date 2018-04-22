@@ -14,6 +14,7 @@ import AddIcon from 'material-ui-icons/Add'
 import DeleteIcon from 'material-ui-icons/Delete'
 import RefreshIcon from 'material-ui-icons/Refresh'
 import ListIcon from 'material-ui-icons/List'
+import FilterListIcon from 'material-ui-icons/FilterList'
 
 const grayColor = '#999999'
 const styles = (theme) => {
@@ -46,7 +47,10 @@ const styles = (theme) => {
     title: {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'flex-start'
+      justifyContent: 'flex-start',
+      '& > h1': {
+        fontSize: 18
+      }
     },
     directory: {
       fontSize: 12
@@ -66,6 +70,7 @@ const TableListToolbar = (props) => {
     handleUninstall,
     handleInstall,
     handleUpdate,
+    handleFilters,
     rowCount,
     packagesActions
   } = props
@@ -82,19 +87,23 @@ const TableListToolbar = (props) => {
       >
         <div className={classes.header}>
           {selected && selected.length > 0 ? (
-            <Typography color="inherit" variant="subheading">
+            <Typography
+              color="primary"
+              variant="headline"
+              className={classes.headline}
+            >
               {selected.length} selected
             </Typography>
           ) : (
             <div className={classes.title}>
-              <Typography variant="title" color="inherit" component="h2">
+              <Typography color="primary" component="h1">
                 {title} {rowCount || 0}
               </Typography>
               {directory ? (
                 <Typography
                   className={classes.directory}
-                  variant="title"
-                  color="inherit"
+                  variant="headline"
+                  color="secondary"
                   component="div"
                 >
                   {' '}
@@ -105,44 +114,44 @@ const TableListToolbar = (props) => {
           )}
         </div>
         <div className={classes.spacer} />
-        {loading ? null : (
-          <div className={classes.actions}>
-            {searchMode && selected.length ? (
-              <Tooltip title="Install selected">
+        <div className={classes.actions}>
+          {searchMode && selected.length ? (
+            <Tooltip title="Install selected">
+              <IconButton aria-label="Install-selected" onClick={handleInstall}>
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
+          ) : !searchMode && selected.length ? (
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Tooltip title="Uninstall selected">
                 <IconButton
-                  aria-label="Install-selected"
-                  onClick={handleInstall}
+                  aria-label="Uninstall-selected"
+                  onClick={handleUninstall}
                 >
-                  <AddIcon />
+                  <DeleteIcon />
                 </IconButton>
               </Tooltip>
-            ) : !searchMode && selected.length ? (
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <Tooltip title="Uninstall selected">
-                  <IconButton
-                    aria-label="Uninstall-selected"
-                    onClick={handleUninstall}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <Tooltip title="Reload list">
-                  <IconButton aria-label="Reload list" onClick={handleReload}>
-                    <RefreshIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="Show globals">
-                  <IconButton aria-label="Show globals" onClick={handleGlobals}>
-                    <ListIcon />
-                  </IconButton>
-                </Tooltip>
-              </div>
-            )}
-          </div>
-        )}
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Tooltip title="Reload list">
+                <IconButton aria-label="Reload list" onClick={handleReload}>
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Show globals">
+                <IconButton aria-label="Show globals" onClick={handleGlobals}>
+                  <ListIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Show filters">
+                <IconButton aria-label="Show filtes" onClick={handleFilters}>
+                  <FilterListIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          )}
+        </div>
       </Toolbar>
     </section>
   )

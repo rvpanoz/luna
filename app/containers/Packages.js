@@ -7,7 +7,7 @@ import { autoBind, parse, triggerEvent } from 'utils'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { withStyles } from 'material-ui/styles'
-import { APP_MODES } from 'constants/AppConstants'
+import { APP_MODES, PACKAGE_GROUPS } from 'constants/AppConstants'
 import * as globalActions from 'actions/globalActions'
 import * as packagesActions from 'actions/packagesActions'
 import * as R from 'ramda'
@@ -198,9 +198,12 @@ class PackagesContainer extends React.Component {
   }
   setupPackagesFromResponse(packages) {
     const {
+      mode,
+      directory,
       setActive,
       setPackages,
       packagesOutdated,
+      packageJSON,
       setTotal,
       addMessage,
       clearMessages
@@ -217,6 +220,23 @@ class PackagesContainer extends React.Component {
 
       const mappedPackages = data.map((pkg) => {
         const hasError = typeof pkg.error === 'object'
+        const name = pkg.name
+        let _group = null,
+          _hasPeerMissing = false
+
+        //find group and attach to pkg, useful to show data in list
+        if (mode === APP_MODES.LOCAL && typeof packageJSON === 'object') {
+          let found = false
+
+          Object.keys(PACKAGE_GROUPS).some((groupName, idx) => {
+            found = packageJSON[groupName] && packageJSON[groupName][name]
+            if (found) {
+              _group = groupName
+            }
+
+            return found
+          })
+        }
 
         if (hasError) {
           return R.merge(pkg, {
@@ -224,16 +244,7 @@ class PackagesContainer extends React.Component {
           })
         }
 
-        const {
-          name,
-          version,
-          peerMissing,
-          required,
-          missing,
-          _from,
-          link
-        } = pkg
-        let _hasPeerMissing = false
+        const { version, peerMissing, required, missing, _from, link } = pkg
         const outdatedPackage = R.prop(name, packagesOutdated)
 
         if (peerMissing && Array.isArray(peerMissing)) {
@@ -254,11 +265,14 @@ class PackagesContainer extends React.Component {
           version !== outdatedPackage.latest
         ) {
           return R.merge(pkg, {
-            latest: outdatedPackage.latest,
-            _hasPeerMissing
+            _group,
+            _hasPeerMissing,
+            latest: outdatedPackage.latest
           })
         }
+
         return R.merge(pkg, {
+          _group,
           _hasPeerMissing
         })
       })
@@ -304,7 +318,7 @@ class PackagesContainer extends React.Component {
         justify="space-between"
         alignItems="flex-start"
       >
-        <Grid item xs={12} sm={4} md={4} lg={3}>
+        <Grid item xs={12} sm={5} md={5} lg={4} xl={4}>
           <WithToolbarList
             setGlobalMode={this.setGlobalMode}
             reload={this.reload}
@@ -312,7 +326,7 @@ class PackagesContainer extends React.Component {
             {...rest}
           />
         </Grid>
-        <Grid item xs={12} sm={8} md={8} lg={9}>
+        <Grid item xs={12} sm={7} md={7} lg={8} xl={8}>
           <PackageContainer
             isLoading={isLoading}
             loading={loading}

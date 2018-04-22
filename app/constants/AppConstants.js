@@ -29,7 +29,7 @@ export const APP_INFO = {
   CONFIRMATION: 'Would you like to $action $name@version?'
 }
 
-// package groups (in package.json)
+// supported package groups
 export const PACKAGE_GROUPS = {
   dependencies: 'save',
   devDependencies: 'save-dev',

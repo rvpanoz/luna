@@ -6,7 +6,7 @@ import { autoBind, triggerEvent } from 'utils'
 import { withStyles } from 'material-ui/styles'
 import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import cn from 'classnames'
 import Table, {
   TableBody,
   TableCell,
@@ -14,11 +14,22 @@ import Table, {
   TablePagination,
   TableRow
 } from 'material-ui/Table'
-
+import Avatar from 'material-ui/Avatar'
 import Checkbox from 'material-ui/Checkbox'
 import TableListHeader from './TableListHeader'
-import infoColor from 'styles/variables'
-import defaultFont from 'styles/variables'
+import Tooltip from 'material-ui/Tooltip'
+import {
+  infoColor,
+  primaryColor,
+  grayColor,
+  dangerColor
+} from 'styles/variables'
+import {
+  Reorder as ReorderIcon,
+  Code as CodeIcon,
+  Build as BuildIcon,
+  Group as GroupIcon
+} from 'material-ui-icons'
 
 const styles = (theme) => ({
   root: {
@@ -30,6 +41,23 @@ const styles = (theme) => ({
   },
   infoTableHeader: {
     color: infoColor
+  },
+  avatar: {
+    margin: 0,
+    color: '#fff',
+    fontSize: 10
+  },
+  gloAvatar: {
+    backgroundColor: grayColor
+  },
+  depAvatar: {
+    backgroundColor: theme.palette.primary.light
+  },
+  devAvatar: {
+    backgroundColor: theme.palette.secondary.dark
+  },
+  optAvatar: {
+    backgroundColor: primaryColor
   },
   tableRow: {
     border: 'none',
@@ -57,13 +85,8 @@ const styles = (theme) => ({
     borderSpacing: 0,
     borderCollapse: 'collapse'
   },
-  tableHeadCell: {
-    ...defaultFont,
-    color: theme.palette.info.dark,
-    fontSize: 12
-  },
   tableCell: {
-    ...defaultFont,
+    fontSize: 14,
     lineHeight: '1.4em',
     padding: '12px 8px',
     verticalAlign: 'middle'
@@ -184,7 +207,8 @@ class TableList extends React.PureComponent {
                   deprecated,
                   version,
                   name,
-                  repository
+                  repository,
+                  _group
                 } = pkg
 
                 const alreadySelected = isSelected(name)
@@ -241,6 +265,57 @@ class TableList extends React.PureComponent {
                         </span>
                       ) : (
                         version
+                      )}
+                    </TableCell>
+                    <TableCell padding="none" className={classes.tableCell}>
+                      {_group === null && (
+                        <Avatar
+                          className={cn(classes.avatar, classes.gloAvatar)}
+                        >
+                          <GroupIcon />
+                        </Avatar>
+                      )}
+                      {_group === 'dependencies' && (
+                        <Tooltip
+                          enterDelay={300}
+                          leaveDelay={300}
+                          placement="top"
+                          title="in dependencies"
+                        >
+                          <Avatar
+                            className={cn(classes.avatar, classes.depAvatar)}
+                          >
+                            <CodeIcon />
+                          </Avatar>
+                        </Tooltip>
+                      )}
+                      {_group === 'devDependencies' && (
+                        <Tooltip
+                          enterDelay={300}
+                          leaveDelay={300}
+                          placement="top"
+                          title="in Dev dependencies"
+                        >
+                          <Avatar
+                            className={cn(classes.avatar, classes.devAvatar)}
+                          >
+                            <BuildIcon />
+                          </Avatar>
+                        </Tooltip>
+                      )}
+                      {_group === 'optionalDependencies' && (
+                        <Tooltip
+                          enterDelay={300}
+                          leaveDelay={300}
+                          placement="top"
+                          title="in Optional dependencies"
+                        >
+                          <Avatar
+                            className={cn(classes.avatar, classes.optAvatar)}
+                          >
+                            <ReorderIcon />
+                          </Avatar>
+                        </Tooltip>
                       )}
                     </TableCell>
                   </TableRow>
