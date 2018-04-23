@@ -97,6 +97,9 @@ function withToolbarTableList(List, options = {}) {
         throw new Error(e)
       }
     }
+    _handleFilter(filterName, packages) {
+      console.log(filterName, packages)
+    }
     componentWillReceiveProps(nextProps) {
       const { loading, toggleSnackbar } = nextProps
 
@@ -118,8 +121,19 @@ function withToolbarTableList(List, options = {}) {
       })
     }
     applyFilters(e) {
-      const { filters } = this.props
-      console.log(filters)
+      const { packages, setPackages, filters } = this.props
+
+      if(filters && filters.length) {
+        const filteredPackages = packages && packages.filter(pkg=>{
+          filters.forEach(filterName=>this._handleFilter(filterName, packages))
+        })
+
+        // if(filteredPackages && filteredPackages.length) {
+        //   setPackages(filteredPackages)
+        // }
+      }
+
+      return false;
     }
     handleReload(e) {
       if (e) e.preventDefault()

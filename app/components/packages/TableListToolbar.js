@@ -66,7 +66,15 @@ class TableListToolbar extends React.Component {
     this.state = {
       anchorEl: null
     }
-    autoBind(['handleFilters', 'handleFiltersClose'], this)
+    autoBind(['_applyFilters', 'handleFilters', 'handleFiltersClose'], this)
+  }
+  _applyFilters(e) {
+    const {
+      applyFilters
+    } = this.props
+
+    applyFilters(e)
+    this.handleFiltersClose()
   }
   handleFiltersClose(e) {
     const { showFilters, toggleFilters } = this.props
@@ -97,6 +105,7 @@ class TableListToolbar extends React.Component {
       classes,
       directory,
       selected,
+      mode,
       title,
       loading,
       handleReload,
@@ -107,7 +116,6 @@ class TableListToolbar extends React.Component {
       rowCount,
       showFilters,
       addFilter,
-      applyFilters,
       filters,
       packagesActions
     } = this.props
@@ -161,9 +169,10 @@ class TableListToolbar extends React.Component {
               onClose={this.handleFiltersClose}
             >
               <ListFilters
+                mode={mode}
                 onAddFilter={addFilter}
                 filters={filters}
-                applyFilters={applyFilters}
+                applyFilters={this._applyFilters}
               />
             </Popover>
           </div>

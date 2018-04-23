@@ -2,14 +2,14 @@
 ListFilters
 **/
 
+import {APP_MODES} from 'constants/AppConstants'
 import { withStyles } from 'material-ui/styles'
 import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from 'material-ui/Typography'
 import Divider from 'material-ui/Divider'
-import TextField from 'material-ui/TextField'
 import Button from 'material-ui/Button'
-import Filter from 'material-ui-icons/Filter'
+import FilterIcon from 'material-ui-icons/FilterList'
 
 import {
   FormLabel,
@@ -41,7 +41,7 @@ const styles = (theme) => ({
 })
 
 const ListFilters = (props) => {
-  const { classes, filters, onAddFilter, applyFilters } = props
+  const { classes, filters, onAddFilter, applyFilters, mode} = props
 
   return (
     <div className={classes.root}>
@@ -50,18 +50,23 @@ const ListFilters = (props) => {
       </Typography>
       <Divider />
       <div className={classes.filterItems}>
-        <TextField label="package name" />
         <FormControl
           component="fieldset"
           style={{
             marginTop: 20
           }}
         >
-          <FormLabel component="legend">By group</FormLabel>
-          <FormGroup>
+          <FormLabel component="legend" style={{
+            display: mode===APP_MODES.GLOBAL ? 'none' : 'block'
+          }}>By group</FormLabel>
+          <FormGroup style={{
+            display: mode===APP_MODES.GLOBAL ? 'none' : 'block'
+          }}>
+            <FormHelperText> Select packages based on group</FormHelperText>
             <FormControlLabel
               control={
                 <Checkbox
+                  disabled={mode===APP_MODES.GLOBAL}
                   checked={filters && filters.indexOf('dependencies') > -1}
                   onChange={(e) => onAddFilter('dependencies')}
                   value="dependencies"
@@ -72,6 +77,7 @@ const ListFilters = (props) => {
             <FormControlLabel
               control={
                 <Checkbox
+                  disabled={mode===APP_MODES.GLOBAL}
                   checked={filters && filters.indexOf('devDependencies') > -1}
                   onChange={(e) => onAddFilter('devDependencies')}
                   value="devDependencies"
@@ -97,21 +103,23 @@ const ListFilters = (props) => {
         <FormControl component="fieldset">
           <FormLabel component="legend">By status</FormLabel>
           <FormGroup>
+            <FormHelperText> Select outdated packages</FormHelperText>
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={true}
-                  onChange={(e) => console.log(e)}
-                  value="outdated"
+                checked={
+                  filters && filters.indexOf('outdated') > -1
+                }
+                onChange={(e) => onAddFilter('outdated')}
+                value="outdated"
                 />
               }
               label="Outdated"
             />
           </FormGroup>
-          <FormHelperText />
         </FormControl>
         <Button color="primary" onClick={applyFilters}>
-          <Filter className={classes.leftIcon} />
+          <FilterIcon className={classes.leftIcon} />
           Apply
         </Button>
       </div>
