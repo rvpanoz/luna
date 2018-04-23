@@ -174,6 +174,10 @@ class TableList extends React.PureComponent {
       update
     } = this.props
 
+    if (loading) {
+      return null
+    }
+
     const numSelected =
       selected && Array.isArray(selected) ? selected.length : 0
     const emptyRows =

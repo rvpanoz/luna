@@ -3,6 +3,7 @@
  *
  **/
 
+import { APP_MODES, PACKAGE_GROUPS } from 'constants/AppConstants'
 import { remote } from 'electron'
 import { filter, contains } from 'ramda'
 import { autoBind, triggerEvent } from 'utils'
@@ -16,8 +17,10 @@ function withToolbarTableList(List, options = {}) {
   return class WithToolbarList extends React.Component {
     constructor(props) {
       super(props)
+      this._allPackages = null
       autoBind(
         [
+          '_installSelected',
           '_uninstallSelected',
           'applyFilters',
           'handleSort',
@@ -97,17 +100,16 @@ function withToolbarTableList(List, options = {}) {
         throw new Error(e)
       }
     }
-    _handleFilter(filterName, packages) {
-      console.log(filterName, packages)
-    }
     componentWillReceiveProps(nextProps) {
-      const { loading, toggleSnackbar } = nextProps
+      const { loading, toggleSnackbar, packages } = nextProps
 
       if (loading) {
         toggleSnackbar(true, {
           loader: true,
           message: 'Loading packages'
         })
+      } else if (packages && packages.length && this._allPackages === null) {
+        this._allPackages = packages
       }
     }
     componentDidMount() {
@@ -122,18 +124,35 @@ function withToolbarTableList(List, options = {}) {
     }
     applyFilters(e) {
       const { packages, setPackages, filters } = this.props
+      const groups = Object.keys(PACKAGE_GROUPS)
+      const allPackages = [].concat(this._allPackages)
+      debugger
+      let filteredPackages = []
 
-      if(filters && filters.length) {
-        const filteredPackages = packages && packages.filter(pkg=>{
-          filters.forEach(filterName=>this._handleFilter(filterName, packages))
-        })
-
-        // if(filteredPackages && filteredPackages.length) {
-        //   setPackages(filteredPackages)
-        // }
+      if (!filters.length) {
+        setPackages(this._allPackages || [])
+        return
       }
 
-      return false;
+      filters.forEach((filterName) => {
+        let prop
+        if (groups.indexOf(filterName) > -1) {
+          prop = '_group'
+        }
+
+        const filtered =
+          allPackages &&
+          allPackages.filter((pkg) => {
+            if (prop) {
+              return pkg[prop] === filterName
+            }
+            return !!pkg[filterName]
+          })
+
+        if (filtered && filtered.length) {
+          setPackages(filtered)
+        }
+      })
     }
     handleReload(e) {
       if (e) e.preventDefault()
@@ -257,10 +276,6 @@ function withToolbarTableList(List, options = {}) {
         ...rest
       } = this.props
       const { title } = options
-
-      // if (loading) {
-      //   return null
-      // }
 
       function getStyles() {
         return loading ? { filter: 'blur(15px)' } : null

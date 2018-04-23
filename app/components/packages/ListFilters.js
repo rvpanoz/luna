@@ -2,7 +2,7 @@
 ListFilters
 **/
 
-import {APP_MODES} from 'constants/AppConstants'
+import { APP_MODES } from 'constants/AppConstants'
 import { withStyles } from 'material-ui/styles'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -10,6 +10,7 @@ import Typography from 'material-ui/Typography'
 import Divider from 'material-ui/Divider'
 import Button from 'material-ui/Button'
 import FilterIcon from 'material-ui-icons/FilterList'
+import ClearIcon from 'material-ui-icons/Clear'
 
 import {
   FormLabel,
@@ -41,7 +42,14 @@ const styles = (theme) => ({
 })
 
 const ListFilters = (props) => {
-  const { classes, filters, onAddFilter, applyFilters, mode} = props
+  const {
+    classes,
+    filters,
+    onAddFilter,
+    applyFilters,
+    mode,
+    handleFiltersClose
+  } = props
 
   return (
     <div className={classes.root}>
@@ -56,17 +64,24 @@ const ListFilters = (props) => {
             marginTop: 20
           }}
         >
-          <FormLabel component="legend" style={{
-            display: mode===APP_MODES.GLOBAL ? 'none' : 'block'
-          }}>By group</FormLabel>
-          <FormGroup style={{
-            display: mode===APP_MODES.GLOBAL ? 'none' : 'block'
-          }}>
+          <FormLabel
+            component="legend"
+            style={{
+              display: mode === APP_MODES.GLOBAL ? 'none' : 'block'
+            }}
+          >
+            By group
+          </FormLabel>
+          <FormGroup
+            style={{
+              display: mode === APP_MODES.GLOBAL ? 'none' : 'block'
+            }}
+          >
             <FormHelperText> Select packages based on group</FormHelperText>
             <FormControlLabel
               control={
                 <Checkbox
-                  disabled={mode===APP_MODES.GLOBAL}
+                  disabled={mode === APP_MODES.GLOBAL}
                   checked={filters && filters.indexOf('dependencies') > -1}
                   onChange={(e) => onAddFilter('dependencies')}
                   value="dependencies"
@@ -77,7 +92,7 @@ const ListFilters = (props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  disabled={mode===APP_MODES.GLOBAL}
+                  disabled={mode === APP_MODES.GLOBAL}
                   checked={filters && filters.indexOf('devDependencies') > -1}
                   onChange={(e) => onAddFilter('devDependencies')}
                   value="devDependencies"
@@ -107,21 +122,25 @@ const ListFilters = (props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                checked={
-                  filters && filters.indexOf('outdated') > -1
-                }
-                onChange={(e) => onAddFilter('outdated')}
-                value="outdated"
+                  checked={filters && filters.indexOf('latest') > -1}
+                  onChange={(e) => onAddFilter('latest')}
+                  value="latest"
                 />
               }
               label="Outdated"
             />
           </FormGroup>
         </FormControl>
-        <Button color="primary" onClick={applyFilters}>
-          <FilterIcon className={classes.leftIcon} />
-          Apply
-        </Button>
+        <div className={classes.actions}>
+          <Button color="primary" onClick={applyFilters}>
+            <FilterIcon className={classes.leftIcon} />
+            Apply
+          </Button>
+          <Button color="primary" onClick={handleFiltersClose}>
+            <ClearIcon className={classes.leftIcon} />
+            Close
+          </Button>
+        </div>
       </div>
     </div>
   )
