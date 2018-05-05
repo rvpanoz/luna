@@ -11,7 +11,6 @@ import Divider from 'material-ui/Divider'
 import Button from 'material-ui/Button'
 import FilterIcon from 'material-ui-icons/FilterList'
 import ClearIcon from 'material-ui-icons/Clear'
-
 import {
   FormLabel,
   FormControl,

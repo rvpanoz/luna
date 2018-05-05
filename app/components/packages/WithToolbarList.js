@@ -126,7 +126,7 @@ function withToolbarTableList(List, options = {}) {
       const { packages, setPackages, filters } = this.props
       const groups = Object.keys(PACKAGE_GROUPS)
       const allPackages = [].concat(this._allPackages)
-      debugger
+
       let filteredPackages = []
 
       if (!filters.length) {
