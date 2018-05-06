@@ -3,7 +3,6 @@
  *
  **/
 
-import { APP_MODES, PACKAGE_GROUPS } from 'constants/AppConstants'
 import { remote } from 'electron'
 import { filter, contains } from 'ramda'
 import { autoBind, triggerEvent } from 'utils'
@@ -17,12 +16,10 @@ function withToolbarTableList(List, options = {}) {
   return class WithToolbarList extends React.Component {
     constructor(props) {
       super(props)
-      this._allPackages = null
       autoBind(
         [
           '_installSelected',
           '_uninstallSelected',
-          'applyFilters',
           'handleSort',
           'handleSelectAllClick',
           'handleInstall',
@@ -120,38 +117,6 @@ function withToolbarTableList(List, options = {}) {
         cmd: ['outdated', 'list'],
         mode,
         directory
-      })
-    }
-    applyFilters(e) {
-      const { packages, setPackages, filters } = this.props
-      const groups = Object.keys(PACKAGE_GROUPS)
-      const allPackages = [].concat(this._allPackages)
-
-      let filteredPackages = []
-
-      if (!filters.length) {
-        setPackages(this._allPackages || [])
-        return
-      }
-
-      filters.forEach((filterName) => {
-        let prop
-        if (groups.indexOf(filterName) > -1) {
-          prop = '_group'
-        }
-
-        const filtered =
-          allPackages &&
-          allPackages.filter((pkg) => {
-            if (prop) {
-              return pkg[prop] === filterName
-            }
-            return !!pkg[filterName]
-          })
-
-        if (filtered && filtered.length) {
-          setPackages(filtered)
-        }
       })
     }
     handleReload(e) {
@@ -295,7 +260,6 @@ function withToolbarTableList(List, options = {}) {
             addFilter={addFilter}
             toggleFilters={toggleFilters}
             packagesActions={packagesActions}
-            applyFilters={this.applyFilters}
             handleReload={this.handleReload}
             handleUpdate={this.handleUpdate}
             handleGlobals={this.handleGlobals}
@@ -311,6 +275,7 @@ function withToolbarTableList(List, options = {}) {
             loading={loading}
             rowCount={total}
             rowsPerPage={rowsPerPage}
+            filters={filters}
             {...rest}
           />
         </Paper>

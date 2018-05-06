@@ -131,9 +131,9 @@ const ListFilters = (props) => {
           </FormGroup>
         </FormControl>
         <div className={classes.actions}>
-          <Button color="primary" onClick={applyFilters}>
+          <Button color="primary" onClick={(e) => handleFiltersClose()}>
             <FilterIcon className={classes.leftIcon} />
-            Apply
+            Clear
           </Button>
           <Button color="primary" onClick={handleFiltersClose}>
             <ClearIcon className={classes.leftIcon} />

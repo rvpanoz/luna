@@ -308,7 +308,14 @@ class PackagesContainer extends React.Component {
     })
   }
   render() {
-    const { classes, loading, isLoading, settings, ...rest } = this.props
+    const {
+      classes,
+      loading,
+      isLoading,
+      filters,
+      settings,
+      ...rest
+    } = this.props
 
     return (
       <Grid
@@ -323,6 +330,7 @@ class PackagesContainer extends React.Component {
             setGlobalMode={this.setGlobalMode}
             reload={this.reload}
             loading={loading}
+            filters={filters}
             {...rest}
           />
         </Grid>

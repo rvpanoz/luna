@@ -2,6 +2,7 @@
  * TableList component
  **/
 
+import { APP_MODES, PACKAGE_GROUPS } from 'constants/AppConstants'
 import { autoBind, triggerEvent } from 'utils'
 import { withStyles } from 'material-ui/styles'
 import React from 'react'
@@ -155,6 +156,28 @@ class TableList extends React.PureComponent {
 
     return false
   }
+  applyFilters(packages, filters) {
+    const groups = Object.keys(PACKAGE_GROUPS)
+    let filtered
+
+    filters.forEach((filterName) => {
+      let prop
+      if (groups.indexOf(filterName) > -1) {
+        prop = '_group'
+      }
+
+      filtered =
+        packages &&
+        packages.filter((pkg) => {
+          if (prop) {
+            return pkg[prop] === filterName
+          }
+          return !!pkg[filterName]
+        })
+    })
+
+    return filtered
+  }
   render() {
     const {
       classes,
@@ -171,18 +194,26 @@ class TableList extends React.PureComponent {
       mode,
       directory,
       loading,
-      update
+      update,
+      filters
     } = this.props
 
     if (loading) {
       return null
     }
 
+    const listPackages =
+      filters && filters.length
+        ? this.applyFilters(packages, filters)
+        : packages
+
     const numSelected =
       selected && Array.isArray(selected) ? selected.length : 0
     const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, packages.length - page * rowsPerPage)
+      rowsPerPage -
+      Math.min(rowsPerPage, listPackages.length - page * rowsPerPage)
 
+    console.log(listPackages)
     return (
       <section className={classes.root}>
         <Table className={classes.tableResponsive}>
@@ -195,7 +226,7 @@ class TableList extends React.PureComponent {
             onSelectAllClick={handleSelectAllClick}
           />
           <TableBody>
-            {packages
+            {listPackages
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((pkg, idx) => {
                 if (!pkg) {
