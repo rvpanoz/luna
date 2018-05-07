@@ -7,7 +7,11 @@ import {
   toggleSettings,
   toggleDrawer
 } from 'actions/globalActions'
-import { setActive, setPackageActions } from 'actions/packagesActions'
+import {
+  clearFilters,
+  setActive,
+  setPackageActions
+} from 'actions/packagesActions'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
@@ -103,6 +107,7 @@ class AppHeader extends React.Component {
     const {
       menuOpen,
       classes,
+      clearFilters,
       handleDrawerOpen,
       handleDrawerClose,
       mode,
@@ -150,6 +155,7 @@ class AppHeader extends React.Component {
               setActive={setActive}
               toggleLoader={toggleLoader}
               setPackageActions={setPackageActions}
+              clearFilters={clearFilters}
             />
             <Notifications
               drawerOpen={drawerOpen}
@@ -210,7 +216,8 @@ function mapDispatchToProps(dispatch) {
     setPackageActions: (actions) => dispatch(setPackageActions(actions)),
     toggleSettings: (bool) => dispatch(toggleSettings(bool)),
     toggleLoader: (bool) => dispatch(toggleLoader(bool)),
-    toggleDrawer: (bool) => dispatch(toggleDrawer(bool))
+    toggleDrawer: (bool) => dispatch(toggleDrawer(bool)),
+    clearFilters: () => dispatch(clearFilters())
   }
 }
 

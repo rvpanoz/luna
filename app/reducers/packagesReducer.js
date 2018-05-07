@@ -25,6 +25,7 @@ import {
   ADD_COMMAND_OPTION,
   CLEAR_COMMAND_OPTIONS,
   CLEAR_SELECTED,
+  CLEAR_FILTERS,
   REMOVE_COMMAND_OPTION,
   SET_ERROR
 } from 'constants/ActionTypes'
@@ -66,6 +67,7 @@ const handlers = {
   },
   [CLEAR_COMMAND_OPTIONS]: (state, action) => R.assoc('cmdOptions', [], state),
   [CLEAR_SELECTED]: (state, action) => R.assoc('selected', [], state),
+  [CLEAR_FILTERS]: (state, action) => R.assoc('filters', [], state),
   [REMOVE_COMMAND_OPTION]: (state, action) => {
     const idx = state.cmdOptions.indexOf(action.option)
     return R.merge(state, {

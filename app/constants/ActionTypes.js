@@ -30,6 +30,7 @@ export const SET_ERROR = 'SET_ERROR'
 // various
 export const DO_INSTALL = 'DO_INSTALL'
 export const ADD_FILTER = 'ADD_FILTER'
+export const CLEAR_FILTERS = 'CLEAR_FILTERS'
 export const ADD_MESSAGE = 'ADD_MESSAGE'
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES'
 export const ADD_COMMAND_OPTION = 'ADD_COMMAND_OPTION'

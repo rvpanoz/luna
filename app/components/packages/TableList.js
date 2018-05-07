@@ -207,13 +207,14 @@ class TableList extends React.PureComponent {
         ? this.applyFilters(packages, filters)
         : packages
 
+    console.log(listPackages)
+
     const numSelected =
       selected && Array.isArray(selected) ? selected.length : 0
     const emptyRows =
       rowsPerPage -
       Math.min(rowsPerPage, listPackages.length - page * rowsPerPage)
 
-    console.log(listPackages)
     return (
       <section className={classes.root}>
         <Table className={classes.tableResponsive}>

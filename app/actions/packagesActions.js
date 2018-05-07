@@ -87,6 +87,12 @@ export function addFilter(filterName) {
   }
 }
 
+export function clearFilters() {
+  return {
+    type: types.CLEAR_FILTERS
+  }
+}
+
 export function addCommandOption(option) {
   return {
     type: types.ADD_COMMAND_OPTION,
