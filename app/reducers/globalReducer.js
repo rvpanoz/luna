@@ -32,7 +32,7 @@ import {
 
 const { packages, ...globalState } = initialState
 
-// currying
+/** make use of the currying technique to avoid switch **/
 const createReducer = (globalState, handlers) => (
   state = globalState,
   action
