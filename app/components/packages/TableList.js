@@ -2,50 +2,50 @@
  * TableList component
  **/
 
-import { APP_MODES, PACKAGE_GROUPS } from 'constants/AppConstants'
-import { autoBind, triggerEvent } from 'utils'
-import { withStyles } from 'material-ui/styles'
-import React from 'react'
-import PropTypes from 'prop-types'
-import cn from 'classnames'
+import { APP_MODES, PACKAGE_GROUPS } from "constants/AppConstants";
+import { autoBind, triggerEvent } from "utils";
+import { withStyles } from "material-ui/styles";
+import React from "react";
+import PropTypes from "prop-types";
+import cn from "classnames";
 import Table, {
   TableBody,
   TableCell,
   TableFooter,
   TablePagination,
   TableRow
-} from 'material-ui/Table'
-import Avatar from 'material-ui/Avatar'
-import Checkbox from 'material-ui/Checkbox'
-import TableListHeader from './TableListHeader'
-import Tooltip from 'material-ui/Tooltip'
+} from "material-ui/Table";
+import Avatar from "material-ui/Avatar";
+import Checkbox from "material-ui/Checkbox";
+import TableListHeader from "./TableListHeader";
+import Tooltip from "material-ui/Tooltip";
 import {
   infoColor,
   primaryColor,
   grayColor,
   dangerColor
-} from 'styles/variables'
+} from "styles/variables";
 import {
   Reorder as ReorderIcon,
   Code as CodeIcon,
   Build as BuildIcon,
   List as ListIcon
-} from 'material-ui-icons'
+} from "material-ui-icons";
 
-const styles = (theme) => ({
+const styles = theme => ({
   root: {
-    width: '100%',
+    width: "100%",
     marginTop: 15
   },
   tableWrapper: {
-    overflowX: 'auto'
+    overflowX: "auto"
   },
   infoTableHeader: {
     color: infoColor
   },
   avatar: {
     margin: 0,
-    color: '#fff',
+    color: "#fff",
     fontSize: 10
   },
   gloAvatar: {
@@ -61,122 +61,107 @@ const styles = (theme) => ({
     backgroundColor: primaryColor
   },
   tableRow: {
-    border: 'none',
+    border: "none",
     padding: theme.spacing.unit,
-    lineHeight: '1.4',
-    verticalAlign: 'middle',
-    '&:hover': {
+    lineHeight: "1.4",
+    verticalAlign: "middle",
+    "&:hover": {
       color: infoColor,
-      cursor: 'pointer',
+      cursor: "pointer",
       background: theme.palette.info.light
     }
   },
   tablelist: {
-    visibility: 'visible',
-    overflowX: 'hidden',
-    overflowY: 'auto',
-    clear: 'both',
+    visibility: "visible",
+    overflowX: "hidden",
+    overflowY: "auto",
+    clear: "both",
     maxHeight: 850
   },
   table: {
     marginBottom: 0,
-    width: '100%',
-    maxWidth: '100%',
-    backgroundColor: 'transparent',
+    width: "100%",
+    maxWidth: "100%",
+    backgroundColor: "transparent",
     borderSpacing: 0,
-    borderCollapse: 'collapse'
+    borderCollapse: "collapse"
   },
   tableCell: {
     fontSize: 14,
-    lineHeight: '1.4em',
-    padding: '12px 8px',
-    verticalAlign: 'middle'
+    lineHeight: "1.4em",
+    padding: "12px 8px",
+    verticalAlign: "middle"
   }
-})
+});
 
 class TableList extends React.PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
     autoBind(
       [
-        'handleChangePage',
-        'handleChangeRowsPerPage',
-        'handleUpdate',
-        'viewPackage',
-        'handleClick',
-        'handleUpdate'
+        "handleChangePage",
+        "handleChangeRowsPerPage",
+        "viewPackage",
+        "handleClick"
       ],
       this
-    )
-  }
-  handleUpdate(e) {
-    const { mode, directory, selected } = this.props
-    if (selected && selected.length) {
-      triggerEvent('update-packages', {
-        cmd: ['install'],
-        multiple: true,
-        packages: selected,
-        mode,
-        directory
-      })
-    }
-    e.stopPropagation()
+    );
   }
   handleChangePage(e, page) {
-    const { setPage } = this.props
-    setPage(page)
+    const { setPage } = this.props;
+    setPage(page);
   }
   handleChangeRowsPerPage(e) {
-    const { setRowsPerPage } = this.props
-    setRowsPerPage(e.target.value)
+    const { setRowsPerPage } = this.props;
+    setRowsPerPage(e.target.value);
   }
   handleClick(e, name) {
-    e.preventDefault()
-    const { selected, setSelectedPackage } = this.props
-    setSelectedPackage(name)
-    e.stopPropagation()
+    e.preventDefault();
+    const { selected, setSelectedPackage } = this.props;
+    setSelectedPackage(name);
+    e.stopPropagation();
   }
   viewPackage(e, name, version, mode, directory, repo, latest) {
-    const { toggleMainLoader } = this.props
+    const { toggleMainLoader } = this.props;
 
     if (e) {
-      e.preventDefault()
+      e.preventDefault();
     }
 
-    toggleMainLoader(true)
-    triggerEvent('view-package', {
-      cmd: ['view'],
+    toggleMainLoader(true);
+    triggerEvent("view-package", {
+      cmd: ["view"],
       pkgName: name,
       pkgVersion: version,
       latest,
       repo,
       mode,
       directory
-    })
+    });
 
-    return false
+    return false;
   }
   applyFilters(packages, filters) {
-    const groups = Object.keys(PACKAGE_GROUPS)
-    let filtered
+    const groups = Object.keys(PACKAGE_GROUPS);
+    let filtered;
 
-    filters.forEach((filterName) => {
-      let prop
+    filters.forEach(filterName => {
+      let prop;
       if (groups.indexOf(filterName) > -1) {
-        prop = '_group'
+        prop = "_group";
       }
 
       filtered =
         packages &&
-        packages.filter((pkg) => {
+        packages.filter(pkg => {
           if (prop) {
-            return pkg[prop] === filterName
+            return pkg[prop] === filterName;
           }
-          return !!pkg[filterName]
-        })
-    })
+          return !!pkg[filterName];
+        });
+    });
 
-    return filtered
+    return filtered;
   }
   render() {
     const {
@@ -196,24 +181,22 @@ class TableList extends React.PureComponent {
       loading,
       update,
       filters
-    } = this.props
+    } = this.props;
 
     if (loading) {
-      return null
+      return null;
     }
 
     const listPackages =
       filters && filters.length
         ? this.applyFilters(packages, filters)
-        : packages
-
-    console.log(listPackages)
+        : packages;
 
     const numSelected =
-      selected && Array.isArray(selected) ? selected.length : 0
+      selected && Array.isArray(selected) ? selected.length : 0;
     const emptyRows =
       rowsPerPage -
-      Math.min(rowsPerPage, listPackages.length - page * rowsPerPage)
+      Math.min(rowsPerPage, listPackages.length - page * rowsPerPage);
 
     return (
       <section className={classes.root}>
@@ -231,7 +214,7 @@ class TableList extends React.PureComponent {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((pkg, idx) => {
                 if (!pkg) {
-                  return null
+                  return null;
                 }
 
                 const {
@@ -245,17 +228,17 @@ class TableList extends React.PureComponent {
                   name,
                   repository,
                   _group
-                } = pkg
+                } = pkg;
 
-                const alreadySelected = isSelected(name)
+                const alreadySelected = isSelected(name);
 
                 return (
                   <TableRow
                     className={classes.tableRow}
                     hover
                     role="checkbox"
-                    onClick={(e) => {
-                      const _version = version.replace(/\^/g, '')
+                    onClick={e => {
+                      const _version = version.replace(/\^/g, "");
                       this.viewPackage(
                         e,
                         name,
@@ -264,7 +247,7 @@ class TableList extends React.PureComponent {
                         directory,
                         repository,
                         latest
-                      )
+                      );
                     }}
                     aria-checked={isSelected}
                     tabIndex={-1}
@@ -273,15 +256,15 @@ class TableList extends React.PureComponent {
                   >
                     <TableCell padding="checkbox">
                       <Checkbox
-                        onClick={(e) => this.handleClick(e, name)}
+                        onClick={e => this.handleClick(e, name)}
                         checked={alreadySelected}
                       />
                     </TableCell>
                     <TableCell padding="none" className={classes.tableCell}>
                       <span
                         style={{
-                          display: 'inline-flex',
-                          overflowWrap: 'break-word'
+                          display: "inline-flex",
+                          overflowWrap: "break-word"
                         }}
                       >
                         {name}
@@ -294,7 +277,7 @@ class TableList extends React.PureComponent {
                       {latest ? (
                         <span
                           style={{
-                            color: 'red'
+                            color: "red"
                           }}
                         >
                           {latest}
@@ -318,7 +301,7 @@ class TableList extends React.PureComponent {
                           </Avatar>
                         </Tooltip>
                       )}
-                      {_group === 'dependencies' && (
+                      {_group === "dependencies" && (
                         <Tooltip
                           enterDelay={300}
                           leaveDelay={300}
@@ -332,7 +315,7 @@ class TableList extends React.PureComponent {
                           </Avatar>
                         </Tooltip>
                       )}
-                      {_group === 'devDependencies' && (
+                      {_group === "devDependencies" && (
                         <Tooltip
                           enterDelay={300}
                           leaveDelay={300}
@@ -346,7 +329,7 @@ class TableList extends React.PureComponent {
                           </Avatar>
                         </Tooltip>
                       )}
-                      {_group === 'optionalDependencies' && (
+                      {_group === "optionalDependencies" && (
                         <Tooltip
                           enterDelay={300}
                           leaveDelay={300}
@@ -362,7 +345,7 @@ class TableList extends React.PureComponent {
                       )}
                     </TableCell>
                   </TableRow>
-                )
+                );
               })}
             {emptyRows > 0 && (
               <TableRow style={{ height: 49 * emptyRows }}>
@@ -379,10 +362,10 @@ class TableList extends React.PureComponent {
                 rowsPerPageOptions={[]}
                 page={page}
                 backIconButtonProps={{
-                  'aria-label': 'Previous Page'
+                  "aria-label": "Previous Page"
                 }}
                 nextIconButtonProps={{
-                  'aria-label': 'Next Page'
+                  "aria-label": "Next Page"
                 }}
                 onChangePage={this.handleChangePage}
                 onChangeRowsPerPage={this.handleChangeRowsPerPage}
@@ -391,12 +374,12 @@ class TableList extends React.PureComponent {
           </TableFooter>
         </Table>
       </section>
-    )
+    );
   }
 }
 
 TableList.propTypes = {
   classes: PropTypes.object.isRequired
-}
+};
 
-export default withStyles(styles)(TableList)
+export default withStyles(styles)(TableList);
