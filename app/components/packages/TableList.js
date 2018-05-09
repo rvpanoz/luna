@@ -135,6 +135,8 @@ class TableList extends React.PureComponent {
     const groups = Object.keys(PACKAGE_GROUPS)
     let filtered
     console.log(packages)
+
+    //NOT WORKING
     filters.forEach((filterName) => {
       let prop
       if (groups.indexOf(filterName) > -1) {
