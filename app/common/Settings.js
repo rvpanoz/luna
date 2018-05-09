@@ -84,7 +84,7 @@ class Settings extends React.Component {
             <Button onClick={this.saveSettings} color="primary">
               Save
             </Button>
-            <Button onClick={handleSettingsClose} color="accent">
+            <Button onClick={handleSettingsClose} color="secondary">
               Close
             </Button>
           </DialogActions>

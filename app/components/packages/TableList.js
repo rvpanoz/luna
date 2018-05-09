@@ -308,7 +308,7 @@ class TableList extends React.PureComponent {
                             this.renderTooltipIcon(
                               GroupIcon,
                               'global',
-                              'accent'
+                              'secondary'
                             )
                           )
                         ],
@@ -318,7 +318,7 @@ class TableList extends React.PureComponent {
                             this.renderTooltipIcon(
                               CodeIcon,
                               'dependency',
-                              'accent'
+                              'secondary'
                             )
                           )
                         ],

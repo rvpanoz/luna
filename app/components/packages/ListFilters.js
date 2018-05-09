@@ -2,45 +2,48 @@
 ListFilters
 **/
 
-import { APP_MODES } from 'constants/AppConstants'
-import { withStyles } from 'material-ui/styles'
-import React from 'react'
-import PropTypes from 'prop-types'
-import Typography from 'material-ui/Typography'
-import Divider from 'material-ui/Divider'
-import Button from 'material-ui/Button'
-import FilterIcon from 'material-ui-icons/FilterList'
-import ClearIcon from 'material-ui-icons/Clear'
+import { APP_MODES } from "constants/AppConstants";
+import { withStyles } from "material-ui/styles";
+import React from "react";
+import PropTypes from "prop-types";
+import Typography from "material-ui/Typography";
+import Divider from "material-ui/Divider";
+import Button from "material-ui/Button";
+import FilterIcon from "material-ui-icons/FilterList";
+import ClearIcon from "material-ui-icons/Clear";
 import {
   FormLabel,
   FormControl,
   FormGroup,
   FormControlLabel,
   FormHelperText
-} from 'material-ui/Form'
-import Checkbox from 'material-ui/Checkbox'
+} from "material-ui/Form";
+import Checkbox from "material-ui/Checkbox";
 
-const styles = (theme) => ({
+const styles = theme => ({
   root: {
     maxWidth: 400,
     padding: theme.spacing.unit,
     margin: theme.spacing.unit,
-    '& > h2': {
+    "& > h2": {
       color: theme.palette.secondary.light,
       fontSize: 18
     }
   },
   filterItems: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between"
+  },
+  bottomDivider: {
+    margin: theme.spacing.unit
   },
   leftIcon: {
     marginRight: theme.spacing.unit / 2
   }
-})
+});
 
-const ListFilters = (props) => {
+const ListFilters = props => {
   const {
     classes,
     filters,
@@ -49,27 +52,27 @@ const ListFilters = (props) => {
     mode,
     clearFilters,
     handleFiltersClose
-  } = props
+  } = props;
 
   return (
     <div className={classes.root}>
       <Typography variant="headline" component="h2">
         Filters
       </Typography>
-      <Divider />
+      <Divider light={true} />
       <div className={classes.filterItems}>
         <FormControl component="fieldset">
           <FormLabel
             component="legend"
             style={{
-              display: mode === APP_MODES.GLOBAL ? 'none' : 'block'
+              display: mode === APP_MODES.GLOBAL ? "none" : "block"
             }}
           >
             By group
           </FormLabel>
           <FormGroup
             style={{
-              display: mode === APP_MODES.GLOBAL ? 'none' : 'block'
+              display: mode === APP_MODES.GLOBAL ? "none" : "block"
             }}
           >
             <FormHelperText> Select packages based on group</FormHelperText>
@@ -77,8 +80,8 @@ const ListFilters = (props) => {
               control={
                 <Checkbox
                   disabled={mode === APP_MODES.GLOBAL}
-                  checked={filters && filters.indexOf('dependencies') > -1}
-                  onChange={(e) => onAddFilter('dependencies')}
+                  checked={filters && filters.indexOf("dependencies") > -1}
+                  onChange={e => onAddFilter("dependencies")}
                   value="dependencies"
                 />
               }
@@ -88,8 +91,8 @@ const ListFilters = (props) => {
               control={
                 <Checkbox
                   disabled={mode === APP_MODES.GLOBAL}
-                  checked={filters && filters.indexOf('devDependencies') > -1}
-                  onChange={(e) => onAddFilter('devDependencies')}
+                  checked={filters && filters.indexOf("devDependencies") > -1}
+                  onChange={e => onAddFilter("devDependencies")}
                   value="devDependencies"
                 />
               }
@@ -99,9 +102,9 @@ const ListFilters = (props) => {
               control={
                 <Checkbox
                   checked={
-                    filters && filters.indexOf('optionalDependencies') > -1
+                    filters && filters.indexOf("optionalDependencies") > -1
                   }
-                  onChange={(e) => onAddFilter('optionalDependencies')}
+                  onChange={e => onAddFilter("optionalDependencies")}
                   value="optionalDependencies"
                 />
               }
@@ -117,8 +120,8 @@ const ListFilters = (props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={filters && filters.indexOf('latest') > -1}
-                  onChange={(e) => onAddFilter('latest')}
+                  checked={filters && filters.indexOf("latest") > -1}
+                  onChange={e => onAddFilter("latest")}
                   value="latest"
                 />
               }
@@ -126,15 +129,15 @@ const ListFilters = (props) => {
             />
           </FormGroup>
         </FormControl>
-        <Divider />
+        <Divider className={classes.bottomDivider} light={true} />
         <div className={classes.actions}>
           <Button
             color="primary"
-            onClick={(e) => {
+            onClick={e => {
               if (filters && filters.length) {
-                clearFilters()
+                clearFilters();
               }
-              return false
+              return false;
             }}
           >
             <FilterIcon className={classes.leftIcon} />
@@ -147,12 +150,12 @@ const ListFilters = (props) => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 ListFilters.propTypes = {
   classes: PropTypes.object.isRequired,
   filters: PropTypes.array.isRequired
-}
+};
 
-export default withStyles(styles)(ListFilters)
+export default withStyles(styles)(ListFilters);

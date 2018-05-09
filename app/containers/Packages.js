@@ -8,9 +8,33 @@ import { connect } from "react-redux";
 import { compose } from "redux";
 import { withStyles } from "material-ui/styles";
 import { APP_MODES, PACKAGE_GROUPS } from "constants/AppConstants";
-import * as globalActions from "actions/globalActions";
-import * as packagesActions from "actions/packagesActions";
-import * as R from "ramda";
+import {
+  addFilter,
+  clearFilters,
+  clearSelected,
+  setError,
+  setTotal,
+  setPage,
+  setRowsPerPage,
+  setSelectedPackage,
+  setPackages,
+  setPackageActions,
+  setActive,
+  setVersion,
+  setPackagesOutdated,
+  toggleMainLoader,
+  toggleFilters
+} from "actions/packagesActions";
+import {
+  addMessage,
+  clearMessages,
+  removePackages,
+  toggleLoader,
+  toggleModal,
+  setMode,
+  setPackageJSON
+} from "actions/globalActions";
+import { filter as Rfilter, merge as Rmerge, prop as Rprop } from "ramda";
 import React from "react";
 import Grid from "material-ui/Grid";
 import TableList from "components/packages/TableList";
@@ -123,14 +147,14 @@ class PackagesContainer extends React.Component {
           let pkg = JSON.parse(data);
 
           if (latest) {
-            pkg = R.merge(pkg, {
+            pkg = Rmerge(pkg, {
               latest
             });
           }
 
           if (stats) {
             const _stats = JSON.parse(stats);
-            pkg = R.merge(pkg, {
+            pkg = Rmerge(pkg, {
               stats: _stats
             });
           }
@@ -206,8 +230,6 @@ class PackagesContainer extends React.Component {
       clearMessages
     } = this.props;
 
-    clearMessages();
-
     try {
       const data = parse(packages, "dependencies");
 
@@ -236,13 +258,13 @@ class PackagesContainer extends React.Component {
         }
 
         if (hasError) {
-          return R.merge(pkg, {
+          return Rmerge(pkg, {
             _hasError: pkg.error
           });
         }
 
         const { version, peerMissing, required, missing, _from, link } = pkg;
-        const outdatedPackage = R.prop(name, packagesOutdated);
+        const outdatedPackage = Rprop(name, packagesOutdated);
 
         if (peerMissing && Array.isArray(peerMissing)) {
           _hasPeerMissing = true;
@@ -261,23 +283,24 @@ class PackagesContainer extends React.Component {
           typeof outdatedPackage === "object" &&
           version !== outdatedPackage.latest
         ) {
-          return R.merge(pkg, {
+          return Rmerge(pkg, {
             _group,
             _hasPeerMissing,
             latest: outdatedPackage.latest
           });
         }
 
-        return R.merge(pkg, {
+        return Rmerge(pkg, {
           _group,
           _hasPeerMissing
         });
       });
 
-      const listPackages = R.filter(pkg => {
+      const listPackages = Rfilter(pkg => {
         return !pkg._hasPeerMissing && !pkg._hasError;
       }, mappedPackages);
 
+      clearMessages();
       setPackages(listPackages, "asc", "name");
       setTotal(listPackages.length);
     } catch (e) {
@@ -371,35 +394,31 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setError: error => dispatch(packagesActions.setError(error)),
-    setPage: page => dispatch(packagesActions.setPage(page)),
-    setRowsPerPage: rows => dispatch(packagesActions.setRowsPerPage(rows)),
+    setError: error => dispatch(setError(error)),
+    setPage: page => dispatch(setPage(page)),
+    setRowsPerPage: rows => dispatch(setRowsPerPage(rows)),
     setSelectedPackage: (pkgName, force) =>
-      dispatch(packagesActions.setSelectedPackage(pkgName, force)),
-    clearFilters: () => dispatch(packagesActions.clearFilters()),
-    clearSelected: () => dispatch(packagesActions.clearSelected()),
+      dispatch(setSelectedPackage(pkgName, force)),
+    clearFilters: () => dispatch(clearFilters()),
+    clearSelected: () => dispatch(clearSelected()),
     setPackages: (packages, order, orderBy) =>
-      dispatch(packagesActions.setPackages(packages, order, orderBy)),
-    setPackageActions: actions =>
-      dispatch(packagesActions.setPackageActions(actions)),
-    setPackageJSON: content => dispatch(globalActions.setPackageJSON(content)),
-    setActive: active => dispatch(packagesActions.setActive(active)),
-    setVersion: version => dispatch(packagesActions.setVersion(version)),
-    toggleLoader: bool => dispatch(globalActions.toggleLoader(bool)),
-    toggleModal: bool => dispatch(globalActions.toggleModal(bool)),
-    toggleFilters: bool => dispatch(packagesActions.toggleFilters(bool)),
-    setTotal: total => dispatch(packagesActions.setTotal(total)),
-    toggleMainLoader: bool => dispatch(packagesActions.toggleMainLoader(bool)),
-    setMode: (mode, directory) =>
-      dispatch(globalActions.setMode(mode, directory)),
-    setPackagesOutdated: packages =>
-      dispatch(packagesActions.setPackagesOutdated(packages)),
+      dispatch(setPackages(packages, order, orderBy)),
+    setPackageActions: actions => dispatch(setPackageActions(actions)),
+    setPackageJSON: content => dispatch(setPackageJSON(content)),
+    setActive: active => dispatch(setActive(active)),
+    setVersion: version => dispatch(setVersion(version)),
+    toggleLoader: bool => dispatch(toggleLoader(bool)),
+    toggleModal: bool => dispatch(toggleModal(bool)),
+    toggleFilters: bool => dispatch(toggleFilters(bool)),
+    setTotal: total => dispatch(setTotal(total)),
+    toggleMainLoader: bool => dispatch(toggleMainLoader(bool)),
+    setMode: (mode, directory) => dispatch(setMode(mode, directory)),
+    setPackagesOutdated: packages => dispatch(setPackagesOutdated(packages)),
     addMessage: (level, message, requires, requiredBy) =>
-      dispatch(globalActions.addMessage(level, message, requires, requiredBy)),
-    addFilter: filterName => dispatch(packagesActions.addFilter(filterName)),
-    clearMessages: () => dispatch(globalActions.clearMessages()),
-    removePackages: packages =>
-      dispatch(packagesActions.removePackages(packages))
+      dispatch(addMessage(level, message, requires, requiredBy)),
+    addFilter: filterName => dispatch(addFilter(filterName)),
+    clearMessages: () => dispatch(clearMessages()),
+    removePackages: packages => dispatch(removePackages(packages))
   };
 }
 

@@ -148,7 +148,7 @@ class CardActions extends React.Component {
               return this.buildAction(action, idx)
             })
           : this.buildAction({
-              color: 'accent',
+              color: 'secondary',
               text: 'Install',
               iconCls: 'install'
             })}

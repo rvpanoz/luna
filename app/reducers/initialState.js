@@ -35,7 +35,7 @@ export default {
     defaultActions: [
       {
         text: 'update',
-        color: 'accent',
+        color: 'secondary',
         iconCls: 'update'
       },
       {
