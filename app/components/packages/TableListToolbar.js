@@ -1,34 +1,34 @@
 /** Toolbar List component **/
 
-import { withStyles } from "material-ui/styles";
-import { filter } from "ramda";
-import { lighten } from "material-ui/styles/colorManipulator";
-import { autoBind } from "utils";
-import React from "react";
-import classNames from "classnames";
-import PropTypes from "prop-types";
-import Toolbar from "material-ui/Toolbar";
-import Popover from "material-ui/Popover";
-import Typography from "material-ui/Typography";
-import IconButton from "material-ui/IconButton";
-import Tooltip from "material-ui/Tooltip";
-import AddIcon from "material-ui-icons/Add";
-import DeleteIcon from "material-ui-icons/Delete";
-import RefreshIcon from "material-ui-icons/Refresh";
-import ListIcon from "material-ui-icons/List";
-import FilterListIcon from "material-ui-icons/FilterList";
-import ListFilters from "./ListFilters";
+import { withStyles } from 'material-ui/styles'
+import { filter } from 'ramda'
+import { lighten } from 'material-ui/styles/colorManipulator'
+import { autoBind } from 'utils'
+import React from 'react'
+import classNames from 'classnames'
+import PropTypes from 'prop-types'
+import Toolbar from 'material-ui/Toolbar'
+import Popover from 'material-ui/Popover'
+import Typography from 'material-ui/Typography'
+import IconButton from 'material-ui/IconButton'
+import Tooltip from 'material-ui/Tooltip'
+import AddIcon from 'material-ui-icons/Add'
+import DeleteIcon from 'material-ui-icons/Delete'
+import RefreshIcon from 'material-ui-icons/Refresh'
+import GroupWork from 'material-ui-icons/GroupWork'
+import FilterListIcon from 'material-ui-icons/FilterList'
+import ListFilters from './ListFilters'
 
-const styles = theme => {
+const styles = (theme) => {
   return {
     root: {
-      width: "100%"
+      width: '100%'
     },
     tableListToolbar: {
       paddingRight: theme.spacing.unit
     },
     highlight:
-      theme.palette.type === "light"
+      theme.palette.type === 'light'
         ? {
             color: theme.palette.secondary.main,
             backgroundColor: lighten(theme.palette.secondary.light, 0.85)
@@ -38,59 +38,59 @@ const styles = theme => {
             backgroundColor: theme.palette.secondary.dark
           },
     spacer: {
-      flex: "1 1 100%"
+      flex: '1 1 100%'
     },
     actions: {
       color: theme.palette.text.secondary
     },
     header: {
-      flex: "0 0 auto"
+      flex: '0 0 auto'
     },
     title: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "flex-start",
-      "& > h1": {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'flex-start',
+      '& > h1': {
         fontSize: 18
       }
     },
     directory: {
       fontSize: 12
     }
-  };
-};
+  }
+}
 
 class TableListToolbar extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       anchorEl: null
-    };
-    autoBind(["handleFilters", "handleFiltersClose"], this);
+    }
+    autoBind(['handleFilters', 'handleFiltersClose'], this)
   }
   handleFiltersClose(e) {
-    const { showFilters, toggleFilters } = this.props;
+    const { showFilters, toggleFilters } = this.props
 
     this.setState(
       {
         anchorEl: null
       },
       () => {
-        toggleFilters(!showFilters);
+        toggleFilters(!showFilters)
       }
-    );
+    )
   }
   handleFilters(e) {
-    const { showFilters, toggleFilters } = this.props;
+    const { showFilters, toggleFilters } = this.props
 
     this.setState(
       {
         anchorEl: e.target
       },
       () => {
-        toggleFilters(!showFilters);
+        toggleFilters(!showFilters)
       }
-    );
+    )
   }
   render() {
     const {
@@ -111,14 +111,14 @@ class TableListToolbar extends React.Component {
       filters,
       clearFilters,
       packagesActions
-    } = this.props;
+    } = this.props
 
-    const { anchorEl } = this.state;
+    const { anchorEl } = this.state
 
     //search mode catch
-    const searchMode = filter(action => action.text === "Install")(
+    const searchMode = filter((action) => action.text === 'Install')(
       packagesActions
-    ).length;
+    ).length
 
     return (
       <section className={classes.root}>
@@ -148,8 +148,8 @@ class TableListToolbar extends React.Component {
                     color="secondary"
                     component="div"
                   >
-                    {" "}
-                    {directory}{" "}
+                    {' '}
+                    {directory}{' '}
                   </Typography>
                 ) : null}
               </div>
@@ -182,7 +182,7 @@ class TableListToolbar extends React.Component {
                 </IconButton>
               </Tooltip>
             ) : !searchMode && selected.length ? (
-              <div style={{ display: "flex", flexDirection: "row" }}>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <Tooltip title="Uninstall selected">
                   <IconButton
                     aria-label="Uninstall-selected"
@@ -193,7 +193,7 @@ class TableListToolbar extends React.Component {
                 </Tooltip>
               </div>
             ) : (
-              <div style={{ display: "flex", flexDirection: "row" }}>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <Tooltip title="Reload list">
                   <IconButton aria-label="Reload list" onClick={handleReload}>
                     <RefreshIcon />
@@ -201,7 +201,7 @@ class TableListToolbar extends React.Component {
                 </Tooltip>
                 <Tooltip title="Show globals">
                   <IconButton aria-label="Show globals" onClick={handleGlobals}>
-                    <ListIcon />
+                    <GroupWork />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Show filters">
@@ -217,13 +217,13 @@ class TableListToolbar extends React.Component {
           </div>
         </Toolbar>
       </section>
-    );
+    )
   }
 }
 
 TableListToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   selected: PropTypes.array
-};
+}
 
-export default withStyles(styles)(TableListToolbar);
+export default withStyles(styles)(TableListToolbar)
