@@ -2,11 +2,20 @@
  * TableList component
  **/
 
+import { APP_MODES, PACKAGE_GROUPS } from 'constants/AppConstants'
 import { autoBind, triggerEvent } from 'utils'
 import { withStyles } from 'material-ui/styles'
 import React from 'react'
 import PropTypes from 'prop-types'
-import classNames from 'classnames'
+import cn from 'classnames'
+import {
+  always as Ralways,
+  isNil,
+  equals as Requals,
+  cond as Rcond,
+  propOr as RpropOr,
+  and as Rand
+} from 'ramda'
 import Table, {
   TableBody,
   TableCell,
@@ -14,11 +23,21 @@ import Table, {
   TablePagination,
   TableRow
 } from 'material-ui/Table'
-
+import Avatar from 'material-ui/Avatar'
 import Checkbox from 'material-ui/Checkbox'
 import TableListHeader from './TableListHeader'
-import infoColor from 'styles/variables'
-import defaultFont from 'styles/variables'
+import Tooltip from 'material-ui/Tooltip'
+import {
+  infoColor,
+  primaryColor,
+  grayColor,
+  dangerColor
+} from 'styles/variables'
+import {
+  Code as CodeIcon,
+  Build as BuildIcon,
+  GroupWork as GroupIcon
+} from 'material-ui-icons'
 
 const styles = (theme) => ({
   root: {
@@ -57,13 +76,8 @@ const styles = (theme) => ({
     borderSpacing: 0,
     borderCollapse: 'collapse'
   },
-  tableHeadCell: {
-    ...defaultFont,
-    color: theme.palette.info.dark,
-    fontSize: 12
-  },
   tableCell: {
-    ...defaultFont,
+    fontSize: 14,
     lineHeight: '1.4em',
     padding: '12px 8px',
     verticalAlign: 'middle'
@@ -77,26 +91,11 @@ class TableList extends React.PureComponent {
       [
         'handleChangePage',
         'handleChangeRowsPerPage',
-        'handleUpdate',
         'viewPackage',
-        'handleClick',
-        'handleUpdate'
+        'handleClick'
       ],
       this
     )
-  }
-  handleUpdate(e) {
-    const { mode, directory, selected } = this.props
-    if (selected && selected.length) {
-      triggerEvent('update-packages', {
-        cmd: ['install'],
-        multiple: true,
-        packages: selected,
-        mode,
-        directory
-      })
-    }
-    e.stopPropagation()
   }
   handleChangePage(e, page) {
     const { setPage } = this.props
@@ -132,6 +131,31 @@ class TableList extends React.PureComponent {
 
     return false
   }
+  applyFilters(packages, filters) {
+    const groups = Object.keys(PACKAGE_GROUPS)
+    let allFiltered = []
+
+    filters.forEach((filterName) => {
+      let filtered =
+        packages &&
+        packages.filter((pkg) => {
+          if (groups.indexOf(filterName) > -1) {
+            return pkg['_group'] === filterName
+          }
+          return !!pkg[filterName]
+        })
+      allFiltered = allFiltered.concat(filtered)
+    })
+
+    return allFiltered
+  }
+  renderTooltipIcon(IconComponent, title, color) {
+    return (
+      <Tooltip enterDelay={300} leaveDelay={300} placement="top" title={title}>
+        <IconComponent color={color} />
+      </Tooltip>
+    )
+  }
   render() {
     const {
       classes,
@@ -148,13 +172,24 @@ class TableList extends React.PureComponent {
       mode,
       directory,
       loading,
-      update
+      update,
+      filters
     } = this.props
+
+    if (loading) {
+      return null
+    }
+
+    const listPackages =
+      filters && filters.length
+        ? this.applyFilters(packages, filters)
+        : packages
 
     const numSelected =
       selected && Array.isArray(selected) ? selected.length : 0
     const emptyRows =
-      rowsPerPage - Math.min(rowsPerPage, packages.length - page * rowsPerPage)
+      rowsPerPage -
+      Math.min(rowsPerPage, listPackages.length - page * rowsPerPage)
 
     return (
       <section className={classes.root}>
@@ -168,7 +203,7 @@ class TableList extends React.PureComponent {
             onSelectAllClick={handleSelectAllClick}
           />
           <TableBody>
-            {packages
+            {listPackages
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((pkg, idx) => {
                 if (!pkg) {
@@ -184,7 +219,8 @@ class TableList extends React.PureComponent {
                   deprecated,
                   version,
                   name,
-                  repository
+                  repository,
+                  _group
                 } = pkg
 
                 const alreadySelected = isSelected(name)
@@ -243,9 +279,44 @@ class TableList extends React.PureComponent {
                         version
                       )}
                     </TableCell>
+                    <TableCell padding="none" className={classes.tableCell}>
+                      {Rcond([
+                        [
+                          Requals(null),
+                          Ralways(
+                            this.renderTooltipIcon(
+                              GroupIcon,
+                              'global',
+                              'secondary'
+                            )
+                          )
+                        ],
+                        [
+                          Requals('dependencies'),
+                          Ralways(
+                            this.renderTooltipIcon(
+                              CodeIcon,
+                              'dependency',
+                              'secondary'
+                            )
+                          )
+                        ],
+                        [
+                          Requals('devDependencies'),
+                          Ralways(
+                            this.renderTooltipIcon(
+                              BuildIcon,
+                              'devDependency',
+                              'primary'
+                            )
+                          )
+                        ]
+                      ])(_group)}
+                    </TableCell>
                   </TableRow>
                 )
               })}
+
             {emptyRows > 0 && (
               <TableRow style={{ height: 49 * emptyRows }}>
                 <TableCell colSpan={6} />

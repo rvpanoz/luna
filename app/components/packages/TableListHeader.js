@@ -22,7 +22,8 @@ const styles = (theme) => ({
   tableHeadCell: {
     color: 'inherit',
     ...defaultFont,
-    fontSize: '1em'
+    color: theme.palette.primary.dark,
+    fontSize: 14
   },
   tableCell: {
     ...defaultFont,
@@ -35,7 +36,8 @@ const styles = (theme) => ({
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'version', numeric: false, disablePadding: true, label: 'Version' },
-  { id: 'latest', numeric: false, disablePadding: true, label: 'Latest' }
+  { id: 'latest', numeric: false, disablePadding: true, label: 'Latest' },
+  { id: 'group', numeric: false, disablePadding: true, label: 'Group' }
 ]
 
 class TableListHeader extends React.Component {

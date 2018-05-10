@@ -1,13 +1,13 @@
 //MK
 
 global.mk = {
+  logToFile: false,
   config: {
     defaultSettings: {
       registry: 'https://registry.npmjs.org/',
       fetchGithub: true
     }
   },
-  logToFile: false,
   log() {
     const dt = new Date()
     let cons,

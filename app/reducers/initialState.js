@@ -1,5 +1,5 @@
 export default {
-  mode: "GLOBAL",
+  mode: 'GLOBAL',
   directory: null,
   settings: null,
   loading: false,
@@ -9,13 +9,14 @@ export default {
   drawerOpen: false,
   snackbar: {
     action: null,
-    actionText: "",
-    message: ""
+    actionText: '',
+    message: ''
   },
   messages: [],
   packages: {
     isLoading: false,
     expanded: false,
+    showFilters: false,
     tabIndex: 0,
     total: 0,
     active: null,
@@ -23,32 +24,34 @@ export default {
     errors: [],
     packages: [],
     selected: [],
-    cmdOptions: ["save"],
-    version: "",
-    order: "asc",
-    orderBy: "name",
+    filters: [],
+    nprotected: ['npm'],
+    cmdOptions: ['save'],
+    version: '',
+    order: 'asc',
+    orderBy: 'name',
     page: 0,
     rowsPerPage: 10,
     defaultActions: [
       {
-        text: "update",
-        color: "primary",
-        iconCls: "update"
+        text: 'update',
+        color: 'secondary',
+        iconCls: 'update'
       },
       {
-        text: "uninstall",
-        color: "secondary",
-        iconCls: "uninstall"
+        text: 'uninstall',
+        color: 'primary',
+        iconCls: 'uninstall'
       }
     ],
     actions: []
   },
   packageJSON: {
     license: null,
-    author: "",
-    name: "",
+    author: '',
+    name: '',
     dependencies: [],
     devDependencies: [],
     optionalDependencies: []
   }
-};
+}

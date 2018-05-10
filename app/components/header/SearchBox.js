@@ -59,11 +59,13 @@ class SearchBox extends React.Component {
       setActive,
       mode,
       directory,
-      setPackageActions
+      setPackageActions,
+      clearFilters
     } = this.props
     const pkgName = e.target.value
 
     if (pkgName) {
+      clearFilters()
       toggleLoader(true)
       setActive(null)
       setPackageActions([

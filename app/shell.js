@@ -5,16 +5,21 @@
 
 import Q from 'q'
 import npmApi from './apis/npm'
+import mk from './mk'
 
 exports.doCommand = function(options, callback) {
-  const opts = options || {}
-  const { cmd, ...rest } = opts
+  const { cmd, ...rest } = options || {}
 
-  function combine() {
+  /**
+   helper fn to setup promises array
+  **/
+  const combine = () => {
     let promises = []
 
     if (!cmd || !Array.isArray(cmd)) {
-      throw new Error('shell[doCommand]:cmd must be given and must be an array')
+      throw new Error(
+        'SHELL[doCommand]: cmd parameter must be given and must be an array'
+      )
     }
 
     cmd.forEach((c, idx) => {
@@ -28,6 +33,9 @@ exports.doCommand = function(options, callback) {
     return promises
   }
 
+  /**
+
+  **/
   Q.allSettled(combine()).then((results) => {
     results.forEach((result) => {
       if (result.state === 'fulfilled') {
@@ -40,8 +48,8 @@ exports.doCommand = function(options, callback) {
           result.value.dataString
         )
       } else {
-        const reason = result.reason
-        console.log('Reason', reason)
+        mk.log(`${result.state} ${result.reason}`)
+        callback(result)
       }
     })
   })

@@ -7,7 +7,13 @@ import { ipcRenderer } from 'electron'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { withStyles } from 'material-ui/styles'
-import * as globalActions from 'actions/globalActions'
+import {
+  toggleSettings,
+  handleDrawer,
+  toggleSnackbar,
+  toggleLoader,
+  setSettings
+} from 'actions/globalActions'
 import classnames from 'classnames'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -64,7 +70,9 @@ class Layout extends React.Component {
     })
     ipcRenderer.on('uncaught-exception', (event, exceptionError) => {
       console.error('uncaught-exception', exceptionError)
+      const { toggleLoader } = this.props
 
+      toggleLoader(false)
       toggleSnackbar(true, {
         loader: false,
         actionText: 'Dismiss',
@@ -141,13 +149,13 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setSettings: (settings) => dispatch(globalActions.setSettings(settings)),
-    toggleSnackbar: (bool, options) =>
-      dispatch(globalActions.toggleSnackbar(bool, options)),
-    handleDrawerOpen: () => dispatch(globalActions.handleDrawer(true)),
-    handleDrawerClose: () => dispatch(globalActions.handleDrawer(false)),
-    handleSettingsOpen: () => dispatch(globalActions.toggleSettings(true)),
-    handleSettingsClose: () => dispatch(globalActions.toggleSettings(false))
+    setSettings: (settings) => dispatch(setSettings(settings)),
+    toggleLoader: (bool) => dispatch(toggleLoader(bool)),
+    toggleSnackbar: (bool, options) => dispatch(toggleSnackbar(bool, options)),
+    handleDrawerOpen: () => dispatch(handleDrawer(true)),
+    handleDrawerClose: () => dispatch(handleDrawer(false)),
+    handleSettingsOpen: () => dispatch(toggleSettings(true)),
+    handleSettingsClose: () => dispatch(toggleSettings(false))
   }
 }
 

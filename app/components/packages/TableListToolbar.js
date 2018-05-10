@@ -3,19 +3,22 @@
 import { withStyles } from 'material-ui/styles'
 import { filter } from 'ramda'
 import { lighten } from 'material-ui/styles/colorManipulator'
+import { autoBind } from 'utils'
 import React from 'react'
 import classNames from 'classnames'
 import PropTypes from 'prop-types'
 import Toolbar from 'material-ui/Toolbar'
+import Popover from 'material-ui/Popover'
 import Typography from 'material-ui/Typography'
 import IconButton from 'material-ui/IconButton'
 import Tooltip from 'material-ui/Tooltip'
 import AddIcon from 'material-ui-icons/Add'
 import DeleteIcon from 'material-ui-icons/Delete'
 import RefreshIcon from 'material-ui-icons/Refresh'
-import ListIcon from 'material-ui-icons/List'
+import GroupWork from 'material-ui-icons/GroupWork'
+import FilterListIcon from 'material-ui-icons/FilterList'
+import ListFilters from './ListFilters'
 
-const grayColor = '#999999'
 const styles = (theme) => {
   return {
     root: {
@@ -46,7 +49,10 @@ const styles = (theme) => {
     title: {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'flex-start'
+      justifyContent: 'flex-start',
+      '& > h1': {
+        fontSize: 18
+      }
     },
     directory: {
       fontSize: 12
@@ -54,58 +60,117 @@ const styles = (theme) => {
   }
 }
 
-const TableListToolbar = (props) => {
-  const {
-    classes,
-    directory,
-    selected,
-    title,
-    loading,
-    handleReload,
-    handleGlobals,
-    handleUninstall,
-    handleInstall,
-    handleUpdate,
-    rowCount,
-    packagesActions
-  } = props
-  const searchMode = filter((action) => action.text === 'Install')(
-    packagesActions
-  ).length
+class TableListToolbar extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      anchorEl: null
+    }
+    autoBind(['handleFilters', 'handleFiltersClose'], this)
+  }
+  handleFiltersClose(e) {
+    const { showFilters, toggleFilters } = this.props
 
-  return (
-    <section className={classes.root}>
-      <Toolbar
-        className={classNames(classes.tableListToolbar, {
-          [classes.highlight]: selected && selected.length > 0
-        })}
-      >
-        <div className={classes.header}>
-          {selected && selected.length > 0 ? (
-            <Typography color="inherit" variant="subheading">
-              {selected.length} selected
-            </Typography>
-          ) : (
-            <div className={classes.title}>
-              <Typography variant="title" color="inherit" component="h2">
-                {title} {rowCount || 0}
+    this.setState(
+      {
+        anchorEl: null
+      },
+      () => {
+        toggleFilters(!showFilters)
+      }
+    )
+  }
+  handleFilters(e) {
+    const { showFilters, toggleFilters } = this.props
+
+    this.setState(
+      {
+        anchorEl: e.target
+      },
+      () => {
+        toggleFilters(!showFilters)
+      }
+    )
+  }
+  render() {
+    const {
+      classes,
+      directory,
+      selected,
+      mode,
+      title,
+      loading,
+      handleReload,
+      handleGlobals,
+      handleUninstall,
+      handleInstall,
+      handleUpdate,
+      rowCount,
+      showFilters,
+      addFilter,
+      filters,
+      clearFilters,
+      packagesActions
+    } = this.props
+
+    const { anchorEl } = this.state
+
+    //search mode catch
+    const searchMode = filter((action) => action.text === 'Install')(
+      packagesActions
+    ).length
+
+    return (
+      <section className={classes.root}>
+        <Toolbar
+          className={classNames(classes.tableListToolbar, {
+            [classes.highlight]: selected && selected.length > 0
+          })}
+        >
+          <div className={classes.header}>
+            {selected && selected.length > 0 ? (
+              <Typography
+                color="primary"
+                variant="headline"
+                className={classes.headline}
+              >
+                {selected.length} selected
               </Typography>
-              {directory ? (
-                <Typography
-                  className={classes.directory}
-                  variant="title"
-                  color="inherit"
-                  component="div"
-                >
-                  {' '}
-                  {directory}{' '}
+            ) : (
+              <div className={classes.title}>
+                <Typography color="primary" component="h1">
+                  {title} {rowCount || 0}
                 </Typography>
-              ) : null}
-            </div>
-          )}
-        </div>
-        <div className={classes.spacer} />
-        {loading ? null : (
+                {directory ? (
+                  <Typography
+                    className={classes.directory}
+                    variant="headline"
+                    color="secondary"
+                    component="div"
+                  >
+                    {' '}
+                    {directory}{' '}
+                  </Typography>
+                ) : null}
+              </div>
+            )}
+          </div>
+          <div className={classes.filters}>
+            <Popover
+              open={showFilters}
+              anchorEl={anchorEl}
+              onClose={this.handleFiltersClose}
+            >
+              <ListFilters
+                mode={mode}
+                onAddFilter={addFilter}
+                filters={filters}
+                clearFilters={clearFilters}
+                handleFiltersClose={this.handleFiltersClose}
+              />
+            </Popover>
+          </div>
+          <div className={classes.spacer} />
           <div className={classes.actions}>
             {searchMode && selected.length ? (
               <Tooltip title="Install selected">
@@ -136,16 +201,24 @@ const TableListToolbar = (props) => {
                 </Tooltip>
                 <Tooltip title="Show globals">
                   <IconButton aria-label="Show globals" onClick={handleGlobals}>
-                    <ListIcon />
+                    <GroupWork />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Show filters">
+                  <IconButton
+                    aria-label="Show filters"
+                    onClick={this.handleFilters}
+                  >
+                    <FilterListIcon />
                   </IconButton>
                 </Tooltip>
               </div>
             )}
           </div>
-        )}
-      </Toolbar>
-    </section>
-  )
+        </Toolbar>
+      </section>
+    )
+  }
 }
 
 TableListToolbar.propTypes = {

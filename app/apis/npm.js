@@ -2,16 +2,20 @@
  * NPM cli commands
  **/
 
-const { merge } = require('ramda')
-const cp = require('child_process')
-const Q = require('q')
-const path = require('path')
-const github = require('./github')
+import { merge } from 'ramda'
+import { fetchStats } from './github'
+import cp from 'child_process'
+import Q from 'q'
+import path from 'path'
+import mk from '../mk'
+
 const spawn = cp.spawn
+
+mk.logToFile = false
 
 /** Run npm command **/
 function runCommand(command, directory, callback, opts) {
-  console.log(`running: npm ${command.join(' ')}`)
+  mk.log(`RUNNING: npm ${command.join(' ')}`)
 
   const deferred = Q.defer()
   const cwd = process.cwd()
@@ -42,11 +46,11 @@ function runCommand(command, directory, callback, opts) {
   })
 
   npmc.on('exit', (code) => {
-    console.log(`Child exited with code ${code}`)
+    mk.log(`INFO: Child exited with code ${code}`)
   })
 
   npmc.on('close', () => {
-    console.log(`finished: npm ${command.join(' ')}`)
+    mk.log(`FINISHED: npm ${command.join(' ')}`)
 
     const results = {
       status: 'close',
@@ -59,7 +63,7 @@ function runCommand(command, directory, callback, opts) {
     //github stats
     if (opts && opts.fetchGithub === true) {
       if (repo && repo.url) {
-        const getStats = github.fetchStats({
+        const getStats = fetchStats({
           repoUrl: repo.url || null,
           pkgName
         })
@@ -93,9 +97,11 @@ exports.list = function(opts, callback) {
   const { mode, directory, options } = opts
   const defaults = ['--depth=0', '--long', '--json']
 
-  if (!command || !Array.isArray(command)) {
+  if (!callback || !typeof callback === 'function') {
     return Q.reject(
-      new Error('shell[doCommand]:cmd must be given and must be an array')
+      new Error(
+        'npm[list] callback parameter must be given and must be a function'
+      )
     )
   }
 
@@ -114,7 +120,9 @@ exports.outdated = function(opts, callback) {
 
   if (!command || !Array.isArray(command)) {
     return Q.reject(
-      new Error('shell[doCommand]:cmd must be given and must be an array')
+      new Error(
+        'npm[outdated] cmd parameter must be given and must be an array'
+      )
     )
   }
 
@@ -132,7 +140,7 @@ exports.view = function(opts, callback) {
   const defaults = ['--depth=0', '--json']
 
   if (!pkgName) {
-    return Q.reject(new Error(`npmApi[${command}]:package name must be given`))
+    return Q.reject(new Error('npm[view] package name parameter must be given'))
   }
 
   let result = '',
@@ -166,7 +174,7 @@ exports.search = function(opts, callback) {
 
   if (!pkgName) {
     return Q.reject(
-      new Error(`npmApi[${command[0]}]:package name must be given`)
+      new Error('npm[search] package name parameter must be given')
     )
   }
 
@@ -182,7 +190,9 @@ exports.install = function(opts, callback) {
     pkgOptions = opts.pkgOptions || []
 
   if (!pkgName && !multiple) {
-    throw new Error('npmApi:install package name cannot be empty or undefined')
+    return Q.reject(
+      new Error('npm[install] package name parameter must be given')
+    )
   }
 
   function getNames() {
@@ -216,8 +226,8 @@ exports.uninstall = function(opts, callback) {
     if (multiple && packages && Array.isArray(packages)) {
       return packages
     } else if (!pkgName && !multiple) {
-      throw new Error(
-        'npmApi:uninstall package name cannot be empty or undefined'
+      return Q.reject(
+        new Error('npm[uninstall] package name parameter must be given')
       )
     } else {
       return pkgName

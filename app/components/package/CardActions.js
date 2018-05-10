@@ -21,7 +21,7 @@ const styles = (theme) => {
   return {
     actions: {
       display: 'flex',
-      marginTop: theme.spacing.unit + 20
+      marginTop: theme.spacing.unit
     },
     button: {
       margin: theme.spacing.unit
@@ -56,9 +56,8 @@ class CardActions extends React.Component {
     super(props)
     autoBind(['buildAction', 'doAction'], this)
   }
-  renderIcon(icon) {}
-  buildAction(action, isInstalled, idx) {
-    const { classes } = this.props
+  buildAction(action, idx) {
+    const { active, classes } = this.props
 
     return (
       <Button
@@ -134,9 +133,9 @@ class CardActions extends React.Component {
   }
   render() {
     const {
-      classes,
+      active,
       actions,
-      defaultActions,
+      classes,
       expanded,
       handleExpandClick,
       isInstalled
@@ -146,10 +145,10 @@ class CardActions extends React.Component {
       <MuiCardActions className={classes.actions}>
         {isInstalled && actions
           ? actions.map((action, idx) => {
-              return this.buildAction(action, isInstalled, idx)
+              return this.buildAction(action, idx)
             })
           : this.buildAction({
-              color: 'primary',
+              color: 'secondary',
               text: 'Install',
               iconCls: 'install'
             })}
@@ -174,7 +173,6 @@ CardActions.propTypes = {
   handleExpandClick: func.isRequired,
   setActive: func.isRequired,
   actions: array.isRequired,
-  defaultActions: array.isRequired,
   expanded: bool.isRequired
 }
 

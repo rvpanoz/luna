@@ -1,8 +1,9 @@
 @import '~material-design-icons/iconfont/material-icons.css';
 @import '~typeface-roboto';
 
-html * {
-  font-family: Roboto, sans-serif;
+html,
+* {
+  font-family: Roboto, 'Helvetica', 'Arial', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

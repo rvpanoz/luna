@@ -10,6 +10,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Paper from 'material-ui/Paper'
 import TableListToolbar from './TableListToolbar'
+import Popover from 'material-ui/Popover'
 
 function withToolbarTableList(List, options = {}) {
   return class WithToolbarList extends React.Component {
@@ -17,13 +18,14 @@ function withToolbarTableList(List, options = {}) {
       super(props)
       autoBind(
         [
+          '_installSelected',
           '_uninstallSelected',
           'handleSort',
           'handleSelectAllClick',
-          'handleUpdate',
           'handleInstall',
           'handleReload',
           'handleGlobals',
+          'handleFilters',
           'handleUninstall',
           'isSelected',
           'showDetails',
@@ -66,7 +68,6 @@ function withToolbarTableList(List, options = {}) {
         mode,
         directory,
         packages,
-        setTotal,
         clearSelected,
         setPackages,
         toggleLoader,
@@ -96,13 +97,15 @@ function withToolbarTableList(List, options = {}) {
       }
     }
     componentWillReceiveProps(nextProps) {
-      const { loading, toggleSnackbar } = nextProps
+      const { loading, toggleSnackbar, packages } = nextProps
 
       if (loading) {
         toggleSnackbar(true, {
           loader: true,
           message: 'Loading packages'
         })
+      } else if (packages && packages.length && this._allPackages === null) {
+        this._allPackages = packages
       }
     }
     componentDidMount() {
@@ -224,19 +227,20 @@ function withToolbarTableList(List, options = {}) {
         directory,
         selected,
         loading,
+        clearFilters,
         handleChangePage,
         handleChangeRowsPerPage,
         total,
         toggleSnackbar,
+        toggleFilters,
         packagesActions,
         rowsPerPage,
+        showFilters,
+        addFilter,
+        filters,
         ...rest
       } = this.props
       const { title } = options
-
-      if (loading) {
-        return null
-      }
 
       function getStyles() {
         return loading ? { filter: 'blur(15px)' } : null
@@ -245,12 +249,17 @@ function withToolbarTableList(List, options = {}) {
       return (
         <Paper square style={getStyles()}>
           <TableListToolbar
+            clearFilters={clearFilters}
             mode={mode}
             directory={directory}
             title={title}
             rowCount={total}
             selected={selected}
             loading={loading}
+            showFilters={showFilters}
+            filters={filters}
+            addFilter={addFilter}
+            toggleFilters={toggleFilters}
             packagesActions={packagesActions}
             handleReload={this.handleReload}
             handleUpdate={this.handleUpdate}
@@ -267,6 +276,7 @@ function withToolbarTableList(List, options = {}) {
             loading={loading}
             rowCount={total}
             rowsPerPage={rowsPerPage}
+            filters={filters}
             {...rest}
           />
         </Paper>
@@ -283,6 +293,7 @@ withToolbarTableList.propTypes = {
   toggleMainLoader: func.isRequired,
   mode: string.isRequired,
   total: number,
+  packageJSON: object,
   directory: string,
   packages: array.isRequired,
   setPackages: func.isRequired,

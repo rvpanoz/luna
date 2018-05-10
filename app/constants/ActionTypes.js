@@ -1,10 +1,11 @@
 // toggles
-export const TOGGLE_LOADER = 'TOGGLE_LOADER'
+export const TOGGLE_LOADER = '@@UI/TOGGLE_LOADER'
 export const TOGGLE_MAIN_LOADER = 'TOGGLE_MAIN_LOADER'
 export const TOGGLE_SETTINGS = 'TOGGLE_SETTINGS'
 export const TOGGLE_EXPANDED = 'TOGGLE_EXPANDED'
 export const TOGGLE_SNACKBAR = 'TOGGLE_SNACKBAR'
 export const TOGGLE_DRAWER = 'TOGGLE_DRAWER'
+export const TOGGLE_FILTERS = 'TOGGLE_FILTERS'
 export const MENU_OPEN = 'MENU_OPEN'
 
 // setters
@@ -28,6 +29,8 @@ export const SET_ERROR = 'SET_ERROR'
 
 // various
 export const DO_INSTALL = 'DO_INSTALL'
+export const ADD_FILTER = 'ADD_FILTER'
+export const CLEAR_FILTERS = 'CLEAR_FILTERS'
 export const ADD_MESSAGE = 'ADD_MESSAGE'
 export const CLEAR_MESSAGES = 'CLEAR_MESSAGES'
 export const ADD_COMMAND_OPTION = 'ADD_COMMAND_OPTION'

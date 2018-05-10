@@ -60,6 +60,13 @@ export function setActiveTab(tabIndex) {
   }
 }
 
+export function toggleFilters(showFilters) {
+  return {
+    type: types.TOGGLE_FILTERS,
+    showFilters
+  }
+}
+
 export function toggleExpanded() {
   return {
     type: types.TOGGLE_EXPANDED
@@ -70,6 +77,19 @@ export function setTotal(total) {
   return {
     type: types.SET_TOTAL,
     total
+  }
+}
+
+export function addFilter(filterName) {
+  return {
+    type: types.ADD_FILTER,
+    filterName
+  }
+}
+
+export function clearFilters() {
+  return {
+    type: types.CLEAR_FILTERS
   }
 }
 
