@@ -27,7 +27,7 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 
 ## Downloads
 
-Latest release
+Latest stable release
 
 ### Linux
 
@@ -42,6 +42,16 @@ AppImage [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/lun
 ### MacOS
 
 [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-macOS.zip)
+
+## Development
+
+Install application's dependencies:
+
+`npm install`
+
+In order to start the development server:
+
+`npm run dev`
 
 ## Contribution
 
