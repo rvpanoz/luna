@@ -133,27 +133,21 @@ class TableList extends React.PureComponent {
   }
   applyFilters(packages, filters) {
     const groups = Object.keys(PACKAGE_GROUPS)
-    let filtered
-    console.log(packages)
+    let allFiltered = []
 
-    //NOT WORKING
     filters.forEach((filterName) => {
-      let prop
-      if (groups.indexOf(filterName) > -1) {
-        prop = '_group'
-      }
-
-      filtered =
+      let filtered =
         packages &&
         packages.filter((pkg) => {
-          if (prop) {
-            return pkg[prop] === filterName
+          if (groups.indexOf(filterName) > -1) {
+            return pkg['_group'] === filterName
           }
           return !!pkg[filterName]
         })
+      allFiltered = allFiltered.concat(filtered)
     })
 
-    return filtered
+    return allFiltered
   }
   renderTooltipIcon(IconComponent, title, color) {
     return (
