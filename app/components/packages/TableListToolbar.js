@@ -131,7 +131,7 @@ class TableListToolbar extends React.Component {
             {selected && selected.length > 0 ? (
               <Typography
                 color="primary"
-                variant="headline"
+                component="h1"
                 className={classes.headline}
               >
                 {selected.length} selected
