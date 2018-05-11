@@ -25,9 +25,8 @@ const styles = (theme) => {
     root: {
       flexGrow: 1,
       marginTop: theme.spacing.unit * 3,
-      marginBottom: theme.spacing.unit + 25,
       backgroundColor: theme.palette.white,
-      height: 500
+      height: 400
     },
     graphContent: {
       padding: theme.spacing.unit * 1.5
@@ -37,10 +36,10 @@ const styles = (theme) => {
       overflowX: 'hidden',
       overflowY: 'scroll',
       clear: 'both',
-      maxHeight: '750px'
+      maxHeight: 750
     },
     innerListSmall: {
-      maxHeight: '400px'
+      maxHeight: 300
     },
     heading: {
       color: 'rgba(0, 0, 0, 0.54)',
