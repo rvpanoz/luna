@@ -4,7 +4,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import classnames from 'classnames'
-
+import { and as Rand } from 'ramda'
 import {
   TableCell,
   TableFooter,
@@ -35,10 +35,29 @@ const styles = (theme) => ({
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-  { id: 'version', numeric: false, disablePadding: true, label: 'Version' },
-  { id: 'latest', numeric: false, disablePadding: true, label: 'Latest' },
-  { id: 'group', numeric: false, disablePadding: true, label: 'Group' }
+  { id: 'version-id', disablePadding: true, label: 'Version' },
+  { id: 'latest-id', disablePadding: true, label: 'Latest' },
+  { id: 'group-id', disablePadding: true, label: 'Group' }
 ]
+
+const renderTableLabel = (order, orderBy, column, handler) => {
+  const needSort =
+    Rand(!!orderBy, !!column.id) && Rand(true, orderBy === column.id)
+
+  if (needSort) {
+    return (
+      <TableSortLabel
+        active={orderBy === column.id}
+        direction={order}
+        onClick={handler(column.id)}
+      >
+        {column.label}
+      </TableSortLabel>
+    )
+  }
+
+  return column.label
+}
 
 class TableListHeader extends React.Component {
   createSortHandler = (property) => (e) => {
@@ -72,23 +91,15 @@ class TableListHeader extends React.Component {
               <TableCell
                 className={classes.tableCell}
                 key={column.id}
-                numeric={column.numeric}
                 padding={column.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === column.id ? order : false}
               >
-                <Tooltip
-                  title="Sort"
-                  placement={column.numeric ? 'bottom-end' : 'bottom-start'}
-                  enterDelay={300}
-                >
-                  <TableSortLabel
-                    active={orderBy === column.id}
-                    direction={order}
-                    onClick={this.createSortHandler(column.id)}
-                  >
-                    {column.label}
-                  </TableSortLabel>
-                </Tooltip>
+                {renderTableLabel(
+                  order,
+                  orderBy,
+                  column,
+                  this.createSortHandler
+                )}
               </TableCell>
             )
           }, this)}
