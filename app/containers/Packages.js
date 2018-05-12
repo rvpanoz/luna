@@ -376,6 +376,7 @@ function mapStateToProps(state) {
     directory: state.global.directory,
     showModal: state.global.showModal,
     showFilters: state.packages.showFilters,
+    showDetails: state.packages.showDetails,
     filters: state.packages.filters,
     packages: state.packages.packages,
     selected: state.packages.selected,

@@ -256,6 +256,7 @@ class PackageCard extends React.Component {
       actions,
       setActive,
       settings,
+      showDetails,
       packageJSON,
       packages
     } = this.props
@@ -275,8 +276,8 @@ class PackageCard extends React.Component {
             mode={mode}
             group={group}
             packageJSON={packageJSON}
-            fetchGithub={settings && settings.fetchGithub}
             toggleMainLoader={toggleMainLoader}
+            showDetails={showDetails}
           />
           <CardActions
             isInstalled={find(propEq('name', active.name))(packages)}

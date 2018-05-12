@@ -14,6 +14,7 @@ import {
   toggleLoader,
   setSettings
 } from 'actions/globalActions'
+import { toggleDetails } from 'actions/packagesActions'
 import classnames from 'classnames'
 import React from 'react'
 import PropTypes from 'prop-types'
@@ -100,6 +101,7 @@ class Layout extends React.Component {
       handleSettingsOpen,
       handleSettingsClose,
       settingsOpen,
+      toggleDetails,
       toggleSnackbar,
       loading,
       settings
@@ -122,6 +124,7 @@ class Layout extends React.Component {
             open={settingsOpen}
             settings={settings || {}}
             handleSettingsClose={handleSettingsClose}
+            toggleDetails={toggleDetails}
           />
           <SnackBar
             snackBarOpen={snackBarOpen}
@@ -151,6 +154,7 @@ function mapDispatchToProps(dispatch) {
   return {
     setSettings: (settings) => dispatch(setSettings(settings)),
     toggleLoader: (bool) => dispatch(toggleLoader(bool)),
+    toggleDetails: (bool) => dispatch(toggleDetails(bool)),
     toggleSnackbar: (bool, options) => dispatch(toggleSnackbar(bool, options)),
     handleDrawerOpen: () => dispatch(handleDrawer(true)),
     handleDrawerClose: () => dispatch(handleDrawer(false)),
