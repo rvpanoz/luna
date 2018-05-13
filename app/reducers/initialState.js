@@ -13,6 +13,7 @@ export default {
     message: ''
   },
   messages: [],
+  openedPackages: [],
   packages: {
     isLoading: false,
     expanded: false,

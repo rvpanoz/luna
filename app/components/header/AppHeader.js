@@ -2,10 +2,12 @@
  * AppHeader with mini drawer
  **/
 
+import { ipcRenderer } from 'electron'
 import {
   toggleLoader,
   toggleSettings,
-  toggleDrawer
+  toggleDrawer,
+  setOpenedPackages
 } from 'actions/globalActions'
 import {
   clearFilters,
@@ -103,6 +105,13 @@ const styles = (theme) => {
 }
 
 class AppHeader extends React.Component {
+  componentDidMount() {
+    ipcRenderer.on('openedPackages_loaded', (event, packages) => {
+      const { setOpenedPackages } = this.props
+
+      setOpenedPackages(packages)
+    })
+  }
   render() {
     const {
       menuOpen,
@@ -120,7 +129,8 @@ class AppHeader extends React.Component {
       toggleDrawer,
       setPackageActions,
       handleSettingsOpen,
-      notifications
+      notifications,
+      openedPackages
     } = this.props
 
     return (
@@ -191,6 +201,7 @@ class AppHeader extends React.Component {
             </div>
             <Divider />
             <AppHeaderContent
+              openedPackages={openedPackages}
               handleDrawerClose={handleDrawerClose}
               handleSettingsOpen={handleSettingsOpen}
             />
@@ -206,7 +217,8 @@ function mapStateToProps(state) {
     drawerOpen: state.global.drawerOpen,
     mode: state.global.mode,
     directory: state.global.directory,
-    notifications: state.global.messages
+    notifications: state.global.messages,
+    openedPackages: state.global.openedPackages
   }
 }
 
@@ -214,6 +226,7 @@ function mapDispatchToProps(dispatch) {
   return {
     setActive: (active) => dispatch(setActive(active)),
     setPackageActions: (actions) => dispatch(setPackageActions(actions)),
+    setOpenedPackages: (packages) => dispatch(setOpenedPackages(packages)),
     toggleSettings: (bool) => dispatch(toggleSettings(bool)),
     toggleLoader: (bool) => dispatch(toggleLoader(bool)),
     toggleDrawer: (bool) => dispatch(toggleDrawer(bool)),

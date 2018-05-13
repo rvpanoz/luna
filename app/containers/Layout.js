@@ -64,11 +64,13 @@ class Layout extends React.Component {
         setSettings(settings)
       }
     })
+
     ipcRenderer.on('settings_saved', (event, settings) => {
       if (settings && typeof settings === 'object') {
         setSettings(settings)
       }
     })
+
     ipcRenderer.on('uncaught-exception', (event, exceptionError) => {
       console.error('uncaught-exception', exceptionError)
       const { toggleLoader } = this.props

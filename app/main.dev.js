@@ -40,6 +40,9 @@ const MIN_HEIGHT = 768
 // store initialization
 const Store = new electronStore()
 
+//clear opened packages
+Store.set('openedPackages', [])
+
 //main window
 let mainWindow = null
 
@@ -91,7 +94,18 @@ ipcMain.on('analyze-json', (event, filePath) => {
       }
 
       const content = JSON.parse(fileContent)
-      event.sender.send('analyze-json-close', filePath, content)
+      const openedPackages = Store.get('openedPackages') || []
+
+      if (openedPackages.indexOf(filePath) === -1) {
+        Store.set('openedPackages', [].concat(openedPackages, filePath))
+      }
+
+      event.sender.send(
+        'analyze-json-close',
+        filePath,
+        content,
+        Store.get('openedPackages')
+      )
     })
   } catch (e) {
     console.log(e)
@@ -99,7 +113,7 @@ ipcMain.on('analyze-json', (event, filePath) => {
   }
 })
 
-//user settings
+//store application settings
 ipcMain.on('save-settings', (event, settings) => {
   if (settings && typeof settings === 'object') {
     try {
@@ -111,6 +125,7 @@ ipcMain.on('save-settings', (event, settings) => {
   }
 })
 
+// generic ipc-event dispatcher
 ipcMain.on('ipc-event', (event, options) => {
   const opts = options || {}
   const { ipcEvent } = opts || {}
@@ -228,6 +243,10 @@ app.on('ready', async () => {
       //get user settings
       const userSettings = Store.get('user_settings') || defaultSettings
       event.sender.send('settings_loaded', userSettings)
+
+      //openedPackages
+      const openedPackages = Store.get('openedPackages') || []
+      event.sender.send('openedPackages_loaded', openedPackages)
 
       // show mainWindow
       mainWindow.show()

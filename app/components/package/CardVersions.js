@@ -33,11 +33,6 @@ const styles = (theme) => {
 class CardVersions extends React.Component {
   constructor(props) {
     super(props)
-    this._onChangeVersion = this._onChangeVersion.bind(this)
-  }
-  _onChangeVersion(e) {
-    const { onChangeVersion, version } = this.props
-    onChangeVersion(e, version)
   }
   componentDidMount() {
     const { active, setVersion } = this.props
@@ -80,13 +75,6 @@ class CardVersions extends React.Component {
               </MenuItem>
             ))}
         </TextField>
-        <Button
-          className={classes.button}
-          color="primary"
-          onClick={this._onChangeVersion}
-        >
-          Preview
-        </Button>
       </div>
     )
   }

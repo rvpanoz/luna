@@ -46,7 +46,8 @@ function runCommand(command, directory, callback, opts) {
   })
 
   npmc.on('exit', (code) => {
-    mk.log(`INFO: Child exited with code ${code}`)
+    mk.log(`INFO: child exited with code ${code}`)
+    mk.log('===== EXIT ======')
   })
 
   npmc.on('close', () => {
