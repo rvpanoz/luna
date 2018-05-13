@@ -101,7 +101,7 @@ ipcMain.on('analyze-json', (event, filePath) => {
 
 //user settings
 ipcMain.on('save-settings', (event, settings) => {
-  if (settings) {
+  if (settings && typeof settings === 'object') {
     try {
       Store.set('user_settings', settings)
       event.sender.send('settings_saved', Store.get('user_settings'))

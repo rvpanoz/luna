@@ -86,7 +86,7 @@ class CardContent extends React.Component {
         >
           {active && active.description}
         </Typography>
-        {showDetails ? (
+        {showDetails && showDetails === true ? (
           <div className={classes.details}>
             <Typography
               variant="subheading"

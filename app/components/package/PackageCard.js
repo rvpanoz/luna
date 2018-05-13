@@ -256,7 +256,6 @@ class PackageCard extends React.Component {
       actions,
       setActive,
       settings,
-      showDetails,
       packageJSON,
       packages
     } = this.props
@@ -277,7 +276,7 @@ class PackageCard extends React.Component {
             group={group}
             packageJSON={packageJSON}
             toggleMainLoader={toggleMainLoader}
-            showDetails={showDetails}
+            showDetails={settings && settings.showDetails}
           />
           <CardActions
             isInstalled={find(propEq('name', active.name))(packages)}

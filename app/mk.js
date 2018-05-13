@@ -5,7 +5,8 @@ global.mk = {
   config: {
     defaultSettings: {
       registry: 'https://registry.npmjs.org/',
-      fetchGithub: true
+      fetchGithub: true,
+      showDetails: true
     }
   },
   log() {
