@@ -73,6 +73,13 @@ export function clearMessages(messages) {
   }
 }
 
+export function setOpenedPackages(packages) {
+  return {
+    type: types.SET_OPENED_PACKAGES,
+    packages
+  }
+}
+
 export function toggleLoader(loading) {
   return {
     type: types.TOGGLE_LOADER,

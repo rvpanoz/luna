@@ -32,7 +32,8 @@ import {
   toggleLoader,
   toggleModal,
   setMode,
-  setPackageJSON
+  setPackageJSON,
+  setOpenedPackages
 } from 'actions/globalActions'
 import { filter as Rfilter, merge as Rmerge, prop as Rprop } from 'ramda'
 import React from 'react'
@@ -104,7 +105,8 @@ class PackagesContainer extends React.Component {
       setPackageJSON,
       toggleSnackbar,
       addMessage,
-      clearMessages
+      clearMessages,
+      setOpenedPackages
     } = this.props
 
     ipcRenderer.on('install-packages-close', this.listPackages)
@@ -178,18 +180,29 @@ class PackagesContainer extends React.Component {
     ipcRenderer.on('ipcEvent-error', (event, error) => {
       console.error(error)
     })
-    ipcRenderer.on('analyze-json-close', (event, directory, content) => {
-      setActive(null)
-      setPackageActions(null)
-      toggleLoader(true)
-      setMode(APP_MODES.LOCAL, directory)
-      setPackageJSON(content)
-      triggerEvent('get-packages', {
-        cmd: ['outdated', 'list'],
-        mode: APP_MODES.LOCAL,
-        directory
-      })
-    })
+    ipcRenderer.on(
+      'analyze-json-close',
+      (event, directory, content, openedPackages) => {
+        setActive(null)
+        setPackageActions(null)
+        toggleLoader(true)
+
+        if (directory) {
+          setMode(APP_MODES.LOCAL, directory)
+          setPackageJSON(content)
+        }
+
+        if (openedPackages) {
+          setOpenedPackages(openedPackages)
+        }
+
+        triggerEvent('get-packages', {
+          cmd: ['outdated', 'list'],
+          mode: APP_MODES.LOCAL,
+          directory
+        })
+      }
+    )
   }
   componentWillUnmount() {
     try {
@@ -406,6 +419,7 @@ function mapDispatchToProps(dispatch) {
       dispatch(setPackages(packages, order, orderBy)),
     setPackageActions: (actions) => dispatch(setPackageActions(actions)),
     setPackageJSON: (content) => dispatch(setPackageJSON(content)),
+    setOpenedPackages: (packages) => dispatch(setOpenedPackages(packages)),
     setActive: (active) => dispatch(setActive(active)),
     setVersion: (version) => dispatch(setVersion(version)),
     toggleLoader: (bool) => dispatch(toggleLoader(bool)),

@@ -2,10 +2,12 @@
  * AppHeader with mini drawer
  **/
 
+import { ipcRenderer } from 'electron'
 import {
   toggleLoader,
   toggleSettings,
-  toggleDrawer
+  toggleDrawer,
+  setOpenedPackages
 } from 'actions/globalActions'
 import {
   clearFilters,
@@ -34,7 +36,7 @@ import Notifications from './Notifications'
 const { object, func } = PropTypes
 
 const styles = (theme) => {
-  const drawerWidth = 240
+  const drawerWidth = 275
 
   return {
     appBar: {
@@ -103,6 +105,11 @@ const styles = (theme) => {
 }
 
 class AppHeader extends React.Component {
+  componentDidMount() {
+    ipcRenderer.on('openedPackages_loaded', (event, packages) => {
+      setOpenedPackages(packages)
+    })
+  }
   render() {
     const {
       menuOpen,
@@ -120,9 +127,10 @@ class AppHeader extends React.Component {
       toggleDrawer,
       setPackageActions,
       handleSettingsOpen,
-      notifications
+      notifications,
+      openedPackages
     } = this.props
-
+    console.log(openedPackages)
     return (
       <div className="header">
         <AppBar
@@ -191,6 +199,7 @@ class AppHeader extends React.Component {
             </div>
             <Divider />
             <AppHeaderContent
+              openedPackages={openedPackages}
               handleDrawerClose={handleDrawerClose}
               handleSettingsOpen={handleSettingsOpen}
             />
@@ -206,7 +215,8 @@ function mapStateToProps(state) {
     drawerOpen: state.global.drawerOpen,
     mode: state.global.mode,
     directory: state.global.directory,
-    notifications: state.global.messages
+    notifications: state.global.messages,
+    openedPackages: state.global.openedPackages
   }
 }
 
@@ -214,6 +224,7 @@ function mapDispatchToProps(dispatch) {
   return {
     setActive: (active) => dispatch(setActive(active)),
     setPackageActions: (actions) => dispatch(setPackageActions(actions)),
+    setOpenedPackages: (packages) => dispatch(setOpenedPackages(packages)),
     toggleSettings: (bool) => dispatch(toggleSettings(bool)),
     toggleLoader: (bool) => dispatch(toggleLoader(bool)),
     toggleDrawer: (bool) => dispatch(toggleDrawer(bool)),

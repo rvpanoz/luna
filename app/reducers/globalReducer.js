@@ -7,6 +7,7 @@ import {
   SET_MODE,
   SET_PACKAGE_JSON,
   SET_ACTIVE_SIDEBAR,
+  SET_OPENED_PACKAGES,
   ADD_MESSAGE,
   CLEAR_MESSAGES,
   TOGGLE_LOADER,
@@ -39,6 +40,8 @@ const createReducer = (globalState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action)
 
 const handlers = {
+  [SET_OPENED_PACKAGES]: (state, action) =>
+    assoc('openedPackages', action.packages, state),
   [SET_SETTINGS]: (state, action) => assoc('settings', action.settings, state),
   [SET_MODE]: (state, action) =>
     merge(state, {

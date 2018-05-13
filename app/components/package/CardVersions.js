@@ -82,7 +82,7 @@ class CardVersions extends React.Component {
         </TextField>
         <Button
           className={classes.button}
-          color="primary"
+          color="secondary"
           onClick={this._onChangeVersion}
         >
           Preview
