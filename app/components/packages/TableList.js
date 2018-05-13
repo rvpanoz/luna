@@ -36,7 +36,8 @@ import {
 import {
   Code as CodeIcon,
   Build as BuildIcon,
-  GroupWork as GroupIcon
+  GroupWork as GroupIcon,
+  SettingsEthernet as OptIcon
 } from 'material-ui-icons'
 
 const styles = (theme) => ({
@@ -308,6 +309,16 @@ class TableList extends React.PureComponent {
                               BuildIcon,
                               'devDependency',
                               'primary'
+                            )
+                          )
+                        ],
+                        [
+                          Requals('optionalDependencies'),
+                          Ralways(
+                            this.renderTooltipIcon(
+                              OptIcon,
+                              'optionalDependency',
+                              'error'
                             )
                           )
                         ]

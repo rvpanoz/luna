@@ -145,8 +145,7 @@ class TableListToolbar extends React.Component {
                   <Typography
                     className={classes.directory}
                     variant="headline"
-                    color="secondary"
-                    component="div"
+                    component="h5"
                   >
                     {' '}
                     {directory}{' '}
