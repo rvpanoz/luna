@@ -10,6 +10,7 @@ import {
   TOGGLE_EXPANDED,
   TOGGLE_MAIN_LOADER,
   TOGGLE_FILTERS,
+  TOGGLE_DETAILS,
   SET_PACKAGES,
   SET_TOTAL,
   SET_ACTIVE,
@@ -39,6 +40,8 @@ const createReducer = (initialState, handlers) => (
 ) => R.propOr(R.identity, R.prop('type', action), handlers)(state, action)
 
 const handlers = {
+  [TOGGLE_DETAILS]: (state, action) =>
+    R.assoc('showDetails', action.showDetails, state),
   [TOGGLE_FILTERS]: (state, action) =>
     R.assoc('showFilters', action.showFilters, state),
   [TOGGLE_MAIN_LOADER]: (state, action) =>

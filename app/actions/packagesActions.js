@@ -4,6 +4,13 @@
 
 import * as types from 'constants/ActionTypes'
 
+export function toggleDetails(bool) {
+  return {
+    type: types.TOGGLE_DETAILS,
+    showDetails: bool
+  }
+}
+
 export function setError(error) {
   return {
     type: types.SET_ERROR,

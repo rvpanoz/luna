@@ -275,8 +275,8 @@ class PackageCard extends React.Component {
             mode={mode}
             group={group}
             packageJSON={packageJSON}
-            fetchGithub={settings && settings.fetchGithub}
             toggleMainLoader={toggleMainLoader}
+            showDetails={settings && settings.showDetails}
           />
           <CardActions
             isInstalled={find(propEq('name', active.name))(packages)}

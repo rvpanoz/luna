@@ -17,6 +17,7 @@ export default {
     isLoading: false,
     expanded: false,
     showFilters: false,
+    showDetails: false,
     tabIndex: 0,
     total: 0,
     active: null,

@@ -22,7 +22,7 @@ const styles = (theme) => {
       fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif'
     },
     headingTail: {
-      margin: '0.9em 0 1em'
+      margin: theme.spacing.unit + 4
     },
     controls: {
       display: 'flex',
@@ -35,7 +35,12 @@ const styles = (theme) => {
       }
     },
     details: {
-      marginBottom: 10
+      marginTop: theme.spacing.unit + 2,
+      marginBottom: theme.spacing.unit + 2
+    },
+    infoDetails: {
+      marginTop: theme.spacing.unit,
+      marginBottom: theme.spacing.unit
     },
     info: {
       lineHeight: '22px',
@@ -60,8 +65,8 @@ class CardContent extends React.Component {
       packageJSON,
       group,
       toggleMainLoader,
-      fetchGithub,
-      removeCommandOption
+      removeCommandOption,
+      showDetails
     } = this.props
 
     if (!active) {
@@ -81,27 +86,30 @@ class CardContent extends React.Component {
         >
           {active && active.description}
         </Typography>
-        <br />
-        <Typography
-          variant="subheading"
-          component="h3"
-          className={classes.heading}
-        >
-          Details and statistics
-        </Typography>
-        <Divider />
-        <section className={classes.details}>
-          <Typography
-            className={classes.info}
-            component="p"
-            gutterBottom={true}
-            variant="caption"
-          >
-            Author: {active.author || APP_INFO.NOT_AVAILABLE}
-          </Typography>
-          <br />
-          <CardTabs active={active} toggleMainLoader={toggleMainLoader} />
-        </section>
+        {showDetails && showDetails === true ? (
+          <div className={classes.details}>
+            <Typography
+              variant="subheading"
+              component="h3"
+              className={classes.heading}
+            >
+              Details and statistics
+            </Typography>
+            <Divider />
+            <section className={classes.infoDetails}>
+              <Typography
+                className={classes.info}
+                component="p"
+                gutterBottom={true}
+                variant="caption"
+              >
+                Author: {active.author || APP_INFO.NOT_AVAILABLE}
+              </Typography>
+              <br />
+              <CardTabs active={active} toggleMainLoader={toggleMainLoader} />
+            </section>
+          </div>
+        ) : null}
       </MuiCardContent>
     )
   }

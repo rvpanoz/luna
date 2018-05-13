@@ -18,26 +18,36 @@ import Button from 'material-ui/Button'
 import Switch from 'material-ui/Switch'
 import Divider from 'material-ui/Divider'
 
-const styles = {}
+const styles = {
+  formControls: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  }
+}
 
 class Settings extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      showDetails: false,
       fetchGithub: false
     }
-    autoBind(['handleChange', 'saveSettings'], this)
+    autoBind(['handlefetchGithub', 'handleDetails', 'saveSettings'], this)
   }
   componentWillReceiveProps(nextProps) {
     const { settings } = nextProps
 
-    if (settings) {
-      this.setState({
-        fetchGithub: settings.fetchGithub
-      })
-    }
+    this.setState({
+      showDetails: settings && settings.showDetails,
+      fetchGithub: settings && settings.fetchGithub
+    })
   }
-  handleChange(e) {
+  handleDetails(e) {
+    const { name } = e.target
+    this.setState({ [name]: e.target.checked })
+  }
+  handlefetchGithub(e) {
     const { name } = e.target
     this.setState({ [name]: e.target.checked })
   }
@@ -49,10 +59,10 @@ class Settings extends React.Component {
   }
   render() {
     const { classes, handleSettingsClose, open, settings } = this.props
-    const { fetchGithub } = this.state
+    const { fetchGithub, showDetails } = this.state
 
     if (!settings) {
-      return null
+      return null //@todo
     }
 
     return (
@@ -71,12 +81,24 @@ class Settings extends React.Component {
                 control={
                   <Switch
                     checked={fetchGithub}
-                    onChange={(e) => this.handleChange(e)}
+                    onChange={(e) => this.handlefetchGithub(e)}
                     name="fetchGithub"
                     color="primary"
                   />
                 }
                 label="Fetch Github stats"
+              />
+              <br />
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={showDetails}
+                    onChange={(e) => this.handleDetails(e)}
+                    name="showDetails"
+                    color="primary"
+                  />
+                }
+                label="Show package details"
               />
             </DialogContentText>
           </DialogContent>

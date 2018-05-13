@@ -162,11 +162,11 @@ class PackageActions extends React.Component {
               component="h3"
               className={classes.heading}
               variant="subheading"
-              >
+            >
               Dist tags
             </Typography>
             <Divider />
-            <CardTags active={active} toggleMainLoader={toggleMainLoader}/>
+            <CardTags active={active} toggleMainLoader={toggleMainLoader} />
           </CardContent>
         </Card>
         {settings && settings.fetchGithub === true && active.stats ? (
