@@ -87,29 +87,29 @@ class CardContent extends React.Component {
           {active && active.description}
         </Typography>
         {showDetails ? (
-        <div className={classes.details}>
-        <Typography
-          variant="subheading"
-          component="h3"
-          className={classes.heading}
-        >
-          Details and statistics
-        </Typography>
-        <Divider />
-        <section className={classes.infoDetails}>
-          <Typography
-            className={classes.info}
-            component="p"
-            gutterBottom={true}
-            variant="caption"
-          >
-            Author: {active.author || APP_INFO.NOT_AVAILABLE}
-          </Typography>
-          <br />
-          <CardTabs active={active} toggleMainLoader={toggleMainLoader} />
-        </section>
-        </div>
-        : null }
+          <div className={classes.details}>
+            <Typography
+              variant="subheading"
+              component="h3"
+              className={classes.heading}
+            >
+              Details and statistics
+            </Typography>
+            <Divider />
+            <section className={classes.infoDetails}>
+              <Typography
+                className={classes.info}
+                component="p"
+                gutterBottom={true}
+                variant="caption"
+              >
+                Author: {active.author || APP_INFO.NOT_AVAILABLE}
+              </Typography>
+              <br />
+              <CardTabs active={active} toggleMainLoader={toggleMainLoader} />
+            </section>
+          </div>
+        ) : null}
       </MuiCardContent>
     )
   }
