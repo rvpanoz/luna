@@ -83,7 +83,7 @@ class CardVersions extends React.Component {
         <Button
           className={classes.button}
           color="secondary"
-          onClick={this._onChangeVersion}
+          onClick={(e) => this._onChangeVersion}
         >
           Preview
         </Button>

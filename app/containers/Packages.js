@@ -164,6 +164,7 @@ class PackagesContainer extends React.Component {
           setActive(pkg)
           toggleMainLoader(false)
         } catch (e) {
+          console.log(e)
           throw new Error(e)
         }
       }
