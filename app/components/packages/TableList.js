@@ -327,12 +327,6 @@ class TableList extends React.PureComponent {
                   </TableRow>
                 )
               })}
-
-            {emptyRows > 0 && (
-              <TableRow style={{ height: 49 * emptyRows }}>
-                <TableCell colSpan={6} />
-              </TableRow>
-            )}
           </TableBody>
           <TableFooter>
             <TableRow>
@@ -340,7 +334,7 @@ class TableList extends React.PureComponent {
                 colSpan={6}
                 count={rowCount}
                 rowsPerPage={rowsPerPage}
-                rowsPerPageOptions={[]}
+                rowsPerPageOptions={[10, 15, 20, 25, 50]}
                 page={page}
                 backIconButtonProps={{
                   'aria-label': 'Previous Page'
