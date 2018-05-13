@@ -138,7 +138,7 @@ const ListFilters = (props) => {
         <Divider className={classes.bottomDivider} light={true} />
         <div className={classes.actions}>
           <Button
-            color="primary"
+            color="secondary"
             onClick={(e) => {
               if (filters && filters.length) {
                 clearFilters()

@@ -36,7 +36,7 @@ import Notifications from './Notifications'
 const { object, func } = PropTypes
 
 const styles = (theme) => {
-  const drawerWidth = 275
+  const drawerWidth = 240
 
   return {
     appBar: {
@@ -107,6 +107,8 @@ const styles = (theme) => {
 class AppHeader extends React.Component {
   componentDidMount() {
     ipcRenderer.on('openedPackages_loaded', (event, packages) => {
+      const { setOpenedPackages } = this.props
+
       setOpenedPackages(packages)
     })
   }
@@ -130,7 +132,7 @@ class AppHeader extends React.Component {
       notifications,
       openedPackages
     } = this.props
-    console.log(openedPackages)
+
     return (
       <div className="header">
         <AppBar

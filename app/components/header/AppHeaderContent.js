@@ -32,7 +32,16 @@ const styles = (theme) => ({
     width: '100%'
   },
   listItem: {
+    fontFamily: 'Roboto',
     marginLeft: 50
+  },
+  link: {
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
+    '&:hover': {
+      fill: 'rgb(225, 0, 80)',
+      textDecoration: 'none'
+    }
   },
   iconHover: {
     '&:hover': {
@@ -45,6 +54,13 @@ class AppHeaderContent extends React.Component {
   constructor() {
     super()
     autoBind(['analyzeDirectory', 'openPackage', 'toggleSettings'], this)
+  }
+  analyzeDirectory(e, directory) {
+    const { handleDrawerClose } = this.props
+    e.preventDefault()
+
+    ipcRenderer.send('analyze-json', directory)
+    handleDrawerClose()
   }
   openPackage(e) {
     e.preventDefault()
@@ -76,11 +92,6 @@ class AppHeaderContent extends React.Component {
     const { handleSettingsOpen } = this.props
     handleSettingsOpen(true)
   }
-  analyzeDirectory(e, directory) {
-    const { handleDrawerClose } = this.props
-    ipcRenderer.send('analyze-json', directory)
-    handleDrawerClose()
-  }
   render() {
     const { classes, openedPackages } = this.props
 
@@ -103,6 +114,12 @@ class AppHeaderContent extends React.Component {
         <Divider />
         <div className={classes.list}>
           <List dense={true}>
+            <ListItem>
+              <ListItemIcon>
+                <Icon>folder_open</Icon>
+              </ListItemIcon>
+              <ListItemText primary="Packages history" />
+            </ListItem>
             {openedPackages &&
               openedPackages.map((pkg, idx) => {
                 const pkgToArray = pkg.split('/')
@@ -110,16 +127,17 @@ class AppHeaderContent extends React.Component {
                 const pkgName = pkgToArray[items - 2]
 
                 return (
-                  <ListItem
-                    button
-                    onClick={(e) => this.analyzeDirectory(e, pkg)}
-                    key={`opkg-${idx}`}
-                  >
+                  <ListItem key={`opkg-${idx}`}>
                     <ListItemText
                       className={classes.listItem}
-                      primary={pkgName}
-                      secondary={
-                        <span className={classes.directory}>{pkg}</span>
+                      primary={
+                        <a
+                          onClick={(e) => this.analyzeDirectory(e, pkg)}
+                          href="#sub-labels-and-columns"
+                          className={classes.link}
+                        >
+                          {pkgName}
+                        </a>
                       }
                     />
                   </ListItem>
