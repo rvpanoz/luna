@@ -64,7 +64,6 @@ class CardActions extends React.Component {
         key={`act-${idx}`}
         variant="raised"
         color={daction.color}
-        action={daction.text}
         onClick={this.doAction}
         aria-label={daction.text}
         className={classes.button}
