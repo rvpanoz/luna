@@ -213,12 +213,13 @@ app.on('ready', async () => {
       y = externalDisplay.bounds.y + 50
     }
 
-    if (MIN_WIDTH > screenSize.width) {
-      mk.log(`FATAL: low_resolution ${screenSize.width}x${screenSize.height}`)
-      throw new Error(
-        `Resolution ${screenSize.width}x${screenSize.height} is not supported.`
-      )
-    }
+    /** Needs work for RETINA displays **/
+    // if (MIN_WIDTH > screenSize.width) {
+    //   mk.log(`FATAL: low_resolution ${screenSize.width}x${screenSize.height}`)
+    //   throw new Error(
+    //     `Resolution ${screenSize.width}x${screenSize.height} is not supported.`
+    //   )
+    // }
 
     // create main window
     mainWindow = new BrowserWindow({
