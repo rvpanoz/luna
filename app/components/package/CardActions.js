@@ -56,27 +56,27 @@ class CardActions extends React.Component {
     super(props)
     autoBind(['buildAction', 'doAction'], this)
   }
-  buildAction(action, idx) {
+  buildAction(daction, idx) {
     const { active, classes } = this.props
 
     return (
       <Button
         key={`act-${idx}`}
         variant="raised"
-        color={action.color}
-        action={action.text}
+        color={daction.color}
+        action={daction.text}
         onClick={this.doAction}
-        aria-label={action.text}
+        aria-label={daction.text}
         className={classes.button}
       >
-        {action.iconCls === 'install' && <Add className={classes.leftIcon} />}
-        {action.iconCls === 'update' && <Update className={classes.leftIcon} />}
-        {action.iconCls === 'uninstall' && (
+        {daction.iconCls === 'install' && <Add className={classes.leftIcon} />}
+        {daction.iconCls === 'update' && <Update className={classes.leftIcon} />}
+        {daction.iconCls === 'uninstall' && (
           <Delete
             className={classnames(classes.leftIcon, classes.buttonUninstall)}
           />
         )}
-        {action.text}
+        {daction.text}
       </Button>
     )
   }
@@ -84,7 +84,7 @@ class CardActions extends React.Component {
     e.preventDefault()
 
     const target = e.currentTarget
-    const action = target.textContent.trim().toLowerCase()
+    const actionText = target.textContent.trim().toLowerCase()
     const {
       actions,
       mode,
@@ -98,31 +98,27 @@ class CardActions extends React.Component {
       toggleSnackbar
     } = this.props
 
-    if (!action || ['install', 'uninstall', 'update'].indexOf(action) === -1) {
-      throw new Error(`doAction: action ${action} is invalid`)
-    }
-
     remote.dialog.showMessageBox(
       remote.getCurrentWindow(),
       {
         title: 'Confirmation',
         type: 'question',
         message:
-          action === 'uninstall'
-            ? `Would you like to ${action} ${active.name}?`
-            : `Would you like to ${action} ${active.name + '@' + version}?`,
-        buttons: ['Cancel', firstToUpper(action)]
+          actionText === 'uninstall'
+            ? `Would you like to ${actionText} ${active.name}?`
+            : `Would you like to ${actionText} ${active.name + '@' + version}?`,
+        buttons: ['Cancel', firstToUpper(actionText)]
       },
       (btnIdx) => {
         if (Boolean(btnIdx) === true) {
           setActive(null)
           toggleLoader(true)
-          triggerEvent(action, {
+          triggerEvent(actionText, {
             mode,
             directory,
-            cmd: [action === 'update' ? 'install' : action],
+            cmd: [actionText === 'update' ? 'install' : actionText],
             pkgName: active.name,
-            pkgVersion: action === 'uninstall' || !isInstalled ? null : version,
+            pkgVersion: actionText === 'uninstall' || !isInstalled ? null : version,
             pkgOptions: cmdOptions
           })
         }
@@ -144,8 +140,8 @@ class CardActions extends React.Component {
     return (
       <MuiCardActions className={classes.actions}>
         {isInstalled && actions
-          ? actions.map((action, idx) => {
-              return this.buildAction(action, idx)
+          ? actions.map((daction, idx) => {
+              return this.buildAction(daction, idx)
             })
           : this.buildAction({
               color: 'secondary',
