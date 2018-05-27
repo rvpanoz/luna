@@ -26,17 +26,18 @@ Latest stable release
 
 ### Linux
 
-Debian [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna_2.1.0_amd64.deb)
+Debian [Download](https://github.com/rvpanoz/luna/releases/download/v2.2.0/luna_2.2.0_amd64.deb)
 
-AppImage [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-x86_64.AppImage)
+AppImage [Download](https://github.com/rvpanoz/luna/releases/download/v2.2.0/luna-2.2.0-x86_64.AppImage)
 
 ### Windows
 
 [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna.Setup.2.1.0.exe)
 
-### MacOS
+### MacOS (v2.1.0)
 
 [Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna-2.1.0-macOS.zip)
+_update release soon_
 
 ## Development
 
