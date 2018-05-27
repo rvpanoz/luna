@@ -1,9 +1,4 @@
-<p align="center">
-     <img align="center" width="100%" height="100%"
-     title="luna-icon" src="./resources/img/luna-banner.png">
-</p>
-
-# Luna v2 - NPM management through a modern UI</h1>
+# Luna - NPM management through a modern UI
 
 npm desktop manager for handling npm packages. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
 
@@ -15,7 +10,7 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 * Install new packages - multiple
 * Uninstall packages - multiple
 * Update existing packages
-* Preview package versions
+* Preview package details (versions, statistics, dependencies and more)
 * Get notifications for missing dependencies
 
 ---
@@ -53,14 +48,16 @@ In order to start the development server:
 
 `npm run dev`
 
+_As of version 2.2 because there are some core dependencies updates you have to remove the node_modules folders and run a clean install_
+
 ## Contribution
 
 If you'd like to make some changes:
 
-1. Fork this repository to your own GitHub account and then clone it to your local device
-2. Install npm globally and run `npm install` to install application's dependencies
-3. Build and start the application with `npm run dev`
-4. Submit a pull request with your changes :boom:
+1.  Fork this repository to your own GitHub account and then clone it to your local device
+2.  Install npm globally and run `npm install` to install application's dependencies
+3.  Build and start the application with `npm run dev`
+4.  Submit a pull request with your changes :boom:
 
 ## Notes
 

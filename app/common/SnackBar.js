@@ -56,14 +56,12 @@ class SnackBar extends React.Component {
         resumeHideDuration={5}
         anchorOrigin={position}
         open={snackBarOpen}
-        onClose={(e) => {
-          handleSnackBarClose()
-        }}
+        onClose={(e) => handleSnackBarClose}
         SnackbarContentProps={{
           'aria-describedby': 'message'
         }}
         message={
-          <div className="saving">
+          <div className="dots">
             {message}
             {!loader ? null : (
               <span>
