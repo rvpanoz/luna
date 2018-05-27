@@ -22,7 +22,7 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 
 ## Downloads
 
-Latest stable release
+Latest stable release (v2.2.0)
 
 ### Linux
 
