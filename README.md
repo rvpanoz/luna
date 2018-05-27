@@ -32,7 +32,7 @@ AppImage [Download](https://github.com/rvpanoz/luna/releases/download/v2.2.0/lun
 
 ### Windows
 
-[Download](https://github.com/rvpanoz/luna/releases/download/v2.1.0/luna.Setup.2.1.0.exe)
+[Download](https://github.com/rvpanoz/luna/releases/download/v2.2.0/luna-setup-v2.2.0.exe)
 
 ### MacOS (v2.1.0)
 
