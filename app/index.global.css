@@ -46,87 +46,6 @@ body:before {
   -webkit-font-smoothing: antialiased;
 }
 
-a {
-  color: #9c27b0;
-  text-decoration: none;
-}
-
-a:hover,
-a:focus {
-  color: #89229b;
-  text-decoration: none;
-}
-
-legend {
-  border-bottom: 0;
-}
-
-* {
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-  -webkit-tap-highlight-color: transparent;
-}
-
-*:focus {
-  outline: 0;
-}
-
-a:focus,
-a:active,
-button:active,
-button:focus,
-button:hover,
-button::-moz-focus-inner,
-input[type='reset']::-moz-focus-inner,
-input[type='button']::-moz-focus-inner,
-input[type='submit']::-moz-focus-inner,
-select::-moz-focus-inner,
-input[type='file'] > input[type='button']::-moz-focus-inner {
-  outline: 0 !important;
-}
-
-legend {
-  margin-bottom: 20px;
-  font-size: 21px;
-}
-
-output {
-  padding-top: 8px;
-  font-size: 14px;
-  line-height: 1.42857;
-}
-
-label {
-  font-size: 14px;
-  line-height: 1.42857;
-  color: #aaaaaa;
-  font-weight: 400;
-}
-
-/* The sticky class is added to the header with JS when it reaches its scroll position */
-.sticky {
-  position: fixed;
-  top: 0;
-  width: 100%;
-}
-
-/* Add some top padding to the page content to prevent sudden quick movement (as the header gets a new position at the top of the page (position:fixed and top:0) */
-.sticky + .content {
-  padding-top: 102px;
-}
-
-.tooltip {
-  position: absolute;
-  text-align: center;
-  width: '60px';
-  height: '28px';
-  padding: '2px';
-  font: 12px sans-serif;
-  background: lightsteelblue;
-  border: '0px';
-  border-radius: '8px';
-  pointer-events: 'none';
-}
-
 /** animations **/
 @keyframes blink {
   /**
@@ -152,7 +71,7 @@ label {
   }
 }
 
-.saving span {
+.dots span {
   /**
      * Use the blink animation, which is defined above
      */
@@ -175,7 +94,7 @@ label {
   animation-fill-mode: both;
 }
 
-.saving span:nth-child(2) {
+.dots span:nth-child(2) {
   /**
      * Starts the animation of the third dot
      * with a delay of .2s, otherwise all dots
@@ -184,7 +103,7 @@ label {
   animation-delay: 0.2s;
 }
 
-.saving span:nth-child(3) {
+.dots span:nth-child(3) {
   /**
      * Starts the animation of the third dot
      * with a delay of .4s, otherwise all dots
