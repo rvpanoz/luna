@@ -39,7 +39,7 @@ const styles = (theme) => ({
     color: theme.palette.primary.main,
     textDecoration: 'none',
     '&:hover': {
-      fill: 'rgb(225, 0, 80)',
+      color: theme.palette.secondary.light,
       textDecoration: 'none'
     }
   },
@@ -113,7 +113,7 @@ class AppHeaderContent extends React.Component {
         </List>
         <Divider />
         <div className={classes.list}>
-          <List dense={true}>
+          <List>
             <ListItem>
               <ListItemIcon>
                 <Icon>folder_open</Icon>
@@ -127,7 +127,11 @@ class AppHeaderContent extends React.Component {
                 const pkgName = pkgToArray[items - 2]
 
                 return (
-                  <ListItem key={`opkg-${idx}`}>
+                  <ListItem
+                    key={`opkg-${idx}`}
+                    dense={true}
+                    style={{ marginLeft: '10px' }}
+                  >
                     <ListItemText
                       className={classes.listItem}
                       primary={
