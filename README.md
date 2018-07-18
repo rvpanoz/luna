@@ -22,7 +22,7 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 
 ## There have been no commits in X weeks. Is Luna dead?
 
-No! It's just that I have other things to do related to my daily job. The software is working just fine as it is. Bugs will be fixed. Some new things will come at some point. Patience... :)
+No! It's just that I have other things to do related to my daily job. The software is working just fine as it is. Bugs will be fixed. Some new things will come at some point. If you want to help me you can make a PR! :)
 
 ## Downloads
 
