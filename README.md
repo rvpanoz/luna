@@ -20,6 +20,10 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
      title="luna-icon" src="./resources/img/luna-v2.1.1.png">
 </div>
 
+## There have been no commits in X weeks. Is luna dead?
+
+No! It's just that I have other things to do related to my daily job. The software is working just fine as it is. Bugs will be fixed. Some new things will come at some point. Patience... :)
+
 ## Downloads
 
 Latest stable release (v2.2.0)
