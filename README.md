@@ -60,21 +60,6 @@ If you'd like to make some changes:
 3.  Build and start the application with `npm run dev`
 4.  Submit a pull request with your changes :boom:
 
-## Notes
-
-_If you have installed the previous version v1.2.0 you have to remove the node_modules folder and make a clean npm install. Previous version 1.2.0 codebase is now on `UI/bootstrap branch`._
-
-For the previous version of the application you can use the **UI/bootstrap branch**
-You have to remove the node_modules folder and run a clean install then use:
-
-`git checkout UI/bootstrap`
-
-`npm install`
-
-if you encounter permission problems on Linux try:
-
-`sudo npm install --allow-root`
-
 ## Thanks
 
 Luna is alive thanks to these great libs and frameworks:
@@ -88,3 +73,6 @@ _Material-ui https://material-ui-next.com/_
 > _Webpack https://github.com/webpack/webpack_
 
 > _d3js https://d3js.org/_
+
+
+in memory of my friend luna - rest in peace my love <3
