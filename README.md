@@ -3,6 +3,8 @@
 
 npm desktop manager for handling npm packages. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
 
+**I am working on the new release with many extra features, new design and yarn support! - stay tuned**
+
 ## Features
 
 * Manage global packages
@@ -71,9 +73,9 @@ _ReactJS https://reactjs.org/_
 
 _Material-ui https://material-ui-next.com/_
 
-> _Webpack https://github.com/webpack/webpack_
+_Webpack https://github.com/webpack/webpack_
 
-> _d3js https://d3js.org/_
+_d3js https://d3js.org/_
 
 
 
