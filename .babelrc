@@ -4,6 +4,8 @@
       "presets": ["@babel/preset-react", "@babel/preset-env"],
       "plugins": [
         "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-destructuring",
+        "@babel/plugin-transform-spread",
         "@babel/plugin-transform-arrow-functions"
       ]
     }
