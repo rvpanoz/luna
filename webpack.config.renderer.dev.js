@@ -5,51 +5,51 @@
  * https://webpack.js.org/concepts/hot-module-replacement/
  */
 
-import path from "path";
-import fs from "fs";
-import webpack from "webpack";
-import chalk from "chalk";
-import merge from "webpack-merge";
-import { spawn } from "child_process";
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import HtmlWebpackPlugin from "html-webpack-plugin";
-import baseConfig from "./webpack.config.base";
-import CheckNodeEnv from "./internals/scripts/CheckNodeEnv";
+import chalk from 'chalk';
+import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
 
-CheckNodeEnv("development");
+const webpack = require('webpack');
+const merge = require('webpack-merge');
+const { spawn } = require('child_process');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const baseConfig = require('./webpack.config.base');
+const path = require('path');
+
+CheckNodeEnv('development');
 
 const port = process.env.PORT || 6129;
 const publicPath = `http://localhost:${port}/dist`;
 
 export default merge.smart(baseConfig, {
-  mode: "development",
+  mode: 'development',
 
-  devtool: "inline-source-map",
+  devtool: 'inline-source-map',
 
-  target: "electron-renderer",
+  target: 'electron-renderer',
 
   entry: [
-    "react-hot-loader/patch",
+    'react-hot-loader/patch',
     `webpack-dev-server/client?http://localhost:${port}/`,
-    "webpack/hot/only-dev-server",
-    path.join(__dirname, "src/processes/main.dev.js")
+    'webpack/hot/only-dev-server',
+    path.join(__dirname, 'src/processes/main.dev.js'),
   ],
 
   resolve: {
     alias: {
-      actions: path.resolve(__dirname, "app/actions"),
-      constants: path.resolve(__dirname, "app/constants"),
-      common: path.resolve(__dirname, "app/common"),
-      components: path.resolve(__dirname, "app/components"),
-      containers: path.resolve(__dirname, "app/containers"),
-      styles: path.resolve(__dirname, "app/styles"),
-      utils: path.resolve(__dirname, "app/utils")
-    }
+      actions: path.resolve(__dirname, 'src/actions'),
+      constants: path.resolve(__dirname, 'src/constants'),
+      common: path.resolve(__dirname, 'src/common'),
+      components: path.resolve(__dirname, 'src/components'),
+      containers: path.resolve(__dirname, 'src/containers'),
+      styles: path.resolve(__dirname, 'src/styles'),
+      utils: path.resolve(__dirname, 'src/utils'),
+    },
   },
 
   output: {
     publicPath: `http://localhost:${port}/dist/`,
-    filename: "renderer.dev.js"
+    filename: 'renderer.dev.js',
   },
 
   module: {
@@ -58,48 +58,41 @@ export default merge.smart(baseConfig, {
         test: /\.js|.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
             cacheDirectory: true,
-            plugins: [
-              // Here, we include babel plugins that are only required for the
-              // renderer process. The 'transform-*' plugins must be included
-              // before react-hot-loader/babel
-              "transform-class-properties",
-              "transform-es2015-classes",
-              "react-hot-loader/babel"
-            ]
-          }
-        }
+            // plugins: ['react-hot-loader/babel'],
+          },
+        },
       },
       {
         test: /\.css$/,
         use: [
           {
-            loader: "style-loader"
+            loader: 'style-loader',
           },
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: {
-              sourceMap: true
-            }
-          }
-        ]
+              sourceMap: true,
+            },
+          },
+        ],
       },
       {
         test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
-        use: "url-loader?limit=10000"
+        use: 'url-loader?limit=10000',
       },
       {
         test: /\.((ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9]))|(ttf|eot)$/,
-        use: "file-loader"
-      }
-    ]
+        use: 'file-loader',
+      },
+    ],
   },
 
   plugins: [
     new webpack.HotModuleReplacementPlugin({
-      multiStep: true
+      multiStep: true,
     }),
 
     new webpack.NoEmitOnErrorsPlugin(),
@@ -117,26 +110,26 @@ export default merge.smart(baseConfig, {
      * 'staging', for example, by changing the ENV variables in the npm scripts
      */
     new webpack.EnvironmentPlugin({
-      NODE_ENV: "development"
+      NODE_ENV: 'development',
     }),
 
     new webpack.LoaderOptionsPlugin({
-      debug: true
+      debug: true,
     }),
 
     new MiniCssExtractPlugin({
-      filename: "[name].css"
+      filename: '[name].css',
     }),
 
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src/index.html"),
-      title: "Luna"
-    })
+      template: path.join(__dirname, 'src/index.html'),
+      title: 'Luna - manage npm packages',
+    }),
   ],
 
   node: {
     __dirname: false,
-    __filename: false
+    __filename: false,
   },
 
   devServer: {
@@ -144,32 +137,32 @@ export default merge.smart(baseConfig, {
     publicPath,
     compress: true,
     noInfo: true,
-    stats: "errors-only",
+    stats: 'errors-only',
     inline: true,
     lazy: false,
     hot: true,
-    headers: { "Access-Control-Allow-Origin": "*" },
-    contentBase: path.join(__dirname, "dist"),
+    headers: { 'Access-Control-Allow-Origin': '*' },
+    contentBase: path.join(__dirname, 'dist'),
     watchOptions: {
       aggregateTimeout: 300,
       ignored: /node_modules/,
-      poll: 100
+      poll: 100,
     },
     historyApiFallback: {
       verbose: true,
-      disableDotRule: false
+      disableDotRule: false,
     },
     before() {
       if (process.env.START_HOT) {
-        console.log("Starting Main Process...");
-        spawn("npm", ["run", "start-main-dev"], {
+        console.log(chalk.blue('starting main process..'));
+        spawn('npm', ['run', 'start-main-dev'], {
           shell: true,
           env: process.env,
-          stdio: "inherit"
+          stdio: 'inherit',
         })
-          .on("close", code => process.exit(code))
-          .on("error", spawnError => console.error(spawnError));
+          .on('close', code => process.exit(code))
+          .on('error', spawnError => console.error(spawnError));
       }
-    }
-  }
+    },
+  },
 });

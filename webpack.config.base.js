@@ -2,8 +2,8 @@
  * Base webpack config used across other specific configs
  */
 
-import path from "path";
-import webpack from "webpack";
+const path = require('path');
+const webpack = require('webpack');
 
 export default {
   module: {
@@ -12,31 +12,31 @@ export default {
         test: /\.js|.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            cacheDirectory: true
-          }
-        }
-      }
-    ]
+            cacheDirectory: true,
+          },
+        },
+      },
+    ],
   },
 
   output: {
-    path: path.join(__dirname, "src")
+    path: path.join(__dirname, 'src'),
   },
 
   /**
    * Determine the array of extensions that should be used to resolve modules.
    */
   resolve: {
-    extensions: [".js", ".jsx", ".json"]
+    extensions: ['.js', '.jsx', '.json'],
   },
 
   plugins: [
     new webpack.EnvironmentPlugin({
-      NODE_ENV: "production"
+      NODE_ENV: 'development',
     }),
 
-    new webpack.NamedModulesPlugin()
-  ]
+    new webpack.NamedModulesPlugin(),
+  ],
 };

@@ -5,7 +5,7 @@
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": [2, { "ignore": ["electron"] }],
     "linebreak-style": 0,
-    "quotes": ["error", "double"],
+    "quotes": ["error", "single"],
     "react/prefer-stateless-function": 0
   }
 }

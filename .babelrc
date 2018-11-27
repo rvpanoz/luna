@@ -1,13 +1,12 @@
 {
-  "presets": ["@babel/preset-stage-0"],
-  "plugins": ["add-module-exports", "dynamic-import-webpack"],
   "env": {
-    "production": {
-      "presets": ["react-optimize"],
-      "plugins": ["dev-expression"]
-    },
     "development": {
-      "plugins": ["transform-class-properties", "transform-es2015-classes"]
+      "presets": ["@babel/preset-react", "@babel/preset-env"],
+      "plugins": [
+        "transform-class-properties",
+        "transform-es2015-classes",
+        "transform-es2015-modules-commonjs"
+      ]
     }
   }
 }

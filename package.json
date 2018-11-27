@@ -5,18 +5,34 @@
   "description": "lunav2",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron-forge start",
     "dev": "cross-env NODE_ENV=development && cross-env START_HOT=1 npm run start-renderer-dev",
-    "start-renderer-dev": "cross-env NODE_ENV=development node --trace-warnings -r babel-register ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.renderer.dev.js",
+    "start-renderer-dev": "cross-env NODE_ENV=development node --trace-warnings -r @babel/register ./node_modules/webpack-dev-server/bin/webpack-dev-server --config webpack.config.renderer.dev.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "eslint --cache --color --ext .jsx,.js src"
   },
-  "keywords": [],
-  "author": "root",
-  "license": "MIT",
+  "author": {
+    "name": "rvpanoz",
+    "email": "rvpanoz@gmail.com",
+    "url": "https://github.com/rvpanoz"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/rvpanoz/luna/issues"
+  },
+  "keywords": [
+    "electron",
+    "boilerplate",
+    "react",
+    "redux",
+    "sass",
+    "webpack",
+    "hot",
+    "reload"
+  ],
+  "homepage": "https://github.com/rvpanoz/luna#readme",
   "config": {
     "forge": {
       "make_targets": {
@@ -50,6 +66,7 @@
     }
   },
   "dependencies": {
+    "@babel/polyfill": "^7.0.0",
     "electron-compile": "^6.4.3",
     "electron-debug": "^2.0.0",
     "electron-devtools-installer": "^2.2.4",
@@ -71,12 +88,11 @@
   },
   "devDependencies": {
     "@babel/core": "^7.1.0",
-    "@babel/plugin-proposal-class-properties": "^7.1.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
-    "@babel/plugin-transform-spread": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/plugin-transform-arrow-functions": "^7.0.0",
+    "@babel/preset-env": "^7.1.6",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-stage-0": "^7.0.0",
+    "@babel/register": "^7.0.0",
     "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.0-beta.6",
     "babel-plugin-add-module-exports": "^1.0.0",
@@ -85,10 +101,8 @@
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-es2015-classes": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
     "babel-register": "^6.26.0",
     "concurrently": "^4.0.1",
     "cross-env": "^5.2.0",

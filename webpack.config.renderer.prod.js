@@ -2,16 +2,16 @@
  * Build config for electron renderer process
  */
 
-import path from 'path'
-import webpack from 'webpack'
-import ExtractTextPlugin from 'extract-text-webpack-plugin'
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer'
-import merge from 'webpack-merge'
-import UglifyJSPlugin from 'uglifyjs-webpack-plugin'
-import baseConfig from './webpack.config.base'
-import CheckNodeEnv from './internals/scripts/CheckNodeEnv'
+import path from 'path';
+import webpack from 'webpack';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import merge from 'webpack-merge';
+import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
+import baseConfig from './webpack.config.base';
+import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
 
-CheckNodeEnv('production')
+CheckNodeEnv('production');
 
 export default merge.smart(baseConfig, {
   mode: 'production',
@@ -25,7 +25,7 @@ export default merge.smart(baseConfig, {
   output: {
     path: path.join(__dirname, 'app/dist'),
     publicPath: './dist/',
-    filename: 'renderer.prod.js'
+    filename: 'renderer.prod.js',
   },
 
   module: {
@@ -38,22 +38,22 @@ export default merge.smart(baseConfig, {
           use: {
             loader: 'css-loader',
             options: {
-              minimize: true
-            }
+              minimize: true,
+            },
           },
-          fallback: 'style-loader'
-        })
+          fallback: 'style-loader',
+        }),
       },
       // Common Image Formats
       {
         test: /\.((woff2?|svg)(\?v=[0-9]\.[0-9]\.[0-9]))|(woff2?|svg|jpe?g|png|gif|ico)$/,
-        use: 'url-loader?limit=10000'
+        use: 'url-loader?limit=10000',
       },
       {
         test: /\.((ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9]))|(ttf|eot)$/,
-        use: 'file-loader'
-      }
-    ]
+        use: 'file-loader',
+      },
+    ],
   },
 
   plugins: [
@@ -67,12 +67,12 @@ export default merge.smart(baseConfig, {
      * development checks
      */
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'production'
+      NODE_ENV: 'production',
     }),
 
     new UglifyJSPlugin({
       parallel: true,
-      sourceMap: true
+      sourceMap: true,
     }),
 
     new ExtractTextPlugin('style.css'),
@@ -80,7 +80,7 @@ export default merge.smart(baseConfig, {
     new BundleAnalyzerPlugin({
       analyzerMode:
         process.env.OPEN_ANALYZER === 'true' ? 'server' : 'disabled',
-      openAnalyzer: process.env.OPEN_ANALYZER === 'true'
-    })
-  ]
-})
+      openAnalyzer: process.env.OPEN_ANALYZER === 'true',
+    }),
+  ],
+});
