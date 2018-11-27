@@ -3,9 +3,8 @@
     "development": {
       "presets": ["@babel/preset-react", "@babel/preset-env"],
       "plugins": [
-        "transform-class-properties",
-        "transform-es2015-classes",
-        "transform-es2015-modules-commonjs"
+        "@babel/plugin-proposal-object-rest-spread",
+        "@babel/plugin-transform-arrow-functions"
       ]
     }
   }

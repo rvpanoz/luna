@@ -6,15 +6,14 @@
  */
 
 import chalk from 'chalk';
+import webpack from 'webpack';
+import merge from 'webpack-merge';
+import { spawn } from 'child_process';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import path from 'path';
 import CheckNodeEnv from './internals/scripts/CheckNodeEnv';
-
-const webpack = require('webpack');
-const merge = require('webpack-merge');
-const { spawn } = require('child_process');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const baseConfig = require('./webpack.config.base');
-const path = require('path');
+import baseConfig from './webpack.config.base';
 
 CheckNodeEnv('development');
 
@@ -23,18 +22,14 @@ const publicPath = `http://localhost:${port}/dist`;
 
 export default merge.smart(baseConfig, {
   mode: 'development',
-
   devtool: 'inline-source-map',
-
   target: 'electron-renderer',
-
   entry: [
     'react-hot-loader/patch',
     `webpack-dev-server/client?http://localhost:${port}/`,
     'webpack/hot/only-dev-server',
     path.join(__dirname, 'src/processes/main.dev.js'),
   ],
-
   resolve: {
     alias: {
       actions: path.resolve(__dirname, 'src/actions'),
@@ -46,12 +41,10 @@ export default merge.smart(baseConfig, {
       utils: path.resolve(__dirname, 'src/utils'),
     },
   },
-
   output: {
     publicPath: `http://localhost:${port}/dist/`,
     filename: 'renderer.dev.js',
   },
-
   module: {
     rules: [
       {

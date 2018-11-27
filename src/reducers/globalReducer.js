@@ -6,7 +6,6 @@
 import {
   SET_MODE,
   SET_PACKAGE_JSON,
-  SET_ACTIVE_SIDEBAR,
   SET_OPENED_PACKAGES,
   ADD_MESSAGE,
   CLEAR_MESSAGES,
@@ -16,28 +15,18 @@ import {
   TOGGLE_DRAWER,
   TOGGLE_DIALOG,
   MENU_OPEN,
-  SET_SETTINGS
-} from 'constants/ActionTypes'
-import initialState from './initialState'
-import {
-  identity,
-  merge,
-  evolve,
-  assoc,
-  propOr,
-  prop,
-  prepend,
-  contains,
-  remove
-} from 'ramda'
+  SET_SETTINGS,
+} from 'constants/ActionTypes';
+import initialState from './initialState';
+import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
 
-const { packages, ...globalState } = initialState
+const { packages, ...globalState } = initialState;
 
 /** make use of the currying technique to avoid switch **/
 const createReducer = (globalState, handlers) => (
   state = globalState,
   action
-) => propOr(identity, prop('type', action), handlers)(state, action)
+) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
   [SET_OPENED_PACKAGES]: (state, action) =>
@@ -46,12 +35,14 @@ const handlers = {
   [SET_MODE]: (state, action) =>
     merge(state, {
       mode: action.mode,
-      directory: action.directory
+      directory: action.directory,
     }),
   [TOGGLE_SNACKBAR]: (state, action) =>
     merge(state, {
       snackBarOpen: action.snackBarOpen,
-      snackbar: action.snackbarOptions ? action.snackbarOptions : state.snackbar
+      snackbar: action.snackbarOptions
+        ? action.snackbarOptions
+        : state.snackbar,
     }),
   [TOGGLE_DIALOG]: (state, action) =>
     assoc('dialogOpen', action.dialogOpen, state),
@@ -69,14 +60,14 @@ const handlers = {
           level: action.level,
           body: action.body,
           requires: action.requires,
-          requiredBy: action.requiredBy
+          requiredBy: action.requiredBy,
         },
         state.messages
-      )
+      ),
     }),
   [CLEAR_MESSAGES]: (state, action) => assoc('messages', [], state),
-  [MENU_OPEN]: (state, action) => assoc('menuOpen', action.menuOpen, state)
-}
+  [MENU_OPEN]: (state, action) => assoc('menuOpen', action.menuOpen, state),
+};
 
-const reducer = createReducer(globalState, handlers)
-export default reducer
+const reducer = createReducer(globalState, handlers);
+export default reducer;
