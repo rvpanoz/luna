@@ -2,11 +2,9 @@
  * Layout component
  */
 
-import { ipcRenderer } from 'electron';
 import React from 'react';
-import layoutStyles from '../styles/layout.css';
-import PackagesList from '../components/Packages';
 import cn from 'classnames';
+import layoutStyles from '../styles/layout.css';
 import styles from '../styles/spectre.min.css';
 
 const { wrapper, header, main } = layoutStyles;
@@ -15,12 +13,12 @@ const {
   container,
   columns,
   column,
-  'col-12': col12,
-  'col-9': col9,
   'col-6': col6,
-  'col-3': col3
+  'col-5': col5,
+  'col-1': col1
 } = styles;
 
+// eslint-disabled-line-no-unused-vars
 const Layout = props => {
   return (
     <div className={wrapper}>
@@ -28,10 +26,9 @@ const Layout = props => {
       <div className={main}>
         <div className={container}>
           <div className={columns}>
-            <div className={cn(column, col3)}>Sidebar</div>
-            <div className={cn(column, col6)}>
-              <PackagesList />
-            </div>
+            <div className={cn(column, col1)}>col-1</div>
+            <div className={cn(column, col5)}>col-5</div>
+            <div className={cn(column, col6)}>col-6</div>
           </div>
         </div>
       </div>
