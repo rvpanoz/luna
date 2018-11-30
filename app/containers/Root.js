@@ -1,14 +1,18 @@
-import React, { Component } from 'react';
-import { Provider } from 'react-redux';
+import React from 'react';
+import { StoreProvider } from 'redux-react-hook';
+import App from './App';
 import Layout from './Layout';
 
-export default class Root extends Component {
-  render() {
-    const { store } = this.props;
-    return (
-      <Provider store={store}>
+const Root = props => {
+  const { store } = props;
+
+  return (
+    <StoreProvider value={store}>
+      <App>
         <Layout />
-      </Provider>
-    );
-  }
-}
+      </App>
+    </StoreProvider>
+  );
+};
+
+export default Root;
