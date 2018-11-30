@@ -8,20 +8,17 @@ import './app.global.css';
 const store = configureStore();
 
 render(
-  <AppContainer>
-    <Root store={store} history={history} />
-  </AppContainer>,
+  <Root store={store} history={history} />,
   document.getElementById('root')
 );
 
 if (module.hot) {
   module.hot.accept('./containers/Root', () => {
+    console.log('HMR');
     const NextRoot = require('./containers/Root').default;
 
     render(
-      <AppContainer>
-        <NextRoot store={store} history={history} />
-      </AppContainer>,
+      <NextRoot store={store} history={history} />,
       document.getElementById('root')
     );
   });

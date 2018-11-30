@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Dashboard = props => {
-  return <div>Dashboard1</div>;
-};
+function Dashboard() {
+  return <h1>Package details</h1>;
+}
 
 export default Dashboard;

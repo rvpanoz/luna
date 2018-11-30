@@ -46,9 +46,13 @@ export default merge.smart(baseConfig, {
   target: 'electron-renderer',
 
   entry: [
-    'react-hot-loader/patch',
+    /* bundle the client for webpack dev server
+    and connect to the provided endpoint */
     `webpack-dev-server/client?http://localhost:${port}/`,
+    /* bundle the client for hot reloading
+    only- means to only hot reload for successful updates */
     'webpack/hot/only-dev-server',
+    /* the entry point */
     require.resolve('../app/index')
   ],
 
@@ -257,9 +261,13 @@ export default merge.smart(baseConfig, {
     stats: 'errors-only',
     inline: true,
     lazy: false,
-    hot: true,
+    // If you want to refresh on errors too
+    // hot: true,
+    // Don't refresh if hot loading fails.
+    hotOnly: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
     contentBase: path.join(__dirname, 'dist'),
+    watchContentBase: true,
     watchOptions: {
       aggregateTimeout: 300,
       ignored: /node_modules/,
@@ -272,7 +280,7 @@ export default merge.smart(baseConfig, {
     before() {
       if (process.env.START_HOT) {
         console.log('Starting Main Process...');
-        spawn('npm', ['run', 'start-main-dev'], {
+        spawn('yarn', ['run', 'start-main-dev'], {
           shell: true,
           env: process.env,
           stdio: 'inherit'
