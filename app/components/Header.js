@@ -1,39 +1,62 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import cn from 'classnames';
 import styles from '../styles/spectre.min.css';
+import headerStyles from '../styles/header.css';
+
+const { navbar } = styles;
 
 const {
-  navbar,
-  btn,
-  'navbar-section': section,
-  'navbar-brand mr-2': brand,
-  'navbar-center': center,
-  'btn-link': link,
-  'btn-primary': btnPrimary,
-  'input-group': group,
-  'input-group-btn': groupBtn,
-  'input-inline': inline,
-  'form-input': input
-} = styles;
+  bar,
+  overlay,
+  active,
+  'bar-active': barActive,
+  'menu-container': menuContainer
+} = headerStyles;
 
 const Header = props => {
+  const [menuOpen, toggleMenu] = useState(false);
+  const menuWrapperRef = useRef(null);
+  const menuRef = useRef(null);
+
+  const handleMenu = () => {
+    const menuStatusBool = Boolean(menuOpen);
+
+    toggleMenu(!menuStatusBool);
+
+    if (!menuStatusBool === false) {
+      menuWrapperRef && menuWrapperRef.current.classList.remove(active);
+      menuRef && menuRef.current.classList.remove(visible);
+    } else {
+      menuWrapperRef && menuWrapperRef.current.classList.add(active);
+      menuRef && menuRef.current.classList.add(visible);
+      menuRef && menuRef.current.classList.add(hidden);
+    }
+  };
+
   return (
-    <header className={navbar} style={{ padding: '5px' }}>
-      <section className={section}>
-        <a href="..." className={cn(btn, link)} style={{ color: '#fff' }}>
-          Docs
-        </a>
-        <a href="..." className={cn(btn, link)} style={{ color: '#fff' }}>
-          GitHub
-        </a>
-      </section>
-      <section className={center}>~luna~</section>
-      <section className={section}>
-        <div className={cn(group, inline)}>
-          <input className={input} type="text" placeholder="search" />
-          <button className={cn(btn, btnPrimary, groupBtn)}>Search</button>
-        </div>
-      </section>
+    <header className={navbar}>
+      <div className={menuContainer} onClick={e => handleMenu()}>
+        <div className={bar} />
+      </div>
+
+      <div ref={menuWrapperRef} className={overlay}>
+        <nav ref={menuRef}>
+          <ul>
+            <li>
+              <a href="#">About</a>
+            </li>
+            <li>
+              <a href="#">Work</a>
+            </li>
+            <li>
+              <a href="#">Blog</a>
+            </li>
+            <li>
+              <a href="#">Contact</a>
+            </li>
+          </ul>
+        </nav>
+      </div>
     </header>
   );
 };
