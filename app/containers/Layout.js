@@ -29,9 +29,9 @@ const Layout = props => (
     <div className={main}>
       <div className={container}>
         <div className={columns}>
-          <div className={cn(column, col1)}>col-1</div>
-          <div className={cn(column, col5)}>col-5</div>
-          <div className={cn(column, col6)}>col-6</div>
+          <div className={cn(column, col1)}>1</div>
+          <div className={cn(column, col5)}>2</div>
+          <div className={cn(column, col6)}>3</div>
         </div>
       </div>
     </div>
