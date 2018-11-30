@@ -26,7 +26,9 @@ function Header(props) {
     <header className={navbar}>
       <div
         ref={menuContainerRef}
-        className={menuContainer}
+        className={cn(menuContainer, {
+          [barActive]: menuOpen
+        })}
         onClick={e => toggleMenu(!menuOpen)}
         role="menu"
       >
@@ -36,7 +38,8 @@ function Header(props) {
       <div
         ref={menuWrapperRef}
         className={cn(overlay, {
-          [active]: menuOpen
+          [active]: menuOpen,
+          [nonActive]: !menuOpen
         })}
       >
         <nav ref={menuRef}>

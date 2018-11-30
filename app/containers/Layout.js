@@ -9,7 +9,8 @@ import cn from 'classnames';
 import layoutStyles from '../styles/layout.css';
 import styles from '../styles/spectre.min.css';
 import Header from '../components/Header';
-import Dashboard from '../components/Dashboard';
+import Packages from '../components/Packages';
+import Package from '../components/Package';
 
 const { wrapper, header, main } = layoutStyles;
 
@@ -30,10 +31,12 @@ const Layout = props => (
     <div className={main}>
       <div className={container}>
         <div className={columns}>
-          <div className={cn(column, col1)}>1</div>
-          <div className={cn(column, col5)}>2</div>
+          <div className={cn(column, col1)} />
+          <div className={cn(column, col5)}>
+            <Packages />
+          </div>
           <div className={cn(column, col6)}>
-            <Dashboard />
+            <Package />
           </div>
         </div>
       </div>

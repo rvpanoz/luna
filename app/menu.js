@@ -1,8 +1,6 @@
 import { app, Menu, shell, BrowserWindow } from 'electron';
 
 export default class MenuBuilder {
-  mainWindow = null;
-
   constructor(mainWindow) {
     this.mainWindow = mainWindow;
   }
