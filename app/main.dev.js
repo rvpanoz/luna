@@ -1,19 +1,14 @@
 /* eslint global-require: off */
 
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `yarn build` or `yarn build-main`, this file is compiled to
- * `./app/main.prod.js` using webpack. This gives us some performance wins.
- *
- * @flow
- */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
+import { merge } from 'ramda';
+import electronStore from 'electron-store';
 import { autoUpdater } from 'electron-updater';
+import fs from 'fs';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+import shell from './shell';
+import mk from './mk';
 
 export default class AppUpdater {
   constructor() {
@@ -22,6 +17,32 @@ export default class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
+
+mk.logToFile = true;
+
+const APP_PATHS = {
+  appData: app.getPath('appData'),
+  userData: app.getPath('userData')
+};
+
+const { defaultSettings } = mk.config;
+
+//NODE_EVN
+const NODE_ENV = process.env.NODE_ENV;
+
+//get parameters
+const debug = /--debug/.test(process.argv[2]);
+const needslog = /--log/.test(process.argv[3]);
+
+//window min resolution
+const MIN_WIDTH = 1366;
+const MIN_HEIGHT = 768;
+
+// store initialization
+const Store = new electronStore();
+
+//clear opened packages
+Store.set('openedPackages', []);
 
 let mainWindow = null;
 
@@ -46,6 +67,94 @@ const installExtensions = async () => {
     extensions.map(name => installer.default(installer[name], forceDownload))
   ).catch(console.log);
 };
+
+/** ipcRender events */
+
+/* analyze directory */
+ipcMain.on('analyze-json', (event, filePath) => {
+  if (!filePath) {
+    throw new Error('filePath is not defined');
+  }
+
+  try {
+    fs.readFile(filePath, 'utf8', (err, fileContent) => {
+      if (err) {
+        if (err.code === 'ENOENT') {
+          return;
+        }
+        throw new Error(err);
+      }
+
+      const content = JSON.parse(fileContent);
+      const openedPackages = Store.get('openedPackages') || [];
+
+      if (openedPackages.indexOf(filePath) === -1) {
+        Store.set('openedPackages', [].concat(openedPackages, filePath));
+      }
+
+      event.sender.send(
+        'analyze-json-close',
+        filePath,
+        content,
+        Store.get('openedPackages')
+      );
+    });
+  } catch (e) {
+    console.log(e);
+    throw new Error(e.message);
+  }
+});
+
+/* generic ipc-event dispatcher */
+ipcMain.on('ipc-event', (event, options) => {
+  const opts = options || {};
+  const { ipcEvent } = opts || {};
+
+  function callback(status, command, data, latest, stats) {
+    const isStatus = status && typeof status === 'string';
+
+    if (!isStatus) {
+      mk.log('FATAL: command status is not valid');
+      throw new Error('command status is not valid');
+    }
+
+    const args = arguments;
+
+    if (args.length === 1) {
+      console.log(args);
+      return;
+    }
+
+    if (args.length === 2) {
+      event.sender.send('ipcEvent-reply', args[1]);
+      return;
+    }
+
+    switch (status) {
+      case 'close':
+        if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
+          event.sender.send('action-close', data, command);
+        } else {
+          event.sender.send(`${ipcEvent}-close`, data, command, latest, stats);
+        }
+        break;
+      case 'error':
+        event.sender.send('ipcEvent-error', data);
+        break;
+    }
+  }
+
+  /**
+   * At this point we try to run a shell command
+   * sending output using spawn to renderer via ipc events
+   * */
+  try {
+    const settings = Store.get('user_settings');
+    shell.doCommand(merge(opts, settings || {}), callback);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+});
 
 /**
  * Add event listeners...

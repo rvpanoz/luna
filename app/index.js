@@ -13,7 +13,6 @@ render(
 
 if (module.hot) {
   module.hot.accept('./containers/Root', () => {
-    console.log('HMR');
     const NextRoot = require('./containers/Root').default;
 
     render(
