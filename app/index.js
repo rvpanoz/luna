@@ -1,13 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
+import { StoreProvider } from 'redux-react-hook';
 import Root from './containers/Root';
 import { configureStore, history } from './store/configureStore';
-import './app.global.css';
 
 const store = configureStore();
 
 render(
-  <Root store={store} history={history} />,
+  <StoreProvider value={store}>
+    <Root history={history} />
+  </StoreProvider>,
   document.getElementById('root')
 );
 
@@ -16,7 +18,9 @@ if (module.hot) {
     const NextRoot = require('./containers/Root').default;
 
     render(
-      <NextRoot store={store} history={history} />,
+      <StoreProvider value={store}>
+        <NextRoot history={history} />
+      </StoreProvider>,
       document.getElementById('root')
     );
   });

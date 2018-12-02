@@ -1,8 +1,11 @@
 /* eslint-disable-no-unused-var */
 
-import React, { useEffect } from 'react';
-import styles from '../styles/spectre.min.css';
+import React from 'react';
+import { merge } from 'ramda';
+import { useMappedState, useDispatch } from 'redux-react-hook';
 import useIpc from '../commons/hooks/useIpc';
+import styles from '../styles/spectre.min.css';
+
 const { panel, 'panel-header': panelHeader, 'panel-body': panelBody } = styles;
 
 const options = {
@@ -10,11 +13,24 @@ const options = {
   cmd: ['outdated', 'list']
 };
 
+const mapState = state => ({
+  packages: state.packages
+});
+
 const Packages = props => {
   const { mode, directory } = props;
 
-  const [packages, error] = useIpc('ipc-event', options);
-  console.log(packages, error);
+  const { packages } = useMappedState(mapState);
+  console.log(packages); //working
+
+  // const [packages, error] = useIpc(
+  //   'ipc-event',
+  //   merge(options, {
+  //     mode,
+  //     directory
+  //   })
+  // );
+
   return (
     <div className={panel}>
       <div className={panelHeader}>Packages</div>
