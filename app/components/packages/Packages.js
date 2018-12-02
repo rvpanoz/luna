@@ -38,7 +38,7 @@ const Packages = props => {
   const { packages } = useMappedState(mapState);
   const dispatch = useDispatch();
   const setPackages = useCallback(
-    packages => dispatch({ type: SET_PACKAGES, packages }),
+    data => dispatch({ type: SET_PACKAGES, packages: data }),
     [packages]
   );
 
@@ -52,17 +52,15 @@ const Packages = props => {
 
   useEffect(
     () => {
-      const packages = setupPackagesFromResponse(newPackages);
-      setPackages(packages);
+      const completedPackages = setupPackagesFromResponse(newPackages);
+      setPackages(completedPackages);
     },
     [newPackages]
   );
 
   return (
     <div className={panel} style={{ border: 'none' }}>
-      <div className={panelHeader}>
-        <ActionsBar />
-      </div>
+      <div className={panelHeader} />
       <div className={panelNav}>
         <ul className={cn(tab, tabBlock)}>
           <li

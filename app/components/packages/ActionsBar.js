@@ -18,15 +18,6 @@ const {
 const { icon, 'icon-search': search } = styleIcons;
 
 const ActionsBar = props => {
-  const [manager, setManager] = useState('npm');
-  const npmInputRef = useRef(null);
-  const yarnInputRef = useRef(null);
-
-  const handleManager = e => {
-    const { name } = e.currentTarget;
-    setManager(name);
-  };
-
   return (
     <div className={flex}>
       <div className={iconRight}>
@@ -42,28 +33,6 @@ const ActionsBar = props => {
           })}
           style={{ color: '#000' }}
         />
-      </div>
-      <div className={formGroup}>
-        <label className={cn(formRadio, formInline)}>
-          <input
-            type="radio"
-            name="npm"
-            checked={manager === 'npm'}
-            onChange={handleManager}
-            ref={npmInputRef}
-          />
-          <i className={formIcon} /> npm
-        </label>
-        <label className={cn(formRadio, formInline)}>
-          <input
-            type="radio"
-            name="yarn"
-            checked={manager === 'yarn'}
-            onChange={handleManager}
-            ref={yarnInputRef}
-          />
-          <i className={formIcon} /> yarn
-        </label>
       </div>
     </div>
   );
