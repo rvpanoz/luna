@@ -26,7 +26,7 @@ const Packages = props => {
   const dispatch = useDispatch();
   const setPackages = useCallback(
     packages => dispatch({ type: SET_PACKAGES, packages }),
-    [[]]
+    [packages]
   );
 
   const [newPackages, error] = useIpc(

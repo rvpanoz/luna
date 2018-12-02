@@ -20,7 +20,7 @@ const useIpc = (channel, options) => {
   useEffect(() => {
     ipcRenderer.once(listenTo, (eventName, data, command) => {
       try {
-        // const packages = data && JSON.parse(data);
+        // const packages = data && JSON.parse(data); // TODO: parse in setupPackagesFromResponse
         setData(
           merge(defaultState, {
             packages: data
