@@ -52,7 +52,7 @@ const handlers = {
   [SET_TAB_INDEX]: (state, action) =>
     R.assoc('tabIndex', action.tabIndex, state),
   [SET_PACKAGE_GROUP]: (state, action) => {
-    let cmdOptions = [PACKAGE_GROUPS[action.group]];
+    const cmdOptions = [PACKAGE_GROUPS[action.group]];
 
     if (action.option) {
       cmdOptions.push(action.option);
@@ -70,12 +70,14 @@ const handlers = {
   [CLEAR_FILTERS]: (state, action) => R.assoc('filters', [], state),
   [REMOVE_COMMAND_OPTION]: (state, action) => {
     const idx = state.cmdOptions.indexOf(action.option);
+
     return R.merge(state, {
       cmdOptions: R.remove(idx, 1, state.cmdOptions)
     });
   },
   [ADD_COMMAND_OPTION]: (state, action) => {
     const idx = state.cmdOptions.indexOf(action.option);
+
     return R.merge(state, {
       cmdOptions:
         idx !== -1
@@ -85,6 +87,7 @@ const handlers = {
   },
   [ADD_FILTER]: (state, action) => {
     const idx = state.filters.indexOf(action.filterName);
+
     return R.merge(state, {
       page: 0,
       filters:
@@ -93,13 +96,12 @@ const handlers = {
           : R.prepend(action.filterName, state.filters)
     });
   },
-  [SET_ERROR]: (state, action) => {
-    return R.merge(state, {
-      errors: R.prepend(action.error, state.errors)
-    });
-  },
-  [SET_PACKAGES]: (state, action) =>
+  [SET_ERROR]: (state, action) =>
     R.merge(state, {
+      errors: R.prepend(action.error, state.errors)
+    }),
+  [SET_PACKAGES]: (state, action) => {
+    return R.merge(state, {
       packages: action.packages,
       order: action.order || 'asc',
       orderBy: action.orderBy || 'name',
@@ -107,7 +109,8 @@ const handlers = {
       cmdOptions: [],
       selected: [],
       version: ''
-    }),
+    });
+  },
   [SET_PACKAGES_OUTDATED]: (state, action) =>
     R.assoc('outdated', action.outdated, state),
   [SET_ACTIVE]: (state, action) => R.assoc('active', action.active, state),
@@ -116,6 +119,7 @@ const handlers = {
   [SET_TOTAL]: (state, action) => R.assoc('total', action.total, state),
   [SET_SELECTED_PACKAGE]: (state, action) => {
     const idx = state.selected.indexOf(action.packageName);
+
     return R.merge(state, {
       selected:
         idx !== -1

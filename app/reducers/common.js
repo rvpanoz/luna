@@ -6,7 +6,6 @@
 import {
   SET_MODE,
   SET_PACKAGE_JSON,
-  SET_ACTIVE_SIDEBAR,
   SET_OPENED_PACKAGES,
   ADD_MESSAGE,
   CLEAR_MESSAGES,
@@ -19,21 +18,10 @@ import {
   SET_SETTINGS
 } from '../constants/ActionTypes';
 import initialState from './initialState';
-import {
-  identity,
-  merge,
-  evolve,
-  assoc,
-  propOr,
-  prop,
-  prepend,
-  contains,
-  remove
-} from 'ramda';
+import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
 
 const { packages, ...globalState } = initialState;
 
-/** make use of the currying technique to avoid switch **/
 const createReducer = (globalState, handlers) => (
   state = globalState,
   action

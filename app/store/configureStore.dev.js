@@ -23,7 +23,7 @@ const configureStore = initialState => {
   });
 
   // skip redux logs in console during the tests
-  if (process.env.NODE_ENV !== 'test') {
+  if (process.env.NODE_ENV === 'development') {
     middleware.push(logger);
   }
 

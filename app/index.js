@@ -1,25 +1,25 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { StoreProvider } from 'redux-react-hook';
-import Root from './containers/Root';
+import App from './containers/App';
 import { configureStore, history } from './store/configureStore';
 
 const store = configureStore();
-
+console.log(store);
 render(
   <StoreProvider value={store}>
-    <Root history={history} />
+    <App />
   </StoreProvider>,
   document.getElementById('root')
 );
 
 if (module.hot) {
-  module.hot.accept('./containers/Root', () => {
-    const NextRoot = require('./containers/Root').default;
+  module.hot.accept('./containers/App', () => {
+    const NextApp = require('./containers/App').default;
 
     render(
       <StoreProvider value={store}>
-        <NextRoot history={history} />
+        <NextApp />
       </StoreProvider>,
       document.getElementById('root')
     );
