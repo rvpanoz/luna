@@ -4,7 +4,7 @@ import React, { useCallback, useEffect } from 'react';
 import { merge } from 'ramda';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import cn from 'classnames';
-import ActionsBar from './ActionsBar';
+import Package from './Package';
 import { SET_PACKAGES } from '../../constants/ActionTypes';
 import useIpc from '../../commons/hooks/useIpc';
 import styles from '../../styles/spectre.min.css';
@@ -61,27 +61,13 @@ const Packages = props => {
   return (
     <div className={panel} style={{ border: 'none' }}>
       <div className={panelHeader} />
-      <div className={panelNav}>
-        <ul className={cn(tab, tabBlock)}>
-          <li
-            className={cn(tabItem, {
-              [active]: true
-            })}
-          >
-            <a className={textLight} href="#">
-              Dependencies
-            </a>
-          </li>
-          <li
-            className={cn(tabItem, {
-              [active]: false
-            })}
-          >
-            <a href="#">Dependencies</a>
-          </li>
-        </ul>
+      <div className={panelNav} />
+      <div className={panelBody}>
+        {packages &&
+          packages.map((pkg, idx) => (
+            <Package key={`pkg-${idx}`} styles={styles} {...pkg} />
+          ))}
       </div>
-      <div className={panelBody} />
     </div>
   );
 };
