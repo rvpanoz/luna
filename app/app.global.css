@@ -2,7 +2,7 @@
  * Global styling
  */
 
-@import '~@fortawesome/fontawesome-free/css/all.css';
+@import '~@fortawesome/fontawesome-free/css/regular.min.css';
 
 html,
 * {
@@ -11,10 +11,7 @@ html,
 }
 
 body {
-  font-size: 1.6rem;
-  font-family: open sans, sans-serif;
-  color: #333545;
-  background-color: #fff;
+  color: #fff;
   overflow-y: hidden;
 }
 

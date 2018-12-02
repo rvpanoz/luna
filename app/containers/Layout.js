@@ -9,8 +9,7 @@ import cn from 'classnames';
 import layoutStyles from '../styles/layout.css';
 import styles from '../styles/spectre.min.css';
 import Header from '../components/Header';
-import Packages from '../components/Packages';
-import Package from '../components/Package';
+import { Packages } from '../components/packages';
 import Dashboard from '../components/Dashboard';
 
 const { wrapper, header, main } = layoutStyles;

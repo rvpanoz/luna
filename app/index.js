@@ -5,7 +5,7 @@ import App from './containers/App';
 import { configureStore, history } from './store/configureStore';
 
 const store = configureStore();
-console.log(store);
+
 render(
   <StoreProvider value={store}>
     <App />
