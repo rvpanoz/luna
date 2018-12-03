@@ -18,7 +18,7 @@ const useIpc = (channel, options) => {
   const [state, setData] = useState(defaultState);
 
   useEffect(() => {
-    ipcRenderer.once(listenTo, (eventName, data, command) => {
+    ipcRenderer.on(listenTo, (eventName, data, command) => {
       try {
         // const packages = data && JSON.parse(data); // TODO: parse in setupPackagesFromResponse
         setData(

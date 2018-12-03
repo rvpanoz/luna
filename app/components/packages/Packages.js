@@ -28,22 +28,22 @@ const options = {
   cmd: ['outdated', 'list']
 };
 
-// const mapState = state => {
-//   return {
-//     records: state.packages.packages.records
-//   };
-// };
+const mapState = state => ({
+  packages: state.packages.packages
+});
 
 const Packages = props => {
-  const { mode = 'GLOBAL', directory = '' } = props;
-  const mapState = useCallback(state => state.packages.packages.records, [[]]);
+  const { mode, directory } = props;
   const { packages } = useMappedState(mapState);
   const dispatch = useDispatch();
+
+  // create a memoized callback - that only changes if packages has changed, second param
   const setPackages = useCallback(
     data => dispatch({ type: SET_PACKAGES, packages: data }),
     [packages]
   );
 
+  // fetch new packages
   const [newPackages, error] = useIpc(
     'ipc-event',
     merge(options, {
@@ -52,6 +52,7 @@ const Packages = props => {
     })
   );
 
+  // update packages
   useEffect(
     () => {
       const completedPackages = setupPackagesFromResponse(newPackages);

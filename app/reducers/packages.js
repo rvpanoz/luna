@@ -15,10 +15,11 @@ const createReducer = (packagesState, handlers) => (
 ) => R.propOr(R.identity, R.prop('type', action), handlers)(state, action);
 
 const handlers = {
-  [SET_PACKAGES]: (state, action) =>
-    R.merge(state, {
-      records: action.packages
-    })
+  [SET_PACKAGES]: (state, action) => {
+    return R.merge(state, {
+      packages: action.packages
+    });
+  }
 };
 
 export default createReducer(packagesStateSlice, handlers);

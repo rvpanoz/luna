@@ -2,8 +2,6 @@ export default {
   ui: {
     loading: false
   },
-  packages: {
-    records: []
-  },
+  packages: [],
   metadata: {}
 };
