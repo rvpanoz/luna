@@ -28,15 +28,15 @@ const options = {
   cmd: ['outdated', 'list']
 };
 
-const mapState = state => {
-  return {
-    records: state.packages.packages.records
-  };
-};
+// const mapState = state => {
+//   return {
+//     records: state.packages.packages.records
+//   };
+// };
 
 const Packages = props => {
   const { mode = 'GLOBAL', directory = '' } = props;
-
+  const mapState = useCallback(state => state.packages.packages.records, [[]]);
   const { packages } = useMappedState(mapState);
   const dispatch = useDispatch();
   const setPackages = useCallback(
