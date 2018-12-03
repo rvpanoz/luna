@@ -1,27 +1,29 @@
-/**
- * NPM cli commands
- **/
+/* eslint-disable func-names */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-else-return */
 
-import { merge } from 'ramda'
-import { fetchStats } from './github'
-import cp from 'child_process'
-import Q from 'q'
-import path from 'path'
-import mk from '../mk'
+// NPM cli commands
 
-const spawn = cp.spawn
+import { merge } from 'ramda';
+import cp from 'child_process';
+import Q from 'q';
+import path from 'path';
+import { fetchStats } from './github';
+import mk from '../mk';
 
-mk.logToFile = false
+const { spawn } = cp;
 
-/** Run npm command **/
+mk.logToFile = false;
+
+// run npm command
 function runCommand(command, directory, callback, opts) {
-  mk.log(`RUNNING: npm ${command.join(' ')}`)
+  mk.log(`RUNNING: npm ${command.join(' ')}`);
 
-  const deferred = Q.defer()
-  const cwd = process.cwd()
-  const { repo, pkgName, latest } = opts || {}
-  let result = '',
-    error = ''
+  const deferred = Q.defer();
+  const cwd = process.cwd();
+  const { repo, pkgName, latest } = opts || {};
+  let result = '';
+  let error = '';
 
   // on windows use npm.cmd
   const npmc = spawn(
@@ -31,27 +33,27 @@ function runCommand(command, directory, callback, opts) {
       env: process.env,
       cwd: directory ? path.dirname(directory) : cwd
     }
-  )
+  );
 
-  npmc.stdout.on('data', (data) => {
-    const dataToString = data.toString()
-    result += dataToString
-    callback('flow', dataToString)
-  })
+  npmc.stdout.on('data', data => {
+    const dataToString = data.toString();
+    result += dataToString;
+    callback('flow', dataToString);
+  });
 
-  npmc.stderr.on('data', (error) => {
-    const errorToString = error.toString()
-    error += `${errorToString} | `
-    callback('error', errorToString)
-  })
+  npmc.stderr.on('data', err => {
+    const errorToString = err.toString();
+    error += `${errorToString} | `;
+    callback('error', errorToString);
+  });
 
-  npmc.on('exit', (code) => {
-    mk.log(`INFO: child exited with code ${code}`)
-    mk.log('===== EXIT ======')
-  })
+  npmc.on('exit', code => {
+    mk.log(`INFO: child exited with code ${code}`);
+    mk.log('===== EXIT ======');
+  });
 
   npmc.on('close', () => {
-    mk.log(`FINISHED: npm ${command.join(' ')}`)
+    mk.log(`FINISHED: npm ${command.join(' ')}`);
 
     const results = {
       status: 'close',
@@ -59,7 +61,7 @@ function runCommand(command, directory, callback, opts) {
       data: result,
       cmd: command,
       latest: latest
-    }
+    };
 
     //github stats
     if (opts && opts.fetchGithub === true) {
@@ -67,178 +69,171 @@ function runCommand(command, directory, callback, opts) {
         const getStats = fetchStats({
           repoUrl: repo.url || null,
           pkgName
-        })
+        });
 
         getStats
-          .then((stats) => {
+          .then(stats => {
             deferred.resolve(
               merge(results, {
                 stats: stats
               })
-            )
+            );
           })
-          .catch((e) => {
-            console.log('Error fetching stats from github')
-            deferred.resolve(results)
-          })
+          .catch(e => {
+            console.log('Error fetching stats from github');
+            deferred.resolve(results);
+          });
       } else {
-        deferred.resolve(results)
+        deferred.resolve(results);
       }
     } else {
-      deferred.resolve(results)
+      deferred.resolve(results);
     }
-  })
+  });
 
-  return deferred.promise
+  return deferred.promise;
 }
 
 // npm list [[<@scope>/]<pkg> ...]
 exports.list = function(opts, callback) {
-  const command = ['list']
-  const { mode, directory, options } = opts
-  const defaults = ['--depth=0', '--long', '--json']
+  const command = ['list'];
+  const { mode, directory } = opts;
+  const defaults = ['--depth=0', '--long', '--json'];
 
-  if (!callback || !typeof callback === 'function') {
+  if (!callback || typeof callback !== 'function') {
     return Q.reject(
       new Error(
         'npm[list] callback parameter must be given and must be a function'
       )
-    )
+    );
   }
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  const run = [].concat(command).concat(commandArgs.reverse())
-  return runCommand(run, directory, callback)
-}
+  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
+  const run = [].concat(command).concat(commandArgs.reverse());
+  return runCommand(run, directory, callback);
+};
 
 // npm list [[<@scope>/]<pkg> ...]
 exports.outdated = function(opts, callback) {
-  const command = ['outdated']
-  const deferred = Q.defer()
-  const cwd = process.cwd()
-  const { mode, directory, options } = opts
-  const defaults = ['--depth=0', '--json']
+  const command = ['outdated'];
+  const { mode, directory } = opts;
+  const defaults = ['--depth=0', '--json'];
 
-  if (!command || !Array.isArray(command)) {
+  if (!callback || typeof callback !== 'function') {
     return Q.reject(
       new Error(
-        'npm[outdated] cmd parameter must be given and must be an array'
+        'npm[outdated] callback parameter must be given and must be a function'
       )
-    )
+    );
   }
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-  const run = [].concat(command).concat(commandArgs)
-  return runCommand(run, directory, callback)
-}
+  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
+  const run = [].concat(command).concat(commandArgs);
+  return runCommand(run, directory, callback);
+};
 
 // npm view [<@scope>/]<name>[@<version>]
 exports.view = function(opts, callback) {
-  const command = ['view']
-  const deferred = Q.defer()
-  const cwd = process.cwd()
-  const { mode, directory, pkgName, pkgVersion, repo, latest } = opts
-  const defaults = ['--depth=0', '--json']
+  const command = ['view'];
+  const { mode, directory, pkgName, pkgVersion, repo, latest } = opts;
+  const defaults = ['--depth=0', '--json'];
 
   if (!pkgName) {
-    return Q.reject(new Error('npm[view] package name parameter must be given'))
+    return Q.reject(
+      new Error('npm[view] package name parameter must be given')
+    );
   }
 
-  let result = '',
-    error = ''
+  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
-
-  //build npm command
+  // build npm command
   const run = []
     .concat(command)
     .concat(pkgVersion ? [].concat([`${pkgName}@${pkgVersion}`]) : [pkgName])
-    .concat(commandArgs)
+    .concat(commandArgs);
 
   return runCommand(run, directory, callback, {
     repo,
     pkgName,
     latest,
     fetchGithub: opts && opts.fetchGithub
-  })
-}
+  });
+};
 
 // npm search [-l|--long] [--json]
 exports.search = function(opts, callback) {
-  const command = ['search']
-  const deferred = Q.defer()
-  const { pkgName } = opts
-  const defaults = ['--depth=0', '--json']
-
-  let result = '',
-    error = ''
+  const command = ['search'];
+  const { pkgName } = opts;
+  const defaults = ['--depth=0', '--json'];
 
   if (!pkgName) {
     return Q.reject(
       new Error('npm[search] package name parameter must be given')
-    )
+    );
   }
 
-  const run = [].concat(command, pkgName).concat(defaults)
-  return runCommand(run, null, callback)
-}
+  const run = [].concat(command, pkgName).concat(defaults);
+  return runCommand(run, null, callback);
+};
 
 // npm install [<@scope>/]<name>@<version>
 exports.install = function(opts, callback) {
-  const command = ['install']
-  const { pkgName, mode, directory, pkgVersion, multiple, packages } = opts
-  const defaults = [],
-    pkgOptions = opts.pkgOptions || []
+  const command = ['install'];
+  const { pkgName, mode, directory, pkgVersion, multiple, packages } = opts;
+  const defaults = [];
+  const pkgOptions = opts.pkgOptions || [];
 
   if (!pkgName && !multiple) {
     return Q.reject(
       new Error('npm[install] package name parameter must be given')
-    )
+    );
   }
 
   function getNames() {
     return multiple && packages && Array.isArray(packages)
       ? packages
-      : pkgVersion ? `${pkgName}@${pkgVersion}` : pkgName
+      : pkgVersion
+      ? `${pkgName}@${pkgVersion}`
+      : pkgName;
   }
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
+  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
   const commandOpts =
     pkgOptions && pkgOptions.length
-      ? pkgOptions.map((option) => `--${option}`)
-      : []
+      ? pkgOptions.map(option => `--${option}`)
+      : [];
 
   const run = []
     .concat(command)
     .concat(commandArgs)
     .concat(getNames())
-    .concat(commandOpts)
+    .concat(commandOpts);
 
-  return runCommand(run, directory, callback)
-}
+  return runCommand(run, directory, callback);
+};
 
 // npm uninstall [<@scope>/]<pkg>[@<version>]
 exports.uninstall = function(opts, callback) {
-  const command = ['uninstall']
-  const { pkgName, mode, directory, multiple, packages } = opts
-  const defaults = []
+  const command = ['uninstall'];
+  const { pkgName, mode, directory, multiple, packages } = opts;
+  const defaults = [];
 
   function getNames() {
     if (multiple && packages && Array.isArray(packages)) {
-      return packages
+      return packages;
     } else if (!pkgName && !multiple) {
       return Q.reject(
         new Error('npm[uninstall] package name parameter must be given')
-      )
+      );
     } else {
-      return pkgName
+      return pkgName;
     }
   }
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults
+  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
   const run = []
     .concat(command)
     .concat(commandArgs)
-    .concat(getNames())
-  return runCommand(run, directory, callback)
-}
+    .concat(getNames());
+  return runCommand(run, directory, callback);
+};

@@ -25,7 +25,7 @@ const {
 
 const options = {
   ipcEvent: 'get-packages',
-  cmd: ['outdated', 'list']
+  cmd: ['list']
 };
 
 const mapState = state => ({
@@ -34,10 +34,10 @@ const mapState = state => ({
 
 const Packages = props => {
   const { mode, directory } = props;
+
   const { packages } = useMappedState(mapState);
   const dispatch = useDispatch();
 
-  // fetch new packages
   const [newPackages, error] = useIpc(
     'ipc-event',
     merge(options, {
@@ -46,29 +46,30 @@ const Packages = props => {
     })
   );
 
-  // create a memoized callback - that only changes if packages has changed, second param
   const setPackages = useCallback(
     data => dispatch({ type: SET_PACKAGES, packages: data }),
     [newPackages]
   );
 
-  // update packages
-  useEffect(
-    () => {
-      const completedPackages = setupPackagesFromResponse(newPackages);
-      setPackages(completedPackages);
-    },
-    [packages]
-  );
+  console.log(newPackages);
 
+  // useEffect(
+  //   () => {
+  //     const completedPackages = JSON.parse(newPackages);
+  //     setPackages(newPackages || []);
+  //   },
+  //   [newPackages]
+  // );
+
+  console.log('render');
   return (
     <div className={panel} style={{ border: 'none' }}>
       <div className={panelHeader} />
       <div className={panelNav} />
       <div className={panelBody}>
         {packages &&
-          packages.map(pkg => (
-            <Package key={`pkg-${pkg.current}-key`} styles={styles} {...pkg} />
+          packages.map((pkg, idx) => (
+            <Package key={`pkg-${idx}-key`} styles={styles} {...pkg} />
           ))}
       </div>
     </div>

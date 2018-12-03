@@ -2,7 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 
 const Package = props => {
-  const { styles } = props;
+  const { styles, ...restProps } = props;
 
   const {
     tile,

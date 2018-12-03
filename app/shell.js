@@ -1,3 +1,7 @@
+/* eslint-disable func-names */
+/* eslint-disable promise/catch-or-return */
+/* eslint-disable promise/always-return */
+
 /**
  * Run shell commands
  * npm [cmd] [[<@scope>/]<pkg> ...]
@@ -10,9 +14,7 @@ import mk from './mk';
 exports.doCommand = function(options, callback) {
   const { cmd, ...rest } = options || {};
 
-  /**
-   helper fn to setup promises array
-  **/
+  // helper fn to setup promises array
   const combine = () => {
     let promises = [];
 
@@ -22,10 +24,12 @@ exports.doCommand = function(options, callback) {
       );
     }
 
-    cmd.forEach((c, idx) => {
+    cmd.forEach(command => {
       promises.push(
         (function() {
-          return npmApi[c] ? npmApi[c].call(this, rest, callback) : null;
+          return npmApi[command]
+            ? npmApi[command].call(this, rest, callback)
+            : null;
         })()
       );
     });
@@ -33,9 +37,6 @@ exports.doCommand = function(options, callback) {
     return promises;
   };
 
-  /**
-
-  **/
   Q.allSettled(combine()).then(results => {
     results.forEach(result => {
       if (result.state === 'fulfilled') {

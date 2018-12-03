@@ -1,8 +1,9 @@
 /* eslint global-require: off */
+/* eslint-disable compat/compat */
 
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { merge } from 'ramda';
-import electronStore from 'electron-store';
+import ElectronStore from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import fs from 'fs';
 import log from 'electron-log';
@@ -27,21 +28,21 @@ const APP_PATHS = {
 
 const { defaultSettings } = mk.config;
 
-//NODE_EVN
+// NODE_EVN
 const NODE_ENV = process.env.NODE_ENV;
 
-//get parameters
+// get parameters
 const debug = /--debug/.test(process.argv[2]);
 const needslog = /--log/.test(process.argv[3]);
 
-//window min resolution
+// window min resolution
 const MIN_WIDTH = 1366;
 const MIN_HEIGHT = 768;
 
 // store initialization
-const Store = new electronStore();
+const Store = new ElectronStore();
 
-//clear opened packages
+// clear opened packages
 Store.set('openedPackages', []);
 
 let mainWindow = null;
@@ -110,7 +111,7 @@ ipcMain.on('ipc-event', (event, options) => {
   const opts = options || {};
   const { ipcEvent } = opts || {};
 
-  function callback(status, command, data, latest, stats) {
+  function callback(status, command, data, ...args) {
     const isStatus = status && typeof status === 'string';
 
     if (!isStatus) {
@@ -118,12 +119,12 @@ ipcMain.on('ipc-event', (event, options) => {
       throw new Error('command status is not valid');
     }
 
-    const args = arguments;
+    // const args = arguments;
 
-    if (args.length === 1) {
-      console.log(args);
-      return;
-    }
+    // if (args.length === 1) {
+    //   console.log(args);
+    //   return;
+    // }
 
     if (args.length === 2) {
       event.sender.send('ipcEvent-reply', args[1]);
@@ -135,11 +136,13 @@ ipcMain.on('ipc-event', (event, options) => {
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
           event.sender.send('action-close', data, command);
         } else {
-          event.sender.send(`${ipcEvent}-close`, data, command, latest, stats);
+          event.sender.send(`${ipcEvent}-close`, data, command, ...args);
         }
         break;
       case 'error':
         event.sender.send('ipcEvent-error', data);
+        break;
+      default:
         break;
     }
   }
@@ -150,6 +153,7 @@ ipcMain.on('ipc-event', (event, options) => {
    * */
   try {
     const settings = Store.get('user_settings');
+
     shell.doCommand(merge(opts, settings || {}), callback);
   } catch (e) {
     throw new Error(e.message);
@@ -205,7 +209,7 @@ app.on('ready', async () => {
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 
-  // Remove this if your app does not use auto updates
+  // remove this if the app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
 });

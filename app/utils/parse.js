@@ -20,7 +20,7 @@ export const setupPackagesFromResponse = packages => {
   }
 
   try {
-    const data = parse(packages, 'dependencies');
+    const data = parse(packages);
 
     if (!data || !Array.isArray(data)) {
       throw new Error('Critical: cannot parse packages');
