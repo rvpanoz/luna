@@ -37,12 +37,6 @@ const Packages = props => {
   const { packages } = useMappedState(mapState);
   const dispatch = useDispatch();
 
-  // create a memoized callback - that only changes if packages has changed, second param
-  const setPackages = useCallback(
-    data => dispatch({ type: SET_PACKAGES, packages: data }),
-    [packages]
-  );
-
   // fetch new packages
   const [newPackages, error] = useIpc(
     'ipc-event',
@@ -52,13 +46,19 @@ const Packages = props => {
     })
   );
 
+  // create a memoized callback - that only changes if packages has changed, second param
+  const setPackages = useCallback(
+    data => dispatch({ type: SET_PACKAGES, packages: data }),
+    [newPackages]
+  );
+
   // update packages
   useEffect(
     () => {
       const completedPackages = setupPackagesFromResponse(newPackages);
       setPackages(completedPackages);
     },
-    [newPackages]
+    [packages]
   );
 
   return (
