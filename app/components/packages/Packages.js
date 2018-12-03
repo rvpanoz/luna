@@ -28,12 +28,14 @@ const options = {
   cmd: ['outdated', 'list']
 };
 
-const mapState = state => ({
-  packages: state.packages.packages
-});
+const mapState = state => {
+  return {
+    records: state.packages.packages.records
+  };
+};
 
 const Packages = props => {
-  const { mode, directory } = props;
+  const { mode = 'GLOBAL', directory = '' } = props;
 
   const { packages } = useMappedState(mapState);
   const dispatch = useDispatch();
@@ -64,8 +66,8 @@ const Packages = props => {
       <div className={panelNav} />
       <div className={panelBody}>
         {packages &&
-          packages.map((pkg, idx) => (
-            <Package key={`pkg-${idx}`} styles={styles} {...pkg} />
+          packages.map(pkg => (
+            <Package key={`pkg-${pkg.current}-key`} styles={styles} {...pkg} />
           ))}
       </div>
     </div>

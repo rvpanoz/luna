@@ -2,8 +2,8 @@ import React from 'react';
 import cn from 'classnames';
 
 const Package = props => {
-  console.log(props);
   const { styles } = props;
+
   const {
     tile,
     'tile-centered': tileCentered,

@@ -1,8 +1,10 @@
+/* eslint-disable global-require */
+
 import React from 'react';
 import { render } from 'react-dom';
 import { StoreProvider } from 'redux-react-hook';
 import App from './containers/App';
-import { configureStore, history } from './store/configureStore';
+import { configureStore } from './store/configureStore';
 
 const store = configureStore();
 

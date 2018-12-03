@@ -2,7 +2,7 @@
  Global reducer:
  Handles state management for global operations.
  * */
-
+import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
 import {
   SET_MODE,
   SET_PACKAGE_JSON,
@@ -13,19 +13,15 @@ import {
   TOGGLE_SETTINGS,
   TOGGLE_SNACKBAR,
   TOGGLE_DRAWER,
-  TOGGLE_DIALOG,
   MENU_OPEN,
   SET_SETTINGS
 } from '../constants/ActionTypes';
 import initialState from './initialState';
-import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
 
-const { packages, ...globalState } = initialState;
+const { metadata, packages, ...common } = initialState;
 
-const createReducer = (globalState, handlers) => (
-  state = globalState,
-  action
-) => propOr(identity, prop('type', action), handlers)(state, action);
+const createReducer = (commonState, handlers) => (state = common, action) =>
+  propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
   [SET_OPENED_PACKAGES]: (state, action) =>
@@ -41,8 +37,6 @@ const handlers = {
       snackBarOpen: action.snackBarOpen,
       snackbar: action.snackbarOptions ? action.snackbarOptions : state.snackbar
     }),
-  [TOGGLE_DIALOG]: (state, action) =>
-    assoc('dialogOpen', action.dialogOpen, state),
   [TOGGLE_DRAWER]: (state, action) =>
     assoc('drawerOpen', action.drawerOpen, state),
   [TOGGLE_LOADER]: (state, action) => assoc('loading', action.loading, state),
@@ -62,9 +56,9 @@ const handlers = {
         state.messages
       )
     }),
-  [CLEAR_MESSAGES]: (state, action) => assoc('messages', [], state),
+  [CLEAR_MESSAGES]: state => assoc('messages', [], state),
   [MENU_OPEN]: (state, action) => assoc('menuOpen', action.menuOpen, state)
 };
 
-const reducer = createReducer(globalState, handlers);
+const reducer = createReducer(common, handlers);
 export default reducer;
