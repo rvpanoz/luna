@@ -64,8 +64,6 @@ if (
   process.env.DEBUG_PROD === 'true'
 ) {
   require('electron-debug')();
-  // TODO:
-  // require('electron-reloader')('..');
 }
 
 const installExtensions = async () => {
@@ -119,45 +117,31 @@ ipcMain.on('analyze-json', (event, filePath) => {
 
 // channel: ipc-event
 ipcMain.on('ipc-event', async (event, options) => {
-  const opts = options || {};
-  const { ipcEvent } = opts || {};
+  const { ipcEvent } = options || {};
 
-  function callback(status, cmd, data, latest, error) {
-    console.log(status);
-    return void 0;
+  function callback(status, cmd, data) {
+    console.log(status, cmd);
+    const hasValidStatus = status && typeof status === 'string';
 
-    // const { status } = args;
-    // const hasValidStatus = status && typeof status === 'string';
+    if (!hasValidStatus) {
+      throw new Error('FATAL: status response is not valid');
+    }
 
-    // if (!hasValidStatus) {
-    //   throw new Error('FATAL: status response is not valid');
-    // }
-
-    // const args = arguments;
-    // if (args.length === 1) {
-    //   console.log(args);
-    //   return;
-    // }
-    // console.log(status);
-    // if (args.length === 2) {
-    //   event.sender.send('ipcEvent-reply', args[1]);
-    //   return;
-    // }
     // finalize response
-    // switch (status) {
-    //   case 'close':
-    //     if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
-    //       event.sender.send('action-close', data, command);
-    //     } else {
-    //       event.sender.send(`${ipcEvent}-close`, data, command, ...args);
-    //     }
-    //     break;
-    //   case 'error':
-    //     event.sender.send('ipcEvent-error', data);
-    //     break;
-    //   default:
-    //     break;
-    // }
+    switch (status) {
+      case 'close':
+        if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
+          event.sender.send('action-close', data);
+        } else {
+          event.sender.send(`${ipcEvent}-close`, cmd, data);
+        }
+        break;
+      case 'error':
+        event.sender.send('ipcEvent-error', data);
+        break;
+      default:
+        break;
+    }
   }
 
   /**
@@ -166,7 +150,8 @@ ipcMain.on('ipc-event', async (event, options) => {
    * */
   try {
     // TODO: use async - await
-    const params = merge(opts, settings);
+    const params = merge(options, settings);
+
     runCommand(params, callback);
   } catch (e) {
     throw new Error(e.message);

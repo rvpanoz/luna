@@ -47,20 +47,14 @@ function runCommand(command, directory, callback, opts) {
     const dataToString = data.toString();
 
     result += dataToString;
-    callback({
-      status: 'flow',
-      data: dataToString
-    });
+    callback('stdout', command, dataToString);
   });
 
   npmc.stderr.on('data', err => {
     const errorToString = err.toString();
 
     error += `${errorToString} | `;
-    callback({
-      status: 'error',
-      error: errorToString
-    });
+    callback('error', command, errorToString);
   });
 
   npmc.on('exit', code => {
@@ -75,7 +69,7 @@ function runCommand(command, directory, callback, opts) {
       error: error.length ? error : null,
       data: result,
       cmd: command,
-      latest: latest
+      latest
     };
 
     deferred.resolve(results);

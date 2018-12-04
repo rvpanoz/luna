@@ -32,9 +32,8 @@ export const runCommand = (options, callback) => {
     cmd.forEach(command => {
       promises.push(
         (() => {
-          return npmApi[command]
-            ? npmApi[command].call(this, rest, callback)
-            : null;
+          const npmCmd = npmApi[command];
+          return npmCmd ? npmCmd.call(npmCmd, rest, callback) : null;
         })()
       );
     });
@@ -45,17 +44,10 @@ export const runCommand = (options, callback) => {
   Q.allSettled(combine()).then(results => {
     results.forEach(async result => {
       if (result.state === 'fulfilled') {
-        // console.log(result);
-        await fs.writeFileSync(
-          'test.txt',
-          JSON.stringify(result.value),
-          'UTF-8'
-        );
-
         const { value } = result;
         const { status, cmd, error, latest, ...rest } = value || {};
-        // console.log(status);
-        // callback.call(...value);
+
+        callback.call(callback, status, cmd);
       } else {
         mk.log(`ERROR: ${result.state} ${result.reason}`);
         // callback(result);
