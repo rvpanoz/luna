@@ -25,7 +25,7 @@ mk.logToFile = false;
  * @param {*} opts
  */
 function runCommand(command, directory, callback, opts) {
-  log(chalk.red(`running: npm ${command.join(' ')}`));
+  log(chalk.red.bold(`running: npm ${command.join(' ')}`));
 
   const deferred = Q.defer();
   const cwd = process.cwd();
@@ -58,11 +58,11 @@ function runCommand(command, directory, callback, opts) {
   });
 
   npmc.on('exit', code => {
-    log(chalk.white(`child exited with code ${code}`));
+    log(chalk.white.bold(`child exited with code ${code}`));
   });
 
   npmc.on('close', () => {
-    log(chalk.green(`finished: npm ${command.join(' ')}`));
+    log(chalk.green.bold(`finished: npm ${command.join(' ')}`));
 
     const results = {
       status: 'close',
@@ -82,7 +82,7 @@ function runCommand(command, directory, callback, opts) {
 exports.list = function(opts, callback) {
   const command = ['list'];
   const { mode, directory } = opts;
-  const defaults = ['--depth=0', '--json'];
+  const defaults = ['--long', '--json', '--depth=0'];
 
   if (!callback || typeof callback !== 'function') {
     return Q.reject(

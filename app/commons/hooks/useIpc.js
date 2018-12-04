@@ -10,7 +10,7 @@ const useIpc = (channel, options) => {
   }
 
   const defaultState = {
-    packages: [],
+    packages: '',
     error: null
   };
 
@@ -18,7 +18,7 @@ const useIpc = (channel, options) => {
   const [state, setData] = useState(defaultState);
 
   useEffect(() => {
-    ipcRenderer.on(listenTo, (eventName, data) => {
+    ipcRenderer.on(listenTo, (eventName, status, cmd, data) => {
       try {
         // const packages = data && JSON.parse(data); // TODO: parse in setupPackagesFromResponse
         setData(

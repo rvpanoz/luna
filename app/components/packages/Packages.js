@@ -51,17 +51,14 @@ const Packages = props => {
     [newPackages]
   );
 
-  console.log(newPackages);
+  useEffect(
+    () => {
+      const parsedPackages = setupPackagesFromResponse(newPackages);
+      setPackages(parsedPackages || []);
+    },
+    [newPackages]
+  );
 
-  // useEffect(
-  //   () => {
-  //     const completedPackages = JSON.parse(newPackages);
-  //     setPackages(newPackages || []);
-  //   },
-  //   [newPackages]
-  // );
-
-  console.log('render');
   return (
     <div className={panel} style={{ border: 'none' }}>
       <div className={panelHeader} />

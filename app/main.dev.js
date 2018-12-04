@@ -31,9 +31,7 @@ const APP_PATHS = {
 // defaults settings
 const { defaultSettings } = mk.config;
 
-// NODE_EVN
-const NODE_ENV = process.env.NODE_ENV;
-const START_MINIMIZED = process.env.START_MINIMIZED || true;
+const { DEBUG_PROD, NODE_ENV, START_MINIMIZED } = process.env;
 
 // get parameters
 const debug = /--debug/.test(process.argv[2]);
@@ -54,15 +52,12 @@ const settings = Store.get('user_settings');
 
 let mainWindow = null;
 
-if (process.env.NODE_ENV === 'production') {
+if (NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
 
-if (
-  process.env.NODE_ENV === 'development' ||
-  process.env.DEBUG_PROD === 'true'
-) {
+if (NODE_ENV === 'development' || DEBUG_PROD === 'true') {
   require('electron-debug')();
 }
 
@@ -120,7 +115,6 @@ ipcMain.on('ipc-event', async (event, options) => {
   const { ipcEvent } = options || {};
 
   function callback(status, cmd, data) {
-    console.log(status, cmd);
     const hasValidStatus = status && typeof status === 'string';
 
     if (!hasValidStatus) {
@@ -133,7 +127,7 @@ ipcMain.on('ipc-event', async (event, options) => {
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
           event.sender.send('action-close', data);
         } else {
-          event.sender.send(`${ipcEvent}-close`, cmd, data);
+          event.sender.send(`${ipcEvent}-close`, status, cmd, data);
         }
         break;
       case 'error':
@@ -145,14 +139,12 @@ ipcMain.on('ipc-event', async (event, options) => {
   }
 
   /**
-   * At this point we try to run a shell command
-   * sending output using spawn to renderer via ipc events
-   * */
+   * At this point we try to run a shell command sending output using spawn to renderer via ipc events
+   */
   try {
-    // TODO: use async - await
     const params = merge(options, settings);
 
-    runCommand(params, callback);
+    runCommand.call(runCommand, params, callback);
   } catch (e) {
     throw new Error(e.message);
   }

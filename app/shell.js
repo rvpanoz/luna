@@ -45,12 +45,12 @@ export const runCommand = (options, callback) => {
     results.forEach(async result => {
       if (result.state === 'fulfilled') {
         const { value } = result;
-        const { status, cmd, error, latest, ...rest } = value || {};
+        const { status, cmd, error, latest, data } = value || {};
 
-        callback.call(callback, status, cmd);
+        callback.apply(callback, [status, cmd, data]);
       } else {
         mk.log(`ERROR: ${result.state} ${result.reason}`);
-        // callback(result);
+        callback.call(callback, 'error');
       }
     });
   });
