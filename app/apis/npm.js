@@ -8,16 +8,24 @@ import { merge } from 'ramda';
 import cp from 'child_process';
 import Q from 'q';
 import path from 'path';
+import chalk from 'chalk';
 import { fetchStats } from './github';
 import mk from '../mk';
 
 const { spawn } = cp;
+const log = console.log;
 
 mk.logToFile = false;
 
-// run npm command
+/**
+ *
+ * @param {*} command
+ * @param {*} directory
+ * @param {*} callback
+ * @param {*} opts
+ */
 function runCommand(command, directory, callback, opts) {
-  mk.log(`RUNNING: npm ${command.join(' ')}`);
+  log(chalk.red(`running: npm ${command.join(' ')}`));
 
   const deferred = Q.defer();
   const cwd = process.cwd();
@@ -37,23 +45,30 @@ function runCommand(command, directory, callback, opts) {
 
   npmc.stdout.on('data', data => {
     const dataToString = data.toString();
+
     result += dataToString;
-    callback('flow', dataToString);
+    callback({
+      status: 'flow',
+      data: dataToString
+    });
   });
 
   npmc.stderr.on('data', err => {
     const errorToString = err.toString();
+
     error += `${errorToString} | `;
-    callback('error', errorToString);
+    callback({
+      status: 'error',
+      error: errorToString
+    });
   });
 
   npmc.on('exit', code => {
-    mk.log(`INFO: child exited with code ${code}`);
-    mk.log('===== EXIT ======');
+    log(chalk.white(`child exited with code ${code}`));
   });
 
   npmc.on('close', () => {
-    mk.log(`FINISHED: npm ${command.join(' ')}`);
+    log(chalk.green(`finished: npm ${command.join(' ')}`));
 
     const results = {
       status: 'close',
@@ -63,32 +78,7 @@ function runCommand(command, directory, callback, opts) {
       latest: latest
     };
 
-    //github stats
-    if (opts && opts.fetchGithub === true) {
-      if (repo && repo.url) {
-        const getStats = fetchStats({
-          repoUrl: repo.url || null,
-          pkgName
-        });
-
-        getStats
-          .then(stats => {
-            deferred.resolve(
-              merge(results, {
-                stats: stats
-              })
-            );
-          })
-          .catch(e => {
-            console.log('Error fetching stats from github');
-            deferred.resolve(results);
-          });
-      } else {
-        deferred.resolve(results);
-      }
-    } else {
-      deferred.resolve(results);
-    }
+    deferred.resolve(results);
   });
 
   return deferred.promise;
@@ -98,7 +88,7 @@ function runCommand(command, directory, callback, opts) {
 exports.list = function(opts, callback) {
   const command = ['list'];
   const { mode, directory } = opts;
-  const defaults = ['--depth=0', '--long', '--json'];
+  const defaults = ['--depth=0', '--json'];
 
   if (!callback || typeof callback !== 'function') {
     return Q.reject(
@@ -113,7 +103,7 @@ exports.list = function(opts, callback) {
   return runCommand(run, directory, callback);
 };
 
-// npm list [[<@scope>/]<pkg> ...]
+// npm outdated [[<@scope>/]<pkg> ...]
 exports.outdated = function(opts, callback) {
   const command = ['outdated'];
   const { mode, directory } = opts;

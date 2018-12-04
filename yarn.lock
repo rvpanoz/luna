@@ -3419,6 +3419,13 @@ electron-publish@20.38.2:
     lazy-val "^1.0.3"
     mime "^2.4.0"
 
+electron-reloader@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npmjs.org/electron-reloader/-/electron-reloader-0.2.0.tgz#0e7842b97d6011d983ac34553601226865344738"
+  dependencies:
+    chokidar "^2.0.0"
+    electron-is-dev "^0.3.0"
+
 electron-store@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/electron-store/-/electron-store-2.0.0.tgz#1035cca2a95409d1f54c7466606345852450d64a"

@@ -1,22 +1,27 @@
-/* eslint-disable func-names */
-/* eslint-disable promise/catch-or-return */
-/* eslint-disable promise/always-return */
+/* eslint-disable */
 
 /**
  * Run shell commands
  * npm [cmd] [[<@scope>/]<pkg> ...]
  * */
 
+import fs from 'fs';
+import path from 'path';
 import Q from 'q';
 import npmApi from './apis/npm';
 import mk from './mk';
 
-exports.doCommand = function(options, callback) {
+/**
+ *
+ * @param {*} options
+ * @param {*} callback
+ */
+export const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
   // helper fn to setup promises array
   const combine = () => {
-    let promises = [];
+    const promises = [];
 
     if (!cmd || !Array.isArray(cmd)) {
       throw new Error(
@@ -26,7 +31,7 @@ exports.doCommand = function(options, callback) {
 
     cmd.forEach(command => {
       promises.push(
-        (function() {
+        (() => {
           return npmApi[command]
             ? npmApi[command].call(this, rest, callback)
             : null;
@@ -38,19 +43,22 @@ exports.doCommand = function(options, callback) {
   };
 
   Q.allSettled(combine()).then(results => {
-    results.forEach(result => {
+    results.forEach(async result => {
       if (result.state === 'fulfilled') {
-        callback(
-          result.value.status,
-          result.value.cmd,
-          result.value.data,
-          result.value.latest,
-          result.value.stats,
-          result.value.dataString
+        // console.log(result);
+        await fs.writeFileSync(
+          'test.txt',
+          JSON.stringify(result.value),
+          'UTF-8'
         );
+
+        const { value } = result;
+        const { status, cmd, error, latest, ...rest } = value || {};
+        // console.log(status);
+        // callback.call(...value);
       } else {
-        mk.log(`${result.state} ${result.reason}`);
-        callback(result);
+        mk.log(`ERROR: ${result.state} ${result.reason}`);
+        // callback(result);
       }
     });
   });

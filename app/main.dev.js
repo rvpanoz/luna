@@ -3,12 +3,13 @@
 
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { merge } from 'ramda';
-import ElectronStore from 'electron-store';
 import { autoUpdater } from 'electron-updater';
+import ElectronStore from 'electron-store';
+import path from 'path';
 import fs from 'fs';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import shell from './shell';
+import { runCommand } from './shell';
 import mk from './mk';
 
 export default class AppUpdater {
@@ -21,15 +22,18 @@ export default class AppUpdater {
 
 mk.logToFile = true;
 
+// user system paths
 const APP_PATHS = {
   appData: app.getPath('appData'),
   userData: app.getPath('userData')
 };
 
+// defaults settings
 const { defaultSettings } = mk.config;
 
 // NODE_EVN
 const NODE_ENV = process.env.NODE_ENV;
+const START_MINIMIZED = process.env.START_MINIMIZED || true;
 
 // get parameters
 const debug = /--debug/.test(process.argv[2]);
@@ -45,6 +49,9 @@ const Store = new ElectronStore();
 // clear opened packages
 Store.set('openedPackages', []);
 
+// user settings
+const settings = Store.get('user_settings');
+
 let mainWindow = null;
 
 if (process.env.NODE_ENV === 'production') {
@@ -57,6 +64,8 @@ if (
   process.env.DEBUG_PROD === 'true'
 ) {
   require('electron-debug')();
+  // TODO:
+  // require('electron-reloader')('..');
 }
 
 const installExtensions = async () => {
@@ -69,9 +78,11 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-/** ipcRender events */
+/**
+ * Listen to ipcRenderer events
+ */
 
-/* analyze directory */
+// channel: analyze-json
 ipcMain.on('analyze-json', (event, filePath) => {
   if (!filePath) {
     throw new Error('filePath is not defined');
@@ -106,45 +117,47 @@ ipcMain.on('analyze-json', (event, filePath) => {
   }
 });
 
-/* generic ipc-event dispatcher */
-ipcMain.on('ipc-event', (event, options) => {
+// channel: ipc-event
+ipcMain.on('ipc-event', async (event, options) => {
   const opts = options || {};
   const { ipcEvent } = opts || {};
 
-  function callback(status, command, data, ...args) {
-    const isStatus = status && typeof status === 'string';
+  function callback(status, cmd, data, latest, error) {
+    console.log(status);
+    return void 0;
 
-    if (!isStatus) {
-      mk.log('FATAL: command status is not valid');
-      throw new Error('command status is not valid');
-    }
+    // const { status } = args;
+    // const hasValidStatus = status && typeof status === 'string';
+
+    // if (!hasValidStatus) {
+    //   throw new Error('FATAL: status response is not valid');
+    // }
 
     // const args = arguments;
-
     // if (args.length === 1) {
     //   console.log(args);
     //   return;
     // }
-
-    if (args.length === 2) {
-      event.sender.send('ipcEvent-reply', args[1]);
-      return;
-    }
-
-    switch (status) {
-      case 'close':
-        if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
-          event.sender.send('action-close', data, command);
-        } else {
-          event.sender.send(`${ipcEvent}-close`, data, command, ...args);
-        }
-        break;
-      case 'error':
-        event.sender.send('ipcEvent-error', data);
-        break;
-      default:
-        break;
-    }
+    // console.log(status);
+    // if (args.length === 2) {
+    //   event.sender.send('ipcEvent-reply', args[1]);
+    //   return;
+    // }
+    // finalize response
+    // switch (status) {
+    //   case 'close':
+    //     if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
+    //       event.sender.send('action-close', data, command);
+    //     } else {
+    //       event.sender.send(`${ipcEvent}-close`, data, command, ...args);
+    //     }
+    //     break;
+    //   case 'error':
+    //     event.sender.send('ipcEvent-error', data);
+    //     break;
+    //   default:
+    //     break;
+    // }
   }
 
   /**
@@ -152,9 +165,9 @@ ipcMain.on('ipc-event', (event, options) => {
    * sending output using spawn to renderer via ipc events
    * */
   try {
-    const settings = Store.get('user_settings');
-
-    shell.doCommand(merge(opts, settings || {}), callback);
+    // TODO: use async - await
+    const params = merge(opts, settings);
+    runCommand(params, callback);
   } catch (e) {
     throw new Error(e.message);
   }
@@ -194,7 +207,7 @@ app.on('ready', async () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
-    if (process.env.START_MINIMIZED) {
+    if (START_MINIMIZED) {
       mainWindow.minimize();
     } else {
       mainWindow.show();

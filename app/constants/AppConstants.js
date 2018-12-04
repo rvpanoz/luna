@@ -48,7 +48,7 @@ export const COMMAND_OPTIONS = [
   "save-exact*Saved dependencies will be configured with an exact version rather than using npm's default semver range operator"
 ];
 
-//npm config allowed values
+// npm config allowed values
 export const NPM_CONFIG_VALUES = {
   REGISTRY: 'registry',
   PROXY: 'proxy',
