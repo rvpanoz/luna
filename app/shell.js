@@ -35,10 +35,10 @@ export const runCommand = (options, callback) => {
     cmd.forEach(command => {
       promises.push(
         (() => {
-          const api = require(`./apis/${activeManager}`);
-          const r_command = api[command];
-
           try {
+            const api = require(`./apis/${activeManager}`);
+            const r_command = api[command];
+
             return r_command.call(api, rest, callback);
           } catch (error) {
             throw new Error(error);

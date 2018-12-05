@@ -46,15 +46,14 @@ const Packages = props => {
     })
   );
 
-  const setPackages = useCallback(
-    data => dispatch({ type: SET_PACKAGES, packages: data }),
-    [newPackages]
-  );
-
   useEffect(
     () => {
+      //ignore empty respone
+      if (!Boolean(newPackages.length)) {
+        return;
+      }
       const parsedPackages = setupPackagesFromResponse(newPackages);
-      setPackages(parsedPackages || []);
+      dispatch({ type: SET_PACKAGES, packages: parsedPackages });
     },
     [newPackages]
   );

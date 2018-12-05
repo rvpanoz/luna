@@ -246,6 +246,7 @@
     "electron-store": "^2.0.0",
     "electron-updater": "^3.2.3",
     "history": "^4.7.2",
+    "lodash": "^4.17.11",
     "prop-types": "^15.6.2",
     "ramda": "^0.26.1",
     "react": "^16.7.0-alpha.0",
