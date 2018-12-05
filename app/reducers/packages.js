@@ -7,7 +7,7 @@ import * as R from 'ramda';
 import initialState from './initialState';
 import { SET_PACKAGES } from '../constants/ActionTypes';
 
-const { ui, metadata, ...packages } = initialState;
+const { common, metadata, ...packagesSlice } = initialState;
 
 const createReducer = (packagesState, handlers) => (
   state = packagesState,
@@ -21,4 +21,4 @@ const handlers = {
     })
 };
 
-export default createReducer(packages, handlers);
+export default createReducer(packagesSlice, handlers);

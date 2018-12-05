@@ -1,5 +1,6 @@
 export default {
-  ui: {
+  common: {
+    manager: 'npm',
     loading: false
   },
   packages: [],

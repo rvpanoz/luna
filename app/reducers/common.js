@@ -4,6 +4,7 @@
  * */
 import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
 import {
+  SET_MANAGER,
   SET_MODE,
   SET_PACKAGE_JSON,
   SET_OPENED_PACKAGES,
@@ -32,6 +33,7 @@ const handlers = {
       mode: action.mode,
       directory: action.directory
     }),
+  [SET_MANAGER]: (state, action) => assoc('manager', action.drawerOpen, state),
   [TOGGLE_SNACKBAR]: (state, action) =>
     merge(state, {
       snackBarOpen: action.snackBarOpen,

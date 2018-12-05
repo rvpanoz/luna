@@ -8,9 +8,8 @@
 import fs from 'fs';
 import path from 'path';
 import Q from 'q';
-import npmApi from './apis/npm';
-import yarnApi from './apis/yarn';
 import mk from './mk';
+import { NPM, YARN } from './constants/AppConstants';
 
 const { defaultSettings } = mk.config;
 const { manager } = defaultSettings;
@@ -21,7 +20,7 @@ const { manager } = defaultSettings;
  * @param {*} callback
  */
 export const runCommand = (options, callback) => {
-  const { cmd, ...rest } = options || {};
+  const { activeManager = manager, cmd, ...rest } = options || {};
 
   // helper fn to setup promises array
   const combine = () => {
@@ -33,15 +32,17 @@ export const runCommand = (options, callback) => {
       );
     }
 
-    // TODO: find a better way to use manager's apis
     cmd.forEach(command => {
       promises.push(
         (() => {
-          const managerCmd =
-            manager === 'npm' ? npmApi[command] : yarnApi[command];
-          return managerCmd
-            ? managerCmd.call(managerCmd, rest, callback)
-            : null;
+          const api = require(`./apis/${activeManager}`);
+          const r_command = api[command];
+
+          try {
+            return r_command.call(api, rest, callback);
+          } catch (error) {
+            throw new Error(error);
+          }
         })()
       );
     });

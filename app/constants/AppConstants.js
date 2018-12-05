@@ -2,6 +2,7 @@
  * APP constants
  * */
 
+export const LUNA = 'LUNA';
 export const NPM = 'npm';
 export const YARN = 'yarn';
 
@@ -10,7 +11,8 @@ export const GITHUB = {
 };
 
 export const APP_GLOBALS = {
-  name: 'luna'
+  name: LUNA,
+  manager: NPM
 };
 
 // app modes

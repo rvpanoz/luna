@@ -4,6 +4,13 @@
 
 import * as types from '../constants/ActionTypes';
 
+export function setManager(manager = 'npm') {
+  return {
+    type: types.SET_MANAGER,
+    manager
+  };
+}
+
 export function toggleDrawer(bool) {
   return {
     type: types.TOGGLE_DRAWER,
