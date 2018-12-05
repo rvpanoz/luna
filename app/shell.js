@@ -9,7 +9,11 @@ import fs from 'fs';
 import path from 'path';
 import Q from 'q';
 import npmApi from './apis/npm';
+import yarnApi from './apis/yarn';
 import mk from './mk';
+
+const { defaultSettings } = mk.config;
+const { manager } = defaultSettings;
 
 /**
  *
@@ -29,11 +33,15 @@ export const runCommand = (options, callback) => {
       );
     }
 
+    // TODO: find a better way to use manager's apis
     cmd.forEach(command => {
       promises.push(
         (() => {
-          const npmCmd = npmApi[command];
-          return npmCmd ? npmCmd.call(npmCmd, rest, callback) : null;
+          const managerCmd =
+            manager === 'npm' ? npmApi[command] : yarnApi[command];
+          return managerCmd
+            ? managerCmd.call(managerCmd, rest, callback)
+            : null;
         })()
       );
     });

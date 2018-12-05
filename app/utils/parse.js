@@ -6,6 +6,13 @@ import path from 'path';
 import { filter as Rfilter, merge as Rmerge, prop as Rprop } from 'ramda';
 import { APP_MODES, PACKAGE_GROUPS } from '../constants/AppConstants';
 
+const ROOTDIR = __dirname;
+
+const __writeFile = (fileName, data) =>
+  fs.writeFileSync(path.join(__dirname, fileName), data, {
+    encoding: 'utf8'
+  });
+
 const parseResponse = (data, key, all) => {
   try {
     let packages = JSON.parse(data);
@@ -24,13 +31,17 @@ export const setupPackagesFromResponse = (
   response,
   packagesOutdated = [],
   mode = 'GLOBAL',
+  manager = 'yarn',
   packageJSON = {}
 ) => {
   if (Boolean(response.length) === false) {
     return;
   }
 
-  const data = parseResponse(response, 'dependencies');
+  const data = parseResponse(
+    response,
+    manager === 'npm' ? 'dependencies' : 'data'
+  );
 
   if (!data || !Array.isArray(data)) {
     throw new Error('Cannot parse packages');

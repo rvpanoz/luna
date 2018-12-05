@@ -2,7 +2,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-else-return */
 
-// NPM cli commands
+// YARN cli commands
 
 import { merge } from 'ramda';
 import cp from 'child_process';
@@ -12,6 +12,7 @@ import chalk from 'chalk';
 import { fetchStats } from './github';
 import mk from '../mk';
 
+const MANAGER = 'yarn';
 const { spawn } = cp;
 const log = console.log;
 
@@ -25,7 +26,7 @@ mk.logToFile = false;
  * @param {*} opts
  */
 function runCommand(command, directory, callback, opts) {
-  log(chalk.red.bold(`running: npm ${command.join(' ')}`));
+  log(chalk.red.bold(`running: ${MANAGER} ${command.join(' ')}`));
 
   const deferred = Q.defer();
   const cwd = process.cwd();
@@ -34,8 +35,8 @@ function runCommand(command, directory, callback, opts) {
   let error = '';
 
   // on windows use npm.cmd
-  const npmc = spawn(
-    /^win/.test(process.platform) ? 'npm.cmd' : 'npm',
+  const yarnc = spawn(
+    /^win/.test(process.platform) ? 'yarn.cmd' : 'yarn',
     command,
     {
       env: process.env,
@@ -43,26 +44,26 @@ function runCommand(command, directory, callback, opts) {
     }
   );
 
-  npmc.stdout.on('data', data => {
+  yarnc.stdout.on('data', data => {
     const dataToString = data.toString();
 
     result += dataToString;
     callback('stdout', command, dataToString);
   });
 
-  npmc.stderr.on('data', err => {
+  yarnc.stderr.on('data', err => {
     const errorToString = err.toString();
 
     error += `${errorToString} | `;
     callback('error', command, errorToString);
   });
 
-  npmc.on('exit', code => {
+  yarnc.on('exit', code => {
     log(chalk.white.bold(`child exited with code ${code}`));
   });
 
-  npmc.on('close', () => {
-    log(chalk.green.bold(`finished: npm ${command.join(' ')}`));
+  yarnc.on('close', () => {
+    log(chalk.green.bold(`finished: ${MANAGER} ${command.join(' ')}`));
 
     const results = {
       status: 'close',
@@ -78,7 +79,7 @@ function runCommand(command, directory, callback, opts) {
   return deferred.promise;
 }
 
-// npm list [[<@scope>/]<pkg> ...]
+// yarn list [[<@scope>/]<pkg> ...]
 exports.list = function(opts, callback) {
   const command = ['list'];
   const { mode, directory } = opts;
@@ -87,7 +88,7 @@ exports.list = function(opts, callback) {
   if (!callback || typeof callback !== 'function') {
     return Q.reject(
       new Error(
-        'npm[list] callback parameter must be given and must be a function'
+        'yarn[list] callback parameter must be given and must be a function'
       )
     );
   }
@@ -97,7 +98,7 @@ exports.list = function(opts, callback) {
   return runCommand(run, directory, callback);
 };
 
-// npm outdated [[<@scope>/]<pkg> ...]
+// yarn outdated [[<@scope>/]<pkg> ...]
 exports.outdated = function(opts, callback) {
   const command = ['outdated'];
   const { mode, directory } = opts;
@@ -106,7 +107,7 @@ exports.outdated = function(opts, callback) {
   if (!callback || typeof callback !== 'function') {
     return Q.reject(
       new Error(
-        'npm[outdated] callback parameter must be given and must be a function'
+        'yarn[outdated] callback parameter must be given and must be a function'
       )
     );
   }
@@ -116,7 +117,7 @@ exports.outdated = function(opts, callback) {
   return runCommand(run, directory, callback);
 };
 
-// npm view [<@scope>/]<name>[@<version>]
+// yarn view [<@scope>/]<name>[@<version>]
 exports.view = function(opts, callback) {
   const command = ['view'];
   const { mode, directory, pkgName, pkgVersion, repo, latest } = opts;
@@ -124,7 +125,7 @@ exports.view = function(opts, callback) {
 
   if (!pkgName) {
     return Q.reject(
-      new Error('npm[view] package name parameter must be given')
+      new Error('yarn[view] package name parameter must be given')
     );
   }
 
@@ -144,7 +145,7 @@ exports.view = function(opts, callback) {
   });
 };
 
-// npm search [-l|--long] [--json]
+// yarn search [-l|--long] [--json]
 exports.search = function(opts, callback) {
   const command = ['search'];
   const { pkgName } = opts;
@@ -152,7 +153,7 @@ exports.search = function(opts, callback) {
 
   if (!pkgName) {
     return Q.reject(
-      new Error('npm[search] package name parameter must be given')
+      new Error('yarn[search] package name parameter must be given')
     );
   }
 
@@ -160,7 +161,7 @@ exports.search = function(opts, callback) {
   return runCommand(run, null, callback);
 };
 
-// npm install [<@scope>/]<name>@<version>
+// yarn install [<@scope>/]<name>@<version>
 exports.install = function(opts, callback) {
   const command = ['install'];
   const {
@@ -176,7 +177,7 @@ exports.install = function(opts, callback) {
 
   if (!pkgName && !multiple) {
     return Q.reject(
-      new Error('npm[install] package name parameter must be given')
+      new Error('yarn[install] package name parameter must be given')
     );
   }
 
@@ -203,7 +204,7 @@ exports.install = function(opts, callback) {
   return runCommand(run, directory, callback);
 };
 
-// npm uninstall [<@scope>/]<pkg>[@<version>]
+// yarn uninstall [<@scope>/]<pkg>[@<version>]
 exports.uninstall = function(opts, callback) {
   const command = ['uninstall'];
   const { pkgName, mode, directory, multiple, packages } = opts;
@@ -214,7 +215,7 @@ exports.uninstall = function(opts, callback) {
       return packages;
     } else if (!pkgName && !multiple) {
       return Q.reject(
-        new Error('npm[uninstall] package name parameter must be given')
+        new Error('yarn[uninstall] package name parameter must be given')
       );
     } else {
       return pkgName;

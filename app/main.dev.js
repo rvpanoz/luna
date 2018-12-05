@@ -117,7 +117,7 @@ ipcMain.on('analyze-json', (event, filePath) => {
 });
 
 // channel: ipc-event
-ipcMain.on('ipc-event', async (event, options) => {
+ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent } = options || {};
 
   function callback(status, cmd, data) {
