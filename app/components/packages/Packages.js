@@ -8,7 +8,6 @@ import Package from './Package';
 import { SET_PACKAGES } from '../../constants/ActionTypes';
 import useIpc from '../../commons/hooks/useIpc';
 import styles from '../../styles/spectre.min.css';
-import { setupPackagesFromResponse } from '../../utils/parse';
 
 const {
   active,
@@ -49,14 +48,17 @@ const Packages = props => {
   useEffect(
     () => {
       //ignore empty respone
-      if (!Boolean(newPackages.length)) {
+      if (typeof newPackages === 'string' && !Boolean(newPackages.length)) {
         return;
       }
-      const parsedPackages = setupPackagesFromResponse(newPackages);
-      dispatch({ type: SET_PACKAGES, packages: parsedPackages });
+
+      dispatch({ type: SET_PACKAGES, packages: newPackages });
     },
     [newPackages]
   );
+
+  console.log(packages);
+  return null;
 
   return (
     <div className={panel} style={{ border: 'none' }}>

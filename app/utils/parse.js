@@ -1,19 +1,33 @@
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable dot-notation */
+/* eslint-disable */
 
 import fs from 'fs';
 import path from 'path';
 import { filter as Rfilter, merge as Rmerge, prop as Rprop } from 'ramda';
 import { APP_MODES, PACKAGE_GROUPS } from '../constants/AppConstants';
+import { pickAll } from 'ramda';
 
-const ROOTDIR = __dirname;
+const ROOT = __dirname;
 
-const __writeFile = (fileName, data) =>
-  fs.writeFileSync(path.join(__dirname, fileName), data, {
-    encoding: 'utf8'
-  });
+const yarnParse = response => {
+  const packageJsonObj = parsePackageJSON();
+  const partialPackageJsonObj = pickAll(
+    ['dependencies', 'devDependencies', 'optionalDependencies'],
+    packageJsonObj
+  );
+  const packages = parse(response);
+  const {
+    data: { trees }
+  } = packages;
 
-const parseResponse = (data, key, all) => {
+  const packageValues = Object.values(partialPackageJsonObj);
+  console.log(packageValues);
+
+  return trees.reduce((acc, pkg, idx) => {
+    return [...acc, 1];
+  }, []);
+};
+
+const parse = (data, key, all) => {
   try {
     let packages = JSON.parse(data);
 
@@ -21,7 +35,20 @@ const parseResponse = (data, key, all) => {
       packages = packages[key];
       return Object.keys(packages).map(pkey => packages[pkey]);
     }
-    return [];
+
+    return packages;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const parsePackageJSON = () => {
+  try {
+    const packageJSON = fs.readFileSync(path.join(ROOT, '../package.json'), {
+      encoding: 'utf8'
+    });
+
+    return JSON.parse(packageJSON);
   } catch (error) {
     throw new Error(error);
   }
@@ -38,10 +65,11 @@ export const setupPackagesFromResponse = (
     return;
   }
 
-  const data = parseResponse(
-    response,
-    manager === 'npm' ? 'dependencies' : 'data'
-  );
+  const data =
+    manager === 'npm' ? parse(response, 'dependencies') : yarnParse(response);
+
+  // console.log(data);
+  return [];
 
   if (!data || !Array.isArray(data)) {
     throw new Error('Cannot parse packages');

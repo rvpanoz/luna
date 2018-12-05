@@ -5,11 +5,8 @@
  * npm [cmd] [[<@scope>/]<pkg> ...]
  * */
 
-import fs from 'fs';
-import path from 'path';
 import Q from 'q';
 import mk from './mk';
-import { NPM, YARN } from './constants/AppConstants';
 
 const { defaultSettings } = mk.config;
 const { manager } = defaultSettings;

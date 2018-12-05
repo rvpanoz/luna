@@ -1,4 +1,5 @@
-//MK
+/* eslint-disable */
+// MK
 
 global.mk = {
   logToFile: false,
@@ -11,13 +12,13 @@ global.mk = {
       showDetails: true
     }
   },
-  log() {
+  log(...args) {
     const dt = new Date();
-    let cons,
-      args = Array.prototype.slice.call(arguments, 0);
-    let dtf = `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}.${dt.getMilliseconds()}`;
+    let cons;
+    const _args = Array.prototype.slice.call(args, 0);
+    const dtf = `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}.${dt.getMilliseconds()}`;
 
-    args.unshift(dtf);
+    _args.unshift(dtf);
 
     if (this.gui && global.window) {
       cons = global.window.console;
