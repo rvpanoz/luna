@@ -6,6 +6,7 @@ global.mk = {
     defaultSettings: {
       manager: 'npm',
       registry: 'https://registry.npmjs.org/',
+      startMinimized: true,
       fetchGithub: true,
       showDetails: true
     }

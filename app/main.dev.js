@@ -1,7 +1,7 @@
 /* eslint global-require: off */
 /* eslint-disable compat/compat */
 
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { merge } from 'ramda';
 import { autoUpdater } from 'electron-updater';
 import ElectronStore from 'electron-store';
@@ -30,8 +30,14 @@ const APP_PATHS = {
 
 // defaults settings
 const { defaultSettings } = mk.config;
+const { startMinimized } = defaultSettings;
 
-const { DEBUG_PROD, NODE_ENV, START_MINIMIZED } = process.env;
+const {
+  DEBUG_PROD,
+  UPGRADE_EXTENSIONS,
+  NODE_ENV,
+  START_MINIMIZED = startMinimized
+} = process.env;
 
 // get parameters
 const debug = /--debug/.test(process.argv[2]);
@@ -57,13 +63,13 @@ if (NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-if (NODE_ENV === 'development' || DEBUG_PROD === 'true') {
+if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
   require('electron-debug')();
 }
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  const forceDownload = !!UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
   return Promise.all(
@@ -121,7 +127,10 @@ ipcMain.on('ipc-event', async (event, options) => {
       throw new Error('FATAL: status response is not valid');
     }
 
-    // finalize response
+    /**
+     * finalize response send it to renderer
+     * process via ipc events
+     */
     switch (status) {
       case 'close':
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
@@ -155,7 +164,7 @@ ipcMain.on('ipc-event', async (event, options) => {
  */
 
 app.on('window-all-closed', () => {
-  // Respect the OSX convention of having the application in memory even
+  // respect the OSX convention of having the application in memory even
   // after all windows have been closed
   if (process.platform !== 'darwin') {
     app.quit();
@@ -163,23 +172,45 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
-  ) {
+  if (NODE_ENV === 'development') {
     await installExtensions();
   }
 
+  let x = 0,
+    y = 0;
+  const screenSize = screen.getPrimaryDisplay().size;
+  const displays = screen.getAllDisplays();
+  const externalDisplay = displays.find(
+    display => display.bounds.x !== 0 || display.bounds.y !== 0
+  );
+
+  if (externalDisplay) {
+    x = externalDisplay.bounds.x + 50;
+    y = externalDisplay.bounds.y + 50;
+  }
+
+  /** Needs work for RETINA displays **/
+  // if (MIN_WIDTH > screenSize.width) {
+  //   mk.log(`FATAL: low_resolution ${screenSize.width}x${screenSize.height}`)
+  //   throw new Error(
+  //     `Resolution ${screenSize.width}x${screenSize.height} is not supported.`
+  //   )
+  // }
+
+  // create main window
   mainWindow = new BrowserWindow({
+    minWidth: MIN_WIDTH || screenSize.width,
+    minHeight: MIN_HEIGHT || screenSize.height,
+    x: x,
+    y: y,
     show: false,
-    width: 1024,
-    height: 728
+    resizable: true,
+    icon: path.join(__dirname, 'resources/icon.ico')
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  // @TODO: Use 'ready-to-show' event
-  //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
+  // TODO: Use 'ready-to-show' event
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
@@ -190,10 +221,28 @@ app.on('ready', async () => {
       mainWindow.show();
       mainWindow.focus();
     }
+
+    // open devTools in development
+    if (NODE_ENV === 'development') {
+      mainWindow.openDevTools();
+    }
+  });
+
+  mainWindow.webContents.on('crashed', event => {
+    // todo error reporting //
+  });
+
+  mainWindow.on('unresponsive', event => {
+    // todo error reporting //
+  });
+
+  mainWindow.on('show', event => {
+    // todo..
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
+    mk.log('mainWindow is closed');
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
@@ -202,4 +251,9 @@ app.on('ready', async () => {
   // remove this if the app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+});
+
+process.on('uncaughtException', err => {
+  mk.log(`${err}`);
+  mainWindow.webContents.send('uncaught-exception', `${err}`);
 });
