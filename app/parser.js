@@ -51,18 +51,12 @@ class Parser {
     };
 
     const packages = parseJson(data, keys);
-    // writeToFile('packages-debug.json', JSON.stringify(packages));
-
     const values =
       activeManager === 'yarn'
-        ? rPath(['trees'], pick(['data'], packages))
-        : rPath(['dependencies'], pick(['dependencies'], packages));
+        ? rPath(['data', 'trees'], packages)
+        : rPath(['dependencies'], packages);
 
-    // packages &&
-    //   packages.map((pkg, idx) => {
-    //     console.log(pkg);
-    //   });
-
+    // TODO: map packages .. transform(_hasError, _hasPeerDependency, _group)
     return values;
   }
 

@@ -5,7 +5,7 @@ global.mk = {
   logToFile: false,
   config: {
     defaultSettings: {
-      manager: 'npm',
+      manager: 'yarn',
       registry: 'https://registry.npmjs.org/',
       startMinimized: true,
       fetchGithub: false,
