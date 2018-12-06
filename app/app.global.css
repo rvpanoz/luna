@@ -27,6 +27,7 @@ body::before {
 ::-webkit-scrollbar {
   width: 12.5px;
 }
+
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
   background: #999;
@@ -49,9 +50,16 @@ li {
 }
 
 a {
-  color: white;
   opacity: 0.75;
   text-decoration: none;
+}
+
+a:focus,
+a:hover,
+a:active,
+a.active {
+  color: #ffd;
+  text-decoration: underline;
 }
 
 a:hover {

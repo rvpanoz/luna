@@ -40,8 +40,6 @@ class Parser {
     const parseJson = (dataString, keys) => {
       try {
         const toJson = JSON.parse(dataString);
-        const hasManyKeys = Array.isArray(keys) && keys.length;
-        const hasOneKey = !Array.isArray(keys) && typeof keys === 'string';
 
         return keys ? pick(keys, toJson) : toJson;
       } catch (error) {
@@ -60,7 +58,7 @@ class Parser {
     return values;
   }
 
-  readPackageJson() {
+  readPackageJson(directory) {
     try {
       const packageJSON = fs.readFileSync(
         path.join(ROOTDIR, '../package.json'),

@@ -45,7 +45,7 @@ function Header(props) {
         <nav ref={menuRef}>
           <ul>
             <li>
-              <a href="#">Action_2</a>
+              <a href="#">Analyze</a>
             </li>
           </ul>
         </nav>

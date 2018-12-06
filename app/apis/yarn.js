@@ -25,7 +25,12 @@ mk.logToFile = false;
  * @param {*} callback
  * @param {*} opts
  */
-function runCommand(command, directory, callback, opts) {
+function runCommand(
+  command,
+  directory = '/home/rvpanoz/Projects/electron/luna-test/package.json',
+  callback,
+  opts
+) {
   log(chalk.red.bold(`running: ${MANAGER} ${command.join(' ')}`));
 
   const deferred = Q.defer();

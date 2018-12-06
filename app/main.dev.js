@@ -28,6 +28,8 @@ const APP_PATHS = {
   userData: app.getPath('userData')
 };
 
+console.log(APP_PATHS);
+
 // defaults settings
 const { defaultSettings } = mk.config;
 const { startMinimized } = defaultSettings;
@@ -64,7 +66,10 @@ if (NODE_ENV === 'production') {
 }
 
 if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
+  const p = path.join(__dirname, '..', 'app', 'node_modules');
+
   require('electron-debug')();
+  require('module').globalPaths.push(p);
 }
 
 const installExtensions = async () => {
