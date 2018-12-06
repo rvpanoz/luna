@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * Parser class
  */
@@ -21,7 +23,7 @@ class Parser {
     }
 
     if (!data || !Array.isArray(data)) {
-      throw new Error('Cannot parse packages');
+      return;
     }
 
     const mappedPackages = data.map(pkg => {

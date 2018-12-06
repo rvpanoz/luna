@@ -164,8 +164,7 @@ ipcMain.on('ipc-event', (event, options) => {
  */
 
 app.on('window-all-closed', () => {
-  // respect the OSX convention of having the application in memory even
-  // after all windows have been closed
+  // respect the OSX convention of having the application in memory even after all windows have been closed
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -176,8 +175,8 @@ app.on('ready', async () => {
     await installExtensions();
   }
 
-  let x = 0,
-    y = 0;
+  let x = 0;
+  let y = 0;
   const screenSize = screen.getPrimaryDisplay().size;
   const displays = screen.getAllDisplays();
   const externalDisplay = displays.find(
@@ -189,7 +188,8 @@ app.on('ready', async () => {
     y = externalDisplay.bounds.y + 50;
   }
 
-  /** Needs work for RETINA displays **/
+  /** Needs work for RETINA displays */
+
   // if (MIN_WIDTH > screenSize.width) {
   //   mk.log(`FATAL: low_resolution ${screenSize.width}x${screenSize.height}`)
   //   throw new Error(
@@ -199,10 +199,10 @@ app.on('ready', async () => {
 
   // create main window
   mainWindow = new BrowserWindow({
-    minWidth: MIN_WIDTH || screenSize.width,
-    minHeight: MIN_HEIGHT || screenSize.height,
-    x: x,
-    y: y,
+    width: MIN_WIDTH || screenSize.width,
+    height: MIN_HEIGHT || screenSize.height,
+    x,
+    y,
     show: false,
     resizable: true,
     icon: path.join(__dirname, 'resources/icon.ico')
