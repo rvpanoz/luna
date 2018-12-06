@@ -83,7 +83,7 @@ function runCommand(command, directory, callback, opts) {
 exports.list = function(opts, callback) {
   const command = ['list'];
   const { mode, directory } = opts;
-  const defaults = ['--long', '--json', '--depth=0'];
+  const defaults = ['--json', '--depth=0'];
 
   if (!callback || typeof callback !== 'function') {
     return Q.reject(

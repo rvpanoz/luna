@@ -7,6 +7,7 @@
 
 import Q from 'q';
 import mk from './mk';
+import Parser from './parser';
 
 const { defaultSettings } = mk.config;
 const { manager } = defaultSettings;
@@ -18,8 +19,9 @@ const { manager } = defaultSettings;
  */
 export const runCommand = (options, callback) => {
   const { activeManager = manager, cmd, ...rest } = options || {};
+  const ParserInst = new Parser(activeManager);
+  const packageJson = ParserInst.readPackageJson();
 
-  // helper fn to setup promises array
   const combine = () => {
     const promises = [];
 
@@ -33,10 +35,12 @@ export const runCommand = (options, callback) => {
       promises.push(
         (() => {
           try {
+            // load api: npm and yarn are supported
             const api = require(`./apis/${activeManager}`);
-            const r_command = api[command];
+            const rcommand = api[command];
 
-            return r_command.call(api, rest, callback);
+            // run the command
+            return rcommand.call(api, rest, callback);
           } catch (error) {
             throw new Error(error);
           }
@@ -51,9 +55,24 @@ export const runCommand = (options, callback) => {
     results.forEach(async result => {
       if (result.state === 'fulfilled') {
         const { value } = result;
-        const { status, cmd, error, latest, data } = value || {};
+        const { status, cmd, data } = value || {};
 
-        callback.apply(callback, [status, cmd, data]);
+        const keys =
+          activeManager === 'npm'
+            ? [
+                'dependencies',
+                'devDependencies',
+                'optionalDependenies',
+                'peerDependencies'
+              ]
+            : ['data'];
+
+        //  we have the response - parse, transform and send it back to ipcRenderer
+        const packages = ParserInst.parse(data, keys, {
+          manager: activeManager
+        });
+
+        callback.apply(callback, [status, cmd, packages]);
       } else {
         mk.log(`ERROR: ${result.state} ${result.reason}`);
         callback.call(callback, 'error');

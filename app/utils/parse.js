@@ -27,16 +27,8 @@ const yarnParse = response => {
   }, []);
 };
 
-const parse = (data, key, all) => {
+export const parseJson = data => {
   try {
-    let packages = JSON.parse(data);
-
-    if (key && packages[key]) {
-      packages = packages[key];
-      return Object.keys(packages).map(pkey => packages[pkey]);
-    }
-
-    return packages;
   } catch (error) {
     throw new Error(error);
   }

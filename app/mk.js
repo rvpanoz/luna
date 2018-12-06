@@ -8,8 +8,8 @@ global.mk = {
       manager: 'npm',
       registry: 'https://registry.npmjs.org/',
       startMinimized: true,
-      fetchGithub: true,
-      showDetails: true
+      fetchGithub: false,
+      showDetails: false
     }
   },
   log(...args) {

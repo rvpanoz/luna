@@ -160,7 +160,7 @@ ipcMain.on('ipc-event', (event, options) => {
 });
 
 /**
- * Add event listeners...
+ * Add event listeners
  */
 
 app.on('window-all-closed', () => {

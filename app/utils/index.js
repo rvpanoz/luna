@@ -1,4 +1,3 @@
-import parse from './parse';
-import isJson from './isJson';
+import writeToFile from './writeToFile';
 
-export { parse, isJson };
+export { writeToFile };

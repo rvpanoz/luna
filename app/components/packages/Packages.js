@@ -47,7 +47,6 @@ const Packages = props => {
 
   useEffect(
     () => {
-      //ignore empty respone
       if (typeof newPackages === 'string' && !Boolean(newPackages.length)) {
         return;
       }
