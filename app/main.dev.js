@@ -28,8 +28,6 @@ const APP_PATHS = {
   userData: app.getPath('userData')
 };
 
-console.log(APP_PATHS);
-
 // defaults settings
 const { defaultSettings } = mk.config;
 const { startMinimized } = defaultSettings;

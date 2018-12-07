@@ -25,12 +25,15 @@ mk.logToFile = false;
  * @param {*} callback
  * @param {*} opts
  */
-function runCommand(
-  command,
-  directory = '/home/rvpanoz/Projects/electron/luna-test/package.json',
-  callback,
-  opts
-) {
+
+// TODO: dev
+const __directory = path.join(
+  'C:/projects/',
+  'agile/luna-test/',
+  'package.json'
+);
+
+function runCommand(command, directory = __directory, callback, opts) {
   log(chalk.red.bold(`running: ${MANAGER} ${command.join(' ')}`));
 
   const deferred = Q.defer();
@@ -39,7 +42,7 @@ function runCommand(
   let result = '';
   let error = '';
 
-  // on windows use npm.cmd
+  // on windows use yarn.cmd
   const yarnc = spawn(
     /^win/.test(process.platform) ? 'yarn.cmd' : 'yarn',
     command,
@@ -232,5 +235,6 @@ exports.uninstall = function(opts, callback) {
     .concat(command)
     .concat(commandArgs)
     .concat(getNames());
+
   return runCommand(run, directory, callback);
 };

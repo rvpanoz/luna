@@ -14,6 +14,13 @@ import { writeToFile } from './utils';
 
 const ROOTDIR = __dirname;
 
+// TODO: dev
+const __directory = path.join(
+  'C:/projects/',
+  'agile/luna-test/',
+  'package.json'
+);
+
 class Parser {
   _manager = null;
 
@@ -49,6 +56,8 @@ class Parser {
     };
 
     const packages = parseJson(data, keys);
+    const packageJson = this.readPackageJson();
+
     const values =
       activeManager === 'yarn'
         ? rPath(['data', 'trees'], packages)
@@ -58,14 +67,11 @@ class Parser {
     return values;
   }
 
-  readPackageJson(directory) {
+  readPackageJson(directory = __directory) {
     try {
-      const packageJSON = fs.readFileSync(
-        path.join(ROOTDIR, '../package.json'),
-        {
-          encoding: 'utf8'
-        }
-      );
+      const packageJSON = fs.readFileSync(path.join(directory), {
+        encoding: 'utf8'
+      });
 
       return JSON.parse(packageJSON);
     } catch (error) {

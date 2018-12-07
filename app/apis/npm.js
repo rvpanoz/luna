@@ -23,13 +23,17 @@ mk.logToFile = false;
  * @param {*} directory
  * @param {*} callback
  * @param {*} opts
+ * @dir: '/home/rvpanoz/Projects/electron/luna-test/package.json'
  */
-function runCommand(
-  command,
-  directory = '/home/rvpanoz/Projects/electron/luna-test/package.json',
-  callback,
-  opts
-) {
+
+// TODO: dev
+const __directory = path.join(
+  'C:/projects/',
+  'agile/luna-test/',
+  'package.json'
+);
+
+function runCommand(command, directory = __directory, callback, opts) {
   log(chalk.red.bold(`running: npm ${command.join(' ')}`));
 
   const deferred = Q.defer();

@@ -20,7 +20,6 @@ const { manager } = defaultSettings;
 export const runCommand = (options, callback) => {
   const { activeManager = manager, cmd, ...rest } = options || {};
   const ParserInst = new Parser(activeManager);
-  const packageJson = ParserInst.readPackageJson();
 
   const combine = () => {
     const promises = [];
