@@ -1,5 +1,4 @@
-/* eslint global-require: off */
-/* eslint-disable compat/compat */
+/* eslint-disable */
 
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { merge } from 'ramda';
@@ -151,7 +150,8 @@ ipcMain.on('ipc-event', (event, options) => {
   }
 
   /**
-   * At this point we try to run a shell command sending output using spawn to renderer via ipc events
+   * At this point we try to run a shell command sending output
+   * using spawn to renderer via ipc events
    */
   try {
     const params = merge(options, settings);
@@ -167,7 +167,11 @@ ipcMain.on('ipc-event', (event, options) => {
  */
 
 app.on('window-all-closed', () => {
-  // respect the OSX convention of having the application in memory even after all windows have been closed
+  /**
+   * Respect the OSX convention of having the application
+   * in memory even after all windows have been closed
+   */
+
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -191,7 +195,7 @@ app.on('ready', async () => {
     y = externalDisplay.bounds.y + 50;
   }
 
-  /** Needs work for RETINA displays */
+  // TODO: needs work for RETINA displays
 
   // if (MIN_WIDTH > screenSize.width) {
   //   mk.log(`FATAL: low_resolution ${screenSize.width}x${screenSize.height}`)

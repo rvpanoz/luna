@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import Layout from './Layout';
 import '../app.global.css';
 
-const App = props => {
+const App = () => {
   useEffect(() => {
     ipcRenderer.on('uncaught-exception', (event, exceptionError) => {
       console.error('uncaught-exception', exceptionError);
@@ -13,7 +13,7 @@ const App = props => {
   });
 
   return (
-    <div className="app-content">
+    <div id="app">
       <Layout />
     </div>
   );
