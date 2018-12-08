@@ -5,18 +5,18 @@ global.mk = {
   logToFile: false,
   config: {
     defaultSettings: {
-      manager: 'npm',
+      manager: 'yarn',
       registry: 'https://registry.npmjs.org/',
-      startMinimized: true,
+      startMinimized: false,
       fetchGithub: false,
       showDetails: false
     }
   },
   log(...args) {
     const dt = new Date();
-    let cons;
     const _args = Array.prototype.slice.call(args, 0);
     const dtf = `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}.${dt.getMilliseconds()}`;
+    let cons;
 
     _args.unshift(dtf);
 
@@ -39,8 +39,9 @@ global.mk = {
     return txt;
   },
   debug(args) {
-    const fs = require('fs'),
-      txt = this._cnc(args);
+    const fs = require('fs');
+    const txt = this._cnc(args);
+
     fs.writeFileSync('debug.log', txt + '\n', { flag: 'a' });
   }
 };

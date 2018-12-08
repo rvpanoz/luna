@@ -1,6 +1,4 @@
-/* eslint-disable func-names */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-else-return */
+/* eslint-disable */
 
 // YARN cli commands
 
@@ -14,7 +12,7 @@ import mk from '../mk';
 
 const MANAGER = 'yarn';
 const { spawn } = cp;
-const log = console.log;
+const { log } = console;
 
 mk.logToFile = false;
 
@@ -27,11 +25,13 @@ mk.logToFile = false;
  */
 
 // TODO: dev
-const __directory = path.join(
-  'C:/projects/',
-  'agile/luna-test/',
-  'package.json'
-);
+// const __directory = path.join(
+//   'C:/projects/',
+//   'agile/luna-test/',
+//   'package.json'
+// );
+
+const __directory = '/home/rvpanoz/Projects/electron/luna-test/package.json';
 
 function runCommand(command, directory = __directory, callback, opts) {
   log(chalk.red.bold(`running: ${MANAGER} ${command.join(' ')}`));

@@ -15,11 +15,13 @@ import { writeToFile } from './utils';
 const ROOTDIR = __dirname;
 
 // TODO: dev
-const __directory = path.join(
-  'C:/projects/',
-  'agile/luna-test/',
-  'package.json'
-);
+// const __directory = path.join(
+//   'C:/projects/',
+//   'agile/luna-test/',
+//   'package.json'
+// );
+
+const __directory = '/home/rvpanoz/Projects/electron/luna-test/package.json';
 
 class Parser {
   _manager = null;
