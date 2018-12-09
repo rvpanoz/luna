@@ -8,6 +8,10 @@
 import Q from 'q';
 import mk from './mk';
 import Parser from './parser';
+import manager from './apis/manager';
+
+import npmCli from './apis/npm';
+import yarnCli from './apis/yarn';
 
 const { defaultSettings } = mk.config;
 const { manager } = defaultSettings;
@@ -30,12 +34,13 @@ export const runCommand = (options, callback) => {
       );
     }
 
+    // load api: npm and yarn are supported
+    // const api = require(`./apis/${activeManager}`);
+
     cmd.forEach(command => {
       promises.push(
         (() => {
           try {
-            // load api: npm and yarn are supported
-            const api = require(`./apis/${activeManager}`);
             const rcommand = api[command];
 
             // run the command
