@@ -67,6 +67,9 @@ if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
   const p = path.join(__dirname, '..', 'app', 'node_modules');
 
   require('electron-debug')();
+  require('electron-reload')(__dirname, {
+    electron: path.join(__dirname, '..', '/node_modules/electron')
+  });
   require('module').globalPaths.push(p);
 }
 

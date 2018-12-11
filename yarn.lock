@@ -2254,7 +2254,7 @@ cheerio@^1.0.0-rc.2:
     lodash "^4.15.0"
     parse5 "^3.0.1"
 
-chokidar@^2.0.0, chokidar@^2.0.2:
+chokidar@^2.0.0, chokidar@^2.0.2, chokidar@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-2.0.4.tgz#356ff4e2b0e8e43e322d18a372460bbcf3accd26"
   dependencies:
@@ -3419,12 +3419,12 @@ electron-publish@20.38.2:
     lazy-val "^1.0.3"
     mime "^2.4.0"
 
-electron-reloader@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.npmjs.org/electron-reloader/-/electron-reloader-0.2.0.tgz#0e7842b97d6011d983ac34553601226865344738"
+electron-reload@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/electron-reload/-/electron-reload-1.4.0.tgz#00154268c936fa17b496fdb1728434c747e1d29a"
+  integrity sha512-pluNocZ9LqIeKmUzUSEHa+vT1+dG5923zXez4iwEhWqC2hydALPKvu+kJJzkdYRJv5z15S8waDthyrMyKd5MCQ==
   dependencies:
-    chokidar "^2.0.0"
-    electron-is-dev "^0.3.0"
+    chokidar "^2.0.4"
 
 electron-store@^2.0.0:
   version "2.0.0"

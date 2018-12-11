@@ -14,7 +14,7 @@ export class UserException extends Error {
 
 const mk = {
   logToFile: false,
-  syslog: null,
+  syslog: false,
   config: {
     defaultSettings: {
       manager: 'yarn',
