@@ -8,13 +8,13 @@
 import Q from 'q';
 import mk from './mk';
 import Parser from './parser';
-import manager from './apis/manager';
+import apiManager from './apis/manager';
+import { UserException } from './mk';
 
-import npmCli from './apis/npm';
-import yarnCli from './apis/yarn';
-
-const { defaultSettings } = mk.config;
-const { manager } = defaultSettings;
+const { config } = mk;
+const {
+  defaultSettings: { manager }
+} = config;
 
 /**
  *
@@ -34,19 +34,14 @@ export const runCommand = (options, callback) => {
       );
     }
 
-    // load api: npm and yarn are supported
-    // const api = require(`./apis/${activeManager}`);
-
     cmd.forEach(command => {
       promises.push(
         (() => {
           try {
-            const rcommand = api[command];
-
-            // run the command
-            return rcommand.call(api, rest, callback);
+            return apiManager[command](rest, callback);
           } catch (error) {
-            throw new Error(error);
+            // mk.userException(error);
+            throw new UserException(error);
           }
         })()
       );
@@ -62,7 +57,7 @@ export const runCommand = (options, callback) => {
         const { status, cmd, data } = value || {};
 
         const keys =
-          activeManager === 'npm'
+          manager === 'npm'
             ? [
                 'dependencies',
                 'devDependencies',
@@ -73,7 +68,7 @@ export const runCommand = (options, callback) => {
 
         //  we have the response - parse, transform and send it back to ipcRenderer
         const packages = ParserInst.parse(data, keys, {
-          manager: activeManager
+          manager
         });
 
         callback.apply(callback, [status, cmd, packages]);

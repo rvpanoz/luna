@@ -10,6 +10,7 @@ import log from 'electron-log';
 import MenuBuilder from './menu';
 import { runCommand } from './shell';
 import mk from './mk';
+import chalk from 'chalk';
 
 export default class AppUpdater {
   constructor() {
@@ -126,7 +127,12 @@ ipcMain.on('ipc-event', (event, options) => {
     const hasValidStatus = status && typeof status === 'string';
 
     if (!hasValidStatus) {
-      throw new Error('FATAL: status response is not valid');
+      event.sender.send(
+        'ipcEvent-error',
+        'FATAL: status response is not valid'
+      );
+      return;
+      // throw new Error('FATAL: status response is not valid');
     }
 
     /**
@@ -261,6 +267,7 @@ app.on('ready', async () => {
 });
 
 process.on('uncaughtException', err => {
-  mk.log(`${err}`);
+  // console.log(chalk.redBright(err));
+  mk.log(`${err}`, 3);
   mainWindow.webContents.send('uncaught-exception', `${err}`);
 });

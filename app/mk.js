@@ -1,8 +1,20 @@
-/* eslint-disable */
-// MK
+// @Mike Car
+export class UserException extends Error {
+  constructor(...args) {
+    super();
 
-global.mk = {
+    this.message = args.slice(0) || '';
+    this.code = args.slice(1) || 999;
+    this.parts = args.slice(2);
+
+    console.log(this.message, this.code, this.parts);
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+const mk = {
   logToFile: false,
+  syslog: null,
   config: {
     defaultSettings: {
       manager: 'yarn',
@@ -12,13 +24,22 @@ global.mk = {
       showDetails: false
     }
   },
+  _cnc(args) {
+    let txt = '';
+    const values = Object.values(args);
+
+    values.forEach(element => {
+      txt += String(JSON.stringify(element));
+    });
+
+    return txt;
+  },
   log(...args) {
     const dt = new Date();
-    const _args = Array.prototype.slice.call(args, 0);
     const dtf = `${dt.getHours()}:${dt.getMinutes()}:${dt.getSeconds()}.${dt.getMilliseconds()}`;
     let cons;
 
-    _args.unshift(dtf);
+    args.unshift(dtf);
 
     if (this.gui && global.window) {
       cons = global.window.console;
@@ -31,19 +52,19 @@ global.mk = {
     }
 
     args.unshift('\n');
+
+    // eslint-disable-next-line prefer-spread
     cons.log.apply(cons, args);
   },
-  _cnc(args) {
-    let txt = '';
-    for (let i in args) txt += JSON.stringify(args[i]) + ' ';
-    return txt;
-  },
   debug(args) {
+    // eslint-disable-next-line global-require
     const fs = require('fs');
+
+    // eslint-disable-next-line no-underscore-dangle
     const txt = this._cnc(args);
 
-    fs.writeFileSync('debug.log', txt + '\n', { flag: 'a' });
+    fs.writeFileSync('debug.log', `${txt}\n`, { flag: 'a' });
   }
 };
 
-export default global.mk;
+export default mk;
