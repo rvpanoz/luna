@@ -1,17 +1,17 @@
 /* eslint-disable */
 
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
-import { merge } from 'ramda';
-import { autoUpdater } from 'electron-updater';
 import ElectronStore from 'electron-store';
 import path from 'path';
 import fs from 'fs';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import { runCommand } from './shell';
 import mk from './mk';
 import chalk from 'chalk';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { merge } from 'ramda';
+import { autoUpdater } from 'electron-updater';
 
+import { runCommand } from './shell';
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -29,8 +29,10 @@ const APP_PATHS = {
 };
 
 // defaults settings
-const { defaultSettings } = mk.config;
-const { startMinimized } = defaultSettings;
+const { config } = mk;
+const {
+  defaultSettings: { manager, startMinimized }
+} = config;
 
 const {
   DEBUG_PROD,
@@ -124,7 +126,7 @@ ipcMain.on('analyze-json', (event, filePath) => {
 
 // channel: ipc-event
 ipcMain.on('ipc-event', (event, options) => {
-  const { ipcEvent } = options || {};
+  const { ipcEvent, activeManager } = options || {};
 
   function callback(status, cmd, data) {
     const hasValidStatus = status && typeof status === 'string';
@@ -163,9 +165,11 @@ ipcMain.on('ipc-event', (event, options) => {
    * using spawn to renderer via ipc events
    */
   try {
-    const params = merge(options, settings);
+    const params = merge(options, settings, {
+      activeManager
+    });
 
-    runCommand.call(runCommand, params, callback);
+    runCommand.apply(null, [params, callback]);
   } catch (e) {
     throw new Error(e.message);
   }
@@ -269,8 +273,7 @@ app.on('ready', async () => {
   new AppUpdater();
 });
 
-process.on('uncaughtException', err => {
-  // console.log(chalk.redBright(err));
-  mk.log(`${err}`, 3);
-  mainWindow.webContents.send('uncaught-exception', `${err}`);
+process.on('uncaughtException', error => {
+  mk.log(error);
+  mainWindow.webContents.send('uncaught-exception', error);
 });

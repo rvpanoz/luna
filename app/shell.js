@@ -9,12 +9,6 @@ import Q from 'q';
 import mk from './mk';
 import Parser from './parser';
 import apiManager from './apis/manager';
-import { UserException } from './mk';
-
-const { config } = mk;
-const {
-  defaultSettings: { manager }
-} = config;
 
 /**
  *
@@ -22,8 +16,7 @@ const {
  * @param {*} callback
  */
 export const runCommand = (options, callback) => {
-  const { activeManager = manager, cmd, ...rest } = options || {};
-  const ParserInst = new Parser(activeManager);
+  const { cmd, ...rest } = options || {};
 
   const combine = () => {
     const promises = [];
@@ -38,10 +31,10 @@ export const runCommand = (options, callback) => {
       promises.push(
         (() => {
           try {
-            return apiManager[command](rest, callback);
+            // cli command e.g npm list --depth=0 --json
+            return apiManager[command](callback, rest);
           } catch (error) {
-            // mk.userException(error);
-            throw new UserException(error);
+            throw new Error(error);
           }
         })()
       );
@@ -56,22 +49,24 @@ export const runCommand = (options, callback) => {
         const { value } = result;
         const { status, cmd, data } = value || {};
 
-        const keys =
-          manager === 'npm'
-            ? [
-                'dependencies',
-                'devDependencies',
-                'optionalDependenies',
-                'peerDependencies'
-              ]
-            : ['data'];
+        // Parser class usage
+        //
+        // const keys =
+        //   activeManager === 'npm'
+        //     ? [
+        //         'dependencies',
+        //         'devDependencies',
+        //         'optionalDependenies',
+        //         'peerDependencies'
+        //       ]
+        //     : ['data'];
 
-        //  we have the response - parse, transform and send it back to ipcRenderer
-        const packages = ParserInst.parse(data, keys, {
-          manager
-        });
+        // //  we have the response - parse, transform and send it back to ipcRenderer
+        // const packages = ParserInst.parse(data, keys, {
+        //   manager: activeManager
+        // });
 
-        callback.apply(callback, [status, cmd, packages]);
+        callback.apply(callback, [status, cmd, data]);
       } else {
         mk.log(`ERROR: ${result.state} ${result.reason}`);
         callback.call(callback, 'error');

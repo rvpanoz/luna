@@ -1,30 +1,24 @@
-/* eslint-disable-no-unused-var */
+/* eslint-disable */
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { merge } from 'ramda';
 import { useMappedState, useDispatch } from 'redux-react-hook';
-import cn from 'classnames';
 import Package from './Package';
 import { SET_PACKAGES } from '../../constants/ActionTypes';
 import useIpc from '../../commons/hooks/useIpc';
 import styles from '../../styles/spectre.min.css';
 
 const {
-  active,
   panel,
-  tab,
   'panel-header': panelHeader,
   'panel-body': panelBody,
-  'panel-nav': panelNav,
-  'tab-block': tabBlock,
-  'tab-item': tabItem,
-  'text-light': textLight,
-  'text-dark': textDark
+  'panel-nav': panelNav
 } = styles;
 
 const options = {
   ipcEvent: 'get-packages',
-  cmd: ['list']
+  cmd: ['list'],
+  activeManager: 'yarn'
 };
 
 const mapState = state => ({

@@ -1,23 +1,11 @@
 // @Mike Car
-export class UserException extends Error {
-  constructor(...args) {
-    super();
-
-    this.message = args.slice(0) || '';
-    this.code = args.slice(1) || 999;
-    this.parts = args.slice(2);
-
-    console.log(this.message, this.code, this.parts);
-    Error.captureStackTrace(this, this.constructor);
-  }
-}
 
 const mk = {
   logToFile: false,
   syslog: false,
   config: {
     defaultSettings: {
-      manager: 'yarn',
+      activeManager: 'npm',
       registry: 'https://registry.npmjs.org/',
       startMinimized: false,
       fetchGithub: false,

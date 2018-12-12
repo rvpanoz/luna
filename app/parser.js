@@ -7,12 +7,13 @@
 import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
+import mk from './mk';
 import { pick, path as rPath } from 'ramda';
 
-//dev utils
-import { writeToFile } from './utils';
-
-const ROOTDIR = __dirname;
+const { config } = mk;
+const {
+  defaultSettings: { manager }
+} = config;
 
 // TODO: dev
 // const __directory = path.join(
@@ -24,7 +25,7 @@ const ROOTDIR = __dirname;
 const __directory = '/home/rvpanoz/Projects/electron/luna-test/package.json';
 
 class Parser {
-  _manager = null;
+  _manager = manager;
 
   constructor(manager) {
     this._manager = manager;

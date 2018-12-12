@@ -16,7 +16,7 @@ const { spawn } = cp;
 const { log } = console;
 const { config } = mk;
 const {
-  defaultSettings: { manager }
+  defaultSettings: { activeManager }
 } = config;
 
 const cwd = process.cwd();
@@ -25,7 +25,7 @@ const deferred = Q.defer();
 const __directory = '/home/rvpanoz/Projects/electron/luna-test/package.json';
 
 const execute = (
-  manager = activeManager,
+  manager,
   commandArgs,
   directory = __directory,
   callback,
@@ -39,7 +39,7 @@ const execute = (
 
   // on windows use npm.cmd
   const command = spawn(
-    /^win/.test(process.platform) ? 'npm.cmd' : 'npm',
+    /^win/.test(process.platform) ? `${manager}.cmd` : manager,
     commandArgs,
     {
       env: process.env,
@@ -62,7 +62,7 @@ const execute = (
   });
 
   command.on('exit', code => {
-    log(chalk.greenBright.bold(`child exited with code ${code}`));
+    log(chalk.yellow.bold(`child exited with code ${code}`));
   });
 
   command.on('close', () => {
@@ -87,9 +87,9 @@ const execute = (
  *
  * */
 
-exports.list = (opts, callback) => {
+exports.list = (callback, options) => {
   const command = ['list'];
-  const { mode, directory, manager } = opts;
+  const { mode, directory, activeManager } = options || {};
   const defaults = ['--long', '--json', '--depth=0', '--parseable'];
 
   if (!callback || typeof callback !== 'function') {
@@ -103,5 +103,6 @@ exports.list = (opts, callback) => {
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
   const run = [].concat(command).concat(commandArgs.reverse());
 
-  return execute(manager, run, directory, callback);
+  // support npm list command only
+  return execute('npm', run, directory, callback);
 };
