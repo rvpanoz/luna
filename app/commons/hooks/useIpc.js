@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { merge } from 'ramda';
+import { parse } from '../utils';
 
 const useIpc = (channel, options) => {
   const { ipcEvent } = options || {};
-
-  if (!ipcEvent) {
-    throw new Error('ipcEvent must be given and must be a string');
-  }
 
   const defaultState = {
     packages: '',
@@ -20,13 +17,15 @@ const useIpc = (channel, options) => {
   useEffect(() => {
     ipcRenderer.on(listenTo, (eventName, status, cmd, data) => {
       try {
-        // const packages = data && JSON.parse(data); // TODO: parse in setupPackagesFromResponse
+        const packages = data && parse(data);
+
         setData(
           merge(defaultState, {
-            packages: data
+            packages
           })
         );
       } catch (error) {
+        console.error(error);
         setData({
           packages: null,
           error

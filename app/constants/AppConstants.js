@@ -56,3 +56,5 @@ export const NPM_CONFIG_VALUES = {
   PROXY: 'proxy',
   HTTPS_PROXY: 'https-proxy'
 };
+
+export const ERROR_MESSAGES = {};

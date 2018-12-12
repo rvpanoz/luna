@@ -10,7 +10,6 @@ import chalk from 'chalk';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { merge } from 'ramda';
 import { autoUpdater } from 'electron-updater';
-
 import { runCommand } from './shell';
 export default class AppUpdater {
   constructor() {
@@ -69,9 +68,9 @@ if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
   const p = path.join(__dirname, '..', 'app', 'node_modules');
 
   require('electron-debug')();
-  require('electron-reload')(__dirname, {
-    electron: path.join(__dirname, '..', '/node_modules/electron')
-  });
+  // require('electron-reload')(__dirname, {
+  //   electron: path.join(__dirname, '..', '/node_modules/electron')
+  // });
   require('module').globalPaths.push(p);
 }
 
@@ -126,9 +125,10 @@ ipcMain.on('analyze-json', (event, filePath) => {
 
 // channel: ipc-event
 ipcMain.on('ipc-event', (event, options) => {
-  const { ipcEvent, activeManager } = options || {};
+  const { ipcEvent, activeManager, ...rest } = options || {};
 
-  function callback(status, cmd, data) {
+  function callback(result) {
+    const { status, data, error, cmd } = result || {};
     const hasValidStatus = status && typeof status === 'string';
 
     if (!hasValidStatus) {
@@ -137,7 +137,6 @@ ipcMain.on('ipc-event', (event, options) => {
         'FATAL: status response is not valid'
       );
       return;
-      // throw new Error('FATAL: status response is not valid');
     }
 
     /**
@@ -161,17 +160,19 @@ ipcMain.on('ipc-event', (event, options) => {
   }
 
   /**
+   *
    * At this point we try to run a shell command sending output
    * using spawn to renderer via ipc events
    */
   try {
-    const params = merge(options, settings, {
-      activeManager
+    const params = merge(settings, {
+      activeManager,
+      ...rest
     });
 
-    runCommand.apply(null, [params, callback]);
+    runCommand.call(null, params, callback);
   } catch (e) {
-    throw new Error(e.message);
+    throw new Error(e);
   }
 });
 

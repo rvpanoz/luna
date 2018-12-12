@@ -3,7 +3,6 @@
 import React, { useEffect } from 'react';
 import { merge } from 'ramda';
 import { useMappedState, useDispatch } from 'redux-react-hook';
-import Package from './Package';
 import { SET_PACKAGES } from '../../constants/ActionTypes';
 import useIpc from '../../commons/hooks/useIpc';
 import styles from '../../styles/spectre.min.css';
@@ -22,13 +21,13 @@ const options = {
 };
 
 const mapState = state => ({
+  mode: state.common.mode,
+  directory: state.common.directory,
   packages: state.packages.packages
 });
 
 const Packages = props => {
-  const { mode, directory } = props;
-
-  const { packages } = useMappedState(mapState);
+  const { packages, mode, directory } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   const [newPackages, error] = useIpc(
@@ -38,6 +37,10 @@ const Packages = props => {
       directory
     })
   );
+
+  if (error) {
+    console.error(error);
+  }
 
   useEffect(
     () => {
@@ -51,17 +54,16 @@ const Packages = props => {
   );
 
   console.log(packages);
-  return null;
 
   return (
     <div className={panel} style={{ border: 'none' }}>
       <div className={panelHeader} />
       <div className={panelNav} />
       <div className={panelBody}>
-        {packages &&
+        {/* {packages &&
           packages.map((pkg, idx) => (
             <Package key={`pkg-${idx}-key`} styles={styles} {...pkg} />
-          ))}
+          ))} */}
       </div>
     </div>
   );

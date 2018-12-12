@@ -24,16 +24,14 @@ const deferred = Q.defer();
 
 const __directory = '/home/rvpanoz/Projects/electron/luna-test/package.json';
 
-const execute = (
-  manager,
-  commandArgs,
-  directory = __directory,
-  callback,
-  opts
-) => {
-  log(chalk.white.bold(`running: ${manager} ${commandArgs.join(' ')}`));
+const execute = (manager, commandArgs, mode, directory, callback) => {
+  log(
+    chalk.white.bold(
+      `running: ${manager} ${commandArgs.join(' ')} ${directory &&
+        'in ' + directory}`
+    )
+  );
 
-  const { latest } = opts || {};
   let result = '';
   let error = '';
 
@@ -43,7 +41,7 @@ const execute = (
     commandArgs,
     {
       env: process.env,
-      cwd: directory ? path.dirname(directory) : cwd
+      cwd: mode === 'LOCAL' && directory ? path.dirname(directory) : cwd
     }
   );
 
@@ -72,8 +70,7 @@ const execute = (
       status: 'close',
       error: error.length ? error : null,
       data: result,
-      cmd: commandArgs,
-      latest
+      cmd: commandArgs
     };
 
     deferred.resolve(results);
@@ -89,14 +86,12 @@ const execute = (
 
 exports.list = (callback, options) => {
   const command = ['list'];
-  const { mode, directory, activeManager } = options || {};
-  const defaults = ['--long', '--json', '--depth=0', '--parseable'];
+  const { mode } = options || {};
+  const defaults = ['--json', '--depth=0', '--parseable'];
 
   if (!callback || typeof callback !== 'function') {
     return Q.reject(
-      new Error(
-        `${manager}[list] callback parameter must be given and must be a function`
-      )
+      new Error(`callback parameter must be given and must be a function`)
     );
   }
 
@@ -104,5 +99,5 @@ exports.list = (callback, options) => {
   const run = [].concat(command).concat(commandArgs.reverse());
 
   // support npm list command only
-  return execute('npm', run, directory, callback);
+  return execute('npm', run, mode, __directory, callback);
 };

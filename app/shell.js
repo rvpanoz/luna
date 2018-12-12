@@ -7,7 +7,6 @@
 
 import Q from 'q';
 import mk from './mk';
-import Parser from './parser';
 import apiManager from './apis/manager';
 
 /**
@@ -22,9 +21,7 @@ export const runCommand = (options, callback) => {
     const promises = [];
 
     if (!cmd || !Array.isArray(cmd)) {
-      throw new Error(
-        'SHELL[doCommand]: cmd parameter must be given and must be an array'
-      );
+      throw new Error('cmd parameter must be given and must be an array');
     }
 
     cmd.forEach(command => {
@@ -47,26 +44,8 @@ export const runCommand = (options, callback) => {
     results.forEach(async result => {
       if (result.state === 'fulfilled') {
         const { value } = result;
-        const { status, cmd, data } = value || {};
 
-        // Parser class usage
-        //
-        // const keys =
-        //   activeManager === 'npm'
-        //     ? [
-        //         'dependencies',
-        //         'devDependencies',
-        //         'optionalDependenies',
-        //         'peerDependencies'
-        //       ]
-        //     : ['data'];
-
-        // //  we have the response - parse, transform and send it back to ipcRenderer
-        // const packages = ParserInst.parse(data, keys, {
-        //   manager: activeManager
-        // });
-
-        callback.apply(callback, [status, cmd, data]);
+        callback.call(null, value);
       } else {
         mk.log(`ERROR: ${result.state} ${result.reason}`);
         callback.call(callback, 'error');

@@ -1,8 +1,8 @@
 export default {
-  common: {
-    manager: 'npm',
-    loading: false
-  },
+  directory: null,
+  loading: false,
+  mode: 'LOCAL',
+  manager: 'npm',
   packages: [],
   metadata: {}
 };

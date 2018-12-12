@@ -14,14 +14,7 @@ import Dashboard from '../components/Dashboard';
 
 const { wrapper, header, main } = layoutStyles;
 
-const {
-  container,
-  columns,
-  column,
-  'col-7': col7,
-  'col-5': col5,
-  'col-1': col1
-} = styles;
+const { container, columns, column, 'col-7': col7, 'col-5': col5 } = styles;
 
 const Layout = props => (
   <div className={wrapper}>
