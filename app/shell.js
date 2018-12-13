@@ -42,13 +42,14 @@ export const runCommand = (options, callback) => {
   };
 
   const finalize = result => {
-    if (result.state === 'fulfilled') {
-      const { value } = result;
+    const { state, value } = result;
 
-      callback.call(null, value);
+    if (state === 'fulfilled') {
+      console.log(value.data.slice(0, 200));
+      callback.call(null, ...value);
     } else {
       mk.log(`${result.state} ${result.reason}`);
-      callback.call(callback, 'error');
+      // callback.call(null, 'error');
     }
   };
 

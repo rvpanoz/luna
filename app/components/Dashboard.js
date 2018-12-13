@@ -9,6 +9,9 @@ import { SET_MODE } from '../constants/ActionTypes';
 const Dashboard = () => {
   const dispatch = useDispatch();
 
+  const switchMode = mode =>
+    dispatch({ type: SET_MODE, mode, directory: null });
+
   const openPackage = () => {
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
@@ -34,9 +37,14 @@ const Dashboard = () => {
   };
 
   return (
-    <button type="button" onClick={() => openPackage()}>
-      local
-    </button>
+    <React.Fragment>
+      <button type="button" onClick={() => openPackage()}>
+        local
+      </button>
+      <button type="button" onClick={() => switchMode()}>
+        global
+      </button>
+    </React.Fragment>
   );
 };
 

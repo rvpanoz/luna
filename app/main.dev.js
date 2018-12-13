@@ -122,12 +122,10 @@ ipcMain.on('analyze-json', (event, filePath) => {
 ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent, activeManager, ...rest } = options || {};
 
-  function callback(result) {
-    const { status, data, error, cmd } = result || {};
+  function callback(status, error, data, cmd) {
+    console.log(status, cmd);
 
-    /**
-     * finalize response send it to renderer process via ipc events
-     */
+    // finalize response send it to renderer process via ipc events
     switch (status) {
       case 'close':
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
@@ -137,7 +135,7 @@ ipcMain.on('ipc-event', (event, options) => {
         }
         break;
       case 'error':
-        event.sender.send('ipcEvent-error', data);
+        event.sender.send('ipcEvent-error', error);
         break;
       default:
         break;
@@ -145,7 +143,6 @@ ipcMain.on('ipc-event', (event, options) => {
   }
 
   /**
-   *
    * At this point we try to run a shell command sending output
    * using spawn to renderer via ipc events
    */
@@ -155,7 +152,6 @@ ipcMain.on('ipc-event', (event, options) => {
       ...rest
     });
 
-    console.log(chalk.yellow('running cli command..'));
     runCommand.call(null, params, callback);
   } catch (e) {
     mk.log(e.message);
@@ -205,7 +201,9 @@ app.on('ready', async () => {
   //   )
   // }
 
-  // create main window
+  /**
+   * Main window
+   */
   mainWindow = new BrowserWindow({
     width: MIN_WIDTH || screenSize.width,
     height: MIN_HEIGHT || screenSize.height,
@@ -230,33 +228,26 @@ app.on('ready', async () => {
       mainWindow.focus();
     }
 
-    // open devTools in development
     if (NODE_ENV === 'development') {
       mainWindow.openDevTools();
     }
   });
 
   mainWindow.webContents.on('crashed', event => {
-    // todo error reporting //
+    console.log(event);
   });
 
   mainWindow.on('unresponsive', event => {
-    // todo error reporting //
-  });
-
-  mainWindow.on('show', event => {
-    // todo..
+    console.log(event);
   });
 
   mainWindow.on('closed', () => {
     mainWindow = null;
-    console.log(chalk.whiteBright.bold('mainWindow is closed'));
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 
-  // remove this if the app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
 });

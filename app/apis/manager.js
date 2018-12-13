@@ -22,11 +22,6 @@ const cwd = process.cwd();
 const deferred = Q.defer();
 const platform = os.platform();
 
-const __directory =
-  platform === 'win32'
-    ? path.join('c:\\/projects', 'agile', 'luna-test\\/package.json')
-    : '/home/rvpanoz/Projects/electron/luna-test/package.json';
-
 const execute = (
   manager = defaultManager,
   commandArgs,
@@ -36,8 +31,9 @@ const execute = (
 ) => {
   log(
     chalk.white.bold(
-      `running: ${manager} ${commandArgs.join(' ')} ${directory &&
-        'in ' + directory}`
+      `running: (${mode.toUpperCase()}) ${manager} ${commandArgs.join(
+        ' '
+      )} ${directory && 'in ' + directory}`
     )
   );
 
@@ -58,7 +54,7 @@ const execute = (
     const dataToString = data.toString();
 
     result += dataToString;
-    callback('stdout', commandArgs, dataToString);
+    callback('flow', commandArgs, dataToString);
   });
 
   command.stderr.on('data', err => {
@@ -74,10 +70,10 @@ const execute = (
 
   command.on('close', () => {
     log(chalk.green.bold(`finished: ${manager} ${commandArgs.join(' ')}`));
-
+    console.log(result.slice(0, 200));
     const results = {
       status: 'close',
-      error: error.length ? error : null,
+      error: Boolean(error.length) ? error : null,
       data: result,
       cmd: commandArgs
     };

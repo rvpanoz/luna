@@ -2,6 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 
 const Package = props => {
+  // eslint-disable-next-line
   const { styles, ...restProps } = props;
 
   const {
@@ -17,7 +18,7 @@ const Package = props => {
   return (
     <div className={cn(tile, tileCentered)}>
       <div className={tileContent}>
-        <div className={cn(tileTitle, textBold)}>{restProps.name}</div>
+        <div className={cn(tileTitle, textBold)}>{restProps.from}</div>
         <div className={cn(tileSubTitle)}>{restProps.version}</div>
       </div>
       <div className={tileAction} />

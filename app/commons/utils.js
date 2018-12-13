@@ -16,15 +16,6 @@ const {
   defaultSettings: { manager }
 } = config;
 
-// TODO: dev
-// const __directory = path.join(
-//   'C:/projects/',
-//   'agile/luna-test/',
-//   'package.json'
-// );
-
-const __directory = '/home/rvpanoz/Projects/electron/luna-test/package.json';
-
 const mappedPackages = (data, packageJson) =>
   data.map(pkg => {
     const hasError = typeof pkg.error === 'object';
@@ -114,7 +105,7 @@ export const parse = (data, keys, options) => {
   return rPath(['dependencies'], packages);
 };
 
-export const readPackageJson = (directory = __directory) => {
+export const readPackageJson = directory => {
   try {
     const packageJSON = fs.readFileSync(path.join(directory), {
       encoding: 'utf8'

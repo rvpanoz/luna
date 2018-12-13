@@ -16,31 +16,28 @@ const {
 
 const options = {
   ipcEvent: 'get-packages',
-  cmd: ['list'],
-  activeManager: 'yarn'
+  cmd: ['list']
 };
 
 const mapState = state => ({
+  manager: state.common.manager,
   mode: state.common.mode,
   directory: state.common.directory,
   packages: state.packages.packages
 });
 
 const Packages = props => {
-  const { packages, mode, directory } = useMappedState(mapState);
+  const { packages, mode, directory, manager } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   const [newPackages, error] = useIpc(
     'ipc-event',
     merge(options, {
+      manager,
       mode,
       directory
     })
   );
-
-  if (error) {
-    console.error(error);
-  }
 
   useEffect(
     () => {
@@ -50,20 +47,21 @@ const Packages = props => {
 
       dispatch({ type: SET_PACKAGES, packages: newPackages });
     },
-    [newPackages]
+    [newPackages, directory]
   );
 
   console.log(packages);
+  return null;
 
   return (
     <div className={panel} style={{ border: 'none' }}>
       <div className={panelHeader} />
       <div className={panelNav} />
       <div className={panelBody}>
-        {/* {packages &&
-          packages.map((pkg, idx) => (
-            <Package key={`pkg-${idx}-key`} styles={styles} {...pkg} />
-          ))} */}
+        {packages &&
+          packages.map((pkg, idx) => {
+            console.log(idx === 0 && pkg);
+          })}
       </div>
     </div>
   );

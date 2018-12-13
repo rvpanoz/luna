@@ -14,28 +14,31 @@ const useIpc = (channel, options) => {
   const listenTo = `${ipcEvent}-close`;
   const [state, setData] = useState(defaultState);
 
-  useEffect(() => {
-    ipcRenderer.on(listenTo, (eventName, status, cmd, data) => {
-      try {
-        const packages = data && parse(data);
+  useEffect(
+    () => {
+      // eslint-disable-next-line
+      ipcRenderer.on(listenTo, (eventName, status, cmd, data, error) => {
+        try {
+          const packages = data && parse(data);
 
-        setData(
-          merge(defaultState, {
-            packages
-          })
-        );
-      } catch (error) {
-        console.error(error);
-        setData({
-          packages: null,
-          error
-        });
-      }
-    });
+          setData(
+            merge(defaultState, {
+              packages
+            })
+          );
+        } catch (err) {
+          setData({
+            packages: null,
+            error: err
+          });
+        }
+      });
 
-    ipcRenderer.send(channel, options);
-    return () => ipcRenderer.removeAllListeners(listenTo);
-  }, []);
+      ipcRenderer.send(channel, options);
+      return () => ipcRenderer.removeAllListeners(listenTo);
+    },
+    [options.directory]
+  );
 
   return [state.packages, state.error];
 };
