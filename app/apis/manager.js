@@ -1,9 +1,5 @@
 /* eslint-disable */
 
-/* eslint-disable */
-
-// NPM cli commands
-
 import cp from 'child_process';
 import os from 'os';
 import Q from 'q';
@@ -70,7 +66,7 @@ const execute = (
 
   command.on('close', () => {
     log(chalk.green.bold(`finished: ${manager} ${commandArgs.join(' ')}`));
-    console.log(result.slice(0, 200));
+
     const results = {
       status: 'close',
       error: Boolean(error.length) ? error : null,

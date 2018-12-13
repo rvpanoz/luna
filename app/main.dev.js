@@ -122,9 +122,7 @@ ipcMain.on('analyze-json', (event, filePath) => {
 ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent, activeManager, ...rest } = options || {};
 
-  function callback(status, error, data, cmd) {
-    console.log(status, cmd);
-
+  const callback = (status, error, data, cmd) => {
     // finalize response send it to renderer process via ipc events
     switch (status) {
       case 'close':
@@ -140,7 +138,7 @@ ipcMain.on('ipc-event', (event, options) => {
       default:
         break;
     }
-  }
+  };
 
   /**
    * At this point we try to run a shell command sending output
