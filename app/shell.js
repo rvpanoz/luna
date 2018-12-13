@@ -2,7 +2,7 @@
 
 /**
  * Run shell commands
- * npm [cmd] [[<@scope>/]<pkg> ...]
+ * npm/yarn [cmd] [[<@scope>/]<pkg> ...]
  * */
 
 import Q from 'q';
@@ -14,6 +14,7 @@ import apiManager from './apis/manager';
  * @param {*} options
  * @param {*} callback
  */
+
 export const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
@@ -40,16 +41,18 @@ export const runCommand = (options, callback) => {
     return promises;
   };
 
-  Q.allSettled(combine()).then(results => {
-    results.forEach(async result => {
-      if (result.state === 'fulfilled') {
-        const { value } = result;
+  const finalize = result => {
+    if (result.state === 'fulfilled') {
+      const { value } = result;
 
-        callback.call(null, value);
-      } else {
-        mk.log(`ERROR: ${result.state} ${result.reason}`);
-        callback.call(callback, 'error');
-      }
-    });
+      callback.call(null, value);
+    } else {
+      mk.log(`${result.state} ${result.reason}`);
+      callback.call(callback, 'error');
+    }
+  };
+
+  Q.allSettled(combine()).then(results => {
+    results.forEach(finalize);
   });
 };

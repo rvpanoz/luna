@@ -5,26 +5,35 @@
 // NPM cli commands
 
 import cp from 'child_process';
+import os from 'os';
 import Q from 'q';
 import path from 'path';
 import chalk from 'chalk';
 import mk from '../mk';
 
-mk.logToFile = false;
-
 const { spawn } = cp;
 const { log } = console;
 const { config } = mk;
 const {
-  defaultSettings: { activeManager }
+  defaultSettings: { defaultManager }
 } = config;
 
 const cwd = process.cwd();
 const deferred = Q.defer();
+const platform = os.platform();
 
-const __directory = '/home/rvpanoz/Projects/electron/luna-test/package.json';
+const __directory =
+  platform === 'win32'
+    ? path.join('c:\\/projects', 'agile', 'luna-test\\/package.json')
+    : '/home/rvpanoz/Projects/electron/luna-test/package.json';
 
-const execute = (manager, commandArgs, mode, directory, callback) => {
+const execute = (
+  manager = defaultManager,
+  commandArgs,
+  mode,
+  directory,
+  callback
+) => {
   log(
     chalk.white.bold(
       `running: ${manager} ${commandArgs.join(' ')} ${directory &&
@@ -34,6 +43,8 @@ const execute = (manager, commandArgs, mode, directory, callback) => {
 
   let result = '';
   let error = '';
+
+  console.log(mode, directory);
 
   // on windows use npm.cmd
   const command = spawn(

@@ -19,8 +19,6 @@ export default class AppUpdater {
   }
 }
 
-mk.logToFile = true;
-
 // user system paths
 const APP_PATHS = {
   appData: app.getPath('appData'),
@@ -118,8 +116,8 @@ ipcMain.on('analyze-json', (event, filePath) => {
       );
     });
   } catch (e) {
-    console.log(e);
-    throw new Error(e.message);
+    mk.log(e.message);
+    throw new Error(e);
   }
 });
 
@@ -129,19 +127,9 @@ ipcMain.on('ipc-event', (event, options) => {
 
   function callback(result) {
     const { status, data, error, cmd } = result || {};
-    const hasValidStatus = status && typeof status === 'string';
-
-    if (!hasValidStatus) {
-      event.sender.send(
-        'ipcEvent-error',
-        'FATAL: status response is not valid'
-      );
-      return;
-    }
 
     /**
-     * finalize response send it to renderer
-     * process via ipc events
+     * finalize response send it to renderer process via ipc events
      */
     switch (status) {
       case 'close':
@@ -170,8 +158,10 @@ ipcMain.on('ipc-event', (event, options) => {
       ...rest
     });
 
+    console.log(chalk.yellow('running cli command..'));
     runCommand.call(null, params, callback);
   } catch (e) {
+    mk.log(e.message);
     throw new Error(e);
   }
 });
@@ -234,7 +224,7 @@ app.on('ready', async () => {
   // TODO: Use 'ready-to-show' event
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
-      throw new Error('"mainWindow" is not defined');
+      throw new Error('mainWindow is not defined');
     }
     if (START_MINIMIZED) {
       mainWindow.minimize();
@@ -263,7 +253,7 @@ app.on('ready', async () => {
 
   mainWindow.on('closed', () => {
     mainWindow = null;
-    mk.log('mainWindow is closed');
+    console.log(chalk.whiteBright.bold('mainWindow is closed'));
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
@@ -275,6 +265,6 @@ app.on('ready', async () => {
 });
 
 process.on('uncaughtException', error => {
-  mk.log(error);
+  mk.log(error.message);
   mainWindow.webContents.send('uncaught-exception', error);
 });

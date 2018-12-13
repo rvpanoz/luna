@@ -2,18 +2,18 @@
 // @Mike Car
 
 const mk = {
-  logToFile: false,
-  syslog: false,
+  logToFile: true,
+  syslog: true,
   config: {
     defaultSettings: {
-      activeManager: 'npm',
+      defaultManager: 'npm',
       registry: 'https://registry.npmjs.org/',
       startMinimized: false,
       fetchGithub: false,
       showDetails: false
     }
   },
-  _cnc(args) {
+  _cnc(...args) {
     let txt = '';
     const values = Object.values(args);
 
