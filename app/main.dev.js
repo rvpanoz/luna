@@ -89,15 +89,12 @@ const installExtensions = async () => {
 // channel: analyze-json
 ipcMain.on('analyze-json', (event, filePath) => {
   if (!filePath) {
-    throw new Error('filePath is not defined');
+    throw new Error('file path is not defined');
   }
 
   try {
     fs.readFile(filePath, 'utf8', (err, fileContent) => {
       if (err) {
-        if (err.code === 'ENOENT') {
-          return;
-        }
         throw new Error(err);
       }
 

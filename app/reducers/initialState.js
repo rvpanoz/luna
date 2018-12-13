@@ -1,7 +1,7 @@
 export default {
   directory: null,
   loading: false,
-  mode: 'LOCAL',
+  mode: 'GLOBAL',
   manager: 'npm',
   packages: [],
   metadata: {}

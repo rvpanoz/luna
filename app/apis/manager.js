@@ -44,8 +44,6 @@ const execute = (
   let result = '';
   let error = '';
 
-  console.log(mode, directory);
-
   // on windows use npm.cmd
   const command = spawn(
     /^win/.test(process.platform) ? `${manager}.cmd` : manager,
@@ -97,7 +95,7 @@ const execute = (
 
 exports.list = (callback, options) => {
   const command = ['list'];
-  const { mode } = options || {};
+  const { mode, directory } = options || {};
   const defaults = ['--json', '--depth=0', '--parseable'];
 
   if (!callback || typeof callback !== 'function') {
@@ -110,5 +108,5 @@ exports.list = (callback, options) => {
   const run = [].concat(command).concat(commandArgs.reverse());
 
   // support npm list command only
-  return execute('npm', run, mode, __directory, callback);
+  return execute('npm', run, mode, directory, callback);
 };
