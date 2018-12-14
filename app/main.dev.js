@@ -6,11 +6,12 @@ import fs from 'fs';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import mk from './mk';
-import chalk from 'chalk';
+
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { merge } from 'ramda';
 import { autoUpdater } from 'electron-updater';
 import { runCommand } from './shell';
+
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -19,7 +20,6 @@ export default class AppUpdater {
   }
 }
 
-// user system paths
 const APP_PATHS = {
   appData: app.getPath('appData'),
   userData: app.getPath('userData')
@@ -66,9 +66,9 @@ if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
   const p = path.join(__dirname, '..', 'app', 'node_modules');
 
   require('electron-debug')();
-  // require('electron-reload')(__dirname, {
-  //   electron: path.join(__dirname, '..', '/node_modules/electron')
-  // });
+  require('electron-reload')(__dirname, {
+    electron: path.join(__dirname, '..', '/node_modules/electron')
+  });
   require('module').globalPaths.push(p);
 }
 
@@ -150,7 +150,7 @@ ipcMain.on('ipc-event', (event, options) => {
       ...rest
     });
 
-    runCommand.call(null, params, callback);
+    runCommand.apply(null, [params, callback]);
   } catch (e) {
     mk.log(e.message);
     throw new Error(e);
@@ -247,7 +247,7 @@ app.on('ready', async () => {
   menuBuilder.buildMenu();
 
   // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater(); // TODO: use AppUpdater
 });
 
 process.on('uncaughtException', error => {

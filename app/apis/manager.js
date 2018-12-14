@@ -2,7 +2,6 @@
 
 import cp from 'child_process';
 import os from 'os';
-import Q from 'q';
 import path from 'path';
 import chalk from 'chalk';
 import mk from '../mk';
@@ -14,91 +13,84 @@ const {
   defaultSettings: { defaultManager }
 } = config;
 
+const defaultsArgs = {
+  list: ['--json', '--depth=0', '--parseable']
+};
+
 const cwd = process.cwd();
-const deferred = Q.defer();
 const platform = os.platform();
 
-const execute = (
-  manager = defaultManager,
-  commandArgs,
-  mode,
-  directory,
-  callback
-) => {
-  log(
-    chalk.white.bold(
-      `running: (${mode.toUpperCase()}) ${manager} ${commandArgs.join(
-        ' '
-      )} ${directory && 'in ' + directory}`
-    )
-  );
+const execute = (manager = defaultManager, commandArgs, mode, directory) => {
+  const resultP = new Promise((resolve, reject) => {
+    let result = '';
+    let error = '';
 
-  let result = '';
-  let error = '';
+    log(
+      chalk.whiteBright.bgYellowBright.bold(
+        `running: ${manager} ${commandArgs.join(' ')}`
+      )
+    );
 
-  // on windows use npm.cmd
-  const command = spawn(
-    /^win/.test(process.platform) ? `${manager}.cmd` : manager,
-    commandArgs,
-    {
-      env: process.env,
-      cwd: mode === 'LOCAL' && directory ? path.dirname(directory) : cwd
-    }
-  );
+    // on windows use npm.cmd
+    const command = spawn(
+      /^win/.test(process.platform) ? `${manager}.cmd` : manager,
+      commandArgs,
+      {
+        env: process.env,
+        cwd: mode === 'LOCAL' && directory ? path.dirname(directory) : cwd
+      }
+    );
 
-  command.stdout.on('data', data => {
-    const dataToString = data.toString();
+    command.stdout.on('data', data => {
+      result += String(data);
+    });
 
-    result += dataToString;
-    callback('flow', commandArgs, dataToString);
+    command.stderr.on('data', err => {
+      error += String(err);
+    });
+
+    command.on('exit', code => {
+      log(chalk.yellow.bold(`child exited with code ${code}`));
+    });
+
+    command.on('close', () => {
+      log(
+        chalk.greenBright.bgWhiteBright.bold(
+          `finished: ${manager} ${commandArgs.join(' ')}`
+        )
+      );
+
+      const hasError = Boolean(error.length) ? error : null;
+      const results = {
+        error: hasError,
+        data: result,
+        cmd: commandArgs,
+        status: 'close'
+      };
+
+      return resolve(results);
+    });
   });
 
-  command.stderr.on('data', err => {
-    const errorToString = err.toString();
-
-    error += `${errorToString} | `;
-    callback('error', commandArgs, errorToString);
-  });
-
-  command.on('exit', code => {
-    log(chalk.yellow.bold(`child exited with code ${code}`));
-  });
-
-  command.on('close', () => {
-    log(chalk.green.bold(`finished: ${manager} ${commandArgs.join(' ')}`));
-
-    const results = {
-      status: 'close',
-      error: Boolean(error.length) ? error : null,
-      data: result,
-      cmd: commandArgs
-    };
-
-    deferred.resolve(results);
-  });
-
-  return deferred.promise;
+  return resultP;
 };
 
 /**
  * List command
- *
  * */
 
-exports.list = (callback, options) => {
-  const command = ['list'];
-  const { mode, directory } = options || {};
-  const defaults = ['--json', '--depth=0', '--parseable'];
-
+exports.list = (options, callback) => {
   if (!callback || typeof callback !== 'function') {
-    return Q.reject(
-      new Error(`callback parameter must be given and must be a function`)
-    );
+    Promise.reject('callback must be given and must be a function');
   }
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
-  const run = [].concat(command).concat(commandArgs.reverse());
+  const command = ['list'];
+  const { mode, directory } = options || {};
+  const commandArgs =
+    mode === 'GLOBAL' ? [].concat(defaultsArgs.list, '-g') : defaultsArgs.list;
+  const commandArgsReversed = commandArgs.reverse();
+  const run = [].concat(command).concat(commandArgsReversed);
 
-  // support npm list command only
+  // returns a Promise
   return execute('npm', run, mode, directory, callback);
 };

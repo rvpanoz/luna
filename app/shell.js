@@ -5,7 +5,6 @@
  * npm/yarn [cmd] [[<@scope>/]<pkg> ...]
  * */
 
-import Q from 'q';
 import mk from './mk';
 import apiManager from './apis/manager';
 
@@ -25,35 +24,31 @@ export const runCommand = (options, callback) => {
       throw new Error('cmd parameter must be given and must be an array');
     }
 
+    if (!callback || typeof callback !== 'function') {
+      throw new Error('callback must be given and must be a function');
+    }
+
     cmd.forEach(command => {
-      promises.push(
-        (() => {
-          try {
-            // cli command e.g npm list --depth=0 --json
-            return apiManager[command](callback, rest);
-          } catch (error) {
-            throw new Error(error);
-          }
-        })()
-      );
+      const fc = () => {
+        const runner = apiManager[command];
+        return runner.apply(this, [rest, callback]);
+      };
+
+      promises.push(fc());
     });
 
     return promises;
   };
 
   const finalize = result => {
-    const { state, value } = result;
+    const { status, ...values } = result;
 
-    if (state === 'fulfilled') {
-      console.log(value.data.slice(0, 200));
-      callback.call(null, ...value);
-    } else {
-      mk.log(`${result.state} ${result.reason}`);
-      // callback.call(null, 'error');
+    if (status === 'close') {
+      return callback(...values);
     }
   };
 
-  Q.allSettled(combine()).then(results => {
+  Promise.all(combine()).then(results => {
     results.forEach(finalize);
   });
 };
