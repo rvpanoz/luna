@@ -48,7 +48,7 @@ export const parseMap = (response, mode, directory) => {
 
     return data.map(pkg => {
       const hasError = typeof pkg.error === 'object';
-      const { name } = pkg;
+      const { _from, name } = pkg;
       let _group = null,
         _hasPeerMissing = false,
         found = false;

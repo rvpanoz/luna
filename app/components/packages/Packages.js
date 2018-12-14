@@ -50,7 +50,7 @@ const Packages = props => {
     [newPackages, directory]
   );
 
-  // console.log(packages);
+  console.log(packages);
   return null;
 
   return (
