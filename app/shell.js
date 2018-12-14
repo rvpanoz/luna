@@ -5,7 +5,6 @@
  * npm/yarn [cmd] [[<@scope>/]<pkg> ...]
  * */
 
-import mk from './mk';
 import apiManager from './apis/manager';
 
 /**
@@ -40,16 +39,14 @@ export const runCommand = (options, callback) => {
     return promises;
   };
 
-  const finalize = result => {
-    const { status, ...values } = result;
-    const { data, error, cmd } = values;
-
-    if (status === 'close') {
-      return callback(status, error, data, cmd);
-    }
-  };
-
   Promise.all(combine()).then(results => {
-    results.forEach(finalize);
+    results.forEach(result => {
+      const { status, ...values } = result;
+      const { data, error, cmd } = values;
+
+      if (status === 'close') {
+        return callback(status, error, data, cmd);
+      }
+    });
   });
 };

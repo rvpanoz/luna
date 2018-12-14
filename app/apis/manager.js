@@ -14,7 +14,7 @@ const {
 } = config;
 
 const defaultsArgs = {
-  list: ['--json', '--depth=0', '--parseable']
+  list: ['--json', '--depth=0', '--parseable', '--long']
 };
 
 const cwd = process.cwd();
@@ -25,11 +25,7 @@ const execute = (manager = defaultManager, commandArgs, mode, directory) => {
     let result = '';
     let error = '';
 
-    log(
-      chalk.whiteBright.bgYellowBright.bold(
-        `running: ${manager} ${commandArgs.join(' ')}`
-      )
-    );
+    log(chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`));
 
     // on windows use npm.cmd
     const command = spawn(
@@ -55,9 +51,7 @@ const execute = (manager = defaultManager, commandArgs, mode, directory) => {
 
     command.on('close', () => {
       log(
-        chalk.greenBright.bgWhiteBright.bold(
-          `finished: ${manager} ${commandArgs.join(' ')}`
-        )
+        chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
       );
 
       const hasError = Boolean(error.length) ? error : null;
@@ -80,16 +74,23 @@ const execute = (manager = defaultManager, commandArgs, mode, directory) => {
  * */
 
 exports.list = (options, callback) => {
+  const command = 'list';
+  const { mode, directory } = options || {};
+
   if (!callback || typeof callback !== 'function') {
     Promise.reject('callback must be given and must be a function');
   }
 
-  const command = ['list'];
-  const { mode, directory } = options || {};
+  if (!mode || typeof mode !== 'string') {
+    Promise.reject('mode must be given and must be one of "GLOBAL" or "LOCAL"');
+  }
+
   const commandArgs =
-    mode === 'GLOBAL' ? [].concat(defaultsArgs.list, '-g') : defaultsArgs.list;
-  const commandArgsReversed = commandArgs.reverse();
-  const run = [].concat(command).concat(commandArgsReversed);
+    mode === 'GLOBAL' && !directory
+      ? [].concat(command, defaultsArgs.list, '-g')
+      : [].concat(command, defaultsArgs.list);
+
+  const run = [].concat(commandArgs);
 
   // returns a Promise
   return execute('npm', run, mode, directory, callback);

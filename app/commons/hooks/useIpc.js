@@ -1,36 +1,27 @@
 import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
-import { merge } from 'ramda';
-import { parse } from '../utils';
+import { assoc } from 'ramda';
+import { parseMap } from '../utils';
 
 const useIpc = (channel, options) => {
   const { ipcEvent } = options || {};
 
-  const defaultState = {
-    packages: '',
+  const initialState = {
+    data: [],
     error: null
   };
 
   const listenTo = `${ipcEvent}-close`;
-  const [state, setData] = useState(defaultState);
+  const [packages, setPackages] = useState(initialState);
 
   useEffect(
     () => {
       // eslint-disable-next-line
       ipcRenderer.on(listenTo, (eventName, status, cmd, data, error) => {
-        try {
-          const packages = data && parse(data);
+        const parsedPackages = data && parseMap(data);
 
-          setData(
-            merge(defaultState, {
-              packages
-            })
-          );
-        } catch (err) {
-          setData({
-            packages: null,
-            error: err
-          });
+        if (Array.isArray(parsedPackages)) {
+          setPackages(assoc('packages', parsedPackages, packages));
         }
       });
 
@@ -40,7 +31,7 @@ const useIpc = (channel, options) => {
     [options.directory]
   );
 
-  return [state.packages, state.error];
+  return [packages.packages, packages.error];
 };
 
 export default useIpc;

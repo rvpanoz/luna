@@ -8,7 +8,7 @@ import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
 import mk from '../mk';
-import { pick, path as rPath } from 'ramda';
+import { pick, merge, path as rPath } from 'ramda';
 import { APP_MODES, PACKAGE_GROUPS } from '../constants/AppConstants';
 
 const { config } = mk;
@@ -16,93 +16,70 @@ const {
   defaultSettings: { manager }
 } = config;
 
-const mappedPackages = (data, packageJson) =>
-  data.map(pkg => {
-    const hasError = typeof pkg.error === 'object';
-    const { name } = pkg;
-    let _group = null,
-      _hasPeerMissing = false;
+const _writeToFile = content =>
+  fs.writeFileSync(
+    path.join(__dirname, '..', 'app', 'packages-debug.json'),
+    content,
+    {
+      encoding: 'utf8'
+    }
+  );
 
-    /**
-     * find group and attach to pkg, useful to show data in list
-     */
-    if (mode === APP_MODES.LOCAL && typeof packageJSON === 'object') {
-      let found = false;
+const _getKeys = obj => Object.keys(obj);
+const _getValues = obj => Object.values(obj);
 
-      Object.keys(PACKAGE_GROUPS).some((groupName, idx) => {
-        found = packageJSON[groupName] && packageJSON[groupName][name];
-        if (found) {
-          _group = groupName;
+export const parseMap = (response, mode, directory) => {
+  // data && _writeToFile(data);
+  try {
+    const packages = JSON.parse(response);
+    let data;
+
+    //
+    if (mode === APP_MODES.GLOBAL || !directory) {
+      data = _getValues(rPath(['dependencies'], packages));
+    } else if (mode === APP_MODES.LOCAL && typeof directory === 'string') {
+      data = rPath(['dependencies', 'devDependencies'], packages);
+    }
+
+    if (!Array.isArray(data) || !data) {
+      mk.log(`data is not valid`);
+      return; // TODO: error_reporting
+    }
+
+    return data.map(pkg => {
+      const hasError = typeof pkg.error === 'object';
+      const { name } = pkg;
+      let _group = null,
+        _hasPeerMissing = false,
+        found = false;
+
+      // find group and attach to pkg, useful to show data in list
+      if (mode === APP_MODES.LOCAL) {
+        const packageJSON = readPackageJson(directory);
+
+        if (!Boolean(packageJSON)) {
+          mk.log(`could not parse package.json in ${directory}`);
+          return; // TODO: error_reporting
         }
 
-        return found;
-      });
-    }
+        Object.keys(PACKAGE_GROUPS).some(groupName => {
+          found = packageJSON[groupName] && packageJSON[groupName][name];
+          if (found) {
+            _group = groupName;
+          }
 
-    if (hasError) {
-      return Rmerge(pkg, {
-        _hasError: pkg.error
-      });
-    }
+          return found;
+        });
+      }
 
-    const { version, peerMissing, required, missing, _from, link } = pkg;
-    const outdatedPackage = Rprop(name, packagesOutdated);
-
-    if (peerMissing && Array.isArray(peerMissing)) {
-      _hasPeerMissing = true;
-      peerMissing.forEach(pm => {
-        addMessage(
-          'error',
-          `Package ${pm['requiredBy']} requires ${pm['requires']}`,
-          pm['requires'],
-          pm['requiredBy']
-        );
-      });
-    }
-
-    if (
-      outdatedPackage &&
-      typeof outdatedPackage === 'object' &&
-      version !== outdatedPackage.latest
-    ) {
-      return Rmerge(pkg, {
+      return merge(pkg, {
         _group,
-        _hasPeerMissing,
-        latest: outdatedPackage.latest
+        _hasPeerMissing
       });
-    }
-
-    return Rmerge(pkg, {
-      _group,
-      _hasPeerMissing
     });
-  });
-
-/**
- * Parses the response
- * @param {*} data
- * @param {*} keys
- */
-export const parse = (data, keys, options) => {
-  if (typeof data === 'string' && Boolean(data.length) === false) {
-    return;
+  } catch (error) {
+    mk.log(error);
   }
-
-  const parseJson = (dataString, keys) => {
-    try {
-      const toJson = JSON.parse(dataString);
-
-      return keys ? pick(keys, toJson) : toJson;
-    } catch (error) {
-      console.log(chalk.red.bold(error));
-      return [];
-    }
-  };
-
-  const packages = parseJson(data, keys);
-
-  // TODO: map packages .. transform(_hasError, _hasPeerDependency, _group)
-  return rPath(['dependencies'], packages);
 };
 
 export const readPackageJson = directory => {
@@ -113,6 +90,7 @@ export const readPackageJson = directory => {
 
     return JSON.parse(packageJSON);
   } catch (error) {
-    throw new Error(error);
+    mk.log(error);
+    return false;
   }
 };

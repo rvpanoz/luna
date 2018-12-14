@@ -115,6 +115,7 @@
   "keywords": [
     "electron",
     "npm",
+    "yarn",
     "react",
     "redux",
     "node-packages",
