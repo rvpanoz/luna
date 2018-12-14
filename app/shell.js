@@ -42,9 +42,10 @@ export const runCommand = (options, callback) => {
 
   const finalize = result => {
     const { status, ...values } = result;
+    const { data, error, cmd } = values;
 
     if (status === 'close') {
-      return callback(...values);
+      return callback(status, error, data, cmd);
     }
   };
 
