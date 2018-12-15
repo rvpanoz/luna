@@ -28,30 +28,36 @@ const _writeToFile = content =>
 const _getKeys = obj => Object.keys(obj);
 const _getValues = obj => Object.values(obj);
 
+/**
+ * Object to array
+ * @param {*} obj
+ */
+export const objectEntries = obj => {
+  let ownProps = _getKeys(obj),
+    i = ownProps.length,
+    resArray = new Array(i);
+
+  while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
+  return resArray;
+};
+
 export const parseMap = (response, mode, directory) => {
-  // data && _writeToFile(data);
   try {
     const packages = JSON.parse(response);
-    let data;
+    const data = pick(['dependencies'], packages);
+    const dataArray = objectEntries(data.dependencies);
 
-    //
-    if (mode === APP_MODES.GLOBAL || !directory) {
-      data = _getValues(rPath(['dependencies'], packages));
-    } else if (mode === APP_MODES.LOCAL && typeof directory === 'string') {
-      data = rPath(['dependencies', 'devDependencies'], packages);
+    if (!Array.isArray(dataArray) || !dataArray) {
+      mk.log(`utils[parseMap]: cound not convert data to array`);
+      return;
     }
 
-    if (!Array.isArray(data) || !data) {
-      mk.log(`data is not valid`);
-      return; // TODO: error_reporting
-    }
-
-    return data.map(pkg => {
-      const hasError = typeof pkg.error === 'object';
-      const { _from, name } = pkg;
-      let _group = null,
-        _hasPeerMissing = false,
-        found = false;
+    return dataArray.map(pkgArr => {
+      const [pkgName, details] = pkgArr;
+      let group = null;
+      let hasPeerMissing = false;
+      let found = false;
+      let hasError = typeof details.error === 'object';
 
       // find group and attach to pkg, useful to show data in list
       if (mode === APP_MODES.LOCAL) {
@@ -59,22 +65,24 @@ export const parseMap = (response, mode, directory) => {
 
         if (!Boolean(packageJSON)) {
           mk.log(`could not parse package.json in ${directory}`);
-          return; // TODO: error_reporting
+          return;
         }
 
         Object.keys(PACKAGE_GROUPS).some(groupName => {
-          found = packageJSON[groupName] && packageJSON[groupName][name];
+          found = packageJSON[groupName] && packageJSON[groupName][pkgName];
           if (found) {
-            _group = groupName;
+            group = groupName;
           }
 
           return found;
         });
       }
 
-      return merge(pkg, {
-        _group,
-        _hasPeerMissing
+      // TODO: destruct details
+      return merge(details, {
+        __group: group,
+        __error: hasError,
+        __hasPeerMissing: hasPeerMissing
       });
     });
   } catch (error) {

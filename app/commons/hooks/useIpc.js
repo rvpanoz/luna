@@ -4,7 +4,7 @@ import { assoc } from 'ramda';
 import { parseMap } from '../utils';
 
 const useIpc = (channel, options) => {
-  const { ipcEvent } = options || {};
+  const { ipcEvent, mode, directory } = options || {};
 
   const initialState = {
     data: [],
@@ -18,7 +18,7 @@ const useIpc = (channel, options) => {
     () => {
       // eslint-disable-next-line
       ipcRenderer.on(listenTo, (eventName, status, cmd, data, error) => {
-        const parsedPackages = data && parseMap(data);
+        const parsedPackages = data && parseMap(data, mode, directory);
 
         if (Array.isArray(parsedPackages)) {
           setPackages(assoc('packages', parsedPackages, packages));

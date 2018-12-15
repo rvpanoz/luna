@@ -26,7 +26,7 @@ const requiredByDLLConfig = module.parent.filename.includes(
   'webpack.config.renderer.dev.dll'
 );
 
-const log = console.log;
+const { log } = console;
 
 /**
  * Warn if the DLL is not built
