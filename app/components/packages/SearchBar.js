@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useState, useRef } from 'react';
 import cn from 'classnames';
 import styles from '../../styles/spectre.min.css';

@@ -19,7 +19,7 @@ import {
 } from '../constants/ActionTypes';
 import initialState from './initialState';
 
-const { metadata, packages, ...common } = initialState;
+const { packages, ...common } = initialState;
 
 const createReducer = (commonState, handlers) => (state = common, action) =>
   propOr(identity, prop('type', action), handlers)(state, action);

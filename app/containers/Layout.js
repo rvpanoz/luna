@@ -1,39 +1,34 @@
+/* eslint-disable */
+
 /**
  * Layout component
  */
 
-/* eslint-disable no-unused-vars */
-
 import React from 'react';
-import cn from 'classnames';
-import layoutStyles from '../styles/layout.css';
-import styles from '../styles/spectre.min.css';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { withStyles } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 import Header from '../components/Header';
 import { Packages } from '../components/packages';
 import Dashboard from '../components/Dashboard';
+import styles from './styles/layout';
 
-const { wrapper, header, main } = layoutStyles;
+const Layout = props => {
+  const { classes } = props;
 
-const { container, columns, column, 'col-7': col7, 'col-5': col5 } = styles;
-
-const Layout = props => (
-  <div className={wrapper}>
-    <div className={header}>
-      <Header />
-    </div>
-    <div className={main}>
-      <div className={container}>
-        <div className={columns}>
-          <div className={cn(column, col7)}>
-            <Dashboard />
-          </div>
-          <div className={cn(column, col5)}>
-            <Packages />
-          </div>
+  return (
+    <div className={classes.wrapper}>
+      <CssBaseline />
+      <section className={classes.header}>
+        <Header />
+      </section>
+      <section className={classes.main}>
+        <div className={classes.container}>
+          <Packages />
         </div>
-      </div>
+      </section>
     </div>
-  </div>
-);
+  );
+};
 
-export default Layout;
+export default withStyles(styles)(Layout);

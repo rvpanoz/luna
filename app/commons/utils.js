@@ -41,6 +41,38 @@ export const objectEntries = obj => {
   return resArray;
 };
 
+/**
+ * Validate url
+ * @param {*} url
+ */
+export function isUrl(url) {
+  const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
+  return matcher.test(url);
+}
+
+/**
+ * switch-case using currying
+ * @param {*} cases
+ */
+export const switchcase = cases => defaultCase => key =>
+  cases.hasOwnProperty(key) && typeof cases[key] === 'function'
+    ? cases[key].apply(undefined)
+    : defaultCase;
+
+/**
+ *
+ * @param {*} str
+ */
+export function firstToUpper(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+/**
+ * Parses and maps response
+ * @param {*} response
+ * @param {*} mode
+ * @param {*} directory
+ */
 export const parseMap = (response, mode, directory) => {
   try {
     const packages = JSON.parse(response);
@@ -90,6 +122,10 @@ export const parseMap = (response, mode, directory) => {
   }
 };
 
+/**
+ * Read package.json from a directory
+ * @param {*} directory
+ */
 export const readPackageJson = directory => {
   try {
     const packageJSON = fs.readFileSync(path.join(directory), {
