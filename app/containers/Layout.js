@@ -23,7 +23,7 @@ const Layout = props => {
         <Header />
       </section>
       <section className={classes.main}>
-        <div className={classes.container}>
+        <div className={classes.container} style={{ display: 'none' }}>
           <Packages />
         </div>
       </section>

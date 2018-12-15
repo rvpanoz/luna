@@ -12,27 +12,10 @@ const styles = theme => ({
     transform: 'translate(0, -100%)',
     width: 50,
     height: 50,
-    cursor: 'pointer',
-    '&$barActive': {
-      content: '"*"',
-      '&:before': {
-        top: 0,
-        left: 0,
-        transform: 'rotate(45deg)'
-      },
-      '&:after': {
-        top: 0,
-        left: 0,
-        transform: 'rotate(45deg)',
-        backgroundColor: '#fff'
-      },
-      '&$bar': {
-        backgroundColor: 'transparent'
-      }
-    }
+    cursor: 'pointer'
   },
   barActive: {
-    display: 'block'
+    display: 'inherit'
   },
   navBar: {
     alignItems: 'stretch',
@@ -66,7 +49,20 @@ const styles = theme => ({
       width: '100%',
       height: '100%',
       backgroundColor: 'inherit',
-      transition: 'all 300ms ease-in-out'
+      transition: 'all 300ms ease-in-out',
+      '&$close': {
+        '&:before': {
+          top: 0,
+          left: 0,
+          transform: 'rotate(45deg)'
+        },
+        '&:after': {
+          top: 0,
+          left: 0,
+          transform: 'rotate(45deg)',
+          backgroundColor: '#fff'
+        }
+      }
     }
   },
   overlay: {

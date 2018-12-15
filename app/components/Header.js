@@ -26,7 +26,11 @@ function Header(props) {
         onClick={e => toggleMenu(!menuOpen)}
         role="menu"
       >
-        <div className={classes.bar} />
+        <div
+          className={cn(classes.bar, {
+            [classes.close]: menuOpen
+          })}
+        />
       </div>
 
       <div
