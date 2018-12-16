@@ -40,7 +40,6 @@ const mapState = state => ({
 });
 
 const Packages = props => {
-  console.log('render');
   const { classes } = props;
   const {
     packages,
