@@ -13,7 +13,8 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 import {
   SET_PACKAGES,
-  SET_SELECTED_PACKAGE
+  SET_SELECTED_PACKAGE,
+  CLEAR_SELECTED
 } from '../../constants/ActionTypes';
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
@@ -32,7 +33,8 @@ const mapState = state => ({
   page: state.common.page,
   rowsPerPage: state.common.rowsPerPage,
   directory: state.common.directory,
-  packages: state.packages.packages
+  packages: state.packages.packages,
+  selected: state.packages.selected
 });
 
 const Packages = props => {
@@ -43,9 +45,11 @@ const Packages = props => {
     directory,
     manager,
     page,
-    rowsPerPage
+    rowsPerPage,
+    selected
   } = useMappedState(mapState);
   const dispatch = useDispatch();
+  const isSelected = name => selected.indexOf(name) !== -1;
 
   const [newPackages, error] = useIpc(
     'ipc-event',
@@ -77,12 +81,28 @@ const Packages = props => {
         <TableToolbar
           mode={mode}
           directory={directory}
-          selected={[]}
+          selected={selected}
           title="Packages"
         />
       </div>
       <Table className={classes.tableResponsive}>
-        <TableHeader />
+        <TableHeader
+          packages={dataSlices && dataSlices.map(pkg => pkg.name)}
+          numSelected={Number(selected.length)}
+          rowCount={rowsPerPage}
+          onSelect={name =>
+            dispatch({
+              type: SET_SELECTED_PACKAGE,
+              name,
+              force: true
+            })
+          }
+          onClearSelected={() =>
+            dispatch({
+              type: CLEAR_SELECTED
+            })
+          }
+        />
         <TableBody>
           {dataSlices &&
             dataSlices.map(pkg => {
@@ -92,6 +112,7 @@ const Packages = props => {
                 <TableRow key={`pkg-${name}`}>
                   <TableCell padding="checkbox">
                     <Checkbox
+                      checked={isSelected(name)}
                       onClick={e =>
                         dispatch({
                           type: SET_SELECTED_PACKAGE,

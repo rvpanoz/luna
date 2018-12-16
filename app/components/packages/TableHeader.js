@@ -18,6 +18,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Checkbox from '@material-ui/core/Checkbox';
 import defaultFont from '../../styles/variables';
+import { CLEAR_SELECTED } from '../../constants/ActionTypes';
 
 const styles = () => ({
   tableHeadCell: {
@@ -48,8 +49,16 @@ const TableHeader = props => {
     order,
     orderBy,
     sortHandler,
-    onSelectAllClick
+    packages,
+    onSelect,
+    onClearSelected
   } = props;
+  console.log(numSelected, rowCount);
+  const onSelectAll = (e, checked) => {
+    checked
+      ? packages && packages.forEach(pkgName => onSelect(pkgName))
+      : onClearSelected();
+  };
 
   return (
     <TableHead className={classes.primaryTableHeader}>
@@ -60,7 +69,7 @@ const TableHeader = props => {
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
+            onChange={onSelectAll}
           />
         </TableCell>
         {columnData.map(column => {

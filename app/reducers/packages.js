@@ -5,7 +5,11 @@
 
 import { identity, merge, assoc, prepend, prop, propOr, remove } from 'ramda';
 import initialState from './initialState';
-import { SET_PACKAGES, SET_SELECTED_PACKAGE } from '../constants/ActionTypes';
+import {
+  CLEAR_SELECTED,
+  SET_PACKAGES,
+  SET_SELECTED_PACKAGE
+} from '../constants/ActionTypes';
 
 const { packages } = initialState;
 
@@ -15,6 +19,7 @@ const createReducer = (packagesState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [CLEAR_SELECTED]: state => assoc('selected', [], state),
   [SET_PACKAGES]: (state, action) =>
     merge(state, {
       packages: action.packages
