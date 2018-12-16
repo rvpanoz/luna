@@ -11,7 +11,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import { SET_PACKAGES } from '../../constants/ActionTypes';
+import {
+  SET_PACKAGES,
+  SET_SELECTED_PACKAGE
+} from '../../constants/ActionTypes';
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -88,7 +91,14 @@ const Packages = props => {
               return (
                 <TableRow key={`pkg-${name}`}>
                   <TableCell padding="checkbox">
-                    <Checkbox onClick={e => console.log(e, name)} />
+                    <Checkbox
+                      onClick={e =>
+                        dispatch({
+                          type: SET_SELECTED_PACKAGE,
+                          name
+                        })
+                      }
+                    />
                   </TableCell>
                   <TableCell padding="none" className={classes.tableCell}>
                     <span

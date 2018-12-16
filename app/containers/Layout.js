@@ -30,7 +30,9 @@ const Layout = props => {
             </Grid>
             <Grid item xs={4}>
               <Grid container>
-                <Grid item xs={12} />
+                <Grid item xs={12}>
+                  <Dashboard />
+                </Grid>
                 <Grid item xs={12} />
               </Grid>
             </Grid>

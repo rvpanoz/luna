@@ -5,6 +5,9 @@ export default {
   manager: 'yarn',
   page: 0,
   rowsPerPage: 10,
-  packages: [],
+  packages: {
+    packages: [],
+    selected: []
+  },
   metadata: {}
 };

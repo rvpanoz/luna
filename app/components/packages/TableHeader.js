@@ -40,74 +40,57 @@ const columnData = [
   { id: 'group-id', disablePadding: true, label: 'Group' }
 ];
 
-const renderTableLabel = (order, orderBy, column, handler) => {
-  const needSort =
-    Rand(!!orderBy, !!column.id) && Rand(true, orderBy === column.id);
+const TableHeader = props => {
+  const {
+    classes,
+    numSelected,
+    rowCount,
+    order,
+    orderBy,
+    sortHandler,
+    onSelectAllClick
+  } = props;
 
-  if (needSort) {
-    return (
-      <TableSortLabel
-        active={orderBy === column.id}
-        direction={order}
-        onClick={handler(column.id)}
-      >
-        {column.label}
-      </TableSortLabel>
-    );
-  }
-
-  return column.label;
+  return (
+    <TableHead className={classes.primaryTableHeader}>
+      <TableRow>
+        <TableCell
+          className={classnames(classes.tableCell, classes.tableHeadCell)}
+        >
+          <Checkbox
+            indeterminate={numSelected > 0 && numSelected < rowCount}
+            checked={numSelected > 0 && numSelected === rowCount}
+            onChange={onSelectAllClick}
+          />
+        </TableCell>
+        {columnData.map(column => {
+          const needSort =
+            Rand(!!orderBy, !!column.id) && Rand(true, orderBy === column.id);
+          return (
+            <TableCell
+              className={classes.tableCell}
+              key={column.id}
+              padding={column.disablePadding ? 'none' : 'default'}
+              sortDirection={orderBy === column.id ? order : false}
+            >
+              {needSort ? (
+                <TableSortLabel
+                  active={orderBy === column.id}
+                  direction={order}
+                  onClick={sortHandler(column.id)}
+                >
+                  {column.label}
+                </TableSortLabel>
+              ) : (
+                column.label
+              )}
+            </TableCell>
+          );
+        }, this)}
+      </TableRow>
+    </TableHead>
+  );
 };
-
-class TableHeader extends React.Component {
-  createSortHandler = property => e => {
-    this.props.onRequestSort(e, property);
-  };
-
-  render() {
-    const {
-      classes,
-      onSelectAllClick,
-      order,
-      orderBy,
-      numSelected,
-      rowCount
-    } = this.props;
-
-    return (
-      <TableHead className={classes.primaryTableHeader}>
-        <TableRow>
-          <TableCell
-            className={classnames(classes.tableCell, classes.tableHeadCell)}
-          >
-            <Checkbox
-              indeterminate={numSelected > 0 && numSelected < rowCount}
-              checked={numSelected > 0 && numSelected === rowCount}
-              onChange={onSelectAllClick}
-            />
-          </TableCell>
-          {columnData.map(column => {
-            return (
-              <TableCell
-                className={classes.tableCell}
-                key={column.id}
-                padding={column.disablePadding ? 'none' : 'default'}
-                sortDirection={orderBy === column.id ? order : false}
-              >
-                {renderTableLabel(
-                  order,
-                  orderBy,
-                  column,
-                  this.createSortHandler
-                )}
-              </TableCell>
-            );
-          }, this)}
-        </TableRow>
-      </TableHead>
-    );
-  }
-}
 
 // TableListHeader.propTypes = {
 //   numSelected: PropTypes.number.isRequired,

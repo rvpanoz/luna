@@ -14,40 +14,41 @@ const styles = theme => {
 
 const Dashboard = props => {
   const { classes } = props;
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // const switchMode = (mode, directory) =>
-  //   dispatch({ type: SET_MODE, mode, directory: directory || null });
+  const switchMode = (mode, directory) =>
+    dispatch({ type: SET_MODE, mode, directory: directory || null });
 
-  // // eslint-disable-next-line
-  // const toggleLoader = loading => dispatch({ type: TOGGLE_LOADER, loading });
+  // eslint-disable-next-line
+  const toggleLoader = loading => dispatch({ type: TOGGLE_LOADER, loading });
 
-  // const openPackage = () => {
-  //   remote.dialog.showOpenDialog(
-  //     remote.getCurrentWindow(),
-  //     {
-  //       title: 'Open package.json file',
-  //       buttonLabel: 'Analyze',
-  //       filters: [
-  //         {
-  //           name: 'package.json',
-  //           extensions: ['json']
-  //         }
-  //       ],
-  //       properties: ['openFile']
-  //     },
-  //     filePath => {
-  //       if (filePath) {
-  //         const directory = filePath.join('');
-  //         switchMode('LOCAL', directory);
-  //       }
-  //     }
-  //   );
-  // };
+  const openPackage = () => {
+    remote.dialog.showOpenDialog(
+      remote.getCurrentWindow(),
+      {
+        title: 'Open package.json file',
+        buttonLabel: 'Analyze',
+        filters: [
+          {
+            name: 'package.json',
+            extensions: ['json']
+          }
+        ],
+        properties: ['openFile']
+      },
+      filePath => {
+        if (filePath) {
+          const directory = filePath.join('');
+          switchMode('LOCAL', directory);
+        }
+      }
+    );
+  };
 
   return (
     <section className={classes.root}>
       <Typography>Dashboard</Typography>
+      <button onClick={e => openPackage()}>Open</button>
     </section>
   );
 };
