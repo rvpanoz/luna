@@ -6,17 +6,12 @@
 
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import Toolbar from '@material-ui/core/Toolbar';
-import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteIcon from '@material-ui/icons/Delete';
 import RefreshIcon from '@material-ui/icons/Refresh';
-import GroupWork from '@material-ui/icons/GroupWork';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
 const styles = theme => {
@@ -77,8 +72,7 @@ const TableListToolbar = props => {
                   variant="headline"
                   component="h5"
                 >
-                  {' '}
-                  {directory}{' '}
+                  {directory}
                 </Typography>
               ) : null}
             </div>
@@ -90,11 +84,6 @@ const TableListToolbar = props => {
             <Tooltip title="Reload list">
               <IconButton aria-label="Reload list">
                 <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Show globals">
-              <IconButton aria-label="Show globals">
-                <GroupWork />
               </IconButton>
             </Tooltip>
             <Tooltip title="Show filters">

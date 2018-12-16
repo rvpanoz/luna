@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { withStyles } from '@material-ui/core';
 import { merge } from 'ramda';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -10,6 +10,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import {
   CLEAR_SELECTED,
@@ -29,7 +30,6 @@ const options = {
 };
 
 const mapState = state => ({
-  loading: state.common.loading,
   manager: state.common.manager,
   mode: state.common.mode,
   page: state.common.page,
@@ -40,6 +40,7 @@ const mapState = state => ({
 });
 
 const Packages = props => {
+  console.log('render');
   const { classes } = props;
   const {
     packages,
@@ -48,26 +49,19 @@ const Packages = props => {
     manager,
     page,
     rowsPerPage,
-    selected,
-    loading
+    selected
   } = useMappedState(mapState);
+
   const dispatch = useDispatch();
   const isSelected = name => selected.indexOf(name) !== -1;
 
-  const [newPackages, error] = useIpc(
+  const [newPackages, loading, error] = useIpc(
     'ipc-event',
     merge(options, {
       manager,
       mode,
       directory
     })
-  );
-
-  useEffect(
-    () => {
-      dispatch({ type: TOGGLE_LOADER, loading: false });
-    },
-    [loading]
   );
 
   useEffect(
@@ -114,7 +108,10 @@ const Packages = props => {
           }
         />
         <TableBody>
-          {dataSlices &&
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            dataSlices &&
             dataSlices.map(pkg => {
               const { name, version } = pkg;
 
@@ -146,7 +143,8 @@ const Packages = props => {
                   </TableCell>
                 </TableRow>
               );
-            })}
+            })
+          )}
         </TableBody>
       </Table>
     </section>

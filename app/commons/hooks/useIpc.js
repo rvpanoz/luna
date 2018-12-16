@@ -1,18 +1,14 @@
 import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
-import { assoc } from 'ramda';
 import { parseMap } from '../utils';
 
 const useIpc = (channel, options) => {
   const { ipcEvent, mode, directory } = options || {};
-
-  const initialState = {
-    data: [],
-    error: null
-  };
-
   const listenTo = `${ipcEvent}-close`;
-  const [packages, setPackages] = useState(initialState);
+
+  const [dataSet, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, toggleLoader] = useState(false);
 
   useEffect(
     () => {
@@ -20,18 +16,24 @@ const useIpc = (channel, options) => {
       ipcRenderer.on(listenTo, (eventName, status, cmd, data, error) => {
         const parsedPackages = data && parseMap(data, mode, directory);
 
+        if (error) {
+          setError(error);
+        }
+
         if (Array.isArray(parsedPackages)) {
-          setPackages(assoc('packages', parsedPackages, packages));
+          setData(parsedPackages);
+          toggleLoader(false);
         }
       });
 
+      toggleLoader(true);
       ipcRenderer.send(channel, options);
       return () => ipcRenderer.removeAllListeners(listenTo);
     },
     [options.directory]
   );
 
-  return [packages.packages, packages.error];
+  return [dataSet, loading, error];
 };
 
 export default useIpc;
