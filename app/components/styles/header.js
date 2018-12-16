@@ -4,7 +4,7 @@
  * Header styling
  */
 
-const styles = theme => ({
+export default theme => ({
   menu_container: {
     position: 'absolute',
     top: 50,
@@ -65,6 +65,7 @@ const styles = theme => ({
       }
     }
   },
+  close: {},
   overlay: {
     position: 'absolute',
     top: '0',
@@ -110,5 +111,3 @@ const styles = theme => ({
     }
   }
 });
-
-export default styles;

@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-const styles = theme => ({
+export const listStyles = theme => ({
   root: {
     width: '100%',
     marginTop: 15
@@ -39,5 +39,3 @@ const styles = theme => ({
     verticalAlign: 'middle'
   }
 });
-
-export default styles;
