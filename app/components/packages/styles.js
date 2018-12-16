@@ -1,9 +1,11 @@
 /* eslint-disable */
 
-const styles = theme => ({
+export const listStyles = theme => ({
   root: {
-    width: '100%',
-    marginTop: 15
+    width: '100%'
+  },
+  toolbar: {
+    width: '100%'
   },
   tableWrapper: {
     overflowX: 'auto'
@@ -39,5 +41,3 @@ const styles = theme => ({
     verticalAlign: 'middle'
   }
 });
-
-export default styles;

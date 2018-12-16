@@ -3,10 +3,10 @@
 
 import React, { useState, useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-
 import cn from 'classnames';
-import styles from '../styles/spectre.min.css';
-import headerStyles from './styles/header';
+
+import SearchBar from './SearchBar';
+import styles from './styles/header';
 
 function Header(props) {
   const { classes } = props;
@@ -18,6 +18,7 @@ function Header(props) {
 
   return (
     <header className={classes.navBar}>
+      <SearchBar className={classes.textField} />
       <div
         ref={menuContainerRef}
         className={cn(classes.menu_container, {
@@ -26,7 +27,11 @@ function Header(props) {
         onClick={e => toggleMenu(!menuOpen)}
         role="menu"
       >
-        <div className={classes.bar} />
+        <div
+          className={cn(classes.bar, {
+            [classes.close]: menuOpen
+          })}
+        />
       </div>
 
       <div
@@ -48,4 +53,4 @@ function Header(props) {
   );
 }
 
-export default withStyles(headerStyles)(Header);
+export default withStyles(styles)(Header);

@@ -8,8 +8,6 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
-// import TableHead from '@material-ui/core/TableHead';
-// import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
@@ -17,8 +15,8 @@ import { SET_PACKAGES } from '../../constants/ActionTypes';
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
-import SearchBar from './SearchBar';
-import styles from './styles';
+
+import { listStyles as styles } from './styles';
 
 const options = {
   ipcEvent: 'get-packages',
@@ -72,10 +70,7 @@ const Packages = props => {
 
   return (
     <section className={classes.root}>
-      <div className={classes.bar}>
-        <SearchBar />
-      </div>
-      <div className={classes.bar}>
+      <div className={classes.toolbar}>
         <TableToolbar
           mode={mode}
           directory={directory}

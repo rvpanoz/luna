@@ -19,12 +19,16 @@ const styles = theme => ({
     height: 'calc(100vh - 50px)',
     position: 'relative',
     zIndex: '2',
-    backgroundColor: '#40508e',
+    // backgroundColor: '#40508e',
     WebkitFontSmoothing: 'antialiased',
     MozOsxFontSmoothing: 'grayscale',
     WebkitTransition: '-webkit-transform 0.3s',
     MozTransition: '-moz-transform 0.3s',
     transition: 'transform 0.3s'
+  },
+  container: {
+    width: '100%',
+    padding: 20
   }
 });
 
