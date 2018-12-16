@@ -2,8 +2,7 @@
 
 export const listStyles = theme => ({
   root: {
-    width: '100%',
-    marginTop: 15
+    width: '100%'
   },
   toolbar: {
     width: '100%'

@@ -2,7 +2,8 @@
  * Global styling
  */
 
-/* @import '~@fortawesome/fontawesome-free/css/regular.min.css'; */
+@import '~material-design-icons/iconfont/material-icons.css';
+@import '~typeface-roboto';
 
 html,
 * {
@@ -11,7 +12,7 @@ html,
 }
 
 body {
-  color: #fff;
+  font-family: 'Lato', sans-serif;
   overflow-y: hidden;
 }
 
