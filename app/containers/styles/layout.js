@@ -19,7 +19,7 @@ const styles = theme => ({
     height: 'calc(100vh - 50px)',
     position: 'relative',
     zIndex: '2',
-    backgroundColor: '#40508e',
+    // backgroundColor: '#40508e',
     WebkitFontSmoothing: 'antialiased',
     MozOsxFontSmoothing: 'grayscale',
     WebkitTransition: '-webkit-transform 0.3s',

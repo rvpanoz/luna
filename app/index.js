@@ -3,8 +3,8 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { StoreProvider } from 'redux-react-hook';
-import App from './containers/App';
 import { configureStore } from './store/configureStore';
+import App from './containers/App';
 
 const store = configureStore();
 

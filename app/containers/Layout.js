@@ -25,7 +25,7 @@ const Layout = props => {
       <section className={classes.main}>
         <div className={classes.container}>
           <Grid container>
-            <Grid item xs={6}>
+            <Grid item xs={8}>
               <Packages />
             </Grid>
             <Grid item />
