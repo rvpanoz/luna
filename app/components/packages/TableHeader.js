@@ -53,7 +53,7 @@ const TableHeader = props => {
     onSelect,
     onClearSelected
   } = props;
-  console.log(numSelected, rowCount);
+
   const onSelectAll = (e, checked) => {
     checked
       ? packages && packages.forEach(pkgName => onSelect(pkgName))

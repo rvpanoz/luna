@@ -12,9 +12,10 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
 import {
+  CLEAR_SELECTED,
   SET_PACKAGES,
   SET_SELECTED_PACKAGE,
-  CLEAR_SELECTED
+  TOGGLE_LOADER
 } from '../../constants/ActionTypes';
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
@@ -28,6 +29,7 @@ const options = {
 };
 
 const mapState = state => ({
+  loading: state.common.loading,
   manager: state.common.manager,
   mode: state.common.mode,
   page: state.common.page,
@@ -46,7 +48,8 @@ const Packages = props => {
     manager,
     page,
     rowsPerPage,
-    selected
+    selected,
+    loading
   } = useMappedState(mapState);
   const dispatch = useDispatch();
   const isSelected = name => selected.indexOf(name) !== -1;
@@ -58,6 +61,13 @@ const Packages = props => {
       mode,
       directory
     })
+  );
+
+  useEffect(
+    () => {
+      dispatch({ type: TOGGLE_LOADER, loading: false });
+    },
+    [loading]
   );
 
   useEffect(
