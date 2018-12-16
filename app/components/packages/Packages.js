@@ -70,7 +70,7 @@ const Packages = props => {
 
   return (
     <section className={classes.root}>
-      <div className={classes.bar}>
+      <div className={classes.toolbar}>
         <TableToolbar
           mode={mode}
           directory={directory}

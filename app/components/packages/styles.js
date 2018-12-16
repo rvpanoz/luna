@@ -5,6 +5,9 @@ export const listStyles = theme => ({
     width: '100%',
     marginTop: 15
   },
+  toolbar: {
+    width: '100%'
+  },
   tableWrapper: {
     overflowX: 'auto'
   },

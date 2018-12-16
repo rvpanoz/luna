@@ -23,8 +23,13 @@ const Layout = props => {
         <Header />
       </section>
       <section className={classes.main}>
-        <div className={classes.container} style={{ display: 'none' }}>
-          <Packages />
+        <div className={classes.container}>
+          <Grid container>
+            <Grid item xs={6}>
+              <Packages />
+            </Grid>
+            <Grid item />
+          </Grid>
         </div>
       </section>
     </div>

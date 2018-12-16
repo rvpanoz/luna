@@ -25,6 +25,10 @@ const styles = theme => ({
     WebkitTransition: '-webkit-transform 0.3s',
     MozTransition: '-moz-transform 0.3s',
     transition: 'transform 0.3s'
+  },
+  container: {
+    width: '100%',
+    padding: 20
   }
 });
 
