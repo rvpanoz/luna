@@ -1,9 +1,12 @@
 /* eslint-disable */
 
-import React, { useEffect, useCallback } from 'react';
+/**
+ * Packages component
+ */
+
+import React, { useEffect } from 'react';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core';
-import { merge } from 'ramda';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 
 import Table from '@material-ui/core/Table';
@@ -33,6 +36,10 @@ const mapState = state => ({
   packages: state.packages.packages,
   selected: state.packages.selected
 });
+
+const getStyles = loading => {
+  return loading ? { filter: 'blur(15px)' } : null;
+};
 
 const Packages = props => {
   const { classes } = props;
@@ -84,14 +91,23 @@ const Packages = props => {
       </div>
       {loading && <CircularProgress />}
       <Table
+        style={getStyles(loading)}
         className={cn(classes.tableResponsive, {
           [classes.none]: loading
         })}
       >
         <TableHeader
-          packages={dataSlices && dataSlices.map(pkg => pkg.name)}
+          packages={dataSlices}
           numSelected={Number(selected.length)}
           rowCount={rowsPerPage}
+          order="asc"
+          orderBy="name"
+          setPackages={sortedPackages =>
+            dispatch({
+              type: SET_PACKAGES,
+              packages: sortedPackages
+            })
+          }
           onSelect={name =>
             dispatch({
               type: SET_SELECTED_PACKAGE,

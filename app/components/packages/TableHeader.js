@@ -4,19 +4,17 @@
  Table Header 
 **/
 
-// TODO: use hooks
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
-import { and as Rand } from 'ramda';
+import { and } from 'ramda';
 import { withStyles } from '@material-ui/core/styles';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { tableHeaderStyles as styles } from './styles';
 
 const columnData = [
@@ -31,19 +29,41 @@ const TableHeader = props => {
     classes,
     numSelected,
     rowCount,
-    order,
-    orderBy,
-    sortHandler,
     packages,
     onSelect,
-    onClearSelected
+    onClearSelected,
+    setPackages
   } = props;
+
+  const [order, setOrder] = useState('asc');
+  const [orderBy, setOrderBy] = useState('name');
+  const [sortedPackages, sortPackages] = useState([]);
 
   const onSelectAll = (e, checked) => {
     checked
-      ? packages && packages.forEach(pkgName => onSelect(pkgName))
+      ? packages && packages.forEach(pkg => onSelect(pkg.name))
       : onClearSelected();
   };
+
+  const handleSort = (e, property) => {
+    const { packages } = props;
+    const newOrderBy = order === 'desc' ? 'asc' : 'desc';
+
+    const data =
+      order === 'asc'
+        ? packages.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1))
+        : packages.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1));
+
+    sortPackages(data);
+    setOrder(newOrderBy);
+  };
+
+  useEffect(
+    () => {
+      setPackages(sortedPackages);
+    },
+    [order, orderBy]
+  );
 
   return (
     <TableHead className={classes.primaryTableHeader}>
@@ -59,7 +79,8 @@ const TableHeader = props => {
         </TableCell>
         {columnData.map(column => {
           const needSort =
-            Rand(!!orderBy, !!column.id) && Rand(true, orderBy === column.id);
+            and(!!orderBy, !!column.id) && and(true, orderBy === column.id);
+
           return (
             <TableCell
               className={classes.tableCell}
@@ -71,7 +92,7 @@ const TableHeader = props => {
                 <TableSortLabel
                   active={orderBy === column.id}
                   direction={order}
-                  onClick={sortHandler(column.id)}
+                  onClick={e => handleSort(e, column.id)}
                 >
                   {column.label}
                 </TableSortLabel>
@@ -88,8 +109,6 @@ const TableHeader = props => {
 
 TableHeader.propTypes = {
   numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.string.isRequired,
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired
