@@ -10,29 +10,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { and as Rand } from 'ramda';
+import { withStyles } from '@material-ui/core/styles';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { withStyles } from '@material-ui/core/styles';
-
 import Checkbox from '@material-ui/core/Checkbox';
-import defaultFont from '../../styles/variables';
-import { CLEAR_SELECTED } from '../../constants/ActionTypes';
 
-const styles = () => ({
-  tableHeadCell: {
-    color: 'inherit',
-    ...defaultFont,
-    fontSize: 14
-  },
-  tableCell: {
-    ...defaultFont,
-    lineHeight: '1.50',
-    padding: '0px 13px',
-    verticalAlign: 'middle'
-  }
-});
+import { tableHeaderStyles as styles } from './styles';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -101,13 +86,13 @@ const TableHeader = props => {
   );
 };
 
-// TableListHeader.propTypes = {
-//   numSelected: PropTypes.number.isRequired,
-//   onRequestSort: PropTypes.func.isRequired,
-//   onSelectAllClick: PropTypes.func.isRequired,
-//   order: PropTypes.string.isRequired,
-//   orderBy: PropTypes.string.isRequired,
-//   rowCount: PropTypes.number.isRequired
-// };
+TableHeader.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.string.isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired
+};
 
 export default withStyles(styles)(TableHeader);

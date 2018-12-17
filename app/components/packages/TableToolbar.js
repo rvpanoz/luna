@@ -9,42 +9,14 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-const styles = theme => {
-  return {
-    root: {
-      width: '100%'
-    },
-    tableListToolbar: {
-      paddingRight: 8
-    },
-    highlight: {
-      color: '#ccc'
-    },
-    spacer: {
-      flex: '1 1 100%'
-    },
-
-    header: {
-      flex: '0 0 auto'
-    },
-    title: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'flex-start',
-      '& > h1': {
-        fontSize: 18
-      }
-    },
-    directory: {
-      fontSize: 12
-    }
-  };
-};
+import { tableToolbarStyles as styles } from './styles';
 
 const TableListToolbar = props => {
   const { classes, selected, title, directory, mode } = props;
@@ -80,18 +52,26 @@ const TableListToolbar = props => {
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            <Tooltip title="Reload list">
-              <IconButton aria-label="Reload list">
-                <RefreshIcon />
+          {selected.length === 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Tooltip title="Reload list">
+                <IconButton aria-label="Reload list">
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Show filters">
+                <IconButton aria-label="Show filters">
+                  <FilterListIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          ) : (
+            <Tooltip title="Uninstall selected">
+              <IconButton aria-label="uninstall selected">
+                <DeleteIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title="Show filters">
-              <IconButton aria-label="Show filters">
-                <FilterListIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
+          )}
         </div>
       </Toolbar>
     </section>

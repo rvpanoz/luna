@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import React, { useEffect, useCallback } from 'react';
+import cn from 'classnames';
 import { withStyles } from '@material-ui/core';
 import { merge } from 'ramda';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -15,19 +16,13 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   CLEAR_SELECTED,
   SET_PACKAGES,
-  SET_SELECTED_PACKAGE,
-  TOGGLE_LOADER
+  SET_SELECTED_PACKAGE
 } from '../../constants/ActionTypes';
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 
 import { listStyles as styles } from './styles';
-
-const options = {
-  ipcEvent: 'get-packages',
-  cmd: ['list']
-};
 
 const mapState = state => ({
   manager: state.common.manager,
@@ -54,14 +49,13 @@ const Packages = props => {
   const dispatch = useDispatch();
   const isSelected = name => selected.indexOf(name) !== -1;
 
-  const [newPackages, loading, error] = useIpc(
-    'ipc-event',
-    merge(options, {
-      manager,
-      mode,
-      directory
-    })
-  );
+  const [newPackages, loading, error] = useIpc('ipc-event', {
+    ipcEvent: 'get-packages',
+    cmd: ['list'],
+    manager,
+    mode,
+    directory
+  });
 
   useEffect(
     () => {
@@ -88,7 +82,12 @@ const Packages = props => {
           title="Packages"
         />
       </div>
-      <Table className={classes.tableResponsive}>
+      {loading && <CircularProgress />}
+      <Table
+        className={cn(classes.tableResponsive, {
+          [classes.none]: loading
+        })}
+      >
         <TableHeader
           packages={dataSlices && dataSlices.map(pkg => pkg.name)}
           numSelected={Number(selected.length)}
@@ -107,10 +106,7 @@ const Packages = props => {
           }
         />
         <TableBody>
-          {loading ? (
-            <CircularProgress />
-          ) : (
-            dataSlices &&
+          {dataSlices &&
             dataSlices.map(pkg => {
               const { name, version } = pkg;
 
@@ -142,8 +138,7 @@ const Packages = props => {
                   </TableCell>
                 </TableRow>
               );
-            })
-          )}
+            })}
         </TableBody>
       </Table>
     </section>
