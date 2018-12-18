@@ -19,20 +19,25 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   CLEAR_SELECTED,
   SET_PACKAGES,
+  SET_PAGE,
   SET_SELECTED_PACKAGE
 } from '../../constants/ActionTypes';
+
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
-
+import TableFooter from './TableFooter';
 import { listStyles as styles } from './styles';
 
+import { setPackagesSuccess } from '../../models/packages/actions';
+
 const mapState = state => ({
+  loading: state.common.loading,
   manager: state.common.manager,
   mode: state.common.mode,
+  directory: state.common.directory,
   page: state.common.page,
   rowsPerPage: state.common.rowsPerPage,
-  directory: state.common.directory,
   packages: state.packages.packages,
   selected: state.packages.selected
 });
@@ -44,19 +49,20 @@ const getStyles = loading => {
 const Packages = props => {
   const { classes } = props;
   const {
+    loading,
     packages,
     mode,
-    directory,
-    manager,
     page,
     rowsPerPage,
+    directory,
+    manager,
     selected
   } = useMappedState(mapState);
 
   const dispatch = useDispatch();
   const isSelected = name => selected.indexOf(name) !== -1;
 
-  const [newPackages, loading, error] = useIpc('ipc-event', {
+  const [newPackages] = useIpc('ipc-event', {
     ipcEvent: 'get-packages',
     cmd: ['list'],
     manager,
@@ -66,13 +72,13 @@ const Packages = props => {
 
   useEffect(
     () => {
-      if (typeof newPackages === 'string' && !Boolean(newPackages.length)) {
+      if (typeof newPackages === 'string' || !Boolean(newPackages.length)) {
         return;
       }
 
-      dispatch({ type: SET_PACKAGES, packages: newPackages });
+      dispatch(setPackagesSuccess(newPackages));
     },
-    [newPackages, directory]
+    [newPackages, mode, directory]
   );
 
   const dataSlices =
@@ -83,10 +89,10 @@ const Packages = props => {
     <section className={classes.root}>
       <div className={classes.toolbar}>
         <TableToolbar
+          title="Packages"
           mode={mode}
           directory={directory}
           selected={selected}
-          title="Packages"
         />
       </div>
       {loading && <CircularProgress />}
@@ -102,24 +108,9 @@ const Packages = props => {
           rowCount={rowsPerPage}
           order="asc"
           orderBy="name"
-          setPackages={sortedPackages =>
-            dispatch({
-              type: SET_PACKAGES,
-              packages: sortedPackages
-            })
-          }
-          onSelect={name =>
-            dispatch({
-              type: SET_SELECTED_PACKAGE,
-              name,
-              force: true
-            })
-          }
-          onClearSelected={() =>
-            dispatch({
-              type: CLEAR_SELECTED
-            })
-          }
+          setPackages={sortedPackages => console.log(sortedPackages)}
+          onSelect={name => console.log(name)}
+          onClearSelected={() => console.log('clear selected')}
         />
         <TableBody>
           {dataSlices &&
@@ -156,6 +147,12 @@ const Packages = props => {
               );
             })}
         </TableBody>
+        <TableFooter
+          rowCount={(packages && packages.length) || 0}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          handleChangePage={(e, page) => dispatch({ type: SET_PAGE, page })}
+        />
       </Table>
     </section>
   );
