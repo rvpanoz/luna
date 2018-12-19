@@ -28,6 +28,19 @@ const _writeToFile = content =>
 const _getKeys = obj => Object.keys(obj);
 const _getValues = obj => Object.values(obj);
 
+export const constructAction = namespace => actionType => {
+  const type = `${namespace}/${actionType}`;
+  const actionCreator = payload => ({
+    type,
+    payload
+  });
+  actionCreator.type = type;
+
+  Object.freeze(actionCreator);
+
+  return actionCreator;
+};
+
 /**
  * Object to array
  * @param {*} obj

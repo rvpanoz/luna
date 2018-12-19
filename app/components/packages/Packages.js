@@ -32,12 +32,12 @@ import { listStyles as styles } from './styles';
 import { setPackagesSuccess } from '../../models/packages/actions';
 
 const mapState = state => ({
-  loading: state.common.loading,
   manager: state.common.manager,
   mode: state.common.mode,
   directory: state.common.directory,
   page: state.common.page,
   rowsPerPage: state.common.rowsPerPage,
+  loading: state.packages.loading,
   packages: state.packages.packages,
   selected: state.packages.selected
 });

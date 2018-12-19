@@ -38,6 +38,7 @@ const execute = (manager = defaultManager, commandArgs, mode, directory) => {
     );
 
     command.stdout.on('data', data => {
+      console.log(data);
       result += String(data);
     });
 

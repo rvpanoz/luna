@@ -24,11 +24,18 @@ const handlers = {
   // [CLEAR_SELECTED]: state => assoc('selected', [], state),
   [setPackagesSuccess.type]: (state, action) =>
     merge(state, {
-      packages: action.payload
+      packages: action.payload,
+      loading: false
     }),
   [setPackagesError.type]: (state, action) =>
     merge(state, {
-      packages: action.payload
+      error: action.payload,
+      packages: [],
+      loading: false
+    }),
+  [setPackagesStart.type]: state =>
+    merge(state, {
+      loading: true
     })
   // [SET_SELECTED_PACKAGE]: (state, action) => {
   //   const { selected } = state;

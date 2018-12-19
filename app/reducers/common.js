@@ -10,7 +10,6 @@ import {
   SET_OPENED_PACKAGES,
   ADD_MESSAGE,
   CLEAR_MESSAGES,
-  TOGGLE_LOADER,
   TOGGLE_SETTINGS,
   TOGGLE_SNACKBAR,
   TOGGLE_DRAWER,
@@ -41,7 +40,6 @@ const handlers = {
     }),
   [TOGGLE_DRAWER]: (state, action) =>
     assoc('drawerOpen', action.drawerOpen, state),
-  [TOGGLE_LOADER]: (state, action) => assoc('loading', action.loading, state),
   [TOGGLE_SETTINGS]: (state, action) =>
     assoc('settingsOpen', action.settingsOpen, state),
   [SET_PACKAGE_JSON]: (state, action) =>

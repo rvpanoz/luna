@@ -1,6 +1,6 @@
-import { Action } from '../../commons/actions';
+import { constructAction } from '../../commons/utils';
 
-const ActionCreator = Action('@@LUNA_APP');
+const ActionCreator = constructAction('@@LUNA_APP');
 
 const setPackagesStart = ActionCreator('SET_PACKAGES_START');
 const setPackagesSuccess = ActionCreator('SET_PACKAGES_SUCCESS');
