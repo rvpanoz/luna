@@ -12,10 +12,24 @@ export default theme => ({
     transform: 'translate(0, -100%)',
     width: 50,
     height: 50,
-    cursor: 'pointer'
+    cursor: 'pointer',
+    '& $barActive': {
+      '&:before': {
+        top: 0,
+        left: 0,
+        transform: 'rotate(45deg)',
+        backgroundColor: '#fff'
+      },
+      '&:after': {
+        top: 0,
+        left: 0,
+        transform: 'rotate(-45deg)',
+        backgroundColor: '#fff'
+      }
+    }
   },
   barActive: {
-    display: 'inherit'
+    backgroundColor: 'unset !important'
   },
   navBar: {
     alignItems: 'stretch',
@@ -49,23 +63,10 @@ export default theme => ({
       width: '100%',
       height: '100%',
       backgroundColor: 'inherit',
-      transition: 'all 300ms ease-in-out',
-      '&$close': {
-        '&:before': {
-          top: 0,
-          left: 0,
-          transform: 'rotate(45deg)'
-        },
-        '&:after': {
-          top: 0,
-          left: 0,
-          transform: 'rotate(45deg)',
-          backgroundColor: '#fff'
-        }
-      }
+      transition: 'all 300ms ease-in-out'
     }
   },
-  close: {},
+
   overlay: {
     position: 'absolute',
     top: '0',
@@ -74,7 +75,7 @@ export default theme => ({
     height: '100vh',
     backgroundColor: 'rgba(34, 34, 34, 0.05)'
   },
-  active: { width: '25%', transition: 'all 300ms ease-in-out' },
+  active: { width: '15%', transition: 'all 300ms ease-in-out' },
   non_active: { width: '0', transition: 'all 300ms ease-in-out' },
   nav: {
     position: 'absolute',

@@ -18,7 +18,7 @@ function Header(props) {
 
   return (
     <header className={classes.navBar}>
-      <SearchBar className={classes.textField} />
+      <SearchBar />
       <div
         ref={menuContainerRef}
         className={cn(classes.menu_container, {
@@ -29,7 +29,7 @@ function Header(props) {
       >
         <div
           className={cn(classes.bar, {
-            [classes.close]: menuOpen
+            [classes.barActive]: menuOpen
           })}
         />
       </div>

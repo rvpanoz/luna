@@ -5,12 +5,9 @@
 /* eslint no-underscore-dangle: 0 */
 /* eslint-disable global-require */
 
-import { createHashHistory } from 'history';
 import { createStore } from 'redux';
 import { createLogger } from 'redux-logger';
 import rootReducer from '../reducers';
-
-const history = createHashHistory();
 
 const configureStore = initialState => {
   // redux Configuration
@@ -43,4 +40,4 @@ const configureStore = initialState => {
   return store;
 };
 
-export default { configureStore, history };
+export default { configureStore };
