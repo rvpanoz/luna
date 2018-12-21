@@ -16,15 +16,6 @@ const {
   defaultSettings: { manager }
 } = config;
 
-const _writeToFile = content =>
-  fs.writeFileSync(
-    path.join(__dirname, '..', 'app', 'packages-debug.json'),
-    content,
-    {
-      encoding: 'utf8'
-    }
-  );
-
 const _getKeys = obj => Object.keys(obj);
 const _getValues = obj => Object.values(obj);
 
@@ -54,14 +45,16 @@ export const objectEntries = obj => {
   return resArray;
 };
 
+export const isArray = data => Array.isArray(data);
+
 /**
  * Validate url
  * @param {*} url
  */
-export function isUrl(url) {
+export const isUrl = url => {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
   return matcher.test(url);
-}
+};
 
 /**
  * switch-case using currying
@@ -90,7 +83,13 @@ export const parseMap = (response, mode, directory) => {
   try {
     const packages = JSON.parse(response);
     const data = pick(['dependencies'], packages);
-    const dataArray = objectEntries(data.dependencies);
+    let dataArray = [];
+
+    if (!data.dependencies) {
+      dataArray = objectEntries(packages);
+    } else {
+      dataArray = objectEntries(data.dependencies);
+    }
 
     if (!Array.isArray(dataArray) || !dataArray) {
       mk.log(`utils[parseMap]: cound not convert data to array`);
@@ -132,6 +131,7 @@ export const parseMap = (response, mode, directory) => {
     });
   } catch (error) {
     mk.log(error);
+    throw new Error(error);
   }
 };
 

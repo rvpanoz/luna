@@ -25,6 +25,7 @@ import { listStyles as styles } from './styles';
 import {
   addSelected,
   setPackagesSuccess,
+  setPackagesOutdatedSuccess,
   clearSelected
 } from '../../models/packages/actions';
 
@@ -38,6 +39,7 @@ const mapState = state => ({
   rowsPerPage: state.common.rowsPerPage,
   loading: state.packages.loading,
   packages: state.packages.packages,
+  packagesOutdated: state.packages.packagesOutdated,
   selected: state.packages.selected
 });
 
@@ -61,9 +63,9 @@ const Packages = props => {
   const dispatch = useDispatch();
   const isSelected = name => selected.indexOf(name) !== -1;
 
-  const [newPackages] = useIpc('ipc-event', {
+  const [newPackages, outdatedPackages, error] = useIpc('ipc-event', {
     ipcEvent: 'get-packages',
-    cmd: ['list'],
+    cmd: ['list', 'outdated'],
     manager,
     mode,
     directory
@@ -71,13 +73,15 @@ const Packages = props => {
 
   useEffect(
     () => {
-      if (typeof newPackages === 'string' || !Boolean(newPackages.length)) {
-        return;
+      if (typeof newPackages === 'object' && newPackages.length) {
+        dispatch(setPackagesSuccess(newPackages));
       }
 
-      dispatch(setPackagesSuccess(newPackages));
+      if (typeof outdatedPackages === 'object' && outdatedPackages.length) {
+        dispatch(setPackagesOutdatedSuccess(outdatedPackages));
+      }
     },
-    [newPackages, mode, directory]
+    [newPackages, outdatedPackages]
   );
 
   const dataSlices =

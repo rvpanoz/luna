@@ -3,9 +3,10 @@ export default {
   page: 0,
   rowsPerPage: 10,
   mode: 'GLOBAL',
-  manager: 'yarn',
+  manager: 'npm',
   packages: {
     packages: [],
+    packagesOutdated: [],
     selected: [],
     loading: false
   },
