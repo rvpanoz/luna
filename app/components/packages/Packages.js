@@ -16,20 +16,17 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import {
-  CLEAR_SELECTED,
-  SET_PACKAGES,
-  SET_PAGE,
-  SET_SELECTED_PACKAGE
-} from '../../constants/ActionTypes';
-
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import { listStyles as styles } from './styles';
 
-import { setPackagesSuccess } from '../../models/packages/actions';
+import {
+  addSelected,
+  setPackagesSuccess,
+  clearSelected
+} from '../../models/packages/actions';
 
 const mapState = state => ({
   manager: state.common.manager,
@@ -103,14 +100,21 @@ const Packages = props => {
         })}
       >
         <TableHeader
-          packages={dataSlices}
+          packagesNames={dataSlices.map(d => d.name)}
           numSelected={Number(selected.length)}
           rowCount={rowsPerPage}
           order="asc"
           orderBy="name"
           setPackages={sortedPackages => console.log(sortedPackages)}
-          onSelect={name => console.log(name)}
-          onClearSelected={() => console.log('clear selected')}
+          onSelected={(name, force) =>
+            dispatch(
+              addSelected({
+                name,
+                force
+              })
+            )
+          }
+          onClearSelected={() => dispatch(clearSelected())}
         />
         <TableBody>
           {dataSlices &&
@@ -122,12 +126,7 @@ const Packages = props => {
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected(name)}
-                      onClick={e =>
-                        dispatch({
-                          type: SET_SELECTED_PACKAGE,
-                          name
-                        })
-                      }
+                      onClick={e => dispatch(addSelected({ name }))}
                     />
                   </TableCell>
                   <TableCell padding="none" className={classes.tableCell}>

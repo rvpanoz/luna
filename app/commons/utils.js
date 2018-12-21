@@ -28,7 +28,7 @@ const _writeToFile = content =>
 const _getKeys = obj => Object.keys(obj);
 const _getValues = obj => Object.values(obj);
 
-export const constructAction = namespace => actionType => {
+export const createActionCreator = namespace => actionType => {
   const type = `${namespace}/${actionType}`;
   const actionCreator = payload => ({
     type,
