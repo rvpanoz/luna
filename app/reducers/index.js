@@ -1,6 +1,6 @@
 /**
  * Redux reducers
- * use combineReducers to combine reducers
+ * use combineReducers to combine reducers into one root reducer
  * */
 
 import { combineReducers } from 'redux';

@@ -9,11 +9,11 @@ import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 
-const Footer = props => {
+const Pagination = props => {
   const {
     rowCount,
     handleChangePage,
-    handleChangeRowsPerPage,
+    handleChangePageRows,
     page,
     rowsPerPage
   } = props;
@@ -34,11 +34,11 @@ const Footer = props => {
             'aria-label': 'Next Page'
           }}
           onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
+          onChangeRowsPerPage={handleChangePageRows}
         />
       </TableRow>
     </TableFooter>
   );
 };
 
-export default Footer;
+export default Pagination;

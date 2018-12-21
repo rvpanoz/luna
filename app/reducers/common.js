@@ -2,62 +2,58 @@
  Global reducer:
  Handles state management for global operations.
  * */
-import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
+import { identity, merge, assoc, propOr, prop } from 'ramda';
 import {
-  SET_MANAGER,
-  SET_MODE,
-  SET_PACKAGE_JSON,
-  SET_OPENED_PACKAGES,
-  ADD_MESSAGE,
-  CLEAR_MESSAGES,
-  TOGGLE_SETTINGS,
-  TOGGLE_SNACKBAR,
-  TOGGLE_DRAWER,
-  MENU_OPEN,
-  SET_SETTINGS
-} from '../constants/ActionTypes';
+  setManager,
+  setMode,
+  setPage,
+  setPageRows
+} from '../models/ui/actions';
 import initialState from './initialState';
 
 const { packages, ...common } = initialState;
 
-const createReducer = (commonState, handlers) => (state = common, action) =>
-  propOr(identity, prop('type', action), handlers)(state, action);
+const createReducer = (commonState, handlers) => (
+  state = commonState,
+  action
+) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
-  [SET_OPENED_PACKAGES]: (state, action) =>
-    assoc('openedPackages', action.packages, state),
-  [SET_SETTINGS]: (state, action) => assoc('settings', action.settings, state),
-  [SET_MODE]: (state, action) =>
-    merge(state, {
-      mode: action.mode,
-      directory: action.directory
-    }),
-  [SET_MANAGER]: (state, action) => assoc('manager', action.drawerOpen, state),
-  [TOGGLE_SNACKBAR]: (state, action) =>
-    merge(state, {
-      snackBarOpen: action.snackBarOpen,
-      snackbar: action.snackbarOptions ? action.snackbarOptions : state.snackbar
-    }),
-  [TOGGLE_DRAWER]: (state, action) =>
-    assoc('drawerOpen', action.drawerOpen, state),
-  [TOGGLE_SETTINGS]: (state, action) =>
-    assoc('settingsOpen', action.settingsOpen, state),
-  [SET_PACKAGE_JSON]: (state, action) =>
-    assoc('packageJSON', action.packageJSON, state),
-  [ADD_MESSAGE]: (state, action) =>
-    merge(state, {
-      messages: prepend(
-        {
-          level: action.level,
-          body: action.body,
-          requires: action.requires,
-          requiredBy: action.requiredBy
-        },
-        state.messages
-      )
-    }),
-  [CLEAR_MESSAGES]: state => assoc('messages', [], state),
-  [MENU_OPEN]: (state, action) => assoc('menuOpen', action.menuOpen, state)
+  [setMode.type]: (state, action) => {
+    const {
+      payload: { mode },
+      payload: { directory }
+    } = action;
+
+    return merge(state, {
+      mode,
+      directory
+    });
+  },
+
+  [setManager.type]: (state, action) => {
+    const {
+      payload: { manager }
+    } = action;
+
+    return assoc('manager', manager, state);
+  },
+
+  [setPage.type]: (state, action) => {
+    const {
+      payload: { page }
+    } = action;
+
+    return assoc('page', page, state);
+  },
+
+  [setPageRows.type]: (state, action) => {
+    const {
+      payload: { rowsPerPage }
+    } = action;
+
+    return assoc('rowsPerPage', rowsPerPage, state);
+  }
 };
 
 const reducer = createReducer(common, handlers);

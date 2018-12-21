@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Header from '../components/Header';
 import { Packages } from '../components/packages';
-import Dashboard from '../components/Dashboard';
+// import Dashboard from '../components/Dashboard';
 import styles from './styles/layout';
 
 const Layout = props => {
@@ -30,9 +30,7 @@ const Layout = props => {
             </Grid>
             <Grid item xs={4}>
               <Grid container>
-                <Grid item xs={12}>
-                  <Dashboard />
-                </Grid>
+                <Grid item xs={12} />
                 <Grid item xs={12} />
               </Grid>
             </Grid>

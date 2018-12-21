@@ -28,6 +28,8 @@ import {
   clearSelected
 } from '../../models/packages/actions';
 
+import { setPage, setPageRows } from '../../models/ui/actions';
+
 const mapState = state => ({
   manager: state.common.manager,
   mode: state.common.mode,
@@ -102,10 +104,10 @@ const Packages = props => {
         <TableHeader
           packagesNames={dataSlices.map(d => d.name)}
           numSelected={Number(selected.length)}
-          rowCount={rowsPerPage}
+          rowCount={(packages && packages.length) || 0}
           order="asc"
           orderBy="name"
-          setPackages={sortedPackages => console.log(sortedPackages)}
+          setPackages={sortedPackages => void 0}
           onSelected={(name, force) =>
             dispatch(
               addSelected({
@@ -150,7 +152,10 @@ const Packages = props => {
           rowCount={(packages && packages.length) || 0}
           page={page}
           rowsPerPage={rowsPerPage}
-          handleChangePage={(e, page) => dispatch({ type: SET_PAGE, page })}
+          handleChangePage={(e, page) => dispatch(setPage({ page }))}
+          handleChangePageRows={e =>
+            dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
+          }
         />
       </Table>
     </section>
