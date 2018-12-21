@@ -16,7 +16,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import { tableHeaderStyles as styles } from './styles';
-import { addSelected } from '../../models/packages/actions';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -68,14 +67,14 @@ const TableHeader = props => {
   );
 
   return (
-    <TableHead className={classes.primaryTableHeader}>
+    <TableHead>
       <TableRow>
         <TableCell
           className={classnames(classes.tableCell, classes.tableHeadCell)}
         >
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={numSelected > 0 && numSelected === rowCount}
+            checked={numSelected === rowCount}
             onChange={handleSelectAll}
           />
         </TableCell>

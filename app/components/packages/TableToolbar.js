@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
 import { useIpc } from '../../commons/hooks/useIpc';
 import { withStyles } from '@material-ui/core/styles';
@@ -20,11 +21,16 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { tableToolbarStyles as styles } from './styles';
 
 const TableListToolbar = props => {
-  const { classes, selected, title, directory, mode } = props;
+  const { classes, selected, title, directory, mode, reload } = props;
 
   return (
     <section className={classes.root}>
-      <Toolbar>
+      <Toolbar
+        disableGutters={true}
+        className={cn({
+          [classes.highlight]: selected.length > 0
+        })}
+      >
         <div className={classes.header}>
           {selected && selected.length > 0 ? (
             <Typography
@@ -56,7 +62,7 @@ const TableListToolbar = props => {
           {selected.length === 0 ? (
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <Tooltip title="Reload list">
-                <IconButton aria-label="Reload list">
+                <IconButton aria-label="Reload list" onClick={reload}>
                   <RefreshIcon />
                 </IconButton>
               </Tooltip>

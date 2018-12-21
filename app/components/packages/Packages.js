@@ -4,11 +4,11 @@
  * Packages component
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
-
+import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -17,6 +17,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import useIpc from '../../commons/hooks/useIpc';
+import useForceUpdate from '../../commons/hooks/useForceUpdate';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
@@ -49,6 +50,7 @@ const getStyles = loading => {
 
 const Packages = props => {
   const { classes } = props;
+
   const {
     loading,
     packages,
@@ -60,6 +62,7 @@ const Packages = props => {
     selected
   } = useMappedState(mapState);
 
+  const [counter, setCounter] = useState(0);
   const dispatch = useDispatch();
   const isSelected = name => selected.indexOf(name) !== -1;
 
@@ -73,6 +76,8 @@ const Packages = props => {
 
   useEffect(
     () => {
+      console.log('useEffect');
+
       if (typeof newPackages === 'object' && newPackages.length) {
         dispatch(setPackagesSuccess(newPackages));
       }
@@ -80,8 +85,10 @@ const Packages = props => {
       if (typeof outdatedPackages === 'object' && outdatedPackages.length) {
         dispatch(setPackagesOutdatedSuccess(outdatedPackages));
       }
+
+      return void 0;
     },
-    [newPackages, outdatedPackages]
+    [newPackages, outdatedPackages, counter]
   );
 
   const dataSlices =
@@ -89,19 +96,20 @@ const Packages = props => {
     packages.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <section className={classes.root}>
+    <Paper className={classes.root}>
       <div className={classes.toolbar}>
         <TableToolbar
           title="Packages"
           mode={mode}
           directory={directory}
           selected={selected}
+          reload={e => setCounter(counter + 1)}
         />
       </div>
       {loading && <CircularProgress />}
       <Table
         style={getStyles(loading)}
-        className={cn(classes.tableResponsive, {
+        className={cn(classes.tablelist, {
           [classes.none]: loading
         })}
       >
@@ -162,7 +170,7 @@ const Packages = props => {
           }
         />
       </Table>
-    </section>
+    </Paper>
   );
 };
 

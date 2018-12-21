@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 export const listStyles = theme => ({
   root: {
@@ -45,7 +46,7 @@ export const listStyles = theme => ({
   }
 });
 
-export const tableHeaderStyles = () => ({
+export const tableHeaderStyles = theme => ({
   tableHeadCell: {
     color: 'inherit',
     fontSize: 14
@@ -72,7 +73,8 @@ export const tableToolbarStyles = theme => ({
   },
 
   header: {
-    flex: '0 0 auto'
+    flex: '0 0 auto',
+    padding: theme.spacing.unit
   },
   title: {
     display: 'flex',
@@ -84,5 +86,24 @@ export const tableToolbarStyles = theme => ({
   },
   directory: {
     fontSize: 12
+  },
+  highlight:
+    theme.palette.type === 'light'
+      ? {
+          color: theme.palette.secondary.main,
+          backgroundColor: lighten(theme.palette.secondary.light, 0.85)
+        }
+      : {
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.dark
+        },
+  spacer: {
+    flex: '1 1 100%'
+  },
+  actions: {
+    color: theme.palette.text.secondary
+  },
+  title: {
+    flex: '0 0 auto'
   }
 });
