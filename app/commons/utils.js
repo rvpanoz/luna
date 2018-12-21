@@ -28,6 +28,19 @@ const _writeToFile = content =>
 const _getKeys = obj => Object.keys(obj);
 const _getValues = obj => Object.values(obj);
 
+export const createActionCreator = namespace => actionType => {
+  const type = `${namespace}/${actionType}`;
+  const actionCreator = payload => ({
+    type,
+    payload
+  });
+  actionCreator.type = type;
+
+  Object.freeze(actionCreator);
+
+  return actionCreator;
+};
+
 /**
  * Object to array
  * @param {*} obj
@@ -137,4 +150,53 @@ export const readPackageJson = directory => {
     mk.log(error);
     return false;
   }
+};
+
+/**
+ *
+ * @param {*} str
+ */
+export const isJson = str => {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
+
+/**
+ *
+ * @param {*} version
+ */
+export const isBeta = version => {
+  if (!version) {
+    return null;
+  }
+
+  return /beta/g.test(version);
+};
+
+/**
+ *
+ * @param {*} version
+ */
+export const isRC = version => {
+  if (!version) {
+    return null;
+  }
+
+  return /rc/g.test(version);
+};
+
+/**
+ *
+ * @param {*} version
+ */
+export const isAlpha = version => {
+  if (!version) {
+    return null;
+  }
+
+  return /alpha/g.test(version);
 };

@@ -19,9 +19,6 @@ const Dashboard = props => {
   const switchMode = (mode, directory) =>
     dispatch({ type: SET_MODE, mode, directory: directory || null });
 
-  // eslint-disable-next-line
-  const toggleLoader = loading => dispatch({ type: TOGGLE_LOADER, loading });
-
   const openPackage = () => {
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),

@@ -1,30 +1,29 @@
-// @flow
-import fs from 'fs'
-import chalk from 'chalk'
-import { execSync } from 'child_process'
-import { dependencies } from '../../package.json'
+import fs from 'fs';
+import chalk from 'chalk';
+import { execSync } from 'child_process';
+import { dependencies } from '../../package.json';
 
-;(() => {
-  if (!dependencies) return
+(() => {
+  if (!dependencies) return;
 
-  const dependenciesKeys = Object.keys(dependencies)
+  const dependenciesKeys = Object.keys(dependencies);
   const nativeDeps = fs
     .readdirSync('node_modules')
-    .filter((folder) => fs.existsSync(`node_modules/${folder}/binding.gyp`))
+    .filter(folder => fs.existsSync(`node_modules/${folder}/binding.gyp`));
 
   // Find the reason for why the dependency is installed. If it is installed
   // because of a devDependency then that is okay. Warn when it is installed
   // because of a dependency
   const dependenciesObject = JSON.parse(
     execSync(`npm ls ${nativeDeps.join(' ')} --json`).toString()
-  )
-  const rootDependencies = Object.keys(dependenciesObject.dependencies)
-  const filteredRootDependencies = rootDependencies.filter((rootDependency) =>
+  );
+  const rootDependencies = Object.keys(dependenciesObject.dependencies);
+  const filteredRootDependencies = rootDependencies.filter(rootDependency =>
     dependenciesKeys.includes(rootDependency)
-  )
+  );
 
   if (filteredRootDependencies.length > 0) {
-    const plural = filteredRootDependencies.length > 1
+    const plural = filteredRootDependencies.length > 1;
     console.log(`
 
 ${chalk.whiteBright.bgYellow.bold(
@@ -53,8 +52,8 @@ ${chalk.bold(
     )}
 
 
-`)
+`);
 
-    process.exit(1)
+    process.exit(1);
   }
-})()
+})();

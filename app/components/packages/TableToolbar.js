@@ -5,11 +5,12 @@
  */
 
 import React from 'react';
+import { useDispatch } from 'redux-react-hook';
+import { useIpc } from '../../commons/hooks/useIpc';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import RefreshIcon from '@material-ui/icons/Refresh';

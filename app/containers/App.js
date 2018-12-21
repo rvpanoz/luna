@@ -1,6 +1,8 @@
 import { ipcRenderer } from 'electron';
 import React, { useEffect } from 'react';
+import { withErrorBoundary } from '../commons/hocs';
 import Layout from './Layout';
+
 import '../app.global.css';
 
 const App = () => {
@@ -19,4 +21,5 @@ const App = () => {
   );
 };
 
-export default App;
+const WithErrorBoundaryApp = withErrorBoundary(App);
+export default WithErrorBoundaryApp;

@@ -43,8 +43,8 @@ const debug = /--debug/.test(process.argv[2]);
 const needslog = /--log/.test(process.argv[3]);
 
 // window min resolution
-const MIN_WIDTH = 1366;
-const MIN_HEIGHT = 768;
+const MIN_WIDTH = 0;
+const MIN_HEIGHT = 0;
 
 // store initialization
 const Store = new ElectronStore();
@@ -66,9 +66,6 @@ if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
   const p = path.join(__dirname, '..', 'app', 'node_modules');
 
   require('electron-debug')();
-  // require('electron-reload')(__dirname, {
-  //   electron: path.join(__dirname, '..', '/node_modules/electron')
-  // });
   require('module').globalPaths.push(p);
 }
 
