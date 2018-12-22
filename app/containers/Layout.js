@@ -25,7 +25,7 @@ const Layout = props => {
       <section className={classes.main}>
         <div className={classes.container}>
           <Grid container justify="space-between">
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <Packages />
             </Grid>
             <Grid item xs={6}>

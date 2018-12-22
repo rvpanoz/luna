@@ -4,7 +4,7 @@
  * Packages component
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -19,6 +19,7 @@ import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageRow from './PackageRow';
 
+import { PACKAGE_GROUPS } from '../../constants/AppConstants';
 import { listStyles as styles } from './styles';
 
 import {
@@ -36,6 +37,7 @@ const mapState = state => ({
   directory: state.common.directory,
   page: state.common.page,
   rowsPerPage: state.common.rowsPerPage,
+  filters: state.packages.filters,
   loading: state.packages.loading,
   packages: state.packages.packages,
   packagesOutdated: state.packages.packagesOutdated,
@@ -54,6 +56,7 @@ const Packages = props => {
     packages,
     mode,
     page,
+    filters,
     rowsPerPage,
     directory,
     manager,
@@ -101,9 +104,36 @@ const Packages = props => {
     [newPackages, outdatedPackages, counter]
   );
 
+  const getFiltered = useCallback(
+    () => {
+      const groups = Object.keys(PACKAGE_GROUPS);
+      let allFiltered = [];
+
+      filters.forEach(filterName => {
+        let filtered =
+          packages &&
+          packages.filter(pkg => {
+            if (groups.indexOf(filterName) > -1) {
+              return pkg['__group'] === filterName;
+            }
+            return !!pkg[filterName];
+          });
+        allFiltered = allFiltered.concat(filtered);
+      });
+
+      return allFiltered;
+    },
+    [filters]
+  );
+
+  const filteredPackages = getFiltered();
+  const data =
+    Array.isArray(filteredPackages) && filteredPackages.length
+      ? filteredPackages
+      : packages;
+
   const dataSlices =
-    packages &&
-    packages.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <Loader loading={loading}>
