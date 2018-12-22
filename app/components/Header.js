@@ -8,6 +8,8 @@ import cn from 'classnames';
 import SearchBar from './SearchBar';
 import styles from './styles/header';
 
+import Settings from './Settings';
+
 function Header(props) {
   const { classes } = props;
 
@@ -38,10 +40,16 @@ function Header(props) {
         ref={menuWrapperRef}
         className={cn(classes.overlay, {
           [classes.active]: menuOpen,
-          [classes.non_active]: !menuOpen
+          [classes.inactive]: !menuOpen
         })}
       >
-        <nav ref={menuRef} />
+        <div
+          className={cn(classes.items, {
+            [classes.visible]: menuOpen
+          })}
+        >
+          <Settings />
+        </div>
       </div>
     </header>
   );

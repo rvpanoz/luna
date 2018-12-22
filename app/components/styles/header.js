@@ -3,6 +3,7 @@
 /*
  * Header styling
  */
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 export default theme => ({
   menu_container: {
@@ -73,47 +74,19 @@ export default theme => ({
     left: '0',
     width: '0',
     height: '100vh',
-    backgroundColor: 'rgba(34, 34, 34, 0.05)'
+    backgroundColor: lighten('#333545', 0.99)
   },
   active: { width: '15%', transition: 'all 300ms ease-in-out' },
-  non_active: { width: '0', transition: 'all 300ms ease-in-out' },
-  nav: {
+  inactive: { width: '0%', transition: 'all 300ms ease-in-out' },
+  visible: {
+    display: 'block !important',
+    transition: 'all 300ms ease-in-out'
+  },
+  items: {
     position: 'absolute',
-    top: '10%',
-    left: '25%',
-    transform: 'translate(-50%, -50%)'
-  },
-  nav: {
-    '& ul': { margin: '0', padding: '0', listStyle: 'none' },
-    '& li': { textAlign: 'center' },
-    '& a': {
-      color: '#fff',
-      fontSize: '14px',
-      textDecoration: 'none',
-      lineHeight: '100px',
-      cursor: 'pointer',
-      position: 'relative',
-      '&:before': {
-        content: "''",
-        position: 'absolute',
-        bottom: '-5px',
-        left: '0',
-        width: '100%',
-        height: '1px',
-        backgroundColor: '#222',
-        transition: 'all 300ms ease-in-out',
-        transform: 'scaleX(0)'
-      },
-      '&:hover': {
-        '&:before': {
-          transform: 'scaleX(1)'
-        }
-      }
-    }
-  },
-  drawer: {
-    width: 200,
-    flexShrink: 0,
-    whiteSpace: 'nowrap'
+    top: '5%',
+    left: '5%',
+    display: 'none',
+    transition: 'all 300ms ease-in-out'
   }
 });
