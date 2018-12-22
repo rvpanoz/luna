@@ -25,7 +25,6 @@ import { setMode } from '../../models/ui/actions';
 import { APP_MODES } from '../../constants/AppConstants';
 
 import { tableToolbarStyles as styles } from './styles';
-import { Table } from '@material-ui/core';
 
 const TableListToolbar = props => {
   const { classes, selected, title, directory, mode, reload } = props;
@@ -38,8 +37,8 @@ const TableListToolbar = props => {
     reload();
   };
 
-  const openFilters = e => {
-    setAnchorEl(e.target);
+  const openFilters = (e, close) => {
+    setAnchorEl(close ? null : e.target);
     toggleFilters(!filtersOn);
   };
 
@@ -102,7 +101,7 @@ const TableListToolbar = props => {
             anchorEl={anchorEl}
             onClose={e => toggleFilters(!filtersOn)}
           >
-            <TableFilters mode={mode} />
+            <TableFilters mode={mode} close={() => openFilters(null, true)} />
           </Popover>
         </div>
         <div className={classes.spacer} />

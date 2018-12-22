@@ -109,7 +109,7 @@ export const tableFiltersStyles = theme => ({
     padding: theme.spacing.unit,
     margin: theme.spacing.unit,
     '& > h2': {
-      color: theme.palette.secondary.light,
+      color: theme.palette.primary.light,
       fontSize: 18
     }
   },

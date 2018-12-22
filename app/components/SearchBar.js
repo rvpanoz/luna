@@ -9,20 +9,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import SearchIcon from '@material-ui/icons/Search';
 
-const styles = theme => ({
-  root: {
-    width: '100%'
-  },
-  textField: {
-    margin: 0,
-    width: 200
-  },
-  dense: {
-    position: 'relative',
-    marginTop: 10,
-    left: '50%'
-  }
-});
+import styles from './styles/searchBar';
 
 const SearchBar = props => {
   const { classes } = props;

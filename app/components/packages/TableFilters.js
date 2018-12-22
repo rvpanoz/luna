@@ -30,7 +30,7 @@ const mapState = state => ({
 });
 
 const ListFilters = props => {
-  const { classes, mode } = props;
+  const { classes, mode, close } = props;
 
   const dispatch = useDispatch();
   const { filters } = useMappedState(mapState);
@@ -126,7 +126,7 @@ const ListFilters = props => {
             color="secondary"
             onClick={e => {
               if (filters && filters.length) {
-                clearFilters();
+                dispatch(clearFilters());
               }
               return false;
             }}
@@ -134,10 +134,7 @@ const ListFilters = props => {
             <FilterIcon className={classes.leftIcon} />
             Clear
           </Button>
-          <Button
-            color="primary"
-            onClick={() => console.log('close filters..')}
-          >
+          <Button color="primary" onClick={close}>
             <ClearIcon className={classes.leftIcon} />
             Close
           </Button>
