@@ -19,9 +19,9 @@ import { tableHeaderStyles as styles } from './styles';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-  { id: 'version-id', disablePadding: true, label: 'Version' },
-  { id: 'latest-id', disablePadding: true, label: 'Latest' },
-  { id: 'group-id', disablePadding: true, label: 'Group' }
+  { id: 'version', disablePadding: true, label: 'Version' },
+  { id: 'latest', disablePadding: true, label: 'Latest' },
+  { id: 'group', disablePadding: true, label: 'Group' }
 ];
 
 const TableHeader = props => {
@@ -32,12 +32,10 @@ const TableHeader = props => {
     packagesNames,
     onSelected,
     onClearSelected,
-    setPackages
+    toggleSort,
+    sortDir,
+    sortBy
   } = props;
-
-  const [order, setOrder] = useState('asc');
-  const [orderBy, setOrderBy] = useState('name');
-  const [sortedPackages, sortPackages] = useState([]);
 
   const handleSelectAll = (e, checked) => {
     checked
@@ -45,26 +43,6 @@ const TableHeader = props => {
         packagesNames.forEach(pkgName => onSelected(pkgName, true))
       : onClearSelected();
   };
-
-  const handleSort = (e, property) => {
-    const { packages } = props;
-    const newOrderBy = order === 'desc' ? 'asc' : 'desc';
-
-    const data =
-      order === 'asc'
-        ? packages.sort((a, b) => (a[orderBy] < b[orderBy] ? -1 : 1))
-        : packages.sort((a, b) => (b[orderBy] < a[orderBy] ? -1 : 1));
-
-    sortPackages(data);
-    setOrder(newOrderBy);
-  };
-
-  useEffect(
-    () => {
-      setPackages(sortedPackages);
-    },
-    [order, orderBy]
-  );
 
   return (
     <TableHead>
@@ -80,20 +58,20 @@ const TableHeader = props => {
         </TableCell>
         {columnData.map(column => {
           const needSort =
-            and(!!orderBy, !!column.id) && and(true, orderBy === column.id);
+            and(!!sortBy, !!column.id) && and(true, sortBy === column.id);
 
           return (
             <TableCell
               className={classes.tableCell}
               key={column.id}
               padding={column.disablePadding ? 'none' : 'default'}
-              sortDirection={orderBy === column.id ? order : false}
+              sortDirection={sortBy === column.id ? sortDir : false}
             >
               {needSort ? (
                 <TableSortLabel
-                  active={orderBy === column.id}
-                  direction={order}
-                  onClick={e => handleSort(e, column.id)}
+                  active={sortBy === column.id}
+                  direction={sortDir}
+                  onClick={e => toggleSort(e, column.id)}
                 >
                   {column.label}
                 </TableSortLabel>
@@ -110,9 +88,9 @@ const TableHeader = props => {
 
 TableHeader.propTypes = {
   numSelected: PropTypes.number.isRequired,
-  order: PropTypes.string.isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
+  rowCount: PropTypes.number.isRequired,
+  sortBy: PropTypes.string,
+  sortDir: PropTypes.string
 };
 
 export default withStyles(styles)(TableHeader);
