@@ -37,15 +37,13 @@ export const createActionCreator = namespace => actionType => {
  * @param {*} obj
  */
 export const objectEntries = obj => {
-  let ownProps = _getKeys(obj),
-    i = ownProps.length,
-    resArray = new Array(i);
+  let ownProps = _getKeys(obj);
+  let i = ownProps.length;
+  let resArray = new Array(i);
 
   while (i--) resArray[i] = [ownProps[i], obj[ownProps[i]]];
   return resArray;
 };
-
-export const isArray = data => Array.isArray(data);
 
 /**
  * Validate url
@@ -79,7 +77,7 @@ export function firstToUpper(str) {
  * @param {*} mode
  * @param {*} directory
  */
-export const parseMap = (response, mode, directory) => {
+export const parseMap = (response, mode, directory, outdated) => {
   try {
     const packages = JSON.parse(response);
     const data = pick(['dependencies'], packages);
@@ -98,6 +96,7 @@ export const parseMap = (response, mode, directory) => {
 
     return dataArray.map(pkgArr => {
       const [pkgName, details] = pkgArr;
+
       let group = null;
       let hasPeerMissing = false;
       let found = false;
@@ -108,7 +107,9 @@ export const parseMap = (response, mode, directory) => {
         const packageJSON = readPackageJson(directory);
 
         if (!Boolean(packageJSON)) {
-          mk.log(`could not parse package.json in ${directory}`);
+          mk.log(
+            `utils[parseMap]: could not parse package.json in ${directory}`
+          );
           return;
         }
 
@@ -122,8 +123,8 @@ export const parseMap = (response, mode, directory) => {
         });
       }
 
-      // TODO: destruct details
       return merge(details, {
+        name: pkgName,
         __group: group,
         __error: hasError,
         __hasPeerMissing: hasPeerMissing

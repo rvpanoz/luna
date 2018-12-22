@@ -11,15 +11,14 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
 import Loader from '../layout/Loader';
 
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
+import PackageRow from './PackageRow';
+
 import { listStyles as styles } from './styles';
 
 import {
@@ -73,6 +72,16 @@ const Packages = props => {
     directory,
     counter
   });
+
+  const setSelected = name => dispatch(addSelected({ name }));
+
+  const isPackageOutdated = name => {
+    return [
+      Array.isArray(outdatedPackages) &&
+        outdatedPackages.some(o => o.name === name),
+      outdatedPackages.find(f => f.name === name)
+    ];
+  };
 
   /**
    * Hint: use counter to run effect again
@@ -135,30 +144,17 @@ const Packages = props => {
           <TableBody>
             {dataSlices &&
               dataSlices.map(pkg => {
-                const { name, version } = pkg;
+                const [isOutdated, outdatePkg] = isPackageOutdated(pkg.name);
 
                 return (
-                  <TableRow key={`pkg-${name}`}>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isSelected(name)}
-                        onClick={e => dispatch(addSelected({ name }))}
-                      />
-                    </TableCell>
-                    <TableCell padding="none" className={classes.tableCell}>
-                      <span
-                        style={{
-                          display: 'inline-flex',
-                          overflowWrap: 'break-word'
-                        }}
-                      >
-                        {name}
-                      </span>
-                    </TableCell>
-                    <TableCell padding="none" className={classes.tableCell}>
-                      {version}
-                    </TableCell>
-                  </TableRow>
+                  <PackageRow
+                    {...pkg}
+                    key={`pkg-${pkg.name}`}
+                    isSelected={isSelected}
+                    setSelected={setSelected}
+                    isOutdated={isOutdated}
+                    latest={outdatePkg && outdatePkg.latest}
+                  />
                 );
               })}
           </TableBody>
