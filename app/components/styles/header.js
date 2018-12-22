@@ -110,5 +110,10 @@ export default theme => ({
         }
       }
     }
+  },
+  drawer: {
+    width: 200,
+    flexShrink: 0,
+    whiteSpace: 'nowrap'
   }
 });

@@ -41,13 +41,7 @@ function Header(props) {
           [classes.non_active]: !menuOpen
         })}
       >
-        <nav ref={menuRef}>
-          {/* <ul>
-            <li>
-              <a href="#">Analyze</a>
-            </li>
-          </ul> */}
-        </nav>
+        <nav ref={menuRef} />
       </div>
     </header>
   );

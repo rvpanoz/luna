@@ -88,9 +88,9 @@ const TableHeader = props => {
 
 TableHeader.propTypes = {
   numSelected: PropTypes.number.isRequired,
-  order: PropTypes.string.isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired
+  rowCount: PropTypes.number.isRequired,
+  sortBy: PropTypes.string,
+  sortDir: PropTypes.string
 };
 
 export default withStyles(styles)(TableHeader);
