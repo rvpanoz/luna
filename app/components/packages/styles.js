@@ -74,15 +74,13 @@ export const tableToolbarStyles = theme => ({
 
   header: {
     flex: '0 0 auto',
-    padding: theme.spacing.unit
+    padding: theme.spacing.unit * 2 + 4
   },
+
   title: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'flex-start',
-    '& > h1': {
-      fontSize: 18
-    }
+    justifyContent: 'flex-start'
   },
   directory: {
     fontSize: 12
@@ -102,8 +100,5 @@ export const tableToolbarStyles = theme => ({
   },
   actions: {
     color: theme.palette.text.secondary
-  },
-  title: {
-    flex: '0 0 auto'
   }
 });

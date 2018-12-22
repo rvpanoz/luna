@@ -9,7 +9,7 @@ import { parseMap } from '../utils';
 import { setPackagesStart } from '../../models/packages/actions';
 
 const useIpc = (channel, options) => {
-  const { ipcEvent, mode, directory } = options || {};
+  const { ipcEvent, mode, directory, counter } = options || {};
   const listenTo = `${ipcEvent}-close`;
 
   const [dataSet, setData] = useState([]);
@@ -40,7 +40,7 @@ const useIpc = (channel, options) => {
       ipcRenderer.send(channel, options);
       return () => ipcRenderer.removeAllListeners(listenTo);
     },
-    [options.directory]
+    [counter]
   );
 
   return [dataSet, outdatedSet, error];

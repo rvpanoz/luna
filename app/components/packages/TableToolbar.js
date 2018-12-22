@@ -33,16 +33,12 @@ const TableListToolbar = props => {
       >
         <div className={classes.header}>
           {selected && selected.length > 0 ? (
-            <Typography
-              color="secondary"
-              component="h1"
-              className={classes.headline}
-            >
+            <Typography color="primary" component="h1" variant="title">
               {selected.length} selected
             </Typography>
           ) : (
             <div className={classes.title}>
-              <Typography color="secondary" component="h1">
+              <Typography color="primary" component="h1" variant="title">
                 {title}
               </Typography>
               {directory ? (

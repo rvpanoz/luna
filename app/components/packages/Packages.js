@@ -14,10 +14,9 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Loader from '../layout/Loader';
 
 import useIpc from '../../commons/hooks/useIpc';
-import useForceUpdate from '../../commons/hooks/useForceUpdate';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
@@ -71,13 +70,15 @@ const Packages = props => {
     cmd: ['list', 'outdated'],
     manager,
     mode,
-    directory
+    directory,
+    counter
   });
 
+  /**
+   * Hint: use counter to run effect again
+   */
   useEffect(
     () => {
-      console.log('useEffect');
-
       if (typeof newPackages === 'object' && newPackages.length) {
         dispatch(setPackagesSuccess(newPackages));
       }
@@ -96,81 +97,83 @@ const Packages = props => {
     packages.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <Paper className={classes.root}>
-      <div className={classes.toolbar}>
-        <TableToolbar
-          title="Packages"
-          mode={mode}
-          directory={directory}
-          selected={selected}
-          reload={e => setCounter(counter + 1)}
-        />
-      </div>
-      {loading && <CircularProgress />}
-      <Table
-        style={getStyles(loading)}
-        className={cn(classes.tablelist, {
-          [classes.none]: loading
-        })}
-      >
-        <TableHeader
-          packagesNames={dataSlices.map(d => d.name)}
-          numSelected={Number(selected.length)}
-          rowCount={(packages && packages.length) || 0}
-          order="asc"
-          orderBy="name"
-          setPackages={sortedPackages => void 0}
-          onSelected={(name, force) =>
-            dispatch(
-              addSelected({
-                name,
-                force
-              })
-            )
-          }
-          onClearSelected={() => dispatch(clearSelected())}
-        />
-        <TableBody>
-          {dataSlices &&
-            dataSlices.map(pkg => {
-              const { name, version } = pkg;
+    <Loader loading={loading}>
+      <Paper className={classes.root}>
+        <div className={classes.toolbar}>
+          <TableToolbar
+            title="Packages"
+            mode={mode}
+            directory={directory}
+            selected={selected}
+            reload={e => setCounter(counter + 1)} // triggers render
+          />
+        </div>
 
-              return (
-                <TableRow key={`pkg-${name}`}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected(name)}
-                      onClick={e => dispatch(addSelected({ name }))}
-                    />
-                  </TableCell>
-                  <TableCell padding="none" className={classes.tableCell}>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        overflowWrap: 'break-word'
-                      }}
-                    >
-                      {name}
-                    </span>
-                  </TableCell>
-                  <TableCell padding="none" className={classes.tableCell}>
-                    {version}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </TableBody>
-        <TableFooter
-          rowCount={(packages && packages.length) || 0}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          handleChangePage={(e, page) => dispatch(setPage({ page }))}
-          handleChangePageRows={e =>
-            dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
-          }
-        />
-      </Table>
-    </Paper>
+        <Table
+          style={getStyles(loading)}
+          className={cn(classes.tablelist, {
+            [classes.none]: loading
+          })}
+        >
+          <TableHeader
+            packagesNames={dataSlices.map(d => d.name)}
+            numSelected={Number(selected.length)}
+            rowCount={(packages && packages.length) || 0}
+            order="asc"
+            orderBy="name"
+            setPackages={sortedPackages => void 0}
+            onSelected={(name, force) =>
+              dispatch(
+                addSelected({
+                  name,
+                  force
+                })
+              )
+            }
+            onClearSelected={() => dispatch(clearSelected())}
+          />
+          <TableBody>
+            {dataSlices &&
+              dataSlices.map(pkg => {
+                const { name, version } = pkg;
+
+                return (
+                  <TableRow key={`pkg-${name}`}>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={isSelected(name)}
+                        onClick={e => dispatch(addSelected({ name }))}
+                      />
+                    </TableCell>
+                    <TableCell padding="none" className={classes.tableCell}>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          overflowWrap: 'break-word'
+                        }}
+                      >
+                        {name}
+                      </span>
+                    </TableCell>
+                    <TableCell padding="none" className={classes.tableCell}>
+                      {version}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+          </TableBody>
+          <TableFooter
+            rowCount={(packages && packages.length) || 0}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            handleChangePage={(e, page) => dispatch(setPage({ page }))}
+            handleChangePageRows={e =>
+              dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
+            }
+          />
+        </Table>
+      </Paper>
+    </Loader>
   );
 };
 
