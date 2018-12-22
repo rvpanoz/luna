@@ -63,6 +63,8 @@ const Packages = props => {
     selected
   } = useMappedState(mapState);
 
+  const [sortDir, setSortDir] = useState('asc');
+  const [sortBy, setSortBy] = useState('name');
   const [counter, setCounter] = useState(0);
   const dispatch = useDispatch();
   const isSelected = name => selected.indexOf(name) !== -1;
@@ -77,6 +79,12 @@ const Packages = props => {
   });
 
   const setSelected = name => dispatch(addSelected({ name }));
+  const toggleSort = prop => {
+    const newSortBy = sortDir === 'desc' ? 'asc' : 'desc';
+
+    setSortBy(prop);
+    setSortDir(newSortBy);
+  };
 
   const isPackageOutdated = name => {
     return [
@@ -126,6 +134,23 @@ const Packages = props => {
     [filters]
   );
 
+  useEffect(
+    () => {
+      const data = newPackages.slice(0); //clone newPackages
+
+      if (!data || !data.length) {
+        return;
+      }
+
+      sortDir === 'asc'
+        ? data.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
+        : data.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
+
+      dispatch(setPackagesSuccess(data));
+    },
+    [sortDir, sortBy]
+  );
+
   const filteredPackages = getFiltered();
   const data =
     Array.isArray(filteredPackages) && filteredPackages.length
@@ -155,12 +180,13 @@ const Packages = props => {
           })}
         >
           <TableHeader
-            packagesNames={dataSlices.map(d => d.name)}
+            packages={dataSlices.map(d => d.name)}
             numSelected={Number(selected.length)}
-            rowCount={(packages && packages.length) || 0}
-            order="asc"
-            orderBy="name"
-            setPackages={sortedPackages => void 0}
+            rowCount={(data && data.length) || 0}
+            sortBy={sortBy}
+            sortDir={sortDir}
+            setSortBy={(e, prop) => setSortBy(prop)}
+            toggleSort={(e, prop) => toggleSort(prop)}
             onSelected={(name, force) =>
               dispatch(
                 addSelected({
@@ -189,7 +215,7 @@ const Packages = props => {
               })}
           </TableBody>
           <TableFooter
-            rowCount={(packages && packages.length) || 0}
+            rowCount={(data && data.length) || 0}
             page={page}
             rowsPerPage={rowsPerPage}
             handleChangePage={(e, page) => dispatch(setPage({ page }))}
