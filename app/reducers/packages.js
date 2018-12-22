@@ -8,8 +8,10 @@
 import { identity, merge, assoc, prepend, prop, propOr, remove } from 'ramda';
 import initialState from './initialState';
 import {
+  addFilter,
   addSelected,
   clearSelected,
+  clearFilters,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
@@ -24,6 +26,17 @@ const createReducer = (packagesState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [addFilter.type]: (state, { payload }) => {
+    const { filterName } = payload;
+    const { filters } = state;
+    const idx = filters.indexOf(filterName);
+
+    return merge(state, {
+      page: 0,
+      filters:
+        idx !== -1 ? remove(idx, 1, filters) : prepend(filterName, filters)
+    });
+  },
   [addSelected.type]: (state, action) => {
     const { selected } = state;
     const {
@@ -44,6 +57,7 @@ const handlers = {
 
     return assoc('selected', newSelected, state);
   },
+  [clearFilters.type]: state => assoc('filters', [], state),
   [clearSelected.type]: state => assoc('selected', [], state),
   [setPackagesSuccess.type]: (state, { payload }) =>
     merge(state, {

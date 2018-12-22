@@ -4,7 +4,7 @@
  * Toolbar
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
 import { remote } from 'electron';
@@ -14,25 +14,33 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import Popover from '@material-ui/core/Popover';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
+import TableFilters from './TableFilters';
 import { setMode } from '../../models/ui/actions';
 import { APP_MODES } from '../../constants/AppConstants';
 
 import { tableToolbarStyles as styles } from './styles';
-import { APP_GLOBALS } from '../../constants/AppConstants';
+import { Table } from '@material-ui/core';
 
 const TableListToolbar = props => {
   const { classes, selected, title, directory, mode, reload } = props;
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [filtersOn, toggleFilters] = useState(false);
   const dispatch = useDispatch();
 
   const switchMode = (mode, directory) => {
     dispatch(setMode({ mode, directory }));
     reload();
+  };
+
+  const openFilters = e => {
+    setAnchorEl(e.target);
+    toggleFilters(!filtersOn);
   };
 
   const openPackage = () => {
@@ -88,6 +96,15 @@ const TableListToolbar = props => {
             </div>
           )}
         </div>
+        <div className={classes.filters}>
+          <Popover
+            open={filtersOn}
+            anchorEl={anchorEl}
+            onClose={e => toggleFilters(!filtersOn)}
+          >
+            <TableFilters mode={mode} />
+          </Popover>
+        </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
           {selected.length === 0 ? (
@@ -115,7 +132,7 @@ const TableListToolbar = props => {
                 </IconButton>
               </Tooltip>
               <Tooltip title="Show filters">
-                <IconButton aria-label="Show filters">
+                <IconButton aria-label="Show filters" onClick={openFilters}>
                   <FilterListIcon />
                 </IconButton>
               </Tooltip>

@@ -102,3 +102,30 @@ export const tableToolbarStyles = theme => ({
     color: theme.palette.text.secondary
   }
 });
+
+export const tableFiltersStyles = theme => ({
+  root: {
+    maxWidth: 400,
+    padding: theme.spacing.unit,
+    margin: theme.spacing.unit,
+    '& > h2': {
+      color: theme.palette.secondary.light,
+      fontSize: 18
+    }
+  },
+  filterItems: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    padding: theme.spacing.unit * 2
+  },
+  bottomDivider: {
+    margin: theme.spacing.unit
+  },
+  headline: {
+    marginBottom: theme.spacing.unit
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit / 2
+  }
+});
