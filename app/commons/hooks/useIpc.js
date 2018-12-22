@@ -9,12 +9,12 @@ import { parseMap } from '../utils';
 import { setPackagesStart } from '../../models/packages/actions';
 
 const useIpc = (channel, options) => {
-  const { ipcEvent, mode, directory } = options || {};
+  const { ipcEvent, mode, directory, counter } = options || {};
   const listenTo = `${ipcEvent}-close`;
 
   const [dataSet, setData] = useState([]);
+  const [outdatedSet, setOutdated] = useState([]);
   const [error, setError] = useState(null);
-  const [loading, toggleLoader] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(
@@ -28,20 +28,22 @@ const useIpc = (channel, options) => {
         }
 
         if (Array.isArray(parsedPackages)) {
-          setData(parsedPackages);
-          toggleLoader(false);
+          if (cmd[0] === 'list') {
+            setData(parsedPackages);
+          } else {
+            setOutdated(parsedPackages);
+          }
         }
       });
 
-      toggleLoader(true);
       dispatch(setPackagesStart());
       ipcRenderer.send(channel, options);
       return () => ipcRenderer.removeAllListeners(listenTo);
     },
-    [options.directory]
+    [counter]
   );
 
-  return [dataSet, loading, error];
+  return [dataSet, outdatedSet, error];
 };
 
 export default useIpc;

@@ -25,10 +25,10 @@ const Layout = props => {
       <section className={classes.main}>
         <div className={classes.container}>
           <Grid container justify="space-between">
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               <Packages />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <Grid container>
                 <Grid item xs={12} />
                 <Grid item xs={12} />

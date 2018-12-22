@@ -12,6 +12,7 @@ import {
   clearSelected,
   setPackagesStart,
   setPackagesSuccess,
+  setPackagesOutdatedSuccess,
   setPackagesError
 } from '../models/packages/actions';
 
@@ -44,9 +45,14 @@ const handlers = {
     return assoc('selected', newSelected, state);
   },
   [clearSelected.type]: state => assoc('selected', [], state),
-  [setPackagesSuccess.type]: (state, action) =>
+  [setPackagesSuccess.type]: (state, { payload }) =>
     merge(state, {
-      packages: action.payload,
+      packages: payload,
+      loading: false
+    }),
+  [setPackagesOutdatedSuccess.type]: (state, { payload }) =>
+    merge(state, {
+      packagesOutdated: payload,
       loading: false
     }),
   [setPackagesError.type]: (state, action) =>

@@ -78,11 +78,42 @@ exports.list = (options, callback) => {
   const { mode, directory } = options || {};
 
   if (!callback || typeof callback !== 'function') {
-    Promise.reject('callback must be given and must be a function');
+    Promise.reject(
+      'manager[list]: callback must be given and must be a function'
+    );
   }
 
   if (!mode || typeof mode !== 'string') {
-    Promise.reject('mode must be given and must be one of "GLOBAL" or "LOCAL"');
+    Promise.reject(
+      'manager[list]: mode must be given and must be one of "GLOBAL" or "LOCAL"'
+    );
+  }
+
+  const commandArgs =
+    mode === 'GLOBAL' && !directory
+      ? [].concat(command, defaultsArgs.list, '-g')
+      : [].concat(command, defaultsArgs.list);
+
+  const run = [].concat(commandArgs);
+
+  // returns a Promise
+  return execute('npm', run, mode, directory, callback);
+};
+
+exports.outdated = (options, callback) => {
+  const command = 'outdated';
+  const { mode, directory } = options || {};
+
+  if (!callback || typeof callback !== 'function') {
+    Promise.reject(
+      'manager[outdated]: callback must be given and must be a function'
+    );
+  }
+
+  if (!mode || typeof mode !== 'string') {
+    Promise.reject(
+      'manager[outdated]: mode must be given and must be one of "GLOBAL" or "LOCAL"'
+    );
   }
 
   const commandArgs =

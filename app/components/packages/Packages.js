@@ -4,27 +4,27 @@
  * Packages component
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
-
+import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Loader from '../layout/Loader';
 
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
+import PackageRow from './PackageRow';
+
 import { listStyles as styles } from './styles';
 
 import {
   addSelected,
   setPackagesSuccess,
+  setPackagesOutdatedSuccess,
   clearSelected
 } from '../../models/packages/actions';
 
@@ -38,6 +38,7 @@ const mapState = state => ({
   rowsPerPage: state.common.rowsPerPage,
   loading: state.packages.loading,
   packages: state.packages.packages,
+  packagesOutdated: state.packages.packagesOutdated,
   selected: state.packages.selected
 });
 
@@ -47,6 +48,7 @@ const getStyles = loading => {
 
 const Packages = props => {
   const { classes } = props;
+
   const {
     loading,
     packages,
@@ -58,26 +60,45 @@ const Packages = props => {
     selected
   } = useMappedState(mapState);
 
+  const [counter, setCounter] = useState(0);
   const dispatch = useDispatch();
   const isSelected = name => selected.indexOf(name) !== -1;
 
-  const [newPackages] = useIpc('ipc-event', {
+  const [newPackages, outdatedPackages, error] = useIpc('ipc-event', {
     ipcEvent: 'get-packages',
-    cmd: ['list'],
+    cmd: ['list', 'outdated'],
     manager,
     mode,
-    directory
+    directory,
+    counter
   });
 
+  const setSelected = name => dispatch(addSelected({ name }));
+
+  const isPackageOutdated = name => {
+    return [
+      Array.isArray(outdatedPackages) &&
+        outdatedPackages.some(o => o.name === name),
+      outdatedPackages.find(f => f.name === name)
+    ];
+  };
+
+  /**
+   * Hint: use counter to run effect again
+   */
   useEffect(
     () => {
-      if (typeof newPackages === 'string' || !Boolean(newPackages.length)) {
-        return;
+      if (typeof newPackages === 'object' && newPackages.length) {
+        dispatch(setPackagesSuccess(newPackages));
       }
 
-      dispatch(setPackagesSuccess(newPackages));
+      if (typeof outdatedPackages === 'object' && outdatedPackages.length) {
+        dispatch(setPackagesOutdatedSuccess(outdatedPackages));
+      }
+
+      return void 0;
     },
-    [newPackages, mode, directory]
+    [newPackages, outdatedPackages, counter]
   );
 
   const dataSlices =
@@ -85,80 +106,70 @@ const Packages = props => {
     packages.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <section className={classes.root}>
-      <div className={classes.toolbar}>
-        <TableToolbar
-          title="Packages"
-          mode={mode}
-          directory={directory}
-          selected={selected}
-        />
-      </div>
-      {loading && <CircularProgress />}
-      <Table
-        style={getStyles(loading)}
-        className={cn(classes.tableResponsive, {
-          [classes.none]: loading
-        })}
-      >
-        <TableHeader
-          packagesNames={dataSlices.map(d => d.name)}
-          numSelected={Number(selected.length)}
-          rowCount={(packages && packages.length) || 0}
-          order="asc"
-          orderBy="name"
-          setPackages={sortedPackages => void 0}
-          onSelected={(name, force) =>
-            dispatch(
-              addSelected({
-                name,
-                force
-              })
-            )
-          }
-          onClearSelected={() => dispatch(clearSelected())}
-        />
-        <TableBody>
-          {dataSlices &&
-            dataSlices.map(pkg => {
-              const { name, version } = pkg;
+    <Loader loading={loading}>
+      <Paper className={classes.root}>
+        <div className={classes.toolbar}>
+          <TableToolbar
+            title="Packages"
+            mode={mode}
+            directory={directory}
+            selected={selected}
+            reload={e => setCounter(counter + 1)} // triggers render
+          />
+        </div>
 
-              return (
-                <TableRow key={`pkg-${name}`}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected(name)}
-                      onClick={e => dispatch(addSelected({ name }))}
-                    />
-                  </TableCell>
-                  <TableCell padding="none" className={classes.tableCell}>
-                    <span
-                      style={{
-                        display: 'inline-flex',
-                        overflowWrap: 'break-word'
-                      }}
-                    >
-                      {name}
-                    </span>
-                  </TableCell>
-                  <TableCell padding="none" className={classes.tableCell}>
-                    {version}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-        </TableBody>
-        <TableFooter
-          rowCount={(packages && packages.length) || 0}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          handleChangePage={(e, page) => dispatch(setPage({ page }))}
-          handleChangePageRows={e =>
-            dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
-          }
-        />
-      </Table>
-    </section>
+        <Table
+          style={getStyles(loading)}
+          className={cn(classes.tablelist, {
+            [classes.none]: loading
+          })}
+        >
+          <TableHeader
+            packagesNames={dataSlices.map(d => d.name)}
+            numSelected={Number(selected.length)}
+            rowCount={(packages && packages.length) || 0}
+            order="asc"
+            orderBy="name"
+            setPackages={sortedPackages => void 0}
+            onSelected={(name, force) =>
+              dispatch(
+                addSelected({
+                  name,
+                  force
+                })
+              )
+            }
+            onClearSelected={() => dispatch(clearSelected())}
+          />
+          <TableBody>
+            {dataSlices &&
+              dataSlices.map(pkg => {
+                const [isOutdated, outdatePkg] = isPackageOutdated(pkg.name);
+
+                return (
+                  <PackageRow
+                    {...pkg}
+                    key={`pkg-${pkg.name}`}
+                    isSelected={isSelected}
+                    setSelected={setSelected}
+                    isOutdated={isOutdated}
+                    latest={outdatePkg && outdatePkg.latest}
+                  />
+                );
+              })}
+          </TableBody>
+          <TableFooter
+            rowCount={(packages && packages.length) || 0}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            handleChangePage={(e, page) => dispatch(setPage({ page }))}
+            handleChangePageRows={e =>
+              dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
+            }
+          />
+        </Table>
+      </Paper>
+    </Loader>
   );
 };
 
