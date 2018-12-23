@@ -12,7 +12,7 @@ html,
 }
 
 body {
-  font-family: 'Lato', sans-serif;
+  font-family: 'Regular', 'Roboto', 'Comic Sans MS', cursive, sans-serif;
   overflow-y: hidden;
 }
 
@@ -32,4 +32,39 @@ body::before {
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
   background: #999;
+}
+
+@font-face {
+  font-family: 'Regular';
+  src: local('Regular'), local('Regular'),
+    url('./assets/fonts/Regular.woff') format('woff'),
+    url('./assets/fonts/Regular.woff2') format('woff2'),
+    url('./assets/fonts/Regular.ttf') format('truetype'),
+    url('./assets/fonts/Regular.eot') format('eot');
+}
+
+@font-face {
+  font-family: 'Light';
+  src: local('Light'), local('Light'),
+    url('/assets/fonts/Light.woff') format('woff'),
+    url('/assets/fonts/Light.woff2') format('woff2'),
+    url('/assets/fonts/Light.ttf') format('truetype'),
+    url('/assets/fonts/Light.eot') format('eot');
+}
+
+.material-icons {
+  font-family: 'Material Icons', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  font-feature-settings: 'aalt';
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
 }

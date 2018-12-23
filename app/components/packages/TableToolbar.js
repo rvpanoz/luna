@@ -4,9 +4,9 @@
  * Toolbar
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
-import { useDispatch } from 'redux-react-hook';
+import { useDispatch, useMappedState } from 'redux-react-hook';
 import { remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -20,14 +20,22 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
+import useIpc from '../../commons/hooks/useIpc';
 import TableFilters from './TableFilters';
 import { setMode } from '../../models/ui/actions';
 import { APP_MODES } from '../../constants/AppConstants';
 
 import { tableToolbarStyles as styles } from './styles';
 
+const mapState = state => ({
+  manager: state.common.manager,
+  mode: state.common.mode,
+  directory: state.common.directory
+});
+
 const TableListToolbar = props => {
   const { classes, selected, title, directory, mode, reload } = props;
+  const { manager } = useMappedState(mapState);
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
   const dispatch = useDispatch();
@@ -63,6 +71,28 @@ const TableListToolbar = props => {
         }
       }
     );
+  };
+
+  const handleUninstall = e => {
+    const { selected } = props;
+
+    if (selected && selected.length) {
+      remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          title: 'Confirmation',
+          type: 'question',
+          message: 'Would you like to uninstall the selected packages?',
+          buttons: ['Cancel', 'Uninstall']
+        },
+        btnIdx => {
+          if (Boolean(btnIdx) === true) {
+            // TODO: do uninstall..
+          }
+        }
+      );
+    }
+    return false;
   };
 
   return (
@@ -138,7 +168,10 @@ const TableListToolbar = props => {
             </div>
           ) : (
             <Tooltip title="Uninstall selected">
-              <IconButton aria-label="uninstall selected">
+              <IconButton
+                aria-label="uninstall selected"
+                onClick={e => handleUninstall()}
+              >
                 <DeleteIcon />
               </IconButton>
             </Tooltip>

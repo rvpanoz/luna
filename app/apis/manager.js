@@ -131,3 +131,30 @@ exports.outdated = (options, callback) => {
   // returns a Promise
   return execute('npm', run, mode, directory, callback);
 };
+
+/**
+ * Uninstall/remove command
+ */
+exports.uninstall = function(opts, callback) {
+  const { pkgName, mode, directory, multiple, packages, manager } = opts;
+  const command = manager === 'yarn' ? ['remove'] : ['uninstall'];
+  const defaults = [];
+
+  function getNames() {
+    if (multiple && packages && Array.isArray(packages)) {
+      return packages;
+    } else if (!pkgName && !multiple) {
+      Promise.reject('manager[uninstall] package name parameter must be given');
+    } else {
+      return pkgName;
+    }
+  }
+
+  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
+  const run = []
+    .concat(command)
+    .concat(commandArgs)
+    .concat(getNames());
+
+  return runCommand(run, directory, callback);
+};

@@ -72,11 +72,14 @@ const Packages = props => {
   const [newPackages, outdatedPackages, error] = useIpc('ipc-event', {
     ipcEvent: 'get-packages',
     cmd: ['list', 'outdated'],
-    manager,
     mode,
     directory,
-    counter
+    inputs: [manager, counter]
   });
+
+  if (error) {
+    throw new Error(error);
+  }
 
   const setSelected = name => dispatch(addSelected({ name }));
   const toggleSort = prop => {

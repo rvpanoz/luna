@@ -120,7 +120,10 @@ ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent, activeManager, ...rest } = options || {};
 
   const callback = (status, error, data, cmd) => {
-    // send response to renderer process via ipc events
+    /**
+     *  Send response to renderer process
+     *  via ipc events
+     * */
     switch (status) {
       case 'close':
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
@@ -211,7 +214,6 @@ app.on('ready', async () => {
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  // TODO: Use 'ready-to-show' event
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');

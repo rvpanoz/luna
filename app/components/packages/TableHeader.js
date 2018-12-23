@@ -29,7 +29,7 @@ const TableHeader = props => {
     classes,
     numSelected,
     rowCount,
-    packagesNames,
+    packages,
     onSelected,
     onClearSelected,
     toggleSort,
@@ -37,13 +37,15 @@ const TableHeader = props => {
     sortBy
   } = props;
 
-  const handleSelectAll = (e, checked) => {
+  const handleSelectAll = e => {
+    const { checked } = e.target;
+
     checked
-      ? packagesNames &&
-        packagesNames.forEach(pkgName => onSelected(pkgName, true))
+      ? packages && packages.forEach(pkgName => onSelected(pkgName, true))
       : onClearSelected();
   };
 
+  console.log(numSelected);
   return (
     <TableHead>
       <TableRow>
