@@ -1,6 +1,6 @@
 import { createActionCreator } from '../../commons/utils';
 
-const ActionCreator = createActionCreator('@@LUNA_APP');
+const ActionCreator = createActionCreator('@@LUNA_APP/DATA');
 
 const addFilter = ActionCreator('ADD_FILTER');
 const addSelected = ActionCreator('ADD_SELECTED');

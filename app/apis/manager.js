@@ -71,11 +71,12 @@ const execute = (manager = defaultManager, commandArgs, mode, directory) => {
 
 /**
  * List command
+ * use npm
  * */
 
 exports.list = (options, callback) => {
   const command = 'list';
-  const { mode, directory } = options || {};
+  const { mode, directory, manager } = options || {};
 
   if (!callback || typeof callback !== 'function') {
     Promise.reject(
@@ -100,9 +101,13 @@ exports.list = (options, callback) => {
   return execute('npm', run, mode, directory, callback);
 };
 
+/**
+ * Outdated command
+ * use npm
+ */
 exports.outdated = (options, callback) => {
   const command = 'outdated';
-  const { mode, directory } = options || {};
+  const { mode, directory, manager } = options || {};
 
   if (!callback || typeof callback !== 'function') {
     Promise.reject(

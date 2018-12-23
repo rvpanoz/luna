@@ -1,7 +1,7 @@
 export default {
   directory: null,
   page: 0,
-  rowsPerPage: 15,
+  rowsPerPage: 5,
   mode: 'GLOBAL',
   manager: 'npm',
   packages: {
