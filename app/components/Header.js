@@ -5,54 +5,106 @@ import React, { useState, useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 
-import SearchBar from './SearchBar';
-import styles from './styles/header';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import InputBase from '@material-ui/core/InputBase';
+import Badge from '@material-ui/core/Badge';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Modal from '@material-ui/core/Modal';
 
+import SearchIcon from '@material-ui/icons/Search';
+import SettingsIcon from '@material-ui/icons/Settings';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+
+import styles from './styles/header';
 import Settings from './Settings';
 
-function Header(props) {
+const Header = props => {
   const { classes } = props;
-
-  const [menuOpen, toggleMenu] = useState(false);
-  const menuWrapperRef = useRef(null);
-  const menuRef = useRef(null);
-  const menuContainerRef = useRef(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [settingsOpen, toggleSettings] = useState(false);
+  const [keyboardOpen, toggleKeyboard] = useState(false);
+  const menuOpen = Boolean(anchorEl);
 
   return (
-    <header className={classes.navBar}>
-      <SearchBar />
-      <div
-        ref={menuContainerRef}
-        className={cn(classes.menu_container, {
-          [classes.barActive]: menuOpen
-        })}
-        onClick={e => toggleMenu(!menuOpen)}
-        role="menu"
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography
+            className={classes.title}
+            variant="h6"
+            color="inherit"
+            noWrap
+          >
+            Luna
+          </Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
+            </div>
+            <InputBase
+              placeholder="Search for packages…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput
+              }}
+            />
+          </div>
+          <div className={classes.grow} />
+          <div className={classes.sectionDesktop}>
+            <IconButton
+              color="inherit"
+              aria-owns={menuOpen ? 'app-settings' : undefined}
+              aria-haspopup="true"
+              onClick={e => {
+                setAnchorEl(e.currentTarget);
+              }}
+            >
+              <SettingsIcon />
+            </IconButton>
+            <Menu
+              id="app-settings"
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={e => setAnchorEl(null)}
+            >
+              <MenuItem onClick={e => toggleSettings(true)}>Settings</MenuItem>
+              <MenuItem onClick={e => toggleKeyboard(true)}>
+                Keyboard shortcuts
+              </MenuItem>
+            </Menu>
+            <IconButton color="inherit">
+              <Badge badgeContent={17} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          </div>
+        </Toolbar>
+      </AppBar>
+      <Modal
+        aria-labelledby="settings"
+        aria-describedby="settings"
+        open={settingsOpen}
+        onClose={e => setAnchorEl(null)}
+        className={classes.modal}
       >
-        <div
-          className={cn(classes.bar, {
-            [classes.barActive]: menuOpen
-          })}
-        />
-      </div>
-
-      <div
-        ref={menuWrapperRef}
-        className={cn(classes.overlay, {
-          [classes.active]: menuOpen,
-          [classes.inactive]: !menuOpen
-        })}
-      >
-        <div
-          className={cn(classes.items, {
-            [classes.visible]: menuOpen
-          })}
-        >
-          <Settings />
+        <div className={classes.settings}>
+          <Settings onClose={e => toggleSettings(false)} />
         </div>
-      </div>
-    </header>
+      </Modal>
+      <Modal
+        aria-labelledby="keyboard"
+        aria-describedby="keyboard"
+        open={keyboardOpen}
+        onClose={e => toggleKeyboard(false)}
+      >
+        <div className={classes.paper}>keyboard...</div>
+      </Modal>
+    </div>
   );
-}
+};
 
 export default withStyles(styles)(Header);

@@ -5,66 +5,96 @@
 /* eslint-disable */
 
 import { withStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Divider from '@material-ui/core/Divider';
+import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
+
+import { setManager, setPageRows } from '../models/ui/actions';
 
 import styles from './styles/settings';
 
+const mapState = state => ({
+  manager: state.common.manager,
+  rowsPerPage: state.common.rowsPerPage
+});
+
 const Settings = props => {
-  const { classes, mode, close } = props;
+  const { classes, mode, directory, onClose } = props;
+  const { manager, rowsPerPage } = useMappedState(mapState);
+
+  const [setting_manager, setSettingManager] = useState(manager);
+  const [setting_rowsPerPage, setSettingRowsPerPage] = useState(rowsPerPage);
+  const dispatch = useDispatch();
+
+  const saveSettings = () => {
+    dispatch(setManager({ manager: setting_manager }));
+    dispatch(setPageRows({ rowsPerPage: setting_rowsPerPage }));
+    onClose();
+  };
 
   return (
-    <div className={classes.root}>
-      <Typography
-        className={classes.headline}
-        variant="headline"
-        component="h2"
-      >
-        Settings
-      </Typography>
-      <Divider light />
-      <div className={classes.filterItems}>
-        <FormControl component="fieldset">
-          <FormLabel component="legend">General</FormLabel>
-          <FormGroup>
-            <FormHelperText> Select manager</FormHelperText>
-            <FormControlLabel
-              control={
-                <Select
-                  inputProps={{
-                    name: 'manager'
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  <MenuItem value="npm">npm</MenuItem>
-                  <MenuItem value="yarn">yarn</MenuItem>
-                </Select>
+    <Paper className={classes.paper}>
+      <DialogTitle>Settings</DialogTitle>
+      <DialogContent>
+        <DialogContentText>General</DialogContentText>
+        <Divider light />
+        <form className={classes.form} autoComplete="off">
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="manager">Manager</InputLabel>
+            <Select
+              value={setting_manager}
+              inputProps={{
+                name: 'manager'
+              }}
+              onChange={(e, element) => setSettingManager(element.props.value)}
+            >
+              <MenuItem value={'npm'}>npm</MenuItem>
+              <MenuItem value={'yarn'}>yarn</MenuItem>
+            </Select>
+          </FormControl>
+          <div className={classes.grow} />
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="rowsPerPage">Rows per page</InputLabel>
+            <Select
+              value={setting_rowsPerPage}
+              inputProps={{
+                name: 'rowsPerPage'
+              }}
+              onChange={(e, element) =>
+                setSettingRowsPerPage(Number(element.props.value))
               }
-              label="Manager"
-            />
-          </FormGroup>
-        </FormControl>
-        <Divider className={classes.bottomDivider} light />
-        <div className={classes.actions}>
-          <Button color="primary" onClick={close}>
-            Save
-          </Button>
-        </div>
-      </div>
-    </div>
+            >
+              <MenuItem value={'5'}>5</MenuItem>
+              <MenuItem value={'10'}>10</MenuItem>
+              <MenuItem value={'15'}>15</MenuItem>
+            </Select>
+          </FormControl>
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="primary">
+          Close
+        </Button>
+        <Button
+          onClick={e => saveSettings()}
+          color="primary"
+          variant="contained"
+        >
+          Save
+        </Button>
+      </DialogActions>
+    </Paper>
   );
 };
 

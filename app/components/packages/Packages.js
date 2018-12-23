@@ -109,7 +109,7 @@ const Packages = props => {
 
       return void 0;
     },
-    [newPackages, outdatedPackages, counter]
+    [newPackages, outdatedPackages, counter, manager]
   );
 
   const getFiltered = useCallback(

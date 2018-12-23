@@ -3,90 +3,95 @@
 /*
  * Header styling
  */
-import { lighten } from '@material-ui/core/styles/colorManipulator';
+import { lighten, fade } from '@material-ui/core/styles/colorManipulator';
 
-export default theme => ({
-  menu_container: {
-    position: 'absolute',
-    top: 50,
-    right: '0px',
-    transform: 'translate(0, -100%)',
-    width: 50,
-    height: 50,
-    cursor: 'pointer',
-    '& $barActive': {
-      '&:before': {
-        top: 0,
-        left: 0,
-        transform: 'rotate(45deg)',
-        backgroundColor: '#fff'
-      },
-      '&:after': {
-        top: 0,
-        left: 0,
-        transform: 'rotate(-45deg)',
-        backgroundColor: '#fff'
-      }
-    }
+const styles = theme => ({
+  root: {
+    width: '100%'
   },
-  barActive: {
-    backgroundColor: 'unset !important'
+  grow: {
+    flexGrow: 1
   },
-  navBar: {
-    alignItems: 'stretch',
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between'
+  settings: {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    padding: 0
   },
-  bar: {
-    position: 'absolute',
-    top: '50%',
+  modal: {
+    top: '35%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: '50%',
-    height: '2px',
-    backgroundColor: '#fff',
-    '&:before': {
-      content: "''",
-      position: 'absolute',
-      top: '-5px',
-      left: '0',
-      width: '100%',
-      height: '100%',
-      backgroundColor: 'inherit',
-      transition: 'all 300ms ease-in-out'
-    },
-    '&:after': {
-      content: "''",
-      position: 'absolute',
-      top: '5px',
-      left: '0',
-      width: '100%',
-      height: '100%',
-      backgroundColor: 'inherit',
-      transition: 'all 300ms ease-in-out'
+    maxHeight: 320
+  },
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20
+  },
+  title: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block'
     }
   },
-
-  overlay: {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '0',
-    height: '100vh',
-    backgroundColor: lighten('#333545', 0.99)
+  search: {
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.white, 0.15),
+    '&:hover': {
+      backgroundColor: fade(theme.palette.common.white, 0.25)
+    },
+    marginRight: theme.spacing.unit * 2,
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing.unit * 3,
+      width: 'auto'
+    }
   },
-  active: { width: '15%', transition: 'all 300ms ease-in-out' },
-  inactive: { width: '0%', transition: 'all 300ms ease-in-out' },
-  visible: {
-    display: 'block !important',
-    transition: 'all 300ms ease-in-out'
-  },
-  items: {
+  searchIcon: {
+    width: theme.spacing.unit * 9,
+    height: '100%',
     position: 'absolute',
-    top: '5%',
-    left: '5%',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  inputRoot: {
+    color: 'inherit',
+    width: '100%'
+  },
+  inputInput: {
+    paddingTop: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 10,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: 200
+    }
+  },
+  sectionDesktop: {
     display: 'none',
-    transition: 'all 300ms ease-in-out'
+    [theme.breakpoints.up('md')]: {
+      display: 'flex'
+    }
+  },
+  sectionMobile: {
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none'
+    }
   }
 });
+
+export default styles;
