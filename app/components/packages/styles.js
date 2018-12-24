@@ -43,6 +43,12 @@ export const listStyles = theme => ({
     lineHeight: '1.4em',
     padding: '12px 8px',
     verticalAlign: 'middle'
+  },
+  hasFilterBlur: {
+    filter: 'blur(15px)'
+  },
+  outdated: {
+    color: lighten(theme.palette.secondary.dark, 0.85)
   }
 });
 

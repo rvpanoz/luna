@@ -71,69 +71,24 @@ export function firstToUpper(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-/**
- * Parses and maps response
- * @param {*} response
- * @param {*} mode
- * @param {*} directory
- */
-export const parseMap = (response, mode, directory, outdated) => {
-  try {
-    const packages = JSON.parse(response);
-    const data = pick(['dependencies'], packages);
-    let dataArray = [];
+export const getFiltered = (data, filters) => {
+  const groups = Object.keys(PACKAGE_GROUPS);
+  let allFiltered = [];
 
-    if (!data.dependencies) {
-      dataArray = objectEntries(packages);
-    } else {
-      dataArray = objectEntries(data.dependencies);
-    }
-
-    if (!Array.isArray(dataArray) || !dataArray) {
-      mk.log(`utils[parseMap]: cound not convert data to array`);
-      return;
-    }
-
-    return dataArray.map(pkgArr => {
-      const [pkgName, details] = pkgArr;
-
-      let group = null;
-      let hasPeerMissing = false;
-      let found = false;
-      let hasError = typeof details.error === 'object';
-
-      // find group and attach to pkg, useful to show data in list
-      if (mode === APP_MODES.LOCAL) {
-        const packageJSON = readPackageJson(directory);
-
-        if (!Boolean(packageJSON)) {
-          mk.log(
-            `utils[parseMap]: could not parse package.json in ${directory}`
-          );
-          return;
+  filters.forEach(filterName => {
+    let filtered =
+      data &&
+      data.filter(pkg => {
+        if (groups.indexOf(filterName) > -1) {
+          return pkg['__group'] === filterName;
         }
-
-        Object.keys(PACKAGE_GROUPS).some(groupName => {
-          found = packageJSON[groupName] && packageJSON[groupName][pkgName];
-          if (found) {
-            group = groupName;
-          }
-
-          return found;
-        });
-      }
-
-      return merge(details, {
-        name: pkgName,
-        __group: group,
-        __error: hasError,
-        __hasPeerMissing: hasPeerMissing
+        return !!pkg[filterName];
       });
-    });
-  } catch (error) {
-    mk.log(error);
-    throw new Error(error);
-  }
+
+    allFiltered = allFiltered.concat(filtered);
+  });
+
+  return allFiltered;
 };
 
 /**
@@ -200,4 +155,87 @@ export const isAlpha = version => {
   }
 
   return /alpha/g.test(version);
+};
+
+/**
+ * Get package outdated
+ * @param {*} outdatedPackages
+ * @param {*} name
+ */
+export const isPackageOutdated = (outdatedPackages, name) => {
+  if (!Array.isArray(outdatedPackages)) {
+    return [false, null];
+  }
+
+  return [
+    outdatedPackages.some(o => o.name === name),
+    outdatedPackages.find(f => f.name === name)
+  ];
+};
+
+/**
+ * Parses and maps response
+ * @param {*} response
+ * @param {*} mode
+ * @param {*} directory
+ */
+export const parseMap = (response, mode, directory, commandArgs) => {
+  try {
+    const packages = JSON.parse(response);
+    const data = pick(['dependencies'], packages);
+    let dataArray = [];
+
+    if (!data.dependencies) {
+      dataArray = objectEntries(packages);
+    } else {
+      dataArray = objectEntries(data.dependencies);
+    }
+
+    if (!Array.isArray(dataArray) || !dataArray) {
+      mk.log(`utils[parseMap]: cound not convert data to array`);
+      return;
+    }
+
+    const packagesData = dataArray.map(pkgArr => {
+      const [pkgName, details] = pkgArr;
+
+      let group = null;
+      let hasPeerMissing = false;
+      let found = false;
+      let hasError = typeof details.error === 'object';
+
+      // find group and attach to pkg, useful to show data in list
+      if (mode === APP_MODES.LOCAL) {
+        const packageJSON = readPackageJson(directory);
+
+        if (!Boolean(packageJSON)) {
+          mk.log(
+            `utils[parseMap]: could not parse package.json in ${directory}`
+          );
+          return;
+        }
+
+        Object.keys(PACKAGE_GROUPS).some(groupName => {
+          found = packageJSON[groupName] && packageJSON[groupName][pkgName];
+          if (found) {
+            group = groupName;
+          }
+
+          return found;
+        });
+      }
+
+      return merge(details, {
+        name: pkgName,
+        __group: group || '',
+        __error: hasError,
+        __hasPeerMissing: hasPeerMissing
+      });
+    });
+
+    return packagesData;
+  } catch (error) {
+    mk.log(error);
+    throw new Error(error);
+  }
 };

@@ -18,20 +18,17 @@ const useIpc = (channel, options) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (Boolean(inputs[0]) === false) {
-      return;
-    }
-
     // eslint-disable-next-line
-    ipcRenderer.on(listenTo, (eventName, status, cmd, data, error) => {
-      const parsedPackages = data && parseMap(data, mode, directory);
+    ipcRenderer.on(listenTo, (event, status, commandArgs, data, error) => {
+      const parsedPackages =
+        data && parseMap(data, mode, directory, commandArgs);
 
       if (error) {
         setError(error);
       }
 
       if (Array.isArray(parsedPackages)) {
-        if (cmd[0] === 'list') {
+        if (commandArgs[0] === 'list') {
           setData(parsedPackages);
         } else {
           setOutdated(parsedPackages);

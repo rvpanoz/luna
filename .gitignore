@@ -44,3 +44,4 @@ main.js.map
 npm-debug.log.*
 .vscode
 .editorconfig
+.gitconfig

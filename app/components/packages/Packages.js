@@ -1,11 +1,11 @@
-/* eslint-disable */
-
 /**
  * Packages component
  */
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import cn from 'classnames';
+import { objectOf, object } from 'prop-types';
+
 import { withStyles } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
@@ -19,15 +19,14 @@ import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageRow from './PackageRow';
 
-import { PACKAGE_GROUPS } from '../../constants/AppConstants';
+import { getFiltered } from '../../commons/utils';
 import { listStyles as styles } from './styles';
 
 import {
   addSelected,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
-  clearSelected,
-  updatePackage
+  clearSelected
 } from '../../models/packages/actions';
 
 import { setPage, setPageRows } from '../../models/ui/actions';
@@ -44,29 +43,6 @@ const mapState = state => ({
   packagesOutdated: state.packages.packagesOutdated,
   selected: state.packages.selected
 });
-
-const getStyles = loading => {
-  return loading ? { filter: 'blur(15px)' } : null;
-};
-
-const getFiltered = (data, filters) => {
-  const groups = Object.keys(PACKAGE_GROUPS);
-  let allFiltered = [];
-
-  filters.forEach(filterName => {
-    let filtered =
-      data &&
-      data.filter(pkg => {
-        if (groups.indexOf(filterName) > -1) {
-          return pkg['__group'] === filterName;
-        }
-        return !!pkg[filterName];
-      });
-    allFiltered = allFiltered.concat(filtered);
-  });
-
-  return allFiltered;
-};
 
 const Packages = props => {
   const { classes } = props;
@@ -89,9 +65,11 @@ const Packages = props => {
   const dispatch = useDispatch();
   const isSelected = name => selected.indexOf(name) !== -1;
 
+  // useIpc hook to send and listenTo ipc events
+  // TODO: needs work to handle all events (install, uninstall etc)
   const [newPackages, outdatedPackages, error] = useIpc('ipc-event', {
     ipcEvent: 'get-packages',
-    cmd: ['list', 'outdated'],
+    cmd: ['outdated', 'list'],
     mode,
     directory,
     inputs: [manager, counter]
@@ -109,17 +87,9 @@ const Packages = props => {
     setSortDir(newSortBy);
   };
 
-  const isPackageOutdated = name => {
-    return [
-      Array.isArray(outdatedPackages) &&
-        outdatedPackages.some(o => o.name === name),
-      outdatedPackages.find(f => f.name === name)
-    ];
-  };
-
   /**
    * TODO: figure out how not to dispatch
-   * SET_PACKAGES_SUCCESS twice
+   * SET_PACKAGES_SUCCESS twice :-
    */
   useEffect(
     () => {
@@ -130,36 +100,41 @@ const Packages = props => {
       if (typeof outdatedPackages === 'object' && outdatedPackages.length) {
         dispatch(setPackagesOutdatedSuccess(outdatedPackages));
       }
-
-      return void 0;
     },
     [newPackages, outdatedPackages, counter, manager]
   );
 
+  // sort packages
   useEffect(
     () => {
-      const data = newPackages.slice(0); //clone newPackages
+      // clone newPackages
+      const data = newPackages.slice(0);
 
       if (!data || !data.length) {
         return;
       }
 
-      sortDir === 'asc'
-        ? data.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
-        : data.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
+      const sortedData =
+        sortDir === 'asc'
+          ? data.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
+          : data.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-      dispatch(setPackagesSuccess(data));
+      dispatch(setPackagesSuccess(sortedData));
     },
     [sortDir, sortBy]
   );
 
+  // filter packages
   const filteredPackages =
     filters && filters.length ? getFiltered(packages, filters) : [];
+
+  // assign final data
   const data =
     Array.isArray(filteredPackages) && filteredPackages.length
       ? filteredPackages
       : packages;
 
+  // pagination
   const dataSlices =
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
@@ -172,14 +147,13 @@ const Packages = props => {
             mode={mode}
             directory={directory}
             selected={selected}
-            reload={e => setCounter(counter + 1)} // triggers render
+            reload={() => setCounter(counter + 1)} // triggers render
           />
         </div>
 
         <Table
-          style={getStyles(loading)}
           className={cn(classes.tablelist, {
-            [classes.none]: loading
+            [classes.hasFilterBlur]: loading
           })}
         >
           <TableHeader
@@ -202,26 +176,22 @@ const Packages = props => {
           />
           <TableBody>
             {dataSlices &&
-              dataSlices.map(pkg => {
-                const [isOutdated, outdatePkg] = isPackageOutdated(pkg.name);
-
-                return (
-                  <PackageRow
-                    {...pkg}
-                    key={`pkg-${pkg.name}`}
-                    isSelected={isSelected}
-                    setSelected={setSelected}
-                    isOutdated={isOutdated}
-                    latest={outdatePkg && outdatePkg.latest}
-                  />
-                );
-              })}
+              dataSlices.map(pkg => (
+                <PackageRow
+                  key={`pkg-${pkg.name}`}
+                  isSelected={isSelected}
+                  setSelected={setSelected}
+                  {...pkg}
+                />
+              ))}
           </TableBody>
           <TableFooter
             rowCount={(data && data.length) || 0}
             page={page}
             rowsPerPage={rowsPerPage}
-            handleChangePage={(e, page) => dispatch(setPage({ page }))}
+            handleChangePage={(e, pageNo) =>
+              dispatch(setPage({ page: pageNo }))
+            }
             handleChangePageRows={e =>
               dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
             }
@@ -230,6 +200,10 @@ const Packages = props => {
       </Paper>
     </Loader>
   );
+};
+
+Packages.propTypes = {
+  classes: objectOf(object).isRequired
 };
 
 const withStylesPackages = withStyles(styles)(Packages);

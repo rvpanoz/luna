@@ -1,10 +1,13 @@
+/* eslint-disable react/prop-types */
+
 /**
  * Package item row
  */
 
-/* eslint-disable */
-
 import React from 'react';
+import { bool, objectOf, object, string, func } from 'prop-types';
+import cn from 'classnames';
+
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -19,15 +22,18 @@ const PackageItemRow = props => {
     isSelected,
     setSelected,
     version,
-    isOutdated,
     latest,
+    isOutdated,
     __group
   } = props;
 
   return (
     <TableRow key={`pkg-${name}`}>
       <TableCell padding="checkbox">
-        <Checkbox checked={isSelected(name)} onClick={e => setSelected(name)} />
+        <Checkbox
+          checked={isSelected(name)}
+          onClick={() => setSelected(name)}
+        />
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         <span
@@ -43,13 +49,30 @@ const PackageItemRow = props => {
         {version}
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        {isOutdated && latest}
+        <span
+          className={cn({
+            [classes.outdated]: isOutdated
+          })}
+        >
+          {latest}
+        </span>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         {__group}
       </TableCell>
     </TableRow>
   );
+};
+
+PackageItemRow.propTypes = {
+  classes: objectOf(object).isRequired,
+  name: string.isRequired,
+  isSelected: func.isRequired,
+  version: string.isRequired,
+  latest: string.isRequired,
+  isOutdated: bool.isRequired,
+  setSelected: func.isRequired,
+  __group: string.isRequired
 };
 
 export default withStyles(styles)(PackageItemRow);

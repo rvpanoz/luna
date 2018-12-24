@@ -18,6 +18,7 @@ import {
   setPackagesOutdatedSuccess,
   setPackagesError
 } from '../models/packages/actions';
+import { isPackageOutdated } from '../commons/utils';
 
 const { packages } = initialState;
 
@@ -60,11 +61,25 @@ const handlers = {
   },
   [clearFilters.type]: state => assoc('filters', [], state),
   [clearSelected.type]: state => assoc('selected', [], state),
-  [setPackagesSuccess.type]: (state, { payload }) =>
-    merge(state, {
-      packages: payload,
+  [setPackagesSuccess.type]: (state, { payload }) => {
+    const { packagesOutdated } = state;
+    let newPayload = payload.map(pkg => {
+      const [isOutdated, outdatedPkg] = isPackageOutdated(
+        packagesOutdated,
+        pkg.name
+      );
+
+      return merge(pkg, {
+        latest: isOutdated ? outdatedPkg.latest : pkg.version,
+        isOutdated
+      });
+    });
+
+    return merge(state, {
+      packages: newPayload,
       loading: false
-    }),
+    });
+  },
   [setPackagesOutdatedSuccess.type]: (state, { payload }) =>
     merge(state, {
       packagesOutdated: payload,
