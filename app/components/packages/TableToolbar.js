@@ -149,6 +149,7 @@ const TableListToolbar = props => {
               </Tooltip>
               <Tooltip title="Show global packages">
                 <IconButton
+                  disabled={mode === APP_MODES.GLOBAL}
                   aria-label="Show globals"
                   onClick={e => switchMode(APP_MODES.GLOBAL, null)}
                 >

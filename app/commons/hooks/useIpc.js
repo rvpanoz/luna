@@ -12,7 +12,7 @@ const useIpc = (channel, options) => {
   const { ipcEvent, mode, directory, inputs = [] } = options || {};
   const listenTo = `${ipcEvent}-close`;
 
-  const [dataSet, setData] = useState([]);
+  const [packagesSet, setData] = useState([]);
   const [outdatedSet, setOutdated] = useState([]);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ const useIpc = (channel, options) => {
     return () => ipcRenderer.removeAllListeners(listenTo);
   }, inputs);
 
-  return [dataSet, outdatedSet, error];
+  return [packagesSet, outdatedSet, error];
 };
 
 export default useIpc;
