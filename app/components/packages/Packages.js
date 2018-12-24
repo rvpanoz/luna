@@ -72,7 +72,7 @@ const Packages = props => {
     cmd: ['outdated', 'list'],
     mode,
     directory,
-    inputs: [manager, counter]
+    inputs: [counter, manager]
   });
 
   if (error) {
@@ -101,7 +101,7 @@ const Packages = props => {
         dispatch(setPackagesOutdatedSuccess(outdatedPackages));
       }
     },
-    [newPackages, outdatedPackages, counter, manager]
+    [newPackages, outdatedPackages]
   );
 
   // sort packages

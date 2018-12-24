@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { lighten } from '@material-ui/core/styles/colorManipulator';
+import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 
 export const listStyles = theme => ({
   root: {
@@ -48,7 +48,10 @@ export const listStyles = theme => ({
     filter: 'blur(15px)'
   },
   outdated: {
-    color: lighten(theme.palette.secondary.dark, 0.85)
+    color: darken(theme.palette.secondary.dark, 0.1)
+  },
+  updated: {
+    color: lighten('#7FFF00', 0.1)
   }
 });
 

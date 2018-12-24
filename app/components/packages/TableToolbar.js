@@ -138,6 +138,18 @@ const TableListToolbar = props => {
         <div className={classes.actions}>
           {selected.length === 0 ? (
             <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <Tooltip title="Show global packages">
+                <div>
+                  <IconButton
+                    color="primary"
+                    disabled={mode === APP_MODES.GLOBAL}
+                    aria-label="Show globals"
+                    onClick={e => switchMode(APP_MODES.GLOBAL, null)}
+                  >
+                    <PublicIcon />
+                  </IconButton>
+                </div>
+              </Tooltip>
               <Tooltip title="Open package.json">
                 <IconButton
                   color="secondary"
@@ -145,14 +157,6 @@ const TableListToolbar = props => {
                   onClick={e => openPackage()}
                 >
                   <LoadIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Show global packages">
-                <IconButton
-                  aria-label="Show globals"
-                  onClick={e => switchMode(APP_MODES.GLOBAL, null)}
-                >
-                  <PublicIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Reload list">

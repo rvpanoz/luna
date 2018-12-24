@@ -70,13 +70,14 @@ const handlers = {
       );
 
       return merge(pkg, {
-        latest: isOutdated ? outdatedPkg.latest : pkg.version,
+        latest: isOutdated ? outdatedPkg.latest : null,
         isOutdated
       });
     });
 
     return merge(state, {
       packages: newPayload,
+      filters: [], //clear filters
       loading: false
     });
   },

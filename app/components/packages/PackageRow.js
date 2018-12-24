@@ -51,10 +51,11 @@ const PackageItemRow = props => {
       <TableCell padding="none" className={classes.tableCell}>
         <span
           className={cn({
-            [classes.outdated]: isOutdated
+            [classes.outdated]: isOutdated,
+            [classes.updated]: !isOutdated
           })}
         >
-          {latest}
+          {latest || version}
         </span>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>

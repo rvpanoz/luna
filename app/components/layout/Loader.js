@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * Loader
  * renders a CircularProgress or props.children
