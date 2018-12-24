@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * Dashboard
  */
@@ -7,9 +9,9 @@ import { objectOf, object } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import WarningIcon from '@material-ui/icons/Warning';
-import WarningIcon1 from '@material-ui/icons/Cached';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
 
-import Card from './layout/Card';
+import CardInfo from './layout/CardInfo';
 
 const styles = () => ({
   root: {
@@ -18,50 +20,37 @@ const styles = () => ({
   }
 });
 
-// TODO: implement InfoCard
-
 const Dashboard = props => {
   const { classes } = props;
 
   return (
     <section className={classes.root}>
-      <Grid container justify="space-around">
+      <Grid container justify="space-between">
         <Grid item xs={12} sm={6} md={3}>
-          <Card
-            icon={WarningIcon1}
-            iconColor="orange"
+          <CardInfo
             title="Used Space"
             description="49/50"
             small="GB"
-            statIcon={WarningIcon}
-            statIconColor="danger"
-            statLink={{ text: 'Get More Space...', href: '#pablo' }}
+            icon="info"
+            iconscolor="info"
+            text="Get More Space..."
+            renderAvatarIcon={() => <WarningIcon />}
+            renderActionsIcon={() => <InfoIcon />}
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <Card
-            icon={WarningIcon1}
-            iconColor="orange"
-            title="Used Space"
+          <CardInfo
+            title="Dependencies"
             description="49/50"
             small="GB"
-            statIcon={WarningIcon}
-            statIconColor="danger"
-            statLink={{ text: 'Get More Space...', href: '#pablo' }}
+            icon="warning"
+            iconscolor="danger"
+            text="Get More Space..."
+            renderAvatarIcon={() => <WarningIcon />}
+            renderActionsIcon={() => <InfoIcon />}
           />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card
-            icon={WarningIcon1}
-            iconColor="orange"
-            title="Used Space"
-            description="49/50"
-            small="GB"
-            statIcon={WarningIcon}
-            statIconColor="danger"
-            statLink={{ text: 'Get More Space...', href: '#pablo' }}
-          />
-        </Grid>
+        <Grid item xs={12} sm={6} md={3} />
       </Grid>
     </section>
   );

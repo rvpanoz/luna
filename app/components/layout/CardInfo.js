@@ -10,27 +10,39 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import styles from '../styles/card';
+import { firstToUpper } from '../../commons/utils';
+import styles from '../styles/cardInfo';
 
 const AppCard = props => {
   const {
     classes,
     title,
     description,
-    statLink,
     small,
-    statText,
-    statIconColor,
-    iconColor
+    text,
+    color,
+    renderAvatarIcon,
+    renderActionsIcon
   } = props;
+
+  const AvatarIcon = React.createElement('div', {
+    className: classes.cardIcon,
+    children: [renderAvatarIcon()]
+  });
+
+  const ActionsIcon = React.createElement('div', {
+    className: classes.cardStatsIcon + ' ' + classes[color + 'CardStatsIcon'],
+    children: [renderActionsIcon()]
+  });
+
   return (
     <Card className={classes.card}>
       <CardHeader
         classes={{
-          root: classes.cardHeader + ' ' + classes[iconColor + 'CardHeader'],
+          root: classes.cardHeader + ' ' + classes[color + 'CardHeader'],
           avatar: classes.cardAvatar
         }}
-        avatar={<props.icon className={classes.cardIcon} />}
+        avatar={AvatarIcon}
       />
       <CardContent className={classes.cardContent}>
         <Typography component="p" className={classes.cardCategory}>
@@ -48,22 +60,7 @@ const AppCard = props => {
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <div className={classes.cardStats}>
-          <props.statIcon
-            className={
-              classes.cardStatsIcon +
-              ' ' +
-              classes[statIconColor + 'CardStatsIcon']
-            }
-          />{' '}
-          {statLink !== undefined ? (
-            <a href={statLink.href} className={classes.cardStatsLink}>
-              {statLink.text}
-            </a>
-          ) : statText !== undefined ? (
-            statText
-          ) : null}
-        </div>
+        {ActionsIcon} {text}
       </CardActions>
     </Card>
   );
@@ -76,13 +73,10 @@ Card.defaultProps = {
 
 Card.propTypes = {
   classes: PropTypes.object.isRequired,
-  icon: PropTypes.func.isRequired,
-  iconColor: PropTypes.oneOf(['orange', 'green', 'red', 'blue', 'purple']),
   title: PropTypes.node,
   description: PropTypes.node,
   small: PropTypes.node,
-  statIcon: PropTypes.func.isRequired,
-  statIconColor: PropTypes.oneOf([
+  color: PropTypes.oneOf([
     'warning',
     'primary',
     'danger',
@@ -91,8 +85,7 @@ Card.propTypes = {
     'rose',
     'gray'
   ]),
-  statLink: PropTypes.object,
-  statText: PropTypes.node
+  text: PropTypes.node
 };
 
 export default withStyles(styles)(AppCard);

@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* eslint-disable react/prop-types */
 
 /**
@@ -5,7 +6,7 @@
  */
 
 import React from 'react';
-import { bool, objectOf, object, string, func } from 'prop-types';
+import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import cn from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -70,7 +71,7 @@ PackageItemRow.propTypes = {
   name: string.isRequired,
   isSelected: func.isRequired,
   version: string.isRequired,
-  latest: string.isRequired,
+  latest: oneOfType([string, object]).isRequired,
   isOutdated: bool.isRequired,
   setSelected: func.isRequired,
   __group: string.isRequired
