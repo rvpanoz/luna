@@ -12,11 +12,13 @@ import {
   addSelected,
   clearSelected,
   clearFilters,
+  updatePackage,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
   setPackagesError
 } from '../models/packages/actions';
+import { isPackageOutdated } from '../commons/utils';
 
 const { packages } = initialState;
 
@@ -59,11 +61,25 @@ const handlers = {
   },
   [clearFilters.type]: state => assoc('filters', [], state),
   [clearSelected.type]: state => assoc('selected', [], state),
-  [setPackagesSuccess.type]: (state, { payload }) =>
-    merge(state, {
-      packages: payload,
+  [setPackagesSuccess.type]: (state, { payload }) => {
+    const { packagesOutdated } = state;
+    let newPayload = payload.map(pkg => {
+      const [isOutdated, outdatedPkg] = isPackageOutdated(
+        packagesOutdated,
+        pkg.name
+      );
+
+      return merge(pkg, {
+        latest: isOutdated ? outdatedPkg.latest : pkg.version,
+        isOutdated
+      });
+    });
+
+    return merge(state, {
+      packages: newPayload,
       loading: false
-    }),
+    });
+  },
   [setPackagesOutdatedSuccess.type]: (state, { payload }) =>
     merge(state, {
       packagesOutdated: payload,
@@ -78,7 +94,16 @@ const handlers = {
   [setPackagesStart.type]: state =>
     merge(state, {
       loading: true
-    })
+    }),
+  [updatePackage.type]: (state, { name, props }) => {
+    const { packages } = state;
+    const pkg = packages.find(pkg => pkg.name === name);
+    const newPkg = merge(pkg, props);
+
+    return merge(state, {
+      packages: packages.map(pkg => (pkg.name === name ? newPkg : pkg))
+    });
+  }
 };
 
 export default createReducer(packages, handlers);

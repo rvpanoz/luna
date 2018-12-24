@@ -9,7 +9,7 @@ import { parseMap } from '../utils';
 import { setPackagesStart } from '../../models/packages/actions';
 
 const useIpc = (channel, options) => {
-  const { ipcEvent, mode, directory, counter, manager } = options || {};
+  const { ipcEvent, mode, directory, inputs = [] } = options || {};
   const listenTo = `${ipcEvent}-close`;
 
   const [dataSet, setData] = useState([]);
@@ -17,31 +17,30 @@ const useIpc = (channel, options) => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
-  useEffect(
-    () => {
-      // eslint-disable-next-line
-      ipcRenderer.on(listenTo, (eventName, status, cmd, data, error) => {
-        const parsedPackages = data && parseMap(data, mode, directory);
+  useEffect(() => {
+    // eslint-disable-next-line
+    ipcRenderer.on(listenTo, (event, status, commandArgs, data, error) => {
+      const parsedPackages =
+        data && parseMap(data, mode, directory, commandArgs);
 
-        if (error) {
-          setError(error);
+      if (error) {
+        setError(error);
+      }
+
+      if (Array.isArray(parsedPackages)) {
+        if (commandArgs[0] === 'list') {
+          setData(parsedPackages);
+        } else {
+          setOutdated(parsedPackages);
         }
+      }
+    });
 
-        if (Array.isArray(parsedPackages)) {
-          if (cmd[0] === 'list') {
-            setData(parsedPackages);
-          } else {
-            setOutdated(parsedPackages);
-          }
-        }
-      });
+    dispatch(setPackagesStart());
+    ipcRenderer.send(channel, options);
 
-      dispatch(setPackagesStart());
-      ipcRenderer.send(channel, options);
-      return () => ipcRenderer.removeAllListeners(listenTo);
-    },
-    [counter, manager]
-  );
+    return () => ipcRenderer.removeAllListeners(listenTo);
+  }, inputs);
 
   return [dataSet, outdatedSet, error];
 };

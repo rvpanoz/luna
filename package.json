@@ -17,7 +17,7 @@
     "package-all": "yarn build && electron-builder build -mwl",
     "package-ci": "yarn postinstall && yarn build && electron-builder --publish always",
     "package-linux": "yarn build && electron-builder build --linux",
-    "package-win": "yarn build && electron-builder build --win --x64",
+    "package-win": "yarn build && electron-builder -c.extraMetadata.main=app/main.prod.js build --win --x64",
     "postinstall": "yarn build-dll",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{*{js,jsx,json},babelrc,eslintrc,prettierrc,stylelintrc}'",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
@@ -50,6 +50,7 @@
   },
   "main": "./app/main.prod.js",
   "build": {
+    "extends": null,
     "productName": "luna",
     "appId": "org.dev.luna",
     "files": [
@@ -94,8 +95,8 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate",
+      "owner": "rvpanoz",
+      "repo": "luna",
       "private": false
     }
   },

@@ -1,13 +1,15 @@
-/**
- * Loader
- */
-
 /* eslint-disable */
 
-import { withStyles } from '@material-ui/core/styles';
-import { bool, object } from 'prop-types';
-import CircularProgress from '@material-ui/core/CircularProgress';
+/**
+ * Loader
+ * renders a CircularProgress or props.children
+ */
+
 import React from 'react';
+import { bool, object, objectOf } from 'prop-types';
+
+import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const styles = theme => ({
   loader: {
@@ -29,9 +31,9 @@ const Loader = props => {
 };
 
 Loader.propTypes = {
-  classes: object,
-  loading: bool,
-  children: object
+  classes: objectOf(object).isRequired,
+  children: objectOf(object).isRequired,
+  loading: bool.isRequired
 };
 
 export default withStyles(styles)(Loader);
