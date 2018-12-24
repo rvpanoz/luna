@@ -101,7 +101,7 @@ const Packages = props => {
         dispatch(setPackagesOutdatedSuccess(outdatedPackages));
       }
     },
-    [newPackages, outdatedPackages, counter, manager]
+    [newPackages, outdatedPackages]
   );
 
   // sort packages

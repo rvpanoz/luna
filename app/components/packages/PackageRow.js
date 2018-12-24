@@ -55,7 +55,7 @@ const PackageItemRow = props => {
             [classes.updated]: !isOutdated
           })}
         >
-          {latest}
+          {latest || version}
         </span>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
