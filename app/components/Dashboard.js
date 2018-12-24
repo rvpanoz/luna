@@ -1,53 +1,74 @@
-/* eslint-disable */
+/**
+ * Dashboard
+ */
 
-import { remote } from 'electron';
-import { useDispatch } from 'redux-react-hook';
-import { SET_MODE, TOGGLE_LOADER } from '../constants/ActionTypes';
-import { withStyles } from '@material-ui/core';
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
+import { objectOf, object } from 'prop-types';
+import { withStyles } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
+import WarningIcon from '@material-ui/icons/Warning';
+import WarningIcon1 from '@material-ui/icons/Cached';
 
-const styles = theme => {
+import Card from './layout/Card';
+
+const styles = () => ({
   root: {
+    padding: 0,
+    margin: 0
   }
-};
+});
+
+// TODO: implement InfoCard
 
 const Dashboard = props => {
   const { classes } = props;
-  const dispatch = useDispatch();
-
-  const switchMode = (mode, directory) =>
-    dispatch({ type: SET_MODE, mode, directory: directory || null });
-
-  const openPackage = () => {
-    remote.dialog.showOpenDialog(
-      remote.getCurrentWindow(),
-      {
-        title: 'Open package.json file',
-        buttonLabel: 'Analyze',
-        filters: [
-          {
-            name: 'package.json',
-            extensions: ['json']
-          }
-        ],
-        properties: ['openFile']
-      },
-      filePath => {
-        if (filePath) {
-          const directory = filePath.join('');
-          switchMode('LOCAL', directory);
-        }
-      }
-    );
-  };
 
   return (
     <section className={classes.root}>
-      <Typography>Dashboard</Typography>
-      <button onClick={e => openPackage()}>Open</button>
+      <Grid container justify="space-around">
+        <Grid item xs={12} sm={6} md={3}>
+          <Card
+            icon={WarningIcon1}
+            iconColor="orange"
+            title="Used Space"
+            description="49/50"
+            small="GB"
+            statIcon={WarningIcon}
+            statIconColor="danger"
+            statLink={{ text: 'Get More Space...', href: '#pablo' }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card
+            icon={WarningIcon1}
+            iconColor="orange"
+            title="Used Space"
+            description="49/50"
+            small="GB"
+            statIcon={WarningIcon}
+            statIconColor="danger"
+            statLink={{ text: 'Get More Space...', href: '#pablo' }}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={3}>
+          <Card
+            icon={WarningIcon1}
+            iconColor="orange"
+            title="Used Space"
+            description="49/50"
+            small="GB"
+            statIcon={WarningIcon}
+            statIconColor="danger"
+            statLink={{ text: 'Get More Space...', href: '#pablo' }}
+          />
+        </Grid>
+      </Grid>
     </section>
   );
+};
+
+Dashboard.propTypes = {
+  classes: objectOf(object).isRequired
 };
 
 export default withStyles(styles)(Dashboard);
