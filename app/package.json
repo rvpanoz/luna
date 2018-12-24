@@ -1,4 +1,13 @@
 {
   "name": "luna",
-  "dependencies": []
+  "productName": "luna",
+  "version": "3.0.0",
+  "description": "Node packages management through a modern UI. Created with ReactJS and Redux. UI using Material-UI. Bundled with Webpack. Build on Electron.",
+  "main": "./main.prod.js",
+  "author": {
+    "name": "rvpanoz",
+    "email": "rvpanoz@gmail.com",
+    "url": "https://github.com/rvpanoz"
+  },
+  "license": "GPLv3"
 }

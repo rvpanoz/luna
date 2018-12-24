@@ -12,6 +12,7 @@ const setPackagesOutdatedSuccess = ActionCreator(
   'SET_PACKAGES_OUTDATED_SUCCESS'
 );
 const setPackagesError = ActionCreator('SET_PACKAGES_ERROR');
+const updatePackage = ActionCreator('UPDATE_PACKAGE');
 
 export {
   addFilter,
@@ -21,5 +22,6 @@ export {
   setPackagesStart,
   setPackagesSuccess,
   setPackagesError,
-  setPackagesOutdatedSuccess
+  setPackagesOutdatedSuccess,
+  updatePackage
 };

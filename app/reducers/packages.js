@@ -12,6 +12,7 @@ import {
   addSelected,
   clearSelected,
   clearFilters,
+  updatePackage,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
@@ -78,7 +79,16 @@ const handlers = {
   [setPackagesStart.type]: state =>
     merge(state, {
       loading: true
-    })
+    }),
+  [updatePackage.type]: (state, { name, props }) => {
+    const { packages } = state;
+    const pkg = packages.find(pkg => pkg.name === name);
+    const newPkg = merge(pkg, props);
+
+    return merge(state, {
+      packages: packages.map(pkg => (pkg.name === name ? newPkg : pkg))
+    });
+  }
 };
 
 export default createReducer(packages, handlers);

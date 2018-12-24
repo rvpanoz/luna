@@ -26,7 +26,8 @@ import {
   addSelected,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
-  clearSelected
+  clearSelected,
+  updatePackage
 } from '../../models/packages/actions';
 
 import { setPage, setPageRows } from '../../models/ui/actions';
@@ -46,6 +47,25 @@ const mapState = state => ({
 
 const getStyles = loading => {
   return loading ? { filter: 'blur(15px)' } : null;
+};
+
+const getFiltered = (data, filters) => {
+  const groups = Object.keys(PACKAGE_GROUPS);
+  let allFiltered = [];
+
+  filters.forEach(filterName => {
+    let filtered =
+      data &&
+      data.filter(pkg => {
+        if (groups.indexOf(filterName) > -1) {
+          return pkg['__group'] === filterName;
+        }
+        return !!pkg[filterName];
+      });
+    allFiltered = allFiltered.concat(filtered);
+  });
+
+  return allFiltered;
 };
 
 const Packages = props => {
@@ -98,7 +118,8 @@ const Packages = props => {
   };
 
   /**
-   * Hint: use counter to run effect again
+   * TODO: figure out how not to dispatch
+   * SET_PACKAGES_SUCCESS twice
    */
   useEffect(
     () => {
@@ -113,28 +134,6 @@ const Packages = props => {
       return void 0;
     },
     [newPackages, outdatedPackages, counter, manager]
-  );
-
-  const getFiltered = useCallback(
-    () => {
-      const groups = Object.keys(PACKAGE_GROUPS);
-      let allFiltered = [];
-
-      filters.forEach(filterName => {
-        let filtered =
-          packages &&
-          packages.filter(pkg => {
-            if (groups.indexOf(filterName) > -1) {
-              return pkg['__group'] === filterName;
-            }
-            return !!pkg[filterName];
-          });
-        allFiltered = allFiltered.concat(filtered);
-      });
-
-      return allFiltered;
-    },
-    [filters]
   );
 
   useEffect(
@@ -154,7 +153,8 @@ const Packages = props => {
     [sortDir, sortBy]
   );
 
-  const filteredPackages = getFiltered();
+  const filteredPackages =
+    filters && filters.length ? getFiltered(packages, filters) : [];
   const data =
     Array.isArray(filteredPackages) && filteredPackages.length
       ? filteredPackages

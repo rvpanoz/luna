@@ -45,7 +45,6 @@ const TableHeader = props => {
       : onClearSelected();
   };
 
-  console.log(numSelected);
   return (
     <TableHead>
       <TableRow>
