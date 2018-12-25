@@ -12,8 +12,7 @@ const styles = theme => ({
     display: 'block',
     fontSize: '1.2rem',
     color: theme.palette.secondary.light,
-    padding: '1rem',
-    filter: 'drop-shadow(0 0 1px #fff)'
+    padding: '1rem'
   },
   cursor: { animation: 'cursor-blink 300ms alternate linear infinite' },
   overlay: {

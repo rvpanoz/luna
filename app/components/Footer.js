@@ -13,11 +13,7 @@ import Terminal from './layout/Terminal';
 const Footer = props => {
   const { classes } = props;
 
-  return (
-    <section className={classes.root}>
-      <Terminal />
-    </section>
-  );
+  return <section className={classes.root} />;
 };
 
 export default withStyles(styles)(Footer);

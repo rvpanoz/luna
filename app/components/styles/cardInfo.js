@@ -1,6 +1,6 @@
-// ##############################
-// // // StatsCard styles
-// #############################
+/**
+ * CardInfo styles
+ */
 
 import {
   card,
@@ -21,7 +21,7 @@ import {
   roseColor
 } from './general';
 
-const cardStyle = {
+const cardInfoStyle = {
   card,
   cardHeader: {
     ...cardHeader,
@@ -105,7 +105,11 @@ const cardStyle = {
     color: primaryColor,
     textDecoration: 'none',
     ...defaultFont
+  },
+  text: {
+    position: 'relative',
+    top: 5
   }
 };
 
-export default cardStyle;
+export default cardInfoStyle;

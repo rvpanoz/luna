@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { bool, object, objectOf } from 'prop-types';
-
+import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -20,20 +20,26 @@ const styles = theme => ({
   }
 });
 
-const Loader = props => {
-  const { loading, classes, children } = props;
+const AppLoader = props => {
+  const { loading, classes, children, small } = props;
 
   return loading ? (
-    <CircularProgress className={classes.loader} color="secondary" />
+    <CircularProgress
+      className={cn({
+        [classes.loader]: !Boolean(small)
+      })}
+      color={small ? 'primary' : 'secondary'}
+      size={small ? 20 : 40}
+    />
   ) : (
     children
   );
 };
 
-// Loader.propTypes = {
+// AppLoader.propTypes = {
 //   classes: objectOf(object).isRequired,
 //   children: objectOf(object).isRequired,
 //   loading: bool.isRequired
 // };
 
-export default withStyles(styles)(Loader);
+export default withStyles(styles)(AppLoader);

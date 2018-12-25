@@ -13,7 +13,7 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import Loader from '../layout/Loader';
+import AppLoader from '../layout/AppLoader';
 
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
@@ -141,7 +141,7 @@ const Packages = props => {
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <Loader loading={loading}>
+    <AppLoader loading={loading}>
       <Paper className={classes.root}>
         <div className={classes.toolbar}>
           <TableToolbar
@@ -208,7 +208,7 @@ const Packages = props => {
           />
         </Table>
       </Paper>
-    </Loader>
+    </AppLoader>
   );
 };
 

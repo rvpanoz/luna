@@ -1,10 +1,6 @@
-/*!
-
-// ##############################
-// // // Variables - Styles that are used on more than one component
-// #############################
-
-*/
+/**
+ * Styles that are used on more than one component
+ */
 
 const drawerWidth = 260;
 
@@ -36,7 +32,7 @@ const card = {
 };
 
 const defaultFont = {
-  fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+  fontFamily: '"Regular", "Helvetica", "Arial", sans-serif',
   fontWeight: '300',
   lineHeight: '1.5em'
 };
@@ -100,7 +96,7 @@ const cardActions = {
 };
 
 const cardHeader = {
-  margin: '-20px 15px 0',
+  margin: '-5px 15px 0',
   borderRadius: '3px',
   padding: '15px'
 };

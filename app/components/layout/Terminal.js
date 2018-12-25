@@ -20,7 +20,6 @@ const Terminal = props => {
         {command}
         <span className={classes.cursor} />
       </div>
-      <div className={classes.overlay} />
     </div>
   );
 };

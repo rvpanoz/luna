@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { objectOf, object, node, oneOf } from 'prop-types';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 
 import styles from '../styles/cardConsole';
 
-const AppCard = props => {
+const AppCardDetails = props => {
   const { classes, color, title, text } = props;
 
   return (
@@ -40,15 +40,15 @@ const AppCard = props => {
   );
 };
 
-Card.defaultProps = {
-  color: 'gray'
+AppCardDetails.defaultProps = {
+  color: 'orange'
 };
 
-Card.propTypes = {
-  classes: PropTypes.object.isRequired,
-  color: PropTypes.oneOf(['orange', 'green', 'red', 'blue', 'purple']),
-  title: PropTypes.node,
-  text: PropTypes.node
+AppCardDetails.propTypes = {
+  classes: objectOf(object).isRequired,
+  color: oneOf(['orange', 'green', 'red', 'blue', 'purple']),
+  title: node,
+  text: node
 };
 
-export default withStyles(styles)(AppCard);
+export default withStyles(styles)(AppCardDetails);

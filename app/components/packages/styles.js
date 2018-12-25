@@ -111,7 +111,8 @@ export const tableToolbarStyles = theme => ({
   },
   actions: {
     color: theme.palette.text.secondary
-  }
+  },
+  flexContainer: { display: 'flex', flexDirection: 'row' }
 });
 
 export const tableFiltersStyles = theme => ({
