@@ -1,6 +1,6 @@
-// ##############################
-// // // CardStat styles
-// #############################
+/**
+ * CardInfo styles
+ */
 
 import {
   card,
@@ -21,13 +21,12 @@ import {
   roseColor
 } from './general';
 
-const cardStatStyle = {
+const cardInfoStyle = {
   card,
   cardHeader: {
     ...cardHeader,
-    padding: '0',
-    minHeight: '80px',
-    ...defaultFont
+    float: 'left',
+    textAlign: 'center'
   },
   orangeCardHeader,
   greenCardHeader,
@@ -35,19 +34,34 @@ const cardStatStyle = {
   blueCardHeader,
   purpleCardHeader,
   cardContent: {
+    textAlign: 'left',
+    paddingTop: '10px',
     padding: '15px 20px'
   },
-  cardTitle: {
-    marginTop: '0',
-    marginBottom: '5px',
-    ...defaultFont,
-    fontSize: '1.175em'
+  cardIcon: {
+    width: '40px',
+    height: '36px',
+    fill: '#fff'
+  },
+  cardAvatar: {
+    margin: '8px'
   },
   cardCategory: {
     marginBottom: '0',
     color: grayColor,
+    margin: '0 0 10px',
+    ...defaultFont
+  },
+  cardTitle: {
+    margin: '0',
     ...defaultFont,
-    fontSize: '0.9em'
+    fontSize: '1.625em'
+  },
+  cardTitleSmall: {
+    fontSize: '65%',
+    fontWeight: '400',
+    lineHeight: '1',
+    color: '#777'
   },
   cardActions: {
     ...cardActions,
@@ -91,7 +105,11 @@ const cardStatStyle = {
     color: primaryColor,
     textDecoration: 'none',
     ...defaultFont
+  },
+  text: {
+    position: 'relative',
+    top: 5
   }
 };
 
-export default cardStatStyle;
+export default cardInfoStyle;

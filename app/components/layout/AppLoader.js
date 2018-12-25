@@ -24,13 +24,15 @@ const AppLoader = props => {
   const { loading, classes, children, small } = props;
 
   return loading ? (
-    <CircularProgress
-      className={cn({
-        [classes.loader]: !Boolean(small)
-      })}
-      color={small ? 'primary' : 'secondary'}
-      size={small ? 20 : 40}
-    />
+    <React.Fragment>
+      <CircularProgress
+        className={cn({
+          [classes.loader]: !Boolean(small)
+        })}
+        color={small ? 'primary' : 'secondary'}
+        size={small ? 20 : 40}
+      />
+    </React.Fragment>
   ) : (
     children
   );

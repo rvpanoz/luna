@@ -7,6 +7,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { objectOf, object, oneOf, string, node } from 'prop-types';
+import cn from 'classnames';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -25,6 +26,7 @@ import styles from '../styles/cardInfo';
 const AppCardInfo = props => {
   const {
     classes,
+    avatar,
     title,
     description,
     small,
@@ -38,10 +40,12 @@ const AppCardInfo = props => {
     <Card className={classes.card}>
       <CardHeader
         classes={{
-          root: classes.cardHeader + ' ' + classes[color + 'CardHeader'],
+          root: cn(classes.cardHeader, {
+            [classes[color + 'CardHeader']]: color && avatar
+          }),
           avatar: classes.cardAvatar
         }}
-        avatar={<BalotIcon className={classes.cardIcon} />}
+        avatar={avatar && <BalotIcon className={classes.cardIcon} />}
       />
       <CardContent className={classes.cardContent}>
         <Typography component="p" className={classes.cardCategory}>
@@ -76,10 +80,6 @@ const AppCardInfo = props => {
       </CardActions>
     </Card>
   );
-};
-
-AppCardInfo.defaultProps = {
-  color: 'primary'
 };
 
 // AppCardInfo.propTypes = {

@@ -85,6 +85,7 @@ const installExtensions = async () => {
 
 // channel: analyze-json
 ipcMain.on('analyze-json', (event, filePath) => {
+  console.log(1);
   if (!filePath) {
     throw new Error('file path is not defined');
   }
@@ -109,9 +110,9 @@ ipcMain.on('analyze-json', (event, filePath) => {
         Store.get('openedPackages')
       );
     });
-  } catch (e) {
-    mk.log(e.message);
-    throw new Error(e);
+  } catch (error) {
+    mk.log(error.message);
+    throw new Error(error);
   }
 });
 
@@ -121,9 +122,8 @@ ipcMain.on('ipc-event', (event, options) => {
 
   const callback = (status, error, data, cmd) => {
     /**
-     *  Send response to renderer process
-     *  via ipc events
-     * */
+     *  Send response to renderer process via ipc events
+     */
     switch (status) {
       case 'close':
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {

@@ -6,21 +6,18 @@ import { objectOf, object, node, oneOf } from 'prop-types';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
+
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import styles from '../styles/cardConsole';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
+import styles from '../styles/cardDetails';
 
 const AppCardDetails = props => {
-  const { classes, color, title, text } = props;
+  const { classes, title, subtext, text, color, link } = props;
 
   return (
     <Card className={classes.card}>
-      <CardHeader
-        className={classes.cardHeader + ' ' + classes[color + 'CardHeader']}
-        subheader={null}
-      />
       <CardContent className={classes.cardContent}>
         <Typography
           variant="title"
@@ -30,25 +27,37 @@ const AppCardDetails = props => {
           {title}
         </Typography>
         <Typography component="p" className={classes.cardCategory}>
-          {text}
+          {subtext}
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <div className={classes.cardStats}>{text || null} </div>
+        <InfoIcon
+          className={
+            classes.cardStatsIcon + ' ' + classes[color + 'CardStatsIcon']
+          }
+        />
+        {link !== undefined ? (
+          <a href={link.href} className={classes.cardStatsLink}>
+            {link.text}
+          </a>
+        ) : text !== undefined ? (
+          <small className={classes.text}>{text}</small>
+        ) : null}
       </CardActions>
     </Card>
   );
 };
 
 AppCardDetails.defaultProps = {
-  color: 'orange'
+  color: 'info',
+  text: 'No working directory'
 };
 
-AppCardDetails.propTypes = {
-  classes: objectOf(object).isRequired,
-  color: oneOf(['orange', 'green', 'red', 'blue', 'purple']),
-  title: node,
-  text: node
-};
+// AppCardDetails.propTypes = {
+//   classes: objectOf(object).isRequired,
+//   color: oneOf(['orange', 'green', 'red', 'blue', 'purple']),
+//   title: node,
+//   text: node
+// };
 
 export default withStyles(styles)(AppCardDetails);

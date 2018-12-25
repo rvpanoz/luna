@@ -55,6 +55,18 @@ export const isUrl = url => {
 };
 
 /**
+ *
+ * @param {*} str
+ */
+export const camelize = str => {
+  return str
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+      return index !== 0 ? letter.toLowerCase() : letter.toUpperCase();
+    })
+    .replace(/\s+/g, '');
+};
+
+/**
  * switch-case using currying
  * @param {*} cases
  */
@@ -67,9 +79,9 @@ export const switchcase = cases => defaultCase => key =>
  *
  * @param {*} str
  */
-export function firstToUpper(str) {
+export const firstToUpper = str => {
   return str.charAt(0).toUpperCase() + str.slice(1);
-}
+};
 
 export const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);
@@ -182,6 +194,7 @@ export const isPackageOutdated = (outdatedPackages, name) => {
 export const parseMap = (response, mode, directory, commandArgs) => {
   try {
     const packages = JSON.parse(response);
+    const { name, version } = packages || {};
     const data = pick(['dependencies'], packages);
     let dataArray = [];
 
@@ -233,9 +246,9 @@ export const parseMap = (response, mode, directory, commandArgs) => {
       });
     });
 
-    return packagesData;
+    return [name, version, packagesData];
   } catch (error) {
-    mk.log(error);
+    mk.log(error.message);
     throw new Error(error);
   }
 };

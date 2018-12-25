@@ -36,7 +36,13 @@ const PackageItemRow = props => {
           onClick={() => setSelected(name)}
         />
       </TableCell>
-      <TableCell padding="none" className={classes.tableCell}>
+      <TableCell
+        padding="none"
+        className={classes.tableCell}
+        style={{
+          maxWidth: 150
+        }}
+      >
         <span
           style={{
             display: 'inline-flex',

@@ -51,7 +51,7 @@ export const listStyles = theme => ({
     color: darken(theme.palette.secondary.dark, 0.1)
   },
   updated: {
-    color: lighten('#7FFF00', 0.1)
+    color: lighten('#7FFF00', 0.01)
   }
 });
 
