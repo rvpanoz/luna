@@ -113,15 +113,6 @@ const TableListToolbar = props => {
               <Typography color="primary" component="h1" variant="title">
                 {title}
               </Typography>
-              {directory ? (
-                <Typography
-                  className={classes.directory}
-                  variant="headline"
-                  component="h5"
-                >
-                  {directory}
-                </Typography>
-              ) : null}
             </div>
           )}
         </div>
@@ -137,19 +128,7 @@ const TableListToolbar = props => {
         <div className={classes.spacer} />
         <div className={classes.actions}>
           {selected.length === 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <Tooltip title="Show global packages">
-                <div>
-                  <IconButton
-                    color="primary"
-                    disabled={mode === APP_MODES.GLOBAL}
-                    aria-label="Show globals"
-                    onClick={e => switchMode(APP_MODES.GLOBAL, null)}
-                  >
-                    <PublicIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
+            <div className={classes.flexContainer}>
               <Tooltip title="Open package.json">
                 <IconButton
                   color="secondary"
@@ -158,6 +137,17 @@ const TableListToolbar = props => {
                 >
                   <LoadIcon />
                 </IconButton>
+              </Tooltip>
+              <Tooltip title="Show global packages">
+                <div>
+                  <IconButton
+                    disabled={mode === APP_MODES.GLOBAL}
+                    aria-label="Show globals"
+                    onClick={e => switchMode(APP_MODES.GLOBAL, null)}
+                  >
+                    <PublicIcon />
+                  </IconButton>
+                </div>
               </Tooltip>
               <Tooltip title="Reload list">
                 <IconButton aria-label="Reload list" onClick={reload}>

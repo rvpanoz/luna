@@ -17,15 +17,21 @@ const useIpc = (channel, options) => {
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
 
+  let projectName;
+  let projectVersion;
+
   useEffect(() => {
     // eslint-disable-next-line
     ipcRenderer.on(listenTo, (event, status, commandArgs, data, error) => {
-      const parsedPackages =
+      const [name, version, parsedPackages] =
         data && parseMap(data, mode, directory, commandArgs);
 
       if (error) {
         setError(error);
       }
+
+      projectName = name;
+      projectVersion = version;
 
       if (Array.isArray(parsedPackages)) {
         if (commandArgs[0] === 'list') {
@@ -36,7 +42,7 @@ const useIpc = (channel, options) => {
       }
     });
 
-    dispatch(setPackagesStart());
+    dispatch(setPackagesStart(projectName, projectVersion));
     ipcRenderer.send(channel, options);
 
     return () => ipcRenderer.removeAllListeners(listenTo);

@@ -92,8 +92,10 @@ const handlers = {
       packages: [],
       loading: false
     }),
-  [setPackagesStart.type]: state =>
+  [setPackagesStart.type]: (state, { packageName, packageVersion }) =>
     merge(state, {
+      packageName,
+      packageVersion,
       loading: true
     }),
   [updatePackage.type]: (state, { name, props }) => {

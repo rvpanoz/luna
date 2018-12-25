@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * Packages component
  */
@@ -11,13 +13,13 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import Loader from '../layout/Loader';
+import AppLoader from '../layout/AppLoader';
 
 import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
-import PackageRow from './PackageRow';
+import PackageItem from './PackageItem';
 
 import { getFiltered } from '../../commons/utils';
 import { listStyles as styles } from './styles';
@@ -139,7 +141,7 @@ const Packages = props => {
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <Loader loading={loading}>
+    <AppLoader loading={loading}>
       <Paper className={classes.root}>
         <div className={classes.toolbar}>
           <TableToolbar
@@ -176,14 +178,22 @@ const Packages = props => {
           />
           <TableBody>
             {dataSlices &&
-              dataSlices.map(pkg => (
-                <PackageRow
-                  key={`pkg-${pkg.name}`}
-                  isSelected={isSelected}
-                  setSelected={setSelected}
-                  {...pkg}
-                />
-              ))}
+              dataSlices.map(pkg => {
+                const { name, version, latest, isOutdated, __group } = pkg;
+
+                return (
+                  <PackageItem
+                    key={`pkg-${pkg.name}`}
+                    isSelected={isSelected}
+                    setSelected={setSelected}
+                    name={name}
+                    version={version}
+                    latest={latest}
+                    isOutdated={isOutdated}
+                    __group={__group}
+                  />
+                );
+              })}
           </TableBody>
           <TableFooter
             rowCount={(data && data.length) || 0}
@@ -198,13 +208,13 @@ const Packages = props => {
           />
         </Table>
       </Paper>
-    </Loader>
+    </AppLoader>
   );
 };
 
-Packages.propTypes = {
-  classes: objectOf(object).isRequired
-};
+// Packages.propTypes = {
+//   classes: objectOf.isRequired
+// };
 
 const withStylesPackages = withStyles(styles)(Packages);
 export default withStylesPackages;

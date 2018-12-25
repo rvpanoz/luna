@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* eslint-disable react/prop-types */
 
 /**
@@ -5,7 +6,7 @@
  */
 
 import React from 'react';
-import { bool, objectOf, object, string, func } from 'prop-types';
+import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import cn from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -35,7 +36,13 @@ const PackageItemRow = props => {
           onClick={() => setSelected(name)}
         />
       </TableCell>
-      <TableCell padding="none" className={classes.tableCell}>
+      <TableCell
+        padding="none"
+        className={classes.tableCell}
+        style={{
+          maxWidth: 150
+        }}
+      >
         <span
           style={{
             display: 'inline-flex',
@@ -65,15 +72,15 @@ const PackageItemRow = props => {
   );
 };
 
-PackageItemRow.propTypes = {
-  classes: objectOf(object).isRequired,
-  name: string.isRequired,
-  isSelected: func.isRequired,
-  version: string.isRequired,
-  latest: string.isRequired,
-  isOutdated: bool.isRequired,
-  setSelected: func.isRequired,
-  __group: string.isRequired
-};
+// PackageItemRow.propTypes = {
+//   classes: objectOf(object).isRequired,
+//   name: string.isRequired,
+//   isSelected: func.isRequired,
+//   version: string.isRequired,
+//   isOutdated: bool.isRequired,
+//   setSelected: func.isRequired,
+//   latest: oneOfType([string, object]),
+//   __group: string
+// };
 
 export default withStyles(styles)(PackageItemRow);

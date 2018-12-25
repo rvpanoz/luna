@@ -80,17 +80,38 @@ const styles = theme => ({
       width: 200
     }
   },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex'
-    }
+  hide: {
+    display: 'none'
   },
-  sectionMobile: {
+  drawer: {
+    width: 240,
+    flexShrink: 0
+  },
+  drawerPaper: {
+    width: 240
+  },
+  drawerHeader: {
     display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none'
-    }
+    alignItems: 'center',
+    padding: '0 8px',
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end'
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    marginLeft: -240
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    }),
+    marginLeft: 0
   }
 });
 
