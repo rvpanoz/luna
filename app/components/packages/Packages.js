@@ -19,7 +19,7 @@ import useIpc from '../../commons/hooks/useIpc';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
-import PackageRow from './PackageRow';
+import PackageItem from './PackageItem';
 
 import { getFiltered } from '../../commons/utils';
 import { listStyles as styles } from './styles';
@@ -178,14 +178,22 @@ const Packages = props => {
           />
           <TableBody>
             {dataSlices &&
-              dataSlices.map(pkg => (
-                <PackageRow
-                  key={`pkg-${pkg.name}`}
-                  isSelected={isSelected}
-                  setSelected={setSelected}
-                  {...pkg}
-                />
-              ))}
+              dataSlices.map(pkg => {
+                const { name, version, latest, isOutdated, __group } = pkg;
+
+                return (
+                  <PackageItem
+                    key={`pkg-${pkg.name}`}
+                    isSelected={isSelected}
+                    setSelected={setSelected}
+                    name={name}
+                    version={version}
+                    latest={latest}
+                    isOutdated={isOutdated}
+                    __group={__group}
+                  />
+                );
+              })}
           </TableBody>
           <TableFooter
             rowCount={(data && data.length) || 0}
@@ -204,9 +212,9 @@ const Packages = props => {
   );
 };
 
-Packages.propTypes = {
-  classes: objectOf(object).isRequired
-};
+// Packages.propTypes = {
+//   classes: objectOf.isRequired
+// };
 
 const withStylesPackages = withStyles(styles)(Packages);
 export default withStylesPackages;

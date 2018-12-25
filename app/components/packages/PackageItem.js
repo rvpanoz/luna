@@ -66,15 +66,15 @@ const PackageItemRow = props => {
   );
 };
 
-PackageItemRow.propTypes = {
-  classes: objectOf(object).isRequired,
-  name: string.isRequired,
-  isSelected: func.isRequired,
-  version: string.isRequired,
-  latest: oneOfType([string, object]).isRequired,
-  isOutdated: bool.isRequired,
-  setSelected: func.isRequired,
-  __group: string.isRequired
-};
+// PackageItemRow.propTypes = {
+//   classes: objectOf(object).isRequired,
+//   name: string.isRequired,
+//   isSelected: func.isRequired,
+//   version: string.isRequired,
+//   isOutdated: bool.isRequired,
+//   setSelected: func.isRequired,
+//   latest: oneOfType([string, object]),
+//   __group: string
+// };
 
 export default withStyles(styles)(PackageItemRow);

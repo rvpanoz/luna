@@ -10,30 +10,13 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import { firstToUpper } from '../../commons/utils';
+import WarningIcon from '@material-ui/icons/Warning';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
+
 import styles from '../styles/cardInfo';
 
 const AppCard = props => {
-  const {
-    classes,
-    title,
-    description,
-    small,
-    text,
-    color,
-    renderAvatarIcon,
-    renderActionsIcon
-  } = props;
-
-  const AvatarIcon = React.createElement('div', {
-    className: classes.cardIcon,
-    children: [renderAvatarIcon()]
-  });
-
-  const ActionsIcon = React.createElement('div', {
-    className: classes.cardStatsIcon + ' ' + classes[color + 'CardStatsIcon'],
-    children: [renderActionsIcon()]
-  });
+  const { classes, title, description, small, text, color, type } = props;
 
   return (
     <Card className={classes.card}>
@@ -42,7 +25,7 @@ const AppCard = props => {
           root: classes.cardHeader + ' ' + classes[color + 'CardHeader'],
           avatar: classes.cardAvatar
         }}
-        avatar={AvatarIcon}
+        avatar={<InfoIcon className={classes.cardIcon} />}
       />
       <CardContent className={classes.cardContent}>
         <Typography component="p" className={classes.cardCategory}>
@@ -60,15 +43,18 @@ const AppCard = props => {
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        {ActionsIcon} {text}
+        <WarningIcon
+          className={
+            classes.cardStatsIcon + ' ' + classes[color + 'CardStatsIcon']
+          }
+        />
       </CardActions>
     </Card>
   );
 };
 
 Card.defaultProps = {
-  iconColor: 'purple',
-  statIconColor: 'gray'
+  color: 'purple'
 };
 
 Card.propTypes = {

@@ -64,7 +64,7 @@ export const tableHeaderStyles = theme => ({
   tableCell: {
     fontSize: 14,
     lineHeight: '1.4em',
-    padding: '12px 8px',
+    padding: '0px 12px',
     verticalAlign: 'middle'
   }
 });

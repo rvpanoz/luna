@@ -13,13 +13,7 @@ const styles = {};
 const PackageDetails = props => {
   const { classes } = props;
 
-  return (
-    <CardDetails
-      color="red"
-      title="Completed Tasks"
-      text="Last Campaign Performance"
-    />
-  );
+  return null;
 };
 
 export default withStyles(styles)(PackageDetails);

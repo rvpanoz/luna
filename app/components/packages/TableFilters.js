@@ -1,8 +1,8 @@
+/* eslint-disable */
+
 /**
  * Table list filters
  */
-
-/* eslint-disable */
 
 import { withStyles } from '@material-ui/core/styles';
 import React from 'react';

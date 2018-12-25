@@ -10,7 +10,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import styles from '../styles/cardStat';
+import styles from '../styles/cardConsole';
 
 const AppCard = props => {
   const { classes, color, title, text } = props;

@@ -26,7 +26,7 @@ const cardStatStyle = {
   cardHeader: {
     ...cardHeader,
     padding: '0',
-    minHeight: '160px',
+    minHeight: '80px',
     ...defaultFont
   },
   orangeCardHeader,

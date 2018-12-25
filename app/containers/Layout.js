@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * Layout component
  */
@@ -10,6 +12,7 @@ import { withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import Dashboard from '../components/Dashboard';
 import { Packages, PackageDetails } from '../components/packages';
 
@@ -39,14 +42,19 @@ const Layout = props => {
               <PackageDetails />
             </Grid>
           </Grid>
+          <Grid container justify="space-between">
+            <Grid item xs={12}>
+              <Footer />
+            </Grid>
+          </Grid>
         </div>
       </section>
     </div>
   );
 };
 
-Layout.propTypes = {
-  classes: objectOf(object).isRequired
-};
+// Layout.propTypes = {
+//   classes: objectOf(object).isRequired
+// };
 
 export default withStyles(styles)(Layout);

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * Loader
  * renders a CircularProgress or props.children
@@ -28,10 +30,10 @@ const Loader = props => {
   );
 };
 
-Loader.propTypes = {
-  classes: objectOf(object).isRequired,
-  children: objectOf(object).isRequired,
-  loading: bool.isRequired
-};
+// Loader.propTypes = {
+//   classes: objectOf(object).isRequired,
+//   children: objectOf(object).isRequired,
+//   loading: bool.isRequired
+// };
 
 export default withStyles(styles)(Loader);
