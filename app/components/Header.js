@@ -14,7 +14,15 @@ import Badge from '@material-ui/core/Badge';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Modal from '@material-ui/core/Modal';
+import Drawer from '@material-ui/core/Drawer';
+import Divider from '@material-ui/core/Divider';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import List from '@material-ui/core/List';
 
+import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -25,6 +33,7 @@ import Settings from './Settings';
 const Header = props => {
   const { classes } = props;
   const [anchorEl, setAnchorEl] = useState(null);
+  const [drawerOpen, toggleDrawer] = useState(false);
   const [settingsOpen, toggleSettings] = useState(false);
   const [keyboardOpen, toggleKeyboard] = useState(false);
   const menuOpen = Boolean(anchorEl);
@@ -33,6 +42,14 @@ const Header = props => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
+          <IconButton
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="Open menu"
+            onClick={e => toggleDrawer(e)}
+          >
+            <MenuIcon />
+          </IconButton>
           <Typography
             className={classes.title}
             variant="h6"
@@ -84,6 +101,32 @@ const Header = props => {
           </div>
         </Toolbar>
       </AppBar>
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={drawerOpen}
+        classes={{
+          paper: classes.drawerPaper
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={e => toggleDrawer(!drawerOpen)}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        <Divider />
+        <List>
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+            <ListItem button key={text}>
+              <ListItemIcon>
+                {index % 2 === 0 ? <SettingsIcon /> : <NotificationsIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
       <Modal
         aria-labelledby="settings"
         aria-describedby="settings"
