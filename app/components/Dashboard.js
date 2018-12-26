@@ -65,6 +65,7 @@ const Dashboard = props => {
             text={directory || 'Global mode'}
             loading={loading}
             avatar
+            type="info"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
@@ -74,7 +75,12 @@ const Dashboard = props => {
             color="orange"
             text="Updated"
             loading={loading}
+            link={{
+              text: 'View packages',
+              href: '#'
+            }}
             avatar
+            type="update"
           />
         </Grid>
       </Grid>

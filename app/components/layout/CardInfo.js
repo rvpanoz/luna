@@ -17,9 +17,9 @@ import Typography from '@material-ui/core/Typography';
 
 import AppLoader from './AppLoader';
 
-import WarningIcon from '@material-ui/icons/Warning';
+import UpdateIcon from '@material-ui/icons/UpdateOutlined';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
-import BalotIcon from '@material-ui/icons/Ballot';
+import BalotIcon from '@material-ui/icons/BallotOutlined';
 
 import styles from '../styles/cardInfo';
 
@@ -33,7 +33,8 @@ const AppCardInfo = props => {
     text,
     color,
     link,
-    loading
+    loading,
+    type
   } = props;
 
   return (
@@ -45,7 +46,13 @@ const AppCardInfo = props => {
           }),
           avatar: classes.cardAvatar
         }}
-        avatar={avatar && <BalotIcon className={classes.cardIcon} />}
+        avatar={
+          type === 'info' ? (
+            <BalotIcon className={classes.cardIcon} />
+          ) : (
+            <UpdateIcon className={classes.cardIcon} />
+          )
+        }
       />
       <CardContent className={classes.cardContent}>
         <Typography component="p" className={classes.cardCategory}>
