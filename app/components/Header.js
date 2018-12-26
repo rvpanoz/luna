@@ -1,9 +1,9 @@
 /* eslint-disable */
 /* eslint-disable-interactive-support-focus */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import cn from 'classnames';
+import { ipcRenderer } from 'electron';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -21,6 +21,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
+import Icon from '@material-ui/core/Icon';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
@@ -32,11 +33,23 @@ import Settings from './Settings';
 
 const Header = props => {
   const { classes } = props;
+  const [openedDirectories, setOpenedDirectories] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [drawerOpen, toggleDrawer] = useState(false);
   const [settingsOpen, toggleSettings] = useState(false);
   const [keyboardOpen, toggleKeyboard] = useState(false);
   const menuOpen = Boolean(anchorEl);
+
+  useEffect(
+    () => {
+      ipcRenderer.on('loaded-packages-close', (event, directories) => {
+        setOpenedDirectories(directories);
+      });
+
+      return () => ipcRenderer.removeAllListeners('loaded-packages-close');
+    },
+    [openedDirectories.length]
+  );
 
   return (
     <div className={classes.root}>
@@ -46,7 +59,7 @@ const Header = props => {
             className={classes.menuButton}
             color="inherit"
             aria-label="Open menu"
-            onClick={e => toggleDrawer(e)}
+            onClick={e => toggleDrawer(!drawerOpen)}
           >
             <MenuIcon />
           </IconButton>
@@ -116,16 +129,37 @@ const Header = props => {
           </IconButton>
         </div>
         <Divider />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
+        <div className={classes.list}>
+          <List>
+            <ListItem>
               <ListItemIcon>
-                {index % 2 === 0 ? <SettingsIcon /> : <NotificationsIcon />}
+                <Icon>folder_open</Icon>
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary="History" />
             </ListItem>
-          ))}
-        </List>
+            {openedDirectories &&
+              openedDirectories.map((pkg, idx) => (
+                <ListItem
+                  key={`directory-${idx}`}
+                  dense={true}
+                  style={{ marginLeft: '10px' }}
+                >
+                  <ListItemText
+                    className={classes.listItem}
+                    primary={
+                      <a
+                        onClick={e => console.log(pkg.directory)}
+                        href="#sub-labels-and-columns"
+                        className={classes.link}
+                      >
+                        {pkg.name}
+                      </a>
+                    }
+                  />
+                </ListItem>
+              ))}
+          </List>
+        </div>
       </Drawer>
       <Modal
         aria-labelledby="settings"

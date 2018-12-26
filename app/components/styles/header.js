@@ -112,6 +112,27 @@ const styles = theme => ({
       duration: theme.transitions.duration.enteringScreen
     }),
     marginLeft: 0
+  },
+  list: {
+    overflow: 'hidden',
+    position: 'relative',
+    width: '100%'
+  },
+  listItem: {
+    marginLeft: 50
+  },
+  link: {
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
+    '&:hover': {
+      color: theme.palette.secondary.light,
+      textDecoration: 'none'
+    }
+  },
+  iconHover: {
+    '&:hover': {
+      fill: 'rgb(225, 0, 80)'
+    }
   }
 });
 

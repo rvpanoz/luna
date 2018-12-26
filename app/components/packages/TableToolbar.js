@@ -34,8 +34,7 @@ const mapState = state => ({
 });
 
 const TableListToolbar = props => {
-  const { classes, selected, title, directory, mode, reload } = props;
-  const { manager } = useMappedState(mapState);
+  const { classes, selected, title, mode, reload } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
   const dispatch = useDispatch();

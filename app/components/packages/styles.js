@@ -52,6 +52,9 @@ export const listStyles = theme => ({
   },
   updated: {
     color: lighten('#7FFF00', 0.01)
+  },
+  nodata: {
+    padding: theme.spacing.unit * 2.5
   }
 });
 

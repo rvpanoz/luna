@@ -28,7 +28,7 @@ const mapState = state => ({
 });
 
 const Dashboard = props => {
-  const { classes } = props;
+  const { classes, theme } = props;
   const {
     packages,
     packagesOutdated,
@@ -40,13 +40,17 @@ const Dashboard = props => {
     projectVersion
   } = useMappedState(mapState);
 
+  const {
+    palette: { primary, secondary }
+  } = theme || {};
+
   return (
     <section className={classes.root}>
       <Grid container justify="space-between">
         <Grid item xs={12} sm={6} md={3}>
           <CardDetails
             title={`${
-              mode === APP_MODES.LOCAL
+              mode === APP_MODES.LOCAL && projectName
                 ? `${projectName} v${projectVersion}`
                 : 'Project'
             }`}
@@ -61,18 +65,18 @@ const Dashboard = props => {
           <CardInfo
             title="Total dependencies"
             description={packages ? packages.length : 0}
-            color="blue"
-            text={directory || 'Global mode'}
+            color="red"
+            text={'Problems'}
             loading={loading}
             avatar
-            type="info"
+            type="warning"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <CardInfo
             title="Outdated packages"
             description={packagesOutdated ? packagesOutdated.length : 0}
-            color="orange"
+            color="blue"
             text="Updated"
             loading={loading}
             link={{
@@ -88,4 +92,6 @@ const Dashboard = props => {
   );
 };
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles, {
+  withTheme: true
+})(Dashboard);
