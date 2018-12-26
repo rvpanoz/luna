@@ -14,10 +14,14 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
+<<<<<<< c72704d15192f0efaaec41921e7332f403eceb4f
 
 import useIpc from 'commons/hooks/useIpc';
 import { getFiltered } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
+=======
+import AppLoader from '../layout/AppLoader';
+>>>>>>> work in progress
 
 import AppLoader from '../layout/AppLoader';
 import TableToolbar from './TableToolbar';
@@ -96,11 +100,31 @@ const Packages = props => {
   useEffect(
     () => {
       if (error) {
+<<<<<<< c72704d15192f0efaaec41921e7332f403eceb4f
         setPackagesError(error);
         return;
       }
 
       if (Array.isArray(dependencies) && dependencies.length) {
+=======
+        dispatch(setPackagesSuccess({ data: [], name: null, version: null }));
+        dispatch(
+          setPackagesOutdatedSuccess({
+            data: []
+          })
+        );
+
+        return;
+      }
+
+      if (Array.isArray(dependencies) && dependencies.length) {
+        dispatch(setPackagesSuccess({ data: dependencies, name, version }));
+      } else if (!name) {
+        dispatch(
+          setPackagesSuccess({ data: dependencies, name: null, version: null })
+        );
+      } else {
+>>>>>>> work in progress
         dispatch(setPackagesSuccess({ data: dependencies, name, version }));
       }
 
@@ -108,6 +132,12 @@ const Packages = props => {
         dispatch(
           setPackagesOutdatedSuccess({
             data: outdated
+          })
+        );
+      } else {
+        dispatch(
+          setPackagesOutdatedSuccess({
+            data: []
           })
         );
       }
@@ -161,7 +191,11 @@ const Packages = props => {
             reload={() => setCounter(counter + 1)} // triggers render
           />
         </div>
+<<<<<<< c72704d15192f0efaaec41921e7332f403eceb4f
         {dataSlices.length ? (
+=======
+        {!dataSlices.length ? (
+>>>>>>> work in progress
           <React.Fragment>
             <Table
               className={cn(classes.tablelist, {
