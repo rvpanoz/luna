@@ -69,7 +69,7 @@ const Packages = props => {
 
   // useIpc hook to send and listenTo ipc events
   // TODO: needs work to handle all events (install, uninstall etc)
-  const [newPackages, outdatedPackages, error] = useIpc('ipc-event', {
+  const [dependenciesSet, outdatedSet, error] = useIpc('ipc-event', {
     ipcEvent: 'get-packages',
     cmd: ['outdated', 'list'],
     mode,
@@ -89,28 +89,35 @@ const Packages = props => {
     setSortDir(newSortBy);
   };
 
-  /**
-   * TODO: figure out how not to dispatch
-   * SET_PACKAGES_SUCCESS twice :-
-   */
+  const { name, version } = dependenciesSet || {}; //project name
+  const dependencies = dependenciesSet.data || [];
+  const outdated = outdatedSet.data || [];
+
+  // dispatch actions
   useEffect(
     () => {
-      if (typeof newPackages === 'object' && newPackages.length) {
-        dispatch(setPackagesSuccess(newPackages));
+      console.log(dependencies, outdated);
+
+      if (dependencies && typeof dependencies === 'object') {
+        dispatch(setPackagesSuccess({ data: dependencies, name, version }));
       }
 
-      if (typeof outdatedPackages === 'object' && outdatedPackages.length) {
-        dispatch(setPackagesOutdatedSuccess(outdatedPackages));
+      if (outdated && typeof outdated === 'object') {
+        dispatch(
+          setPackagesOutdatedSuccess({
+            data: outdated
+          })
+        );
       }
     },
-    [newPackages, outdatedPackages]
+    [dependenciesSet]
   );
 
   // sort packages
   useEffect(
     () => {
       // clone newPackages
-      const data = newPackages.slice(0);
+      const data = dependencies && dependencies.slice(0);
 
       if (!data || !data.length) {
         return;
