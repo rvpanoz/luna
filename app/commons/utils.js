@@ -193,23 +193,26 @@ export const isPackageOutdated = (outdatedPackages, name) => {
  */
 export const parseMap = (response, mode, directory, commandArgs) => {
   try {
-    const packages = JSON.parse(response);
-    const { name, version } = packages || {};
-    const data = pick(['dependencies'], packages);
+    const packageJson = JSON.parse(response);
+    const { name, version } = packageJson || {};
+
+    const packages = pick(['dependencies'], packageJson);
+    const { dependencies } = packages || {};
+
     let dataArray = [];
 
-    if (!data.dependencies) {
-      dataArray = objectEntries(packages);
+    if (Boolean(dependencies) === false) {
+      dataArray = objectEntries(packageJson);
     } else {
-      dataArray = objectEntries(data.dependencies);
+      dataArray = objectEntries(dependencies);
     }
 
     if (!Array.isArray(dataArray) || !dataArray) {
-      mk.log(`utils[parseMap]: cound not convert data to array`);
+      mk.log(`utils[parseMap]: cound not convert package.json data to array`);
       return;
     }
 
-    const packagesData = dataArray.map(pkgArr => {
+    const data = dataArray.map(pkgArr => {
       const [pkgName, details] = pkgArr;
 
       let group = null;
@@ -246,7 +249,7 @@ export const parseMap = (response, mode, directory, commandArgs) => {
       });
     });
 
-    return [name, version, packagesData];
+    return [name, version, data];
   } catch (error) {
     mk.log(error.message);
     throw new Error(error);

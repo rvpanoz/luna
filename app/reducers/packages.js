@@ -62,8 +62,9 @@ const handlers = {
   [clearFilters.type]: state => assoc('filters', [], state),
   [clearSelected.type]: state => assoc('selected', [], state),
   [setPackagesSuccess.type]: (state, { payload }) => {
+    const { data, name, version } = payload;
     const { packagesOutdated } = state;
-    let newPayload = payload.map(pkg => {
+    const packages = data.map(pkg => {
       const [isOutdated, outdatedPkg] = isPackageOutdated(
         packagesOutdated,
         pkg.name
@@ -76,16 +77,21 @@ const handlers = {
     });
 
     return merge(state, {
-      packages: newPayload,
-      filters: [], //clear filters
+      packages,
+      filters: [],
+      loading: false,
+      projectName: name,
+      projectVersion: version
+    });
+  },
+  [setPackagesOutdatedSuccess.type]: (state, { payload }) => {
+    const { data } = payload;
+
+    return merge(state, {
+      packagesOutdated: data,
       loading: false
     });
   },
-  [setPackagesOutdatedSuccess.type]: (state, { payload }) =>
-    merge(state, {
-      packagesOutdated: payload,
-      loading: false
-    }),
   [setPackagesError.type]: (state, action) =>
     merge(state, {
       error: action.payload,
