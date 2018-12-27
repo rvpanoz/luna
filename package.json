@@ -31,7 +31,6 @@
   "lint-staged": {
     "*.{js,jsx}": [
       "cross-env NODE_ENV=development eslint --cache --format=pretty",
-      "prettier --ignore-path .eslintignore --single-quote --write",
       "git add"
     ],
     "{*.json,.{babelrc,eslintrc,prettierrc,stylelintrc}}": [
@@ -164,12 +163,14 @@
     "electron-devtools-installer": "^2.2.4",
     "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-erb": "0.0.2",
     "eslint-config-prettier": "^3.3.0",
     "eslint-formatter-pretty": "^2.0.0",
     "eslint-import-resolver-webpack": "^0.10.1",
     "eslint-plugin-compat": "^2.6.3",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "6.1.2",
+    "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-react": "^7.11.1",
     "fbjs-scripts": "^1.0.1",
