@@ -107,6 +107,7 @@ const cardInfoStyle = {
     ...defaultFont
   },
   text: {
+    width: '100%',
     position: 'relative',
     top: 5
   }
