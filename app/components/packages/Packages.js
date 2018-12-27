@@ -109,7 +109,7 @@ const Packages = props => {
   // sort packages
   useEffect(
     () => {
-      // clone newPackages
+      // clone dependencies
       const data = dependencies && dependencies.slice(0);
 
       if (!data || !data.length) {
@@ -208,7 +208,6 @@ const Packages = props => {
             />
           </Table>
         </React.Fragment>
-        )
       </Paper>
     </AppLoader>
   );
