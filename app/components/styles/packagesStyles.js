@@ -51,7 +51,7 @@ export const listStyles = theme => ({
     color: darken(theme.palette.secondary.dark, 0.1)
   },
   updated: {
-    color: lighten('#7FFF00', 0.01)
+    color: darken('#00b300', 0.01)
   },
   nodata: {
     padding: theme.spacing.unit * 2.5

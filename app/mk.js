@@ -1,4 +1,3 @@
-// eslint-disable
 // @Mike Car
 
 const mk = {

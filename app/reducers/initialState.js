@@ -9,6 +9,7 @@ export default {
     packagesOutdated: [],
     selected: [],
     filters: [],
+    lastUpdatedAt: null,
     loading: false
   },
   metadata: {}

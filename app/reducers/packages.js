@@ -16,8 +16,9 @@ import {
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
   setPackagesError
-} from '../models/packages/actions';
-import { isPackageOutdated } from '../commons/utils';
+} from 'models/packages/actions';
+import { isPackageOutdated } from 'commons/utils';
+import format from 'date-fns/format';
 
 const { packages } = initialState;
 
@@ -61,7 +62,7 @@ const handlers = {
   [clearFilters.type]: state => assoc('filters', [], state),
   [clearSelected.type]: state => assoc('selected', [], state),
   [setPackagesSuccess.type]: (state, { payload }) => {
-    const { data, name, version } = payload;
+    const { data, name, version, loader } = payload;
     const { packagesOutdated } = state;
     const packages = data.map(pkg => {
       const [isOutdated, outdatedPkg] = isPackageOutdated(
@@ -79,6 +80,7 @@ const handlers = {
       packages,
       filters: [],
       loading: false,
+      lastUpdatedAt: format(new Date(), 'MM/DD/YYYY h:mm:ss'),
       projectName: name,
       projectVersion: version
     });
