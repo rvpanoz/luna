@@ -1,5 +1,5 @@
 const path = require('path');
-console.log(path.resolve(__dirname, 'configs/webpack.config.eslint.js'));
+
 module.exports = {
   parser: 'babel-eslint',
   parserOptions: {

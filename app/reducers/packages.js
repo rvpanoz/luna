@@ -7,11 +7,12 @@
 import { identity, merge, assoc, prepend, prop, propOr, remove } from 'ramda';
 import initialState from './initialState';
 import {
+  addNotification,
   addFilter,
   addSelected,
   clearSelected,
   clearFilters,
-  updatePackage,
+  clearNotifications,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
@@ -109,15 +110,22 @@ const handlers = {
       packageVersion,
       loading: true
     }),
-  [updatePackage.type]: (state, { name, props }) => {
-    const { packages } = state;
-    const pkg = packages.find(pkg => pkg.name === name);
-    const newPkg = merge(pkg, props);
-
-    return merge(state, {
-      packages: packages.map(pkg => (pkg.name === name ? newPkg : pkg))
-    });
-  }
+  [addNotification.type]: (
+    state,
+    { payload: { level, body, requires, requiredBy } }
+  ) =>
+    merge(state, {
+      notifications: prepend(
+        {
+          level,
+          body,
+          requires,
+          requiredBy
+        },
+        state.notifications
+      )
+    }),
+  [clearNotifications.type]: state => assoc('notifications', [], state)
 };
 
 export default createReducer(packages, handlers);

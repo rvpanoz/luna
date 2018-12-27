@@ -19,6 +19,7 @@ const App = () => {
 
     ipcRenderer.on('ipcEvent-error', (event, error) => {
       console.error(error, 1);
+      // TODO: dispatch addNotification.type
     });
 
     return () =>
