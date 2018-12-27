@@ -22,7 +22,6 @@ import useIpc from 'commons/hooks/useIpc';
 import { getFiltered } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
 
-
 import { listStyles as styles } from '../styles/packagesStyles';
 import {
   addSelected,
@@ -33,7 +32,6 @@ import {
 } from 'models/packages/actions';
 
 import { setPage, setPageRows } from 'models/ui/actions';
-//tes
 
 const mapState = state => ({
   manager: state.common.manager,
@@ -94,33 +92,8 @@ const Packages = props => {
   // dispatch actions
   useEffect(
     () => {
-      if (error) {
-<<<<<<< c72704d15192f0efaaec41921e7332f403eceb4f
-        setPackagesError(error);
-        return;
-      }
-
-      if (Array.isArray(dependencies) && dependencies.length) {
-=======
-        dispatch(setPackagesSuccess({ data: [], name: null, version: null }));
-        dispatch(
-          setPackagesOutdatedSuccess({
-            data: []
-          })
-        );
-
-        return;
-      }
-
       if (Array.isArray(dependencies) && dependencies.length) {
         dispatch(setPackagesSuccess({ data: dependencies, name, version }));
-      } else {
-<<<<<<< 9b80af76a9d16bfb83289f24f0de70b3159fe6a3
->>>>>>> work in progress
-        dispatch(setPackagesSuccess({ data: dependencies, name, version }));
-=======
-        dispatch(setPackagesSuccess({ data: [], name: '', version: '' }));
->>>>>>> general fixes
       }
 
       if (Array.isArray(outdated) && outdated.length) {
@@ -129,8 +102,6 @@ const Packages = props => {
             data: outdated
           })
         );
-      } else {
-        dispatch(setPackagesOutdatedSuccess({ data: [] }));
       }
     },
     [dependenciesSet]
@@ -182,76 +153,63 @@ const Packages = props => {
             reload={() => setCounter(counter + 1)} // triggers render
           />
         </div>
-<<<<<<< 9b80af76a9d16bfb83289f24f0de70b3159fe6a3
-<<<<<<< c72704d15192f0efaaec41921e7332f403eceb4f
-        {dataSlices.length ? (
-=======
-        {!dataSlices.length ? (
->>>>>>> work in progress
-=======
-        {dataSlices.length ? (
->>>>>>> general fixes
-          <React.Fragment>
-            <Table
-              className={cn(classes.tablelist, {
-                [classes.hasFilterBlur]: loading
-              })}
-            >
-              <TableHeader
-                packages={dataSlices.map(d => d.name)}
-                numSelected={Number(selected.length)}
-                rowCount={(data && data.length) || 0}
-                sortBy={sortBy}
-                sortDir={sortDir}
-                setSortBy={(e, prop) => setSortBy(prop)}
-                toggleSort={(e, prop) => toggleSort(prop)}
-                onSelected={(name, force) =>
-                  dispatch(
-                    addSelected({
-                      name,
-                      force
-                    })
-                  )
-                }
-                onClearSelected={() => dispatch(clearSelected())}
-              />
-              <TableBody>
-                {dataSlices &&
-                  dataSlices.map(pkg => {
-                    const { name, version, latest, isOutdated, __group } = pkg;
+        <React.Fragment>
+          <Table
+            className={cn(classes.tablelist, {
+              [classes.hasFilterBlur]: loading
+            })}
+          >
+            <TableHeader
+              packages={dataSlices.map(d => d.name)}
+              numSelected={Number(selected.length)}
+              rowCount={(data && data.length) || 0}
+              sortBy={sortBy}
+              sortDir={sortDir}
+              setSortBy={(e, prop) => setSortBy(prop)}
+              toggleSort={(e, prop) => toggleSort(prop)}
+              onSelected={(name, force) =>
+                dispatch(
+                  addSelected({
+                    name,
+                    force
+                  })
+                )
+              }
+              onClearSelected={() => dispatch(clearSelected())}
+            />
+            <TableBody>
+              {dataSlices &&
+                dataSlices.map(pkg => {
+                  const { name, version, latest, isOutdated, __group } = pkg;
 
-                    return (
-                      <PackageItem
-                        key={`pkg-${pkg.name}`}
-                        isSelected={isSelected}
-                        setSelected={setSelected}
-                        name={name}
-                        version={version}
-                        latest={latest}
-                        isOutdated={isOutdated}
-                        __group={__group}
-                      />
-                    );
-                  })}
-              </TableBody>
-              <TableFooter
-                rowCount={(data && data.length) || 0}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                handleChangePage={(e, pageNo) =>
-                  dispatch(setPage({ page: pageNo }))
-                }
-                handleChangePageRows={e =>
-                  dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
-                }
-              />
-            </Table>{' '}
-          </React.Fragment>
-        ) : (
-          <Typography className={classes.nodata} component="h4">
-            No dependencies found
-          </Typography>
-        )}
+                  return (
+                    <PackageItem
+                      key={`pkg-${pkg.name}`}
+                      isSelected={isSelected}
+                      setSelected={setSelected}
+                      name={name}
+                      version={version}
+                      latest={latest}
+                      isOutdated={isOutdated}
+                      __group={__group}
+                    />
+                  );
+                })}
+            </TableBody>
+            <TableFooter
+              rowCount={(data && data.length) || 0}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              handleChangePage={(e, pageNo) =>
+                dispatch(setPage({ page: pageNo }))
+              }
+              handleChangePageRows={e =>
+                dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
+              }
+            />
+          </Table>
+        </React.Fragment>
+        )
       </Paper>
     </AppLoader>
   );
