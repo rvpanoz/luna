@@ -46,6 +46,9 @@ const Dashboard = props => {
   const renderProjectStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
+      <div className={cn(classes.flexContainerItem, classes.textCenter)}>
+        Outdated:&nbsp;{packagesOutdated ? packagesOutdated.length : 0}
+      </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
         Problems:&nbsp;0
       </div>
