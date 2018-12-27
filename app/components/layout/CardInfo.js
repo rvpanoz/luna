@@ -95,9 +95,7 @@ const AppCardInfo = props => {
           component="h2"
           className={classes.cardTitle}
         >
-          <AppLoader loading={loading} small={true}>
-            {description}
-          </AppLoader>
+          {description}
           {small !== undefined ? (
             <small className={classes.cardTitleSmall}>{small}</small>
           ) : null}

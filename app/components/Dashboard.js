@@ -14,6 +14,7 @@ import CardDetails from './layout/CardDetails';
 import styles from './styles/dashboard';
 
 import { APP_MODES } from 'constants/AppConstants';
+import AppLoader from './layout/AppLoader';
 
 const mapState = state => ({
   manager: state.common.manager,
@@ -39,11 +40,24 @@ const Dashboard = props => {
     projectVersion
   } = useMappedState(mapState);
 
-  const renderItems = () => (
+  const renderDetailsStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
         Problems:&nbsp;21
+      </div>
+    </div>
+  );
+
+  const renderDependenciesStats = data => data;
+
+  const renderInfoStats = () => (
+    <div className={classes.flexContainer}>
+      <div className={classes.flexContainerItem}>
+        Last update at:&nbsp;12/12/2018 - 20:33
+      </div>
+      <div className={cn(classes.flexContainerItem, classes.textRight)}>
+        Outdated:&nbsp;21
       </div>
     </div>
   );
@@ -57,14 +71,14 @@ const Dashboard = props => {
       <Grid container justify="space-between">
         <Grid item xs={12} sm={6} md={3}>
           <CardDetails
+            id="card-1"
             title={`${
               mode === APP_MODES.LOCAL && projectName
                 ? `${projectName} v${projectVersion}`
                 : 'Project'
             }`}
-            description={packages ? packages.length : 0}
             subtext={directory || 'No working directory'}
-            text={renderItems()}
+            text={renderDetailsStats()}
             loading={loading}
             avatar
           />
@@ -72,9 +86,11 @@ const Dashboard = props => {
         <Grid item xs={12} sm={6} md={3}>
           <CardInfo
             title="Total dependencies"
-            description={packages ? packages.length : 0}
+            description={renderDependenciesStats(
+              packages ? packages.length : 0
+            )}
             color="red"
-            text={'Last update at'}
+            text={renderInfoStats()}
             loading={loading}
             avatar
             type="update"
@@ -82,15 +98,10 @@ const Dashboard = props => {
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <CardInfo
-            title="Outdated packages"
-            description={packagesOutdated ? packagesOutdated.length : 0}
+            title="Tools/Graph?"
+            description="Statistics"
             color="blue"
-            text="Updated"
-            loading={loading}
-            link={{
-              text: 'View packages',
-              href: '#'
-            }}
+            text="Statistics"
             avatar
             type="update"
           />
