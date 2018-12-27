@@ -17,19 +17,15 @@ import Typography from '@material-ui/core/Typography';
 
 import useIpc from 'commons/hooks/useIpc';
 import { getFiltered } from 'commons/utils';
-import { APP_MODES } from 'constants/AppConstants';
 
-import AppLoader from '../layout/AppLoader';
-import TableToolbar from './TableToolbar';
-import TableHeader from './TableHeader';
-import TableFooter from './TableFooter';
-import PackageItem from './PackageItem';
+import useIpc from 'commons/hooks/useIpc';
+import { getFiltered } from 'commons/utils';
+import { APP_MODES } from 'constants/AppConstants';
 
 import { listStyles as styles } from '../styles/packagesStyles';
 import {
   addSelected,
   setPackagesSuccess,
-  setPackagesError,
   setPackagesOutdatedSuccess,
   clearSelected
 } from 'models/packages/actions';

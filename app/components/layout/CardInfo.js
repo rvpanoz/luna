@@ -17,12 +17,24 @@ import Typography from '@material-ui/core/Typography';
 
 import AppLoader from './AppLoader';
 
+<<<<<<< c72704d15192f0efaaec41921e7332f403eceb4f
+<<<<<<< eafb0800260f011efe16ea65ffb5345f5aa812ed
+=======
+>>>>>>> work in progress
 import WarningIcon from '@material-ui/icons/WarningOutlined';
 import UpdateIcon from '@material-ui/icons/UpdateOutlined';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
 import BalotIcon from '@material-ui/icons/BallotOutlined';
 
 import { switchcase } from '../../commons/utils';
+<<<<<<< c72704d15192f0efaaec41921e7332f403eceb4f
+=======
+import UpdateIcon from '@material-ui/icons/UpdateOutlined';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
+import BalotIcon from '@material-ui/icons/BallotOutlined';
+>>>>>>> Cards info and details
+=======
+>>>>>>> work in progress
 
 import styles from '../styles/cardInfo';
 
@@ -84,7 +96,21 @@ const AppCardInfo = props => {
           }),
           avatar: classes.cardAvatar
         }}
+<<<<<<< c72704d15192f0efaaec41921e7332f403eceb4f
+<<<<<<< eafb0800260f011efe16ea65ffb5345f5aa812ed
         avatar={renderAvatarIcon(type)}
+=======
+        avatar={
+          type === 'info' ? (
+            <BalotIcon className={classes.cardIcon} />
+          ) : (
+            <UpdateIcon className={classes.cardIcon} />
+          )
+        }
+>>>>>>> Cards info and details
+=======
+        avatar={renderAvatarIcon(type)}
+>>>>>>> work in progress
       />
       <CardContent className={classes.cardContent}>
         <Typography component="p" className={classes.cardCategory}>
