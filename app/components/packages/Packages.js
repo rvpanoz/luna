@@ -26,7 +26,6 @@ import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
 
 import { listStyles as styles } from '../styles/packagesStyles';
-
 import {
   addSelected,
   setPackagesSuccess,
@@ -36,7 +35,6 @@ import {
 } from 'models/packages/actions';
 
 import { setPage, setPageRows } from 'models/ui/actions';
-//tes
 
 const mapState = state => ({
   manager: state.common.manager,
@@ -98,20 +96,12 @@ const Packages = props => {
   useEffect(
     () => {
       if (error) {
-        dispatch(setPackagesSuccess({ data: [], name: null, version: null }));
-        dispatch(
-          setPackagesOutdatedSuccess({
-            data: []
-          })
-        );
-
+        setPackagesError(error);
         return;
       }
 
       if (Array.isArray(dependencies) && dependencies.length) {
         dispatch(setPackagesSuccess({ data: dependencies, name, version }));
-      } else {
-        dispatch(setPackagesSuccess({ data: [], name: '', version: '' }));
       }
 
       if (Array.isArray(outdated) && outdated.length) {
@@ -120,8 +110,6 @@ const Packages = props => {
             data: outdated
           })
         );
-      } else {
-        dispatch(setPackagesOutdatedSuccess({ data: [] }));
       }
     },
     [dependenciesSet]

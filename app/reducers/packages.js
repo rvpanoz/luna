@@ -91,10 +91,11 @@ const handlers = {
       loading: false
     });
   },
-  [setPackagesError.type]: (state, action) =>
+  [setPackagesError.type]: (state, { payload: { error } }) =>
     merge(state, {
-      error: action.payload,
+      error,
       packages: [],
+      packagesOutdated: [],
       loading: false
     }),
   [setPackagesStart.type]: (state, { packageName, packageVersion }) =>
