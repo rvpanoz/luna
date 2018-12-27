@@ -14,20 +14,14 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
-<<<<<<< c72704d15192f0efaaec41921e7332f403eceb4f
+
+import useIpc from 'commons/hooks/useIpc';
+import { getFiltered } from 'commons/utils';
 
 import useIpc from 'commons/hooks/useIpc';
 import { getFiltered } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
-=======
-import AppLoader from '../layout/AppLoader';
->>>>>>> work in progress
 
-import AppLoader from '../layout/AppLoader';
-import TableToolbar from './TableToolbar';
-import TableHeader from './TableHeader';
-import TableFooter from './TableFooter';
-import PackageItem from './PackageItem';
 
 import { listStyles as styles } from '../styles/packagesStyles';
 import {
@@ -119,13 +113,13 @@ const Packages = props => {
 
       if (Array.isArray(dependencies) && dependencies.length) {
         dispatch(setPackagesSuccess({ data: dependencies, name, version }));
-      } else if (!name) {
-        dispatch(
-          setPackagesSuccess({ data: dependencies, name: null, version: null })
-        );
       } else {
+<<<<<<< 9b80af76a9d16bfb83289f24f0de70b3159fe6a3
 >>>>>>> work in progress
         dispatch(setPackagesSuccess({ data: dependencies, name, version }));
+=======
+        dispatch(setPackagesSuccess({ data: [], name: '', version: '' }));
+>>>>>>> general fixes
       }
 
       if (Array.isArray(outdated) && outdated.length) {
@@ -135,11 +129,7 @@ const Packages = props => {
           })
         );
       } else {
-        dispatch(
-          setPackagesOutdatedSuccess({
-            data: []
-          })
-        );
+        dispatch(setPackagesOutdatedSuccess({ data: [] }));
       }
     },
     [dependenciesSet]
@@ -191,11 +181,15 @@ const Packages = props => {
             reload={() => setCounter(counter + 1)} // triggers render
           />
         </div>
+<<<<<<< 9b80af76a9d16bfb83289f24f0de70b3159fe6a3
 <<<<<<< c72704d15192f0efaaec41921e7332f403eceb4f
         {dataSlices.length ? (
 =======
         {!dataSlices.length ? (
 >>>>>>> work in progress
+=======
+        {dataSlices.length ? (
+>>>>>>> general fixes
           <React.Fragment>
             <Table
               className={cn(classes.tablelist, {
