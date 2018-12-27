@@ -14,6 +14,9 @@ const styles = () => ({
   },
   textRight: {
     textAlign: 'right'
+  },
+  textCenter: {
+    textAlign: 'center'
   }
 });
 

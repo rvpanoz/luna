@@ -62,19 +62,22 @@ const handlers = {
   [clearFilters.type]: state => assoc('filters', [], state),
   [clearSelected.type]: state => assoc('selected', [], state),
   [setPackagesSuccess.type]: (state, { payload }) => {
-    const { data, name, version, loader } = payload;
+    const { data, name, version } = payload;
     const { packagesOutdated } = state;
-    const packages = data.map(pkg => {
-      const [isOutdated, outdatedPkg] = isPackageOutdated(
-        packagesOutdated,
-        pkg.name
-      );
 
-      return merge(pkg, {
-        latest: isOutdated ? outdatedPkg.latest : null,
-        isOutdated
-      });
-    });
+    const packages = data
+      ? data.map(pkg => {
+          const [isOutdated, outdatedPkg] = isPackageOutdated(
+            packagesOutdated,
+            pkg.name
+          );
+
+          return merge(pkg, {
+            latest: isOutdated ? outdatedPkg.latest : null,
+            isOutdated
+          });
+        })
+      : [];
 
     return merge(state, {
       packages,

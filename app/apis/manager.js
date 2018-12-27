@@ -20,7 +20,13 @@ const defaultsArgs = {
 const cwd = process.cwd();
 const platform = os.platform();
 
-const execute = (manager = defaultManager, commandArgs, mode, directory) => {
+const execute = (
+  manager = defaultManager,
+  commandArgs,
+  mode,
+  directory,
+  callback
+) => {
   const resultP = new Promise((resolve, reject) => {
     let result = '';
     let error = '';
@@ -43,6 +49,7 @@ const execute = (manager = defaultManager, commandArgs, mode, directory) => {
 
     command.stderr.on('data', err => {
       error += String(err);
+      callback('error', error);
     });
 
     command.on('exit', code => {
@@ -54,9 +61,8 @@ const execute = (manager = defaultManager, commandArgs, mode, directory) => {
         chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
       );
 
-      const hasError = Boolean(error.length) ? error : null;
       const results = {
-        error: hasError,
+        error,
         data: result,
         cmd: commandArgs,
         status: 'close'

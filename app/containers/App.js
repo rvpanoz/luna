@@ -17,7 +17,12 @@ const App = () => {
       console.error('uncaught-exception', exceptionError);
     });
 
-    return () => ipcRenderer.removeAllListeners('uncaught-exception');
+    ipcRenderer.on('ipcEvent-error', (event, error) => {
+      console.error(error, 1);
+    });
+
+    return () =>
+      ipcRenderer.removeAllListeners(['uncaught-exception', 'ipcEvent-error']);
   });
 
   return (

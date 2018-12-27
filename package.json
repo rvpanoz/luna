@@ -31,6 +31,7 @@
   "lint-staged": {
     "*.{js,jsx}": [
       "cross-env NODE_ENV=development eslint --cache --format=pretty",
+      "prettier --ignore-path .eslintignore --single-quote --write",
       "git add"
     ],
     "{*.json,.{babelrc,eslintrc,prettierrc,stylelintrc}}": [

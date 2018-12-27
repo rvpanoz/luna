@@ -96,7 +96,7 @@ const Packages = props => {
         dispatch(setPackagesSuccess({ data: dependencies, name, version }));
       }
 
-      if (Array.isArray(outdated) && outdated.length) {
+      if (outdated && outdated.length) {
         dispatch(
           setPackagesOutdatedSuccess({
             data: outdated
@@ -122,7 +122,7 @@ const Packages = props => {
           ? data.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
           : data.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-      dispatch(setPackagesSuccess(sortedData));
+      dispatch(setPackagesSuccess({ data: sortedData }));
     },
     [sortDir, sortBy]
   );

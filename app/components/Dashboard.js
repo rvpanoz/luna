@@ -13,6 +13,7 @@ import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import styles from './styles/dashboard';
 
+import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
 import AppLoader from './layout/AppLoader';
 
@@ -45,6 +46,9 @@ const Dashboard = props => {
   const renderDetailsStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
+      <div className={cn(classes.flexContainerItem, classes.textCenter)}>
+        Mode:&nbsp;{firstToUpper(mode)}
+      </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
         Problems:&nbsp;0
       </div>
