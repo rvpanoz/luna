@@ -247,3 +247,14 @@ export const parseMap = (response, mode, directory, commandArgs) => {
     throw new Error(error);
   }
 };
+
+export const parseNpmError = error => {
+  if (!error) {
+    return [];
+  }
+
+  const errorParts = typeof error === 'string' && error.split(',');
+  const errorMessage = errorParts && errorParts[0].split(':');
+
+  return [errorMessage[0], errorMessage[1], errorParts[1]];
+};

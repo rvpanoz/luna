@@ -7,17 +7,15 @@
 import { identity, merge, assoc, prepend, prop, propOr, remove } from 'ramda';
 import initialState from './initialState';
 import {
-  addNotification,
   addFilter,
   addSelected,
   clearSelected,
   clearFilters,
-  clearNotifications,
   setPackagesStart,
   setPackagesSuccess,
-  setPackagesOutdatedSuccess,
-  setPackagesError
+  setPackagesOutdatedSuccess
 } from 'models/packages/actions';
+
 import { isPackageOutdated } from 'commons/utils';
 import format from 'date-fns/format';
 
@@ -97,35 +95,12 @@ const handlers = {
       loading: false
     });
   },
-  [setPackagesError.type]: (state, { payload: { error } }) =>
-    merge(state, {
-      error,
-      packages: [],
-      packagesOutdated: [],
-      loading: false
-    }),
   [setPackagesStart.type]: (state, { packageName, packageVersion }) =>
     merge(state, {
       packageName,
       packageVersion,
       loading: true
-    }),
-  [addNotification.type]: (
-    state,
-    { payload: { level, body, requires, requiredBy } }
-  ) =>
-    merge(state, {
-      notifications: prepend(
-        {
-          level,
-          body,
-          requires,
-          requiredBy
-        },
-        state.notifications
-      )
-    }),
-  [clearNotifications.type]: state => assoc('notifications', [], state)
+    })
 };
 
 export default createReducer(packages, handlers);

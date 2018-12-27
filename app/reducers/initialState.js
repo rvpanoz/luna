@@ -1,9 +1,10 @@
 export default {
-  directory: null,
-  page: 0,
-  rowsPerPage: 10,
   mode: 'GLOBAL',
   manager: 'npm',
+  page: 0,
+  rowsPerPage: 10,
+  notifications: [],
+  directory: null,
   packages: {
     packages: [],
     packagesOutdated: [],

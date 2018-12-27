@@ -44,11 +44,13 @@ const execute = (
     );
 
     command.stdout.on('data', data => {
-      result += String(data);
+      result += `${String(data)}`;
+      callback('flow', error, data);
     });
 
     command.stderr.on('data', err => {
-      error += String(err);
+      // mark with -eor- (end of error) in order to split with that in renderer
+      error += `${String(err)}`;
       callback('error', error);
     });
 

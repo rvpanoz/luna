@@ -46,9 +46,6 @@ const Dashboard = props => {
   const renderDetailsStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
-      <div className={cn(classes.flexContainerItem, classes.textCenter)}>
-        Mode:&nbsp;{firstToUpper(mode)}
-      </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
         Problems:&nbsp;0
       </div>

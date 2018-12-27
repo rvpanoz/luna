@@ -26,7 +26,6 @@ import { listStyles as styles } from '../styles/packagesStyles';
 import {
   addSelected,
   setPackagesSuccess,
-  setPackagesError,
   setPackagesOutdatedSuccess,
   clearSelected
 } from 'models/packages/actions';

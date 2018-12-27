@@ -4,8 +4,15 @@
  * Global reducer: Handles state management for global operations.
  */
 
-import { identity, merge, assoc, propOr, prop } from 'ramda';
-import { setManager, setMode, setPage, setPageRows } from 'models/ui/actions';
+import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
+import {
+  addNotification,
+  clearNotifications,
+  setManager,
+  setMode,
+  setPage,
+  setPageRows
+} from 'models/ui/actions';
 import initialState from './initialState';
 
 const { packages, ...common } = initialState;
@@ -16,6 +23,22 @@ const createReducer = (commonState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [addNotification.type]: (
+    state,
+    { payload: { level, body, requires, requiredBy } }
+  ) =>
+    merge(state, {
+      notifications: prepend(
+        {
+          level,
+          body,
+          requires,
+          requiredBy
+        },
+        state.notifications
+      )
+    }),
+  [clearNotifications.type]: state => assoc('notifications', [], state),
   [setMode.type]: (state, action) => {
     const {
       payload: { mode },
