@@ -20,7 +20,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 
-import { setManager, setPageRows } from '../models/ui/actions';
+import { setManager, setPageRows } from 'models/ui/actions';
 
 import styles from './styles/settings';
 

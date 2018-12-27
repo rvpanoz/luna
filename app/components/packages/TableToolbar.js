@@ -20,12 +20,12 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
-import useIpc from '../../commons/hooks/useIpc';
-import TableFilters from './TableFilters';
-import { setMode } from '../../models/ui/actions';
-import { APP_MODES } from '../../constants/AppConstants';
 
-import { tableToolbarStyles as styles } from './styles';
+import TableFilters from './TableFilters';
+import { setMode } from 'models/ui/actions';
+import { APP_MODES } from 'constants/AppConstants';
+
+import { tableToolbarStyles as styles } from '../styles/packagesStyles';
 
 const mapState = state => ({
   manager: state.common.manager,
@@ -34,8 +34,7 @@ const mapState = state => ({
 });
 
 const TableListToolbar = props => {
-  const { classes, selected, title, directory, mode, reload } = props;
-  const { manager } = useMappedState(mapState);
+  const { classes, selected, title, mode, reload } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
   const dispatch = useDispatch();

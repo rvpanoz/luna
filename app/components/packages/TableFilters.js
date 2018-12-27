@@ -19,11 +19,10 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import { APP_MODES } from '../../constants/AppConstants';
+import { APP_MODES } from 'constants/AppConstants';
+import { addFilter, clearFilters } from 'models/packages/actions';
 
-import { addFilter, clearFilters } from '../../models/packages/actions';
-
-import { tableFiltersStyles as styles } from './styles';
+import { tableFiltersStyles as styles } from '../styles/packagesStyles';
 
 const mapState = state => ({
   filters: state.packages.filters

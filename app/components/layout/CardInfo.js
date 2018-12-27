@@ -17,9 +17,12 @@ import Typography from '@material-ui/core/Typography';
 
 import AppLoader from './AppLoader';
 
-import WarningIcon from '@material-ui/icons/Warning';
+import WarningIcon from '@material-ui/icons/WarningOutlined';
+import UpdateIcon from '@material-ui/icons/UpdateOutlined';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
-import BalotIcon from '@material-ui/icons/Ballot';
+import BalotIcon from '@material-ui/icons/BallotOutlined';
+
+import { switchcase } from '../../commons/utils';
 
 import styles from '../styles/cardInfo';
 
@@ -33,8 +36,44 @@ const AppCardInfo = props => {
     text,
     color,
     link,
-    loading
+    loading,
+    type
   } = props;
+
+  const defaultAvatarIcon = <BalotIcon className={classes.cardIcon} />;
+  const defaultStatIcon = <InfoIcon className={classes.cardIcon} />;
+
+  const renderAvatarIcon = type => {
+    const icon = switchcase({
+      info: () => defaultAvatarIcon,
+      update: () => <UpdateIcon className={classes.cardIcon} />,
+      warning: () => <WarningIcon className={classes.cardIcon} />
+    })(defaultAvatarIcon)(type);
+
+    return icon;
+  };
+
+  const renderStatIcon = type => {
+    const icon = switchcase({
+      info: () => defaultStatIcon,
+      update: () => (
+        <UpdateIcon
+          className={
+            classes.cardStatsIcon + ' ' + classes[type + 'CardStatsIcon']
+          }
+        />
+      ),
+      warning: () => (
+        <WarningIcon
+          className={
+            classes.cardStatsIcon + ' ' + classes[type + 'CardStatsIcon']
+          }
+        />
+      )
+    })(defaultStatIcon)(type);
+
+    return icon;
+  };
 
   return (
     <Card className={classes.card}>
@@ -45,7 +84,7 @@ const AppCardInfo = props => {
           }),
           avatar: classes.cardAvatar
         }}
-        avatar={avatar && <BalotIcon className={classes.cardIcon} />}
+        avatar={renderAvatarIcon(type)}
       />
       <CardContent className={classes.cardContent}>
         <Typography component="p" className={classes.cardCategory}>
@@ -56,20 +95,14 @@ const AppCardInfo = props => {
           component="h2"
           className={classes.cardTitle}
         >
-          <AppLoader loading={loading} small={true}>
-            {description}
-          </AppLoader>
+          {description}
           {small !== undefined ? (
             <small className={classes.cardTitleSmall}>{small}</small>
           ) : null}
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <InfoIcon
-          className={
-            classes.cardStatsIcon + ' ' + classes[color + 'CardStatsIcon']
-          }
-        />
+        {renderStatIcon(type)}
         {link !== undefined ? (
           <a href={link.href} className={classes.cardStatsLink}>
             {link.text}

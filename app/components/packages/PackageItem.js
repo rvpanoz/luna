@@ -14,7 +14,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import { listStyles as styles } from './styles';
+import { listStyles as styles } from '../styles/packagesStyles';
 
 const PackageItemRow = props => {
   const {

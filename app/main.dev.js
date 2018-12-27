@@ -2,7 +2,6 @@
 
 import ElectronStore from 'electron-store';
 import path from 'path';
-import fs from 'fs';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import mk from './mk';
@@ -25,10 +24,12 @@ const APP_PATHS = {
   userData: app.getPath('userData')
 };
 
+const { delimiter } = path;
+
 // defaults settings
 const { config } = mk;
 const {
-  defaultSettings: { manager, startMinimized }
+  defaultSettings: { startMinimized }
 } = config;
 
 const {
@@ -38,7 +39,7 @@ const {
   START_MINIMIZED = startMinimized
 } = process.env;
 
-// get parameters
+// development parameters
 const debug = /--debug/.test(process.argv[2]);
 const needslog = /--log/.test(process.argv[3]);
 
@@ -64,6 +65,10 @@ if (NODE_ENV === 'production') {
 
 if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
   const p = path.join(__dirname, '..', 'app', 'node_modules');
+  const { appData, userData } = APP_PATHS;
+
+  mk.log(`[INFO] user data directory: ${userData}`);
+  mk.log(`[INFO] app data directory: ${appData}`);
 
   require('electron-debug')();
   require('module').globalPaths.push(p);
@@ -83,42 +88,10 @@ const installExtensions = async () => {
  * Listen to ipcRenderer events
  */
 
-// channel: analyze-json
-ipcMain.on('analyze-json', (event, filePath) => {
-  console.log(1);
-  if (!filePath) {
-    throw new Error('file path is not defined');
-  }
-
-  try {
-    fs.readFile(filePath, 'utf8', (err, fileContent) => {
-      if (err) {
-        throw new Error(err);
-      }
-
-      const content = JSON.parse(fileContent);
-      const openedPackages = Store.get('openedPackages') || [];
-
-      if (openedPackages.indexOf(filePath) === -1) {
-        Store.set('openedPackages', [].concat(openedPackages, filePath));
-      }
-
-      event.sender.send(
-        'analyze-json-close',
-        filePath,
-        content,
-        Store.get('openedPackages')
-      );
-    });
-  } catch (error) {
-    mk.log(error.message);
-    throw new Error(error);
-  }
-});
-
 // channel: ipc-event
 ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent, activeManager, ...rest } = options || {};
+  const openedPackages = Store.get('openedPackages') || [];
 
   const callback = (status, error, data, cmd) => {
     /**
@@ -129,6 +102,33 @@ ipcMain.on('ipc-event', (event, options) => {
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
           event.sender.send('action-close', data);
         } else {
+          const { directory, mode } = rest;
+
+          if (directory && mode === 'LOCAL' && cmd[0] === 'list') {
+            const resolvedDirectory = path.resolve(directory);
+            const dirName = path.dirname(resolvedDirectory);
+            const parsedDirectory = path.parse(dirName);
+            const { name } = parsedDirectory;
+
+            const inDirectories = openedPackages.some(
+              pkg => pkg.directory && pkg.directory.indexOf(dirName) !== -1
+            );
+
+            if (!inDirectories) {
+              Store.set('openedPackages', [
+                ...openedPackages,
+                {
+                  name,
+                  directory: dirName
+                }
+              ]);
+            }
+          }
+
+          event.sender.send(
+            'loaded-packages-close',
+            Store.get('openedPackages')
+          );
           event.sender.send(`${ipcEvent}-close`, status, cmd, data);
         }
         break;
@@ -151,9 +151,9 @@ ipcMain.on('ipc-event', (event, options) => {
     });
 
     runCommand.apply(null, [params, callback]);
-  } catch (e) {
-    mk.log(e.message);
-    throw new Error(e);
+  } catch (error) {
+    mk.log(error.message);
+    throw new Error(error);
   }
 });
 
@@ -190,15 +190,6 @@ app.on('ready', async () => {
     y = externalDisplay.bounds.y + 50;
   }
 
-  // TODO: needs work for RETINA displays
-
-  // if (MIN_WIDTH > screenSize.width) {
-  //   mk.log(`FATAL: low_resolution ${screenSize.width}x${screenSize.height}`)
-  //   throw new Error(
-  //     `Resolution ${screenSize.width}x${screenSize.height} is not supported.`
-  //   )
-  // }
-
   /**
    * Main window
    */
@@ -214,10 +205,11 @@ app.on('ready', async () => {
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.webContents.on('did-finish-load', event => {
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');
     }
+
     if (START_MINIMIZED) {
       mainWindow.minimize();
     } else {
@@ -225,17 +217,25 @@ app.on('ready', async () => {
       mainWindow.focus();
     }
 
+    // user settings
+    const userSettings = Store.get('user_settings') || defaultSettings;
+    event.sender.send('settings_loaded', userSettings);
+
+    // opened directories
+    const openedPackages = Store.get('opened_packages') || [];
+    event.sender.send('loaded-packages-close', openedPackages);
+
     if (NODE_ENV === 'development') {
       mainWindow.openDevTools();
     }
   });
 
   mainWindow.webContents.on('crashed', event => {
-    console.log(event);
+    // console.log(event);
   });
 
   mainWindow.on('unresponsive', event => {
-    console.log(event);
+    // console.log(event);
   });
 
   mainWindow.on('closed', () => {
@@ -245,8 +245,7 @@ app.on('ready', async () => {
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 
-  // eslint-disable-next-line
-  // new AppUpdater(); // TODO: use AppUpdater
+  new AppUpdater(); // TODO: use AppUpdater
 });
 
 process.on('uncaughtException', error => {

@@ -7,14 +7,14 @@
 import React from 'react';
 import { useMappedState } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core';
+import cn from 'classnames';
 import Grid from '@material-ui/core/Grid';
-
 import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import styles from './styles/dashboard';
 
-import { camelize } from '../commons/utils';
-import { APP_MODES } from '../constants/AppConstants';
+import { APP_MODES } from 'constants/AppConstants';
+import AppLoader from './layout/AppLoader';
 
 const mapState = state => ({
   manager: state.common.manager,
@@ -28,7 +28,7 @@ const mapState = state => ({
 });
 
 const Dashboard = props => {
-  const { classes } = props;
+  const { classes, theme } = props;
   const {
     packages,
     packagesOutdated,
@@ -40,19 +40,45 @@ const Dashboard = props => {
     projectVersion
   } = useMappedState(mapState);
 
+  const renderDetailsStats = () => (
+    <div className={classes.flexContainer}>
+      <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
+      <div className={cn(classes.flexContainerItem, classes.textRight)}>
+        Problems:&nbsp;21
+      </div>
+    </div>
+  );
+
+  const renderDependenciesStats = data => data;
+
+  const renderInfoStats = () => (
+    <div className={classes.flexContainer}>
+      <div className={classes.flexContainerItem}>
+        Last update at:&nbsp;12/12/2018 - 20:33
+      </div>
+      <div className={cn(classes.flexContainerItem, classes.textRight)}>
+        Outdated:&nbsp;21
+      </div>
+    </div>
+  );
+
+  const {
+    palette: { primary, secondary }
+  } = theme || {};
+
   return (
     <section className={classes.root}>
       <Grid container justify="space-between">
         <Grid item xs={12} sm={6} md={3}>
           <CardDetails
+            id="card-1"
             title={`${
-              mode === APP_MODES.LOCAL
+              mode === APP_MODES.LOCAL && projectName
                 ? `${projectName} v${projectVersion}`
                 : 'Project'
             }`}
-            description={packages ? packages.length : 0}
             subtext={directory || 'No working directory'}
-            text={`Active manager: ${manager}`}
+            text={renderDetailsStats()}
             loading={loading}
             avatar
           />
@@ -60,21 +86,24 @@ const Dashboard = props => {
         <Grid item xs={12} sm={6} md={3}>
           <CardInfo
             title="Total dependencies"
-            description={packages ? packages.length : 0}
-            color="blue"
-            text={directory || 'Global mode'}
+            description={renderDependenciesStats(
+              packages ? packages.length : 0
+            )}
+            color="red"
+            text={renderInfoStats()}
             loading={loading}
             avatar
+            type="update"
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <CardInfo
-            title="Outdated packages"
-            description={packagesOutdated ? packagesOutdated.length : 0}
-            color="orange"
-            text="Updated"
-            loading={loading}
+            title="Tools/Graph?"
+            description="Statistics"
+            color="blue"
+            text="Statistics"
             avatar
+            type="update"
           />
         </Grid>
       </Grid>
@@ -82,4 +111,6 @@ const Dashboard = props => {
   );
 };
 
-export default withStyles(styles)(Dashboard);
+export default withStyles(styles, {
+  withTheme: true
+})(Dashboard);

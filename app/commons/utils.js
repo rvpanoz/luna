@@ -67,7 +67,7 @@ export const camelize = str => {
 };
 
 /**
- * switch-case using currying
+ * switch using currying
  * @param {*} cases
  */
 export const switchcase = cases => defaultCase => key =>

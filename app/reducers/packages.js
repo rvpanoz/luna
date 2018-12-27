@@ -1,9 +1,8 @@
 /* eslint-disable */
 
 /**
- Packages reducer:
- Handles state management for packages operations
- * */
+ * Packages reducer: Handles state management for packages operations
+ */
 
 import { identity, merge, assoc, prepend, prop, propOr, remove } from 'ramda';
 import initialState from './initialState';
@@ -92,10 +91,11 @@ const handlers = {
       loading: false
     });
   },
-  [setPackagesError.type]: (state, action) =>
+  [setPackagesError.type]: (state, { payload: { error } }) =>
     merge(state, {
-      error: action.payload,
+      error,
       packages: [],
+      packagesOutdated: [],
       loading: false
     }),
   [setPackagesStart.type]: (state, { packageName, packageVersion }) =>

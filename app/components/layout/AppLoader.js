@@ -27,7 +27,7 @@ const AppLoader = props => {
     <React.Fragment>
       <CircularProgress
         className={cn({
-          [classes.loader]: !Boolean(small)
+          [classes.loader]: !small || !Boolean(small)
         })}
         color={small ? 'primary' : 'secondary'}
         size={small ? 20 : 40}
