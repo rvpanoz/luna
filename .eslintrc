@@ -48,8 +48,8 @@
   "plugins": ["import", "promise", "compat", "react"],
   "settings": {
     "import/resolver": {
-      "webpack": {
-        "config": "configs/webpack.config.eslint.js"
+      "node": {
+        "extensions": [".js", ".node"]
       }
     }
   }
