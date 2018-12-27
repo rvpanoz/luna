@@ -15,7 +15,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import { tableHeaderStyles as styles } from './styles';
+import { tableHeaderStyles as styles } from '../styles/packagesStyles';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },

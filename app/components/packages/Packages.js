@@ -14,25 +14,27 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
-import AppLoader from '../layout/AppLoader';
 
-import useIpc from '../../commons/hooks/useIpc';
+import useIpc from 'commons/hooks/useIpc';
+import { getFiltered } from 'commons/utils';
+import { APP_MODES } from 'constants/AppConstants';
+
+import AppLoader from '../layout/AppLoader';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
 
-import { getFiltered } from '../../commons/utils';
-import { listStyles as styles } from './styles';
+import { listStyles as styles } from '../styles/packagesStyles';
 
 import {
   addSelected,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
   clearSelected
-} from '../../models/packages/actions';
+} from 'models/packages/actions';
 
-import { setPage, setPageRows } from '../../models/ui/actions';
+import { setPage, setPageRows } from 'models/ui/actions';
 
 const mapState = state => ({
   manager: state.common.manager,
@@ -106,12 +108,8 @@ const Packages = props => {
 
       if (Array.isArray(dependencies) && dependencies.length) {
         dispatch(setPackagesSuccess({ data: dependencies, name, version }));
-      } else if (!name) {
-        dispatch(
-          setPackagesSuccess({ data: dependencies, name: null, version: null })
-        );
       } else {
-        dispatch(setPackagesSuccess({ data: dependencies, name, version }));
+        dispatch(setPackagesSuccess({ data: [], name: '', version: '' }));
       }
 
       if (Array.isArray(outdated) && outdated.length) {
@@ -121,11 +119,7 @@ const Packages = props => {
           })
         );
       } else {
-        dispatch(
-          setPackagesOutdatedSuccess({
-            data: []
-          })
-        );
+        dispatch(setPackagesOutdatedSuccess({ data: [] }));
       }
     },
     [dependenciesSet]
@@ -177,7 +171,7 @@ const Packages = props => {
             reload={() => setCounter(counter + 1)} // triggers render
           />
         </div>
-        {!dataSlices.length ? (
+        {dataSlices.length ? (
           <React.Fragment>
             <Table
               className={cn(classes.tablelist, {

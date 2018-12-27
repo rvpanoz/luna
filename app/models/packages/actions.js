@@ -1,4 +1,6 @@
-import { createActionCreator } from '../../commons/utils';
+/* eslint-disable */
+
+import { createActionCreator } from 'commons/utils';
 
 const ActionCreator = createActionCreator('@@LUNA_APP/DATA');
 

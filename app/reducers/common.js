@@ -1,14 +1,11 @@
+/* eslint-disable */
+
 /**
- Global reducer:
- Handles state management for global operations.
- * */
+ * Global reducer: Handles state management for global operations.
+ */
+
 import { identity, merge, assoc, propOr, prop } from 'ramda';
-import {
-  setManager,
-  setMode,
-  setPage,
-  setPageRows
-} from '../models/ui/actions';
+import { setManager, setMode, setPage, setPageRows } from 'models/ui/actions';
 import initialState from './initialState';
 
 const { packages, ...common } = initialState;

@@ -11,10 +11,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Dashboard from '../components/Dashboard';
-import { Packages, PackageDetails } from '../components/packages';
+import Header from 'components/Header';
+import Footer from 'components/Footer';
+import Dashboard from 'components/Dashboard';
+import { Packages, PackageDetails } from 'components/packages';
 
 import styles from './styles/layout';
 

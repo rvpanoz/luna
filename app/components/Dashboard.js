@@ -13,8 +13,8 @@ import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import styles from './styles/dashboard';
 
-import { camelize } from '../commons/utils';
-import { APP_MODES } from '../constants/AppConstants';
+import { camelize } from 'commons/utils';
+import { APP_MODES } from 'constants/AppConstants';
 
 const mapState = state => ({
   manager: state.common.manager,
