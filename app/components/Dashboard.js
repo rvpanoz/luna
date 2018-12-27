@@ -13,6 +13,7 @@ import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import styles from './styles/dashboard';
 
+import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
 import AppLoader from './layout/AppLoader';
 
@@ -21,6 +22,7 @@ const mapState = state => ({
   mode: state.common.mode,
   directory: state.common.directory,
   loading: state.packages.loading,
+  lastUpdatedAt: state.packages.lastUpdatedAt,
   packages: state.packages.packages,
   packagesOutdated: state.packages.packagesOutdated,
   projectName: state.packages.projectName,
@@ -37,14 +39,15 @@ const Dashboard = props => {
     mode,
     manager,
     projectName,
-    projectVersion
+    projectVersion,
+    lastUpdatedAt
   } = useMappedState(mapState);
 
   const renderDetailsStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        Problems:&nbsp;21
+        Problems:&nbsp;0
       </div>
     </div>
   );
@@ -54,10 +57,10 @@ const Dashboard = props => {
   const renderInfoStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>
-        Last update at:&nbsp;12/12/2018 - 20:33
+        Updated at:&nbsp;{lastUpdatedAt}
       </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        Outdated:&nbsp;21
+        Outdated:&nbsp;{packagesOutdated ? packagesOutdated.length : 0}
       </div>
     </div>
   );
@@ -98,7 +101,7 @@ const Dashboard = props => {
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <CardInfo
-            title="Tools/Graph?"
+            title="Tools/Graph"
             description="Statistics"
             color="blue"
             text="Statistics"

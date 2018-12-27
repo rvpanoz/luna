@@ -11,13 +11,13 @@ import {
   addSelected,
   clearSelected,
   clearFilters,
-  updatePackage,
   setPackagesStart,
   setPackagesSuccess,
-  setPackagesOutdatedSuccess,
-  setPackagesError
-} from '../models/packages/actions';
-import { isPackageOutdated } from '../commons/utils';
+  setPackagesOutdatedSuccess
+} from 'models/packages/actions';
+
+import { isPackageOutdated } from 'commons/utils';
+import format from 'date-fns/format';
 
 const { packages } = initialState;
 
@@ -63,22 +63,26 @@ const handlers = {
   [setPackagesSuccess.type]: (state, { payload }) => {
     const { data, name, version } = payload;
     const { packagesOutdated } = state;
-    const packages = data.map(pkg => {
-      const [isOutdated, outdatedPkg] = isPackageOutdated(
-        packagesOutdated,
-        pkg.name
-      );
 
-      return merge(pkg, {
-        latest: isOutdated ? outdatedPkg.latest : null,
-        isOutdated
-      });
-    });
+    const packages = data
+      ? data.map(pkg => {
+          const [isOutdated, outdatedPkg] = isPackageOutdated(
+            packagesOutdated,
+            pkg.name
+          );
+
+          return merge(pkg, {
+            latest: isOutdated ? outdatedPkg.latest : null,
+            isOutdated
+          });
+        })
+      : [];
 
     return merge(state, {
       packages,
       filters: [],
       loading: false,
+      lastUpdatedAt: format(new Date(), 'MM/DD/YYYY h:mm:ss'),
       projectName: name,
       projectVersion: version
     });
@@ -91,28 +95,12 @@ const handlers = {
       loading: false
     });
   },
-  [setPackagesError.type]: (state, { payload: { error } }) =>
-    merge(state, {
-      error,
-      packages: [],
-      packagesOutdated: [],
-      loading: false
-    }),
   [setPackagesStart.type]: (state, { packageName, packageVersion }) =>
     merge(state, {
       packageName,
       packageVersion,
       loading: true
-    }),
-  [updatePackage.type]: (state, { name, props }) => {
-    const { packages } = state;
-    const pkg = packages.find(pkg => pkg.name === name);
-    const newPkg = merge(pkg, props);
-
-    return merge(state, {
-      packages: packages.map(pkg => (pkg.name === name ? newPkg : pkg))
-    });
-  }
+    })
 };
 
 export default createReducer(packages, handlers);

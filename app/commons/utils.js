@@ -58,7 +58,7 @@ export const isUrl = url => {
  *
  * @param {*} str
  */
-export const camelize = str => {
+export const firstToUpper = str => {
   return str
     .replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
       return index !== 0 ? letter.toLowerCase() : letter.toUpperCase();
@@ -74,14 +74,6 @@ export const switchcase = cases => defaultCase => key =>
   cases.hasOwnProperty(key) && typeof cases[key] === 'function'
     ? cases[key].apply(undefined)
     : defaultCase;
-
-/**
- *
- * @param {*} str
- */
-export const firstToUpper = str => {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-};
 
 export const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);
@@ -254,4 +246,15 @@ export const parseMap = (response, mode, directory, commandArgs) => {
     mk.log(error.message);
     throw new Error(error);
   }
+};
+
+export const parseNpmError = error => {
+  if (!error) {
+    return [];
+  }
+
+  const errorParts = typeof error === 'string' && error.split(',');
+  const errorMessage = errorParts && errorParts[0].split(':');
+
+  return [errorMessage[0], errorMessage[1], errorParts[1]];
 };

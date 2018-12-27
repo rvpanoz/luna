@@ -108,7 +108,7 @@ ipcMain.on('ipc-event', (event, options) => {
             const resolvedDirectory = path.resolve(directory);
             const dirName = path.dirname(resolvedDirectory);
             const parsedDirectory = path.parse(dirName);
-            const { name } = parsedDirectory;
+            const { name } = parsedDirectory || {};
 
             const inDirectories = openedPackages.some(
               pkg => pkg.directory && pkg.directory.indexOf(dirName) !== -1
@@ -129,8 +129,12 @@ ipcMain.on('ipc-event', (event, options) => {
             'loaded-packages-close',
             Store.get('openedPackages')
           );
-          event.sender.send(`${ipcEvent}-close`, status, cmd, data);
+
+          event.sender.send(`${ipcEvent}-close`, status, cmd, data, error);
         }
+        break;
+      case 'flow':
+        event.sender.send('ipcEvent-flow', error, data);
         break;
       case 'error':
         event.sender.send('ipcEvent-error', error);

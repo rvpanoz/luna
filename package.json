@@ -31,6 +31,7 @@
   "lint-staged": {
     "*.{js,jsx}": [
       "cross-env NODE_ENV=development eslint --cache --format=pretty",
+      "prettier --ignore-path .eslintignore --single-quote --write",
       "git add"
     ],
     "{*.json,.{babelrc,eslintrc,prettierrc,stylelintrc}}": [
@@ -205,6 +206,7 @@
     "@material-ui/icons": "^3.0.0",
     "chalk": "^2.4.1",
     "classnames": "^2.2.6",
+    "date-fns": "^1.30.1",
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",
     "electron-log": "^2.2.17",

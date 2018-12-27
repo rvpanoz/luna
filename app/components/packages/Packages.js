@@ -17,19 +17,15 @@ import Typography from '@material-ui/core/Typography';
 
 import useIpc from 'commons/hooks/useIpc';
 import { getFiltered } from 'commons/utils';
-import { APP_MODES } from 'constants/AppConstants';
 
-import AppLoader from '../layout/AppLoader';
-import TableToolbar from './TableToolbar';
-import TableHeader from './TableHeader';
-import TableFooter from './TableFooter';
-import PackageItem from './PackageItem';
+import useIpc from 'commons/hooks/useIpc';
+import { getFiltered } from 'commons/utils';
+import { APP_MODES } from 'constants/AppConstants';
 
 import { listStyles as styles } from '../styles/packagesStyles';
 import {
   addSelected,
   setPackagesSuccess,
-  setPackagesError,
   setPackagesOutdatedSuccess,
   clearSelected
 } from 'models/packages/actions';
@@ -95,16 +91,11 @@ const Packages = props => {
   // dispatch actions
   useEffect(
     () => {
-      if (error) {
-        setPackagesError(error);
-        return;
-      }
-
       if (Array.isArray(dependencies) && dependencies.length) {
         dispatch(setPackagesSuccess({ data: dependencies, name, version }));
       }
 
-      if (Array.isArray(outdated) && outdated.length) {
+      if (outdated && outdated.length) {
         dispatch(
           setPackagesOutdatedSuccess({
             data: outdated
@@ -130,7 +121,7 @@ const Packages = props => {
           ? data.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
           : data.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-      dispatch(setPackagesSuccess(sortedData));
+      dispatch(setPackagesSuccess({ data: sortedData }));
     },
     [sortDir, sortBy]
   );
@@ -161,68 +152,63 @@ const Packages = props => {
             reload={() => setCounter(counter + 1)} // triggers render
           />
         </div>
-        {dataSlices.length ? (
-          <React.Fragment>
-            <Table
-              className={cn(classes.tablelist, {
-                [classes.hasFilterBlur]: loading
-              })}
-            >
-              <TableHeader
-                packages={dataSlices.map(d => d.name)}
-                numSelected={Number(selected.length)}
-                rowCount={(data && data.length) || 0}
-                sortBy={sortBy}
-                sortDir={sortDir}
-                setSortBy={(e, prop) => setSortBy(prop)}
-                toggleSort={(e, prop) => toggleSort(prop)}
-                onSelected={(name, force) =>
-                  dispatch(
-                    addSelected({
-                      name,
-                      force
-                    })
-                  )
-                }
-                onClearSelected={() => dispatch(clearSelected())}
-              />
-              <TableBody>
-                {dataSlices &&
-                  dataSlices.map(pkg => {
-                    const { name, version, latest, isOutdated, __group } = pkg;
+        <React.Fragment>
+          <Table
+            className={cn(classes.tablelist, {
+              [classes.hasFilterBlur]: loading
+            })}
+          >
+            <TableHeader
+              packages={dataSlices.map(d => d.name)}
+              numSelected={Number(selected.length)}
+              rowCount={(data && data.length) || 0}
+              sortBy={sortBy}
+              sortDir={sortDir}
+              setSortBy={(e, prop) => setSortBy(prop)}
+              toggleSort={(e, prop) => toggleSort(prop)}
+              onSelected={(name, force) =>
+                dispatch(
+                  addSelected({
+                    name,
+                    force
+                  })
+                )
+              }
+              onClearSelected={() => dispatch(clearSelected())}
+            />
+            <TableBody>
+              {dataSlices &&
+                dataSlices.map(pkg => {
+                  const { name, version, latest, isOutdated, __group } = pkg;
 
-                    return (
-                      <PackageItem
-                        key={`pkg-${pkg.name}`}
-                        isSelected={isSelected}
-                        setSelected={setSelected}
-                        name={name}
-                        version={version}
-                        latest={latest}
-                        isOutdated={isOutdated}
-                        __group={__group}
-                      />
-                    );
-                  })}
-              </TableBody>
-              <TableFooter
-                rowCount={(data && data.length) || 0}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                handleChangePage={(e, pageNo) =>
-                  dispatch(setPage({ page: pageNo }))
-                }
-                handleChangePageRows={e =>
-                  dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
-                }
-              />
-            </Table>{' '}
-          </React.Fragment>
-        ) : (
-          <Typography className={classes.nodata} component="h4">
-            No dependencies found
-          </Typography>
-        )}
+                  return (
+                    <PackageItem
+                      key={`pkg-${pkg.name}`}
+                      isSelected={isSelected}
+                      setSelected={setSelected}
+                      name={name}
+                      version={version}
+                      latest={latest}
+                      isOutdated={isOutdated}
+                      __group={__group}
+                    />
+                  );
+                })}
+            </TableBody>
+            <TableFooter
+              rowCount={(data && data.length) || 0}
+              page={page}
+              rowsPerPage={rowsPerPage}
+              handleChangePage={(e, pageNo) =>
+                dispatch(setPage({ page: pageNo }))
+              }
+              handleChangePageRows={e =>
+                dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
+              }
+            />
+          </Table>
+        </React.Fragment>
+        )
       </Paper>
     </AppLoader>
   );
