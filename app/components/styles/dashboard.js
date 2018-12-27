@@ -10,10 +10,14 @@ const styles = () => ({
     justifyContent: 'space-between'
   },
   flexContainerItem: {
-    width: '100%'
+    width: '100%',
+    fontSize: 16
   },
   textRight: {
     textAlign: 'right'
+  },
+  textLeft: {
+    textAlign: 'left'
   },
   textCenter: {
     textAlign: 'center'

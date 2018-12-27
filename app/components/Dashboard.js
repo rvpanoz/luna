@@ -46,6 +46,9 @@ const Dashboard = props => {
   const renderDetailsStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
+      <div className={cn(classes.flexContainerItem, classes.textCenter)}>
+        Outdated:&nbsp;{packagesOutdated ? packagesOutdated.length : 0}
+      </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
         Problems:&nbsp;0
       </div>
@@ -56,11 +59,9 @@ const Dashboard = props => {
 
   const renderInfoStats = () => (
     <div className={classes.flexContainer}>
-      <div className={classes.flexContainerItem}>
-        Updated at:&nbsp;{lastUpdatedAt}
-      </div>
+      <div className={classes.flexContainerItem}>Updated at</div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        Outdated:&nbsp;{packagesOutdated ? packagesOutdated.length : 0}
+        {lastUpdatedAt}
       </div>
     </div>
   );
