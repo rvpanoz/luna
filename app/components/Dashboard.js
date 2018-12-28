@@ -12,10 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import styles from './styles/dashboard';
-
-import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
-import AppLoader from './layout/AppLoader';
 
 const mapState = state => ({
   manager: state.common.manager,
