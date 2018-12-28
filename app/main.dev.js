@@ -134,7 +134,7 @@ ipcMain.on('ipc-event', (event, options) => {
         }
         break;
       case 'flow':
-        event.sender.send('ipcEvent-flow', error, data);
+        event.sender.send('ipcEvent-flow', data);
         break;
       case 'error':
         event.sender.send('ipcEvent-error', error);
