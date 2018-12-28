@@ -12,10 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import styles from './styles/dashboard';
-
-import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
-import AppLoader from './layout/AppLoader';
 
 const mapState = state => ({
   manager: state.common.manager,
@@ -46,9 +43,6 @@ const Dashboard = props => {
   const renderProjectStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
-      <div className={cn(classes.flexContainerItem, classes.textCenter)}>
-        Outdated:&nbsp;{packagesOutdated ? packagesOutdated.length : 0}
-      </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
         Problems:&nbsp;0
       </div>
