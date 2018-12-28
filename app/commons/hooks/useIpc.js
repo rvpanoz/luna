@@ -18,7 +18,6 @@ const useIpc = (channel, options) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // eslint-disable-next-line
     ipcRenderer.on(listenTo, (event, status, commandArgs, data, errors) => {
       const [name, version, packages] =
         data && parseMap(data, mode, directory, commandArgs);

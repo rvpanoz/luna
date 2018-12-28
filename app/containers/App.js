@@ -22,11 +22,7 @@ const App = () => {
     });
 
     return () =>
-      ipcRenderer.removeAllListeners([
-        'uncaught-exception',
-        'ipcEvent-error',
-        'ipcEvent-flow'
-      ]);
+      ipcRenderer.removeAllListeners(['uncaught-exception', 'ipcEvent-flow']);
   });
 
   return (

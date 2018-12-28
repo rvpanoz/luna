@@ -140,28 +140,20 @@ exports.outdated = (options, callback) => {
 };
 
 /**
- * Uninstall/remove command
+ * search for packages
  */
-exports.uninstall = function(opts, callback) {
-  const { pkgName, mode, directory, multiple, packages, manager } = opts;
-  const command = manager === 'yarn' ? ['remove'] : ['uninstall'];
-  const defaults = [];
+exports.search = (opts, callback) => {
+  const command = ['search'];
+  const { directory, mode, pkgName } = opts;
+  const defaults = ['--depth=0', '--json'];
 
-  function getNames() {
-    if (multiple && packages && Array.isArray(packages)) {
-      return packages;
-    } else if (!pkgName && !multiple) {
-      Promise.reject('manager[uninstall] package name parameter must be given');
-    } else {
-      return pkgName;
-    }
+  let result = '',
+    error = '';
+
+  if (!pkgName) {
+    return Promise.reject('npm[search] package name parameter must be given');
   }
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
-  const run = []
-    .concat(command)
-    .concat(commandArgs)
-    .concat(getNames());
-
-  return runCommand(run, directory, callback);
+  const run = [].concat(command, pkgName).concat(defaults);
+  return execute('npm', run, mode, directory, callback);
 };
