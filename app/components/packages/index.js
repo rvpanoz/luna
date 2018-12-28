@@ -2,5 +2,6 @@
 
 import Packages from './Packages';
 import PackageDetails from './PackageDetails';
+import PackageItem from './PackageItem';
 
-export { Packages, PackageDetails };
+export { Packages, PackageDetails, PackageItem };

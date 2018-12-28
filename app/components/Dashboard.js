@@ -43,26 +43,27 @@ const Dashboard = props => {
     lastUpdatedAt
   } = useMappedState(mapState);
 
-  const renderDetailsStats = () => (
+  const renderProjectStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
-      <div className={cn(classes.flexContainerItem, classes.textCenter)}>
-        Outdated:&nbsp;{packagesOutdated ? packagesOutdated.length : 0}
-      </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
         Problems:&nbsp;0
       </div>
     </div>
   );
 
-  const renderDependenciesStats = data => data;
-
-  const renderInfoStats = () => (
+  const renderDependenciesStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Updated at</div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
         {lastUpdatedAt}
       </div>
+    </div>
+  );
+
+  const renderStats = () => (
+    <div className={classes.flexContainer}>
+      <div className={classes.flexContainerItem}>Statistics</div>
     </div>
   );
 
@@ -82,19 +83,18 @@ const Dashboard = props => {
                 : 'Project'
             }`}
             subtext={directory || 'No working directory'}
-            text={renderDetailsStats()}
+            text={renderProjectStats()}
             loading={loading}
             avatar
           />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <CardInfo
+            id="card-2"
             title="Total dependencies"
-            description={renderDependenciesStats(
-              packages ? packages.length : 0
-            )}
+            description={packages ? packages.length : 0}
             color="red"
-            text={renderInfoStats()}
+            text={renderDependenciesStats()}
             loading={loading}
             avatar
             type="update"
@@ -102,10 +102,11 @@ const Dashboard = props => {
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <CardInfo
-            title="Tools/Graph"
-            description="Statistics"
+            id="card-3"
+            title="Outdated packages"
+            description={packagesOutdated ? packagesOutdated.length : 0}
             color="blue"
-            text="Statistics"
+            text={renderStats()}
             avatar
             type="update"
           />

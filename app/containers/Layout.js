@@ -12,7 +12,6 @@ import { withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 
 import Header from 'components/Header';
-import Footer from 'components/Footer';
 import Dashboard from 'components/Dashboard';
 import { Packages, PackageDetails } from 'components/packages';
 
@@ -40,11 +39,6 @@ const Layout = props => {
             </Grid>
             <Grid item xs={6}>
               <PackageDetails />
-            </Grid>
-          </Grid>
-          <Grid container justify="space-between">
-            <Grid item xs={12}>
-              <Footer />
             </Grid>
           </Grid>
         </div>

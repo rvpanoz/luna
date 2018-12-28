@@ -6,16 +6,13 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { and } from 'ramda';
-import { withStyles } from '@material-ui/core/styles';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import { tableHeaderStyles as styles } from '../styles/packagesStyles';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -48,9 +45,7 @@ const TableHeader = props => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell
-          className={classnames(classes.tableCell, classes.tableHeadCell)}
-        >
+        <TableCell padding="checkbox">
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}
@@ -63,7 +58,6 @@ const TableHeader = props => {
 
           return (
             <TableCell
-              className={classes.tableCell}
               key={column.id}
               padding={column.disablePadding ? 'none' : 'default'}
               sortDirection={sortBy === column.id ? sortDir : false}
@@ -94,4 +88,4 @@ TableHeader.propTypes = {
   sortDir: PropTypes.string
 };
 
-export default withStyles(styles)(TableHeader);
+export default TableHeader;

@@ -12,6 +12,7 @@ import SnackbarContent from 'components/layout/SnackbarContent';
 
 import { parseMap } from 'commons/utils';
 import { setPackagesStart, setPackagesSuccess } from 'models/packages/actions';
+import { clearNotifications } from 'models/ui/actions';
 
 import styles from './styles/searchBox';
 
@@ -31,6 +32,7 @@ const SearchBox = props => {
       return;
     }
 
+    dispatch(clearNotifications());
     dispatch(setPackagesStart());
 
     ipcRenderer.send('ipc-event', {
