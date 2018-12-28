@@ -43,13 +43,9 @@ const Dashboard = props => {
 
   const renderProjectStats = () => (
     <div className={classes.flexContainer}>
-<<<<<<< 7b28c4c58a54abe5eb09aa114b634580b72b7cc8
       <div className={classes.flexContainerItem}>
         version:&nbsp;{projectVersion || APP_INFO.NOT_AVAILABLE}
       </div>
-=======
-      <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
->>>>>>> update dashaboard cards
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
         Problems:&nbsp;{notifications ? notifications.length : 0}
       </div>

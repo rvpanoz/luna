@@ -37,9 +37,10 @@ const AppCardInfo = props => {
     text,
     color,
     link,
-    type
+    type = null
   } = props;
 
+<<<<<<< 2a45e2dcbb846119025aa7e5bc49d2a62c6d4d5e
   const infoStatIcon = (
     <BalotIcon
       className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
@@ -61,14 +62,26 @@ const AppCardInfo = props => {
       className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
     />
   );
+=======
+  const defaultAvatarIcon = null;
+  const defaultStatIcon = null;
+  const infoAvatarIcon = <BalotIcon className={classes.cardIcon} />;
+  const infoStatIcon = <InfoIcon className={classes.cardIcon} />;
+>>>>>>> wip cards avatars
 
   // TODO: avatars
   const renderAvatarIcon = type => {
     const icon = switchcase({
+<<<<<<< 2a45e2dcbb846119025aa7e5bc49d2a62c6d4d5e
       info: () => null,
       stats: () => null,
       update: () => null,
       warning: () => null
+=======
+      info: () => infoAvatarIcon,
+      update: () => <UpdateIcon className={classes.cardIcon} />,
+      warning: () => <WarningIcon className={classes.cardIcon} />
+>>>>>>> wip cards avatars
     })(defaultAvatarIcon)(type);
 
     return icon;
@@ -77,9 +90,26 @@ const AppCardInfo = props => {
   const renderStatIcon = type => {
     const icon = switchcase({
       info: () => infoStatIcon,
+<<<<<<< 2a45e2dcbb846119025aa7e5bc49d2a62c6d4d5e
       stats: () => barStatIcon,
       update: () => updateStatIcon,
       warning: () => warningStatIcon
+=======
+      update: () => (
+        <UpdateIcon
+          className={
+            classes.cardStatsIcon + ' ' + classes[type + 'CardStatsIcon']
+          }
+        />
+      ),
+      warning: () => (
+        <WarningIcon
+          className={
+            classes.cardStatsIcon + ' ' + classes[type + 'CardStatsIcon']
+          }
+        />
+      )
+>>>>>>> wip cards avatars
     })(defaultStatIcon)(type);
 
     return icon;
