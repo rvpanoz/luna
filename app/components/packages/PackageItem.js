@@ -29,28 +29,23 @@ const PackageItemRow = props => {
   } = props;
 
   return (
-    <TableRow key={`pkg-${name}`}>
+    <TableRow
+      key={`pkg-${name}`}
+      hover
+      onClick={e => console.log(e)}
+      role="checkbox"
+      aria-checked={isSelected(name)}
+      tabIndex={-1}
+      selected={isSelected(name)}
+    >
       <TableCell padding="checkbox">
         <Checkbox
           checked={isSelected(name)}
           onClick={() => setSelected(name)}
         />
       </TableCell>
-      <TableCell
-        padding="none"
-        className={classes.tableCell}
-        style={{
-          maxWidth: 150
-        }}
-      >
-        <span
-          style={{
-            display: 'inline-flex',
-            overflowWrap: 'break-word'
-          }}
-        >
-          {name}
-        </span>
+      <TableCell padding="none" className={classes.tableCell}>
+        {name}
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         {version}

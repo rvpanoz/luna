@@ -47,6 +47,15 @@ export const listStyles = theme => ({
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto'
   },
+  tableCell: {
+    fontSize: 14,
+    lineHeight: '1.4em',
+    verticalAlign: 'left',
+    '& span': {
+      display: 'inline-block',
+      overflowWrap: 'break-word'
+    }
+  },
   outdated: {
     color: darken(theme.palette.secondary.dark, 0.1)
   },
@@ -60,15 +69,15 @@ export const listStyles = theme => ({
 
 export const tableHeaderStyles = theme => ({
   tableHeadCell: {
-    color: 'inherit',
     ...defaultFont,
-    fontSize: '1em'
+    fontSize: 16
   },
   tableCell: {
     fontSize: 14,
     lineHeight: '1.4em',
     padding: '0px 12px',
-    verticalAlign: 'middle'
+    verticalAlign: 'middle',
+    maxWidth: 100
   }
 });
 

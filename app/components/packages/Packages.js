@@ -13,7 +13,6 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import Typography from '@material-ui/core/Typography';
 
 import useIpc from 'commons/hooks/useIpc';
 import { getFiltered, parseNpmError } from 'commons/utils';
@@ -156,7 +155,7 @@ const Packages = props => {
           ? data.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
           : data.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-      dispatch(setPackagesSuccess({ data: sortedData }));
+      dispatch(setPackagesSuccess({ data: sortedData, sort: true }));
     },
     [sortDir, sortBy]
   );
@@ -187,9 +186,10 @@ const Packages = props => {
             reload={() => setCounter(counter + 1)} // triggers render
           />
         </div>
-        <React.Fragment>
+        <div className={classes.tableWrapper}>
           <Table
-            className={cn(classes.tablelist, {
+            aria-labelledby="packages-list"
+            className={cn(classes.table, classes.tablelist, {
               [classes.hasFilterBlur]: loading
             })}
           >
@@ -242,7 +242,7 @@ const Packages = props => {
               }
             />
           </Table>
-        </React.Fragment>
+        </div>
       </Paper>
     </AppLoader>
   );

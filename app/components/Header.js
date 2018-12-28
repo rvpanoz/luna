@@ -10,7 +10,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
+
 import Badge from '@material-ui/core/Badge';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -25,15 +25,14 @@ import List from '@material-ui/core/List';
 import Icon from '@material-ui/core/Icon';
 
 import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
+
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import ModuleIcon from '@material-ui/icons/ViewModule';
 
 import Popover from '@material-ui/core/Popover';
-import Fade from '@material-ui/core/Fade';
 
-import Tiles from './layout/Tiles';
+import SearchBox from './SearchBox';
 import styles from './styles/header';
 import Settings from './Settings';
 
@@ -86,18 +85,7 @@ const Header = props => {
           >
             Luna
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search for packages…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
-            />
-          </div>
+          <SearchBox />
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton
@@ -143,7 +131,7 @@ const Header = props => {
               }}
               onClose={e => setPopperEl(null)}
             >
-              <Tiles />
+              render something...?
             </Popover>
             <IconButton color="inherit">
               <Badge badgeContent={notifications.length} color="secondary">

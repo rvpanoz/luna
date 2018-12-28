@@ -183,7 +183,7 @@ export const isPackageOutdated = (outdatedPackages, name) => {
  * @param {*} mode
  * @param {*} directory
  */
-export const parseMap = (response, mode, directory, commandArgs) => {
+export const parseMap = (response, mode, directory) => {
   try {
     const packageJson = JSON.parse(response);
     const { name, version } = packageJson || {};
@@ -200,12 +200,13 @@ export const parseMap = (response, mode, directory, commandArgs) => {
     }
 
     if (!Array.isArray(dataArray) || !dataArray) {
-      mk.log(`utils[parseMap]: cound not convert package.json data to array`);
+      mk.log(`utils[parseMap]: cound not convert response data to array`);
       return;
     }
 
     const data = dataArray.map(pkgArr => {
       const [pkgName, details] = pkgArr;
+      const { name } = details || {};
 
       let group = null;
       let hasPeerMissing = false;
@@ -213,7 +214,7 @@ export const parseMap = (response, mode, directory, commandArgs) => {
       let hasError = typeof details.error === 'object';
 
       // find group and attach to pkg, useful to show data in list
-      if (mode === APP_MODES.LOCAL) {
+      if (mode && mode === APP_MODES.LOCAL) {
         const packageJSON = readPackageJson(directory);
 
         if (!Boolean(packageJSON)) {
@@ -234,7 +235,7 @@ export const parseMap = (response, mode, directory, commandArgs) => {
       }
 
       return merge(details, {
-        name: pkgName,
+        name: name || pkgName,
         __group: group || '',
         __error: hasError,
         __hasPeerMissing: hasPeerMissing
