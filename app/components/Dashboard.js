@@ -93,7 +93,7 @@ const Dashboard = props => {
             color="red"
             text={renderDependenciesStats()}
             loading={loading}
-            avatar
+            // avatar
             type="update"
           />
         </Grid>
@@ -104,8 +104,8 @@ const Dashboard = props => {
             description={packagesOutdated ? packagesOutdated.length : 0}
             color="blue"
             text={renderStats()}
-            avatar
             type="update"
+            // avatar
           />
         </Grid>
       </Grid>

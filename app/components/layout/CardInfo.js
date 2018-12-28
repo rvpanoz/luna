@@ -34,15 +34,17 @@ const AppCardInfo = props => {
     text,
     color,
     link,
-    type
+    type = null
   } = props;
 
-  const defaultAvatarIcon = <BalotIcon className={classes.cardIcon} />;
-  const defaultStatIcon = <InfoIcon className={classes.cardIcon} />;
+  const defaultAvatarIcon = null;
+  const defaultStatIcon = null;
+  const infoAvatarIcon = <BalotIcon className={classes.cardIcon} />;
+  const infoStatIcon = <InfoIcon className={classes.cardIcon} />;
 
   const renderAvatarIcon = type => {
     const icon = switchcase({
-      info: () => defaultAvatarIcon,
+      info: () => infoAvatarIcon,
       update: () => <UpdateIcon className={classes.cardIcon} />,
       warning: () => <WarningIcon className={classes.cardIcon} />
     })(defaultAvatarIcon)(type);
@@ -52,7 +54,7 @@ const AppCardInfo = props => {
 
   const renderStatIcon = type => {
     const icon = switchcase({
-      info: () => defaultStatIcon,
+      info: () => infoStatIcon,
       update: () => (
         <UpdateIcon
           className={
@@ -81,7 +83,7 @@ const AppCardInfo = props => {
           }),
           avatar: classes.cardAvatar
         }}
-        avatar={renderAvatarIcon(type)}
+        avatar={type && renderAvatarIcon(type)}
       />
       <CardContent className={classes.cardContent}>
         <Typography component="p" className={classes.cardCategory}>
@@ -99,7 +101,7 @@ const AppCardInfo = props => {
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        {renderStatIcon(type)}
+        {type && renderStatIcon(type)}
         {link !== undefined ? (
           <a href={link.href} className={classes.cardStatsLink}>
             {link.text}
