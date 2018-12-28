@@ -24,8 +24,6 @@ const APP_PATHS = {
   userData: app.getPath('userData')
 };
 
-const { delimiter } = path;
-
 // defaults settings
 const { config } = mk;
 const {
@@ -65,10 +63,10 @@ if (NODE_ENV === 'production') {
 
 if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
   const p = path.join(__dirname, '..', 'app', 'node_modules');
-  const { appData, userData } = APP_PATHS;
+  // const { appData, userData } = APP_PATHS;
 
-  mk.log(`[INFO] user data directory: ${userData}`);
-  mk.log(`[INFO] app data directory: ${appData}`);
+  // mk.log(`[INFO] user data directory: ${userData}`);
+  // mk.log(`[INFO] app data directory: ${appData}`);
 
   require('electron-debug')();
   require('module').globalPaths.push(p);
@@ -104,6 +102,7 @@ ipcMain.on('ipc-event', (event, options) => {
         } else {
           const { directory, mode } = rest;
 
+          // handle opened directories
           if (directory && mode === 'LOCAL' && cmd[0] === 'list') {
             const resolvedDirectory = path.resolve(directory);
             const dirName = path.dirname(resolvedDirectory);

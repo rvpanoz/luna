@@ -12,10 +12,7 @@ import Layout from './Layout';
 import '../app.global.css';
 
 const App = () => {
-  console.log('app rendered');
-
   useEffect(() => {
-    console.log('app useEffect 1');
     ipcRenderer.on('uncaught-exception', (event, exceptionError) => {
       console.error('uncaught-exception', exceptionError);
     });
@@ -25,7 +22,11 @@ const App = () => {
     });
 
     return () =>
-      ipcRenderer.removeAllListeners(['uncaught-exception', 'ipcEvent-error']);
+      ipcRenderer.removeAllListeners([
+        'uncaught-exception',
+        'ipcEvent-error',
+        'ipcEvent-flow'
+      ]);
   });
 
   return (

@@ -28,7 +28,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import ModuleIcon from '@material-ui/icons/ViewModule';
 
+import Popover from '@material-ui/core/Popover';
+import Fade from '@material-ui/core/Fade';
+
+import Tiles from './layout/Tiles';
 import styles from './styles/header';
 import Settings from './Settings';
 
@@ -40,14 +45,15 @@ const Header = props => {
   const { classes } = props;
   const [openedDirectories, setOpenedDirectories] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [popperEl, setPopperEl] = useState(null);
   const [drawerOpen, toggleDrawer] = useState(false);
   const [settingsOpen, toggleSettings] = useState(false);
   const [keyboardOpen, toggleKeyboard] = useState(false);
 
   const { notifications } = useMappedState(mapState);
 
-  // is right menu open
   const menuOpen = Boolean(anchorEl);
+  const popperOpen = Boolean(popperEl);
 
   useEffect(
     () => {
@@ -62,7 +68,7 @@ const Header = props => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             className={classes.menuButton}
@@ -115,6 +121,30 @@ const Header = props => {
                 Keyboard shortcuts
               </MenuItem>
             </Menu>
+            <IconButton
+              color="inherit"
+              onClick={e => {
+                setPopperEl(e.currentTarget);
+              }}
+            >
+              <ModuleIcon />
+            </IconButton>
+            <Popover
+              id="managers-popover"
+              open={popperOpen}
+              anchorEl={popperEl}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center'
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center'
+              }}
+              onClose={e => setPopperEl(null)}
+            >
+              <Tiles />
+            </Popover>
             <IconButton color="inherit">
               <Badge badgeContent={notifications.length} color="secondary">
                 <NotificationsIcon />
