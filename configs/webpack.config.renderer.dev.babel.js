@@ -65,6 +65,7 @@ export default merge.smart(baseConfig, {
 
   resolve: {
     alias: {
+      assets: path.resolve(path.join(__dirname, '..', 'app', 'assets')),
       constants: path.resolve(path.join(__dirname, '..', 'app', 'constants')),
       commons: path.resolve(path.join(__dirname, '..', 'app', 'commons')),
       components: path.resolve(path.join(__dirname, '..', 'app', 'components')),
