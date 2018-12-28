@@ -45,11 +45,10 @@ const execute = (
 
     command.stdout.on('data', data => {
       result += `${String(data)}`;
-      callback('flow', error, data);
+      callback('flow', data);
     });
 
     command.stderr.on('data', err => {
-      // mark with -eor- (end of error) in order to split with that in renderer
       error += `${String(err)}`;
       callback('error', error);
     });

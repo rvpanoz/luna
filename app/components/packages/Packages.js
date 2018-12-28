@@ -16,8 +16,7 @@ import TableBody from '@material-ui/core/TableBody';
 import Typography from '@material-ui/core/Typography';
 
 import useIpc from 'commons/hooks/useIpc';
-import { getFiltered } from 'commons/utils';
-import { APP_MODES } from 'constants/AppConstants';
+import { getFiltered, parseNpmError } from 'commons/utils';
 
 import AppLoader from '../layout/AppLoader';
 import TableToolbar from './TableToolbar';
@@ -29,17 +28,22 @@ import { listStyles as styles } from '../styles/packagesStyles';
 import {
   addSelected,
   setPackagesSuccess,
-  setPackagesError,
   setPackagesOutdatedSuccess,
   clearSelected
 } from 'models/packages/actions';
 
-import { setPage, setPageRows } from 'models/ui/actions';
+import {
+  addNotification,
+  clearNotifications,
+  setPage,
+  setPageRows
+} from 'models/ui/actions';
 
 const mapState = state => ({
+  directory: state.common.directory,
+  notifications: state.common.notifications,
   manager: state.common.manager,
   mode: state.common.mode,
-  directory: state.common.directory,
   page: state.common.page,
   rowsPerPage: state.common.rowsPerPage,
   filters: state.packages.filters,
@@ -61,7 +65,8 @@ const Packages = props => {
     rowsPerPage,
     directory,
     manager,
-    selected
+    selected,
+    notifications
   } = useMappedState(mapState);
 
   const [sortDir, setSortDir] = useState('asc');
@@ -71,7 +76,7 @@ const Packages = props => {
   const isSelected = name => selected.indexOf(name) !== -1;
 
   // useIpc hook to send and listenTo ipc events
-  const [dependenciesSet, outdatedSet, error] = useIpc('ipc-event', {
+  const [dependenciesSet, outdatedSet, errors] = useIpc('ipc-event', {
     ipcEvent: 'get-packages',
     cmd: ['outdated', 'list'],
     mode,
@@ -95,6 +100,10 @@ const Packages = props => {
   // dispatch actions
   useEffect(
     () => {
+      if (notifications && notifications.length) {
+        dispatch(clearNotifications());
+      }
+
       if (Array.isArray(dependencies) && dependencies.length) {
         dispatch(setPackagesSuccess({ data: dependencies, name, version }));
       }
@@ -105,6 +114,28 @@ const Packages = props => {
             data: outdated
           })
         );
+      }
+
+      if (errors && typeof errors === 'string') {
+        const errorsArr = errors.split('\n');
+        let errorsLen = errorsArr && errorsArr.length;
+
+        while (errorsLen--) {
+          if (errorsArr[errorsLen]) {
+            const [body, requires, requiredBy] = parseNpmError(
+              errorsArr[errorsLen]
+            );
+
+            dispatch(
+              addNotification({
+                level: 0,
+                body,
+                requires,
+                requiredBy
+              })
+            );
+          }
+        }
       }
     },
     [dependenciesSet]

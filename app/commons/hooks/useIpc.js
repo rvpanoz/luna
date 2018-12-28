@@ -14,17 +14,17 @@ const useIpc = (channel, options) => {
 
   const [dependenciesSet, setDependencies] = useState({});
   const [outdatedSet, setOutdated] = useState({});
-  const [error, setError] = useState(null);
+  const [error, setErrors] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     // eslint-disable-next-line
-    ipcRenderer.on(listenTo, (event, status, commandArgs, data, error) => {
+    ipcRenderer.on(listenTo, (event, status, commandArgs, data, errors) => {
       const [name, version, packages] =
         data && parseMap(data, mode, directory, commandArgs);
 
-      if (error) {
-        setError(error);
+      if (errors) {
+        setErrors(errors);
       }
 
       if (Array.isArray(packages)) {
@@ -33,8 +33,6 @@ const useIpc = (channel, options) => {
         } else {
           setOutdated({ data: packages });
         }
-      } else {
-        setError('Packages data is invalid');
       }
     });
 

@@ -4,6 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
+import { useMappedState } from 'redux-react-hook';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -31,6 +32,10 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import styles from './styles/header';
 import Settings from './Settings';
 
+const mapState = state => ({
+  notifications: state.common.notifications
+});
+
 const Header = props => {
   const { classes } = props;
   const [openedDirectories, setOpenedDirectories] = useState([]);
@@ -38,6 +43,10 @@ const Header = props => {
   const [drawerOpen, toggleDrawer] = useState(false);
   const [settingsOpen, toggleSettings] = useState(false);
   const [keyboardOpen, toggleKeyboard] = useState(false);
+
+  const { notifications } = useMappedState(mapState);
+
+  // is right menu open
   const menuOpen = Boolean(anchorEl);
 
   useEffect(
@@ -107,7 +116,7 @@ const Header = props => {
               </MenuItem>
             </Menu>
             <IconButton color="inherit">
-              <Badge badgeContent={17} color="secondary">
+              <Badge badgeContent={notifications.length} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
