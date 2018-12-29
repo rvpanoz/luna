@@ -97,6 +97,9 @@ ipcMain.on('ipc-event', (event, options) => {
      *  Send response to renderer process via ipc events
      */
     switch (status) {
+      case 'dev':
+        event.sender.send('ipcEvent-dev', data);
+        break;
       case 'close':
         if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
           event.sender.send('action-close', data);

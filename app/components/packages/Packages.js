@@ -145,7 +145,9 @@ const Packages = props => {
         }
       }
 
-      dispatch(setPage({ page: 0 }));
+      if (page !== 0) {
+        dispatch(setPage({ page: 0 }));
+      }
     },
     [dependenciesSet]
   );
@@ -192,6 +194,7 @@ const Packages = props => {
         <div className={classes.toolbar}>
           <TableToolbar
             title="Packages"
+            manager={manager}
             mode={mode}
             directory={directory}
             selected={selected}

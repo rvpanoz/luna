@@ -5,7 +5,7 @@
  */
 
 import { ipcRenderer } from 'electron';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
 import { remote } from 'electron';
@@ -29,8 +29,9 @@ import { APP_MODES } from 'constants/AppConstants';
 
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
 
-const installSelected = (mode, directory, selected) => {
+const installSelected = (manager, mode, directory, selected) => {
   ipcRenderer.send('ipc-event', {
+    activeManager: manager,
     cmd: ['install'],
     multiple: true,
     packages: selected,
@@ -40,7 +41,7 @@ const installSelected = (mode, directory, selected) => {
 };
 
 const TableListToolbar = props => {
-  const { classes, selected, title, reload, mode, fromSearch } = props;
+  const { classes, selected, title, manager, reload, mode, fromSearch } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
   const dispatch = useDispatch();
@@ -117,7 +118,7 @@ const TableListToolbar = props => {
         },
         btnIdx => {
           if (Boolean(btnIdx) === true) {
-            installSelected(mode, directory, selected);
+            installSelected(manager, mode, directory, selected);
           }
         }
       );
@@ -164,6 +165,14 @@ const TableListToolbar = props => {
       </Tooltip>
     </div>
   );
+
+  useEffect(() => {
+    ipcRenderer.on('install-package-close', (event, data) => {
+      console.log(data);
+    });
+
+    return () => ipcRenderer.removeAllListeners(['install-package-close']);
+  });
 
   return (
     <section className={classes.root}>

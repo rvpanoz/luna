@@ -199,15 +199,16 @@ const Header = props => {
         aria-describedby="settings"
         open={settingsOpen}
         onClose={e => setAnchorEl(null)}
-        className={classes.modal}
+        // className={classes.modal}
       >
-        <div className={classes.settings}>
+        <div className={classes.paper}>
           <Settings onClose={e => toggleSettings(false)} />
         </div>
       </Modal>
       <Modal
         aria-labelledby="keyboard"
         aria-describedby="keyboard"
+        hideBackdrop
         open={keyboardOpen}
         onClose={e => toggleKeyboard(false)}
       >
