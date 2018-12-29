@@ -12,7 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import styles from './styles/dashboard';
-import { APP_MODES } from 'constants/AppConstants';
+import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 
 const mapState = state => ({
   manager: state.common.manager,
@@ -61,6 +61,11 @@ const Dashboard = props => {
   const renderStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Statistics</div>
+      <div className={cn(classes.flexContainerItem, classes.textRight)}>
+        <a href="#" className={classes.cardLink}>
+          View details
+        </a>
+      </div>
     </div>
   );
 
@@ -79,7 +84,7 @@ const Dashboard = props => {
                 ? `${projectName} v${projectVersion}`
                 : 'Project'
             }`}
-            subtext={directory || 'No working directory'}
+            subtext={directory || APP_INFO.NO_WORKING_DIRECTORY}
             text={renderProjectStats()}
             loading={loading}
             avatar
@@ -90,10 +95,9 @@ const Dashboard = props => {
             id="card-2"
             title="Total dependencies"
             description={packages ? packages.length : 0}
-            color="red"
+            color="danger"
             text={renderDependenciesStats()}
             loading={loading}
-            avatar
             type="update"
           />
         </Grid>
@@ -102,10 +106,9 @@ const Dashboard = props => {
             id="card-3"
             title="Outdated packages"
             description={packagesOutdated ? packagesOutdated.length : 0}
-            color="blue"
+            color="info"
             text={renderStats()}
-            avatar
-            type="update"
+            type="stats"
           />
         </Grid>
       </Grid>

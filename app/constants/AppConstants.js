@@ -31,7 +31,8 @@ export const APP_ACTIONS = {
 export const APP_INFO = {
   NOT_AVAILABLE: 'N/A',
   NO_NOTIFICATIONS: 'No notifications',
-  CONFIRMATION: 'Would you like to $action $name@version?'
+  CONFIRMATION: 'Would you like to $action $name@version?',
+  NO_WORKING_DIRECTORY: 'No working directory'
 };
 
 // supported package groups
