@@ -31,6 +31,10 @@ export const APP_INFO = {
   CONFIRMATION: 'Would you like to $action $name@version?',
   NOT_AVAILABLE: 'N/A',
   NO_NOTIFICATIONS: 'No notifications',
+<<<<<<< 44e1816833dbd8ae38ce6969cf54acb61ff581af
+=======
+  CONFIRMATION: 'Would you like to $action $name@version?',
+>>>>>>> dashboard cards icon stats colors
   NO_WORKING_DIRECTORY: 'No working directory'
 };
 
