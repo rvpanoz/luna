@@ -17,12 +17,15 @@ import Typography from '@material-ui/core/Typography';
 
 import WarningIcon from '@material-ui/icons/WarningOutlined';
 import UpdateIcon from '@material-ui/icons/UpdateOutlined';
-import InfoIcon from '@material-ui/icons/InfoOutlined';
 import BalotIcon from '@material-ui/icons/BallotOutlined';
+import BarChartIcon from '@material-ui/icons/BarChartOutlined';
 
 import { switchcase } from '../../commons/utils';
 
 import styles from '../styles/cardInfo';
+
+const defaultAvatarIcon = null;
+const defaultStatIcon = null;
 
 const AppCardInfo = props => {
   const {
@@ -34,19 +37,38 @@ const AppCardInfo = props => {
     text,
     color,
     link,
-    type = null
+    type
   } = props;
 
-  const defaultAvatarIcon = null;
-  const defaultStatIcon = null;
-  const infoAvatarIcon = <BalotIcon className={classes.cardIcon} />;
-  const infoStatIcon = <InfoIcon className={classes.cardIcon} />;
+  const infoStatIcon = (
+    <BalotIcon
+      className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
+    />
+  );
 
+  const barStatIcon = (
+    <BarChartIcon
+      className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
+    />
+  );
+  const updateStatIcon = (
+    <UpdateIcon
+      className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
+    />
+  );
+  const warningStatIcon = (
+    <WarningIcon
+      className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
+    />
+  );
+
+  // TODO: avatars
   const renderAvatarIcon = type => {
     const icon = switchcase({
-      info: () => infoAvatarIcon,
-      update: () => <UpdateIcon className={classes.cardIcon} />,
-      warning: () => <WarningIcon className={classes.cardIcon} />
+      info: () => null,
+      stats: () => null,
+      update: () => null,
+      warning: () => null
     })(defaultAvatarIcon)(type);
 
     return icon;
@@ -55,20 +77,9 @@ const AppCardInfo = props => {
   const renderStatIcon = type => {
     const icon = switchcase({
       info: () => infoStatIcon,
-      update: () => (
-        <UpdateIcon
-          className={
-            classes.cardStatsIcon + ' ' + classes[type + 'CardStatsIcon']
-          }
-        />
-      ),
-      warning: () => (
-        <WarningIcon
-          className={
-            classes.cardStatsIcon + ' ' + classes[type + 'CardStatsIcon']
-          }
-        />
-      )
+      stats: () => barStatIcon,
+      update: () => updateStatIcon,
+      warning: () => warningStatIcon
     })(defaultStatIcon)(type);
 
     return icon;

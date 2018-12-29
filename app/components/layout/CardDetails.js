@@ -49,8 +49,7 @@ const AppCardDetails = props => {
 };
 
 AppCardDetails.defaultProps = {
-  color: 'info',
-  text: 'No working directory'
+  color: 'gray'
 };
 
 // AppCardDetails.propTypes = {
