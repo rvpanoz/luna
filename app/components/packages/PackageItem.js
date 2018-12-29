@@ -32,7 +32,6 @@ const PackageItemRow = props => {
     <TableRow
       key={`pkg-${name}`}
       hover
-      onClick={e => console.log(e)}
       role="checkbox"
       aria-checked={isSelected(name)}
       tabIndex={-1}

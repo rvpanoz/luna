@@ -64,6 +64,8 @@ const SearchBox = props => {
             setPackagesSuccess({
               name,
               version,
+              fromSearch: true,
+              outdated: null,
               data: packages
             })
           );

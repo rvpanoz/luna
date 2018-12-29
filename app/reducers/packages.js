@@ -61,13 +61,12 @@ const handlers = {
   [clearFilters.type]: state => assoc('filters', [], state),
   [clearSelected.type]: state => assoc('selected', [], state),
   [setPackagesSuccess.type]: (state, { payload }) => {
-    const { data, name, version, sort } = payload;
-    const { packagesOutdated } = state;
+    const { data, name, version, fromSort, fromSearch, outdated } = payload;
 
     const packages = data
       ? data.map(pkg => {
           const [isOutdated, outdatedPkg] = isPackageOutdated(
-            packagesOutdated,
+            outdated,
             pkg.name
           );
 
@@ -80,13 +79,15 @@ const handlers = {
 
     return merge(state, {
       packages,
-      filters: [],
+      fromSearch,
       loading: false,
-      lastUpdatedAt: !sort
-        ? format(new Date(), 'MM/DD/YYYY h:mm:ss')
-        : state.lastUpdatedAt,
+      lastUpdatedAt: fromSort
+        ? state.lastUpdatedAt
+        : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
       projectName: name,
-      projectVersion: version
+      projectVersion: version,
+      filters: [],
+      selected: []
     });
   },
   [setPackagesOutdatedSuccess.type]: (state, { payload }) => {

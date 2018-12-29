@@ -11,7 +11,9 @@ export default {
     selected: [],
     filters: [],
     lastUpdatedAt: null,
-    loading: false
+    loading: false,
+    fromSearch: false,
+    fromSort: false
   },
   metadata: {}
 };

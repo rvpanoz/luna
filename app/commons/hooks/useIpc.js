@@ -8,8 +8,8 @@ import { useDispatch } from 'redux-react-hook';
 import { parseMap } from '../utils';
 import { setPackagesStart } from '../../models/packages/actions';
 
-const useIpc = (channel, options) => {
-  const { ipcEvent, mode, directory, inputs = [] } = options || {};
+const useIpc = (channel, options, inputs = []) => {
+  const { ipcEvent, mode, directory } = options || {};
   const listenTo = `${ipcEvent}-close`;
 
   const [dependenciesSet, setDependencies] = useState({});

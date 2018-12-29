@@ -4,9 +4,9 @@
  * Toolbar
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
-import { useDispatch, useMappedState } from 'redux-react-hook';
+import { useDispatch } from 'redux-react-hook';
 import { remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -17,6 +17,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import InstallIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
@@ -27,21 +28,15 @@ import { APP_MODES } from 'constants/AppConstants';
 
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
 
-const mapState = state => ({
-  manager: state.common.manager,
-  mode: state.common.mode,
-  directory: state.common.directory
-});
-
 const TableListToolbar = props => {
-  const { classes, selected, title, mode, reload } = props;
+  const { classes, selected, title, reload, mode, fromSearch } = props;
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
   const dispatch = useDispatch();
 
   const switchMode = (mode, directory) => {
     dispatch(setMode({ mode, directory }));
-    reload();
+    // reload();
   };
 
   const openFilters = (e, close) => {
@@ -94,6 +89,68 @@ const TableListToolbar = props => {
     return false;
   };
 
+  const handleInstall = e => {
+    const { selected } = props;
+
+    if (selected && selected.length) {
+      remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          title: 'Confirmation',
+          type: 'question',
+          message: 'Would you like to install the selected packages?',
+          buttons: ['Cancel', 'Install']
+        },
+        btnIdx => {
+          if (Boolean(btnIdx) === true) {
+            console.log('do install..');
+          }
+        }
+      );
+    }
+    return false;
+  };
+
+  const renderToolbarActions = () => (
+    <div className={classes.flexContainer}>
+      <Tooltip title="Open package.json">
+        <IconButton
+          color="secondary"
+          aria-label="Open package.json"
+          onClick={e => openPackage()}
+        >
+          <LoadIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Show global packages">
+        <div>
+          <IconButton
+            disabled={mode === APP_MODES.GLOBAL && !fromSearch}
+            aria-label="Show globals"
+            onClick={e => switchMode(APP_MODES.GLOBAL, null)}
+          >
+            <PublicIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
+      <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
+        <div>
+          <IconButton
+            aria-label={fromSearch ? 'Back to list' : 'Reload list'}
+            onClick={() => reload()}
+          >
+            <RefreshIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
+      <Tooltip title="Show filters">
+        <IconButton aria-label="Show filters" onClick={openFilters}>
+          <FilterListIcon />
+        </IconButton>
+      </Tooltip>
+    </div>
+  );
+
   return (
     <section className={classes.root}>
       <Toolbar
@@ -103,17 +160,11 @@ const TableListToolbar = props => {
         })}
       >
         <div className={classes.header}>
-          {selected && selected.length > 0 ? (
-            <Typography color="primary" component="h1" variant="title">
-              {selected.length} selected
-            </Typography>
-          ) : (
-            <div className={classes.title}>
-              <Typography color="primary" component="h1" variant="title">
-                {title}
-              </Typography>
-            </div>
-          )}
+          <Typography color="primary" component="h1" variant="title">
+            {selected && selected.length === 0
+              ? title
+              : `${selected.length} selected`}
+          </Typography>
         </div>
         <div className={classes.filters}>
           <Popover
@@ -127,47 +178,29 @@ const TableListToolbar = props => {
         <div className={classes.spacer} />
         <div className={classes.actions}>
           {selected.length === 0 ? (
+            renderToolbarActions()
+          ) : fromSearch ? (
             <div className={classes.flexContainer}>
-              <Tooltip title="Open package.json">
+              <Tooltip title="Install selected">
                 <IconButton
-                  color="secondary"
-                  aria-label="Open package.json"
-                  onClick={e => openPackage()}
+                  aria-label="install selected"
+                  onClick={e => handleInstall()}
                 >
-                  <LoadIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Show global packages">
-                <div>
-                  <IconButton
-                    disabled={mode === APP_MODES.GLOBAL}
-                    aria-label="Show globals"
-                    onClick={e => switchMode(APP_MODES.GLOBAL, null)}
-                  >
-                    <PublicIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
-              <Tooltip title="Reload list">
-                <IconButton aria-label="Reload list" onClick={reload}>
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Show filters">
-                <IconButton aria-label="Show filters" onClick={openFilters}>
-                  <FilterListIcon />
+                  <InstallIcon />
                 </IconButton>
               </Tooltip>
             </div>
           ) : (
-            <Tooltip title="Uninstall selected">
-              <IconButton
-                aria-label="uninstall selected"
-                onClick={e => handleUninstall()}
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
+            <div className={classes.flexContainer}>
+              <Tooltip title="Uninstall selected">
+                <IconButton
+                  aria-label="uninstall selected"
+                  onClick={e => handleUninstall()}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
           )}
         </div>
       </Toolbar>
