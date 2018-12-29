@@ -15,6 +15,7 @@ import styles from './styles/dashboard';
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 
 const mapState = state => ({
+  notifications: state.common.notifications,
   manager: state.common.manager,
   mode: state.common.mode,
   directory: state.common.directory,
@@ -37,14 +38,15 @@ const Dashboard = props => {
     manager,
     projectName,
     projectVersion,
-    lastUpdatedAt
+    lastUpdatedAt,
+    notifications
   } = useMappedState(mapState);
 
   const renderProjectStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        Problems:&nbsp;0
+        Problems:&nbsp;{notifications ? notifications.length : 0}
       </div>
     </div>
   );

@@ -18,13 +18,13 @@ import { Packages, PackageDetails } from 'components/packages';
 import styles from './styles/layout';
 
 const Layout = props => {
-  const { classes } = props;
+  const { app, classes } = props;
 
   return (
     <div className={classes.wrapper}>
       <CssBaseline />
       <section className={classes.header}>
-        <Header />
+        <Header app={app} />
       </section>
       <section className={classes.main}>
         <div className={classes.container}>
