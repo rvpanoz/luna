@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { ipcRenderer } from 'electron';
-import { useMappedState } from 'redux-react-hook';
+import { useDispatch, useMappedState } from 'redux-react-hook';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -23,18 +23,19 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import List from '@material-ui/core/List';
 import Icon from '@material-ui/core/Icon';
+import Popover from '@material-ui/core/Popover';
 
 import MenuIcon from '@material-ui/icons/Menu';
-
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-
-import Popover from '@material-ui/core/Popover';
 
 import SearchBox from './SearchBox';
 import styles from './styles/header';
 import Settings from './Settings';
 import Notifications from './Notifications';
+
+import { APP_MODES } from 'constants/AppConstants';
+import { setMode } from 'models/ui/actions';
 
 const mapState = state => ({
   notifications: state.common.notifications
@@ -49,6 +50,7 @@ const Header = props => {
   const [settingsOpen, toggleSettings] = useState(false);
   const [keyboardOpen, toggleKeyboard] = useState(false);
 
+  const dispatch = useDispatch();
   const { notifications } = useMappedState(mapState);
 
   const menuOpen = Boolean(anchorEl);
@@ -158,10 +160,10 @@ const Header = props => {
               <ListItemIcon>
                 <Icon>folder_open</Icon>
               </ListItemIcon>
-              <ListItemText primary="History" />
+              <ListItemText primary="My History" />
             </ListItem>
             {openedDirectories &&
-              openedDirectories.map((pkg, idx) => (
+              openedDirectories.map((dir, idx) => (
                 <ListItem
                   key={`directory-${idx}`}
                   dense={true}
@@ -171,11 +173,18 @@ const Header = props => {
                     className={classes.listItem}
                     primary={
                       <a
-                        onClick={e => console.log(pkg.directory)}
+                        onClick={() =>
+                          dispatch(
+                            setMode({
+                              mode: APP_MODES.LOCAL,
+                              directory: dir.directory
+                            })
+                          )
+                        }
                         href="#sub-labels-and-columns"
                         className={classes.link}
                       >
-                        {pkg.name}
+                        {dir.name}
                       </a>
                     }
                   />

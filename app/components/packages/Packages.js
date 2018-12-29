@@ -49,7 +49,8 @@ const mapState = state => ({
   loading: state.packages.loading,
   packages: state.packages.packages,
   packagesOutdated: state.packages.packagesOutdated,
-  selected: state.packages.selected
+  selected: state.packages.selected,
+  fromSearch: state.packages.fromSearch
 });
 
 const Packages = props => {
@@ -65,7 +66,8 @@ const Packages = props => {
     directory,
     manager,
     selected,
-    notifications
+    notifications,
+    fromSearch
   } = useMappedState(mapState);
 
   const [sortDir, setSortDir] = useState('asc');
@@ -75,14 +77,18 @@ const Packages = props => {
   const isSelected = name => selected.indexOf(name) !== -1;
 
   // useIpc hook to send and listenTo ipc events
-  const [dependenciesSet, outdatedSet, errors] = useIpc('ipc-event', {
-    ipcEvent: 'get-packages',
-    cmd: ['outdated', 'list'],
-    mode,
-    directory,
-    inputs: [counter, manager]
-  });
+  const [dependenciesSet, outdatedSet, errors] = useIpc(
+    'ipc-event',
+    {
+      ipcEvent: 'get-packages',
+      cmd: ['outdated', 'list'],
+      mode,
+      directory
+    },
+    [manager, directory, counter]
+  );
 
+  const reload = () => setCounter(counter + 1);
   const setSelected = name => dispatch(addSelected({ name }));
   const toggleSort = prop => {
     const newSortBy = sortDir === 'desc' ? 'asc' : 'desc';
@@ -104,7 +110,9 @@ const Packages = props => {
       }
 
       if (Array.isArray(dependencies) && dependencies.length) {
-        dispatch(setPackagesSuccess({ data: dependencies, name, version }));
+        dispatch(
+          setPackagesSuccess({ data: dependencies, name, version, outdated })
+        );
       }
 
       if (outdated && outdated.length) {
@@ -155,7 +163,9 @@ const Packages = props => {
           ? data.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
           : data.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-      dispatch(setPackagesSuccess({ data: sortedData, sort: true }));
+      dispatch(
+        setPackagesSuccess({ data: sortedData, fromSort: true, outdated })
+      );
     },
     [sortDir, sortBy]
   );
@@ -183,7 +193,8 @@ const Packages = props => {
             mode={mode}
             directory={directory}
             selected={selected}
-            reload={() => setCounter(counter + 1)} // triggers render
+            fromSearch={fromSearch}
+            reload={reload} // triggers render
           />
         </div>
         <div className={classes.tableWrapper}>

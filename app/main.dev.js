@@ -118,7 +118,7 @@ ipcMain.on('ipc-event', (event, options) => {
                 ...openedPackages,
                 {
                   name,
-                  directory: dirName
+                  directory: path.join(dirName, 'package.json')
                 }
               ]);
             }
