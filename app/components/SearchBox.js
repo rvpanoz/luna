@@ -17,7 +17,7 @@ import { clearNotifications } from 'models/ui/actions';
 import styles from './styles/searchBox';
 
 const SearchBox = props => {
-  const { classes } = props;
+  const { classes, disabled } = props;
   const rootEl = useRef(null);
   const [snackbarOpen, toggleSnackbar] = useState(false);
   const dispatch = useDispatch();
@@ -93,6 +93,7 @@ const SearchBox = props => {
           <SearchIcon />
         </div>
         <InputBase
+          disabled={disabled}
           placeholder="Search for packages…"
           classes={{
             root: classes.inputRoot,

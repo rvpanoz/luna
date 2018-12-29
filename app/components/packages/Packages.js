@@ -144,6 +144,8 @@ const Packages = props => {
           }
         }
       }
+
+      dispatch(setPage({ page: 0 }));
     },
     [dependenciesSet]
   );

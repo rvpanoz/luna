@@ -4,6 +4,7 @@
  * Toolbar
  */
 
+import { ipcRenderer } from 'electron';
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
@@ -28,6 +29,16 @@ import { APP_MODES } from 'constants/AppConstants';
 
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
 
+const installSelected = (mode, directory, selected) => {
+  ipcRenderer.send('ipc-event', {
+    cmd: ['install'],
+    multiple: true,
+    packages: selected,
+    mode,
+    directory
+  });
+};
+
 const TableListToolbar = props => {
   const { classes, selected, title, reload, mode, fromSearch } = props;
   const [anchorEl, setAnchorEl] = useState(null);
@@ -36,7 +47,10 @@ const TableListToolbar = props => {
 
   const switchMode = (mode, directory) => {
     dispatch(setMode({ mode, directory }));
-    // reload();
+
+    if (fromSearch) {
+      reload();
+    }
   };
 
   const openFilters = (e, close) => {
@@ -90,7 +104,7 @@ const TableListToolbar = props => {
   };
 
   const handleInstall = e => {
-    const { selected } = props;
+    const { mode, directory, selected } = props;
 
     if (selected && selected.length) {
       remote.dialog.showMessageBox(
@@ -103,7 +117,7 @@ const TableListToolbar = props => {
         },
         btnIdx => {
           if (Boolean(btnIdx) === true) {
-            console.log('do install..');
+            installSelected(mode, directory, selected);
           }
         }
       );

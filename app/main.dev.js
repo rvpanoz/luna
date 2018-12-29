@@ -27,9 +27,10 @@ const APP_PATHS = {
 // defaults settings
 const { config } = mk;
 const {
-  defaultSettings: { startMinimized }
+  defaultSettings: { startMinimized },
+  defaultSettings
 } = config;
-
+const { defaultManager } = defaultSettings;
 const {
   DEBUG_PROD,
   UPGRADE_EXTENSIONS,
@@ -88,7 +89,7 @@ const installExtensions = async () => {
 
 // channel: ipc-event
 ipcMain.on('ipc-event', (event, options) => {
-  const { ipcEvent, activeManager, ...rest } = options || {};
+  const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
   const openedPackages = Store.get('openedPackages') || [];
 
   const callback = (status, error, data, cmd) => {
