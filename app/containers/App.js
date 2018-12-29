@@ -27,7 +27,7 @@ const App = () => {
 
   return (
     <div id="app">
-      <Layout />
+      <Layout app="Luna" />
     </div>
   );
 };

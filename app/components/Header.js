@@ -28,23 +28,23 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import ModuleIcon from '@material-ui/icons/ViewModule';
 
 import Popover from '@material-ui/core/Popover';
 
 import SearchBox from './SearchBox';
 import styles from './styles/header';
 import Settings from './Settings';
+import Notifications from './Notifications';
 
 const mapState = state => ({
   notifications: state.common.notifications
 });
 
 const Header = props => {
-  const { classes } = props;
+  const { app, classes } = props;
   const [openedDirectories, setOpenedDirectories] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
-  const [popperEl, setPopperEl] = useState(null);
+  const [notificationsEl, setNotificationsEl] = useState(null);
   const [drawerOpen, toggleDrawer] = useState(false);
   const [settingsOpen, toggleSettings] = useState(false);
   const [keyboardOpen, toggleKeyboard] = useState(false);
@@ -52,7 +52,7 @@ const Header = props => {
   const { notifications } = useMappedState(mapState);
 
   const menuOpen = Boolean(anchorEl);
-  const popperOpen = Boolean(popperEl);
+  const notificationsOpen = Boolean(notifications.length && notificationsEl);
 
   useEffect(
     () => {
@@ -67,8 +67,8 @@ const Header = props => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed">
-        <Toolbar>
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar className={classes.headerToolbar}>
           <IconButton
             className={classes.menuButton}
             color="inherit"
@@ -83,7 +83,7 @@ const Header = props => {
             color="inherit"
             noWrap
           >
-            Luna
+            {app}
           </Typography>
           <SearchBox />
           <div className={classes.grow} />
@@ -112,15 +112,16 @@ const Header = props => {
             <IconButton
               color="inherit"
               onClick={e => {
-                setPopperEl(e.currentTarget);
+                setNotificationsEl(e.currentTarget);
               }}
             >
-              <ModuleIcon />
+              <Badge badgeContent={notifications.length} color="secondary">
+                <NotificationsIcon />
+              </Badge>
             </IconButton>
             <Popover
-              id="managers-popover"
-              open={popperOpen}
-              anchorEl={popperEl}
+              open={notificationsOpen}
+              anchorEl={notificationsEl}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'center'
@@ -129,15 +130,10 @@ const Header = props => {
                 vertical: 'top',
                 horizontal: 'center'
               }}
-              onClose={e => setPopperEl(null)}
+              onClose={e => setNotificationsEl(null)}
             >
-              render something...?
+              <Notifications notifications={notifications} />
             </Popover>
-            <IconButton color="inherit">
-              <Badge badgeContent={notifications.length} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
           </div>
         </Toolbar>
       </AppBar>
