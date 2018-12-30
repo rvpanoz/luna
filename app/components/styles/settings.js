@@ -1,7 +1,8 @@
 const styles = theme => ({
-  paper: {
+  root: {
     width: '100%',
-    height: '100%'
+    height: '100%',
+    padding: theme.spacing.unit * 3
   },
   form: {
     display: 'flex',

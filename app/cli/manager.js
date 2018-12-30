@@ -147,13 +147,36 @@ exports.search = (opts, callback) => {
   const { directory, mode, pkgName } = opts;
   const defaults = ['--depth=0', '--json'];
 
-  let result = '',
-    error = '';
-
   if (!pkgName) {
     return Promise.reject('npm[search] package name parameter must be given');
   }
 
   const run = [].concat(command, pkgName).concat(defaults);
   return execute('npm', run, mode, directory, callback);
+};
+
+exports.install = (opts, callback) => {
+  const { mode, directory, activeManager } = opts;
+
+  try {
+    const manager = require(path.resolve(__dirname, activeManager));
+    const run = manager['install'].call(this, opts);
+
+    return execute(activeManager, run, mode, directory, callback);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+exports.uninstall = (opts, callback) => {
+  const { mode, directory, activeManager } = opts;
+
+  try {
+    const manager = require(path.resolve(__dirname, activeManager));
+    const run = manager['uninstall'].call(this, opts);
+
+    return execute(activeManager, run, mode, directory, callback);
+  } catch (error) {
+    throw new Error(error);
+  }
 };

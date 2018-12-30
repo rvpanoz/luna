@@ -4,7 +4,8 @@
  * Toolbar
  */
 
-import React, { useState } from 'react';
+import { ipcRenderer } from 'electron';
+import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
 import { remote } from 'electron';
@@ -21,22 +22,56 @@ import InstallIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
+import Snackbar from '@material-ui/core/Snackbar';
 
-import TableFilters from './TableFilters';
 import { setMode } from 'models/ui/actions';
 import { APP_MODES } from 'constants/AppConstants';
 
+import SnackbarContent from 'components/layout/SnackbarContent';
+import TableFilters from './TableFilters';
+
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
 
+const installSelected = (manager, mode, directory, selected) => {
+  ipcRenderer.send('ipc-event', {
+    activeManager: manager,
+    ipcEvent: 'install-packages',
+    cmd: ['install'],
+    multiple: true,
+    packages: selected,
+    mode,
+    directory
+  });
+};
+
+const uninstallSelected = (manager, mode, directory, selected) => {
+  ipcRenderer.send('ipc-event', {
+    activeManager: manager,
+    ipcEvent: 'uninstall-packages',
+    cmd: ['uninstall'],
+    multiple: true,
+    packages: selected,
+    mode,
+    directory
+  });
+};
+
 const TableListToolbar = props => {
-  const { classes, selected, title, reload, mode, fromSearch } = props;
+  const { classes, selected, title, manager, reload, mode, fromSearch } = props;
+  const [snackbarOpen, toggleSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [counter, setCounter] = useState(0);
   const [filtersOn, toggleFilters] = useState(false);
+
   const dispatch = useDispatch();
 
   const switchMode = (mode, directory) => {
     dispatch(setMode({ mode, directory }));
-    // reload();
+
+    if (fromSearch) {
+      reload();
+    }
   };
 
   const openFilters = (e, close) => {
@@ -67,8 +102,8 @@ const TableListToolbar = props => {
     );
   };
 
-  const handleUninstall = e => {
-    const { selected } = props;
+  const handleUninstall = () => {
+    const { mode, directory, selected } = props;
 
     if (selected && selected.length) {
       remote.dialog.showMessageBox(
@@ -81,7 +116,7 @@ const TableListToolbar = props => {
         },
         btnIdx => {
           if (Boolean(btnIdx) === true) {
-            // TODO: do uninstall..
+            uninstallSelected(manager, mode, directory, selected);
           }
         }
       );
@@ -89,8 +124,8 @@ const TableListToolbar = props => {
     return false;
   };
 
-  const handleInstall = e => {
-    const { selected } = props;
+  const handleInstall = () => {
+    const { mode, directory, selected } = props;
 
     if (selected && selected.length) {
       remote.dialog.showMessageBox(
@@ -103,7 +138,7 @@ const TableListToolbar = props => {
         },
         btnIdx => {
           if (Boolean(btnIdx) === true) {
-            console.log('do install..');
+            installSelected(manager, mode, directory, selected);
           }
         }
       );
@@ -149,6 +184,31 @@ const TableListToolbar = props => {
         </IconButton>
       </Tooltip>
     </div>
+  );
+
+  useEffect(
+    () => {
+      ipcRenderer.on('install-packages-close', (event, status, error, data) => {
+        setSnackbarMessage(data);
+        toggleSnackbar(true);
+      });
+
+      ipcRenderer.on(
+        'uninstall-packages-close',
+        (event, status, error, data) => {
+          setSnackbarMessage(data);
+          toggleSnackbar(true);
+        }
+      );
+    },
+    [counter]
+  );
+
+  useEffect(() => () =>
+    ipcRenderer.removeAllListeners([
+      'install-packages-close',
+      'uninstall-packages-close'
+    ])
   );
 
   return (
@@ -204,6 +264,21 @@ const TableListToolbar = props => {
           )}
         </div>
       </Toolbar>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => toggleSnackbar(false)}
+      >
+        <SnackbarContent
+          onClose={() => toggleSnackbar(false)}
+          variant="success"
+          message={snackbarMessage}
+        />
+      </Snackbar>
     </section>
   );
 };

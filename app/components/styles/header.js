@@ -81,24 +81,12 @@ const styles = theme => ({
     color: '#FFFFFF',
     ...defaultBoxShadow
   },
-  settings: {
-    position: 'relative',
-    width: '100%',
-    height: '100%',
-    padding: 0
-  },
-  modal: {
-    top: '35%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    maxHeight: 320
-  },
   paper: {
+    width: 450,
+    height: 385,
     position: 'absolute',
-    width: theme.spacing.unit * 50,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4
+    top: '15%',
+    left: '35%'
   },
   menuButton: {
     marginLeft: -12,

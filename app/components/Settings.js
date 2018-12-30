@@ -30,7 +30,7 @@ const mapState = state => ({
 });
 
 const Settings = props => {
-  const { classes, mode, directory, onClose } = props;
+  const { classes, onClose } = props;
   const { manager, rowsPerPage } = useMappedState(mapState);
 
   const [setting_manager, setSettingManager] = useState(manager);
@@ -44,7 +44,7 @@ const Settings = props => {
   };
 
   return (
-    <Paper className={classes.paper}>
+    <Paper className={classes.root} elevation={2}>
       <DialogTitle>Settings</DialogTitle>
       <DialogContent>
         <DialogContentText>General</DialogContentText>

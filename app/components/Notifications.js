@@ -26,7 +26,9 @@ const Notifications = props => {
                 return (
                   <MenuItem
                     key={`notification-${idx}`}
-                    onClick={e => console.log(e)}
+                    onClick={e =>
+                      console.log(`${body} ${requires}\n${requiredBy}`)
+                    }
                     className={classes.dropdownItem}
                   >
                     {`${body} ${requires}\n${requiredBy}`}

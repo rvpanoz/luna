@@ -2,13 +2,13 @@
 
 import ElectronStore from 'electron-store';
 import path from 'path';
-import log from 'electron-log';
-import MenuBuilder from './menu';
-import mk from './mk';
-
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { merge } from 'ramda';
 import { autoUpdater } from 'electron-updater';
+import log from 'electron-log';
+
+import MenuBuilder from './menu';
+import mk from './mk';
 import { runCommand } from './shell';
 
 export default class AppUpdater {
@@ -27,9 +27,10 @@ const APP_PATHS = {
 // defaults settings
 const { config } = mk;
 const {
-  defaultSettings: { startMinimized }
+  defaultSettings: { startMinimized },
+  defaultSettings
 } = config;
-
+const { defaultManager } = defaultSettings;
 const {
   DEBUG_PROD,
   UPGRADE_EXTENSIONS,
@@ -88,7 +89,7 @@ const installExtensions = async () => {
 
 // channel: ipc-event
 ipcMain.on('ipc-event', (event, options) => {
-  const { ipcEvent, activeManager, ...rest } = options || {};
+  const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
   const openedPackages = Store.get('openedPackages') || [];
 
   const callback = (status, error, data, cmd) => {
@@ -97,40 +98,30 @@ ipcMain.on('ipc-event', (event, options) => {
      */
     switch (status) {
       case 'close':
-        if (['install', 'update', 'uninstall'].indexOf(ipcEvent) > -1) {
-          event.sender.send('action-close', data);
-        } else {
-          const { directory, mode } = rest;
+        const { directory, mode } = rest;
 
-          // handle opened directories
-          if (directory && mode === 'LOCAL' && cmd[0] === 'list') {
-            const resolvedDirectory = path.resolve(directory);
-            const dirName = path.dirname(resolvedDirectory);
-            const parsedDirectory = path.parse(dirName);
-            const { name } = parsedDirectory || {};
+        if (directory && mode === 'LOCAL' && cmd[0] === 'list') {
+          const dirName = path.dirname(path.resolve(directory));
+          const parsedDirectory = path.parse(dirName);
+          const { name } = parsedDirectory || {};
 
-            const inDirectories = openedPackages.some(
-              pkg => pkg.directory && pkg.directory.indexOf(dirName) !== -1
-            );
-
-            if (!inDirectories) {
-              Store.set('openedPackages', [
-                ...openedPackages,
-                {
-                  name,
-                  directory: path.join(dirName, 'package.json')
-                }
-              ]);
-            }
-          }
-
-          event.sender.send(
-            'loaded-packages-close',
-            Store.get('openedPackages')
+          const inDirectories = openedPackages.some(
+            pkg => pkg.directory && pkg.directory.indexOf(dirName) !== -1
           );
 
-          event.sender.send(`${ipcEvent}-close`, status, cmd, data, error);
+          if (!inDirectories) {
+            Store.set('openedPackages', [
+              ...openedPackages,
+              {
+                name,
+                directory: path.join(dirName, 'package.json')
+              }
+            ]);
+          }
         }
+
+        event.sender.send('loaded-packages-close', Store.get('openedPackages'));
+        event.sender.send(`${ipcEvent}-close`, status, cmd, data, error);
         break;
       case 'flow':
         event.sender.send('ipcEvent-flow', data);

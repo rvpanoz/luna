@@ -5,7 +5,7 @@
  * npm/yarn [cmd] [[<@scope>/]<pkg> ...]
  * */
 
-import apiManager from './apis/manager';
+import apiManager from './cli/manager';
 
 /**
  *

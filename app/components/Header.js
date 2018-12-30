@@ -38,7 +38,8 @@ import { APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
 
 const mapState = state => ({
-  notifications: state.common.notifications
+  notifications: state.common.notifications,
+  loading: state.packages.loading
 });
 
 const Header = props => {
@@ -51,7 +52,7 @@ const Header = props => {
   const [keyboardOpen, toggleKeyboard] = useState(false);
 
   const dispatch = useDispatch();
-  const { notifications } = useMappedState(mapState);
+  const { notifications, loading } = useMappedState(mapState);
 
   const menuOpen = Boolean(anchorEl);
   const notificationsOpen = Boolean(notifications.length && notificationsEl);
@@ -87,7 +88,7 @@ const Header = props => {
           >
             {app}
           </Typography>
-          <SearchBox />
+          <SearchBox disabled={loading} />
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton
@@ -198,15 +199,16 @@ const Header = props => {
         aria-describedby="settings"
         open={settingsOpen}
         onClose={e => setAnchorEl(null)}
-        className={classes.modal}
+        // className={classes.modal}
       >
-        <div className={classes.settings}>
+        <div className={classes.paper}>
           <Settings onClose={e => toggleSettings(false)} />
         </div>
       </Modal>
       <Modal
         aria-labelledby="keyboard"
         aria-describedby="keyboard"
+        hideBackdrop
         open={keyboardOpen}
         onClose={e => toggleKeyboard(false)}
       >
