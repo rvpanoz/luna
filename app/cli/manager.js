@@ -63,10 +63,10 @@ const execute = (
       );
 
       const results = {
+        status: 'close',
         error,
         data: result,
-        cmd: commandArgs,
-        status: 'close'
+        cmd: commandArgs
       };
 
       return resolve(results);

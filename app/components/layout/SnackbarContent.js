@@ -22,7 +22,8 @@ const variantIcon = {
   success: CheckCircleIcon,
   warning: WarningIcon,
   error: ErrorIcon,
-  info: InfoIcon
+  info: InfoIcon,
+  primary: () => {}
 };
 
 const styles = theme => ({
@@ -37,6 +38,9 @@ const styles = theme => ({
   },
   warning: {
     backgroundColor: amber[700]
+  },
+  primary: {
+    backgroundColor: 'transparent'
   },
   icon: {
     fontSize: 20
@@ -58,10 +62,12 @@ const AppSnackbarContent = props => {
   return (
     <SnackbarContent
       className={classNames(classes[variant], className)}
-      aria-describedby="client-snackbar"
+      aria-describedby="cli-snackbar"
       message={
-        <span id="client-snackbar" className={classes.message}>
-          <Icon className={classNames(classes.icon, classes.iconVariant)} />
+        <span id="cli-snackbar" className={classes.message}>
+          {variant !== 'primary' && (
+            <Icon className={classNames(classes.icon, classes.iconVariant)} />
+          )}
           {message}
         </span>
       }
@@ -86,7 +92,8 @@ AppSnackbarContent.propTypes = {
   className: PropTypes.string,
   message: PropTypes.node,
   onClose: PropTypes.func,
-  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info']).isRequired
+  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info', 'primary'])
+    .isRequired
 };
 
 const AppSnackbarContentWrapper = withStyles(styles)(AppSnackbarContent);

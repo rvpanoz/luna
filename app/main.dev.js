@@ -121,11 +121,18 @@ ipcMain.on('ipc-event', (event, options) => {
         }
 
         event.sender.send('loaded-packages-close', Store.get('openedPackages'));
-        event.sender.send(`${ipcEvent}-close`, status, cmd, data, error);
+        event.sender.send(
+          `${ipcEvent}-close`,
+          status,
+          cmd,
+          data,
+          error,
+          options
+        );
         break;
-      case 'flow':
-        event.sender.send('ipcEvent-flow', data);
-        break;
+      // case 'flow':
+      //   event.sender.send('ipcEvent-flow', data);
+      //   break;
       case 'error':
         event.sender.send('ipcEvent-error', error);
         break;

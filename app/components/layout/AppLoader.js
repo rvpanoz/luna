@@ -28,7 +28,13 @@ const styles = theme => ({
 });
 
 const AppLoader = props => {
-  const { loading, classes, children, small } = props;
+  const {
+    loading,
+    classes,
+    children,
+    small,
+    message = 'Loading packages..'
+  } = props;
 
   return loading ? (
     <div
@@ -41,7 +47,7 @@ const AppLoader = props => {
         size={small ? 20 : 30}
       />
       <Typography className={classes.margin} variant="caption">
-        Loading packages..
+        {message}
       </Typography>
     </div>
   ) : (

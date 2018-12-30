@@ -5,7 +5,7 @@
  */
 
 import { ipcRenderer } from 'electron';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
 import { remote } from 'electron';
@@ -22,12 +22,9 @@ import InstallIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
-import Snackbar from '@material-ui/core/Snackbar';
 
-import { setMode } from 'models/ui/actions';
 import { APP_MODES } from 'constants/AppConstants';
-
-import SnackbarContent from 'components/layout/SnackbarContent';
+import { setMode, setSnackbar } from 'models/ui/actions';
 import TableFilters from './TableFilters';
 
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
@@ -57,11 +54,9 @@ const uninstallSelected = (manager, mode, directory, selected) => {
 };
 
 const TableListToolbar = props => {
-  const { classes, selected, title, manager, reload, mode, fromSearch } = props;
-  const [snackbarOpen, toggleSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState(null);
+  const { classes, selected, title, manager, mode, fromSearch, reload } = props;
+
   const [anchorEl, setAnchorEl] = useState(null);
-  const [counter, setCounter] = useState(0);
   const [filtersOn, toggleFilters] = useState(false);
 
   const dispatch = useDispatch();
@@ -117,6 +112,12 @@ const TableListToolbar = props => {
         btnIdx => {
           if (Boolean(btnIdx) === true) {
             uninstallSelected(manager, mode, directory, selected);
+            dispatch(
+              setSnackbar({
+                type: 'warning',
+                message: 'Uninstall packages..'
+              })
+            );
           }
         }
       );
@@ -139,6 +140,12 @@ const TableListToolbar = props => {
         btnIdx => {
           if (Boolean(btnIdx) === true) {
             installSelected(manager, mode, directory, selected);
+            dispatch(
+              setSnackbar({
+                type: 'warning',
+                message: 'Installing packages..'
+              })
+            );
           }
         }
       );
@@ -184,31 +191,6 @@ const TableListToolbar = props => {
         </IconButton>
       </Tooltip>
     </div>
-  );
-
-  useEffect(
-    () => {
-      ipcRenderer.on('install-packages-close', (event, status, error, data) => {
-        setSnackbarMessage(data);
-        toggleSnackbar(true);
-      });
-
-      ipcRenderer.on(
-        'uninstall-packages-close',
-        (event, status, error, data) => {
-          setSnackbarMessage(data);
-          toggleSnackbar(true);
-        }
-      );
-    },
-    [counter]
-  );
-
-  useEffect(() => () =>
-    ipcRenderer.removeAllListeners([
-      'install-packages-close',
-      'uninstall-packages-close'
-    ])
   );
 
   return (
@@ -264,27 +246,13 @@ const TableListToolbar = props => {
           )}
         </div>
       </Toolbar>
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right'
-        }}
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={() => toggleSnackbar(false)}
-      >
-        <SnackbarContent
-          onClose={() => toggleSnackbar(false)}
-          variant="success"
-          message={snackbarMessage}
-        />
-      </Snackbar>
     </section>
   );
 };
 
 TableListToolbar.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  reload: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(TableListToolbar);

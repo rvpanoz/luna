@@ -4,7 +4,7 @@
  * Layout component
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { objectOf, object } from 'prop-types';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -47,8 +47,8 @@ const Layout = props => {
   );
 };
 
-// Layout.propTypes = {
-//   classes: objectOf(object).isRequired
-// };
+Layout.propTypes = {
+  classes: objectOf(object).isRequired
+};
 
 export default withStyles(styles)(Layout);

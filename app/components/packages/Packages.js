@@ -4,10 +4,11 @@
  * Packages component
  */
 
-import React, { useEffect, useState } from 'react';
+import { ipcRenderer } from 'electron';
+import React, { useEffect, useState, useCallback } from 'react';
 import cn from 'classnames';
-import { objectOf, object } from 'prop-types';
-
+import { objectOf, object, func } from 'prop-types';
+import { filter } from 'ramda';
 import { withStyles } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
@@ -16,6 +17,9 @@ import TableBody from '@material-ui/core/TableBody';
 
 import useIpc from 'commons/hooks/useIpc';
 import { getFiltered, parseNpmError } from 'commons/utils';
+
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from 'components/layout/SnackbarContent';
 
 import AppLoader from '../layout/AppLoader';
 import TableToolbar from './TableToolbar';
@@ -34,6 +38,7 @@ import {
 import {
   addNotification,
   clearNotifications,
+  setSnackbar,
   setPage,
   setPageRows
 } from 'models/ui/actions';
@@ -45,6 +50,7 @@ const mapState = state => ({
   mode: state.common.mode,
   page: state.common.page,
   rowsPerPage: state.common.rowsPerPage,
+  snackbarOptions: state.common.snackbarOptions,
   filters: state.packages.filters,
   loading: state.packages.loading,
   packages: state.packages.packages,
@@ -67,12 +73,14 @@ const Packages = props => {
     manager,
     selected,
     notifications,
-    fromSearch
+    fromSearch,
+    snackbarOptions
   } = useMappedState(mapState);
 
   const [sortDir, setSortDir] = useState('asc');
   const [sortBy, setSortBy] = useState('name');
   const [counter, setCounter] = useState(0);
+
   const dispatch = useDispatch();
   const isSelected = name => selected.indexOf(name) !== -1;
 
@@ -101,6 +109,15 @@ const Packages = props => {
   const { name, version } = dependenciesSet || {};
   const dependencies = dependenciesSet.data || [];
   const outdated = outdatedSet.data || [];
+
+  // if (snackbarOptions && snackbarOptions.message !== null) {
+  //   dispatch(
+  //     setSnackbar({
+  //       type: 'primary',
+  //       message: null
+  //     })
+  //   );
+  // }
 
   // dispatch actions
   useEffect(
@@ -174,6 +191,41 @@ const Packages = props => {
     [sortDir, sortBy]
   );
 
+  useEffect(
+    () => {
+      ipcRenderer.once(
+        'install-packages-close',
+        (event, status, cmd, data, error, options) => {
+          dispatch(
+            setSnackbar({
+              type: 'success',
+              message: data
+            })
+          );
+        }
+      );
+
+      ipcRenderer.once(
+        'uninstall-packages-close',
+        (event, status, cmd, data, error, options) => {
+          dispatch(
+            setSnackbar({
+              type: 'success',
+              message: data
+            })
+          );
+        }
+      );
+
+      return () =>
+        ipcRenderer.removeAllListeners([
+          'install-packages-close',
+          'uninstall-packages-close'
+        ]);
+    },
+    [counter]
+  );
+
   // filter packages
   const filteredPackages =
     filters && filters.length ? getFiltered(packages, filters) : [];
@@ -184,9 +236,15 @@ const Packages = props => {
       ? filteredPackages
       : packages;
 
+  // exclude packages with errors and peerMissing
+  const packagesData = filter(pkg => {
+    return !pkg.__peerMissing && !pkg.__error;
+  }, data);
+
   // pagination
   const dataSlices =
-    data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    packagesData &&
+    packagesData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <AppLoader loading={loading}>
@@ -199,6 +257,7 @@ const Packages = props => {
             directory={directory}
             selected={selected}
             fromSearch={fromSearch}
+            setSnackbar={setSnackbar}
             reload={reload} // triggers render
           />
         </div>
@@ -247,7 +306,7 @@ const Packages = props => {
                 })}
             </TableBody>
             <TableFooter
-              rowCount={(data && data.length) || 0}
+              rowCount={(packagesData && packagesData.length) || 0}
               page={page}
               rowsPerPage={rowsPerPage}
               handleChangePage={(e, pageNo) =>
@@ -260,12 +319,33 @@ const Packages = props => {
           </Table>
         </div>
       </Paper>
+      {snackbarOptions && (
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right'
+          }}
+          open={Boolean(snackbarOptions.message)}
+          autoHideDuration={3000}
+        >
+          <SnackbarContent
+            onClose={() =>
+              setSnackbar({
+                type: 'primary',
+                message: null
+              })
+            }
+            variant={snackbarOptions.type || 'info'}
+            message={snackbarOptions.message}
+          />
+        </Snackbar>
+      )}
     </AppLoader>
   );
 };
 
 // Packages.propTypes = {
-//   classes: objectOf.isRequired
+//   classes: objectOf.isRequired,
 // };
 
 const withStylesPackages = withStyles(styles)(Packages);

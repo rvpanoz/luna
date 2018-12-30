@@ -206,10 +206,9 @@ export const parseMap = (response, mode, directory) => {
 
     const data = dataArray.map(pkgArr => {
       const [pkgName, details] = pkgArr;
-      const { name } = details || {};
+      const { name, peerMissing } = details || {};
 
       let group = null;
-      let hasPeerMissing = false;
       let found = false;
       let hasError = typeof details.error === 'object';
 
@@ -238,7 +237,7 @@ export const parseMap = (response, mode, directory) => {
         name: name || pkgName,
         __group: group || '',
         __error: hasError,
-        __hasPeerMissing: hasPeerMissing
+        __peerMissing: Array.isArray(peerMissing) && peerMissing.length
       });
     });
 

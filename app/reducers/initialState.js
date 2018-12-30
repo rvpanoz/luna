@@ -3,8 +3,11 @@ export default {
   manager: 'npm',
   page: 0,
   rowsPerPage: 10,
-  notifications: [],
   directory: null,
+  notifications: [],
+  snackbarOptions: {
+    message: null
+  },
   packages: {
     packages: [],
     packagesOutdated: [],

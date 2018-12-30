@@ -8,6 +8,7 @@ import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
 import {
   addNotification,
   clearNotifications,
+  setSnackbar,
   setManager,
   setMode,
   setPage,
@@ -39,6 +40,8 @@ const handlers = {
       )
     }),
   [clearNotifications.type]: state => assoc('notifications', [], state),
+  [setSnackbar.type]: (state, { payload }) =>
+    assoc('snackbarOptions', payload, state),
   [setMode.type]: (state, action) => {
     const {
       payload: { mode },

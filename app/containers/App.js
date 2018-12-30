@@ -13,16 +13,11 @@ import '../app.global.css';
 
 const App = () => {
   useEffect(() => {
-    ipcRenderer.on('uncaught-exception', (event, exceptionError) => {
+    ipcRenderer.once('uncaught-exception', (event, exceptionError) => {
       console.error('uncaught-exception', exceptionError);
     });
 
-    ipcRenderer.on('ipcEvent-flow', (event, error, data) => {
-      //TODO: do something with the data stream..
-    });
-
-    return () =>
-      ipcRenderer.removeAllListeners(['uncaught-exception', 'ipcEvent-flow']);
+    return () => ipcRenderer.removeAllListeners(['uncaught-exception']);
   });
 
   return (
