@@ -4,7 +4,7 @@
  * Layout component
  */
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { objectOf, object } from 'prop-types';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,7 +19,7 @@ import styles from './styles/layout';
 
 const Layout = props => {
   const { app, classes } = props;
-
+  console.log('Layout render');
   return (
     <div className={classes.wrapper}>
       <CssBaseline />
@@ -34,7 +34,7 @@ const Layout = props => {
             </Grid>
           </Grid>
           <Grid container justify="flex-start">
-            <Grid item xs={4}>
+            <Grid item xs={6}>
               <Packages />
             </Grid>
             <Grid item xs={6}>
@@ -45,10 +45,6 @@ const Layout = props => {
       </section>
     </div>
   );
-};
-
-Layout.propTypes = {
-  classes: objectOf(object).isRequired
 };
 
 export default withStyles(styles)(Layout);

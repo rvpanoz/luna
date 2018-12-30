@@ -100,6 +100,13 @@ ipcMain.on('ipc-event', (event, options) => {
       case 'close':
         const { directory, mode } = rest;
 
+        const inAction =
+          ['install-packages', 'uninstall-packages'].indexOf(ipcEvent) > -1;
+
+        if (inAction) {
+          return event.sender.send('action-close', error, data);
+        }
+
         if (directory && mode === 'LOCAL' && cmd[0] === 'list') {
           const dirName = path.dirname(path.resolve(directory));
           const parsedDirectory = path.parse(dirName);

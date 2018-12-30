@@ -11,6 +11,7 @@ const setManager = ActionCreator('SET_MANAGER');
 const setMode = ActionCreator('SET_MODE');
 const setPage = ActionCreator('SET_PAGE');
 const setPageRows = ActionCreator('SET_PAGE_ROWS');
+const toggleLoader = ActionCreator('TOGGLE_LOADER');
 
 export {
   addNotification,
@@ -19,5 +20,6 @@ export {
   setManager,
   setMode,
   setPage,
-  setPageRows
+  setPageRows,
+  toggleLoader
 };

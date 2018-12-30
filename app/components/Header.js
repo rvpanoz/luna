@@ -96,7 +96,7 @@ const Header = props => {
               aria-owns={menuOpen ? 'app-settings' : undefined}
               aria-haspopup="true"
               onClick={e => {
-                setAnchorEl(e.currentTarget);
+                // setAnchorEl(e.currentTarget);
               }}
             >
               <SettingsIcon />
@@ -199,7 +199,6 @@ const Header = props => {
         aria-describedby="settings"
         open={settingsOpen}
         onClose={e => setAnchorEl(null)}
-        // className={classes.modal}
       >
         <div className={classes.paper}>
           <Settings onClose={e => toggleSettings(false)} />

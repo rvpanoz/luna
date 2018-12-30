@@ -4,11 +4,10 @@
  * Toolbar
  */
 
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
-import { remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -24,37 +23,22 @@ import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
 
 import { APP_MODES } from 'constants/AppConstants';
-import { setMode, setSnackbar } from 'models/ui/actions';
+import { setMode } from 'models/ui/actions';
 import TableFilters from './TableFilters';
 
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
 
-const installSelected = (manager, mode, directory, selected) => {
-  ipcRenderer.send('ipc-event', {
-    activeManager: manager,
-    ipcEvent: 'install-packages',
-    cmd: ['install'],
-    multiple: true,
-    packages: selected,
-    mode,
-    directory
-  });
-};
-
-const uninstallSelected = (manager, mode, directory, selected) => {
-  ipcRenderer.send('ipc-event', {
-    activeManager: manager,
-    ipcEvent: 'uninstall-packages',
-    cmd: ['uninstall'],
-    multiple: true,
-    packages: selected,
-    mode,
-    directory
-  });
-};
-
 const TableListToolbar = props => {
-  const { classes, selected, title, manager, mode, fromSearch, reload } = props;
+  const {
+    classes,
+    selected,
+    title,
+    mode,
+    fromSearch,
+    reload,
+    handleInstall,
+    handleUninstall
+  } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
@@ -95,62 +79,6 @@ const TableListToolbar = props => {
         }
       }
     );
-  };
-
-  const handleUninstall = () => {
-    const { mode, directory, selected } = props;
-
-    if (selected && selected.length) {
-      remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          title: 'Confirmation',
-          type: 'question',
-          message: 'Would you like to uninstall the selected packages?',
-          buttons: ['Cancel', 'Uninstall']
-        },
-        btnIdx => {
-          if (Boolean(btnIdx) === true) {
-            uninstallSelected(manager, mode, directory, selected);
-            dispatch(
-              setSnackbar({
-                type: 'warning',
-                message: 'Uninstall packages..'
-              })
-            );
-          }
-        }
-      );
-    }
-    return false;
-  };
-
-  const handleInstall = () => {
-    const { mode, directory, selected } = props;
-
-    if (selected && selected.length) {
-      remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          title: 'Confirmation',
-          type: 'question',
-          message: 'Would you like to install the selected packages?',
-          buttons: ['Cancel', 'Install']
-        },
-        btnIdx => {
-          if (Boolean(btnIdx) === true) {
-            installSelected(manager, mode, directory, selected);
-            dispatch(
-              setSnackbar({
-                type: 'warning',
-                message: 'Installing packages..'
-              })
-            );
-          }
-        }
-      );
-    }
-    return false;
   };
 
   const renderToolbarActions = () => (

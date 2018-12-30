@@ -6,6 +6,11 @@ export default {
   directory: null,
   notifications: [],
   snackbarOptions: {
+    open: false,
+    message: null
+  },
+  loader: {
+    loading: false,
     message: null
   },
   packages: {
@@ -14,7 +19,6 @@ export default {
     selected: [],
     filters: [],
     lastUpdatedAt: null,
-    loading: false,
     fromSearch: false,
     fromSort: false
   },

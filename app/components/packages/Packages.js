@@ -4,7 +4,7 @@
  * Packages component
  */
 
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import React, { useEffect, useState, useCallback } from 'react';
 import cn from 'classnames';
 import { objectOf, object, func } from 'prop-types';
@@ -40,8 +40,33 @@ import {
   clearNotifications,
   setSnackbar,
   setPage,
-  setPageRows
+  setPageRows,
+  toggleLoader
 } from 'models/ui/actions';
+
+const installSelected = (manager, mode, directory, selected) => {
+  ipcRenderer.send('ipc-event', {
+    activeManager: manager,
+    ipcEvent: 'install-packages',
+    cmd: ['install'],
+    multiple: true,
+    packages: selected,
+    mode,
+    directory
+  });
+};
+
+const uninstallSelected = (manager, mode, directory, selected) => {
+  ipcRenderer.send('ipc-event', {
+    activeManager: manager,
+    ipcEvent: 'uninstall-packages',
+    cmd: ['uninstall'],
+    multiple: true,
+    packages: selected,
+    mode,
+    directory
+  });
+};
 
 const mapState = state => ({
   directory: state.common.directory,
@@ -50,9 +75,9 @@ const mapState = state => ({
   mode: state.common.mode,
   page: state.common.page,
   rowsPerPage: state.common.rowsPerPage,
+  loader: state.common.loader,
   snackbarOptions: state.common.snackbarOptions,
   filters: state.packages.filters,
-  loading: state.packages.loading,
   packages: state.packages.packages,
   packagesOutdated: state.packages.packagesOutdated,
   selected: state.packages.selected,
@@ -63,7 +88,7 @@ const Packages = props => {
   const { classes } = props;
 
   const {
-    loading,
+    loader: { loading, message },
     packages,
     mode,
     page,
@@ -80,9 +105,65 @@ const Packages = props => {
   const [sortDir, setSortDir] = useState('asc');
   const [sortBy, setSortBy] = useState('name');
   const [counter, setCounter] = useState(0);
-
   const dispatch = useDispatch();
+
   const isSelected = name => selected.indexOf(name) !== -1;
+  const clearSnackbar = () =>
+    dispatch(
+      setSnackbar({
+        open: false,
+        message: null
+      })
+    );
+
+  const handleUninstall = () => {
+    if (selected && selected.length) {
+      remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          title: 'Confirmation',
+          type: 'question',
+          message: 'Would you like to uninstall the selected packages?',
+          buttons: ['Cancel', 'Uninstall']
+        },
+        btnIdx => {
+          if (Boolean(btnIdx) === true) {
+            uninstallSelected(manager, mode, directory, selected);
+            dispatch(
+              toggleLoader({
+                loading: true,
+                message: 'Uninstalling packages..'
+              })
+            );
+          }
+        }
+      );
+    }
+    return false;
+  };
+
+  const handleInstall = () => {
+    if (selected && selected.length) {
+      remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          title: 'Confirmation',
+          type: 'question',
+          message: 'Would you like to install the selected packages?',
+          buttons: ['Cancel', 'Install']
+        },
+        btnIdx => {
+          if (Boolean(btnIdx) === true) {
+            installSelected(manager, mode, directory, selected);
+            dispatch(
+              toggleLoader({ loading: true, message: 'Installing packages..' })
+            );
+          }
+        }
+      );
+    }
+    return false;
+  };
 
   // useIpc hook to send and listenTo ipc events
   const [dependenciesSet, outdatedSet, errors] = useIpc(
@@ -110,15 +191,6 @@ const Packages = props => {
   const dependencies = dependenciesSet.data || [];
   const outdated = outdatedSet.data || [];
 
-  // if (snackbarOptions && snackbarOptions.message !== null) {
-  //   dispatch(
-  //     setSnackbar({
-  //       type: 'primary',
-  //       message: null
-  //     })
-  //   );
-  // }
-
   // dispatch actions
   useEffect(
     () => {
@@ -130,6 +202,7 @@ const Packages = props => {
         dispatch(
           setPackagesSuccess({ data: dependencies, name, version, outdated })
         );
+        dispatch(toggleLoader({ loading: false, message: null }));
       }
 
       if (outdated && outdated.length) {
@@ -138,6 +211,7 @@ const Packages = props => {
             data: outdated
           })
         );
+        dispatch(toggleLoader({ loading: false, message: null }));
       }
 
       if (errors && typeof errors === 'string') {
@@ -191,37 +265,21 @@ const Packages = props => {
     [sortDir, sortBy]
   );
 
+  // actions listeners
   useEffect(
     () => {
-      ipcRenderer.once(
-        'install-packages-close',
-        (event, status, cmd, data, error, options) => {
-          dispatch(
-            setSnackbar({
-              type: 'success',
-              message: data
-            })
-          );
-        }
-      );
+      ipcRenderer.once(['action-close'], (event, error, data) => {
+        reload();
+        // dispatch(
+        //   setSnackbar({
+        //     open: true,
+        //     type: 'success',
+        //     message: data
+        //   })
+        // );
+      });
 
-      ipcRenderer.once(
-        'uninstall-packages-close',
-        (event, status, cmd, data, error, options) => {
-          dispatch(
-            setSnackbar({
-              type: 'success',
-              message: data
-            })
-          );
-        }
-      );
-
-      return () =>
-        ipcRenderer.removeAllListeners([
-          'install-packages-close',
-          'uninstall-packages-close'
-        ]);
+      return () => ipcRenderer.removeAllListeners(['action-close']);
     },
     [counter]
   );
@@ -247,7 +305,7 @@ const Packages = props => {
     packagesData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <AppLoader loading={loading}>
+    <AppLoader loading={loading} message={message}>
       <Paper className={classes.root}>
         <div className={classes.toolbar}>
           <TableToolbar
@@ -257,8 +315,9 @@ const Packages = props => {
             directory={directory}
             selected={selected}
             fromSearch={fromSearch}
-            setSnackbar={setSnackbar}
-            reload={reload} // triggers render
+            reload={reload}
+            handleInstall={handleInstall}
+            handleUninstall={handleUninstall}
           />
         </div>
         <div className={classes.tableWrapper}>
@@ -325,18 +384,18 @@ const Packages = props => {
             vertical: 'bottom',
             horizontal: 'right'
           }}
-          open={Boolean(snackbarOptions.message)}
-          autoHideDuration={3000}
+          open={Boolean(snackbarOptions.open)}
+          autoHideDuration={6000}
         >
           <SnackbarContent
+            variant={snackbarOptions.type || 'info'}
+            message={snackbarOptions.message}
             onClose={() =>
               setSnackbar({
-                type: 'primary',
+                open: false,
                 message: null
               })
             }
-            variant={snackbarOptions.type || 'info'}
-            message={snackbarOptions.message}
           />
         </Snackbar>
       )}

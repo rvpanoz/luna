@@ -12,7 +12,8 @@ import {
   setManager,
   setMode,
   setPage,
-  setPageRows
+  setPageRows,
+  toggleLoader
 } from 'models/ui/actions';
 import initialState from './initialState';
 
@@ -41,7 +42,7 @@ const handlers = {
     }),
   [clearNotifications.type]: state => assoc('notifications', [], state),
   [setSnackbar.type]: (state, { payload }) =>
-    assoc('snackbarOptions', payload, state),
+    assoc('snackbarOptions', merge(state.snackbarOptions, payload), state),
   [setMode.type]: (state, action) => {
     const {
       payload: { mode },
@@ -76,7 +77,17 @@ const handlers = {
     } = action;
 
     return assoc('rowsPerPage', rowsPerPage, state);
-  }
+  },
+  [toggleLoader.type]: (
+    state,
+    { payload: { loading }, payload: { message } }
+  ) =>
+    merge(state, {
+      loader: {
+        loading,
+        message
+      }
+    })
 };
 
 const reducer = createReducer(common, handlers);
