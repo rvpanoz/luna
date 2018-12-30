@@ -1,11 +1,15 @@
 /* eslint-disable */
 
+/**
+ * npm module for cli commands
+ */
+
 // npm install [<@scope>/]<name>@<version>
-exports.install = opts => {
+exports.install = options => {
   const command = ['install'];
-  const { pkgName, mode, pkgVersion, multiple, packages } = opts;
-  const defaults = [],
-    pkgOptions = opts.pkgOptions || [];
+  const { pkgName, mode, pkgVersion, pkgOptions, multiple, packages } =
+    options || {};
+  const defaults = [];
 
   if (!pkgName && !multiple) {
     return Promise.reject('npm[install] package name parameter must be given');
@@ -35,17 +39,17 @@ exports.install = opts => {
 };
 
 // npm uninstall [<@scope>/]<pkg>[@<version>]
-exports.uninstall = function(opts, callback) {
+exports.uninstall = options => {
   const command = ['uninstall'];
-  const { pkgName, mode, directory, multiple, packages } = opts;
+  const { pkgName, mode, multiple, packages } = options;
   const defaults = [];
 
   function getNames() {
     if (multiple && packages && Array.isArray(packages)) {
       return packages;
     } else if (!pkgName && !multiple) {
-      return Q.reject(
-        new Error('npm[uninstall] package name parameter must be given')
+      return Promise.reject(
+        'npm[uninstall] package name parameter must be given'
       );
     } else {
       return pkgName;
@@ -57,5 +61,6 @@ exports.uninstall = function(opts, callback) {
     .concat(command)
     .concat(commandArgs)
     .concat(getNames());
-  return runCommand(run, directory, callback);
+
+  return run;
 };

@@ -22,17 +22,33 @@ import InstallIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
+import Snackbar from '@material-ui/core/Snackbar';
 
-import TableFilters from './TableFilters';
 import { setMode } from 'models/ui/actions';
 import { APP_MODES } from 'constants/AppConstants';
+
+import SnackbarContent from 'components/layout/SnackbarContent';
+import TableFilters from './TableFilters';
 
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
 
 const installSelected = (manager, mode, directory, selected) => {
   ipcRenderer.send('ipc-event', {
     activeManager: manager,
+    ipcEvent: 'install-packages',
     cmd: ['install'],
+    multiple: true,
+    packages: selected,
+    mode,
+    directory
+  });
+};
+
+const uninstallSelected = (manager, mode, directory, selected) => {
+  ipcRenderer.send('ipc-event', {
+    activeManager: manager,
+    ipcEvent: 'uninstall-packages',
+    cmd: ['uninstall'],
     multiple: true,
     packages: selected,
     mode,
@@ -42,8 +58,12 @@ const installSelected = (manager, mode, directory, selected) => {
 
 const TableListToolbar = props => {
   const { classes, selected, title, manager, reload, mode, fromSearch } = props;
+  const [snackbarOpen, toggleSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [counter, setCounter] = useState(0);
   const [filtersOn, toggleFilters] = useState(false);
+
   const dispatch = useDispatch();
 
   const switchMode = (mode, directory) => {
@@ -82,8 +102,8 @@ const TableListToolbar = props => {
     );
   };
 
-  const handleUninstall = e => {
-    const { selected } = props;
+  const handleUninstall = () => {
+    const { mode, directory, selected } = props;
 
     if (selected && selected.length) {
       remote.dialog.showMessageBox(
@@ -96,7 +116,7 @@ const TableListToolbar = props => {
         },
         btnIdx => {
           if (Boolean(btnIdx) === true) {
-            // TODO: do uninstall..
+            uninstallSelected(manager, mode, directory, selected);
           }
         }
       );
@@ -104,7 +124,7 @@ const TableListToolbar = props => {
     return false;
   };
 
-  const handleInstall = e => {
+  const handleInstall = () => {
     const { mode, directory, selected } = props;
 
     if (selected && selected.length) {
@@ -166,13 +186,30 @@ const TableListToolbar = props => {
     </div>
   );
 
-  useEffect(() => {
-    ipcRenderer.on('install-package-close', (event, data) => {
-      console.log(data);
-    });
+  useEffect(
+    () => {
+      ipcRenderer.on('install-packages-close', (event, status, error, data) => {
+        setSnackbarMessage(data);
+        toggleSnackbar(true);
+      });
 
-    return () => ipcRenderer.removeAllListeners(['install-package-close']);
-  });
+      ipcRenderer.on(
+        'uninstall-packages-close',
+        (event, status, error, data) => {
+          setSnackbarMessage(data);
+          toggleSnackbar(true);
+        }
+      );
+    },
+    [counter]
+  );
+
+  useEffect(() => () =>
+    ipcRenderer.removeAllListeners([
+      'install-packages-close',
+      'uninstall-packages-close'
+    ])
+  );
 
   return (
     <section className={classes.root}>
@@ -227,6 +264,21 @@ const TableListToolbar = props => {
           )}
         </div>
       </Toolbar>
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right'
+        }}
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        onClose={() => toggleSnackbar(false)}
+      >
+        <SnackbarContent
+          onClose={() => toggleSnackbar(false)}
+          variant="success"
+          message={snackbarMessage}
+        />
+      </Snackbar>
     </section>
   );
 };

@@ -156,26 +156,24 @@ exports.search = (opts, callback) => {
 };
 
 exports.install = (opts, callback) => {
-  const {
-    pkgName,
-    mode,
-    directory,
-    pkgVersion,
-    multiple,
-    packages,
-    activeManager
-  } = opts;
+  const { mode, directory, activeManager } = opts;
 
   try {
-    // require active manager's module
     const manager = require(path.resolve(__dirname, activeManager));
-    const run = manager['install'].call(this, {
-      pkgName,
-      mode,
-      pkgVersion,
-      multiple,
-      packages
-    });
+    const run = manager['install'].call(this, opts);
+
+    return execute(activeManager, run, mode, directory, callback);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+exports.uninstall = (opts, callback) => {
+  const { mode, directory, activeManager } = opts;
+
+  try {
+    const manager = require(path.resolve(__dirname, activeManager));
+    const run = manager['uninstall'].call(this, opts);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {

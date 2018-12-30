@@ -8,7 +8,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import CardDetails from '../layout/CardDetails';
 
-const styles = {};
+const styles = theme => ({});
 
 const PackageDetails = props => {
   const { classes } = props;
