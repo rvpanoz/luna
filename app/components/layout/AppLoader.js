@@ -28,7 +28,7 @@ const styles = theme => ({
 });
 
 const AppLoader = props => {
-  const { loading, classes, children, small } = props;
+  const { loading, classes, children, small, message } = props;
 
   return loading ? (
     <div
@@ -40,13 +40,19 @@ const AppLoader = props => {
         color={small ? 'primary' : 'secondary'}
         size={small ? 20 : 30}
       />
-      <Typography className={classes.margin} variant="caption">
-        Loading packages..
-      </Typography>
+      {message && (
+        <Typography className={classes.margin} variant="caption">
+          {message}
+        </Typography>
+      )}
     </div>
   ) : (
     children
   );
+};
+
+AppLoader.defaultProps = {
+  message: 'Loading packages..'
 };
 
 // AppLoader.propTypes = {

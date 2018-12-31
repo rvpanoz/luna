@@ -3,15 +3,22 @@ export default {
   manager: 'npm',
   page: 0,
   rowsPerPage: 10,
-  notifications: [],
   directory: null,
+  notifications: [],
+  snackbarOptions: {
+    open: false,
+    message: null
+  },
+  loader: {
+    loading: false,
+    message: null
+  },
   packages: {
     packages: [],
     packagesOutdated: [],
     selected: [],
     filters: [],
     lastUpdatedAt: null,
-    loading: false,
     fromSearch: false,
     fromSort: false
   },

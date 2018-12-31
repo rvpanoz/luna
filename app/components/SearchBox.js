@@ -12,7 +12,7 @@ import SnackbarContent from 'components/layout/SnackbarContent';
 
 import { parseMap } from 'commons/utils';
 import { setPackagesStart, setPackagesSuccess } from 'models/packages/actions';
-import { clearNotifications } from 'models/ui/actions';
+import { clearNotifications, toggleLoader } from 'models/ui/actions';
 
 import styles from './styles/searchBox';
 
@@ -32,6 +32,9 @@ const SearchBox = props => {
       return;
     }
 
+    dispatch(
+      toggleLoader({ loading: true, message: `Searching for ${searchValue}..` })
+    );
     dispatch(clearNotifications());
     dispatch(setPackagesStart());
 
@@ -69,6 +72,8 @@ const SearchBox = props => {
               data: packages
             })
           );
+
+          dispatch(toggleLoader({ loading: false, message: null }));
         } catch (e) {
           throw new Error(e);
         }
@@ -93,6 +98,7 @@ const SearchBox = props => {
           <SearchIcon />
         </div>
         <InputBase
+          value="react"
           disabled={disabled}
           placeholder="Search for packages…"
           classes={{

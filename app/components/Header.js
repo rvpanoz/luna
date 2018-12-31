@@ -39,7 +39,7 @@ import { setMode } from 'models/ui/actions';
 
 const mapState = state => ({
   notifications: state.common.notifications,
-  loading: state.packages.loading
+  loader: state.common.loader
 });
 
 const Header = props => {
@@ -52,7 +52,7 @@ const Header = props => {
   const [keyboardOpen, toggleKeyboard] = useState(false);
 
   const dispatch = useDispatch();
-  const { notifications, loading } = useMappedState(mapState);
+  const { notifications, loader } = useMappedState(mapState);
 
   const menuOpen = Boolean(anchorEl);
   const notificationsOpen = Boolean(notifications.length && notificationsEl);
@@ -88,7 +88,7 @@ const Header = props => {
           >
             {app}
           </Typography>
-          <SearchBox disabled={loading} />
+          <SearchBox disabled={loader && loader.loading} />
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <IconButton
@@ -96,7 +96,7 @@ const Header = props => {
               aria-owns={menuOpen ? 'app-settings' : undefined}
               aria-haspopup="true"
               onClick={e => {
-                setAnchorEl(e.currentTarget);
+                // setAnchorEl(e.currentTarget);
               }}
             >
               <SettingsIcon />
@@ -199,7 +199,6 @@ const Header = props => {
         aria-describedby="settings"
         open={settingsOpen}
         onClose={e => setAnchorEl(null)}
-        // className={classes.modal}
       >
         <div className={classes.paper}>
           <Settings onClose={e => toggleSettings(false)} />

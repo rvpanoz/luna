@@ -7,6 +7,7 @@ import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 import { parseMap } from '../utils';
 import { setPackagesStart } from '../../models/packages/actions';
+import { toggleLoader } from '../../models/ui/actions';
 
 const useIpc = (channel, options, inputs = []) => {
   const { ipcEvent, mode, directory } = options || {};
@@ -35,10 +36,11 @@ const useIpc = (channel, options, inputs = []) => {
       }
     });
 
+    dispatch(toggleLoader({ loading: true, message: 'Loading packages..' }));
     dispatch(setPackagesStart());
     ipcRenderer.send(channel, options);
 
-    return () => ipcRenderer.removeAllListeners(listenTo);
+    return () => ipcRenderer.removeAllListeners([listenTo]);
   }, inputs);
 
   return [dependenciesSet, outdatedSet, error];

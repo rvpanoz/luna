@@ -10,9 +10,9 @@ const MAX_NUMBER = Number.MAX_SAFE_INTEGER - 1;
 const useForceUpdate = () => {
   const [counter, setCounter] = useState(0);
 
-  setCounter((counter + 1) % MAX_NUMBER);
+  const forceUpdate = setCounter((counter + 1) % MAX_NUMBER);
 
-  return counter;
+  return forceUpdate;
 };
 
 export default useForceUpdate;

@@ -19,7 +19,7 @@ import styles from './styles/layout';
 
 const Layout = props => {
   const { app, classes } = props;
-
+  console.log('Layout render');
   return (
     <div className={classes.wrapper}>
       <CssBaseline />
@@ -46,9 +46,5 @@ const Layout = props => {
     </div>
   );
 };
-
-// Layout.propTypes = {
-//   classes: objectOf(object).isRequired
-// };
 
 export default withStyles(styles)(Layout);

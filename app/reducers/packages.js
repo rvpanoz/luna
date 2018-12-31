@@ -80,7 +80,6 @@ const handlers = {
     return merge(state, {
       packages,
       fromSearch,
-      loading: false,
       lastUpdatedAt: fromSort
         ? state.lastUpdatedAt
         : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
@@ -94,8 +93,7 @@ const handlers = {
     const { data } = payload;
 
     return merge(state, {
-      packagesOutdated: data,
-      loading: false
+      packagesOutdated: data
     });
   },
   [setPackagesStart.type]: (state, { packageName, packageVersion }) =>
@@ -103,8 +101,7 @@ const handlers = {
       packageName,
       packageVersion,
       packagesOutdated: [],
-      packages: [],
-      loading: true
+      packages: []
     })
 };
 

@@ -63,10 +63,10 @@ const execute = (
       );
 
       const results = {
+        status: 'close',
         error,
         data: result,
-        cmd: commandArgs,
-        status: 'close'
+        cmd: commandArgs
       };
 
       return resolve(results);
@@ -156,7 +156,7 @@ exports.search = (opts, callback) => {
 };
 
 exports.install = (opts, callback) => {
-  const { mode, directory, activeManager } = opts;
+  const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
@@ -169,7 +169,7 @@ exports.install = (opts, callback) => {
 };
 
 exports.uninstall = (opts, callback) => {
-  const { mode, directory, activeManager } = opts;
+  const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
