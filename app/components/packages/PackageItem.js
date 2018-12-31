@@ -37,7 +37,7 @@ const PackageItemRow = props => {
       tabIndex={-1}
       selected={isSelected(name)}
     >
-      <TableCell padding="checkbox">
+      <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
           checked={isSelected(name)}
           onClick={() => setSelected(name)}

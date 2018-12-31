@@ -44,30 +44,6 @@ import {
   toggleLoader
 } from 'models/ui/actions';
 
-const installSelected = (manager, mode, directory, selected) => {
-  ipcRenderer.send('ipc-event', {
-    activeManager: manager,
-    ipcEvent: 'install-packages',
-    cmd: ['install'],
-    multiple: true,
-    packages: selected,
-    mode,
-    directory
-  });
-};
-
-const uninstallSelected = (manager, mode, directory, selected) => {
-  ipcRenderer.send('ipc-event', {
-    activeManager: manager,
-    ipcEvent: 'uninstall-packages',
-    cmd: ['uninstall'],
-    multiple: true,
-    packages: selected,
-    mode,
-    directory
-  });
-};
-
 const mapState = state => ({
   directory: state.common.directory,
   notifications: state.common.notifications,
@@ -108,62 +84,6 @@ const Packages = props => {
   const dispatch = useDispatch();
 
   const isSelected = name => selected.indexOf(name) !== -1;
-  const clearSnackbar = () =>
-    dispatch(
-      setSnackbar({
-        open: false,
-        message: null
-      })
-    );
-
-  const handleUninstall = () => {
-    if (selected && selected.length) {
-      remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          title: 'Confirmation',
-          type: 'question',
-          message: 'Would you like to uninstall the selected packages?',
-          buttons: ['Cancel', 'Uninstall']
-        },
-        btnIdx => {
-          if (Boolean(btnIdx) === true) {
-            uninstallSelected(manager, mode, directory, selected);
-            dispatch(
-              toggleLoader({
-                loading: true,
-                message: 'Uninstalling packages..'
-              })
-            );
-          }
-        }
-      );
-    }
-    return false;
-  };
-
-  const handleInstall = () => {
-    if (selected && selected.length) {
-      remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          title: 'Confirmation',
-          type: 'question',
-          message: 'Would you like to install the selected packages?',
-          buttons: ['Cancel', 'Install']
-        },
-        btnIdx => {
-          if (Boolean(btnIdx) === true) {
-            installSelected(manager, mode, directory, selected);
-            dispatch(
-              toggleLoader({ loading: true, message: 'Installing packages..' })
-            );
-          }
-        }
-      );
-    }
-    return false;
-  };
 
   // useIpc hook to send and listenTo ipc events
   const [dependenciesSet, outdatedSet, errors] = useIpc(
@@ -270,13 +190,6 @@ const Packages = props => {
     () => {
       ipcRenderer.once(['action-close'], (event, error, data) => {
         reload();
-        // dispatch(
-        //   setSnackbar({
-        //     open: true,
-        //     type: 'success',
-        //     message: data
-        //   })
-        // );
       });
 
       return () => ipcRenderer.removeAllListeners(['action-close']);
@@ -294,9 +207,23 @@ const Packages = props => {
       ? filteredPackages
       : packages;
 
-  // exclude packages with errors and peerMissing
+  /** dev logs */
+
+  const withPeerMissing = filter(pkg => {
+    return pkg.__peerMissing;
+  }, data);
+  console.log('peers', withPeerMissing);
+
+  const withErrors = filter(pkg => {
+    return pkg.__error;
+  }, data);
+  console.log('errors', withErrors);
+
+  /** */
+
+  // exclude packages with errors and peerMissing?
   const packagesData = filter(pkg => {
-    return !pkg.__peerMissing && !pkg.__error;
+    return !pkg.__error && !pkg.__peerMissing;
   }, data);
 
   // pagination
@@ -316,8 +243,6 @@ const Packages = props => {
             selected={selected}
             fromSearch={fromSearch}
             reload={reload}
-            handleInstall={handleInstall}
-            handleUninstall={handleUninstall}
           />
         </div>
         <div className={classes.tableWrapper}>

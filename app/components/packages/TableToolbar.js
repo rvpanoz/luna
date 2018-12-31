@@ -22,8 +22,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
 
+import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
-import { setMode } from 'models/ui/actions';
+import { setMode, toggleLoader } from 'models/ui/actions';
 import TableFilters from './TableFilters';
 
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
@@ -34,10 +35,10 @@ const TableListToolbar = props => {
     selected,
     title,
     mode,
+    manager,
+    directory,
     fromSearch,
-    reload,
-    handleInstall,
-    handleUninstall
+    reload
   } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -56,6 +57,25 @@ const TableListToolbar = props => {
   const openFilters = (e, close) => {
     setAnchorEl(close ? null : e.target);
     toggleFilters(!filtersOn);
+  };
+
+  const doAction = action => {
+    ipcRenderer.send('ipc-event', {
+      activeManager: manager,
+      ipcEvent: `${action}-packages`,
+      cmd: [action],
+      multiple: true,
+      packages: selected,
+      mode,
+      directory
+    });
+
+    dispatch(
+      toggleLoader({
+        loading: true,
+        message: `${firstToUpper(action)}ing packages..`
+      })
+    );
   };
 
   const openPackage = () => {
@@ -79,6 +99,26 @@ const TableListToolbar = props => {
         }
       }
     );
+  };
+
+  const handleAction = action => {
+    if (selected && selected.length) {
+      remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          title: 'Confirmation',
+          type: 'question',
+          message: `Would you like to ${action} the selected packages?`,
+          buttons: ['Cancel', firstToUpper(action)]
+        },
+        btnIdx => {
+          if (Boolean(btnIdx) === true) {
+            doAction(action);
+          }
+        }
+      );
+    }
+    return false;
   };
 
   const renderToolbarActions = () => (
@@ -154,7 +194,7 @@ const TableListToolbar = props => {
               <Tooltip title="Install selected">
                 <IconButton
                   aria-label="install selected"
-                  onClick={e => handleInstall()}
+                  onClick={() => handleAction('install')}
                 >
                   <InstallIcon />
                 </IconButton>
@@ -165,7 +205,7 @@ const TableListToolbar = props => {
               <Tooltip title="Uninstall selected">
                 <IconButton
                   aria-label="uninstall selected"
-                  onClick={e => handleUninstall()}
+                  onClick={() => handleAction('uninstall')}
                 >
                   <DeleteIcon />
                 </IconButton>
