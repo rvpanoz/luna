@@ -12,6 +12,7 @@ import {
   addSelected,
   clearSelected,
   clearFilters,
+  clearPackages,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess
@@ -68,6 +69,11 @@ const handlers = {
   },
   [clearFilters.type]: state => assoc('filters', [], state),
   [clearSelected.type]: state => assoc('selected', [], state),
+  [clearPackages.type]: state =>
+    merge(state, {
+      packages: [],
+      packagesOutdated: []
+    }),
   [setPackagesSuccess.type]: (state, { payload }) => {
     const { data, name, version, fromSort, fromSearch, outdated } = payload;
 

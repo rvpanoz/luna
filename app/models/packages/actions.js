@@ -9,6 +9,7 @@ const addFilter = ActionCreator('ADD_FILTER');
 const addSelected = ActionCreator('ADD_SELECTED');
 const clearSelected = ActionCreator('CLEAR_SELECTED');
 const clearFilters = ActionCreator('CLEAR_FILTERS');
+const clearPackages = ActionCreator('CLEAR_PACKAGES');
 const setPackagesStart = ActionCreator('SET_PACKAGES_START');
 const setPackagesSuccess = ActionCreator('SET_PACKAGES_SUCCESS');
 const setPackagesOutdatedSuccess = ActionCreator(
@@ -23,6 +24,7 @@ export {
   addSelected,
   clearSelected,
   clearFilters,
+  clearPackages,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesError,

@@ -43,8 +43,8 @@ const debug = /--debug/.test(process.argv[2]);
 const needslog = /--log/.test(process.argv[3]);
 
 // window min resolution
-const MIN_WIDTH = 0;
-const MIN_HEIGHT = 0;
+const MIN_WIDTH = 1366;
+const MIN_HEIGHT = 768;
 
 // store initialization
 const Store = new ElectronStore();

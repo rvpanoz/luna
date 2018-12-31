@@ -9,6 +9,9 @@ export const listStyles = theme => ({
   none: {
     display: 'none'
   },
+  pagination: {
+    backgroundColor: 'red !important'
+  },
   toolbar: {
     width: '100%'
   },
@@ -26,10 +29,13 @@ export const listStyles = theme => ({
   },
   tablelist: {
     visibility: 'visible',
-    overflowX: 'hidden',
+    overflowX: 'auto',
     overflowY: 'auto',
     clear: 'both',
-    maxHeight: 850
+    maxHeight: 850,
+    [theme.breakpoints.down('1367')]: {
+      maxHeight: 425
+    }
   },
   table: {
     marginBottom: 0,

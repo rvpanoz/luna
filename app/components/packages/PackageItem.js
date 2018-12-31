@@ -41,6 +41,9 @@ const PackageItemRow = props => {
       aria-checked={isSelected(name)}
       tabIndex={-1}
       selected={isSelected(name)}
+      classes={{
+        root: classes.tableRow
+      }}
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox

@@ -59,5 +59,7 @@ export const NPM_CONFIG_VALUES = {
 
 export const WARNING_MESSAGES = {
   peerMissing:
-    'You have packages with peer missing. \nCheck your notifications to fix it.'
+    'You have packages with peer missing. Check your notifications to fix it.',
+  errorPackages:
+    'Some packages have errors. Check your notifications to fix it.'
 };
