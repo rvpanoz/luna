@@ -9,6 +9,9 @@ export const listStyles = theme => ({
   none: {
     display: 'none'
   },
+  pagination: {
+    backgroundColor: 'red !important'
+  },
   toolbar: {
     width: '100%'
   },
@@ -26,10 +29,13 @@ export const listStyles = theme => ({
   },
   tablelist: {
     visibility: 'visible',
-    overflowX: 'hidden',
+    overflowX: 'auto',
     overflowY: 'auto',
     clear: 'both',
-    maxHeight: 850
+    maxHeight: 850,
+    [theme.breakpoints.down('1367')]: {
+      maxHeight: 425
+    }
   },
   table: {
     marginBottom: 0,
@@ -49,21 +55,25 @@ export const listStyles = theme => ({
   },
   tableCell: {
     fontSize: 14,
+    fontFamily: 'Regular',
     lineHeight: '1.4em',
-    verticalAlign: 'left',
     '& span': {
       display: 'inline-block',
       overflowWrap: 'break-word'
     }
   },
   outdated: {
-    color: darken(theme.palette.secondary.dark, 0.1)
+    color: theme.palette.secondary.dark
   },
   updated: {
-    color: darken('#00b300', 0.01)
+    color: darken('#00b300', 0.1)
   },
   nodata: {
     padding: theme.spacing.unit * 2.5
+  },
+  icon: {
+    width: '0.85em',
+    color: darken(theme.palette.secondary.light, 0.1)
   }
 });
 

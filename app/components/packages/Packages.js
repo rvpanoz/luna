@@ -4,8 +4,8 @@
  * Packages component
  */
 
-import { ipcRenderer, remote } from 'electron';
-import React, { useEffect, useState, useCallback } from 'react';
+import { ipcRenderer } from 'electron';
+import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
 import { objectOf, object, func } from 'prop-types';
 import { filter } from 'ramda';
@@ -27,12 +27,16 @@ import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
 
+import { WARNING_MESSAGES } from 'constants/AppConstants';
+
 import { listStyles as styles } from '../styles/packagesStyles';
 import {
+  addActionError,
   addSelected,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
-  clearSelected
+  clearSelected,
+  clearPackages
 } from 'models/packages/actions';
 
 import {
@@ -53,6 +57,7 @@ const mapState = state => ({
   rowsPerPage: state.common.rowsPerPage,
   loader: state.common.loader,
   snackbarOptions: state.common.snackbarOptions,
+  action: state.packages.action,
   filters: state.packages.filters,
   packages: state.packages.packages,
   packagesOutdated: state.packages.packagesOutdated,
@@ -64,6 +69,7 @@ const Packages = props => {
   const { classes } = props;
 
   const {
+    action: { actionName, actionError },
     loader: { loading, message },
     packages,
     mode,
@@ -73,7 +79,6 @@ const Packages = props => {
     directory,
     manager,
     selected,
-    notifications,
     fromSearch,
     snackbarOptions
   } = useMappedState(mapState);
@@ -81,6 +86,9 @@ const Packages = props => {
   const [sortDir, setSortDir] = useState('asc');
   const [sortBy, setSortBy] = useState('name');
   const [counter, setCounter] = useState(0);
+
+  const listRef = useRef();
+
   const dispatch = useDispatch();
 
   const isSelected = name => selected.indexOf(name) !== -1;
@@ -114,14 +122,18 @@ const Packages = props => {
   // dispatch actions
   useEffect(
     () => {
-      if (notifications && notifications.length) {
-        dispatch(clearNotifications());
+      dispatch(clearPackages());
+      dispatch(clearNotifications());
+
+      if (page !== 0) {
+        dispatch(setPage({ page: 0 }));
       }
 
       if (Array.isArray(dependencies) && dependencies.length) {
         dispatch(
           setPackagesSuccess({ data: dependencies, name, version, outdated })
         );
+
         dispatch(toggleLoader({ loading: false, message: null }));
       }
 
@@ -131,6 +143,7 @@ const Packages = props => {
             data: outdated
           })
         );
+
         dispatch(toggleLoader({ loading: false, message: null }));
       }
 
@@ -155,9 +168,42 @@ const Packages = props => {
           }
         }
       }
+    },
+    [dependenciesSet]
+  );
 
-      if (page !== 0) {
-        dispatch(setPage({ page: 0 }));
+  useEffect(
+    () => {
+      if (!dependencies || !Array.isArray(dependencies)) {
+        return;
+      }
+
+      const withPeerMissing = filter(pkg => {
+        return pkg.__peerMissing;
+      }, dependencies);
+
+      if (withPeerMissing.length) {
+        dispatch(
+          setSnackbar({
+            open: true,
+            type: 'warning',
+            message: WARNING_MESSAGES.peerMissing
+          })
+        );
+      }
+
+      const withErrors = filter(pkg => {
+        return pkg.__error;
+      }, dependencies);
+
+      if (withErrors.length) {
+        dispatch(
+          setSnackbar({
+            open: true,
+            type: 'error',
+            message: WARNING_MESSAGES.errorPackages
+          })
+        );
       }
     },
     [dependenciesSet]
@@ -185,18 +231,6 @@ const Packages = props => {
     [sortDir, sortBy]
   );
 
-  // actions listeners
-  useEffect(
-    () => {
-      ipcRenderer.once(['action-close'], (event, error, data) => {
-        reload();
-      });
-
-      return () => ipcRenderer.removeAllListeners(['action-close']);
-    },
-    [counter]
-  );
-
   // filter packages
   const filteredPackages =
     filters && filters.length ? getFiltered(packages, filters) : [];
@@ -207,24 +241,32 @@ const Packages = props => {
       ? filteredPackages
       : packages;
 
-  /** dev logs */
-
-  const withPeerMissing = filter(pkg => {
-    return pkg.__peerMissing;
-  }, data);
-  console.log('peers', withPeerMissing);
-
-  const withErrors = filter(pkg => {
-    return pkg.__error;
-  }, data);
-  console.log('errors', withErrors);
-
-  /** */
-
   // exclude packages with errors and peerMissing?
   const packagesData = filter(pkg => {
-    return !pkg.__error && !pkg.__peerMissing;
+    return !pkg.__error;
   }, data);
+
+  // actions listeners
+  useEffect(
+    () => {
+      ipcRenderer.once(['action-close'], (event, error, data) => {
+        if (error) {
+          dispatch(addActionError('actionName', error));
+        }
+        console.log(error, data);
+        reload();
+      });
+
+      if (listRef && listRef.current) {
+        listRef.current.addEventListener('scroll', function(e) {
+          console.log(e);
+        });
+      }
+
+      return () => ipcRenderer.removeAllListeners(['action-close']);
+    },
+    [counter]
+  );
 
   // pagination
   const dataSlices =
@@ -245,10 +287,13 @@ const Packages = props => {
             reload={reload}
           />
         </div>
-        <div className={classes.tableWrapper}>
+        <div
+          className={cn(classes.tableWrapper, classes.tablelist)}
+          ref={listRef}
+        >
           <Table
             aria-labelledby="packages-list"
-            className={cn(classes.table, classes.tablelist, {
+            className={cn(classes.table, {
               [classes.hasFilterBlur]: loading
             })}
           >
@@ -310,16 +355,18 @@ const Packages = props => {
             horizontal: 'right'
           }}
           open={Boolean(snackbarOptions.open)}
-          autoHideDuration={6000}
+          autoHideDuration={2000}
         >
           <SnackbarContent
             variant={snackbarOptions.type || 'info'}
             message={snackbarOptions.message}
             onClose={() =>
-              setSnackbar({
-                open: false,
-                message: null
-              })
+              dispatch(
+                setSnackbar({
+                  open: false,
+                  message: null
+                })
+              )
             }
           />
         </Snackbar>

@@ -7,20 +7,20 @@
 // npm install [<@scope>/]<name>@<version>
 exports.install = options => {
   const command = ['install'];
-  const { pkgName, mode, pkgVersion, pkgOptions, multiple, packages } =
+  const { name, mode, version = null, pkgOptions, multiple, packages } =
     options || {};
   const defaults = [];
 
-  if (!pkgName && !multiple) {
+  if (!name && !multiple) {
     return Promise.reject('npm[install] package name parameter must be given');
   }
 
   function getNames() {
     return multiple && packages && Array.isArray(packages)
       ? packages
-      : pkgVersion
-      ? `${pkgName}@${pkgVersion}`
-      : pkgName;
+      : version
+      ? `${name}@${version}`.trim()
+      : name.trim();
   }
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
@@ -41,18 +41,18 @@ exports.install = options => {
 // npm uninstall [<@scope>/]<pkg>[@<version>]
 exports.uninstall = options => {
   const command = ['uninstall'];
-  const { pkgName, mode, multiple, packages } = options;
+  const { name, mode, multiple, packages } = options;
   const defaults = [];
 
   function getNames() {
     if (multiple && packages && Array.isArray(packages)) {
       return packages;
-    } else if (!pkgName && !multiple) {
+    } else if (!name && !multiple) {
       return Promise.reject(
         'npm[uninstall] package name parameter must be given'
       );
     } else {
-      return pkgName;
+      return name;
     }
   }
 

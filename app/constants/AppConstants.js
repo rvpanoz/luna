@@ -2,16 +2,15 @@
  * APP constants
  * */
 
-export const LUNA = 'LUNA';
-export const NPM = 'npm';
-export const YARN = 'yarn';
+const APP = 'LUNA';
+const NPM = 'npm';
 
 export const GITHUB = {
   baseUrl: 'https://api.github.com/repos/'
 };
 
 export const APP_GLOBALS = {
-  name: LUNA,
+  name: APP,
   manager: NPM
 };
 
@@ -29,9 +28,9 @@ export const APP_ACTIONS = {
 };
 
 export const APP_INFO = {
+  CONFIRMATION: 'Would you like to $action $name@version?',
   NOT_AVAILABLE: 'N/A',
   NO_NOTIFICATIONS: 'No notifications',
-  CONFIRMATION: 'Would you like to $action $name@version?',
   NO_WORKING_DIRECTORY: 'No working directory'
 };
 
@@ -58,4 +57,9 @@ export const NPM_CONFIG_VALUES = {
   HTTPS_PROXY: 'https-proxy'
 };
 
-export const ERROR_MESSAGES = {};
+export const WARNING_MESSAGES = {
+  peerMissing:
+    'You have packages with peer missing. Check your notifications to fix it.',
+  errorPackages:
+    'Some packages have errors. Check your notifications to fix it.'
+};

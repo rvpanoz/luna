@@ -14,6 +14,10 @@ export default {
     message: null
   },
   packages: {
+    action: {
+      name: null,
+      error: null
+    },
     packages: [],
     packagesOutdated: [],
     selected: [],

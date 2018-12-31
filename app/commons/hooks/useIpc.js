@@ -20,6 +20,8 @@ const useIpc = (channel, options, inputs = []) => {
 
   useEffect(() => {
     ipcRenderer.on(listenTo, (event, status, commandArgs, data, errors) => {
+      console.log('ipcHook', errors);
+
       const [name, version, packages] =
         data && parseMap(data, mode, directory, commandArgs);
 

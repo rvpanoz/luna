@@ -35,7 +35,6 @@ const Dashboard = props => {
     loading,
     directory,
     mode,
-    manager,
     projectName,
     projectVersion,
     lastUpdatedAt,
@@ -44,7 +43,9 @@ const Dashboard = props => {
 
   const renderProjectStats = () => (
     <div className={classes.flexContainer}>
-      <div className={classes.flexContainerItem}>Manager:&nbsp;{manager}</div>
+      <div className={classes.flexContainerItem}>
+        version:&nbsp;{projectVersion || APP_INFO.NOT_AVAILABLE}
+      </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
         Problems:&nbsp;{notifications ? notifications.length : 0}
       </div>
@@ -81,11 +82,9 @@ const Dashboard = props => {
         <Grid item xs={12} sm={6} md={3}>
           <CardDetails
             id="card-1"
-            title={`${
-              mode === APP_MODES.LOCAL && projectName
-                ? `${projectName} v${projectVersion}`
-                : 'Project'
-            }`}
+            title={
+              mode === APP_MODES.LOCAL && projectName ? projectName : 'Project'
+            }
             subtext={directory || APP_INFO.NO_WORKING_DIRECTORY}
             text={renderProjectStats()}
             loading={loading}

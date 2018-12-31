@@ -51,7 +51,9 @@ const styles = theme => ({
   },
   message: {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    maxWidth: 300
   }
 });
 

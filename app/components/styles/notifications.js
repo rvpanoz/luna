@@ -1,7 +1,7 @@
 import {
   defaultFont,
   primaryBoxShadow,
-  primaryColor,
+  // primaryColor,
   dangerColor
 } from './general';
 
@@ -59,7 +59,7 @@ const styles = theme => ({
     color: '#333',
     whiteSpace: 'nowrap',
     '&:hover': {
-      backgroundColor: primaryColor,
+      backgroundColor: theme.palette.secondary.light,
       color: '#FFFFFF',
       ...primaryBoxShadow
     }
