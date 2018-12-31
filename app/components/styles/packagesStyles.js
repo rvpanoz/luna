@@ -49,8 +49,8 @@ export const listStyles = theme => ({
   },
   tableCell: {
     fontSize: 14,
+    fontFamily: 'Regular',
     lineHeight: '1.4em',
-    verticalAlign: 'left',
     '& span': {
       display: 'inline-block',
       overflowWrap: 'break-word'
@@ -64,6 +64,10 @@ export const listStyles = theme => ({
   },
   nodata: {
     padding: theme.spacing.unit * 2.5
+  },
+  icon: {
+    width: '0.85em',
+    color: darken(theme.palette.secondary.light, 0.1)
   }
 });
 

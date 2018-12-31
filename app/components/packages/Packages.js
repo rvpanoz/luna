@@ -31,6 +31,7 @@ import { WARNING_MESSAGES } from 'constants/AppConstants';
 
 import { listStyles as styles } from '../styles/packagesStyles';
 import {
+  addActionError,
   addSelected,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
@@ -55,6 +56,7 @@ const mapState = state => ({
   rowsPerPage: state.common.rowsPerPage,
   loader: state.common.loader,
   snackbarOptions: state.common.snackbarOptions,
+  action: state.packages.action,
   filters: state.packages.filters,
   packages: state.packages.packages,
   packagesOutdated: state.packages.packagesOutdated,
@@ -66,6 +68,7 @@ const Packages = props => {
   const { classes } = props;
 
   const {
+    action: { actionName, actionError },
     loader: { loading, message },
     packages,
     mode,
@@ -75,7 +78,6 @@ const Packages = props => {
     directory,
     manager,
     selected,
-    notifications,
     fromSearch,
     snackbarOptions
   } = useMappedState(mapState);
@@ -116,17 +118,9 @@ const Packages = props => {
   // dispatch actions
   useEffect(
     () => {
-      if (notifications && notifications.length) {
-        dispatch(clearNotifications());
-      }
+      dispatch(clearNotifications());
 
       if (Array.isArray(dependencies) && dependencies.length) {
-        dispatch(
-          setPackagesSuccess({ data: dependencies, name, version, outdated })
-        );
-
-        dispatch(toggleLoader({ loading: false, message: null }));
-
         const withPeerMissing = filter(pkg => {
           return pkg.__peerMissing;
         }, dependencies);
@@ -140,6 +134,12 @@ const Packages = props => {
             })
           );
         }
+
+        dispatch(
+          setPackagesSuccess({ data: dependencies, name, version, outdated })
+        );
+
+        dispatch(toggleLoader({ loading: false, message: null }));
       }
 
       if (outdated && outdated.length) {
@@ -214,13 +214,17 @@ const Packages = props => {
 
   // exclude packages with errors and peerMissing?
   const packagesData = filter(pkg => {
-    return !pkg.__error && !pkg.__peerMissing;
+    return !pkg.__error;
   }, data);
 
   // actions listeners
   useEffect(
     () => {
       ipcRenderer.once(['action-close'], (event, error, data) => {
+        if (error) {
+          dispatch(addActionError('actionName', error));
+        }
+        console.log(error, data);
         reload();
       });
 

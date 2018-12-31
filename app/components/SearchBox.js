@@ -98,7 +98,6 @@ const SearchBox = props => {
           <SearchIcon />
         </div>
         <InputBase
-          value="react"
           disabled={disabled}
           placeholder="Search for packages…"
           classes={{

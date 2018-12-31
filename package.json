@@ -164,7 +164,6 @@
     "electron-devtools-installer": "^2.2.4",
     "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
-    "eslint-config-erb": "0.0.2",
     "eslint-config-prettier": "^3.3.0",
     "eslint-formatter-pretty": "^2.0.0",
     "eslint-import-resolver-webpack": "^0.10.1",

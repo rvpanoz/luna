@@ -58,7 +58,6 @@ const Notifications = props => {
       ipcEvent: 'install-packages',
       cmd: ['install'],
       name: peerName,
-      version: 'latest',
       mode,
       directory
     });
@@ -74,7 +73,7 @@ const Notifications = props => {
   };
 
   return (
-    <ClickAwayListener onClickAway={e => console.log(e)}>
+    <ClickAwayListener onClickAway={e => {}}>
       <Grow in={true} id="menu-list" style={{ transformOrigin: '0 0 0' }}>
         <Paper className={classes.dropdown}>
           <List dense>

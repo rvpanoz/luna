@@ -7,6 +7,7 @@
 import { identity, merge, assoc, prepend, prop, propOr, remove } from 'ramda';
 import initialState from './initialState';
 import {
+  addActionError,
   addFilter,
   addSelected,
   clearSelected,
@@ -27,6 +28,13 @@ const createReducer = (packagesState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [addActionError.type]: (state, { payload: { actionName, actionError } }) =>
+    merge(state, {
+      action: {
+        actionName,
+        actionError
+      }
+    }),
   [addFilter.type]: (state, { payload }) => {
     const { filterName } = payload;
     const { filters } = state;
