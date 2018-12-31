@@ -27,6 +27,8 @@ import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
 
+import { WARNING_MESSAGES } from 'constants/AppConstants';
+
 import { listStyles as styles } from '../styles/packagesStyles';
 import {
   addSelected,
@@ -122,7 +124,22 @@ const Packages = props => {
         dispatch(
           setPackagesSuccess({ data: dependencies, name, version, outdated })
         );
+
         dispatch(toggleLoader({ loading: false, message: null }));
+
+        const withPeerMissing = filter(pkg => {
+          return pkg.__peerMissing;
+        }, dependencies);
+
+        if (withPeerMissing.length) {
+          dispatch(
+            setSnackbar({
+              open: true,
+              type: 'warning',
+              message: WARNING_MESSAGES.peerMissing
+            })
+          );
+        }
       }
 
       if (outdated && outdated.length) {
@@ -185,6 +202,21 @@ const Packages = props => {
     [sortDir, sortBy]
   );
 
+  // filter packages
+  const filteredPackages =
+    filters && filters.length ? getFiltered(packages, filters) : [];
+
+  // assign final data
+  const data =
+    Array.isArray(filteredPackages) && filteredPackages.length
+      ? filteredPackages
+      : packages;
+
+  // exclude packages with errors and peerMissing?
+  const packagesData = filter(pkg => {
+    return !pkg.__error && !pkg.__peerMissing;
+  }, data);
+
   // actions listeners
   useEffect(
     () => {
@@ -196,35 +228,6 @@ const Packages = props => {
     },
     [counter]
   );
-
-  // filter packages
-  const filteredPackages =
-    filters && filters.length ? getFiltered(packages, filters) : [];
-
-  // assign final data
-  const data =
-    Array.isArray(filteredPackages) && filteredPackages.length
-      ? filteredPackages
-      : packages;
-
-  /** dev logs */
-
-  const withPeerMissing = filter(pkg => {
-    return pkg.__peerMissing;
-  }, data);
-  console.log('peers', withPeerMissing);
-
-  const withErrors = filter(pkg => {
-    return pkg.__error;
-  }, data);
-  console.log('errors', withErrors);
-
-  /** */
-
-  // exclude packages with errors and peerMissing?
-  const packagesData = filter(pkg => {
-    return !pkg.__error && !pkg.__peerMissing;
-  }, data);
 
   // pagination
   const dataSlices =
@@ -310,16 +313,18 @@ const Packages = props => {
             horizontal: 'right'
           }}
           open={Boolean(snackbarOptions.open)}
-          autoHideDuration={6000}
+          autoHideDuration={2000}
         >
           <SnackbarContent
             variant={snackbarOptions.type || 'info'}
             message={snackbarOptions.message}
             onClose={() =>
-              setSnackbar({
-                open: false,
-                message: null
-              })
+              dispatch(
+                setSnackbar({
+                  open: false,
+                  message: null
+                })
+              )
             }
           />
         </Snackbar>

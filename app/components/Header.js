@@ -135,7 +135,10 @@ const Header = props => {
               }}
               onClose={e => setNotificationsEl(null)}
             >
-              <Notifications notifications={notifications} />
+              <Notifications
+                notifications={notifications}
+                close={() => setNotificationsEl(null)}
+              />
             </Popover>
           </div>
         </Toolbar>

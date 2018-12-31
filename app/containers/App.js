@@ -11,8 +11,6 @@ import Layout from './Layout';
 
 import '../app.global.css';
 
-console.clear();
-
 const App = () => {
   useEffect(() => {
     ipcRenderer.once('uncaught-exception', (event, exceptionError) => {

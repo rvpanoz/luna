@@ -7,20 +7,20 @@
 // npm install [<@scope>/]<name>@<version>
 exports.install = options => {
   const command = ['install'];
-  const { pkgName, mode, pkgVersion, pkgOptions, multiple, packages } =
+  const { name, mode, version = null, pkgOptions, multiple, packages } =
     options || {};
   const defaults = [];
 
-  if (!pkgName && !multiple) {
+  if (!name && !multiple) {
     return Promise.reject('npm[install] package name parameter must be given');
   }
 
   function getNames() {
     return multiple && packages && Array.isArray(packages)
       ? packages
-      : pkgVersion
-      ? `${pkgName}@${pkgVersion}`
-      : pkgName;
+      : version
+      ? `${name}@${version}`
+      : name;
   }
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;

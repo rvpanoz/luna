@@ -57,10 +57,10 @@ export const listStyles = theme => ({
     }
   },
   outdated: {
-    color: darken(theme.palette.secondary.dark, 0.1)
+    color: theme.palette.secondary.dark
   },
   updated: {
-    color: darken('#00b300', 0.01)
+    color: darken('#00b300', 0.1)
   },
   nodata: {
     padding: theme.spacing.unit * 2.5
