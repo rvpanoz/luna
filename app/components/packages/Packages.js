@@ -87,8 +87,6 @@ const Packages = props => {
   const [sortBy, setSortBy] = useState('name');
   const [counter, setCounter] = useState(0);
 
-  const listRef = useRef();
-
   const dispatch = useDispatch();
 
   const isSelected = name => selected.indexOf(name) !== -1;
@@ -125,24 +123,22 @@ const Packages = props => {
       dispatch(clearPackages());
       dispatch(clearNotifications());
 
-      if (page !== 0) {
-        dispatch(setPage({ page: 0 }));
-      }
-
       if (Array.isArray(dependencies) && dependencies.length) {
+        if (page !== 0) {
+          dispatch(setPage({ page: 0 }));
+        }
+
         dispatch(
           setPackagesSuccess({ data: dependencies, name, version, outdated })
         );
 
-        dispatch(toggleLoader({ loading: false, message: null }));
-      }
-
-      if (outdated && outdated.length) {
-        dispatch(
-          setPackagesOutdatedSuccess({
-            data: outdated
-          })
-        );
+        if (outdated && outdated.length) {
+          dispatch(
+            setPackagesOutdatedSuccess({
+              data: outdated
+            })
+          );
+        }
 
         dispatch(toggleLoader({ loading: false, message: null }));
       }
@@ -167,15 +163,6 @@ const Packages = props => {
             );
           }
         }
-      }
-    },
-    [dependenciesSet]
-  );
-
-  useEffect(
-    () => {
-      if (!dependencies || !Array.isArray(dependencies)) {
-        return;
       }
 
       const withPeerMissing = filter(pkg => {
@@ -253,15 +240,9 @@ const Packages = props => {
         if (error) {
           dispatch(addActionError('actionName', error));
         }
-        console.log(error, data);
+
         reload();
       });
-
-      if (listRef && listRef.current) {
-        listRef.current.addEventListener('scroll', function(e) {
-          console.log(e);
-        });
-      }
 
       return () => ipcRenderer.removeAllListeners(['action-close']);
     },
@@ -287,10 +268,7 @@ const Packages = props => {
             reload={reload}
           />
         </div>
-        <div
-          className={cn(classes.tableWrapper, classes.tablelist)}
-          ref={listRef}
-        >
+        <div className={cn(classes.tableWrapper, classes.tablelist)}>
           <Table
             aria-labelledby="packages-list"
             className={cn(classes.table, {
