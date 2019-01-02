@@ -5,7 +5,7 @@
  */
 
 import { ipcRenderer, remote } from 'electron';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -78,7 +78,8 @@ const TableListToolbar = props => {
     );
   };
 
-  const openPackage = () => {
+  // header line
+  const openPackage = useCallback(() => {
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
       {
@@ -95,11 +96,14 @@ const TableListToolbar = props => {
       filePath => {
         if (filePath) {
           const directory = filePath.join('');
+
           switchMode(APP_MODES.LOCAL, directory);
         }
+
+        return false;
       }
     );
-  };
+  }, []);
 
   const handleAction = action => {
     if (selected && selected.length) {

@@ -45,7 +45,7 @@ const handlers = {
     merge(state, {
       snackbarOptions: {
         open: false,
-        type: null,
+        type: 'info',
         message: null
       }
     }),

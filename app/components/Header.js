@@ -1,9 +1,9 @@
 /* eslint-disable */
 /* eslint-disable-interactive-support-focus */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, remote } from 'electron';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -68,10 +68,48 @@ const Header = props => {
     [openedDirectories.length]
   );
 
+  const openPackage = useCallback(() => {
+    remote.dialog.showOpenDialog(
+      remote.getCurrentWindow(),
+      {
+        title: 'Open package.json file',
+        buttonLabel: 'Analyze',
+        filters: [
+          {
+            name: 'package.json',
+            extensions: ['json']
+          }
+        ],
+        properties: ['openFile']
+      },
+      filePath => {
+        if (filePath) {
+          const directory = filePath.join('');
+
+          dispatch(setMode({ mode: APP_MODES.LOCAL, directory }));
+          toggleDrawer(false);
+        }
+
+        return false;
+      }
+    );
+  }, []);
+
+  const openDirectory = useCallback(directory => {
+    dispatch(
+      setMode({
+        mode: APP_MODES.LOCAL,
+        directory
+      })
+    );
+
+    toggleDrawer(false);
+  });
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar className={classes.headerToolbar}>
+        <Toolbar>
           <IconButton
             className={classes.menuButton}
             color="inherit"
@@ -90,18 +128,22 @@ const Header = props => {
           </Typography>
           <SearchBox disabled={loader && loader.loading} />
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
+          <div className={classes.headerToolbar}>
             <IconButton
               color="inherit"
               aria-owns={menuOpen ? 'app-settings' : undefined}
               aria-haspopup="true"
               onClick={e => {
-                // setAnchorEl(e.currentTarget);
+                setAnchorEl(e.currentTarget);
               }}
             >
               <SettingsIcon />
             </IconButton>
             <Menu
+              classes={{
+                paper: classes.settingsMenu
+              }}
+              transitionDuration={0}
               id="app-settings"
               anchorEl={anchorEl}
               open={menuOpen}
@@ -123,6 +165,7 @@ const Header = props => {
               </Badge>
             </IconButton>
             <Popover
+              transitionDuration={0}
               open={notificationsOpen}
               anchorEl={notificationsEl}
               anchorOrigin={{
@@ -160,6 +203,12 @@ const Header = props => {
         <Divider />
         <div className={classes.list}>
           <List>
+            <ListItem button onClick={() => openPackage()}>
+              <ListItemIcon>
+                <Icon className={classes.iconHover}>archive</Icon>
+              </ListItemIcon>
+              <ListItemText primary="Open package" />
+            </ListItem>
             <ListItem>
               <ListItemIcon>
                 <Icon>folder_open</Icon>
@@ -177,15 +226,8 @@ const Header = props => {
                     className={classes.listItem}
                     primary={
                       <a
-                        onClick={() =>
-                          dispatch(
-                            setMode({
-                              mode: APP_MODES.LOCAL,
-                              directory: dir.directory
-                            })
-                          )
-                        }
-                        href="#sub-labels-and-columns"
+                        onClick={() => openDirectory(dir.directory)}
+                        href="#"
                         className={classes.link}
                       >
                         {dir.name}
@@ -200,7 +242,7 @@ const Header = props => {
       <Modal
         aria-labelledby="settings"
         aria-describedby="settings"
-        open={settingsOpen}
+        open={false}
         onClose={e => setAnchorEl(null)}
       >
         <div className={classes.paper}>
@@ -211,7 +253,7 @@ const Header = props => {
         aria-labelledby="keyboard"
         aria-describedby="keyboard"
         hideBackdrop
-        open={keyboardOpen}
+        open={false}
         onClose={e => toggleKeyboard(false)}
       >
         <div className={classes.paper}>keyboard...</div>

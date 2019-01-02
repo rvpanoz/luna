@@ -34,10 +34,10 @@ const Layout = props => {
             </Grid>
           </Grid>
           <Grid container justify="flex-start">
-            <Grid item xs={4}>
+            <Grid item xs={6} md={6} lg={4} xl={4}>
               <Packages />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={6} md={6} lg={4} xl={4}>
               <PackageDetails />
             </Grid>
           </Grid>
