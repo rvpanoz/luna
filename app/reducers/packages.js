@@ -79,6 +79,10 @@ const handlers = {
 
     const packages = data
       ? data.map(pkg => {
+          if (!pkg) {
+            return;
+          }
+
           const [isOutdated, outdatedPkg] = isPackageOutdated(
             outdated,
             pkg.name

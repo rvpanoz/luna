@@ -13,6 +13,8 @@ import { withStyles } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 
 import useIpc from 'commons/hooks/useIpc';
@@ -118,6 +120,13 @@ const Packages = props => {
 
   const reload = () => setCounter(counter + 1);
   const setSelected = name => dispatch(addSelected({ name }));
+  const closeSnackbar = () =>
+    dispatch(
+      setSnackbar({
+        open: false,
+        message: null
+      })
+    );
   const toggleSort = prop => {
     const direction = sortOptions.direction === 'desc' ? 'asc' : 'desc';
 
@@ -206,14 +215,13 @@ const Packages = props => {
         );
       }
     },
-    [dependenciesSet]
+    [dependenciesSet] // TODO: wip inputs--too late for now (01:22:55)
   );
 
   // sort packages
   useEffect(
     () => {
-      // clone dependencies
-      const data = dependencies && dependencies.slice(0);
+      const data = dependencies && dependencies.slice(0); // clone dependencies
 
       if (!data || !data.length) {
         return;
@@ -243,7 +251,7 @@ const Packages = props => {
       ? filteredPackages
       : packages;
 
-  // exclude packages with errors and peerMissing?
+  // exclude packages with errors and peerMissing
   const packagesData = filter(pkg => {
     return !pkg.__error && !pkg.__peerMissing;
   }, data);
@@ -268,6 +276,8 @@ const Packages = props => {
   const dataSlices =
     packagesData &&
     packagesData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+  const nodata = !Boolean(dataSlices && dataSlices.length !== 0);
 
   return (
     <AppLoader loading={loading} message={message}>
@@ -334,6 +344,11 @@ const Packages = props => {
                 })}
             </TableBody>
             <TableFooter
+              classes={{
+                root: {
+                  [classes.hidden]: nodata
+                }
+              }}
               rowCount={(packagesData && packagesData.length) || 0}
               page={page}
               rowsPerPage={rowsPerPage}
@@ -354,19 +369,13 @@ const Packages = props => {
             horizontal: 'right'
           }}
           open={Boolean(snackbarOptions.open)}
-          autoHideDuration={2000}
+          autoHideDuration={5000}
+          onClose={() => closeSnackbar()}
         >
           <SnackbarContent
-            variant={snackbarOptions.type || 'info'}
+            variant={snackbarOptions.type}
             message={snackbarOptions.message}
-            onClose={() =>
-              dispatch(
-                setSnackbar({
-                  open: false,
-                  message: null
-                })
-              )
-            }
+            onClose={() => closeSnackbar()}
           />
         </Snackbar>
       )}

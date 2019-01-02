@@ -34,7 +34,7 @@ export const listStyles = theme => ({
     clear: 'both',
     maxHeight: 850,
     [theme.breakpoints.down('1367')]: {
-      maxHeight: 425
+      maxHeight: 650
     }
   },
   table: {
@@ -74,6 +74,9 @@ export const listStyles = theme => ({
   icon: {
     width: '0.85em',
     color: darken(theme.palette.secondary.light, 0.1)
+  },
+  hidden: {
+    display: 'none'
   }
 });
 
