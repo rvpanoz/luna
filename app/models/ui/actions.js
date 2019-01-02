@@ -6,6 +6,7 @@ const ActionCreator = createActionCreator('@@LUNA_APP/UI');
 
 const addNotification = ActionCreator('ADD_NOTIFICATION');
 const clearNotifications = ActionCreator('CLEAR_NOTIFICATIONS');
+const clearSnackbar = ActionCreator('CLEAR_SNACKBAR');
 const setSnackbar = ActionCreator('SET_SNACKBAR');
 const setManager = ActionCreator('SET_MANAGER');
 const setMode = ActionCreator('SET_MODE');
@@ -16,6 +17,7 @@ const toggleLoader = ActionCreator('TOGGLE_LOADER');
 export {
   addNotification,
   clearNotifications,
+  clearSnackbar,
   setSnackbar,
   setManager,
   setMode,

@@ -8,6 +8,7 @@ import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
 import {
   addNotification,
   clearNotifications,
+  clearSnackbar,
   setSnackbar,
   setManager,
   setMode,
@@ -40,37 +41,25 @@ const handlers = {
         state.notifications
       )
     }),
+  [clearSnackbar.type]: state =>
+    merge(state, {
+      snackbarOptions: {
+        open: false,
+        type: null,
+        message: null
+      }
+    }),
   [clearNotifications.type]: state => assoc('notifications', [], state),
   [setSnackbar.type]: (state, { payload }) =>
     assoc('snackbarOptions', merge(state.snackbarOptions, payload), state),
-  [setMode.type]: (state, action) => {
-    const {
-      payload: { mode },
-      payload: { directory }
-    } = action;
-
-    return merge(state, {
+  [setMode.type]: (state, { payload: { mode }, payload: { directory } }) =>
+    merge(state, {
       mode,
       directory
-    });
-  },
-
-  [setManager.type]: (state, action) => {
-    const {
-      payload: { manager }
-    } = action;
-
-    return assoc('manager', manager, state);
-  },
-
-  [setPage.type]: (state, action) => {
-    const {
-      payload: { page }
-    } = action;
-
-    return assoc('page', page, state);
-  },
-
+    }),
+  [setManager.type]: (state, { payload: { manager } }) =>
+    assoc('manager', manager, state),
+  [setPage.type]: (state, { payload: { page } }) => assoc('page', page, state),
   [setPageRows.type]: (state, action) => {
     const {
       payload: { rowsPerPage }

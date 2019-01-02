@@ -5,7 +5,7 @@
  */
 
 import { ipcRenderer } from 'electron';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import cn from 'classnames';
 import { objectOf, object, func } from 'prop-types';
 import { filter } from 'ramda';
@@ -27,9 +27,6 @@ import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
 
-import { WARNING_MESSAGES } from 'constants/AppConstants';
-
-import { listStyles as styles } from '../styles/packagesStyles';
 import {
   addActionError,
   addSelected,
@@ -42,11 +39,20 @@ import {
 import {
   addNotification,
   clearNotifications,
+  clearSnackbar,
   setSnackbar,
   setPage,
   setPageRows,
   toggleLoader
 } from 'models/ui/actions';
+
+import { WARNING_MESSAGES } from 'constants/AppConstants';
+import { listStyles as styles } from '../styles/packagesStyles';
+
+// use useCallback if you need it inside component body
+// const mapState = useCallback(state=>({
+//   directory: state.common.directory
+// }),[input])
 
 const mapState = state => ({
   directory: state.common.directory,
@@ -83,13 +89,18 @@ const Packages = props => {
     snackbarOptions
   } = useMappedState(mapState);
 
-  const [sortDir, setSortDir] = useState('asc');
-  const [sortBy, setSortBy] = useState('name');
+  const [sortOptions, setSort] = useState({
+    direction: 'asc',
+    prop: 'name'
+  });
+
   const [counter, setCounter] = useState(0);
-
-  const listRef = useRef();
-
   const dispatch = useDispatch();
+  const clearUI = () => {
+    dispatch(clearPackages());
+    dispatch(clearNotifications());
+    dispatch(clearSnackbar());
+  };
 
   const isSelected = name => selected.indexOf(name) !== -1;
 
@@ -108,10 +119,12 @@ const Packages = props => {
   const reload = () => setCounter(counter + 1);
   const setSelected = name => dispatch(addSelected({ name }));
   const toggleSort = prop => {
-    const newSortBy = sortDir === 'desc' ? 'asc' : 'desc';
+    const direction = sortOptions.direction === 'desc' ? 'asc' : 'desc';
 
-    setSortBy(prop);
-    setSortDir(newSortBy);
+    setSort({
+      direction,
+      prop
+    });
   };
 
   // project name and version
@@ -122,28 +135,24 @@ const Packages = props => {
   // dispatch actions
   useEffect(
     () => {
-      dispatch(clearPackages());
-      dispatch(clearNotifications());
-
-      if (page !== 0) {
-        dispatch(setPage({ page: 0 }));
-      }
-
       if (Array.isArray(dependencies) && dependencies.length) {
+        if (page !== 0) {
+          dispatch(setPage({ page: 0 }));
+        }
+
         dispatch(
           setPackagesSuccess({ data: dependencies, name, version, outdated })
         );
 
-        dispatch(toggleLoader({ loading: false, message: null }));
-      }
+        if (outdated && outdated.length) {
+          dispatch(
+            setPackagesOutdatedSuccess({
+              data: outdated
+            })
+          );
+        }
 
-      if (outdated && outdated.length) {
-        dispatch(
-          setPackagesOutdatedSuccess({
-            data: outdated
-          })
-        );
-
+        clearUI(); //clear notifications, snackbar etc
         dispatch(toggleLoader({ loading: false, message: null }));
       }
 
@@ -167,15 +176,6 @@ const Packages = props => {
             );
           }
         }
-      }
-    },
-    [dependenciesSet]
-  );
-
-  useEffect(
-    () => {
-      if (!dependencies || !Array.isArray(dependencies)) {
-        return;
       }
 
       const withPeerMissing = filter(pkg => {
@@ -219,16 +219,18 @@ const Packages = props => {
         return;
       }
 
+      const { direction, prop } = sortOptions;
+
       const sortedData =
-        sortDir === 'asc'
-          ? data.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
-          : data.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
+        direction === 'asc'
+          ? data.sort((a, b) => (a[prop] < b[prop] ? -1 : 1))
+          : data.sort((a, b) => (b[prop] < a[prop] ? -1 : 1));
 
       dispatch(
         setPackagesSuccess({ data: sortedData, fromSort: true, outdated })
       );
     },
-    [sortDir, sortBy]
+    [dependenciesSet, sortOptions]
   );
 
   // filter packages
@@ -243,7 +245,7 @@ const Packages = props => {
 
   // exclude packages with errors and peerMissing?
   const packagesData = filter(pkg => {
-    return !pkg.__error;
+    return !pkg.__error && !pkg.__peerMissing;
   }, data);
 
   // actions listeners
@@ -253,15 +255,9 @@ const Packages = props => {
         if (error) {
           dispatch(addActionError('actionName', error));
         }
-        console.log(error, data);
+
         reload();
       });
-
-      if (listRef && listRef.current) {
-        listRef.current.addEventListener('scroll', function(e) {
-          console.log(e);
-        });
-      }
 
       return () => ipcRenderer.removeAllListeners(['action-close']);
     },
@@ -287,10 +283,7 @@ const Packages = props => {
             reload={reload}
           />
         </div>
-        <div
-          className={cn(classes.tableWrapper, classes.tablelist)}
-          ref={listRef}
-        >
+        <div className={cn(classes.tableWrapper, classes.tablelist)}>
           <Table
             aria-labelledby="packages-list"
             className={cn(classes.table, {
@@ -301,9 +294,15 @@ const Packages = props => {
               packages={dataSlices.map(d => d.name)}
               numSelected={Number(selected.length)}
               rowCount={(data && data.length) || 0}
-              sortBy={sortBy}
-              sortDir={sortDir}
-              setSortBy={(e, prop) => setSortBy(prop)}
+              sortBy={sortOptions.prop}
+              sortDir={sortOptions.direction}
+              setSortBy={(e, prop) =>
+                setSort(
+                  merge(sortOptions, {
+                    prop
+                  })
+                )
+              }
               toggleSort={(e, prop) => toggleSort(prop)}
               onSelected={(name, force) =>
                 dispatch(

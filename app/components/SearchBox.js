@@ -35,6 +35,7 @@ const SearchBox = props => {
     dispatch(
       toggleLoader({ loading: true, message: `Searching for ${searchValue}..` })
     );
+
     dispatch(clearNotifications());
     dispatch(setPackagesStart());
 
