@@ -40,10 +40,6 @@ const AppCardInfo = props => {
     type
   } = props;
 
-<<<<<<< 44e1816833dbd8ae38ce6969cf54acb61ff581af
-<<<<<<< 2a45e2dcbb846119025aa7e5bc49d2a62c6d4d5e
-=======
->>>>>>> dashboard cards icon stats colors
   const infoStatIcon = (
     <BalotIcon
       className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
@@ -65,35 +61,14 @@ const AppCardInfo = props => {
       className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
     />
   );
-<<<<<<< 44e1816833dbd8ae38ce6969cf54acb61ff581af
-=======
-  const defaultAvatarIcon = null;
-  const defaultStatIcon = null;
-  const infoAvatarIcon = <BalotIcon className={classes.cardIcon} />;
-  const infoStatIcon = <InfoIcon className={classes.cardIcon} />;
->>>>>>> wip cards avatars
-=======
->>>>>>> dashboard cards icon stats colors
 
   // TODO: avatars
   const renderAvatarIcon = type => {
     const icon = switchcase({
-<<<<<<< 44e1816833dbd8ae38ce6969cf54acb61ff581af
-<<<<<<< 2a45e2dcbb846119025aa7e5bc49d2a62c6d4d5e
-=======
->>>>>>> dashboard cards icon stats colors
       info: () => null,
       stats: () => null,
       update: () => null,
       warning: () => null
-<<<<<<< 44e1816833dbd8ae38ce6969cf54acb61ff581af
-=======
-      info: () => infoAvatarIcon,
-      update: () => <UpdateIcon className={classes.cardIcon} />,
-      warning: () => <WarningIcon className={classes.cardIcon} />
->>>>>>> wip cards avatars
-=======
->>>>>>> dashboard cards icon stats colors
     })(defaultAvatarIcon)(type);
 
     return icon;
@@ -102,32 +77,9 @@ const AppCardInfo = props => {
   const renderStatIcon = type => {
     const icon = switchcase({
       info: () => infoStatIcon,
-<<<<<<< 44e1816833dbd8ae38ce6969cf54acb61ff581af
-<<<<<<< 2a45e2dcbb846119025aa7e5bc49d2a62c6d4d5e
       stats: () => barStatIcon,
       update: () => updateStatIcon,
       warning: () => warningStatIcon
-=======
-      update: () => (
-        <UpdateIcon
-          className={
-            classes.cardStatsIcon + ' ' + classes[type + 'CardStatsIcon']
-          }
-        />
-      ),
-      warning: () => (
-        <WarningIcon
-          className={
-            classes.cardStatsIcon + ' ' + classes[type + 'CardStatsIcon']
-          }
-        />
-      )
->>>>>>> wip cards avatars
-=======
-      stats: () => barStatIcon,
-      update: () => updateStatIcon,
-      warning: () => warningStatIcon
->>>>>>> dashboard cards icon stats colors
     })(defaultStatIcon)(type);
 
     return icon;
