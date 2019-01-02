@@ -80,6 +80,10 @@ const Notifications = props => {
             {notifications &&
               notifications.map((notification, idx) => {
                 const { requiredBy, requires } = notification;
+                const parts = requires.split('@');
+                const peerName = Boolean(parts[0].length)
+                  ? parts[0]
+                  : `@${parts[1]}`; // @ indicates namespace e.g @material-ui/core
 
                 return (
                   <ListItem key={`notification-${idx}`}>
@@ -95,7 +99,7 @@ const Notifications = props => {
                     <ListItemSecondaryAction>
                       <IconButton
                         aria-label="Install"
-                        onClick={e => handleInstall(requires.split('@')[0])}
+                        onClick={() => handleInstall(peerName)}
                       >
                         <AddIcon />
                       </IconButton>
