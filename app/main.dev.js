@@ -2,10 +2,12 @@
 
 import ElectronStore from 'electron-store';
 import path from 'path';
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { merge } from 'ramda';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+
+import { switchcase } from './commons/utils';
 
 import MenuBuilder from './menu';
 import mk from './mk';
@@ -39,8 +41,8 @@ const {
 } = process.env;
 
 // development parameters
-const debug = /--debug/.test(process.argv[2]);
-const needslog = /--log/.test(process.argv[3]);
+// const debug = /--debug/.test(process.argv[2]);
+// const needslog = /--log/.test(process.argv[3]);
 
 // window min resolution
 const MIN_WIDTH = 1366;
@@ -90,63 +92,52 @@ const installExtensions = async () => {
 // channel: ipc-event
 ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
-  const openedPackages = Store.get('openedPackages') || [];
 
-  const callback = (status, error, data, cmd) => {
-    /**
-     *  Send response to renderer process via ipc events
-     */
-    switch (status) {
-      case 'close':
-        const { directory, mode } = rest;
+  const onError = error => event.sender.send('ipcEvent-error', error);
 
-        const inAction =
-          ['install-packages', 'uninstall-packages'].indexOf(ipcEvent) > -1;
+  function onClose(status, error, data, cmd) {
+    const { directory, mode } = rest;
 
-        if (inAction) {
-          return event.sender.send('action-close', error, data);
-        }
+    const inAction =
+      ['install-packages', 'uninstall-packages'].indexOf(ipcEvent) > -1;
 
-        if (directory && mode === 'LOCAL' && cmd[0] === 'list') {
-          const dirName = path.dirname(path.resolve(directory));
-          const parsedDirectory = path.parse(dirName);
-          const { name } = parsedDirectory || {};
-
-          const inDirectories = openedPackages.some(
-            pkg => pkg.directory && pkg.directory.indexOf(dirName) !== -1
-          );
-
-          if (!inDirectories) {
-            Store.set('openedPackages', [
-              ...openedPackages,
-              {
-                name,
-                directory: path.join(dirName, 'package.json')
-              }
-            ]);
-          }
-        }
-
-        event.sender.send('loaded-packages-close', Store.get('openedPackages'));
-        event.sender.send(
-          `${ipcEvent}-close`,
-          status,
-          cmd,
-          data,
-          error,
-          options
-        );
-        break;
-      // case 'flow':
-      //   event.sender.send('ipcEvent-flow', data);
-      //   break;
-      case 'error':
-        event.sender.send('ipcEvent-error', error);
-        break;
-      default:
-        break;
+    if (inAction) {
+      return event.sender.send('action-close', error, data);
     }
-  };
+
+    if (directory && mode === 'LOCAL' && cmd[0] === 'list') {
+      const openedPackages = Store.get('openedPackages') || [];
+      const dirName = path.dirname(path.resolve(directory));
+      const parsedDirectory = path.parse(dirName);
+      const { name } = parsedDirectory || {};
+
+      const inDirectories = openedPackages.some(
+        pkg => pkg.directory && pkg.directory.indexOf(dirName) !== -1
+      );
+
+      if (!inDirectories) {
+        Store.set('openedPackages', [
+          ...openedPackages,
+          {
+            name,
+            directory: path.join(dirName, 'package.json')
+          }
+        ]);
+      }
+    }
+
+    event.sender.send('loaded-packages-close', Store.get('openedPackages'));
+    event.sender.send(`${ipcEvent}-close`, status, cmd, data, error, options);
+  }
+
+  /**
+   *  Send response to renderer process via ipc events
+   */
+  const callback = (status, error, ...restArgs) =>
+    switchcase({
+      close: () => onClose(status, error, ...restArgs),
+      error: () => onError(error)
+    })(null)(status);
 
   /**
    * At this point we try to run a shell command sending output
@@ -253,7 +244,7 @@ app.on('ready', async () => {
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
 
-  new AppUpdater(); // TODO: use AppUpdater
+  new AppUpdater();
 });
 
 process.on('uncaughtException', error => {

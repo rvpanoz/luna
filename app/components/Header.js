@@ -1,10 +1,10 @@
-/* eslint-disable */
 /* eslint-disable-interactive-support-focus */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { ipcRenderer, remote } from 'electron';
 import { useDispatch, useMappedState } from 'redux-react-hook';
+import PropTypes from 'prop-types';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -29,13 +29,13 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
+import { APP_MODES } from 'constants/AppConstants';
+import { setMode } from 'models/ui/actions';
+
 import SearchBox from './SearchBox';
 import styles from './styles/header';
 import Settings from './Settings';
 import Notifications from './Notifications';
-
-import { APP_MODES } from 'constants/AppConstants';
-import { setMode } from 'models/ui/actions';
 
 const mapState = state => ({
   notifications: state.common.notifications,
@@ -48,6 +48,7 @@ const Header = props => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notificationsEl, setNotificationsEl] = useState(null);
   const [drawerOpen, toggleDrawer] = useState(false);
+
   const [settingsOpen, toggleSettings] = useState(false);
   const [keyboardOpen, toggleKeyboard] = useState(false);
 
@@ -114,7 +115,7 @@ const Header = props => {
             className={classes.menuButton}
             color="inherit"
             aria-label="Open menu"
-            onClick={e => toggleDrawer(!drawerOpen)}
+            onClick={() => toggleDrawer(!drawerOpen)}
           >
             <MenuIcon />
           </IconButton>
@@ -147,10 +148,10 @@ const Header = props => {
               id="app-settings"
               anchorEl={anchorEl}
               open={menuOpen}
-              onClose={e => setAnchorEl(null)}
+              onClose={() => setAnchorEl(null)}
             >
-              <MenuItem onClick={e => toggleSettings(true)}>Settings</MenuItem>
-              <MenuItem onClick={e => toggleKeyboard(true)}>
+              <MenuItem onClick={() => toggleSettings(true)}>Settings</MenuItem>
+              <MenuItem onClick={() => toggleKeyboard(true)}>
                 Keyboard shortcuts
               </MenuItem>
             </Menu>
@@ -176,7 +177,7 @@ const Header = props => {
                 vertical: 'top',
                 horizontal: 'center'
               }}
-              onClose={e => setNotificationsEl(null)}
+              onClose={() => setNotificationsEl(null)}
             >
               <Notifications
                 notifications={notifications}
@@ -196,7 +197,7 @@ const Header = props => {
         }}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={e => toggleDrawer(!drawerOpen)}>
+          <IconButton onClick={() => toggleDrawer(!drawerOpen)}>
             <ChevronLeftIcon />
           </IconButton>
         </div>
@@ -218,8 +219,7 @@ const Header = props => {
             {openedDirectories &&
               openedDirectories.map((dir, idx) => (
                 <ListItem
-                  key={`directory-${idx}`}
-                  dense={true}
+                  key={`directory-${idx + 1}`}
                   style={{ marginLeft: '10px' }}
                 >
                   <ListItemText
@@ -242,24 +242,29 @@ const Header = props => {
       <Modal
         aria-labelledby="settings"
         aria-describedby="settings"
-        open={false}
-        onClose={e => setAnchorEl(null)}
+        open={settingsOpen}
+        onClose={() => setAnchorEl(null)}
       >
         <div className={classes.paper}>
-          <Settings onClose={e => toggleSettings(false)} />
+          <Settings onClose={() => toggleSettings(false)} />
         </div>
       </Modal>
       <Modal
         aria-labelledby="keyboard"
         aria-describedby="keyboard"
         hideBackdrop
-        open={false}
-        onClose={e => toggleKeyboard(false)}
+        open={keyboardOpen}
+        onClose={() => toggleKeyboard(false)}
       >
         <div className={classes.paper}>keyboard...</div>
       </Modal>
     </div>
   );
+};
+
+Header.propTypes = {
+  app: PropTypes.string.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
 export default withStyles(styles)(Header);

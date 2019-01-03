@@ -1,7 +1,10 @@
-/* eslint-disable */
+/**
+ * Notifications
+ */
 
 import { ipcRenderer, remote } from 'electron';
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -19,7 +22,6 @@ import ModuleIcon from '@material-ui/icons/ViewModuleRounded';
 import AddIcon from '@material-ui/icons/Add';
 
 import { toggleLoader } from 'models/ui/actions';
-
 import styles from './styles/notifications';
 
 const mapState = state => ({
@@ -73,20 +75,22 @@ const Notifications = props => {
   };
 
   return (
-    <ClickAwayListener onClickAway={e => {}}>
-      <Grow in={true} id="menu-list" style={{ transformOrigin: '0 0 0' }}>
+    <ClickAwayListener onClickAway={() => false}>
+      <Grow
+        in={Boolean(true)} // eslint complains without casting..
+        id="menu-list"
+        style={{ transformOrigin: '0 0 0' }}
+      >
         <Paper className={classes.dropdown}>
           <List dense>
             {notifications &&
               notifications.map((notification, idx) => {
                 const { requiredBy, requires } = notification;
                 const parts = requires.split('@');
-                const peerName = Boolean(parts[0].length)
-                  ? parts[0]
-                  : `@${parts[1]}`; // @ indicates namespace e.g @material-ui/core
+                const peerName = parts[0].length ? parts[0] : `@${parts[1]}`; // @ indicates namespace e.g @material-ui/core, @babel/core etc
 
                 return (
-                  <ListItem key={`notification-${idx}`}>
+                  <ListItem key={`notification-${idx + 1}`}>
                     <ListItemAvatar>
                       <Avatar color="primary">
                         <ModuleIcon />
@@ -112,6 +116,12 @@ const Notifications = props => {
       </Grow>
     </ClickAwayListener>
   );
+};
+
+Notifications.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  close: PropTypes.func.isRequired,
+  notifications: PropTypes.arrayOf(PropTypes.array).isRequired
 };
 
 export default withStyles(styles)(Notifications);
