@@ -121,7 +121,7 @@ const Notifications = props => {
 Notifications.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   close: PropTypes.func.isRequired,
-  notifications: PropTypes.arrayOf(PropTypes.array).isRequired
+  notifications: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default withStyles(styles)(Notifications);

@@ -2,13 +2,14 @@
 
 import ElectronStore from 'electron-store';
 import path from 'path';
+import fs from 'fs';
 import { merge } from 'ramda';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { APP_MODES } from './constants/AppConstants';
 
 import { switchcase } from './commons/utils';
-
 import MenuBuilder from './menu';
 import mk from './mk';
 import { runCommand } from './shell';
@@ -105,11 +106,18 @@ ipcMain.on('ipc-event', (event, options) => {
       return event.sender.send('action-close', error, data);
     }
 
-    if (directory && mode === 'LOCAL' && cmd[0] === 'list') {
+    if (directory && mode === APP_MODES.LOCAL && cmd[0] === 'list') {
       const openedPackages = Store.get('openedPackages') || [];
+      const yarnLock = fs.existsSync(
+        path.join(path.dirname(directory), 'yarn-lock.json')
+      );
       const dirName = path.dirname(path.resolve(directory));
       const parsedDirectory = path.parse(dirName);
       const { name } = parsedDirectory || {};
+
+      if (yarnLock) {
+        event.sender.send('yarn-warning-close');
+      }
 
       const inDirectories = openedPackages.some(
         pkg => pkg.directory && pkg.directory.indexOf(dirName) !== -1

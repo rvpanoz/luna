@@ -61,5 +61,7 @@ export const WARNING_MESSAGES = {
   peerMissing:
     'You have packages with peer missing. Check your notifications to fix it.',
   errorPackages:
-    'Some packages have errors. Check your notifications to fix it.'
+    'Some packages have errors. Check your notifications to fix it.',
+  yarnlock:
+    'yarn-lock file detected. Please remove before running any action operation.'
 };

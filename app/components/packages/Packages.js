@@ -7,14 +7,12 @@
 import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import cn from 'classnames';
-import { objectOf, object, func } from 'prop-types';
+import { objectOf, string } from 'prop-types';
 import { filter } from 'ramda';
 import { withStyles } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 
 import useIpc from 'commons/hooks/useIpc';
@@ -101,7 +99,7 @@ const Packages = props => {
   const clearUI = () => {
     dispatch(clearPackages());
     dispatch(clearNotifications());
-    dispatch(clearSnackbar());
+    // dispatch(clearSnackbar());
   };
 
   const isSelected = name => selected.indexOf(name) !== -1;
@@ -256,7 +254,7 @@ const Packages = props => {
     return !pkg.__error && !pkg.__peerMissing;
   }, data);
 
-  // actions listeners
+  // actions listeners && yarn-lock warning
   useEffect(
     () => {
       ipcRenderer.once(['action-close'], (event, error, data) => {
@@ -267,7 +265,18 @@ const Packages = props => {
         reload();
       });
 
-      return () => ipcRenderer.removeAllListeners(['action-close']);
+      ipcRenderer.once('yarn-warning-close', event => {
+        dispatch(
+          setSnackbar({
+            open: true,
+            type: 'error',
+            message: WARNING_MESSAGES.yarnlock
+          })
+        );
+      });
+
+      return () =>
+        ipcRenderer.removeAllListeners(['action-close', 'yarn-warning-close']);
     },
     [counter]
   );
@@ -383,9 +392,9 @@ const Packages = props => {
   );
 };
 
-// Packages.propTypes = {
-//   classes: objectOf.isRequired,
-// };
+Packages.propTypes = {
+  classes: objectOf(string).isRequired
+};
 
 const withStylesPackages = withStyles(styles)(Packages);
 export default withStylesPackages;
