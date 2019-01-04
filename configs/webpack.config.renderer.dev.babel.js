@@ -281,7 +281,7 @@ export default merge.smart(baseConfig, {
     before() {
       if (process.env.START_HOT) {
         log(chalk.blue('Starting Main Process...'));
-        spawn('yarn', ['run', 'start-main-dev'], {
+        spawn('npm', ['run', 'start-main-dev'], {
           shell: true,
           env: process.env,
           stdio: 'inherit'

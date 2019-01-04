@@ -5,26 +5,11 @@ const styles = theme => ({
   header: {
     position: 'relative',
     zIndex: '4',
-    height: '70px',
-    // backgroundColor: '#333545',
-    WebkitFontSmoothing: 'antialiased',
-    MozOsxFontSmoothing: 'grayscale',
-    WebkitTransition: '-webkit-transform 0.3s',
-    MozTransition: '-moz-transform 0.3s',
-    transition: 'transform 0.3s'
+    height: '70px'
+    // backgroundColor: '#333545'
   },
   main: {
-    display: 'flex',
-    width: '100%',
-    height: 'calc(100vh - 50px)',
-    position: 'relative',
-    zIndex: '2',
-    backgroundColor: 'transparent',
-    WebkitFontSmoothing: 'antialiased',
-    MozOsxFontSmoothing: 'grayscale',
-    WebkitTransition: '-webkit-transform 0.3s',
-    MozTransition: '-moz-transform 0.3s',
-    transition: 'transform 0.3s'
+    width: '100%'
   },
   container: {
     width: '100%',

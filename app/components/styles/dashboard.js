@@ -1,4 +1,6 @@
-const styles = () => ({
+import { defaultFont } from './general';
+
+const styles = theme => ({
   root: {
     padding: 0,
     margin: 0
@@ -10,8 +12,8 @@ const styles = () => ({
     justifyContent: 'space-between'
   },
   flexContainerItem: {
-    width: '100%',
-    fontSize: 16
+    ...defaultFont,
+    fontWeight: 100
   },
   textRight: {
     textAlign: 'right'
@@ -21,6 +23,11 @@ const styles = () => ({
   },
   textCenter: {
     textAlign: 'center'
+  },
+  cardInfo: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
+    }
   }
 });
 

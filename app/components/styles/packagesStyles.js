@@ -9,14 +9,23 @@ export const listStyles = theme => ({
   none: {
     display: 'none'
   },
-  pagination: {
-    backgroundColor: 'red !important'
-  },
+  pagination: {},
   toolbar: {
     width: '100%'
   },
   tableWrapper: {
-    overflowX: 'auto'
+    whiteSpace: 'nowrap',
+    overflowY: 'scroll',
+    maxHeight: 850,
+    [theme.breakpoints.down('sm')]: {
+      maxHeight: 385
+    },
+    [theme.breakpoints.up('md')]: {
+      maxHeight: 500
+    },
+    [theme.breakpoints.up('lg')]: {
+      maxHeight: 750
+    }
   },
   tableRow: {
     border: 'none',
@@ -27,20 +36,8 @@ export const listStyles = theme => ({
       cursor: 'pointer'
     }
   },
-  tablelist: {
-    visibility: 'visible',
-    overflowX: 'auto',
-    overflowY: 'auto',
-    clear: 'both',
-    maxHeight: 850,
-    [theme.breakpoints.down('1367')]: {
-      maxHeight: 650
-    }
-  },
   table: {
-    marginBottom: 0,
     width: '100%',
-    maxWidth: '100%',
     backgroundColor: 'transparent',
     borderSpacing: 0,
     borderCollapse: 'collapse'

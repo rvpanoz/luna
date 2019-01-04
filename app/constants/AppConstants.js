@@ -31,7 +31,8 @@ export const APP_INFO = {
   CONFIRMATION: 'Would you like to $action $name@version?',
   NOT_AVAILABLE: 'N/A',
   NO_NOTIFICATIONS: 'No notifications',
-  NO_WORKING_DIRECTORY: 'No working directory'
+  NO_WORKING_DIRECTORY: 'No working directory',
+  NO_DATA: 'No data'
 };
 
 // supported package groups
@@ -57,9 +58,15 @@ export const NPM_CONFIG_VALUES = {
   HTTPS_PROXY: 'https-proxy'
 };
 
+export const INFO_MESSAGES = {
+  noData: 'No dependencies found.'
+};
+
 export const WARNING_MESSAGES = {
   peerMissing:
     'You have packages with peer missing. Check your notifications to fix it.',
   errorPackages:
-    'Some packages have errors. Check your notifications to fix it.'
+    'Some packages have errors. Check your notifications to fix it.',
+  yarnlock:
+    'yarn-lock file detected. Please remove before running any action operation.'
 };
