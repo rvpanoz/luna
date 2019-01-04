@@ -74,7 +74,6 @@ const mapState = state => ({
 
 const Packages = props => {
   const { classes } = props;
-  console.log('packages render');
   const {
     action: { actionName, actionError },
     loader: { loading, message },
@@ -109,7 +108,13 @@ const Packages = props => {
   }, []);
 
   const isSelected = useCallback(name => selected.indexOf(name) !== -1, []);
-  const reload = useCallback(() => setCounter(counter + 1), [counter]);
+  const reload = useCallback(
+    () => {
+      dispatch(toggleLoader({ loading: true, message: 'Loading packages..' }));
+      setCounter(counter + 1);
+    },
+    [counter]
+  );
   const setSelected = useCallback(name => dispatch(addSelected({ name }), []));
   const closeSnackbar = useCallback(() => {
     dispatch(
@@ -148,25 +153,28 @@ const Packages = props => {
   // dispatch actions
   useEffect(
     () => {
-      // clearUI({
-      //   packages: true,
-      //   notifications: true,
-      //   snackbar: false
-      // });
+      clearUI({
+        packages: true,
+        notifications: true,
+        snackbar: false
+      });
 
       page !== 0 && dispatch(setPage({ page: 0 }));
 
-      dispatch(
-        setPackagesSuccess({ data: dependencies, name, version, outdated })
-      );
+      if (dependencies && Array.isArray(dependencies) && dependencies.length) {
+        dispatch(toggleLoader({ loading: false, message: null }));
+        dispatch(
+          setPackagesSuccess({ data: dependencies, name, version, outdated })
+        );
+      }
 
-      dispatch(
-        setPackagesOutdatedSuccess({
-          data: outdated
-        })
-      );
-
-      dispatch(toggleLoader({ loading: false, message: null }));
+      if (outdated && Array.isArray(outdated) && outdated.length) {
+        dispatch(
+          setPackagesOutdatedSuccess({
+            data: outdated
+          })
+        );
+      }
 
       if (errors && typeof errors === 'string') {
         const errorsArr = errors.split('\n');
@@ -224,6 +232,7 @@ const Packages = props => {
 
       // handle empty data
       if (dependencies === null) {
+        dispatch(toggleLoader({ loading: false, message: null }));
         dispatch(
           setSnackbar({
             open: true,
@@ -233,7 +242,7 @@ const Packages = props => {
         );
       }
     },
-    [dependencies, counter]
+    [counter, dependencies]
   );
 
   // sort packages
