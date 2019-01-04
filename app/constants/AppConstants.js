@@ -31,7 +31,8 @@ export const APP_INFO = {
   CONFIRMATION: 'Would you like to $action $name@version?',
   NOT_AVAILABLE: 'N/A',
   NO_NOTIFICATIONS: 'No notifications',
-  NO_WORKING_DIRECTORY: 'No working directory'
+  NO_WORKING_DIRECTORY: 'No working directory',
+  NO_DATA: 'No data'
 };
 
 // supported package groups
@@ -55,6 +56,10 @@ export const NPM_CONFIG_VALUES = {
   REGISTRY: 'registry',
   PROXY: 'proxy',
   HTTPS_PROXY: 'https-proxy'
+};
+
+export const INFO_MESSAGES = {
+  noData: 'No dependencies found.'
 };
 
 export const WARNING_MESSAGES = {

@@ -38,7 +38,8 @@ const TableListToolbar = props => {
     manager,
     directory,
     fromSearch,
-    reload
+    reload,
+    nodata
   } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -158,9 +159,15 @@ const TableListToolbar = props => {
         </div>
       </Tooltip>
       <Tooltip title="Show filters">
-        <IconButton aria-label="Show filters" onClick={openFilters}>
-          <FilterListIcon />
-        </IconButton>
+        <div>
+          <IconButton
+            disabled={nodata === true}
+            aria-label="Show filters"
+            onClick={openFilters}
+          >
+            <FilterListIcon />
+          </IconButton>
+        </div>
       </Tooltip>
     </div>
   );
@@ -224,7 +231,8 @@ const TableListToolbar = props => {
 
 TableListToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  reload: PropTypes.func.isRequired
+  reload: PropTypes.func.isRequired,
+  nodata: PropTypes.string
 };
 
 export default withStyles(styles)(TableListToolbar);

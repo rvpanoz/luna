@@ -5,16 +5,23 @@
 import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
+
+import { setPackagesStart } from 'models/packages/actions';
+import { toggleLoader } from 'models/ui/actions';
 import { parseMap } from '../utils';
-import { setPackagesStart } from '../../models/packages/actions';
-import { toggleLoader } from '../../models/ui/actions';
 
 const useIpc = (channel, options, inputs = []) => {
   const { ipcEvent, mode, directory } = options || {};
   const listenTo = `${ipcEvent}-close`;
 
-  const [dependenciesSet, setDependencies] = useState({});
-  const [outdatedSet, setOutdated] = useState({});
+  const [dependenciesSet, setDependencies] = useState({
+    data: [],
+    name: null,
+    version: null
+  });
+  const [outdatedSet, setOutdated] = useState({
+    data: []
+  });
   const [errors, setErrors] = useState(null);
   const dispatch = useDispatch();
 
@@ -23,17 +30,17 @@ const useIpc = (channel, options, inputs = []) => {
       const [name, version, packages] =
         data && parseMap(data, mode, directory, commandArgs);
 
-      if (error) {
-        setErrors(error);
-      } else {
-        setErrors(null);
-      }
+      setErrors(error || null);
 
       if (Array.isArray(packages)) {
         if (commandArgs[0] === 'list') {
-          setDependencies({ data: packages, name, version });
+          setDependencies({
+            data: packages && packages.length ? packages : null,
+            name,
+            version
+          });
         } else {
-          setOutdated({ data: packages });
+          setOutdated({ data: packages && packages.length ? packages : null });
         }
       }
     });

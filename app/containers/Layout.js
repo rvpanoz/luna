@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { objectOf, object } from 'prop-types';
+import { objectOf, string } from 'prop-types';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core';
@@ -19,7 +19,7 @@ import styles from './styles/layout';
 
 const Layout = props => {
   const { app, classes } = props;
-  console.log('Layout render');
+
   return (
     <div className={classes.wrapper}>
       <CssBaseline />
@@ -29,15 +29,15 @@ const Layout = props => {
       <section className={classes.main}>
         <div className={classes.container}>
           <Grid container justify="space-between">
-            <Grid item xs={12}>
+            <Grid item xs={12} md={12} lg={12} xl={12}>
               <Dashboard />
             </Grid>
           </Grid>
           <Grid container justify="flex-start">
-            <Grid item xs={6} md={6} lg={4} xl={4}>
+            <Grid item xs={12} md={12} lg={4} xl={4}>
               <Packages />
             </Grid>
-            <Grid item xs={6} md={6} lg={4} xl={4}>
+            <Grid item xs={12} md={12} lg={4} xl={4}>
               <PackageDetails />
             </Grid>
           </Grid>
@@ -45,6 +45,11 @@ const Layout = props => {
       </section>
     </div>
   );
+};
+
+Layout.propTypes = {
+  app: string.isRequired,
+  classes: objectOf(string).isRequired
 };
 
 export default withStyles(styles)(Layout);

@@ -50,6 +50,7 @@ const cardInfoStyle = {
     marginBottom: '0',
     color: grayColor,
     margin: '0 0 10px',
+    wordBreak: 'break-word',
     ...defaultFont
   },
   cardTitle: {

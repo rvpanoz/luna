@@ -5,11 +5,11 @@
  */
 
 import { ipcRenderer } from 'electron';
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { filter } from 'ramda';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Typography } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -46,8 +46,9 @@ import {
   toggleLoader
 } from 'models/ui/actions';
 
-import { WARNING_MESSAGES } from 'constants/AppConstants';
+import { INFO_MESSAGES, WARNING_MESSAGES } from 'constants/AppConstants';
 import { listStyles as styles } from '../styles/packagesStyles';
+import { APP_INFO } from '../../constants/AppConstants';
 
 // use useCallback if you need it inside component body
 // const mapState = useCallback(state=>({
@@ -73,7 +74,7 @@ const mapState = state => ({
 
 const Packages = props => {
   const { classes } = props;
-
+  console.log('packages render');
   const {
     action: { actionName, actionError },
     loader: { loading, message },
@@ -93,16 +94,39 @@ const Packages = props => {
     direction: 'asc',
     prop: 'name'
   });
-
   const [counter, setCounter] = useState(0);
   const dispatch = useDispatch();
-  const clearUI = () => {
-    dispatch(clearPackages());
-    dispatch(clearNotifications());
-    // dispatch(clearSnackbar());
-  };
 
-  const isSelected = name => selected.indexOf(name) !== -1;
+  // ui handlers
+  const clearUI = useCallback(opts => {
+    if (!opts) {
+      return;
+    }
+
+    opts.packages === true && dispatch(clearPackages());
+    opts.notifications === true && dispatch(clearNotifications());
+    opts.snackbar === true && dispatch(clearSnackbar());
+  }, []);
+
+  const isSelected = useCallback(name => selected.indexOf(name) !== -1, []);
+  const reload = useCallback(() => setCounter(counter + 1), [counter]);
+  const setSelected = useCallback(name => dispatch(addSelected({ name }), []));
+  const closeSnackbar = useCallback(() => {
+    dispatch(
+      setSnackbar({
+        open: false,
+        message: null
+      })
+    );
+  }, []);
+  const toggleSort = useCallback(prop => {
+    const direction = sortOptions.direction === 'desc' ? 'asc' : 'desc';
+
+    setSort({
+      direction,
+      prop
+    });
+  }, []);
 
   // useIpc hook to send and listenTo ipc events
   const [dependenciesSet, outdatedSet, errors] = useIpc(
@@ -113,55 +137,36 @@ const Packages = props => {
       mode,
       directory
     },
-    [manager, directory, counter]
+    [mode, directory, counter]
   );
 
-  const reload = () => setCounter(counter + 1);
-  const setSelected = name => dispatch(addSelected({ name }));
-  const closeSnackbar = () =>
-    dispatch(
-      setSnackbar({
-        open: false,
-        message: null
-      })
-    );
-  const toggleSort = prop => {
-    const direction = sortOptions.direction === 'desc' ? 'asc' : 'desc';
-
-    setSort({
-      direction,
-      prop
-    });
-  };
-
-  // project name and version
   const { name, version } = dependenciesSet || {};
-  const dependencies = dependenciesSet.data || [];
-  const outdated = outdatedSet.data || [];
+  const dependencies = dependenciesSet.data;
+  const outdated = outdatedSet.data;
+  const nodata = dependencies && dependencies.length === 0;
 
   // dispatch actions
   useEffect(
     () => {
-      if (Array.isArray(dependencies) && dependencies.length) {
-        if (page !== 0) {
-          dispatch(setPage({ page: 0 }));
-        }
+      // clearUI({
+      //   packages: true,
+      //   notifications: true,
+      //   snackbar: false
+      // });
 
-        dispatch(
-          setPackagesSuccess({ data: dependencies, name, version, outdated })
-        );
+      page !== 0 && dispatch(setPage({ page: 0 }));
 
-        if (outdated && outdated.length) {
-          dispatch(
-            setPackagesOutdatedSuccess({
-              data: outdated
-            })
-          );
-        }
+      dispatch(
+        setPackagesSuccess({ data: dependencies, name, version, outdated })
+      );
 
-        clearUI(); //clear notifications, snackbar etc
-        dispatch(toggleLoader({ loading: false, message: null }));
-      }
+      dispatch(
+        setPackagesOutdatedSuccess({
+          data: outdated
+        })
+      );
+
+      dispatch(toggleLoader({ loading: false, message: null }));
 
       if (errors && typeof errors === 'string') {
         const errorsArr = errors.split('\n');
@@ -185,11 +190,13 @@ const Packages = props => {
         }
       }
 
-      const withPeerMissing = filter(pkg => {
-        return pkg.__peerMissing;
-      }, dependencies);
+      const withPeerMissing =
+        dependencies &&
+        filter(pkg => {
+          return pkg.__peerMissing;
+        }, dependencies);
 
-      if (withPeerMissing.length) {
+      if (withPeerMissing && withPeerMissing.length) {
         dispatch(
           setSnackbar({
             open: true,
@@ -199,11 +206,13 @@ const Packages = props => {
         );
       }
 
-      const withErrors = filter(pkg => {
-        return pkg.__error;
-      }, dependencies);
+      const withErrors =
+        dependencies &&
+        filter(pkg => {
+          return pkg.__error;
+        }, dependencies);
 
-      if (withErrors.length) {
+      if (withErrors && withErrors.length) {
         dispatch(
           setSnackbar({
             open: true,
@@ -212,14 +221,25 @@ const Packages = props => {
           })
         );
       }
+
+      // handle empty data
+      if (dependencies === null) {
+        dispatch(
+          setSnackbar({
+            open: true,
+            type: 'info',
+            message: INFO_MESSAGES.noData
+          })
+        );
+      }
     },
-    [dependenciesSet] // TODO: wip inputs--too late for now (01:22:55)
+    [dependencies, counter]
   );
 
   // sort packages
   useEffect(
     () => {
-      const data = dependencies && dependencies.slice(0); // clone dependencies
+      const data = dependencies && dependencies.slice(0);
 
       if (!data || !data.length) {
         return;
@@ -236,8 +256,32 @@ const Packages = props => {
         setPackagesSuccess({ data: sortedData, fromSort: true, outdated })
       );
     },
-    [dependenciesSet, sortOptions]
+    [sortOptions]
   );
+
+  // componentDidMount
+  useEffect(() => {
+    ipcRenderer.once(['action-close'], (event, error, data) => {
+      if (error) {
+        dispatch(addActionError('actionName', error));
+      }
+
+      reload();
+    });
+
+    ipcRenderer.once('yarn-warning-close', event => {
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: 'error',
+          message: WARNING_MESSAGES.yarnlock
+        })
+      );
+    });
+
+    return () =>
+      ipcRenderer.removeAllListeners(['action-close', 'yarn-warning-close']);
+  }, []);
 
   // filter packages
   const filteredPackages =
@@ -254,39 +298,10 @@ const Packages = props => {
     return !pkg.__error && !pkg.__peerMissing;
   }, data);
 
-  // actions listeners && yarn-lock warning
-  useEffect(
-    () => {
-      ipcRenderer.once(['action-close'], (event, error, data) => {
-        if (error) {
-          dispatch(addActionError('actionName', error));
-        }
-
-        reload();
-      });
-
-      ipcRenderer.once('yarn-warning-close', event => {
-        dispatch(
-          setSnackbar({
-            open: true,
-            type: 'error',
-            message: WARNING_MESSAGES.yarnlock
-          })
-        );
-      });
-
-      return () =>
-        ipcRenderer.removeAllListeners(['action-close', 'yarn-warning-close']);
-    },
-    [counter]
-  );
-
   // pagination
   const dataSlices =
     packagesData &&
     packagesData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
-  const nodata = !Boolean(dataSlices && dataSlices.length !== 0);
 
   return (
     <AppLoader loading={loading} message={message}>
@@ -300,75 +315,84 @@ const Packages = props => {
             selected={selected}
             fromSearch={fromSearch}
             reload={reload}
+            nodata={dependencies === null}
           />
         </div>
-        <div className={cn(classes.tableWrapper, classes.tablelist)}>
-          <Table
-            aria-labelledby="packages-list"
-            className={cn(classes.table, {
-              [classes.hasFilterBlur]: loading
-            })}
-          >
-            <TableHeader
-              packages={dataSlices.map(d => d.name)}
-              numSelected={Number(selected.length)}
-              rowCount={(data && data.length) || 0}
-              sortBy={sortOptions.prop}
-              sortDir={sortOptions.direction}
-              setSortBy={(e, prop) =>
-                setSort(
-                  merge(sortOptions, {
-                    prop
-                  })
-                )
-              }
-              toggleSort={(e, prop) => toggleSort(prop)}
-              onSelected={(name, force) =>
-                dispatch(
-                  addSelected({
-                    name,
-                    force
-                  })
-                )
-              }
-              onClearSelected={() => dispatch(clearSelected())}
-            />
-            <TableBody>
-              {dataSlices &&
-                dataSlices.map(pkg => {
-                  const { name, version, latest, isOutdated, __group } = pkg;
-
-                  return (
-                    <PackageItem
-                      key={`pkg-${pkg.name}`}
-                      isSelected={isSelected}
-                      setSelected={setSelected}
-                      name={name}
-                      version={version}
-                      latest={latest}
-                      isOutdated={isOutdated}
-                      __group={__group}
-                    />
-                  );
-                })}
-            </TableBody>
-            <TableFooter
-              classes={{
-                root: {
-                  [classes.hidden]: nodata
+        <div className={classes.tableWrapper}>
+          {nodata === false ? (
+            <Table
+              aria-labelledby="packages-list"
+              className={cn(classes.table, {
+                [classes.hasFilterBlur]: loading
+              })}
+            >
+              <TableHeader
+                packages={dataSlices.map(d => d.name)}
+                numSelected={Number(selected.length)}
+                rowCount={(data && data.length) || 0}
+                sortBy={sortOptions.prop}
+                sortDir={sortOptions.direction}
+                setSortBy={(e, prop) =>
+                  setSort(
+                    merge(sortOptions, {
+                      prop
+                    })
+                  )
                 }
-              }}
-              rowCount={(packagesData && packagesData.length) || 0}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              handleChangePage={(e, pageNo) =>
-                dispatch(setPage({ page: pageNo }))
-              }
-              handleChangePageRows={e =>
-                dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
-              }
-            />
-          </Table>
+                toggleSort={(e, prop) => toggleSort(prop)}
+                onSelected={(name, force) =>
+                  dispatch(
+                    addSelected({
+                      name,
+                      force
+                    })
+                  )
+                }
+                onClearSelected={() => dispatch(clearSelected())}
+              />
+              <TableBody>
+                {dataSlices &&
+                  dataSlices.map(pkg => {
+                    const { name, version, latest, isOutdated, __group } = pkg;
+
+                    return (
+                      <PackageItem
+                        key={`pkg-${pkg.name}`}
+                        isSelected={isSelected}
+                        setSelected={setSelected}
+                        name={name}
+                        version={version}
+                        latest={latest}
+                        isOutdated={isOutdated}
+                        __group={__group}
+                      />
+                    );
+                  })}
+              </TableBody>
+              <TableFooter
+                classes={{
+                  root: {
+                    [classes.hidden]: nodata
+                  }
+                }}
+                rowCount={(packagesData && packagesData.length) || 0}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                handleChangePage={(e, pageNo) =>
+                  dispatch(setPage({ page: pageNo }))
+                }
+                handleChangePageRows={e =>
+                  dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
+                }
+              />
+            </Table>
+          ) : (
+            <div className={classes.nodata}>
+              <Typography variant="caption" gutterBottom>
+                {APP_INFO.NO_DATA}
+              </Typography>
+            </div>
+          )}
         </div>
       </Paper>
       {snackbarOptions && (

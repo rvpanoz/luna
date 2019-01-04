@@ -4,7 +4,7 @@
  * Card info component
  */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { objectOf, object, oneOf, string, node } from 'prop-types';
 import cn from 'classnames';
@@ -30,6 +30,7 @@ const defaultStatIcon = null;
 const AppCardInfo = props => {
   const {
     classes,
+    className,
     avatar,
     title,
     description,
@@ -62,8 +63,7 @@ const AppCardInfo = props => {
     />
   );
 
-  // TODO: avatars
-  const renderAvatarIcon = type => {
+  const renderAvatarIcon = useCallback(type => {
     const icon = switchcase({
       info: () => null,
       stats: () => null,
@@ -72,9 +72,9 @@ const AppCardInfo = props => {
     })(defaultAvatarIcon)(type);
 
     return icon;
-  };
+  }, []);
 
-  const renderStatIcon = type => {
+  const renderStatIcon = useCallback(type => {
     const icon = switchcase({
       info: () => infoStatIcon,
       stats: () => barStatIcon,
@@ -83,10 +83,14 @@ const AppCardInfo = props => {
     })(defaultStatIcon)(type);
 
     return icon;
-  };
+  }, []);
 
   return (
-    <Card className={classes.card}>
+    <Card
+      className={cn(classes.card, {
+        [className]: Boolean(className)
+      })}
+    >
       <CardHeader
         classes={{
           root: cn(classes.cardHeader, {
