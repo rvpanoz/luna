@@ -5,9 +5,11 @@
  * Package item row
  */
 
-import React from 'react';
-import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
+import { ipcRenderer } from 'electron';
+import React, { useCallback } from 'react';
 import cn from 'classnames';
+import { useDispatch } from 'redux-react-hook';
+import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
 import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
@@ -19,12 +21,15 @@ import DevDependencyIcon from '@material-ui/icons/BuildOutlined';
 import GlobalIcon from '@material-ui/icons/GroupWorkSharp';
 import OptionalIcon from '@material-ui/icons/SettingsEthernetOutlined';
 
+import { doTogglePackageLoader } from 'models/ui/selectors';
+
 import { listStyles as styles } from '../styles/packagesStyles';
 
 const PackageItemRow = props => {
   const {
     classes,
     name,
+    manager,
     isSelected,
     setSelected,
     version,
@@ -32,6 +37,29 @@ const PackageItemRow = props => {
     isOutdated,
     __group
   } = props;
+
+  const dispatch = useDispatch();
+
+  const viewPackage = useCallback(
+    (manager, name, version, mode, directory, latest) => {
+      doTogglePackageLoader(dispatch, {
+        loading: true,
+        message: `Loading ${name}@${version}`
+      });
+
+      ipcRenderer.send('ipc-event', {
+        activeManager: manager,
+        ipcEvent: 'view-package',
+        cmd: ['view'],
+        name,
+        mode,
+        directory
+      });
+
+      return false;
+    },
+    []
+  );
 
   return (
     <TableRow
@@ -44,9 +72,16 @@ const PackageItemRow = props => {
       classes={{
         root: classes.tableRow
       }}
+      onClick={e => viewPackage(manager, name)}
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
-        <Checkbox checked={isSelected} onClick={() => setSelected(name)} />
+        <Checkbox
+          checked={isSelected}
+          onClick={e => {
+            e.stopPropagation();
+            setSelected(name);
+          }}
+        />
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         {name}
@@ -85,15 +120,15 @@ const PackageItemRow = props => {
   );
 };
 
-// PackageItemRow.propTypes = {
-//   classes: objectOf(object).isRequired,
-//   name: string.isRequired,
-//   isSelected: func.isRequired,
-//   version: string.isRequired,
-//   isOutdated: bool.isRequired,
-//   setSelected: func.isRequired,
-//   latest: oneOfType([string, object]),
-//   __group: string
-// };
+PackageItemRow.propTypes = {
+  classes: objectOf(string).isRequired,
+  name: string.isRequired,
+  isSelected: bool.isRequired,
+  version: string.isRequired,
+  isOutdated: bool.isRequired,
+  setSelected: func.isRequired,
+  latest: oneOfType([string, object]),
+  __group: string
+};
 
 export default withStyles(styles)(PackageItemRow);

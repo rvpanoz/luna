@@ -13,6 +13,10 @@ export default {
     loading: false,
     message: null
   },
+  packageLoader: {
+    loading: false,
+    message: null
+  },
   packages: {
     action: {
       name: null,

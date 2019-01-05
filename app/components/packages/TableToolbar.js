@@ -214,20 +214,20 @@ const TableListToolbar = props => {
             </div>
           ) : (
             <div className={classes.flexContainer}>
-              <Tooltip title="Uninstall selected">
-                <IconButton
-                  aria-label="uninstall selected"
-                  onClick={() => handleAction('uninstall')}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
               <Tooltip title="Clear selected">
                 <IconButton
                   aria-label="clear selected"
                   onClick={() => dispatch(clearSelected())}
                 >
                   <ClearAllIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Uninstall selected">
+                <IconButton
+                  aria-label="uninstall selected"
+                  onClick={() => handleAction('uninstall')}
+                >
+                  <DeleteIcon />
                 </IconButton>
               </Tooltip>
             </div>

@@ -13,6 +13,7 @@ import {
   clearSelected,
   clearFilters,
   clearPackages,
+  setActive,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess
@@ -75,10 +76,17 @@ const handlers = {
       packagesOutdated: []
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
-    const { data, name, version, fromSort, fromSearch, outdated } = payload;
+    const {
+      dependencies,
+      projectName,
+      projectVersion,
+      fromSort,
+      fromSearch,
+      outdated
+    } = payload;
 
-    const packages = data
-      ? data.map(pkg => {
+    const packages = dependencies
+      ? dependencies.map(pkg => {
           if (!pkg) {
             return;
           }
@@ -101,23 +109,28 @@ const handlers = {
       lastUpdatedAt: fromSort
         ? state.lastUpdatedAt
         : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
-      projectName: name,
-      projectVersion: version,
+      projectName,
+      projectVersion,
       filters: [],
       selected: []
     });
   },
   [setPackagesOutdatedSuccess.type]: (state, { payload }) => {
-    const { data } = payload;
+    const { dependencies } = payload;
 
     return merge(state, {
-      packagesOutdated: data
+      packagesOutdated: dependencies
     });
   },
-  [setPackagesStart.type]: (state, { packageName, packageVersion }) =>
+  [setActive.type]: (state, { payload }) =>
     merge(state, {
-      packageName,
-      packageVersion,
+      active: payload
+    }),
+  [setPackagesStart.type]: state =>
+    merge(state, {
+      active: null,
+      packageName: null,
+      packageVersion: null,
       packagesOutdated: [],
       packages: []
     })

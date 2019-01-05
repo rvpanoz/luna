@@ -70,7 +70,7 @@ const SearchBox = props => {
               version,
               fromSearch: true,
               outdated: null,
-              data: packages
+              dependencies: packages
             })
           );
 

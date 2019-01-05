@@ -13,6 +13,7 @@ const setMode = ActionCreator('SET_MODE');
 const setPage = ActionCreator('SET_PAGE');
 const setPageRows = ActionCreator('SET_PAGE_ROWS');
 const toggleLoader = ActionCreator('TOGGLE_LOADER');
+const togglePackageLoader = ActionCreator('TOGGLE_PACKAGE_LOADER');
 
 export {
   addNotification,
@@ -23,5 +24,6 @@ export {
   setMode,
   setPage,
   setPageRows,
-  toggleLoader
+  toggleLoader,
+  togglePackageLoader
 };

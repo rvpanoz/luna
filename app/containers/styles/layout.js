@@ -4,9 +4,10 @@ const styles = theme => ({
   wrapper: { position: 'relative', width: '100%' },
   header: {
     position: 'relative',
-    zIndex: '4',
-    height: '70px'
-    // backgroundColor: '#333545'
+    zIndex: 4,
+    height: 60
+    // backgroundColor: '#333545',
+    // color: '#fff'
   },
   main: {
     width: '100%'

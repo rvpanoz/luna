@@ -37,7 +37,7 @@ const Layout = props => {
             <Grid item xs={12} md={12} lg={4} xl={4}>
               <Packages />
             </Grid>
-            <Grid item xs={12} md={12} lg={4} xl={4}>
+            <Grid item xs={12} md={12} lg={6} xl={6}>
               <PackageDetails />
             </Grid>
           </Grid>
