@@ -1,12 +1,20 @@
 import {
   addActionError,
   addSelected,
+<<<<<<< 1beff8f651b44fbd14f7b672e915efa17d384a08
   clearSelected,
   clearPackages,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
   setActive
+=======
+  setPackagesStart,
+  setPackagesSuccess,
+  setPackagesOutdatedSuccess,
+  clearSelected,
+  clearPackages
+>>>>>>> clean up
 } from './actions';
 
 const doAddActionError = (dispatch, payload) =>
@@ -22,9 +30,15 @@ const doSetPackagesSuccess = (
 ) =>
   dispatch(
     setPackagesSuccess({
+<<<<<<< 1beff8f651b44fbd14f7b672e915efa17d384a08
       dependencies,
       projectName,
       projectVersion,
+=======
+      data: dependencies,
+      name: projectName,
+      version: projectVersion,
+>>>>>>> clean up
       outdated
     })
   );
@@ -32,18 +46,28 @@ const doSetPackagesSuccess = (
 const doSetOutdatedSuccess = (dispatch, { dependencies }) =>
   dispatch(
     setPackagesOutdatedSuccess({
+<<<<<<< 1beff8f651b44fbd14f7b672e915efa17d384a08
       dependencies
     })
   );
 
 const doSetActive = (dispatch, { active }) => dispatch(setActive(active));
 
+=======
+      data: dependencies
+    })
+  );
+
+>>>>>>> clean up
 export {
   doAddActionError,
   doAddSelected,
   doClearPackages,
   doClearSelected,
+<<<<<<< 1beff8f651b44fbd14f7b672e915efa17d384a08
   doSetActive,
+=======
+>>>>>>> clean up
   doStartPackages,
   doSetPackagesSuccess,
   doSetOutdatedSuccess
