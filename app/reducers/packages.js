@@ -13,6 +13,7 @@ import {
   clearSelected,
   clearFilters,
   clearPackages,
+  setActive,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess
@@ -76,7 +77,7 @@ const handlers = {
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
     const {
-      data,
+      dependencies,
       projectName,
       projectVersion,
       fromSort,
@@ -84,8 +85,8 @@ const handlers = {
       outdated
     } = payload;
 
-    const packages = data
-      ? data.map(pkg => {
+    const packages = dependencies
+      ? dependencies.map(pkg => {
           if (!pkg) {
             return;
           }
@@ -115,14 +116,19 @@ const handlers = {
     });
   },
   [setPackagesOutdatedSuccess.type]: (state, { payload }) => {
-    const { data } = payload;
+    const { dependencies } = payload;
 
     return merge(state, {
-      packagesOutdated: data
+      packagesOutdated: dependencies
     });
   },
+  [setActive.type]: (state, { payload }) =>
+    merge(state, {
+      active: payload
+    }),
   [setPackagesStart.type]: state =>
     merge(state, {
+      active: null,
       packageName: null,
       packageVersion: null,
       packagesOutdated: [],

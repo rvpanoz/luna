@@ -31,7 +31,6 @@ import {
   doAddActionError,
   doAddSelected,
   doClearPackages,
-  doClearSelected,
   doSetPackagesSuccess,
   doSetOutdatedSuccess
 } from 'models/packages/selectors';
@@ -41,6 +40,7 @@ import {
   doClearNotifications,
   doClearSnackbar,
   doToggleLoader,
+  doTogglePackageLoader,
   doSetPage,
   doSetPageRows,
   doSetSnackbar
@@ -49,6 +49,8 @@ import {
 import { INFO_MESSAGES, WARNING_MESSAGES } from 'constants/AppConstants';
 import { listStyles as styles } from '../styles/packagesStyles';
 import { APP_INFO } from '../../constants/AppConstants';
+import { setActive } from '../../models/packages/actions';
+import { doSetActive } from '../../models/packages/selectors';
 
 // use useCallback if you need it inside component body
 // const mapState = useCallback(state=>({
@@ -64,6 +66,7 @@ const mapState = state => ({
   rowsPerPage: state.common.rowsPerPage,
   loader: state.common.loader,
   snackbarOptions: state.common.snackbarOptions,
+  active: state.packages.active,
   action: state.packages.action,
   filters: state.packages.filters,
   packages: state.packages.packages,
@@ -79,6 +82,7 @@ const Packages = props => {
   const {
     action: { actionName, actionError },
     loader: { loading, message },
+    active,
     packages,
     mode,
     page,
@@ -100,27 +104,22 @@ const Packages = props => {
 
   // ui handlers
   const clearUI = useCallback(opts => {
-    if (!opts) {
-      return;
-    }
-
     opts.packages === true && doClearPackages(dispatch);
     opts.notifications === true && doClearNotifications(dispatch);
     opts.snackbar === true && doClearSnackbar(dispatch);
-  }, []);
-
-  const reload = useCallback(() => {
-    setCounter(counter + 1);
+    active && opts.active === true && doSetActive(dispatch, { active: null });
   }, []);
 
   const setSelected = useCallback(
     name => doAddSelected(dispatch, { name }),
     []
   );
+
   const updateLoader = useCallback(
     (loading, message) => doToggleLoader(dispatch, { loading, message }),
     []
   );
+
   const closeSnackbar = useCallback(() => {
     doSetSnackbar(dispatch, {
       open: false,
@@ -149,7 +148,7 @@ const Packages = props => {
       mode,
       directory
     },
-    [mode, directory, counter]
+    [counter, mode, directory]
   );
 
   const { projectName, projectVersion } = dependenciesSet || {};
@@ -162,17 +161,18 @@ const Packages = props => {
    */
   useEffect(
     () => {
-      clearUI({
-        packages: true,
-        notifications: true,
-        snackbar: false
-      });
-
       if (page !== 0) {
         doSetPage(dispatch, { page: 0 });
       }
 
       if (dependencies && Array.isArray(dependencies) && dependencies.length) {
+        clearUI({
+          packages: true,
+          notifications: true,
+          snackbar: true,
+          active: true
+        });
+
         doSetPackagesSuccess(dispatch, {
           dependencies,
           projectName,
@@ -183,8 +183,9 @@ const Packages = props => {
 
       if (outdated && Array.isArray(outdated) && outdated.length) {
         doSetOutdatedSuccess(dispatch, {
-          dependencies
+          dependencies: outdated
         });
+
         updateLoader(false, null);
       }
 
@@ -245,7 +246,7 @@ const Packages = props => {
         });
       }
     },
-    [dependencies, counter]
+    [dependenciesSet]
   );
 
   /**
@@ -284,17 +285,42 @@ const Packages = props => {
         doAddActionError(dispatch, { error });
       }
 
-      reload(); // TODO: bug fix
+      setCounter(counter + 1);
+    });
+
+    ipcRenderer.on(['view-package-close'], (event, status, error, data) => {
+      doTogglePackageLoader(dispatch, {
+        loading: false,
+        message: null
+      });
+
+      doSetSnackbar(dispatch, {
+        open: true,
+        type: 'info',
+        message: INFO_MESSAGES.packageLoaded
+      });
+
+      try {
+        const active = data && JSON.parse(data);
+
+        doSetActive(dispatch, {
+          active
+        });
+      } catch (err) {
+        doSetSnackbar(dispatch, {
+          open: true,
+          type: 'danger',
+          message: err.message
+        });
+      }
     });
 
     ipcRenderer.on('yarn-warning-close', event => {
-      dispatch(
-        setSnackbar({
-          open: true,
-          type: 'error',
-          message: WARNING_MESSAGES.yarnlock
-        })
-      );
+      doSetSnackbar(dispatch, {
+        open: true,
+        type: 'error',
+        message: WARNING_MESSAGES.yarnlock
+      });
     });
 
     return () =>
@@ -329,7 +355,7 @@ const Packages = props => {
             directory={directory}
             selected={selected}
             fromSearch={fromSearch}
-            reload={reload}
+            reload={() => setCounter(counter + 1)}
             nodata={dependencies === null}
           />
         </div>
@@ -374,6 +400,7 @@ const Packages = props => {
                         isSelected={isSelected(pkg.name, selected)}
                         setSelected={setSelected}
                         name={name}
+                        manager={manager}
                         version={version}
                         latest={latest}
                         isOutdated={isOutdated}

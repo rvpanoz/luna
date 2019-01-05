@@ -14,7 +14,8 @@ import {
   setMode,
   setPage,
   setPageRows,
-  toggleLoader
+  toggleLoader,
+  togglePackageLoader
 } from 'models/ui/actions';
 import initialState from './initialState';
 
@@ -73,6 +74,16 @@ const handlers = {
   ) =>
     merge(state, {
       loader: {
+        loading,
+        message
+      }
+    }),
+  [togglePackageLoader.type]: (
+    state,
+    { payload: { loading }, payload: { message } }
+  ) =>
+    merge(state, {
+      packageLoader: {
         loading,
         message
       }

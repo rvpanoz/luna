@@ -180,3 +180,17 @@ exports.uninstall = (opts, callback) => {
     throw new Error(error);
   }
 };
+
+// npm view [<@scope>/]<name>[@<version>]
+exports.view = (opts, callback) => {
+  const { mode, directory, activeManager = 'npm' } = opts;
+
+  try {
+    const manager = require(path.resolve(__dirname, activeManager));
+    const run = manager['view'].call(this, opts);
+
+    return execute(activeManager, run, mode, directory, callback);
+  } catch (error) {
+    throw new Error(error);
+  }
+};

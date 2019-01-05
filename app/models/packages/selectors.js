@@ -1,11 +1,12 @@
 import {
   addActionError,
   addSelected,
+  clearSelected,
+  clearPackages,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
-  clearSelected,
-  clearPackages
+  setActive
 } from './actions';
 
 const doAddActionError = (dispatch, payload) =>
@@ -21,7 +22,7 @@ const doSetPackagesSuccess = (
 ) =>
   dispatch(
     setPackagesSuccess({
-      data: dependencies,
+      dependencies,
       projectName,
       projectVersion,
       outdated
@@ -31,15 +32,18 @@ const doSetPackagesSuccess = (
 const doSetOutdatedSuccess = (dispatch, { dependencies }) =>
   dispatch(
     setPackagesOutdatedSuccess({
-      data: dependencies
+      dependencies
     })
   );
+
+const doSetActive = (dispatch, { active }) => dispatch(setActive(active));
 
 export {
   doAddActionError,
   doAddSelected,
   doClearPackages,
   doClearSelected,
+  doSetActive,
   doStartPackages,
   doSetPackagesSuccess,
   doSetOutdatedSuccess

@@ -50,7 +50,6 @@ const Header = props => {
   const [drawerOpen, toggleDrawer] = useState(false);
 
   const [settingsOpen, toggleSettings] = useState(false);
-  const [keyboardOpen, toggleKeyboard] = useState(false);
 
   const dispatch = useDispatch();
   const { notifications, loader } = useMappedState(mapState);
@@ -151,9 +150,7 @@ const Header = props => {
               onClose={() => setAnchorEl(null)}
             >
               <MenuItem onClick={() => toggleSettings(true)}>Settings</MenuItem>
-              <MenuItem onClick={() => toggleKeyboard(true)}>
-                Keyboard shortcuts
-              </MenuItem>
+              <MenuItem onClick={() => false}>Help</MenuItem>
             </Menu>
             <IconButton
               color="inherit"
@@ -248,15 +245,6 @@ const Header = props => {
         <div className={classes.paper}>
           <Settings onClose={() => toggleSettings(false)} />
         </div>
-      </Modal>
-      <Modal
-        aria-labelledby="keyboard"
-        aria-describedby="keyboard"
-        hideBackdrop
-        open={keyboardOpen}
-        onClose={() => toggleKeyboard(false)}
-      >
-        <div className={classes.paper}>keyboard...</div>
       </Modal>
     </div>
   );

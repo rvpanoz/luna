@@ -15,6 +15,7 @@ const setPackagesSuccess = ActionCreator('SET_PACKAGES_SUCCESS');
 const setPackagesOutdatedSuccess = ActionCreator(
   'SET_PACKAGES_OUTDATED_SUCCESS'
 );
+const setActive = ActionCreator('SET_ACTIVE_PACKAGE');
 const setPackagesError = ActionCreator('SET_PACKAGES_ERROR');
 const updatePackage = ActionCreator('UPDATE_PACKAGE');
 
@@ -25,6 +26,7 @@ export {
   clearSelected,
   clearFilters,
   clearPackages,
+  setActive,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesError,
