@@ -333,8 +333,8 @@ const Packages = props => {
         console.error(err);
         doSetSnackbar(dispatch, {
           open: true,
-          type: 'danger',
-          message: err.message
+          type: 'error',
+          message: WARNING_MESSAGES.yarnlock
         });
       }
     });
@@ -345,7 +345,6 @@ const Packages = props => {
         type: 'error',
         message: WARNING_MESSAGES.yarnlock
       });
-    });
 
     return () =>
       ipcRenderer.removeAllListeners([
