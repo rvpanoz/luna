@@ -155,6 +155,7 @@ const Packages = props => {
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
   const nodata = dependencies && dependencies.length === 0;
+  console.log('packages-render', dependencies && dependencies.length, counter);
 
   /**
    * TODO: description
