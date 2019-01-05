@@ -148,7 +148,6 @@ const Packages = props => {
       doToggleLoader(dispatch, { loading: bool, message: content }),
     []
   );
-
   const closeSnackbar = useCallback(() => {
     doSetSnackbar(dispatch, {
       open: false,
