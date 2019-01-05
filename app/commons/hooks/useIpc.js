@@ -6,8 +6,9 @@ import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 
-import { setPackagesStart } from 'models/packages/actions';
-import { toggleLoader } from 'models/ui/actions';
+import { doStartPackages } from 'models/packages/selectors';
+
+import { doToggleLoader } from 'models/ui/selectors';
 import { parseMap } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
@@ -45,8 +46,8 @@ const useIpc = (channel, options, inputs = []) => {
       }
     });
 
-    dispatch(toggleLoader({ loading: true, message: 'Loading packages..' }));
-    dispatch(setPackagesStart());
+    doToggleLoader(dispatch, { loading: true, message: 'Loading packages..' });
+    doStartPackages(dispatch);
     ipcRenderer.send(channel, options);
 
     return () => ipcRenderer.removeAllListeners([listenTo]);

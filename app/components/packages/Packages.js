@@ -28,24 +28,23 @@ import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
 
 import {
-  addActionError,
-  addSelected,
-  setPackagesStart,
-  setPackagesSuccess,
-  setPackagesOutdatedSuccess,
-  clearSelected,
-  clearPackages
-} from 'models/packages/actions';
+  doAddActionError,
+  doAddSelected,
+  doClearPackages,
+  doClearSelected,
+  doSetPackagesSuccess,
+  doSetOutdatedSuccess
+} from 'models/packages/selectors';
 
 import {
-  addNotification,
-  clearNotifications,
-  clearSnackbar,
-  setSnackbar,
-  setPage,
-  setPageRows,
-  toggleLoader
-} from 'models/ui/actions';
+  doAddNotification,
+  doClearNotifications,
+  doClearSnackbar,
+  doToggleLoader,
+  doSetPage,
+  doSetPageRows,
+  doSetSnackbar
+} from 'models/ui/selectors';
 
 import { INFO_MESSAGES, WARNING_MESSAGES } from 'constants/AppConstants';
 import { listStyles as styles } from '../styles/packagesStyles';
@@ -76,7 +75,6 @@ const mapState = state => ({
 const isSelected = (name, selected) => selected.indexOf(name) !== -1;
 
 const Packages = props => {
-  console.log('Packages render');
   const { classes } = props;
   const {
     action: { actionName, actionError },
@@ -102,38 +100,34 @@ const Packages = props => {
 
   // ui handlers
   const clearUI = useCallback(opts => {
-    console.log('clearUI');
     if (!opts) {
       return;
     }
 
-    opts.packages === true && dispatch(clearPackages());
-    opts.notifications === true && dispatch(clearNotifications());
-    opts.snackbar === true && dispatch(clearSnackbar());
+    opts.packages === true && doClearPackages(dispatch);
+    opts.notifications === true && doClearNotifications(dispatch);
+    opts.snackbar === true && doClearSnackbar(dispatch);
   }, []);
 
-  const reload = useCallback(
-    () => {
-      clearUI({
-        packages: true,
-        notifications: true,
-        snackbar: true
-      });
+  const reload = useCallback(() => {
+    setCounter(counter + 1);
+  }, []);
 
-      setCounter(counter + 1);
-    },
-    [counter]
+  const setSelected = useCallback(
+    name => doAddSelected(dispatch, { name }),
+    []
   );
-
-  const setSelected = useCallback(name => dispatch(addSelected({ name }), []));
+  const updateLoader = useCallback(
+    (loading, message) => doToggleLoader(dispatch, { loading, message }),
+    []
+  );
   const closeSnackbar = useCallback(() => {
-    dispatch(
-      setSnackbar({
-        open: false,
-        message: null
-      })
-    );
+    doSetSnackbar(dispatch, {
+      open: false,
+      message: null
+    });
   }, []);
+
   const toggleSort = useCallback(
     prop => {
       const direction = sortOptions.direction === 'desc' ? 'asc' : 'desc';
@@ -164,7 +158,9 @@ const Packages = props => {
   const nodata = dependencies && dependencies.length === 0;
   console.log('packages-render', dependencies && dependencies.length, counter);
 
-  // dispatch actions
+  /**
+   * TODO: description
+   */
   useEffect(
     () => {
       clearUI({
@@ -173,21 +169,22 @@ const Packages = props => {
         snackbar: false
       });
 
-      page !== 0 && dispatch(setPage({ page: 0 }));
+      page !== 0 && doSetPage(dispatch, { page: 0 });
 
       if (dependencies && Array.isArray(dependencies) && dependencies.length) {
-        dispatch(
-          setPackagesSuccess({ data: dependencies, name, version, outdated })
-        );
+        doSetPackagesSuccess(dispatch, {
+          dependencies,
+          name,
+          version,
+          outdated
+        });
       }
 
       if (outdated && Array.isArray(outdated) && outdated.length) {
-        dispatch(
-          setPackagesOutdatedSuccess({
-            data: outdated
-          })
-        );
-        dispatch(toggleLoader({ loading: false, message: null }));
+        doSetOutdatedSuccess(dispatch, {
+          dependencies
+        });
+        updateLoader(false, null);
       }
 
       if (errors && typeof errors === 'string') {
@@ -200,14 +197,12 @@ const Packages = props => {
               errorsArr[errorsLen]
             );
 
-            dispatch(
-              addNotification({
-                level: 0,
-                body,
-                requires,
-                requiredBy
-              })
-            );
+            doAddNotification(dispatch, {
+              level: 0,
+              body,
+              requires,
+              requiredBy
+            });
           }
         }
       }
@@ -219,13 +214,11 @@ const Packages = props => {
         }, dependencies);
 
       if (withPeerMissing && withPeerMissing.length) {
-        dispatch(
-          setSnackbar({
-            open: true,
-            type: 'warning',
-            message: WARNING_MESSAGES.peerMissing
-          })
-        );
+        doSetSnackbar(dispatch, {
+          open: true,
+          type: 'warning',
+          message: WARNING_MESSAGES.peerMissing
+        });
       }
 
       const withErrors =
@@ -235,31 +228,28 @@ const Packages = props => {
         }, dependencies);
 
       if (withErrors && withErrors.length) {
-        dispatch(
-          setSnackbar({
-            open: true,
-            type: 'error',
-            message: WARNING_MESSAGES.errorPackages
-          })
-        );
+        doSetSnackbar(dispatch, {
+          open: true,
+          type: 'error',
+          message: WARNING_MESSAGES.errorPackages
+        });
       }
 
       // handle empty data
       if (dependencies === null) {
-        dispatch(toggleLoader({ loading: false, message: null }));
-        dispatch(
-          setSnackbar({
-            open: true,
-            type: 'info',
-            message: INFO_MESSAGES.noData
-          })
-        );
+        doSetSnackbar(dispatch, {
+          open: true,
+          type: 'info',
+          message: INFO_MESSAGES.noData
+        });
       }
     },
     [dependencies, counter]
   );
 
-  // sort packages
+  /**
+   * TODO: description
+   */
   useEffect(
     () => {
       const data = dependencies && dependencies.slice(0);
@@ -275,18 +265,22 @@ const Packages = props => {
           ? data.sort((a, b) => (a[prop] < b[prop] ? -1 : 1))
           : data.sort((a, b) => (b[prop] < a[prop] ? -1 : 1));
 
-      dispatch(
-        setPackagesSuccess({ data: sortedData, fromSort: true, outdated })
-      );
+      doSetPackagesSuccess(dispatch, {
+        data: sortedData,
+        fromSort: true,
+        outdated
+      });
     },
     [sortOptions]
   );
 
-  // componentDidMount
+  /**
+   * TODO: description
+   */
   useEffect(() => {
     ipcRenderer.on(['action-close'], (event, error, data) => {
       if (error) {
-        dispatch(addActionError('actionName', error));
+        doAddActionError(dispatch, { error });
       }
 
       reload();
@@ -306,11 +300,9 @@ const Packages = props => {
       ipcRenderer.removeAllListeners(['action-close', 'yarn-warning-close']);
   }, []);
 
-  // filter packages
   const filteredPackages =
     filters && filters.length ? getFiltered(packages, filters) : [];
 
-  // assign final data
   const data =
     Array.isArray(filteredPackages) && filteredPackages.length
       ? filteredPackages
@@ -321,7 +313,6 @@ const Packages = props => {
     return !pkg.__error && !pkg.__peerMissing;
   }, data);
 
-  // pagination
   const dataSlices =
     packagesData &&
     packagesData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -364,14 +355,12 @@ const Packages = props => {
                 }
                 toggleSort={(e, prop) => toggleSort(prop)}
                 onSelected={(name, force) =>
-                  dispatch(
-                    addSelected({
-                      name,
-                      force
-                    })
-                  )
+                  doAddSelected(dispatch, {
+                    name,
+                    force
+                  })
                 }
-                onClearSelected={() => dispatch(clearSelected())}
+                onClearSelected={() => clearSelected(dispatch)}
               />
               <TableBody>
                 {dataSlices &&
@@ -402,10 +391,10 @@ const Packages = props => {
                 page={page}
                 rowsPerPage={rowsPerPage}
                 handleChangePage={(e, pageNo) =>
-                  dispatch(setPage({ page: pageNo }))
+                  doSetPage(dispatch, { page: pageNo })
                 }
                 handleChangePageRows={e =>
-                  dispatch(setPageRows({ rowsPerPage: e.target.value || 10 }))
+                  doSetPageRows(dispatch, { rowsPerPage: e.target.value || 10 })
                 }
               />
             </Table>
