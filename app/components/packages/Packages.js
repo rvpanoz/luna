@@ -72,7 +72,10 @@ const mapState = state => ({
   fromSearch: state.packages.fromSearch
 });
 
+const isSelected = (name, selected) => selected.indexOf(name) !== -1;
+
 const Packages = props => {
+  console.log(1);
   const { classes } = props;
   const {
     action: { actionName, actionError },
@@ -107,7 +110,6 @@ const Packages = props => {
     opts.snackbar === true && dispatch(clearSnackbar());
   }, []);
 
-  const isSelected = useCallback(name => selected.indexOf(name) !== -1, []);
   const reload = useCallback(
     () => {
       dispatch(toggleLoader({ loading: true, message: 'Loading packages..' }));
@@ -115,6 +117,7 @@ const Packages = props => {
     },
     [counter]
   );
+
   const setSelected = useCallback(name => dispatch(addSelected({ name }), []));
   const closeSnackbar = useCallback(() => {
     dispatch(
@@ -124,14 +127,17 @@ const Packages = props => {
       })
     );
   }, []);
-  const toggleSort = useCallback(prop => {
-    const direction = sortOptions.direction === 'desc' ? 'asc' : 'desc';
+  const toggleSort = useCallback(
+    prop => {
+      const direction = sortOptions.direction === 'desc' ? 'asc' : 'desc';
 
-    setSort({
-      direction,
-      prop
-    });
-  }, []);
+      setSort({
+        direction,
+        prop
+      });
+    },
+    [sortOptions]
+  );
 
   // useIpc hook to send and listenTo ipc events
   const [dependenciesSet, outdatedSet, errors] = useIpc(
@@ -367,7 +373,7 @@ const Packages = props => {
                     return (
                       <PackageItem
                         key={`pkg-${pkg.name}`}
-                        isSelected={isSelected}
+                        isSelected={isSelected(pkg.name, selected)}
                         setSelected={setSelected}
                         name={name}
                         version={version}

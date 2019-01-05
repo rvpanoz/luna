@@ -6,8 +6,8 @@
 
 import { ipcRenderer, remote } from 'electron';
 import React, { useState, useCallback } from 'react';
-import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
+import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -17,6 +17,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
+import ClearAllIcon from '@material-ui/icons/ClearAll';
 import InstallIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
@@ -25,6 +26,7 @@ import PublicIcon from '@material-ui/icons/PublicRounded';
 import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
 import { setMode, toggleLoader } from 'models/ui/actions';
+import { clearSelected } from 'models/packages/actions';
 import TableFilters from './TableFilters';
 
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
@@ -97,7 +99,6 @@ const TableListToolbar = props => {
       filePath => {
         if (filePath) {
           const directory = filePath.join('');
-
           switchMode(APP_MODES.LOCAL, directory);
         }
 
@@ -221,6 +222,14 @@ const TableListToolbar = props => {
                   <DeleteIcon />
                 </IconButton>
               </Tooltip>
+              <Tooltip title="Clear selected">
+                <IconButton
+                  aria-label="clear selected"
+                  onClick={() => dispatch(clearSelected())}
+                >
+                  <ClearAllIcon />
+                </IconButton>
+              </Tooltip>
             </div>
           )}
         </div>
@@ -232,7 +241,7 @@ const TableListToolbar = props => {
 TableListToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   reload: PropTypes.func.isRequired,
-  nodata: PropTypes.string
+  nodata: PropTypes.bool
 };
 
 export default withStyles(styles)(TableListToolbar);
