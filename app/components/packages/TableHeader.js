@@ -23,7 +23,6 @@ const columnData = [
 
 const TableHeader = props => {
   const {
-    classes,
     numSelected,
     rowCount,
     packages,

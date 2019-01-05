@@ -38,18 +38,15 @@ const PackageItemRow = props => {
       key={`pkg-${name}`}
       hover
       role="checkbox"
-      aria-checked={isSelected(name)}
+      aria-checked={isSelected}
       tabIndex={-1}
-      selected={isSelected(name)}
+      selected={isSelected}
       classes={{
         root: classes.tableRow
       }}
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
-        <Checkbox
-          checked={isSelected(name)}
-          onClick={() => setSelected(name)}
-        />
+        <Checkbox checked={isSelected} onClick={() => setSelected(name)} />
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         {name}
