@@ -19,7 +19,7 @@ const styles = theme => ({
     alignItems: 'center',
     position: 'absolute',
     left: '50%',
-    top: '50%',
+    top: '100%',
     margin: `0 ${theme.spacing.unit * 2}px`
   },
   margin: {

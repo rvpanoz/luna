@@ -30,21 +30,22 @@ const useIpc = (channel, options, inputs = []) => {
       const [name, version, packages] =
         data && parseMap(data, mode, directory, commandArgs);
 
-      setErrors(error || null);
+      if (error) {
+        setErrors(error);
+      }
 
-      if (Array.isArray(packages)) {
-        if (commandArgs[0] === 'list') {
-          setDependencies({
-            data: packages && packages.length ? packages : null,
-            name,
-            version
-          });
-        } else {
-          setOutdated({ data: packages && packages.length ? packages : null });
-        }
+      if (commandArgs[0] === 'list') {
+        setDependencies({
+          data: packages && packages.length ? packages : null,
+          name,
+          version
+        });
+      } else {
+        setOutdated({ data: packages });
       }
     });
 
+    console.log(1);
     dispatch(toggleLoader({ loading: true, message: 'Loading packages..' }));
     dispatch(setPackagesStart());
     ipcRenderer.send(channel, options);
