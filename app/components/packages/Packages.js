@@ -162,7 +162,6 @@ const Packages = props => {
       page !== 0 && dispatch(setPage({ page: 0 }));
 
       if (dependencies && Array.isArray(dependencies) && dependencies.length) {
-        dispatch(toggleLoader({ loading: false, message: null }));
         dispatch(
           setPackagesSuccess({ data: dependencies, name, version, outdated })
         );
@@ -174,6 +173,7 @@ const Packages = props => {
             data: outdated
           })
         );
+        dispatch(toggleLoader({ loading: false, message: null }));
       }
 
       if (errors && typeof errors === 'string') {
