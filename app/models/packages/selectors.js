@@ -36,9 +36,14 @@ const doSetPackagesSuccess = (
       projectVersion,
 =======
       data: dependencies,
+<<<<<<< 9e2b4bd230cfc539b6bac8b8cb85cd0c9ce1c37c
       name: projectName,
       version: projectVersion,
 >>>>>>> clean up
+=======
+      projectName,
+      projectVersion,
+>>>>>>> fix bugs
       outdated
     })
   );
