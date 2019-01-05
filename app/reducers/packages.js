@@ -75,7 +75,14 @@ const handlers = {
       packagesOutdated: []
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
-    const { data, name, version, fromSort, fromSearch, outdated } = payload;
+    const {
+      data,
+      projectName,
+      projectVersion,
+      fromSort,
+      fromSearch,
+      outdated
+    } = payload;
 
     const packages = data
       ? data.map(pkg => {
@@ -101,8 +108,8 @@ const handlers = {
       lastUpdatedAt: fromSort
         ? state.lastUpdatedAt
         : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
-      projectName: name,
-      projectVersion: version,
+      projectName,
+      projectVersion,
       filters: [],
       selected: []
     });
@@ -114,10 +121,10 @@ const handlers = {
       packagesOutdated: data
     });
   },
-  [setPackagesStart.type]: (state, { packageName, packageVersion }) =>
+  [setPackagesStart.type]: state =>
     merge(state, {
-      packageName,
-      packageVersion,
+      packageName: null,
+      packageVersion: null,
       packagesOutdated: [],
       packages: []
     })

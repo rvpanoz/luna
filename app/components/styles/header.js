@@ -33,7 +33,7 @@ const styles = theme => ({
     paddingTop: '10px',
     zIndex: '1029',
     color: '#555555',
-    borderBottom: '1px solid rgba(0,0,0,0.25)',
+    // borderBottom: '1px solid rgba(0,0,0,0.25)',
     borderRadius: '3px',
     padding: '10px 0',
     transition: 'all 150ms ease 0s',

@@ -22,8 +22,8 @@ const doSetPackagesSuccess = (
   dispatch(
     setPackagesSuccess({
       data: dependencies,
-      name: projectName,
-      version: projectVersion,
+      projectName,
+      projectVersion,
       outdated
     })
   );

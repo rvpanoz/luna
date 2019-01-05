@@ -17,8 +17,8 @@ const useIpc = (channel, options, inputs = []) => {
 
   const [dependenciesSet, setDependencies] = useState({
     data: [],
-    name: null,
-    version: null
+    projectName: null,
+    projectVersion: null
   });
   const [outdatedSet, setOutdated] = useState({
     data: []
@@ -38,8 +38,8 @@ const useIpc = (channel, options, inputs = []) => {
       if (commandArgs[0] === 'list') {
         setDependencies({
           data: packages && packages.length ? packages : null,
-          name,
-          version
+          projectName: name,
+          projectVersion: version
         });
       } else {
         setOutdated({ data: packages });

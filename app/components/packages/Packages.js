@@ -152,11 +152,10 @@ const Packages = props => {
     [mode, directory, counter]
   );
 
-  const { name, version } = dependenciesSet || {};
+  const { projectName, projectVersion } = dependenciesSet || {};
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
   const nodata = dependencies && dependencies.length === 0;
-  console.log('packages-render', dependencies && dependencies.length, counter);
 
   /**
    * TODO: description
@@ -169,13 +168,15 @@ const Packages = props => {
         snackbar: false
       });
 
-      page !== 0 && doSetPage(dispatch, { page: 0 });
+      if (page !== 0) {
+        doSetPage(dispatch, { page: 0 });
+      }
 
       if (dependencies && Array.isArray(dependencies) && dependencies.length) {
         doSetPackagesSuccess(dispatch, {
           dependencies,
-          name,
-          version,
+          projectName,
+          projectVersion,
           outdated
         });
       }
@@ -266,7 +267,7 @@ const Packages = props => {
           : data.sort((a, b) => (b[prop] < a[prop] ? -1 : 1));
 
       doSetPackagesSuccess(dispatch, {
-        data: sortedData,
+        dependencies: sortedData,
         fromSort: true,
         outdated
       });
@@ -283,7 +284,7 @@ const Packages = props => {
         doAddActionError(dispatch, { error });
       }
 
-      reload();
+      reload(); // TODO: bug fix
     });
 
     ipcRenderer.on('yarn-warning-close', event => {
