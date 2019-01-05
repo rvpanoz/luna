@@ -132,6 +132,10 @@ const handlers = {
     }),
   [setPackagesStart.type]: state =>
     merge(state, {
+      active: null
+    }),
+  [setPackagesStart.type]: state =>
+    merge(state, {
       active: null,
       packageName: null,
       packageVersion: null,
