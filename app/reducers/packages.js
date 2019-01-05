@@ -77,11 +77,15 @@ const handlers = {
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
     const {
+<<<<<<< c95bb4b50524e27e2c0538331b8ba3eee2323202
 <<<<<<< 9e2b4bd230cfc539b6bac8b8cb85cd0c9ce1c37c
       dependencies,
 =======
       data,
 >>>>>>> fix bugs
+=======
+      dependencies,
+>>>>>>> Package details first implementation, add more selectors and clean up packages
       projectName,
       projectVersion,
       fromSort,
@@ -126,11 +130,15 @@ const handlers = {
       packagesOutdated: dependencies
     });
   },
+<<<<<<< c95bb4b50524e27e2c0538331b8ba3eee2323202
 <<<<<<< 9e2b4bd230cfc539b6bac8b8cb85cd0c9ce1c37c
+=======
+>>>>>>> Package details first implementation, add more selectors and clean up packages
   [setActive.type]: (state, { payload }) =>
     merge(state, {
       active: payload
     }),
+<<<<<<< c95bb4b50524e27e2c0538331b8ba3eee2323202
   [setPackagesStart.type]: state =>
     merge(state, {
       active: null,
@@ -138,6 +146,11 @@ const handlers = {
   [setPackagesStart.type]: state =>
     merge(state, {
 >>>>>>> fix bugs
+=======
+  [setPackagesStart.type]: state =>
+    merge(state, {
+      active: null,
+>>>>>>> Package details first implementation, add more selectors and clean up packages
       packageName: null,
       packageVersion: null,
       packagesOutdated: [],
