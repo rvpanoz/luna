@@ -30,6 +30,7 @@ import PackageItem from './PackageItem';
 import {
   addActionError,
   addSelected,
+  setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
   clearSelected,
@@ -75,7 +76,7 @@ const mapState = state => ({
 const isSelected = (name, selected) => selected.indexOf(name) !== -1;
 
 const Packages = props => {
-  console.log(1);
+  console.log('Packages render');
   const { classes } = props;
   const {
     action: { actionName, actionError },
@@ -101,6 +102,7 @@ const Packages = props => {
 
   // ui handlers
   const clearUI = useCallback(opts => {
+    console.log('clearUI');
     if (!opts) {
       return;
     }
@@ -112,7 +114,12 @@ const Packages = props => {
 
   const reload = useCallback(
     () => {
-      dispatch(toggleLoader({ loading: true, message: 'Loading packages..' }));
+      clearUI({
+        packages: true,
+        notifications: true,
+        snackbar: true
+      });
+
       setCounter(counter + 1);
     },
     [counter]
@@ -155,6 +162,7 @@ const Packages = props => {
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
   const nodata = dependencies && dependencies.length === 0;
+  console.log('packages-render', dependencies && dependencies.length, counter);
 
   // dispatch actions
   useEffect(
@@ -248,7 +256,7 @@ const Packages = props => {
         );
       }
     },
-    [counter, dependencies]
+    [dependencies, counter]
   );
 
   // sort packages
@@ -276,7 +284,7 @@ const Packages = props => {
 
   // componentDidMount
   useEffect(() => {
-    ipcRenderer.once(['action-close'], (event, error, data) => {
+    ipcRenderer.on(['action-close'], (event, error, data) => {
       if (error) {
         dispatch(addActionError('actionName', error));
       }
@@ -284,7 +292,7 @@ const Packages = props => {
       reload();
     });
 
-    ipcRenderer.once('yarn-warning-close', event => {
+    ipcRenderer.on('yarn-warning-close', event => {
       dispatch(
         setSnackbar({
           open: true,
