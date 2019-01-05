@@ -45,7 +45,6 @@ const useIpc = (channel, options, inputs = []) => {
       }
     });
 
-    console.log(1);
     dispatch(toggleLoader({ loading: true, message: 'Loading packages..' }));
     dispatch(setPackagesStart());
     ipcRenderer.send(channel, options);
