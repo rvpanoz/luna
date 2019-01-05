@@ -157,7 +157,7 @@ ipcMain.on('ipc-event', (event, options) => {
       ...rest
     });
 
-    runCommand.apply(null, [params, callback]);
+    runCommand(params, callback);
   } catch (error) {
     mk.log(error.message);
     throw new Error(error);

@@ -57,22 +57,42 @@ import { doSetActive } from '../../models/packages/selectors';
 //   directory: state.common.directory
 // }),[input])
 
-const mapState = state => ({
-  directory: state.common.directory,
-  notifications: state.common.notifications,
-  manager: state.common.manager,
-  mode: state.common.mode,
-  page: state.common.page,
-  rowsPerPage: state.common.rowsPerPage,
-  loader: state.common.loader,
-  snackbarOptions: state.common.snackbarOptions,
-  active: state.packages.active,
-  action: state.packages.action,
-  filters: state.packages.filters,
-  packages: state.packages.packages,
-  packagesOutdated: state.packages.packagesOutdated,
-  selected: state.packages.selected,
-  fromSearch: state.packages.fromSearch
+const mapState = ({
+  common: {
+    directory,
+    notifications,
+    manager,
+    mode,
+    page,
+    rowsPerPage,
+    loader
+  },
+  packages: {
+    snackbarOptions,
+    active,
+    action,
+    filters,
+    packages,
+    packagesOutdated,
+    selected,
+    fromSearch
+  }
+}) => ({
+  directory,
+  notifications,
+  manager,
+  mode,
+  page,
+  rowsPerPage,
+  loader,
+  snackbarOptions,
+  active,
+  action,
+  filters,
+  packages,
+  packagesOutdated,
+  selected,
+  fromSearch
 });
 
 const isSelected = (name, selected) => selected.indexOf(name) !== -1;
@@ -279,53 +299,55 @@ const Packages = props => {
   /**
    * TODO: description
    */
-  useEffect(() => {
-    ipcRenderer.on(['action-close'], (event, error, data) => {
-      if (error) {
-        doAddActionError(dispatch, { error });
-      }
+  useEffect(
+    () => {
+      ipcRenderer.on(['action-close'], (event, error, data) => {
+        if (error) {
+          doAddActionError(dispatch, { error });
+        }
 
-      setCounter(counter + 1);
-    });
-
-    ipcRenderer.on(['view-package-close'], (event, status, error, data) => {
-      doTogglePackageLoader(dispatch, {
-        loading: false,
-        message: null
+        setCounter(counter + 1);
       });
 
-      doSetSnackbar(dispatch, {
-        open: true,
-        type: 'info',
-        message: INFO_MESSAGES.packageLoaded
+      ipcRenderer.on(['view-package-close'], (event, status, error, data) => {
+        try {
+          const active = data && JSON.parse(data);
+
+          doSetActive(dispatch, {
+            active
+          });
+
+          doSetSnackbar(dispatch, {
+            open: true,
+            type: 'info',
+            message: INFO_MESSAGES.packageLoaded
+          });
+        } catch (err) {
+          doSetSnackbar(dispatch, {
+            open: true,
+            type: 'danger',
+            message: err.message
+          });
+        }
       });
 
-      try {
-        const active = data && JSON.parse(data);
-
-        doSetActive(dispatch, {
-          active
-        });
-      } catch (err) {
+      ipcRenderer.on('yarn-warning-close', event => {
         doSetSnackbar(dispatch, {
           open: true,
-          type: 'danger',
-          message: err.message
+          type: 'error',
+          message: WARNING_MESSAGES.yarnlock
         });
-      }
-    });
-
-    ipcRenderer.on('yarn-warning-close', event => {
-      doSetSnackbar(dispatch, {
-        open: true,
-        type: 'error',
-        message: WARNING_MESSAGES.yarnlock
       });
-    });
 
-    return () =>
-      ipcRenderer.removeAllListeners(['action-close', 'yarn-warning-close']);
-  }, []);
+      return () =>
+        ipcRenderer.removeAllListeners([
+          'action-close',
+          'view-package-close',
+          'yarn-warning-close'
+        ]);
+    },
+    [counter]
+  );
 
   const filteredPackages =
     filters && filters.length ? getFiltered(packages, filters) : [];
@@ -334,7 +356,7 @@ const Packages = props => {
     Array.isArray(filteredPackages) && filteredPackages.length
       ? filteredPackages
       : packages;
-
+  0;
   // exclude packages with errors and peerMissing
   const packagesData = filter(pkg => {
     return !pkg.__error && !pkg.__peerMissing;

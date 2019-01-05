@@ -58,7 +58,7 @@ const PackageItemRow = props => {
 
       return false;
     },
-    []
+    [name]
   );
 
   return (

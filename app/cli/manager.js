@@ -99,8 +99,8 @@ exports.list = (options, callback) => {
 
   const commandArgs =
     mode === 'GLOBAL' && !directory
-      ? [].concat(command, defaultsArgs.list, '-g')
-      : [].concat(command, defaultsArgs.list);
+      ? command.concat(defaultsArgs.list, '-g')
+      : command.concat(defaultsArgs.list);
 
   const run = [].concat(commandArgs);
 

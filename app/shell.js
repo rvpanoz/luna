@@ -17,8 +17,6 @@ export const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
   const combine = () => {
-    const promises = [];
-
     if (!cmd || !Array.isArray(cmd)) {
       throw new Error('cmd parameter must be given and must be an array');
     }
@@ -27,25 +25,33 @@ export const runCommand = (options, callback) => {
       throw new Error('callback must be given and must be a function');
     }
 
-    cmd.forEach(command => {
-      const fc = () => {
-        const runner = apiManager[command];
-        return runner.apply(this, [rest, callback]);
-      };
+    const promises = cmd.map(command => {
+      // const fc = () => {
+      //   const runner = apiManager[command];
+      //   return runner.call(this, rest, callback);
+      // };
 
-      promises.push(fc());
+      // return fc();
+
+      const runner = apiManager[command];
+      return runner.call(this, rest, callback)();
     });
 
     return promises;
   };
 
-  Promise.all(combine()).then(results => {
+  const promises = combine();
+  // console.log(promises)
+
+  Promise.all(promises).then(results => {
+    console.log(results);
+
     results.forEach(result => {
       const { status, ...values } = result;
       const { data, error, cmd } = values;
 
       if (status === 'close') {
-        return callback(status, error, data, cmd);
+        callback(status, error, data, cmd);
       }
     });
   });

@@ -207,8 +207,7 @@ export const parseMap = (response, mode, directory) => {
       const [pkgName, details] = pkgArr;
       const { name, peerMissing } = details || {};
 
-      let group = null;
-      let found = false;
+      let group;
       let hasError = typeof details.error === 'object';
 
       // find group and attach to pkg, useful to show data in list
@@ -222,13 +221,8 @@ export const parseMap = (response, mode, directory) => {
           return;
         }
 
-        Object.keys(PACKAGE_GROUPS).some(groupName => {
-          found = packageJSON[groupName] && packageJSON[groupName][pkgName];
-          if (found) {
-            group = groupName;
-          }
-
-          return found;
+        group = Object.keys(PACKAGE_GROUPS).find(groupName => {
+          return packageJSON[groupName] && packageJSON[groupName][pkgName];
         });
       }
 
@@ -251,7 +245,7 @@ export const parseNpmError = error => {
   if (!error) {
     return [];
   }
-
+  console.log(error);
   const errorParts = typeof error === 'string' && error.split(',');
   const errorMessage = errorParts && errorParts[0].split(':');
 
