@@ -101,6 +101,11 @@ exports.list = (options, callback) => {
     mode === 'GLOBAL' && !directory
       ? command.concat(defaultsArgs.list, '-g')
       : command.concat(defaultsArgs.list);
+<<<<<<< e2c721b728ef2f002f21e369491b25af046eb9a6
+=======
+
+  const run = [].concat(commandArgs);
+>>>>>>> finish review
 
   // returns a Promise
   return execute('npm', run, mode, directory, callback);
