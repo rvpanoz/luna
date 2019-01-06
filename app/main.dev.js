@@ -149,7 +149,7 @@ ipcMain.on('ipc-event', (event, options) => {
 
   /**
    * At this point we try to run a shell command sending output
-   * using spawn to renderer via ipc events
+   * to renderer via ipc events
    */
   try {
     const params = merge(settings, {
@@ -163,10 +163,6 @@ ipcMain.on('ipc-event', (event, options) => {
     throw new Error(error);
   }
 });
-
-/**
- * Add event listeners
- */
 
 app.on('window-all-closed', () => {
   /**

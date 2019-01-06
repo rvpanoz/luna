@@ -183,8 +183,13 @@ export const isPackageOutdated = (outdatedPackages, name) => {
  * @param {*} directory
  */
 export const parseMap = (response, mode, directory) => {
+  if (!response || typeof response !== 'string') {
+    throw new Error('response parameter must be a string');
+  }
+
   try {
     const packageJson = JSON.parse(response);
+
     const { name, version } = packageJson || {};
 
     const packages = pick(['dependencies'], packageJson);
@@ -237,7 +242,7 @@ export const parseMap = (response, mode, directory) => {
     return [name, version, data];
   } catch (error) {
     mk.log(error.message);
-    throw new Error(error);
+    return;
   }
 };
 
