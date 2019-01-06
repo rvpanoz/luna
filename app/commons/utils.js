@@ -250,9 +250,11 @@ export const parseNpmError = error => {
   if (!error) {
     return [];
   }
-  console.log(error);
+
   const errorParts = typeof error === 'string' && error.split(',');
   const errorMessage = errorParts && errorParts[0].split(':');
 
-  return [errorMessage[0].trim(), errorMessage[1].trim(), errorParts[1]];
+  return !errorMessage
+    ? []
+    : [errorMessage[0].trim(), errorMessage[1].trim(), errorParts[1]];
 };

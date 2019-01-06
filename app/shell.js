@@ -2,7 +2,7 @@
 
 /**
  * Run shell commands
- * npm/yarn [cmd] [[<@scope>/]<pkg> ...]
+ * npm [cmd] [[<@scope>/]<pkg> ...]
  * */
 
 import apiManager from './cli/manager';
