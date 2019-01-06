@@ -113,8 +113,8 @@ const handlers = {
 
     return merge(state, {
       packages,
-      fromSearch,
-      lastUpdatedAt: fromSort
+      fromSearch: Boolean(fromSearch),
+      lastUpdatedAt: Boolean(fromSort)
         ? state.lastUpdatedAt
         : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
       projectName,

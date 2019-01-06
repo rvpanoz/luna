@@ -246,6 +246,12 @@ export const parseMap = (response, mode, directory) => {
   }
 };
 
+export const filterByProp = (data, prop) =>
+  data &&
+  data.filter(item => {
+    return item[prop];
+  }, data);
+
 export const parseNpmError = error => {
   if (!error) {
     return [];

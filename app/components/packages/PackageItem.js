@@ -49,7 +49,7 @@ const PackageItemRow = props => {
 
       ipcRenderer.send('ipc-event', {
         activeManager: manager,
-        ipcEvent: 'view-package',
+        ipcEvent: 'view',
         cmd: ['view'],
         name,
         mode,

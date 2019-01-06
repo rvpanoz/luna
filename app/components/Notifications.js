@@ -1,5 +1,5 @@
 /**
- * Notifications
+ * Notifications component
  */
 
 import { ipcRenderer, remote } from 'electron';
@@ -9,7 +9,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Paper from '@material-ui/core/Paper';
-import Grow from '@material-ui/core/Grow';
 
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -57,7 +56,7 @@ const Notifications = props => {
   const handleAction = peerName => {
     ipcRenderer.send('ipc-event', {
       activeManager: manager,
-      ipcEvent: 'install-packages',
+      ipcEvent: 'install',
       cmd: ['install'],
       name: peerName,
       mode,
@@ -76,44 +75,38 @@ const Notifications = props => {
 
   return (
     <ClickAwayListener onClickAway={() => false}>
-      <Grow
-        in={Boolean(true)} // eslint complains without casting..
-        id="menu-list"
-        style={{ transformOrigin: '0 0 0' }}
-      >
-        <Paper className={classes.dropdown}>
-          <List dense>
-            {notifications &&
-              notifications.map((notification, idx) => {
-                const { requiredBy, requires } = notification;
-                const parts = requires.split('@');
-                const peerName = parts[0].length ? parts[0] : `@${parts[1]}`; // @ indicates namespace e.g @material-ui/core, @babel/core etc
+      <Paper className={classes.dropdown}>
+        <List dense>
+          {notifications &&
+            notifications.map((notification, idx) => {
+              const { requiredBy, requires } = notification;
+              const parts = requires.split('@');
+              const peerName = parts[0].length ? parts[0] : `@${parts[1]}`; // @ indicates namespace e.g @material-ui/core, @babel/core etc
 
-                return (
-                  <ListItem key={`notification-${idx + 1}`}>
-                    <ListItemAvatar>
-                      <Avatar color="primary">
-                        <ModuleIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={`peer ${requires} missing`}
-                      secondary={requiredBy}
-                    />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        aria-label="Install"
-                        onClick={() => handleInstall(peerName)}
-                      >
-                        <AddIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                );
-              })}
-          </List>
-        </Paper>
-      </Grow>
+              return (
+                <ListItem key={`notification-${idx + 1}`}>
+                  <ListItemAvatar>
+                    <Avatar color="primary">
+                      <ModuleIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={`peer ${requires} missing`}
+                    secondary={requiredBy}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      aria-label="Install"
+                      onClick={() => handleInstall(peerName)}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              );
+            })}
+        </List>
+      </Paper>
     </ClickAwayListener>
   );
 };

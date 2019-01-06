@@ -11,7 +11,7 @@ import { merge } from 'ramda';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { APP_MODES } from './constants/AppConstants';
+import { APP_MODES, APP_ACTIONS } from './constants/AppConstants';
 import { switchcase } from './commons/utils';
 import MenuBuilder from './menu';
 import mk from './mk';
@@ -96,12 +96,10 @@ ipcMain.on('ipc-event', (event, options) => {
 
   const onClose = (status, error, data, cmd) => {
     const { directory, mode } = rest;
+    const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
 
-    const inAction =
-      ['install-packages', 'uninstall-packages'].indexOf(ipcEvent) > -1;
-
-    if (inAction) {
-      return event.sender.send('action-close', error, data);
+    if (actionIndex > -1) {
+      return event.sender.send('action-close', error, data, cmd);
     }
 
     if (directory && mode === APP_MODES.LOCAL && cmd[0] === 'list') {

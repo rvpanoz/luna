@@ -1,5 +1,5 @@
 /**
- * Dashboard
+ * Dashboard component
  */
 
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
@@ -13,17 +13,27 @@ import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import styles from './styles/dashboard';
 
-const mapState = state => ({
-  notifications: state.common.notifications,
-  manager: state.common.manager,
-  mode: state.common.mode,
-  directory: state.common.directory,
-  loading: state.packages.loading,
-  lastUpdatedAt: state.packages.lastUpdatedAt,
-  packages: state.packages.packages,
-  packagesOutdated: state.packages.packagesOutdated,
-  projectName: state.packages.projectName,
-  projectVersion: state.packages.projectVersion
+const mapState = ({
+  common: { notifications, manager, mode, directory },
+  packages: {
+    loading,
+    lastUpdatedAt,
+    packages,
+    packagesOutdated,
+    projectNam,
+    projectVersion
+  }
+}) => ({
+  notifications,
+  manager,
+  mode,
+  directory,
+  loading,
+  lastUpdatedAt,
+  packages,
+  packagesOutdated,
+  projectNam,
+  projectVersion
 });
 
 const Dashboard = props => {

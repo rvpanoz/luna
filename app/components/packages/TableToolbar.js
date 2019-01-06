@@ -65,7 +65,7 @@ const TableListToolbar = props => {
   const doAction = action => {
     ipcRenderer.send('ipc-event', {
       activeManager: manager,
-      ipcEvent: `${action}-packages`,
+      ipcEvent: action,
       cmd: [action],
       multiple: true,
       packages: selected,
@@ -81,7 +81,6 @@ const TableListToolbar = props => {
     );
   };
 
-  // header line
   const openPackage = useCallback(() => {
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
@@ -222,14 +221,16 @@ const TableListToolbar = props => {
                   <ClearAllIcon />
                 </IconButton>
               </Tooltip>
-              <Tooltip title="Uninstall selected">
-                <IconButton
-                  aria-label="uninstall selected"
-                  onClick={() => handleAction('uninstall')}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </Tooltip>
+              {!fromSearch && (
+                <Tooltip title="Uninstall selected">
+                  <IconButton
+                    aria-label="uninstall selected"
+                    onClick={() => handleAction('uninstall')}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
             </div>
           )}
         </div>
