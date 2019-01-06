@@ -48,7 +48,7 @@ const PackageDetails = props => {
           <CardHeader
             avatar={
               <Avatar aria-label="Recipe" className={classes.avatar}>
-                R
+                {active.license}
               </Avatar>
             }
             action={
@@ -57,7 +57,7 @@ const PackageDetails = props => {
               </IconButton>
             }
             title={active.name}
-            subheader={active.license}
+            subheader={active.version}
           />
           <CardContent>
             <Typography
@@ -65,7 +65,7 @@ const PackageDetails = props => {
               color="textSecondary"
               gutterBottom
             >
-              {active.name}
+              {active.description}
             </Typography>
           </CardContent>
         </Card>

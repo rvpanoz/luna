@@ -18,13 +18,13 @@ const doStartPackages = dispatch => dispatch(setPackagesStart());
 
 const doSetPackagesSuccess = (
   dispatch,
-  { dependencies, projectName, projectVersion, outdated }
+  { dependencies, fromSort, fromSearch, outdated }
 ) =>
   dispatch(
     setPackagesSuccess({
       dependencies,
-      projectName,
-      projectVersion,
+      fromSearch,
+      fromSort,
       outdated
     })
   );

@@ -20,13 +20,6 @@ export const APP_MODES = {
   LOCAL: 'LOCAL'
 };
 
-// package actions
-export const APP_ACTIONS = {
-  INSTALL: 'INSTALL',
-  UPDATE: 'UPDATE',
-  UNINSTALL: 'UNINSTALL'
-};
-
 export const APP_INFO = {
   CONFIRMATION: 'Would you like to $action $name@version?',
   NOT_AVAILABLE: 'N/A',
@@ -34,6 +27,9 @@ export const APP_INFO = {
   NO_WORKING_DIRECTORY: 'No working directory',
   NO_DATA: 'No data'
 };
+
+// package actions
+export const APP_ACTIONS = ['install', 'uninstall', 'update', 'view'];
 
 // supported package groups
 export const PACKAGE_GROUPS = {

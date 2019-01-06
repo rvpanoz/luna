@@ -1,5 +1,9 @@
 /* eslint-disable */
 
+/**
+ * Applications main process
+ */
+
 import ElectronStore from 'electron-store';
 import path from 'path';
 import fs from 'fs';
@@ -7,12 +11,37 @@ import { merge } from 'ramda';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { APP_MODES } from './constants/AppConstants';
-
+import { APP_MODES, APP_ACTIONS } from './constants/AppConstants';
 import { switchcase } from './commons/utils';
 import MenuBuilder from './menu';
 import mk from './mk';
 import { runCommand } from './shell';
+
+const { config } = mk;
+const {
+  defaultSettings: { startMinimized },
+  defaultSettings: { defaultManager }
+} = config;
+
+const {
+  DEBUG_PROD = 0,
+  DEBUG_DEV = 1,
+  MIN_WIDTH = 0,
+  MIN_HEIGHT = 0,
+  INSTALL_EXTENSIONS = 1,
+  UPGRADE_EXTENSIONS,
+  NODE_ENV,
+  START_MINIMIZED = startMinimized
+} = process.env;
+
+const APP_PATHS = {
+  appData: app.getPath('appData'),
+  userData: app.getPath('userData')
+};
+
+// development parameters
+// const debug = /--debug/.test(process.argv[2]);
+// const needslog = /--log/.test(process.argv[3]);
 
 export default class AppUpdater {
   constructor() {
@@ -21,33 +50,6 @@ export default class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
-
-const APP_PATHS = {
-  appData: app.getPath('appData'),
-  userData: app.getPath('userData')
-};
-
-// defaults settings
-const { config } = mk;
-const {
-  defaultSettings: { startMinimized },
-  defaultSettings
-} = config;
-const { defaultManager } = defaultSettings;
-const {
-  DEBUG_PROD,
-  UPGRADE_EXTENSIONS,
-  NODE_ENV,
-  START_MINIMIZED = startMinimized
-} = process.env;
-
-// development parameters
-// const debug = /--debug/.test(process.argv[2]);
-// const needslog = /--log/.test(process.argv[3]);
-
-// window min resolution
-const MIN_WIDTH = 1366;
-const MIN_HEIGHT = 768;
 
 // store initialization
 const Store = new ElectronStore();
@@ -67,12 +69,8 @@ if (NODE_ENV === 'production') {
 
 if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
   const p = path.join(__dirname, '..', 'app', 'node_modules');
-  // const { appData, userData } = APP_PATHS;
 
-  // mk.log(`[INFO] user data directory: ${userData}`);
-  // mk.log(`[INFO] app data directory: ${appData}`);
-
-  require('electron-debug')();
+  DEBUG_DEV && require('electron-debug')();
   require('module').globalPaths.push(p);
 }
 
@@ -96,14 +94,12 @@ ipcMain.on('ipc-event', (event, options) => {
 
   const onError = error => event.sender.send('ipcEvent-error', error);
 
-  function onClose(status, error, data, cmd) {
+  const onClose = (status, error, data, cmd) => {
     const { directory, mode } = rest;
+    const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
 
-    const inAction =
-      ['install-packages', 'uninstall-packages'].indexOf(ipcEvent) > -1;
-
-    if (inAction) {
-      return event.sender.send('action-close', error, data);
+    if (actionIndex > -1) {
+      return event.sender.send('action-close', error, data, cmd);
     }
 
     if (directory && mode === APP_MODES.LOCAL && cmd[0] === 'list') {
@@ -136,11 +132,8 @@ ipcMain.on('ipc-event', (event, options) => {
 
     event.sender.send('loaded-packages-close', Store.get('openedPackages'));
     event.sender.send(`${ipcEvent}-close`, status, cmd, data, error, options);
-  }
+  };
 
-  /**
-   *  Send response to renderer process via ipc events
-   */
   const callback = (status, error, ...restArgs) =>
     switchcase({
       close: () => onClose(status, error, ...restArgs),
@@ -149,7 +142,7 @@ ipcMain.on('ipc-event', (event, options) => {
 
   /**
    * At this point we try to run a shell command sending output
-   * using spawn to renderer via ipc events
+   * to renderer process via ipc events
    */
   try {
     const params = merge(settings, {
@@ -157,16 +150,12 @@ ipcMain.on('ipc-event', (event, options) => {
       ...rest
     });
 
-    runCommand.apply(null, [params, callback]);
+    runCommand(params, callback);
   } catch (error) {
     mk.log(error.message);
     throw new Error(error);
   }
 });
-
-/**
- * Add event listeners
- */
 
 app.on('window-all-closed', () => {
   /**
@@ -181,7 +170,7 @@ app.on('window-all-closed', () => {
 
 app.on('ready', async () => {
   if (NODE_ENV === 'development') {
-    await installExtensions();
+    INSTALL_EXTENSIONS && (await installExtensions());
   }
 
   let x = 0;

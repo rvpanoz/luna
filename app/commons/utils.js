@@ -183,8 +183,13 @@ export const isPackageOutdated = (outdatedPackages, name) => {
  * @param {*} directory
  */
 export const parseMap = (response, mode, directory) => {
+  if (!response || typeof response !== 'string') {
+    throw new Error('response parameter must be a string');
+  }
+
   try {
     const packageJson = JSON.parse(response);
+
     const { name, version } = packageJson || {};
 
     const packages = pick(['dependencies'], packageJson);
@@ -207,8 +212,7 @@ export const parseMap = (response, mode, directory) => {
       const [pkgName, details] = pkgArr;
       const { name, peerMissing } = details || {};
 
-      let group = null;
-      let found = false;
+      let group;
       let hasError = typeof details.error === 'object';
 
       // find group and attach to pkg, useful to show data in list
@@ -222,13 +226,8 @@ export const parseMap = (response, mode, directory) => {
           return;
         }
 
-        Object.keys(PACKAGE_GROUPS).some(groupName => {
-          found = packageJSON[groupName] && packageJSON[groupName][pkgName];
-          if (found) {
-            group = groupName;
-          }
-
-          return found;
+        group = Object.keys(PACKAGE_GROUPS).find(groupName => {
+          return packageJSON[groupName] && packageJSON[groupName][pkgName];
         });
       }
 
@@ -243,9 +242,15 @@ export const parseMap = (response, mode, directory) => {
     return [name, version, data];
   } catch (error) {
     mk.log(error.message);
-    throw new Error(error);
+    return;
   }
 };
+
+export const filterByProp = (data, prop) =>
+  data &&
+  data.filter(item => {
+    return item[prop];
+  }, data);
 
 export const parseNpmError = error => {
   if (!error) {
@@ -255,5 +260,7 @@ export const parseNpmError = error => {
   const errorParts = typeof error === 'string' && error.split(',');
   const errorMessage = errorParts && errorParts[0].split(':');
 
-  return [errorMessage[0].trim(), errorMessage[1].trim(), errorParts[1]];
+  return !errorMessage
+    ? []
+    : [errorMessage[0].trim(), errorMessage[1].trim(), errorParts[1]];
 };

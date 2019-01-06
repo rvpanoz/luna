@@ -1,14 +1,16 @@
-/* eslint-disable */
-
 /**
  * Packages component
  */
+
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-underscore-dangle */
 
 import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useCallback } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
-import { filter } from 'ramda';
+import { filter, merge } from 'ramda';
 import { withStyles, Typography } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
@@ -16,23 +18,19 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 
 import useIpc from 'commons/hooks/useIpc';
-import { getFiltered, parseNpmError } from 'commons/utils';
+import { getFiltered, parseNpmError, filterByProp } from 'commons/utils';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/layout/SnackbarContent';
-
-import AppLoader from '../layout/AppLoader';
-import TableToolbar from './TableToolbar';
-import TableHeader from './TableHeader';
-import TableFooter from './TableFooter';
-import PackageItem from './PackageItem';
 
 import {
   doAddActionError,
   doAddSelected,
   doClearPackages,
+  doClearSelected,
   doSetPackagesSuccess,
-  doSetOutdatedSuccess
+  doSetOutdatedSuccess,
+  doSetActive
 } from 'models/packages/selectors';
 
 import {
@@ -40,39 +38,66 @@ import {
   doClearNotifications,
   doClearSnackbar,
   doToggleLoader,
-  doTogglePackageLoader,
   doSetPage,
   doSetPageRows,
   doSetSnackbar
 } from 'models/ui/selectors';
 
-import { INFO_MESSAGES, WARNING_MESSAGES } from 'constants/AppConstants';
+import {
+  APP_INFO,
+  INFO_MESSAGES,
+  WARNING_MESSAGES
+} from 'constants/AppConstants';
+
+import AppLoader from '../layout/AppLoader';
+import TableToolbar from './TableToolbar';
+import TableHeader from './TableHeader';
+import TableFooter from './TableFooter';
+import PackageItem from './PackageItem';
+
 import { listStyles as styles } from '../styles/packagesStyles';
-import { APP_INFO } from '../../constants/AppConstants';
-import { setActive } from '../../models/packages/actions';
-import { doSetActive } from '../../models/packages/selectors';
 
 // use useCallback if you need it inside component body
 // const mapState = useCallback(state=>({
 //   directory: state.common.directory
-// }),[input])
+// }), [input])
 
-const mapState = state => ({
-  directory: state.common.directory,
-  notifications: state.common.notifications,
-  manager: state.common.manager,
-  mode: state.common.mode,
-  page: state.common.page,
-  rowsPerPage: state.common.rowsPerPage,
-  loader: state.common.loader,
-  snackbarOptions: state.common.snackbarOptions,
-  active: state.packages.active,
-  action: state.packages.action,
-  filters: state.packages.filters,
-  packages: state.packages.packages,
-  packagesOutdated: state.packages.packagesOutdated,
-  selected: state.packages.selected,
-  fromSearch: state.packages.fromSearch
+const mapState = ({
+  common: {
+    directory,
+    notifications,
+    manager,
+    mode,
+    page,
+    rowsPerPage,
+    loader
+  },
+  packages: {
+    snackbarOptions,
+    active,
+    action,
+    filters,
+    packages,
+    packagesOutdated,
+    selected,
+    fromSearch
+  }
+}) => ({
+  directory,
+  notifications,
+  manager,
+  mode,
+  page,
+  rowsPerPage,
+  loader,
+  snackbarOptions,
+  active,
+  action,
+  filters,
+  packages,
+  packagesOutdated,
+  selected,
+  fromSearch
 });
 
 const isSelected = (name, selected) => selected.indexOf(name) !== -1;
@@ -80,9 +105,7 @@ const isSelected = (name, selected) => selected.indexOf(name) !== -1;
 const Packages = props => {
   const { classes } = props;
   const {
-    action: { actionName, actionError },
     loader: { loading, message },
-    active,
     packages,
     mode,
     page,
@@ -99,15 +122,20 @@ const Packages = props => {
     direction: 'asc',
     prop: 'name'
   });
+
   const [counter, setCounter] = useState(0);
   const dispatch = useDispatch();
 
-  // ui handlers
-  const clearUI = useCallback(opts => {
-    opts.packages === true && doClearPackages(dispatch);
-    opts.notifications === true && doClearNotifications(dispatch);
-    opts.snackbar === true && doClearSnackbar(dispatch);
-    active && opts.active === true && doSetActive(dispatch, { active: null });
+  const clearUI = useCallback((...options) => {
+    const { inert } = options;
+
+    if (inert) {
+      doSetActive(dispatch, { active: null });
+    }
+
+    doClearPackages(dispatch);
+    doClearNotifications(dispatch);
+    doClearSnackbar(dispatch);
   }, []);
 
   const setSelected = useCallback(
@@ -116,7 +144,8 @@ const Packages = props => {
   );
 
   const updateLoader = useCallback(
-    (loading, message) => doToggleLoader(dispatch, { loading, message }),
+    (bool, content) =>
+      doToggleLoader(dispatch, { loading: bool, message: content }),
     []
   );
 
@@ -167,10 +196,10 @@ const Packages = props => {
 
       if (dependencies && Array.isArray(dependencies) && dependencies.length) {
         clearUI({
-          packages: true,
+          data: true,
           notifications: true,
           snackbar: true,
-          active: true
+          inert: true
         });
 
         doSetPackagesSuccess(dispatch, {
@@ -209,11 +238,8 @@ const Packages = props => {
         }
       }
 
-      const withPeerMissing =
-        dependencies &&
-        filter(pkg => {
-          return pkg.__peerMissing;
-        }, dependencies);
+      const withPeerMissing = filterByProp(dependencies, '__peerMissing');
+      const withErrors = filterByProp(dependencies, '__error');
 
       if (withPeerMissing && withPeerMissing.length) {
         doSetSnackbar(dispatch, {
@@ -222,12 +248,6 @@ const Packages = props => {
           message: WARNING_MESSAGES.peerMissing
         });
       }
-
-      const withErrors =
-        dependencies &&
-        filter(pkg => {
-          return pkg.__error;
-        }, dependencies);
 
       if (withErrors && withErrors.length) {
         doSetSnackbar(dispatch, {
@@ -276,37 +296,41 @@ const Packages = props => {
     [sortOptions]
   );
 
+  useEffect(
+    () => {
+      ipcRenderer.on(['action-close'], (event, error) => {
+        if (error && error.length) {
+          doAddActionError(dispatch, { error });
+        }
+
+        setCounter(counter + 1);
+      });
+
+      return () => ipcRenderer.removeAllListeners(['action-close']);
+    },
+    [counter]
+  );
+
   /**
    * TODO: description
    */
   useEffect(() => {
-    ipcRenderer.on(['action-close'], (event, error, data) => {
-      if (error) {
-        doAddActionError(dispatch, { error });
-      }
-
-      setCounter(counter + 1);
-    });
-
     ipcRenderer.on(['view-package-close'], (event, status, error, data) => {
-      doTogglePackageLoader(dispatch, {
-        loading: false,
-        message: null
-      });
-
-      doSetSnackbar(dispatch, {
-        open: true,
-        type: 'info',
-        message: INFO_MESSAGES.packageLoaded
-      });
-
       try {
+        // WIP
         const active = data && JSON.parse(data);
+        console.log(active);
+        // doSetActive(dispatch, {
+        //   active
+        // });
 
-        doSetActive(dispatch, {
-          active
+        doSetSnackbar(dispatch, {
+          open: true,
+          type: 'info',
+          message: INFO_MESSAGES.packageLoaded
         });
       } catch (err) {
+        console.error(err);
         doSetSnackbar(dispatch, {
           open: true,
           type: 'danger',
@@ -315,7 +339,7 @@ const Packages = props => {
       }
     });
 
-    ipcRenderer.on('yarn-warning-close', event => {
+    ipcRenderer.on('yarn-warning-close', () => {
       doSetSnackbar(dispatch, {
         open: true,
         type: 'error',
@@ -324,7 +348,11 @@ const Packages = props => {
     });
 
     return () =>
-      ipcRenderer.removeAllListeners(['action-close', 'yarn-warning-close']);
+      ipcRenderer.removeAllListeners([
+        'action-close',
+        'view-package-close',
+        'yarn-warning-close'
+      ]);
   }, []);
 
   const filteredPackages =
@@ -335,10 +363,7 @@ const Packages = props => {
       ? filteredPackages
       : packages;
 
-  // exclude packages with errors and peerMissing
-  const packagesData = filter(pkg => {
-    return !pkg.__error && !pkg.__peerMissing;
-  }, data);
+  const packagesData = filter(pkg => !pkg.__error && !pkg.__peerMissing, data);
 
   const dataSlices =
     packagesData &&
@@ -387,7 +412,7 @@ const Packages = props => {
                     force
                   })
                 }
-                onClearSelected={() => clearSelected(dispatch)}
+                onClearSelected={() => doClearSelected(dispatch)}
               />
               <TableBody>
                 {dataSlices &&

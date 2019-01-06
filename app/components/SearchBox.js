@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'redux-react-hook';
 import { ipcRenderer } from 'electron';
@@ -11,8 +12,11 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/layout/SnackbarContent';
 
 import { parseMap } from 'commons/utils';
-import { setPackagesStart, setPackagesSuccess } from 'models/packages/actions';
-import { clearNotifications, toggleLoader } from 'models/ui/actions';
+import {
+  doStartPackages,
+  doSetPackagesSuccess
+} from 'models/packages/selectors';
+import { doClearNotifications, doToggleLoader } from 'models/ui/selectors';
 
 import styles from './styles/searchBox';
 
@@ -32,12 +36,13 @@ const SearchBox = props => {
       return;
     }
 
-    dispatch(
-      toggleLoader({ loading: true, message: `Searching for ${searchValue}..` })
-    );
+    doToggleLoader(dispatch, {
+      loading: true,
+      message: `Searching for ${searchValue}..`
+    });
 
-    dispatch(clearNotifications());
-    dispatch(setPackagesStart());
+    doClearNotifications(dispatch);
+    doStartPackages(dispatch);
 
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'search-packages',
@@ -64,17 +69,16 @@ const SearchBox = props => {
         try {
           const [name, version, packages] = (data && parseMap(data)) || [];
 
-          dispatch(
-            setPackagesSuccess({
-              name,
-              version,
-              fromSearch: true,
-              outdated: null,
-              dependencies: packages
-            })
-          );
+          doSetPackagesSuccess(dispatch, {
+            fromSearch: true,
+            outdated: null,
+            dependencies: packages
+          });
 
-          dispatch(toggleLoader({ loading: false, message: null }));
+          doToggleLoader(dispatch, {
+            loading: false,
+            message: null
+          });
         } catch (e) {
           throw new Error(e);
         }
@@ -127,6 +131,11 @@ const SearchBox = props => {
       </Snackbar>
     </React.Fragment>
   );
+};
+
+SearchBox.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  disabled: PropTypes.bool
 };
 
 export default withStyles(styles)(SearchBox);

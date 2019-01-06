@@ -1,5 +1,9 @@
 /* eslint-disable-interactive-support-focus */
 
+/**
+ * Header component
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { ipcRenderer, remote } from 'electron';

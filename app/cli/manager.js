@@ -82,8 +82,8 @@ const execute = (
  * */
 
 exports.list = (options, callback) => {
-  const command = 'list';
-  const { mode, directory, manager } = options || {};
+  const command = ['list'];
+  const { mode, directory } = options || {};
 
   if (!callback || typeof callback !== 'function') {
     Promise.reject(
@@ -97,12 +97,10 @@ exports.list = (options, callback) => {
     );
   }
 
-  const commandArgs =
+  const run =
     mode === 'GLOBAL' && !directory
-      ? [].concat(command, defaultsArgs.list, '-g')
-      : [].concat(command, defaultsArgs.list);
-
-  const run = [].concat(commandArgs);
+      ? command.concat(defaultsArgs.list, '-g')
+      : command.concat(defaultsArgs.list);
 
   // returns a Promise
   return execute('npm', run, mode, directory, callback);
@@ -113,8 +111,8 @@ exports.list = (options, callback) => {
  * use npm
  */
 exports.outdated = (options, callback) => {
-  const command = 'outdated';
-  const { mode, directory, manager } = options || {};
+  const command = ['outdated'];
+  const { mode, directory } = options || {};
 
   if (!callback || typeof callback !== 'function') {
     Promise.reject(
@@ -128,12 +126,10 @@ exports.outdated = (options, callback) => {
     );
   }
 
-  const commandArgs =
+  const run =
     mode === 'GLOBAL' && !directory
-      ? [].concat(command, defaultsArgs.list, '-g')
-      : [].concat(command, defaultsArgs.list);
-
-  const run = [].concat(commandArgs);
+      ? command.concat(defaultsArgs.list, '-g')
+      : command.concat(defaultsArgs.list);
 
   // returns a Promise
   return execute('npm', run, mode, directory, callback);
