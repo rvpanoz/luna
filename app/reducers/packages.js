@@ -76,6 +76,7 @@ const handlers = {
       packagesOutdated: []
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
+    console.log(payload);
     const {
       dependencies,
       projectName,
@@ -105,8 +106,8 @@ const handlers = {
 
     return merge(state, {
       packages,
-      fromSearch: Boolean(fromSearch),
-      lastUpdatedAt: Boolean(fromSort)
+      fromSearch,
+      lastUpdatedAt: fromSort
         ? state.lastUpdatedAt
         : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
       projectName,
