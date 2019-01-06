@@ -142,7 +142,11 @@ ipcMain.on('ipc-event', (event, options) => {
 
   /**
    * At this point we try to run a shell command sending output
+<<<<<<< 4528f1a617e4e40b3a878a1525e2216fd7836e07
    * to renderer process via ipc events
+=======
+   * to renderer via ipc events
+>>>>>>> sync with preview, opt code
    */
   try {
     const params = merge(settings, {

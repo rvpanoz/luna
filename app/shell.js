@@ -16,6 +16,7 @@ import apiManager from './cli/manager';
 export const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
+<<<<<<< 4528f1a617e4e40b3a878a1525e2216fd7836e07
 <<<<<<< e2c721b728ef2f002f21e369491b25af046eb9a6
   const combine = () =>
     cmd.map(command => {
@@ -45,20 +46,22 @@ export const runCommand = (options, callback) => {
 
       // return fc();
 
+=======
+  const combine = () =>
+    cmd.map(command => {
+      // the apiManager function to call
+>>>>>>> sync with preview, opt code
       const runner = apiManager[command];
-      return runner.call(this, rest, callback)();
+
+      // return the function's result
+      return runner(rest, callback);
     });
 
-    return promises;
-  };
-
-  const promises = combine();
-  // console.log(promises)
-
-  Promise.all(promises).then(results => {
-    console.log(results);
-
+<<<<<<< 4528f1a617e4e40b3a878a1525e2216fd7836e07
 >>>>>>> finish review
+=======
+  Promise.all(combine()).then(results => {
+>>>>>>> sync with preview, opt code
     results.forEach(result => {
       const { status, ...values } = result;
       const { data, error, cmd } = values;

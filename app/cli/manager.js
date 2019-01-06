@@ -104,9 +104,12 @@ exports.list = (options, callback) => {
 <<<<<<< e2c721b728ef2f002f21e369491b25af046eb9a6
 =======
 
+<<<<<<< 4528f1a617e4e40b3a878a1525e2216fd7836e07
   const run = [].concat(commandArgs);
 >>>>>>> finish review
 
+=======
+>>>>>>> sync with preview, opt code
   // returns a Promise
   return execute('npm', run, mode, directory, callback);
 };
