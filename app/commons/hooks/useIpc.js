@@ -48,7 +48,6 @@ const useIpc = (channel, options, inputs = []) => {
 
     doToggleLoader(dispatch, { loading: true, message: 'Loading packages..' });
     doStartPackages(dispatch);
-
     ipcRenderer.send(channel, options);
 
     return () => ipcRenderer.removeAllListeners([listenTo]);
