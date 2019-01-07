@@ -149,10 +149,7 @@ const TableListToolbar = props => {
       </Tooltip>
       <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
         <div>
-          <IconButton
-            aria-label={fromSearch ? 'Back to list' : 'Reload list'}
-            onClick={() => reload()}
-          >
+          <IconButton aria-label="back_reload" onClick={() => reload()}>
             <RefreshIcon />
           </IconButton>
         </div>
