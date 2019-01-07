@@ -332,8 +332,8 @@ const Packages = props => {
       } catch (err) {
         doSetSnackbar(dispatch, {
           open: true,
-          type: 'info',
-          message: INFO_MESSAGES.packageLoaded
+          type: 'danger',
+          message: err.message
         });
       }
     });
