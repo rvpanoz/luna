@@ -72,6 +72,8 @@ const handlers = {
   [clearSelected.type]: state => assoc('selected', [], state),
   [clearPackages.type]: state =>
     merge(state, {
+      projectName: null,
+      projectVersion: null,
       packages: [],
       packagesOutdated: []
     }),

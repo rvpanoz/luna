@@ -34,16 +34,17 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import { APP_MODES } from 'constants/AppConstants';
-import { setMode } from 'models/ui/actions';
+import { doSetMode } from 'models/ui/selectors';
+import { doClearPackages } from 'models/packages/selectors';
 
 import SearchBox from './SearchBox';
 import styles from './styles/header';
 import Settings from './Settings';
 import Notifications from './Notifications';
 
-const mapState = state => ({
-  notifications: state.common.notifications,
-  loader: state.common.loader
+const mapState = ({ common: { notifications, loader } }) => ({
+  notifications,
+  loader
 });
 
 const Header = props => {
@@ -52,7 +53,6 @@ const Header = props => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notificationsEl, setNotificationsEl] = useState(null);
   const [drawerOpen, toggleDrawer] = useState(false);
-
   const [settingsOpen, toggleSettings] = useState(false);
 
   const dispatch = useDispatch();
@@ -60,6 +60,11 @@ const Header = props => {
 
   const menuOpen = Boolean(anchorEl);
   const notificationsOpen = Boolean(notifications.length && notificationsEl);
+  const handleDirectory = useCallback(directory => {
+    doClearPackages(dispatch);
+    doSetMode(dispatch, { mode: APP_MODES.LOCAL, directory });
+    toggleDrawer(false);
+  }, []);
 
   useEffect(
     () => {
@@ -89,26 +94,13 @@ const Header = props => {
       filePath => {
         if (filePath) {
           const directory = filePath.join('');
-
-          dispatch(setMode({ mode: APP_MODES.LOCAL, directory }));
-          toggleDrawer(false);
+          handleDirectory(directory);
         }
-
-        return false;
       }
     );
   }, []);
 
-  const openDirectory = useCallback(directory => {
-    dispatch(
-      setMode({
-        mode: APP_MODES.LOCAL,
-        directory
-      })
-    );
-
-    toggleDrawer(false);
-  });
+  const openDirectory = useCallback(directory => handleDirectory(directory));
 
   return (
     <div className={classes.root}>

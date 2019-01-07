@@ -18,6 +18,8 @@ export default {
     message: null
   },
   packages: {
+    projectName: '',
+    projectVersion: '',
     action: {
       name: null,
       error: null

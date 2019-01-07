@@ -4,6 +4,7 @@ import {
   clearSnackbar,
   setSnackbar,
   setPage,
+  setMode,
   setPageRows,
   toggleLoader,
   togglePackageLoader
@@ -19,11 +20,13 @@ const doAddNotification = (dispatch, payload) =>
   dispatch(addNotification(payload));
 const doSetSnackbar = (dispatch, payload) => dispatch(setSnackbar(payload));
 const doSetPageRows = (dispatch, payload) => dispatch(setPageRows(payload));
+const doSetMode = (dispatch, payload) => dispatch(setMode(payload));
 
 export {
   doAddNotification,
   doClearNotifications,
   doClearSnackbar,
+  doSetMode,
   doToggleLoader,
   doTogglePackageLoader,
   doSetPage,

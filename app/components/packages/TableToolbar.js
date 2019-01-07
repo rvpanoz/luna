@@ -25,8 +25,9 @@ import PublicIcon from '@material-ui/icons/PublicRounded';
 
 import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
-import { setMode, toggleLoader } from 'models/ui/actions';
-import { clearSelected } from 'models/packages/actions';
+import { doSetMode, doToggleLoader } from 'models/ui/selectors';
+import { doClearSelected } from 'models/packages/selectors';
+
 import TableFilters from './TableFilters';
 
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
@@ -50,7 +51,7 @@ const TableListToolbar = props => {
   const dispatch = useDispatch();
 
   const switchMode = (mode, directory) => {
-    dispatch(setMode({ mode, directory }));
+    doSetMode(dispatch, { mode, directory });
 
     if (fromSearch) {
       reload();
@@ -73,12 +74,10 @@ const TableListToolbar = props => {
       directory
     });
 
-    dispatch(
-      toggleLoader({
-        loading: true,
-        message: `${firstToUpper(action)}ing packages..`
-      })
-    );
+    doToggleLoader(dispatch, {
+      loading: true,
+      message: `${firstToUpper(action)}ing packages..`
+    });
   };
 
   const openPackage = useCallback(() => {
@@ -158,17 +157,19 @@ const TableListToolbar = props => {
           </IconButton>
         </div>
       </Tooltip>
-      <Tooltip title="Show filters">
-        <div>
-          <IconButton
-            disabled={nodata === true}
-            aria-label="Show filters"
-            onClick={openFilters}
-          >
-            <FilterListIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
+      {!fromSearch && (
+        <Tooltip title="Show filters">
+          <div>
+            <IconButton
+              disabled={nodata === true || fromSearch}
+              aria-label="Show filters"
+              onClick={openFilters}
+            >
+              <FilterListIcon />
+            </IconButton>
+          </div>
+        </Tooltip>
+      )}
     </div>
   );
 
