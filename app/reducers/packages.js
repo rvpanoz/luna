@@ -76,6 +76,7 @@ const handlers = {
       packagesOutdated: []
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
+    console.log(payload);
     const {
 <<<<<<< c95bb4b50524e27e2c0538331b8ba3eee2323202
 <<<<<<< 9e2b4bd230cfc539b6bac8b8cb85cd0c9ce1c37c

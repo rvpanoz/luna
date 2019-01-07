@@ -20,7 +20,7 @@ const mapState = ({
     lastUpdatedAt,
     packages,
     packagesOutdated,
-    projectNam,
+    projectName,
     projectVersion
   }
 }) => ({
@@ -32,7 +32,7 @@ const mapState = ({
   lastUpdatedAt,
   packages,
   packagesOutdated,
-  projectNam,
+  projectName,
   projectVersion
 });
 
