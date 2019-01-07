@@ -76,7 +76,6 @@ const handlers = {
       packagesOutdated: []
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
-    console.log(payload);
     const {
       dependencies,
       projectName,
@@ -126,14 +125,6 @@ const handlers = {
   [setActive.type]: (state, { payload }) =>
     merge(state, {
       active: payload
-    }),
-  [setPackagesStart.type]: state =>
-    merge(state, {
-      active: null
-    }),
-  [setPackagesStart.type]: state =>
-    merge(state, {
-      active: null
     }),
   [setPackagesStart.type]: state =>
     merge(state, {
