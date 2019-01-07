@@ -122,10 +122,11 @@ const handlers = {
       packagesOutdated: dependencies
     });
   },
-  [setActive.type]: (state, { payload }) =>
-    merge(state, {
-      active: payload
-    }),
+  [setActive.type]: (state, { payload }) => {
+    const { active } = payload;
+
+    return assoc('active', active, state);
+  },
   [setPackagesStart.type]: state =>
     merge(state, {
       active: null,

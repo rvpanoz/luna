@@ -98,7 +98,7 @@ ipcMain.on('ipc-event', (event, options) => {
     const { directory, mode } = rest;
     const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
 
-    if (actionIndex > -1) {
+    if (actionIndex > -1 && ipcEvent !== 'view') {
       return event.sender.send('action-close', error, data, cmd);
     }
 

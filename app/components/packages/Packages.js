@@ -126,7 +126,7 @@ const Packages = props => {
   const [counter, setCounter] = useState(0);
   const dispatch = useDispatch();
 
-  const clearUI = useCallback((...options) => {
+  const clearUI = useCallback(options => {
     const { inert } = options;
 
     if (inert) {
@@ -298,6 +298,7 @@ const Packages = props => {
 
   useEffect(
     () => {
+      // handles intall and uninstall actions which they need reload the packages
       ipcRenderer.on(['action-close'], (event, error) => {
         if (error && error.length) {
           doAddActionError(dispatch, { error });
@@ -315,29 +316,6 @@ const Packages = props => {
    * TODO: description
    */
   useEffect(() => {
-    ipcRenderer.on(['view-package-close'], (event, status, error, data) => {
-      try {
-        // WIP
-        const active = data && JSON.parse(data);
-        console.log(active);
-        // doSetActive(dispatch, {
-        //   active
-        // });
-
-        doSetSnackbar(dispatch, {
-          open: true,
-          type: 'info',
-          message: INFO_MESSAGES.packageLoaded
-        });
-      } catch (err) {
-        doSetSnackbar(dispatch, {
-          open: true,
-          type: 'danger',
-          message: err.message
-        });
-      }
-    });
-
     ipcRenderer.on('yarn-warning-close', () => {
       doSetSnackbar(dispatch, {
         open: true,

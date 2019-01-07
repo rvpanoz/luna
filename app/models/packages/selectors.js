@@ -38,7 +38,7 @@ const doSetOutdatedSuccess = (dispatch, { dependencies }) =>
     })
   );
 
-const doSetActive = (dispatch, { active }) => dispatch(setActive(active));
+const doSetActive = (dispatch, { active }) => dispatch(setActive({ active }));
 
 export {
   doAddActionError,

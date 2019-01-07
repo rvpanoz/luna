@@ -26,6 +26,7 @@ export default {
     packagesOutdated: [],
     selected: [],
     filters: [],
+    active: null,
     lastUpdatedAt: null,
     fromSearch: false,
     fromSort: false
