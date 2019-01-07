@@ -35,7 +35,7 @@ const PackageItemRow = props => {
     version,
     latest,
     isOutdated,
-    __group
+    group
   } = props;
 
   const dispatch = useDispatch();
@@ -114,7 +114,7 @@ const PackageItemRow = props => {
             equals('optionalDependencies'),
             always(<OptionalIcon className={classes.icon} />)
           ]
-        ])(__group)}
+        ])(group)}
       </TableCell>
     </TableRow>
   );
@@ -128,7 +128,7 @@ PackageItemRow.propTypes = {
   isOutdated: bool.isRequired,
   setSelected: func.isRequired,
   latest: oneOfType([string, object]),
-  __group: string
+  group: string
 };
 
 export default withStyles(styles)(PackageItemRow);

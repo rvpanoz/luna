@@ -15,6 +15,7 @@ const setPackagesSuccess = ActionCreator('SET_PACKAGES_SUCCESS');
 const setPackagesOutdatedSuccess = ActionCreator(
   'SET_PACKAGES_OUTDATED_SUCCESS'
 );
+const setSortOptions = ActionCreator('SET_SORT_OPTIONS');
 const setActive = ActionCreator('SET_ACTIVE_PACKAGE');
 const setPackagesError = ActionCreator('SET_PACKAGES_ERROR');
 const updatePackage = ActionCreator('UPDATE_PACKAGE');
@@ -30,6 +31,7 @@ export {
   setPackagesStart,
   setPackagesSuccess,
   setPackagesError,
+  setSortOptions,
   setPackagesOutdatedSuccess,
   updatePackage
 };

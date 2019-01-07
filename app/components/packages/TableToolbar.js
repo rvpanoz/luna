@@ -214,7 +214,7 @@ const TableListToolbar = props => {
               <Tooltip title="Clear selected">
                 <IconButton
                   aria-label="clear selected"
-                  onClick={() => dispatch(clearSelected())}
+                  onClick={() => doClearSelected(dispatch)}
                 >
                   <ClearAllIcon />
                 </IconButton>

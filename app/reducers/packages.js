@@ -16,7 +16,8 @@ import {
   setActive,
   setPackagesStart,
   setPackagesSuccess,
-  setPackagesOutdatedSuccess
+  setPackagesOutdatedSuccess,
+  setSortOptions
 } from 'models/packages/actions';
 
 import { isPackageOutdated } from 'commons/utils';
@@ -136,6 +137,11 @@ const handlers = {
       packageVersion: null,
       packagesOutdated: [],
       packages: []
+    }),
+  [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
+    merge(state, {
+      sortBy,
+      sortDir
     })
 };
 

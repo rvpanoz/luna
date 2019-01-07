@@ -20,6 +20,8 @@ export default {
   packages: {
     projectName: '',
     projectVersion: '',
+    sortBy: 'name',
+    sortDir: 'asc',
     action: {
       name: null,
       error: null

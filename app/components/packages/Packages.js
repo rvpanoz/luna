@@ -2,6 +2,7 @@
  * Packages component
  */
 
+/* eslint-disable */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-underscore-dangle */
@@ -10,7 +11,7 @@ import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useCallback } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
-import { filter, merge } from 'ramda';
+import { filter } from 'ramda';
 import { withStyles, Typography } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
@@ -57,11 +58,6 @@ import PackageItem from './PackageItem';
 
 import { listStyles as styles } from '../styles/packagesStyles';
 
-// use useCallback if you need it inside component body
-// const mapState = useCallback(state=>({
-//   directory: state.common.directory
-// }), [input])
-
 const mapState = ({
   common: {
     directory,
@@ -80,7 +76,9 @@ const mapState = ({
     packages,
     packagesOutdated,
     selected,
-    fromSearch
+    fromSearch,
+    sortDir,
+    sortBy
   }
 }) => ({
   directory,
@@ -97,13 +95,14 @@ const mapState = ({
   packages,
   packagesOutdated,
   selected,
-  fromSearch
+  fromSearch,
+  sortDir,
+  sortBy
 });
 
 const isSelected = (name, selected) => selected.indexOf(name) !== -1;
 
-const Packages = props => {
-  const { classes } = props;
+const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
     packages,
@@ -115,15 +114,12 @@ const Packages = props => {
     manager,
     selected,
     fromSearch,
-    snackbarOptions
+    snackbarOptions,
+    sortDir,
+    sortBy
   } = useMappedState(mapState);
 
-  const [sortOptions, setSort] = useState({
-    direction: 'asc',
-    prop: 'name'
-  });
-
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useState(0); // force render programmaticlly
   const dispatch = useDispatch();
 
   const clearUI = useCallback(options => {
@@ -149,24 +145,17 @@ const Packages = props => {
     []
   );
 
-  const closeSnackbar = useCallback(() => {
-    doSetSnackbar(dispatch, {
-      open: false,
-      message: null
-    });
-  }, []);
-
-  const toggleSort = useCallback(
-    prop => {
-      const direction = sortOptions.direction === 'desc' ? 'asc' : 'desc';
-
-      setSort({
-        direction,
-        prop
-      });
-    },
-    [sortOptions]
+  const updateSnackbar = useCallback(
+    ({ open, type, message }) =>
+      doSetSnackbar(dispatch, {
+        open,
+        type,
+        message
+      }),
+    []
   );
+
+  const reload = () => setCounter(counter + 1);
 
   // useIpc hook to send and listenTo ipc events
   const [dependenciesSet, outdatedSet, errors] = useIpc(
@@ -185,37 +174,32 @@ const Packages = props => {
   const outdated = outdatedSet.data;
   const nodata = dependencies && dependencies.length === 0;
 
-  /**
-   * TODO: description
-   */
   useEffect(
     () => {
+      clearUI({
+        data: true,
+        notifications: true,
+        snackbar: true,
+        inert: true
+      });
+
       if (page !== 0) {
         doSetPage(dispatch, { page: 0 });
       }
 
       if (dependencies && Array.isArray(dependencies) && dependencies.length) {
-        clearUI({
-          data: true,
-          notifications: true,
-          snackbar: true,
-          inert: true
-        });
-
         doSetPackagesSuccess(dispatch, {
           dependencies,
           projectName,
           projectVersion,
           outdated
         });
-      }
 
-      if (outdated && Array.isArray(outdated) && outdated.length) {
-        doSetOutdatedSuccess(dispatch, {
-          dependencies: outdated
-        });
-
-        updateLoader(false, null);
+        if (outdated && Array.isArray(outdated) && outdated.length) {
+          doSetOutdatedSuccess(dispatch, {
+            dependencies: outdated
+          });
+        }
       }
 
       if (errors && typeof errors === 'string') {
@@ -238,19 +222,10 @@ const Packages = props => {
         }
       }
 
-      const withPeerMissing = filterByProp(dependencies, '__peerMissing');
       const withErrors = filterByProp(dependencies, '__error');
 
-      if (withPeerMissing && withPeerMissing.length) {
-        doSetSnackbar(dispatch, {
-          open: true,
-          type: 'warning',
-          message: WARNING_MESSAGES.peerMissing
-        });
-      }
-
       if (withErrors && withErrors.length) {
-        doSetSnackbar(dispatch, {
+        updateSnackbar({
           open: true,
           type: 'error',
           message: WARNING_MESSAGES.errorPackages
@@ -259,52 +234,27 @@ const Packages = props => {
 
       // handle empty data
       if (dependencies === null) {
-        doSetSnackbar(dispatch, {
+        updateSnackbar({
           open: true,
           type: 'info',
-          message: INFO_MESSAGES.noData
+          message: INFO_MESSAGES.nodata
         });
       }
+
+      updateLoader(false, null);
     },
     [dependenciesSet]
   );
 
-  /**
-   * TODO: description
-   */
   useEffect(
     () => {
-      const data = dependencies && dependencies.slice(0);
-
-      if (!data || !data.length) {
-        return;
-      }
-
-      const { direction, prop } = sortOptions;
-
-      const sortedData =
-        direction === 'asc'
-          ? data.sort((a, b) => (a[prop] < b[prop] ? -1 : 1))
-          : data.sort((a, b) => (b[prop] < a[prop] ? -1 : 1));
-
-      doSetPackagesSuccess(dispatch, {
-        dependencies: sortedData,
-        fromSort: true,
-        outdated
-      });
-    },
-    [sortOptions]
-  );
-
-  useEffect(
-    () => {
-      // handles intall and uninstall actions which they need reload the packages
+      // handles install and uninstall actions
       ipcRenderer.on(['action-close'], (event, error) => {
         if (error && error.length) {
           doAddActionError(dispatch, { error });
         }
 
-        setCounter(counter + 1);
+        setCounter(counter + 1); // force render
       });
 
       return () => ipcRenderer.removeAllListeners(['action-close']);
@@ -312,9 +262,6 @@ const Packages = props => {
     [counter]
   );
 
-  /**
-   * TODO: description
-   */
   useEffect(() => {
     ipcRenderer.on('yarn-warning-close', () => {
       doSetSnackbar(dispatch, {
@@ -332,19 +279,21 @@ const Packages = props => {
       ]);
   }, []);
 
+  // filtering
   const filteredPackages =
-    filters && filters.length ? getFiltered(packages, filters) : [];
-
-  const data =
-    Array.isArray(filteredPackages) && filteredPackages.length
-      ? filteredPackages
-      : packages;
-
-  const packagesData = filter(pkg => !pkg.__error && !pkg.__peerMissing, data);
+    filters && filters.length ? getFiltered(packages, filters) : packages;
 
   const dataSlices =
-    packagesData &&
-    packagesData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    filteredPackages &&
+    filteredPackages.slice(
+      page * rowsPerPage,
+      page * rowsPerPage + rowsPerPage
+    );
+
+  const sortedPackages =
+    sortDir === 'asc'
+      ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
+      : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
   return (
     <AppLoader loading={loading} message={message}>
@@ -357,7 +306,7 @@ const Packages = props => {
             directory={directory}
             selected={selected}
             fromSearch={fromSearch}
-            reload={() => setCounter(counter + 1)}
+            reload={reload}
             nodata={dependencies === null}
           />
         </div>
@@ -372,44 +321,34 @@ const Packages = props => {
               <TableHeader
                 packages={dataSlices.map(d => d.name)}
                 numSelected={Number(selected.length)}
-                rowCount={(data && data.length) || 0}
-                sortBy={sortOptions.prop}
-                sortDir={sortOptions.direction}
-                setSortBy={(e, prop) =>
-                  setSort(
-                    merge(sortOptions, {
-                      prop
-                    })
-                  )
-                }
-                toggleSort={(e, prop) => toggleSort(prop)}
-                onSelected={(name, force) =>
-                  doAddSelected(dispatch, {
-                    name,
-                    force
-                  })
-                }
-                onClearSelected={() => doClearSelected(dispatch)}
+                rowCount={dependencies && dependencies.length}
               />
               <TableBody>
-                {dataSlices &&
-                  dataSlices.map(pkg => {
-                    const { name, version, latest, isOutdated, __group } = pkg;
-
-                    return (
-                      <PackageItem
-                        key={`pkg-${pkg.name}`}
-                        isSelected={isSelected(pkg.name, selected)}
-                        setSelected={setSelected}
-                        name={name}
-                        manager={manager}
-                        version={version}
-                        latest={latest}
-                        isOutdated={isOutdated}
-                        __group={__group}
-                      />
-                    );
-                  })}
+                {sortedPackages &&
+                  sortedPackages.map(
+                    ({
+                      name,
+                      version,
+                      latest,
+                      isOutdated,
+                      __group,
+                      __error,
+                      __peerMissing
+                    }) =>
+                      !__error && !__peerMissing ? (
+                        <PackageItem
+                          key={`pkg-${name}`}
+                          isSelected={isSelected(name, selected)}
+                          setSelected={setSelected}
+                          name={name}
+                          manager={manager}
+                          version={version}
+                          latest={latest}
+                          isOutdated={isOutdated}
+                          group={__group}
+                        />
+                      ) : null
+                  )}
               </TableBody>
               <TableFooter
                 classes={{
@@ -417,7 +356,7 @@ const Packages = props => {
                     [classes.hidden]: nodata
                   }
                 }}
-                rowCount={(packagesData && packagesData.length) || 0}
+                rowCount={dependencies && dependencies.length}
                 page={page}
                 rowsPerPage={rowsPerPage}
                 handleChangePage={(e, pageNo) =>
