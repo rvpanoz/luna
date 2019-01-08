@@ -120,7 +120,6 @@ const Packages = ({ classes }) => {
   } = useMappedState(mapState);
 
   const [counter, setCounter] = useState(0); // force render programmaticlly
-  const [filtered, setFilters] = useState(filters);
   const dispatch = useDispatch();
 
   const clearUI = useCallback(options => {
@@ -223,7 +222,7 @@ const Packages = ({ classes }) => {
         }
       }
 
-      const withErrors = filterByProp(dependencies, '__error');
+      const withErrors = dependencies && filterByProp(dependencies, '__error');
 
       if (withErrors && withErrors.length) {
         updateSnackbar({
@@ -283,9 +282,8 @@ const Packages = ({ classes }) => {
   }, []);
 
   // filtering
-  const [filtered] = useFilters(packages, filters);
-
-  const dataPackages = filtered && filtered.length ? filtered : packages;
+  const [filtered] = useFilters(packages, filters, counter);
+  const dataPackages = filtered || packages;
 
   // pagination
   const dataSlices =

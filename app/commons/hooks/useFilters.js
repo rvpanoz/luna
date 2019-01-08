@@ -3,20 +3,20 @@
 import { useState, useEffect } from 'react';
 import { getFiltered } from 'commons/utils';
 
-const useFilters = (data, filters) => {
-  const [data, setData] = useState([]);
+const useFilters = (allData, filters, force) => {
+  const [filtered, applyFilters] = useState(allData);
 
   useEffect(
     () => {
       const withFiltersPackages =
-        filters && filters.length ? getFiltered(packages, filters) : packages;
+        filters && filters.length ? getFiltered(allData, filters) : null;
 
-      setData(withFiltersPackages);
-
-      return [data];
+      Array.isArray(withFiltersPackages) && applyFilters(withFiltersPackages);
     },
-    [filters]
+    [filters, force]
   );
+
+  return [filtered];
 };
 
 export default useFilters;
