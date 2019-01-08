@@ -19,13 +19,7 @@ const AppCardDetails = props => {
   return (
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
-        <Typography
-          variant="title"
-          component="h4"
-          className={classes.cardTitle}
-        >
-          {title}
-        </Typography>
+        <Typography variant="subtitle1">{title}</Typography>
         <Typography component="p" className={classes.cardCategory}>
           {subtext}
         </Typography>

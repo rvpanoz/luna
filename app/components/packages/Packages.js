@@ -172,7 +172,7 @@ const Packages = ({ classes }) => {
   const { projectName, projectVersion } = dependenciesSet || {};
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
-  const nodata = dependencies && dependencies.length === 0;
+  const nodata = Boolean(dependencies && dependencies.length === 0);
 
   useEffect(
     () => {
@@ -282,13 +282,11 @@ const Packages = ({ classes }) => {
   }, []);
 
   // filtering
-  const [filtered] = useFilters(packages, filters, counter);
-  const dataPackages = filtered || packages;
+  const [data] = useFilters(packages, filters, counter);
 
   // pagination
   const dataSlices =
-    dataPackages &&
-    dataPackages.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const sortedPackages =
     sortDir === 'asc'
@@ -321,7 +319,7 @@ const Packages = ({ classes }) => {
               <TableHeader
                 packages={dataSlices.map(d => d.name)}
                 numSelected={Number(selected.length)}
-                rowCount={dependencies && dependencies.length}
+                rowCount={data && data.length}
               />
               <TableBody>
                 {sortedPackages &&

@@ -7,9 +7,19 @@
 import fs from 'fs';
 import path from 'path';
 import mk from '../mk';
-import { pick, merge, path as rPath } from 'ramda';
 import { APP_MODES, PACKAGE_GROUPS } from '../constants/AppConstants';
-
+import {
+  pipe,
+  pick,
+  prop,
+  map,
+  reduce,
+  merge,
+  mergeMap,
+  mergeWith,
+  values,
+  indexBy
+} from 'ramda';
 const { config } = mk;
 const {
   defaultSettings: { manager }
@@ -66,32 +76,43 @@ export const firstToUpper = str => {
 };
 
 /**
- * switch using currying
  * @param {*} cases
+ *
  */
 export const switchcase = cases => defaultCase => key =>
   cases.hasOwnProperty(key) && typeof cases[key] === 'function'
     ? cases[key].apply(undefined)
     : defaultCase;
 
+/**
+ * Filtering
+ * TODO: buggy combine returns only the last element! why?
+ */
 export const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);
-  let allFiltered = [];
+  const allFiltered = [];
+
+  const combine = pipe(
+    map(indexBy(prop('__id'))),
+    reduce(mergeWith(mergeMap), {}),
+    values
+  );
 
   filters.forEach(filterName => {
-    let filtered =
+    const filtered =
       data &&
       data.filter(pkg => {
         if (groups.indexOf(filterName) > -1) {
           return pkg['__group'] === filterName;
         }
-        return !!pkg[filterName];
+
+        return Boolean(pkg[filterName]);
       });
 
-    allFiltered = allFiltered.concat(filtered);
+    allFiltered.push(filtered);
   });
 
-  return allFiltered;
+  return combine(allFiltered);
 };
 
 /**

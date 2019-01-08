@@ -20,9 +20,11 @@ const useIpc = (channel, options, inputs = []) => {
     projectName: null,
     projectVersion: null
   });
+
   const [outdatedSet, setOutdated] = useState({
     data: []
   });
+
   const [commandErrors, setErrors] = useState(null);
   const dispatch = useDispatch();
 

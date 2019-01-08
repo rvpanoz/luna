@@ -9,7 +9,7 @@ const useFilters = (allData, filters, force) => {
   useEffect(
     () => {
       const withFiltersPackages =
-        filters && filters.length ? getFiltered(allData, filters) : null;
+        filters && filters.length ? getFiltered(allData, filters) : allData;
 
       Array.isArray(withFiltersPackages) && applyFilters(withFiltersPackages);
     },

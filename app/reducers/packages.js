@@ -136,7 +136,8 @@ const handlers = {
       packageName: null,
       packageVersion: null,
       packagesOutdated: [],
-      packages: []
+      packages: [],
+      filters: []
     }),
   [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
     merge(state, {

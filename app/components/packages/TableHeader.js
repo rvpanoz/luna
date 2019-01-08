@@ -33,7 +33,6 @@ const mapState = ({ packages: { sortBy, sortDir } }) => ({
 });
 
 const TableHeader = ({ numSelected, rowCount, packages }) => {
-  console.log(numSelected, rowCount, packages);
   const dispatch = useDispatch();
   const { sortBy, sortDir } = useMappedState(mapState);
 
