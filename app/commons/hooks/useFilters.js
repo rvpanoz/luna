@@ -1,11 +1,22 @@
 /* eslint-disable */
 
 import { useState, useEffect } from 'react';
+import { getFiltered } from 'commons/utils';
 
-const useFilters = (data, filters = []) => {
-  const [filteredData, setFilteredData] = useState({ data: [] });
+const useFilters = (data, filters) => {
+  const [data, setData] = useState([]);
 
-  //TODO...
+  useEffect(
+    () => {
+      const withFiltersPackages =
+        filters && filters.length ? getFiltered(packages, filters) : packages;
+
+      setData(withFiltersPackages);
+
+      return [data];
+    },
+    [filters]
+  );
 };
 
 export default useFilters;

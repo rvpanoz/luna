@@ -11,7 +11,6 @@ import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useCallback } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
-import { filter } from 'ramda';
 import { withStyles, Typography } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
@@ -19,7 +18,8 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 
 import useIpc from 'commons/hooks/useIpc';
-import { getFiltered, parseNpmError, filterByProp } from 'commons/utils';
+import useFilters from 'commons/hooks/useFilters';
+import { parseNpmError, filterByProp } from 'commons/utils';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/layout/SnackbarContent';
@@ -120,6 +120,7 @@ const Packages = ({ classes }) => {
   } = useMappedState(mapState);
 
   const [counter, setCounter] = useState(0); // force render programmaticlly
+  const [filtered, setFilters] = useState(filters);
   const dispatch = useDispatch();
 
   const clearUI = useCallback(options => {
@@ -246,6 +247,7 @@ const Packages = ({ classes }) => {
     [dependenciesSet]
   );
 
+  // action listener
   useEffect(
     () => {
       // handles install and uninstall actions
@@ -262,6 +264,7 @@ const Packages = ({ classes }) => {
     [counter]
   );
 
+  // more listeners
   useEffect(() => {
     ipcRenderer.on('yarn-warning-close', () => {
       doSetSnackbar(dispatch, {
@@ -280,15 +283,14 @@ const Packages = ({ classes }) => {
   }, []);
 
   // filtering
-  const filteredPackages =
-    filters && filters.length ? getFiltered(packages, filters) : packages;
+  const [filtered] = useFilters(packages, filters);
 
+  const dataPackages = filtered && filtered.length ? filtered : packages;
+
+  // pagination
   const dataSlices =
-    filteredPackages &&
-    filteredPackages.slice(
-      page * rowsPerPage,
-      page * rowsPerPage + rowsPerPage
-    );
+    dataPackages &&
+    dataPackages.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const sortedPackages =
     sortDir === 'asc'
@@ -376,7 +378,8 @@ const Packages = ({ classes }) => {
           )}
         </div>
       </Paper>
-      {snackbarOptions && (
+
+      {snackbarOptions && snackbarOptions.open && (
         <Snackbar
           anchorOrigin={{
             vertical: 'bottom',
