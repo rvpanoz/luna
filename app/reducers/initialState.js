@@ -18,6 +18,10 @@ export default {
     message: null
   },
   packages: {
+    projectName: '',
+    projectVersion: '',
+    sortBy: 'name',
+    sortDir: 'asc',
     action: {
       name: null,
       error: null
@@ -26,6 +30,7 @@ export default {
     packagesOutdated: [],
     selected: [],
     filters: [],
+    active: null,
     lastUpdatedAt: null,
     fromSearch: false,
     fromSort: false

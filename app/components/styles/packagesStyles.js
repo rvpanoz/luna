@@ -18,13 +18,13 @@ export const listStyles = theme => ({
     overflowY: 'scroll',
     maxHeight: 850,
     [theme.breakpoints.down('sm')]: {
-      maxHeight: 300
+      maxHeight: 285
     },
     [theme.breakpoints.down('md')]: {
-      maxHeight: 400
+      maxHeight: 300
     },
     [theme.breakpoints.down('lg')]: {
-      maxHeight: 450
+      maxHeight: 385
     }
   },
   tableRow: {
@@ -74,6 +74,14 @@ export const listStyles = theme => ({
   },
   hidden: {
     display: 'none'
+  },
+  flexContainer: {
+    display: 'flex'
+  },
+  iconContainer: {
+    flexGrow: 1,
+    position: 'relative',
+    padding: '3px 0 0 6px'
   }
 });
 

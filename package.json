@@ -25,7 +25,7 @@
     "prestart": "npm run build",
     "start": "cross-env NODE_ENV=production electron ./app/main.prod.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r @babel/register ./app/main.dev.js",
-    "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --client-log-level info --config ./configs/webpack.config.renderer.dev.babel.js",
+    "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --client-log-level error --config ./configs/webpack.config.renderer.dev.babel.js",
     "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 jest"
   },
   "lint-staged": {

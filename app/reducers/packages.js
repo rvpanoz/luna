@@ -16,7 +16,8 @@ import {
   setActive,
   setPackagesStart,
   setPackagesSuccess,
-  setPackagesOutdatedSuccess
+  setPackagesOutdatedSuccess,
+  setSortOptions
 } from 'models/packages/actions';
 
 import { isPackageOutdated } from 'commons/utils';
@@ -72,6 +73,8 @@ const handlers = {
   [clearSelected.type]: state => assoc('selected', [], state),
   [clearPackages.type]: state =>
     merge(state, {
+      projectName: null,
+      projectVersion: null,
       packages: [],
       packagesOutdated: []
     }),
@@ -122,17 +125,24 @@ const handlers = {
       packagesOutdated: dependencies
     });
   },
-  [setActive.type]: (state, { payload }) =>
-    merge(state, {
-      active: payload
-    }),
+  [setActive.type]: (state, { payload }) => {
+    const { active } = payload;
+
+    return assoc('active', active, state);
+  },
   [setPackagesStart.type]: state =>
     merge(state, {
       active: null,
       packageName: null,
       packageVersion: null,
       packagesOutdated: [],
-      packages: []
+      packages: [],
+      filters: []
+    }),
+  [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
+    merge(state, {
+      sortBy,
+      sortDir
     })
 };
 

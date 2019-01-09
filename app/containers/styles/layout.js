@@ -6,8 +6,6 @@ const styles = theme => ({
     position: 'relative',
     zIndex: 4,
     height: 60
-    // backgroundColor: '#333545',
-    // color: '#fff'
   },
   main: {
     width: '100%'

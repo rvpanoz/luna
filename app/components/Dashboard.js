@@ -5,10 +5,16 @@
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useMappedState } from 'redux-react-hook';
-import { withStyles } from '@material-ui/core';
 import cn from 'classnames';
+import { useMappedState } from 'redux-react-hook';
+import { withStyles, Toolbar } from '@material-ui/core';
+
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import ViewCompactIcon from '@material-ui/icons/ViewCompactOutlined';
+import HistoryIcon from '@material-ui/icons/HistoryOutlined';
+
 import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import styles from './styles/dashboard';
@@ -89,8 +95,23 @@ const Dashboard = props => {
 
   return (
     <section className={classes.root}>
+      <Grid container justify="flex-end">
+        <Toolbar>
+          <Tooltip title="Compact layout">
+            <IconButton onClick={e => console.log(e)}>
+              <ViewCompactIcon />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="Preview history">
+            <IconButton onClick={e => console.log(e)}>
+              <HistoryIcon />
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
+      </Grid>
       <Grid container justify="space-between">
-        <Grid item xs={12} sm={12} md={12} lg={3} xl={3}>
+        <Grid item xs={12} sm={12} md={12} lg={4} xl={3}>
           <CardDetails
             id="card-1"
             title={
@@ -100,6 +121,7 @@ const Dashboard = props => {
             text={renderProjectStats()}
             loading={loading}
             avatar
+            className={classes.cardDetails}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>

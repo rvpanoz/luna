@@ -25,8 +25,9 @@ import PublicIcon from '@material-ui/icons/PublicRounded';
 
 import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
-import { setMode, toggleLoader } from 'models/ui/actions';
-import { clearSelected } from 'models/packages/actions';
+import { doSetMode, doToggleLoader } from 'models/ui/selectors';
+import { doClearSelected } from 'models/packages/selectors';
+
 import TableFilters from './TableFilters';
 
 import { tableToolbarStyles as styles } from '../styles/packagesStyles';
@@ -50,7 +51,7 @@ const TableListToolbar = props => {
   const dispatch = useDispatch();
 
   const switchMode = (mode, directory) => {
-    dispatch(setMode({ mode, directory }));
+    doSetMode(dispatch, { mode, directory });
 
     if (fromSearch) {
       reload();
@@ -73,12 +74,10 @@ const TableListToolbar = props => {
       directory
     });
 
-    dispatch(
-      toggleLoader({
-        loading: true,
-        message: `${firstToUpper(action)}ing packages..`
-      })
-    );
+    doToggleLoader(dispatch, {
+      loading: true,
+      message: `${firstToUpper(action)}ing packages..`
+    });
   };
 
   const openPackage = useCallback(() => {
@@ -150,25 +149,24 @@ const TableListToolbar = props => {
       </Tooltip>
       <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
         <div>
-          <IconButton
-            aria-label={fromSearch ? 'Back to list' : 'Reload list'}
-            onClick={() => reload()}
-          >
+          <IconButton aria-label="back_reload" onClick={() => reload()}>
             <RefreshIcon />
           </IconButton>
         </div>
       </Tooltip>
-      <Tooltip title="Show filters">
-        <div>
-          <IconButton
-            disabled={nodata === true}
-            aria-label="Show filters"
-            onClick={openFilters}
-          >
-            <FilterListIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
+      {!fromSearch && (
+        <Tooltip title="Show filters">
+          <div>
+            <IconButton
+              disabled={nodata === true || fromSearch}
+              aria-label="Show filters"
+              onClick={openFilters}
+            >
+              <FilterListIcon />
+            </IconButton>
+          </div>
+        </Tooltip>
+      )}
     </div>
   );
 
@@ -181,7 +179,7 @@ const TableListToolbar = props => {
         })}
       >
         <div className={classes.header}>
-          <Typography color="secondary" component="h1">
+          <Typography variant="headline">
             {selected && selected.length === 0
               ? title
               : `${selected.length} selected`}
@@ -216,7 +214,7 @@ const TableListToolbar = props => {
               <Tooltip title="Clear selected">
                 <IconButton
                   aria-label="clear selected"
-                  onClick={() => dispatch(clearSelected())}
+                  onClick={() => doClearSelected(dispatch)}
                 >
                   <ClearAllIcon />
                 </IconButton>

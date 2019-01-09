@@ -4,15 +4,21 @@
  Table Header 
 **/
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { and } from 'ramda';
-
+import { useDispatch, useMappedState } from 'redux-react-hook';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
+
+import {
+  doAddSelected,
+  doClearSelected,
+  doSetSortOptions
+} from 'models/packages/selectors';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -21,25 +27,42 @@ const columnData = [
   { id: 'group', disablePadding: true, label: 'Group' }
 ];
 
-const TableHeader = props => {
-  const {
-    numSelected,
-    rowCount,
-    packages,
-    onSelected,
-    onClearSelected,
-    toggleSort,
-    sortDir,
-    sortBy
-  } = props;
+const mapState = ({ packages: { sortBy, sortDir } }) => ({
+  sortBy,
+  sortDir
+});
 
-  const handleSelectAll = e => {
-    const { checked } = e.target;
+const TableHeader = ({ numSelected, rowCount, packages }) => {
+  const dispatch = useDispatch();
+  const { sortBy, sortDir } = useMappedState(mapState);
 
-    checked
-      ? packages && packages.forEach(pkgName => onSelected(pkgName, true))
-      : onClearSelected();
-  };
+  const onClearSelected = useCallback(() => doClearSelected(dispatch), []);
+  const toggleSort = useCallback(
+    prop =>
+      doSetSortOptions(dispatch, {
+        sortDir: sortDir === 'desc' ? 'asc' : 'desc',
+        sortBy: prop
+      }),
+    [sortDir]
+  );
+  const handleSelectAll = useCallback(
+    ({
+      e: {
+        target: { checked }
+      }
+    }) => {
+      checked
+        ? packages &&
+          packages.forEach(name =>
+            doAddSelected(dispatch, {
+              name,
+              force: true
+            })
+          )
+        : onClearSelected();
+    },
+    [packages]
+  );
 
   return (
     <TableHead>
@@ -48,7 +71,7 @@ const TableHeader = props => {
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}
-            onChange={handleSelectAll}
+            onChange={e => handleSelectAll(e)}
           />
         </TableCell>
         {columnData.map(column => {
@@ -65,7 +88,7 @@ const TableHeader = props => {
                 <TableSortLabel
                   active={sortBy === column.id}
                   direction={sortDir}
-                  onClick={e => toggleSort(e, column.id)}
+                  onClick={() => toggleSort(column.id)}
                 >
                   {column.label}
                 </TableSortLabel>
@@ -83,6 +106,7 @@ const TableHeader = props => {
 TableHeader.propTypes = {
   numSelected: PropTypes.number.isRequired,
   rowCount: PropTypes.number.isRequired,
+  packages: PropTypes.array.isRequired,
   sortBy: PropTypes.string,
   sortDir: PropTypes.string
 };

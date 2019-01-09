@@ -6,7 +6,8 @@ import {
   setPackagesStart,
   setPackagesSuccess,
   setPackagesOutdatedSuccess,
-  setActive
+  setActive,
+  setSortOptions
 } from './actions';
 
 const doAddActionError = (dispatch, payload) =>
@@ -38,7 +39,14 @@ const doSetOutdatedSuccess = (dispatch, { dependencies }) =>
     })
   );
 
-const doSetActive = (dispatch, { active }) => dispatch(setActive(active));
+const doSetActive = (dispatch, { active }) => dispatch(setActive({ active }));
+const doSetSortOptions = (dispatch, { sortDir, sortBy }) =>
+  dispatch(
+    setSortOptions({
+      sortBy,
+      sortDir
+    })
+  );
 
 export {
   doAddActionError,
@@ -46,6 +54,7 @@ export {
   doClearPackages,
   doClearSelected,
   doSetActive,
+  doSetSortOptions,
   doStartPackages,
   doSetPackagesSuccess,
   doSetOutdatedSuccess

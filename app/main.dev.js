@@ -11,6 +11,7 @@ import { merge } from 'ramda';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+
 import { APP_MODES, APP_ACTIONS } from './constants/AppConstants';
 import { switchcase } from './commons/utils';
 import MenuBuilder from './menu';
@@ -18,10 +19,8 @@ import mk from './mk';
 import { runCommand } from './shell';
 
 const { config } = mk;
-const {
-  defaultSettings: { startMinimized },
-  defaultSettings: { defaultManager }
-} = config;
+const { defaultSettings } = config || {};
+const { startMinimized, defaultManager } = defaultSettings;
 
 const {
   DEBUG_PROD = 0,
@@ -98,7 +97,7 @@ ipcMain.on('ipc-event', (event, options) => {
     const { directory, mode } = rest;
     const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
 
-    if (actionIndex > -1) {
+    if (actionIndex > -1 && ipcEvent !== 'view') {
       return event.sender.send('action-close', error, data, cmd);
     }
 
