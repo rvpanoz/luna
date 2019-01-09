@@ -90,15 +90,8 @@ export const switchcase = cases => defaultCase => key =>
  */
 export const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);
-  const allFiltered = [];
 
-  const combine = pipe(
-    map(indexBy(prop('__id'))),
-    reduce(mergeWith(mergeMap), {}),
-    values
-  );
-
-  filters.forEach(filterName => {
+  const withFiltersData = filters.reduce((acc, filterName) => {
     const filtered =
       data &&
       data.filter(pkg => {
@@ -106,13 +99,15 @@ export const getFiltered = (data, filters) => {
           return pkg['__group'] === filterName;
         }
 
-        return Boolean(pkg[filterName]);
+        return !!pkg[filterName];
       });
 
-    allFiltered.push(filtered);
-  });
+    if (filtered.length) {
+      return acc.concat(filtered);
+    }
+  }, []);
 
-  return combine(allFiltered);
+  return withFiltersData;
 };
 
 /**

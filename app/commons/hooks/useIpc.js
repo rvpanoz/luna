@@ -7,7 +7,6 @@ import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 
 import { doStartPackages } from 'models/packages/selectors';
-
 import { doToggleLoader } from 'models/ui/selectors';
 import { parseMap } from '../utils';
 

@@ -20,28 +20,51 @@ import DependencyIcon from '@material-ui/icons/CodeOutlined';
 import DevDependencyIcon from '@material-ui/icons/BuildOutlined';
 import GlobalIcon from '@material-ui/icons/GroupWorkSharp';
 import OptionalIcon from '@material-ui/icons/SettingsEthernetOutlined';
+import PeersIcon from '@material-ui/icons/BallotOutlined';
 
 import { doTogglePackageLoader } from 'models/ui/selectors';
 
 import { listStyles as styles } from '../styles/packagesStyles';
 
-const PackageItemRow = props => {
-  const {
-    classes,
-    name,
-    manager,
-    isSelected,
-    setSelected,
-    version,
-    latest,
-    isOutdated,
-    group
-  } = props;
-
+const PackageItemRow = ({
+  classes,
+  name,
+  manager,
+  isSelected,
+  setSelected,
+  version,
+  latest,
+  isOutdated,
+  group
+}) => {
   const dispatch = useDispatch();
 
+  const renderIconByGroup = useCallback(
+    group =>
+      cond([
+        [equals(''), always(<GlobalIcon className={classes.icon} />)],
+        [
+          equals('dependencies'),
+          always(<DependencyIcon className={classes.icon} />)
+        ],
+        [
+          equals('devDependencies'),
+          always(<DevDependencyIcon className={classes.icon} />)
+        ],
+        [
+          equals('optionalDependencies'),
+          always(<OptionalIcon className={classes.icon} />)
+        ],
+        [
+          equals('peerDependencies'),
+          always(<PeersIcon className={classes.icon} />)
+        ]
+      ])(group),
+    [group]
+  );
+
   const viewPackage = useCallback(
-    (manager, name, version, mode, directory, latest) => {
+    (manager, name, version, mode, directory) => {
       doTogglePackageLoader(dispatch, {
         loading: true,
         message: `Loading ${name}@${version}`
@@ -72,7 +95,7 @@ const PackageItemRow = props => {
       classes={{
         root: classes.tableRow
       }}
-      onClick={e => viewPackage(manager, name)}
+      onClick={() => viewPackage(manager, name)}
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
@@ -84,7 +107,12 @@ const PackageItemRow = props => {
         />
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        {name}
+        <div className={classes.flexContainer}>
+          <div className={classes.flexItem}>{renderIconByGroup(group)}</div>
+          <div className={cn(classes.flexItem, classes.iconContainer)}>
+            {name}
+          </div>
+        </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         {version}
@@ -100,21 +128,7 @@ const PackageItemRow = props => {
         </span>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        {cond([
-          [equals(''), always(<GlobalIcon className={classes.icon} />)],
-          [
-            equals('dependencies'),
-            always(<DependencyIcon className={classes.icon} />)
-          ],
-          [
-            equals('devDependencies'),
-            always(<DevDependencyIcon className={classes.icon} />)
-          ],
-          [
-            equals('optionalDependencies'),
-            always(<OptionalIcon className={classes.icon} />)
-          ]
-        ])(group)}
+        action
       </TableCell>
     </TableRow>
   );

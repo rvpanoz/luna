@@ -36,6 +36,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
   const dispatch = useDispatch();
   const { sortBy, sortDir } = useMappedState(mapState);
 
+  const onClearSelected = useCallback(() => doClearSelected(dispatch), []);
   const toggleSort = useCallback(
     prop =>
       doSetSortOptions(dispatch, {
@@ -44,9 +45,6 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
       }),
     [sortDir]
   );
-
-  const onClearSelected = useCallback(() => doClearSelected(dispatch), []);
-
   const handleSelectAll = useCallback(
     ({
       e: {

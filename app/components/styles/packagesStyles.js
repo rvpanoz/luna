@@ -74,6 +74,14 @@ export const listStyles = theme => ({
   },
   hidden: {
     display: 'none'
+  },
+  flexContainer: {
+    display: 'flex'
+  },
+  iconContainer: {
+    flexGrow: 1,
+    position: 'relative',
+    padding: '3px 0 0 6px'
   }
 });
 

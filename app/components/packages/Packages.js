@@ -139,12 +139,6 @@ const Packages = ({ classes }) => {
     []
   );
 
-  const updateLoader = useCallback(
-    (bool, content) =>
-      doToggleLoader(dispatch, { loading: bool, message: content }),
-    []
-  );
-
   const updateSnackbar = useCallback(
     ({ open, type, message }) =>
       doSetSnackbar(dispatch, {
@@ -169,6 +163,12 @@ const Packages = ({ classes }) => {
     [counter, mode, directory]
   );
 
+  const updateLoader = useCallback(
+    (bool, content) =>
+      doToggleLoader(dispatch, { loading: bool, message: content }),
+    []
+  );
+
   const { projectName, projectVersion } = dependenciesSet || {};
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
@@ -176,13 +176,19 @@ const Packages = ({ classes }) => {
 
   useEffect(
     () => {
+      console.log('clearing ui..');
       clearUI({
         data: true,
         notifications: true,
         snackbar: true,
         inert: true
       });
+    },
+    [dependenciesSet]
+  );
 
+  useEffect(
+    () => {
       if (page !== 0) {
         doSetPage(dispatch, { page: 0 });
       }
@@ -200,6 +206,8 @@ const Packages = ({ classes }) => {
             dependencies: outdated
           });
         }
+
+        updateLoader(false, null);
       }
 
       if (errors && typeof errors === 'string') {
@@ -240,8 +248,6 @@ const Packages = ({ classes }) => {
           message: INFO_MESSAGES.nodata
         });
       }
-
-      updateLoader(false, null);
     },
     [dependenciesSet]
   );
@@ -361,7 +367,7 @@ const Packages = ({ classes }) => {
                   doSetPage(dispatch, { page: pageNo })
                 }
                 handleChangePageRows={e =>
-                  doSetPageRows(dispatch, { rowsPerPage: e.target.value || 10 })
+                  doSetPageRows(dispatch, { rowsPerPage: e.target.value })
                 }
               />
             </Table>
