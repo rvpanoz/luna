@@ -179,7 +179,7 @@ const TableListToolbar = props => {
         })}
       >
         <div className={classes.header}>
-          <Typography variant="headline">
+          <Typography variant="subtitle1">
             {selected && selected.length === 0
               ? title
               : `${selected.length} selected`}

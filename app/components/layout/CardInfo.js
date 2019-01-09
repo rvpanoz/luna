@@ -91,15 +91,6 @@ const AppCardInfo = props => {
         [className]: Boolean(className)
       })}
     >
-      <CardHeader
-        classes={{
-          root: cn(classes.cardHeader, {
-            [classes[color + 'CardHeader']]: color && avatar
-          }),
-          avatar: classes.cardAvatar
-        }}
-        avatar={type && renderAvatarIcon(type)}
-      />
       <CardContent className={classes.cardContent}>
         <Typography component="p" className={classes.cardCategory}>
           {title}

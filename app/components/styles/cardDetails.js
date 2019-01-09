@@ -35,7 +35,7 @@ const cardInfoStyle = {
   purpleCardHeader,
   cardContent: {
     textAlign: 'left',
-    paddingTop: '10px',
+    paddingTop: 20,
     padding: '15px 20px'
   },
   cardIcon: {
