@@ -129,6 +129,7 @@ const TableListToolbar = props => {
     <div className={classes.flexContainer}>
       <Tooltip title="Open package.json">
         <IconButton
+          disableRipple
           color="secondary"
           aria-label="Open package.json"
           onClick={e => openPackage()}
@@ -139,6 +140,7 @@ const TableListToolbar = props => {
       <Tooltip title="Show global packages">
         <div>
           <IconButton
+            disableRipple
             disabled={mode === APP_MODES.GLOBAL && !fromSearch}
             aria-label="Show globals"
             onClick={e => switchMode(APP_MODES.GLOBAL, null)}
@@ -149,7 +151,12 @@ const TableListToolbar = props => {
       </Tooltip>
       <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
         <div>
-          <IconButton aria-label="back_reload" onClick={() => reload()}>
+          <IconButton
+            disableRipple
+            aria-label="back_reload"
+            disableRipple
+            onClick={() => reload()}
+          >
             <RefreshIcon />
           </IconButton>
         </div>
@@ -158,6 +165,7 @@ const TableListToolbar = props => {
         <Tooltip title="Show filters">
           <div>
             <IconButton
+              disableRipple
               disabled={nodata === true || fromSearch}
               aria-label="Show filters"
               onClick={openFilters}

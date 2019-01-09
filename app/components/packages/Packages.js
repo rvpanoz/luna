@@ -19,7 +19,7 @@ import TableBody from '@material-ui/core/TableBody';
 
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
-import { parseNpmError, filterByProp } from 'commons/utils';
+import { parseNpmError, filterByProp, callActionCreator } from 'commons/utils';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/layout/SnackbarContent';
@@ -133,11 +133,6 @@ const Packages = ({ classes }) => {
     doClearNotifications(dispatch);
     doClearSnackbar(dispatch);
   }, []);
-
-  const setSelected = useCallback(
-    name => doAddSelected(dispatch, { name }),
-    []
-  );
 
   const updateSnackbar = useCallback(
     ({ open, type, message }) =>
@@ -343,7 +338,11 @@ const Packages = ({ classes }) => {
                         <PackageItem
                           key={`pkg-${name}`}
                           isSelected={isSelected(name, selected)}
-                          setSelected={setSelected}
+                          addSelected={() =>
+                            callActionCreator(dispatch, {
+                              name
+                            })
+                          }
                           name={name}
                           manager={manager}
                           version={version}

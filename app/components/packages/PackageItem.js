@@ -15,10 +15,10 @@ import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import Avatar from '@material-ui/core/Avatar';
 import DependencyIcon from '@material-ui/icons/CodeOutlined';
 import DevDependencyIcon from '@material-ui/icons/BuildOutlined';
-import GlobalIcon from '@material-ui/icons/GroupWorkSharp';
+import GlobalIcon from '@material-ui/icons/GroupWorkOutlined';
 import OptionalIcon from '@material-ui/icons/SettingsEthernetOutlined';
 import PeersIcon from '@material-ui/icons/BallotOutlined';
 
@@ -31,7 +31,7 @@ const PackageItemRow = ({
   name,
   manager,
   isSelected,
-  setSelected,
+  addSelected,
   version,
   latest,
   isOutdated,
@@ -100,9 +100,10 @@ const PackageItemRow = ({
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
           checked={isSelected}
+          disableRipple
           onClick={e => {
             e.stopPropagation();
-            setSelected(name);
+            addSelected();
           }}
         />
       </TableCell>
@@ -128,7 +129,16 @@ const PackageItemRow = ({
         </span>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        action
+        <Avatar
+          className={cn(classes.avatar, {
+            [classes.greenAvatar]: group === '',
+            [classes.pinkAvatar]: group === 'dependencies',
+            [classes.greenAvatar]: group === 'devDependencies',
+            [classes.pinkAvatar]: group === 'optionalDependencies'
+          })}
+        >
+          G
+        </Avatar>
       </TableCell>
     </TableRow>
   );
@@ -137,10 +147,10 @@ const PackageItemRow = ({
 PackageItemRow.propTypes = {
   classes: objectOf(string).isRequired,
   name: string.isRequired,
+  addSelected: func.isRequired,
   isSelected: bool.isRequired,
   version: string.isRequired,
   isOutdated: bool.isRequired,
-  setSelected: func.isRequired,
   latest: oneOfType([string, object]),
   group: string
 };

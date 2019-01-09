@@ -36,7 +36,6 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
   const dispatch = useDispatch();
   const { sortBy, sortDir } = useMappedState(mapState);
 
-  const onClearSelected = useCallback(() => doClearSelected(dispatch), []);
   const toggleSort = useCallback(
     prop =>
       doSetSortOptions(dispatch, {
@@ -45,21 +44,19 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
       }),
     [sortDir]
   );
+
   const handleSelectAll = useCallback(
-    ({
-      e: {
-        target: { checked }
-      }
-    }) => {
+    e => {
+      const { checked } = e && e.target;
+
       checked
         ? packages &&
           packages.forEach(name =>
             doAddSelected(dispatch, {
-              name,
-              force: true
+              name
             })
           )
-        : onClearSelected();
+        : doClearSelected(dispatch);
     },
     [packages]
   );
@@ -71,7 +68,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}
-            onChange={e => handleSelectAll(e)}
+            onChange={handleSelectAll}
           />
         </TableCell>
         {columnData.map(column => {

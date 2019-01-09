@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Tooltip from '@material-ui/core/Tooltip';
 import Paper from '@material-ui/core/Paper';
 
 import List from '@material-ui/core/List';
@@ -95,12 +96,16 @@ const Notifications = props => {
                     secondary={requiredBy}
                   />
                   <ListItemSecondaryAction>
-                    <IconButton
-                      aria-label="Install"
-                      onClick={() => handleInstall(peerName)}
-                    >
-                      <AddIcon />
-                    </IconButton>
+                    <div>
+                      <Tooltip title="Install peer">
+                        <IconButton
+                          aria-label="Install"
+                          onClick={() => handleInstall(peerName)}
+                        >
+                          <AddIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </div>
                   </ListItemSecondaryAction>
                 </ListItem>
               );

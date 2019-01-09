@@ -8,18 +8,8 @@ import fs from 'fs';
 import path from 'path';
 import mk from '../mk';
 import { APP_MODES, PACKAGE_GROUPS } from '../constants/AppConstants';
-import {
-  pipe,
-  pick,
-  prop,
-  map,
-  reduce,
-  merge,
-  mergeMap,
-  mergeWith,
-  values,
-  indexBy
-} from 'ramda';
+import { pick, merge } from 'ramda';
+
 const { config } = mk;
 const {
   defaultSettings: { manager }
@@ -28,6 +18,8 @@ const {
 const _getKeys = obj => Object.keys(obj);
 const _getValues = obj => Object.values(obj);
 
+export const callActionCreator = (dispatch, payload) =>
+  actionCreator(dispatch)(payload);
 export const createActionCreator = namespace => actionType => {
   const type = `${namespace}/${actionType}`;
   const actionCreator = payload => ({
