@@ -15,14 +15,14 @@ import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import Avatar from '@material-ui/core/Avatar';
 import DependencyIcon from '@material-ui/icons/CodeOutlined';
 import DevDependencyIcon from '@material-ui/icons/BuildOutlined';
-import GlobalIcon from '@material-ui/icons/GroupWorkSharp';
+import GlobalIcon from '@material-ui/icons/GroupWorkOutlined';
 import OptionalIcon from '@material-ui/icons/SettingsEthernetOutlined';
 import PeersIcon from '@material-ui/icons/BallotOutlined';
 
-import { doTogglePackageLoader } from 'models/ui/selectors';
+import { onTogglePackageLoader } from 'models/ui/selectors';
 
 import { listStyles as styles } from '../styles/packagesStyles';
 
@@ -31,7 +31,7 @@ const PackageItemRow = ({
   name,
   manager,
   isSelected,
-  setSelected,
+  addSelected,
   version,
   latest,
   isOutdated,
@@ -63,26 +63,22 @@ const PackageItemRow = ({
     [group]
   );
 
-  const viewPackage = useCallback(
-    (manager, name, version, mode, directory) => {
-      doTogglePackageLoader(dispatch, {
-        loading: true,
-        message: `Loading ${name}@${version}`
-      });
+  const viewPackage = (manager, name, version, mode, directory) => {
+    onTogglePackageLoader(dispatch, {
+      loading: true
+    });
 
-      ipcRenderer.send('ipc-event', {
-        activeManager: manager,
-        ipcEvent: 'view',
-        cmd: ['view'],
-        name,
-        mode,
-        directory
-      });
+    ipcRenderer.send('ipc-event', {
+      activeManager: manager,
+      ipcEvent: 'view',
+      cmd: ['view'],
+      name,
+      mode,
+      directory
+    });
 
-      return false;
-    },
-    [name]
-  );
+    return false;
+  };
 
   return (
     <TableRow
@@ -100,9 +96,10 @@ const PackageItemRow = ({
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
           checked={isSelected}
+          disableRipple
           onClick={e => {
             e.stopPropagation();
-            setSelected(name);
+            addSelected();
           }}
         />
       </TableCell>
@@ -127,9 +124,6 @@ const PackageItemRow = ({
           {latest || version}
         </span>
       </TableCell>
-      <TableCell padding="none" className={classes.tableCell}>
-        action
-      </TableCell>
     </TableRow>
   );
 };
@@ -137,10 +131,10 @@ const PackageItemRow = ({
 PackageItemRow.propTypes = {
   classes: objectOf(string).isRequired,
   name: string.isRequired,
+  addSelected: func.isRequired,
   isSelected: bool.isRequired,
   version: string.isRequired,
   isOutdated: bool.isRequired,
-  setSelected: func.isRequired,
   latest: oneOfType([string, object]),
   group: string
 };

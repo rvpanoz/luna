@@ -4,7 +4,7 @@
  Table Header 
 **/
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { and } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
@@ -15,16 +15,16 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 import {
-  doAddSelected,
-  doClearSelected,
-  doSetSortOptions
+  onAddSelected,
+  onClearSelected,
+  onSetSortOptions
 } from 'models/packages/selectors';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'version', disablePadding: true, label: 'Version' },
-  { id: 'latest', disablePadding: true, label: 'Latest' },
-  { id: 'group', disablePadding: true, label: 'Group' }
+  { id: 'latest', disablePadding: true, label: 'Latest' }
+  // { id: 'group', disablePadding: true, label: 'Group' }
 ];
 
 const mapState = ({ packages: { sortBy, sortDir } }) => ({
@@ -35,34 +35,36 @@ const mapState = ({ packages: { sortBy, sortDir } }) => ({
 const TableHeader = ({ numSelected, rowCount, packages }) => {
   const dispatch = useDispatch();
   const { sortBy, sortDir } = useMappedState(mapState);
+  const checkboxAll = useRef(null);
 
-  const onClearSelected = useCallback(() => doClearSelected(dispatch), []);
   const toggleSort = useCallback(
     prop =>
-      doSetSortOptions(dispatch, {
+      onSetSortOptions(dispatch, {
         sortDir: sortDir === 'desc' ? 'asc' : 'desc',
         sortBy: prop
       }),
     [sortDir]
   );
-  const handleSelectAll = useCallback(
-    ({
-      e: {
-        target: { checked }
-      }
-    }) => {
-      checked
-        ? packages &&
-          packages.forEach(name =>
-            doAddSelected(dispatch, {
-              name,
-              force: true
-            })
-          )
-        : onClearSelected();
-    },
-    [packages]
-  );
+
+  const handleSelectAll = e => {
+    const { checked } = e && e.target;
+    const checkBoxElement = checkboxAll && checkboxAll.current;
+
+    const indeterminate =
+      checkBoxElement.dataset && checkBoxElement.dataset.indeterminate;
+
+    if (indeterminate === 'true') {
+      onClearSelected(dispatch);
+      return;
+    }
+
+    packages &&
+      packages.forEach(name =>
+        onAddSelected(dispatch, {
+          name
+        })
+      );
+  };
 
   return (
     <TableHead>
@@ -71,7 +73,10 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}
-            onChange={e => handleSelectAll(e)}
+            onChange={handleSelectAll}
+            inputProps={{
+              ref: checkboxAll
+            }}
           />
         </TableCell>
         {columnData.map(column => {
@@ -97,7 +102,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
               )}
             </TableCell>
           );
-        }, this)}
+        })}
       </TableRow>
     </TableHead>
   );

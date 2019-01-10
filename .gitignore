@@ -41,7 +41,8 @@ main.js
 main.js.map
 
 .idea
-npm-debug.log.*
+.npm-debug.log.*
 .vscode/
 .editorconfig
 .gitconfig
+.gittips

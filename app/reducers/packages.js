@@ -52,8 +52,7 @@ const handlers = {
   [addSelected.type]: (state, action) => {
     const { selected } = state;
     const {
-      payload: { name },
-      payload: { force }
+      payload: { name, force }
     } = action;
 
     const idx = selected.indexOf(name);

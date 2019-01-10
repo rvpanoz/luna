@@ -25,8 +25,8 @@ import PublicIcon from '@material-ui/icons/PublicRounded';
 
 import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
-import { doSetMode, doToggleLoader } from 'models/ui/selectors';
-import { doClearSelected } from 'models/packages/selectors';
+import { onSetMode, onToggleLoader } from 'models/ui/selectors';
+import { onClearSelected } from 'models/packages/selectors';
 
 import TableFilters from './TableFilters';
 
@@ -51,7 +51,7 @@ const TableListToolbar = props => {
   const dispatch = useDispatch();
 
   const switchMode = (mode, directory) => {
-    doSetMode(dispatch, { mode, directory });
+    onSetMode(dispatch, { mode, directory });
 
     if (fromSearch) {
       reload();
@@ -74,7 +74,7 @@ const TableListToolbar = props => {
       directory
     });
 
-    doToggleLoader(dispatch, {
+    onToggleLoader(dispatch, {
       loading: true,
       message: `${firstToUpper(action)}ing packages..`
     });
@@ -122,6 +122,7 @@ const TableListToolbar = props => {
         }
       );
     }
+
     return false;
   };
 
@@ -129,9 +130,10 @@ const TableListToolbar = props => {
     <div className={classes.flexContainer}>
       <Tooltip title="Open package.json">
         <IconButton
+          disableRipple
           color="secondary"
           aria-label="Open package.json"
-          onClick={e => openPackage()}
+          onClick={openPackage}
         >
           <LoadIcon />
         </IconButton>
@@ -139,9 +141,10 @@ const TableListToolbar = props => {
       <Tooltip title="Show global packages">
         <div>
           <IconButton
+            disableRipple
             disabled={mode === APP_MODES.GLOBAL && !fromSearch}
             aria-label="Show globals"
-            onClick={e => switchMode(APP_MODES.GLOBAL, null)}
+            onClick={() => switchMode(APP_MODES.GLOBAL, null)}
           >
             <PublicIcon />
           </IconButton>
@@ -149,7 +152,12 @@ const TableListToolbar = props => {
       </Tooltip>
       <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
         <div>
-          <IconButton aria-label="back_reload" onClick={() => reload()}>
+          <IconButton
+            disableRipple
+            aria-label="back_reload"
+            disableRipple
+            onClick={reload}
+          >
             <RefreshIcon />
           </IconButton>
         </div>
@@ -158,6 +166,7 @@ const TableListToolbar = props => {
         <Tooltip title="Show filters">
           <div>
             <IconButton
+              disableRipple
               disabled={nodata === true || fromSearch}
               aria-label="Show filters"
               onClick={openFilters}
@@ -214,7 +223,7 @@ const TableListToolbar = props => {
               <Tooltip title="Clear selected">
                 <IconButton
                   aria-label="clear selected"
-                  onClick={() => doClearSelected(dispatch)}
+                  onClick={() => onClearSelected(dispatch)}
                 >
                   <ClearAllIcon />
                 </IconButton>

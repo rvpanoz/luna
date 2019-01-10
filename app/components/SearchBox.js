@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'redux-react-hook';
@@ -13,10 +13,10 @@ import SnackbarContent from 'components/layout/SnackbarContent';
 
 import { parseMap } from 'commons/utils';
 import {
-  doStartPackages,
-  doSetPackagesSuccess
+  onStartPackages,
+  onSetPackagesSuccess
 } from 'models/packages/selectors';
-import { doClearNotifications, doToggleLoader } from 'models/ui/selectors';
+import { onClearNotifications, onToggleLoader } from 'models/ui/selectors';
 
 import styles from './styles/searchBox';
 
@@ -36,13 +36,12 @@ const SearchBox = props => {
       return;
     }
 
-    doToggleLoader(dispatch, {
+    onToggleLoader(dispatch, {
       loading: true,
       message: `Searching for ${searchValue}..`
     });
 
-    doClearNotifications(dispatch);
-    doStartPackages(dispatch);
+    onStartPackages(dispatch);
 
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'search-packages',
@@ -69,13 +68,13 @@ const SearchBox = props => {
         try {
           const [name, version, packages] = (data && parseMap(data)) || [];
 
-          doSetPackagesSuccess(dispatch, {
+          onSetPackagesSuccess(dispatch, {
             fromSearch: true,
             outdated: null,
             dependencies: packages
           });
 
-          doToggleLoader(dispatch, {
+          onToggleLoader(dispatch, {
             loading: false,
             message: null
           });

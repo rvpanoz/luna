@@ -8,18 +8,8 @@ import fs from 'fs';
 import path from 'path';
 import mk from '../mk';
 import { APP_MODES, PACKAGE_GROUPS } from '../constants/AppConstants';
-import {
-  pipe,
-  pick,
-  prop,
-  map,
-  reduce,
-  merge,
-  mergeMap,
-  mergeWith,
-  values,
-  indexBy
-} from 'ramda';
+import { pick, merge } from 'ramda';
+
 const { config } = mk;
 const {
   defaultSettings: { manager }

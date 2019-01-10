@@ -10,26 +10,28 @@ import {
   togglePackageLoader
 } from './actions';
 
-const doClearNotifications = dispatch => dispatch(clearNotifications());
-const doClearSnackbar = dispatch => dispatch(clearSnackbar());
-const doToggleLoader = (dispatch, payload) => dispatch(toggleLoader(payload));
-const doTogglePackageLoader = (dispatch, payload) =>
+const onClearNotifications = dispatch => dispatch(clearNotifications());
+const onClearSnackbar = dispatch => dispatch(clearSnackbar());
+const onToggleLoader = (dispatch, payload) => dispatch(toggleLoader(payload));
+
+const onTogglePackageLoader = (dispatch, payload) =>
   dispatch(togglePackageLoader(payload));
-const doSetPage = (dispatch, payload) => dispatch(setPage(payload));
-const doAddNotification = (dispatch, payload) =>
+const onSetPage = (dispatch, payload) => dispatch(setPage(payload));
+
+const onAddNotification = (dispatch, payload) =>
   dispatch(addNotification(payload));
-const doSetSnackbar = (dispatch, payload) => dispatch(setSnackbar(payload));
-const doSetPageRows = (dispatch, payload) => dispatch(setPageRows(payload));
-const doSetMode = (dispatch, payload) => dispatch(setMode(payload));
+const onSetSnackbar = (dispatch, payload) => dispatch(setSnackbar(payload));
+const onSetPageRows = (dispatch, payload) => dispatch(setPageRows(payload));
+const onSetMode = (dispatch, payload) => dispatch(setMode(payload));
 
 export {
-  doAddNotification,
-  doClearNotifications,
-  doClearSnackbar,
-  doSetMode,
-  doToggleLoader,
-  doTogglePackageLoader,
-  doSetPage,
-  doSetPageRows,
-  doSetSnackbar
+  onAddNotification,
+  onClearNotifications,
+  onClearSnackbar,
+  onSetMode,
+  onToggleLoader,
+  onTogglePackageLoader,
+  onSetPage,
+  onSetPageRows,
+  onSetSnackbar
 };

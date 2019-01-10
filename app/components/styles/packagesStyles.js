@@ -1,4 +1,7 @@
 /* eslint-disable */
+
+import pink from '@material-ui/core/colors/pink';
+import green from '@material-ui/core/colors/green';
 import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont } from '../styles/general';
 
@@ -69,8 +72,7 @@ export const listStyles = theme => ({
     padding: theme.spacing.unit * 2.5
   },
   icon: {
-    width: '0.85em',
-    color: darken(theme.palette.secondary.light, 0.1)
+    width: '0.85em'
   },
   hidden: {
     display: 'none'
@@ -82,6 +84,17 @@ export const listStyles = theme => ({
     flexGrow: 1,
     position: 'relative',
     padding: '3px 0 0 6px'
+  },
+  avatar: {
+    margin: theme.spacing.unit / 4
+  },
+  pinkAvatar: {
+    color: '#fff',
+    backgroundColor: pink[500]
+  },
+  greenAvatar: {
+    color: '#fff',
+    backgroundColor: lighten(theme.palette.primary.dark, 0.2)
   }
 });
 
