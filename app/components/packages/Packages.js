@@ -28,7 +28,6 @@ import {
   onAddActionError,
   onAddSelected,
   onClearPackages,
-  onClearSelected,
   onSetPackagesSuccess,
   onSetOutdatedSuccess,
   onSetActive
@@ -66,10 +65,10 @@ const mapState = ({
     mode,
     page,
     rowsPerPage,
-    loader
+    loader,
+    snackbarOptions
   },
   packages: {
-    snackbarOptions,
     active,
     action,
     filters,
@@ -383,12 +382,22 @@ const Packages = ({ classes }) => {
           }}
           open={Boolean(snackbarOptions.open)}
           autoHideDuration={5000}
-          onClose={() => closeSnackbar()}
+          onClose={() =>
+            onSetSnackbar(dispatch, {
+              open: false,
+              message: null
+            })
+          }
         >
           <SnackbarContent
             variant={snackbarOptions.type}
             message={snackbarOptions.message}
-            onClose={() => closeSnackbar()}
+            onClose={() =>
+              onSetSnackbar(dispatch, {
+                open: false,
+                message: null
+              })
+            }
           />
         </Snackbar>
       )}

@@ -99,5 +99,4 @@ AppSnackbarContent.propTypes = {
 };
 
 const AppSnackbarContentWrapper = withStyles(styles)(AppSnackbarContent);
-
 export default AppSnackbarContentWrapper;

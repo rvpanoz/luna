@@ -5,15 +5,25 @@
 /* eslint no-underscore-dangle: 0 */
 /* eslint-disable global-require */
 
-import { createStore } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
+import { createEpicMiddleware } from 'redux-observable';
+
+// epics
+import { epics as rootEpic } from 'models/packages';
+
+// reducers
 import rootReducer from '../reducers';
 
 const configureStore = initialState => {
-  // redux Configuration
-  const middleware = [];
+  // create epic middleware
+  const epicMiddleware = createEpicMiddleware();
 
-  // logging Middleware
+  // redux Configuration
+  const middleware = [epicMiddleware];
+  const enhancers = [];
+
+  // logging middleware
   const logger = createLogger({
     level: 'info',
     collapsed: true
@@ -24,12 +34,20 @@ const configureStore = initialState => {
     middleware.push(logger);
   }
 
+  // If redux DevTools Extension is installed use it,
+  // otherwise use redux compose
+
+  /* eslint-disable no-underscore-dangle */
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : compose;
+
+  // apply Middleware & Compose Enhancers
+  enhancers.push(applyMiddleware(...middleware));
+  const enhancer = composeEnhancers(...enhancers);
+
   // create Store
-  const store = createStore(
-    rootReducer,
-    initialState,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  );
+  const store = createStore(rootReducer, initialState, enhancer);
 
   if (module.hot) {
     module.hot.accept('../reducers', () =>
@@ -37,6 +55,7 @@ const configureStore = initialState => {
     );
   }
 
+  epicMiddleware.run(rootEpic);
   return store;
 };
 
