@@ -199,7 +199,7 @@ const Packages = ({ classes }) => {
           });
         }
 
-        updateLoader(false, null);
+        updateLoader(false, null); //rx
       }
 
       if (errors && typeof errors === 'string') {

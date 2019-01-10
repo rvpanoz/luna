@@ -33,7 +33,7 @@ const PackageDetails = props => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on(['view-close'], (event, status, error, data) => {
+    ipcRenderer.on(['view-close'], (event, status, cmd, data, error) => {
       try {
         const newActive = data && JSON.parse(data);
 
@@ -46,7 +46,7 @@ const PackageDetails = props => {
         // TODO: fix it
         onSetSnackbar(dispatch, {
           open: true,
-          type: error ? 'danger' : 'info',
+          type: error ? 'error' : 'info',
           message: error || INFO_MESSAGES.packageLoaded
         });
       } catch (err) {
