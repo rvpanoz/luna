@@ -22,7 +22,7 @@ import GlobalIcon from '@material-ui/icons/GroupWorkOutlined';
 import OptionalIcon from '@material-ui/icons/SettingsEthernetOutlined';
 import PeersIcon from '@material-ui/icons/BallotOutlined';
 
-import { doTogglePackageLoader } from 'models/ui/selectors';
+import { onTogglePackageLoader } from 'models/ui/selectors';
 
 import { listStyles as styles } from '../styles/packagesStyles';
 
@@ -65,10 +65,11 @@ const PackageItemRow = ({
 
   const viewPackage = useCallback(
     (manager, name, version, mode, directory) => {
-      doTogglePackageLoader(dispatch, {
-        loading: true,
-        message: `Loading ${name}@${version}`
-      });
+      // TODO: open package loader
+      // onTogglePackageLoader(dispatch, {
+      //   loading: true,
+      //   message: `Loading ${name}@${version}`
+      // });
 
       ipcRenderer.send('ipc-event', {
         activeManager: manager,

@@ -10,16 +10,17 @@ import {
   setSortOptions
 } from './actions';
 
-const doAddActionError = (dispatch, payload) =>
-  dispatch(addActionError(payload));
-const doAddSelected = dispatch => payload => dispatch(addSelected(payload));
-const doClearSelected = dispatch => () => dispatch(clearSelected());
-const doClearPackages = dispatch => () => dispatch(clearPackages());
-const doStartPackages = dispatch => () => dispatch(setPackagesStart());
+const onClearSelected = dispatch => dispatch(clearSelected());
+const onClearPackages = dispatch => dispatch(clearPackages());
+const onStartPackages = dispatch => dispatch(setPackagesStart());
 
-const doSetPackagesSuccess = (
+const onAddActionError = (dispatch, { error }) =>
+  dispatch(addActionError(error));
+const onAddSelected = (dispatch, { name }) => dispatch(addSelected({ name }));
+
+const onSetPackagesSuccess = (
   dispatch,
-  { dependencies, projectName, projectVersion, fromSort, fromSearch, outdated }
+  { projectName, projectVersion, dependencies, fromSearch, fromSort, outdated }
 ) =>
   dispatch(
     setPackagesSuccess({
@@ -32,15 +33,15 @@ const doSetPackagesSuccess = (
     })
   );
 
-const doSetOutdatedSuccess = (dispatch, { dependencies }) =>
+const onSetOutdatedSuccess = (dispatch, { dependencies }) =>
   dispatch(
     setPackagesOutdatedSuccess({
       dependencies
     })
   );
 
-const doSetActive = (dispatch, { active }) => dispatch(setActive({ active }));
-const doSetSortOptions = (dispatch, { sortDir, sortBy }) =>
+const onSetActive = (dispatch, { active }) => dispatch(setActive({ active }));
+const onSetSortOptions = (dispatch, { sortDir, sortBy }) =>
   dispatch(
     setSortOptions({
       sortBy,
@@ -49,13 +50,13 @@ const doSetSortOptions = (dispatch, { sortDir, sortBy }) =>
   );
 
 export {
-  doAddActionError,
-  doAddSelected,
-  doClearPackages,
-  doClearSelected,
-  doSetActive,
-  doSetSortOptions,
-  doStartPackages,
-  doSetPackagesSuccess,
-  doSetOutdatedSuccess
+  onAddActionError,
+  onAddSelected,
+  onClearPackages,
+  onClearSelected,
+  onSetActive,
+  onSetSortOptions,
+  onStartPackages,
+  onSetPackagesSuccess,
+  onSetOutdatedSuccess
 };

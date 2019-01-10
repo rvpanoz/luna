@@ -4,7 +4,7 @@
  Table Header 
 **/
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { and } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
@@ -15,9 +15,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 import {
-  doAddSelected,
-  doClearSelected,
-  doSetSortOptions
+  onAddSelected,
+  onClearSelected,
+  onSetSortOptions
 } from 'models/packages/selectors';
 
 const columnData = [
@@ -35,31 +35,36 @@ const mapState = ({ packages: { sortBy, sortDir } }) => ({
 const TableHeader = ({ numSelected, rowCount, packages }) => {
   const dispatch = useDispatch();
   const { sortBy, sortDir } = useMappedState(mapState);
+  const checkboxAll = useRef(null);
 
   const toggleSort = useCallback(
     prop =>
-      doSetSortOptions(dispatch, {
+      onSetSortOptions(dispatch, {
         sortDir: sortDir === 'desc' ? 'asc' : 'desc',
         sortBy: prop
       }),
     [sortDir]
   );
 
-  const handleSelectAll = useCallback(
-    e => {
-      const { checked } = e && e.target;
+  const handleSelectAll = e => {
+    const { checked } = e && e.target;
+    const checkBoxElement = checkboxAll && checkboxAll.current;
 
-      checked
-        ? packages &&
-          packages.forEach(name =>
-            doAddSelected(dispatch, {
-              name
-            })
-          )
-        : doClearSelected(dispatch);
-    },
-    [packages]
-  );
+    const indeterminate =
+      checkBoxElement.dataset && checkBoxElement.dataset.indeterminate;
+
+    if (indeterminate === 'true') {
+      onClearSelected(dispatch);
+      return;
+    }
+
+    packages &&
+      packages.forEach(name =>
+        onAddSelected(dispatch, {
+          name
+        })
+      );
+  };
 
   return (
     <TableHead>
@@ -69,6 +74,9 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}
             onChange={handleSelectAll}
+            inputProps={{
+              ref: checkboxAll
+            }}
           />
         </TableCell>
         {columnData.map(column => {
@@ -94,7 +102,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
               )}
             </TableCell>
           );
-        }, this)}
+        })}
       </TableRow>
     </TableHead>
   );

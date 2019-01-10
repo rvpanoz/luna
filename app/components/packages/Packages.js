@@ -19,29 +19,29 @@ import TableBody from '@material-ui/core/TableBody';
 
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
-import { parseNpmError, filterByProp, callActionCreator } from 'commons/utils';
+import { parseNpmError, filterByProp } from 'commons/utils';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/layout/SnackbarContent';
 
 import {
-  doAddActionError,
-  doAddSelected,
-  doClearPackages,
-  doClearSelected,
-  doSetPackagesSuccess,
-  doSetOutdatedSuccess,
-  doSetActive
+  onAddActionError,
+  onAddSelected,
+  onClearPackages,
+  onClearSelected,
+  onSetPackagesSuccess,
+  onSetOutdatedSuccess,
+  onSetActive
 } from 'models/packages/selectors';
 
 import {
-  doAddNotification,
-  doClearNotifications,
-  doClearSnackbar,
-  doToggleLoader,
-  doSetPage,
-  doSetPageRows,
-  doSetSnackbar
+  onAddNotification,
+  onClearNotifications,
+  onClearSnackbar,
+  onToggleLoader,
+  onSetPage,
+  onSetPageRows,
+  onSetSnackbar
 } from 'models/ui/selectors';
 
 import {
@@ -126,12 +126,12 @@ const Packages = ({ classes }) => {
     const { inert } = options;
 
     if (inert) {
-      doSetActive(dispatch, { active: null });
+      onSetActive(dispatch, { active: null });
     }
 
-    doClearPackages(dispatch);
-    doClearNotifications(dispatch);
-    doClearSnackbar(dispatch);
+    onClearPackages(dispatch);
+    onClearNotifications(dispatch);
+    onClearSnackbar(dispatch);
   }, []);
 
   const updateSnackbar = useCallback(
@@ -159,8 +159,7 @@ const Packages = ({ classes }) => {
   );
 
   const updateLoader = useCallback(
-    (bool, content) =>
-      doToggleLoader(dispatch, { loading: bool, message: content }),
+    (loading, message) => onToggleLoader(dispatch, { loading, message }),
     []
   );
 
@@ -171,7 +170,6 @@ const Packages = ({ classes }) => {
 
   useEffect(
     () => {
-      console.log('clearing ui..');
       clearUI({
         data: true,
         notifications: true,
@@ -185,11 +183,11 @@ const Packages = ({ classes }) => {
   useEffect(
     () => {
       if (page !== 0) {
-        doSetPage(dispatch, { page: 0 });
+        onSetPage(dispatch, { page: 0 });
       }
 
       if (dependencies && Array.isArray(dependencies) && dependencies.length) {
-        doSetPackagesSuccess(dispatch, {
+        onSetPackagesSuccess(dispatch, {
           dependencies,
           projectName,
           projectVersion,
@@ -197,7 +195,7 @@ const Packages = ({ classes }) => {
         });
 
         if (outdated && Array.isArray(outdated) && outdated.length) {
-          doSetOutdatedSuccess(dispatch, {
+          onSetOutdatedSuccess(dispatch, {
             dependencies: outdated
           });
         }
@@ -215,7 +213,7 @@ const Packages = ({ classes }) => {
               errorsArr[errorsLen]
             );
 
-            doAddNotification(dispatch, {
+            onAddNotification(dispatch, {
               level: 0,
               body,
               requires,
@@ -253,10 +251,11 @@ const Packages = ({ classes }) => {
       // handles install and uninstall actions
       ipcRenderer.on(['action-close'], (event, error) => {
         if (error && error.length) {
-          doAddActionError(dispatch, { error });
+          onAddActionError(dispatch, { error });
         }
 
-        setCounter(counter + 1); // force render
+        // force render
+        setCounter(counter + 1);
       });
 
       return () => ipcRenderer.removeAllListeners(['action-close']);
@@ -267,7 +266,7 @@ const Packages = ({ classes }) => {
   // more listeners
   useEffect(() => {
     ipcRenderer.on('yarn-warning-close', () => {
-      doSetSnackbar(dispatch, {
+      onSetSnackbar(dispatch, {
         open: true,
         type: 'error',
         message: WARNING_MESSAGES.yarnlock
@@ -319,8 +318,8 @@ const Packages = ({ classes }) => {
             >
               <TableHeader
                 packages={dataSlices.map(d => d.name)}
-                numSelected={Number(selected.length)}
-                rowCount={data && data.length}
+                numSelected={selected.length}
+                rowCount={dependencies && dependencies.length}
               />
               <TableBody>
                 {sortedPackages &&
@@ -338,11 +337,7 @@ const Packages = ({ classes }) => {
                         <PackageItem
                           key={`pkg-${name}`}
                           isSelected={isSelected(name, selected)}
-                          addSelected={() =>
-                            callActionCreator(dispatch, {
-                              name
-                            })
-                          }
+                          addSelected={() => onAddSelected(dispatch, { name })}
                           name={name}
                           manager={manager}
                           version={version}
@@ -363,10 +358,10 @@ const Packages = ({ classes }) => {
                 page={page}
                 rowsPerPage={rowsPerPage}
                 handleChangePage={(e, pageNo) =>
-                  doSetPage(dispatch, { page: pageNo })
+                  onSetPage(dispatch, { page: pageNo })
                 }
                 handleChangePageRows={e =>
-                  doSetPageRows(dispatch, { rowsPerPage: e.target.value })
+                  onSetPageRows(dispatch, { rowsPerPage: e.target.value })
                 }
               />
             </Table>

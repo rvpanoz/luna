@@ -18,8 +18,6 @@ const {
 const _getKeys = obj => Object.keys(obj);
 const _getValues = obj => Object.values(obj);
 
-export const callActionCreator = (dispatch, payload) =>
-  actionCreator(dispatch)(payload);
 export const createActionCreator = namespace => actionType => {
   const type = `${namespace}/${actionType}`;
   const actionCreator = payload => ({
