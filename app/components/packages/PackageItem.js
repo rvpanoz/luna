@@ -63,27 +63,22 @@ const PackageItemRow = ({
     [group]
   );
 
-  const viewPackage = useCallback(
-    (manager, name, version, mode, directory) => {
-      // TODO: open package loader
-      // onTogglePackageLoader(dispatch, {
-      //   loading: true,
-      //   message: `Loading ${name}@${version}`
-      // });
+  const viewPackage = (manager, name, version, mode, directory) => {
+    onTogglePackageLoader(dispatch, {
+      loading: true
+    });
 
-      ipcRenderer.send('ipc-event', {
-        activeManager: manager,
-        ipcEvent: 'view',
-        cmd: ['view'],
-        name,
-        mode,
-        directory
-      });
+    ipcRenderer.send('ipc-event', {
+      activeManager: manager,
+      ipcEvent: 'view',
+      cmd: ['view'],
+      name,
+      mode,
+      directory
+    });
 
-      return false;
-    },
-    [name]
-  );
+    return false;
+  };
 
   return (
     <TableRow
@@ -128,18 +123,6 @@ const PackageItemRow = ({
         >
           {latest || version}
         </span>
-      </TableCell>
-      <TableCell padding="none" className={classes.tableCell}>
-        <Avatar
-          className={cn(classes.avatar, {
-            [classes.greenAvatar]: group === '',
-            [classes.pinkAvatar]: group === 'dependencies',
-            [classes.greenAvatar]: group === 'devDependencies',
-            [classes.pinkAvatar]: group === 'optionalDependencies'
-          })}
-        >
-          G
-        </Avatar>
       </TableCell>
     </TableRow>
   );

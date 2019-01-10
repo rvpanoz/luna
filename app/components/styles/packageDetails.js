@@ -2,6 +2,7 @@ import red from '@material-ui/core/colors/red';
 
 const styles = () => ({
   wrapper: {
+    minHeight: 350,
     marginLeft: 10
   },
   card: {

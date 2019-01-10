@@ -14,8 +14,9 @@ const onClearNotifications = dispatch => dispatch(clearNotifications());
 const onClearSnackbar = dispatch => dispatch(clearSnackbar());
 const onToggleLoader = (dispatch, payload) => dispatch(toggleLoader(payload));
 
-const onTogglePackageLoader = dispatch => dispatch(togglePackageLoader());
-const onSetPage = (dispatch, { page }) => dispatch(setPage({ page }));
+const onTogglePackageLoader = (dispatch, payload) =>
+  dispatch(togglePackageLoader(payload));
+const onSetPage = (dispatch, payload) => dispatch(setPage(payload));
 
 const onAddNotification = (dispatch, payload) =>
   dispatch(addNotification(payload));

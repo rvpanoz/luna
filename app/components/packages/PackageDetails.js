@@ -7,6 +7,7 @@ import { ipcRenderer } from 'electron';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { objectOf, string } from 'prop-types';
+import AppLoader from 'components/layout/AppLoader';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -16,19 +17,19 @@ import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { INFO_MESSAGES } from 'constants/AppConstants';
-import { doSetSnackbar } from 'models/ui/selectors';
-import { doSetActive } from 'models/packages/selectors';
+import { onSetSnackbar, onTogglePackageLoader } from 'models/ui/selectors';
+import { onSetActive } from 'models/packages/selectors';
 
 import styles from '../styles/packageDetails';
 
-const mapState = ({ common: { loader }, packages: { active } }) => ({
+const mapState = ({ common: { packageLoader }, packages: { active } }) => ({
   active,
-  loader
+  packageLoader
 });
 
 const PackageDetails = props => {
   const { classes } = props;
-  const { active } = useMappedState(mapState);
+  const { active, packageLoader } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,10 +37,14 @@ const PackageDetails = props => {
       try {
         const newActive = data && JSON.parse(data);
 
-        doSetActive(dispatch, { active: newActive });
+        onTogglePackageLoader(dispatch, {
+          loading: false
+        });
+
+        onSetActive(dispatch, { active: newActive });
 
         // TODO: fix it
-        doSetSnackbar(dispatch, {
+        onSetSnackbar(dispatch, {
           open: true,
           type: error ? 'danger' : 'info',
           message: error || INFO_MESSAGES.packageLoaded
@@ -54,33 +59,35 @@ const PackageDetails = props => {
 
   return (
     <div className={classes.wrapper}>
-      {active ? (
-        <Card className={classes.card}>
-          <CardHeader
-            avatar={
-              <Avatar aria-label="Recipe" className={classes.avatar}>
-                {active.license}
-              </Avatar>
-            }
-            action={
-              <IconButton>
-                <MoreVertIcon />
-              </IconButton>
-            }
-            title={active.name}
-            subheader={active.version}
-          />
-          <CardContent>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-            >
-              {active.description}
-            </Typography>
-          </CardContent>
-        </Card>
-      ) : null}
+      <AppLoader loading={packageLoader.loading} relative>
+        {active ? (
+          <Card className={classes.card}>
+            <CardHeader
+              avatar={
+                <Avatar aria-label="Recipe" className={classes.avatar}>
+                  {active.license}
+                </Avatar>
+              }
+              action={
+                <IconButton>
+                  <MoreVertIcon />
+                </IconButton>
+              }
+              title={active.name}
+              subheader={active.version}
+            />
+            <CardContent>
+              <Typography
+                className={classes.title}
+                color="textSecondary"
+                gutterBottom
+              >
+                {active.description}
+              </Typography>
+            </CardContent>
+          </Card>
+        ) : null}
+      </AppLoader>
     </div>
   );
 };

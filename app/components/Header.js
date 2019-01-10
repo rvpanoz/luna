@@ -34,8 +34,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import { APP_MODES } from 'constants/AppConstants';
-import { doSetMode } from 'models/ui/selectors';
-import { doClearPackages } from 'models/packages/selectors';
+import { onSetMode } from 'models/ui/selectors';
+import { onClearPackages } from 'models/packages/selectors';
 
 import SearchBox from './SearchBox';
 import styles from './styles/header';
@@ -60,9 +60,10 @@ const Header = props => {
 
   const menuOpen = Boolean(anchorEl);
   const notificationsOpen = Boolean(notifications.length && notificationsEl);
+
   const handleDirectory = useCallback(directory => {
-    doClearPackages(dispatch);
-    doSetMode(dispatch, { mode: APP_MODES.LOCAL, directory });
+    onClearPackages(dispatch);
+    onSetMode(dispatch, { mode: APP_MODES.LOCAL, directory });
     toggleDrawer(false);
   }, []);
 
@@ -99,8 +100,6 @@ const Header = props => {
       }
     );
   }, []);
-
-  const openDirectory = useCallback(directory => handleDirectory(directory));
 
   return (
     <div className={classes.root}>
@@ -219,7 +218,7 @@ const Header = props => {
                     className={classes.listItem}
                     primary={
                       <a
-                        onClick={() => openDirectory(dir.directory)}
+                        onClick={() => handleDirectory(dir.directory)}
                         href="#"
                         className={classes.link}
                       >

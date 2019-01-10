@@ -53,7 +53,7 @@ const handlers = {
   [clearNotifications.type]: state => assoc('notifications', [], state),
   [setSnackbar.type]: (state, { payload }) =>
     assoc('snackbarOptions', merge(state.snackbarOptions, payload), state),
-  [setMode.type]: (state, { payload: { mode }, payload: { directory } }) =>
+  [setMode.type]: (state, { payload: { mode, directory } }) =>
     merge(state, {
       mode,
       directory
@@ -68,20 +68,14 @@ const handlers = {
 
     return assoc('rowsPerPage', rowsPerPage, state);
   },
-  [toggleLoader.type]: (
-    state,
-    { payload: { loading }, payload: { message } }
-  ) =>
+  [toggleLoader.type]: (state, { payload: { loading, message } }) =>
     merge(state, {
       loader: {
         loading,
         message
       }
     }),
-  [togglePackageLoader.type]: (
-    state,
-    { payload: { loading }, payload: { message } }
-  ) =>
+  [togglePackageLoader.type]: (state, { payload: { loading, message } }) =>
     merge(state, {
       packageLoader: {
         loading,

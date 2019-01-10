@@ -23,8 +23,8 @@ import {
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'version', disablePadding: true, label: 'Version' },
-  { id: 'latest', disablePadding: true, label: 'Latest' },
-  { id: 'group', disablePadding: true, label: 'Group' }
+  { id: 'latest', disablePadding: true, label: 'Latest' }
+  // { id: 'group', disablePadding: true, label: 'Group' }
 ];
 
 const mapState = ({ packages: { sortBy, sortDir } }) => ({

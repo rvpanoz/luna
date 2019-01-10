@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { bool, object, objectOf } from 'prop-types';
+import { bool, symbol, objectOf, string } from 'prop-types';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -22,23 +22,28 @@ const styles = theme => ({
     top: '100%',
     margin: `0 ${theme.spacing.unit * 2}px`
   },
+  relative: {
+    position: 'relative',
+    margin: `0 ${theme.spacing.unit * 2}px`
+  },
   margin: {
     margin: '10px 0'
   }
 });
 
 const AppLoader = props => {
-  const { loading, classes, children, small, message } = props;
+  const { loading, classes, children, message, relative, mini } = props;
 
   return loading ? (
     <div
       className={cn({
-        [classes.loader]: !small
+        [classes.loader]: !relative,
+        [classes.relatove]: relative
       })}
     >
       <CircularProgress
-        color={small ? 'primary' : 'secondary'}
-        size={small ? 20 : 30}
+        color={relative ? 'primary' : 'secondary'}
+        size={mini ? 20 : 30}
       />
       {message && (
         <Typography className={classes.margin} variant="caption">
@@ -52,13 +57,14 @@ const AppLoader = props => {
 };
 
 AppLoader.defaultProps = {
-  message: 'Loading packages..'
+  loading: false,
+  message: null
 };
 
-// AppLoader.propTypes = {
-//   classes: objectOf(object).isRequired,
-//   children: objectOf(object).isRequired,
-//   loading: bool.isRequired
-// };
+AppLoader.propTypes = {
+  classes: objectOf(string).isRequired,
+  loading: bool.isRequired,
+  children: objectOf(symbol)
+};
 
 export default withStyles(styles)(AppLoader);
