@@ -38,15 +38,13 @@ const handlers = {
         actionError
       }
     }),
-  [addFilter.type]: (state, { payload }) => {
-    const { filterName } = payload;
+  [addFilter.type]: (state, { payload: { filter } }) => {
     const { filters } = state;
-    const idx = filters.indexOf(filterName);
+    const idx = filters.indexOf(filter);
 
     return merge(state, {
       page: 0,
-      filters:
-        idx !== -1 ? remove(idx, 1, filters) : prepend(filterName, filters)
+      filters: idx !== -1 ? remove(idx, 1, filters) : prepend(filter, filters)
     });
   },
   [addSelected.type]: (state, action) => {

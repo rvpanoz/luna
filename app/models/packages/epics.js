@@ -8,8 +8,31 @@ import { combineEpics, ofType } from 'redux-observable';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-import { setSnackbar } from 'models/ui/actions';
-import { clearFilters, setPackagesError, setPackagesSuccess } from './actions';
+import { setSnackbar, toggleLoader } from 'models/ui/actions';
+import {
+  clearFilters,
+  setPackagesError,
+  setPackagesSuccess,
+  setPackagesStart
+} from './actions';
+
+const setPackagesStartEpic = action$ =>
+  action$.pipe(
+    ofType(setPackagesStart.type),
+    map(() => ({
+      type: toggleLoader.type,
+      payload: {
+        loading: true,
+        message: 'Loading packages..'
+      }
+    })),
+    catchError(err => {
+      of({
+        type: setPackagesError.type,
+        err
+      });
+    })
+  );
 
 const setPackagesSuccessEpic = action$ =>
   action$.pipe(
@@ -48,4 +71,8 @@ const clearFiltersEpic = action$ =>
     }))
   );
 
-export default combineEpics(setPackagesSuccessEpic, clearFiltersEpic);
+export default combineEpics(
+  clearFiltersEpic,
+  setPackagesSuccessEpic,
+  setPackagesStartEpic
+);

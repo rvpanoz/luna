@@ -7,7 +7,6 @@ import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 
 import { onStartPackages } from 'models/packages/selectors';
-import { onToggleLoader } from 'models/ui/selectors';
 import { parseMap } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
@@ -46,8 +45,9 @@ const useIpc = (channel, options, inputs = []) => {
       }
     });
 
-    onToggleLoader(dispatch, { loading: true, message: 'Loading packages..' });
-    onStartPackages(dispatch);
+    onStartPackages(dispatch, {
+      options
+    });
     ipcRenderer.send(channel, options);
 
     return () => ipcRenderer.removeAllListeners([listenTo]);

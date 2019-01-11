@@ -1,6 +1,5 @@
 import {
   addNotification,
-  clearAll,
   clearNotifications,
   clearSnackbar,
   setSnackbar,
@@ -24,11 +23,9 @@ const onAddNotification = (dispatch, payload) =>
 const onSetSnackbar = (dispatch, payload) => dispatch(setSnackbar(payload));
 const onSetPageRows = (dispatch, payload) => dispatch(setPageRows(payload));
 const onSetMode = (dispatch, payload) => dispatch(setMode(payload));
-const onClearAll = dispatch => dispatch(clearAll());
 
 export {
   onAddNotification,
-  onClearAll,
   onClearNotifications,
   onClearSnackbar,
   onSetMode,

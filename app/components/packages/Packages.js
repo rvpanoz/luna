@@ -24,7 +24,6 @@ import SnackbarContent from 'components/layout/SnackbarContent';
 import {
   onAddActionError,
   onAddSelected,
-  onClearPackages,
   onSetPackagesSuccess,
   onSetOutdatedSuccess,
   onSetActive
@@ -52,6 +51,11 @@ import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
 
 import { listStyles as styles } from '../styles/packagesStyles';
+import {
+  onClearNotifications,
+  onClearSnackbar
+} from '../../models/ui/selectors';
+import { onClearSelected } from '../../models/packages/selectors';
 
 const mapState = ({
   common: {
@@ -120,15 +124,17 @@ const Packages = ({ classes }) => {
     [name, selected]
   );
 
-  const clearUI = useCallback(options => {
+  const clearUI = options => {
     const { inert } = options;
 
     if (inert) {
       onSetActive(dispatch, { active: null });
     }
 
-    onClearAll(dispatch);
-  }, []);
+    onClearNotifications(dispatch);
+    onClearSnackbar(dispatch);
+    onClearSelected(dispatch);
+  };
 
   const updateSnackbar = useCallback(
     ({ open, type, message }) =>
@@ -154,9 +160,6 @@ const Packages = ({ classes }) => {
     [counter, mode, directory]
   );
 
-  const updateLoader = (loading, message) =>
-    onToggleLoader(dispatch, { loading, message });
-
   const { projectName, projectVersion } = dependenciesSet || {};
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
@@ -170,12 +173,7 @@ const Packages = ({ classes }) => {
         snackbar: true,
         inert: true
       });
-    },
-    [dependenciesSet]
-  );
 
-  useEffect(
-    () => {
       if (page !== 0) {
         onSetPage(dispatch, { page: 0 });
       }
@@ -194,7 +192,7 @@ const Packages = ({ classes }) => {
           });
         }
 
-        updateLoader(false, null); //rx
+        onToggleLoader(dispatch, { loading: false, message: null });
       }
 
       if (errors && typeof errors === 'string') {
@@ -239,10 +237,8 @@ const Packages = ({ classes }) => {
     [dependenciesSet]
   );
 
-  // action listener
   useEffect(
     () => {
-      // handles install and uninstall actions
       ipcRenderer.on(['action-close'], (event, error) => {
         if (error && error.length) {
           onAddActionError(dispatch, { error });
@@ -277,6 +273,27 @@ const Packages = ({ classes }) => {
 
   // filtering
   const [data] = useFilters(packages, filters, counter);
+
+  /**
+   * Render footer based on data in order to
+   * calculate the rows count when filters are on
+   */
+  const renderFooter = useCallback(() => (
+    <TableFooter
+      classes={{
+        root: {
+          [classes.hidden]: nodata
+        }
+      }}
+      rowCount={data && data.length}
+      page={page}
+      rowsPerPage={rowsPerPage}
+      handleChangePage={(e, pageNo) => onSetPage(dispatch, { page: pageNo })}
+      handleChangePageRows={e =>
+        onSetPageRows(dispatch, { rowsPerPage: e.target.value })
+      }
+    />
+  ));
 
   // pagination
   const dataSlices =
@@ -342,22 +359,7 @@ const Packages = ({ classes }) => {
                       ) : null
                   )}
               </TableBody>
-              <TableFooter
-                classes={{
-                  root: {
-                    [classes.hidden]: nodata
-                  }
-                }}
-                rowCount={dependencies && dependencies.length}
-                page={page}
-                rowsPerPage={rowsPerPage}
-                handleChangePage={(e, pageNo) =>
-                  onSetPage(dispatch, { page: pageNo })
-                }
-                handleChangePageRows={e =>
-                  onSetPageRows(dispatch, { rowsPerPage: e.target.value })
-                }
-              />
+              {renderFooter()}
             </Table>
           ) : (
             <div className={classes.nodata}>
