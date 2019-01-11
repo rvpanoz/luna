@@ -6,7 +6,15 @@
  */
 
 import React from 'react';
-import { bool, symbol, objectOf, string } from 'prop-types';
+import {
+  array,
+  bool,
+  symbol,
+  objectOf,
+  node,
+  oneOfType,
+  string
+} from 'prop-types';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -64,7 +72,7 @@ AppLoader.defaultProps = {
 AppLoader.propTypes = {
   classes: objectOf(string).isRequired,
   loading: bool.isRequired,
-  children: objectOf(symbol)
+  children: oneOfType([node, array, symbol])
 };
 
 export default withStyles(styles)(AppLoader);
