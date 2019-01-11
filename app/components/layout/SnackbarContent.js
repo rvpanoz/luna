@@ -31,10 +31,10 @@ const styles = theme => ({
     backgroundColor: green[600]
   },
   error: {
-    backgroundColor: theme.palette.error.dark
+    backgroundColor: theme.palette.error.light
   },
   info: {
-    backgroundColor: theme.palette.primary.dark
+    backgroundColor: theme.palette.secondary.light
   },
   warning: {
     backgroundColor: amber[700]

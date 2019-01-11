@@ -3,9 +3,6 @@
  */
 
 /* eslint-disable */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-plusplus */
-/* eslint-disable no-underscore-dangle */
 
 import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useCallback } from 'react';
@@ -35,8 +32,7 @@ import {
 
 import {
   onAddNotification,
-  onClearNotifications,
-  onClearSnackbar,
+  onClearAll,
   onToggleLoader,
   onSetPage,
   onSetPageRows,
@@ -99,8 +95,6 @@ const mapState = ({
   sortBy
 });
 
-const isSelected = (name, selected) => selected.indexOf(name) !== -1;
-
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
@@ -121,6 +115,11 @@ const Packages = ({ classes }) => {
   const [counter, setCounter] = useState(0); // force render programmaticlly
   const dispatch = useDispatch();
 
+  const isSelected = useCallback(
+    (name, selected) => selected.indexOf(name) !== -1,
+    [name, selected]
+  );
+
   const clearUI = useCallback(options => {
     const { inert } = options;
 
@@ -128,9 +127,7 @@ const Packages = ({ classes }) => {
       onSetActive(dispatch, { active: null });
     }
 
-    onClearPackages(dispatch);
-    onClearNotifications(dispatch);
-    onClearSnackbar(dispatch);
+    onClearAll(dispatch);
   }, []);
 
   const updateSnackbar = useCallback(
@@ -157,10 +154,8 @@ const Packages = ({ classes }) => {
     [counter, mode, directory]
   );
 
-  const updateLoader = useCallback(
-    (loading, message) => onToggleLoader(dispatch, { loading, message }),
-    []
-  );
+  const updateLoader = (loading, message) =>
+    onToggleLoader(dispatch, { loading, message });
 
   const { projectName, projectVersion } = dependenciesSet || {};
   const dependencies = dependenciesSet.data;

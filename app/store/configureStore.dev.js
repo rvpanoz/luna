@@ -10,7 +10,8 @@ import { createLogger } from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
 
 // epics
-import { epics as rootEpic } from 'models/packages';
+import { epics as packagesEpic } from 'models/packages';
+import { epics as uiEpic } from 'models/ui';
 
 // reducers
 import rootReducer from '../reducers';
@@ -55,7 +56,9 @@ const configureStore = initialState => {
     );
   }
 
-  epicMiddleware.run(rootEpic);
+  epicMiddleware.run(uiEpic);
+  epicMiddleware.run(packagesEpic);
+
   return store;
 };
 

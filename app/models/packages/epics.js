@@ -16,9 +16,11 @@ const setPackagesSuccessEpic = action$ =>
     ofType(setPackagesSuccess.type),
     map(({ payload }) => {
       const { dependencies, outdated } = payload;
+
       return {
         type: setSnackbar.type,
         payload: {
+          type: 'info',
           open: true,
           message: `${dependencies.length} dependencies loaded!\nFound ${
             outdated.length

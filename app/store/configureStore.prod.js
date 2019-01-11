@@ -7,6 +7,12 @@
 
 import { createStore, compose, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
+
+// epics
+import { epics as packagesEpic } from 'models/packages';
+import { epics as uiEpic } from 'models/ui';
+
+// reducers
 import rootReducer from '../reducers';
 
 const configureStore = initialState => {
@@ -23,6 +29,9 @@ const configureStore = initialState => {
 
   // create Store
   const store = createStore(rootReducer, initialState, enhancer);
+
+  epicMiddleware.run(uiEpic);
+  epicMiddleware.run(packagesEpic);
 
   return store;
 };
