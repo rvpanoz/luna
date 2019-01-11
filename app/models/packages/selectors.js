@@ -1,7 +1,9 @@
 import {
   addActionError,
+  addFilter,
   addSelected,
   clearSelected,
+  clearFilters,
   clearPackages,
   setPackagesStart,
   setPackagesSuccess,
@@ -40,6 +42,8 @@ const onSetOutdatedSuccess = (dispatch, { dependencies }) =>
     })
   );
 
+const onAddFilter = (dispatch, { filter }) => dispatch(addFilter({ filter }));
+const onClearFilters = dispatch => dispatch(clearFilters());
 const onSetActive = (dispatch, { active }) => dispatch(setActive({ active }));
 const onSetSortOptions = (dispatch, { sortDir, sortBy }) =>
   dispatch(
@@ -52,6 +56,8 @@ const onSetSortOptions = (dispatch, { sortDir, sortBy }) =>
 export {
   onAddActionError,
   onAddSelected,
+  onAddFilter,
+  onClearFilters,
   onClearPackages,
   onClearSelected,
   onSetActive,

@@ -93,7 +93,7 @@ export const getFiltered = (data, filters) => {
       });
 
     if (filtered.length) {
-      return acc.concat(filtered);
+      return acc ? acc.concat(filtered) : [];
     }
   }, []);
 

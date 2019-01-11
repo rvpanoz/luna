@@ -52,18 +52,17 @@ const styles = theme => ({
   message: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    maxWidth: 300
+    justifyContent: 'space-between'
   }
 });
 
 const AppSnackbarContent = props => {
-  const { classes, className, message, onClose, variant, ...other } = props;
+  const { classes, message, onClose, variant, ...other } = props;
   const Icon = variantIcon[variant];
 
   return (
     <SnackbarContent
-      className={classNames(classes[variant], className)}
+      className={classNames(classes[variant], classes.root)}
       aria-describedby="cli-snackbar"
       message={
         <span id="cli-snackbar" className={classes.message}>

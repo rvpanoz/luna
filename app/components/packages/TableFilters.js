@@ -20,7 +20,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { APP_MODES } from 'constants/AppConstants';
-import { addFilter, clearFilters } from 'models/packages/actions';
+import { onAddFilter, onClearFilters } from 'models/packages/selectors';
 
 import { tableFiltersStyles as styles } from '../styles/packagesStyles';
 
@@ -66,7 +66,9 @@ const ListFilters = props => {
                   disabled={mode === APP_MODES.GLOBAL}
                   checked={filters && filters.indexOf('dependencies') > -1}
                   onChange={() =>
-                    dispatch(addFilter({ filterName: 'dependencies' }))
+                    onAddFilter(dispatch, {
+                      filter: 'dependencies'
+                    })
                   }
                   value="dependencies"
                 />
@@ -79,7 +81,9 @@ const ListFilters = props => {
                   disabled={mode === APP_MODES.GLOBAL}
                   checked={filters && filters.indexOf('devDependencies') > -1}
                   onChange={() =>
-                    dispatch(addFilter({ filterName: 'devDependencies' }))
+                    onAddFilter(dispatch, {
+                      filter: 'devDependencies'
+                    })
                   }
                   value="devDependencies"
                 />
@@ -93,7 +97,9 @@ const ListFilters = props => {
                     filters && filters.indexOf('optionalDependencies') > -1
                   }
                   onChange={() =>
-                    dispatch(addFilter({ filterName: 'optionalDependencies' }))
+                    onAddFilter(dispatch, {
+                      filter: 'optionalDependencies'
+                    })
                   }
                   value="optionalDependencies"
                 />
@@ -111,7 +117,11 @@ const ListFilters = props => {
               control={
                 <Checkbox
                   checked={filters && filters.indexOf('latest') > -1}
-                  onChange={() => dispatch(addFilter({ filterName: 'latest' }))}
+                  onChange={() =>
+                    onAddFilter(dispatch, {
+                      filter: 'latest'
+                    })
+                  }
                   value="latest"
                 />
               }
@@ -125,7 +135,7 @@ const ListFilters = props => {
             color="secondary"
             onClick={e => {
               if (filters && filters.length) {
-                dispatch(clearFilters());
+                onClearFilters(dispatch);
               }
               return false;
             }}
