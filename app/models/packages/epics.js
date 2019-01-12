@@ -44,20 +44,18 @@ const setPackagesStartEpic = action$ =>
 const setPackagesSuccessEpic = action$ =>
   action$.pipe(
     ofType(setPackagesSuccess.type),
-    map(
-      () => ({
-        type: toggleLoader.type,
-        payload: {
-          looading: false
-        }
-      }),
-      catchError(err => {
-        of({
-          type: setPackagesError.type,
-          err
-        });
-      })
-    )
+    map(() => ({
+      type: toggleLoader.type,
+      payload: {
+        looading: false
+      }
+    })),
+    catchError(err => {
+      of({
+        type: setPackagesError.type,
+        err
+      });
+    })
   );
 
 const clearFiltersEpic = action$ =>

@@ -198,7 +198,15 @@ const TableListToolbar = props => {
           <Popover
             open={filtersOn}
             anchorEl={anchorEl}
-            onClose={e => toggleFilters(!filtersOn)}
+            onClose={() => toggleFilters(!filtersOn)}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right'
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left'
+            }}
           >
             <TableFilters mode={mode} close={() => openFilters(null, true)} />
           </Popover>

@@ -5,7 +5,7 @@
 /* eslint-disable */
 
 import { ipcRenderer } from 'electron';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { withStyles, Typography } from '@material-ui/core';
@@ -112,6 +112,7 @@ const Packages = ({ classes }) => {
     sortBy
   } = useMappedState(mapState);
 
+  const wrapperRef = useRef(null);
   const [counter, setCounter] = useState(0); // force render programmaticlly
   const dispatch = useDispatch();
 
@@ -284,7 +285,17 @@ const Packages = ({ classes }) => {
       rowCount={data && data.length}
       page={page}
       rowsPerPage={rowsPerPage}
-      handleChangePage={(e, pageNo) => onSetPage(dispatch, { page: pageNo })}
+      handleChangePage={(e, pageNo) => {
+        const wrapperEl = wrapperRef && wrapperRef.current;
+
+        // scroll to top
+        wrapperEl &&
+          wrapperEl.scroll({
+            top: 0
+          });
+
+        onSetPage(dispatch, { page: pageNo });
+      }}
       handleChangePageRows={e =>
         onSetPageRows(dispatch, { rowsPerPage: e.target.value })
       }
@@ -316,7 +327,7 @@ const Packages = ({ classes }) => {
             nodata={dependencies === null}
           />
         </div>
-        <div className={classes.tableWrapper}>
+        <div className={classes.tableWrapper} ref={wrapperRef}>
           {nodata === false ? (
             <Table
               padding="dense"
