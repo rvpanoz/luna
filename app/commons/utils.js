@@ -10,13 +10,7 @@ import mk from '../mk';
 import { APP_MODES, PACKAGE_GROUPS } from '../constants/AppConstants';
 import { pick, merge } from 'ramda';
 
-const { config } = mk;
-const {
-  defaultSettings: { manager }
-} = config;
-
 const _getKeys = obj => Object.keys(obj);
-const _getValues = obj => Object.values(obj);
 
 export const createActionCreator = namespace => actionType => {
   const type = `${namespace}/${actionType}`;

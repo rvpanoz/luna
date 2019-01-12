@@ -15,7 +15,6 @@ import { withStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-import Avatar from '@material-ui/core/Avatar';
 import DependencyIcon from '@material-ui/icons/CodeOutlined';
 import DevDependencyIcon from '@material-ui/icons/BuildOutlined';
 import GlobalIcon from '@material-ui/icons/GroupWorkOutlined';
@@ -24,7 +23,7 @@ import PeersIcon from '@material-ui/icons/BallotOutlined';
 
 import { onTogglePackageLoader } from 'models/ui/selectors';
 
-import { listStyles as styles } from '../styles/packagesStyles';
+import { listStyles as styles } from '../../styles/packagesStyles';
 
 const PackageItemRow = ({
   classes,
