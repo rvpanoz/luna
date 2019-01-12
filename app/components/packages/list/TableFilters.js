@@ -5,21 +5,20 @@
  */
 
 import { withStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
-import FilterIcon from '@material-ui/icons/FilterList';
-import ClearIcon from '@material-ui/icons/Clear';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import { APP_MODES } from 'constants/AppConstants';
+
+import AppButton from 'components/layout/Buttons/AppButton';
 import { onAddFilter, onClearFilters } from 'models/packages/selectors';
 
 import { tableFiltersStyles as styles } from '../../styles/packagesStyles';
@@ -28,20 +27,16 @@ const mapState = state => ({
   filters: state.packages.filters
 });
 
-const ListFilters = props => {
-  const { classes, mode, close } = props;
-
+const ListFilters = ({ classes, mode, close }) => {
   const dispatch = useDispatch();
   const { filters } = useMappedState(mapState);
+  const clearFilters = () =>
+    filters && filters.length ? onClearFilters(dispatch) : false;
 
   return (
     <div className={classes.root}>
-      <Typography
-        className={classes.headline}
-        variant="headline"
-        component="h2"
-      >
-        Filters
+      <Typography className={classes.headline} component="h2">
+        Filter packages
       </Typography>
       <Divider light />
       <div className={classes.filterItems}>
@@ -131,22 +126,8 @@ const ListFilters = props => {
         </FormControl>
         <Divider className={classes.bottomDivider} light />
         <div className={classes.actions}>
-          <Button
-            color="secondary"
-            onClick={e => {
-              if (filters && filters.length) {
-                onClearFilters(dispatch);
-              }
-              return false;
-            }}
-          >
-            <FilterIcon className={classes.leftIcon} />
-            Clear
-          </Button>
-          <Button color="primary" onClick={close}>
-            <ClearIcon className={classes.leftIcon} />
-            Close
-          </Button>
+          <AppButton onClick={clearFilters}>Clear</AppButton>
+          <AppButton onClick={close}>Close</AppButton>
         </div>
       </div>
     </div>
