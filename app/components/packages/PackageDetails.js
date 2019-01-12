@@ -2,24 +2,34 @@
  * Package details
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { ipcRenderer } from 'electron';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { objectOf, string } from 'prop-types';
+import cn from 'classnames';
 import AppLoader from 'components/layout/AppLoader';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-import { INFO_MESSAGES } from 'constants/AppConstants';
-import { onSetSnackbar, onTogglePackageLoader } from 'models/ui/selectors';
+import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import HistoryIcon from '@material-ui/icons/HistoryOutlined';
+
+import Grid from '@material-ui/core/Grid';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import { onSetActive } from 'models/packages/selectors';
 
+import Transition from 'components/layout/Transition';
 import styles from '../styles/packageDetails';
 
 const mapState = ({ common: { packageLoader }, packages: { active } }) => ({
@@ -29,26 +39,37 @@ const mapState = ({ common: { packageLoader }, packages: { active } }) => ({
 
 const PackageDetails = props => {
   const { classes } = props;
+  const [expanded, expand] = useState(false);
   const { active, packageLoader } = useMappedState(mapState);
   const dispatch = useDispatch();
 
+  const renderActions = () => (
+    <CardActions className={classes.actions} disableActionSpacing>
+      <IconButton aria-label="Add to favorites">
+        <FavoriteIcon />
+      </IconButton>
+      <IconButton aria-label="Share">
+        <ShareIcon />
+      </IconButton>
+      <IconButton
+        className={cn(classes.expand, {
+          [classes.expandOpen]: expanded
+        })}
+        onClick={() => expand(!expanded)}
+        aria-expanded={expanded}
+        aria-label="Show more"
+      >
+        <ExpandMoreIcon />
+      </IconButton>
+    </CardActions>
+  );
+
   useEffect(() => {
-    ipcRenderer.on(['view-close'], (event, status, cmd, data, error) => {
+    ipcRenderer.on(['view-close'], (event, status, cmd, data) => {
       try {
         const newActive = data && JSON.parse(data);
 
-        onTogglePackageLoader(dispatch, {
-          loading: false
-        });
-
         onSetActive(dispatch, { active: newActive });
-
-        // TODO: fix it
-        onSetSnackbar(dispatch, {
-          open: true,
-          type: error ? 'error' : 'info',
-          message: error || INFO_MESSAGES.packageLoaded
-        });
       } catch (err) {
         throw new Error(err);
       }
@@ -57,36 +78,70 @@ const PackageDetails = props => {
     return () => ipcRenderer.removeAllListeners(['view-package-close']);
   }, []);
 
+  const renderCard = useCallback(
+    () => {
+      const { name, license, version, description } = active || {};
+
+      return (
+        <Grid container>
+          <Grid item xs={11} md={11} lg={10} xl={10}>
+            <Transition>
+              <Card className={classes.card}>
+                <CardHeader
+                  avatar={
+                    <Avatar aria-label="Recipe" className={classes.avatar}>
+                      {license}
+                    </Avatar>
+                  }
+                  action={
+                    <IconButton>
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  title={name}
+                  subheader={version}
+                />
+                <CardContent>
+                  <Typography component="p">{description}</Typography>
+                </CardContent>
+                {renderActions()}
+              </Card>
+            </Transition>
+          </Grid>
+          <Grid item xs={1} md={1} lg={2} xl={2}>
+            <Toolbar
+              variant="dense"
+              classes={{
+                root: classes.toolbar
+              }}
+            >
+              <Tooltip title="actions">
+                <IconButton disableRipple onClick={e => console.log(e)}>
+                  <HistoryIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="actions">
+                <IconButton disableRipple onClick={e => console.log(e)}>
+                  <HistoryIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="actions">
+                <IconButton disableRipple onClick={e => console.log(e)}>
+                  <HistoryIcon />
+                </IconButton>
+              </Tooltip>
+            </Toolbar>
+          </Grid>
+        </Grid>
+      );
+    },
+    [active]
+  );
+
   return (
     <div className={classes.wrapper}>
       <AppLoader loading={packageLoader.loading} relative>
-        {active ? (
-          <Card className={classes.card}>
-            <CardHeader
-              avatar={
-                <Avatar aria-label="Recipe" className={classes.avatar}>
-                  {active.license}
-                </Avatar>
-              }
-              action={
-                <IconButton>
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title={active.name}
-              subheader={active.version}
-            />
-            <CardContent>
-              <Typography
-                className={classes.title}
-                color="textSecondary"
-                gutterBottom
-              >
-                {active.description}
-              </Typography>
-            </CardContent>
-          </Card>
-        ) : null}
+        {active ? renderCard() : null}
       </AppLoader>
     </div>
   );
