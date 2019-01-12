@@ -289,9 +289,10 @@ const Packages = ({ classes }) => {
         const wrapperEl = wrapperRef && wrapperRef.current;
 
         // scroll to top
-        wrapperEl.scroll({
-          top: 0
-        });
+        wrapperEl &&
+          wrapperEl.scroll({
+            top: 0
+          });
 
         onSetPage(dispatch, { page: pageNo });
       }}
