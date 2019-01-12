@@ -22,7 +22,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { APP_MODES } from 'constants/AppConstants';
 import { onAddFilter, onClearFilters } from 'models/packages/selectors';
 
-import { tableFiltersStyles as styles } from '../styles/packagesStyles';
+import { tableFiltersStyles as styles } from '../../styles/packagesStyles';
 
 const mapState = state => ({
   filters: state.packages.filters

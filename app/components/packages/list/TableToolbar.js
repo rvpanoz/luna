@@ -30,7 +30,7 @@ import { onClearSelected } from 'models/packages/selectors';
 
 import TableFilters from './TableFilters';
 
-import { tableToolbarStyles as styles } from '../styles/packagesStyles';
+import { tableToolbarStyles as styles } from '../../styles/packagesStyles';
 
 const TableListToolbar = props => {
   const {

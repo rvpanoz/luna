@@ -43,18 +43,15 @@ import {
   WARNING_MESSAGES
 } from 'constants/AppConstants';
 
-import AppLoader from '../layout/AppLoader';
+import AppLoader from 'components/layout/AppLoader';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
 
-import { listStyles as styles } from '../styles/packagesStyles';
-import {
-  onClearNotifications,
-  onClearSnackbar
-} from '../../models/ui/selectors';
-import { onClearSelected } from '../../models/packages/selectors';
+import { listStyles as styles } from '../../styles/packagesStyles';
+import { onClearNotifications, onClearSnackbar } from 'models/ui/selectors';
+import { onClearSelected } from 'models/packages/selectors';
 
 const mapState = ({
   common: {
