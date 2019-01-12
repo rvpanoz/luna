@@ -1,5 +1,3 @@
-import { defaultFont } from './general';
-
 const styles = theme => ({
   root: {
     padding: 0,
@@ -12,7 +10,6 @@ const styles = theme => ({
     justifyContent: 'space-between'
   },
   flexContainerItem: {
-    ...defaultFont,
     fontWeight: 100
   },
   textRight: {

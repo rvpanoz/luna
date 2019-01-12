@@ -31,7 +31,6 @@ import {
 
 import {
   onAddNotification,
-  onClearAll,
   onToggleLoader,
   onSetPage,
   onSetPageRows,
@@ -299,6 +298,7 @@ const Packages = ({ classes }) => {
   const dataSlices =
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+  // sorting
   const sortedPackages =
     sortDir === 'asc'
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
@@ -322,6 +322,7 @@ const Packages = ({ classes }) => {
         <div className={classes.tableWrapper}>
           {nodata === false ? (
             <Table
+              padding="dense"
               aria-labelledby="packages-list"
               className={cn(classes.table, {
                 [classes.hasFilterBlur]: loading

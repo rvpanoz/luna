@@ -47,8 +47,7 @@ const mapState = ({ common: { notifications, loader } }) => ({
   loader
 });
 
-const Header = props => {
-  const { app, classes } = props;
+const Header = ({ title, classes }) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [notificationsEl, setNotificationsEl] = useState(null);
@@ -119,7 +118,7 @@ const Header = props => {
             color="inherit"
             noWrap
           >
-            {app}
+            {title}
           </Typography>
           <SearchBox disabled={loader && loader.loading} />
           <div className={classes.grow} />
@@ -246,7 +245,7 @@ const Header = props => {
 };
 
 Header.propTypes = {
-  app: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 

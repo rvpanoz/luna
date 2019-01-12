@@ -8,12 +8,19 @@ import { combineEpics, ofType } from 'redux-observable';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-import { setSnackbar, toggleLoader } from 'models/ui/actions';
+import {
+  setSnackbar,
+  toggleLoader,
+  togglePackageLoader
+} from 'models/ui/actions';
+
 import {
   clearFilters,
   setPackagesError,
   setPackagesSuccess,
-  setPackagesStart
+  setPackagesStart,
+  setActive,
+  setActiveError
 } from './actions';
 
 const setPackagesStartEpic = action$ =>
@@ -37,26 +44,20 @@ const setPackagesStartEpic = action$ =>
 const setPackagesSuccessEpic = action$ =>
   action$.pipe(
     ofType(setPackagesSuccess.type),
-    map(({ payload }) => {
-      const { dependencies, outdated } = payload;
-
-      return {
-        type: setSnackbar.type,
+    map(
+      () => ({
+        type: toggleLoader.type,
         payload: {
-          type: 'info',
-          open: true,
-          message: `${dependencies.length} dependencies loaded!\nFound ${
-            outdated.length
-          } outdated packages.`
+          looading: false
         }
-      };
-    }),
-    catchError(err => {
-      of({
-        type: setPackagesError.type,
-        err
-      });
-    })
+      }),
+      catchError(err => {
+        of({
+          type: setPackagesError.type,
+          err
+        });
+      })
+    )
   );
 
 const clearFiltersEpic = action$ =>
@@ -71,8 +72,26 @@ const clearFiltersEpic = action$ =>
     }))
   );
 
+const setActiveEpic = action$ =>
+  action$.pipe(
+    ofType(setActive.type),
+    map(() => ({
+      type: togglePackageLoader.type,
+      payload: {
+        loading: false
+      }
+    })),
+    catchError(err => {
+      of({
+        type: setActiveError.type,
+        err
+      });
+    })
+  );
+
 export default combineEpics(
   clearFiltersEpic,
   setPackagesSuccessEpic,
+  setActiveEpic,
   setPackagesStartEpic
 );

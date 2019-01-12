@@ -36,11 +36,6 @@ const SearchBox = props => {
       return;
     }
 
-    onToggleLoader(dispatch, {
-      loading: true,
-      message: `Searching for ${searchValue}..`
-    });
-
     onStartPackages(dispatch);
 
     ipcRenderer.send('ipc-event', {
@@ -48,6 +43,8 @@ const SearchBox = props => {
       cmd: ['search'],
       pkgName: searchValue
     });
+
+    return false;
   };
 
   const onKeyPress = e => {
@@ -72,11 +69,6 @@ const SearchBox = props => {
             fromSearch: true,
             outdated: null,
             dependencies: packages
-          });
-
-          onToggleLoader(dispatch, {
-            loading: false,
-            message: null
           });
         } catch (e) {
           throw new Error(e);

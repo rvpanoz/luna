@@ -12,6 +12,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
+import Transition from './layout/Transition';
 import styles from './styles/dashboard';
 
 const mapState = ({
@@ -92,17 +93,21 @@ const Dashboard = props => {
     <section className={classes.root}>
       <Grid container justify="space-between">
         <Grid item xs={12} sm={12} md={12} lg={4} xl={3}>
-          <CardDetails
-            id="card-1"
-            title={
-              mode === APP_MODES.LOCAL && projectName ? projectName : 'Project'
-            }
-            subtext={directory || APP_INFO.NO_WORKING_DIRECTORY}
-            text={renderProjectStats()}
-            loading={loading}
-            avatar
-            className={classes.cardDetails}
-          />
+          <Transition>
+            <CardDetails
+              id="card-1"
+              title={
+                mode === APP_MODES.LOCAL && projectName
+                  ? projectName
+                  : 'Project'
+              }
+              subtext={directory || APP_INFO.NO_WORKING_DIRECTORY}
+              text={renderProjectStats()}
+              loading={loading}
+              avatar
+              className={classes.cardDetails}
+            />
+          </Transition>
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
           <CardInfo

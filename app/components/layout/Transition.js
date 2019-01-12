@@ -16,7 +16,7 @@ const Transitions = {
 
 class Transition extends React.Component {
   static defaultProps = {
-    transition: 'Fade',
+    type: 'Fade',
     direction: 'right',
     show: true,
     mountOnEnter: true,
