@@ -33,7 +33,7 @@ export const listStyles = theme => ({
   tableRow: {
     border: 'none',
     padding: 10,
-    lineHeight: '1.4',
+    lineHeight: '1.1',
     verticalAlign: 'middle',
     '&:hover': {
       cursor: 'pointer'

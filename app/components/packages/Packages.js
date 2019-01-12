@@ -31,7 +31,6 @@ import {
 
 import {
   onAddNotification,
-  onClearAll,
   onToggleLoader,
   onSetPage,
   onSetPageRows,
@@ -322,6 +321,7 @@ const Packages = ({ classes }) => {
         <div className={classes.tableWrapper}>
           {nodata === false ? (
             <Table
+              padding="dense"
               aria-labelledby="packages-list"
               className={cn(classes.table, {
                 [classes.hasFilterBlur]: loading
