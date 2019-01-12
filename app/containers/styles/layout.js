@@ -12,7 +12,7 @@ const styles = theme => ({
   },
   container: {
     width: '100%',
-    padding: 20
+    padding: theme.spacing.unit * 3
   }
 });
 

@@ -25,6 +25,8 @@ import HistoryIcon from '@material-ui/icons/HistoryOutlined';
 import Grid from '@material-ui/core/Grid';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { onSetActive } from 'models/packages/selectors';
@@ -68,7 +70,7 @@ const PackageDetails = props => {
     ipcRenderer.on(['view-close'], (event, status, cmd, data) => {
       try {
         const newActive = data && JSON.parse(data);
-        console.log(newActive);
+
         onSetActive(dispatch, { active: newActive });
       } catch (err) {
         throw new Error(err);
@@ -83,8 +85,8 @@ const PackageDetails = props => {
       const { name, license, version, description } = active || {};
 
       return (
-        <Grid container>
-          <Grid item xs={11} md={11} lg={10} xl={10}>
+        <Grid container justify="space-around">
+          <Grid item xs={11} md={9} lg={9} xl={9}>
             <Transition>
               <Card className={classes.card}>
                 <CardHeader
@@ -108,28 +110,34 @@ const PackageDetails = props => {
               </Card>
             </Transition>
           </Grid>
-          <Grid item xs={1} md={1} lg={2} xl={2}>
+          <Grid item xs={1} md={1} lg={1} xl={1}>
             <Toolbar
               variant="dense"
               classes={{
                 root: classes.toolbar
               }}
             >
-              <Tooltip title="actions">
-                <IconButton disableRipple onClick={e => console.log(e)}>
-                  <HistoryIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="actions">
-                <IconButton disableRipple onClick={e => console.log(e)}>
-                  <HistoryIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="actions">
-                <IconButton disableRipple onClick={e => console.log(e)}>
-                  <HistoryIcon />
-                </IconButton>
-              </Tooltip>
+              <Transition type="Slide">
+                <Tooltip title="update">
+                  <IconButton disableRipple onClick={e => console.log(e)}>
+                    <HistoryIcon />
+                  </IconButton>
+                </Tooltip>
+              </Transition>
+              <Transition type="Slide">
+                <Tooltip title="install">
+                  <IconButton disableRipple onClick={e => console.log(e)}>
+                    <AddIcon />
+                  </IconButton>
+                </Tooltip>
+              </Transition>
+              <Transition type="Slide">
+                <Tooltip title="remove">
+                  <IconButton disableRipple onClick={e => console.log(e)}>
+                    <RemoveIcon />
+                  </IconButton>
+                </Tooltip>
+              </Transition>
             </Toolbar>
           </Grid>
         </Grid>

@@ -31,6 +31,7 @@ const styles = theme => ({
     margin: `0 ${theme.spacing.unit * 2}px`
   },
   relative: {
+    left: 0,
     position: 'relative',
     margin: `0 ${theme.spacing.unit * 2}px`
   },
@@ -44,9 +45,8 @@ const AppLoader = props => {
 
   return loading ? (
     <div
-      className={cn({
-        [classes.loader]: !relative,
-        [classes.relatove]: relative
+      className={cn(classes.loader, {
+        [classes.relative]: relative
       })}
     >
       <CircularProgress

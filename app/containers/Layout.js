@@ -34,10 +34,10 @@ const Layout = props => {
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item xs={12} md={12} lg={5} xl={5}>
+            <Grid item xs={12} md={12} lg={6} xl={6}>
               <Packages />
             </Grid>
-            <Grid item xs={12} md={12} lg={5} xl={5}>
+            <Grid item xs={12} md={12} lg={6} xl={6}>
               <PackageDetails />
             </Grid>
           </Grid>
