@@ -24,7 +24,7 @@ const Layout = props => {
     <div className={classes.wrapper}>
       <CssBaseline />
       <section className={classes.header}>
-        <Header app={app} />
+        <Header title={app} />
       </section>
       <section className={classes.main}>
         <div className={classes.container}>
@@ -33,7 +33,7 @@ const Layout = props => {
               <Dashboard />
             </Grid>
           </Grid>
-          <Grid container justify="space-between" alignItems="flex-start">
+          <Grid container>
             <Grid item xs={12} md={12} lg={5} xl={5}>
               <Packages />
             </Grid>
