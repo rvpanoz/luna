@@ -34,7 +34,7 @@ const Layout = props => {
             </Grid>
           </Grid>
           <Grid container justify="space-between" alignItems="flex-start">
-            <Grid item xs={12} md={12} lg={6} xl={6}>
+            <Grid item xs={12} md={12} lg={5} xl={5}>
               <Packages />
             </Grid>
             <Grid item xs={12} md={12} lg={5} xl={5}>

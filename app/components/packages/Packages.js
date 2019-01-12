@@ -298,6 +298,7 @@ const Packages = ({ classes }) => {
   const dataSlices =
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+  // sorting
   const sortedPackages =
     sortDir === 'asc'
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))

@@ -19,7 +19,7 @@ export const listStyles = theme => ({
   tableWrapper: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
-    maxHeight: 850,
+    maxHeight: 1024,
     [theme.breakpoints.down('sm')]: {
       maxHeight: 285
     },

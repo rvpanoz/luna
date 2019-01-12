@@ -68,7 +68,7 @@ const PackageDetails = props => {
     ipcRenderer.on(['view-close'], (event, status, cmd, data) => {
       try {
         const newActive = data && JSON.parse(data);
-
+        console.log(newActive);
         onSetActive(dispatch, { active: newActive });
       } catch (err) {
         throw new Error(err);
