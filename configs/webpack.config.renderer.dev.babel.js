@@ -70,7 +70,8 @@ export default merge.smart(baseConfig, {
       commons: path.resolve(path.join(__dirname, '..', 'app', 'commons')),
       components: path.resolve(path.join(__dirname, '..', 'app', 'components')),
       containers: path.resolve(path.join(__dirname, '..', 'app', 'containers')),
-      models: path.resolve(path.join(__dirname, '..', 'app', 'models'))
+      models: path.resolve(path.join(__dirname, '..', 'app', 'models')),
+      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles'))
     }
   },
 

@@ -14,7 +14,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 
-import styles from '../styles/cardRegular';
+import styles from './styles/cardRegular';
 
 const AppCardRegular = props => {
   const {

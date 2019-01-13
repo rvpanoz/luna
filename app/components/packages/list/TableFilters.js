@@ -21,7 +21,7 @@ import { APP_MODES } from 'constants/AppConstants';
 import AppButton from 'components/layout/Buttons/AppButton';
 import { onAddFilter, onClearFilters } from 'models/packages/selectors';
 
-import { tableFiltersStyles as styles } from '../../styles/packagesStyles';
+import { tableFiltersStyles as styles } from './styles/packagesStyles';
 
 const mapState = state => ({
   filters: state.packages.filters

@@ -19,7 +19,7 @@ import {
   infoColor,
   primaryColor,
   roseColor
-} from './general';
+} from 'styles/variables';
 
 const cardInfoStyle = {
   card,
@@ -34,8 +34,8 @@ const cardInfoStyle = {
   blueCardHeader,
   purpleCardHeader,
   cardContent: {
-    textAlign: 'right',
-    paddingTop: '10px',
+    textAlign: 'left',
+    paddingTop: 20,
     padding: '15px 20px'
   },
   cardIcon: {
@@ -50,6 +50,7 @@ const cardInfoStyle = {
     marginBottom: '0',
     color: grayColor,
     margin: '0 0 10px',
+    wordBreak: 'break-word',
     ...defaultFont
   },
   cardTitle: {

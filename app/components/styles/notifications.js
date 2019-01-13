@@ -1,9 +1,4 @@
-import {
-  defaultFont,
-  primaryBoxShadow,
-  // primaryColor,
-  dangerColor
-} from './general';
+import { defaultFont, primaryBoxShadow, dangerColor } from 'styles/variables';
 
 const styles = theme => ({
   notifications: {

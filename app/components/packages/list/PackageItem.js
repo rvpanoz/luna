@@ -23,7 +23,7 @@ import PeersIcon from '@material-ui/icons/BallotOutlined';
 
 import { onTogglePackageLoader } from 'models/ui/selectors';
 
-import { listStyles as styles } from '../../styles/packagesStyles';
+import { listStyles as styles } from './styles/packagesStyles';
 
 const PackageItemRow = ({
   classes,

@@ -6,12 +6,11 @@
 
 import React, { useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { objectOf, object, oneOf, string, node } from 'prop-types';
+import { objectOf, oneOfType, oneOf, string, node } from 'prop-types';
 import cn from 'classnames';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
@@ -20,9 +19,9 @@ import UpdateIcon from '@material-ui/icons/UpdateOutlined';
 import BalotIcon from '@material-ui/icons/BallotOutlined';
 import BarChartIcon from '@material-ui/icons/BarChartOutlined';
 
-import { switchcase } from '../../commons/utils';
+import { switchcase } from 'commons/utils';
 
-import styles from '../styles/cardInfo';
+import styles from './styles/cardInfo';
 
 const defaultAvatarIcon = null;
 const defaultStatIcon = null;
@@ -31,7 +30,6 @@ const AppCardInfo = props => {
   const {
     classes,
     className,
-    avatar,
     title,
     description,
     small,
@@ -62,17 +60,6 @@ const AppCardInfo = props => {
       className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
     />
   );
-
-  const renderAvatarIcon = useCallback(type => {
-    const icon = switchcase({
-      info: () => null,
-      stats: () => null,
-      update: () => null,
-      warning: () => null
-    })(defaultAvatarIcon)(type);
-
-    return icon;
-  }, []);
 
   const renderStatIcon = useCallback(type => {
     const icon = switchcase({
@@ -120,21 +107,21 @@ const AppCardInfo = props => {
   );
 };
 
-// AppCardInfo.propTypes = {
-//   classes: objectOf(object).isRequired,
-//   title: node.isRequired,
-//   description: node.isRequired,
-//   small: node,
-//   color: oneOf([
-//     'warning',
-//     'primary',
-//     'danger',
-//     'success',
-//     'info',
-//     'rose',
-//     'gray'
-//   ]),
-//   text: string
-// };
+AppCardInfo.propTypes = {
+  classes: objectOf(string).isRequired,
+  title: node.isRequired,
+  description: node.isRequired,
+  small: node,
+  color: oneOf([
+    'warning',
+    'primary',
+    'danger',
+    'success',
+    'info',
+    'rose',
+    'gray'
+  ]),
+  text: oneOfType([string, node])
+};
 
 export default withStyles(styles)(AppCardInfo);
