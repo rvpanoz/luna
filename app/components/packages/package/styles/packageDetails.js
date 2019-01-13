@@ -1,4 +1,4 @@
-import lighten from '@material-ui/core/colors';
+import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import red from '@material-ui/core/colors/red';
 
 const styles = theme => ({
@@ -11,7 +11,7 @@ const styles = theme => ({
     backgroundColor: red[500]
   },
   chip: {
-    color: '#fff',
+    color: theme.palette.secondary.main,
     margin: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
   },
   devDependenciesChip: {
@@ -21,10 +21,13 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.light
   },
   optionalDependenciesChip: {
-    backgroundColor: lighten(theme.palette.secondary.light, 0.75)
+    backgroundColor: lighten(theme.palette.primary.light, 0.75)
   },
   peerDependenciesChip: {
-    backgroundColor: lighten(theme.palette.secondary.light, 0.6)
+    backgroundColor: darken(theme.palette.error.light, 0.6)
+  },
+  GlobalChip: {
+    backgroundColor: theme.palette.secondary.main
   },
   expand: {
     transform: 'rotate(0deg)',

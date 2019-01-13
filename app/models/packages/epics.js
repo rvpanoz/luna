@@ -14,7 +14,8 @@ import {
   clearFilters,
   setPackagesError,
   setPackagesSuccess,
-  setPackagesStart
+  setPackagesStart,
+  setActive
 } from './actions';
 
 const setPackagesStartEpic = action$ =>
@@ -42,6 +43,12 @@ const setPackagesSuccessEpic = action$ =>
       type: toggleLoader.type,
       payload: {
         looading: false
+      }
+    })),
+    map(() => ({
+      type: setActive.type,
+      payload: {
+        active: null
       }
     })),
     catchError(err => {
