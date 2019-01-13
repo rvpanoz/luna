@@ -40,15 +40,16 @@ const setPackagesSuccessEpic = action$ =>
   action$.pipe(
     ofType(setPackagesSuccess.type),
     map(() => ({
-      type: toggleLoader.type,
-      payload: {
-        looading: false
-      }
-    })),
-    map(() => ({
       type: setActive.type,
       payload: {
         active: null
+      }
+    })),
+    map(() => ({
+      type: toggleLoader.type,
+      payload: {
+        looading: false,
+        message: null
       }
     })),
     catchError(err => {
