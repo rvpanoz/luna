@@ -120,7 +120,7 @@ const Packages = ({ classes }) => {
     [name, selected]
   );
 
-  const clearUI = options => {
+  const clearUI = () => {
     onClearNotifications(dispatch);
     onClearSnackbar(dispatch);
     onClearSelected(dispatch);
@@ -170,8 +170,7 @@ const Packages = ({ classes }) => {
       clearUI({
         data: true,
         notifications: true,
-        snackbar: true,
-        inert: true
+        snackbar: true
       });
 
       if (page !== 0) {
@@ -191,8 +190,6 @@ const Packages = ({ classes }) => {
             dependencies: outdated
           });
         }
-
-        onToggleLoader(dispatch, { loading: false, message: null });
       }
 
       if (errors && typeof errors === 'string') {
@@ -346,6 +343,8 @@ const Packages = ({ classes }) => {
                       version,
                       latest,
                       isOutdated,
+                      mode,
+                      directory,
                       __group,
                       __error,
                       __peerMissing

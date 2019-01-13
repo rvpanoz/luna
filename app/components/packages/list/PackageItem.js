@@ -34,7 +34,9 @@ const PackageItemRow = ({
   version,
   latest,
   isOutdated,
-  group
+  group,
+  mode,
+  directory
 }) => {
   const dispatch = useDispatch();
 
@@ -62,7 +64,7 @@ const PackageItemRow = ({
     [group]
   );
 
-  const viewPackage = (manager, name, version, mode, directory) => {
+  const viewPackage = () => {
     onTogglePackageLoader(dispatch, {
       loading: true
     });
@@ -72,6 +74,7 @@ const PackageItemRow = ({
       ipcEvent: 'view',
       cmd: ['view'],
       name,
+      version,
       mode,
       directory
     });
@@ -90,7 +93,7 @@ const PackageItemRow = ({
       classes={{
         root: classes.tableRow
       }}
-      onClick={() => viewPackage(manager, name)}
+      onClick={() => viewPackage()}
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
