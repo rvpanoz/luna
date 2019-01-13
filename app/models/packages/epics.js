@@ -70,7 +70,7 @@ const clearFiltersEpic = action$ =>
     }))
   );
 
-const setActiveEpic = action$ =>
+const setActiveSuccessEpic = action$ =>
   action$.pipe(
     ofType(setActive.type),
     map(() => ({
@@ -90,6 +90,6 @@ const setActiveEpic = action$ =>
 export default combineEpics(
   clearFiltersEpic,
   setPackagesSuccessEpic,
-  setActiveEpic,
+  setActiveSuccessEpic,
   setPackagesStartEpic
 );

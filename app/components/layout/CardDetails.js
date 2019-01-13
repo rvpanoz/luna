@@ -2,16 +2,15 @@
 
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { objectOf, object, node, oneOf } from 'prop-types';
+import { objectOf, string, node, oneOf } from 'prop-types';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-
 import InfoIcon from '@material-ui/icons/InfoOutlined';
-import styles from '../styles/cardDetails';
+
+import styles from './styles/cardDetails';
 
 const AppCardDetails = props => {
   const { classes, title, subtext, text, color, link } = props;
@@ -43,14 +42,14 @@ const AppCardDetails = props => {
 };
 
 AppCardDetails.defaultProps = {
-  color: 'gray'
+  color: 'blue'
 };
 
-// AppCardDetails.propTypes = {
-//   classes: objectOf(object).isRequired,
-//   color: oneOf(['orange', 'green', 'red', 'blue', 'purple']),
-//   title: node,
-//   text: node
-// };
+AppCardDetails.propTypes = {
+  classes: objectOf(string).isRequired,
+  color: oneOf(['orange', 'green', 'red', 'blue', 'purple']),
+  title: node,
+  text: node
+};
 
 export default withStyles(styles)(AppCardDetails);

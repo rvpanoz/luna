@@ -2,6 +2,7 @@
  * Redux store
  */
 
+/* eslint-disable no-unused-expressions */
 /* eslint no-underscore-dangle: 0 */
 /* eslint-disable global-require */
 
@@ -31,7 +32,7 @@ const configureStore = initialState => {
 
   // skip redux logs in console during the tests
   if (process.env.NODE_ENV === 'development') {
-    middleware.push(logger);
+    process.env.REDUX_LOGGER === 1 && middleware.push(logger);
   }
 
   // If redux DevTools Extension is installed use it,

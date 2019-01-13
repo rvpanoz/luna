@@ -16,7 +16,6 @@ import {
   onStartPackages,
   onSetPackagesSuccess
 } from 'models/packages/selectors';
-import { onClearNotifications, onToggleLoader } from 'models/ui/selectors';
 
 import styles from './styles/searchBox';
 

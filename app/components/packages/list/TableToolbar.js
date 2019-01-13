@@ -30,21 +30,20 @@ import { onClearSelected } from 'models/packages/selectors';
 
 import TableFilters from './TableFilters';
 
-import { tableToolbarStyles as styles } from '../../styles/packagesStyles';
+import { tableToolbarStyles as styles } from './styles/packagesStyles';
 
-const TableListToolbar = props => {
-  const {
-    classes,
-    selected,
-    title,
-    mode,
-    manager,
-    directory,
-    fromSearch,
-    reload,
-    nodata
-  } = props;
-
+const TableListToolbar = ({
+  classes,
+  selected,
+  title,
+  mode,
+  manager,
+  directory,
+  fromSearch,
+  reload,
+  nodata,
+  scrollWrapper
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
 
@@ -61,6 +60,7 @@ const TableListToolbar = props => {
   const openFilters = (e, close) => {
     setAnchorEl(close ? null : e.target);
     toggleFilters(!filtersOn);
+    scrollWrapper(0);
   };
 
   const doAction = action => {
@@ -198,7 +198,6 @@ const TableListToolbar = props => {
           <Popover
             open={filtersOn}
             anchorEl={anchorEl}
-            onClose={() => toggleFilters(!filtersOn)}
             anchorOrigin={{
               vertical: 'top',
               horizontal: 'right'

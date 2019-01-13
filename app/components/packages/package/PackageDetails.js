@@ -2,6 +2,8 @@
  * Package details
  */
 
+/* eslint-disable */
+
 import React, { useEffect, useCallback, useState } from 'react';
 import { ipcRenderer } from 'electron';
 import { pickBy } from 'ramda';
@@ -25,13 +27,14 @@ import HistoryIcon from '@material-ui/icons/HistoryOutlined';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Delete';
-import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@material-ui/icons/InfoOutlined';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Fade from '@material-ui/core/Fade';
 import AppLoader from 'components/layout/AppLoader';
 import Transition from 'components/layout/Transition';
 import { onSetActive } from 'models/packages/selectors';
-import styles from '../../styles/packageDetails';
+import styles from './styles/packageDetails';
+import PackageInfo from './PackageInfo';
 
 const getCleanProps = (val, key) => /^[^_]/.test(key);
 
@@ -48,6 +51,17 @@ const PackageDetails = ({ classes }) => {
   });
   const { active, packageLoader } = useMappedState(mapState);
   const dispatch = useDispatch();
+
+  const {
+    name,
+    license,
+    version,
+    versions,
+    description,
+    dependencies,
+    devDependencies,
+    group
+  } = active || {};
 
   const renderActions = () => (
     <CardActions className={classes.actions} disableActionSpacing>
@@ -78,8 +92,8 @@ const PackageDetails = ({ classes }) => {
     ipcRenderer.on(['view-close'], (event, status, cmd, data) => {
       try {
         const newActive = data && JSON.parse(data);
-
         const properties = pickBy(getCleanProps, newActive);
+
         onSetActive(dispatch, { active: properties });
       } catch (err) {
         throw new Error(err);
@@ -89,79 +103,53 @@ const PackageDetails = ({ classes }) => {
     return () => ipcRenderer.removeAllListeners(['view-package-close']);
   }, []);
 
-  const renderToolbar = useCallback(
-    () => (
-      <Toolbar
-        variant="dense"
-        classes={{
-          root: classes.toolbar
-        }}
-      >
-        <Transition type="Slide">
-          <Tooltip title="info">
-            <IconButton
-              disableRipple
-              onClick={e =>
-                togglePopperInfo({
-                  anchorEl: e.currentTarget,
-                  open: !popperInfo.open
-                })
-              }
-            >
-              <InfoIcon />
-            </IconButton>
-          </Tooltip>
-        </Transition>
-        <Transition type="Slide">
-          <Tooltip title="update">
-            <IconButton disableRipple onClick={e => console.log(e)}>
-              <HistoryIcon />
-            </IconButton>
-          </Tooltip>
-        </Transition>
-      </Toolbar>
-    ),
-    [active]
-  );
-
-  const renderCard = useCallback(
-    () => {
-      const { name, license, version, description } = active || {};
-
-      return (
-        <Grid container justify="space-around">
-          <Grid item xs={11} md={9} lg={9} xl={9}>
-            <Transition>
-              <Card className={classes.card}>
-                <CardHeader
-                  avatar={
-                    <Avatar aria-label="Recipe" className={classes.avatar}>
-                      {license}
-                    </Avatar>
-                  }
-                  action={
-                    <IconButton>
-                      <MoreVertIcon />
-                    </IconButton>
-                  }
-                  title={name}
-                  subheader={version}
-                />
-                <CardContent>
-                  <Typography component="p">{description}</Typography>
-                </CardContent>
-                {renderActions()}
-              </Card>
-            </Transition>
-          </Grid>
-          <Grid item xs={1} md={1} lg={1} xl={1}>
-            {renderToolbar()}
-          </Grid>
+  const renderCard = useCallback(() => {
+    return (
+      <Grid container justify="space-around">
+        <Grid item xs={11} md={9} lg={9} xl={9}>
+          <Transition>
+            <Card className={classes.card}>
+              <CardHeader
+                action={
+                  <IconButton>
+                    <MoreVertIcon />
+                  </IconButton>
+                }
+                title={name}
+                subheader={`v${version}`}
+              />
+              <CardContent>
+                <Typography component="p">{description}</Typography>
+              </CardContent>
+              {renderActions()}
+            </Card>
+          </Transition>
         </Grid>
-      );
-    },
-    [active]
-  );
+        <Grid item xs={1} md={1} lg={1} xl={1}>
+          <Toolbar
+            variant="dense"
+            classes={{
+              root: classes.toolbar
+            }}
+          >
+            <Tooltip title="View details">
+              <IconButton
+                disableRipple
+                onClick={e =>
+                  togglePopperInfo({
+                    anchorEl: popperInfo.anchorEl ? null : e.currentTarget,
+                    open: !popperInfo.open
+                  })
+                }
+              >
+                <InfoIcon />
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
+        </Grid>
+      </Grid>
+    );
+  });
 
   return (
     <div className={classes.wrapper}>
@@ -171,15 +159,13 @@ const PackageDetails = ({ classes }) => {
       <Popper
         open={popperInfo.open}
         anchorEl={popperInfo.anchorEl}
-        placement="left"
+        placement="left-start"
         transition
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
-              <Typography className={classes.typography}>
-                The content of the Popper.
-              </Typography>
+              <PackageInfo versions={versions} dependencies={dependencies} />
             </Paper>
           </Fade>
         )}

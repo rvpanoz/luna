@@ -13,13 +13,13 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
+import Snackbar from '@material-ui/core/Snackbar';
 
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
 import { parseNpmError, filterByProp } from 'commons/utils';
-
-import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/layout/SnackbarContent';
+import AppLoader from 'components/layout/AppLoader';
 
 import {
   onAddActionError,
@@ -43,15 +43,15 @@ import {
   WARNING_MESSAGES
 } from 'constants/AppConstants';
 
-import AppLoader from 'components/layout/AppLoader';
+import { onClearNotifications, onClearSnackbar } from 'models/ui/selectors';
+import { onClearSelected } from 'models/packages/selectors';
+
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
 
-import { listStyles as styles } from '../../styles/packagesStyles';
-import { onClearNotifications, onClearSnackbar } from 'models/ui/selectors';
-import { onClearSelected } from 'models/packages/selectors';
+import { listStyles as styles } from './styles/packagesStyles';
 
 const mapState = ({
   common: {
@@ -161,6 +161,16 @@ const Packages = ({ classes }) => {
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
   const nodata = Boolean(dependencies && dependencies.length === 0);
+
+  const scrollWrapper = top => {
+    const wrapperEl = wrapperRef && wrapperRef.current;
+
+    // scroll to top
+    wrapperEl &&
+      wrapperEl.scroll({
+        top
+      });
+  };
 
   useEffect(
     () => {
@@ -286,14 +296,7 @@ const Packages = ({ classes }) => {
       page={page}
       rowsPerPage={rowsPerPage}
       handleChangePage={(e, pageNo) => {
-        const wrapperEl = wrapperRef && wrapperRef.current;
-
-        // scroll to top
-        wrapperEl &&
-          wrapperEl.scroll({
-            top: 0
-          });
-
+        scrollWrapper(0);
         onSetPage(dispatch, { page: pageNo });
       }}
       handleChangePageRows={e =>
@@ -325,6 +328,7 @@ const Packages = ({ classes }) => {
             fromSearch={fromSearch}
             reload={reload}
             nodata={dependencies === null}
+            scrollWrapper={scrollWrapper}
           />
         </div>
         <div className={classes.tableWrapper} ref={wrapperRef}>

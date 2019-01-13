@@ -12,7 +12,7 @@ import {
   successColor,
   warningColor,
   dangerColor
-} from './general';
+} from 'styles/variables';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
