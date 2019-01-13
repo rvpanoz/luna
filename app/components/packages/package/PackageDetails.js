@@ -50,7 +50,7 @@ const mapState = ({
 });
 
 const PackageDetails = ({ classes }) => {
-  const [group, setGroup] = useState('');
+  const [group, setGroup] = useState('global');
   const [expanded, expand] = useState(false);
   const [popperInfo, togglePopperInfo] = useState({
     anchorEl: null,
@@ -103,7 +103,6 @@ const PackageDetails = ({ classes }) => {
 
   useEffect(() => {
     ipcRenderer.on(['view-close'], (event, status, cmd, data) => {
-      console.log(1);
       try {
         const newActive = data && JSON.parse(data);
         const properties = pickBy(getCleanProps, newActive);
