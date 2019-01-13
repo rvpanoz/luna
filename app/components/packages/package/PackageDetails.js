@@ -35,6 +35,7 @@ import { onSetActive } from 'models/packages/selectors';
 
 import { APP_MODES } from 'constants/AppConstants';
 import styles from './styles/packageDetails';
+import { APP_INFO } from 'constants/AppConstants';
 import PackageInfo from './PackageInfo';
 
 const getCleanProps = (val, key) => /^[^_]/.test(key);
@@ -50,6 +51,7 @@ const mapState = ({
 });
 
 const PackageDetails = ({ classes }) => {
+  const [license, setLicense] = useState(APP_INFO.NOT_AVAILABLE);
   const [group, setGroup] = useState('global');
   const [expanded, expand] = useState(false);
   const [popperInfo, togglePopperInfo] = useState({
@@ -59,19 +61,26 @@ const PackageDetails = ({ classes }) => {
 
   const dispatch = useDispatch();
   const { active, packageLoader, mode, packages } = useMappedState(mapState);
-  const { name, license, version, description } = active || {};
+  const { name, version, description } = active || {};
 
   const findPackageByName = useCallback(
-    name => packages && packages.filter(pkg => pkg.name === name),
+    name => (packages && packages.filter(pkg => pkg.name === name)[0]) || null,
     [active]
   );
 
   useEffect(
     () => {
-      if (mode === APP_MODES.LOCAL && active) {
-        const pkg = findPackageByName(name);
-        setGroup(pkg && pkg[0].__group);
+      const pkg = findPackageByName(name);
+
+      if (!pkg || typeof pkg !== 'object') {
+        return;
       }
+
+      if (mode === APP_MODES.LOCAL && active) {
+        setGroup(pkg.__group);
+      }
+
+      setLicense(pkg.license);
     },
     [name]
   );
@@ -122,7 +131,7 @@ const PackageDetails = ({ classes }) => {
   const renderCard = useCallback(() => {
     return (
       <Grid container justify="space-around">
-        <Grid item xs={11} md={9} lg={9} xl={9}>
+        <Grid item xs={11} md={10} lg={10} xl={10}>
           <Transition>
             <Card className={classes.card}>
               <CardHeader
@@ -184,7 +193,7 @@ const PackageDetails = ({ classes }) => {
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
-              <PackageInfo {...active} />
+              <PackageInfo license={license} {...active} />
             </Paper>
           </Fade>
         )}
