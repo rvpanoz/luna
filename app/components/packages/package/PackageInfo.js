@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import React, { useState, useCallback } from 'react';
-
+import cn from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,15 +16,17 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import ViewIcon from '@material-ui/icons/ViewArray';
+
+import CardDetails from 'components/layout/CardInfo';
 import styles from './styles/packageInfo';
 
-function TabContainer(props) {
+const TabContainer = ({ children }) => {
   return (
     <Typography component="div" style={{ padding: 8 }}>
-      {props.children}
+      {children}
     </Typography>
   );
-}
+};
 
 const renderVersions = versions => (
   <List style={{ maxHeight: 400, overflow: 'auto' }}>
@@ -42,11 +44,39 @@ const renderVersions = versions => (
   </List>
 );
 
-const PackageInfoDetails = ({ classes, versions, dependencies }) => {
+const renderDependencies = dependencies => {
+  const dependenciesValues = Object.values(dependencies);
+
+  return (
+    <List style={{ maxHeight: 400, overflow: 'auto' }}>
+      {dependenciesValues &&
+        dependenciesValues.map(dependency => {
+          return (
+            <ListItem key={`${dependency}`}>
+              <ListItemText primary={dependency} />
+              <ListItemSecondaryAction>
+                <IconButton aria-label="View version">
+                  <ViewIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          );
+        })}
+    </List>
+  );
+};
+
+const PackageInfoDetails = ({
+  classes,
+  name,
+  group,
+  versions,
+  dependencies
+}) => {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <div className={classes.root}>
+    <Paper elevation={2} className={classes.root}>
       <AppBar position="static" color="default">
         <Tabs
           value={activeTab}
@@ -62,8 +92,10 @@ const PackageInfoDetails = ({ classes, versions, dependencies }) => {
       {activeTab === 0 && (
         <TabContainer>{versions && renderVersions(versions)}</TabContainer>
       )}
-      {activeTab === 1 && <TabContainer>textB</TabContainer>}
-    </div>
+      {activeTab === 1 && (
+        <TabContainer>{renderDependencies(dependencies)}</TabContainer>
+      )}
+    </Paper>
   );
 };
 

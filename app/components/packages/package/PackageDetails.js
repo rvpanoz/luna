@@ -18,12 +18,10 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Chip from '@material-ui/core/Chip';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
-import HistoryIcon from '@material-ui/icons/HistoryOutlined';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Delete';
@@ -32,36 +30,51 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Fade from '@material-ui/core/Fade';
 import AppLoader from 'components/layout/AppLoader';
 import Transition from 'components/layout/Transition';
+import { onTogglePackageLoader } from 'models/ui/selectors';
 import { onSetActive } from 'models/packages/selectors';
+
+import { APP_MODES } from 'constants/AppConstants';
 import styles from './styles/packageDetails';
 import PackageInfo from './PackageInfo';
 
 const getCleanProps = (val, key) => /^[^_]/.test(key);
 
-const mapState = ({ common: { packageLoader }, packages: { active } }) => ({
+const mapState = ({
+  common: { mode, packageLoader },
+  packages: { packages, active }
+}) => ({
   active,
-  packageLoader
+  mode,
+  packageLoader,
+  packages
 });
 
 const PackageDetails = ({ classes }) => {
+  const [group, setGroup] = useState('');
   const [expanded, expand] = useState(false);
   const [popperInfo, togglePopperInfo] = useState({
     anchorEl: null,
     open: false
   });
-  const { active, packageLoader } = useMappedState(mapState);
-  const dispatch = useDispatch();
 
-  const {
-    name,
-    license,
-    version,
-    versions,
-    description,
-    dependencies,
-    devDependencies,
-    group
-  } = active || {};
+  const dispatch = useDispatch();
+  const { active, packageLoader, mode, packages } = useMappedState(mapState);
+  const { name, license, version, description } = active || {};
+
+  const findPackageByName = useCallback(
+    name => packages && packages.filter(pkg => pkg.name === name),
+    [active]
+  );
+
+  useEffect(
+    () => {
+      if (mode === APP_MODES.LOCAL && active) {
+        const pkg = findPackageByName(name);
+        setGroup(pkg && pkg[0].__group);
+      }
+    },
+    [name]
+  );
 
   const renderActions = () => (
     <CardActions className={classes.actions} disableActionSpacing>
@@ -90,11 +103,15 @@ const PackageDetails = ({ classes }) => {
 
   useEffect(() => {
     ipcRenderer.on(['view-close'], (event, status, cmd, data) => {
+      console.log(1);
       try {
         const newActive = data && JSON.parse(data);
         const properties = pickBy(getCleanProps, newActive);
 
         onSetActive(dispatch, { active: properties });
+        onTogglePackageLoader(dispatch, {
+          loading: false
+        });
       } catch (err) {
         throw new Error(err);
       }
@@ -111,9 +128,12 @@ const PackageDetails = ({ classes }) => {
             <Card className={classes.card}>
               <CardHeader
                 action={
-                  <IconButton>
-                    <MoreVertIcon />
-                  </IconButton>
+                  <Chip
+                    label={`in ${group}`}
+                    className={cn(classes.chip, {
+                      [classes[`${group}Chip`]]: Boolean(group)
+                    })}
+                  />
                 }
                 title={name}
                 subheader={`v${version}`}
@@ -165,7 +185,7 @@ const PackageDetails = ({ classes }) => {
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Paper>
-              <PackageInfo versions={versions} dependencies={dependencies} />
+              <PackageInfo {...active} />
             </Paper>
           </Fade>
         )}

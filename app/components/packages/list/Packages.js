@@ -25,8 +25,7 @@ import {
   onAddActionError,
   onAddSelected,
   onSetPackagesSuccess,
-  onSetOutdatedSuccess,
-  onSetActive
+  onSetOutdatedSuccess
 } from 'models/packages/selectors';
 
 import {
@@ -122,12 +121,6 @@ const Packages = ({ classes }) => {
   );
 
   const clearUI = options => {
-    const { inert } = options;
-
-    if (inert) {
-      onSetActive(dispatch, { active: null });
-    }
-
     onClearNotifications(dispatch);
     onClearSnackbar(dispatch);
     onClearSelected(dispatch);
