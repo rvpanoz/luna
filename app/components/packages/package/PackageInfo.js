@@ -8,6 +8,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import List from '@material-ui/core/List';
@@ -15,9 +16,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
+import SearchIcon from '@material-ui/icons/Search';
 import ViewIcon from '@material-ui/icons/ViewArray';
 
-import CardDetails from 'components/layout/CardInfo';
+import PaperHeader from 'components/layout/Paper/PaperHeader';
+
 import styles from './styles/packageInfo';
 
 const TabContainer = ({ children }) => {
@@ -45,18 +48,20 @@ const renderVersions = versions => (
 );
 
 const renderDependencies = dependencies => {
-  const dependenciesValues = Object.values(dependencies);
+  const dependenciesKeys = Object.keys(dependencies);
 
   return (
     <List style={{ maxHeight: 400, overflow: 'auto' }}>
-      {dependenciesValues &&
-        dependenciesValues.map(dependency => {
+      {dependenciesKeys &&
+        dependenciesKeys.map(dependency => {
           return (
             <ListItem key={`${dependency}`}>
-              <ListItemText primary={dependency} />
+              <ListItemText
+                primary={`${dependency} - v${dependencies[dependency]}`}
+              />
               <ListItemSecondaryAction>
                 <IconButton aria-label="View version">
-                  <ViewIcon />
+                  <SearchIcon />
                 </IconButton>
               </ListItemSecondaryAction>
             </ListItem>
@@ -69,7 +74,7 @@ const renderDependencies = dependencies => {
 const PackageInfoDetails = ({
   classes,
   name,
-  group,
+  license,
   versions,
   dependencies
 }) => {
@@ -77,6 +82,10 @@ const PackageInfoDetails = ({
 
   return (
     <Paper elevation={2} className={classes.root}>
+      <PaperHeader>
+        <Typography>License:&nbsp;{`${license}`}</Typography>
+      </PaperHeader>
+      <Divider />
       <AppBar position="static" color="default">
         <Tabs
           value={activeTab}
