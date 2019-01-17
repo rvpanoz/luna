@@ -26,7 +26,7 @@ export const createActionCreator = namespace => actionType => {
 };
 
 /**
- * Object to array
+ * Object array
  * @param {*} obj
  */
 export const objectEntries = obj => {
@@ -256,7 +256,7 @@ export const parseNpmError = error => {
   if (!error) {
     return [];
   }
-
+  console.log(error);
   const errorParts = typeof error === 'string' && error.split(',');
   const errorMessage = errorParts && errorParts[0].split(':');
 

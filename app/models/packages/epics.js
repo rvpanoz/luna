@@ -2,78 +2,55 @@
  * Packages epics
  */
 
+/** eslint-disable */
 /** eslint-disable-import/no-duplicates */
 
 import { combineEpics, ofType } from 'redux-observable';
-import { map, catchError } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
+
+import { ERROR_TYPES } from 'constants/AppConstants';
+import { commandError } from 'models/app/actions';
+import { parseNpmError, switchcase } from 'commons/utils';
+
 import { of } from 'rxjs';
 
-import { setSnackbar, toggleLoader } from 'models/ui/actions';
+const matchType = (subject, needle) => {
+  const prefixRegX = new RegExp(needle);
+  return prefixRegX.test(subject);
+};
 
-import {
-  clearFilters,
-  setPackagesError,
-  setPackagesSuccess,
-  setPackagesStart,
-  setActive
-} from './actions';
+/**
+ *
+ * @param {*} error
+ * npm ERR!, npm WARN
+ */
+const extractType = errorPrefix => types =>
+  types.find(type => matchType(errorPrefix, type));
 
-const setPackagesStartEpic = action$ =>
+const handleCommandErrorsEpic = action$ =>
   action$.pipe(
-    ofType(setPackagesStart.type),
-    map(() => ({
-      type: toggleLoader.type,
-      payload: {
-        loading: true,
-        message: 'Loading packages..'
-      }
-    })),
-    catchError(err => {
-      of({
-        type: setPackagesError.type,
-        err
-      });
+    ofType(commandError.type),
+    mergeMap(({ payload: { error } }) => {
+      const prefix = error.slice(0, 8).trim(); // very buggy w/ warnings..
+      const errorType = extractType(prefix)(ERROR_TYPES);
+      console.log(prefix, error);
+      const messages = error.split(prefix);
+
+      return of(messages).pipe(
+        map(message =>
+          switchcase({
+            WARN: () => ({
+              type: 'SHOW_WARNING',
+              message
+            }),
+            ERR: () => ({
+              type: 'SHOW_ERROR',
+              message: parseNpmError(message)
+            })
+          })([])(errorType)
+        )
+      );
     })
   );
 
-const setPackagesSuccessEpic = action$ =>
-  action$.pipe(
-    ofType(setPackagesSuccess.type),
-    map(() => ({
-      type: setActive.type,
-      payload: {
-        active: null
-      }
-    })),
-    map(() => ({
-      type: toggleLoader.type,
-      payload: {
-        looading: false,
-        message: null
-      }
-    })),
-    catchError(err => {
-      of({
-        type: setPackagesError.type,
-        err
-      });
-    })
-  );
-
-const clearFiltersEpic = action$ =>
-  action$.pipe(
-    ofType(clearFilters.type),
-    map(() => ({
-      type: setSnackbar.type,
-      payload: {
-        open: true,
-        message: 'Filters cleared'
-      }
-    }))
-  );
-
-export default combineEpics(
-  clearFiltersEpic,
-  setPackagesSuccessEpic,
-  setPackagesStartEpic
-);
+export default combineEpics(handleCommandErrorsEpic);
