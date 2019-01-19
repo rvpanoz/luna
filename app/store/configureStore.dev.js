@@ -2,11 +2,7 @@
  * Redux store
  */
 
-<<<<<<< ab8f92c84f93424295a63c62598af665ab0867ec
-/* eslint-disable no-unused-expressions */
-=======
 /* eslint-disable */
->>>>>>> WIP handleCommandMessages epic
 /* eslint no-underscore-dangle: 0 */
 /* eslint-disable global-require */
 
@@ -36,11 +32,7 @@ const configureStore = initialState => {
 
   // skip redux logs in console during the tests
   if (process.env.NODE_ENV === 'development') {
-<<<<<<< ab8f92c84f93424295a63c62598af665ab0867ec
-    process.env.REDUX_LOGGER === 1 && middleware.push(logger);
-=======
     // middleware.push(logger);
->>>>>>> WIP handleCommandMessages epic
   }
 
   // If redux DevTools Extension is installed use it,
