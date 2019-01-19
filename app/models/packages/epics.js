@@ -6,51 +6,85 @@
 /** eslint-disable-import/no-duplicates */
 
 import { combineEpics, ofType } from 'redux-observable';
-import { map, mergeMap } from 'rxjs/operators';
+import { mergeMap, concatAll, catchError } from 'rxjs/operators';
 
+// ['WARN', 'ERR']
 import { ERROR_TYPES } from 'constants/AppConstants';
-import { commandError } from 'models/app/actions';
-import { parseNpmError, switchcase } from 'commons/utils';
+import { commandMessage } from 'models/app/actions';
+import { parseMessage, switchcase } from 'commons/utils';
 
 import { of } from 'rxjs';
 
+/**
+ *
+ * @param {*} subject
+ * @param {*} needle
+ */
 const matchType = (subject, needle) => {
   const prefixRegX = new RegExp(needle);
+
   return prefixRegX.test(subject);
 };
 
 /**
  *
- * @param {*} error
- * npm ERR!, npm WARN
+ * @param {*} prefix
+ * npm ERR!, npm WARN, etc ...
  */
-const extractType = errorPrefix => types =>
-  types.find(type => matchType(errorPrefix, type));
+const matchMessageType = prefix => types =>
+  types.find(type => matchType(prefix, type));
 
-const handleCommandErrorsEpic = action$ =>
+/**
+ * NPM messages comes in the following format
+ *
+ * Error example:
+ * npm ERR! peer dep missing: react-dom@^15.3.0 || ^16.0.0-alpha, required by react-virtualized@9.21.0
+ *
+ * Warning example
+ * npm WARN react-d3-graph@2.0.0-rc2 requires a peer of d3@^5.5.0 but none is installed. You must install peer dependencies yourself
+ *
+ * With the following epic we can handle the stream of npm messages and dispatch multiple actions per message
+ * there are 2 types of messages: WARNINGS and ERRORS
+ *
+ * dispatch payload example
+ *
+ * {
+ *    type: 'SHOW_ERROR',
+ *    error: ['npm error', 'react@>=15, 'required by react-router@4.3.1']
+ * }
+ *
+ */
+const handleMessagesEpic = action$ =>
   action$.pipe(
-    ofType(commandError.type),
-    mergeMap(({ payload: { error } }) => {
-      const prefix = error.slice(0, 8).trim(); // very buggy w/ warnings..
-      const errorType = extractType(prefix)(ERROR_TYPES);
-      console.log(prefix, error);
-      const messages = error.split(prefix);
+    ofType(commandMessage.type),
+    mergeMap(({ payload: { message } }) => {
+      const messages = message && message.split('\n');
 
-      return of(messages).pipe(
-        map(message =>
-          switchcase({
-            WARN: () => ({
-              type: 'SHOW_WARNING',
-              message
-            }),
-            ERR: () => ({
-              type: 'SHOW_ERROR',
-              message: parseNpmError(message)
-            })
-          })([])(errorType)
-        )
-      );
-    })
+      const mappedMessages = messages.map(npmMsg => {
+        const prefix = npmMsg.slice(0, 8).trim(); // npm ERR! || npm WARN
+        const messageType = matchMessageType(prefix)(ERROR_TYPES);
+
+        return switchcase({
+          WARN: () => ({
+            type: 'SHOW_WARNING',
+            warning: parseMessage(npmMsg)
+          }),
+          ERR: () => ({
+            type: 'SHOW_ERROR',
+            error: parseMessage(npmMsg)
+          })
+        })({})(messageType);
+      });
+
+      return of(mappedMessages.filter(({ type }) => Boolean(type)));
+    }),
+    concatAll(),
+    catchError(error =>
+      of({
+        type: 'COMMAND_ERROR',
+        error
+      })
+    )
   );
 
-export default combineEpics(handleCommandErrorsEpic);
+export default combineEpics(handleMessagesEpic);

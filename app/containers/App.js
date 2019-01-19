@@ -10,7 +10,7 @@ import { useDispatch } from 'redux-react-hook';
 import { withErrorBoundary } from 'commons/hocs';
 import Layout from './Layout';
 
-import { commandError } from 'models/app/actions';
+import { commandMessage } from 'models/app/actions';
 import '../app.global.css';
 
 const App = () => {
@@ -21,10 +21,12 @@ const App = () => {
       console.error('uncaught-exception', args);
     });
 
-    ipcRenderer.on('ipcEvent-error', (event, error) => {
+    ipcRenderer.on('ipcEvent-error', (event, message) => {
+      if (!message) return;
+
       dispatch(
-        commandError({
-          error
+        commandMessage({
+          message
         })
       );
     });

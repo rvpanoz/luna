@@ -4,6 +4,6 @@ import { createActionCreator } from 'commons/utils';
 
 const ActionCreator = createActionCreator('@@LUNA_APP/APP');
 
-const commandError = ActionCreator('COMMAND_ERROR');
+const commandMessage = ActionCreator('COMMAND_MESSAGE');
 
-export { commandError };
+export { commandMessage };
