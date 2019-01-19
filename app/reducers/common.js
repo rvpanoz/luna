@@ -21,6 +21,11 @@ import initialState from './initialState';
 
 const { packages, ...common } = initialState;
 
+/**
+ *
+ * @param {*} commonState
+ * @param {*} handlers
+ */
 const createReducer = (commonState, handlers) => (
   state = commonState,
   action

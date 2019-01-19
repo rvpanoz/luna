@@ -25,8 +25,8 @@ const { startMinimized, defaultManager } = defaultSettings;
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 1280,
-  MIN_HEIGHT = 768,
+  MIN_WIDTH = 0,
+  MIN_HEIGHT = 0,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS,
   NODE_ENV,
@@ -101,7 +101,7 @@ ipcMain.on('ipc-event', (event, options) => {
       return event.sender.send('action-close', error, data, cmd);
     }
 
-    if (directory && mode === APP_MODES.LOCAL && cmd[0] === 'list') {
+    if (directory && mode === APP_MODES.LOCAL && cmd.indexOf('list') > -1) {
       const openedPackages = Store.get('openedPackages') || [];
       const yarnLock = fs.existsSync(
         path.join(path.dirname(directory), 'yarn-lock.json')

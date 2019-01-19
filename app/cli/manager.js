@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 import cp from 'child_process';
-import os from 'os';
 import path from 'path';
 import chalk from 'chalk';
 import mk from '../mk';
@@ -18,7 +17,6 @@ const defaultsArgs = {
 };
 
 const cwd = process.cwd();
-const platform = os.platform();
 
 const execute = (
   manager = defaultManager,
@@ -28,8 +26,8 @@ const execute = (
   callback
 ) => {
   const resultP = new Promise((resolve, reject) => {
-    let result = '';
-    let error = '';
+    const result = [];
+    const errors = [];
 
     log(chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`));
 
@@ -44,13 +42,13 @@ const execute = (
     );
 
     command.stdout.on('data', data => {
-      result += `${String(data)}`;
-      callback('flow', data);
+      result.push(String(data));
+      callback('flow', String(data));
     });
 
-    command.stderr.on('data', err => {
-      error += `${String(err)}`;
-      callback('error', error);
+    command.stderr.on('data', error => {
+      errors.push(String(error));
+      callback('error', String(error));
     });
 
     command.on('exit', code => {
@@ -64,8 +62,8 @@ const execute = (
 
       const results = {
         status: 'close',
-        error,
-        data: result,
+        errors,
+        data: result.join(''),
         cmd: commandArgs
       };
 

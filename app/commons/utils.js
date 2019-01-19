@@ -26,7 +26,7 @@ export const createActionCreator = namespace => actionType => {
 };
 
 /**
- * Object to array
+ * Object array
  * @param {*} obj
  */
 export const objectEntries = obj => {
@@ -252,7 +252,7 @@ export const filterByProp = (data, prop) =>
     return item[prop];
   }, data);
 
-export const parseNpmError = error => {
+export const parseMessage = error => {
   if (!error) {
     return [];
   }

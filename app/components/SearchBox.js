@@ -30,7 +30,7 @@ const SearchBox = props => {
 
     toggleSnackbar(false);
 
-    if (!searchValue || searchValue.length <= 3) {
+    if (!searchValue) {
       toggleSnackbar(true);
       return;
     }
