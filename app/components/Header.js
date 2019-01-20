@@ -58,7 +58,9 @@ const Header = ({ title, classes }) => {
   const { notifications, loader } = useMappedState(mapState);
 
   const menuOpen = Boolean(anchorEl);
-  const notificationsOpen = Boolean(notifications.length && notificationsEl);
+  const notificationsOpen = Boolean(
+    notifications && notifications.length && notificationsEl
+  );
 
   const handleDirectory = useCallback(directory => {
     onClearPackages(dispatch);

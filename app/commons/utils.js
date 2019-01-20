@@ -260,6 +260,7 @@ export const parseMessage = error => {
   const errorParts = typeof error === 'string' && error.split(',');
   const errorMessage = errorParts && errorParts[0].split(':');
 
+  // console.log(error, errorMessage);
   return !errorMessage
     ? []
     : [errorMessage[0].trim(), errorMessage[1].trim(), errorParts[1]];

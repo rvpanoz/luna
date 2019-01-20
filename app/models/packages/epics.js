@@ -6,11 +6,15 @@
 /** eslint-disable-import/no-duplicates */
 
 import { combineEpics, ofType } from 'redux-observable';
-import { mergeMap, concatAll, catchError } from 'rxjs/operators';
+import { delay, map, concatMap, catchError } from 'rxjs/operators';
 
 // ['WARN', 'ERR']
 import { ERROR_TYPES } from 'constants/AppConstants';
-import { commandMessage } from 'models/app/actions';
+import {
+  addNotification,
+  commandMessage,
+  commandError
+} from 'models/ui/actions';
 import { parseMessage, switchcase } from 'commons/utils';
 
 import { of } from 'rxjs';
@@ -57,32 +61,54 @@ const matchMessageType = prefix => types =>
 const handleMessagesEpic = action$ =>
   action$.pipe(
     ofType(commandMessage.type),
-    mergeMap(({ payload: { message } }) => {
+    map(({ payload: { message } }) => {
       const messages = message && message.split('\n');
 
       const mappedMessages = messages.map(npmMsg => {
         const prefix = npmMsg.slice(0, 8).trim(); // npm ERR! || npm WARN
         const messageType = matchMessageType(prefix)(ERROR_TYPES);
+        const [body, required, requiredBy] = parseMessage(npmMsg);
 
-        return switchcase({
-          WARN: () => ({
-            type: 'SHOW_WARNING',
-            warning: parseMessage(npmMsg)
-          }),
-          ERR: () => ({
-            type: 'SHOW_ERROR',
-            error: parseMessage(npmMsg)
-          })
-        })({})(messageType);
+        return of(
+          switchcase({
+            WARN: () => ({
+              type: addNotification.type,
+              payload: {
+                time: new Date(),
+                level: 'warning',
+                body,
+                required,
+                requiredBy
+              }
+            }),
+            ERR: () => ({
+              type: addNotification.type,
+              payload: {
+                time: new Date(),
+                level: 'error',
+                body,
+                required,
+                requiredBy
+              }
+            })
+          })({})(messageType)
+        );
       });
 
-      return of(mappedMessages.filter(({ type }) => Boolean(type)));
+      return mappedMessages;
     }),
-    concatAll(),
+    concatMap(actions =>
+      of(actions).pipe(
+        delay(2000),
+        map(action => action.value)
+      )
+    ),
     catchError(error =>
       of({
-        type: 'COMMAND_ERROR',
-        error
+        type: commandError.type,
+        payload: {
+          error: error.message
+        }
       })
     )
   );

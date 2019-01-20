@@ -121,7 +121,7 @@ const Packages = ({ classes }) => {
   );
 
   const clearUI = () => {
-    onClearNotifications(dispatch);
+    // onClearNotifications(dispatch);
     onClearSnackbar(dispatch);
     onClearSelected(dispatch);
   };
