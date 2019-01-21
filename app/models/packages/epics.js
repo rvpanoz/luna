@@ -8,9 +8,10 @@
 import { of, pipe, from } from 'rxjs';
 import { delay, map, mergeMap, takeWhile, concatMap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
+import { merge } from 'ramda';
 
 import { ERROR_TYPES } from 'constants/AppConstants';
-import { showError, showWarning, commandMessage } from 'models/ui/actions';
+import { addNotification, commandMessage } from 'models/ui/actions';
 import { parseMessage, switchcase } from 'commons/utils';
 
 /**
@@ -57,12 +58,16 @@ const handleMessagesEpic = pipe(
       map(({ messageType, payload }) =>
         switchcase({
           WARN: () => ({
-            type: showWarning.type,
-            payload
+            type: addNotification.type,
+            payload: merge(payload, {
+              type: 'WARNING'
+            })
           }),
           ERR: () => ({
-            type: showError.type,
-            payload
+            type: addNotification.type,
+            payload: merge(payload, {
+              type: 'ERROR'
+            })
           })
         })({})(messageType)
       )

@@ -35,12 +35,12 @@ const createReducer = (commonState, handlers) => (
 const handlers = {
   [addNotification.type]: (
     state,
-    { payload: { level, body, required, requiredBy } }
+    { payload: { type, body, required, requiredBy } }
   ) =>
     merge(state, {
       notifications: prepend(
         {
-          level,
+          type,
           body,
           required,
           requiredBy
