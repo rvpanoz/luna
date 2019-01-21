@@ -5,19 +5,18 @@
 /** eslint-disable */
 /** eslint-disable-import/no-duplicates */
 
+import { of, pipe } from 'rxjs';
+import { delay, map, mergeMap, catchError } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
-import { delay, map, concatMap, catchError } from 'rxjs/operators';
 
-// ['WARN', 'ERR']
 import { ERROR_TYPES } from 'constants/AppConstants';
 import {
-  addNotification,
+  showError,
+  showWarning,
   commandMessage,
   commandError
 } from 'models/ui/actions';
 import { parseMessage, switchcase } from 'commons/utils';
-
-import { of } from 'rxjs';
 
 /**
  *
@@ -58,59 +57,49 @@ const matchMessageType = prefix => types =>
  * }
  *
  */
-const handleMessagesEpic = action$ =>
-  action$.pipe(
-    ofType(commandMessage.type),
-    map(({ payload: { message } }) => {
-      const messages = message && message.split('\n');
 
-      const mappedMessages = messages.map(npmMsg => {
-        const prefix = npmMsg.slice(0, 8).trim(); // npm ERR! || npm WARN
-        const messageType = matchMessageType(prefix)(ERROR_TYPES);
-        const [body, required, requiredBy] = parseMessage(npmMsg);
+const handleMessagesEpic = pipe(
+  ofType(commandMessage.type),
+  map(({ payload: { message = '' } }) => {
+    console.log(message);
+    return message.split('\n');
+  }),
+  mergeMap(npmMsg => {
+    const npmMsgToStr = npmMsg.join('');
+    const prefix = npmMsgToStr.slice(0, 8).trim();
+    const messageType = matchMessageType(prefix)(ERROR_TYPES);
+    const [body, required, requiredBy] = parseMessage(npmMsgToStr);
 
-        return of(
-          switchcase({
-            WARN: () => ({
-              type: addNotification.type,
-              payload: {
-                time: new Date(),
-                level: 'warning',
-                body,
-                required,
-                requiredBy
-              }
-            }),
-            ERR: () => ({
-              type: addNotification.type,
-              payload: {
-                time: new Date(),
-                level: 'error',
-                body,
-                required,
-                requiredBy
-              }
-            })
-          })({})(messageType)
-        );
-      });
-
-      return mappedMessages;
-    }),
-    concatMap(actions =>
-      of(actions).pipe(
-        delay(2000),
-        map(action => action.value)
-      )
-    ),
-    catchError(error =>
-      of({
-        type: commandError.type,
-        payload: {
-          error: error.message
-        }
+    return of({
+      messageType,
+      payload: {
+        body,
+        required,
+        requiredBy
+      }
+    }).pipe(map(value => value));
+  }),
+  map(({ messageType, payload }) =>
+    switchcase({
+      WARN: () => ({
+        type: showWarning.type,
+        payload
+      }),
+      ERR: () => ({
+        type: showError.type,
+        payload
       })
-    )
-  );
+    })({})(messageType)
+  ),
+  delay(1200),
+  catchError(error =>
+    of({
+      type: commandError.type,
+      payload: {
+        error: error.message
+      }
+    })
+  )
+);
 
 export default combineEpics(handleMessagesEpic);

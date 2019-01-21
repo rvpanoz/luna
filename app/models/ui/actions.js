@@ -14,6 +14,8 @@ const setManager = ActionCreator('SET_MANAGER');
 const setMode = ActionCreator('SET_MODE');
 const setPage = ActionCreator('SET_PAGE');
 const setPageRows = ActionCreator('SET_PAGE_ROWS');
+const showError = ActionCreator('SHOW_ERROR');
+const showWarning = ActionCreator('SHOW_WARNING');
 const toggleLoader = ActionCreator('TOGGLE_LOADER');
 const togglePackageLoader = ActionCreator('TOGGLE_PACKAGE_LOADER');
 const uiError = ActionCreator('UI_ERROR');
@@ -29,6 +31,8 @@ export {
   setMode,
   setPage,
   setPageRows,
+  showError,
+  showWarning,
   toggleLoader,
   togglePackageLoader,
   uiError
