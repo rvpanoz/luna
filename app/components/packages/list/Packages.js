@@ -17,7 +17,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
-import { parseNpmError, filterByProp } from 'commons/utils';
+import { filterByProp } from 'commons/utils';
 import SnackbarContent from 'components/layout/SnackbarContent';
 import AppLoader from 'components/layout/AppLoader';
 
@@ -30,7 +30,6 @@ import {
 } from 'models/packages/actions';
 
 import {
-  addNotification,
   clearSnackbar,
   setPage,
   setPageRows,
@@ -136,7 +135,7 @@ const Packages = ({ classes }) => {
   const reload = () => setCounter(counter + 1);
 
   // useIpc hook to send and listenTo ipc events
-  const [dependenciesSet, outdatedSet, errors] = useIpc(
+  const [dependenciesSet, outdatedSet] = useIpc(
     'ipc-event',
     {
       ipcEvent: 'get-packages',
@@ -155,7 +154,6 @@ const Packages = ({ classes }) => {
   const scrollWrapper = top => {
     const wrapperEl = wrapperRef && wrapperRef.current;
 
-    // scroll to top
     wrapperEl &&
       wrapperEl.scroll({
         top
@@ -164,30 +162,43 @@ const Packages = ({ classes }) => {
 
   useEffect(
     () => {
-      clearUI({
-        data: true,
-        notifications: true,
-        snackbar: true
-      });
+      clearUI();
 
       if (page !== 0) {
         setPage(dispatch, { page: 0 });
       }
 
-      if (dependencies && Array.isArray(dependencies) && dependencies.length) {
-        setPackagesSuccess(dispatch, {
-          dependencies,
-          projectName,
-          projectVersion,
-          outdated
-        });
+      ////
 
-        if (outdated && Array.isArray(outdated) && outdated.length) {
-          setOutdatedSuccess(dispatch, {
-            dependencies: outdated
-          });
-        }
-      }
+      dispatch(
+        setPackagesSuccess({
+          dependencies,
+          outdated,
+          projectName,
+          projectVersion
+        })
+      );
+
+      ////
+
+      // if (dependencies && Array.isArray(dependencies) && dependencies.length) {
+      //   dispatch(
+      //     setPackagesSuccess({
+      //       dependencies,
+      //       projectName,
+      //       projectVersion,
+      //       outdated
+      //     })
+      //   );
+
+      //   if (outdated && Array.isArray(outdated) && outdated.length) {
+      //     dispatch(
+      //       setOutdatedSuccess({
+      //         dependencies: outdated
+      //       })
+      //     );
+      //   }
+      // }
 
       const withErrors = dependencies && filterByProp(dependencies, '__error');
 
@@ -320,8 +331,6 @@ const Packages = ({ classes }) => {
                       version,
                       latest,
                       isOutdated,
-                      mode,
-                      directory,
                       __group,
                       __error,
                       __peerMissing
@@ -330,7 +339,7 @@ const Packages = ({ classes }) => {
                         <PackageItem
                           key={`pkg-${name}`}
                           isSelected={isSelected(name, selected)}
-                          addSelected={() => onAddSelected(dispatch, { name })}
+                          addSelected={() => addSelected(dispatch, { name })}
                           name={name}
                           manager={manager}
                           version={version}

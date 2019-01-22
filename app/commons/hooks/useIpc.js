@@ -7,7 +7,7 @@ import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 
 import { setPackagesStart } from 'models/packages/actions';
-import { parseMap } from '../utils';
+import { parseMap, switchcase } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
   const { ipcEvent, mode, directory } = options || {};
@@ -28,21 +28,22 @@ const useIpc = (channel, options, inputs = []) => {
 
   useEffect(() => {
     ipcRenderer.on(listenTo, (event, status, commandArgs, data, errors) => {
+      const command = commandArgs && commandArgs[0];
       const [name, version, packages] =
         data && parseMap(data, mode, directory, commandArgs);
       const errorsMessages = errors && errors.length ? errors : null;
 
       setErrors(errorsMessages);
 
-      if (commandArgs[0] === 'list') {
-        setDependencies({
-          data: packages && packages.length ? packages : null,
-          projectName: name,
-          projectVersion: version
-        });
-      } else {
-        setOutdated({ data: packages });
-      }
+      switchcase({
+        list: () =>
+          setDependencies({
+            data: packages && packages.length ? packages : null,
+            projectName: name,
+            projectVersion: version
+          }),
+        outdated: () => setOutdated({ data: packages })
+      })('list')(command);
     });
 
     setPackagesStart(dispatch, {

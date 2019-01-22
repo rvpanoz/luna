@@ -13,6 +13,7 @@ import { merge } from 'ramda';
 import { ERROR_TYPES } from 'constants/AppConstants';
 import { addNotification, commandMessage } from 'models/ui/actions';
 import { parseMessage, switchcase } from 'commons/utils';
+import { setPackagesSuccess, setOutdatedSuccess } from './actions';
 
 /**
  *
@@ -48,7 +49,17 @@ const parseNpmMessage = message => {
   };
 };
 
-const handleMessagesEpic = pipe(
+const packagesEpic = pipe(
+  ofType(setPackagesSuccess.type),
+  map(({ payload: { outdated } }) => ({
+    type: setOutdatedSuccess.type,
+    payload: {
+      dependencies: outdated
+    }
+  }))
+);
+
+const messagesEpic = pipe(
   ofType(commandMessage.type),
   map(({ payload: { message = '' } }) => message.split('\n')),
   mergeMap(messages =>
@@ -72,7 +83,10 @@ const handleMessagesEpic = pipe(
         })({})(messageType)
       )
     )
-  )
+  ),
+  map(data => {
+    console.log(data);
+  })
 );
 
-export default combineEpics(handleMessagesEpic);
+export default combineEpics(packagesEpic, messagesEpic);
