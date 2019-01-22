@@ -6,7 +6,7 @@
 /** eslint-disable-import/no-duplicates */
 
 import { of, pipe, from } from 'rxjs';
-import { map, mergeMap, takeWhile, concatMap } from 'rxjs/operators';
+import { map, mergeMap, takeWhile, concatMap, filter } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { merge } from 'ramda';
 
@@ -51,6 +51,10 @@ const parseNpmMessage = message => {
 
 const packagesEpic = pipe(
   ofType(setPackagesSuccess.type),
+  filter(
+    ({ payload: { dependencies } }) =>
+      Array.isArray(dependencies) && dependencies.length
+  ),
   map(({ payload: { outdated } }) => ({
     type: setOutdatedSuccess.type,
     payload: {
@@ -84,9 +88,7 @@ const messagesEpic = pipe(
       )
     )
   ),
-  map(data => {
-    console.log(data);
-  })
+  map(data => data)
 );
 
 export default combineEpics(packagesEpic, messagesEpic);
