@@ -18,7 +18,7 @@ const showError = ActionCreator('SHOW_ERROR');
 const showWarning = ActionCreator('SHOW_WARNING');
 const toggleLoader = ActionCreator('TOGGLE_LOADER');
 const togglePackageLoader = ActionCreator('TOGGLE_PACKAGE_LOADER');
-const uiError = ActionCreator('UI_ERROR');
+const uiException = ActionCreator('UI_EXCEPTION_ERROR');
 
 export {
   addNotification,
@@ -35,5 +35,5 @@ export {
   showWarning,
   toggleLoader,
   togglePackageLoader,
-  uiError
+  uiException
 };

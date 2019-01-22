@@ -12,9 +12,7 @@ const clearFilters = ActionCreator('CLEAR_FILTERS');
 const clearPackages = ActionCreator('CLEAR_PACKAGES');
 const setPackagesStart = ActionCreator('SET_PACKAGES_START');
 const setPackagesSuccess = ActionCreator('SET_PACKAGES_SUCCESS');
-const setPackagesOutdatedSuccess = ActionCreator(
-  'SET_PACKAGES_OUTDATED_SUCCESS'
-);
+const setOutdatedSuccess = ActionCreator('SET_OUTDATED_SUCCESS');
 const setSortOptions = ActionCreator('SET_SORT_OPTIONS');
 const setActive = ActionCreator('SET_ACTIVE_PACKAGE');
 const setActiveError = ActionCreator('SET_ACTIVE_PACKAGE_ERROR');
@@ -34,6 +32,6 @@ export {
   setPackagesSuccess,
   setPackagesError,
   setSortOptions,
-  setPackagesOutdatedSuccess,
+  setOutdatedSuccess,
   updatePackage
 };

@@ -12,10 +12,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/layout/SnackbarContent';
 
 import { parseMap } from 'commons/utils';
-import {
-  onStartPackages,
-  onSetPackagesSuccess
-} from 'models/packages/selectors';
+import { setPackagesStart, setPackagesSuccess } from 'models/packages/actions';
 
 import styles from './styles/searchBox';
 
@@ -35,7 +32,7 @@ const SearchBox = props => {
       return;
     }
 
-    onStartPackages(dispatch);
+    setPackagesStart(dispatch);
 
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'search-packages',
@@ -64,7 +61,7 @@ const SearchBox = props => {
         try {
           const [name, version, packages] = (data && parseMap(data)) || [];
 
-          onSetPackagesSuccess(dispatch, {
+          setPackagesSuccess(dispatch, {
             fromSearch: true,
             outdated: null,
             dependencies: packages

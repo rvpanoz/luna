@@ -8,8 +8,9 @@ import { ipcRenderer, remote } from 'electron';
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
 import cn from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+
+import { withStyles } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -25,8 +26,8 @@ import PublicIcon from '@material-ui/icons/PublicRounded';
 
 import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
-import { onSetMode, onToggleLoader } from 'models/ui/selectors';
-import { onClearSelected } from 'models/packages/selectors';
+import { setMode, toggleLoader } from 'models/ui/actions';
+import { clearSelected } from 'models/packages/actions';
 
 import TableFilters from './TableFilters';
 
@@ -50,7 +51,7 @@ const TableListToolbar = ({
   const dispatch = useDispatch();
 
   const switchMode = (mode, directory) => {
-    onSetMode(dispatch, { mode, directory });
+    setMode(dispatch, { mode, directory });
 
     if (fromSearch) {
       reload();
@@ -74,7 +75,7 @@ const TableListToolbar = ({
       directory
     });
 
-    onToggleLoader(dispatch, {
+    toggleLoader(dispatch, {
       loading: true,
       message: `${firstToUpper(action)}ing packages..`
     });

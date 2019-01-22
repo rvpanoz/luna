@@ -6,7 +6,7 @@
 /** eslint-disable-import/no-duplicates */
 
 import { of, pipe, from } from 'rxjs';
-import { delay, map, mergeMap, takeWhile, concatMap } from 'rxjs/operators';
+import { map, mergeMap, takeWhile, concatMap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { merge } from 'ramda';
 
@@ -54,7 +54,7 @@ const handleMessagesEpic = pipe(
   mergeMap(messages =>
     from(messages).pipe(
       takeWhile(message => message && message.length),
-      concatMap(message => of(parseNpmMessage(message)).pipe(delay(1200))),
+      concatMap(message => of(parseNpmMessage(message))),
       map(({ messageType, payload }) =>
         switchcase({
           WARN: () => ({

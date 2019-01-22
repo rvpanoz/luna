@@ -21,7 +21,7 @@ import GlobalIcon from '@material-ui/icons/GroupWorkOutlined';
 import OptionalIcon from '@material-ui/icons/SettingsEthernetOutlined';
 import PeersIcon from '@material-ui/icons/BallotOutlined';
 
-import { onTogglePackageLoader } from 'models/ui/selectors';
+import { togglePackageLoader } from 'models/ui/actions';
 
 import { listStyles as styles } from './styles/packagesStyles';
 
@@ -65,7 +65,7 @@ const PackageItemRow = ({
   );
 
   const viewPackage = () => {
-    onTogglePackageLoader(dispatch, {
+    togglePackageLoader(dispatch, {
       loading: true
     });
 

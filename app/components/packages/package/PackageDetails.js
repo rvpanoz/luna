@@ -30,12 +30,14 @@ import InfoIcon from '@material-ui/icons/InfoOutlined';
 import UpdateIcon from '@material-ui/icons/Update';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Fade from '@material-ui/core/Fade';
+
+import { togglePackageLoader } from 'models/ui/actions';
+import { setActive } from 'models/packages/actions';
+import { APP_MODES, APP_INFO } from 'constants/AppConstants';
+
 import AppLoader from 'components/layout/AppLoader';
 import Transition from 'components/layout/Transition';
 
-import { onTogglePackageLoader } from 'models/ui/selectors';
-import { onSetActive } from 'models/packages/selectors';
-import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
@@ -144,8 +146,8 @@ const PackageDetails = ({ classes }) => {
         const newActive = data && JSON.parse(data);
         const properties = pickBy(getCleanProps, newActive); //remove __property name
 
-        onSetActive(dispatch, { active: properties });
-        onTogglePackageLoader(dispatch, {
+        setActive(dispatch, { active: properties });
+        togglePackageLoader(dispatch, {
           loading: false
         });
       } catch (err) {

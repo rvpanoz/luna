@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 
-import { onStartPackages } from 'models/packages/selectors';
+import { setPackagesStart } from 'models/packages/actions';
 import { parseMap } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
@@ -45,7 +45,7 @@ const useIpc = (channel, options, inputs = []) => {
       }
     });
 
-    onStartPackages(dispatch, {
+    setPackagesStart(dispatch, {
       options
     });
     ipcRenderer.send(channel, options);

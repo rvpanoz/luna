@@ -8,6 +8,7 @@ import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { and } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
+
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -15,16 +16,15 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 import {
-  onAddSelected,
-  onClearSelected,
-  onSetSortOptions
-} from 'models/packages/selectors';
+  addSelected,
+  clearSelected,
+  setSortOptions
+} from 'models/packages/actions';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'version', disablePadding: true, label: 'Version' },
   { id: 'latest', disablePadding: true, label: 'Latest' }
-  // { id: 'group', disablePadding: true, label: 'Group' }
 ];
 
 const mapState = ({ packages: { sortBy, sortDir } }) => ({
@@ -39,7 +39,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
 
   const toggleSort = useCallback(
     prop =>
-      onSetSortOptions(dispatch, {
+      setSortOptions(dispatch, {
         sortDir: sortDir === 'desc' ? 'asc' : 'desc',
         sortBy: prop
       }),
@@ -47,20 +47,19 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
   );
 
   const handleSelectAll = e => {
-    const { checked } = e && e.target;
     const checkBoxElement = checkboxAll && checkboxAll.current;
 
     const indeterminate =
       checkBoxElement.dataset && checkBoxElement.dataset.indeterminate;
 
     if (indeterminate === 'true') {
-      onClearSelected(dispatch);
+      clearSelected(dispatch);
       return;
     }
 
     packages &&
       packages.forEach(name =>
-        onAddSelected(dispatch, {
+        addSelected(dispatch, {
           name
         })
       );
