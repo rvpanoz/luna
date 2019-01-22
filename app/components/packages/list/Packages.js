@@ -168,8 +168,6 @@ const Packages = ({ classes }) => {
         setPage(dispatch, { page: 0 });
       }
 
-      ////
-
       dispatch(
         setPackagesSuccess({
           dependencies,
@@ -178,27 +176,6 @@ const Packages = ({ classes }) => {
           projectVersion
         })
       );
-
-      ////
-
-      // if (dependencies && Array.isArray(dependencies) && dependencies.length) {
-      //   dispatch(
-      //     setPackagesSuccess({
-      //       dependencies,
-      //       projectName,
-      //       projectVersion,
-      //       outdated
-      //     })
-      //   );
-
-      //   if (outdated && Array.isArray(outdated) && outdated.length) {
-      //     dispatch(
-      //       setOutdatedSuccess({
-      //         dependencies: outdated
-      //       })
-      //     );
-      //   }
-      // }
 
       const withErrors = dependencies && filterByProp(dependencies, '__error');
 
