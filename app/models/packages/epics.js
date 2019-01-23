@@ -9,7 +9,7 @@ import {
   filter,
   takeUntil,
   tap,
-  first
+  ignoreElements
 } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { merge } from 'ramda';
@@ -18,13 +18,10 @@ import { ERROR_TYPES } from 'constants/AppConstants';
 import {
   addNotification,
   commandMessage,
-  clearSnackbar,
-  clearNotifications,
   toggleLoader
 } from 'models/ui/actions';
 import { parseMessage, switchcase, matchType } from 'commons/utils';
 import {
-  clearSelected,
   setPackagesStart,
   setPackagesSuccess,
   setOutdatedSuccess
@@ -68,26 +65,26 @@ const packagesStartEpic = pipe(
   )
 );
 
-const toggleLoaderEpic = pipe(
-  ofType(toggleLoader.type),
-  tap(t => console.log(t))
-);
-
-const packagesSuccessEpic = action$ =>
+// TODO: fix bug with nodata
+const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesSuccess.type),
-    map(({ payload: { outdated } }) => ({
-      type: setOutdatedSuccess.type,
-      payload: {
-        dependencies: outdated
-      }
-    }))
-    // map(() => ({
-    //   type: toggleLoader.type,
-    //   payload: {
-    //     loading: false
-    //   }
-    // }))
+    mergeMap(({ payload: { outdated, nodata } }) =>
+      of({
+        type: setOutdatedSuccess.type,
+        payload: {
+          dependencies: outdated
+        }
+      }).pipe(
+        filter(() => !nodata), // TODO: nodata = false is valid use case
+        map(() => ({
+          type: toggleLoader.type,
+          payload: {
+            loading: false
+          }
+        }))
+      )
+    )
   );
 
 const messagesEpic = (action$, state$) =>

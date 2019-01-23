@@ -24,10 +24,17 @@ import AppLoader from 'components/layout/AppLoader';
 import {
   addActionError,
   addSelected,
-  setPackagesSuccess
+  clearSelected,
+  setPackagesSuccess,
+  setOutdatedSuccess
 } from 'models/packages/actions';
 
-import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
+import {
+  clearSnackbar,
+  setPage,
+  setPageRows,
+  setSnackbar
+} from 'models/ui/actions';
 
 import {
   APP_INFO,
@@ -110,17 +117,33 @@ const Packages = ({ classes }) => {
     [name, selected]
   );
 
+  const clearUI = () => {
+    clearSnackbar(dispatch);
+    clearSelected(dispatch);
+  };
+
   const updateSnackbar = useCallback(
     ({ open, type, message }) =>
-      dispatch(
-        setSnackbar({
-          open,
-          type,
-          message
-        })
-      ),
+      setSnackbar(dispatch, {
+        open,
+        type,
+        message
+      }),
     []
   );
+
+  const scrollWrapper = top =>
+    useCallback(
+      () => {
+        const wrapperEl = wrapperRef && wrapperRef.current;
+
+        wrapperEl &&
+          wrapperEl.scroll({
+            top
+          });
+      },
+      [wrapperEl]
+    );
 
   const reload = () => setCounter(counter + 1);
 
@@ -141,19 +164,12 @@ const Packages = ({ classes }) => {
   const outdated = outdatedSet.data;
   const nodata = Boolean(dependencies && dependencies.length === 0);
 
-  const scrollWrapper = top => {
-    const wrapperEl = wrapperRef && wrapperRef.current;
-
-    wrapperEl &&
-      wrapperEl.scroll({
-        top
-      });
-  };
-
   useEffect(
     () => {
+      clearUI();
+
       if (page !== 0) {
-        setPage(dispatch, { page: 0 });
+        dispatch(setPage({ page: 0 }));
       }
 
       dispatch(
@@ -161,7 +177,8 @@ const Packages = ({ classes }) => {
           dependencies,
           outdated,
           projectName,
-          projectVersion
+          projectVersion,
+          nodata
         })
       );
 
