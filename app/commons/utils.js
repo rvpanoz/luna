@@ -177,6 +177,17 @@ export const isPackageOutdated = (outdatedPackages, name) => {
 };
 
 /**
+ *
+ * @param {*} subject
+ * @param {*} needle
+ */
+export const matchType = (subject, needle) => {
+  const prefixRegX = new RegExp(needle);
+
+  return prefixRegX.test(subject);
+};
+
+/**
  * Parses and maps response
  * @param {*} response
  * @param {*} mode

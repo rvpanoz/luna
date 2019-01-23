@@ -24,17 +24,10 @@ import AppLoader from 'components/layout/AppLoader';
 import {
   addActionError,
   addSelected,
-  clearSelected,
-  setPackagesSuccess,
-  setOutdatedSuccess
+  setPackagesSuccess
 } from 'models/packages/actions';
 
-import {
-  clearSnackbar,
-  setPage,
-  setPageRows,
-  setSnackbar
-} from 'models/ui/actions';
+import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
 
 import {
   APP_INFO,
@@ -117,18 +110,15 @@ const Packages = ({ classes }) => {
     [name, selected]
   );
 
-  const clearUI = () => {
-    clearSnackbar(dispatch);
-    clearSelected(dispatch);
-  };
-
   const updateSnackbar = useCallback(
     ({ open, type, message }) =>
-      setSnackbar(dispatch, {
-        open,
-        type,
-        message
-      }),
+      dispatch(
+        setSnackbar({
+          open,
+          type,
+          message
+        })
+      ),
     []
   );
 
@@ -162,8 +152,6 @@ const Packages = ({ classes }) => {
 
   useEffect(
     () => {
-      clearUI();
-
       if (page !== 0) {
         setPage(dispatch, { page: 0 });
       }
