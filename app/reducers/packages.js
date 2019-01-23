@@ -16,7 +16,7 @@ import {
   setActive,
   setPackagesStart,
   setPackagesSuccess,
-  setPackagesOutdatedSuccess,
+  setOutdatedSuccess,
   setSortOptions
 } from 'models/packages/actions';
 
@@ -115,7 +115,7 @@ const handlers = {
       selected: []
     });
   },
-  [setPackagesOutdatedSuccess.type]: (state, { payload }) => {
+  [setOutdatedSuccess.type]: (state, { payload }) => {
     const { dependencies } = payload;
 
     return merge(state, {

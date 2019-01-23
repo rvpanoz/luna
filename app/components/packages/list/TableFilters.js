@@ -19,7 +19,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { APP_MODES } from 'constants/AppConstants';
 
 import AppButton from 'components/layout/Buttons/AppButton';
-import { onAddFilter, onClearFilters } from 'models/packages/selectors';
+import { addFilter, clearFilters } from 'models/packages/actions';
 
 import { tableFiltersStyles as styles } from './styles/packagesStyles';
 
@@ -31,7 +31,7 @@ const ListFilters = ({ classes, mode, close }) => {
   const dispatch = useDispatch();
   const { filters } = useMappedState(mapState);
   const clearFilters = () =>
-    filters && filters.length ? onClearFilters(dispatch) : false;
+    filters && filters.length ? clearFilters(dispatch) : false;
 
   return (
     <div className={classes.root}>
@@ -61,7 +61,7 @@ const ListFilters = ({ classes, mode, close }) => {
                   disabled={mode === APP_MODES.GLOBAL}
                   checked={filters && filters.indexOf('dependencies') > -1}
                   onChange={() =>
-                    onAddFilter(dispatch, {
+                    addFilter(dispatch, {
                       filter: 'dependencies'
                     })
                   }
@@ -76,7 +76,7 @@ const ListFilters = ({ classes, mode, close }) => {
                   disabled={mode === APP_MODES.GLOBAL}
                   checked={filters && filters.indexOf('devDependencies') > -1}
                   onChange={() =>
-                    onAddFilter(dispatch, {
+                    addFilter(dispatch, {
                       filter: 'devDependencies'
                     })
                   }
@@ -92,7 +92,7 @@ const ListFilters = ({ classes, mode, close }) => {
                     filters && filters.indexOf('optionalDependencies') > -1
                   }
                   onChange={() =>
-                    onAddFilter(dispatch, {
+                    addFilter(dispatch, {
                       filter: 'optionalDependencies'
                     })
                   }
@@ -113,7 +113,7 @@ const ListFilters = ({ classes, mode, close }) => {
                 <Checkbox
                   checked={filters && filters.indexOf('latest') > -1}
                   onChange={() =>
-                    onAddFilter(dispatch, {
+                    addFilter(dispatch, {
                       filter: 'latest'
                     })
                   }

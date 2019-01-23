@@ -80,9 +80,7 @@ const Notifications = props => {
         <List dense>
           {notifications &&
             notifications.map((notification, idx) => {
-              const { requiredBy, requires } = notification;
-              const parts = requires.split('@');
-              const peerName = parts[0].length ? parts[0] : `@${parts[1]}`; // @ indicates namespace e.g @material-ui/core, @babel/core etc
+              const { requiredBy, required } = notification;
 
               return (
                 <ListItem key={`notification-${idx + 1}`}>
@@ -91,16 +89,13 @@ const Notifications = props => {
                       <ModuleIcon />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText
-                    primary={`peer ${requires} missing`}
-                    secondary={requiredBy}
-                  />
+                  <ListItemText primary={required} secondary={requiredBy} />
                   <ListItemSecondaryAction>
                     <div>
                       <Tooltip title="Install peer">
                         <IconButton
                           aria-label="Install"
-                          onClick={() => handleInstall(peerName)}
+                          onClick={() => handleInstall(required)}
                         >
                           <AddIcon />
                         </IconButton>

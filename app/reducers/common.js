@@ -9,6 +9,7 @@ import {
   addNotification,
   clearNotifications,
   clearSnackbar,
+  commandError,
   setSnackbar,
   setManager,
   setMode,
@@ -34,19 +35,21 @@ const createReducer = (commonState, handlers) => (
 const handlers = {
   [addNotification.type]: (
     state,
-    { payload: { level, body, requires, requiredBy } }
+    { payload: { type, body, required, requiredBy } }
   ) =>
     merge(state, {
       notifications: prepend(
         {
-          level,
+          type,
           body,
-          requires,
+          required,
           requiredBy
         },
         state.notifications
       )
     }),
+  [commandError.type]: (state, { payload: error }) =>
+    assoc('command_error', error, state),
   [clearSnackbar.type]: state =>
     merge(state, {
       snackbarOptions: {

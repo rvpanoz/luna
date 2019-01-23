@@ -253,12 +253,12 @@ export const filterByProp = (data, prop) =>
   }, data);
 
 export const parseMessage = error => {
-  if (!error) {
-    return [];
-  }
-
   const errorParts = typeof error === 'string' && error.split(',');
   const errorMessage = errorParts && errorParts[0].split(':');
+
+  if (errorMessage && errorMessage.length < 2) {
+    return [];
+  }
 
   return !errorMessage
     ? []

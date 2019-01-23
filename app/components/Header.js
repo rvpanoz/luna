@@ -34,8 +34,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import { APP_MODES } from 'constants/AppConstants';
-import { onSetMode } from 'models/ui/selectors';
-import { onClearPackages } from 'models/packages/selectors';
+import { setMode } from 'models/ui/actions';
+import { clearPackages } from 'models/packages/actions';
 
 import SearchBox from './SearchBox';
 import styles from './styles/header';
@@ -58,11 +58,13 @@ const Header = ({ title, classes }) => {
   const { notifications, loader } = useMappedState(mapState);
 
   const menuOpen = Boolean(anchorEl);
-  const notificationsOpen = Boolean(notifications.length && notificationsEl);
+  const notificationsOpen = Boolean(
+    notifications && notifications.length && notificationsEl
+  );
 
   const handleDirectory = useCallback(directory => {
-    onClearPackages(dispatch);
-    onSetMode(dispatch, { mode: APP_MODES.LOCAL, directory });
+    clearPackages(dispatch);
+    setMode(dispatch, { mode: APP_MODES.LOCAL, directory });
     toggleDrawer(false);
   }, []);
 

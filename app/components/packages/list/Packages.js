@@ -17,33 +17,30 @@ import Snackbar from '@material-ui/core/Snackbar';
 
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
-import { parseNpmError, filterByProp } from 'commons/utils';
+import { filterByProp } from 'commons/utils';
 import SnackbarContent from 'components/layout/SnackbarContent';
 import AppLoader from 'components/layout/AppLoader';
 
 import {
-  onAddActionError,
-  onAddSelected,
-  onSetPackagesSuccess,
-  onSetOutdatedSuccess
-} from 'models/packages/selectors';
+  addActionError,
+  addSelected,
+  clearSelected,
+  setPackagesSuccess,
+  setOutdatedSuccess
+} from 'models/packages/actions';
 
 import {
-  onAddNotification,
-  onToggleLoader,
-  onSetPage,
-  onSetPageRows,
-  onSetSnackbar
-} from 'models/ui/selectors';
+  clearSnackbar,
+  setPage,
+  setPageRows,
+  setSnackbar
+} from 'models/ui/actions';
 
 import {
   APP_INFO,
   INFO_MESSAGES,
   WARNING_MESSAGES
 } from 'constants/AppConstants';
-
-import { onClearNotifications, onClearSnackbar } from 'models/ui/selectors';
-import { onClearSelected } from 'models/packages/selectors';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -121,14 +118,13 @@ const Packages = ({ classes }) => {
   );
 
   const clearUI = () => {
-    onClearNotifications(dispatch);
-    onClearSnackbar(dispatch);
-    onClearSelected(dispatch);
+    clearSnackbar(dispatch);
+    clearSelected(dispatch);
   };
 
   const updateSnackbar = useCallback(
     ({ open, type, message }) =>
-      doSetSnackbar(dispatch, {
+      setSnackbar(dispatch, {
         open,
         type,
         message
@@ -139,7 +135,7 @@ const Packages = ({ classes }) => {
   const reload = () => setCounter(counter + 1);
 
   // useIpc hook to send and listenTo ipc events
-  const [dependenciesSet, outdatedSet, errors] = useIpc(
+  const [dependenciesSet, outdatedSet] = useIpc(
     'ipc-event',
     {
       ipcEvent: 'get-packages',
@@ -158,7 +154,6 @@ const Packages = ({ classes }) => {
   const scrollWrapper = top => {
     const wrapperEl = wrapperRef && wrapperRef.current;
 
-    // scroll to top
     wrapperEl &&
       wrapperEl.scroll({
         top
@@ -167,50 +162,20 @@ const Packages = ({ classes }) => {
 
   useEffect(
     () => {
-      clearUI({
-        data: true,
-        notifications: true,
-        snackbar: true
-      });
+      clearUI();
 
       if (page !== 0) {
-        onSetPage(dispatch, { page: 0 });
+        setPage(dispatch, { page: 0 });
       }
 
-      if (dependencies && Array.isArray(dependencies) && dependencies.length) {
-        onSetPackagesSuccess(dispatch, {
+      dispatch(
+        setPackagesSuccess({
           dependencies,
+          outdated,
           projectName,
-          projectVersion,
-          outdated
-        });
-
-        if (outdated && Array.isArray(outdated) && outdated.length) {
-          onSetOutdatedSuccess(dispatch, {
-            dependencies: outdated
-          });
-        }
-      }
-
-      if (errors && typeof errors === 'string') {
-        const errorsArr = errors.split('\n');
-        let errorsLen = errorsArr && errorsArr.length;
-
-        while (errorsLen--) {
-          if (errorsArr[errorsLen]) {
-            const [body, requires, requiredBy] = parseNpmError(
-              errorsArr[errorsLen]
-            );
-
-            onAddNotification(dispatch, {
-              level: 0,
-              body,
-              requires,
-              requiredBy
-            });
-          }
-        }
-      }
+          projectVersion
+        })
+      );
 
       const withErrors = dependencies && filterByProp(dependencies, '__error');
 
@@ -238,7 +203,7 @@ const Packages = ({ classes }) => {
     () => {
       ipcRenderer.on(['action-close'], (event, error) => {
         if (error && error.length) {
-          onAddActionError(dispatch, { error });
+          addActionError(dispatch, { error });
         }
 
         // force render
@@ -253,7 +218,7 @@ const Packages = ({ classes }) => {
   // more listeners
   useEffect(() => {
     ipcRenderer.on('yarn-warning-close', () => {
-      onSetSnackbar(dispatch, {
+      setSnackbar(dispatch, {
         open: true,
         type: 'error',
         message: WARNING_MESSAGES.yarnlock
@@ -287,10 +252,10 @@ const Packages = ({ classes }) => {
       rowsPerPage={rowsPerPage}
       handleChangePage={(e, pageNo) => {
         scrollWrapper(0);
-        onSetPage(dispatch, { page: pageNo });
+        setPage(dispatch, { page: pageNo });
       }}
       handleChangePageRows={e =>
-        onSetPageRows(dispatch, { rowsPerPage: e.target.value })
+        setPageRows(dispatch, { rowsPerPage: e.target.value })
       }
     />
   ));
@@ -343,8 +308,6 @@ const Packages = ({ classes }) => {
                       version,
                       latest,
                       isOutdated,
-                      mode,
-                      directory,
                       __group,
                       __error,
                       __peerMissing
@@ -353,7 +316,7 @@ const Packages = ({ classes }) => {
                         <PackageItem
                           key={`pkg-${name}`}
                           isSelected={isSelected(name, selected)}
-                          addSelected={() => onAddSelected(dispatch, { name })}
+                          addSelected={() => addSelected(dispatch, { name })}
                           name={name}
                           manager={manager}
                           version={version}
@@ -385,7 +348,7 @@ const Packages = ({ classes }) => {
           open={Boolean(snackbarOptions.open)}
           autoHideDuration={5000}
           onClose={() =>
-            onSetSnackbar(dispatch, {
+            setSnackbar(dispatch, {
               open: false,
               message: null
             })
@@ -395,7 +358,7 @@ const Packages = ({ classes }) => {
             variant={snackbarOptions.type}
             message={snackbarOptions.message}
             onClose={() =>
-              onSetSnackbar(dispatch, {
+              setSnackbar(dispatch, {
                 open: false,
                 message: null
               })

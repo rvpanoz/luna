@@ -93,12 +93,12 @@ ipcMain.on('ipc-event', (event, options) => {
 
   const onError = error => event.sender.send('ipcEvent-error', error);
 
-  const onClose = (status, error, data, cmd) => {
+  const onClose = (status, errors, data, cmd) => {
     const { directory, mode } = rest;
     const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
 
     if (actionIndex > -1 && ipcEvent !== 'view') {
-      return event.sender.send('action-close', error, data, cmd);
+      return event.sender.send('action-close', errors, data, cmd);
     }
 
     if (directory && mode === APP_MODES.LOCAL && cmd.indexOf('list') > -1) {
@@ -130,7 +130,7 @@ ipcMain.on('ipc-event', (event, options) => {
     }
 
     event.sender.send('loaded-packages-close', Store.get('openedPackages'));
-    event.sender.send(`${ipcEvent}-close`, status, cmd, data, error, options);
+    event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
   };
 
   const callback = (status, error, ...restArgs) =>

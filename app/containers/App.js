@@ -5,25 +5,30 @@
  */
 
 import { ipcRenderer } from 'electron';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'redux-react-hook';
 import { withErrorBoundary } from 'commons/hocs';
 import Layout from './Layout';
 
-import { commandMessage } from 'models/app/actions';
+import {
+  commandMessage,
+  clearNotifications,
+  uiException
+} from 'models/ui/actions';
 import '../app.global.css';
 
 const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(clearNotifications());
+
     ipcRenderer.on('uncaught-exception', (event, ...args) => {
-      console.error('uncaught-exception', args);
+      console.error(args);
+      dispatch(uiException(args));
     });
 
     ipcRenderer.on('ipcEvent-error', (event, message) => {
-      if (!message) return;
-
       dispatch(
         commandMessage({
           message
