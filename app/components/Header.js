@@ -63,8 +63,8 @@ const Header = ({ title, classes }) => {
   );
 
   const handleDirectory = useCallback(directory => {
-    clearPackages(dispatch);
-    setMode(dispatch, { mode: APP_MODES.LOCAL, directory });
+    dispatch(clearPackages());
+    dispatch(setMode({ mode: APP_MODES.LOCAL, directory }));
     toggleDrawer(false);
   }, []);
 

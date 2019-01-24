@@ -19,7 +19,10 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import { APP_MODES } from 'constants/AppConstants';
 
 import AppButton from 'components/layout/Buttons/AppButton';
-import { addFilter, clearFilters } from 'models/packages/actions';
+import {
+  addFilter,
+  clearFilters as removeFilters
+} from 'models/packages/actions';
 
 import { tableFiltersStyles as styles } from './styles/packagesStyles';
 
@@ -30,8 +33,9 @@ const mapState = state => ({
 const ListFilters = ({ classes, mode, close }) => {
   const dispatch = useDispatch();
   const { filters } = useMappedState(mapState);
-  const clearFilters = () =>
-    filters && filters.length ? clearFilters(dispatch) : false;
+
+  const removeFilters = () =>
+    filters && filters.length ? dispatch(clearFilters()) : false;
 
   return (
     <div className={classes.root}>
@@ -61,9 +65,11 @@ const ListFilters = ({ classes, mode, close }) => {
                   disabled={mode === APP_MODES.GLOBAL}
                   checked={filters && filters.indexOf('dependencies') > -1}
                   onChange={() =>
-                    addFilter(dispatch, {
-                      filter: 'dependencies'
-                    })
+                    dispatch(
+                      addFilter({
+                        filter: 'dependencies'
+                      })
+                    )
                   }
                   value="dependencies"
                 />
@@ -76,9 +82,11 @@ const ListFilters = ({ classes, mode, close }) => {
                   disabled={mode === APP_MODES.GLOBAL}
                   checked={filters && filters.indexOf('devDependencies') > -1}
                   onChange={() =>
-                    addFilter(dispatch, {
-                      filter: 'devDependencies'
-                    })
+                    dispatch(
+                      addFilter({
+                        filter: 'devDependencies'
+                      })
+                    )
                   }
                   value="devDependencies"
                 />
@@ -92,9 +100,11 @@ const ListFilters = ({ classes, mode, close }) => {
                     filters && filters.indexOf('optionalDependencies') > -1
                   }
                   onChange={() =>
-                    addFilter(dispatch, {
-                      filter: 'optionalDependencies'
-                    })
+                    dispatch(
+                      addFilter({
+                        filter: 'optionalDependencies'
+                      })
+                    )
                   }
                   value="optionalDependencies"
                 />
@@ -113,9 +123,11 @@ const ListFilters = ({ classes, mode, close }) => {
                 <Checkbox
                   checked={filters && filters.indexOf('latest') > -1}
                   onChange={() =>
-                    addFilter(dispatch, {
-                      filter: 'latest'
-                    })
+                    dispatch(
+                      addFilter({
+                        filter: 'latest'
+                      })
+                    )
                   }
                   value="latest"
                 />
@@ -126,7 +138,7 @@ const ListFilters = ({ classes, mode, close }) => {
         </FormControl>
         <Divider className={classes.bottomDivider} light />
         <div className={classes.actions}>
-          <AppButton onClick={clearFilters}>Clear</AppButton>
+          <AppButton onClick={removeFilters}>Clear</AppButton>
           <AppButton onClick={close}>Close</AppButton>
         </div>
       </div>

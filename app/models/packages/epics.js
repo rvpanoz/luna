@@ -1,18 +1,20 @@
 /* eslint-disable */
 
-import { of, pipe, from } from 'rxjs';
+import { of, pipe, from, concat } from 'rxjs';
 import {
   map,
   mergeMap,
   takeWhile,
+  merge,
   concatMap,
   filter,
   takeUntil,
   tap,
-  ignoreElements
+  ignoreElements,
+  concatAll,
+  mergeAll
 } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
-import { merge } from 'ramda';
 
 import { ERROR_TYPES } from 'constants/AppConstants';
 import {
@@ -52,40 +54,34 @@ const parseNpmMessage = message => {
   };
 };
 
+const updateLoader = payload => ({
+  type: toggleLoader.type,
+  payload
+});
+
+const setOutdated = dependencies => ({
+  type: setOutdatedSuccess.type,
+  payload: {
+    dependencies
+  }
+});
+
 const packagesStartEpic = pipe(
   ofType(setPackagesStart.type),
-  concatMap(action =>
-    of({
-      type: toggleLoader.type,
-      payload: {
-        loading: true,
-        message: 'Loading packages..'
-      }
+  map(() =>
+    updateLoader({
+      loading: true,
+      message: 'Loading packages..'
     })
   )
 );
 
-// TODO: fix bug with nodata
-const packagesSuccessEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(setPackagesSuccess.type),
-    mergeMap(({ payload: { outdated, nodata } }) =>
-      of({
-        type: setOutdatedSuccess.type,
-        payload: {
-          dependencies: outdated
-        }
-      }).pipe(
-        filter(() => !nodata), // TODO: nodata = false is valid use case
-        map(() => ({
-          type: toggleLoader.type,
-          payload: {
-            loading: false
-          }
-        }))
-      )
-    )
-  );
+const packagesSuccessEpic = pipe(
+  ofType(setPackagesSuccess.type),
+  mergeMap(({ payload: { dependencies, outdated } }) =>
+    concat(of(setOutdated(outdated)), of(updateLoader({ loading: false })))
+  )
+);
 
 const messagesEpic = (action$, state$) =>
   action$.pipe(

@@ -118,32 +118,31 @@ const Packages = ({ classes }) => {
   );
 
   const clearUI = () => {
-    clearSnackbar(dispatch);
-    clearSelected(dispatch);
+    dispatch(clearSnackbar());
+    dispatch(clearSelected());
   };
 
   const updateSnackbar = useCallback(
     ({ open, type, message }) =>
-      setSnackbar(dispatch, {
-        open,
-        type,
-        message
-      }),
+      dispatch(
+        setSnackbar({
+          open,
+          type,
+          message
+        })
+      ),
     []
   );
 
   const scrollWrapper = top =>
-    useCallback(
-      () => {
-        const wrapperEl = wrapperRef && wrapperRef.current;
+    useCallback(() => {
+      const wrapperEl = wrapperRef && wrapperRef.current;
 
-        wrapperEl &&
-          wrapperEl.scroll({
-            top
-          });
-      },
-      [wrapperEl]
-    );
+      wrapperEl &&
+        wrapperEl.scroll({
+          top
+        });
+    }, []);
 
   const reload = () => setCounter(counter + 1);
 
@@ -172,15 +171,18 @@ const Packages = ({ classes }) => {
         dispatch(setPage({ page: 0 }));
       }
 
-      dispatch(
-        setPackagesSuccess({
-          dependencies,
-          outdated,
-          projectName,
-          projectVersion,
-          nodata
-        })
-      );
+      if (Array.isArray(dependencies) && !dependencies.length) {
+        // dispatch(toggleLoader(false));
+      } else {
+        dispatch(
+          setPackagesSuccess({
+            dependencies,
+            outdated,
+            projectName,
+            projectVersion
+          })
+        );
+      }
 
       const withErrors = dependencies && filterByProp(dependencies, '__error');
 
@@ -208,7 +210,7 @@ const Packages = ({ classes }) => {
     () => {
       ipcRenderer.on(['action-close'], (event, error) => {
         if (error && error.length) {
-          addActionError(dispatch, { error });
+          dispatch(addActionError({ error }));
         }
 
         // force render
@@ -223,11 +225,13 @@ const Packages = ({ classes }) => {
   // more listeners
   useEffect(() => {
     ipcRenderer.on('yarn-warning-close', () => {
-      setSnackbar(dispatch, {
-        open: true,
-        type: 'error',
-        message: WARNING_MESSAGES.yarnlock
-      });
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: 'error',
+          message: WARNING_MESSAGES.yarnlock
+        })
+      );
     });
 
     return () =>
@@ -257,10 +261,10 @@ const Packages = ({ classes }) => {
       rowsPerPage={rowsPerPage}
       handleChangePage={(e, pageNo) => {
         scrollWrapper(0);
-        setPage(dispatch, { page: pageNo });
+        dispatch(setPage({ page: pageNo }));
       }}
       handleChangePageRows={e =>
-        setPageRows(dispatch, { rowsPerPage: e.target.value })
+        dispatch(setPageRows({ rowsPerPage: e.target.value }))
       }
     />
   ));
@@ -321,7 +325,7 @@ const Packages = ({ classes }) => {
                         <PackageItem
                           key={`pkg-${name}`}
                           isSelected={isSelected(name, selected)}
-                          addSelected={() => addSelected(dispatch, { name })}
+                          addSelected={() => dispatch(addSelected({ name }))}
                           name={name}
                           manager={manager}
                           version={version}
@@ -353,20 +357,24 @@ const Packages = ({ classes }) => {
           open={Boolean(snackbarOptions.open)}
           autoHideDuration={5000}
           onClose={() =>
-            setSnackbar(dispatch, {
-              open: false,
-              message: null
-            })
+            dispatch(
+              setSnackbar({
+                open: false,
+                message: null
+              })
+            )
           }
         >
           <SnackbarContent
             variant={snackbarOptions.type}
             message={snackbarOptions.message}
             onClose={() =>
-              setSnackbar(dispatch, {
-                open: false,
-                message: null
-              })
+              dispatch(
+                setSnackbar({
+                  open: false,
+                  message: null
+                })
+              )
             }
           />
         </Snackbar>
