@@ -1,4 +1,5 @@
-/* eslint-disable */
+/* eslint-disable react/require-default-props */
+/* eslint-disable no-unused-expressions */
 
 /**
  * App dialog
@@ -24,59 +25,67 @@ import Switch from '@material-ui/core/Switch';
 import styles from './styles/dialogStyles';
 
 const AppDialog = ({ open, title, classes, contentText, onClose }) => {
-  return (
-    <Dialog
-      maxWidth="sm"
-      open={open}
-      onClose={onClose}
-      aria-labelledby="app-dialog-title"
-      onEntering={() => console.log('on enter')}
-    >
-      <DialogTitle id="app-dialog-title">{title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>{contentText}</DialogContentText>
-        <form className={classes.form} noValidate>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="max-width">maxWidth</InputLabel>
-            <Select
-              value={''}
+  <Dialog
+    maxWidth="sm"
+    open={open}
+    onClose={onClose}
+    aria-labelledby="app-dialog-title"
+    onEntering={() => console.log('on enter')}
+  >
+    <DialogTitle id="app-dialog-title">{title}</DialogTitle>
+    <DialogContent>
+      <DialogContentText>{contentText}</DialogContentText>
+      <form className={classes.form} noValidate>
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="max-width">maxWidth</InputLabel>
+          <Select
+            value=""
+            onChange={(e, value) => console.log(e, value)}
+            inputProps={{
+              name: 'version',
+              id: 'version'
+            }}
+          >
+            <MenuItem value={false}>false</MenuItem>
+            <MenuItem value="xs">xs</MenuItem>
+            <MenuItem value="sm">sm</MenuItem>
+            <MenuItem value="md">md</MenuItem>
+            <MenuItem value="lg">lg</MenuItem>
+            <MenuItem value="xl">xl</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControlLabel
+          className={classes.formControlLabel}
+          control={
+            <Switch
+              checked={false}
               onChange={(e, value) => console.log(e, value)}
-              inputProps={{
-                name: 'version',
-                id: 'version'
-              }}
-            >
-              <MenuItem value={false}>false</MenuItem>
-              <MenuItem value="xs">xs</MenuItem>
-              <MenuItem value="sm">sm</MenuItem>
-              <MenuItem value="md">md</MenuItem>
-              <MenuItem value="lg">lg</MenuItem>
-              <MenuItem value="xl">xl</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControlLabel
-            className={classes.formControlLabel}
-            control={
-              <Switch
-                checked={false}
-                onChange={(e, value) => console.log(e, value)}
-                value="latest"
-              />
-            }
-            label="Install latest"
-          />
-        </form>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Install
-        </Button>
-        <Button onClick={handleInstall} color="secondary">
-          Close
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
+              value="latest"
+            />
+          }
+          label="Install latest"
+        />
+      </form>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={onClose} color="primary">
+        Install
+      </Button>
+      <Button onClick={() => {}} color="secondary">
+        Close
+      </Button>
+    </DialogActions>
+  </Dialog>;
+};
+
+const { bool, func, objectOf, string } = PropTypes;
+
+AppDialog.propTypes = {
+  open: bool,
+  title: string,
+  classes: objectOf(string),
+  contentText: string,
+  onClose: func
 };
 
 export default withStyles(styles)(AppDialog);

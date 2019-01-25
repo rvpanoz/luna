@@ -1,8 +1,8 @@
-/* eslint-disable */
+/* eslint-disable react/require-default-props */
 
 /**
- * Loader
- * renders a CircularProgress or props.children
+ * AppLoader
+ * Renders a CircularProgress or children components
  */
 
 import React from 'react';
@@ -40,10 +40,8 @@ const styles = theme => ({
   }
 });
 
-const AppLoader = props => {
-  const { loading, classes, children, message, relative, mini } = props;
-
-  return loading ? (
+const AppLoader = ({ loading, classes, children, message, relative, mini }) =>
+  loading ? (
     <div
       className={cn(classes.loader, {
         [classes.relative]: relative
@@ -62,17 +60,14 @@ const AppLoader = props => {
   ) : (
     children
   );
-};
-
-AppLoader.defaultProps = {
-  loading: false,
-  message: null
-};
 
 AppLoader.propTypes = {
   classes: objectOf(string).isRequired,
   loading: bool.isRequired,
-  children: oneOfType([node, array, symbol])
+  children: oneOfType([node, array, symbol]),
+  message: string,
+  relative: bool,
+  mini: bool
 };
 
 export default withStyles(styles)(AppLoader);

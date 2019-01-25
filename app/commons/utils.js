@@ -1,9 +1,5 @@
 /* eslint-disable */
 
-/**
- * Parser class
- */
-
 import fs from 'fs';
 import path from 'path';
 import mk from '../mk';

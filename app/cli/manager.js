@@ -1,4 +1,8 @@
-/* eslint-disable */
+/* eslint-disable prefer-promise-reject-errors */
+/* eslint-disable compat/compat */
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
+/* eslint-disable dot-notation */
 
 import cp from 'child_process';
 import path from 'path';
@@ -25,7 +29,7 @@ const execute = (
   directory,
   callback
 ) => {
-  const resultP = new Promise((resolve, reject) => {
+  const resultP = new Promise(resolve => {
     const result = [];
     const errors = [];
 
@@ -84,13 +88,13 @@ exports.list = (options, callback) => {
   const { mode, directory } = options || {};
 
   if (!callback || typeof callback !== 'function') {
-    Promise.reject(
+    return Promise.reject(
       'manager[list]: callback must be given and must be a function'
     );
   }
 
   if (!mode || typeof mode !== 'string') {
-    Promise.reject(
+    return Promise.reject(
       'manager[list]: mode must be given and must be one of "GLOBAL" or "LOCAL"'
     );
   }
@@ -113,13 +117,13 @@ exports.outdated = (options, callback) => {
   const { mode, directory } = options || {};
 
   if (!callback || typeof callback !== 'function') {
-    Promise.reject(
+    return Promise.reject(
       'manager[outdated]: callback must be given and must be a function'
     );
   }
 
   if (!mode || typeof mode !== 'string') {
-    Promise.reject(
+    return Promise.reject(
       'manager[outdated]: mode must be given and must be one of "GLOBAL" or "LOCAL"'
     );
   }

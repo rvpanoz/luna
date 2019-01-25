@@ -1,10 +1,15 @@
-/* eslint-disable */
-
 /**
- * npm module for cli commands
+ *
+ * Npm module for npm cli commands
  */
 
-// npm install [<@scope>/]<name>@<version>
+/* eslint-disable prefer-promise-reject-errors */
+/* eslint-disable compat/compat */
+/* eslint-disable no-nested-ternary */
+
+/**
+ * npm install [<@scope>/]<name>@<version>
+ */
 exports.install = options => {
   const command = ['install'];
   const { name, mode, version = null, pkgOptions, multiple, packages } =
@@ -38,7 +43,9 @@ exports.install = options => {
   return run;
 };
 
-// npm uninstall [<@scope>/]<pkg>[@<version>]
+/**
+ * npm uninstall [<@scope>/]<pkg>[@<version>]
+ */
 exports.uninstall = options => {
   const command = ['uninstall'];
   const { name, mode, multiple, packages } = options;
@@ -47,13 +54,15 @@ exports.uninstall = options => {
   function getNames() {
     if (multiple && packages && Array.isArray(packages)) {
       return packages;
-    } else if (!name && !multiple) {
+    }
+
+    if (!name && !multiple) {
       return Promise.reject(
         'npm[uninstall] package name parameter must be given'
       );
-    } else {
-      return name;
     }
+
+    return name;
   }
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
@@ -65,7 +74,9 @@ exports.uninstall = options => {
   return run;
 };
 
-// npm view [<@scope>/]<name>[@<version>]
+/**
+ * npm view [<@scope>/]<name>[@<version>]
+ */
 exports.view = options => {
   const command = ['view'];
   const { mode, name, version } = options || {};
@@ -77,7 +88,7 @@ exports.view = options => {
 
   const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
 
-  //build npm command
+  // build npm command
   const run = []
     .concat(command)
     .concat(version ? [].concat([`${name}@${version}`]) : [name])
