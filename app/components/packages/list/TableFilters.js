@@ -8,6 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useMappedState } from 'redux-react-hook';
+
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -16,13 +17,10 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import { APP_MODES } from 'constants/AppConstants';
 
+import { APP_MODES } from 'constants/AppConstants';
 import AppButton from 'components/layout/Buttons/AppButton';
-import {
-  addFilter,
-  clearFilters as removeFilters
-} from 'models/packages/actions';
+import { addFilter, clearFilters } from 'models/packages/actions';
 
 import { tableFiltersStyles as styles } from './styles/packagesStyles';
 
@@ -34,14 +32,14 @@ const ListFilters = ({ classes, mode, close }) => {
   const dispatch = useDispatch();
   const { filters } = useMappedState(mapState);
 
-  const removeFilters = () =>
-    filters && filters.length ? dispatch(clearFilters()) : false;
+  const emptyFilters = useCallback(
+    () => (filters && filters.length ? dispatch(clearFilters()) : false),
+    []
+  );
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.headline} component="h2">
-        Filter packages
-      </Typography>
+      <Typography variant="subtitle2">Select filters</Typography>
       <Divider light />
       <div className={classes.filterItems}>
         <FormControl component="fieldset">
@@ -62,8 +60,7 @@ const ListFilters = ({ classes, mode, close }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  disabled={mode === APP_MODES.GLOBAL}
-                  checked={filters && filters.indexOf('dependencies') > -1}
+                  checked={filters && filters.includes('dependencies')}
                   onChange={() =>
                     dispatch(
                       addFilter({
@@ -79,8 +76,7 @@ const ListFilters = ({ classes, mode, close }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  disabled={mode === APP_MODES.GLOBAL}
-                  checked={filters && filters.indexOf('devDependencies') > -1}
+                  checked={filters && filters.includes('devDependencies')}
                   onChange={() =>
                     dispatch(
                       addFilter({
@@ -96,9 +92,7 @@ const ListFilters = ({ classes, mode, close }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={
-                    filters && filters.indexOf('optionalDependencies') > -1
-                  }
+                  checked={filters && filters.includes('optionalDependencies')}
                   onChange={() =>
                     dispatch(
                       addFilter({
@@ -138,7 +132,7 @@ const ListFilters = ({ classes, mode, close }) => {
         </FormControl>
         <Divider className={classes.bottomDivider} light />
         <div className={classes.actions}>
-          <AppButton onClick={removeFilters}>Clear</AppButton>
+          <AppButton onClick={emptyFilters}>Clear</AppButton>
           <AppButton onClick={close}>Close</AppButton>
         </div>
       </div>
@@ -148,7 +142,8 @@ const ListFilters = ({ classes, mode, close }) => {
 
 ListFilters.propTypes = {
   classes: PropTypes.object.isRequired,
-  filters: PropTypes.array
+  filters: PropTypes.array,
+  mode: PropTypes.string
 };
 
 export default withStyles(styles)(ListFilters);

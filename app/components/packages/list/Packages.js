@@ -134,15 +134,17 @@ const Packages = ({ classes }) => {
     []
   );
 
-  const scrollWrapper = top =>
-    useCallback(() => {
+  const scrollWrapper = useCallback(
+    top => {
       const wrapperEl = wrapperRef && wrapperRef.current;
 
       wrapperEl &&
         wrapperEl.scroll({
           top
         });
-    }, []);
+    },
+    [top]
+  );
 
   const reload = () => setCounter(counter + 1);
 
