@@ -1,6 +1,6 @@
-/* eslint-disable */
-
 import React, { Component, createFactory } from 'react';
+
+/* eslint-disable object-shorthand */
 
 const withErrorBoundary = BaseComponent => {
   const factory = createFactory(BaseComponent);
@@ -20,7 +20,7 @@ const withErrorBoundary = BaseComponent => {
       const { hasError, error, errorInfo } = this.state;
       const props = {
         ...this.props
-        //extend..
+        // extend..
       };
 
       if (hasError) {

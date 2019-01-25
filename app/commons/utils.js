@@ -1,9 +1,5 @@
 /* eslint-disable */
 
-/**
- * Parser class
- */
-
 import fs from 'fs';
 import path from 'path';
 import mk from '../mk';
@@ -174,6 +170,17 @@ export const isPackageOutdated = (outdatedPackages, name) => {
     outdatedPackages.some(o => o.name === name),
     outdatedPackages.find(f => f.name === name)
   ];
+};
+
+/**
+ *
+ * @param {*} subject
+ * @param {*} needle
+ */
+export const matchType = (subject, needle) => {
+  const prefixRegX = new RegExp(needle);
+
+  return prefixRegX.test(subject);
 };
 
 /**

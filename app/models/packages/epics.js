@@ -1,30 +1,35 @@
-/**
- * Packages epics
- */
+/* eslint-disable */
 
-/** eslint-disable */
-/** eslint-disable-import/no-duplicates */
-
-import { of, pipe, from } from 'rxjs';
-import { map, mergeMap, takeWhile, concatMap, filter } from 'rxjs/operators';
+import { of, pipe, from, concat } from 'rxjs';
+import {
+  map,
+  mergeMap,
+  takeWhile,
+  merge,
+  concatMap,
+  filter,
+  takeUntil,
+  tap,
+  ignoreElements,
+  concatAll,
+  mergeAll
+} from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
-import { merge } from 'ramda';
 
 import { ERROR_TYPES } from 'constants/AppConstants';
-import { addNotification, commandMessage } from 'models/ui/actions';
-import { parseMessage, switchcase } from 'commons/utils';
-import { setPackagesSuccess, setOutdatedSuccess } from './actions';
+import {
+  addNotification,
+  commandMessage,
+  toggleLoader
+} from 'models/ui/actions';
+import { parseMessage, switchcase, matchType } from 'commons/utils';
+import {
+  setPackagesStart,
+  setPackagesSuccess,
+  setOutdatedSuccess
+} from './actions';
 
-/**
- *
- * @param {*} subject
- * @param {*} needle
- */
-const matchType = (subject, needle) => {
-  const prefixRegX = new RegExp(needle);
-
-  return prefixRegX.test(subject);
-};
+const ACTIONS_PREFIX = '@@LUNA_APP/DATA';
 
 /**
  *
@@ -49,46 +54,70 @@ const parseNpmMessage = message => {
   };
 };
 
-const packagesEpic = pipe(
-  ofType(setPackagesSuccess.type),
-  filter(
-    ({ payload: { dependencies } }) =>
-      Array.isArray(dependencies) && dependencies.length
-  ),
-  map(({ payload: { outdated } }) => ({
-    type: setOutdatedSuccess.type,
-    payload: {
-      dependencies: outdated
-    }
-  }))
+const updateLoader = payload => ({
+  type: toggleLoader.type,
+  payload
+});
+
+const setOutdated = dependencies => ({
+  type: setOutdatedSuccess.type,
+  payload: {
+    dependencies
+  }
+});
+
+const packagesStartEpic = pipe(
+  ofType(setPackagesStart.type),
+  map(() =>
+    updateLoader({
+      loading: true,
+      message: 'Loading packages..'
+    })
+  )
 );
 
-const messagesEpic = pipe(
-  ofType(commandMessage.type),
-  map(({ payload: { message = '' } }) => message.split('\n')),
-  mergeMap(messages =>
-    from(messages).pipe(
-      takeWhile(message => message && message.length),
-      concatMap(message => of(parseNpmMessage(message))),
-      map(({ messageType, payload }) =>
-        switchcase({
-          WARN: () => ({
-            type: addNotification.type,
-            payload: merge(payload, {
-              type: 'WARNING'
+const packagesSuccessEpic = pipe(
+  ofType(setPackagesSuccess.type),
+  mergeMap(({ payload: { dependencies, outdated } }) =>
+    concat(of(setOutdated(outdated)), of(updateLoader({ loading: false })))
+  )
+);
+
+const messagesEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(commandMessage.type),
+    takeUntil(
+      state$.pipe(
+        filter(({ common: { enableNotifications } }) => enableNotifications)
+      )
+    ),
+    map(({ payload: { message = '' } }) => message.split('\n')),
+    mergeMap(messages =>
+      from(messages).pipe(
+        takeWhile(message => message && message.length),
+        concatMap(message => of(parseNpmMessage(message))),
+        map(({ messageType, payload }) =>
+          switchcase({
+            WARN: () => ({
+              type: addNotification.type,
+              payload: merge(payload, {
+                type: 'WARNING'
+              })
+            }),
+            ERR: () => ({
+              type: addNotification.type,
+              payload: merge(payload, {
+                type: 'ERROR'
+              })
             })
-          }),
-          ERR: () => ({
-            type: addNotification.type,
-            payload: merge(payload, {
-              type: 'ERROR'
-            })
-          })
-        })({})(messageType)
+          })({})(messageType)
+        )
       )
     )
-  ),
-  map(data => data)
-);
+  );
 
-export default combineEpics(packagesEpic, messagesEpic);
+export default combineEpics(
+  packagesStartEpic,
+  packagesSuccessEpic,
+  messagesEpic
+);

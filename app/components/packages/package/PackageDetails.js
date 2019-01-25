@@ -146,10 +146,12 @@ const PackageDetails = ({ classes }) => {
         const newActive = data && JSON.parse(data);
         const properties = pickBy(getCleanProps, newActive); //remove __property name
 
-        setActive(dispatch, { active: properties });
-        togglePackageLoader(dispatch, {
-          loading: false
-        });
+        dispatch(setActive({ active: properties }));
+        dispatch(
+          togglePackageLoader({
+            loading: false
+          })
+        );
       } catch (err) {
         throw new Error(err);
       }

@@ -51,7 +51,7 @@ const TableListToolbar = ({
   const dispatch = useDispatch();
 
   const switchMode = (mode, directory) => {
-    setMode(dispatch, { mode, directory });
+    dispatch(setMode({ mode, directory }));
 
     if (fromSearch) {
       reload();
@@ -75,10 +75,12 @@ const TableListToolbar = ({
       directory
     });
 
-    toggleLoader(dispatch, {
-      loading: true,
-      message: `${firstToUpper(action)}ing packages..`
-    });
+    dispatch(
+      toggleLoader({
+        loading: true,
+        message: `${firstToUpper(action)}ing packages..`
+      })
+    );
   };
 
   const openPackage = useCallback(() => {
@@ -231,7 +233,7 @@ const TableListToolbar = ({
               <Tooltip title="Clear selected">
                 <IconButton
                   aria-label="clear selected"
-                  onClick={() => onClearSelected(dispatch)}
+                  onClick={() => dispatch(onClearSelected())}
                 >
                   <ClearAllIcon />
                 </IconButton>

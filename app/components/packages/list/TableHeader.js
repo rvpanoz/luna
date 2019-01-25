@@ -37,13 +37,14 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
   const { sortBy, sortDir } = useMappedState(mapState);
   const checkboxAll = useRef(null);
 
-  const toggleSort = useCallback(
-    prop =>
-      setSortOptions(dispatch, {
+  const toggleSort = useCallback(prop =>
+    dispatch(
+      setSortOptions({
         sortDir: sortDir === 'desc' ? 'asc' : 'desc',
         sortBy: prop
       }),
-    [sortDir]
+      [sortDir]
+    )
   );
 
   const handleSelectAll = e => {
@@ -53,15 +54,16 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
       checkBoxElement.dataset && checkBoxElement.dataset.indeterminate;
 
     if (indeterminate === 'true') {
-      clearSelected(dispatch);
-      return;
+      return dispatch(clearSelected());
     }
 
     packages &&
       packages.forEach(name =>
-        addSelected(dispatch, {
-          name
-        })
+        dispatch(
+          addSelected({
+            name
+          })
+        )
       );
   };
 

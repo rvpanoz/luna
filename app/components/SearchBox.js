@@ -32,7 +32,7 @@ const SearchBox = props => {
       return;
     }
 
-    setPackagesStart(dispatch);
+    dispatch(setPackagesStart());
 
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'search-packages',
@@ -61,11 +61,13 @@ const SearchBox = props => {
         try {
           const [name, version, packages] = (data && parseMap(data)) || [];
 
-          setPackagesSuccess(dispatch, {
-            fromSearch: true,
-            outdated: null,
-            dependencies: packages
-          });
+          dispatch(
+            setPackagesSuccess({
+              fromSearch: true,
+              outdated: null,
+              dependencies: packages
+            })
+          );
         } catch (e) {
           throw new Error(e);
         }

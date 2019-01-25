@@ -65,9 +65,11 @@ const PackageItemRow = ({
   );
 
   const viewPackage = () => {
-    togglePackageLoader(dispatch, {
-      loading: true
-    });
+    dispatch(
+      togglePackageLoader({
+        loading: true
+      })
+    );
 
     ipcRenderer.send('ipc-event', {
       activeManager: manager,
