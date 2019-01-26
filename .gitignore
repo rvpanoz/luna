@@ -46,3 +46,8 @@ main.js.map
 .editorconfig
 .gitconfig
 .gittips
+
+*.ttf binary
+*.eot binary
+*.woff binary
+*.woff2 binary

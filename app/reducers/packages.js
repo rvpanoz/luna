@@ -86,21 +86,19 @@ const handlers = {
     } = payload;
 
     const packages = dependencies
-      ? dependencies.map(pkg => {
-          if (!pkg) {
-            return;
-          }
+      ? dependencies
+          .filter(pkg => pkg)
+          .map(pkg => {
+            const [isOutdated, outdatedPkg] = isPackageOutdated(
+              outdated,
+              pkg.name
+            );
 
-          const [isOutdated, outdatedPkg] = isPackageOutdated(
-            outdated,
-            pkg.name
-          );
-
-          return merge(pkg, {
-            latest: isOutdated ? outdatedPkg.latest : null,
-            isOutdated
-          });
-        })
+            return merge(pkg, {
+              latest: isOutdated ? outdatedPkg.latest : null,
+              isOutdated
+            });
+          })
       : [];
 
     return merge(state, {

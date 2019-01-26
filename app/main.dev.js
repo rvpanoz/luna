@@ -194,6 +194,9 @@ app.on('ready', async () => {
     x,
     y,
     show: false,
+    webPreferences: {
+      nodeIntegration: true
+    },
     resizable: true,
     icon: path.join(__dirname, 'resources/icon.ico')
   });

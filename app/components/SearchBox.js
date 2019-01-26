@@ -12,7 +12,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/layout/SnackbarContent';
 
 import { parseMap } from 'commons/utils';
-import { setPackagesStart, setPackagesSuccess } from 'models/packages/actions';
+import { setPackagesStart, updateData } from 'models/packages/actions';
 
 import styles from './styles/searchBox';
 
@@ -62,9 +62,9 @@ const SearchBox = props => {
           const [name, version, packages] = (data && parseMap(data)) || [];
 
           dispatch(
-            setPackagesSuccess({
+            updateData({
               fromSearch: true,
-              outdated: null,
+              outdated: [],
               dependencies: packages
             })
           );

@@ -4,7 +4,7 @@ export default {
   page: 0,
   rowsPerPage: 10,
   directory: null,
-  enableNotifications: true,
+  enableNotifications: false,
   notifications: [],
   snackbarOptions: {
     open: false,
@@ -19,8 +19,8 @@ export default {
     message: null
   },
   packages: {
-    projectName: '',
-    projectVersion: '',
+    projectName: null,
+    projectVersion: null,
     sortBy: 'name',
     sortDir: 'asc',
     action: {

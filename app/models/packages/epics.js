@@ -26,7 +26,8 @@ import { parseMessage, switchcase, matchType } from 'commons/utils';
 import {
   setPackagesStart,
   setPackagesSuccess,
-  setOutdatedSuccess
+  setOutdatedSuccess,
+  updateData
 } from './actions';
 
 const ACTIONS_PREFIX = '@@LUNA_APP/DATA';
@@ -59,10 +60,17 @@ const updateLoader = payload => ({
   payload
 });
 
-const setOutdated = dependencies => ({
+const setOutdated = outdated => ({
   type: setOutdatedSuccess.type,
   payload: {
-    dependencies
+    dependencies: outdated
+  }
+});
+
+const setPackages = packages => ({
+  type: setPackagesSuccess.type,
+  payload: {
+    dependencies: packages
   }
 });
 
@@ -77,20 +85,19 @@ const packagesStartEpic = pipe(
 );
 
 const packagesSuccessEpic = pipe(
-  ofType(setPackagesSuccess.type),
+  ofType(updateData.type),
   mergeMap(({ payload: { dependencies, outdated } }) =>
-    concat(of(setOutdated(outdated)), of(updateLoader({ loading: false })))
+    concat(
+      of(setPackages(dependencies)),
+      of(setOutdated(outdated)),
+      of(updateLoader({ loading: false }))
+    )
   )
 );
 
 const messagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(commandMessage.type),
-    takeUntil(
-      state$.pipe(
-        filter(({ common: { enableNotifications } }) => enableNotifications)
-      )
-    ),
     map(({ payload: { message = '' } }) => message.split('\n')),
     mergeMap(messages =>
       from(messages).pipe(

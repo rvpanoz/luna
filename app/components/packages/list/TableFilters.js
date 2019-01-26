@@ -1,15 +1,10 @@
 /* eslint-disable */
 
-/**
- * Table list filters
- */
-
 import { withStyles } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
-import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -50,6 +45,7 @@ const ListFilters = ({ classes, mode, close }) => {
             By group
           </FormLabel>
           <FormGroup
+            className={classes.flexContainer}
             style={{
               display: mode === APP_MODES.GLOBAL ? 'none' : 'block'
             }}

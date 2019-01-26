@@ -1,7 +1,3 @@
-/**
- * Packages component
- */
-
 /* eslint-disable */
 
 import { ipcRenderer } from 'electron';
@@ -24,17 +20,10 @@ import AppLoader from 'components/layout/AppLoader';
 import {
   addActionError,
   addSelected,
-  clearSelected,
-  setPackagesSuccess,
-  setOutdatedSuccess
+  updateData
 } from 'models/packages/actions';
 
-import {
-  clearSnackbar,
-  setPage,
-  setPageRows,
-  setSnackbar
-} from 'models/ui/actions';
+import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
 
 import {
   APP_INFO,
@@ -52,7 +41,6 @@ import { listStyles as styles } from './styles/packagesStyles';
 const mapState = ({
   common: {
     directory,
-    notifications,
     manager,
     mode,
     page,
@@ -73,7 +61,6 @@ const mapState = ({
   }
 }) => ({
   directory,
-  notifications,
   manager,
   mode,
   page,
@@ -116,11 +103,6 @@ const Packages = ({ classes }) => {
     (name, selected) => selected.indexOf(name) !== -1,
     [name, selected]
   );
-
-  const clearUI = () => {
-    dispatch(clearSnackbar());
-    dispatch(clearSelected());
-  };
 
   const updateSnackbar = useCallback(
     ({ open, type, message }) =>
@@ -167,17 +149,13 @@ const Packages = ({ classes }) => {
 
   useEffect(
     () => {
-      clearUI();
-
       if (page !== 0) {
         dispatch(setPage({ page: 0 }));
       }
 
-      if (Array.isArray(dependencies) && !dependencies.length) {
-        // dispatch(toggleLoader(false));
-      } else {
+      if (Array.isArray(dependencies) && dependencies.length) {
         dispatch(
-          setPackagesSuccess({
+          updateData({
             dependencies,
             outdated,
             projectName,
@@ -244,32 +222,7 @@ const Packages = ({ classes }) => {
       ]);
   }, []);
 
-  // filtering
   const [data] = useFilters(packages, filters, counter);
-
-  /**
-   * Render footer based on data in order to
-   * calculate the rows count when filters are on
-   */
-  const renderFooter = useCallback(() => (
-    <TableFooter
-      classes={{
-        root: {
-          [classes.hidden]: nodata
-        }
-      }}
-      rowCount={data && data.length}
-      page={page}
-      rowsPerPage={rowsPerPage}
-      handleChangePage={(e, pageNo) => {
-        scrollWrapper(0);
-        dispatch(setPage({ page: pageNo }));
-      }}
-      handleChangePageRows={e =>
-        dispatch(setPageRows({ rowsPerPage: e.target.value }))
-      }
-    />
-  ));
 
   // pagination
   const dataSlices =
@@ -319,6 +272,9 @@ const Packages = ({ classes }) => {
                       version,
                       latest,
                       isOutdated,
+                      dependencies,
+                      devDependencies,
+                      peerDependencies,
                       __group,
                       __error,
                       __peerMissing
@@ -329,6 +285,7 @@ const Packages = ({ classes }) => {
                           isSelected={isSelected(name, selected)}
                           addSelected={() => dispatch(addSelected({ name }))}
                           name={name}
+                          peerDependencies={peerDependencies}
                           manager={manager}
                           version={version}
                           latest={latest}
@@ -338,7 +295,23 @@ const Packages = ({ classes }) => {
                       ) : null
                   )}
               </TableBody>
-              {renderFooter()}
+              <TableFooter
+                classes={{
+                  root: {
+                    [classes.hidden]: nodata
+                  }
+                }}
+                rowCount={data && data.length}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                handleChangePage={(e, pageNo) => {
+                  scrollWrapper(0);
+                  dispatch(setPage({ page: pageNo }));
+                }}
+                handleChangePageRows={e =>
+                  dispatch(setPageRows({ rowsPerPage: e.target.value }))
+                }
+              />
             </Table>
           ) : (
             <div className={classes.nodata}>
