@@ -34,13 +34,11 @@ const ListFilters = ({ classes, mode, close }) => {
 
   const emptyFilters = useCallback(
     () => (filters && filters.length ? dispatch(clearFilters()) : false),
-    []
+    [filters]
   );
 
   return (
     <div className={classes.root}>
-      <Typography variant="subtitle2">Select filters</Typography>
-      <Divider light />
       <div className={classes.filterItems}>
         <FormControl component="fieldset">
           <FormLabel
