@@ -113,7 +113,7 @@ const ListFilters = ({ classes, mode, close }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={filters && filters.indexOf('latest') > -1}
+                  checked={filters && filters.includes('latest')}
                   onChange={() =>
                     dispatch(
                       addFilter({
