@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import pink from '@material-ui/core/colors/pink';
+import green from '@material-ui/core/colors/green';
 import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont } from 'styles/variables';
 
@@ -56,10 +57,14 @@ export const listStyles = theme => ({
     fontSize: 14,
     fontFamily: 'Regular',
     lineHeight: '1.4em',
+    textAlign: 'center',
     '& span': {
       display: 'inline-block',
       overflowWrap: 'break-word'
     }
+  },
+  w300: {
+    width: '65%'
   },
   outdated: {
     color: theme.palette.secondary.dark
@@ -77,37 +82,47 @@ export const listStyles = theme => ({
     display: 'none'
   },
   flexContainer: {
-    display: 'flex'
-  },
-  iconContainer: {
-    flexGrow: 1,
-    position: 'relative',
-    padding: '3px 0 0 6px'
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   avatar: {
     margin: theme.spacing.unit / 4
   },
-  pinkAvatar: {
+  dependenciesAvatar: {
+    color: '#fff',
+    backgroundColor: lighten(theme.palette.primary.dark, 0.2)
+  },
+  optionalDependenciesAvatar: {
+    color: '#fff',
+    backgroundColor: lighten(theme.palette.secondary.dark, 0.2)
+  },
+  devDependenciesAvatar: {
     color: '#fff',
     backgroundColor: pink[500]
   },
-  greenAvatar: {
+  peerDependenciesAvatar: {
     color: '#fff',
-    backgroundColor: lighten(theme.palette.primary.dark, 0.2)
+    backgroundColor: pink[500]
+  },
+  chip: {
+    margin: theme.spacing.unit
   }
 });
 
 export const tableHeaderStyles = theme => ({
   tableHeadCell: {
     ...defaultFont,
-    fontSize: 16
+    fontSize: 16,
+    textAlign: 'center'
   },
   tableCell: {
     fontSize: 14,
     lineHeight: '1.4em',
     padding: '0px 12px',
     verticalAlign: 'middle',
-    maxWidth: 100
+    maxWidth: 100,
+    textAlign: 'center'
   }
 });
 
@@ -170,6 +185,7 @@ export const tableFiltersStyles = theme => ({
     display: 'flex',
     justifyContent: 'flex-end'
   },
+  flexContainer: { display: 'flex' },
   filterItems: {
     display: 'flex',
     flexDirection: 'column',

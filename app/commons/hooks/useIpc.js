@@ -28,9 +28,17 @@ const useIpc = (channel, options, inputs = []) => {
 
   useEffect(() => {
     ipcRenderer.on(listenTo, (event, status, commandArgs, data, errors) => {
+      if (!data) {
+        return;
+      }
+
       const command = commandArgs && commandArgs[0];
-      const [name, version, packages] =
-        data && parseMap(data, mode, directory, commandArgs);
+      const [name, version, packages] = parseMap(
+        data,
+        mode,
+        directory,
+        commandArgs
+      );
       const errorsMessages = errors && errors.length ? errors : null;
 
       setErrors(errorsMessages);

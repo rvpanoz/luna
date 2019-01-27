@@ -12,6 +12,8 @@ import { useDispatch } from 'redux-react-hook';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
 import { withStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -21,6 +23,7 @@ import GlobalIcon from '@material-ui/icons/GroupWorkOutlined';
 import OptionalIcon from '@material-ui/icons/SettingsEthernetOutlined';
 import PeersIcon from '@material-ui/icons/BallotOutlined';
 
+import { APP_INFO } from 'constants/AppConstants';
 import { togglePackageLoader } from 'models/ui/actions';
 
 import { listStyles as styles } from './styles/packagesStyles';
@@ -36,29 +39,59 @@ const PackageItemRow = ({
   isOutdated,
   group,
   mode,
-  directory
+  directory,
+  peerDependencies
 }) => {
   const dispatch = useDispatch();
+  const getPeers = useCallback(
+    () => peerDependencies && Object.keys(peerDependencies),
+    [peerDependencies]
+  );
+
+  const totalPeers = getPeers();
 
   const renderIconByGroup = useCallback(
     group =>
       cond([
-        [equals(''), always(<GlobalIcon className={classes.icon} />)],
+        [
+          equals(''),
+          always(
+            <Avatar className={classes[`${group}Avatar`]}>
+              <GlobalIcon className={classes.icon} />
+            </Avatar>
+          )
+        ],
         [
           equals('dependencies'),
-          always(<DependencyIcon className={classes.icon} />)
+          always(
+            <Avatar className={classes[`${group}Avatar`]}>
+              <DependencyIcon className={classes.icon} />
+            </Avatar>
+          )
         ],
         [
           equals('devDependencies'),
-          always(<DevDependencyIcon className={classes.icon} />)
+          always(
+            <Avatar className={classes[`${group}Avatar`]}>
+              <DevDependencyIcon className={classes.icon} />
+            </Avatar>
+          )
         ],
         [
           equals('optionalDependencies'),
-          always(<OptionalIcon className={classes.icon} />)
+          always(
+            <Avatar className={classes[`${group}Avatar`]}>
+              <OptionalIcon className={classes.icon} />
+            </Avatar>
+          )
         ],
         [
           equals('peerDependencies'),
-          always(<PeersIcon className={classes.icon} />)
+          always(
+            <Avatar>
+              <PeersIcon className={classes.icon} />
+            </Avatar>
+          )
         ]
       ])(group),
     [group]
@@ -107,12 +140,12 @@ const PackageItemRow = ({
           }}
         />
       </TableCell>
-      <TableCell padding="none" className={classes.tableCell}>
+      <TableCell padding="none" className={cn(classes.tableCell, classes.w300)}>
         <div className={classes.flexContainer}>
-          <div className={classes.flexItem}>{renderIconByGroup(group)}</div>
-          <div className={cn(classes.flexItem, classes.iconContainer)}>
-            {name}
+          <div className={classes.flexItem}>
+            <span>{name}</span>
           </div>
+          <div className={classes.flexItem}>{renderIconByGroup(group)}</div>
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>

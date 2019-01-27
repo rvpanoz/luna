@@ -3,16 +3,13 @@
 import { of, pipe, from, concat } from 'rxjs';
 import {
   map,
+  mapTo,
   mergeMap,
   takeWhile,
   merge,
   concatMap,
-  filter,
-  takeUntil,
-  tap,
-  ignoreElements,
-  concatAll,
-  mergeAll
+  delay,
+  tap
 } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
@@ -20,16 +17,16 @@ import { ERROR_TYPES } from 'constants/AppConstants';
 import {
   addNotification,
   commandMessage,
+  setSnackbar,
   toggleLoader
 } from 'models/ui/actions';
 import { parseMessage, switchcase, matchType } from 'commons/utils';
 import {
   setPackagesStart,
   setPackagesSuccess,
-  setOutdatedSuccess
+  setOutdatedSuccess,
+  updateData
 } from './actions';
-
-const ACTIONS_PREFIX = '@@LUNA_APP/DATA';
 
 /**
  *
@@ -59,11 +56,23 @@ const updateLoader = payload => ({
   payload
 });
 
-const setOutdated = dependencies => ({
+const setOutdated = outdated => ({
   type: setOutdatedSuccess.type,
   payload: {
-    dependencies
+    dependencies: outdated
   }
+});
+
+const setPackages = packages => ({
+  type: setPackagesSuccess.type,
+  payload: {
+    dependencies: packages
+  }
+});
+
+const updateSnackbar = payload => ({
+  type: setSnackbar.type,
+  payload
 });
 
 const packagesStartEpic = pipe(
@@ -77,20 +86,27 @@ const packagesStartEpic = pipe(
 );
 
 const packagesSuccessEpic = pipe(
-  ofType(setPackagesSuccess.type),
+  ofType(updateData.type),
   mergeMap(({ payload: { dependencies, outdated } }) =>
-    concat(of(setOutdated(outdated)), of(updateLoader({ loading: false })))
-  )
+    concat(
+      of(setPackages(dependencies)),
+      of(setOutdated(outdated)),
+      of(updateLoader({ loading: false })).pipe(delay(1200))
+    )
+  ),
+  tap(res => console.log(res))
+  // mapTo(
+  //   updateSnackbar({
+  //     open: true,
+  //     type: 'info',
+  //     message: 'Packages loaded..'
+  //   })
+  // )
 );
 
 const messagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(commandMessage.type),
-    takeUntil(
-      state$.pipe(
-        filter(({ common: { enableNotifications } }) => enableNotifications)
-      )
-    ),
     map(({ payload: { message = '' } }) => message.split('\n')),
     mergeMap(messages =>
       from(messages).pipe(

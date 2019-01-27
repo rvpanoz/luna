@@ -196,7 +196,6 @@ export const parseMap = (response, mode, directory) => {
 
   try {
     const packageJson = JSON.parse(response);
-
     const { name, version } = packageJson || {};
 
     const packages = pick(['dependencies'], packageJson);
@@ -222,7 +221,7 @@ export const parseMap = (response, mode, directory) => {
       let group;
       let hasError = typeof details.error === 'object';
 
-      // find group and attach to pkg, useful to show data in list
+      // find group and attach to pkg
       if (mode && mode === APP_MODES.LOCAL) {
         const packageJSON = readPackageJson(directory);
 

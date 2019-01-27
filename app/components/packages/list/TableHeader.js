@@ -8,6 +8,7 @@ import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { and } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
+import cn from 'classnames';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -89,6 +90,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
               key={column.id}
               padding={column.disablePadding ? 'none' : 'default'}
               sortDirection={sortBy === column.id ? sortDir : false}
+              style={column.id !== 'name' ? { textAlign: 'center' } : {}}
             >
               {needSort ? (
                 <TableSortLabel
