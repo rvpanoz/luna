@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useMappedState } from 'redux-react-hook';
+import cn from 'classnames';
 
 import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -38,17 +39,16 @@ const ListFilters = ({ classes, mode, close }) => {
         <FormControl component="fieldset">
           <FormLabel
             component="legend"
-            style={{
-              display: mode === APP_MODES.GLOBAL ? 'none' : 'block'
-            }}
+            className={cn({
+              [classes.hidden]: mode === APP_MODES.GLOBAL
+            })}
           >
             By group
           </FormLabel>
           <FormGroup
-            className={classes.flexContainer}
-            style={{
-              display: mode === APP_MODES.GLOBAL ? 'none' : 'block'
-            }}
+            className={cn(classes.flexContainer, {
+              [classes.hidden]: mode === APP_MODES.GLOBAL
+            })}
           >
             <FormHelperText> Select packages based on group</FormHelperText>
             <FormControlLabel

@@ -122,7 +122,8 @@ const Packages = ({ classes }) => {
 
       wrapperEl &&
         wrapperEl.scroll({
-          top
+          top,
+          behavior: 'smooth'
         });
     },
     [top]

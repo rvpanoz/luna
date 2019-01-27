@@ -57,14 +57,12 @@ const Dashboard = props => {
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>
         version:&nbsp;
-        {loading ? (
-          <span className="loading-dots" />
-        ) : (
-          projectVersion || APP_INFO.NOT_AVAILABLE
-        )}
+        {projectVersion || APP_INFO.NOT_AVAILABLE}
       </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        Problems:&nbsp;{notifications ? notifications.length : 0}
+        <a href="#" className={classes.cardLink}>
+          View details
+        </a>
       </div>
     </div>
   );
@@ -80,11 +78,9 @@ const Dashboard = props => {
 
   const renderStats = () => (
     <div className={classes.flexContainer}>
-      <div className={classes.flexContainerItem}>Statistics</div>
+      <div className={classes.flexContainerItem}>Problems</div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        <a href="#" className={classes.cardLink}>
-          View details
-        </a>
+        {notifications ? notifications.length : 0}
       </div>
     </div>
   );
@@ -96,6 +92,7 @@ const Dashboard = props => {
           <Transition>
             <CardDetails
               id="card-1"
+              color="info"
               title={
                 mode === APP_MODES.LOCAL && projectName
                   ? projectName
@@ -114,7 +111,7 @@ const Dashboard = props => {
             id="card-2"
             title="Total dependencies"
             description={packages ? packages.length : 0}
-            color="danger"
+            color="success"
             text={renderDependenciesStats()}
             loading={loading}
             type="update"
@@ -126,7 +123,7 @@ const Dashboard = props => {
             id="card-3"
             title="Outdated packages"
             description={packagesOutdated ? packagesOutdated.length : 0}
-            color="info"
+            color="danger"
             text={renderStats()}
             type="stats"
             className={classes.cardInfo}

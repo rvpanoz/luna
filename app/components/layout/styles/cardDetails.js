@@ -46,7 +46,7 @@ const cardInfoStyle = {
   cardAvatar: {
     margin: '8px'
   },
-  cardCategory: {
+  cardText: {
     marginBottom: '0',
     color: grayColor,
     margin: '0 0 10px',

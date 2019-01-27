@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 import pink from '@material-ui/core/colors/pink';
-import green from '@material-ui/core/colors/green';
 import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont } from 'styles/variables';
 
@@ -196,5 +195,8 @@ export const tableFiltersStyles = theme => ({
   },
   bottomDivider: {
     margin: theme.spacing.unit
+  },
+  hidden: {
+    display: 'none'
   }
 });
