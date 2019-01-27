@@ -3,17 +3,13 @@
 import { of, pipe, from, concat } from 'rxjs';
 import {
   map,
+  mapTo,
   mergeMap,
   takeWhile,
   merge,
   concatMap,
-  filter,
   delay,
-  takeUntil,
-  tap,
-  ignoreElements,
-  concatAll,
-  mergeAll
+  tap
 } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
@@ -21,6 +17,7 @@ import { ERROR_TYPES } from 'constants/AppConstants';
 import {
   addNotification,
   commandMessage,
+  setSnackbar,
   toggleLoader
 } from 'models/ui/actions';
 import { parseMessage, switchcase, matchType } from 'commons/utils';
@@ -73,6 +70,11 @@ const setPackages = packages => ({
   }
 });
 
+const updateSnackbar = payload => ({
+  type: setSnackbar.type,
+  payload
+});
+
 const packagesStartEpic = pipe(
   ofType(setPackagesStart.type),
   map(() =>
@@ -91,7 +93,15 @@ const packagesSuccessEpic = pipe(
       of(setOutdated(outdated)),
       of(updateLoader({ loading: false })).pipe(delay(1200))
     )
-  )
+  ),
+  tap(res => console.log(res))
+  // mapTo(
+  //   updateSnackbar({
+  //     open: true,
+  //     type: 'info',
+  //     message: 'Packages loaded..'
+  //   })
+  // )
 );
 
 const messagesEpic = (action$, state$) =>
