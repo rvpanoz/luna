@@ -8,6 +8,7 @@ import {
   merge,
   concatMap,
   filter,
+  delay,
   takeUntil,
   tap,
   ignoreElements,
@@ -29,8 +30,6 @@ import {
   setOutdatedSuccess,
   updateData
 } from './actions';
-
-const ACTIONS_PREFIX = '@@LUNA_APP/DATA';
 
 /**
  *
@@ -90,7 +89,7 @@ const packagesSuccessEpic = pipe(
     concat(
       of(setPackages(dependencies)),
       of(setOutdated(outdated)),
-      of(updateLoader({ loading: false }))
+      of(updateLoader({ loading: false })).pipe(delay(1200))
     )
   )
 );

@@ -196,7 +196,6 @@ export const parseMap = (response, mode, directory) => {
 
   try {
     const packageJson = JSON.parse(response);
-    console.log(packageJson);
     const { name, version } = packageJson || {};
 
     const packages = pick(['dependencies'], packageJson);
