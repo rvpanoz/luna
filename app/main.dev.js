@@ -101,7 +101,7 @@ ipcMain.on('ipc-event', (event, options) => {
       return event.sender.send('action-close', errors, data, cmd);
     }
 
-    if (directory && mode === APP_MODES.LOCAL && cmd.indexOf('list') > -1) {
+    if (directory && mode === APP_MODES.LOCAL && cmd.includes('list')) {
       const openedPackages = Store.get('openedPackages') || [];
       const yarnLock = fs.existsSync(
         path.join(path.dirname(directory), 'yarn-lock.json')
@@ -115,7 +115,7 @@ ipcMain.on('ipc-event', (event, options) => {
       }
 
       const inDirectories = openedPackages.some(
-        pkg => pkg.directory && pkg.directory.indexOf(dirName) !== -1
+        pkg => pkg.directory && pkg.directory.includes(dirName)
       );
 
       if (!inDirectories) {

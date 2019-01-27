@@ -196,6 +196,7 @@ export const parseMap = (response, mode, directory) => {
 
   try {
     const packageJson = JSON.parse(response);
+    console.log(1, packageJson);
     const { name, version } = packageJson || {};
 
     const packages = pick(['dependencies'], packageJson);
@@ -248,7 +249,7 @@ export const parseMap = (response, mode, directory) => {
     return [name, version, data];
   } catch (error) {
     mk.log(error.message);
-    return;
+    throw new Error(error);
   }
 };
 

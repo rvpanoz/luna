@@ -87,6 +87,8 @@ export const listStyles = theme => ({
     justifyContent: 'space-between'
   },
   avatar: {
+    width: 30,
+    height: 30,
     margin: theme.spacing.unit / 4
   },
   dependenciesAvatar: {

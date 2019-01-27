@@ -95,13 +95,6 @@ const packagesSuccessEpic = pipe(
     )
   ),
   tap(res => console.log(res))
-  // mapTo(
-  //   updateSnackbar({
-  //     open: true,
-  //     type: 'info',
-  //     message: 'Packages loaded..'
-  //   })
-  // )
 );
 
 const messagesEpic = (action$, state$) =>
