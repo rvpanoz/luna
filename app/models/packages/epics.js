@@ -3,19 +3,20 @@
 import { of, pipe, from, concat } from 'rxjs';
 import {
   map,
-  mapTo,
   mergeMap,
-  takeWhile,
-  merge,
+  filter,
   concatMap,
   delay,
-  tap
+  tap,
+  zip
 } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { ERROR_TYPES } from 'constants/AppConstants';
 import {
   addNotification,
+  showWarning,
+  showError,
   commandMessage,
   setSnackbar,
   toggleLoader
@@ -28,39 +29,14 @@ import {
   updateData
 } from './actions';
 
-/**
- *
- * @param {*} prefix
- * npm ERR!, npm WARN, etc ...
- */
-const matchMessageType = prefix => types =>
-  types.find(type => matchType(prefix, type));
-
-const parseNpmMessage = message => {
-  const prefix = message.slice(0, 8).trim();
-  const messageType = matchMessageType(prefix)(ERROR_TYPES);
-  const [body, required, requiredBy] = parseMessage(message);
-
-  return {
-    messageType,
-    payload: {
-      body,
-      required,
-      requiredBy
-    }
-  };
-};
-
 const updateLoader = payload => ({
   type: toggleLoader.type,
   payload
 });
 
-const setOutdated = outdated => ({
+const setOutdated = payload => ({
   type: setOutdatedSuccess.type,
-  payload: {
-    dependencies: outdated
-  }
+  payload
 });
 
 const setPackages = payload => ({
@@ -70,6 +46,16 @@ const setPackages = payload => ({
 
 const updateSnackbar = payload => ({
   type: setSnackbar.type,
+  payload
+});
+
+const triggerError = payload => ({
+  type: showError.type,
+  payload
+});
+
+const triggerWarning = payload => ({
+  type: showWarning.type,
   payload
 });
 
@@ -88,41 +74,63 @@ const packagesSuccessEpic = pipe(
   concatMap(
     ({ payload: { dependencies, outdated, projectName, projectVersion } }) => [
       setPackages({ dependencies, projectName, projectVersion }),
-      setOutdated(outdated),
+      setOutdated({ outdated }),
       updateLoader({ loading: false })
     ]
   ),
-  delay(1200),
-  tap(res => console.log(res))
+  delay(1200)
 );
 
-const messagesEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(commandMessage.type),
-    map(({ payload: { message = '' } }) => message.split('\n')),
-    mergeMap(messages =>
-      from(messages).pipe(
-        takeWhile(message => message && message.length),
-        concatMap(message => of(parseNpmMessage(message))),
-        map(({ messageType, payload }) =>
-          switchcase({
-            WARN: () => ({
-              type: addNotification.type,
-              payload: merge(payload, {
-                type: 'WARNING'
-              })
-            }),
-            ERR: () => ({
-              type: addNotification.type,
-              payload: merge(payload, {
-                type: 'ERROR'
-              })
-            })
-          })({})(messageType)
-        )
-      )
-    )
-  );
+/**
+ *
+ * @param {*} prefix
+ * npm ERR!, npm WARN, etc ...
+ */
+const matchMessageType = prefix => types =>
+  types.find(type => matchType(prefix, type));
+
+/**
+ *
+ * @param {*} message
+ */
+const parseNpmMessage = message => {
+  const prefix = message.slice(0, 8).trim();
+  const messageType = matchMessageType(prefix)(ERROR_TYPES);
+  const [body, required, requiredBy] = parseMessage(message);
+
+  return {
+    messageType,
+    payload: {
+      body,
+      required,
+      requiredBy
+    }
+  };
+};
+
+const messagesEpic = pipe(
+  ofType(commandMessage.type),
+  mergeMap(({ payload: { message = '' } }) => message.split(/\r?\n/)),
+  filter(message => Boolean(message)),
+  map(message => {
+    const { messageType, payload } = parseNpmMessage(message);
+
+    return switchcase({
+      WARN: () => triggerWarning(payload),
+      ERR: () => triggerError(payload)
+    })({})(messageType);
+  }),
+  delay(1200)
+  // concatMap(({ payload: { body, required } }) =>
+  //   of(
+  //     updateSnackbar({
+  //       type: 'error',
+  //       open: true,
+  //       message: `${body} ${required}`
+  //     })
+  //   ).pipe(delay(1200))
+  // )
+);
 
 export default combineEpics(
   packagesStartEpic,
