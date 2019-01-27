@@ -63,11 +63,9 @@ const setOutdated = outdated => ({
   }
 });
 
-const setPackages = packages => ({
+const setPackages = payload => ({
   type: setPackagesSuccess.type,
-  payload: {
-    dependencies: packages
-  }
+  payload
 });
 
 const updateSnackbar = payload => ({
@@ -87,21 +85,15 @@ const packagesStartEpic = pipe(
 
 const packagesSuccessEpic = pipe(
   ofType(updateData.type),
-  mergeMap(({ payload: { dependencies, outdated } }) =>
-    concat(
-      of(setPackages(dependencies)),
-      of(setOutdated(outdated)),
-      of(updateLoader({ loading: false })).pipe(delay(1200))
-    )
+  concatMap(
+    ({ payload: { dependencies, outdated, projectName, projectVersion } }) => [
+      setPackages({ dependencies, projectName, projectVersion }),
+      setOutdated(outdated),
+      updateLoader({ loading: false })
+    ]
   ),
+  delay(1200),
   tap(res => console.log(res))
-  // mapTo(
-  //   updateSnackbar({
-  //     open: true,
-  //     type: 'info',
-  //     message: 'Packages loaded..'
-  //   })
-  // )
 );
 
 const messagesEpic = (action$, state$) =>

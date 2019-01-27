@@ -32,6 +32,9 @@ const useIpc = (channel, options, inputs = []) => {
         return;
       }
 
+      const errorsMessages = errors && errors.length ? errors : null;
+      setErrors(errorsMessages);
+
       const command = commandArgs && commandArgs[0];
       const [name, version, packages] = parseMap(
         data,
@@ -39,9 +42,6 @@ const useIpc = (channel, options, inputs = []) => {
         directory,
         commandArgs
       );
-      const errorsMessages = errors && errors.length ? errors : null;
-
-      setErrors(errorsMessages);
 
       switchcase({
         list: () =>

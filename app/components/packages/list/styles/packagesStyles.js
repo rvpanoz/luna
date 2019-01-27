@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 import pink from '@material-ui/core/colors/pink';
-import green from '@material-ui/core/colors/green';
 import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont } from 'styles/variables';
 
@@ -87,6 +86,8 @@ export const listStyles = theme => ({
     justifyContent: 'space-between'
   },
   avatar: {
+    width: 30,
+    height: 30,
     margin: theme.spacing.unit / 4
   },
   dependenciesAvatar: {
@@ -194,5 +195,8 @@ export const tableFiltersStyles = theme => ({
   },
   bottomDivider: {
     margin: theme.spacing.unit
+  },
+  hidden: {
+    display: 'none'
   }
 });

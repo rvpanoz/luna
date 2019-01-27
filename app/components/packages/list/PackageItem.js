@@ -13,7 +13,6 @@ import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -39,24 +38,15 @@ const PackageItemRow = ({
   isOutdated,
   group,
   mode,
-  directory,
-  peerDependencies
+  directory
 }) => {
-  const dispatch = useDispatch();
-  const getPeers = useCallback(
-    () => peerDependencies && Object.keys(peerDependencies),
-    [peerDependencies]
-  );
-
-  const totalPeers = getPeers();
-
   const renderIconByGroup = useCallback(
     group =>
       cond([
         [
           equals(''),
           always(
-            <Avatar className={classes[`${group}Avatar`]}>
+            <Avatar className={cn(classes.avatar, classes[`${group}Avatar`])}>
               <GlobalIcon className={classes.icon} />
             </Avatar>
           )
@@ -64,7 +54,7 @@ const PackageItemRow = ({
         [
           equals('dependencies'),
           always(
-            <Avatar className={classes[`${group}Avatar`]}>
+            <Avatar className={cn(classes.avatar, classes[`${group}Avatar`])}>
               <DependencyIcon className={classes.icon} />
             </Avatar>
           )
@@ -72,7 +62,7 @@ const PackageItemRow = ({
         [
           equals('devDependencies'),
           always(
-            <Avatar className={classes[`${group}Avatar`]}>
+            <Avatar className={cn(classes.avatar, classes[`${group}Avatar`])}>
               <DevDependencyIcon className={classes.icon} />
             </Avatar>
           )
@@ -80,7 +70,7 @@ const PackageItemRow = ({
         [
           equals('optionalDependencies'),
           always(
-            <Avatar className={classes[`${group}Avatar`]}>
+            <Avatar className={cn(classes.avatar, classes[`${group}Avatar`])}>
               <OptionalIcon className={classes.icon} />
             </Avatar>
           )
@@ -88,7 +78,7 @@ const PackageItemRow = ({
         [
           equals('peerDependencies'),
           always(
-            <Avatar>
+            <Avatar className={cn(classes.avatar, classes[`${group}Avatar`])}>
               <PeersIcon className={classes.icon} />
             </Avatar>
           )
@@ -97,13 +87,7 @@ const PackageItemRow = ({
     [group]
   );
 
-  const viewPackage = () => {
-    dispatch(
-      togglePackageLoader({
-        loading: true
-      })
-    );
-
+  const viewPackage = () =>
     ipcRenderer.send('ipc-event', {
       activeManager: manager,
       ipcEvent: 'view',
@@ -113,9 +97,6 @@ const PackageItemRow = ({
       mode,
       directory
     });
-
-    return false;
-  };
 
   return (
     <TableRow

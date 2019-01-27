@@ -202,12 +202,12 @@ const TableListToolbar = ({
             open={filtersOn}
             anchorEl={anchorEl}
             anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right'
+              vertical: 'bottom',
+              horizontal: 'left'
             }}
             transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left'
+              vertical: 'center',
+              horizontal: 'right'
             }}
           >
             <TableFilters mode={mode} close={() => openFilters(null, true)} />

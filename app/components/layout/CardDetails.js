@@ -19,7 +19,7 @@ const AppCardDetails = props => {
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
         <Typography variant="subtitle1">{title}</Typography>
-        <Typography component="p" className={classes.cardCategory}>
+        <Typography component="p" className={classes.cardText}>
           {subtext}
         </Typography>
       </CardContent>
@@ -47,7 +47,15 @@ AppCardDetails.defaultProps = {
 
 AppCardDetails.propTypes = {
   classes: objectOf(string).isRequired,
-  color: oneOf(['orange', 'green', 'red', 'blue', 'purple']),
+  color: oneOf([
+    'warning',
+    'primary',
+    'danger',
+    'success',
+    'info',
+    'rose',
+    'gray'
+  ]),
   title: node,
   text: node
 };
