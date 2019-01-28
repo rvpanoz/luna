@@ -6,6 +6,7 @@
 
 import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
 import {
+  updateNotifications,
   addNotification,
   clearNotifications,
   clearSnackbar,
@@ -33,6 +34,8 @@ const createReducer = (commonState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [updateNotifications.type]: (state, { payload: { notifications } }) =>
+    assoc('notifications', notifications, state),
   [addNotification.type]: (
     state,
     { payload: { type, body, required, requiredBy } }
