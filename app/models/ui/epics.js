@@ -39,7 +39,7 @@ const notificationsEpics = pipe(
   mergeMap(({ payload: { message = '' } }) => {
     const messages = message.split(/\r?\n/); // array
 
-    return from(messages).pipe(filter(msg => msg || !/^\s*$/.test(message)));
+    return from(messages).pipe(filter(msg => msg || !/^\s*$/.test(msg)));
   }),
   map(notification => {
     const { messageType, payload } = parseNpmMessage(notification);
