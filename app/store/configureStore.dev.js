@@ -2,7 +2,6 @@
  * Redux store
  */
 
-/* eslint-disable */
 /* eslint no-underscore-dangle: 0 */
 /* eslint-disable global-require */
 
@@ -11,7 +10,8 @@ import { createLogger } from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
 
 // epics
-import { epics as packagesEpic } from 'models/packages';
+import { epics as packagesEpics } from 'models/packages';
+import { epics as uiEpics } from 'models/ui';
 
 // reducers
 import rootReducer from '../reducers';
@@ -32,7 +32,7 @@ const configureStore = initialState => {
 
   // skip redux logs in console during the tests
   if (process.env.NODE_ENV === 'development') {
-    // middleware.push(logger);
+    middleware.push(logger);
   }
 
   // If redux DevTools Extension is installed use it,
@@ -56,7 +56,8 @@ const configureStore = initialState => {
     );
   }
 
-  epicMiddleware.run(packagesEpic);
+  epicMiddleware.run(uiEpics);
+  epicMiddleware.run(packagesEpics);
 
   return store;
 };

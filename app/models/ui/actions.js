@@ -4,6 +4,7 @@ import { createActionCreator } from 'commons/utils';
 
 const ActionCreator = createActionCreator('@@LUNA_APP/UI');
 
+const updateNotifications = ActionCreator('UPDATE_NOTIFICATIONS');
 const addNotification = ActionCreator('ADD_NOTIFICATION');
 const clearNotifications = ActionCreator('CLEAR_NOTIFICATIONS');
 const clearSnackbar = ActionCreator('CLEAR_SNACKBAR');
@@ -21,6 +22,7 @@ const togglePackageLoader = ActionCreator('TOGGLE_PACKAGE_LOADER');
 const uiException = ActionCreator('UI_EXCEPTION_ERROR');
 
 export {
+  updateNotifications,
   addNotification,
   clearNotifications,
   clearSnackbar,
