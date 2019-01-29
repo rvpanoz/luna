@@ -16,7 +16,7 @@ import Transition from './layout/Transition';
 import styles from './styles/dashboard';
 
 const mapState = ({
-  common: { notifications, manager, mode, directory },
+  common: { manager, mode, directory },
   packages: {
     loading,
     lastUpdatedAt,
@@ -26,7 +26,6 @@ const mapState = ({
     projectVersion
   }
 }) => ({
-  notifications,
   manager,
   mode,
   directory,
@@ -49,8 +48,7 @@ const Dashboard = props => {
     mode,
     projectName,
     projectVersion,
-    lastUpdatedAt,
-    notifications
+    lastUpdatedAt
   } = useMappedState(mapState);
 
   const renderProjectStats = () => (
@@ -79,9 +77,6 @@ const Dashboard = props => {
   const renderStats = () => (
     <div className={classes.flexContainer}>
       <div className={classes.flexContainerItem}>Problems</div>
-      <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        {notifications ? notifications.length : 0}
-      </div>
     </div>
   );
 

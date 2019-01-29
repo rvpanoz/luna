@@ -94,7 +94,7 @@ const Packages = ({ classes }) => {
     sortDir,
     sortBy
   } = useMappedState(mapState);
-
+  console.log(fromSearch);
   const wrapperRef = useRef(null);
 
   // force render programmatically

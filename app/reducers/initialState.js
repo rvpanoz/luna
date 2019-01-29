@@ -4,7 +4,7 @@ export default {
   page: 0,
   rowsPerPage: 10,
   directory: null,
-  enableNotifications: true,
+  enableNotifications: false,
   notifications: [],
   snackbarOptions: {
     open: false,
