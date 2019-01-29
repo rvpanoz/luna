@@ -25,7 +25,7 @@ const Pagination = props => {
           colSpan={6}
           count={rowCount}
           rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[5, 10]}
+          rowsPerPageOptions={[5]}
           page={page || 0}
           backIconButtonProps={{
             'aria-label': 'Previous Page'

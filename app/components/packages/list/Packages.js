@@ -96,7 +96,9 @@ const Packages = ({ classes }) => {
   } = useMappedState(mapState);
 
   const wrapperRef = useRef(null);
-  const [counter, setCounter] = useState(0); // force render programmaticlly
+
+  // force render programmatically
+  const [counter, setCounter] = useState(0);
   const dispatch = useDispatch();
 
   const isSelected = useCallback(
@@ -274,27 +276,24 @@ const Packages = ({ classes }) => {
                         version,
                         latest,
                         isOutdated,
-                        dependencies,
-                        devDependencies,
                         peerDependencies,
                         __group,
                         __error,
                         __peerMissing
-                      }) =>
-                        !__error && !__peerMissing ? (
-                          <PackageItem
-                            key={`pkg-${name}`}
-                            isSelected={isSelected(name, selected)}
-                            addSelected={() => dispatch(addSelected({ name }))}
-                            name={name}
-                            peerDependencies={peerDependencies}
-                            manager={manager}
-                            version={version}
-                            latest={latest}
-                            isOutdated={isOutdated}
-                            group={__group}
-                          />
-                        ) : null
+                      }) => (
+                        <PackageItem
+                          key={`pkg-${name}`}
+                          isSelected={isSelected(name, selected)}
+                          addSelected={() => dispatch(addSelected({ name }))}
+                          name={name}
+                          peerDependencies={peerDependencies}
+                          manager={manager}
+                          version={version}
+                          latest={latest}
+                          isOutdated={isOutdated}
+                          group={__group}
+                        />
+                      )
                     )}
                 </TableBody>
                 <TableFooter
