@@ -1,8 +1,10 @@
-/* eslint-disable */
+/* eslint-disable react/require-default-props */
+/* eslint-disable no-nested-ternary */
 
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { objectOf, string, node, oneOf } from 'prop-types';
+import cn from 'classnames';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -25,9 +27,10 @@ const AppCardDetails = props => {
       </CardContent>
       <CardActions className={classes.cardActions}>
         <InfoIcon
-          className={
-            classes.cardStatsIcon + ' ' + classes[color + 'CardStatsIcon']
-          }
+          className={cn(
+            classes.cardStatsIcon,
+            classes[`${color}CardStatsIcon`]
+          )}
         />
         {link !== undefined ? (
           <a href={link.href} className={classes.cardStatsLink}>
@@ -57,7 +60,9 @@ AppCardDetails.propTypes = {
     'gray'
   ]),
   title: node,
-  text: node
+  text: node,
+  subtext: string,
+  link: string
 };
 
 export default withStyles(styles)(AppCardDetails);

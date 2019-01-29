@@ -1,11 +1,5 @@
-/* eslint-disable */
-
-/**
- * Useful transition component
- * based on material-ui transitions https://material-ui-next.com/utils/transitions/
- **/
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import Fade from '@material-ui/core/Fade';
 import Slide from '@material-ui/core/Slide';
 
@@ -18,9 +12,7 @@ class Transition extends React.Component {
   static defaultProps = {
     type: 'Fade',
     direction: 'right',
-    show: true,
-    mountOnEnter: true,
-    unmountOnExit: true
+    show: true
   };
 
   render() {
@@ -28,7 +20,7 @@ class Transition extends React.Component {
 
     if (type && !Transitions[type]) {
       console.error(`Transition ${type} is not supported`);
-      return <div>{children}</div>;
+      return <React.Fragment>{children}</React.Fragment>;
     }
 
     return React.createElement(
@@ -41,5 +33,12 @@ class Transition extends React.Component {
     );
   }
 }
+
+Transition.propTypes = {
+  children: PropTypes.node.isRequired,
+  type: PropTypes.string,
+  direction: PropTypes.string,
+  show: PropTypes.bool
+};
 
 export default Transition;

@@ -1,3 +1,5 @@
+/* eslint-disable react/require-default-props */
+
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -23,7 +25,7 @@ const AppButton = ({
   });
 
   return (
-    <Button {...restProps} className={classes.button + ' ' + btnClasses}>
+    <Button {...restProps} className={`${classes.button} ${btnClasses}`}>
       {children}
     </Button>
   );
@@ -41,7 +43,7 @@ AppButton.propTypes = {
     'white',
     'simple',
     'transparent'
-  ]),
+  ]).isRequired,
   round: bool,
   fullWidth: bool,
   disabled: bool
