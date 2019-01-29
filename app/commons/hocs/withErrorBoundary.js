@@ -1,6 +1,6 @@
-import React, { Component, createFactory } from 'react';
-
 /* eslint-disable object-shorthand */
+
+import React, { Component, createFactory } from 'react';
 
 const withErrorBoundary = BaseComponent => {
   const factory = createFactory(BaseComponent);
