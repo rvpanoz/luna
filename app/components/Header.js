@@ -124,7 +124,7 @@ const Header = ({ title, classes }) => {
           </Typography>
           <SearchBox disabled={loader && loader.loading} />
           <div className={classes.grow} />
-          <div className={classes.headerToolbar}>
+          <div style={{ display: 'none' }} className={classes.headerToolbar}>
             <IconButton
               color="inherit"
               aria-owns={menuOpen ? 'app-settings' : undefined}

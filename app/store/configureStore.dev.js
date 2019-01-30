@@ -16,6 +16,8 @@ import { epics as uiEpics } from 'models/ui';
 // reducers
 import rootReducer from '../reducers';
 
+const reduxLogger = /--redux-logger/.test(process.argv[3]);
+
 const configureStore = initialState => {
   const epicMiddleware = createEpicMiddleware();
   const middleware = [epicMiddleware];
@@ -27,7 +29,9 @@ const configureStore = initialState => {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    middleware.push(logger);
+    if (reduxLogger) {
+      middleware.push(logger);
+    }
   }
 
   // If redux DevTools Extension is installed use it, otherwise use redux compose

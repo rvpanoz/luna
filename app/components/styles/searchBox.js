@@ -6,9 +6,6 @@ const styles = theme => ({
     borderRadius: theme.shape.borderRadius,
     color: '#fff',
     backgroundColor: fade(theme.palette.common.black, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25)
-    },
     marginRight: theme.spacing.unit * 2,
     marginLeft: 0,
     width: '100%',
@@ -29,7 +26,10 @@ const styles = theme => ({
   },
   inputRoot: {
     color: 'inherit',
-    width: '100%'
+    width: '100%',
+    fontFamily: 'inherit',
+    fontSize: 14,
+    lineHeight: '1em'
   },
   inputInput: {
     paddingTop: theme.spacing.unit,

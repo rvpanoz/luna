@@ -110,7 +110,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
 TableHeader.propTypes = {
   numSelected: PropTypes.number.isRequired,
   rowCount: PropTypes.number.isRequired,
-  packages: PropTypes.arrayOf(PropTypes.object)
+  packages: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default TableHeader;

@@ -20,16 +20,14 @@ const SearchBox = props => {
   const { classes, disabled } = props;
   const rootEl = useRef(null);
   const dispatch = useDispatch();
+  const [packageName, setPackageName] = useState('');
   const [snackbarOpen, toggleSnackbar] = useState(false);
 
   const handleSearch = () => {
-    const searchValue = rootEl && rootEl.current.value;
-
     toggleSnackbar(false);
 
-    if (!searchValue) {
-      toggleSnackbar(true);
-      return;
+    if (!packageName) {
+      return toggleSnackbar(true);
     }
 
     dispatch(
@@ -41,21 +39,25 @@ const SearchBox = props => {
     ipcRenderer.send('ipc-event', {
       ipcEvent: 'search-packages',
       cmd: ['search'],
-      pkgName: searchValue
+      pkgName: packageName
     });
 
     return false;
   };
 
-  const onKeyPress = e => {
-    const { which, keyCode } = e;
+  const onKeyUp = e => {
+    const {
+      which,
+      keyCode,
+      currentTarget: { value }
+    } = e;
     const key = which || keyCode || 0;
+
+    setPackageName(value);
 
     if (key === 13) {
       handleSearch();
     }
-
-    return false;
   };
 
   useEffect(() => {
@@ -83,9 +85,9 @@ const SearchBox = props => {
 
   useEffect(() => {
     if (rootEl && rootEl.current) {
-      rootEl.current.addEventListener('keypress', onKeyPress);
+      rootEl.current.addEventListener('keyup', onKeyUp, () => {});
 
-      return () => rootEl.current.removeEventListener('keypress', onKeyPress);
+      return () => rootEl.current.removeEventListener('keyup', onKeyUp);
     }
   });
 
