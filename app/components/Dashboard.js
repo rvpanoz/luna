@@ -1,7 +1,3 @@
-/**
- * Dashboard component
- */
-
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -10,6 +6,8 @@ import { useMappedState } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+
 import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import Transition from './layout/Transition';
@@ -58,9 +56,15 @@ const Dashboard = props => {
         {projectVersion || APP_INFO.NOT_AVAILABLE}
       </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        <a href="#" className={classes.cardLink}>
-          View details
-        </a>
+        <Button
+          size="small"
+          className={cn(classes.actionButton)}
+          color="secondary"
+          variant="outlined"
+          disableRipple
+        >
+          Details
+        </Button>
       </div>
     </div>
   );

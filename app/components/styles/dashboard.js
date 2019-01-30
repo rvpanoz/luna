@@ -25,6 +25,11 @@ const styles = theme => ({
     [theme.breakpoints.down('sm')]: {
       display: 'none'
     }
+  },
+  actionButton: {
+    width: 100,
+    height: 15,
+    textTransform: 'capitalize'
   }
 });
 
