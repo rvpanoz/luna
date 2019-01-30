@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable react/require-default-props */
 
 import { withStyles } from '@material-ui/core/styles';
 import React, { useCallback } from 'react';
@@ -135,9 +135,9 @@ const ListFilters = ({ classes, mode, close }) => {
 };
 
 ListFilters.propTypes = {
-  classes: PropTypes.object.isRequired,
-  filters: PropTypes.array,
-  mode: PropTypes.string
+  classes: PropTypes.objectOf(PropTypes.string),
+  mode: PropTypes.string,
+  close: PropTypes.func
 };
 
 export default withStyles(styles)(ListFilters);

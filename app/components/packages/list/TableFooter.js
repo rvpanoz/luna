@@ -1,10 +1,7 @@
-/* eslint-disable */
-
-/**
- * Table footer - pagination
- */
+/* eslint-disable react/require-default-props */
 
 import React from 'react';
+import { number, func } from 'prop-types';
 import TableFooter from '@material-ui/core/TableFooter';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
@@ -39,6 +36,14 @@ const Pagination = props => {
       </TableRow>
     </TableFooter>
   );
+};
+
+Pagination.propTypes = {
+  rowCount: number,
+  handleChangePage: func,
+  handleChangePageRows: func,
+  page: number,
+  rowsPerPage: number
 };
 
 export default Pagination;

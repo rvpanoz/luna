@@ -1,14 +1,8 @@
-/* eslint-disable */
-/* eslint-disable react/prop-types */
-
-/**
- * Package item row
- */
+/* eslint-disable react/require-default-props */
 
 import { ipcRenderer } from 'electron';
 import React, { useCallback } from 'react';
 import cn from 'classnames';
-import { useDispatch } from 'redux-react-hook';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
 import { withStyles } from '@material-ui/core/styles';
@@ -22,12 +16,9 @@ import GlobalIcon from '@material-ui/icons/GroupWorkOutlined';
 import OptionalIcon from '@material-ui/icons/SettingsEthernetOutlined';
 import PeersIcon from '@material-ui/icons/BallotOutlined';
 
-import { APP_INFO } from 'constants/AppConstants';
-import { togglePackageLoader } from 'models/ui/actions';
-
 import { listStyles as styles } from './styles/packagesStyles';
 
-const PackageItemRow = ({
+const PackageItem = ({
   classes,
   name,
   manager,
@@ -41,12 +32,14 @@ const PackageItemRow = ({
   directory
 }) => {
   const renderIconByGroup = useCallback(
-    group =>
+    groupName =>
       cond([
         [
           equals(''),
           always(
-            <Avatar className={cn(classes.avatar, classes[`${group}Avatar`])}>
+            <Avatar
+              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
+            >
               <GlobalIcon className={classes.icon} />
             </Avatar>
           )
@@ -54,7 +47,9 @@ const PackageItemRow = ({
         [
           equals('dependencies'),
           always(
-            <Avatar className={cn(classes.avatar, classes[`${group}Avatar`])}>
+            <Avatar
+              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
+            >
               <DependencyIcon className={classes.icon} />
             </Avatar>
           )
@@ -62,7 +57,9 @@ const PackageItemRow = ({
         [
           equals('devDependencies'),
           always(
-            <Avatar className={cn(classes.avatar, classes[`${group}Avatar`])}>
+            <Avatar
+              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
+            >
               <DevDependencyIcon className={classes.icon} />
             </Avatar>
           )
@@ -70,7 +67,9 @@ const PackageItemRow = ({
         [
           equals('optionalDependencies'),
           always(
-            <Avatar className={cn(classes.avatar, classes[`${group}Avatar`])}>
+            <Avatar
+              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
+            >
               <OptionalIcon className={classes.icon} />
             </Avatar>
           )
@@ -78,12 +77,14 @@ const PackageItemRow = ({
         [
           equals('peerDependencies'),
           always(
-            <Avatar className={cn(classes.avatar, classes[`${group}Avatar`])}>
+            <Avatar
+              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
+            >
               <PeersIcon className={classes.icon} />
             </Avatar>
           )
         ]
-      ])(group),
+      ])(groupName),
     [group]
   );
 
@@ -146,7 +147,7 @@ const PackageItemRow = ({
   );
 };
 
-PackageItemRow.propTypes = {
+PackageItem.propTypes = {
   classes: objectOf(string).isRequired,
   name: string.isRequired,
   addSelected: func.isRequired,
@@ -154,7 +155,10 @@ PackageItemRow.propTypes = {
   version: string.isRequired,
   isOutdated: bool.isRequired,
   latest: oneOfType([string, object]),
-  group: string
+  group: string,
+  manager: string,
+  mode: string,
+  directory: string
 };
 
-export default withStyles(styles)(PackageItemRow);
+export default withStyles(styles)(PackageItem);
