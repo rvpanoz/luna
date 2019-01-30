@@ -1,10 +1,6 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable no-unused-expressions */
 
-/**
- * App dialog
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 

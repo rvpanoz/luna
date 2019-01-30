@@ -1,14 +1,9 @@
-/* eslint-disable */
-
-/**
- Table Header 
-**/
+/* eslint-disable react/require-default-props */
 
 import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { and } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import cn from 'classnames';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -48,7 +43,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
     )
   );
 
-  const handleSelectAll = e => {
+  const handleSelectAll = () => {
     const checkBoxElement = checkboxAll && checkboxAll.current;
 
     const indeterminate =
@@ -58,7 +53,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
       return dispatch(clearSelected());
     }
 
-    packages &&
+    if (packages && Array.isArray(packages)) {
       packages.forEach(name =>
         dispatch(
           addSelected({
@@ -66,6 +61,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
           })
         )
       );
+    }
   };
 
   return (
@@ -114,9 +110,7 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
 TableHeader.propTypes = {
   numSelected: PropTypes.number.isRequired,
   rowCount: PropTypes.number.isRequired,
-  packages: PropTypes.array.isRequired,
-  sortBy: PropTypes.string,
-  sortDir: PropTypes.string
+  packages: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default TableHeader;

@@ -1,8 +1,5 @@
-/* eslint-disable */
-
-/**
- * Toolbar
- */
+/* eslint-disable react/require-default-props */
+/* eslint-disable no-nested-ternary */
 
 import { ipcRenderer, remote } from 'electron';
 import React, { useState, useCallback } from 'react';
@@ -18,7 +15,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import ClearAllIcon from '@material-ui/icons/ClearAll';
 import InstallIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
@@ -27,7 +23,6 @@ import PublicIcon from '@material-ui/icons/PublicRounded';
 import { firstToUpper } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
 import { setMode, toggleLoader } from 'models/ui/actions';
-import { clearSelected } from 'models/packages/actions';
 
 import TableFilters from './TableFilters';
 
@@ -50,8 +45,8 @@ const TableListToolbar = ({
 
   const dispatch = useDispatch();
 
-  const switchMode = (mode, directory) => {
-    dispatch(setMode({ mode, directory }));
+  const switchMode = (appMode, appDirectory) => {
+    dispatch(setMode({ mode: appMode, directory: appDirectory }));
 
     if (fromSearch) {
       reload();
@@ -99,8 +94,8 @@ const TableListToolbar = ({
       },
       filePath => {
         if (filePath) {
-          const directory = filePath.join('');
-          switchMode(APP_MODES.LOCAL, directory);
+          const scanDirectory = filePath.join('');
+          switchMode(APP_MODES.LOCAL, scanDirectory);
         }
 
         return false;
@@ -155,12 +150,7 @@ const TableListToolbar = ({
       </Tooltip>
       <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
         <div>
-          <IconButton
-            disableRipple
-            aria-label="back_reload"
-            disableRipple
-            onClick={reload}
-          >
+          <IconButton disableRipple aria-label="back_reload" onClick={reload}>
             <RefreshIcon />
           </IconButton>
         </div>
@@ -170,7 +160,7 @@ const TableListToolbar = ({
           <div>
             <IconButton
               disableRipple
-              disabled={nodata === true || fromSearch}
+              disabled={nodata || fromSearch}
               aria-label="Show filters"
               onClick={openFilters}
             >
@@ -185,7 +175,7 @@ const TableListToolbar = ({
   return (
     <section className={classes.root}>
       <Toolbar
-        disableGutters={true}
+        disableGutters
         className={cn({
           [classes.highlight]: selected.length > 0
         })}
@@ -230,14 +220,6 @@ const TableListToolbar = ({
             </div>
           ) : (
             <div className={classes.flexContainer}>
-              <Tooltip title="Clear selected">
-                <IconButton
-                  aria-label="clear selected"
-                  onClick={() => dispatch(onClearSelected())}
-                >
-                  <ClearAllIcon />
-                </IconButton>
-              </Tooltip>
               {!fromSearch && (
                 <Tooltip title="Uninstall selected">
                   <IconButton
@@ -257,9 +239,16 @@ const TableListToolbar = ({
 };
 
 TableListToolbar.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   reload: PropTypes.func.isRequired,
-  nodata: PropTypes.bool
+  nodata: PropTypes.bool,
+  selected: PropTypes.arrayOf(PropTypes.string),
+  title: PropTypes.string,
+  mode: PropTypes.string,
+  manager: PropTypes.string,
+  directory: PropTypes.string,
+  fromSearch: PropTypes.bool,
+  scrollWrapper: PropTypes.func
 };
 
 export default withStyles(styles)(TableListToolbar);

@@ -1,8 +1,6 @@
-/* eslint-disable */
-
-/**
- * Card info component
- */
+/* eslint-disable react/require-default-props */
+/* eslint-disable react/require-default-props */
+/* eslint-disable no-nested-ternary */
 
 import React, { useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
@@ -23,7 +21,6 @@ import { switchcase } from 'commons/utils';
 
 import styles from './styles/cardInfo';
 
-const defaultAvatarIcon = null;
 const defaultStatIcon = null;
 
 const AppCardInfo = props => {
@@ -41,33 +38,33 @@ const AppCardInfo = props => {
 
   const infoStatIcon = (
     <BalotIcon
-      className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
+      className={cn(classes.cardStatsIcon, classes[`${color}CardStatsIcon`])}
     />
   );
 
   const barStatIcon = (
     <BarChartIcon
-      className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
+      className={cn(classes.cardStatsIcon, classes[`${color}CardStatsIcon`])}
     />
   );
   const updateStatIcon = (
     <UpdateIcon
-      className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
+      className={cn(classes.cardStatsIcon, classes[`${color}CardStatsIcon`])}
     />
   );
   const warningStatIcon = (
     <WarningIcon
-      className={cn(classes.cardStatsIcon, classes[color + 'CardStatsIcon'])}
+      className={cn(classes.cardStatsIcon, classes[`${color}CardStatsIcon`])}
     />
   );
 
-  const renderStatIcon = useCallback(type => {
+  const renderStatIcon = useCallback(cardType => {
     const icon = switchcase({
       info: () => infoStatIcon,
       stats: () => barStatIcon,
       update: () => updateStatIcon,
       warning: () => warningStatIcon
-    })(defaultStatIcon)(type);
+    })(defaultStatIcon)(cardType);
 
     return icon;
   }, []);
@@ -121,7 +118,10 @@ AppCardInfo.propTypes = {
     'rose',
     'gray'
   ]),
-  text: oneOfType([string, node])
+  text: oneOfType([string, node]),
+  className: string,
+  link: string,
+  type: string
 };
 
 export default withStyles(styles)(AppCardInfo);

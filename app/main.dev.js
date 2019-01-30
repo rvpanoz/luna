@@ -40,7 +40,6 @@ const APP_PATHS = {
 
 // development parameters
 // const debug = /--debug/.test(process.argv[2]);
-// const needslog = /--log/.test(process.argv[3]);
 
 export default class AppUpdater {
   constructor() {

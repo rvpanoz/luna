@@ -1,8 +1,4 @@
-/* eslint-disable */
-
-/**
- * Snackbar content
- */
+/* eslint-disable react/require-default-props */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -89,7 +85,7 @@ const AppSnackbarContent = props => {
 };
 
 AppSnackbarContent.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string),
   className: PropTypes.string,
   message: PropTypes.node,
   onClose: PropTypes.func,

@@ -16,38 +16,36 @@ import { epics as uiEpics } from 'models/ui';
 // reducers
 import rootReducer from '../reducers';
 
-const configureStore = initialState => {
-  // create epic middleware
-  const epicMiddleware = createEpicMiddleware();
+const reduxLogger = /--redux-logger/.test(process.argv[3]);
 
-  // redux Configuration
+const configureStore = initialState => {
+  const epicMiddleware = createEpicMiddleware();
   const middleware = [epicMiddleware];
   const enhancers = [];
 
-  // logging middleware
   const logger = createLogger({
     level: 'info',
     collapsed: true
   });
 
-  // skip redux logs in console during the tests
   if (process.env.NODE_ENV === 'development') {
-    middleware.push(logger);
+    if (reduxLogger) {
+      middleware.push(logger);
+    }
   }
 
-  // If redux DevTools Extension is installed use it,
-  // otherwise use redux compose
+  // If redux DevTools Extension is installed use it, otherwise use redux compose
 
   /* eslint-disable no-underscore-dangle */
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
-  // apply Middleware & Compose Enhancers
+  // apply middleware & compose Enhancers
   enhancers.push(applyMiddleware(...middleware));
   const enhancer = composeEnhancers(...enhancers);
 
-  // create Store
+  // store creation
   const store = createStore(rootReducer, initialState, enhancer);
 
   if (module.hot) {

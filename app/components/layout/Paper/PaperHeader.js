@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable react/require-default-props */
 
 import React from 'react';
 import classNames from 'classnames';
@@ -27,7 +27,7 @@ const paperHeader = ({ ...props }) => {
 
   const paperHeaderClasses = classNames({
     [classes.paperHeader]: true,
-    [classes[color + 'paperHeader']]: color,
+    [classes[`${color}paperHeader`]]: color,
     [classes.paperHeaderPlain]: plain,
     [className]: className !== undefined
   });

@@ -104,9 +104,11 @@ const handlers = {
     return merge(state, {
       packages,
       fromSearch,
-      lastUpdatedAt: fromSort
-        ? state.lastUpdatedAt
-        : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
+      fromSort,
+      lastUpdatedAt:
+        fromSort || fromSearch
+          ? state.lastUpdatedAt
+          : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
       projectName,
       projectVersion,
       filters: [],
@@ -125,8 +127,10 @@ const handlers = {
 
     return assoc('active', active, state);
   },
-  [setPackagesStart.type]: state =>
+  [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
     merge(state, {
+      fromSearch,
+      fromSort,
       active: null,
       packageName: null,
       packageVersion: null,

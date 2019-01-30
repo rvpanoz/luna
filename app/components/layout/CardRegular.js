@@ -28,21 +28,21 @@ const AppCardRegular = props => {
   } = props;
 
   const plainCardClasses = cn({
-    [' ' + classes.cardPlain]: plainCard
+    [classes.cardPlain]: plainCard
   });
   const cardPlainHeaderClasses = cn({
-    [' ' + classes.cardPlainHeader]: plainCard
+    [classes.cardPlainHeader]: plainCard
   });
 
   return (
     <Card className={classes.card + plainCardClasses}>
       <CardHeader
         classes={{
-          root:
-            classes.cardHeader +
-            ' ' +
-            classes[headerColor + 'CardHeader'] +
-            cardPlainHeaderClasses,
+          root: cn(
+            classes.cardHeader,
+            classes[`${headerColor}CardHeader`],
+            cardPlainHeaderClasses
+          ),
           title: classes.cardTitle,
           subheader: classes.cardSubtitle
         }}

@@ -1,10 +1,5 @@
 /* eslint-disable react/require-default-props */
 
-/**
- * AppLoader
- * Renders a CircularProgress or children components
- */
-
 import React from 'react';
 import {
   array,
