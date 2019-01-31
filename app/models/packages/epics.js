@@ -1,10 +1,17 @@
 /* eslint-disable */
 
-import { pipe } from 'rxjs';
-import { map, concatMap, delay, tap } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
+import {
+  map,
+  concatMap,
+  takeWhile,
+  delay,
+  tap,
+  takeLast
+} from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
-import { toggleLoader } from 'models/ui/actions';
+import { setPage, toggleLoader } from 'models/ui/actions';
 
 import {
   setPackagesStart,
@@ -46,8 +53,18 @@ const packagesSuccessEpic = (action$, state$) =>
         payload: { dependencies, outdated, projectName, projectVersion }
       }) => {
         const {
+          common: { page },
           packages: { fromSearch, fromSort }
         } = state$.value;
+        const actions = [updateLoader({ loading: false })];
+        const withErrors =
+          dependencies &&
+          dependencies.filter(dependency => dependency['__error']);
+        console.log(withErrors);
+
+        if (page !== 0) {
+          actions.push(setPage({ page: 0 }));
+        }
 
         return [
           setPackages({
@@ -57,12 +74,11 @@ const packagesSuccessEpic = (action$, state$) =>
             fromSearch,
             fromSort
           }),
-          setOutdated({ outdated }),
-          updateLoader({ loading: false })
-        ];
+          setOutdated({ outdated })
+        ].concat(actions);
       }
     ),
-    delay(1200)
+    tap(console.log)
   );
 
 export default combineEpics(packagesStartEpic, packagesSuccessEpic);

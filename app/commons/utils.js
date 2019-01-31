@@ -252,12 +252,6 @@ export const parseMap = (response, mode, directory) => {
   }
 };
 
-export const filterByProp = (data, prop) =>
-  data &&
-  data.filter(item => {
-    return item[prop];
-  }, data);
-
 export const parseMessage = error => {
   const errorParts = typeof error === 'string' && error.split(',');
   const errorMessage = errorParts && errorParts[0].split(':');
