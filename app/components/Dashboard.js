@@ -5,6 +5,7 @@ import cn from 'classnames';
 import { useMappedState } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
+import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
@@ -56,15 +57,26 @@ const Dashboard = props => {
         {projectVersion || APP_INFO.NOT_AVAILABLE}
       </div>
       <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        <Button
-          size="small"
-          className={cn(classes.actionButton)}
-          color="secondary"
-          variant="outlined"
-          disableRipple
-        >
-          Details
-        </Button>
+        <Toolbar disableGutters variant="dense">
+          <Button
+            size="small"
+            className={cn(classes.actionButton)}
+            color="secondary"
+            variant="outlined"
+            disableRipple
+          >
+            Details
+          </Button>
+          <Button
+            size="small"
+            className={cn(classes.actionButton)}
+            color="primary"
+            variant="outlined"
+            disableRipple
+          >
+            Audit
+          </Button>
+        </Toolbar>
       </div>
     </div>
   );

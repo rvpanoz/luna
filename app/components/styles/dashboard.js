@@ -3,13 +3,13 @@ const styles = theme => ({
     padding: 0,
     margin: 0
   },
-  flexContainer: {
+  fxContainer: {
     display: 'flex',
     flexGrow: 1,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
-  flexContainerItem: {
+  fxItem: {
     fontWeight: 100
   },
   textRight: {
