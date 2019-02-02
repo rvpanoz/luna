@@ -13,7 +13,6 @@ import Snackbar from '@material-ui/core/Snackbar';
 
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
-import { filterByProp } from 'commons/utils';
 import SnackbarContent from 'components/layout/SnackbarContent';
 import AppLoader from 'components/layout/AppLoader';
 
@@ -104,18 +103,6 @@ const Packages = ({ classes }) => {
     [name, selected]
   );
 
-  const updateSnackbar = useCallback(
-    ({ open, type, message }) =>
-      dispatch(
-        setSnackbar({
-          open,
-          type,
-          message
-        })
-      ),
-    []
-  );
-
   const scrollWrapper = useCallback(
     top => {
       const wrapperEl = wrapperRef && wrapperRef.current;
@@ -129,9 +116,9 @@ const Packages = ({ classes }) => {
     [top]
   );
 
+  // force render
   const reload = () => setCounter(counter + 1);
 
-  // useIpc hook to send and listenTo ipc events
   const [dependenciesSet, outdatedSet] = useIpc(
     'ipc-event',
     {
@@ -150,39 +137,33 @@ const Packages = ({ classes }) => {
 
   useEffect(
     () => {
-      if (page !== 0) {
-        dispatch(setPage({ page: 0 }));
-      }
+      dispatch(
+        updateData({
+          dependencies,
+          outdated,
+          projectName,
+          projectVersion
+        })
+      );
 
-      if (Array.isArray(dependencies) && dependencies.length) {
-        dispatch(
-          updateData({
-            dependencies,
-            outdated,
-            projectName,
-            projectVersion
-          })
-        );
-      }
+      // const withErrors = dependencies && filterByProp(dependencies, '__error');
 
-      const withErrors = dependencies && filterByProp(dependencies, '__error');
+      // if (withErrors && withErrors.length) {
+      //   setSnackbar({
+      //     open: true,
+      //     type: 'error',
+      //     message: WARNING_MESSAGES.errorPackages
+      //   });
+      // }
 
-      if (withErrors && withErrors.length) {
-        updateSnackbar({
-          open: true,
-          type: 'error',
-          message: WARNING_MESSAGES.errorPackages
-        });
-      }
-
-      // handle empty data
-      if (dependencies === null) {
-        updateSnackbar({
-          open: true,
-          type: 'info',
-          message: INFO_MESSAGES.nodata
-        });
-      }
+      // // handle empty data
+      // if (dependencies === null) {
+      //   setSnackbar({
+      //     open: true,
+      //     type: 'info',
+      //     message: INFO_MESSAGES.nodata
+      //   });
+      // }
     },
     [dependenciesSet]
   );

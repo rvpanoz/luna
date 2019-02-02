@@ -24,7 +24,8 @@ const styles = theme => ({
   },
   appBar: {
     top: -5,
-    backgroundColor: lighten('#333545', 0.1),
+    backgroundColor: 'rgba(30, 53, 75, 0.925)',
+    // backgroundColor: lighten('#333545', 0.1),
     boxShadow: 'none',
     borderBottom: 0,
     marginBottom: 0,

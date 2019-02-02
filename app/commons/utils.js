@@ -91,23 +91,6 @@ export const getFiltered = (data, filters) => {
 };
 
 /**
- * Read package.json from a directory
- * @param {*} directory
- */
-export const readPackageJson = directory => {
-  try {
-    const packageJSON = fs.readFileSync(path.join(directory), {
-      encoding: 'utf8'
-    });
-
-    return JSON.parse(packageJSON);
-  } catch (error) {
-    mk.log(error);
-    return false;
-  }
-};
-
-/**
  *
  * @param {*} str
  */
@@ -173,6 +156,23 @@ export const isPackageOutdated = (outdatedPackages, name) => {
 };
 
 /**
+ * Read package.json from a directory
+ * @param {*} directory
+ */
+export const readPackageJson = directory => {
+  try {
+    const packageJSON = fs.readFileSync(path.join(directory), {
+      encoding: 'utf8'
+    });
+
+    return JSON.parse(packageJSON);
+  } catch (error) {
+    mk.log(error);
+    return false;
+  }
+};
+
+/**
  *
  * @param {*} subject
  * @param {*} needle
@@ -184,7 +184,7 @@ export const matchType = (subject, needle) => {
 };
 
 /**
- * Parses and maps response
+ * Parses and maps npm list response
  * @param {*} response
  * @param {*} mode
  * @param {*} directory
@@ -200,14 +200,9 @@ export const parseMap = (response, mode, directory) => {
 
     const packages = pick(['dependencies'], packageJson);
     const { dependencies } = packages || {};
-
-    let dataArray = [];
-
-    if (Boolean(dependencies) === false) {
-      dataArray = objectEntries(packageJson);
-    } else {
-      dataArray = objectEntries(dependencies);
-    }
+    const dataArray = dependencies
+      ? objectEntries(packageJson)
+      : objectEntries(dependencies);
 
     if (!Array.isArray(dataArray) || !dataArray) {
       mk.log(`utils[parseMap]: cound not convert response data to array`);
@@ -221,7 +216,7 @@ export const parseMap = (response, mode, directory) => {
       let group;
       let hasError = typeof details.error === 'object';
 
-      // find group and attach to pkg
+      // find group and attach to package
       if (mode && mode === APP_MODES.LOCAL) {
         const packageJSON = readPackageJson(directory);
 
@@ -251,12 +246,6 @@ export const parseMap = (response, mode, directory) => {
     throw new Error(error);
   }
 };
-
-export const filterByProp = (data, prop) =>
-  data &&
-  data.filter(item => {
-    return item[prop];
-  }, data);
 
 export const parseMessage = error => {
   const errorParts = typeof error === 'string' && error.split(',');

@@ -2,7 +2,7 @@
  * Styles that are used on more than one component
  */
 
-const drawerWidth = 260;
+const drawerWidth = 240;
 
 const transition = {
   transition: 'all 0.33s cubic-bezier(0.685, 0.0473, 0.346, 1)'
@@ -33,11 +33,12 @@ const card = {
 
 const defaultFont = {
   fontFamily: '"Regular", "Helvetica", "Arial", sans-serif',
-  fontWeight: '300',
-  lineHeight: '1.5em'
+  fontWeight: '200',
+  lineHeight: '1.225em'
 };
 
 const primaryColor = '#9c27b0';
+const secondaryColor = '#e51a94';
 const warningColor = '#ff9800';
 const dangerColor = '#f44336';
 const successColor = '#4caf50';
@@ -118,6 +119,7 @@ export {
   card,
   defaultFont,
   primaryColor,
+  secondaryColor,
   warningColor,
   dangerColor,
   successColor,
