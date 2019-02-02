@@ -7,7 +7,8 @@ import {
   takeWhile,
   delay,
   tap,
-  takeLast
+  takeLast,
+  skipWhile
 } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
@@ -19,6 +20,7 @@ import {
   setOutdatedSuccess,
   updateData
 } from './actions';
+import { setSnackbar } from '../ui/actions';
 
 const updateLoader = payload => ({
   type: toggleLoader.type,
@@ -48,6 +50,7 @@ const packagesStartEpic = pipe(
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
+    skipWhile(({ payload: { dependencies } }) => !dependencies.length),
     concatMap(
       ({
         payload: { dependencies, outdated, projectName, projectVersion }
@@ -57,11 +60,23 @@ const packagesSuccessEpic = (action$, state$) =>
           packages: { fromSearch, fromSort }
         } = state$.value;
         const actions = [updateLoader({ loading: false })];
-        const withErrors =
+
+        // TODO: make use of it
+        const withErrorsDependencies =
           dependencies &&
           dependencies.filter(dependency => dependency['__error']);
-        console.log(withErrors);
+        console.log(withErrorsDependencies);
+        if (withErrorsDependencies.length) {
+          actions.push(
+            setSnackbar({
+              open: true,
+              type: 'danger',
+              message: 'There are dependencies with errors.'
+            })
+          );
+        }
 
+        // go to first page
         if (page !== 0) {
           actions.push(setPage({ page: 0 }));
         }
@@ -78,7 +93,9 @@ const packagesSuccessEpic = (action$, state$) =>
         ].concat(actions);
       }
     ),
-    tap(console.log)
+    tap(console.log(new Date())),
+    delay(1200),
+    tap(console.log(new Date()))
   );
 
 export default combineEpics(packagesStartEpic, packagesSuccessEpic);
