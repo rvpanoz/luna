@@ -1,16 +1,11 @@
+import { flexContainer, flexItem } from 'styles/variables';
+
 const styles = theme => ({
+  flexContainer,
+  flexItem,
   root: {
     padding: 0,
     margin: 0
-  },
-  fxContainer: {
-    display: 'flex',
-    flexGrow: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  fxItem: {
-    fontWeight: 100
   },
   textRight: {
     textAlign: 'right'

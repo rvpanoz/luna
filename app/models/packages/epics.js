@@ -50,12 +50,18 @@ const packagesSuccessEpic = (action$, state$) =>
     ),
     map(
       ({
-        payload: { dependencies, outdated, projectName, projectVersion }
+        payload: {
+          dependencies,
+          outdated,
+          projectName,
+          projectVersion,
+          projectDescription
+        }
       }) => {
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
           const { name, __peerMissing, __error } = dependency;
 
-          if (!__peerMissing && __error) {
+          if (!__peerMissing && !__error) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
 
             const enhanceDependency = {
@@ -74,33 +80,43 @@ const packagesSuccessEpic = (action$, state$) =>
           dependencies: withOutdated,
           outdated,
           projectName,
-          projectVersion
+          projectVersion,
+          projectDescription
         };
       }
     ),
-    concatMap(({ dependencies, outdated, projectName, projectVersion }) => {
-      const {
-        common: { page },
-        packages: { fromSearch, fromSort }
-      } = state$.value;
-      const actions = [updateLoader({ loading: false })];
+    concatMap(
+      ({
+        dependencies,
+        outdated,
+        projectName,
+        projectVersion,
+        projectDescription
+      }) => {
+        const {
+          common: { page },
+          packages: { fromSearch, fromSort }
+        } = state$.value;
+        const actions = [updateLoader({ loading: false })];
 
-      if (page !== 0) {
-        actions.unshift(setPage({ page: 0 }));
+        if (page !== 0) {
+          actions.unshift(setPage({ page: 0 }));
+        }
+
+        return [
+          setPackages({
+            projectName,
+            projectVersion,
+            projectDescription,
+            fromSearch,
+            fromSort,
+            dependencies
+          }),
+          setOutdated({ outdated }),
+          ...actions
+        ];
       }
-
-      return [
-        setPackages({
-          projectName,
-          projectVersion,
-          fromSearch,
-          fromSort,
-          dependencies
-        }),
-        setOutdated({ outdated }),
-        ...actions
-      ];
-    })
+    )
   );
 
 export default combineEpics(packagesStartEpic, packagesSuccessEpic);
