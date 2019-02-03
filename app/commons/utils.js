@@ -141,17 +141,17 @@ export const isAlpha = version => {
 
 /**
  * Get package outdated
- * @param {*} outdatedPackages
+ * @param {*} outdated
  * @param {*} name
  */
-export const isPackageOutdated = (outdatedPackages, name) => {
-  if (!Array.isArray(outdatedPackages)) {
+export const isPackageOutdated = (outdated, name) => {
+  if (!Array.isArray(outdated)) {
     return [false, null];
   }
 
   return [
-    outdatedPackages.some(o => o.name === name),
-    outdatedPackages.find(f => f.name === name)
+    outdated.some(o => o.name === name),
+    outdated.find(f => f.name === name)
   ];
 };
 
