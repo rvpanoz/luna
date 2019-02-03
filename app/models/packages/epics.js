@@ -1,24 +1,11 @@
 /* eslint-disable */
 
-import { of, pipe } from 'rxjs';
-import {
-  map,
-  concatMap,
-  from,
-  takeWhile,
-  take,
-  delay,
-  tap,
-  combineAll,
-  takeLast,
-  skipWhile,
-  switchMap,
-  ignoreElements
-} from 'rxjs/operators';
+import { pipe } from 'rxjs';
+import { map, concatMap, tap, skipWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
+
 import { isPackageOutdated } from 'commons/utils';
 import { setPage, toggleLoader } from 'models/ui/actions';
-
 import { WARNING_MESSAGES, INFO_MESSAGES } from 'constants/AppConstants';
 
 import {
@@ -57,23 +44,31 @@ const packagesStartEpic = pipe(
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
-    skipWhile(({ payload: { dependencies } }) => !dependencies.length),
+    skipWhile(
+      ({ payload: { dependencies } }) =>
+        !Array.isArray(dependencies) || !dependencies.length
+    ),
     map(
       ({
         payload: { dependencies, outdated, projectName, projectVersion }
       }) => {
-        const withOutdated = dependencies.map(pkg => {
-          const [isOutdated, outdatedPkg] = isPackageOutdated(
-            outdated,
-            pkg.name
-          );
+        const withOutdated = dependencies.reduce((deps = [], dependency) => {
+          const { name, __peerMissing, __error } = dependency;
 
-          return {
-            ...pkg,
-            latest: isOutdated ? outdatedPkg.latest : null,
-            isOutdated
-          };
-        });
+          if (!__peerMissing && __error) {
+            const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
+
+            const enhanceDependency = {
+              ...dependency,
+              latest: isOutdated ? outdatedPkg.latest : null,
+              isOutdated
+            };
+
+            deps.push(enhanceDependency);
+          }
+
+          return deps;
+        }, []);
 
         return {
           dependencies: withOutdated,
@@ -83,7 +78,6 @@ const packagesSuccessEpic = (action$, state$) =>
         };
       }
     ),
-    tap(console.log),
     concatMap(({ dependencies, outdated, projectName, projectVersion }) => {
       const {
         common: { page },
@@ -95,35 +89,13 @@ const packagesSuccessEpic = (action$, state$) =>
         actions.unshift(setPage({ page: 0 }));
       }
 
-      const withErrorsDependencies =
-        dependencies &&
-        dependencies.filter(dependency => dependency['__error']);
-
-      const withPeerDependencies =
-        dependencies &&
-        dependencies.filter(dependency => dependency['__peerMissing']);
-
-      if (withErrorsDependencies.length) {
-        actions.push(
-          setSnackbar({
-            open: true,
-            type: 'warning',
-            message: WARNING_MESSAGES.errorPackages
-          })
-        );
-      }
-
-      const data = dependencies.filter(
-        dependency => !dependency.__peerMissing || !dependency.__error
-      );
-
       return [
         setPackages({
           projectName,
           projectVersion,
           fromSearch,
           fromSort,
-          dependencies: data
+          dependencies
         }),
         setOutdated({ outdated }),
         ...actions
