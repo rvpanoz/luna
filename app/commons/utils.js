@@ -200,9 +200,10 @@ export const parseMap = (response, mode, directory) => {
 
     const packages = pick(['dependencies'], packageJson);
     const { dependencies } = packages || {};
+
     const dataArray = dependencies
-      ? objectEntries(packageJson)
-      : objectEntries(dependencies);
+      ? objectEntries(dependencies)
+      : objectEntries(packageJson);
 
     if (!Array.isArray(dataArray) || !dataArray) {
       mk.log(`utils[parseMap]: cound not convert response data to array`);
@@ -214,7 +215,7 @@ export const parseMap = (response, mode, directory) => {
       const { name, peerMissing } = details || {};
 
       let group;
-      let hasError = typeof details.error === 'object';
+      let hasError = typeof details && details.error === 'object';
 
       // find group and attach to package
       if (mode && mode === APP_MODES.LOCAL) {
@@ -242,7 +243,7 @@ export const parseMap = (response, mode, directory) => {
 
     return [name, version, data];
   } catch (error) {
-    mk.log(error.message);
+    mk.log(error);
     throw new Error(error);
   }
 };

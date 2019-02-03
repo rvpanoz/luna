@@ -61,11 +61,10 @@ const packagesSuccessEpic = (action$, state$) =>
         } = state$.value;
         const actions = [updateLoader({ loading: false })];
 
-        // TODO: make use of it
         const withErrorsDependencies =
           dependencies &&
           dependencies.filter(dependency => dependency['__error']);
-        console.log(withErrorsDependencies);
+
         if (withErrorsDependencies.length) {
           actions.push(
             setSnackbar({
@@ -92,10 +91,7 @@ const packagesSuccessEpic = (action$, state$) =>
           setOutdated({ outdated })
         ].concat(actions);
       }
-    ),
-    tap(console.log(new Date())),
-    delay(1200),
-    tap(console.log(new Date()))
+    )
   );
 
 export default combineEpics(packagesStartEpic, packagesSuccessEpic);

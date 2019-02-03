@@ -4,8 +4,10 @@ import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
-import { withStyles, Typography } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
+import { withStyles } from '@material-ui/core/styles';
+
+import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -24,11 +26,7 @@ import {
 
 import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
 
-import {
-  APP_INFO,
-  INFO_MESSAGES,
-  WARNING_MESSAGES
-} from 'constants/AppConstants';
+import { APP_INFO, WARNING_MESSAGES } from 'constants/AppConstants';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -96,6 +94,7 @@ const Packages = ({ classes }) => {
 
   const wrapperRef = useRef(null);
   const [counter, setCounter] = useState(0);
+  const reload = () => setCounter(counter + 1);
   const dispatch = useDispatch();
 
   const isSelected = useCallback(
@@ -115,9 +114,6 @@ const Packages = ({ classes }) => {
     },
     [top]
   );
-
-  // force render
-  const reload = () => setCounter(counter + 1);
 
   const [dependenciesSet, outdatedSet] = useIpc(
     'ipc-event',
@@ -145,29 +141,10 @@ const Packages = ({ classes }) => {
           projectVersion
         })
       );
-
-      // const withErrors = dependencies && filterByProp(dependencies, '__error');
-
-      // if (withErrors && withErrors.length) {
-      //   setSnackbar({
-      //     open: true,
-      //     type: 'error',
-      //     message: WARNING_MESSAGES.errorPackages
-      //   });
-      // }
-
-      // // handle empty data
-      // if (dependencies === null) {
-      //   setSnackbar({
-      //     open: true,
-      //     type: 'info',
-      //     message: INFO_MESSAGES.nodata
-      //   });
-      // }
     },
     [dependenciesSet]
   );
-
+  console.log(dependencies);
   useEffect(
     () => {
       ipcRenderer.on(['action-close'], (event, error) => {
