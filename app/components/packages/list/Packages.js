@@ -92,7 +92,7 @@ const Packages = ({ classes }) => {
     sortDir,
     sortBy
   } = useMappedState(mapState);
-  console.log(fromSearch);
+
   const wrapperRef = useRef(null);
   const [counter, setCounter] = useState(0);
   const reload = () => setCounter(counter + 1);
@@ -143,32 +143,38 @@ const Packages = ({ classes }) => {
   const outdated = outdatedSet.data;
   const nodata = Boolean(dependencies && dependencies.length === 0);
 
-  useEffect(() => {
-    dispatch(
-      updateData({
-        dependencies,
-        outdated,
-        projectName,
-        projectVersion,
-        projectDescription,
-        projectLicense,
-        projectAuthor
-      })
-    );
-  }, [dependenciesSet]);
+  useEffect(
+    () => {
+      dispatch(
+        updateData({
+          dependencies,
+          outdated,
+          projectName,
+          projectVersion,
+          projectDescription,
+          projectLicense,
+          projectAuthor
+        })
+      );
+    },
+    [dependenciesSet]
+  );
 
-  useEffect(() => {
-    ipcRenderer.on(['action-close'], (event, error) => {
-      if (error && error.length) {
-        dispatch(addActionError({ error }));
-      }
+  useEffect(
+    () => {
+      ipcRenderer.on(['action-close'], (event, error) => {
+        if (error && error.length) {
+          dispatch(addActionError({ error }));
+        }
 
-      // force render
-      setCounter(counter + 1);
-    });
+        // force render
+        setCounter(counter + 1);
+      });
 
-    return () => ipcRenderer.removeAllListeners(['action-close']);
-  }, [counter]);
+      return () => ipcRenderer.removeAllListeners(['action-close']);
+    },
+    [counter]
+  );
 
   // more listeners
   useEffect(() => {
