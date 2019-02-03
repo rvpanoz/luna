@@ -144,7 +144,7 @@ const Packages = ({ classes }) => {
     },
     [dependenciesSet]
   );
-  console.log(dependencies);
+
   useEffect(
     () => {
       ipcRenderer.on(['action-close'], (event, error) => {

@@ -19,7 +19,6 @@ import {
   setOutdatedSuccess,
   setSortOptions
 } from 'models/packages/actions';
-
 import { isPackageOutdated } from 'commons/utils';
 import format from 'date-fns/format';
 
@@ -81,28 +80,11 @@ const handlers = {
       projectName,
       projectVersion,
       fromSort,
-      fromSearch,
-      outdated
+      fromSearch
     } = payload;
 
-    const packages = dependencies
-      ? dependencies
-          .filter(pkg => pkg)
-          .map(pkg => {
-            const [isOutdated, outdatedPkg] = isPackageOutdated(
-              outdated,
-              pkg.name
-            );
-
-            return merge(pkg, {
-              latest: isOutdated ? outdatedPkg.latest : null,
-              isOutdated
-            });
-          })
-      : [];
-
     return merge(state, {
-      packages,
+      packages: dependencies,
       fromSearch,
       fromSort,
       lastUpdatedAt:
@@ -116,10 +98,10 @@ const handlers = {
     });
   },
   [setOutdatedSuccess.type]: (state, { payload }) => {
-    const { dependencies } = payload;
+    const { outdated } = payload;
 
     return merge(state, {
-      packagesOutdated: dependencies
+      packagesOutdated: outdated
     });
   },
   [setActive.type]: (state, { payload }) => {

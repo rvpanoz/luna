@@ -57,8 +57,9 @@ export const NPM_CONFIG_VALUES = {
 };
 
 export const INFO_MESSAGES = {
+  loading: 'Loading packages..',
   noData: 'No dependencies found.',
-  packageLoaded: 'Package loaded.'
+  loaded: 'Package loaded.'
 };
 
 export const WARNING_MESSAGES = {
