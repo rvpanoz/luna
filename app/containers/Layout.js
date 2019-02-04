@@ -8,7 +8,7 @@ import React from 'react';
 import { objectOf, string } from 'prop-types';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { withStyles } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
 import Header from 'components/Header';

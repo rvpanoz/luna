@@ -21,6 +21,7 @@ export default {
   packages: {
     projectName: null,
     projectVersion: null,
+    projectDescription: null,
     sortBy: 'name',
     sortDir: 'asc',
     action: {

@@ -11,41 +11,30 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
+import ProjectDetails from './RepositoryDetails';
 
 import styles from './styles/cardDetails';
 
 const AppCardDetails = props => {
-  const { classes, title, subtext, text, color, link } = props;
+  const { classes, title, subtext, text, color, link, icon } = props;
 
   return (
     <Card className={classes.card}>
       <CardContent className={classes.cardContent}>
-        <Typography variant="subtitle1">{title}</Typography>
+        <ProjectDetails title={title} />
+      </CardContent>
+      <CardActions className={classes.cardActions}>
         <Typography component="p" className={classes.cardText}>
           {subtext}
         </Typography>
-      </CardContent>
-      <CardActions className={classes.cardActions}>
-        <InfoIcon
-          className={cn(
-            classes.cardStatsIcon,
-            classes[`${color}CardStatsIcon`]
-          )}
-        />
-        {link !== undefined ? (
-          <a href={link.href} className={classes.cardStatsLink}>
-            {link.text}
-          </a>
-        ) : text !== undefined ? (
-          <small className={classes.text}>{text}</small>
-        ) : null}
       </CardActions>
     </Card>
   );
 };
 
 AppCardDetails.defaultProps = {
-  color: 'blue'
+  color: 'gray',
+  icon: true
 };
 
 AppCardDetails.propTypes = {

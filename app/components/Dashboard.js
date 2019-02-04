@@ -1,29 +1,45 @@
-/**
- * Dashboard component
- */
-
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { useMappedState } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
+
 import CardInfo from './layout/CardInfo';
 import CardDetails from './layout/CardDetails';
 import Transition from './layout/Transition';
+import AppLoader from './layout/AppLoader';
+
 import styles from './styles/dashboard';
 
+import WarningIcon from '@material-ui/icons/WarningOutlined';
+import UpdateIcon from '@material-ui/icons/UpdateOutlined';
+import BalotIcon from '@material-ui/icons/BallotOutlined';
+import BarChartIcon from '@material-ui/icons/BarChartOutlined';
+
+import { BasicCard, DetailsCard } from 'components/atoms/';
+import { Typography } from '@material-ui/core';
+
+const detailsCardTitle = 'Project';
+
 const mapState = ({
-  common: { manager, mode, directory },
+  common: {
+    manager,
+    mode,
+    directory,
+    loader: { loading }
+  },
   packages: {
-    loading,
     lastUpdatedAt,
     packages,
     packagesOutdated,
     projectName,
-    projectVersion
+    projectVersion,
+    projectDescription
   }
 }) => ({
   manager,
@@ -34,11 +50,13 @@ const mapState = ({
   packages,
   packagesOutdated,
   projectName,
-  projectVersion
+  projectVersion,
+  projectDescription
 });
 
 const Dashboard = props => {
   const { classes } = props;
+  const [activeTab, setActiveTab] = useState(0);
 
   const {
     packages,
@@ -48,81 +66,29 @@ const Dashboard = props => {
     mode,
     projectName,
     projectVersion,
+    projectDescription,
     lastUpdatedAt
   } = useMappedState(mapState);
-
-  const renderProjectStats = () => (
-    <div className={classes.flexContainer}>
-      <div className={classes.flexContainerItem}>
-        version:&nbsp;
-        {projectVersion || APP_INFO.NOT_AVAILABLE}
-      </div>
-      <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        <a href="#" className={classes.cardLink}>
-          View details
-        </a>
-      </div>
-    </div>
-  );
-
-  const renderDependenciesStats = () => (
-    <div className={classes.flexContainer}>
-      <div className={classes.flexContainerItem}>Updated at</div>
-      <div className={cn(classes.flexContainerItem, classes.textRight)}>
-        {lastUpdatedAt}
-      </div>
-    </div>
-  );
-
-  const renderStats = () => (
-    <div className={classes.flexContainer}>
-      <div className={classes.flexContainerItem}>Problems</div>
-    </div>
-  );
 
   return (
     <section className={classes.root}>
       <Grid container justify="space-between">
         <Grid item xs={12} sm={12} md={12} lg={4} xl={3}>
-          <Transition>
-            <CardDetails
-              id="card-1"
-              color="info"
-              title={
-                mode === APP_MODES.LOCAL && projectName
-                  ? projectName
-                  : 'Project'
-              }
-              subtext={directory || APP_INFO.NO_WORKING_DIRECTORY}
-              text={renderProjectStats()}
-              loading={loading}
-              avatar
-              className={classes.cardDetails}
-            />
-          </Transition>
-        </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-          <CardInfo
-            id="card-2"
-            title="Total dependencies"
-            description={packages ? packages.length : 0}
-            color="success"
-            text={renderDependenciesStats()}
-            loading={loading}
-            type="update"
-            className={classes.cardInfo}
+          <DetailsCard
+            isLoading={loading}
+            title={detailsCardTitle}
+            subTitle={projectName}
+            description={projectDescription}
+            color="info"
+            type="info"
+            renderIconType={className => <WarningIcon className={className} />}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-          <CardInfo
-            id="card-3"
-            title="Outdated packages"
-            description={packagesOutdated ? packagesOutdated.length : 0}
-            color="danger"
-            text={renderStats()}
-            type="stats"
-            className={classes.cardInfo}
-          />
+          <BasicCard title="Dependencies" renderIcon={() => <BalotIcon />} />
+        </Grid>
+        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+          <BasicCard title="Outdated" renderIcon={() => <WarningIcon />} />
         </Grid>
       </Grid>
     </section>

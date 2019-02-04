@@ -88,6 +88,37 @@ const purpleCardHeader = {
   ...primaryBoxShadow
 };
 
+const flexContainer = {
+  display: '-webkit-flex',
+  justifyContent: 'space-around',
+  listStyle: 'none',
+  margin: 0,
+  padding: 0,
+  WebkitFlexFlow: 'row wrap',
+  position: 'relative'
+};
+
+const flexItem = {
+  color: '#fff',
+  height: '210px',
+  margin: '10px 0',
+  padding: '0',
+  width: '225px',
+  position: 'relative'
+};
+
+const flex_item_inner = {
+  display: '-webkit-flex',
+  flexDirection: 'column',
+  justifyContent: 'flex-start',
+  height: '210px',
+  margin: '0',
+  padding: '0',
+  width: '100%'
+};
+
+const flex_item_inner_a = { color: '#fff', cursor: 'pointer' };
+
 const cardActions = {
   margin: '0 20px 10px',
   paddingTop: '10px',
@@ -138,5 +169,9 @@ export {
   purpleCardHeader,
   cardActions,
   cardHeader,
-  defaultBoxShadow
+  defaultBoxShadow,
+  flexContainer,
+  flexItem,
+  flex_item_inner,
+  flex_item_inner_a
 };

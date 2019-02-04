@@ -79,6 +79,7 @@ const handlers = {
       dependencies,
       projectName,
       projectVersion,
+      projectDescription,
       fromSort,
       fromSearch
     } = payload;
@@ -93,6 +94,7 @@ const handlers = {
           : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
       projectName,
       projectVersion,
+      projectDescription,
       filters: [],
       selected: []
     });

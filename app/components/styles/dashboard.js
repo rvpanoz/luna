@@ -1,16 +1,11 @@
+import { flexContainer, flexItem } from 'styles/variables';
+
 const styles = theme => ({
+  flexContainer,
+  flexItem,
   root: {
     padding: 0,
     margin: 0
-  },
-  flexContainer: {
-    display: 'flex',
-    flexGrow: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  flexContainerItem: {
-    fontWeight: 100
   },
   textRight: {
     textAlign: 'right'
@@ -25,6 +20,11 @@ const styles = theme => ({
     [theme.breakpoints.down('sm')]: {
       display: 'none'
     }
+  },
+  actionButton: {
+    width: 100,
+    height: 15,
+    textTransform: 'capitalize'
   }
 });
 
