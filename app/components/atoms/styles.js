@@ -6,112 +6,55 @@ import {
   card,
   cardHeader,
   defaultFont,
-  orangeCardHeader,
-  greenCardHeader,
-  redCardHeader,
-  blueCardHeader,
-  purpleCardHeader,
-  cardActions,
-  grayColor,
-  warningColor,
-  dangerColor,
-  successColor,
-  infoColor,
-  primaryColor,
-  roseColor
+  cardHeaderColor
 } from 'styles/variables';
 
-export const cardInfoStyles = {
+export const detailsCardStyles = theme => ({
   card,
+  cardPlain: {
+    background: 'transparent',
+    boxShadow: 'none'
+  },
   cardHeader: {
     ...cardHeader,
-    float: 'left',
-    textAlign: 'center'
-  },
-  orangeCardHeader,
-  greenCardHeader,
-  redCardHeader,
-  blueCardHeader,
-  purpleCardHeader,
-  cardContent: {
-    textAlign: 'left',
-    paddingTop: '10px',
-    padding: '15px 20px'
-  },
-  cardIcon: {
-    width: '40px',
-    height: '36px',
-    fill: '#fff'
-  },
-  cardAvatar: {
-    margin: '8px'
-  },
-  cardCategory: {
-    marginBottom: '0',
-    color: grayColor,
-    margin: '0 0 10px',
     ...defaultFont
   },
+  cardHeaderColor,
   cardTitle: {
-    margin: '0',
-    ...defaultFont,
-    fontSize: '1.625em'
+    color: '#fff',
+    marginTop: 0,
+    marginBottom: theme.spacing.unit,
+    fontSize: '1.125em',
+    ...defaultFont
   },
-  cardTitleSmall: {
-    fontSize: '65%',
-    fontWeight: '400',
-    lineHeight: '1',
-    color: '#777'
+  cardSubtitle: {
+    ...defaultFont,
+    marginBottom: 0,
+    color: 'rgba(255, 255, 255, 0.62)',
+    margin: '0 0 10px'
   },
   cardActions: {
-    ...cardActions,
-    padding: '0!important'
+    padding: theme.spacing.unit * 1.5,
+    display: 'block',
+    height: 'auto'
+  },
+  cardDescription: {
+    fontSize: '0.85em'
   },
   cardStats: {
-    lineHeight: '22px',
-    color: grayColor,
-    fontSize: '12px',
+    lineHeight: 22,
+    fontSize: 12,
     display: 'inline-block',
-    margin: '0!important'
+    margin: 0
   },
-  cardStatsIcon: {
+  cardIcon: {
     position: 'relative',
-    top: '4px',
-    width: '16px',
-    height: '16px'
-  },
-  warningCardStatsIcon: {
-    color: warningColor
-  },
-  primaryCardStatsIcon: {
-    color: primaryColor
-  },
-  dangerCardStatsIcon: {
-    color: dangerColor
-  },
-  successCardStatsIcon: {
-    color: successColor
-  },
-  infoCardStatsIcon: {
-    color: infoColor
-  },
-  roseCardStatsIcon: {
-    color: roseColor
-  },
-  grayCardStatsIcon: {
-    color: grayColor
-  },
-  cardStatsLink: {
-    color: primaryColor,
-    textDecoration: 'none',
-    ...defaultFont
-  },
-  text: {
-    width: '100%',
-    position: 'relative',
-    top: 5
+    top: 4,
+    color: theme.palette.primary.light,
+    width: 16,
+    height: 16
   }
-};
+});
 
 export const basicCardStyles = theme => ({
   root: {

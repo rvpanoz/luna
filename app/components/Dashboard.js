@@ -73,23 +73,9 @@ const Dashboard = props => {
   return (
     <section className={classes.root}>
       <Grid container justify="space-between">
-        <Grid item xs={12} sm={12} md={12} lg={4} xl={3}>
-          <DetailsCard
-            isLoading={loading}
-            title={detailsCardTitle}
-            subTitle={projectName}
-            description={projectDescription}
-            color="info"
-            type="info"
-            renderIconType={className => <WarningIcon className={className} />}
-          />
-        </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-          <BasicCard title="Dependencies" renderIcon={() => <BalotIcon />} />
-        </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-          <BasicCard title="Outdated" renderIcon={() => <WarningIcon />} />
-        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={4} xl={3} />
+        <Grid item xs={12} sm={12} md={4} lg={3} xl={3} />
+        <Grid item xs={12} sm={12} md={4} lg={3} xl={3} />
       </Grid>
     </section>
   );

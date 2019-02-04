@@ -9,11 +9,11 @@ import { withStyles } from '@material-ui/core/styles';
 import { ipcRenderer, remote } from 'electron';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 
 import Badge from '@material-ui/core/Badge';
 import Menu from '@material-ui/core/Menu';
@@ -114,17 +114,10 @@ const Header = ({ title, classes }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            className={classes.title}
-            variant="h6"
-            color="inherit"
-            noWrap
-          >
-            {title}
-          </Typography>
+          <div className={cn(classes.title, classes.rotate)}>{title}</div>
           <SearchBox disabled={loader && loader.loading} />
           <div className={classes.grow} />
-          <div style={{ display: 'none' }} className={classes.headerToolbar}>
+          <div className={classes.headerToolbar}>
             <IconButton
               color="inherit"
               aria-owns={menuOpen ? 'app-settings' : undefined}

@@ -25,7 +25,7 @@ const styles = theme => ({
   appBar: {
     top: -5,
     // backgroundColor: 'rgba(30, 53, 75, 0.925)',
-    // backgroundColor: lighten('#333545', 0.1),
+    backgroundColor: lighten(theme.palette.secondary.light, 0.1),
     boxShadow: 'none',
     borderBottom: 0,
     marginBottom: 0,
@@ -44,15 +44,8 @@ const styles = theme => ({
   },
   title: {
     ...defaultFont,
-    lineHeight: '30px',
-    fontSize: '18px',
-    borderRadius: '3px',
-    textTransform: 'none',
-    color: 'inherit',
-    top: '10px',
-    '&:hover,&:focus': {
-      background: 'transparent'
-    }
+    fontFamily: '"Steak", "Light", "Helvetica", sans-serif',
+    fontSize: 26
   },
   primary: {
     backgroundColor: primaryColor,
@@ -87,14 +80,9 @@ const styles = theme => ({
     left: '35%'
   },
   menuButton: {
+    top: 2,
     marginLeft: -12,
     marginRight: 20
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block'
-    }
   },
   hide: {
     display: 'none'

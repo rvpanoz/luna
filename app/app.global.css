@@ -28,6 +28,12 @@ body {
 }
 
 @font-face {
+  font-family: 'Steak';
+  src: local('Steak'), local('Steak'),
+    url('./assets/fonts/Steak.ttf') format('truetype');
+}
+
+@font-face {
   font-family: 'Regular';
   src: local('Regular'), local('Regular'),
     url('./assets/fonts/Regular.woff') format('woff'),
