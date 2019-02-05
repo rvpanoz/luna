@@ -56,7 +56,6 @@ const mapState = ({
 
 const Dashboard = props => {
   const { classes } = props;
-  const [activeTab, setActiveTab] = useState(0);
 
   const {
     packages,
@@ -73,7 +72,15 @@ const Dashboard = props => {
   return (
     <section className={classes.root}>
       <Grid container justify="space-between">
-        <Grid item xs={12} sm={12} md={12} lg={4} xl={3} />
+        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+          <DetailsCard
+            mode={mode}
+            directory={directory}
+            name={projectName}
+            version={projectVersion}
+            description={projectDescription}
+          />
+        </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3} />
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3} />
       </Grid>

@@ -4,12 +4,23 @@
 
 import {
   card,
+  cardActions,
   cardHeader,
   defaultFont,
-  cardHeaderColor
+  greyColor
 } from 'styles/variables';
 
 export const detailsCardStyles = theme => ({
+  card,
+  cardContent: {
+    textAlign: 'left',
+    paddingTop: 20,
+    padding: '15px 20px'
+  },
+  cardHeader: {
+    minHeight: 100,
+    ...cardHeader
+  },
   card,
   cardPlain: {
     background: 'transparent',
@@ -19,40 +30,31 @@ export const detailsCardStyles = theme => ({
     ...cardHeader,
     ...defaultFont
   },
-  cardHeaderColor,
+  cardPlainHeader: {
+    marginLeft: 0,
+    marginRight: 0
+  },
   cardTitle: {
-    color: '#fff',
-    marginTop: 0,
-    marginBottom: theme.spacing.unit,
-    fontSize: '1.125em',
-    ...defaultFont
+    marginTop: '0',
+    marginBottom: '5px',
+    ...defaultFont,
+    fontSize: '1.125em'
   },
   cardSubtitle: {
     ...defaultFont,
-    marginBottom: 0,
-    color: 'rgba(255, 255, 255, 0.62)',
+    marginBottom: '0',
     margin: '0 0 10px'
   },
   cardActions: {
-    padding: theme.spacing.unit * 1.5,
+    padding: '14px',
     display: 'block',
-    height: 'auto'
+    height: 'auto',
+    ...cardActions
   },
-  cardDescription: {
-    fontSize: '0.85em'
-  },
-  cardStats: {
-    lineHeight: 22,
+  cardActionsText: {
     fontSize: 12,
-    display: 'inline-block',
-    margin: 0
-  },
-  cardIcon: {
-    position: 'relative',
-    top: 4,
-    color: theme.palette.primary.light,
-    width: 16,
-    height: 16
+    fontWeight: 100,
+    color: greyColor
   }
 });
 

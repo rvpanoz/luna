@@ -44,7 +44,7 @@ const styles = theme => ({
   },
   title: {
     ...defaultFont,
-    fontFamily: '"Steak", "Light", "Helvetica", sans-serif',
+    fontFamily: '"Regular", "Helvetica", sans-serif',
     fontSize: 26
   },
   primary: {
@@ -80,7 +80,7 @@ const styles = theme => ({
     left: '35%'
   },
   menuButton: {
-    top: 2,
+    top: -1,
     marginLeft: -12,
     marginRight: 20
   },

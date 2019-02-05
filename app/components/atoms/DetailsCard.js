@@ -18,38 +18,47 @@ import {
 } from 'prop-types';
 import cn from 'classnames';
 
-import InfoIcon from '@material-ui/icons/InfoRounded';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import PhoneIcon from '@material-ui/icons/Phone';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import PersonPinIcon from '@material-ui/icons/PersonPin';
+import Chip from '@material-ui/core/Chip';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
+import { APP_MODES } from 'constants/AppConstants';
+
 import { detailsCardStyles } from './styles';
 
-const CardDetails = ({ classes, headerColor, data, renderIcon }) => {
-  const { projectName, projectVersion, projectDescription } = data || {};
-
+const CardDetails = ({
+  mode,
+  directory,
+  classes,
+  name,
+  version,
+  description
+}) => {
   return (
     <Card className={classes.card}>
       <CardHeader
         classes={{
-          root: cn(classes.cardHeader, classes.cardHeaderColor),
+          root: classes.cardHeader,
           title: classes.cardTitle,
           subheader: classes.cardSubtitle
         }}
-        title={projectName}
-        subheader={projectVersion}
+        title={name}
+        subheader={description}
+        avatar={<Chip label={version} />}
       />
-      <CardContent>
-        <Typography component="p" className={classes.cardDescription}>
-          {projectDescription}
-        </Typography>
-      </CardContent>
+      <CardContent className={classes.content} />
       <CardActions className={classes.cardActions}>
-        <div className={classes.cardStats}>
-          {<InfoIcon className={classes.cardIcon} />}
-        </div>
+        <Typography component="p" className={classes.cardActionsText}>
+          {mode === APP_MODES.LOCAL && directory}
+        </Typography>
       </CardActions>
     </Card>
   );
@@ -61,9 +70,9 @@ CardDetails.defaultProps = {
 
 CardDetails.propTypes = {
   classes: objectOf(string).isRequired,
-  title: node.isRequired,
+  name: oneOfType([node, string]),
   description: oneOfType([node, string]),
-  small: node,
+  version: string,
   color: oneOf([
     'warning',
     'primary',
@@ -72,11 +81,7 @@ CardDetails.propTypes = {
     'info',
     'rose',
     'gray'
-  ]),
-  text: string,
-  data: object,
-  renderIcon: func,
-  headerColor: bool
+  ])
 };
 
 export default withStyles(detailsCardStyles)(CardDetails);

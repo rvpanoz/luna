@@ -87,13 +87,8 @@ const card = {
   background: '#fff'
 };
 
-const cardHeaderColor = {
-  background: secondaryColor,
-  ...defaultBoxShadow
-};
-
 const cardActions = {
-  margin: '0 20px 10px',
+  margin: '0 10px 0px',
   paddingTop: '10px',
   borderTop: '1px solid #eeeeee',
   height: 'auto',
@@ -151,7 +146,6 @@ export {
   successBoxShadow,
   warningBoxShadow,
   dangerBoxShadow,
-  cardHeaderColor,
   cardActions,
   cardHeader,
   defaultBoxShadow,
