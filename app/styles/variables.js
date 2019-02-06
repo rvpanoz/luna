@@ -88,18 +88,15 @@ const card = {
 };
 
 const cardActions = {
-  margin: '0 10px 0px',
-  paddingTop: '10px',
+  padding: 0,
+  margin: 0,
   borderTop: '1px solid #eeeeee',
   height: 'auto',
   ...defaultFont
 };
 
 const cardHeader = {
-  margin: '-5px 0 0',
-  padding: '8px 0px 0px 16px',
-  border: '1px solid #fff',
-  borderRadius: 5
+  padding: 0
 };
 
 /* box shadows */

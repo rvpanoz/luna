@@ -84,22 +84,10 @@ const Dashboard = props => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-          <DetailsCard
-            mode={mode}
-            directory={directory}
-            name={projectName}
-            version={projectVersion}
-            description={projectDescription}
-          />
+          <BasicCard renderIcon={() => console.log('todo')} />
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-          <DetailsCard
-            mode={mode}
-            directory={directory}
-            name={projectName}
-            version={projectVersion}
-            description={projectDescription}
-          />
+          <BasicCard renderIcon={() => console.log('todo')} />
         </Grid>
       </Grid>
     </section>

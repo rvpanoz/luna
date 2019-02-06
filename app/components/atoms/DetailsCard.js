@@ -8,6 +8,7 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { objectOf, oneOfType, oneOf, string, node } from 'prop-types';
 import cn from 'classnames';
+
 import WarningIcon from '@material-ui/icons/Warning';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';

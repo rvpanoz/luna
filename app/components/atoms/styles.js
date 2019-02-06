@@ -25,7 +25,8 @@ export const detailsCardStyles = theme => ({
   },
   cardHeader: {
     ...cardHeader,
-    ...defaultFont
+    ...defaultFont,
+    padding: theme.spacing.unit
   },
   cardPlainHeader: {
     marginLeft: 0,
@@ -52,10 +53,9 @@ export const detailsCardStyles = theme => ({
     alignItems: 'center'
   },
   cardActions: {
+    ...cardActions,
     display: 'flex',
-    padding: theme.spacing.unit,
-    height: 'auto',
-    ...cardActions
+    padding: theme.spacing.unit
   },
   cardIcon: {
     width: '20px',
@@ -95,14 +95,64 @@ export const detailsCardStyles = theme => ({
   }
 });
 
-export const basicCardStyles = theme => ({
-  root: {
+export const basicCardStyles = () => ({
+  card,
+  cardHeader: {
+    ...cardHeader,
+    float: 'left',
+    textAlign: 'center'
+  },
+  cardContent: {
+    textAlign: 'right',
+    paddingTop: '10px',
+    padding: '15px 20px'
+  },
+  cardIcon: {
+    width: '20px',
+    height: 'auto'
+  },
+  cardAvatar: {
+    margin: '8px'
+  },
+  cardCategory: {
+    marginBottom: '0',
+    color: grayColor,
+    margin: '0 0 10px',
+    ...defaultFont
+  },
+  cardTitle: {
+    margin: '0',
+    ...defaultFont,
+    fontSize: '1.625em'
+  },
+  cardTitleSmall: {
+    fontSize: '65%',
+    fontWeight: '400',
+    lineHeight: '1',
+    color: '#777'
+  },
+  cardActions: {
+    ...cardActions,
+    padding: '0!important'
+  },
+  warningCardIcon: {
+    color: warningColor
+  },
+  dangerCardIcon: {
+    color: dangerColor
+  },
+  successCardIcon: {
+    color: successColor
+  },
+  infoCardIcon: {
+    color: infoColor
+  },
+  grayCardIcon: {
+    color: grayColor
+  },
+  text: {
+    width: '100%',
     position: 'relative',
-    margin: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 3,
-    boxShadow:
-      '0 1px 1px 0 rgba(60, 64, 67, 0.08), 0 1px 3px 1px rgba(60, 64, 67, 0.16)',
-    transition: 'box-shadow 0.25s',
-    borderRadius: 2
+    top: 5
   }
 });
