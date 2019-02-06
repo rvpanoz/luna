@@ -45,7 +45,7 @@ const infoColor = '#00acc1';
 const roseColor = '#e91e63';
 const grayColor = '#999999';
 
-/** flexbox **/
+/* flexbox */
 const flexContainer = {
   display: '-webkit-flex',
   justifyContent: 'space-around',
@@ -96,15 +96,13 @@ const cardActions = {
 };
 
 const cardHeader = {
-  margin: '-5px 15px 0',
-  borderRadius: '3px',
-  padding: '15px',
-  minHeight: 50,
+  margin: '-5px 0 0',
+  padding: '8px 0px 0px 16px',
   border: '1px solid #fff',
   borderRadius: 5
 };
 
-/** box shadows */
+/* box shadows */
 const primaryBoxShadow = {
   boxShadow:
     '0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2)'

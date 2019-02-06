@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import PropTypes, { string, bool } from 'prop-types';
 import cx from 'classnames';
 
-import buttonStyle from '../../styles/buttonStyle';
+import buttonStyle from './styles/buttonStyle';
 
 const AppButton = ({
   classes,
@@ -34,7 +34,6 @@ const AppButton = ({
 AppButton.propTypes = {
   classes: PropTypes.objectOf(string).isRequired,
   color: PropTypes.oneOf([
-    'primary',
     'info',
     'success',
     'warning',
@@ -43,7 +42,7 @@ AppButton.propTypes = {
     'white',
     'simple',
     'transparent'
-  ]).isRequired,
+  ]),
   round: bool,
   fullWidth: bool,
   disabled: bool

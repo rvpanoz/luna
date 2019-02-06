@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import iconButtonStyle from '../../styles/iconButtonStyle';
+import iconButtonStyle from './styles/iconButtonStyle';
 
 const AppIconButton = ({
   classes,

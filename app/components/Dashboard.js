@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
@@ -81,8 +83,24 @@ const Dashboard = props => {
             description={projectDescription}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3} />
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3} />
+        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+          <DetailsCard
+            mode={mode}
+            directory={directory}
+            name={projectName}
+            version={projectVersion}
+            description={projectDescription}
+          />
+        </Grid>
+        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+          <DetailsCard
+            mode={mode}
+            directory={directory}
+            name={projectName}
+            version={projectVersion}
+            description={projectDescription}
+          />
+        </Grid>
       </Grid>
     </section>
   );

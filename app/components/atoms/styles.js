@@ -7,21 +7,18 @@ import {
   cardActions,
   cardHeader,
   defaultFont,
-  greyColor
+  warningColor,
+  dangerColor,
+  infoColor,
+  successColor,
+  grayColor
 } from 'styles/variables';
 
 export const detailsCardStyles = theme => ({
   card,
   cardContent: {
-    textAlign: 'left',
-    paddingTop: 20,
-    padding: '15px 20px'
+    padding: theme.spacing.unit * 2
   },
-  cardHeader: {
-    minHeight: 100,
-    ...cardHeader
-  },
-  card,
   cardPlain: {
     background: 'transparent',
     boxShadow: 'none'
@@ -34,27 +31,67 @@ export const detailsCardStyles = theme => ({
     marginLeft: 0,
     marginRight: 0
   },
+  cardDescription: {
+    ...defaultFont
+  },
   cardTitle: {
-    marginTop: '0',
-    marginBottom: '5px',
+    margin: 0,
+    padding: theme.spacing.unit,
     ...defaultFont,
-    fontSize: '1.125em'
+    fontSize: '1.225em'
   },
   cardSubtitle: {
     ...defaultFont,
+    fontSize: '1.1em',
     marginBottom: '0',
-    margin: '0 0 10px'
+    margin: '0 10px 10px'
+  },
+  cardHeaderContent: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   cardActions: {
-    padding: '14px',
-    display: 'block',
+    display: 'flex',
+    padding: theme.spacing.unit,
     height: 'auto',
     ...cardActions
   },
+  cardIcon: {
+    width: '20px',
+    height: 'auto'
+  },
   cardActionsText: {
-    fontSize: 12,
-    fontWeight: 100,
-    color: greyColor
+    ...defaultFont,
+    fontSize: '0.85em'
+  },
+  cardAvatar: {
+    maxWidth: '130px',
+    maxHeight: '130px',
+    margin: '-50px auto 0',
+    borderRadius: '50%',
+    overflow: 'hidden'
+  },
+  img: {
+    width: '50px',
+    height: 'auto',
+    verticalAlign: 'middle',
+    border: '0'
+  },
+  warningCardIcon: {
+    color: warningColor
+  },
+  dangerCardIcon: {
+    color: dangerColor
+  },
+  successCardIcon: {
+    color: successColor
+  },
+  infoCardIcon: {
+    color: infoColor
+  },
+  grayCardIcon: {
+    color: grayColor
   }
 });
 

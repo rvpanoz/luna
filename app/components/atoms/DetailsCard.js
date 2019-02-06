@@ -6,33 +6,19 @@
 
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import {
-  objectOf,
-  oneOfType,
-  oneOf,
-  string,
-  node,
-  object,
-  func,
-  bool
-} from 'prop-types';
+import { objectOf, oneOfType, oneOf, string, node } from 'prop-types';
 import cn from 'classnames';
-
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import PhoneIcon from '@material-ui/icons/Phone';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
-import Chip from '@material-ui/core/Chip';
+import WarningIcon from '@material-ui/icons/Warning';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import { APP_MODES } from 'constants/AppConstants';
+import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 
-import { detailsCardStyles } from './styles';
+import npmAvatar from 'assets/images/npm.png';
+import { detailsCardStyles as styles } from './styles';
 
 const CardDetails = ({
   mode,
@@ -48,14 +34,21 @@ const CardDetails = ({
         classes={{
           root: classes.cardHeader,
           title: classes.cardTitle,
-          subheader: classes.cardSubtitle
+          subheader: classes.cardSubtitle,
+          content: classes.cardHeaderContent
         }}
-        title={name}
-        subheader={description}
-        avatar={<Chip label={version} />}
+        title={name || 'Global'}
+        subheader={version ? `v.${version}` : null}
       />
-      <CardContent className={classes.content} />
+      <CardContent className={classes.cardContent}>
+        <Typography className={classes.cardDescription}>
+          {description || APP_INFO.NOT_AVAILABLE}
+        </Typography>
+      </CardContent>
       <CardActions className={classes.cardActions}>
+        <WarningIcon
+          className={cn(classes.cardIcon, classes.warningCardIcon)}
+        />
         <Typography component="p" className={classes.cardActionsText}>
           {mode === APP_MODES.LOCAL && directory}
         </Typography>
@@ -84,4 +77,4 @@ CardDetails.propTypes = {
   ])
 };
 
-export default withStyles(detailsCardStyles)(CardDetails);
+export default withStyles(styles)(CardDetails);
