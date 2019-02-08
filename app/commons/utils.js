@@ -196,7 +196,7 @@ export const parseMap = (response, mode, directory) => {
 
   try {
     const packageJson = JSON.parse(response);
-    const { name, version, description } = packageJson || {};
+    const { name, version, description, license, author } = packageJson || {};
 
     const packages = pick(['dependencies'], packageJson);
     const { dependencies } = packages || {};
@@ -241,7 +241,7 @@ export const parseMap = (response, mode, directory) => {
       });
     });
 
-    return [name, version, description, data];
+    return [data, name, version, description, license, author];
   } catch (error) {
     mk.log(error);
     throw new Error(error);

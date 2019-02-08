@@ -58,10 +58,8 @@ const flexContainer = {
 
 const flexItem = {
   color: '#fff',
-  height: '210px',
   margin: '10px 0',
   padding: '0',
-  width: '225px',
   position: 'relative'
 };
 

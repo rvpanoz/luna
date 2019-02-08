@@ -19,7 +19,6 @@ import {
   setOutdatedSuccess,
   setSortOptions
 } from 'models/packages/actions';
-import { isPackageOutdated } from 'commons/utils';
 import format from 'date-fns/format';
 
 const { packages } = initialState;
@@ -71,6 +70,9 @@ const handlers = {
     merge(state, {
       projectName: null,
       projectVersion: null,
+      projectDescription: null,
+      projectLicense: null,
+      projectAuthor: null,
       packages: [],
       packagesOutdated: []
     }),
@@ -80,6 +82,8 @@ const handlers = {
       projectName,
       projectVersion,
       projectDescription,
+      projectLicense,
+      projectAuthor,
       fromSort,
       fromSearch
     } = payload;
@@ -95,6 +99,8 @@ const handlers = {
       projectName,
       projectVersion,
       projectDescription,
+      projectLicense,
+      projectAuthor,
       filters: [],
       selected: []
     });

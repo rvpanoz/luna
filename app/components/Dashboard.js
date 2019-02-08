@@ -26,8 +26,6 @@ import BarChartIcon from '@material-ui/icons/BarChartOutlined';
 import { BasicCard, DetailsCard } from 'components/atoms/';
 import { Typography } from '@material-ui/core';
 
-const detailsCardTitle = 'Project';
-
 const mapState = ({
   common: {
     manager,
@@ -41,7 +39,9 @@ const mapState = ({
     packagesOutdated,
     projectName,
     projectVersion,
-    projectDescription
+    projectDescription,
+    projectLicense,
+    projectAuthor
   }
 }) => ({
   manager,
@@ -53,7 +53,9 @@ const mapState = ({
   packagesOutdated,
   projectName,
   projectVersion,
-  projectDescription
+  projectDescription,
+  projectLicense,
+  projectAuthor
 });
 
 const Dashboard = props => {
@@ -68,6 +70,8 @@ const Dashboard = props => {
     projectName,
     projectVersion,
     projectDescription,
+    projectLicense,
+    projectAuthor,
     lastUpdatedAt
   } = useMappedState(mapState);
 
@@ -81,6 +85,9 @@ const Dashboard = props => {
             name={projectName}
             version={projectVersion}
             description={projectDescription}
+            license={projectLicense}
+            author={projectAuthor}
+            lastUpdatedAt={lastUpdatedAt}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>

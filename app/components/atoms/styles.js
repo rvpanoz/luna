@@ -1,7 +1,3 @@
-/**
- * CardInfo styles
- */
-
 import {
   card,
   cardActions,
@@ -11,12 +7,19 @@ import {
   dangerColor,
   infoColor,
   successColor,
-  grayColor
+  grayColor,
+  flexContainer,
+  flexItem
 } from 'styles/variables';
 
 export const detailsCardStyles = theme => ({
   card,
+  flexContainer,
+  flexItem,
   cardContent: {
+    ...flexContainer,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
     padding: theme.spacing.unit * 2
   },
   cardPlain: {
@@ -41,7 +44,7 @@ export const detailsCardStyles = theme => ({
     ...defaultFont,
     fontSize: '1.225em'
   },
-  cardSubtitle: {
+  cardSubheader: {
     ...defaultFont,
     fontSize: '1.1em',
     marginBottom: '0',
@@ -63,6 +66,8 @@ export const detailsCardStyles = theme => ({
   },
   cardActionsText: {
     ...defaultFont,
+    lineHeight: 'unset',
+    fontWeight: 'inherit',
     fontSize: '0.85em'
   },
   cardAvatar: {

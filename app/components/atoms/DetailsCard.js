@@ -9,16 +9,15 @@ import { withStyles } from '@material-ui/core/styles';
 import { objectOf, oneOfType, oneOf, string, node } from 'prop-types';
 import cn from 'classnames';
 
-import WarningIcon from '@material-ui/icons/Warning';
+import ProjectIcon from '@material-ui/icons/ViewModule';
+import Chip from '@material-ui/core/Chip';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import { APP_MODES, APP_INFO } from 'constants/AppConstants';
-
-import npmAvatar from 'assets/images/npm.png';
+import { APP_MODES } from 'constants/AppConstants';
 import { detailsCardStyles as styles } from './styles';
 
 const CardDetails = ({
@@ -27,7 +26,9 @@ const CardDetails = ({
   classes,
   name,
   version,
-  description
+  license,
+  author,
+  lastUpdatedAt
 }) => {
   return (
     <Card className={classes.card}>
@@ -35,23 +36,24 @@ const CardDetails = ({
         classes={{
           root: classes.cardHeader,
           title: classes.cardTitle,
-          subheader: classes.cardSubtitle,
+          subheader: classes.cardSubheader,
           content: classes.cardHeaderContent
         }}
-        title={name || 'Global'}
-        subheader={version ? `v.${version}` : null}
+        title={name || 'Project'}
+        subheader={mode === APP_MODES.LOCAL && mode}
       />
       <CardContent className={classes.cardContent}>
-        <Typography className={classes.cardDescription}>
-          {description || APP_INFO.NOT_AVAILABLE}
-        </Typography>
+        <div className={classes.flexItem}>
+          Author:&nbsp;{author && author.name}
+        </div>
+        <div className={classes.flexItem}>
+          Author:&nbsp;{author && author.name}
+        </div>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <WarningIcon
-          className={cn(classes.cardIcon, classes.warningCardIcon)}
-        />
+        <ProjectIcon className={cn(classes.cardIcon, classes.infoCardIcon)} />
         <Typography component="p" className={classes.cardActionsText}>
-          {mode === APP_MODES.LOCAL && directory}
+          {`Updated at: ${lastUpdatedAt}`}
         </Typography>
       </CardActions>
     </Card>
