@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 
-import ViewModuleOutlinedIcon from '@material-ui/icons/ViewModuleOutlined';
+import ProjectIcon from '@material-ui/icons/ViewModule';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -14,7 +14,7 @@ import CardActions from '@material-ui/core/CardActions';
 
 import { basicCardStyles as styles } from './styles';
 
-const BasicCard = ({ classes, title, description, iconColor, small }) => {
+const BasicCard = ({ classes, title, value }) => {
   return (
     <Card className={classes.card}>
       <CardHeader
@@ -25,27 +25,27 @@ const BasicCard = ({ classes, title, description, iconColor, small }) => {
       />
       <CardContent className={classes.cardContent}>
         <Typography component="p" className={classes.cardCategory}>
-          Dependencies
+          {title}
         </Typography>
         <Typography
           variant="headline"
           component="h2"
           className={classes.cardTitle}
         >
-          99
+          {value}
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <ViewModuleOutlinedIcon
-          className={cn(classes.cardIcon, classes.infoCardIcon)}
-        />
+        <ProjectIcon className={cn(classes.cardIcon)} />
+        <Typography component="p" className={classes.cardActionsText} />
       </CardActions>
     </Card>
   );
 };
 
 BasicCard.propTypes = {
-  title: PropTypes.string
+  title: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 
 export default withStyles(styles)(BasicCard);

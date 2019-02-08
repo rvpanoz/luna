@@ -92,10 +92,13 @@ const Dashboard = props => {
           />
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-          <BasicCard renderIcon={() => console.log('todo')} />
+          <BasicCard title="Dependencies" value={packages && packages.length} />
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-          <BasicCard renderIcon={() => console.log('todo')} />
+          <BasicCard
+            title="Outdated"
+            value={packagesOutdated && packagesOutdated.length}
+          />
         </Grid>
       </Grid>
     </section>

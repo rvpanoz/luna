@@ -110,7 +110,7 @@ export const detailsCardStyles = theme => ({
   }
 });
 
-export const basicCardStyles = () => ({
+export const basicCardStyles = theme => ({
   card,
   cardHeader: {
     ...cardHeader,
@@ -148,7 +148,14 @@ export const basicCardStyles = () => ({
   },
   cardActions: {
     ...cardActions,
-    padding: '0!important'
+    display: 'flex',
+    padding: theme.spacing.unit
+  },
+  cardActionsText: {
+    ...defaultFont,
+    lineHeight: 'unset',
+    fontWeight: 'inherit',
+    fontSize: '0.85em'
   },
   warningCardIcon: {
     color: warningColor
