@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
@@ -24,8 +26,6 @@ import BarChartIcon from '@material-ui/icons/BarChartOutlined';
 import { BasicCard, DetailsCard } from 'components/atoms/';
 import { Typography } from '@material-ui/core';
 
-const detailsCardTitle = 'Project';
-
 const mapState = ({
   common: {
     manager,
@@ -39,7 +39,9 @@ const mapState = ({
     packagesOutdated,
     projectName,
     projectVersion,
-    projectDescription
+    projectDescription,
+    projectLicense,
+    projectAuthor
   }
 }) => ({
   manager,
@@ -51,12 +53,13 @@ const mapState = ({
   packagesOutdated,
   projectName,
   projectVersion,
-  projectDescription
+  projectDescription,
+  projectLicense,
+  projectAuthor
 });
 
 const Dashboard = props => {
   const { classes } = props;
-  const [activeTab, setActiveTab] = useState(0);
 
   const {
     packages,
@@ -67,28 +70,35 @@ const Dashboard = props => {
     projectName,
     projectVersion,
     projectDescription,
+    projectLicense,
+    projectAuthor,
     lastUpdatedAt
   } = useMappedState(mapState);
 
   return (
     <section className={classes.root}>
       <Grid container justify="space-between">
-        <Grid item xs={12} sm={12} md={12} lg={4} xl={3}>
+        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
           <DetailsCard
-            isLoading={loading}
-            title={detailsCardTitle}
-            subTitle={projectName}
+            mode={mode}
+            directory={directory}
+            name={projectName}
+            version={projectVersion}
             description={projectDescription}
-            color="info"
-            type="info"
-            renderIconType={className => <WarningIcon className={className} />}
+            license={projectLicense}
+            author={projectAuthor}
+            lastUpdatedAt={lastUpdatedAt}
+            loading={loading}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-          <BasicCard title="Dependencies" renderIcon={() => <BalotIcon />} />
+          <BasicCard title="Dependencies" value={packages && packages.length} />
         </Grid>
         <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
-          <BasicCard title="Outdated" renderIcon={() => <WarningIcon />} />
+          <BasicCard
+            title="Outdated"
+            value={packagesOutdated && packagesOutdated.length}
+          />
         </Grid>
       </Grid>
     </section>

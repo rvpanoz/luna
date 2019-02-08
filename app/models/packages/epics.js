@@ -55,7 +55,9 @@ const packagesSuccessEpic = (action$, state$) =>
           outdated,
           projectName,
           projectVersion,
-          projectDescription
+          projectDescription,
+          projectLicense,
+          projectAuthor
         }
       }) => {
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
@@ -81,7 +83,9 @@ const packagesSuccessEpic = (action$, state$) =>
           outdated,
           projectName,
           projectVersion,
-          projectDescription
+          projectDescription,
+          projectLicense,
+          projectAuthor
         };
       }
     ),
@@ -91,7 +95,9 @@ const packagesSuccessEpic = (action$, state$) =>
         outdated,
         projectName,
         projectVersion,
-        projectDescription
+        projectDescription,
+        projectLicense,
+        projectAuthor
       }) => {
         const {
           common: { page },
@@ -108,6 +114,8 @@ const packagesSuccessEpic = (action$, state$) =>
             projectName,
             projectVersion,
             projectDescription,
+            projectLicense,
+            projectAuthor,
             fromSearch,
             fromSort,
             dependencies

@@ -1,17 +1,17 @@
 /* eslint-disable global-require */
 
 import React from 'react';
-import { render } from 'react-dom';
-import { StoreProvider } from 'redux-react-hook';
+import ReactDom from 'react-dom';
+import { StoreContext } from 'redux-react-hook';
 import configureStore from './store/configureStore';
 import App from './containers/App';
 
 const store = configureStore();
 
-render(
-  <StoreProvider value={store}>
+ReactDom.render(
+  <StoreContext.Provider value={store}>
     <App />
-  </StoreProvider>,
+  </StoreContext.Provider>,
   document.getElementById('root')
 );
 
@@ -19,10 +19,10 @@ if (module.hot) {
   module.hot.accept('./containers/App', () => {
     const NextApp = require('./containers/App').default;
 
-    render(
-      <StoreProvider value={store}>
+    ReactDom.render(
+      <StoreContext.Provider value={store}>
         <NextApp />
-      </StoreProvider>,
+      </StoreContext.Provider>,
       document.getElementById('root')
     );
   });

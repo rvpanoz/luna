@@ -33,7 +33,7 @@ const Layout = props => {
               <Dashboard />
             </Grid>
           </Grid>
-          <Grid container>
+          <Grid container style={{ display: 'inherit' }}>
             <Grid item xs={12} md={12} lg={6} xl={4}>
               <Packages />
             </Grid>

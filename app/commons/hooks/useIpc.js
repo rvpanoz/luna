@@ -16,7 +16,10 @@ const useIpc = (channel, options, inputs = []) => {
   const [dependenciesSet, setDependencies] = useState({
     data: [],
     projectName: null,
-    projectVersion: null
+    projectVersion: null,
+    projectDescription: null,
+    projectLicense: null,
+    projectAuthor: null
   });
 
   const [outdatedSet, setOutdated] = useState({
@@ -36,20 +39,22 @@ const useIpc = (channel, options, inputs = []) => {
       setErrors(errorsMessages);
 
       const command = commandArgs && commandArgs[0];
-      const [name, version, description, packages] = parseMap(
+      const [packages, name, version, description, license, author] = parseMap(
         data,
         mode,
         directory,
         commandArgs
       );
-
+      console.log(name, version, description, license, author);
       switchcase({
         list: () =>
           setDependencies({
             data: packages && packages.length ? packages : null,
             projectName: name,
             projectVersion: version,
-            projectDescription: description
+            projectDescription: description,
+            projectLicense: license,
+            projectAuthor: author
           }),
         outdated: () => setOutdated({ data: packages })
       })('list')(command);

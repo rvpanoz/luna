@@ -22,6 +22,8 @@ export default {
     projectName: null,
     projectVersion: null,
     projectDescription: null,
+    projectLicense: null,
+    projectAuthor: null,
     sortBy: 'name',
     sortDir: 'asc',
     action: {

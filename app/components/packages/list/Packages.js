@@ -126,8 +126,13 @@ const Packages = ({ classes }) => {
     [counter, mode, directory]
   );
 
-  const { projectName, projectVersion, projectDescription } =
-    dependenciesSet || {};
+  const {
+    projectName,
+    projectVersion,
+    projectDescription,
+    projectLicense,
+    projectAuthor
+  } = dependenciesSet || {};
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
   const nodata = Boolean(dependencies && dependencies.length === 0);
@@ -140,7 +145,9 @@ const Packages = ({ classes }) => {
           outdated,
           projectName,
           projectVersion,
-          projectDescription
+          projectDescription,
+          projectLicense,
+          projectAuthor
         })
       );
     },

@@ -26,7 +26,7 @@ const withErrorBoundary = BaseComponent => {
       if (hasError) {
         // render fallback UI
         return (
-          <div>
+          <div style={{ padding: 20 }}>
             <h2>Something went wrong.</h2>
             <details style={{ whiteSpace: 'pre-wrap' }}>
               {error && error.toString()}

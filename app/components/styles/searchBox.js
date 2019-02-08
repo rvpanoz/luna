@@ -37,9 +37,9 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 10,
     transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200
+    width: 200,
+    '&:focus': {
+      width: 400
     }
   }
 });

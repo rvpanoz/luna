@@ -11,7 +11,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import InfoIcon from '@material-ui/icons/InfoOutlined';
-import ProjectDetails from './RepositoryDetails';
 
 import styles from './styles/cardDetails';
 
@@ -20,9 +19,7 @@ const AppCardDetails = props => {
 
   return (
     <Card className={classes.card}>
-      <CardContent className={classes.cardContent}>
-        <ProjectDetails title={title} />
-      </CardContent>
+      <CardContent className={classes.cardContent} />
       <CardActions className={classes.cardActions}>
         <Typography component="p" className={classes.cardText}>
           {subtext}
