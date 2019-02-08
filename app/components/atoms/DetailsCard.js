@@ -17,8 +17,10 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import { APP_MODES } from 'constants/AppConstants';
+import AppLoader from 'components/layout/AppLoader';
 import { detailsCardStyles as styles } from './styles';
+
+const renderChip = version => <Chip label={version} />;
 
 const CardDetails = ({
   mode,
@@ -28,7 +30,9 @@ const CardDetails = ({
   version,
   license,
   author,
-  lastUpdatedAt
+  description,
+  lastUpdatedAt,
+  loading
 }) => {
   return (
     <Card className={classes.card}>
@@ -39,16 +43,23 @@ const CardDetails = ({
           subheader: classes.cardSubheader,
           content: classes.cardHeaderContent
         }}
-        title={name || 'Project'}
-        subheader={mode === APP_MODES.LOCAL && mode}
+        title={`Project ${name ? name : ''}`}
+        subheader={
+          <div className={cn(classes.flexContainer, classes.subheader)}>
+            <div className={classes.flexItem}>{license}</div>
+            {version && <div className={classes.flexItem}>v{version}</div>}
+            {author && author.name && (
+              <div className={classes.flexItem}>{author.name}</div>
+            )}
+          </div>
+        }
       />
       <CardContent className={classes.cardContent}>
-        <div className={classes.flexItem}>
-          Author:&nbsp;{author && author.name}
-        </div>
-        <div className={classes.flexItem}>
-          Author:&nbsp;{author && author.name}
-        </div>
+        <AppLoader relative mini loading={loading}>
+          <div className={cn(classes.flexItem, classes.cardDescription)}>
+            {description || 'Showing global packages'}
+          </div>
+        </AppLoader>
       </CardContent>
       <CardActions className={classes.cardActions}>
         <ProjectIcon className={cn(classes.cardIcon, classes.infoCardIcon)} />

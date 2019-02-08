@@ -45,7 +45,7 @@ const BasicCard = ({ classes, title, description, iconColor, small }) => {
 };
 
 BasicCard.propTypes = {
-  title: PropTypes.string.isRequired
+  title: PropTypes.string
 };
 
 export default withStyles(styles)(BasicCard);

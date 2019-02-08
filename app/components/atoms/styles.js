@@ -36,7 +36,10 @@ export const detailsCardStyles = theme => ({
     marginRight: 0
   },
   cardDescription: {
-    ...defaultFont
+    ...defaultFont,
+    lineHeight: '1.5em',
+    fontSize: 14,
+    fontWeight: 400
   },
   cardTitle: {
     margin: 0,
@@ -76,6 +79,13 @@ export const detailsCardStyles = theme => ({
     margin: '-50px auto 0',
     borderRadius: '50%',
     overflow: 'hidden'
+  },
+  withPadding: {
+    padding: 0
+  },
+  subheader: {
+    flexDirection: 'column',
+    alignItems: 'flex-end'
   },
   img: {
     width: '50px',

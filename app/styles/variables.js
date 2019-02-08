@@ -22,8 +22,8 @@ const boxShadow = {
 
 const defaultFont = {
   fontFamily: '"Regular", "Arial", sans-serif',
-  fontWeight: '200',
-  lineHeight: '1.225em'
+  fontWeight: 200,
+  lineHeight: '1.25em'
 };
 
 const defaultBoxShadow = {
@@ -57,9 +57,8 @@ const flexContainer = {
 };
 
 const flexItem = {
-  color: '#fff',
-  margin: '10px 0',
-  padding: '0',
+  margin: 0,
+  padding: 0,
   position: 'relative'
 };
 

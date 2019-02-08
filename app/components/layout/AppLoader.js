@@ -21,12 +21,12 @@ const styles = theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     position: 'absolute',
-    left: '50%',
+    left: '45%',
     top: '100%',
     margin: `0 ${theme.spacing.unit * 2}px`
   },
   relative: {
-    left: 0,
+    left: '45%',
     position: 'relative',
     margin: `0 ${theme.spacing.unit * 2}px`
   },
