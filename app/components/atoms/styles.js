@@ -129,12 +129,6 @@ export const basicCardStyles = theme => ({
   cardAvatar: {
     margin: '8px'
   },
-  cardCategory: {
-    marginBottom: '0',
-    color: grayColor,
-    margin: '0 0 10px',
-    ...defaultFont
-  },
   cardTitle: {
     margin: '0',
     ...defaultFont,
