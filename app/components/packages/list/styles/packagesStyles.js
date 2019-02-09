@@ -184,7 +184,8 @@ export const tableFiltersStyles = theme => ({
   },
   actions: {
     display: 'flex',
-    justifyContent: 'flex-end'
+    justifyContent: 'space-between',
+    alignItems: 'flex-start'
   },
   flexContainer: { display: 'flex' },
   filterItems: {

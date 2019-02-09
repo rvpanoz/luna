@@ -1,6 +1,6 @@
-/* eslint-disable */
+/* eslint-disable react/require-default-props */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'redux-react-hook';
@@ -94,9 +94,9 @@ const SearchBox = props => {
   return (
     <React.Fragment>
       <div className={classes.search}>
-        <div className={classes.searchIcon} onClick={handleSearch}>
+        <a href="#" className={classes.searchIcon} onClick={handleSearch}>
           <SearchIcon />
-        </div>
+        </a>
         <InputBase
           disabled={disabled}
           placeholder="Search for packages…"

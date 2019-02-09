@@ -1,11 +1,8 @@
-/* eslint-disable */
-
 /**
  * Packages reducer: Handles state management for packages operations
  */
 
 import { identity, merge, assoc, prepend, prop, propOr, remove } from 'ramda';
-import initialState from './initialState';
 import {
   addActionError,
   addFilter,
@@ -20,6 +17,8 @@ import {
   setSortOptions
 } from 'models/packages/actions';
 import format from 'date-fns/format';
+
+import initialState from './initialState';
 
 const { packages } = initialState;
 

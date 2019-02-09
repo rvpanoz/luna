@@ -22,7 +22,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    cursor: 'pointer'
+    color: theme.palette.common.white
   },
   inputRoot: {
     color: 'inherit',

@@ -1,9 +1,5 @@
 /* eslint-disable-interactive-support-focus */
 
-/**
- * Header component
- */
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { ipcRenderer, remote } from 'electron';
@@ -68,16 +64,13 @@ const Header = ({ title, classes }) => {
     toggleDrawer(false);
   }, []);
 
-  useEffect(
-    () => {
-      ipcRenderer.on('loaded-packages-close', (event, directories) => {
-        setOpenedDirectories(directories);
-      });
+  useEffect(() => {
+    ipcRenderer.on('loaded-packages-close', (event, directories) => {
+      setOpenedDirectories(directories);
+    });
 
-      return () => ipcRenderer.removeAllListeners('loaded-packages-close');
-    },
-    [openedDirectories.length]
-  );
+    return () => ipcRenderer.removeAllListeners('loaded-packages-close');
+  }, [openedDirectories.length]);
 
   const openPackage = useCallback(() => {
     remote.dialog.showOpenDialog(

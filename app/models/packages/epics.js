@@ -1,12 +1,10 @@
-/* eslint-disable */
-
 import { pipe } from 'rxjs';
-import { map, concatMap, tap, skipWhile } from 'rxjs/operators';
+import { map, concatMap, skipWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { isPackageOutdated } from 'commons/utils';
 import { setPage, toggleLoader } from 'models/ui/actions';
-import { WARNING_MESSAGES, INFO_MESSAGES } from 'constants/AppConstants';
+import { INFO_MESSAGES } from 'constants/AppConstants';
 
 import {
   clearPackages,
@@ -15,7 +13,6 @@ import {
   setOutdatedSuccess,
   updateData
 } from './actions';
-import { setSnackbar } from '../ui/actions';
 
 const cleanPackages = () => ({
   type: clearPackages.type
@@ -80,10 +77,7 @@ const packagesSuccessEpic = (action$, state$) =>
               licence,
               peerDependencies,
               version,
-              __error,
-              __peerMissing,
-              __group,
-              ...restProps
+              __group
             } = dependency;
 
             const enhanceDependency = {
@@ -97,7 +91,10 @@ const packagesSuccessEpic = (action$, state$) =>
               peerDependencies,
               version,
               latest: isOutdated ? outdatedPkg.latest : null,
-              isOutdated
+              isOutdated,
+              __error,
+              __peerMissing,
+              __group
             };
 
             deps.push(enhanceDependency);

@@ -1,5 +1,7 @@
 // @Mike Car
 
+/* eslint-disable compat/compat */
+
 const mk = {
   logToFile: true,
   syslog: true,

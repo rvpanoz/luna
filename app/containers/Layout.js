@@ -1,9 +1,3 @@
-/* eslint-disable */
-
-/**
- * Layout component
- */
-
 import React from 'react';
 import { objectOf, string } from 'prop-types';
 
@@ -13,7 +7,7 @@ import Grid from '@material-ui/core/Grid';
 
 import Header from 'components/Header';
 import Dashboard from 'components/Dashboard';
-import { Packages, PackageDetails } from 'components/packages';
+import { Packages } from 'components/packages';
 
 import styles from './styles/layout';
 

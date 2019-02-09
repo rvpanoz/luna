@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * App with error boundary
  */
@@ -8,11 +6,12 @@ import { ipcRenderer } from 'electron';
 import React, { useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { withErrorBoundary } from 'commons/hocs';
-import Layout from './Layout';
+
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/layout/SnackbarContent';
-
 import { commandMessage, uiException, setNpmVersion } from 'models/ui/actions';
+
+import Layout from './Layout';
 import '../app.global.css';
 
 const mapState = state => ({
@@ -33,7 +32,7 @@ const App = () => {
       dispatch({ type: setNpmVersion.type, payload: { version } });
     });
 
-    ipcRenderer.on('npm-error', event => {
+    ipcRenderer.on('npm-error', () => {
       dispatch({
         type: uiException.type,
         payload: { message: 'npm is not installed' }
