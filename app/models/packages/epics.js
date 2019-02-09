@@ -65,9 +65,31 @@ const packagesSuccessEpic = (action$, state$) =>
 
           if (!__peerMissing && !__error) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
+            const {
+              author,
+              bugs,
+              deprecated,
+              description,
+              extraneous,
+              licence,
+              peerDependencies,
+              version,
+              __error,
+              __peerMissing,
+              __group,
+              ...restProps
+            } = dependency;
 
             const enhanceDependency = {
-              ...dependency,
+              author,
+              bugs,
+              deprecated,
+              description,
+              extraneous,
+              licence,
+              name,
+              peerDependencies,
+              version,
               latest: isOutdated ? outdatedPkg.latest : null,
               isOutdated
             };

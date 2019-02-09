@@ -29,16 +29,11 @@ const Layout = props => {
       <section className={classes.main}>
         <div className={classes.container}>
           <Grid container justify="space-between">
-            <Grid item xs={12} md={12} lg={12} xl={12}>
-              <Dashboard />
-            </Grid>
-          </Grid>
-          <Grid container style={{ display: 'inherit' }}>
-            <Grid item xs={12} md={12} lg={6} xl={4}>
+            <Grid item xs={12} md={7} lg={8} xl={8}>
               <Packages />
             </Grid>
-            <Grid item xs={12} md={12} lg={6} xl={4}>
-              <PackageDetails />
+            <Grid item xs={12} md={4} lg={3} xl={3}>
+              <Dashboard />
             </Grid>
           </Grid>
         </div>

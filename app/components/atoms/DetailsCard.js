@@ -43,14 +43,10 @@ const CardDetails = ({
           subheader: classes.cardSubheader,
           content: classes.cardHeaderContent
         }}
-        title={`Project ${name ? name : ''}`}
+        title={`Project ${name ? `${name} v${version}` : ''}`}
         subheader={
           <div className={cn(classes.flexContainer, classes.subheader)}>
             <div className={classes.flexItem}>{license}</div>
-            {version && <div className={classes.flexItem}>v{version}</div>}
-            {author && author.name && (
-              <div className={classes.flexItem}>{author.name}</div>
-            )}
           </div>
         }
       />
@@ -64,7 +60,7 @@ const CardDetails = ({
       <CardActions className={classes.cardActions}>
         <ProjectIcon className={cn(classes.cardIcon, classes.infoCardIcon)} />
         <Typography component="p" className={classes.cardActionsText}>
-          {`Updated at: ${lastUpdatedAt}`}
+          {`Updated: ${lastUpdatedAt}`}
         </Typography>
       </CardActions>
     </Card>

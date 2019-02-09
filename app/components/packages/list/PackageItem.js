@@ -1,15 +1,17 @@
 /* eslint-disable react/require-default-props */
 
 import { ipcRenderer } from 'electron';
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
+
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
+
 import DependencyIcon from '@material-ui/icons/CodeOutlined';
 import DevDependencyIcon from '@material-ui/icons/BuildOutlined';
 import GlobalIcon from '@material-ui/icons/GroupWorkOutlined';
@@ -31,6 +33,8 @@ const PackageItem = ({
   mode,
   directory
 }) => {
+  const rowRef = useRef();
+
   const renderIconByGroup = useCallback(
     groupName =>
       cond([
@@ -124,7 +128,7 @@ const PackageItem = ({
       </TableCell>
       <TableCell padding="none" className={cn(classes.tableCell, classes.w300)}>
         <div className={classes.flexContainer}>
-          <div className={classes.flexItem}>
+          <div ref={rowRef} className={classes.flexItem}>
             <span>{name}</span>
           </div>
           <div className={classes.flexItem}>{renderIconByGroup(group)}</div>

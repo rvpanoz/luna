@@ -78,7 +78,7 @@ const Dashboard = props => {
   return (
     <section className={classes.root}>
       <Grid container justify="space-between">
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <DetailsCard
             mode={mode}
             directory={directory}
@@ -91,10 +91,10 @@ const Dashboard = props => {
             loading={loading}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <BasicCard title="Dependencies" value={packages && packages.length} />
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <BasicCard
             title="Outdated"
             value={packagesOutdated && packagesOutdated.length}

@@ -26,7 +26,7 @@ export const listStyles = theme => ({
       maxHeight: 300
     },
     [theme.breakpoints.down('lg')]: {
-      maxHeight: 385
+      maxHeight: 605
     }
   },
   tableRow: {
@@ -86,8 +86,8 @@ export const listStyles = theme => ({
     justifyContent: 'space-between'
   },
   avatar: {
-    width: 30,
-    height: 30,
+    width: 20,
+    height: 20,
     margin: theme.spacing.unit / 4
   },
   dependenciesAvatar: {
