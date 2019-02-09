@@ -20,11 +20,9 @@ const withErrorBoundary = BaseComponent => {
       const { hasError, error, errorInfo } = this.state;
       const props = {
         ...this.props
-        // extend..
       };
 
       if (hasError) {
-        // render fallback UI
         return (
           <div style={{ padding: 20 }}>
             <h2>Something went wrong.</h2>

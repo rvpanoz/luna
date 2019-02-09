@@ -27,6 +27,7 @@ const AppIconButton = ({
 
 AppIconButton.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  children: PropTypes.arrayOf(PropTypes.object),
   color: PropTypes.oneOf([
     'primary',
     'info',

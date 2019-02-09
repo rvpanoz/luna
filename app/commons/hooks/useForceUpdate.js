@@ -1,8 +1,3 @@
-/**
- * useForceUpdate hook
- * force functional component to render
- */
-
 import { useState } from 'react';
 
 const MAX_NUMBER = Number.MAX_SAFE_INTEGER - 1;

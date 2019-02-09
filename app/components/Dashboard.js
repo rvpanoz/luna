@@ -1,15 +1,14 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
-import styles from './styles/dashboard';
 
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 import { BasicCard, DetailsCard } from 'components/atoms/';
+
+import styles from './styles/dashboard';
 
 const mapState = ({
   common: {

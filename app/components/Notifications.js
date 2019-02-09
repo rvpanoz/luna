@@ -1,7 +1,3 @@
-/**
- * Notifications component
- */
-
 import { ipcRenderer, remote } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';

@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * Global reducer: Handles state management for global operations.
  */

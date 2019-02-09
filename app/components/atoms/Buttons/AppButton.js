@@ -25,22 +25,25 @@ const AppButton = ({
   });
 
   return (
-    <Button {...restProps} className={`${classes.button} ${btnClasses}`}>
+    <Button {...restProps} className={cx(classes.button, btnClasses)}>
       {children}
     </Button>
   );
 };
 
+AppButton.defaultProps = {
+  color: 'white'
+};
+
 AppButton.propTypes = {
   classes: PropTypes.objectOf(string).isRequired,
+  children: PropTypes.arrayOf(PropTypes.object),
   color: PropTypes.oneOf([
     'info',
     'success',
     'warning',
     'danger',
-    'rose',
     'white',
-    'simple',
     'transparent'
   ]),
   round: bool,

@@ -126,12 +126,14 @@ const ListFilters = ({ classes, mode, close }) => {
         </FormControl>
         <Divider className={classes.bottomDivider} light />
         <div className={classes.actions}>
-          <AppButton color="white" onClick={emptyFilters}>
+          <AppButton
+            className={classes.actionButton}
+            color="danger"
+            onClick={emptyFilters}
+          >
             Clear
           </AppButton>
-          <AppButton color="white" onClick={close}>
-            Close
-          </AppButton>
+          <AppButton onClick={close}>Close</AppButton>
         </div>
       </div>
     </div>
