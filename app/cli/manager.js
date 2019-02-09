@@ -166,6 +166,19 @@ exports.install = (opts, callback) => {
   }
 };
 
+exports.update = (opts, callback) => {
+  const { mode, directory, activeManager = 'npm' } = opts;
+
+  try {
+    const manager = require(path.resolve(__dirname, activeManager));
+    const run = manager['update'].call(this, opts);
+
+    return execute(activeManager, run, mode, directory, callback);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 exports.uninstall = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 

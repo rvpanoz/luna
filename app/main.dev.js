@@ -17,6 +17,7 @@ import { switchcase } from './commons/utils';
 import MenuBuilder from './menu';
 import mk from './mk';
 import { runCommand } from './shell';
+import chalk from 'chalk';
 
 const { config } = mk;
 const { defaultSettings } = config || {};
@@ -166,7 +167,35 @@ app.on('window-all-closed', () => {
   }
 });
 
+app.once('browser-window-created', () => {
+  console.log(
+    `${chalk.white.bgBlue.bold('[INFO] browser-window-created event')}`
+  );
+});
+
+app.once('web-contents-created', event => {
+  console.log(chalk.white.bgBlue.bold(`[INFO] web-contents-created event`));
+
+  // TODO: check npm installation
+  // try {
+  //   const result = require('child_process').execSync('npm -v');
+  //   const version = result.toString();
+
+  //   if (NODE_ENV === 'development') {
+  //     console.log(
+  //       chalk.black.bgYellow.bold(`[INFO] found npm version ${version}`)
+  //     );
+  //   }
+
+  //   event.sender.send('npm-version', version);
+  // } catch (error) {
+  //   event.sender.send('npm-error');
+  // }
+});
+
 app.on('ready', async () => {
+  console.log(chalk.white.bgBlue.bold(`[INFO] ready event`));
+
   if (NODE_ENV === 'development') {
     INSTALL_EXTENSIONS && (await installExtensions());
   }
@@ -184,9 +213,7 @@ app.on('ready', async () => {
     y = externalDisplay.bounds.y + 50;
   }
 
-  /**
-   * Main window
-   */
+  // create mainWindow
   mainWindow = new BrowserWindow({
     width: MIN_WIDTH || screenSize.width,
     height: MIN_HEIGHT || screenSize.height,
@@ -202,7 +229,13 @@ app.on('ready', async () => {
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
+  mainWindow.once('ready-to-show', event => {
+    // console.log(chalk.white.bgBlue.bold(`[INFO] ready-to-show started`));
+  });
+
   mainWindow.webContents.on('did-finish-load', event => {
+    // console.log(chalk.white.bgBlue.bold(`[INFO] did-finish-load started`));
+
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');
     }
@@ -218,7 +251,7 @@ app.on('ready', async () => {
     const userSettings = Store.get('user_settings') || defaultSettings;
     event.sender.send('settings_loaded', userSettings);
 
-    // opened directories
+    // directories history
     const openedPackages = Store.get('opened_packages') || [];
     event.sender.send('loaded-packages-close', openedPackages);
 
@@ -247,5 +280,5 @@ app.on('ready', async () => {
 
 process.on('uncaughtException', error => {
   mk.log(error.message);
-  mainWindow.webContents.send('uncaught-exception', error);
+  mainWindow.webContents.send('uncaught-exception', error.message);
 });

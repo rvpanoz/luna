@@ -52,7 +52,7 @@ const packagesSuccessEpic = (action$, state$) =>
     ofType(updateData.type),
     skipWhile(
       ({ payload: { dependencies } }) =>
-        !Array.isArray(dependencies) || !dependencies.length
+        !dependencies || !Array.isArray(dependencies) || !dependencies.length
     ),
     map(
       ({
@@ -107,7 +107,7 @@ const packagesSuccessEpic = (action$, state$) =>
         }, []);
 
         return {
-          dependencies: withOutdated,
+          dependencies: withOutdated || dependencies,
           outdated,
           projectName,
           projectVersion,

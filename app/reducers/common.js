@@ -16,8 +16,10 @@ import {
   setMode,
   setPage,
   setPageRows,
+  setNpmVersion,
   toggleLoader,
-  togglePackageLoader
+  togglePackageLoader,
+  uiException
 } from 'models/ui/actions';
 import initialState from './initialState';
 
@@ -34,6 +36,10 @@ const createReducer = (commonState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [uiException.type]: (state, { payload: message }) =>
+    assoc('uiException', message, state),
+  [setNpmVersion.type]: (state, { payload: version }) =>
+    assoc('npm', version, state),
   [updateNotifications.type]: (state, { payload: { notifications } }) =>
     assoc('notifications', notifications, state),
   [addNotification.type]: (

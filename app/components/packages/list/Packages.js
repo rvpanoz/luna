@@ -79,6 +79,7 @@ const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
     packages,
+    packagesOutdated,
     mode,
     page,
     filters,
@@ -101,6 +102,11 @@ const Packages = ({ classes }) => {
     (name, selected) => selected.indexOf(name) !== -1,
     [name, selected]
   );
+
+  const packagesOutdatedNames = useCallback(
+    () => packagesOutdated && packagesOutdated.map(outdated => outdated.name),
+    [packagesOutdated]
+  )();
 
   const scrollWrapper = useCallback(
     top => {
@@ -137,38 +143,32 @@ const Packages = ({ classes }) => {
   const outdated = outdatedSet.data;
   const nodata = Boolean(dependencies && dependencies.length === 0);
 
-  useEffect(
-    () => {
-      dispatch(
-        updateData({
-          dependencies,
-          outdated,
-          projectName,
-          projectVersion,
-          projectDescription,
-          projectLicense,
-          projectAuthor
-        })
-      );
-    },
-    [dependenciesSet]
-  );
+  useEffect(() => {
+    dispatch(
+      updateData({
+        dependencies,
+        outdated,
+        projectName,
+        projectVersion,
+        projectDescription,
+        projectLicense,
+        projectAuthor
+      })
+    );
+  }, [dependenciesSet]);
 
-  useEffect(
-    () => {
-      ipcRenderer.on(['action-close'], (event, error) => {
-        if (error && error.length) {
-          dispatch(addActionError({ error }));
-        }
+  useEffect(() => {
+    ipcRenderer.on(['action-close'], (event, error) => {
+      if (error && error.length) {
+        dispatch(addActionError({ error }));
+      }
 
-        // force render
-        setCounter(counter + 1);
-      });
+      // force render
+      setCounter(counter + 1);
+    });
 
-      return () => ipcRenderer.removeAllListeners(['action-close']);
-    },
-    [counter]
-  );
+    return () => ipcRenderer.removeAllListeners(['action-close']);
+  }, [counter]);
 
   // more listeners
   useEffect(() => {
@@ -213,6 +213,7 @@ const Packages = ({ classes }) => {
               mode={mode}
               directory={directory}
               selected={selected}
+              packagesOutdatedNames={packagesOutdatedNames}
               fromSearch={fromSearch}
               reload={reload}
               nodata={dependencies === null}

@@ -34,7 +34,7 @@ const parseNpmMessage = message => {
   };
 };
 
-const notificationsEpics = pipe(
+const notificationsEpic = pipe(
   ofType(commandMessage.type),
   mergeMap(({ payload: { message = '' } }) => {
     const messages = message.split(/\r?\n/);
@@ -57,4 +57,4 @@ const notificationsEpics = pipe(
   })
 );
 
-export default combineEpics(notificationsEpics);
+export default combineEpics(notificationsEpic);

@@ -15,7 +15,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import InstallIcon from '@material-ui/icons/Add';
+import UpdateIcon from '@material-ui/icons/Update';
+import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
@@ -38,26 +39,37 @@ const TableListToolbar = ({
   fromSearch,
   reload,
   nodata,
-  scrollWrapper
+  scrollWrapper,
+  packagesOutdatedNames
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
 
   const dispatch = useDispatch();
 
-  const switchMode = (appMode, appDirectory) => {
-    dispatch(setMode({ mode: appMode, directory: appDirectory }));
+  const switchMode = useCallback(
+    (appMode, appDirectory) => {
+      dispatch(setMode({ mode: appMode, directory: appDirectory }));
 
-    if (fromSearch) {
-      reload();
-    }
-  };
+      if (fromSearch) {
+        reload();
+      }
+    },
+    [mode, directory]
+  );
 
-  const openFilters = (e, close) => {
-    setAnchorEl(close ? null : e.target);
-    toggleFilters(!filtersOn);
-    scrollWrapper(0);
-  };
+  const needUpdate = selected.some(
+    packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+  );
+
+  const openFilters = useCallback(
+    (e, close) => {
+      setAnchorEl(close ? null : e.target);
+      toggleFilters(!filtersOn);
+      scrollWrapper(0);
+    },
+    [filtersOn]
+  );
 
   const doAction = action => {
     ipcRenderer.send('ipc-event', {
@@ -214,21 +226,41 @@ const TableListToolbar = ({
                   aria-label="install selected"
                   onClick={() => handleAction('install')}
                 >
-                  <InstallIcon />
+                  <AddIcon />
                 </IconButton>
               </Tooltip>
             </div>
           ) : (
             <div className={classes.flexContainer}>
-              {!fromSearch && (
-                <Tooltip title="Uninstall selected">
+              {!fromSearch && selected.length && needUpdate && (
+                <Tooltip title="Update selected">
                   <IconButton
-                    aria-label="uninstall selected"
-                    onClick={() => handleAction('uninstall')}
+                    aria-label="update selected"
+                    onClick={() => handleAction('update')}
                   >
-                    <DeleteIcon />
+                    <UpdateIcon />
                   </IconButton>
                 </Tooltip>
+              )}
+              {!fromSearch && selected.length && (
+                <React.Fragment>
+                  <Tooltip title="Install selected">
+                    <IconButton
+                      aria-label="install selected"
+                      onClick={() => handleAction('install')}
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Uninstall selected">
+                    <IconButton
+                      aria-label="uninstall selected"
+                      onClick={() => handleAction('uninstall')}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                </React.Fragment>
               )}
             </div>
           )}
@@ -248,7 +280,8 @@ TableListToolbar.propTypes = {
   manager: PropTypes.string,
   directory: PropTypes.string,
   fromSearch: PropTypes.bool,
-  scrollWrapper: PropTypes.func
+  scrollWrapper: PropTypes.func,
+  packagesOutdatedNames: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default withStyles(styles)(TableListToolbar);
