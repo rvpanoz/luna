@@ -1,7 +1,10 @@
 import { flexContainer, flexItem } from 'styles/variables';
 
 const styles = theme => ({
-  flexContainer,
+  flexContainer: {
+    ...flexContainer,
+    flexDirection: 'row'
+  },
   flexItem,
   root: {
     padding: 0,

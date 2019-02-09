@@ -1,12 +1,12 @@
 /* eslint-disable */
 
-import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { useMappedState } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
+import { Typography } from '@material-ui/core';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
@@ -23,8 +23,8 @@ import UpdateIcon from '@material-ui/icons/UpdateOutlined';
 import BalotIcon from '@material-ui/icons/BallotOutlined';
 import BarChartIcon from '@material-ui/icons/BarChartOutlined';
 
+import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 import { BasicCard, DetailsCard } from 'components/atoms/';
-import { Typography } from '@material-ui/core';
 
 const mapState = ({
   common: {
@@ -71,30 +71,33 @@ const Dashboard = props => {
     projectVersion,
     projectDescription,
     projectLicense,
-    projectAuthor,
     lastUpdatedAt
   } = useMappedState(mapState);
+
+  const title =
+    mode === APP_MODES.LOCAL ? `Project ${projectName || ''}` : 'Global';
+  const text =
+    mode === APP_MODES.LOCAL ? projectDescription : APP_INFO.GLOBAL_MESSAGE;
 
   return (
     <section className={classes.root}>
       <Grid container justify="space-between">
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <DetailsCard
             mode={mode}
             directory={directory}
-            name={projectName}
-            version={projectVersion}
-            description={projectDescription}
-            license={projectLicense}
-            author={projectAuthor}
-            lastUpdatedAt={lastUpdatedAt}
+            title={title}
+            aside={projectVersion}
+            text={text}
+            smallText={projectLicense}
+            lastUpdatedAt={lastUpdatedAt || ''}
             loading={loading}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <BasicCard title="Dependencies" value={packages && packages.length} />
         </Grid>
-        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <BasicCard
             title="Outdated"
             value={packagesOutdated && packagesOutdated.length}

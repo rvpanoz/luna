@@ -45,7 +45,7 @@ const useIpc = (channel, options, inputs = []) => {
         directory,
         commandArgs
       );
-      console.log(name, version, description, license, author);
+
       switchcase({
         list: () =>
           setDependencies({
