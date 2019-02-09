@@ -9,12 +9,17 @@ import { setPage, toggleLoader } from 'models/ui/actions';
 import { WARNING_MESSAGES, INFO_MESSAGES } from 'constants/AppConstants';
 
 import {
+  clearPackages,
   setPackagesStart,
   setPackagesSuccess,
   setOutdatedSuccess,
   updateData
 } from './actions';
 import { setSnackbar } from '../ui/actions';
+
+const cleanPackages = () => ({
+  type: clearPackages.type
+});
 
 const updateLoader = payload => ({
   type: toggleLoader.type,
@@ -33,12 +38,13 @@ const setPackages = payload => ({
 
 const packagesStartEpic = pipe(
   ofType(setPackagesStart.type),
-  map(() =>
+  concatMap(() => [
+    cleanPackages(),
     updateLoader({
       loading: true,
       message: INFO_MESSAGES.loading
     })
-  )
+  ])
 );
 
 const packagesSuccessEpic = (action$, state$) =>

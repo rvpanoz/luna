@@ -25,7 +25,8 @@ export const APP_INFO = {
   NOT_AVAILABLE: 'N/A',
   NO_NOTIFICATIONS: 'No notifications',
   NO_WORKING_DIRECTORY: 'No working directory',
-  NO_DATA: 'No data'
+  NO_DATA: 'No data',
+  GLOBAL_MESSAGE: 'Showing global packages'
 };
 
 // package actions

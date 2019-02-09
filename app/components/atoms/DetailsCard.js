@@ -26,11 +26,11 @@ const CardDetails = ({
   mode,
   directory,
   classes,
-  name,
-  version,
-  license,
+  title,
+  aside,
+  smallText,
   author,
-  description,
+  text,
   lastUpdatedAt,
   loading
 }) => {
@@ -43,17 +43,17 @@ const CardDetails = ({
           subheader: classes.cardSubheader,
           content: classes.cardHeaderContent
         }}
-        title={`Project ${name ? `${name} v${version}` : ''}`}
+        title={title}
         subheader={
           <div className={cn(classes.flexContainer, classes.subheader)}>
-            <div className={classes.flexItem}>{license}</div>
+            <div className={classes.flexItem}>{aside}</div>
           </div>
         }
       />
       <CardContent className={classes.cardContent}>
         <AppLoader relative mini loading={loading}>
           <div className={cn(classes.flexItem, classes.cardDescription)}>
-            {description || 'Showing global packages'}
+            {text}
           </div>
         </AppLoader>
       </CardContent>
@@ -73,9 +73,9 @@ CardDetails.defaultProps = {
 
 CardDetails.propTypes = {
   classes: objectOf(string).isRequired,
-  name: oneOfType([node, string]),
-  description: oneOfType([node, string]),
-  version: string,
+  title: oneOfType([node, string]),
+  text: oneOfType([node, string]),
+  smallText: string,
   color: oneOf([
     'warning',
     'primary',
