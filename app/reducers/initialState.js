@@ -1,8 +1,12 @@
 export default {
   mode: 'GLOBAL',
   manager: 'npm',
+  npm: '',
   page: 0,
   rowsPerPage: 10,
+  uiException: {
+    message: null
+  },
   directory: null,
   enableNotifications: false,
   notifications: [],

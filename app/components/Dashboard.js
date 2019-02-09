@@ -1,27 +1,12 @@
 /* eslint-disable */
 
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import { useMappedState } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
-import { Typography } from '@material-ui/core';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Grid from '@material-ui/core/Grid';
-
-import CardInfo from './layout/CardInfo';
-import CardDetails from './layout/CardDetails';
-import Transition from './layout/Transition';
-import AppLoader from './layout/AppLoader';
-
 import styles from './styles/dashboard';
-
-import WarningIcon from '@material-ui/icons/WarningOutlined';
-import UpdateIcon from '@material-ui/icons/UpdateOutlined';
-import BalotIcon from '@material-ui/icons/BallotOutlined';
-import BarChartIcon from '@material-ui/icons/BarChartOutlined';
 
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 import { BasicCard, DetailsCard } from 'components/atoms/';

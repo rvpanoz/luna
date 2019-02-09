@@ -65,7 +65,7 @@ const SearchBox = props => {
       'search-packages-close',
       (event, status, commandArgs, data) => {
         try {
-          const [name, version, packages] = (data && parseMap(data)) || [];
+          const [packages] = (data && parseMap(data)) || [];
 
           dispatch(
             updateData({

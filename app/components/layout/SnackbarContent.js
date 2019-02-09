@@ -69,15 +69,17 @@ const AppSnackbarContent = props => {
         </span>
       }
       action={[
-        <IconButton
-          key="close"
-          aria-label="Close"
-          color="inherit"
-          className={classes.close}
-          onClick={onClose}
-        >
-          <CloseIcon className={classes.icon} />
-        </IconButton>
+        typeof onClose === 'function' && (
+          <IconButton
+            key="close"
+            aria-label="Close"
+            color="inherit"
+            className={classes.close}
+            onClick={onClose}
+          >
+            <CloseIcon className={classes.icon} />
+          </IconButton>
+        )
       ]}
       {...other}
     />
@@ -88,7 +90,7 @@ AppSnackbarContent.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   className: PropTypes.string,
   message: PropTypes.node,
-  onClose: PropTypes.func,
+  onClose: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
   variant: PropTypes.oneOf(['success', 'warning', 'error', 'info', 'primary'])
     .isRequired
 };
