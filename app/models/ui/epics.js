@@ -1,11 +1,17 @@
 import { pipe, from } from 'rxjs';
-import { map, mergeMap, filter } from 'rxjs/operators';
+import { map, mergeMap, filter, concatMap, delay } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { ERROR_TYPES } from 'constants/AppConstants';
 import { parseMessage, switchcase, matchType } from 'commons/utils';
 
-import { commandMessage, showError, showWarning } from './actions';
+import {
+  commandMessage,
+  showError,
+  showWarning,
+  setSnackbar,
+  npmCommand
+} from './actions';
 
 /**
  *
@@ -57,4 +63,26 @@ const notificationsEpic = pipe(
   })
 );
 
-export default combineEpics(notificationsEpic);
+const npmCommandEpic = pipe(
+  ofType(npmCommand.type),
+  concatMap(({ payload: { message } }) => [
+    {
+      type: setSnackbar.type,
+      payload: {
+        type: 'info',
+        open: true,
+        message
+      }
+    }
+  ]),
+  delay(1200),
+  map(() => ({
+    type: setSnackbar.type,
+    payload: {
+      open: false
+    }
+  }))
+  // tap(console.log)
+);
+
+export default combineEpics(notificationsEpic, npmCommandEpic);

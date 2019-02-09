@@ -9,7 +9,12 @@ import { withErrorBoundary } from 'commons/hocs';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/layout/SnackbarContent';
-import { commandMessage, uiException, setNpmVersion } from 'models/ui/actions';
+import {
+  commandMessage,
+  uiException,
+  setNpmVersion,
+  npmCommand
+} from 'models/ui/actions';
 
 import Layout from './Layout';
 import '../app.global.css';
@@ -30,6 +35,10 @@ const App = () => {
 
     ipcRenderer.on('npm-version', (event, version) => {
       dispatch({ type: setNpmVersion.type, payload: { version } });
+    });
+
+    ipcRenderer.on('ipcEvent-flow', (event, message) => {
+      dispatch({ type: npmCommand.type, payload: { message } });
     });
 
     ipcRenderer.on('npm-error', () => {

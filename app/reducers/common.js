@@ -17,7 +17,8 @@ import {
   setNpmVersion,
   toggleLoader,
   togglePackageLoader,
-  uiException
+  uiException,
+  npmCommand
 } from 'models/ui/actions';
 import initialState from './initialState';
 
@@ -37,7 +38,11 @@ const handlers = {
   [uiException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
   [setNpmVersion.type]: (state, { payload: version }) =>
-    assoc('npm', version, state),
+    merge(state, {
+      npm: {
+        version
+      }
+    }),
   [updateNotifications.type]: (state, { payload: { notifications } }) =>
     assoc('notifications', notifications, state),
   [addNotification.type]: (
@@ -54,6 +59,12 @@ const handlers = {
         },
         state.notifications
       )
+    }),
+  [npmCommand.type]: (state, { payload: message }) =>
+    merge(state, {
+      npm: {
+        running: message
+      }
     }),
   [commandError.type]: (state, { payload: error }) =>
     assoc('command_error', error, state),

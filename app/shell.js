@@ -20,18 +20,16 @@ export const runCommand = (options, callback) => {
     cmd.map(command => {
       // the apiManager function to call
       const runner = apiManager[command];
-
-      // return the function's result
       return runner(rest, callback);
     });
 
   Promise.all(combine()).then(results => {
     results.forEach(result => {
       const { status, ...values } = result;
-      const { data, error, cmd } = values;
+      const { data, error, message, cmd } = values;
 
       if (status === 'close') {
-        callback(status, error, data, cmd);
+        callback(status, error, message, data, cmd);
       }
     });
   });

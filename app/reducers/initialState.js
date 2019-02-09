@@ -1,15 +1,18 @@
 export default {
   mode: 'GLOBAL',
   manager: 'npm',
-  npm: '',
+  directory: null,
+  enableNotifications: false,
   page: 0,
   rowsPerPage: 10,
+  notifications: [],
+  npm: {
+    version: null,
+    running: null
+  },
   uiException: {
     message: null
   },
-  directory: null,
-  enableNotifications: false,
-  notifications: [],
   snackbarOptions: {
     open: false,
     message: null

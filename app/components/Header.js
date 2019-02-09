@@ -140,7 +140,10 @@ const Header = ({ title, classes }) => {
                 setNotificationsEl(e.currentTarget);
               }}
             >
-              <Badge badgeContent={notifications.length} color="secondary">
+              <Badge
+                badgeContent={notifications && notifications.length}
+                color="secondary"
+              >
                 <NotificationsIcon />
               </Badge>
             </IconButton>

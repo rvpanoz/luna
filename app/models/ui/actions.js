@@ -19,6 +19,7 @@ const showWarning = ActionCreator('SHOW_WARNING');
 const toggleLoader = ActionCreator('TOGGLE_LOADER');
 const togglePackageLoader = ActionCreator('TOGGLE_PACKAGE_LOADER');
 const uiException = ActionCreator('UI_EXCEPTION_ERROR');
+const npmCommand = ActionCreator('NPM_COMMAND');
 
 export {
   updateNotifications,
@@ -37,5 +38,6 @@ export {
   setNpmVersion,
   toggleLoader,
   togglePackageLoader,
+  npmCommand,
   uiException
 };
