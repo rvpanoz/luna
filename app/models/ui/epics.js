@@ -63,26 +63,26 @@ const notificationsEpic = pipe(
   })
 );
 
-const npmCommandEpic = pipe(
-  ofType(npmCommand.type),
-  concatMap(({ payload: { message } }) => [
-    {
-      type: setSnackbar.type,
-      payload: {
-        type: 'info',
-        open: true,
-        message
-      }
-    }
-  ]),
-  delay(1200),
-  map(() => ({
-    type: setSnackbar.type,
-    payload: {
-      open: false
-    }
-  }))
-  // tap(console.log)
-);
+// const npmCommandEpic = pipe(
+//   ofType(npmCommand.type),
+//   concatMap(({ payload: { message } }) => [
+//     {
+//       type: setSnackbar.type,
+//       payload: {
+//         type: 'info',
+//         open: true,
+//         message
+//       }
+//     }
+//   ]),
+//   delay(1200),
+//   map(() => ({
+//     type: setSnackbar.type,
+//     payload: {
+//       open: false
+//     }
+//   }))
+//   // tap(console.log)
+// );
 
-export default combineEpics(notificationsEpic, npmCommandEpic);
+export default combineEpics(notificationsEpic);

@@ -8,6 +8,7 @@ import { always, cond, equals } from 'ramda';
 
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -38,56 +39,11 @@ const PackageItem = ({
   const renderIconByGroup = useCallback(
     groupName =>
       cond([
-        [
-          equals(''),
-          always(
-            <Avatar
-              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
-            >
-              <GlobalIcon className={classes.icon} />
-            </Avatar>
-          )
-        ],
-        [
-          equals('dependencies'),
-          always(
-            <Avatar
-              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
-            >
-              <DependencyIcon className={classes.icon} />
-            </Avatar>
-          )
-        ],
-        [
-          equals('devDependencies'),
-          always(
-            <Avatar
-              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
-            >
-              <DevDependencyIcon className={classes.icon} />
-            </Avatar>
-          )
-        ],
-        [
-          equals('optionalDependencies'),
-          always(
-            <Avatar
-              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
-            >
-              <OptionalIcon className={classes.icon} />
-            </Avatar>
-          )
-        ],
-        [
-          equals('peerDependencies'),
-          always(
-            <Avatar
-              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
-            >
-              <PeersIcon className={classes.icon} />
-            </Avatar>
-          )
-        ]
+        [equals(''), always(null)],
+        [equals('dependencies'), always(null)],
+        [equals('devDependencies'), always(<Chip label="dev" />)],
+        [equals('optionalDependencies'), always(<Chip label="optional" />)],
+        [equals('peerDependencies'), always(<Chip label="peer" />)]
       ])(groupName),
     [group]
   );

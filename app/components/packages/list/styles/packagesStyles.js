@@ -18,7 +18,7 @@ export const listStyles = theme => ({
   tableWrapper: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
-    maxHeight: 1024,
+    maxHeight: 800,
     [theme.breakpoints.down('sm')]: {
       maxHeight: 285
     },
@@ -53,9 +53,9 @@ export const listStyles = theme => ({
     overflowX: 'auto'
   },
   tableCell: {
-    fontSize: 14,
-    fontFamily: 'Regular',
-    lineHeight: '1.4em',
+    ...defaultFont,
+    fontSize: 12,
+    lineHeight: '1.1em',
     textAlign: 'center',
     '& span': {
       display: 'inline-block',
