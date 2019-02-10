@@ -1,4 +1,8 @@
-import BasicCard from './BacicCard';
-import DetailsCard from './DetailsCard';
+const cache = {};
+const req = require.context('./', false, /\.js$/);
 
-export { BasicCard, DetailsCard };
+req.keys().forEach(filename => {
+  cache[filename.replace(/\.\/|\.js/g, '')] = req(filename).default;
+});
+
+export default cache;

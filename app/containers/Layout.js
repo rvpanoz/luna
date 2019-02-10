@@ -14,7 +14,7 @@ import Header from 'components/Header';
 import Dashboard from 'components/Dashboard';
 import Terminal from 'components/layout/Terminal';
 
-import { Packages, PackageDetails } from 'components/packages';
+import { Packages, Package } from 'components/packages';
 
 import styles from './styles/layout';
 
@@ -39,14 +39,14 @@ const Layout = props => {
         </div>
         <div className={classes.container}>
           <Grid container justify="space-between">
-            <Grid item xs={12} md={7} lg={7} xl={8}>
+            <Grid item xs={12} md={6} lg={7} xl={7}>
               <Packages />
             </Grid>
-            <Grid item xs={12} md={4} lg={4} xl={4}>
+            <Grid item xs={12} md={5} lg={4} xl={4}>
               {terminalStatus ? (
                 <Terminal commands={npmCommands} />
               ) : (
-                <PackageDetails />
+                <Package />
               )}
             </Grid>
           </Grid>

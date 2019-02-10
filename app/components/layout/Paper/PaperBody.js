@@ -7,37 +7,34 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 const styles = theme => ({
-  paperHeader: {
-    color: theme.palette.common.white,
+  paperBody: {
+    color: theme.palette.common.black,
     padding: '0.75rem 1.25rem',
     marginBottom: '0',
     borderBottom: 'none',
     background: 'transparent',
-    zIndex: '3 !important',
-    '&:first-child': {
-      borderRadius: 'calc(.25rem - 1px) calc(.25rem - 1px) 0 0'
-    }
+    zIndex: '3 !important'
   }
 });
 
-const paperHeader = ({ ...props }) => {
+const paperBody = ({ ...props }) => {
   const { classes, className, children, ...rest } = props;
 
-  const paperHeaderClasses = classNames({
-    [classes.paperHeader]: true,
+  const paperBodyClasses = classNames({
+    [classes.paperBody]: true,
     [className]: className !== undefined
   });
 
   return (
-    <div className={paperHeaderClasses} {...rest}>
+    <div className={paperBodyClasses} {...rest}>
       {children}
     </div>
   );
 };
 
-paperHeader.propTypes = {
+paperBody.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   className: PropTypes.string
 };
 
-export default withStyles(styles)(paperHeader);
+export default withStyles(styles)(paperBody);

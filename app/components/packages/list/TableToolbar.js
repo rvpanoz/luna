@@ -22,7 +22,7 @@ import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/PublicRounded';
 
 import { firstToUpper } from 'commons/utils';
-import { APP_MODES } from 'constants/AppConstants';
+import { APP_MODES, INFO_MESSAGES } from 'constants/AppConstants';
 import { setMode, toggleLoader } from 'models/ui/actions';
 
 import TableFilters from './TableFilters';
@@ -85,7 +85,7 @@ const TableListToolbar = ({
     dispatch(
       toggleLoader({
         loading: true,
-        message: `${firstToUpper(action)}ing packages..`
+        message: INFO_MESSAGES.updating
       })
     );
   };
