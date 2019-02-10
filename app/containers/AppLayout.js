@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMappedState } from 'redux-react-hook';
 import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
-import Grid from '@material-ui/core/Grid';
 
 import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
@@ -11,7 +11,7 @@ import Dashboard from 'components/pages/Dashboard';
 import theme from 'styles/theme';
 
 import { Packages } from 'components/pages/packages';
-import { Package } from 'components/pages/package';
+import { switchcase } from 'commons/utils';
 
 const drawerWidth = 240;
 
@@ -38,8 +38,19 @@ const styles = {
   }
 };
 
+const mapState = ({
+  common: {
+    activePage,
+    loader: { loading }
+  }
+}) => ({
+  activePage,
+  loading
+});
+
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
+  const { activePage } = useMappedState(mapState);
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -62,24 +73,10 @@ const AppLayout = ({ classes }) => {
           <Header onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
           <main className={classes.mainContent}>
             <div className={classes.container}>
-              <Dashboard />
-            </div>
-            <div className={classes.container}>
-              <Grid container justify="space-between">
-                <Grid item xs={12} md={6} lg={7} xl={7}>
-                  <Packages />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  md={5}
-                  lg={4}
-                  xl={4}
-                  style={{ display: 'none' }}
-                >
-                  <Package />
-                </Grid>
-              </Grid>
+              {switchcase({
+                overview: () => <Dashboard />,
+                packages: () => <Packages />
+              })('overview')(activePage)}
             </div>
           </main>
         </div>

@@ -21,7 +21,8 @@ import {
   toggleLoader,
   togglePackageLoader,
   uiException,
-  npmCommand
+  npmCommand,
+  setActivePage
 } from 'models/ui/actions';
 import initialState from './initialState';
 
@@ -38,6 +39,10 @@ const createReducer = (commonState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [setActivePage.type]: (state, { payload: page }) => {
+    console.log(page);
+    return assoc('activePage', page, state);
+  },
   [uiException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
   [setNpmVersion.type]: (state, { payload: version }) =>

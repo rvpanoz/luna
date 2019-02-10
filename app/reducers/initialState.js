@@ -1,6 +1,7 @@
 export default {
   mode: 'GLOBAL',
   manager: 'npm',
+  activePage: 'overview',
   directory: null,
   enableNotifications: false,
   page: 0,

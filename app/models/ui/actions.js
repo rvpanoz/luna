@@ -21,6 +21,7 @@ const toggleLoader = ActionCreator('TOGGLE_LOADER');
 const togglePackageLoader = ActionCreator('TOGGLE_PACKAGE_LOADER');
 const uiException = ActionCreator('UI_EXCEPTION_ERROR');
 const npmCommand = ActionCreator('NPM_COMMAND');
+const setActivePage = ActionCreator('SET_ACTIVE_PAGE');
 
 export {
   updateNotifications,
@@ -30,6 +31,7 @@ export {
   clearCommands,
   commandError,
   commandMessage,
+  setActivePage,
   setSnackbar,
   setManager,
   setMode,
