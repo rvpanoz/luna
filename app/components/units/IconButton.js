@@ -40,8 +40,8 @@ IconButton.propTypes = {
   narrowPad: PropTypes.bool,
   separated: PropTypes.bool,
   linkInverted: PropTypes.bool,
-  danger: PropTypes.string,
-  success: PropTypes.string
+  danger: PropTypes.bool,
+  success: PropTypes.bool
 };
 
 export default IconButton;

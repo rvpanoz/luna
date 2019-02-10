@@ -55,7 +55,7 @@ Icon.propTypes = {
   contained: PropTypes.bool,
   white: PropTypes.string,
   purple: PropTypes.string,
-  text: PropTypes.string,
+  text: PropTypes.bool,
   light: PropTypes.bool
 };
 
