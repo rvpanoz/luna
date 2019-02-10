@@ -7,8 +7,6 @@ import React, { useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { withErrorBoundary } from 'commons/hocs';
 
-import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContent from 'components/layout/SnackbarContent';
 import {
   commandMessage,
   uiException,
@@ -29,24 +27,24 @@ const App = () => {
   const { enableNotifications, uiExceptionMessage } = useMappedState(mapState);
 
   useEffect(() => {
-    ipcRenderer.on('uncaught-exception', (event, ...args) => {
-      dispatch({ type: uiException.type, payload: { message: args[0] } });
+    ipcRenderer.on('uncaught-exception', (event, ...args) =>
+      dispatch({ type: uiException.type, payload: { message: args[0] } })
+    );
+
+    ipcRenderer.on('npm-version', (event, version) =>
+      dispatch({ type: setNpmVersion.type, payload: { version } })
+    );
+
+    ipcRenderer.on('ipcEvent-flow', (event, command) => {
+      dispatch({ type: npmCommand.type, payload: { command } });
     });
 
-    ipcRenderer.on('npm-version', (event, version) => {
-      dispatch({ type: setNpmVersion.type, payload: { version } });
-    });
-
-    ipcRenderer.on('ipcEvent-flow', (event, message) => {
-      dispatch({ type: npmCommand.type, payload: { message } });
-    });
-
-    ipcRenderer.on('npm-error', () => {
+    ipcRenderer.on('npm-error', () =>
       dispatch({
         type: uiException.type,
         payload: { message: 'npm is not installed' }
-      });
-    });
+      })
+    );
 
     ipcRenderer.on('ipcEvent-error', (event, message) => {
       if (enableNotifications) {
@@ -63,23 +61,7 @@ const App = () => {
   });
 
   return (
-    <div id="app">
-      {!uiExceptionMessage ? <Layout app="Luna" /> : null}
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
-        }}
-        open={Boolean(uiExceptionMessage)}
-        autoHideDuration={5000}
-      >
-        <SnackbarContent
-          variant="error"
-          message={uiExceptionMessage}
-          onClose={false}
-        />
-      </Snackbar>
-    </div>
+    <div id="app">{!uiExceptionMessage ? <Layout app="Luna" /> : null}</div>
   );
 };
 

@@ -78,10 +78,26 @@ const Dashboard = props => {
             loading={loading}
           />
         </Grid>
-        <Grid item xs={12} sm={12} md={3} lg={3} xl={3}>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={3}
+          lg={3}
+          xl={3}
+          className={classes.cardInfo}
+        >
           <BasicCard title="Dependencies" value={packages && packages.length} />
         </Grid>
-        <Grid item xs={12} sm={12} md={3} lg={4} xl={4}>
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={3}
+          lg={4}
+          xl={4}
+          className={classes.cardInfo}
+        >
           <BasicCard
             title="Outdated"
             value={packagesOutdated && packagesOutdated.length}

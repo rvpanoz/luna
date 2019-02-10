@@ -18,15 +18,18 @@ export const listStyles = theme => ({
   tableWrapper: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
-    maxHeight: 800,
-    [theme.breakpoints.down('sm')]: {
-      maxHeight: 285
-    },
+    maxHeight: '100%',
     [theme.breakpoints.down('md')]: {
       maxHeight: 300
     },
-    [theme.breakpoints.down('lg')]: {
-      maxHeight: 605
+    [theme.breakpoints.up('md')]: {
+      maxHeight: 604
+    },
+    [theme.breakpoints.up('lg')]: {
+      maxHeight: '100%'
+    },
+    [theme.breakpoints.up('xl')]: {
+      maxHeight: '100%'
     }
   },
   tableRow: {

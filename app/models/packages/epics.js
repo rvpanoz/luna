@@ -3,7 +3,7 @@ import { map, concatMap, skipWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { isPackageOutdated } from 'commons/utils';
-import { setPage, toggleLoader } from 'models/ui/actions';
+import { setPage, toggleLoader, clearCommands } from 'models/ui/actions';
 import { INFO_MESSAGES } from 'constants/AppConstants';
 
 import {
@@ -13,6 +13,10 @@ import {
   setOutdatedSuccess,
   updateData
 } from './actions';
+
+const cleanCommands = () => ({
+  type: clearCommands.type
+});
 
 const cleanPackages = () => ({
   type: clearPackages.type
@@ -135,6 +139,7 @@ const packagesSuccessEpic = (action$, state$) =>
         }
 
         return [
+          cleanCommands(),
           setPackages({
             projectName,
             projectVersion,

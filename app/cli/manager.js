@@ -34,7 +34,7 @@ const execute = (
     const errors = [];
 
     log(chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`));
-    callback('flow', null, `running: ${manager} ${commandArgs.join(' ')}`);
+    callback('flow', null, `${manager} ${commandArgs.join(' ')}`);
 
     // on windows use npm.cmd
     const command = spawn(

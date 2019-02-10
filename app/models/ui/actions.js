@@ -6,6 +6,7 @@ const updateNotifications = ActionCreator('UPDATE_NOTIFICATIONS');
 const addNotification = ActionCreator('ADD_NOTIFICATION');
 const clearNotifications = ActionCreator('CLEAR_NOTIFICATIONS');
 const clearSnackbar = ActionCreator('CLEAR_SNACKBAR');
+const clearCommands = ActionCreator('CLEAR_COMMANDS');
 const commandError = ActionCreator('COMMAND_ERROR');
 const commandMessage = ActionCreator('COMMAND_MESSAGE');
 const setSnackbar = ActionCreator('SET_SNACKBAR');
@@ -26,6 +27,7 @@ export {
   addNotification,
   clearNotifications,
   clearSnackbar,
+  clearCommands,
   commandError,
   commandMessage,
   setSnackbar,

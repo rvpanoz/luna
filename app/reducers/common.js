@@ -2,11 +2,14 @@
  * Global reducer: Handles state management for global operations.
  */
 
-import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
+import { identity, merge, assoc, propOr, prop, append, prepend } from 'ramda';
+// import format from 'date-fns/format';
+
 import {
   updateNotifications,
   addNotification,
   clearNotifications,
+  clearCommands,
   clearSnackbar,
   commandError,
   setSnackbar,
@@ -60,11 +63,9 @@ const handlers = {
         state.notifications
       )
     }),
-  [npmCommand.type]: (state, { payload: message }) =>
+  [npmCommand.type]: (state, { payload: command }) =>
     merge(state, {
-      npm: {
-        running: message
-      }
+      commands: append(command, state.commands)
     }),
   [commandError.type]: (state, { payload: error }) =>
     assoc('command_error', error, state),
@@ -74,6 +75,12 @@ const handlers = {
         open: false,
         type: 'info',
         message: null
+      }
+    }),
+  [clearCommands.type]: state =>
+    merge(state, {
+      npm: {
+        commands: []
       }
     }),
   [clearNotifications.type]: state => assoc('notifications', [], state),

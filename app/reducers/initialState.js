@@ -6,9 +6,9 @@ export default {
   page: 0,
   rowsPerPage: 10,
   notifications: [],
+  commands: [],
   npm: {
-    version: null,
-    running: null
+    version: null
   },
   uiException: {
     message: null
