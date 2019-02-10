@@ -7,16 +7,10 @@ import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
 
 import { withStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-
-import DependencyIcon from '@material-ui/icons/CodeOutlined';
-import DevDependencyIcon from '@material-ui/icons/BuildOutlined';
-import GlobalIcon from '@material-ui/icons/GroupWorkOutlined';
-import OptionalIcon from '@material-ui/icons/SettingsEthernetOutlined';
-import PeersIcon from '@material-ui/icons/BallotOutlined';
 
 import { listStyles as styles } from './styles/packagesStyles';
 
@@ -38,56 +32,11 @@ const PackageItem = ({
   const renderIconByGroup = useCallback(
     groupName =>
       cond([
-        [
-          equals(''),
-          always(
-            <Avatar
-              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
-            >
-              <GlobalIcon className={classes.icon} />
-            </Avatar>
-          )
-        ],
-        [
-          equals('dependencies'),
-          always(
-            <Avatar
-              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
-            >
-              <DependencyIcon className={classes.icon} />
-            </Avatar>
-          )
-        ],
-        [
-          equals('devDependencies'),
-          always(
-            <Avatar
-              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
-            >
-              <DevDependencyIcon className={classes.icon} />
-            </Avatar>
-          )
-        ],
-        [
-          equals('optionalDependencies'),
-          always(
-            <Avatar
-              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
-            >
-              <OptionalIcon className={classes.icon} />
-            </Avatar>
-          )
-        ],
-        [
-          equals('peerDependencies'),
-          always(
-            <Avatar
-              className={cn(classes.avatar, classes[`${groupName}Avatar`])}
-            >
-              <PeersIcon className={classes.icon} />
-            </Avatar>
-          )
-        ]
+        [equals(''), always(null)],
+        [equals('dependencies'), always(null)],
+        [equals('devDependencies'), always(<Chip label="dev" />)],
+        [equals('optionalDependencies'), always(<Chip label="optional" />)],
+        [equals('peerDependencies'), always(<Chip label="peer" />)]
       ])(groupName),
     [group]
   );

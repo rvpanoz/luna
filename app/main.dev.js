@@ -26,8 +26,8 @@ const { startMinimized, defaultManager } = defaultSettings;
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 1024,
-  MIN_HEIGHT = 768,
+  MIN_WIDTH = 960,
+  MIN_HEIGHT = 675,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS,
   NODE_ENV,
@@ -92,6 +92,7 @@ ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
 
   const onError = error => event.sender.send('ipcEvent-error', error);
+  const onFlow = message => event.sender.send('ipcEvent-flow', message);
 
   const onClose = (status, errors, data, cmd) => {
     const { directory, mode } = rest;
@@ -133,10 +134,11 @@ ipcMain.on('ipc-event', (event, options) => {
     event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
   };
 
-  const callback = (status, error, ...restArgs) =>
+  const callback = (status, error, message, ...restArgs) =>
     switchcase({
       close: () => onClose(status, error, ...restArgs),
-      error: () => onError(error)
+      error: () => onError(error),
+      flow: () => onFlow(message)
     })(null)(status);
 
   /**
@@ -215,8 +217,8 @@ app.on('ready', async () => {
 
   // create mainWindow
   mainWindow = new BrowserWindow({
-    width: MIN_WIDTH || screenSize.width,
-    height: MIN_HEIGHT || screenSize.height,
+    minWidth: MIN_WIDTH || screenSize.width,
+    minHeight: MIN_HEIGHT || screenSize.height,
     x,
     y,
     show: false,

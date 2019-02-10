@@ -2,11 +2,14 @@
  * Global reducer: Handles state management for global operations.
  */
 
-import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
+import { identity, merge, assoc, propOr, prop, append, prepend } from 'ramda';
+// import format from 'date-fns/format';
+
 import {
   updateNotifications,
   addNotification,
   clearNotifications,
+  clearCommands,
   clearSnackbar,
   commandError,
   setSnackbar,
@@ -17,7 +20,8 @@ import {
   setNpmVersion,
   toggleLoader,
   togglePackageLoader,
-  uiException
+  uiException,
+  npmCommand
 } from 'models/ui/actions';
 import initialState from './initialState';
 
@@ -37,7 +41,11 @@ const handlers = {
   [uiException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
   [setNpmVersion.type]: (state, { payload: version }) =>
-    assoc('npm', version, state),
+    merge(state, {
+      npm: {
+        version
+      }
+    }),
   [updateNotifications.type]: (state, { payload: { notifications } }) =>
     assoc('notifications', notifications, state),
   [addNotification.type]: (
@@ -55,6 +63,10 @@ const handlers = {
         state.notifications
       )
     }),
+  [npmCommand.type]: (state, { payload: command }) =>
+    merge(state, {
+      commands: append(command, state.commands)
+    }),
   [commandError.type]: (state, { payload: error }) =>
     assoc('command_error', error, state),
   [clearSnackbar.type]: state =>
@@ -63,6 +75,12 @@ const handlers = {
         open: false,
         type: 'info',
         message: null
+      }
+    }),
+  [clearCommands.type]: state =>
+    merge(state, {
+      npm: {
+        commands: []
       }
     }),
   [clearNotifications.type]: state => assoc('notifications', [], state),

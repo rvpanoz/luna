@@ -19,7 +19,7 @@ import {
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-  { id: 'version', disablePadding: true, label: 'Version' },
+  { id: 'version', disablePadding: true, label: 'Installed' },
   { id: 'latest', disablePadding: true, label: 'Latest' }
 ];
 

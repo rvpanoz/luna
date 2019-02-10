@@ -3,6 +3,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
+import Icon from '@material-ui/core/Icon';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import iconButtonStyle from './styles/iconButtonStyle';
@@ -21,7 +22,7 @@ const AppIconButton = ({
       [classes[customClass]]: Boolean(customClass)
     })}
   >
-    {children}
+    <Icon>{children}</Icon>
   </IconButton>
 );
 

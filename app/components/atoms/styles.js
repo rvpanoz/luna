@@ -37,9 +37,15 @@ export const detailsCardStyles = theme => ({
   },
   cardDescription: {
     ...defaultFont,
-    lineHeight: '1.5em',
+    lineHeight: '1.25em',
     fontSize: 14,
-    fontWeight: 400
+    fontWeight: 400,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
+    },
+    [theme.breakpoints.down('md')]: {
+      display: 'none'
+    }
   },
   cardTitle: {
     margin: 0,
