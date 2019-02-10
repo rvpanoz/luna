@@ -9,7 +9,7 @@ import { ipcRenderer } from 'electron';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContent from 'components/layout/SnackbarContent';
+import SnackbarContent from 'components/common/SnackbarContent';
 
 import { parseMap } from 'commons/utils';
 import { setPackagesStart, updateData } from 'models/packages/actions';

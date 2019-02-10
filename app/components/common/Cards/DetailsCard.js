@@ -13,7 +13,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import AppLoader from 'components/layout/AppLoader';
+import AppLoader from 'components/common/AppLoader';
 import { detailsCardStyles as styles } from './styles';
 
 const CardDetails = ({

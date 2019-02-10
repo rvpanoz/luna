@@ -35,8 +35,8 @@ import { togglePackageLoader } from 'models/ui/actions';
 import { setActive } from 'models/packages/actions';
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 
-import AppLoader from 'components/layout/AppLoader';
-import Transition from 'components/layout/Transition';
+import AppLoader from 'components/common/AppLoader';
+import Transition from 'components/common/Transition';
 
 import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
@@ -74,22 +74,19 @@ const PackageDetails = ({ classes }) => {
     [active]
   );
 
-  useEffect(
-    () => {
-      const pkg = findPackageByName(name);
+  useEffect(() => {
+    const pkg = findPackageByName(name);
 
-      if (!pkg || typeof pkg !== 'object') {
-        return;
-      }
+    if (!pkg || typeof pkg !== 'object') {
+      return;
+    }
 
-      if (mode === APP_MODES.LOCAL && active) {
-        setGroup(pkg.__group);
-      }
+    if (mode === APP_MODES.LOCAL && active) {
+      setGroup(pkg.__group);
+    }
 
-      setLicense(pkg.license || APP_INFO.NOT_AVAILABLE);
-    },
-    [name]
-  );
+    setLicense(pkg.license || APP_INFO.NOT_AVAILABLE);
+  }, [name]);
 
   const renderSearchActions = () => (
     <Tooltip title="install">
@@ -114,31 +111,28 @@ const PackageDetails = ({ classes }) => {
     </React.Fragment>
   );
 
-  const renderActions = useCallback(
-    () => {
-      const fromSearchBool = Boolean(fromSearch);
+  const renderActions = useCallback(() => {
+    const fromSearchBool = Boolean(fromSearch);
 
-      return (
-        <CardActions className={classes.actions} disableActionSpacing>
-          {cond([
-            [equals(false), always(renderInstalledActions())],
-            [equals(true), always(renderSearchActions())]
-          ])(fromSearchBool)}
-          <IconButton
-            className={cn(classes.expand, {
-              [classes.expandOpen]: expanded
-            })}
-            onClick={() => expand(!expanded)}
-            aria-expanded={expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </CardActions>
-      );
-    },
-    [fromSearch]
-  );
+    return (
+      <CardActions className={classes.actions} disableActionSpacing>
+        {cond([
+          [equals(false), always(renderInstalledActions())],
+          [equals(true), always(renderSearchActions())]
+        ])(fromSearchBool)}
+        <IconButton
+          className={cn(classes.expand, {
+            [classes.expandOpen]: expanded
+          })}
+          onClick={() => expand(!expanded)}
+          aria-expanded={expanded}
+          aria-label="Show more"
+        >
+          <ExpandMoreIcon />
+        </IconButton>
+      </CardActions>
+    );
+  }, [fromSearch]);
 
   useEffect(() => {
     ipcRenderer.on(['view-close'], (event, status, cmd, data) => {

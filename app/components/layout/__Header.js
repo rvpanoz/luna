@@ -1,4 +1,4 @@
-/* eslint-disable-interactive-support-focus */
+/* eslint-disable */
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';

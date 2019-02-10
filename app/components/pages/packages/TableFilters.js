@@ -15,7 +15,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { APP_MODES } from 'constants/AppConstants';
-import AppButton from 'components/atoms/Buttons/AppButton';
+import AppButton from 'components/units/Buttons/AppButton';
 import { addFilter, clearFilters } from 'models/packages/actions';
 
 import { tableFiltersStyles as styles } from './styles/packagesStyles';

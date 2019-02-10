@@ -1,4 +1,4 @@
-/* eslint-disable react/require-default-props */
+/* eslint-disable */
 
 import React, { useState } from 'react';
 import { objectOf, string } from 'prop-types';
@@ -10,11 +10,11 @@ import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import Header from 'components/Header';
+import AppHeader from 'components/AppHeader';
 import Dashboard from 'components/Dashboard';
 import Terminal from 'components/layout/Terminal';
 
-import { Packages, PackageDetails } from 'components/packages';
+import { Packages, Package } from 'components/packages';
 
 import styles from './styles/layout';
 
@@ -31,7 +31,7 @@ const Layout = props => {
     <div className={classes.wrapper}>
       <CssBaseline />
       <section className={classes.header}>
-        <Header title={app} />
+        <AppHeader title={app} />
       </section>
       <section className={classes.main}>
         <div className={classes.container}>
@@ -39,14 +39,14 @@ const Layout = props => {
         </div>
         <div className={classes.container}>
           <Grid container justify="space-between">
-            <Grid item xs={12} md={7} lg={7} xl={8}>
+            <Grid item xs={12} md={6} lg={7} xl={7}>
               <Packages />
             </Grid>
-            <Grid item xs={12} md={4} lg={4} xl={4}>
+            <Grid item xs={12} md={5} lg={4} xl={4}>
               {terminalStatus ? (
                 <Terminal commands={npmCommands} />
               ) : (
-                <PackageDetails />
+                <Package />
               )}
             </Grid>
           </Grid>

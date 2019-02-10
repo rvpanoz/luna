@@ -14,7 +14,7 @@ import {
   npmCommand
 } from 'models/ui/actions';
 
-import Layout from './Layout';
+import AppLayout from './AppLayout';
 import '../app.global.css';
 
 const mapState = state => ({
@@ -61,7 +61,7 @@ const App = () => {
   });
 
   return (
-    <div id="app">{!uiExceptionMessage ? <Layout app="Luna" /> : null}</div>
+    <div id="app">{!uiExceptionMessage ? <AppLayout app="Luna" /> : null}</div>
   );
 };
 

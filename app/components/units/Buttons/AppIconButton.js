@@ -35,7 +35,6 @@ AppIconButton.propTypes = {
     'success',
     'warning',
     'danger',
-    'rose',
     'white',
     'simple'
   ]),

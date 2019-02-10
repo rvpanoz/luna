@@ -26,11 +26,7 @@ const BasicCard = ({ classes, title, value }) => (
       <Typography component="p" className={classes.cardCategory}>
         {title}
       </Typography>
-      <Typography
-        variant="headline"
-        component="h2"
-        className={classes.cardTitle}
-      >
+      <Typography component="h2" className={classes.cardTitle}>
         {value}
       </Typography>
     </CardContent>
