@@ -17,10 +17,10 @@ const styles = theme => ({
     paddingTop: 16,
     paddingBottom: 16
   },
-  firebase: {
+  title: {
     fontSize: 24,
     fontFamily: theme.typography.fontFamily,
-    color: theme.palette.common.white
+    color: theme.palette.secondary.light
   },
   itemActionable: {
     '&:hover': {

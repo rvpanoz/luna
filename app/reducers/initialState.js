@@ -1,7 +1,7 @@
 export default {
   mode: 'GLOBAL',
   manager: 'npm',
-  activePage: 'overview',
+  activePage: 'packages',
   directory: null,
   enableNotifications: true,
   page: 0,

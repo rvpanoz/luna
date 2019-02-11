@@ -1,3 +1,5 @@
+/* eslint-disable react/require-default-props */
+
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -34,7 +36,13 @@ const menuItems = [
   }
 ];
 
-const Navigator = ({ classes, ...other }) => {
+const Navigator = ({
+  classes,
+  projectName,
+  projectVersion,
+  mode,
+  ...other
+}) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
   const dispatch = useDispatch();
 
@@ -79,7 +87,7 @@ const Navigator = ({ classes, ...other }) => {
       <List disablePadding>
         <ListItem
           className={classNames(
-            classes.firebase,
+            classes.title,
             classes.item,
             classes.itemCategory
           )}
@@ -95,7 +103,7 @@ const Navigator = ({ classes, ...other }) => {
               primary: classes.itemPrimary
             }}
           >
-            Overview
+            {projectName || 'Overview'}
           </ListItemText>
         </ListItem>
         {menuItems.map(({ id, children }) => (
@@ -177,7 +185,10 @@ const Navigator = ({ classes, ...other }) => {
 };
 
 Navigator.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  mode: PropTypes.string,
+  projectName: PropTypes.string,
+  projectVersion: PropTypes.string
 };
 
 export default withStyles(styles)(Navigator);
