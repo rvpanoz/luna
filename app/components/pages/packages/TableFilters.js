@@ -141,7 +141,7 @@ const ListFilters = ({ classes, mode, close }) => {
 };
 
 ListFilters.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string,
   close: PropTypes.func
 };

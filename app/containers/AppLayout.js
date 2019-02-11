@@ -33,7 +33,7 @@ const styles = {
   },
   mainContent: {
     flex: 1,
-    padding: '48px 36px 0',
+    padding: '28px 18px 0',
     background: '#eaeff1'
   }
 };

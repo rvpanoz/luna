@@ -14,6 +14,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 import LoadIcon from '@material-ui/icons/Archive';
 import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
+import TerminalIcon from '@material-ui/icons/Code';
 
 import { APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
@@ -27,7 +28,8 @@ const menuItems = [
     id: 'Menu',
     children: [
       { id: 'Analyze', icon: <LoadIcon />, active: true },
-      { id: 'Terminal', icon: <SettingsEthernetIcon /> }
+      { id: 'Tools', icon: <SettingsEthernetIcon /> },
+      { id: 'Terminal', icon: <TerminalIcon /> }
     ]
   }
 ];
