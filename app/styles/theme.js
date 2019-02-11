@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 
 const theme = createMuiTheme({
   typography: {
@@ -14,6 +15,21 @@ const theme = createMuiTheme({
       light: '#63ccff',
       main: '#009be5',
       dark: '#006db3'
+    },
+    secondary: {
+      light: lighten('#e51a90', 0.1),
+      main: '#e51a90',
+      dark: darken('#e51a90', 0.1)
+    },
+    error: {
+      light: lighten('#D8000C', 0.1),
+      main: '#D8000C',
+      dark: darken('#D8000C', 0.1)
+    },
+    warning: {
+      light: lighten('#ffae42', 0.1),
+      main: '#ffae42',
+      dark: darken('#ffae42', 0.1)
     }
   },
   shape: {

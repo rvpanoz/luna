@@ -16,14 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import AppLoader from 'components/common/AppLoader';
 import { detailsCardStyles as styles } from './styles';
 
-const CardDetails = ({
-  classes,
-  title,
-  aside,
-  text,
-  lastUpdatedAt,
-  loading
-}) => (
+const CardDetails = ({ classes, title, aside, text, actionsText, loading }) => (
   <Card className={classes.card}>
     <CardHeader
       classes={{
@@ -49,7 +42,7 @@ const CardDetails = ({
     <CardActions className={classes.cardActions}>
       <ProjectIcon className={cn(classes.cardIcon, classes.infoCardIcon)} />
       <Typography component="p" className={classes.cardActionsText}>
-        {`Updated: ${lastUpdatedAt}`}
+        {actionsText}
       </Typography>
     </CardActions>
   </Card>
@@ -61,21 +54,13 @@ CardDetails.defaultProps = {
 
 CardDetails.propTypes = {
   classes: objectOf(string).isRequired,
-  title: oneOfType([node, string]),
+  title: oneOfType([node, string]).isRequired,
   text: oneOfType([node, string]),
   loading: bool,
   mode: string,
-  aside: string,
-  lastUpdatedAt: string,
-  color: oneOf([
-    'warning',
-    'primary',
-    'danger',
-    'success',
-    'info',
-    'rose',
-    'gray'
-  ])
+  aside: oneOfType([node, string]),
+  actionsText: string,
+  color: oneOf(['warning', 'primary', 'danger', 'success', 'info', 'gray'])
 };
 
 export default withStyles(styles)(CardDetails);

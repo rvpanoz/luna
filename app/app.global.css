@@ -19,12 +19,17 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 12.5px;
+  width: 12px;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  border-radius: 0;
-  background: #999;
+  border-radius: 10px;
+  background: #ccc;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
 }
 
 @font-face {

@@ -84,9 +84,9 @@ const Header = ({ classes, onDrawerToggle }) => {
         <Toolbar>
           <Grid container alignItems="center" spacing={8}>
             <Grid item xs>
-              <Typography color="inherit" variant="h5">
+              {/* <Typography color="inherit" variant="h5">
                 Packages
-              </Typography>
+              </Typography> */}
             </Grid>
             <Grid item>
               <Button
@@ -120,9 +120,9 @@ const Header = ({ classes, onDrawerToggle }) => {
           textColor="inherit"
           onChange={(e, value) => dispatch(setActivePage(value))}
         >
-          <Tab textColor="inherit" label="Overview" value="overview" />
           <Tab textColor="inherit" label="Packages" value="packages" />
           <Tab textColor="inherit" label="Problems" value="problems" />
+          <Tab textColor="inherit" label="Scripts" value="scripts" />
         </Tabs>
       </AppBar>
     </React.Fragment>

@@ -19,15 +19,15 @@ import UpdateIcon from '@material-ui/icons/Update';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
-import PublicIcon from '@material-ui/icons/PublicRounded';
+import PublicIcon from '@material-ui/icons/BallotSharp';
 
-import { firstToUpper } from 'commons/utils';
+import { firstToUpper, switchcase } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
 import { setMode, toggleLoader } from 'models/ui/actions';
 
 import TableFilters from './TableFilters';
 
-import { tableToolbarStyles as styles } from './styles/packagesStyles';
+import styles from './styles/tableToolbar';
 
 const TableListToolbar = ({
   classes,
@@ -136,38 +136,39 @@ const TableListToolbar = ({
     return false;
   };
 
-  const renderToolbarActions = () => (
-    <div className={classes.flexContainer}>
-      <Tooltip title="Open package.json">
-        <IconButton
-          disableRipple
-          color="secondary"
-          aria-label="Open package.json"
-          onClick={openPackage}
-        >
-          <LoadIcon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="Show global packages">
-        <div>
+  const renderAction = action =>
+    switchcase({
+      install: () => (
+        <Tooltip title="Install selected">
           <IconButton
-            disableRipple
-            disabled={mode === APP_MODES.GLOBAL && !fromSearch}
-            aria-label="Show globals"
-            onClick={() => switchMode(APP_MODES.GLOBAL, null)}
+            aria-label="install selected"
+            onClick={() => handleAction('install')}
           >
-            <PublicIcon />
+            <AddIcon />
           </IconButton>
-        </div>
-      </Tooltip>
-      <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
-        <div>
-          <IconButton disableRipple aria-label="back_reload" onClick={reload}>
-            <RefreshIcon />
+        </Tooltip>
+      ),
+      update: () => (
+        <Tooltip title="Update selected">
+          <IconButton
+            aria-label="update selected"
+            onClick={() => handleAction('update')}
+          >
+            <UpdateIcon />
           </IconButton>
-        </div>
-      </Tooltip>
-      {!fromSearch && (
+        </Tooltip>
+      ),
+      uninstall: () => (
+        <Tooltip title="Uninstall selected">
+          <IconButton
+            aria-label="uninstall selected"
+            onClick={() => handleAction('uninstall')}
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      ),
+      filters: () => (
         <Tooltip title="Show filters">
           <div>
             <IconButton
@@ -180,8 +181,58 @@ const TableListToolbar = ({
             </IconButton>
           </div>
         </Tooltip>
-      )}
-    </div>
+      )
+    })('none')(action);
+
+  const renderToolbarActions = useCallback(
+    () => (
+      <React.Fragment>
+        <Tooltip title="Open package.json">
+          <IconButton
+            disableRipple
+            color="secondary"
+            aria-label="Open package.json"
+            onClick={openPackage}
+          >
+            <LoadIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Show global packages">
+          <div>
+            <IconButton
+              disableRipple
+              disabled={mode === APP_MODES.GLOBAL && !fromSearch}
+              aria-label="Show globals"
+              onClick={() => switchMode(APP_MODES.GLOBAL, null)}
+            >
+              <PublicIcon />
+            </IconButton>
+          </div>
+        </Tooltip>
+        <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
+          <div>
+            <IconButton disableRipple aria-label="back_reload" onClick={reload}>
+              <RefreshIcon />
+            </IconButton>
+          </div>
+        </Tooltip>
+        {!fromSearch && (
+          <Tooltip title="Show filters">
+            <div>
+              <IconButton
+                disableRipple
+                disabled={nodata || fromSearch}
+                aria-label="Show filters"
+                onClick={openFilters}
+              >
+                <FilterListIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+        )}
+      </React.Fragment>
+    ),
+    []
   );
 
   return (
@@ -199,73 +250,35 @@ const TableListToolbar = ({
               : `${selected.length} selected`}
           </Typography>
         </div>
-        <div className={classes.filters}>
-          <Popover
-            open={filtersOn}
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left'
-            }}
-            transformOrigin={{
-              vertical: 'center',
-              horizontal: 'right'
-            }}
-          >
-            <TableFilters mode={mode} close={() => openFilters(null, true)} />
-          </Popover>
-        </div>
         <div className={classes.spacer} />
-        <div className={classes.actions}>
-          {selected.length === 0 ? (
-            renderToolbarActions()
-          ) : fromSearch ? (
-            <div className={classes.flexContainer}>
-              <Tooltip title="Install selected">
-                <IconButton
-                  aria-label="install selected"
-                  onClick={() => handleAction('install')}
-                >
-                  <AddIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-          ) : (
-            <div className={classes.flexContainer}>
-              {!fromSearch && selected.length && needUpdate && (
-                <Tooltip title="Update selected">
-                  <IconButton
-                    aria-label="update selected"
-                    onClick={() => handleAction('update')}
-                  >
-                    <UpdateIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
-              {!fromSearch && selected.length && (
-                <React.Fragment>
-                  <Tooltip title="Install selected">
-                    <IconButton
-                      aria-label="install selected"
-                      onClick={() => handleAction('install')}
-                    >
-                      <AddIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Uninstall selected">
-                    <IconButton
-                      aria-label="uninstall selected"
-                      onClick={() => handleAction('uninstall')}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </React.Fragment>
-              )}
-            </div>
-          )}
+        <div className={cn(classes.actions)}>
+          {selected.length === 0 && renderToolbarActions()}
+          {fromSearch && renderAction('install')}
+          {!fromSearch && selected.length && needUpdate
+            ? renderAction('update')
+            : null}
+          {!fromSearch && selected.length ? (
+            <React.Fragment>
+              {renderAction('install')}
+              {renderAction('uninstall')}
+            </React.Fragment>
+          ) : null}
         </div>
       </Toolbar>
+      <Popover
+        open={filtersOn}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left'
+        }}
+        transformOrigin={{
+          vertical: 'center',
+          horizontal: 'right'
+        }}
+      >
+        <TableFilters mode={mode} close={() => openFilters(null, true)} />
+      </Popover>
     </section>
   );
 };

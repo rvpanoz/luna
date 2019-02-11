@@ -3,7 +3,7 @@ export default {
   manager: 'npm',
   activePage: 'overview',
   directory: null,
-  enableNotifications: false,
+  enableNotifications: true,
   page: 0,
   rowsPerPage: 10,
   notifications: [],

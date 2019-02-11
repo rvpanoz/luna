@@ -22,7 +22,7 @@ import FormControl from '@material-ui/core/FormControl';
 
 import { setManager, setPageRows } from 'models/ui/actions';
 
-import styles from './styles/settings';
+import styles from './styles';
 
 const mapState = state => ({
   manager: state.common.manager,
