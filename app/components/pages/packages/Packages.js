@@ -11,11 +11,10 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import Snackbar from '@material-ui/core/Snackbar';
+import Grid from '@material-ui/core/Grid';
 
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
-import SnackbarContent from 'components/common/SnackbarContent';
 import AppLoader from 'components/common/AppLoader';
 
 import {
@@ -26,24 +25,25 @@ import {
 
 import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
 
-import { APP_INFO, WARNING_MESSAGES } from 'constants/AppConstants';
+import { APP_INFO, APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
 
+import { BasicCard, DetailsCard } from 'components/common/Cards';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
 
-import { listStyles as styles } from './styles/packagesStyles';
+import styles from './styles/packages';
 
 const mapState = ({
   common: {
     directory,
     manager,
     mode,
+    notifications,
     page,
     rowsPerPage,
-    loader,
-    snackbarOptions
+    loader
   },
   packages: {
     active,
@@ -60,10 +60,10 @@ const mapState = ({
   directory,
   manager,
   mode,
+  notifications,
   page,
   rowsPerPage,
   loader,
-  snackbarOptions,
   active,
   action,
   filters,
@@ -81,6 +81,7 @@ const Packages = ({ classes }) => {
     packages,
     packagesOutdated,
     mode,
+    notifications,
     page,
     filters,
     rowsPerPage,
@@ -88,7 +89,6 @@ const Packages = ({ classes }) => {
     manager,
     selected,
     fromSearch,
-    snackbarOptions,
     sortDir,
     sortBy
   } = useMappedState(mapState);
@@ -103,10 +103,8 @@ const Packages = ({ classes }) => {
     [name, selected]
   );
 
-  const packagesOutdatedNames = useCallback(
-    () => packagesOutdated && packagesOutdated.map(outdated => outdated.name),
-    [packagesOutdated]
-  )();
+  const packagesOutdatedNames =
+    packagesOutdated && packagesOutdated.map(outdated => outdated.name);
 
   const scrollWrapper = useCallback(
     top => {
@@ -164,7 +162,7 @@ const Packages = ({ classes }) => {
       }
 
       // force render
-      setCounter(counter + 1);
+      reload();
     });
 
     return () => ipcRenderer.removeAllListeners(['action-close']);
@@ -204,6 +202,53 @@ const Packages = ({ classes }) => {
 
   return (
     <React.Fragment>
+      <section className={cn(classes.cards)}>
+        <Grid container justify="space-between">
+          <Grid item md={4} lg={4} xl={4}>
+            <DetailsCard
+              mode={mode}
+              directory={directory}
+              title={'Dependencies'}
+              aside={
+                <Typography variant="h5">{data && data.length}</Typography>
+              }
+              text={projectDescription}
+              smallText={projectLicense}
+              loading={loading}
+            />
+          </Grid>
+          <Grid item>
+            <DetailsCard
+              mode={mode}
+              directory={directory}
+              title="Outdated"
+              aside={
+                <Typography variant="h5">
+                  {packagesOutdated && packagesOutdated.length}
+                </Typography>
+              }
+              text={projectDescription}
+              smallText={projectLicense}
+              loading={loading}
+            />
+          </Grid>
+          <Grid item>
+            <DetailsCard
+              mode={mode}
+              directory={directory}
+              title="Problems"
+              aside={
+                <Typography variant="h5">
+                  {notifications && notifications.length}
+                </Typography>
+              }
+              text={projectDescription}
+              smallText={projectLicense}
+              loading={loading}
+            />
+          </Grid>
+        </Grid>
+      </section>
       <AppLoader loading={loading} message={message}>
         <Paper className={classes.root}>
           <div className={classes.toolbar}>
@@ -221,106 +266,69 @@ const Packages = ({ classes }) => {
             />
           </div>
           <div className={classes.tableWrapper} ref={wrapperRef}>
-            {nodata === false ? (
-              <Table
-                padding="dense"
-                aria-labelledby="packages-list"
-                className={cn(classes.table, {
-                  [classes.hasFilterBlur]: loading
-                })}
-              >
-                <TableHeader
-                  packages={dataSlices.map(d => d.name)}
-                  numSelected={selected.length}
-                  rowCount={dependencies && dependencies.length}
-                />
-                <TableBody>
-                  {sortedPackages &&
-                    sortedPackages.map(
-                      ({
-                        name,
-                        version,
-                        latest,
-                        isOutdated,
-                        peerDependencies,
-                        __group,
-                        __error,
-                        __peerMissing
-                      }) => (
-                        <PackageItem
-                          key={`pkg-${name}`}
-                          isSelected={isSelected(name, selected)}
-                          addSelected={() => dispatch(addSelected({ name }))}
-                          name={name}
-                          peerDependencies={peerDependencies}
-                          manager={manager}
-                          version={version}
-                          latest={latest}
-                          isOutdated={isOutdated}
-                          group={__group}
-                        />
-                      )
-                    )}
-                </TableBody>
-                <TableFooter
-                  classes={{
-                    root: {
-                      [classes.hidden]: nodata
-                    }
-                  }}
-                  rowCount={data && data.length}
-                  page={page}
-                  rowsPerPage={rowsPerPage}
-                  handleChangePage={(e, pageNo) => {
-                    scrollWrapper(0);
-                    dispatch(setPage({ page: pageNo }));
-                  }}
-                  handleChangePageRows={e =>
-                    dispatch(setPageRows({ rowsPerPage: e.target.value }))
+            <Table
+              padding="dense"
+              aria-labelledby="packages-list"
+              className={cn(classes.table, {
+                [classes.hasFilterBlur]: loading
+              })}
+            >
+              <TableHeader
+                packages={dataSlices.map(d => d.name)}
+                numSelected={selected.length}
+                rowCount={dependencies && dependencies.length}
+              />
+              <TableBody>
+                {sortedPackages &&
+                  sortedPackages.map(
+                    ({
+                      name,
+                      version,
+                      latest,
+                      isOutdated,
+                      peerDependencies,
+                      __group,
+                      __error,
+                      __peerMissing
+                    }) => (
+                      <PackageItem
+                        key={`pkg-${name}`}
+                        isSelected={isSelected(name, selected)}
+                        addSelected={() => dispatch(addSelected({ name }))}
+                        name={name}
+                        peerDependencies={peerDependencies}
+                        manager={manager}
+                        version={version}
+                        latest={latest}
+                        isOutdated={isOutdated}
+                        group={__group}
+                        error={__error}
+                        peerMissing={__peerMissing}
+                      />
+                    )
+                  )}
+              </TableBody>
+              <TableFooter
+                classes={{
+                  root: {
+                    [classes.hidden]: nodata
                   }
-                />
-              </Table>
-            ) : (
-              <div className={classes.nodata}>
-                <Typography variant="caption" gutterBottom>
-                  {APP_INFO.NO_DATA}
-                </Typography>
-              </div>
-            )}
+                }}
+                rowCount={data && data.length}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                handleChangePage={(e, pageNo) => {
+                  scrollWrapper(0);
+                  dispatch(setPage({ page: pageNo }));
+                }}
+                handleChangePageRows={e =>
+                  dispatch(setPageRows({ rowsPerPage: e.target.value }))
+                }
+              />
+            </Table>
           </div>
         </Paper>
       </AppLoader>
-      {snackbarOptions && snackbarOptions.open && (
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right'
-          }}
-          open={Boolean(snackbarOptions.open)}
-          autoHideDuration={5000}
-          onClose={() =>
-            dispatch(
-              setSnackbar({
-                open: false,
-                message: null
-              })
-            )
-          }
-        >
-          <SnackbarContent
-            variant={snackbarOptions.type}
-            message={snackbarOptions.message}
-            onClose={() =>
-              dispatch(
-                setSnackbar({
-                  open: false,
-                  message: null
-                })
-              )
-            }
-          />
-        </Snackbar>
-      )}
     </React.Fragment>
   );
 };

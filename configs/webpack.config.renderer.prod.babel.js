@@ -13,6 +13,7 @@ import baseConfig from './webpack.config.base';
 import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 
 CheckNodeEnv('production');
+
 export default merge.smart(baseConfig, {
   devtool: 'source-map',
 
@@ -27,7 +28,17 @@ export default merge.smart(baseConfig, {
     publicPath: './dist/',
     filename: 'renderer.prod.js'
   },
-
+  resolve: {
+    alias: {
+      assets: path.resolve(path.join(__dirname, '..', 'app', 'assets')),
+      constants: path.resolve(path.join(__dirname, '..', 'app', 'constants')),
+      commons: path.resolve(path.join(__dirname, '..', 'app', 'commons')),
+      components: path.resolve(path.join(__dirname, '..', 'app', 'components')),
+      containers: path.resolve(path.join(__dirname, '..', 'app', 'containers')),
+      models: path.resolve(path.join(__dirname, '..', 'app', 'models')),
+      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles'))
+    }
+  },
   module: {
     rules: [
       // Extract all .global.css to style.css as is

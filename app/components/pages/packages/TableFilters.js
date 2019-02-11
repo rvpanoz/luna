@@ -18,7 +18,7 @@ import { APP_MODES } from 'constants/AppConstants';
 import AppButton from 'components/units/Buttons/AppButton';
 import { addFilter, clearFilters } from 'models/packages/actions';
 
-import { tableFiltersStyles as styles } from './styles/packagesStyles';
+import styles from './styles/tableFilters';
 
 const mapState = state => ({
   filters: state.packages.filters
@@ -133,7 +133,9 @@ const ListFilters = ({ classes, mode, close }) => {
           >
             Clear
           </AppButton>
-          <AppButton onClick={close}>Close</AppButton>
+          <AppButton color="info" onClick={close}>
+            Close
+          </AppButton>
         </div>
       </div>
     </div>
@@ -141,7 +143,7 @@ const ListFilters = ({ classes, mode, close }) => {
 };
 
 ListFilters.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string),
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string,
   close: PropTypes.func
 };

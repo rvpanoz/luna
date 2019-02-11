@@ -18,7 +18,7 @@ import ModuleIcon from '@material-ui/icons/ViewModuleRounded';
 import AddIcon from '@material-ui/icons/Add';
 
 import { toggleLoader } from 'models/ui/actions';
-import styles from './styles/notifications';
+import styles from './styles';
 
 const mapState = state => ({
   manager: state.common.manager,

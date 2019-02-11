@@ -1,4 +1,4 @@
-import { defaultFont, primaryBoxShadow, dangerColor } from 'styles/variables';
+import { defaultFont, primaryBoxShadow } from 'styles/variables';
 
 const styles = theme => ({
   notifications: {
@@ -6,11 +6,11 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       position: 'absolute',
       top: '5px',
-      border: '1px solid #FFF',
+      border: '1px solid #fff',
       right: '10px',
       fontSize: '9px',
-      background: dangerColor,
-      color: '#FFFFFF',
+      background: theme.palette.error.light,
+      color: '#fff',
       minWidth: '16px',
       height: '16px',
       borderRadius: '10px',
@@ -55,7 +55,7 @@ const styles = theme => ({
     whiteSpace: 'nowrap',
     '&:hover': {
       backgroundColor: theme.palette.secondary.light,
-      color: '#FFFFFF',
+      color: '#fff',
       ...primaryBoxShadow
     }
   }

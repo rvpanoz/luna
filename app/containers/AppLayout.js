@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useMappedState, useDispatch } from 'redux-react-hook';
 import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
-import Grid from '@material-ui/core/Grid';
+import Snackbar from '@material-ui/core/Snackbar';
+import theme from 'styles/theme';
 
 import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
-import Dashboard from 'components/pages/Dashboard';
-import theme from 'styles/theme';
-
+import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
-import { Package } from 'components/pages/package';
+
+import { setSnackbar } from 'models/ui/actions';
+import { switchcase } from 'commons/utils';
 
 const drawerWidth = 240;
 
@@ -33,13 +35,27 @@ const styles = {
   },
   mainContent: {
     flex: 1,
-    padding: '48px 36px 0',
+    padding: '28px 18px 0',
     background: '#eaeff1'
   }
 };
 
+const mapState = ({
+  common: {
+    activePage,
+    loader: { loading },
+    snackbarOptions
+  }
+}) => ({
+  activePage,
+  loading,
+  snackbarOptions
+});
+
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
+  const { activePage, snackbarOptions } = useMappedState(mapState);
+  const dispatch = useDispatch();
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -61,28 +77,42 @@ const AppLayout = ({ classes }) => {
         <div className={classes.appContent}>
           <Header onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
           <main className={classes.mainContent}>
-            <div className={classes.container}>
-              <Dashboard />
-            </div>
-            <div className={classes.container}>
-              <Grid container justify="space-between">
-                <Grid item xs={12} md={6} lg={7} xl={7}>
-                  <Packages />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  md={5}
-                  lg={4}
-                  xl={4}
-                  style={{ display: 'none' }}
-                >
-                  <Package />
-                </Grid>
-              </Grid>
-            </div>
+            {switchcase({
+              packages: () => <Packages />
+            })('overview')(activePage)}
           </main>
         </div>
+        {snackbarOptions && snackbarOptions.open && (
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right'
+            }}
+            open={Boolean(snackbarOptions.open)}
+            autoHideDuration={5000}
+            onClose={() =>
+              dispatch(
+                setSnackbar({
+                  open: false,
+                  message: null
+                })
+              )
+            }
+          >
+            <SnackbarContent
+              variant={snackbarOptions.type}
+              message={snackbarOptions.message}
+              onClose={() =>
+                dispatch(
+                  setSnackbar({
+                    open: false,
+                    message: null
+                  })
+                )
+              }
+            />
+          </Snackbar>
+        )}
       </div>
     </MuiThemeProvider>
   );

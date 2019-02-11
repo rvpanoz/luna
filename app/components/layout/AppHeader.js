@@ -1,8 +1,6 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useMappedState } from 'redux-react-hook';
+import { useMappedState, useDispatch } from 'redux-react-hook';
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -17,18 +15,28 @@ import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+
 import SearchBox from 'components/common/SearchBox';
+import { setActivePage } from 'models/ui/actions';
 
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles/appHeader';
 
-const mapState = ({ common: { notifications, loader } }) => ({
+const mapState = ({
+  common: {
+    activePage,
+    notifications,
+    loader: { loading }
+  }
+}) => ({
+  activePage,
   notifications,
-  loader
+  loading
 });
 
 const Header = ({ classes, onDrawerToggle }) => {
-  const { notifications } = useMappedState(mapState);
+  const dispatch = useDispatch();
+  const { activePage } = useMappedState(mapState);
 
   return (
     <React.Fragment>
@@ -57,7 +65,7 @@ const Header = ({ classes, onDrawerToggle }) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title="Alerts • Notifications">
+              <Tooltip title="show notifications">
                 <IconButton color="inherit">
                   <NotificationsIcon />
                 </IconButton>
@@ -76,9 +84,9 @@ const Header = ({ classes, onDrawerToggle }) => {
         <Toolbar>
           <Grid container alignItems="center" spacing={8}>
             <Grid item xs>
-              <Typography color="inherit" variant="h5">
+              {/* <Typography color="inherit" variant="h5">
                 Packages
-              </Typography>
+              </Typography> */}
             </Grid>
             <Grid item>
               <Button
@@ -107,10 +115,14 @@ const Header = ({ classes, onDrawerToggle }) => {
         position="static"
         elevation={0}
       >
-        <Tabs value={0} textColor="inherit">
-          <Tab textColor="inherit" label="Overview" />
-          <Tab textColor="inherit" label="Packages" />
-          <Tab textColor="inherit" label="Problems" />
+        <Tabs
+          value={activePage}
+          textColor="inherit"
+          onChange={(e, value) => dispatch(setActivePage(value))}
+        >
+          <Tab textColor="inherit" label="Packages" value="packages" />
+          <Tab textColor="inherit" label="Problems" value="problems" />
+          <Tab textColor="inherit" label="Scripts" value="scripts" />
         </Tabs>
       </AppBar>
     </React.Fragment>

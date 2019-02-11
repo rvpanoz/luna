@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import { APP_MODES, APP_INFO } from 'constants/AppConstants';
 import { BasicCard, DetailsCard } from 'components/common/Cards';
 
-import styles from './styles/dashboard';
+import styles from './styles';
 
 const mapState = ({
   common: {
