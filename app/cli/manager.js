@@ -96,12 +96,12 @@ exports.list = (options, callback) => {
 
   if (!mode || typeof mode !== 'string') {
     return Promise.reject(
-      'manager[list]: mode must be given and must be one of "GLOBAL" or "LOCAL"'
+      'manager[list]: mode must be given and must be one of "global" or "LOCAL"'
     );
   }
 
   const run =
-    mode === 'GLOBAL' && !directory
+    mode === 'global' && !directory
       ? command.concat(defaultsArgs.list, '-g')
       : command.concat(defaultsArgs.list);
 
@@ -125,13 +125,13 @@ exports.outdated = (options, callback) => {
 
   if (!mode || typeof mode !== 'string') {
     return Promise.reject(
-      'manager[outdated]: mode must be given and must be one of "GLOBAL" or "LOCAL"'
+      'manager[outdated]: mode must be given and must be one of "global" or "LOCAL"'
     );
   }
 
   const run =
-    mode === 'GLOBAL' && !directory
-      ? command.concat(defaultsArgs.list, '-g')
+    mode === 'global' && !directory
+      ? command.concat(defaultsArgs.list, ['--link', '-g']) //TODO: get linked packages only
       : command.concat(defaultsArgs.list);
 
   // returns a Promise

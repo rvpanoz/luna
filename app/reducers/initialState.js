@@ -1,5 +1,5 @@
 export default {
-  mode: 'GLOBAL',
+  mode: 'global',
   manager: 'npm',
   activePage: 'packages',
   directory: null,

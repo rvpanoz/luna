@@ -1,5 +1,5 @@
 /**
- * Global reducer: Handles state management for global operations.
+ * global reducer: Handles state management for global operations.
  */
 
 import { identity, merge, assoc, propOr, prop, append, prepend } from 'ramda';
@@ -39,10 +39,8 @@ const createReducer = (commonState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
-  [setActivePage.type]: (state, { payload: page }) => {
-    console.log(page);
-    return assoc('activePage', page, state);
-  },
+  [setActivePage.type]: (state, { payload: page }) =>
+    assoc('activePage', page, state),
   [uiException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
   [setNpmVersion.type]: (state, { payload: version }) =>

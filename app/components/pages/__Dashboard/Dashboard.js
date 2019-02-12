@@ -59,9 +59,9 @@ const Dashboard = props => {
   } = useMappedState(mapState);
 
   const title =
-    mode === APP_MODES.LOCAL ? `Project ${projectName || ''}` : 'Global';
+    mode === APP_MODES.LOCAL ? `Project ${projectName || ''}` : 'global';
   const text =
-    mode === APP_MODES.LOCAL ? projectDescription : APP_INFO.GLOBAL_MESSAGE;
+    mode === APP_MODES.LOCAL ? projectDescription : APP_INFO.global_MESSAGE;
 
   return (
     <section className={classes.root}>

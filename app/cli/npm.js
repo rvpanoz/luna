@@ -28,7 +28,7 @@ exports.install = options => {
       : name.trim();
   }
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
+  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
   const commandOpts =
     pkgOptions && pkgOptions.length
       ? pkgOptions.map(option => `--${option}`)
@@ -64,7 +64,7 @@ exports.update = options => {
       : name.trim();
   }
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
+  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
   const commandOpts =
     pkgOptions && pkgOptions.length
       ? pkgOptions.map(option => `--${option}`)
@@ -101,7 +101,7 @@ exports.uninstall = options => {
     return name;
   }
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
+  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
   const run = []
     .concat(command)
     .concat(commandArgs)
@@ -122,7 +122,7 @@ exports.view = options => {
     return Promise.reject('npm[view] package name parameter must be given');
   }
 
-  const commandArgs = mode === 'GLOBAL' ? [].concat(defaults, '-g') : defaults;
+  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
 
   // build npm command
   const run = []

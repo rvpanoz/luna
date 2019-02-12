@@ -27,7 +27,7 @@ const AppCard = ({
   <Card className={classes.card}>
     <CardHeader
       classes={{
-        root: classes.cardHeader + ' ' + classes[iconColor + 'CardHeader'],
+        root: cn(classes.cardHeader, classes[`${iconColor}CardHeader`]),
         avatar: classes.cardAvatar
       }}
       avatar={<HomeIcon className={classes.cardIcon} />}
@@ -50,11 +50,10 @@ const AppCard = ({
     <CardActions className={classes.cardActions}>
       <div className={classes.cardStats}>
         <UpdateIcon
-          className={
-            classes.cardStatsIcon +
-            ' ' +
-            classes[statIconColor + 'CardStatsIcon']
-          }
+          className={cn(
+            classes.cardStatsIcon,
+            classes[`${statIconColor}CardStatsIcon`]
+          )}
         />{' '}
         {statLink !== undefined ? (
           <a href={statLink.href} className={classes.cardStatsLink}>

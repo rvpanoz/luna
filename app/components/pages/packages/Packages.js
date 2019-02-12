@@ -205,13 +205,21 @@ const Packages = ({ classes }) => {
       <section className={cn(classes.cards)}>
         <Grid container justify="space-between">
           <Grid item md={3} lg={4} xl={4}>
-            <AppCard title="Repository" description="+245" />
+            <AppCard
+              title={
+                mode === APP_MODES.GLOBAL ? APP_MODES.GLOBAL : projectLicense
+              }
+              description={mode === APP_MODES.GLOBAL ? ' ' : projectName}
+            />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
-            <AppCard title="Repository" description="+245" />
+            <AppCard title="Dependencies" description={data && data.length} />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
-            <AppCard title="Repository" description="+245" />
+            <AppCard
+              title="Outdated"
+              description={packagesOutdated && packagesOutdated.length}
+            />
           </Grid>
         </Grid>
       </section>
