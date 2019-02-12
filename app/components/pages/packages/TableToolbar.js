@@ -82,12 +82,12 @@ const TableListToolbar = ({
       directory
     });
 
-    dispatch(
-      toggleLoader({
-        loading: true,
-        message: `${firstToUpper(action)}ing packages..`
-      })
-    );
+    // dispatch(
+    //   toggleLoader({
+    //     loading: true,
+    //     message: `${firstToUpper(action)}ing packages..`
+    //   })
+    // );
   };
 
   const openPackage = useCallback(() => {

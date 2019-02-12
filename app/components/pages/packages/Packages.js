@@ -27,7 +27,7 @@ import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
 
 import { APP_INFO, APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
 
-import { BasicCard, DetailsCard } from 'components/common/Cards';
+import AppCard from 'components/common/AppCard';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
@@ -137,6 +137,7 @@ const Packages = ({ classes }) => {
     projectLicense,
     projectAuthor
   } = dependenciesSet || {};
+
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
   const nodata = Boolean(dependencies && dependencies.length === 0);
@@ -168,7 +169,6 @@ const Packages = ({ classes }) => {
     return () => ipcRenderer.removeAllListeners(['action-close']);
   }, [counter]);
 
-  // more listeners
   useEffect(() => {
     ipcRenderer.on('yarn-warning-close', () => {
       dispatch(
@@ -204,48 +204,14 @@ const Packages = ({ classes }) => {
     <React.Fragment>
       <section className={cn(classes.cards)}>
         <Grid container justify="space-between">
-          <Grid item md={4} lg={4} xl={4}>
-            <DetailsCard
-              mode={mode}
-              directory={directory}
-              title={'Dependencies'}
-              aside={
-                <Typography variant="h5">{data && data.length}</Typography>
-              }
-              text={projectDescription}
-              smallText={projectLicense}
-              loading={loading}
-            />
+          <Grid item md={3} lg={4} xl={4}>
+            <AppCard title="Repository" description="+245" />
           </Grid>
-          <Grid item>
-            <DetailsCard
-              mode={mode}
-              directory={directory}
-              title="Outdated"
-              aside={
-                <Typography variant="h5">
-                  {packagesOutdated && packagesOutdated.length}
-                </Typography>
-              }
-              text={projectDescription}
-              smallText={projectLicense}
-              loading={loading}
-            />
+          <Grid item md={3} lg={3} xl={3}>
+            <AppCard title="Repository" description="+245" />
           </Grid>
-          <Grid item>
-            <DetailsCard
-              mode={mode}
-              directory={directory}
-              title="Problems"
-              aside={
-                <Typography variant="h5">
-                  {notifications && notifications.length}
-                </Typography>
-              }
-              text={projectDescription}
-              smallText={projectLicense}
-              loading={loading}
-            />
+          <Grid item md={3} lg={3} xl={3}>
+            <AppCard title="Repository" description="+245" />
           </Grid>
         </Grid>
       </section>
