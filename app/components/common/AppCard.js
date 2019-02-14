@@ -37,7 +37,7 @@ const AppCard = ({
         {title}
       </Typography>
       <Typography variant="h5" className={classes.cardTitle}>
-        {/* {description} */}
+        {description}
         {small !== undefined ? (
           <small className={classes.cardTitleSmall}>{small}</small>
         ) : null}

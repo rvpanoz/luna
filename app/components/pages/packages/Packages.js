@@ -13,6 +13,12 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
 
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
@@ -22,9 +28,7 @@ import {
   addSelected,
   updateData
 } from 'models/packages/actions';
-
 import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
-
 import { APP_INFO, APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
 
 import AppCard from 'components/common/AppCard';
@@ -95,6 +99,8 @@ const Packages = ({ classes }) => {
 
   const wrapperRef = useRef(null);
   const [counter, setCounter] = useState(0);
+  const [linked, setLinked] = useState(false);
+
   const reload = () => setCounter(counter + 1);
   const dispatch = useDispatch();
 
@@ -200,6 +206,16 @@ const Packages = ({ classes }) => {
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
+  const cardDescription =
+    mode === APP_MODES.global ? (
+      <FormControlLabel
+        label="Show linked packages"
+        control={<Checkbox value={linked} />}
+      />
+    ) : (
+      projectName
+    );
+
   return (
     <React.Fragment>
       <section className={cn(classes.cards)}>
@@ -207,11 +223,9 @@ const Packages = ({ classes }) => {
           <Grid item md={3} lg={4} xl={4}>
             <AppCard
               title={
-                mode === APP_MODES.global ? APP_MODES.global : projectLicense
+                mode === APP_MODES.global ? 'in Global mode' : 'in Local mode'
               }
-              description={
-                mode === APP_MODES.global ? 'usr/npm/bin' : projectName
-              }
+              description={cardDescription}
               small={mode === APP_MODES.local ? directory : 'usr/bin/npm'}
             />
           </Grid>

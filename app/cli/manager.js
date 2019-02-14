@@ -86,7 +86,7 @@ const execute = (
 
 exports.list = (options, callback) => {
   const command = ['list'];
-  const { mode, directory } = options || {};
+  const { mode, directory, linked } = options || {};
 
   if (!callback || typeof callback !== 'function') {
     return Promise.reject(
@@ -102,7 +102,9 @@ exports.list = (options, callback) => {
 
   const run =
     mode === 'global' && !directory
-      ? command.concat(defaultsArgs.list, ['--link', '-g']) // TODO: get linked packages only
+      ? linked
+        ? command.concat(defaultsArgs.list, ['--link', '-g'])
+        : command.concat(defaultsArgs.list, ['-g'])
       : command.concat(defaultsArgs.list);
 
   // returns a Promise

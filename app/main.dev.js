@@ -171,9 +171,8 @@ app.on('window-all-closed', () => {
 });
 
 app.once('browser-window-created', (event, webContents) => {
-  console.log(
-    `${chalk.white.bgBlue.bold('[INFO] browser-window-created event')}`
-  );
+  console.log(chalk.white.bgBlue.bold('[INFO] browser-window-created event'));
+  CheckNpm();
 });
 
 app.once('web-contents-created', event => {

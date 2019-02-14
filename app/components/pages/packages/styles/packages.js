@@ -1,3 +1,4 @@
+import green from '@material-ui/core/colors/green';
 import pink from '@material-ui/core/colors/pink';
 import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
@@ -64,6 +65,10 @@ const styles = theme => ({
   },
   w300: {
     width: '65%'
+  },
+  color: green[600],
+  '&$checked': {
+    color: green[500]
   },
   outdated: {
     color: theme.palette.secondary.dark

@@ -1,5 +1,8 @@
 // check npm installation
 import cp from 'child_process';
+import chalk from 'chalk';
+
+const { NODE_ENV } = process.env;
 
 const checkNpm = () => {
   try {
@@ -12,9 +15,9 @@ const checkNpm = () => {
       );
     }
 
-    console.log(version);
+    return version;
   } catch (error) {
-    console.log('npm-error');
+    throw new Error(error);
   }
 };
 
