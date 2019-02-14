@@ -178,21 +178,21 @@ app.once('browser-window-created', () => {
 app.once('web-contents-created', event => {
   console.log(chalk.white.bgBlue.bold(`[INFO] web-contents-created event`));
 
-  // TODO: check npm installation
-  // try {
-  //   const result = require('child_process').execSync('npm -v');
-  //   const version = result.toString();
+  // check npm installation
+  try {
+    const result = require('child_process').execSync('npm -v');
+    const version = result.toString();
 
-  //   if (NODE_ENV === 'development') {
-  //     console.log(
-  //       chalk.black.bgYellow.bold(`[INFO] found npm version ${version}`)
-  //     );
-  //   }
+    if (NODE_ENV === 'development') {
+      console.log(
+        chalk.black.bgYellow.bold(`[INFO] found npm version ${version}`)
+      );
+    }
 
-  //   event.sender.send('npm-version', version);
-  // } catch (error) {
-  //   event.sender.send('npm-error');
-  // }
+    event.sender.send('npm-version', version);
+  } catch (error) {
+    event.sender.send('npm-error');
+  }
 });
 
 app.on('ready', async () => {

@@ -207,9 +207,12 @@ const Packages = ({ classes }) => {
           <Grid item md={3} lg={4} xl={4}>
             <AppCard
               title={
-                mode === APP_MODES.GLOBAL ? APP_MODES.GLOBAL : projectLicense
+                mode === APP_MODES.global ? APP_MODES.global : projectLicense
               }
-              description={mode === APP_MODES.GLOBAL ? ' ' : projectName}
+              description={
+                mode === APP_MODES.global ? 'usr/npm/bin' : projectName
+              }
+              small={mode === APP_MODES.local ? directory : 'usr/bin/npm'}
             />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>

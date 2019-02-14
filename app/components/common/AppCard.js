@@ -36,12 +36,8 @@ const AppCard = ({
       <Typography component="p" className={classes.cardCategory}>
         {title}
       </Typography>
-      <Typography
-        variant="subtitle1"
-        component="h2"
-        className={classes.cardTitle}
-      >
-        {description}{' '}
+      <Typography variant="h5" className={classes.cardTitle}>
+        {/* {description} */}
         {small !== undefined ? (
           <small className={classes.cardTitleSmall}>{small}</small>
         ) : null}

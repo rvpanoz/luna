@@ -102,7 +102,7 @@ exports.list = (options, callback) => {
 
   const run =
     mode === 'global' && !directory
-      ? command.concat(defaultsArgs.list, '-g')
+      ? command.concat(defaultsArgs.list, ['--link', '-g']) // TODO: get linked packages only
       : command.concat(defaultsArgs.list);
 
   // returns a Promise
@@ -131,7 +131,7 @@ exports.outdated = (options, callback) => {
 
   const run =
     mode === 'global' && !directory
-      ? command.concat(defaultsArgs.list, ['--link', '-g']) //TODO: get linked packages only
+      ? command.concat(defaultsArgs.list, ['-g'])
       : command.concat(defaultsArgs.list);
 
   // returns a Promise
