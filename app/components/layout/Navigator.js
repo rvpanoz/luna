@@ -96,7 +96,7 @@ const Navigator = ({
           <div className={classes.flexContainer}>
             <HomeIcon className={classes.homeIcon} />
             <Typography className={classNames(classes.title, classes.flexItem)}>
-              Loona
+              Luna
             </Typography>
           </div>
         </ListItem>
