@@ -13,6 +13,8 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
 
+import npmImgSource from 'assets/images/npm.png';
+
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
@@ -47,7 +49,8 @@ const mapState = ({
     notifications,
     page,
     rowsPerPage,
-    loader
+    loader,
+    npm: { env }
   },
   packages: {
     active,
@@ -58,9 +61,12 @@ const mapState = ({
     selected,
     fromSearch,
     sortDir,
-    sortBy
+    sortBy,
+    lastUpdatedAt
   }
 }) => ({
+  env,
+  lastUpdatedAt,
   directory,
   manager,
   mode,
@@ -94,12 +100,13 @@ const Packages = ({ classes }) => {
     selected,
     fromSearch,
     sortDir,
-    sortBy
+    sortBy,
+    env,
+    lastUpdatedAt
   } = useMappedState(mapState);
 
   const wrapperRef = useRef(null);
   const [counter, setCounter] = useState(0);
-  const [linked, setLinked] = useState(false);
 
   const reload = () => setCounter(counter + 1);
   const dispatch = useDispatch();
@@ -206,35 +213,38 @@ const Packages = ({ classes }) => {
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-  const cardDescription =
-    mode === APP_MODES.global ? (
-      <FormControlLabel
-        label="Show linked packages"
-        control={<Checkbox value={linked} />}
-      />
-    ) : (
-      projectName
-    );
-
   return (
     <React.Fragment>
       <section className={cn(classes.cards)}>
         <Grid container justify="space-between">
           <Grid item md={3} lg={4} xl={4}>
             <AppCard
-              title={
-                mode === APP_MODES.global ? 'in Global mode' : 'in Local mode'
+              title={mode === APP_MODES.global ? 'in Global mode' : projectName}
+              small={
+                mode === APP_MODES.local
+                  ? `${projectLicense} - v${projectVersion}`
+                  : null
               }
-              description={cardDescription}
-              small={mode === APP_MODES.local ? directory : 'usr/bin/npm'}
+              iconColor="blue"
+              statText={lastUpdatedAt}
+              loading={loading}
             />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
-            <AppCard title="Dependencies" description={data && data.length} />
+            <AppCard
+              avatar
+              title="Dependencies"
+              description={data && data.length}
+              iconColor="blue"
+              statText={lastUpdatedAt}
+            />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
             <AppCard
+              avatar
               title="Outdated"
+              iconColor="blue"
+              statText={lastUpdatedAt}
               description={packagesOutdated && packagesOutdated.length}
             />
           </Grid>

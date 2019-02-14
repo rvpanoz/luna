@@ -13,12 +13,13 @@ const styles = theme => ({
   cardHeader: {
     ...cardHeader,
     float: 'left',
+    margin: theme.spacing.unit,
     textAlign: 'center'
   },
   cardContent: {
     textAlign: 'right',
-    paddingTop: '10px',
-    padding: '15px 20px'
+    padding: '15px 20px',
+    minHeight: 75
   },
   cardIcon: {
     width: '40px',
@@ -44,9 +45,8 @@ const styles = theme => ({
     fontSize: '1.625em'
   },
   cardTitleSmall: {
-    fontSize: '65%',
-    fontWeight: '400',
-    lineHeight: '1',
+    margin: 0,
+    paddingTop: theme.spacing.unit,
     color: '#777'
   },
   cardActions: {

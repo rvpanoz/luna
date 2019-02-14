@@ -48,7 +48,7 @@ const Navigator = ({
 
   const handleDirectory = useCallback(directory => {
     dispatch(clearPackages());
-    dispatch(setMode({ mode: APP_MODES.LOCAL, directory }));
+    dispatch(setMode({ mode: APP_MODES.local, directory }));
   }, []);
 
   useEffect(() => {

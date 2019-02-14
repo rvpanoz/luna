@@ -3,6 +3,7 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 /* eslint-disable dot-notation */
+/* eslint-disable no-nested-ternary */
 
 import cp from 'child_process';
 import path from 'path';
@@ -42,7 +43,7 @@ const execute = (
       commandArgs,
       {
         env: process.env,
-        cwd: mode === 'LOCAL' && directory ? path.dirname(directory) : cwd
+        cwd: mode === 'local' && directory ? path.dirname(directory) : cwd
       }
     );
 
@@ -96,7 +97,7 @@ exports.list = (options, callback) => {
 
   if (!mode || typeof mode !== 'string') {
     return Promise.reject(
-      'manager[list]: mode must be given and must be one of "global" or "LOCAL"'
+      'manager[list]: mode must be given and must be one of "global" or "local"'
     );
   }
 
@@ -127,7 +128,7 @@ exports.outdated = (options, callback) => {
 
   if (!mode || typeof mode !== 'string') {
     return Promise.reject(
-      'manager[outdated]: mode must be given and must be one of "global" or "LOCAL"'
+      'manager[outdated]: mode must be given and must be one of "global" or "local"'
     );
   }
 

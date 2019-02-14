@@ -103,7 +103,7 @@ ipcMain.on('ipc-event', (event, options) => {
       return event.sender.send('action-close', errors, data, cmd);
     }
 
-    if (directory && mode === APP_MODES.LOCAL && cmd.includes('list')) {
+    if (directory && mode === APP_MODES.local && cmd.includes('list')) {
       const openedPackages = Store.get('openedPackages') || [];
       const yarnLock = fs.existsSync(
         path.join(path.dirname(directory), 'yarn-lock.json')
@@ -171,18 +171,19 @@ app.on('window-all-closed', () => {
 });
 
 app.once('browser-window-created', (event, webContents) => {
-  console.log(chalk.white.bgBlue.bold('[INFO] browser-window-created event'));
+  console.log(
+    chalk.white.bgBlue.bold('[EVENT] browser-window-created event fired')
+  );
 });
 
 app.once('web-contents-created', (event, webContents) => {
-  console.log(chalk.white.bgBlue.bold(`[INFO] web-contents-created event`));
-
-  const { npm_config_user_agent } = process.env || {};
-  webContents.send('get-user-agent', npm_config_user_agent);
+  console.log(
+    chalk.white.bgBlue.bold(`[EVENT] web-contents-created event fired`)
+  );
 });
 
 app.on('ready', async () => {
-  console.log(chalk.white.bgBlue.bold(`[INFO] ready event`));
+  console.log(chalk.white.bgBlue.bold(`[EVENT] ready event fired`));
 
   if (NODE_ENV === 'development') {
     INSTALL_EXTENSIONS && (await installExtensions());
@@ -218,11 +219,11 @@ app.on('ready', async () => {
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', event => {
-    console.log(chalk.white.bgBlue.bold(`[INFO] ready-to-show event fired`));
+    console.log(chalk.white.bgBlue.bold(`[EVENT] ready-to-show event fired`));
   });
 
   mainWindow.webContents.on('did-finish-load', event => {
-    console.log(chalk.white.bgBlue.bold(`[INFO] did-finish-load event fired`));
+    console.log(chalk.white.bgBlue.bold(`[EVENT] did-finish-load event fired`));
 
     if (!mainWindow) {
       throw new Error('mainWindow is not defined!');
@@ -237,7 +238,11 @@ app.on('ready', async () => {
 
     // user settings
     const userSettings = Store.get('user_settings') || defaultSettings;
-    event.sender.send('settings_loaded', userSettings);
+    event.sender.send('settings-loaded-close', userSettings);
+
+    // npm and node info
+    const npmVersion = CheckNpm();
+    event.sender.send('get-env-close', npmVersion);
 
     // directories history
     const openedPackages = Store.get('opened_packages') || [];

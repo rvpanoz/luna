@@ -9,7 +9,7 @@ export default {
   notifications: [],
   commands: [],
   npm: {
-    version: null
+    env: ''
   },
   uiException: {
     message: null

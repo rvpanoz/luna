@@ -191,7 +191,7 @@
     "terser-webpack-plugin": "^1.2.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.29.3",
-    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-bundle-analyzer": "^3.0.4",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14",
     "webpack-merge": "^4.2.1"
@@ -204,7 +204,7 @@
     "date-fns": "^1.30.1",
     "devtron": "^1.4.0",
     "electron-debug": "^2.1.0",
-    "electron-log": "^2.2.17",
+    "electron-log": "^3.0.1",
     "electron-store": "^2.0.0",
     "electron-updater": "^3.2.3",
     "material-design-icons": "^3.0.1",

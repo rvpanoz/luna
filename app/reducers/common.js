@@ -17,7 +17,7 @@ import {
   setMode,
   setPage,
   setPageRows,
-  setNpmVersion,
+  setEnv,
   toggleLoader,
   togglePackageLoader,
   uiException,
@@ -43,10 +43,10 @@ const handlers = {
     assoc('activePage', page, state),
   [uiException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
-  [setNpmVersion.type]: (state, { payload: version }) =>
+  [setEnv.type]: (state, { payload: env }) =>
     merge(state, {
       npm: {
-        version
+        env
       }
     }),
   [updateNotifications.type]: (state, { payload: { notifications } }) =>

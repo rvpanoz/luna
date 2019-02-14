@@ -1,3 +1,5 @@
+/* eslint-disable react/require-default-props */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
@@ -12,6 +14,8 @@ import CardActions from '@material-ui/core/CardActions';
 import HomeIcon from '@material-ui/icons/Home';
 import UpdateIcon from '@material-ui/icons/Update';
 
+import AppLoader from 'components/common/AppLoader';
+
 import styles from './styles/appCardStyles';
 
 const AppCard = ({
@@ -22,7 +26,9 @@ const AppCard = ({
   small,
   statText,
   statIconColor,
-  iconColor
+  iconColor,
+  loading,
+  avatar
 }) => (
   <Card className={classes.card}>
     <CardHeader
@@ -30,18 +36,22 @@ const AppCard = ({
         root: cn(classes.cardHeader, classes[`${iconColor}CardHeader`]),
         avatar: classes.cardAvatar
       }}
-      avatar={<HomeIcon className={classes.cardIcon} />}
+      avatar={avatar && <HomeIcon className={classes.cardIcon} />}
     />
     <CardContent className={classes.cardContent}>
-      <Typography component="p" className={classes.cardCategory}>
-        {title}
-      </Typography>
-      <Typography variant="h5" className={classes.cardTitle}>
-        {description}
-        {small !== undefined ? (
-          <small className={classes.cardTitleSmall}>{small}</small>
-        ) : null}
-      </Typography>
+      <AppLoader loading={loading} mini relative>
+        <Typography component="p" className={classes.cardCategory}>
+          {title}
+        </Typography>
+        <Typography variant="h5" className={classes.cardTitle}>
+          {description}
+          {small && (
+            <Typography variant="caption" className={classes.cardTitleSmall}>
+              {small}
+            </Typography>
+          )}
+        </Typography>
+      </AppLoader>
     </CardContent>
     <CardActions className={classes.cardActions}>
       <div className={classes.cardStats}>
@@ -51,16 +61,40 @@ const AppCard = ({
             classes[`${statIconColor}CardStatsIcon`]
           )}
         />{' '}
-        {statLink !== undefined ? (
+        {statLink && (
           <a href={statLink.href} className={classes.cardStatsLink}>
             {statLink.text}
           </a>
-        ) : statText !== undefined ? (
-          statText
-        ) : null}
+        )}
+        {statText && statText}
       </div>
     </CardActions>
   </Card>
 );
+
+AppCard.defaultProps = {
+  loading: false
+};
+
+AppCard.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  loading: PropTypes.bool,
+  title: PropTypes.string,
+  description: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.node
+  ]),
+  statLink: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.node
+  ]),
+  small: PropTypes.string,
+  statText: PropTypes.string,
+  statIconColor: PropTypes.string,
+  iconColor: PropTypes.string,
+  avatar: PropTypes.bool
+};
 
 export default withStyles(styles)(AppCard);
