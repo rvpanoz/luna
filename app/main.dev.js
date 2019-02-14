@@ -172,11 +172,13 @@ app.on('window-all-closed', () => {
 
 app.once('browser-window-created', (event, webContents) => {
   console.log(chalk.white.bgBlue.bold('[INFO] browser-window-created event'));
-  CheckNpm();
 });
 
-app.once('web-contents-created', event => {
+app.once('web-contents-created', (event, webContents) => {
   console.log(chalk.white.bgBlue.bold(`[INFO] web-contents-created event`));
+
+  const { npm_config_user_agent } = process.env || {};
+  webContents.send('get-user-agent', npm_config_user_agent);
 });
 
 app.on('ready', async () => {
