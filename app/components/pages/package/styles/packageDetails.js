@@ -26,7 +26,7 @@ const styles = theme => ({
   peerDependenciesChip: {
     backgroundColor: darken(theme.palette.error.light, 0.6)
   },
-  GlobalChip: {
+  globalChip: {
     backgroundColor: theme.palette.secondary.main
   },
   expand: {

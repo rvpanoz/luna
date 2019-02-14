@@ -3,7 +3,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import PropTypes, { string, bool } from 'prop-types';
+import PropTypes, { string, bool, oneOfType } from 'prop-types';
 import cx from 'classnames';
 
 import buttonStyle from './styles/buttonStyle';
@@ -37,7 +37,7 @@ AppButton.defaultProps = {
 
 AppButton.propTypes = {
   classes: PropTypes.objectOf(string).isRequired,
-  children: PropTypes.arrayOf(PropTypes.object),
+  children: PropTypes.arrayOf(oneOfType([PropTypes.string, PropTypes.object])),
   color: PropTypes.oneOf([
     'info',
     'success',

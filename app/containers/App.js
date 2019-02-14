@@ -10,7 +10,7 @@ import { withErrorBoundary } from 'commons/hocs';
 import {
   commandMessage,
   uiException,
-  setNpmVersion,
+  setEnv,
   npmCommand
 } from 'models/ui/actions';
 
@@ -31,19 +31,12 @@ const App = () => {
       dispatch({ type: uiException.type, payload: { message: args[0] } })
     );
 
-    ipcRenderer.on('npm-version', (event, version) =>
-      dispatch({ type: setNpmVersion.type, payload: { version } })
-    );
-
     ipcRenderer.on('ipcEvent-flow', (event, command) => {
       dispatch({ type: npmCommand.type, payload: { command } });
     });
 
-    ipcRenderer.on('npm-error', () =>
-      dispatch({
-        type: uiException.type,
-        payload: { message: 'npm is not installed' }
-      })
+    ipcRenderer.on('get-env-close', (event, env) =>
+      dispatch({ type: setEnv.type, payload: env })
     );
 
     ipcRenderer.on('ipcEvent-error', (event, message) => {

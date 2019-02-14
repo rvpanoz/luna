@@ -14,7 +14,7 @@ import chalk from 'chalk';
 import merge from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
-import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
+import { CheckNodeEnv } from '../internals/scripts';
 
 CheckNodeEnv('development');
 
@@ -183,7 +183,7 @@ export default merge.smart(baseConfig, {
       },
       // Common Image Formats
       {
-        test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
+        test: /\.(?:ico|png|jpg|jpeg)$/,
         use: 'url-loader'
       }
     ]

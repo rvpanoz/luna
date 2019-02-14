@@ -1,5 +1,5 @@
 /*
- * Global styling
+ * global styling
  */
 
 @import '~material-design-icons/iconfont/material-icons.css';
@@ -16,6 +16,13 @@ html,
 body {
   font-family: 'Regular', 'Roboto', 'Comic Sans MS', cursive, sans-serif;
   overflow-y: hidden;
+}
+
+#app {
+  height: '100%';
+  padding: 0;
+  margin: 0;
+  overflow: 'auto';
 }
 
 ::-webkit-scrollbar {

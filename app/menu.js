@@ -76,7 +76,7 @@ export default class MenuBuilder {
                   label: '&Reload',
                   accelerator: 'Ctrl+R',
                   click: () => {
-                    this.mainWindow.webContents.reload();
+                    this.mainWindow.webContents.reloadIgnoringCache();
                   }
                 },
                 {

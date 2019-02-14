@@ -1,7 +1,7 @@
 export default {
-  mode: 'GLOBAL',
+  mode: 'global',
   manager: 'npm',
-  activePage: 'overview',
+  activePage: 'packages',
   directory: null,
   enableNotifications: true,
   page: 0,
@@ -9,7 +9,7 @@ export default {
   notifications: [],
   commands: [],
   npm: {
-    version: null
+    env: ''
   },
   uiException: {
     message: null

@@ -3,6 +3,7 @@
 /* eslint-disable import/no-dynamic-require */
 /* eslint-disable global-require */
 /* eslint-disable dot-notation */
+/* eslint-disable no-nested-ternary */
 
 import cp from 'child_process';
 import path from 'path';
@@ -42,7 +43,7 @@ const execute = (
       commandArgs,
       {
         env: process.env,
-        cwd: mode === 'LOCAL' && directory ? path.dirname(directory) : cwd
+        cwd: mode === 'local' && directory ? path.dirname(directory) : cwd
       }
     );
 
@@ -86,7 +87,7 @@ const execute = (
 
 exports.list = (options, callback) => {
   const command = ['list'];
-  const { mode, directory } = options || {};
+  const { mode, directory, linked } = options || {};
 
   if (!callback || typeof callback !== 'function') {
     return Promise.reject(
@@ -96,13 +97,15 @@ exports.list = (options, callback) => {
 
   if (!mode || typeof mode !== 'string') {
     return Promise.reject(
-      'manager[list]: mode must be given and must be one of "GLOBAL" or "LOCAL"'
+      'manager[list]: mode must be given and must be one of "global" or "local"'
     );
   }
 
   const run =
-    mode === 'GLOBAL' && !directory
-      ? command.concat(defaultsArgs.list, '-g')
+    mode === 'global' && !directory
+      ? linked
+        ? command.concat(defaultsArgs.list, ['--link', '-g'])
+        : command.concat(defaultsArgs.list, ['-g'])
       : command.concat(defaultsArgs.list);
 
   // returns a Promise
@@ -125,13 +128,13 @@ exports.outdated = (options, callback) => {
 
   if (!mode || typeof mode !== 'string') {
     return Promise.reject(
-      'manager[outdated]: mode must be given and must be one of "GLOBAL" or "LOCAL"'
+      'manager[outdated]: mode must be given and must be one of "global" or "local"'
     );
   }
 
   const run =
-    mode === 'GLOBAL' && !directory
-      ? command.concat(defaultsArgs.list, '-g')
+    mode === 'global' && !directory
+      ? command.concat(defaultsArgs.list, ['-g'])
       : command.concat(defaultsArgs.list);
 
   // returns a Promise

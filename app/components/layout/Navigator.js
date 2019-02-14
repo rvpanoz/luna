@@ -1,3 +1,5 @@
+/* eslint-disable react/require-default-props */
+
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -6,15 +8,15 @@ import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
+import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import HomeIcon from '@material-ui/icons/Home';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 import LoadIcon from '@material-ui/icons/Archive';
-import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
-import TerminalIcon from '@material-ui/icons/Code';
+import ToolsIcon from '@material-ui/icons/Settings';
+import CodeIcon from '@material-ui/icons/Code';
 
 import { APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
@@ -28,19 +30,25 @@ const menuItems = [
     id: 'Menu',
     children: [
       { id: 'Analyze', icon: <LoadIcon />, active: true },
-      { id: 'Tools', icon: <SettingsEthernetIcon /> },
-      { id: 'Terminal', icon: <TerminalIcon /> }
+      { id: 'Tools', icon: <ToolsIcon /> },
+      { id: 'Terminal', icon: <CodeIcon /> }
     ]
   }
 ];
 
-const Navigator = ({ classes, ...other }) => {
+const Navigator = ({
+  classes,
+  projectName,
+  projectVersion,
+  mode,
+  ...other
+}) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
   const dispatch = useDispatch();
 
   const handleDirectory = useCallback(directory => {
     dispatch(clearPackages());
-    dispatch(setMode({ mode: APP_MODES.LOCAL, directory }));
+    dispatch(setMode({ mode: APP_MODES.local, directory }));
   }, []);
 
   useEffect(() => {
@@ -79,24 +87,17 @@ const Navigator = ({ classes, ...other }) => {
       <List disablePadding>
         <ListItem
           className={classNames(
-            classes.firebase,
+            classes.title,
             classes.item,
             classes.itemCategory
           )}
         >
-          Luna
-        </ListItem>
-        <ListItem className={classNames(classes.item, classes.itemCategory)}>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText
-            classes={{
-              primary: classes.itemPrimary
-            }}
-          >
-            Overview
-          </ListItemText>
+          <div className={classes.flexContainer}>
+            <CodeIcon />
+            <Typography className={classNames(classes.title, classes.flexItem)}>
+              Luna
+            </Typography>
+          </div>
         </ListItem>
         {menuItems.map(({ id, children }) => (
           <React.Fragment key={id}>
@@ -177,7 +178,10 @@ const Navigator = ({ classes, ...other }) => {
 };
 
 Navigator.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  mode: PropTypes.string,
+  projectName: PropTypes.string,
+  projectVersion: PropTypes.string
 };
 
 export default withStyles(styles)(Navigator);

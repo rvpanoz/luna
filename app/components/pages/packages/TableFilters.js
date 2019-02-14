@@ -40,14 +40,14 @@ const ListFilters = ({ classes, mode, close }) => {
           <FormLabel
             component="legend"
             className={cn({
-              [classes.hidden]: mode === APP_MODES.GLOBAL
+              [classes.hidden]: mode === APP_MODES.global
             })}
           >
             By group
           </FormLabel>
           <FormGroup
             className={cn(classes.flexContainer, {
-              [classes.hidden]: mode === APP_MODES.GLOBAL
+              [classes.hidden]: mode === APP_MODES.global
             })}
           >
             <FormHelperText> Select packages based on group</FormHelperText>

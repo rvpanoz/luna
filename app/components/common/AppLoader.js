@@ -19,7 +19,6 @@ const styles = theme => ({
   loader: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
     position: 'absolute',
     left: '45%',
     top: '100%',

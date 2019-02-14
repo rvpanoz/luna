@@ -36,6 +36,7 @@ const styles = theme => ({
         },
   actions: {
     ...flexContainer,
+    alignItems: 'center',
     flex: '0 0 auto',
     padding: theme.spacing.unit,
     color: theme.palette.text.secondary

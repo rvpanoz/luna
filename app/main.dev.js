@@ -7,6 +7,7 @@
 import ElectronStore from 'electron-store';
 import path from 'path';
 import fs from 'fs';
+import chalk from 'chalk';
 import { merge } from 'ramda';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
@@ -17,7 +18,7 @@ import { switchcase } from './commons/utils';
 import MenuBuilder from './menu';
 import mk from './mk';
 import { runCommand } from './shell';
-import chalk from 'chalk';
+import { CheckNpm } from '../internals/scripts';
 
 const { config } = mk;
 const { defaultSettings } = config || {};
@@ -102,7 +103,7 @@ ipcMain.on('ipc-event', (event, options) => {
       return event.sender.send('action-close', errors, data, cmd);
     }
 
-    if (directory && mode === APP_MODES.LOCAL && cmd.includes('list')) {
+    if (directory && mode === APP_MODES.local && cmd.includes('list')) {
       const openedPackages = Store.get('openedPackages') || [];
       const yarnLock = fs.existsSync(
         path.join(path.dirname(directory), 'yarn-lock.json')
@@ -169,34 +170,20 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.once('browser-window-created', () => {
+app.once('browser-window-created', (event, webContents) => {
   console.log(
-    `${chalk.white.bgBlue.bold('[INFO] browser-window-created event')}`
+    chalk.white.bgBlue.bold('[EVENT] browser-window-created event fired')
   );
 });
 
-app.once('web-contents-created', event => {
-  console.log(chalk.white.bgBlue.bold(`[INFO] web-contents-created event`));
-
-  // TODO: check npm installation
-  // try {
-  //   const result = require('child_process').execSync('npm -v');
-  //   const version = result.toString();
-
-  //   if (NODE_ENV === 'development') {
-  //     console.log(
-  //       chalk.black.bgYellow.bold(`[INFO] found npm version ${version}`)
-  //     );
-  //   }
-
-  //   event.sender.send('npm-version', version);
-  // } catch (error) {
-  //   event.sender.send('npm-error');
-  // }
+app.once('web-contents-created', (event, webContents) => {
+  console.log(
+    chalk.white.bgBlue.bold(`[EVENT] web-contents-created event fired`)
+  );
 });
 
 app.on('ready', async () => {
-  console.log(chalk.white.bgBlue.bold(`[INFO] ready event`));
+  console.log(chalk.white.bgBlue.bold(`[EVENT] ready event fired`));
 
   if (NODE_ENV === 'development') {
     INSTALL_EXTENSIONS && (await installExtensions());
@@ -232,14 +219,14 @@ app.on('ready', async () => {
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', event => {
-    // console.log(chalk.white.bgBlue.bold(`[INFO] ready-to-show started`));
+    console.log(chalk.white.bgBlue.bold(`[EVENT] ready-to-show event fired`));
   });
 
   mainWindow.webContents.on('did-finish-load', event => {
-    // console.log(chalk.white.bgBlue.bold(`[INFO] did-finish-load started`));
+    console.log(chalk.white.bgBlue.bold(`[EVENT] did-finish-load event fired`));
 
     if (!mainWindow) {
-      throw new Error('mainWindow is not defined');
+      throw new Error('mainWindow is not defined!');
     }
 
     if (START_MINIMIZED) {
@@ -251,7 +238,11 @@ app.on('ready', async () => {
 
     // user settings
     const userSettings = Store.get('user_settings') || defaultSettings;
-    event.sender.send('settings_loaded', userSettings);
+    event.sender.send('settings-loaded-close', userSettings);
+
+    // npm and node info
+    const npmVersion = CheckNpm();
+    event.sender.send('get-env-close', npmVersion);
 
     // directories history
     const openedPackages = Store.get('opened_packages') || [];

@@ -9,5 +9,8 @@
     "email": "rvpanoz@gmail.com",
     "url": "https://github.com/rvpanoz"
   },
-  "license": "GPLv3"
+  "license": "GPLv3",
+  "devDependencies": {
+    "webpack-cli": "^3.2.3"
+  }
 }

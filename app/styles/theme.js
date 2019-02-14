@@ -1,8 +1,10 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
+import { defaultFont } from './variables';
 
 const theme = createMuiTheme({
   typography: {
+    ...defaultFont,
     useNextVariants: true,
     h5: {
       fontWeight: 500,

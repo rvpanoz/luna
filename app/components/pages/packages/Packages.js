@@ -13,6 +13,14 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
 
+import npmImgSource from 'assets/images/npm.png';
+
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
@@ -22,12 +30,10 @@ import {
   addSelected,
   updateData
 } from 'models/packages/actions';
-
 import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
-
 import { APP_INFO, APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
 
-import { BasicCard, DetailsCard } from 'components/common/Cards';
+import AppCard from 'components/common/AppCard';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
@@ -43,7 +49,8 @@ const mapState = ({
     notifications,
     page,
     rowsPerPage,
-    loader
+    loader,
+    npm: { env }
   },
   packages: {
     active,
@@ -54,9 +61,12 @@ const mapState = ({
     selected,
     fromSearch,
     sortDir,
-    sortBy
+    sortBy,
+    lastUpdatedAt
   }
 }) => ({
+  env,
+  lastUpdatedAt,
   directory,
   manager,
   mode,
@@ -90,11 +100,14 @@ const Packages = ({ classes }) => {
     selected,
     fromSearch,
     sortDir,
-    sortBy
+    sortBy,
+    env,
+    lastUpdatedAt
   } = useMappedState(mapState);
 
   const wrapperRef = useRef(null);
   const [counter, setCounter] = useState(0);
+
   const reload = () => setCounter(counter + 1);
   const dispatch = useDispatch();
 
@@ -137,6 +150,7 @@ const Packages = ({ classes }) => {
     projectLicense,
     projectAuthor
   } = dependenciesSet || {};
+
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
   const nodata = Boolean(dependencies && dependencies.length === 0);
@@ -168,7 +182,6 @@ const Packages = ({ classes }) => {
     return () => ipcRenderer.removeAllListeners(['action-close']);
   }, [counter]);
 
-  // more listeners
   useEffect(() => {
     ipcRenderer.on('yarn-warning-close', () => {
       dispatch(
@@ -204,47 +217,35 @@ const Packages = ({ classes }) => {
     <React.Fragment>
       <section className={cn(classes.cards)}>
         <Grid container justify="space-between">
-          <Grid item md={4} lg={4} xl={4}>
-            <DetailsCard
-              mode={mode}
-              directory={directory}
-              title={'Dependencies'}
-              aside={
-                <Typography variant="h5">{data && data.length}</Typography>
+          <Grid item md={3} lg={4} xl={4}>
+            <AppCard
+              title={mode === APP_MODES.global ? 'in Global mode' : projectName}
+              small={
+                mode === APP_MODES.local
+                  ? `${projectLicense} - v${projectVersion}`
+                  : null
               }
-              text={projectDescription}
-              smallText={projectLicense}
+              iconColor="blue"
+              statText={lastUpdatedAt}
               loading={loading}
             />
           </Grid>
-          <Grid item>
-            <DetailsCard
-              mode={mode}
-              directory={directory}
+          <Grid item md={3} lg={3} xl={3}>
+            <AppCard
+              avatar
+              title="Dependencies"
+              description={data && data.length}
+              iconColor="blue"
+              statText={lastUpdatedAt}
+            />
+          </Grid>
+          <Grid item md={3} lg={3} xl={3}>
+            <AppCard
+              avatar
               title="Outdated"
-              aside={
-                <Typography variant="h5">
-                  {packagesOutdated && packagesOutdated.length}
-                </Typography>
-              }
-              text={projectDescription}
-              smallText={projectLicense}
-              loading={loading}
-            />
-          </Grid>
-          <Grid item>
-            <DetailsCard
-              mode={mode}
-              directory={directory}
-              title="Problems"
-              aside={
-                <Typography variant="h5">
-                  {notifications && notifications.length}
-                </Typography>
-              }
-              text={projectDescription}
-              smallText={projectLicense}
-              loading={loading}
+              iconColor="blue"
+              statText={lastUpdatedAt}
+              description={packagesOutdated && packagesOutdated.length}
             />
           </Grid>
         </Grid>

@@ -107,7 +107,7 @@ const TableListToolbar = ({
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
-          switchMode(APP_MODES.LOCAL, scanDirectory);
+          switchMode(APP_MODES.local, scanDirectory);
         }
 
         return false;
@@ -201,9 +201,9 @@ const TableListToolbar = ({
           <div>
             <IconButton
               disableRipple
-              disabled={mode === APP_MODES.GLOBAL && !fromSearch}
+              disabled={mode === APP_MODES.global && !fromSearch}
               aria-label="Show globals"
-              onClick={() => switchMode(APP_MODES.GLOBAL, null)}
+              onClick={() => switchMode(APP_MODES.global, null)}
             >
               <PublicIcon />
             </IconButton>

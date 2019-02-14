@@ -14,7 +14,7 @@ const setManager = ActionCreator('SET_MANAGER');
 const setMode = ActionCreator('SET_MODE');
 const setPage = ActionCreator('SET_PAGE');
 const setPageRows = ActionCreator('SET_PAGE_ROWS');
-const setNpmVersion = ActionCreator('SET_NPM_VERSION');
+const setEnv = ActionCreator('SET_ENV');
 const showError = ActionCreator('SHOW_ERROR');
 const showWarning = ActionCreator('SHOW_WARNING');
 const toggleLoader = ActionCreator('TOGGLE_LOADER');
@@ -34,12 +34,12 @@ export {
   setActivePage,
   setSnackbar,
   setManager,
+  setEnv,
   setMode,
   setPage,
   setPageRows,
   showError,
   showWarning,
-  setNpmVersion,
   toggleLoader,
   togglePackageLoader,
   npmCommand,

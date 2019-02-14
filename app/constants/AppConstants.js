@@ -9,15 +9,15 @@ export const GITHUB = {
   baseUrl: 'https://api.github.com/repos/'
 };
 
-export const APP_GLOBALS = {
+export const APP_globalS = {
   name: APP,
   manager: NPM
 };
 
 // app modes
 export const APP_MODES = {
-  GLOBAL: 'GLOBAL',
-  LOCAL: 'LOCAL'
+  global: 'global',
+  local: 'local'
 };
 
 export const APP_INFO = {
@@ -26,7 +26,7 @@ export const APP_INFO = {
   NO_NOTIFICATIONS: 'No notifications',
   NO_WORKING_DIRECTORY: 'No working directory',
   NO_DATA: 'No data',
-  GLOBAL_MESSAGE: 'Showing global packages'
+  global_MESSAGE: 'Showing global packages'
 };
 
 // package actions

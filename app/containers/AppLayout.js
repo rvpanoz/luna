@@ -31,30 +31,40 @@ const styles = {
   appContent: {
     flex: 1,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    overflow: 'auto'
   },
   mainContent: {
     flex: 1,
     padding: '28px 18px 0',
-    background: '#eaeff1'
+    background: '#eaeff1',
+    overflow: 'hidden'
   }
 };
 
 const mapState = ({
   common: {
+    mode,
+    projectName,
+    projectVersion,
     activePage,
     loader: { loading },
     snackbarOptions
   }
 }) => ({
   activePage,
+  projectName,
+  projectVersion,
   loading,
+  mode,
   snackbarOptions
 });
 
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
-  const { activePage, snackbarOptions } = useMappedState(mapState);
+  const { activePage, snackbarOptions, loading, ...rest } = useMappedState(
+    mapState
+  );
   const dispatch = useDispatch();
 
   return (
@@ -68,10 +78,14 @@ const AppLayout = ({ classes }) => {
               variant="temporary"
               open={drawerOpen}
               onClose={toggleDrawer}
+              {...rest}
             />
           </Hidden>
           <Hidden xsDown implementation="css">
-            <Navigator PaperProps={{ style: { width: drawerWidth } }} />
+            <Navigator
+              PaperProps={{ style: { width: drawerWidth } }}
+              {...rest}
+            />
           </Hidden>
         </nav>
         <div className={classes.appContent}>
@@ -79,7 +93,7 @@ const AppLayout = ({ classes }) => {
           <main className={classes.mainContent}>
             {switchcase({
               packages: () => <Packages />
-            })('overview')(activePage)}
+            })('packages')(activePage)}
           </main>
         </div>
         {snackbarOptions && snackbarOptions.open && (

@@ -21,7 +21,7 @@ const boxShadow = {
 };
 
 const defaultFont = {
-  fontFamily: '"Regular", "Arial", sans-serif',
+  fontFamily: '"Regular", "Roboto", "Comic Sans MS", Arial", sans-serif',
   fontWeight: 200,
   lineHeight: '1.25em'
 };
@@ -43,7 +43,6 @@ const grayColor = '#999999';
 /* flexbox */
 const flexContainer = {
   display: '-webkit-flex',
-  justifyContent: 'space-around',
   listStyle: 'none',
   margin: 0,
   padding: 0,
