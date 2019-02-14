@@ -15,6 +15,8 @@ import { Packages } from 'components/pages/packages';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 
+import { darken } from '@material-ui/core/styles/colorManipulator';
+
 const drawerWidth = 240;
 
 const styles = {
@@ -72,18 +74,28 @@ const AppLayout = ({ classes }) => {
       <div className={classes.root}>
         <CssBaseline />
         <nav className={classes.drawer}>
-          <Hidden smUp implementation="js">
+          <Hidden lgUp implementation="js">
             <Navigator
-              PaperProps={{ style: { width: drawerWidth } }}
+              PaperProps={{
+                style: {
+                  width: drawerWidth
+                }
+              }}
               variant="temporary"
               open={drawerOpen}
               onClose={toggleDrawer}
               {...rest}
             />
           </Hidden>
-          <Hidden xsDown implementation="css">
+          <Hidden mdDown implementation="css">
             <Navigator
-              PaperProps={{ style: { width: drawerWidth } }}
+              PaperProps={{
+                style: {
+                  width: drawerWidth,
+                  color: theme.palette.common.white,
+                  backgroundColor: darken(theme.palette.primary.light, 0.955)
+                }
+              }}
               {...rest}
             />
           </Hidden>
