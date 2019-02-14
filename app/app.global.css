@@ -18,6 +18,13 @@ body {
   overflow-y: hidden;
 }
 
+#app {
+  height: '100%';
+  padding: 0;
+  margin: 0;
+  overflow: 'auto';
+}
+
 ::-webkit-scrollbar {
   width: 12px;
   border-radius: 10px;

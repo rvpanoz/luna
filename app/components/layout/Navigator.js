@@ -8,15 +8,15 @@ import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
+import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import HomeIcon from '@material-ui/icons/Home';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 import LoadIcon from '@material-ui/icons/Archive';
-import SettingsEthernetIcon from '@material-ui/icons/SettingsEthernet';
-import TerminalIcon from '@material-ui/icons/Code';
+import ToolsIcon from '@material-ui/icons/Settings';
+import CodeIcon from '@material-ui/icons/Code';
 
 import { APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
@@ -30,8 +30,8 @@ const menuItems = [
     id: 'Menu',
     children: [
       { id: 'Analyze', icon: <LoadIcon />, active: true },
-      { id: 'Tools', icon: <SettingsEthernetIcon /> },
-      { id: 'Terminal', icon: <TerminalIcon /> }
+      { id: 'Tools', icon: <ToolsIcon /> },
+      { id: 'Terminal', icon: <CodeIcon /> }
     ]
   }
 ];
@@ -92,19 +92,12 @@ const Navigator = ({
             classes.itemCategory
           )}
         >
-          Luna
-        </ListItem>
-        <ListItem className={classNames(classes.item, classes.itemCategory)}>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText
-            classes={{
-              primary: classes.itemPrimary
-            }}
-          >
-            {projectName || 'Overview'}
-          </ListItemText>
+          <div className={classes.flexContainer}>
+            <CodeIcon />
+            <Typography className={classNames(classes.title, classes.flexItem)}>
+              Luna
+            </Typography>
+          </div>
         </ListItem>
         {menuItems.map(({ id, children }) => (
           <React.Fragment key={id}>

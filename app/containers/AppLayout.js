@@ -31,12 +31,14 @@ const styles = {
   appContent: {
     flex: 1,
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    overflow: 'auto'
   },
   mainContent: {
     flex: 1,
     padding: '28px 18px 0',
-    background: '#eaeff1'
+    background: '#eaeff1',
+    overflow: 'hidden'
   }
 };
 

@@ -82,12 +82,12 @@ const TableListToolbar = ({
       directory
     });
 
-    // dispatch(
-    //   toggleLoader({
-    //     loading: true,
-    //     message: `${firstToUpper(action)}ing packages..`
-    //   })
-    // );
+    dispatch(
+      toggleLoader({
+        loading: true,
+        message: `${firstToUpper(action)}ing packages..`
+      })
+    );
   };
 
   const openPackage = useCallback(() => {
@@ -107,7 +107,7 @@ const TableListToolbar = ({
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
-          switchMode(APP_MODES.LOCAL, scanDirectory);
+          switchMode(APP_MODES.local, scanDirectory);
         }
 
         return false;

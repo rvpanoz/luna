@@ -1,4 +1,13 @@
+import { flexContainer } from 'styles/variables';
+
 const styles = theme => ({
+  flexContainer: {
+    ...flexContainer,
+    alignItems: 'center'
+  },
+  flexItem: {
+    padding: theme.spacing.unit
+  },
   categoryHeader: {
     paddingTop: 16,
     paddingBottom: 16
@@ -7,15 +16,13 @@ const styles = theme => ({
     color: theme.palette.common.white
   },
   item: {
-    paddingTop: 4,
-    paddingBottom: 4,
+    padding: 0,
     color: 'rgba(255, 255, 255, 0.7)'
   },
   itemCategory: {
     backgroundColor: '#232f3e',
     boxShadow: '0 -1px 0 #404854 inset',
-    paddingTop: 16,
-    paddingBottom: 16
+    padding: theme.spacing.unit / 2
   },
   title: {
     fontSize: 24,
@@ -28,7 +35,7 @@ const styles = theme => ({
     }
   },
   itemActiveItem: {
-    color: '#4fc3f7'
+    color: theme.palette.primary.light
   },
   itemPrimary: {
     color: 'inherit',

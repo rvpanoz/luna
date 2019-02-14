@@ -84,9 +84,9 @@ const Header = ({ classes, onDrawerToggle }) => {
         <Toolbar>
           <Grid container alignItems="center" spacing={8}>
             <Grid item xs>
-              {/* <Typography color="inherit" variant="h5">
-                Packages
-              </Typography> */}
+              <Typography color="inherit" variant="h5">
+                Dashboard
+              </Typography>
             </Grid>
             <Grid item>
               <Button
