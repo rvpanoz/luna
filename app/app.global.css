@@ -14,7 +14,7 @@ html,
 }
 
 body {
-  font-family: 'Regular', 'Roboto', 'Comic Sans MS', cursive, sans-serif;
+  font-family: 'Regular', 'Roboto', cursive, sans-serif;
   overflow-y: hidden;
 }
 
@@ -40,9 +40,9 @@ body {
 }
 
 @font-face {
-  font-family: 'Steak';
-  src: local('Steak'), local('Steak'),
-    url('./assets/fonts/Steak.ttf') format('truetype');
+  font-family: 'Din-Bold';
+  src: local('D-DIN-Bold'), local('D-DIN-Bold'),
+    url('./assets/fonts/D-DIN-Bold.otf') format('truetype');
 }
 
 @font-face {

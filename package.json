@@ -207,6 +207,7 @@
     "electron-log": "^3.0.1",
     "electron-store": "^2.0.0",
     "electron-updater": "^3.2.3",
+    "lockify": "^1.0.0",
     "material-design-icons": "^3.0.1",
     "prop-types": "^15.6.2",
     "ramda": "^0.26.1",
@@ -217,6 +218,7 @@
     "redux-observable": "^1.0.0",
     "redux-react-hook": "^3.1.0",
     "rxjs": "^6.4.0",
+    "semver": "^5.6.0",
     "source-map-support": "^0.5.10",
     "typeface-roboto": "0.0.54"
   },

@@ -21,7 +21,7 @@ const boxShadow = {
 };
 
 const defaultFont = {
-  fontFamily: '"Regular", "Roboto", "Comic Sans MS", Arial", sans-serif',
+  fontFamily: '"Regular", "Roboto", Arial, sans-serif',
   fontWeight: 200,
   lineHeight: '1.25em'
 };

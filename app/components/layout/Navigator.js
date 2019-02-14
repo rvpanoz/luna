@@ -17,6 +17,7 @@ import FolderIcon from '@material-ui/icons/FolderOpen';
 import LoadIcon from '@material-ui/icons/Archive';
 import ToolsIcon from '@material-ui/icons/Settings';
 import CodeIcon from '@material-ui/icons/Code';
+import HomeIcon from '@material-ui/icons/Home';
 
 import { APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
@@ -93,7 +94,7 @@ const Navigator = ({
           )}
         >
           <div className={classes.flexContainer}>
-            <CodeIcon />
+            <HomeIcon className={classes.homeIcon} />
             <Typography className={classNames(classes.title, classes.flexItem)}>
               Luna
             </Typography>
