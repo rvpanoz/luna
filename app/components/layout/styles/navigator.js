@@ -9,14 +9,14 @@ const styles = theme => ({
     padding: theme.spacing.unit
   },
   categoryHeader: {
-    paddingTop: 16,
-    paddingBottom: 16
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit
   },
   categoryHeaderPrimary: {
     color: theme.palette.common.white
   },
   item: {
-    padding: 0,
+    padding: theme.spacing.unit,
     color: 'rgba(255, 255, 255, 0.7)'
   },
   itemCategory: {
@@ -24,10 +24,14 @@ const styles = theme => ({
     boxShadow: '0 -1px 0 #404854 inset',
     padding: theme.spacing.unit / 2
   },
+  homeIcon: {
+    fill: '#fff'
+  },
   title: {
     fontSize: 24,
-    fontFamily: theme.typography.fontFamily,
+    fontFamily: 'Din-Bold',
     color: theme.palette.secondary.light
+    // WebkitTextStroke: '1px white'
   },
   itemActionable: {
     '&:hover': {
