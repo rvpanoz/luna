@@ -19,7 +19,7 @@ import UpdateIcon from '@material-ui/icons/Update';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
-import PublicIcon from '@material-ui/icons/BallotSharp';
+import PublicIcon from '@material-ui/icons/Ballot';
 
 import { firstToUpper, switchcase } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';
@@ -107,10 +107,9 @@ const TableListToolbar = ({
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
-          switchMode(APP_MODES.local, scanDirectory);
-        }
 
-        return false;
+          return switchMode(APP_MODES.local, scanDirectory);
+        }
       }
     );
   }, []);
@@ -127,7 +126,7 @@ const TableListToolbar = ({
         },
         btnIdx => {
           if (Boolean(btnIdx) === true) {
-            doAction(action);
+            return doAction(action);
           }
         }
       );
@@ -253,7 +252,7 @@ const TableListToolbar = ({
         <div className={classes.spacer} />
         <div className={cn(classes.actions)}>
           {selected.length === 0 && renderToolbarActions()}
-          {fromSearch && renderAction('install')}
+          {fromSearch && selected.length ? renderAction('install') : null}
           {!fromSearch && selected.length && needUpdate
             ? renderAction('update')
             : null}

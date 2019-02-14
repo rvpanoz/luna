@@ -1,5 +1,5 @@
 import { pipe } from 'rxjs';
-import { map, concatMap, skipWhile, tap } from 'rxjs/operators';
+import { map, concatMap, skipWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { isPackageOutdated } from 'commons/utils';
@@ -118,7 +118,6 @@ const packagesSuccessEpic = (action$, state$) =>
         };
       }
     ),
-    tap(console.log),
     concatMap(
       ({
         dependencies,
@@ -140,7 +139,7 @@ const packagesSuccessEpic = (action$, state$) =>
         }
 
         return [
-          // cleanCommands(),
+          cleanCommands(),
           setPackages({
             projectName,
             projectVersion,
@@ -155,8 +154,7 @@ const packagesSuccessEpic = (action$, state$) =>
           ...actions
         ];
       }
-    ),
-    tap(console.log)
+    )
   );
 
 export default combineEpics(packagesStartEpic, packagesSuccessEpic);

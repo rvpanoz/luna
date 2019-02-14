@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 
 import { ipcRenderer } from 'electron';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
@@ -52,8 +52,19 @@ const PackageItem = ({
       directory
     });
 
+  useEffect(() => {}, []);
+
+  const onDragStart = e => {
+    console.log(e.target);
+    // TODO: drop into a container
+    // containers are: dependencies, devDependencies, optionalDependencies etc
+    // show them on package installation after search
+  };
+
   return (
     <TableRow
+      onDragStart={onDragStart}
+      draggable
       key={`pkg-${name}`}
       hover
       role="checkbox"
@@ -63,7 +74,7 @@ const PackageItem = ({
       classes={{
         root: classes.tableRow
       }}
-      onClick={() => viewPackage()}
+      onClick={viewPackage}
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
