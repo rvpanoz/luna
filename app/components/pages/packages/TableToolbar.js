@@ -44,7 +44,7 @@ const TableListToolbar = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
-
+  const [packagesToInstall, updatePackagesToInstall] = useState([]);
   const dispatch = useDispatch();
 
   const switchMode = useCallback(
@@ -234,6 +234,25 @@ const TableListToolbar = ({
     []
   );
 
+  const onDrop = useCallback(
+    (e, type) => {
+      const packageName = e.dataTransfer.getData('name');
+      const newPackagesToInstall = [];
+
+      const inPackagesToInstall = packagesToInstall.indexOf(packageName) > -1;
+
+      if (!inPackagesToInstall) {
+        newPackagesToInstall.push({
+          type,
+          packageName
+        });
+      }
+
+      updatePackagesToInstall(packagesToInstall.concat(newPackagesToInstall));
+    },
+    [packagesToInstall]
+  );
+  console.log(packagesToInstall);
   return (
     <section className={classes.root}>
       <Toolbar
@@ -250,6 +269,11 @@ const TableListToolbar = ({
           </Typography>
         </div>
         <div className={classes.spacer} />
+        <div
+          className={classes.droppable}
+          onDrop={e => onDrop(e, 'dependencies')}
+          onDragOver={e => e.preventDefault()}
+        />
         <div className={cn(classes.actions)}>
           {selected.length === 0 && renderToolbarActions()}
           {fromSearch && selected.length ? renderAction('install') : null}

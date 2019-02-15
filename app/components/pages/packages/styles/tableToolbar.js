@@ -40,6 +40,11 @@ const styles = theme => ({
     flex: '0 0 auto',
     padding: theme.spacing.unit,
     color: theme.palette.text.secondary
+  },
+  droppable: {
+    width: '100%',
+    minHeight: 20,
+    border: '1px dotted #ccc'
   }
 });
 

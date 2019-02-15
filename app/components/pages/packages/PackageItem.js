@@ -52,18 +52,13 @@ const PackageItem = ({
       directory
     });
 
+  // TODO: wip
   useEffect(() => {}, []);
-
-  const onDragStart = e => {
-    console.log(e.target);
-    // TODO: drop into a container
-    // containers are: dependencies, devDependencies, optionalDependencies etc
-    // show them on package installation after search
-  };
+  const onDragStart = () => addSelected();
 
   return (
     <TableRow
-      onDragStart={onDragStart}
+      onDragStart={e => onDragStart(e, name)}
       draggable
       key={`pkg-${name}`}
       hover
