@@ -48,7 +48,9 @@ const styles = theme => ({
       fontSize: theme.typography.fontSize
     }
   },
-  textDense: {},
+  textDense: {
+    paddingTop: theme.spacing.unit / 2
+  },
   divider: {
     marginTop: theme.spacing.unit * 2
   }

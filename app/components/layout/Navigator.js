@@ -16,7 +16,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 import LoadIcon from '@material-ui/icons/Archive';
 import ToolsIcon from '@material-ui/icons/Settings';
-import CodeIcon from '@material-ui/icons/Code';
 import HomeIcon from '@material-ui/icons/Home';
 
 import { APP_MODES } from 'constants/AppConstants';
@@ -31,8 +30,7 @@ const menuItems = [
     id: 'Menu',
     children: [
       { id: 'Analyze', icon: <LoadIcon />, active: true },
-      { id: 'Tools', icon: <ToolsIcon /> },
-      { id: 'Terminal', icon: <CodeIcon /> }
+      { id: 'Tools', icon: <ToolsIcon /> }
     ]
   }
 ];
@@ -124,7 +122,7 @@ const Navigator = ({
                 onClick={() =>
                   switchcase({
                     Analyze: () => openPackage(),
-                    Terminal: () => {}
+                    Tools: () => {}
                   })()(childId)
                 }
               >
