@@ -19,7 +19,7 @@ import UpdateIcon from '@material-ui/icons/Update';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
-import PublicIcon from '@material-ui/icons/Ballot';
+import PublicIcon from '@material-ui/icons/BallotOutlined';
 
 import { firstToUpper, switchcase } from 'commons/utils';
 import { APP_MODES } from 'constants/AppConstants';

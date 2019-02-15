@@ -86,8 +86,8 @@ const styles = theme => ({
     display: 'none'
   },
   avatar: {
-    width: 20,
-    height: 20,
+    width: 15,
+    height: 15,
     margin: theme.spacing.unit / 4
   },
   dependenciesAvatar: {

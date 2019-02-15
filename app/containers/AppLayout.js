@@ -15,11 +15,11 @@ import { Packages } from 'components/pages/packages';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 const drawerWidth = 240;
 
-const styles = {
+const styles = appTheme => ({
   root: {
     display: 'flex',
     minHeight: '100vh'
@@ -38,11 +38,11 @@ const styles = {
   },
   mainContent: {
     flex: 1,
-    padding: '28px 18px 0',
-    background: '#eaeff1',
+    padding: appTheme.spacing.unit * 2,
+    background: lighten('#eaeff1', 0.1),
     overflow: 'hidden'
   }
-};
+});
 
 const mapState = ({
   common: {
@@ -74,28 +74,18 @@ const AppLayout = ({ classes }) => {
       <div className={classes.root}>
         <CssBaseline />
         <nav className={classes.drawer}>
-          <Hidden lgUp implementation="js">
+          <Hidden smUp implementation="js">
             <Navigator
-              PaperProps={{
-                style: {
-                  width: drawerWidth
-                }
-              }}
+              PaperProps={{ style: { width: drawerWidth } }}
               variant="temporary"
               open={drawerOpen}
-              onClose={toggleDrawer}
+              onClose={() => toggleDrawer(!drawerOpen)}
               {...rest}
             />
           </Hidden>
-          <Hidden mdDown implementation="css">
+          <Hidden xsDown implementation="css">
             <Navigator
-              PaperProps={{
-                style: {
-                  width: drawerWidth,
-                  color: theme.palette.common.white,
-                  backgroundColor: darken(theme.palette.primary.light, 0.955)
-                }
-              }}
+              PaperProps={{ style: { width: drawerWidth } }}
               {...rest}
             />
           </Hidden>

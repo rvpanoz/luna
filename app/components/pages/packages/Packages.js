@@ -219,13 +219,13 @@ const Packages = ({ classes }) => {
         <Grid container justify="space-between">
           <Grid item md={3} lg={4} xl={4}>
             <AppCard
-              title={mode === APP_MODES.global ? 'in Global mode' : projectName}
-              small={
-                mode === APP_MODES.local
-                  ? `${projectLicense} - v${projectVersion}`
-                  : null
+              avatar
+              title={
+                mode === APP_MODES.global ? 'in Global mode' : projectLicense
               }
-              iconColor="blue"
+              small={mode === APP_MODES.local ? `v${projectVersion}` : null}
+              description={mode === APP_MODES.local ? projectName : null}
+              iconColor="secondary"
               statText={lastUpdatedAt}
               loading={loading}
             />
@@ -233,17 +233,19 @@ const Packages = ({ classes }) => {
           <Grid item md={3} lg={3} xl={3}>
             <AppCard
               avatar
+              iconHeader="dependencies"
               title="Dependencies"
               description={data && data.length}
-              iconColor="blue"
+              iconColor="primary"
               statText={lastUpdatedAt}
             />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
             <AppCard
               avatar
+              iconHeader="outdated"
               title="Outdated"
-              iconColor="blue"
+              iconColor="warning"
               statText={lastUpdatedAt}
               description={packagesOutdated && packagesOutdated.length}
             />
