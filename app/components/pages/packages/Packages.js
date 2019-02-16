@@ -225,7 +225,7 @@ const Packages = ({ classes }) => {
               }
               small={mode === APP_MODES.local ? `v${projectVersion}` : null}
               description={mode === APP_MODES.local ? projectName : null}
-              iconColor="secondary"
+              iconColor="primary"
               statText={lastUpdatedAt}
               loading={loading}
             />
@@ -236,7 +236,7 @@ const Packages = ({ classes }) => {
               iconHeader="dependencies"
               title="Dependencies"
               description={data && data.length}
-              iconColor="primary"
+              iconColor="secondary"
               statText={lastUpdatedAt}
             />
           </Grid>

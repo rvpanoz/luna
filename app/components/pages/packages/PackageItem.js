@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 
 import { ipcRenderer } from 'electron';
-import React, { useCallback, useRef, useEffect } from 'react';
+import React, { useCallback, useRef } from 'react';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
@@ -52,14 +52,8 @@ const PackageItem = ({
       directory
     });
 
-  // TODO: wip
-  useEffect(() => {}, []);
-  const onDragStart = () => addSelected();
-
   return (
     <TableRow
-      onDragStart={e => onDragStart(e, name)}
-      draggable
       key={`pkg-${name}`}
       hover
       role="checkbox"

@@ -132,14 +132,13 @@ const packagesSuccessEpic = (action$, state$) =>
           common: { page },
           packages: { fromSearch, fromSort }
         } = state$.value;
-        const actions = [updateLoader({ loading: false })];
+        const actions = [cleanCommands(), updateLoader({ loading: false })];
 
         if (page !== 0) {
           actions.unshift(setPage({ page: 0 }));
         }
 
         return [
-          cleanCommands(),
           setPackages({
             projectName,
             projectVersion,
