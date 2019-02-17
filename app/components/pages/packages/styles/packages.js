@@ -56,15 +56,13 @@ const styles = theme => ({
   tableCell: {
     ...defaultFont,
     fontSize: 12,
-    lineHeight: '1.1em',
+    lineHeight: '1.2em',
     textAlign: 'center',
     '& span': {
       display: 'inline-block',
       overflowWrap: 'break-word'
-    }
-  },
-  w300: {
-    width: '65%'
+    },
+    height: 60
   },
   color: green[600],
   '&$checked': {

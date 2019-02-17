@@ -7,6 +7,7 @@ import {
   addActionError,
   addFilter,
   addSelected,
+  addInstallOption,
   clearSelected,
   clearFilters,
   clearPackages,
@@ -43,6 +44,30 @@ const handlers = {
       page: 0,
       filters: idx !== -1 ? remove(idx, 1, filters) : prepend(filter, filters)
     });
+  },
+  [addInstallOption.type]: (state, action) => {
+    const { packagesInstallOptions, selected } = state;
+    const {
+      payload: { name, options }
+    } = action;
+
+    let newOptions = [];
+
+    const idx = selected.indexOf(name);
+
+    if (idx > -1) {
+      newOptions = prepend(
+        {
+          name,
+          options
+        },
+        packagesInstallOptions
+      );
+    } else {
+      newOptions = packagesInstallOptions;
+    }
+
+    return assoc('packagesInstallOptions', newOptions, state);
   },
   [addSelected.type]: (state, action) => {
     const { selected } = state;

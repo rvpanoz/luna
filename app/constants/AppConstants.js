@@ -9,7 +9,7 @@ export const GITHUB = {
   baseUrl: 'https://api.github.com/repos/'
 };
 
-export const APP_globalS = {
+export const APP_GLOBALS = {
   name: APP,
   manager: NPM
 };
@@ -34,10 +34,11 @@ export const APP_ACTIONS = ['install', 'uninstall', 'update', 'view'];
 
 // supported package groups
 export const PACKAGE_GROUPS = {
-  dependencies: 'save',
+  dependencies: 'save-prod',
   devDependencies: 'save-dev',
   optionalDependencies: 'save-optional',
-  bundleDependencies: 'save-bundle'
+  bundleDependencies: 'save-bundle',
+  noSave: 'no-save'
 };
 
 // command options when perfoming an APP action

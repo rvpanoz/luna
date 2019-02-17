@@ -2,16 +2,18 @@
 
 import { ipcRenderer } from 'electron';
 import React, { useCallback, useRef } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
 
-import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
+import Categories from 'components/common/Categories';
 import styles from './styles/packages';
 
 const PackageItem = ({
@@ -20,6 +22,8 @@ const PackageItem = ({
   manager,
   isSelected,
   addSelected,
+  addInstallOption,
+  installOptions,
   version,
   latest,
   isOutdated,
@@ -56,6 +60,7 @@ const PackageItem = ({
     <TableRow
       key={`pkg-${name}`}
       hover
+      ref={rowRef}
       role="checkbox"
       aria-checked={isSelected}
       tabIndex={-1}
@@ -75,16 +80,21 @@ const PackageItem = ({
           }}
         />
       </TableCell>
-      <TableCell padding="none" className={cn(classes.tableCell, classes.w300)}>
+
+      <TableCell padding="none" className={cn(classes.tableCell)}>
         <div className={classes.flexContainer}>
-          <div ref={rowRef} className={classes.flexItem}>
-            <span>{name}</span>
-          </div>
-          <div className={classes.flexItem}>{renderIconByGroup(group)}</div>
+          {renderIconByGroup()}
+          <Typography>{name}</Typography>
+          {isSelected && (
+            <Categories
+              onSelect={options => addInstallOption(name, options)}
+              options={installOptions && installOptions.options}
+            />
+          )}
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        {version}
+        <Typography>{version}</Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         <span
@@ -93,7 +103,7 @@ const PackageItem = ({
             [classes.updated]: !isOutdated
           })}
         >
-          {latest || version}
+          <Typography>{latest || version}</Typography>
         </span>
       </TableCell>
     </TableRow>
@@ -104,10 +114,12 @@ PackageItem.propTypes = {
   classes: objectOf(string).isRequired,
   name: string.isRequired,
   addSelected: func.isRequired,
+  addInstallOption: func.isRequired,
   isSelected: bool.isRequired,
   version: string.isRequired,
   isOutdated: bool.isRequired,
   latest: oneOfType([string, object]),
+  installOptions: objectOf(object),
   group: string,
   manager: string,
   mode: string,

@@ -5,6 +5,7 @@ const ActionCreator = createActionCreator('@@LUNA_APP/DATA');
 const addActionError = ActionCreator('ACTION_ERROR');
 const addFilter = ActionCreator('ADD_FILTER');
 const addSelected = ActionCreator('ADD_SELECTED');
+const addInstallOption = ActionCreator('ADD_INSTALL_OPTION');
 const clearSelected = ActionCreator('CLEAR_SELECTED');
 const clearFilters = ActionCreator('CLEAR_FILTERS');
 const clearPackages = ActionCreator('CLEAR_PACKAGES');
@@ -22,6 +23,7 @@ export {
   addActionError,
   addFilter,
   addSelected,
+  addInstallOption,
   clearSelected,
   clearFilters,
   clearPackages,

@@ -7,19 +7,10 @@ import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
-
-import npmImgSource from 'assets/images/npm.png';
-
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
@@ -28,10 +19,11 @@ import AppLoader from 'components/common/AppLoader';
 import {
   addActionError,
   addSelected,
+  addInstallOption,
   updateData
 } from 'models/packages/actions';
 import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
-import { APP_INFO, APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
+import { APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
 
 import AppCard from 'components/common/AppCard';
 import TableToolbar from './TableToolbar';
@@ -59,6 +51,7 @@ const mapState = ({
     packages,
     packagesOutdated,
     selected,
+    packagesInstallOptions,
     fromSearch,
     sortDir,
     sortBy,
@@ -80,6 +73,7 @@ const mapState = ({
   packages,
   packagesOutdated,
   selected,
+  packagesInstallOptions,
   fromSearch,
   sortDir,
   sortBy
@@ -102,6 +96,7 @@ const Packages = ({ classes }) => {
     sortDir,
     sortBy,
     env,
+    packagesInstallOptions,
     lastUpdatedAt
   } = useMappedState(mapState);
 
@@ -175,7 +170,6 @@ const Packages = ({ classes }) => {
         dispatch(addActionError({ error }));
       }
 
-      // force render
       reload();
     });
 
@@ -220,9 +214,7 @@ const Packages = ({ classes }) => {
           <Grid item md={3} lg={4} xl={4}>
             <AppCard
               avatar
-              title={
-                mode === APP_MODES.global ? 'in Global mode' : projectLicense
-              }
+              title={mode === APP_MODES.global ? 'in Global' : projectLicense}
               small={mode === APP_MODES.local ? `v${projectVersion}` : null}
               description={mode === APP_MODES.local ? projectName : null}
               iconColor="primary"
@@ -293,22 +285,36 @@ const Packages = ({ classes }) => {
                       __group,
                       __error,
                       __peerMissing
-                    }) => (
-                      <PackageItem
-                        key={`pkg-${name}`}
-                        isSelected={isSelected(name, selected)}
-                        addSelected={() => dispatch(addSelected({ name }))}
-                        name={name}
-                        peerDependencies={peerDependencies}
-                        manager={manager}
-                        version={version}
-                        latest={latest}
-                        isOutdated={isOutdated}
-                        group={__group}
-                        error={__error}
-                        peerMissing={__peerMissing}
-                      />
-                    )
+                    }) => {
+                      const installOptions = Array.isArray(
+                        packagesInstallOptions
+                      )
+                        ? packagesInstallOptions.find(
+                            data => data.name === name
+                          )
+                        : {};
+
+                      return (
+                        <PackageItem
+                          key={`pkg-${name}`}
+                          isSelected={isSelected(name, selected)}
+                          installOptions={installOptions}
+                          addSelected={() => dispatch(addSelected({ name }))}
+                          addInstallOption={(name, options) =>
+                            dispatch(addInstallOption({ name, options }))
+                          }
+                          name={name}
+                          peerDependencies={peerDependencies}
+                          manager={manager}
+                          version={version}
+                          latest={latest}
+                          isOutdated={isOutdated}
+                          group={__group}
+                          error={__error}
+                          peerMissing={__peerMissing}
+                        />
+                      );
+                    }
                   )}
               </TableBody>
               <TableFooter
