@@ -11,6 +11,7 @@ import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
+import { Notifications } from 'components/pages/notifications';
 
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
@@ -94,8 +95,10 @@ const AppLayout = ({ classes }) => {
           <Header onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
           <main className={classes.mainContent}>
             {switchcase({
-              packages: () => <Packages />
-            })('packages')(activePage)}
+              packages: () => <Packages />,
+              problems: () => <Notifications />,
+              scripts: () => <div>scripts</div>
+            })(<Packages />)(activePage)}
           </main>
         </div>
         {snackbarOptions && snackbarOptions.open && (

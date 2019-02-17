@@ -28,8 +28,8 @@ const CategoriesChips = ({ classes, onSelect, options }) => (
             onSelect([group]);
           }}
           className={classes.chip}
-          variant="outlined"
-          color="primary"
+          variant={icon ? 'default' : 'outlined'}
+          color={icon ? 'secondary' : 'primary'}
         />
       );
     })}
