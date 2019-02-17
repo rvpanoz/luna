@@ -34,16 +34,7 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
-  common: {
-    directory,
-    manager,
-    mode,
-    notifications,
-    page,
-    rowsPerPage,
-    loader,
-    npm: { env }
-  },
+  common: { directory, manager, mode, page, rowsPerPage, loader },
   packages: {
     active,
     action,
@@ -58,12 +49,10 @@ const mapState = ({
     lastUpdatedAt
   }
 }) => ({
-  env,
   lastUpdatedAt,
   directory,
   manager,
   mode,
-  notifications,
   page,
   rowsPerPage,
   loader,
@@ -85,7 +74,6 @@ const Packages = ({ classes }) => {
     packages,
     packagesOutdated,
     mode,
-    notifications,
     page,
     filters,
     rowsPerPage,
@@ -95,7 +83,6 @@ const Packages = ({ classes }) => {
     fromSearch,
     sortDir,
     sortBy,
-    env,
     packagesInstallOptions,
     lastUpdatedAt
   } = useMappedState(mapState);
@@ -254,6 +241,7 @@ const Packages = ({ classes }) => {
               directory={directory}
               selected={selected}
               packagesOutdatedNames={packagesOutdatedNames}
+              packagesInstallOptions={packagesInstallOptions}
               fromSearch={fromSearch}
               reload={reload}
               nodata={dependencies === null}

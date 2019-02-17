@@ -19,8 +19,8 @@ export const runCommand = (options, callback) => {
 
   const combine = () =>
     cmd.map(command => {
-      // the apiManager function to call
       const runner = apiManager[command];
+
       return runner(rest, callback);
     });
 

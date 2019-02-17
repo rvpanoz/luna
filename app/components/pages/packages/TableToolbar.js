@@ -40,7 +40,8 @@ const TableListToolbar = ({
   reload,
   nodata,
   scrollWrapper,
-  packagesOutdatedNames
+  packagesOutdatedNames,
+  packagesInstallOptions
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
@@ -71,6 +72,9 @@ const TableListToolbar = ({
   );
 
   const doAction = action => {
+    console.log(packagesInstallOptions);
+    return;
+
     ipcRenderer.send('ipc-event', {
       activeManager: manager,
       ipcEvent: action,
@@ -286,7 +290,8 @@ TableListToolbar.propTypes = {
   directory: PropTypes.string,
   fromSearch: PropTypes.bool,
   scrollWrapper: PropTypes.func,
-  packagesOutdatedNames: PropTypes.arrayOf(PropTypes.string)
+  packagesOutdatedNames: PropTypes.arrayOf(PropTypes.string),
+  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(TableListToolbar);
