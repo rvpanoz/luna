@@ -309,6 +309,7 @@ const Packages = ({ classes }) => {
                           version={version}
                           latest={latest}
                           isOutdated={isOutdated}
+                          fromSearch={fromSearch}
                           group={__group}
                           error={__error}
                           peerMissing={__peerMissing}

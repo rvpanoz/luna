@@ -31,14 +31,6 @@ const App = () => {
       dispatch({ type: uiException.type, payload: { message: args[0] } })
     );
 
-    ipcRenderer.on('ipcEvent-flow', (event, command) => {
-      dispatch({ type: npmCommand.type, payload: { command } });
-    });
-
-    ipcRenderer.on('get-env-close', (event, env) =>
-      dispatch({ type: setEnv.type, payload: env })
-    );
-
     ipcRenderer.on('ipcEvent-error', (event, message) => {
       if (enableNotifications) {
         dispatch(
@@ -48,6 +40,15 @@ const App = () => {
         );
       }
     });
+
+    // TODO: fix listener once - on
+    ipcRenderer.once('ipcEvent-flow', (event, command) => {
+      dispatch({ type: npmCommand.type, payload: { command } });
+    });
+
+    ipcRenderer.once('get-env-close', (event, env) =>
+      dispatch({ type: setEnv.type, payload: env })
+    );
 
     return () =>
       ipcRenderer.removeAllListeners(['ipcEvent-error', 'uncaught-exception']);

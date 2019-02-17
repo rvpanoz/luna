@@ -29,7 +29,8 @@ const PackageItem = ({
   isOutdated,
   group,
   mode,
-  directory
+  directory,
+  fromSearch
 }) => {
   const rowRef = useRef();
 
@@ -83,28 +84,28 @@ const PackageItem = ({
 
       <TableCell padding="none" className={cn(classes.tableCell)}>
         <div className={classes.flexContainer}>
-          {renderIconByGroup()}
+          {group && typeof group === 'string' ? renderIconByGroup(group) : null}
           <Typography>{name}</Typography>
-          {isSelected && (
+          {isSelected && fromSearch ? (
             <Categories
               onSelect={options => addInstallOption(name, options)}
               options={installOptions && installOptions.options}
             />
-          )}
+          ) : null}
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         <Typography>{version}</Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        <span
+        <Typography
           className={cn({
             [classes.outdated]: isOutdated,
             [classes.updated]: !isOutdated
           })}
         >
-          <Typography>{latest || version}</Typography>
-        </span>
+          {latest || version}
+        </Typography>
       </TableCell>
     </TableRow>
   );
@@ -118,6 +119,7 @@ PackageItem.propTypes = {
   isSelected: bool.isRequired,
   version: string.isRequired,
   isOutdated: bool.isRequired,
+  fromSearch: bool,
   latest: oneOfType([string, object]),
   installOptions: objectOf(object),
   group: string,

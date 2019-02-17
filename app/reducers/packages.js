@@ -54,8 +54,15 @@ const handlers = {
     let newOptions = [];
 
     const idx = selected.indexOf(name);
+    const packageInstallOptions = packagesInstallOptions.find(
+      installOptions => installOptions.name === name
+    );
 
-    if (idx > -1) {
+    if (idx === -1) {
+      return state;
+    }
+
+    if (!packageInstallOptions) {
       newOptions = prepend(
         {
           name,
@@ -64,7 +71,19 @@ const handlers = {
         packagesInstallOptions
       );
     } else {
-      newOptions = packagesInstallOptions;
+      newOptions = packagesInstallOptions.map(option => {
+        const packageName = option.name;
+        const packageOptions = options;
+
+        if (packageName === name) {
+          return {
+            ...option,
+            options: packageOptions
+          };
+        }
+
+        return option;
+      });
     }
 
     return assoc('packagesInstallOptions', newOptions, state);
