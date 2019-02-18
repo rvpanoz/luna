@@ -20,7 +20,8 @@ import {
   addActionError,
   addSelected,
   addInstallOption,
-  updateData
+  updateData,
+  setPackagesStart // TODO: remove
 } from 'models/packages/actions';
 import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
 import { APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
@@ -137,19 +138,19 @@ const Packages = ({ classes }) => {
   const outdated = outdatedSet.data;
   const nodata = Boolean(dependencies && dependencies.length === 0);
 
-  useEffect(() => {
-    dispatch(
-      updateData({
-        dependencies,
-        outdated,
-        projectName,
-        projectVersion,
-        projectDescription,
-        projectLicense,
-        projectAuthor
-      })
-    );
-  }, [dependenciesSet]);
+  // useEffect(() => {
+  //   dispatch(
+  //     updateData({
+  //       dependencies,
+  //       outdated,
+  //       projectName,
+  //       projectVersion,
+  //       projectDescription,
+  //       projectLicense,
+  //       projectAuthor
+  //     })
+  //   );
+  // }, [dependenciesSet]);
 
   useEffect(() => {
     ipcRenderer.on(['action-close'], (event, error) => {
@@ -158,6 +159,19 @@ const Packages = ({ classes }) => {
       }
 
       reload();
+    });
+
+    // TODO: REMOVE
+    dispatch(
+      setPackagesStart({
+        fromSearch: true
+      })
+    );
+
+    ipcRenderer.send('ipc-event', {
+      ipcEvent: 'search-packages',
+      cmd: ['search'],
+      pkgName: 'pop'
     });
 
     return () => ipcRenderer.removeAllListeners(['action-close']);

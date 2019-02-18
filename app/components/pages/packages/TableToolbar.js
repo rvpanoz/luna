@@ -13,6 +13,14 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
+
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+
+import Divider from '@material-ui/core/Divider';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import UpdateIcon from '@material-ui/icons/Update';
@@ -22,10 +30,11 @@ import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/BallotOutlined';
 
 import { firstToUpper, switchcase } from 'commons/utils';
-import { APP_MODES } from 'constants/AppConstants';
+import { APP_MODES, INFO_MESSAGES } from 'constants/AppConstants';
 import { setMode, toggleLoader } from 'models/ui/actions';
 
 import TableFilters from './TableFilters';
+import Flags from '../steps/Flags';
 
 import styles from './styles/tableToolbar';
 
@@ -45,6 +54,7 @@ const TableListToolbar = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
+  const [optionsOpen, toggleOptions] = useState(false);
   const dispatch = useDispatch();
 
   const switchMode = useCallback(
@@ -72,8 +82,10 @@ const TableListToolbar = ({
   );
 
   const doAction = action => {
-    console.log(packagesInstallOptions);
-    return;
+    if (action === 'install') {
+      toggleOptions(true);
+      return;
+    }
 
     ipcRenderer.send('ipc-event', {
       activeManager: manager,
@@ -142,6 +154,7 @@ const TableListToolbar = ({
       install: () => (
         <Tooltip title="Install selected">
           <IconButton
+            color="primary"
             aria-label="install selected"
             onClick={() => handleAction('install')}
           >
@@ -152,6 +165,7 @@ const TableListToolbar = ({
       update: () => (
         <Tooltip title="Update selected">
           <IconButton
+            color="primary"
             aria-label="update selected"
             onClick={() => handleAction('update')}
           >
@@ -162,6 +176,7 @@ const TableListToolbar = ({
       uninstall: () => (
         <Tooltip title="Uninstall selected">
           <IconButton
+            color="secondary"
             aria-label="uninstall selected"
             onClick={() => handleAction('uninstall')}
           >
@@ -275,6 +290,18 @@ const TableListToolbar = ({
       >
         <TableFilters mode={mode} close={() => openFilters(null, true)} />
       </Popover>
+      <Dialog
+        open={optionsOpen}
+        onClose={() => toggleOptions(!optionsOpen)}
+        aria-labelledby="install-options"
+        maxWidth="md"
+      >
+        <DialogTitle id="install-options">Install options</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
+          <Flags selected={selected} />
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

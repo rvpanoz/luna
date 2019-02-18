@@ -25,8 +25,7 @@ export const APP_INFO = {
   NOT_AVAILABLE: 'N/A',
   NO_NOTIFICATIONS: 'No notifications',
   NO_WORKING_DIRECTORY: 'No working directory',
-  NO_DATA: 'No data',
-  global_MESSAGE: 'Showing global packages'
+  NO_DATA: 'No data'
 };
 
 // package actions
@@ -62,7 +61,9 @@ export const INFO_MESSAGES = {
   loading: 'Loading packages..',
   noData: 'No dependencies found.',
   loaded: 'Package loaded.',
-  updating: 'Please wait. Updating packages'
+  updating: 'Please wait. Updating packages',
+  installing:
+    'All dependencies will be installed at the latest version. You can edit dependency version later.'
 };
 
 export const WARNING_MESSAGES = {

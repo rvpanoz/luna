@@ -13,7 +13,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import Categories from 'components/common/Categories';
 import styles from './styles/packages';
 
 const PackageItem = ({
@@ -86,12 +85,6 @@ const PackageItem = ({
         <div className={classes.flexContainer}>
           {group && typeof group === 'string' ? renderIconByGroup(group) : null}
           <Typography>{name}</Typography>
-          {isSelected && fromSearch ? (
-            <Categories
-              onSelect={options => addInstallOption(name, options)}
-              options={installOptions && installOptions.options}
-            />
-          ) : null}
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
