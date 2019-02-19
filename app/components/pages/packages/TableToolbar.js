@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
-
+import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -301,6 +301,14 @@ const TableListToolbar = ({
           <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
           <Flags selected={selected} />
         </DialogContent>
+        <DialogActions>
+          <Button onClick={() => {}} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={() => {}} color="primary" autoFocus>
+            Install
+          </Button>
+        </DialogActions>
       </Dialog>
     </section>
   );

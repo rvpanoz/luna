@@ -95,6 +95,16 @@ const Header = ({ classes, onDrawerToggle }) => {
                 color="inherit"
                 size="small"
               >
+                Create package
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                className={classes.button}
+                variant="outlined"
+                color="inherit"
+                size="small"
+              >
                 Install
               </Button>
             </Grid>
