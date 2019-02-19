@@ -1,9 +1,11 @@
 import { flexContainer } from 'styles/variables';
 
 const styles = theme => ({
+  list: {
+    width: '100%'
+  },
   flexContainer: {
     ...flexContainer,
-    justifyContent: 'flex-end',
     padding: theme.spacing.unit * 2
   }
 });

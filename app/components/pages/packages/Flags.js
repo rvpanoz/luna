@@ -5,34 +5,30 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
 import ControlTypes from 'components/common/ControlTypes';
 import ControlFlags from 'components/common/ControlFlags';
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    padding: theme.spacing.unit * 2,
-    backgroundColor: theme.palette.background.paper
-  }
-});
+import styles from './styles/flags';
 
-const Flags = ({ classes, selected }) => {
-  return (
-    <React.Fragment>
-      <ControlFlags />
-      <List dense className={classes.root}>
-        {selected.map(packageName => (
-          <ListItem key={packageName}>
-            <ListItemText primary={packageName} />
-            <ListItemSecondaryAction>
-              <ControlTypes />
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
-      </List>
-    </React.Fragment>
-  );
+const Flags = ({ classes, selected }) => (
+  <div className={classes.flexContainer}>
+    <List dense className={classes.list}>
+      {selected.map(packageName => (
+        <ListItem key={packageName}>
+          <ListItemText primary={packageName} />
+          <ListItemSecondaryAction>
+            <ControlTypes />
+          </ListItemSecondaryAction>
+        </ListItem>
+      ))}
+    </List>
+    <ControlFlags />
+  </div>
+);
+
+Flags.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  selected: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 export default withStyles(styles)(Flags);
