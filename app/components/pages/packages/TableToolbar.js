@@ -20,7 +20,6 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
-import Divider from '@material-ui/core/Divider';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import UpdateIcon from '@material-ui/icons/Update';
@@ -34,7 +33,7 @@ import { APP_MODES, INFO_MESSAGES } from 'constants/AppConstants';
 import { setMode, toggleLoader } from 'models/ui/actions';
 
 import TableFilters from './TableFilters';
-import Flags from '../steps/Flags';
+import Flags from './Flags';
 
 import styles from './styles/tableToolbar';
 
@@ -81,7 +80,7 @@ const TableListToolbar = ({
     [filtersOn]
   );
 
-  const doAction = action => {
+  const handleAction = action => {
     if (action === 'install') {
       toggleOptions(true);
       return;
@@ -127,27 +126,6 @@ const TableListToolbar = ({
       }
     );
   }, []);
-
-  const handleAction = action => {
-    if (selected && selected.length) {
-      remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          title: 'Confirmation',
-          type: 'question',
-          message: `Would you like to ${action} the selected packages?`,
-          buttons: ['Cancel', firstToUpper(action)]
-        },
-        btnIdx => {
-          if (Boolean(btnIdx) === true) {
-            return doAction(action);
-          }
-        }
-      );
-    }
-
-    return false;
-  };
 
   const renderAction = action =>
     switchcase({
@@ -302,7 +280,7 @@ const TableListToolbar = ({
           <Flags selected={selected} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => {}} color="secondary">
+          <Button onClick={() => toggleOptions(false)} color="secondary">
             Cancel
           </Button>
           <Button onClick={() => {}} color="primary" autoFocus>

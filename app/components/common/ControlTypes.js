@@ -21,16 +21,14 @@ const ControlTypes = ({ classes }) => (
     <FormControl className={classes.formControl}>
       <Select value="save-prod" onChange={() => {}}>
         {groups.map(group => {
-          return <MenuItem value={group}>{group}</MenuItem>;
+          return (
+            <MenuItem key={`group${group}`} value={group}>
+              {group}
+            </MenuItem>
+          );
         })}
       </Select>
     </FormControl>
-    <FormControlLabel
-      control={
-        <Checkbox checked={true} onChange={() => {}} value="save-exact" />
-      }
-      label="exact"
-    />
   </FormGroup>
 );
 
