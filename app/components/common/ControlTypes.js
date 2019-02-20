@@ -14,8 +14,8 @@ import styles from './styles/types';
 
 const groups = Object.values(PACKAGE_GROUPS);
 
-const ControlTypes = ({ classes, name, onSelect }) => {
-  const [groupName, setGroup] = useState('save-prod');
+const ControlTypes = ({ classes, packageName, onSelect, selectedValue }) => {
+  const [groupName, setGroup] = useState(selectedValue || 'save-prod');
 
   return (
     <FormGroup row>
@@ -27,7 +27,7 @@ const ControlTypes = ({ classes, name, onSelect }) => {
 
             setGroup(value);
             onSelect({
-              name,
+              name: packageName,
               options: [value]
             });
           }}
@@ -45,8 +45,9 @@ const ControlTypes = ({ classes, name, onSelect }) => {
 
 ControlTypes.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  name: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired
+  packageName: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  selectedValue: PropTypes.string
 };
 
 export default withStyles(styles)(ControlTypes);

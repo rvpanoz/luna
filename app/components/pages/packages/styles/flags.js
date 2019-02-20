@@ -5,8 +5,7 @@ const styles = theme => ({
     width: '100%'
   },
   flexContainer: {
-    ...flexContainer,
-    padding: theme.spacing.unit * 2
+    ...flexContainer
   }
 });
 

@@ -27,26 +27,38 @@ export default {
     message: null
   },
   packages: {
-    projectName: null,
-    projectVersion: null,
-    projectDescription: null,
-    projectLicense: null,
-    projectAuthor: null,
-    sortBy: 'name',
-    sortDir: 'asc',
-    action: {
-      name: null,
-      error: null
-    },
-    packages: [],
-    packagesOutdated: [],
-    selected: [],
-    packagesInstallOptions: [],
-    filters: [],
     active: null,
-    lastUpdatedAt: null,
-    fromSearch: false,
-    fromSort: false
+    data: {
+      packages: [],
+      packagesOutdated: []
+    },
+    operations: {
+      selected: [],
+      packagesInstallOptions: [],
+      action: {
+        name: null,
+        error: null
+      }
+    },
+    project: {
+      name: null,
+      version: null,
+      description: null,
+      license: null,
+      author: null
+    },
+    sortings: {
+      sortBy: 'name',
+      sortDir: 'asc'
+    },
+    filtering: {
+      filters: []
+    },
+    metadata: {
+      lastUpdatedAt: null,
+      fromSearch: false,
+      fromSort: false
+    }
   },
   metadata: {}
 };

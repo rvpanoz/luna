@@ -48,7 +48,8 @@ const TableListToolbar = ({
   reload,
   nodata,
   scrollWrapper,
-  packagesOutdatedNames
+  packagesOutdatedNames,
+  packagesInstallOptions
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
@@ -79,28 +80,33 @@ const TableListToolbar = ({
     [filtersOn]
   );
 
-  const handleAction = action => {
-    if (action === 'install') {
+  const handleAction = (action, bypass = false) => {
+    if (action === 'install' && !bypass) {
       toggleOptions(true);
       return;
     }
 
-    ipcRenderer.send('ipc-event', {
-      activeManager: manager,
-      ipcEvent: action,
-      cmd: [action],
-      multiple: true,
-      packages: selected,
-      mode,
-      directory
-    });
+    const hasFlags = packagesInstallOptions && packagesInstallOptions.length;
 
-    dispatch(
-      toggleLoader({
-        loading: true,
-        message: `${firstToUpper(action)}ing packages..`
-      })
-    );
+    if (hasFlags) {
+    } else {
+      ipcRenderer.send('ipc-event', {
+        activeManager: manager,
+        ipcEvent: action,
+        cmd: [action],
+        multiple: true,
+        packages: selected,
+        mode,
+        directory
+      });
+
+      dispatch(
+        toggleLoader({
+          loading: true,
+          message: `${firstToUpper(action)}ing packages..`
+        })
+      );
+    }
   };
 
   const openPackage = useCallback(() => {
@@ -282,7 +288,11 @@ const TableListToolbar = ({
           <Button onClick={() => toggleOptions(false)} color="secondary">
             Cancel
           </Button>
-          <Button onClick={() => {}} color="primary" autoFocus>
+          <Button
+            onClick={() => handleAction('install', true)}
+            color="primary"
+            autoFocus
+          >
             Install
           </Button>
         </DialogActions>
