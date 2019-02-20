@@ -62,8 +62,7 @@ export const INFO_MESSAGES = {
   noData: 'No dependencies found.',
   loaded: 'Package loaded.',
   updating: 'Please wait. Updating packages',
-  installing:
-    'All dependencies will be installed at the latest version. You can edit dependency version later.'
+  installing: 'Please choose installation options'
 };
 
 export const WARNING_MESSAGES = {

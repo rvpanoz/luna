@@ -48,8 +48,7 @@ const TableListToolbar = ({
   reload,
   nodata,
   scrollWrapper,
-  packagesOutdatedNames,
-  packagesInstallOptions
+  packagesOutdatedNames
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
@@ -303,8 +302,7 @@ TableListToolbar.propTypes = {
   directory: PropTypes.string,
   fromSearch: PropTypes.bool,
   scrollWrapper: PropTypes.func,
-  packagesOutdatedNames: PropTypes.arrayOf(PropTypes.string),
-  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
+  packagesOutdatedNames: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default withStyles(styles)(TableListToolbar);

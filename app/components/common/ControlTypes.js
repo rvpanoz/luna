@@ -14,13 +14,24 @@ import styles from './styles/types';
 
 const groups = Object.values(PACKAGE_GROUPS);
 
-const ControlTypes = ({ classes }) => {
-  const [type, setType] = useState('save-prod');
+const ControlTypes = ({ classes, name, onSelect }) => {
+  const [groupName, setGroup] = useState('save-prod');
 
   return (
     <FormGroup row>
       <FormControl className={classes.formControl}>
-        <Select value={type} onChange={e => setType(e.target.value)}>
+        <Select
+          value={groupName}
+          onChange={e => {
+            const { value } = e.target;
+
+            setGroup(value);
+            onSelect({
+              name,
+              options: [value]
+            });
+          }}
+        >
           {groups.map(group => (
             <MenuItem key={`group${group}`} value={group}>
               {group}
@@ -33,7 +44,9 @@ const ControlTypes = ({ classes }) => {
 };
 
 ControlTypes.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  name: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(ControlTypes);
