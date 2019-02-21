@@ -2,7 +2,7 @@
  * Packages reducer: Handles state management for packages operations
  */
 
-import { identity, merge, assoc, prepend, prop, propOr, remove } from 'ramda';
+import { identity, merge, prepend, prop, propOr, remove } from 'ramda';
 import {
   addActionError,
   addFilter,
@@ -140,8 +140,11 @@ const handlers = {
     }),
   [clearSelected.type]: state =>
     merge(state, {
-      ...state.operations,
-      selected: []
+      ...state,
+      operations: {
+        packagesInstallOptions: [],
+        selected: []
+      }
     }),
   [clearPackages.type]: state =>
     merge(state, {

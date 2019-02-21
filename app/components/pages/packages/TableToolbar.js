@@ -4,6 +4,7 @@
 import { ipcRenderer, remote } from 'electron';
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
+import { merge, prepend } from 'ramda';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -34,7 +35,6 @@ import { setMode, toggleLoader } from 'models/ui/actions';
 
 import TableFilters from './TableFilters';
 import Flags from './Flags';
-
 import styles from './styles/tableToolbar';
 
 const TableListToolbar = ({
@@ -86,9 +86,26 @@ const TableListToolbar = ({
       return;
     }
 
+    const dependencies = [];
+    const devDependencies = [];
+    const optionalDependencies = [];
+    const bundleDependencies = [];
+    const noSave = [];
+
     const hasFlags = packagesInstallOptions && packagesInstallOptions.length;
 
-    if (hasFlags) {
+    if (hasFlags && selected.length) {
+      const packagesWithOptions = selected.reduce((acc, packageName, idx) => {
+        const flag = packagesInstallOptions.find(
+          option => option.name === packageName
+        );
+
+        // TODO: logic...
+
+        return acc;
+      }, {});
+
+      console.log(packagesWithOptions);
     } else {
       ipcRenderer.send('ipc-event', {
         activeManager: manager,

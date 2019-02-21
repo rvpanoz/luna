@@ -27,8 +27,8 @@ const { startMinimized, defaultManager } = defaultSettings;
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 1024,
-  MIN_HEIGHT = 768,
+  MIN_WIDTH = 429,
+  MIN_HEIGHT = 360,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS,
   NODE_ENV,

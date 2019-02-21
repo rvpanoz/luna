@@ -4,7 +4,15 @@ import { ipcRenderer } from 'electron';
 import React, { useCallback, useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
-import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
+import {
+  bool,
+  objectOf,
+  object,
+  string,
+  func,
+  oneOfType,
+  arrayOf
+} from 'prop-types';
 import { always, cond, equals } from 'ramda';
 
 import Typography from '@material-ui/core/Typography';
@@ -21,15 +29,12 @@ const PackageItem = ({
   manager,
   isSelected,
   addSelected,
-  addInstallOption,
-  installOptions,
   version,
   latest,
   isOutdated,
   group,
   mode,
-  directory,
-  fromSearch
+  directory
 }) => {
   const rowRef = useRef();
 
@@ -114,7 +119,6 @@ PackageItem.propTypes = {
   isOutdated: bool.isRequired,
   fromSearch: bool,
   latest: oneOfType([string, object]),
-  installOptions: objectOf(object),
   group: string,
   manager: string,
   mode: string,
