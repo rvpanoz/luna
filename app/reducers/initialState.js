@@ -4,8 +4,6 @@ export default {
   activePage: 'packages',
   directory: null,
   enableNotifications: false,
-  page: 0,
-  rowsPerPage: 10,
   notifications: [],
   commands: [],
   npm: {
@@ -28,6 +26,10 @@ export default {
   },
   packages: {
     active: null,
+    paginations: {
+      page: 0,
+      rowsPerPage: 10
+    },
     data: {
       packages: [],
       packagesOutdated: []
@@ -47,7 +49,7 @@ export default {
       license: null,
       author: null
     },
-    sortings: {
+    sorting: {
       sortBy: 'name',
       sortDir: 'asc'
     },
@@ -59,6 +61,5 @@ export default {
       fromSearch: false,
       fromSort: false
     }
-  },
-  metadata: {}
+  }
 };

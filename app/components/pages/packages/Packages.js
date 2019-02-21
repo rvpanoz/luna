@@ -38,16 +38,11 @@ const mapState = ({
   common: { directory, manager, mode, page, rowsPerPage, loader },
   packages: {
     active,
-    action,
-    filters,
-    packages,
-    packagesOutdated,
-    selected,
-    packagesInstallOptions,
-    fromSearch,
-    sortDir,
-    sortBy,
-    lastUpdatedAt
+    data: { packages, packagesOutdated },
+    operations: { action, selected, packagesInstallOptions },
+    filtering: { filters },
+    metadata: { fromSearch, lastUpdatedAt },
+    sorting: { sortBy, sortDir }
   }
 }) => ({
   lastUpdatedAt,

@@ -30,14 +30,16 @@ const createReducer = (packagesState, handlers) => (
 
 const handlers = {
   [addActionError.type]: (state, { payload: { actionName, actionError } }) =>
-    merge(state, {
+    merge(state.operations, {
       action: {
         actionName,
         actionError
       }
     }),
   [addFilter.type]: (state, { payload: { filter } }) => {
-    const { filters } = state;
+    const {
+      filtering: { filters }
+    } = state;
     const idx = filters.indexOf(filter);
 
     return merge(state, {
@@ -46,7 +48,7 @@ const handlers = {
     });
   },
   [addInstallOption.type]: (state, action) => {
-    const { packagesInstallOptions, selected } = state;
+    const { packagesInstallOptions, selected } = state.operations;
     const {
       payload: { name, options }
     } = action;
@@ -89,7 +91,9 @@ const handlers = {
     return assoc('packagesInstallOptions', newOptions, state);
   },
   [addSelected.type]: (state, action) => {
-    const { selected } = state;
+    const {
+      operations: { selected }
+    } = state;
     const {
       payload: { name, force }
     } = action;
@@ -111,13 +115,17 @@ const handlers = {
   [clearSelected.type]: state => assoc('selected', [], state),
   [clearPackages.type]: state =>
     merge(state, {
-      projectName: null,
-      projectVersion: null,
-      projectDescription: null,
-      projectLicense: null,
-      projectAuthor: null,
-      packages: [],
-      packagesOutdated: []
+      project: {
+        name: null,
+        version: null,
+        description: null,
+        license: null,
+        author: null
+      },
+      data: {
+        packages: [],
+        packagesOutdated: []
+      }
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
     const {
@@ -132,27 +140,40 @@ const handlers = {
     } = payload;
 
     return merge(state, {
-      packages: dependencies,
-      fromSearch,
-      fromSort,
-      lastUpdatedAt:
-        fromSort || fromSearch
-          ? state.lastUpdatedAt
-          : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
-      projectName,
-      projectVersion,
-      projectDescription,
-      projectLicense,
-      projectAuthor,
-      filters: [],
-      selected: []
+      data: {
+        packages: dependencies
+      },
+      operations: {
+        selected: [],
+        packageInstallOptions: []
+      },
+      project: {
+        name: projectName,
+        version: projectVersion,
+        description: projectDescription,
+        license: projectLicense,
+        author: projectAuthor
+      },
+      filtering: {
+        filters: []
+      },
+      metadata: {
+        lastUpdatedAt:
+          fromSort || fromSearch
+            ? state.lastUpdatedAt
+            : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
+        fromSearch,
+        fromSort
+      }
     });
   },
   [setOutdatedSuccess.type]: (state, { payload }) => {
     const { outdated } = payload;
 
     return merge(state, {
-      packagesOutdated: outdated
+      data: {
+        packagesOutdated: outdated
+      }
     });
   },
   [setActive.type]: (state, { payload }) => {
@@ -162,19 +183,36 @@ const handlers = {
   },
   [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
     merge(state, {
-      fromSearch,
-      fromSort,
       active: null,
-      packageName: null,
-      packageVersion: null,
-      packagesOutdated: [],
-      packages: [],
-      filters: []
+      filtering: {
+        filters: []
+      },
+      operations: {
+        selected: [],
+        packageInstallOptions: []
+      },
+      metadata: {
+        fromSearch,
+        fromSort
+      },
+      project: {
+        name: null,
+        version: null,
+        description: null,
+        license: null,
+        author: null
+      },
+      data: {
+        packagesOutdated: [],
+        packages: []
+      }
     }),
   [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
     merge(state, {
-      sortBy,
-      sortDir
+      sorting: {
+        sortBy,
+        sortDir
+      }
     })
 };
 
