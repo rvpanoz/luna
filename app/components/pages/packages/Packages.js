@@ -35,16 +35,18 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
-  common: { directory, manager, mode, page, rowsPerPage, loader },
-  packages: {
+  common: { directory, manager, mode, loader },
+  dependencies: {
     active,
     data: { packages, packagesOutdated },
     operations: { action, selected, packagesInstallOptions },
+    pagination: { page, rowsPerPage },
     filtering: { filters },
     metadata: { fromSearch, lastUpdatedAt },
     sorting: { sortBy, sortDir }
   }
 }) => ({
+  active,
   lastUpdatedAt,
   directory,
   manager,
@@ -52,7 +54,6 @@ const mapState = ({
   page,
   rowsPerPage,
   loader,
-  active,
   action,
   filters,
   packages,
@@ -269,6 +270,8 @@ const Packages = ({ classes }) => {
                 packages={dataSlices.map(d => d.name)}
                 numSelected={selected.length}
                 rowCount={dependencies && dependencies.length}
+                sortBy={sortBy}
+                sortDir={sortDir}
               />
               <TableBody>
                 {sortedPackages &&

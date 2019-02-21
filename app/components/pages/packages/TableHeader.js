@@ -23,14 +23,8 @@ const columnData = [
   { id: 'latest', disablePadding: true, label: 'Latest' }
 ];
 
-const mapState = ({ packages: { sortBy, sortDir } }) => ({
-  sortBy,
-  sortDir
-});
-
-const TableHeader = ({ numSelected, rowCount, packages }) => {
+const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
   const dispatch = useDispatch();
-  const { sortBy, sortDir } = useMappedState(mapState);
   const checkboxAll = useRef(null);
 
   const toggleSort = useCallback(prop =>

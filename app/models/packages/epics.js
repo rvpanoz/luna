@@ -130,7 +130,9 @@ const packagesSuccessEpic = (action$, state$) =>
       }) => {
         const {
           common: { page },
-          packages: { fromSearch, fromSort }
+          dependencies: {
+            metadata: { fromSearch, fromSort }
+          }
         } = state$.value;
         const actions = [cleanCommands(), updateLoader({ loading: false })];
 

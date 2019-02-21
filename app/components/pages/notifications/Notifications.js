@@ -20,10 +20,10 @@ import AddIcon from '@material-ui/icons/Add';
 import { toggleLoader } from 'models/ui/actions';
 import styles from './styles';
 
-const mapState = state => ({
-  manager: state.common.manager,
-  mode: state.common.mode,
-  directory: state.common.directory
+const mapState = ({ common: { manager, mode, directory } }) => ({
+  manager,
+  mode,
+  directory
 });
 
 const Notifications = props => {

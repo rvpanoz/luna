@@ -20,11 +20,15 @@ import { addFilter, clearFilters } from 'models/packages/actions';
 
 import styles from './styles/tableFilters';
 
-const mapState = state => ({
-  filters: state.packages.filters
+const mapState = ({
+  dependencies: {
+    filtering: { filters }
+  }
+}) => ({
+  filters
 });
 
-const ListFilters = ({ classes, mode, close }) => {
+const TableFilters = ({ classes, mode, close }) => {
   const dispatch = useDispatch();
   const { filters } = useMappedState(mapState);
 
@@ -142,10 +146,10 @@ const ListFilters = ({ classes, mode, close }) => {
   );
 };
 
-ListFilters.propTypes = {
+TableFilters.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string,
   close: PropTypes.func
 };
 
-export default withStyles(styles)(ListFilters);
+export default withStyles(styles)(TableFilters);

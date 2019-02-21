@@ -24,9 +24,9 @@ export default {
     loading: false,
     message: null
   },
-  packages: {
+  dependencies: {
     active: null,
-    paginations: {
+    pagination: {
       page: 0,
       rowsPerPage: 10
     },

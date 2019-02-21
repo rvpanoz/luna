@@ -21,7 +21,7 @@ import format from 'date-fns/format';
 
 import initialState from './initialState';
 
-const { packages } = initialState;
+const { dependencies } = initialState;
 
 const createReducer = (packagesState, handlers) => (
   state = packagesState,
@@ -30,8 +30,10 @@ const createReducer = (packagesState, handlers) => (
 
 const handlers = {
   [addActionError.type]: (state, { payload: { actionName, actionError } }) =>
-    merge(state.operations, {
-      action: {
+    merge(state, {
+      ...state,
+      operations: {
+        ...state.operations,
         actionName,
         actionError
       }
@@ -43,12 +45,18 @@ const handlers = {
     const idx = filters.indexOf(filter);
 
     return merge(state, {
-      page: 0,
-      filters: idx !== -1 ? remove(idx, 1, filters) : prepend(filter, filters)
+      ...state,
+      filtering: {
+        ...state.filtering,
+        page: 0,
+        filters: idx !== -1 ? remove(idx, 1, filters) : prepend(filter, filters)
+      }
     });
   },
   [addInstallOption.type]: (state, action) => {
-    const { packagesInstallOptions, selected } = state.operations;
+    const {
+      operations: { packagesInstallOptions, selected }
+    } = state;
     const {
       payload: { name, options }
     } = action;
@@ -56,9 +64,11 @@ const handlers = {
     let newOptions = [];
 
     const idx = selected.indexOf(name);
-    const packageInstallOptions = packagesInstallOptions.find(
-      installOptions => installOptions.name === name
-    );
+    const packageInstallOptions =
+      packagesInstallOptions &&
+      packagesInstallOptions.find(
+        installOptions => installOptions.name === name
+      );
 
     if (idx === -1) {
       return state;
@@ -88,7 +98,13 @@ const handlers = {
       });
     }
 
-    return assoc('packagesInstallOptions', newOptions, state);
+    return merge(state, {
+      ...state,
+      operations: {
+        ...state.operations,
+        packagesInstallOptions: newOptions
+      }
+    });
   },
   [addSelected.type]: (state, action) => {
     const {
@@ -109,12 +125,27 @@ const handlers = {
       newSelected = prepend(name, selected);
     }
 
-    return assoc('selected', newSelected, state);
+    return merge(state, {
+      ...state,
+      operations: {
+        ...state.operations,
+        selected: newSelected
+      }
+    });
   },
-  [clearFilters.type]: state => assoc('filters', [], state),
-  [clearSelected.type]: state => assoc('selected', [], state),
+  [clearFilters.type]: state =>
+    merge(state, {
+      ...state.filtering,
+      filters: []
+    }),
+  [clearSelected.type]: state =>
+    merge(state, {
+      ...state.operations,
+      selected: []
+    }),
   [clearPackages.type]: state =>
     merge(state, {
+      ...state,
       project: {
         name: null,
         version: null,
@@ -140,14 +171,17 @@ const handlers = {
     } = payload;
 
     return merge(state, {
+      ...state,
       data: {
+        ...state.data,
         packages: dependencies
       },
       operations: {
         selected: [],
-        packageInstallOptions: []
+        packagesInstallOptions: []
       },
       project: {
+        ...state.project,
         name: projectName,
         version: projectVersion,
         description: projectDescription,
@@ -158,12 +192,17 @@ const handlers = {
         filters: []
       },
       metadata: {
+        ...state.metadata,
         lastUpdatedAt:
           fromSort || fromSearch
             ? state.lastUpdatedAt
             : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
         fromSearch,
         fromSort
+      },
+      pagination: {
+        ...state.pagination,
+        page: 0
       }
     });
   },
@@ -171,7 +210,9 @@ const handlers = {
     const { outdated } = payload;
 
     return merge(state, {
+      ...state,
       data: {
+        ...state.data,
         packagesOutdated: outdated
       }
     });
@@ -179,17 +220,21 @@ const handlers = {
   [setActive.type]: (state, { payload }) => {
     const { active } = payload;
 
-    return assoc('active', active, state);
+    return merge(state, {
+      ...state,
+      active
+    });
   },
   [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
     merge(state, {
+      ...state,
       active: null,
       filtering: {
         filters: []
       },
       operations: {
         selected: [],
-        packageInstallOptions: []
+        packagesInstallOptions: []
       },
       metadata: {
         fromSearch,
@@ -209,6 +254,7 @@ const handlers = {
     }),
   [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
     merge(state, {
+      ...state,
       sorting: {
         sortBy,
         sortDir
@@ -216,4 +262,4 @@ const handlers = {
     })
 };
 
-export default createReducer(packages, handlers);
+export default createReducer(dependencies, handlers);

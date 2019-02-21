@@ -11,7 +11,11 @@ import ControlTypes from 'components/common/ControlTypes';
 import { addInstallOption } from 'models/packages/actions';
 import styles from './styles/flags';
 
-const mapState = ({ packages: { packagesInstallOptions } }) => ({
+const mapState = ({
+  dependencies: {
+    operations: { packagesInstallOptions }
+  }
+}) => ({
   packagesInstallOptions
 });
 

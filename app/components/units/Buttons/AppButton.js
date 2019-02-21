@@ -37,7 +37,7 @@ AppButton.defaultProps = {
 
 AppButton.propTypes = {
   classes: PropTypes.objectOf(string).isRequired,
-  children: PropTypes.arrayOf(oneOfType([PropTypes.string, PropTypes.object])),
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   color: PropTypes.oneOf([
     'info',
     'success',

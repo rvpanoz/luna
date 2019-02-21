@@ -26,7 +26,7 @@ import {
 } from 'models/ui/actions';
 import initialState from './initialState';
 
-const { packages, ...common } = initialState;
+const { dependencies, ...common } = initialState;
 
 /**
  *
