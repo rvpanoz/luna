@@ -27,20 +27,18 @@ const { startMinimized, defaultManager } = defaultSettings;
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 429,
-  MIN_HEIGHT = 360,
+  MIN_WIDTH = 1024,
+  MIN_HEIGHT = 768,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS,
   NODE_ENV,
   START_MINIMIZED = startMinimized
 } = process.env;
 
-const APP_PATHS = {
-  appData: app.getPath('appData'),
-  userData: app.getPath('userData')
-};
-
-// development parameters
+// const APP_PATHS = {
+//   appData: app.getPath('appData'),
+//   userData: app.getPath('userData')
+// };
 // const debug = /--debug/.test(process.argv[2]);
 
 export default class AppUpdater {

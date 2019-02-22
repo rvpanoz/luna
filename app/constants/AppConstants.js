@@ -31,7 +31,6 @@ export const APP_INFO = {
 // package actions
 export const APP_ACTIONS = ['install', 'uninstall', 'update', 'view'];
 
-// supported package groups
 export const PACKAGE_GROUPS = {
   dependencies: 'save-prod',
   devDependencies: 'save-dev',
@@ -40,7 +39,6 @@ export const PACKAGE_GROUPS = {
   noSave: 'no-save'
 };
 
-// command options when perfoming an APP action
 export const COMMAND_OPTIONS = [
   'save-prod*Package will appear in your dependencies',
   'save-dev*Package will appear in your devDependencies',
@@ -50,7 +48,6 @@ export const COMMAND_OPTIONS = [
 
 export const ERROR_TYPES = ['WARN', 'ERR'];
 
-// npm config allowed values
 export const NPM_CONFIG_VALUES = {
   REGISTRY: 'registry',
   PROXY: 'proxy',

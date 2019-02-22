@@ -2,9 +2,9 @@
 /* eslint-disable no-nested-ternary */
 
 import { ipcRenderer, remote } from 'electron';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch } from 'redux-react-hook';
-import { merge, prepend } from 'ramda';
+import { merge } from 'ramda';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -30,7 +30,11 @@ import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/BallotOutlined';
 
 import { firstToUpper, switchcase } from 'commons/utils';
-import { APP_MODES, INFO_MESSAGES } from 'constants/AppConstants';
+import {
+  APP_MODES,
+  INFO_MESSAGES,
+  PACKAGE_GROUPS
+} from 'constants/AppConstants';
 import { setMode, toggleLoader } from 'models/ui/actions';
 
 import TableFilters from './TableFilters';
@@ -54,6 +58,8 @@ const TableListToolbar = ({
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
   const [optionsOpen, toggleOptions] = useState(false);
+  const [flags, setFlags] = useState({});
+
   const dispatch = useDispatch();
 
   const switchMode = useCallback(
@@ -80,76 +86,74 @@ const TableListToolbar = ({
     [filtersOn]
   );
 
-  const handleAction = (action, bypass = false) => {
-    if (action === 'install' && !bypass) {
-      toggleOptions(true);
-      return;
+  const handleAction = (action, showDialog) => {
+    if (showDialog) {
+      return toggleOptions(true);
     }
-
-    const dependencies = [];
-    const devDependencies = [];
-    const optionalDependencies = [];
-    const bundleDependencies = [];
-    const noSave = [];
 
     const hasFlags = packagesInstallOptions && packagesInstallOptions.length;
 
     if (hasFlags && selected.length) {
-      const packagesWithOptions = selected.reduce(
-        (acc = {}, packageName, idx) => {
-          const flag = packagesInstallOptions.find(
-            option => option.name === packageName
-          );
+      const dependencies = [];
+      const devDependencies = [];
+      const optionalDependencies = [];
+      const bundleDependencies = [];
+      const noSave = [];
 
-          if (!flag) {
-            dependencies.push(packageName);
-          } else {
-            switch (flag.options[0]) {
-              case 'save-dev':
-                devDependencies.push(packageName);
-                break;
-              case 'save-optional':
-                optionalDependencies.push(packageName);
-                break;
-              case 'save-bundle':
-                bundleDependencies.push(packageName);
-                break;
-              case 'no-save':
-                noSave.push(packageName);
-                break;
-              default:
-                dependencies.push(packageName);
-                break;
-            }
+      const packagesWithOptions = selected.reduce((acc, packageName) => {
+        const flag = packagesInstallOptions.find(
+          option => option.name === packageName
+        );
+
+        if (!flag) {
+          dependencies.push(packageName);
+        } else {
+          switch (flag.options[0]) {
+            case 'save-dev':
+              devDependencies.push(packageName);
+              break;
+            case 'save-optional':
+              optionalDependencies.push(packageName);
+              break;
+            case 'save-bundle':
+              bundleDependencies.push(packageName);
+              break;
+            case 'no-save':
+              noSave.push(packageName);
+              break;
+            default:
+              dependencies.push(packageName);
+              break;
           }
-
-          return merge(acc, {
-            dependencies,
-            devDependencies,
-            optionalDependencies,
-            bundleDependencies,
-            noSave
-          });
-        },
-        {}
-      );
-
-      const installations = Object.values(packagesWithOptions);
-
-      installations.forEach(packages => {
-        if (packages.length) {
-          setTimeout(() => {
-            ipcRenderer.send('ipc-event', {
-              activeManager: manager,
-              ipcEvent: action,
-              cmd: [action],
-              multiple: true,
-              packages,
-              mode,
-              directory
-            });
-          }, 1500);
         }
+
+        return merge(acc, {
+          dependencies,
+          devDependencies,
+          optionalDependencies,
+          bundleDependencies,
+          noSave
+        });
+      }, {});
+
+      // const installations = Object.values(packagesWithOptions);
+      // const groups = Object.keys(packagesWithOptions);
+
+      ipcRenderer.send('ipc-event', {
+        activeManager: manager,
+        ipcEvent: 'install',
+        cmd: ['install', 'install', 'install'],
+        multiple: true,
+        packages,
+        pkgOptions: {
+          dependencies,
+          devDependencies,
+          optionalDependencies,
+          bundleDependencies,
+          noSave
+        },
+        mode,
+        directory
       });
     } else {
       ipcRenderer.send('ipc-event', {
@@ -201,7 +205,7 @@ const TableListToolbar = ({
           <IconButton
             color="primary"
             aria-label="install selected"
-            onClick={() => handleAction('install')}
+            onClick={() => handleAction('install', mode === APP_MODES.local)}
           >
             <AddIcon />
           </IconButton>
@@ -351,7 +355,7 @@ const TableListToolbar = ({
             Cancel
           </Button>
           <Button
-            onClick={() => handleAction('install', true)}
+            onClick={() => handleAction('install')}
             color="primary"
             autoFocus
           >
