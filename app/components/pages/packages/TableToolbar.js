@@ -95,17 +95,62 @@ const TableListToolbar = ({
     const hasFlags = packagesInstallOptions && packagesInstallOptions.length;
 
     if (hasFlags && selected.length) {
-      const packagesWithOptions = selected.reduce((acc, packageName, idx) => {
-        const flag = packagesInstallOptions.find(
-          option => option.name === packageName
-        );
+      const packagesWithOptions = selected.reduce(
+        (acc = {}, packageName, idx) => {
+          const flag = packagesInstallOptions.find(
+            option => option.name === packageName
+          );
 
-        // TODO: logic...
+          if (!flag) {
+            dependencies.push(packageName);
+          } else {
+            switch (flag.options[0]) {
+              case 'save-dev':
+                devDependencies.push(packageName);
+                break;
+              case 'save-optional':
+                optionalDependencies.push(packageName);
+                break;
+              case 'save-bundle':
+                bundleDependencies.push(packageName);
+                break;
+              case 'no-save':
+                noSave.push(packageName);
+                break;
+              default:
+                dependencies.push(packageName);
+                break;
+            }
+          }
 
-        return acc;
-      }, {});
+          return merge(acc, {
+            dependencies,
+            devDependencies,
+            optionalDependencies,
+            bundleDependencies,
+            noSave
+          });
+        },
+        {}
+      );
 
-      console.log(packagesWithOptions);
+      const installations = Object.values(packagesWithOptions);
+
+      installations.forEach(packages => {
+        if (packages.length) {
+          setTimeout(() => {
+            ipcRenderer.send('ipc-event', {
+              activeManager: manager,
+              ipcEvent: action,
+              cmd: [action],
+              multiple: true,
+              packages,
+              mode,
+              directory
+            });
+          }, 1500);
+        }
+      });
     } else {
       ipcRenderer.send('ipc-event', {
         activeManager: manager,
@@ -116,14 +161,14 @@ const TableListToolbar = ({
         mode,
         directory
       });
-
-      dispatch(
-        toggleLoader({
-          loading: true,
-          message: `${firstToUpper(action)}ing packages..`
-        })
-      );
     }
+
+    dispatch(
+      toggleLoader({
+        loading: true,
+        message: `${firstToUpper(action)}ing packages..`
+      })
+    );
   };
 
   const openPackage = useCallback(() => {
