@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+
 import Notifications from './Notifications';
 
-export default { Notifications };
+export { Notifications };

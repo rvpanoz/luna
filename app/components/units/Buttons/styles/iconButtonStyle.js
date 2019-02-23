@@ -2,16 +2,9 @@
  * IconButton styles
  */
 
-import {
-  grayColor,
-  primaryColor,
-  infoColor,
-  successColor,
-  warningColor,
-  dangerColor
-} from 'styles/variables';
+import { grayColor, infoColor, successColor } from 'styles/variables';
 
-const iconButtonStyle = {
+const iconButtonStyle = theme => ({
   button: {
     height: '40px',
     minWidth: '40px',
@@ -48,11 +41,11 @@ const iconButtonStyle = {
     }
   },
   primary: {
-    backgroundColor: primaryColor,
+    backgroundColor: theme.palette.primary.main,
     boxShadow:
       '0 2px 2px 0 rgba(156, 39, 176, 0.14), 0 3px 1px -2px rgba(156, 39, 176, 0.2), 0 1px 5px 0 rgba(156, 39, 176, 0.12)',
     '&:hover': {
-      backgroundColor: primaryColor,
+      backgroundColor: theme.palette.primary.light,
       boxShadow:
         '0 14px 26px -12px rgba(156, 39, 176, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2)'
     }
@@ -78,21 +71,21 @@ const iconButtonStyle = {
     }
   },
   warning: {
-    backgroundColor: warningColor,
+    backgroundColor: theme.palette.warning.main,
     boxShadow:
       '0 2px 2px 0 rgba(255, 152, 0, 0.14), 0 3px 1px -2px rgba(255, 152, 0, 0.2), 0 1px 5px 0 rgba(255, 152, 0, 0.12)',
     '&:hover': {
-      backgroundColor: warningColor,
+      backgroundColor: theme.palette.warning.light,
       boxShadow:
         '0 14px 26px -12px rgba(255, 152, 0, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(255, 152, 0, 0.2)'
     }
   },
   danger: {
-    backgroundColor: dangerColor,
+    backgroundColor: theme.palette.error.main,
     boxShadow:
       '0 2px 2px 0 rgba(244, 67, 54, 0.14), 0 3px 1px -2px rgba(244, 67, 54, 0.2), 0 1px 5px 0 rgba(244, 67, 54, 0.12)',
     '&:hover': {
-      backgroundColor: dangerColor,
+      backgroundColor: theme.palette.error.light,
       boxShadow:
         '0 14px 26px -12px rgba(244, 67, 54, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(244, 67, 54, 0.2)'
     }
@@ -108,6 +101,6 @@ const iconButtonStyle = {
     background: 'transparent',
     boxShadow: 'none'
   }
-};
+});
 
 export default iconButtonStyle;

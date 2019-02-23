@@ -97,7 +97,7 @@ const AppLayout = ({ classes }) => {
             {switchcase({
               packages: () => <Packages />,
               problems: () => <Notifications />,
-              scripts: () => <div>scripts</div>
+              scripts: () => <div>scripts</div> // TODO: implement this
             })(<Packages />)(activePage)}
           </main>
         </div>

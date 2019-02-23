@@ -4,15 +4,7 @@ import { ipcRenderer } from 'electron';
 import React, { useCallback, useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
-import {
-  bool,
-  objectOf,
-  object,
-  string,
-  func,
-  oneOfType,
-  arrayOf
-} from 'prop-types';
+import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
 
 import Typography from '@material-ui/core/Typography';
@@ -113,11 +105,9 @@ PackageItem.propTypes = {
   classes: objectOf(string).isRequired,
   name: string.isRequired,
   addSelected: func.isRequired,
-  addInstallOption: func.isRequired,
   isSelected: bool.isRequired,
   version: string.isRequired,
   isOutdated: bool.isRequired,
-  fromSearch: bool,
   latest: oneOfType([string, object]),
   group: string,
   manager: string,

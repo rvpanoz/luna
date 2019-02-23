@@ -21,7 +21,7 @@ import { addFilter, clearFilters } from 'models/packages/actions';
 import styles from './styles/tableFilters';
 
 const mapState = ({
-  dependencies: {
+  repository: {
     filtering: { filters }
   }
 }) => ({

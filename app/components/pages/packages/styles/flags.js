@@ -1,6 +1,6 @@
 import { flexContainer } from 'styles/variables';
 
-const styles = theme => ({
+const styles = () => ({
   list: {
     width: '100%'
   },

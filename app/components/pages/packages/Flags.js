@@ -1,3 +1,5 @@
+/* eslint-disable prefer-destructuring */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useMappedState } from 'redux-react-hook';
@@ -12,7 +14,7 @@ import { addInstallOption } from 'models/packages/actions';
 import styles from './styles/flags';
 
 const mapState = ({
-  dependencies: {
+  repository: {
     operations: { packagesInstallOptions }
   }
 }) => ({
@@ -29,7 +31,9 @@ const Flags = ({ classes, selected }) => {
         {selected.map(packageName => {
           const option =
             packagesInstallOptions &&
-            packagesInstallOptions.find(option => option.name === packageName);
+            packagesInstallOptions.find(
+              installOption => installOption.name === packageName
+            );
           let value;
 
           if (option) {

@@ -1,5 +1,6 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable no-nested-ternary */
+/* eslint-disable compat/compat */
 
 import { ipcRenderer, remote } from 'electron';
 import React, { useState, useCallback } from 'react';
@@ -58,7 +59,6 @@ const TableListToolbar = ({
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
   const [optionsOpen, toggleOptions] = useState(false);
-  const [flags, setFlags] = useState({});
 
   const dispatch = useDispatch();
 
@@ -391,7 +391,8 @@ TableListToolbar.propTypes = {
   directory: PropTypes.string,
   fromSearch: PropTypes.bool,
   scrollWrapper: PropTypes.func,
-  packagesOutdatedNames: PropTypes.arrayOf(PropTypes.string)
+  packagesOutdatedNames: PropTypes.arrayOf(PropTypes.string),
+  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(TableListToolbar);

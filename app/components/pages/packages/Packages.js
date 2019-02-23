@@ -37,7 +37,7 @@ import styles from './styles/packages';
 
 const mapState = ({
   common: { directory, manager, mode, loader },
-  dependencies: {
+  repository: {
     active,
     data: { packages, packagesOutdated },
     operations: { action, selected, packagesInstallOptions },

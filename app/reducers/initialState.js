@@ -24,7 +24,7 @@ export default {
     loading: false,
     message: null
   },
-  dependencies: {
+  repository: {
     active: null,
     data: {
       packages: [],

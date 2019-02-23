@@ -23,7 +23,7 @@ import format from 'date-fns/format';
 
 import initialState from './initialState';
 
-const { dependencies } = initialState;
+const { repository } = initialState;
 
 const createReducer = (packagesState, handlers) => (
   state = packagesState,
@@ -275,10 +275,10 @@ const handlers = {
   [setPageRows.type]: (state, { payload: { rowsPerPage } }) =>
     merge(state, {
       pagination: {
-        ...pagination,
+        ...state.pagination,
         rowsPerPage
       }
     })
 };
 
-export default createReducer(dependencies, handlers);
+export default createReducer(repository, handlers);

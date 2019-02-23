@@ -131,7 +131,7 @@ const packagesSuccessEpic = (action$, state$) =>
       }) => {
         const {
           common: { page },
-          dependencies: {
+          repository: {
             metadata: { fromSearch, fromSort }
           }
         } = state$.value;

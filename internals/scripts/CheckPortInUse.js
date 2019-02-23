@@ -3,7 +3,7 @@ import detectPort from 'detect-port';
 
 const port = process.env.PORT || '1211';
 
-export const CheckPortInUse = () =>
+const CheckPortInUse = () =>
   detectPort(port, (error, availablePort) => {
     if (port !== String(availablePort)) {
       throw new Error(
@@ -15,3 +15,5 @@ export const CheckPortInUse = () =>
       process.exit(0);
     }
   });
+
+export default CheckPortInUse;
