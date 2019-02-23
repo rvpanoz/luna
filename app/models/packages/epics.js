@@ -3,7 +3,11 @@ import { map, concatMap, skipWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { isPackageOutdated } from 'commons/utils';
-import { toggleLoader, clearCommands } from 'models/ui/actions';
+import {
+  toggleLoader,
+  clearCommands,
+  clearNotifications
+} from 'models/ui/actions';
 import { INFO_MESSAGES } from 'constants/AppConstants';
 
 import {
@@ -14,6 +18,10 @@ import {
   updateData,
   setPage
 } from './actions';
+
+const cleanNotifications = () => ({
+  type: clearNotifications.type
+});
 
 const cleanCommands = () => ({
   type: clearCommands.type
@@ -41,6 +49,7 @@ const setPackages = payload => ({
 const packagesStartEpic = pipe(
   ofType(setPackagesStart.type),
   concatMap(() => [
+    cleanNotifications(),
     cleanPackages(),
     updateLoader({
       loading: true,

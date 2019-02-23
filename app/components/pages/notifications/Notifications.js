@@ -20,15 +20,15 @@ import AddIcon from '@material-ui/icons/Add';
 import { toggleLoader } from 'models/ui/actions';
 import styles from './styles';
 
-const mapState = ({ common: { manager, mode, directory } }) => ({
+const mapState = ({ common: { manager, mode, directory, notifications } }) => ({
   manager,
   mode,
-  directory
+  directory,
+  notifications
 });
 
-const Notifications = props => {
-  const { classes, notifications, close } = props;
-  const { manager, mode, directory } = useMappedState(mapState);
+const Notifications = ({ classes, close }) => {
+  const { manager, mode, directory, notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   const handleInstall = peerName => {
@@ -55,7 +55,7 @@ const Notifications = props => {
       activeManager: manager,
       ipcEvent: 'install',
       cmd: ['install'],
-      name: peerName,
+      packages: [peerName],
       mode,
       directory
     });
@@ -109,8 +109,7 @@ const Notifications = props => {
 
 Notifications.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  close: PropTypes.func.isRequired,
-  notifications: PropTypes.arrayOf(PropTypes.object).isRequired
+  close: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(Notifications);

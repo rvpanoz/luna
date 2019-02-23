@@ -1,79 +1,93 @@
 import {
-  card,
-  cardActions,
-  cardHeader,
   defaultFont,
   infoColor,
   grayColor,
-  infoBoxShadow
+  defaultBoxShadow,
+  flexContainer
 } from 'styles/variables';
 
 const styles = theme => ({
-  card,
+  card: {
+    ...flexContainer,
+    position: 'relative',
+    width: '100%',
+    margin: 0,
+    padding: 0,
+    boxShadow: '0 1px 4px 0 rgba(0, 0, 0, 0.14)',
+    borderRadius: 3
+  },
   cardHeader: {
-    ...cardHeader,
-    float: 'left',
+    padding: theme.spacing.unit,
     margin: theme.spacing.unit,
-    textAlign: 'center'
+    textAlign: 'center',
+    border: 0,
+    borderRadius: 30
   },
   cardContent: {
-    textAlign: 'right',
-    padding: '15px 20px',
-    minHeight: 75
+    ...flexContainer,
+    padding: theme.spacing.unit * 2,
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
   cardIcon: {
-    width: '36px',
-    height: '30px',
     fill: '#fff'
   },
   primaryCardHeader: {
-    background: theme.palette.primary.light,
-    ...infoBoxShadow
+    ...defaultBoxShadow,
+    padding: 0,
+    background: theme.palette.primary.light
   },
   secondaryCardHeader: {
     background: theme.palette.secondary.light,
-    ...infoBoxShadow
+    ...defaultBoxShadow
   },
   warningCardHeader: {
-    background: theme.palette.warning.main,
-    ...infoBoxShadow
+    background: theme.palette.warning.light,
+    ...defaultBoxShadow
+  },
+  errorCardHeader: {
+    background: theme.palette.error.light,
+    ...defaultBoxShadow
   },
   cardAvatar: {
-    margin: '8px'
+    margin: theme.spacing.unit
   },
   cardCategory: {
-    marginBottom: '0',
+    ...defaultFont,
     color: grayColor,
-    margin: '0 0 10px',
-    ...defaultFont
+    flexGrow: 2
   },
-  cardTitle: {
-    margin: '0',
+  cardDescription: {
     ...defaultFont,
     fontSize: '1.625em'
   },
   cardTitleSmall: {
+    ...defaultFont,
     margin: 0,
     paddingTop: theme.spacing.unit,
     color: '#777'
   },
   cardActions: {
-    ...cardActions,
     display: 'flex',
-    padding: theme.spacing.unit
+    padding: theme.spacing.unit,
+    padding: 0,
+    margin: 0,
+    borderTop: '1px solid #eeeeee',
+    height: 'auto',
+    ...defaultFont
   },
   cardStats: {
-    lineHeight: '22px',
+    lineHeight: 22,
     color: grayColor,
-    fontSize: '12px',
+    fontSize: 12,
     display: 'inline-block',
     margin: '0!important'
   },
   cardStatsIcon: {
     position: 'relative',
-    top: '4px',
-    width: '16px',
-    height: '16px'
+    top: theme.spacing.unit / 2,
+    width: theme.spacing.unit * 2,
+    height: theme.spacing.unit * 2
   },
   cardStatsLink: {
     color: infoColor,

@@ -26,15 +26,6 @@ const defaultFont = {
   lineHeight: '1.25em'
 };
 
-const defaultBoxShadow = {
-  border: '0',
-  borderRadius: '3px',
-  boxShadow:
-    '0 10px 20px -12px rgba(0, 0, 0, 0.42), 0 3px 20px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)',
-  padding: '10px 0',
-  transition: 'all 150ms ease 0s'
-};
-
 /* colors */
 const successColor = '#4caf50';
 const infoColor = '#00acc1';
@@ -46,14 +37,11 @@ const flexContainer = {
   listStyle: 'none',
   margin: 0,
   padding: 0,
-  WebkitFlexFlow: 'row wrap',
-  position: 'relative'
+  WebkitFlexFlow: 'row wrap'
 };
 
 const flexItem = {
-  margin: 0,
-  padding: 0,
-  position: 'relative'
+  flexGrow: 1
 };
 
 const flexItemInner = {
@@ -64,30 +52,6 @@ const flexItemInner = {
   margin: '0',
   padding: '0',
   width: '100%'
-};
-
-/* cards */
-const card = {
-  display: 'inline-block',
-  position: 'relative',
-  width: '100%',
-  margin: 0,
-  padding: 0,
-  boxShadow: '0 1px 4px 0 rgba(0, 0, 0, 0.14)',
-  borderRadius: 3,
-  color: 'rgba(0, 0, 0, 0.87)'
-};
-
-const cardActions = {
-  padding: 0,
-  margin: 0,
-  borderTop: '1px solid #eeeeee',
-  height: 'auto',
-  ...defaultFont
-};
-
-const cardHeader = {
-  padding: 0
 };
 
 /* box shadows */
@@ -110,6 +74,11 @@ const warningBoxShadow = {
 const dangerBoxShadow = {
   boxShadow:
     '0 12px 20px -10px rgba(244, 67, 54, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(244, 67, 54, 0.2)'
+};
+
+const defaultBoxShadow = {
+  boxShadow:
+    '0 10px 20px -12px rgba(0, 0, 0, 0.42), 0 3px 20px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)'
 };
 
 export {

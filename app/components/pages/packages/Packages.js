@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import cn from 'classnames';
@@ -36,7 +34,7 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
-  common: { directory, manager, mode, loader },
+  common: { directory, manager, mode, loader, notifications },
   repository: {
     active,
     data: { packages, packagesOutdated },
@@ -51,6 +49,7 @@ const mapState = ({
   lastUpdatedAt,
   directory,
   manager,
+  notifications,
   mode,
   page,
   rowsPerPage,
@@ -82,6 +81,7 @@ const Packages = ({ classes }) => {
     sortDir,
     sortBy,
     packagesInstallOptions,
+    notifications,
     lastUpdatedAt
   } = useMappedState(mapState);
 
@@ -199,22 +199,12 @@ const Packages = ({ classes }) => {
           <Grid item md={3} lg={4} xl={4}>
             <AppCard
               avatar
-              title={mode === APP_MODES.global ? 'in Global' : projectLicense}
-              small={mode === APP_MODES.local ? `v${projectVersion}` : null}
-              description={mode === APP_MODES.local ? projectName : null}
+              title="Packages"
+              description={data ? data.length : '0'}
+              small={mode === APP_MODES.local ? projectName : null}
               iconColor="primary"
               statText={lastUpdatedAt}
               loading={loading}
-            />
-          </Grid>
-          <Grid item md={3} lg={3} xl={3}>
-            <AppCard
-              avatar
-              iconHeader="dependencies"
-              title="Dependencies"
-              description={data && data.length}
-              iconColor="secondary"
-              statText={lastUpdatedAt}
             />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
@@ -224,7 +214,17 @@ const Packages = ({ classes }) => {
               title="Outdated"
               iconColor="warning"
               statText={lastUpdatedAt}
-              description={packagesOutdated && packagesOutdated.length}
+              description={packagesOutdated ? packagesOutdated.length : '0'}
+            />
+          </Grid>
+          <Grid item md={3} lg={3} xl={3}>
+            <AppCard
+              avatar
+              iconHeader="error"
+              title="Problems"
+              description={notifications ? notifications.length : '0'}
+              iconColor="secondary"
+              statText={lastUpdatedAt}
             />
           </Grid>
         </Grid>

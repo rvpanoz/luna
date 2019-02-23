@@ -3,7 +3,7 @@ export default {
   manager: 'npm',
   activePage: 'packages',
   directory: null,
-  enableNotifications: false,
+  enableNotifications: true,
   notifications: [],
   commands: [],
   npm: {

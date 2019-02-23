@@ -14,18 +14,13 @@ CheckNodeEnv('production');
 
 export default merge.smart(baseConfig, {
   devtool: 'source-map',
-
   mode: 'production',
-
   target: 'electron-main',
-
   entry: './app/main.dev',
-
   output: {
     path: path.join(__dirname, '..'),
     filename: './app/main.prod.js'
   },
-
   optimization: {
     minimizer: process.env.E2E_BUILD
       ? []
@@ -37,7 +32,6 @@ export default merge.smart(baseConfig, {
           })
         ]
   },
-
   plugins: [
     new BundleAnalyzerPlugin({
       analyzerMode:

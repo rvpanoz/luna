@@ -42,11 +42,8 @@ if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
 
 export default merge.smart(baseConfig, {
   devtool: 'inline-source-map',
-
   mode: 'development',
-
   target: 'electron-renderer',
-
   entry: [
     /* bundle the client for webpack dev server
     and connect to the provided endpoint */
@@ -57,12 +54,10 @@ export default merge.smart(baseConfig, {
     /* the entry point */
     require.resolve('../app/index')
   ],
-
   output: {
     publicPath: `http://localhost:${port}/dist/`,
     filename: 'renderer.dev.js'
   },
-
   resolve: {
     alias: {
       assets: path.resolve(path.join(__dirname, '..', 'app', 'assets')),
@@ -74,7 +69,6 @@ export default merge.smart(baseConfig, {
       styles: path.resolve(path.join(__dirname, '..', 'app', 'styles'))
     }
   },
-
   module: {
     rules: [
       {

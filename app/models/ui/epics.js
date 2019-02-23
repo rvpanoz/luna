@@ -5,7 +5,12 @@ import { combineEpics, ofType } from 'redux-observable';
 import { ERROR_TYPES } from 'constants/AppConstants';
 import { parseMessage, switchcase, matchType } from 'commons/utils';
 
-import { commandMessage, showError, showWarning } from './actions';
+import {
+  addNotification,
+  commandMessage,
+  showError,
+  showWarning
+} from './actions';
 
 /**
  *
@@ -46,14 +51,14 @@ const notificationsEpic = pipe(
 
     return switchcase({
       WARN: () => ({
-        type: showWarning.type,
+        type: addNotification.type,
         payload
       }),
       ERR: () => ({
-        type: showError.type,
+        type: addNotification.type,
         payload
       })
-    })({})(messageType);
+    })({ type: addNotification, payload: {} })(messageType);
   })
 );
 
