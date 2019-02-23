@@ -13,8 +13,10 @@ import CardActions from '@material-ui/core/CardActions';
 
 import HomeIcon from '@material-ui/icons/Home';
 import UpdateIcon from '@material-ui/icons/Update';
-
+import DependenciesIcon from '@material-ui/icons/List';
+import OutdatedIcon from '@material-ui/icons/VerticalSplit';
 import AppLoader from 'components/common/AppLoader';
+import { switchcase } from 'commons/utils';
 
 import styles from './styles/appCardStyles';
 
@@ -27,50 +29,62 @@ const AppCard = ({
   statText,
   statIconColor,
   iconColor,
+  iconHeader,
   loading,
   avatar
-}) => (
-  <Card className={classes.card}>
-    <CardHeader
-      classes={{
-        root: cn(classes.cardHeader, classes[`${iconColor}CardHeader`]),
-        avatar: classes.cardAvatar
-      }}
-      avatar={avatar && <HomeIcon className={classes.cardIcon} />}
-    />
-    <CardContent className={classes.cardContent}>
-      <AppLoader loading={loading} mini relative>
-        <Typography component="p" className={classes.cardCategory}>
-          {title}
-        </Typography>
-        <Typography variant="h5" className={classes.cardTitle}>
-          {description}
+}) => {
+  const renderIconHeader = icon =>
+    switchcase({
+      home: () => <HomeIcon className={classes.cardIcon} />,
+      dependencies: () => <DependenciesIcon className={classes.cardIcon} />,
+      outdated: () => <OutdatedIcon className={classes.cardIcon} />
+    })(<HomeIcon className={classes.cardIcon} />)(icon);
+
+  return (
+    <Card className={classes.card}>
+      <CardHeader
+        classes={{
+          root: cn(classes.cardHeader, classes[`${iconColor}CardHeader`]),
+          avatar: classes.cardAvatar
+        }}
+        avatar={avatar && renderIconHeader(iconHeader)}
+      />
+      <CardContent className={classes.cardContent}>
+        <AppLoader loading={loading} mini relative>
+          <Typography variant="subtitle1" className={classes.cardCategory}>
+            {title}
+          </Typography>
+          {description && (
+            <Typography variant="body2" className={classes.cardTitle}>
+              {description}
+            </Typography>
+          )}
           {small && (
             <Typography variant="caption" className={classes.cardTitleSmall}>
               {small}
             </Typography>
           )}
-        </Typography>
-      </AppLoader>
-    </CardContent>
-    <CardActions className={classes.cardActions}>
-      <div className={classes.cardStats}>
-        <UpdateIcon
-          className={cn(
-            classes.cardStatsIcon,
-            classes[`${statIconColor}CardStatsIcon`]
+        </AppLoader>
+      </CardContent>
+      <CardActions className={classes.cardActions}>
+        <div className={classes.cardStats}>
+          <UpdateIcon
+            className={cn(
+              classes.cardStatsIcon,
+              classes[`${statIconColor}CardStatsIcon`]
+            )}
+          />{' '}
+          {statLink && (
+            <a href={statLink.href} className={classes.cardStatsLink}>
+              {statLink.text}
+            </a>
           )}
-        />{' '}
-        {statLink && (
-          <a href={statLink.href} className={classes.cardStatsLink}>
-            {statLink.text}
-          </a>
-        )}
-        {statText && statText}
-      </div>
-    </CardActions>
-  </Card>
-);
+          {statText && statText}
+        </div>
+      </CardActions>
+    </Card>
+  );
+};
 
 AppCard.defaultProps = {
   loading: false
@@ -94,6 +108,7 @@ AppCard.propTypes = {
   statText: PropTypes.string,
   statIconColor: PropTypes.string,
   iconColor: PropTypes.string,
+  iconHeader: PropTypes.string,
   avatar: PropTypes.bool
 };
 

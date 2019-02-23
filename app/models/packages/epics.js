@@ -1,9 +1,9 @@
 import { pipe } from 'rxjs';
-import { map, concatMap, skipWhile, tap } from 'rxjs/operators';
+import { map, concatMap, skipWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { isPackageOutdated } from 'commons/utils';
-import { setPage, toggleLoader, clearCommands } from 'models/ui/actions';
+import { toggleLoader, clearCommands } from 'models/ui/actions';
 import { INFO_MESSAGES } from 'constants/AppConstants';
 
 import {
@@ -11,7 +11,8 @@ import {
   setPackagesStart,
   setPackagesSuccess,
   setOutdatedSuccess,
-  updateData
+  updateData,
+  setPage
 } from './actions';
 
 const cleanCommands = () => ({
@@ -118,7 +119,6 @@ const packagesSuccessEpic = (action$, state$) =>
         };
       }
     ),
-    tap(console.log),
     concatMap(
       ({
         dependencies,
@@ -131,16 +131,17 @@ const packagesSuccessEpic = (action$, state$) =>
       }) => {
         const {
           common: { page },
-          packages: { fromSearch, fromSort }
+          repository: {
+            metadata: { fromSearch, fromSort }
+          }
         } = state$.value;
-        const actions = [updateLoader({ loading: false })];
+        const actions = [cleanCommands(), updateLoader({ loading: false })];
 
         if (page !== 0) {
           actions.unshift(setPage({ page: 0 }));
         }
 
         return [
-          // cleanCommands(),
           setPackages({
             projectName,
             projectVersion,
@@ -155,8 +156,7 @@ const packagesSuccessEpic = (action$, state$) =>
           ...actions
         ];
       }
-    ),
-    tap(console.log)
+    )
   );
 
 export default combineEpics(packagesStartEpic, packagesSuccessEpic);

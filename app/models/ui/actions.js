@@ -12,8 +12,6 @@ const commandMessage = ActionCreator('COMMAND_MESSAGE');
 const setSnackbar = ActionCreator('SET_SNACKBAR');
 const setManager = ActionCreator('SET_MANAGER');
 const setMode = ActionCreator('SET_MODE');
-const setPage = ActionCreator('SET_PAGE');
-const setPageRows = ActionCreator('SET_PAGE_ROWS');
 const setEnv = ActionCreator('SET_ENV');
 const showError = ActionCreator('SHOW_ERROR');
 const showWarning = ActionCreator('SHOW_WARNING');
@@ -36,8 +34,6 @@ export {
   setManager,
   setEnv,
   setMode,
-  setPage,
-  setPageRows,
   showError,
   showWarning,
   toggleLoader,

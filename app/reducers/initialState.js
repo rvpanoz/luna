@@ -3,9 +3,7 @@ export default {
   manager: 'npm',
   activePage: 'packages',
   directory: null,
-  enableNotifications: true,
-  page: 0,
-  rowsPerPage: 10,
+  enableNotifications: false,
   notifications: [],
   commands: [],
   npm: {
@@ -26,26 +24,42 @@ export default {
     loading: false,
     message: null
   },
-  packages: {
-    projectName: null,
-    projectVersion: null,
-    projectDescription: null,
-    projectLicense: null,
-    projectAuthor: null,
-    sortBy: 'name',
-    sortDir: 'asc',
-    action: {
-      name: null,
-      error: null
-    },
-    packages: [],
-    packagesOutdated: [],
-    selected: [],
-    filters: [],
+  repository: {
     active: null,
-    lastUpdatedAt: null,
-    fromSearch: false,
-    fromSort: false
-  },
-  metadata: {}
+    data: {
+      packages: [],
+      packagesOutdated: []
+    },
+    operations: {
+      selected: [],
+      packagesInstallOptions: [],
+      action: {
+        name: null,
+        error: null
+      }
+    },
+    project: {
+      name: null,
+      version: null,
+      description: null,
+      license: null,
+      author: null
+    },
+    sorting: {
+      sortBy: 'name',
+      sortDir: 'asc'
+    },
+    filtering: {
+      filters: []
+    },
+    pagination: {
+      page: 0,
+      rowsPerPage: 10
+    },
+    metadata: {
+      lastUpdatedAt: null,
+      fromSearch: false,
+      fromSort: false
+    }
+  }
 };

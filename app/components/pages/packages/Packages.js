@@ -7,19 +7,10 @@ import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
-import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
-
-import npmImgSource from 'assets/images/npm.png';
-
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
-
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
 
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
@@ -28,10 +19,13 @@ import AppLoader from 'components/common/AppLoader';
 import {
   addActionError,
   addSelected,
-  updateData
+  addInstallOption,
+  updateData,
+  setPage,
+  setPageRows
 } from 'models/packages/actions';
-import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
-import { APP_INFO, APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
+import { setSnackbar } from 'models/ui/actions';
+import { APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
 
 import AppCard from 'components/common/AppCard';
 import TableToolbar from './TableToolbar';
@@ -42,44 +36,31 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
-  common: {
-    directory,
-    manager,
-    mode,
-    notifications,
-    page,
-    rowsPerPage,
-    loader,
-    npm: { env }
-  },
-  packages: {
+  common: { directory, manager, mode, loader },
+  repository: {
     active,
-    action,
-    filters,
-    packages,
-    packagesOutdated,
-    selected,
-    fromSearch,
-    sortDir,
-    sortBy,
-    lastUpdatedAt
+    data: { packages, packagesOutdated },
+    operations: { action, selected, packagesInstallOptions },
+    pagination: { page, rowsPerPage },
+    filtering: { filters },
+    metadata: { fromSearch, lastUpdatedAt },
+    sorting: { sortBy, sortDir }
   }
 }) => ({
-  env,
+  active,
   lastUpdatedAt,
   directory,
   manager,
   mode,
-  notifications,
   page,
   rowsPerPage,
   loader,
-  active,
   action,
   filters,
   packages,
   packagesOutdated,
   selected,
+  packagesInstallOptions,
   fromSearch,
   sortDir,
   sortBy
@@ -91,7 +72,6 @@ const Packages = ({ classes }) => {
     packages,
     packagesOutdated,
     mode,
-    notifications,
     page,
     filters,
     rowsPerPage,
@@ -101,7 +81,7 @@ const Packages = ({ classes }) => {
     fromSearch,
     sortDir,
     sortBy,
-    env,
+    packagesInstallOptions,
     lastUpdatedAt
   } = useMappedState(mapState);
 
@@ -175,7 +155,6 @@ const Packages = ({ classes }) => {
         dispatch(addActionError({ error }));
       }
 
-      // force render
       reload();
     });
 
@@ -219,13 +198,11 @@ const Packages = ({ classes }) => {
         <Grid container justify="space-between">
           <Grid item md={3} lg={4} xl={4}>
             <AppCard
-              title={mode === APP_MODES.global ? 'in Global mode' : projectName}
-              small={
-                mode === APP_MODES.local
-                  ? `${projectLicense} - v${projectVersion}`
-                  : null
-              }
-              iconColor="blue"
+              avatar
+              title={mode === APP_MODES.global ? 'in Global' : projectLicense}
+              small={mode === APP_MODES.local ? `v${projectVersion}` : null}
+              description={mode === APP_MODES.local ? projectName : null}
+              iconColor="primary"
               statText={lastUpdatedAt}
               loading={loading}
             />
@@ -233,17 +210,19 @@ const Packages = ({ classes }) => {
           <Grid item md={3} lg={3} xl={3}>
             <AppCard
               avatar
+              iconHeader="dependencies"
               title="Dependencies"
               description={data && data.length}
-              iconColor="blue"
+              iconColor="secondary"
               statText={lastUpdatedAt}
             />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
             <AppCard
               avatar
+              iconHeader="outdated"
               title="Outdated"
-              iconColor="blue"
+              iconColor="warning"
               statText={lastUpdatedAt}
               description={packagesOutdated && packagesOutdated.length}
             />
@@ -260,6 +239,7 @@ const Packages = ({ classes }) => {
               directory={directory}
               selected={selected}
               packagesOutdatedNames={packagesOutdatedNames}
+              packagesInstallOptions={packagesInstallOptions}
               fromSearch={fromSearch}
               reload={reload}
               nodata={dependencies === null}
@@ -278,6 +258,8 @@ const Packages = ({ classes }) => {
                 packages={dataSlices.map(d => d.name)}
                 numSelected={selected.length}
                 rowCount={dependencies && dependencies.length}
+                sortBy={sortBy}
+                sortDir={sortDir}
               />
               <TableBody>
                 {sortedPackages &&
@@ -291,22 +273,37 @@ const Packages = ({ classes }) => {
                       __group,
                       __error,
                       __peerMissing
-                    }) => (
-                      <PackageItem
-                        key={`pkg-${name}`}
-                        isSelected={isSelected(name, selected)}
-                        addSelected={() => dispatch(addSelected({ name }))}
-                        name={name}
-                        peerDependencies={peerDependencies}
-                        manager={manager}
-                        version={version}
-                        latest={latest}
-                        isOutdated={isOutdated}
-                        group={__group}
-                        error={__error}
-                        peerMissing={__peerMissing}
-                      />
-                    )
+                    }) => {
+                      const installOptions = Array.isArray(
+                        packagesInstallOptions
+                      )
+                        ? packagesInstallOptions.find(
+                            data => data.name === name
+                          )
+                        : {};
+
+                      return (
+                        <PackageItem
+                          key={`pkg-${name}`}
+                          isSelected={isSelected(name, selected)}
+                          installOptions={installOptions}
+                          addSelected={() => dispatch(addSelected({ name }))}
+                          addInstallOption={(name, options) =>
+                            dispatch(addInstallOption({ name, options }))
+                          }
+                          name={name}
+                          peerDependencies={peerDependencies}
+                          manager={manager}
+                          version={version}
+                          latest={latest}
+                          isOutdated={isOutdated}
+                          fromSearch={fromSearch}
+                          group={__group}
+                          error={__error}
+                          peerMissing={__peerMissing}
+                        />
+                      );
+                    }
                   )}
               </TableBody>
               <TableFooter

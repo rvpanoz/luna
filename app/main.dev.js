@@ -35,12 +35,10 @@ const {
   START_MINIMIZED = startMinimized
 } = process.env;
 
-const APP_PATHS = {
-  appData: app.getPath('appData'),
-  userData: app.getPath('userData')
-};
-
-// development parameters
+// const APP_PATHS = {
+//   appData: app.getPath('appData'),
+//   userData: app.getPath('userData')
+// };
 // const debug = /--debug/.test(process.argv[2]);
 
 export default class AppUpdater {
@@ -91,16 +89,22 @@ const installExtensions = async () => {
 // channel: ipc-event
 ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
-
   const onError = error => event.sender.send('ipcEvent-error', error);
   const onFlow = message => event.sender.send('ipcEvent-flow', message);
+
+  let runningTimes = 1;
 
   const onClose = (status, errors, data, cmd) => {
     const { directory, mode } = rest;
     const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
+    const commands = options.cmd;
 
     if (actionIndex > -1 && ipcEvent !== 'view') {
-      return event.sender.send('action-close', errors, data, cmd);
+      if (commands.length === runningTimes) {
+        return event.sender.send('action-close', errors, data, cmd);
+      }
+
+      runningTimes += 1;
     }
 
     if (directory && mode === APP_MODES.local && cmd.includes('list')) {
@@ -171,19 +175,21 @@ app.on('window-all-closed', () => {
 });
 
 app.once('browser-window-created', (event, webContents) => {
-  console.log(
-    chalk.white.bgBlue.bold('[EVENT] browser-window-created event fired')
+  log.info(
+    chalk.white.bgBlue.bold('[EVENT]'),
+    'browser-window-created event fired'
   );
 });
 
 app.once('web-contents-created', (event, webContents) => {
-  console.log(
-    chalk.white.bgBlue.bold(`[EVENT] web-contents-created event fired`)
+  log.info(
+    chalk.white.bgBlue.bold('[EVENT]'),
+    'web-contents-created event fired'
   );
 });
 
 app.on('ready', async () => {
-  console.log(chalk.white.bgBlue.bold(`[EVENT] ready event fired`));
+  log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready event fired');
 
   if (NODE_ENV === 'development') {
     INSTALL_EXTENSIONS && (await installExtensions());
@@ -219,11 +225,11 @@ app.on('ready', async () => {
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', event => {
-    console.log(chalk.white.bgBlue.bold(`[EVENT] ready-to-show event fired`));
+    log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready-to-show event fired');
   });
 
   mainWindow.webContents.on('did-finish-load', event => {
-    console.log(chalk.white.bgBlue.bold(`[EVENT] did-finish-load event fired`));
+    log.info(chalk.white.bgBlue.bold('[EVENT]'), 'did-finish-load event fired');
 
     if (!mainWindow) {
       throw new Error('mainWindow is not defined!');
@@ -272,6 +278,6 @@ app.on('ready', async () => {
 });
 
 process.on('uncaughtException', error => {
-  mk.log(error.message);
+  log.error('[ERROR]', error.message);
   mainWindow.webContents.send('uncaught-exception', error.message);
 });

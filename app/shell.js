@@ -18,10 +18,10 @@ export const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
   const combine = () =>
-    cmd.map(command => {
-      // the apiManager function to call
+    cmd.map((command, idx) => {
       const runner = apiManager[command];
-      return runner(rest, callback);
+
+      return runner(rest, callback, idx);
     });
 
   Promise.all(combine())

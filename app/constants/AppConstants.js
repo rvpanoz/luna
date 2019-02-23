@@ -9,7 +9,7 @@ export const GITHUB = {
   baseUrl: 'https://api.github.com/repos/'
 };
 
-export const APP_globalS = {
+export const APP_GLOBALS = {
   name: APP,
   manager: NPM
 };
@@ -25,24 +25,22 @@ export const APP_INFO = {
   NOT_AVAILABLE: 'N/A',
   NO_NOTIFICATIONS: 'No notifications',
   NO_WORKING_DIRECTORY: 'No working directory',
-  NO_DATA: 'No data',
-  global_MESSAGE: 'Showing global packages'
+  NO_DATA: 'No data'
 };
 
 // package actions
 export const APP_ACTIONS = ['install', 'uninstall', 'update', 'view'];
 
-// supported package groups
 export const PACKAGE_GROUPS = {
-  dependencies: 'save',
+  dependencies: 'save-prod',
   devDependencies: 'save-dev',
   optionalDependencies: 'save-optional',
-  bundleDependencies: 'save-bundle'
+  bundleDependencies: 'save-bundle',
+  noSave: 'no-save'
 };
 
-// command options when perfoming an APP action
 export const COMMAND_OPTIONS = [
-  'save*Package will appear in your dependencies',
+  'save-prod*Package will appear in your dependencies',
   'save-dev*Package will appear in your devDependencies',
   'save-optional*Package will appear in your optionalDependencies',
   "save-exact*Saved dependencies will be configured with an exact version rather than using npm's default semver range operator"
@@ -50,7 +48,6 @@ export const COMMAND_OPTIONS = [
 
 export const ERROR_TYPES = ['WARN', 'ERR'];
 
-// npm config allowed values
 export const NPM_CONFIG_VALUES = {
   REGISTRY: 'registry',
   PROXY: 'proxy',
@@ -61,7 +58,8 @@ export const INFO_MESSAGES = {
   loading: 'Loading packages..',
   noData: 'No dependencies found.',
   loaded: 'Package loaded.',
-  updating: 'Please wait. Updating packages'
+  updating: 'Please wait. Updating packages',
+  installing: 'Please choose installation options'
 };
 
 export const WARNING_MESSAGES = {

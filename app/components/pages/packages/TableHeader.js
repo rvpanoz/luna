@@ -3,7 +3,7 @@
 import React, { useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { and } from 'ramda';
-import { useDispatch, useMappedState } from 'redux-react-hook';
+import { useDispatch } from 'redux-react-hook';
 
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -23,14 +23,8 @@ const columnData = [
   { id: 'latest', disablePadding: true, label: 'Latest' }
 ];
 
-const mapState = ({ packages: { sortBy, sortDir } }) => ({
-  sortBy,
-  sortDir
-});
-
-const TableHeader = ({ numSelected, rowCount, packages }) => {
+const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
   const dispatch = useDispatch();
-  const { sortBy, sortDir } = useMappedState(mapState);
   const checkboxAll = useRef(null);
 
   const toggleSort = useCallback(prop =>
@@ -110,7 +104,9 @@ const TableHeader = ({ numSelected, rowCount, packages }) => {
 TableHeader.propTypes = {
   numSelected: PropTypes.number.isRequired,
   rowCount: PropTypes.number.isRequired,
-  packages: PropTypes.arrayOf(PropTypes.string)
+  packages: PropTypes.arrayOf(PropTypes.string),
+  sortBy: PropTypes.string,
+  sortDir: PropTypes.string
 };
 
 export default TableHeader;

@@ -1,9 +1,11 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable no-nested-ternary */
+/* eslint-disable compat/compat */
 
 import { ipcRenderer, remote } from 'electron';
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
+import { merge, pluck } from 'ramda';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -13,20 +15,31 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
+import Button from '@material-ui/core/Button';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import UpdateIcon from '@material-ui/icons/Update';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
-import PublicIcon from '@material-ui/icons/BallotSharp';
+import PublicIcon from '@material-ui/icons/BallotOutlined';
 
 import { firstToUpper, switchcase } from 'commons/utils';
-import { APP_MODES } from 'constants/AppConstants';
+import {
+  APP_MODES,
+  INFO_MESSAGES,
+  PACKAGE_GROUPS
+} from 'constants/AppConstants';
 import { setMode, toggleLoader } from 'models/ui/actions';
 
 import TableFilters from './TableFilters';
-
+import Flags from './Flags';
 import styles from './styles/tableToolbar';
 
 const TableListToolbar = ({
@@ -40,10 +53,12 @@ const TableListToolbar = ({
   reload,
   nodata,
   scrollWrapper,
-  packagesOutdatedNames
+  packagesOutdatedNames,
+  packagesInstallOptions
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
+  const [optionsOpen, toggleOptions] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -71,16 +86,99 @@ const TableListToolbar = ({
     [filtersOn]
   );
 
-  const doAction = action => {
-    ipcRenderer.send('ipc-event', {
-      activeManager: manager,
-      ipcEvent: action,
-      cmd: [action],
-      multiple: true,
-      packages: selected,
-      mode,
-      directory
-    });
+  const handleAction = (action, showDialog) => {
+    if (showDialog) {
+      return toggleOptions(true);
+    }
+
+    const hasFlags = packagesInstallOptions && packagesInstallOptions.length;
+
+    if (hasFlags && selected.length) {
+      const dependencies = [];
+      const devDependencies = [];
+      const optionalDependencies = [];
+      const bundleDependencies = [];
+      const noSave = [];
+
+      const packagesWithOptions = selected.reduce((acc, packageName) => {
+        const flag = packagesInstallOptions.find(
+          option => option.name === packageName
+        );
+
+        if (!flag) {
+          dependencies.push(packageName);
+        } else {
+          switch (flag.options[0]) {
+            case 'save-dev':
+              devDependencies.push(packageName);
+              break;
+            case 'save-optional':
+              optionalDependencies.push(packageName);
+              break;
+            case 'save-bundle':
+              bundleDependencies.push(packageName);
+              break;
+            case 'no-save':
+              noSave.push(packageName);
+              break;
+            default:
+              dependencies.push(packageName);
+              break;
+          }
+        }
+
+        return merge(acc, {
+          dependencies,
+          devDependencies,
+          optionalDependencies,
+          bundleDependencies,
+          noSave
+        });
+      }, {});
+
+      const installations = Object.values(packagesWithOptions);
+      const groups = Object.keys(packagesWithOptions);
+
+      // run install multiple times
+      const commands = installations.map((pkgs, idx) => ({
+        operation: 'install',
+        pkgs,
+        group: groups[idx],
+        flags: PACKAGE_GROUPS[groups[idx]]
+      }));
+
+      const parameters = {
+        activeManager: manager,
+        ipcEvent: 'install',
+        cmd: pluck(
+          'operation',
+          commands.filter(command => command.pkgs.length)
+        ),
+        packages: pluck(
+          'pkgs',
+          commands.filter(command => command.pkgs.length)
+        ),
+        pkgOptions: pluck(
+          'flags',
+          commands.filter(command => command.pkgs.length)
+        ),
+        multiple: true,
+        mode,
+        directory
+      };
+
+      ipcRenderer.send('ipc-event', parameters);
+    } else {
+      ipcRenderer.send('ipc-event', {
+        activeManager: manager,
+        ipcEvent: action,
+        cmd: [action],
+        multiple: true,
+        packages: selected,
+        mode,
+        directory
+      });
+    }
 
     dispatch(
       toggleLoader({
@@ -107,42 +205,20 @@ const TableListToolbar = ({
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
-          switchMode(APP_MODES.local, scanDirectory);
+          return switchMode(APP_MODES.local, scanDirectory);
         }
-
-        return false;
       }
     );
   }, []);
-
-  const handleAction = action => {
-    if (selected && selected.length) {
-      remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          title: 'Confirmation',
-          type: 'question',
-          message: `Would you like to ${action} the selected packages?`,
-          buttons: ['Cancel', firstToUpper(action)]
-        },
-        btnIdx => {
-          if (Boolean(btnIdx) === true) {
-            doAction(action);
-          }
-        }
-      );
-    }
-
-    return false;
-  };
 
   const renderAction = action =>
     switchcase({
       install: () => (
         <Tooltip title="Install selected">
           <IconButton
+            color="primary"
             aria-label="install selected"
-            onClick={() => handleAction('install')}
+            onClick={() => handleAction('install', mode === APP_MODES.local)}
           >
             <AddIcon />
           </IconButton>
@@ -151,6 +227,7 @@ const TableListToolbar = ({
       update: () => (
         <Tooltip title="Update selected">
           <IconButton
+            color="primary"
             aria-label="update selected"
             onClick={() => handleAction('update')}
           >
@@ -161,6 +238,7 @@ const TableListToolbar = ({
       uninstall: () => (
         <Tooltip title="Uninstall selected">
           <IconButton
+            color="secondary"
             aria-label="uninstall selected"
             onClick={() => handleAction('uninstall')}
           >
@@ -253,16 +331,11 @@ const TableListToolbar = ({
         <div className={classes.spacer} />
         <div className={cn(classes.actions)}>
           {selected.length === 0 && renderToolbarActions()}
-          {fromSearch && renderAction('install')}
+          {fromSearch && selected.length ? renderAction('install') : null}
           {!fromSearch && selected.length && needUpdate
             ? renderAction('update')
             : null}
-          {!fromSearch && selected.length ? (
-            <React.Fragment>
-              {renderAction('install')}
-              {renderAction('uninstall')}
-            </React.Fragment>
-          ) : null}
+          {!fromSearch && selected.length ? renderAction('uninstall') : null}
         </div>
       </Toolbar>
       <Popover
@@ -279,6 +352,30 @@ const TableListToolbar = ({
       >
         <TableFilters mode={mode} close={() => openFilters(null, true)} />
       </Popover>
+      <Dialog
+        open={optionsOpen}
+        onClose={() => toggleOptions(!optionsOpen)}
+        aria-labelledby="install-options"
+        maxWidth="md"
+      >
+        <DialogTitle id="install-options">Install options</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
+          <Flags selected={selected} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => toggleOptions(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleAction('install')}
+            color="primary"
+            autoFocus
+          >
+            Install
+          </Button>
+        </DialogActions>
+      </Dialog>
     </section>
   );
 };
@@ -294,7 +391,8 @@ TableListToolbar.propTypes = {
   directory: PropTypes.string,
   fromSearch: PropTypes.bool,
   scrollWrapper: PropTypes.func,
-  packagesOutdatedNames: PropTypes.arrayOf(PropTypes.string)
+  packagesOutdatedNames: PropTypes.arrayOf(PropTypes.string),
+  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(TableListToolbar);

@@ -10,28 +10,28 @@
 /**
  * npm install [<@scope>/]<name>@<version>
  */
-exports.install = options => {
+exports.install = (options, idx) => {
   const command = ['install'];
-  const { name, mode, version = null, pkgOptions, multiple, packages } =
+  const { mode, version = null, pkgOptions, multiple, packages } =
     options || {};
   const defaults = [];
 
-  if (!name && !multiple) {
+  if (!packages && !multiple) {
     return Promise.reject('npm[install] package name parameter must be given');
   }
 
-  function getNames() {
-    return multiple && packages && Array.isArray(packages)
-      ? packages
-      : version
-      ? `${name}@${version}`.trim()
-      : name.trim();
-  }
+  const getNames = () => {
+    if (multiple && Array.isArray(packages[idx])) {
+      return packages[idx];
+    }
+
+    return version ? [`${packages[0]}@${version}`] : packages;
+  };
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
   const commandOpts =
     pkgOptions && pkgOptions.length
-      ? pkgOptions.map(option => `--${option}`)
+      ? [pkgOptions[idx]].map(option => `--${option}`)
       : [];
 
   const run = []

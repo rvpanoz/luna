@@ -2,11 +2,12 @@
 
 import { ipcRenderer } from 'electron';
 import React, { useCallback, useRef } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 import { always, cond, equals } from 'ramda';
 
-import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -56,6 +57,7 @@ const PackageItem = ({
     <TableRow
       key={`pkg-${name}`}
       hover
+      ref={rowRef}
       role="checkbox"
       aria-checked={isSelected}
       tabIndex={-1}
@@ -63,7 +65,7 @@ const PackageItem = ({
       classes={{
         root: classes.tableRow
       }}
-      onClick={() => viewPackage()}
+      onClick={viewPackage}
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
@@ -75,26 +77,25 @@ const PackageItem = ({
           }}
         />
       </TableCell>
-      <TableCell padding="none" className={cn(classes.tableCell, classes.w300)}>
+
+      <TableCell padding="none" className={cn(classes.tableCell)}>
         <div className={classes.flexContainer}>
-          <div ref={rowRef} className={classes.flexItem}>
-            <span>{name}</span>
-          </div>
-          <div className={classes.flexItem}>{renderIconByGroup(group)}</div>
+          {group && typeof group === 'string' ? renderIconByGroup(group) : null}
+          <Typography>{name}</Typography>
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        {version}
+        <Typography>{version}</Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        <span
+        <Typography
           className={cn({
             [classes.outdated]: isOutdated,
             [classes.updated]: !isOutdated
           })}
         >
           {latest || version}
-        </span>
+        </Typography>
       </TableCell>
     </TableRow>
   );

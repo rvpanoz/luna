@@ -22,12 +22,20 @@ const styles = theme => ({
     minHeight: 75
   },
   cardIcon: {
-    width: '40px',
-    height: '36px',
+    width: '36px',
+    height: '30px',
     fill: '#fff'
   },
-  blueCardHeader: {
+  primaryCardHeader: {
     background: theme.palette.primary.light,
+    ...infoBoxShadow
+  },
+  secondaryCardHeader: {
+    background: theme.palette.secondary.light,
+    ...infoBoxShadow
+  },
+  warningCardHeader: {
+    background: theme.palette.warning.main,
     ...infoBoxShadow
   },
   cardAvatar: {

@@ -11,13 +11,16 @@ import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
+import { Notifications } from 'components/pages/notifications';
 
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 
+import { lighten } from '@material-ui/core/styles/colorManipulator';
+
 const drawerWidth = 240;
 
-const styles = {
+const styles = appTheme => ({
   root: {
     display: 'flex',
     minHeight: '100vh'
@@ -36,11 +39,11 @@ const styles = {
   },
   mainContent: {
     flex: 1,
-    padding: '28px 18px 0',
-    background: '#eaeff1',
+    padding: appTheme.spacing.unit * 2,
+    background: lighten('#eaeff1', 0.1),
     overflow: 'hidden'
   }
-};
+});
 
 const mapState = ({
   common: {
@@ -77,7 +80,7 @@ const AppLayout = ({ classes }) => {
               PaperProps={{ style: { width: drawerWidth } }}
               variant="temporary"
               open={drawerOpen}
-              onClose={toggleDrawer}
+              onClose={() => toggleDrawer(!drawerOpen)}
               {...rest}
             />
           </Hidden>
@@ -92,8 +95,10 @@ const AppLayout = ({ classes }) => {
           <Header onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
           <main className={classes.mainContent}>
             {switchcase({
-              packages: () => <Packages />
-            })('packages')(activePage)}
+              packages: () => <Packages />,
+              problems: () => <Notifications />,
+              scripts: () => <div>scripts</div> // TODO: implement this
+            })(<Packages />)(activePage)}
           </main>
         </div>
         {snackbarOptions && snackbarOptions.open && (

@@ -31,7 +31,6 @@ const styles = theme => ({
     fontSize: 24,
     fontFamily: 'Din-Bold',
     color: theme.palette.secondary.light
-    // WebkitTextStroke: '1px white'
   },
   itemActionable: {
     '&:hover': {
