@@ -157,12 +157,12 @@ exports.search = (opts, callback) => {
   return execute('npm', run, mode, directory, callback);
 };
 
-exports.install = (opts, callback) => {
+exports.install = (opts, callback, idx) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
-    const run = manager['install'].call(this, opts);
+    const run = manager['install'].call(this, opts, idx);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {

@@ -2,9 +2,9 @@
 /* eslint-disable no-nested-ternary */
 
 import { ipcRenderer, remote } from 'electron';
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
-import { merge } from 'ramda';
+import { merge, pluck } from 'ramda';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -136,25 +136,29 @@ const TableListToolbar = ({
         });
       }, {});
 
-      // const installations = Object.values(packagesWithOptions);
-      // const groups = Object.keys(packagesWithOptions);
+      const installations = Object.values(packagesWithOptions);
+      const groups = Object.keys(packagesWithOptions);
 
-      ipcRenderer.send('ipc-event', {
+      // run install multiple times
+      const commands = installations.map((pkgs, idx) => ({
+        operation: 'install',
+        pkgs,
+        group: groups[idx],
+        flags: PACKAGE_GROUPS[groups[idx]]
+      }));
+
+      const parameters = {
         activeManager: manager,
         ipcEvent: 'install',
-        cmd: ['install', 'install', 'install'],
+        cmd: pluck('operation', commands),
+        packages: pluck('pkgs', commands),
+        pkgOptions: pluck('flags', commands),
         multiple: true,
-        packages,
-        pkgOptions: {
-          dependencies,
-          devDependencies,
-          optionalDependencies,
-          bundleDependencies,
-          noSave
-        },
         mode,
         directory
-      });
+      };
+
+      ipcRenderer.send('ipc-event', parameters);
     } else {
       ipcRenderer.send('ipc-event', {
         activeManager: manager,

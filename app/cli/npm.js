@@ -10,7 +10,9 @@
 /**
  * npm install [<@scope>/]<name>@<version>
  */
-exports.install = options => {
+exports.install = (options, idx) => {
+  console.log(options);
+
   const command = ['install'];
   const { name, mode, version = null, pkgOptions, multiple, packages } =
     options || {};
@@ -21,17 +23,19 @@ exports.install = options => {
   }
 
   function getNames() {
-    return multiple && packages && Array.isArray(packages)
-      ? packages
-      : version
-      ? `${name}@${version}`.trim()
-      : name.trim();
+    if (multiple && Array.isArray(packages[idx])) {
+      return packages[idx];
+    } else if (version) {
+      return [`${name}@${version}`.trim()];
+    }
+
+    return [name.trim()];
   }
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
   const commandOpts =
     pkgOptions && pkgOptions.length
-      ? pkgOptions.map(option => `--${option}`)
+      ? [pkgOptions[idx]].map(option => `--${option}`)
       : [];
 
   const run = []
@@ -39,6 +43,9 @@ exports.install = options => {
     .concat(commandArgs)
     .concat(getNames())
     .concat(commandOpts);
+
+  console.log(run, idx);
+  return ['install', 'react', 'no-save'];
 
   return run;
 };
