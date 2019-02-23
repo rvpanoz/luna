@@ -89,16 +89,22 @@ const installExtensions = async () => {
 // channel: ipc-event
 ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
-
   const onError = error => event.sender.send('ipcEvent-error', error);
   const onFlow = message => event.sender.send('ipcEvent-flow', message);
+
+  let runningTimes = 1;
 
   const onClose = (status, errors, data, cmd) => {
     const { directory, mode } = rest;
     const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
+    const commands = options.cmd;
 
     if (actionIndex > -1 && ipcEvent !== 'view') {
-      return event.sender.send('action-close', errors, data, cmd);
+      if (commands.length === runningTimes) {
+        return event.sender.send('action-close', errors, data, cmd);
+      }
+
+      runningTimes += 1;
     }
 
     if (directory && mode === APP_MODES.local && cmd.includes('list')) {
