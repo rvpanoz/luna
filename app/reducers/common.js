@@ -15,8 +15,6 @@ import {
   setSnackbar,
   setManager,
   setMode,
-  setPage,
-  setPageRows,
   setEnv,
   toggleLoader,
   togglePackageLoader,
@@ -96,14 +94,6 @@ const handlers = {
     }),
   [setManager.type]: (state, { payload: { manager } }) =>
     assoc('manager', manager, state),
-  [setPage.type]: (state, { payload: { page } }) => assoc('page', page, state),
-  [setPageRows.type]: (state, action) => {
-    const {
-      payload: { rowsPerPage }
-    } = action;
-
-    return assoc('rowsPerPage', rowsPerPage, state);
-  },
   [toggleLoader.type]: (state, { payload: { loading, message } }) =>
     merge(state, {
       loader: {

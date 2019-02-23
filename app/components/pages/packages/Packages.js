@@ -20,9 +20,11 @@ import {
   addActionError,
   addSelected,
   addInstallOption,
-  updateData
+  updateData,
+  setPage,
+  setPageRows
 } from 'models/packages/actions';
-import { setPage, setPageRows, setSnackbar } from 'models/ui/actions';
+import { setSnackbar } from 'models/ui/actions';
 import { APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
 
 import AppCard from 'components/common/AppCard';

@@ -15,7 +15,9 @@ import {
   setPackagesStart,
   setPackagesSuccess,
   setOutdatedSuccess,
-  setSortOptions
+  setSortOptions,
+  setPage,
+  setPageRows
 } from 'models/packages/actions';
 import format from 'date-fns/format';
 
@@ -261,6 +263,20 @@ const handlers = {
       sorting: {
         sortBy,
         sortDir
+      }
+    }),
+  [setPage.type]: (state, { payload: { page } }) =>
+    merge(state, {
+      pagination: {
+        ...state.pagination,
+        page
+      }
+    }),
+  [setPageRows.type]: (state, { payload: { rowsPerPage } }) =>
+    merge(state, {
+      pagination: {
+        ...pagination,
+        rowsPerPage
       }
     })
 };

@@ -150,9 +150,18 @@ const TableListToolbar = ({
       const parameters = {
         activeManager: manager,
         ipcEvent: 'install',
-        cmd: pluck('operation', commands),
-        packages: pluck('pkgs', commands),
-        pkgOptions: pluck('flags', commands),
+        cmd: pluck(
+          'operation',
+          commands.filter(command => command.pkgs.length)
+        ),
+        packages: pluck(
+          'pkgs',
+          commands.filter(command => command.pkgs.length)
+        ),
+        pkgOptions: pluck(
+          'flags',
+          commands.filter(command => command.pkgs.length)
+        ),
         multiple: true,
         mode,
         directory

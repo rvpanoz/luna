@@ -26,10 +26,6 @@ export default {
   },
   dependencies: {
     active: null,
-    pagination: {
-      page: 0,
-      rowsPerPage: 10
-    },
     data: {
       packages: [],
       packagesOutdated: []
@@ -55,6 +51,10 @@ export default {
     },
     filtering: {
       filters: []
+    },
+    pagination: {
+      page: 0,
+      rowsPerPage: 10
     },
     metadata: {
       lastUpdatedAt: null,
