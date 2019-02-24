@@ -95,9 +95,9 @@ const AppLayout = ({ classes }) => {
           <Header onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
           <main className={classes.mainContent}>
             {switchcase({
-              packages: () => <Packages />,
+              packages: () => <Packages too={false} />,
               problems: () => <Notifications />,
-              scripts: () => <div>scripts</div> // TODO: implement this
+              scripts: () => <div>scripts</div>
             })(<Packages />)(activePage)}
           </main>
         </div>

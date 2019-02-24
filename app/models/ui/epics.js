@@ -5,12 +5,7 @@ import { combineEpics, ofType } from 'redux-observable';
 import { ERROR_TYPES } from 'constants/AppConstants';
 import { parseMessage, switchcase, matchType } from 'commons/utils';
 
-import {
-  addNotification,
-  commandMessage,
-  showError,
-  showWarning
-} from './actions';
+import { addNotification, commandMessage } from './actions';
 
 /**
  *
