@@ -47,11 +47,11 @@ const AppLoader = ({ loading, classes, children, message, relative, mini }) =>
         color={relative ? 'primary' : 'secondary'}
         size={mini ? 20 : 30}
       />
-      {/* {message && (
+      {message && (
         <Typography className={classes.message} variant="caption">
           {message}
         </Typography>
-      )} */}
+      )}
     </div>
   ) : (
     children

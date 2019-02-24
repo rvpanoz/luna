@@ -1,3 +1,6 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-unused-expressions */
+
 import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import cn from 'classnames';
@@ -94,7 +97,7 @@ const Packages = ({ classes }) => {
   const dispatch = useDispatch();
 
   const isSelected = useCallback(
-    (name, selected) => selected.indexOf(name) !== -1,
+    (name, selectedPackages) => selectedPackages.indexOf(name) !== -1,
     [name, selected]
   );
 
@@ -182,11 +185,12 @@ const Packages = ({ classes }) => {
       ]);
   }, []);
 
-  const [data] = useFilters(packages, filters, counter);
+  const [packagesData] = useFilters(packages, filters, counter);
 
   // pagination
   const dataSlices =
-    data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    packagesData &&
+    packagesData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   // sorting
   const sortedPackages =
@@ -202,7 +206,7 @@ const Packages = ({ classes }) => {
             <AppCard
               avatar
               title="Packages"
-              description={data ? data.length : '0'}
+              description={packagesData ? packagesData.length : '0'}
               small={mode === APP_MODES.local ? projectName : null}
               iconColor="primary"
               footerText={lastUpdatedAt}
@@ -278,6 +282,7 @@ const Packages = ({ classes }) => {
                           __error,
                           __peerMissing
                         }) => {
+                          const isPackageSelected = isSelected(name, selected);
                           const installOptions = Array.isArray(
                             packagesInstallOptions
                           )
@@ -289,13 +294,15 @@ const Packages = ({ classes }) => {
                           return (
                             <PackageItem
                               key={`pkg-${name}`}
-                              isSelected={isSelected(name, selected)}
+                              isSelected={isPackageSelected}
                               installOptions={installOptions}
                               addSelected={() =>
                                 dispatch(addSelected({ name }))
                               }
-                              addInstallOption={(name, options) =>
-                                dispatch(addInstallOption({ name, options }))
+                              addInstallOption={(pkgName, options) =>
+                                dispatch(
+                                  addInstallOption({ name: pkgName, options })
+                                )
                               }
                               name={name}
                               peerDependencies={peerDependencies}
@@ -318,7 +325,7 @@ const Packages = ({ classes }) => {
                         [classes.hidden]: nodata
                       }
                     }}
-                    rowCount={data && data.length}
+                    rowCount={packagesData && packagesData.length}
                     page={page}
                     rowsPerPage={rowsPerPage}
                     handleChangePage={(e, pageNo) => {

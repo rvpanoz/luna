@@ -31,6 +31,7 @@ const styles = theme => ({
   cardHeader: {
     margin: theme.spacing.unit,
     padding: theme.spacing.unit,
+    color: infoColor,
     textAlign: 'center',
     borderRadius: 5,
     minHeight: 25
