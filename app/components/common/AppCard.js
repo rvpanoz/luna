@@ -24,11 +24,13 @@ import styles from './styles/appCardStyles';
 const AppCard = ({
   classes,
   title,
+  subtitle,
   description,
   footerText,
   iconColor,
   iconHeader,
   avatar,
+  total,
   loading
 }) => {
   const renderIconHeader = icon =>
@@ -41,20 +43,27 @@ const AppCard = ({
 
   return (
     <Card className={classes.card}>
-      <CardHeader
-        classes={{
-          root: cn(classes.cardHeader, classes[`${iconColor}CardHeader`]),
-          avatar: classes.cardAvatar
-        }}
-        avatar={avatar && renderIconHeader(iconHeader)}
-      />
+      {iconHeader && (
+        <CardHeader
+          classes={{
+            root: cn(classes.cardHeader, classes[`${iconColor}CardHeader`]),
+            avatar: classes.cardAvatar,
+            title: classes.cardTitle,
+            subheader: classes.cardSubtitle,
+            content: classes.cardHeaderContent
+          }}
+          avatar={avatar && renderIconHeader(iconHeader)}
+          title={title}
+          subheader={subtitle}
+        />
+      )}
       <CardContent className={classes.cardContent}>
         <AppLoader loading={loading}>
           <Typography variant="subtitle1" className={classes.cardCategory}>
-            {title}
+            {description}
           </Typography>
           <Typography variant="body2" className={classes.cardDescription}>
-            {description}
+            {total}
           </Typography>
         </AppLoader>
       </CardContent>

@@ -6,7 +6,8 @@ import {
   grayColor,
   infoColor,
   successColor,
-  defaultFont
+  defaultFont,
+  boxShadow
 } from 'styles/variables';
 
 const buttonStyle = theme => ({
@@ -40,8 +41,7 @@ const buttonStyle = theme => ({
   },
   primary: {
     backgroundColor: theme.palette.primary.main,
-    boxShadow:
-      '0 2px 2px 0 rgba(156, 39, 176, 0.14), 0 3px 1px -2px rgba(156, 39, 176, 0.2), 0 1px 5px 0 rgba(156, 39, 176, 0.12)',
+    boxShadow,
     '&:hover': {
       backgroundColor: theme.palette.primary.light,
       boxShadow:
@@ -50,8 +50,7 @@ const buttonStyle = theme => ({
   },
   info: {
     backgroundColor: infoColor,
-    boxShadow:
-      '0 2px 2px 0 rgba(0, 188, 212, 0.14), 0 3px 1px -2px rgba(0, 188, 212, 0.2), 0 1px 5px 0 rgba(0, 188, 212, 0.12)',
+    boxShadow,
     '&:hover': {
       backgroundColor: infoColor,
       boxShadow:
@@ -60,8 +59,7 @@ const buttonStyle = theme => ({
   },
   success: {
     backgroundColor: successColor,
-    boxShadow:
-      '0 2px 2px 0 rgba(76, 175, 80, 0.14), 0 3px 1px -2px rgba(76, 175, 80, 0.2), 0 1px 5px 0 rgba(76, 175, 80, 0.12)',
+    boxShadow,
     '&:hover': {
       backgroundColor: successColor,
       boxShadow:
@@ -70,18 +68,16 @@ const buttonStyle = theme => ({
   },
   warning: {
     backgroundColor: theme.palette.warning.main,
-    boxShadow:
-      '0 2px 2px 0 rgba(255, 152, 0, 0.14), 0 3px 1px -2px rgba(255, 152, 0, 0.2), 0 1px 5px 0 rgba(255, 152, 0, 0.12)',
+    boxShadow,
     '&:hover': {
       backgroundColor: theme.palette.warning.light,
       boxShadow:
         '0 14px 26px -12px rgba(255, 152, 0, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(255, 152, 0, 0.2)'
     }
   },
-  danger: {
+  error: {
     backgroundColor: theme.palette.error.main,
-    boxShadow:
-      '0 2px 2px 0 rgba(244, 67, 54, 0.14), 0 3px 1px -2px rgba(244, 67, 54, 0.2), 0 1px 5px 0 rgba(244, 67, 54, 0.12)',
+    boxShadow,
     '&:hover': {
       backgroundColor: theme.palette.error.light,
       boxShadow:
@@ -90,13 +86,13 @@ const buttonStyle = theme => ({
   },
   white: {
     '&,&:focus,&:hover': {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: theme.palette.common.white,
       color: grayColor
     }
   },
   simple: {
     '&,&:focus,&:hover': {
-      color: '#FFFFFF',
+      color: theme.palette.error.light,
       background: 'transparent',
       boxShadow: 'none'
     }

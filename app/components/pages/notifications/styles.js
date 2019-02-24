@@ -1,4 +1,4 @@
-import { defaultFont, primaryBoxShadow } from 'styles/variables';
+import { defaultFont, successColor, primaryBoxShadow } from 'styles/variables';
 
 const styles = theme => ({
   notifications: {
@@ -58,6 +58,24 @@ const styles = theme => ({
       color: '#fff',
       ...primaryBoxShadow
     }
+  },
+  errorIcon: {
+    color: theme.palette.common.white
+  },
+  successIcon: {
+    color: successColor
+  },
+  warningIcon: {
+    color: theme.palette.common.white
+  },
+  errorAvatar: {
+    backgroundColor: theme.palette.error.light
+  },
+  successAvatar: {
+    backgroundColor: successColor
+  },
+  warningAvatar: {
+    backgroundColor: theme.palette.warning.light
   }
 });
 

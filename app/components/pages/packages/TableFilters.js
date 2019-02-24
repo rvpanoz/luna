@@ -132,12 +132,12 @@ const TableFilters = ({ classes, mode, close }) => {
         <div className={classes.actions}>
           <AppButton
             className={classes.actionButton}
-            color="danger"
+            color="simple"
             onClick={emptyFilters}
           >
             Clear
           </AppButton>
-          <AppButton color="info" onClick={close}>
+          <AppButton color="primary" onClick={close}>
             Close
           </AppButton>
         </div>

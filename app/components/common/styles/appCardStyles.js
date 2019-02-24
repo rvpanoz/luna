@@ -19,7 +19,6 @@ const styles = theme => ({
     textAlign: 'left'
   },
   card: {
-    display: 'inline-block',
     position: 'relative',
     width: '100%',
     margin: 0,
@@ -29,6 +28,7 @@ const styles = theme => ({
     background: theme.palette.common.white
   },
   cardHeader: {
+    ...flexContainer,
     margin: theme.spacing.unit,
     padding: theme.spacing.unit,
     color: infoColor,
@@ -42,6 +42,12 @@ const styles = theme => ({
     justifyContent: 'space-between',
     minHeight: 70
   },
+  cardHeaderContent: {
+    ...flexContainer,
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    flexFlow: 'unset'
+  },
   cardIcon: {
     width: 25,
     height: 25,
@@ -53,12 +59,24 @@ const styles = theme => ({
   cardCategory: {
     ...defaultFont,
     fontSize: 20,
-    color: grayColor,
-    flexGrow: 0
+    color: grayColor
   },
   cardDescription: {
     ...defaultFont,
-    fontSize: '1.625em'
+    fontSize: 24
+  },
+  cardTitle: {
+    color: theme.palette.common.white,
+    marginTop: 0,
+    marginBottom: 5,
+    ...defaultFont,
+    fontSize: 18
+  },
+  cardSubtitle: {
+    ...defaultFont,
+    marginBottom: 0,
+    color: 'rgba(255, 255, 255, 0.62)',
+    margin: '0 0 10px'
   },
   cardTitleSmall: {
     ...defaultFont,

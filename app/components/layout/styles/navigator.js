@@ -34,7 +34,8 @@ const styles = theme => ({
   },
   itemActionable: {
     '&:hover': {
-      backgroundColor: 'rgba(255, 255, 255, 0.08)'
+      color: theme.palette.common.white,
+      backgroundColor: theme.palette.secondary.light
     }
   },
   itemActiveItem: {

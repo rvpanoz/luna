@@ -206,11 +206,13 @@ const Packages = ({ classes }) => {
             <AppCard
               avatar
               title="Packages"
-              description={packagesData ? packagesData.length : '0'}
+              description="Total"
+              subtitle={mode}
+              iconHeader="packages"
+              total={packagesData ? packagesData.length : '0'}
               small={mode === APP_MODES.local ? projectName : null}
               iconColor="primary"
               footerText={lastUpdatedAt}
-              loading={loading}
             />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
@@ -220,7 +222,8 @@ const Packages = ({ classes }) => {
               title="Outdated"
               iconColor="warning"
               footerText={lastUpdatedAt}
-              description={packagesOutdated ? packagesOutdated.length : '0'}
+              total={packagesOutdated ? packagesOutdated.length : '0'}
+              description="Found"
             />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
@@ -228,8 +231,9 @@ const Packages = ({ classes }) => {
               avatar
               iconHeader="error"
               title="Problems"
-              description={notifications ? notifications.length : '0'}
+              total={notifications ? notifications.length : '0'}
               iconColor="secondary"
+              description="Found"
               footerText={lastUpdatedAt}
             />
           </Grid>
