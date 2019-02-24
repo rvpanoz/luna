@@ -26,9 +26,12 @@ const styles = appTheme => ({
     minHeight: '100vh'
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: drawerWidth,
       flexShrink: 0
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: 0
     }
   },
   appContent: {
@@ -75,7 +78,7 @@ const AppLayout = ({ classes }) => {
       <div className={classes.root}>
         <CssBaseline />
         <nav className={classes.drawer}>
-          <Hidden smUp implementation="js">
+          <Hidden smDown implementation="js">
             <Navigator
               PaperProps={{ style: { width: drawerWidth } }}
               variant="temporary"
@@ -84,11 +87,8 @@ const AppLayout = ({ classes }) => {
               {...rest}
             />
           </Hidden>
-          <Hidden xsDown implementation="css">
-            <Navigator
-              PaperProps={{ style: { width: drawerWidth } }}
-              {...rest}
-            />
+          <Hidden mdUp implementation="css">
+            <Navigator PaperProps={{ style: { width: 0 } }} {...rest} />
           </Hidden>
         </nav>
         <div className={classes.appContent}>

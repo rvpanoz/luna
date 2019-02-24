@@ -3,59 +3,57 @@ import {
   infoColor,
   grayColor,
   defaultBoxShadow,
-  flexContainer
+  flexContainer,
+  flexItem
 } from 'styles/variables';
 
 const styles = theme => ({
+  flexItem: {
+    ...flexItem,
+    padding: theme.spacing.unit / 2
+  },
+  textRight: {
+    textAlign: 'right'
+  },
+  textLeft: {
+    textAlign: 'left'
+  },
   card: {
-    ...flexContainer,
+    display: 'inline-block',
     position: 'relative',
     width: '100%',
     margin: 0,
-    padding: 0,
     boxShadow: '0 1px 4px 0 rgba(0, 0, 0, 0.14)',
-    borderRadius: 3
+    borderRadius: 5,
+    color: theme.palette.common.black,
+    background: theme.palette.common.white
   },
   cardHeader: {
-    padding: theme.spacing.unit,
     margin: theme.spacing.unit,
+    padding: theme.spacing.unit,
     textAlign: 'center',
-    border: 0,
-    borderRadius: 30
+    borderRadius: 5,
+    minHeight: 25
   },
   cardContent: {
     ...flexContainer,
     padding: theme.spacing.unit * 2,
-    flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    minHeight: 70
   },
   cardIcon: {
-    fill: '#fff'
-  },
-  primaryCardHeader: {
-    ...defaultBoxShadow,
-    padding: 0,
-    background: theme.palette.primary.light
-  },
-  secondaryCardHeader: {
-    background: theme.palette.secondary.light,
-    ...defaultBoxShadow
-  },
-  warningCardHeader: {
-    background: theme.palette.warning.light,
-    ...defaultBoxShadow
-  },
-  errorCardHeader: {
-    background: theme.palette.error.light,
-    ...defaultBoxShadow
+    width: 25,
+    height: 25,
+    fill: theme.palette.common.white
   },
   cardAvatar: {
     margin: theme.spacing.unit
   },
   cardCategory: {
     ...defaultFont,
+    fontSize: 20,
     color: grayColor,
-    flexGrow: 2
+    flexGrow: 0
   },
   cardDescription: {
     ...defaultFont,
@@ -68,20 +66,12 @@ const styles = theme => ({
     color: '#777'
   },
   cardActions: {
-    display: 'flex',
-    padding: theme.spacing.unit,
-    padding: 0,
-    margin: 0,
+    ...flexContainer,
+    ...defaultFont,
+    justifyContent: 'flex-end',
+    padding: theme.spacing.unit / 1.5,
     borderTop: '1px solid #eeeeee',
-    height: 'auto',
-    ...defaultFont
-  },
-  cardStats: {
-    lineHeight: 22,
-    color: grayColor,
-    fontSize: 12,
-    display: 'inline-block',
-    margin: '0!important'
+    height: 'auto'
   },
   cardStatsIcon: {
     position: 'relative',
@@ -89,10 +79,33 @@ const styles = theme => ({
     width: theme.spacing.unit * 2,
     height: theme.spacing.unit * 2
   },
-  cardStatsLink: {
-    color: infoColor,
-    textDecoration: 'none',
-    ...defaultFont
+  primaryIcon: {
+    color: theme.palette.primary.light
+  },
+  secondaryIcon: {
+    color: theme.palette.secondary.light
+  },
+  warningIcon: {
+    color: theme.palette.warning.light
+  },
+  errorIcon: {
+    color: theme.palette.error.light
+  },
+  primaryCardHeader: {
+    background: theme.palette.primary.light,
+    ...defaultBoxShadow
+  },
+  secondaryCardHeader: {
+    background: theme.palette.secondary.light,
+    ...defaultBoxShadow
+  },
+  warningCardHeader: {
+    background: theme.palette.warning.light,
+    ...defaultBoxShadow
+  },
+  errorCardHeader: {
+    background: theme.palette.error.light,
+    ...defaultBoxShadow
   }
 });
 

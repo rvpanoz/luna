@@ -24,9 +24,7 @@ const AppCard = ({
   classes,
   title,
   description,
-  small,
   footerText,
-  statIconColor,
   iconColor,
   iconHeader,
   avatar
@@ -57,17 +55,16 @@ const AppCard = ({
         </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <div className={classes.cardFooter}>
+        <div className={cn(classes.flexItem, classes.textLeft)}>
           <UpdateIcon
-            className={cn(
-              classes.cardStatsIcon,
-              classes[`${statIconColor}CardStatsIcon`]
-            )}
+            className={cn(classes.cardStatsIcon, classes[`${iconColor}Icon`])}
           />
-          {footerText && (
-            <Typography variant="caption">{footerText}</Typography>
-          )}
         </div>
+        {footerText && (
+          <div className={cn(classes.flexItem, classes.textRight)}>
+            <Typography variant="caption">{footerText}</Typography>
+          </div>
+        )}
       </CardActions>
     </Card>
   );

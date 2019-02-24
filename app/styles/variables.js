@@ -48,9 +48,8 @@ const flexItemInner = {
   display: '-webkit-flex',
   flexDirection: 'column',
   justifyContent: 'flex-start',
-  height: '210px',
-  margin: '0',
-  padding: '0',
+  margin: 0,
+  padding: 0,
   width: '100%'
 };
 
@@ -86,7 +85,6 @@ export {
   transition,
   container,
   boxShadow,
-  card,
   defaultFont,
   successColor,
   infoColor,
@@ -96,8 +94,6 @@ export {
   successBoxShadow,
   warningBoxShadow,
   dangerBoxShadow,
-  cardActions,
-  cardHeader,
   defaultBoxShadow,
   flexContainer,
   flexItem,
