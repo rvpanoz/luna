@@ -144,7 +144,11 @@ const packagesSuccessEpic = (action$, state$) =>
             metadata: { fromSearch, fromSort }
           }
         } = state$.value;
-        const actions = [cleanCommands(), updateLoader({ loading: false })];
+
+        const actions = [
+          cleanCommands(),
+          updateLoader({ loading: false, message: null })
+        ];
 
         if (page !== 0) {
           actions.unshift(setPage({ page: 0 }));
