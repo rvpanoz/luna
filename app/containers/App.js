@@ -33,11 +33,7 @@ const App = () => {
 
     ipcRenderer.on('ipcEvent-error', (event, message) => {
       if (enableNotifications) {
-        dispatch(
-          commandMessage({
-            message
-          })
-        );
+        dispatch({ type: commandMessage.type, payload: { message } });
       }
     });
 

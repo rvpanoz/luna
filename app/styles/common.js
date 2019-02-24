@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * common classes
  */

@@ -27,7 +27,7 @@ const styles = theme => ({
       maxHeight: 365
     },
     [theme.breakpoints.up('lg')]: {
-      maxHeight: '100vh'
+      maxHeight: 600
     }
   },
   tableRow: {

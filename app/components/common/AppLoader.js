@@ -19,9 +19,10 @@ const styles = theme => ({
   loader: {
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'space-around',
     position: 'absolute',
     left: '45%',
-    top: '100%',
+    bottom: theme.spacing.unit * 4,
     margin: `0 ${theme.spacing.unit * 2}px`
   },
   relative: {
@@ -29,8 +30,9 @@ const styles = theme => ({
     position: 'relative',
     margin: `0 ${theme.spacing.unit * 2}px`
   },
-  margin: {
-    margin: '10px 0'
+  message: {
+    padding: theme.spacing.unit * 2,
+    margin: theme.spacing.unit
   }
 });
 
@@ -45,11 +47,11 @@ const AppLoader = ({ loading, classes, children, message, relative, mini }) =>
         color={relative ? 'primary' : 'secondary'}
         size={mini ? 20 : 30}
       />
-      {message && (
-        <Typography className={classes.margin} variant="caption">
+      {/* {message && (
+        <Typography className={classes.message} variant="caption">
           {message}
         </Typography>
-      )}
+      )} */}
     </div>
   ) : (
     children

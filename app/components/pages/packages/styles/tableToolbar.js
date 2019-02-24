@@ -1,5 +1,5 @@
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-import { defaultFont, flexContainer } from 'styles/variables';
+import { defaultFont, flexContainer, grayColor } from 'styles/variables';
 
 const styles = theme => ({
   root: {
@@ -24,16 +24,10 @@ const styles = theme => ({
     ...defaultFont,
     fontSize: 12
   },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85)
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark
-        },
+  highlight: {
+    color: theme.palette.common.white,
+    backgroundColor: lighten(grayColor, 0.1)
+  },
   actions: {
     ...flexContainer,
     alignItems: 'center',
