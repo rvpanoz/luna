@@ -5,48 +5,21 @@ import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
 import Snackbar from '@material-ui/core/Snackbar';
+import Typography from '@material-ui/core/Typography';
 import theme from 'styles/theme';
 
 import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
-import { Notifications } from 'components/pages/notifications';
+import { Tools } from 'components/pages/tools';
 
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 
-import { lighten } from '@material-ui/core/styles/colorManipulator';
+import styles from './styles/appLayout';
 
 const drawerWidth = 240;
-
-const styles = appTheme => ({
-  root: {
-    display: 'flex',
-    minHeight: '100vh'
-  },
-  drawer: {
-    [theme.breakpoints.up('md')]: {
-      width: drawerWidth,
-      flexShrink: 0
-    },
-    [theme.breakpoints.up('sm')]: {
-      width: 0
-    }
-  },
-  appContent: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'auto'
-  },
-  mainContent: {
-    flex: 1,
-    padding: appTheme.spacing.unit * 2,
-    background: lighten('#eaeff1', 0.1),
-    overflow: 'hidden'
-  }
-});
 
 const mapState = ({
   common: {
@@ -95,9 +68,8 @@ const AppLayout = ({ classes }) => {
           <Header onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
           <main className={classes.mainContent}>
             {switchcase({
-              packages: () => <Packages too={false} />,
-              problems: () => <Notifications />,
-              scripts: () => <div>scripts</div>
+              packages: () => <Packages />,
+              tools: () => <Typography>NOT AVAILABLE</Typography>
             })(<Packages />)(activePage)}
           </main>
         </div>

@@ -185,6 +185,7 @@ const Packages = ({ classes }) => {
       ]);
   }, []);
 
+  // setup packages
   const [packagesData] = useFilters(packages, filters, counter);
 
   // pagination
@@ -254,7 +255,7 @@ const Packages = ({ classes }) => {
                   packagesInstallOptions={packagesInstallOptions}
                   fromSearch={fromSearch}
                   reload={reload}
-                  nodata={dependencies === null}
+                  nodata={nodata}
                   scrollWrapper={scrollWrapper}
                 />
               </div>
