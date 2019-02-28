@@ -16,6 +16,7 @@ html,
 body {
   font-family: 'Regular', 'Roboto', cursive, sans-serif;
   overflow-y: hidden;
+  background-color: 'rgb(247, 246, 246)';
 }
 
 #app {

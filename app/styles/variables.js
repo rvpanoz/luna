@@ -15,11 +15,7 @@ const container = {
   marginLeft: 'auto'
 };
 
-const boxShadow = {
-  boxShadow:
-    '0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)'
-};
-
+/** fonts */
 const defaultFont = {
   fontFamily: '"Regular", "Roboto", Arial, sans-serif',
   fontWeight: 200,
@@ -33,11 +29,10 @@ const grayColor = '#999999';
 
 /* flexbox */
 const flexContainer = {
-  display: '-webkit-flex',
-  listStyle: 'none',
+  display: 'flex',
   margin: 0,
   padding: 0,
-  WebkitFlexFlow: 'row wrap'
+  flexFlow: 'row wrap'
 };
 
 const flexItem = {
@@ -54,6 +49,11 @@ const flexItemInner = {
 };
 
 /* box shadows */
+const boxShadow = {
+  boxShadow:
+    '0 10px 30px -12px rgba(0, 0, 0, 0.42), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)'
+};
+
 const primaryBoxShadow = {
   boxShadow:
     '0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2)'

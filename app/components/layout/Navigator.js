@@ -82,7 +82,7 @@ const Navigator = ({
   }, []);
 
   return (
-    <Drawer variant="permanent" {...other}>
+    <Drawer variant="temporary" {...other}>
       <List disablePadding>
         <ListItem
           className={classNames(

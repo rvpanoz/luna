@@ -1,7 +1,14 @@
 import { pipe } from 'rxjs';
-import { map, concatMap, skipWhile } from 'rxjs/operators';
-import { combineEpics, ofType } from 'redux-observable';
-
+import {
+  map,
+  mergeMap,
+  concatMap,
+  skipWhile,
+  tap,
+  takeUntil
+} from 'rxjs/operators';
+import { combineEpics, ofType, fromEvent, fromPromise } from 'redux-observable';
+import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
 import {
   toggleLoader,
@@ -46,17 +53,31 @@ const setPackages = payload => ({
   payload
 });
 
-const packagesStartEpic = pipe(
-  ofType(setPackagesStart.type),
-  concatMap(() => [
-    cleanNotifications(),
-    cleanPackages(),
-    updateLoader({
-      loading: true,
-      message: INFO_MESSAGES.loading
-    })
-  ])
-);
+const packagesStartEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(setPackagesStart.type),
+    mergeMap(({ payload: { channel, options } }) => {
+      console.log('fetching..', channel, options);
+      return fromPromise(ipcRenderer.send(channel, options));
+    }),
+    skipWhile(({ payload: { refetch } }) => {
+      const {
+        repository: {
+          data: { packages }
+        }
+      } = state$.value;
+
+      return Boolean(packages.length);
+    }),
+    concatMap(() => [
+      cleanNotifications(),
+      cleanPackages(),
+      updateLoader({
+        loading: true,
+        message: INFO_MESSAGES.loading
+      })
+    ])
+  );
 
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(

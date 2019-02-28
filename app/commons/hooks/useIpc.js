@@ -31,7 +31,7 @@ const useIpc = (channel, options, inputs = []) => {
 
   useEffect(() => {
     ipcRenderer.on(listenTo, (event, status, commandArgs, data, errors) => {
-      if (!data) {
+      if (!data || !status) {
         return;
       }
 
@@ -62,11 +62,12 @@ const useIpc = (channel, options, inputs = []) => {
 
     dispatch(
       setPackagesStart({
+        channel,
         options
       })
     );
 
-    ipcRenderer.send(channel, options);
+    // ipcRenderer.send(channel, options);
 
     return () => ipcRenderer.removeAllListeners([listenTo]);
   }, inputs);
