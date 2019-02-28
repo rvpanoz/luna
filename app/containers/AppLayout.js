@@ -69,7 +69,8 @@ const AppLayout = ({ classes }) => {
           <main className={classes.mainContent}>
             {switchcase({
               packages: () => <Packages />,
-              tools: () => <Typography>NOT AVAILABLE</Typography>
+              tools: () => <Typography>NOT AVAILABLE</Typography>,
+              scripts: () => <Typography>NOT AVAILABLE</Typography>
             })(<Packages />)(activePage)}
           </main>
         </div>

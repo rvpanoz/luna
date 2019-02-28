@@ -155,18 +155,6 @@ const Packages = ({ classes }) => {
   }, [dependenciesSet]);
 
   useEffect(() => {
-    ipcRenderer.on(['action-close'], (event, error) => {
-      if (error && error.length) {
-        dispatch(addActionError({ error }));
-      }
-
-      reload();
-    });
-
-    return () => ipcRenderer.removeAllListeners(['action-close']);
-  }, [counter]);
-
-  useEffect(() => {
     ipcRenderer.on('yarn-warning-close', () => {
       dispatch(
         setSnackbar({
@@ -177,12 +165,16 @@ const Packages = ({ classes }) => {
       );
     });
 
+    ipcRenderer.on(['action-close'], (event, error) => {
+      if (error && error.length) {
+        dispatch(addActionError({ error }));
+      }
+
+      reload();
+    });
+
     return () =>
-      ipcRenderer.removeAllListeners([
-        'action-close',
-        'view-package-close',
-        'yarn-warning-close'
-      ]);
+      ipcRenderer.removeAllListeners(['action-close', 'yarn-warning-close']);
   }, []);
 
   // setup packages

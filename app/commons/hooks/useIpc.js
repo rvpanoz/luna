@@ -62,11 +62,12 @@ const useIpc = (channel, options, inputs = []) => {
 
     dispatch(
       setPackagesStart({
+        channel,
         options
       })
     );
 
-    ipcRenderer.send(channel, options);
+    // ipcRenderer.send(channel, options);
 
     return () => ipcRenderer.removeAllListeners([listenTo]);
   }, inputs);
