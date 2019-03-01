@@ -63,7 +63,8 @@ const useIpc = (channel, options, inputs = []) => {
     dispatch(
       setPackagesStart({
         channel,
-        options
+        options,
+        fromNavigation: false
       })
     );
 

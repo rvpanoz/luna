@@ -25,6 +25,7 @@ import {
   updateData,
   setPage
 } from './actions';
+import { resolve } from 'path';
 
 const cleanNotifications = () => ({
   type: clearNotifications.type
@@ -56,27 +57,20 @@ const setPackages = payload => ({
 const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    mergeMap(({ payload: { channel, options } }) => {
-      console.log('fetching..', channel, options);
-      return fromPromise(ipcRenderer.send(channel, options));
+    map(({ payload: { channel, options, fromNavigation } }) => {
+      ipcRenderer.send(channel, options);
     }),
-    skipWhile(({ payload: { refetch } }) => {
-      const {
-        repository: {
-          data: { packages }
-        }
-      } = state$.value;
-
-      return Boolean(packages.length);
+    concatMap(() => {
+      return [
+        cleanNotifications(),
+        cleanPackages(),
+        updateLoader({
+          loading: true,
+          message: INFO_MESSAGES.loading
+        })
+      ];
     }),
-    concatMap(() => [
-      cleanNotifications(),
-      cleanPackages(),
-      updateLoader({
-        loading: true,
-        message: INFO_MESSAGES.loading
-      })
-    ])
+    tap(console.log)
   );
 
 const packagesSuccessEpic = (action$, state$) =>
