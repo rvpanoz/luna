@@ -1,13 +1,16 @@
-import { pipe } from 'rxjs';
+import { pipe, from, of } from 'rxjs';
 import {
   map,
   mergeMap,
   concatMap,
   skipWhile,
   tap,
-  takeUntil
+  takeUntil,
+  takeWhile,
+  switchMap,
+  catchError
 } from 'rxjs/operators';
-import { combineEpics, ofType, fromEvent, fromPromise } from 'redux-observable';
+import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
 import {
@@ -25,7 +28,6 @@ import {
   updateData,
   setPage
 } from './actions';
-import { resolve } from 'path';
 
 const cleanNotifications = () => ({
   type: clearNotifications.type
@@ -57,20 +59,31 @@ const setPackages = payload => ({
 const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    map(({ payload: { channel, options, fromNavigation } }) => {
-      ipcRenderer.send(channel, options);
+    switchMap(({ payload: { channel, options, cancelled } }) => {
+      const newPromise = new Promise((resolve, reject) => {
+        if (cancelled) {
+          reject({
+            type: 'PAUSE_REQUEST'
+          });
+        } else {
+          //async operation
+          ipcRenderer.send(channel, options);
+
+          resolve(
+            updateLoader({
+              loading: true,
+              message: INFO_MESSAGES.loading
+            })
+          );
+        }
+      });
+
+      return from(newPromise).pipe(catchError(error => of(error)));
     }),
+    takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
     concatMap(() => {
-      return [
-        cleanNotifications(),
-        cleanPackages(),
-        updateLoader({
-          loading: true,
-          message: INFO_MESSAGES.loading
-        })
-      ];
-    }),
-    tap(console.log)
+      return [cleanNotifications(), cleanPackages(), cleanCommands()];
+    })
   );
 
 const packagesSuccessEpic = (action$, state$) =>
