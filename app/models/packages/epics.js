@@ -8,7 +8,8 @@ import {
   takeUntil,
   takeWhile,
   switchMap,
-  catchError
+  catchError,
+  mapTo
 } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
@@ -56,34 +57,29 @@ const setPackages = payload => ({
   payload
 });
 
-const packagesStartEpic = (action$, state$) =>
+const pauseRequest = () => ({
+  type: 'PAUSE_REQUEST'
+});
+
+const packagesStartEpic = action$ =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    switchMap(({ payload: { channel, options, cancelled } }) => {
-      const newPromise = new Promise((resolve, reject) => {
-        if (cancelled) {
-          reject({
-            type: 'PAUSE_REQUEST'
-          });
-        } else {
-          //async operation
-          ipcRenderer.send(channel, options);
+    map(({ payload: { channel, options, cancelled = false } }) => {
+      if (cancelled) {
+        return pauseRequest();
+      }
 
-          resolve(
-            updateLoader({
-              loading: true,
-              message: INFO_MESSAGES.loading
-            })
-          );
-        }
+      ipcRenderer.send(channel, options);
+
+      return updateLoader({
+        loading: true,
+        message: INFO_MESSAGES.loading
       });
-
-      return from(newPromise).pipe(catchError(error => of(error)));
     }),
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
-    concatMap(() => {
-      return [cleanNotifications(), cleanPackages(), cleanCommands()];
-    })
+    switchMap(action =>
+      from([action, cleanNotifications(), cleanPackages(), cleanCommands()])
+    )
   );
 
 const packagesSuccessEpic = (action$, state$) =>
