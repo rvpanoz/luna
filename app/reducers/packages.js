@@ -2,7 +2,7 @@
  * Packages reducer: Handles state management for packages operations
  */
 
-import { identity, merge, prepend, prop, propOr, remove } from 'ramda';
+import { identity, assoc, merge, prepend, prop, propOr, remove } from 'ramda';
 import {
   addActionError,
   addFilter,
@@ -230,32 +230,32 @@ const handlers = {
       active
     });
   },
-  [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
+  [setPackagesStart.type]: state =>
     merge(state, {
       ...state,
-      active: null,
-      filtering: {
-        filters: []
-      },
-      operations: {
-        selected: [],
-        packagesInstallOptions: []
-      },
-      metadata: {
-        fromSearch,
-        fromSort
-      },
-      project: {
-        name: null,
-        version: null,
-        description: null,
-        license: null,
-        author: null
-      },
-      data: {
-        packagesOutdated: [],
-        packages: []
-      }
+      active: null
+      // filtering: {
+      //   filters: []
+      // },
+      // operations: {
+      //   selected: [],
+      //   packagesInstallOptions: []
+      // },
+      // metadata: {
+      //   fromSearch,
+      //   fromSort
+      // },
+      // project: {
+      //   name: null,
+      //   version: null,
+      //   description: null,
+      //   license: null,
+      //   author: null
+      // },
+      // data: {
+      //   packagesOutdated: [],
+      //   packages: []
+      // }
     }),
   [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
     merge(state, {
@@ -278,7 +278,9 @@ const handlers = {
         ...state.pagination,
         rowsPerPage
       }
-    })
+    }),
+  CANCEL_REQUEST: state => assoc('cancelled', true, state),
+  RESUME_REQUEST: state => assoc('cancelled', false, state)
 };
 
 export default createReducer(repository, handlers);

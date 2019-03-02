@@ -1,15 +1,11 @@
-import { pipe, from, of } from 'rxjs';
+import { from } from 'rxjs';
 import {
   map,
-  mergeMap,
   concatMap,
   skipWhile,
   tap,
-  takeUntil,
   takeWhile,
-  switchMap,
-  catchError,
-  mapTo
+  switchMap
 } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
@@ -58,13 +54,13 @@ const setPackages = payload => ({
 });
 
 const pauseRequest = () => ({
-  type: 'PAUSE_REQUEST'
+  type: 'CANCEL_REQUEST'
 });
 
 const packagesStartEpic = action$ =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    map(({ payload: { channel, options, cancelled = false } }) => {
+    map(({ payload: { channel, options, cancelled } }) => {
       if (cancelled) {
         return pauseRequest();
       }
@@ -76,7 +72,8 @@ const packagesStartEpic = action$ =>
         message: INFO_MESSAGES.loading
       });
     }),
-    takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
+    takeWhile(({ type }) => type !== 'CANCEL_REQUEST'),
+    tap(console.log),
     switchMap(action =>
       from([action, cleanNotifications(), cleanPackages(), cleanCommands()])
     )

@@ -10,7 +10,7 @@ import { setPackagesStart } from 'models/packages/actions';
 import { parseMap, switchcase } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
-  const { ipcEvent, mode, directory } = options || {};
+  const { ipcEvent, mode, directory, cancelled = false } = options || {};
   const listenTo = `${ipcEvent}-close`;
 
   const [dependenciesSet, setDependencies] = useState({
@@ -64,16 +64,14 @@ const useIpc = (channel, options, inputs = []) => {
       setPackagesStart({
         channel,
         options,
-        fromNavigation: false
+        cancelled
       })
     );
-
-    // ipcRenderer.send(channel, options);
 
     return () => ipcRenderer.removeAllListeners([listenTo]);
   }, inputs);
 
-  return [dependenciesSet, outdatedSet, commandErrors];
+  return [dependenciesSet, outdatedSet, commandErrors, cancelled];
 };
 
 export default useIpc;

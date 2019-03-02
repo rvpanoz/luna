@@ -47,9 +47,11 @@ const mapState = ({
     pagination: { page, rowsPerPage },
     filtering: { filters },
     metadata: { fromSearch, lastUpdatedAt },
-    sorting: { sortBy, sortDir }
+    sorting: { sortBy, sortDir },
+    cancelled
   }
 }) => ({
+  cancelled,
   active,
   lastUpdatedAt,
   directory,
@@ -73,6 +75,7 @@ const mapState = ({
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
+    cancelled,
     packages,
     packagesOutdated,
     mode,
@@ -123,7 +126,8 @@ const Packages = ({ classes }) => {
       ipcEvent: 'get-packages',
       cmd: ['outdated', 'list'],
       mode,
-      directory
+      directory,
+      cancelled
     },
     [counter, mode, directory]
   );
@@ -141,6 +145,8 @@ const Packages = ({ classes }) => {
   const nodata = Boolean(dependencies && dependencies.length === 0);
 
   useEffect(() => {
+    if (cancelled) return;
+
     dispatch(
       updateData({
         dependencies,

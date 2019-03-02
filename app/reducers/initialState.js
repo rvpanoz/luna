@@ -26,6 +26,7 @@ export default {
   },
   repository: {
     active: null,
+    cancelled: false,
     data: {
       packages: [],
       packagesOutdated: []
