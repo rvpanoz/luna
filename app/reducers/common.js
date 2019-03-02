@@ -74,7 +74,7 @@ const handlers = {
     merge(state, {
       npm: {
         ...state.npm,
-        commands: append(command, state.npm.commands)
+        commands: [...state.npm.commands, command]
       }
     }),
   [commandError.type]: (state, { payload: error }) =>
@@ -90,6 +90,7 @@ const handlers = {
   [clearCommands.type]: state =>
     merge(state, {
       npm: {
+        ...state.npm,
         commands: []
       }
     }),
