@@ -205,6 +205,7 @@ const TableListToolbar = ({
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
+
           return switchMode(APP_MODES.local, scanDirectory);
         }
       }

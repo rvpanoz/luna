@@ -3,7 +3,6 @@
  */
 
 import { identity, merge, assoc, propOr, prop, append, prepend } from 'ramda';
-// import format from 'date-fns/format';
 
 import {
   updateNotifications,
@@ -24,7 +23,7 @@ import {
 } from 'models/ui/actions';
 import initialState from './initialState';
 
-const { dependencies, ...common } = initialState;
+const { repository, ...common } = initialState;
 
 /**
  *
@@ -38,12 +37,19 @@ const createReducer = (commonState, handlers) => (
 
 const handlers = {
   [setActivePage.type]: (state, { payload: page }) =>
-    assoc('activePage', page, state),
+    merge(state, {
+      activePage: page,
+      npm: {
+        ...state.npm,
+        paused: true
+      }
+    }),
   [uiException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
   [setEnv.type]: (state, { payload: env }) =>
     merge(state, {
       npm: {
+        ...state.npm,
         env
       }
     }),
@@ -66,7 +72,10 @@ const handlers = {
     }),
   [npmCommand.type]: (state, { payload: command }) =>
     merge(state, {
-      commands: append(command, state.commands)
+      npm: {
+        ...state.npm,
+        commands: append(command, state.npm.commands)
+      }
     }),
   [commandError.type]: (state, { payload: error }) =>
     assoc('command_error', error, state),

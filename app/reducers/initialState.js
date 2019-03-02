@@ -5,8 +5,9 @@ export default {
   directory: null,
   enableNotifications: true,
   notifications: [],
-  commands: [],
   npm: {
+    commands: [],
+    paused: false,
     env: ''
   },
   uiException: {
@@ -26,7 +27,6 @@ export default {
   },
   repository: {
     active: null,
-    cancelled: false,
     data: {
       packages: [],
       packagesOutdated: []

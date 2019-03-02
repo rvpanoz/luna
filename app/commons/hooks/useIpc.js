@@ -6,12 +6,11 @@ import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 
-import { setPackagesStart } from 'models/packages/actions';
+import { setPackagesStart, updateData } from 'models/packages/actions';
 import { parseMap, switchcase } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
-  const { ipcEvent, mode, directory, cancelled = false } = options || {};
-  const listenTo = `${ipcEvent}-close`;
+  const { ipcEvent, mode, directory } = options || {};
 
   const [dependenciesSet, setDependencies] = useState({
     data: [],
@@ -30,48 +29,52 @@ const useIpc = (channel, options, inputs = []) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on(listenTo, (event, status, commandArgs, data, errors) => {
-      if (!data || !status) {
-        return;
+    ipcRenderer.on(
+      `${ipcEvent}-close`,
+      (event, status, commandArgs, data, errors) => {
+        if (!data || !status) {
+          return;
+        }
+
+        const errorsMessages = errors && errors.length ? errors : null;
+        setErrors(errorsMessages);
+
+        const command = commandArgs && commandArgs[0];
+        const [
+          packages,
+          name,
+          version,
+          description,
+          license,
+          author
+        ] = parseMap(data, mode, directory, commandArgs);
+
+        switchcase({
+          list: () =>
+            setDependencies({
+              data: packages && packages.length ? packages : null,
+              projectName: name,
+              projectVersion: version,
+              projectDescription: description,
+              projectLicense: license,
+              projectAuthor: author
+            }),
+          outdated: () => setOutdated({ data: packages })
+        })('list')(command);
       }
-
-      const errorsMessages = errors && errors.length ? errors : null;
-      setErrors(errorsMessages);
-
-      const command = commandArgs && commandArgs[0];
-      const [packages, name, version, description, license, author] = parseMap(
-        data,
-        mode,
-        directory,
-        commandArgs
-      );
-
-      switchcase({
-        list: () =>
-          setDependencies({
-            data: packages && packages.length ? packages : null,
-            projectName: name,
-            projectVersion: version,
-            projectDescription: description,
-            projectLicense: license,
-            projectAuthor: author
-          }),
-        outdated: () => setOutdated({ data: packages })
-      })('list')(command);
-    });
+    );
 
     dispatch(
       setPackagesStart({
         channel,
-        options,
-        cancelled
+        options
       })
     );
 
-    return () => ipcRenderer.removeAllListeners([listenTo]);
+    return () => ipcRenderer.removeAllListeners([`${ipcEvent}-close`]);
   }, inputs);
 
-  return [dependenciesSet, outdatedSet, commandErrors, cancelled];
+  return [dependenciesSet, outdatedSet, commandErrors];
 };
 
 export default useIpc;

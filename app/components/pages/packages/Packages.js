@@ -17,13 +17,15 @@ import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
 
+import { parseMap, switchcase } from 'commons/utils';
 import {
   addActionError,
   addSelected,
   addInstallOption,
   updateData,
   setPage,
-  setPageRows
+  setPageRows,
+  setPackagesStart
 } from 'models/packages/actions';
 import { setSnackbar } from 'models/ui/actions';
 import { APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
@@ -47,11 +49,9 @@ const mapState = ({
     pagination: { page, rowsPerPage },
     filtering: { filters },
     metadata: { fromSearch, lastUpdatedAt },
-    sorting: { sortBy, sortDir },
-    cancelled
+    sorting: { sortBy, sortDir }
   }
 }) => ({
-  cancelled,
   active,
   lastUpdatedAt,
   directory,
@@ -72,10 +72,9 @@ const mapState = ({
   sortBy
 });
 
-const Packages = ({ classes }) => {
+const Packages = ({ classes, paused }) => {
   const {
     loader: { loading, message },
-    cancelled,
     packages,
     packagesOutdated,
     mode,
@@ -93,10 +92,8 @@ const Packages = ({ classes }) => {
     lastUpdatedAt
   } = useMappedState(mapState);
 
-  const wrapperRef = useRef(null);
   const [counter, setCounter] = useState(0);
-
-  const reload = () => setCounter(counter + 1);
+  const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
   const isSelected = useCallback(
@@ -126,8 +123,7 @@ const Packages = ({ classes }) => {
       ipcEvent: 'get-packages',
       cmd: ['outdated', 'list'],
       mode,
-      directory,
-      cancelled
+      directory
     },
     [counter, mode, directory]
   );
@@ -145,8 +141,6 @@ const Packages = ({ classes }) => {
   const nodata = Boolean(dependencies && dependencies.length === 0);
 
   useEffect(() => {
-    if (cancelled) return;
-
     dispatch(
       updateData({
         dependencies,
@@ -175,8 +169,6 @@ const Packages = ({ classes }) => {
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
-
-      reload();
     });
 
     return () =>
@@ -208,7 +200,7 @@ const Packages = ({ classes }) => {
               description="Total"
               subtitle={mode}
               iconHeader="packages"
-              total={packagesData ? packagesData.length : '0'}
+              total={packagesData && packagesData.length}
               small={mode === APP_MODES.local ? projectName : null}
               iconColor="primary"
               footerText={lastUpdatedAt}
@@ -240,7 +232,7 @@ const Packages = ({ classes }) => {
       </section>
       <AppLoader loading={loading} message={message}>
         <Grid container>
-          <Grid item sm={8} md={6} lg={6} xl={6}>
+          <Grid item sm={8} md={8} lg={6} xl={6}>
             <Paper className={classes.root}>
               <div className={classes.toolbar}>
                 <TableToolbar
@@ -252,9 +244,10 @@ const Packages = ({ classes }) => {
                   packagesOutdatedNames={packagesOutdatedNames}
                   packagesInstallOptions={packagesInstallOptions}
                   fromSearch={fromSearch}
-                  reload={reload}
-                  nodata={nodata}
                   scrollWrapper={scrollWrapper}
+                  reload={() => {
+                    setCounter(counter + 1);
+                  }}
                 />
               </div>
               <div className={classes.tableWrapper} ref={wrapperRef}>
@@ -268,7 +261,7 @@ const Packages = ({ classes }) => {
                   <TableHeader
                     packages={dataSlices.map(d => d.name)}
                     numSelected={selected.length}
-                    rowCount={dependencies && dependencies.length}
+                    rowCount={dataSlices && dataSlices.length}
                     sortBy={sortBy}
                     sortDir={sortDir}
                   />
@@ -325,7 +318,7 @@ const Packages = ({ classes }) => {
                   <TableFooter
                     classes={{
                       root: {
-                        [classes.hidden]: nodata
+                        [classes.hidden]: false // nodata
                       }
                     }}
                     rowCount={packagesData && packagesData.length}
@@ -342,9 +335,6 @@ const Packages = ({ classes }) => {
                 </Table>
               </div>
             </Paper>
-          </Grid>
-          <Grid item sm={4} md={4} lg={4} xl={4}>
-            <PackageDetails />
           </Grid>
         </Grid>
       </AppLoader>

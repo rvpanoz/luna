@@ -2,7 +2,7 @@
  * Packages reducer: Handles state management for packages operations
  */
 
-import { identity, assoc, merge, prepend, prop, propOr, remove } from 'ramda';
+import { identity, merge, prepend, prop, propOr, remove } from 'ramda';
 import {
   addActionError,
   addFilter,
@@ -230,32 +230,24 @@ const handlers = {
       active
     });
   },
-  [setPackagesStart.type]: state =>
+  [setPackagesStart.type]: (
+    state,
+    { payload: { fromSearch, fromSort, paused } }
+  ) =>
     merge(state, {
       ...state,
-      active: null
-      // filtering: {
-      //   filters: []
-      // },
-      // operations: {
-      //   selected: [],
-      //   packagesInstallOptions: []
-      // },
-      // metadata: {
-      //   fromSearch,
-      //   fromSort
-      // },
-      // project: {
-      //   name: null,
-      //   version: null,
-      //   description: null,
-      //   license: null,
-      //   author: null
-      // },
-      // data: {
-      //   packagesOutdated: [],
-      //   packages: []
-      // }
+      active: null,
+      filtering: {
+        filters: []
+      },
+      operations: {
+        selected: [],
+        packagesInstallOptions: []
+      },
+      metadata: {
+        fromSearch,
+        fromSort
+      }
     }),
   [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
     merge(state, {
@@ -278,9 +270,7 @@ const handlers = {
         ...state.pagination,
         rowsPerPage
       }
-    }),
-  CANCEL_REQUEST: state => assoc('cancelled', true, state),
-  RESUME_REQUEST: state => assoc('cancelled', false, state)
+    })
 };
 
 export default createReducer(repository, handlers);

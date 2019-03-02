@@ -21,7 +21,6 @@ import HomeIcon from '@material-ui/icons/Home';
 import { APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
 import { clearPackages } from 'models/packages/actions';
-
 import { switchcase } from 'commons/utils';
 import styles from './styles/navigator';
 
@@ -46,7 +45,6 @@ const Navigator = ({
   const dispatch = useDispatch();
 
   const handleDirectory = useCallback(directory => {
-    dispatch(clearPackages());
     dispatch(setMode({ mode: APP_MODES.local, directory }));
   }, []);
 

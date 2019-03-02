@@ -13,7 +13,8 @@ import { isPackageOutdated } from 'commons/utils';
 import {
   toggleLoader,
   clearCommands,
-  clearNotifications
+  clearNotifications,
+  setActivePage
 } from 'models/ui/actions';
 import { INFO_MESSAGES } from 'constants/AppConstants';
 
@@ -57,35 +58,49 @@ const pauseRequest = () => ({
   type: 'CANCEL_REQUEST'
 });
 
-const packagesStartEpic = action$ =>
-  action$.pipe(
+const resetPage = payload => ({
+  type: setActivePage.type,
+  payload
+});
+
+const packagesStartEpic = (action$, state$) => {
+  const {
+    common: {
+      npm: { paused }
+    }
+  } = state$.value;
+
+  return action$.pipe(
     ofType(setPackagesStart.type),
-    map(({ payload: { channel, options, cancelled } }) => {
-      if (cancelled) {
+    map(({ payload: { channel, options } }) => {
+      console.log(paused);
+      if (paused) {
         return pauseRequest();
       }
 
       ipcRenderer.send(channel, options);
-
-      return updateLoader({
+    }),
+    concatMap(() => [
+      updateLoader({
         loading: true,
         message: INFO_MESSAGES.loading
-      });
-    }),
-    takeWhile(({ type }) => type !== 'CANCEL_REQUEST'),
-    tap(console.log),
-    switchMap(action =>
-      from([action, cleanNotifications(), cleanPackages(), cleanCommands()])
-    )
+      }),
+      cleanNotifications(),
+      cleanPackages(),
+      cleanCommands()
+    ])
   );
+};
 
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
-    skipWhile(
-      ({ payload: { dependencies } }) =>
-        !dependencies || !Array.isArray(dependencies) || !dependencies.length
-    ),
+    skipWhile(({ payload: { dependencies } }) => {
+      console.log(dependencies);
+      const noData = !dependencies || !Array.isArray(dependencies);
+
+      return noData;
+    }),
     map(
       ({
         payload: {
