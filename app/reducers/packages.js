@@ -230,10 +230,7 @@ const handlers = {
       active
     });
   },
-  [setPackagesStart.type]: (
-    state,
-    { payload: { fromSearch, fromSort, paused } }
-  ) =>
+  [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
     merge(state, {
       ...state,
       active: null,

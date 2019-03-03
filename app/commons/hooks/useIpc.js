@@ -6,11 +6,11 @@ import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 
-import { setPackagesStart, updateData } from 'models/packages/actions';
+import { setPackagesStart } from 'models/packages/actions';
 import { parseMap, switchcase } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
-  const { ipcEvent, mode, directory } = options || {};
+  const { ipcEvent, mode, directory, paused } = options || {};
 
   const [dependenciesSet, setDependencies] = useState({
     data: [],
@@ -64,12 +64,15 @@ const useIpc = (channel, options, inputs = []) => {
       }
     );
 
-    dispatch(
-      setPackagesStart({
-        channel,
-        options
-      })
-    );
+    if (!paused) {
+      dispatch(
+        setPackagesStart({
+          channel,
+          options,
+          paused
+        })
+      );
+    }
 
     return () => ipcRenderer.removeAllListeners([`${ipcEvent}-close`]);
   }, inputs);

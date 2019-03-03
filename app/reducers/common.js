@@ -2,7 +2,7 @@
  * global reducer: Handles state management for global operations.
  */
 
-import { identity, merge, assoc, propOr, prop, append, prepend } from 'ramda';
+import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
 
 import {
   updateNotifications,
@@ -94,13 +94,21 @@ const handlers = {
         commands: []
       }
     }),
-  [clearNotifications.type]: state => assoc('notifications', [], state),
+  [clearNotifications.type]: state =>
+    merge(state, {
+      ...state,
+      notifications: []
+    }),
   [setSnackbar.type]: (state, { payload }) =>
     assoc('snackbarOptions', merge(state.snackbarOptions, payload), state),
   [setMode.type]: (state, { payload: { mode, directory } }) =>
     merge(state, {
       mode,
-      directory
+      directory,
+      npm: {
+        ...state.npm,
+        paused: false
+      }
     }),
   [setManager.type]: (state, { payload: { manager } }) =>
     assoc('manager', manager, state),

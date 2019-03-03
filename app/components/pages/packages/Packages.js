@@ -17,20 +17,16 @@ import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
 
-import { parseMap, switchcase } from 'commons/utils';
 import {
   addActionError,
   addSelected,
   addInstallOption,
   updateData,
   setPage,
-  setPageRows,
-  setPackagesStart
+  setPageRows
 } from 'models/packages/actions';
 import { setSnackbar } from 'models/ui/actions';
 import { APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
-
-import { PackageDetails } from 'components/pages/package';
 import AppCard from 'components/common/AppCard';
 
 import TableToolbar from './TableToolbar';
@@ -41,7 +37,14 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
-  common: { directory, manager, mode, loader, notifications },
+  common: {
+    directory,
+    manager,
+    mode,
+    loader,
+    notifications,
+    npm: { paused }
+  },
   repository: {
     active,
     data: { packages, packagesOutdated },
@@ -52,6 +55,7 @@ const mapState = ({
     sorting: { sortBy, sortDir }
   }
 }) => ({
+  paused,
   active,
   lastUpdatedAt,
   directory,
@@ -72,7 +76,7 @@ const mapState = ({
   sortBy
 });
 
-const Packages = ({ classes, paused }) => {
+const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
     packages,
@@ -89,7 +93,8 @@ const Packages = ({ classes, paused }) => {
     sortBy,
     packagesInstallOptions,
     notifications,
-    lastUpdatedAt
+    lastUpdatedAt,
+    paused
   } = useMappedState(mapState);
 
   const [counter, setCounter] = useState(0);
@@ -123,9 +128,10 @@ const Packages = ({ classes, paused }) => {
       ipcEvent: 'get-packages',
       cmd: ['outdated', 'list'],
       mode,
-      directory
+      directory,
+      paused
     },
-    [counter, mode, directory]
+    [counter, paused, mode, directory]
   );
 
   const {
@@ -138,9 +144,12 @@ const Packages = ({ classes, paused }) => {
 
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
-  const nodata = Boolean(dependencies && dependencies.length === 0);
 
   useEffect(() => {
+    if (paused) {
+      return;
+    }
+
     dispatch(
       updateData({
         dependencies,
@@ -154,6 +163,7 @@ const Packages = ({ classes, paused }) => {
     );
   }, [dependenciesSet]);
 
+  // ipcRenderer listeners
   useEffect(() => {
     ipcRenderer.on('yarn-warning-close', () => {
       dispatch(
