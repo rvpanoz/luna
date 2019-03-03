@@ -41,12 +41,6 @@ body {
 }
 
 @font-face {
-  font-family: 'Din-Bold';
-  src: local('D-DIN-Bold'), local('D-DIN-Bold'),
-    url('./assets/fonts/D-DIN-Bold.otf') format('truetype');
-}
-
-@font-face {
   font-family: 'Regular';
   src: local('Regular'), local('Regular'),
     url('./assets/fonts/Regular.woff') format('woff'),
