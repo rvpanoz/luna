@@ -1,4 +1,4 @@
-import { map, takeWhile, concatMap, skipWhile } from 'rxjs/operators';
+import { tap, map, takeWhile, concatMap, skipWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
@@ -10,6 +10,8 @@ import {
 
 import {
   clearPackages,
+  installPackages,
+  updatePackages,
   setPackagesStart,
   setPackagesSuccess,
   setOutdatedSuccess,
@@ -74,6 +76,18 @@ const packagesStartEpic = action$ =>
     ])
   );
 
+const installPackagesEpic = action$ =>
+  action$.pipe(
+    ofType(installPackages.type),
+    map(({ payload }) => {
+      ipcRenderer.send(channel, payload);
+
+      return updateLoader({
+        loading: true
+      });
+    })
+  );
+
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
@@ -110,7 +124,7 @@ const packagesSuccessEpic = (action$, state$) =>
               __group
             } = dependency;
 
-            const enhanceDependency = {
+            const enhancedDependency = {
               author,
               bugs,
               deprecated,
@@ -127,7 +141,7 @@ const packagesSuccessEpic = (action$, state$) =>
               __group
             };
 
-            deps.push(enhanceDependency);
+            deps.push(enhancedDependency);
           }
 
           return deps;
@@ -185,4 +199,8 @@ const packagesSuccessEpic = (action$, state$) =>
     )
   );
 
-export default combineEpics(packagesStartEpic, packagesSuccessEpic);
+export default combineEpics(
+  packagesStartEpic,
+  packagesSuccessEpic,
+  installPackagesEpic
+);

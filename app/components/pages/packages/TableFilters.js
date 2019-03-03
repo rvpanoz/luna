@@ -131,13 +131,13 @@ const TableFilters = ({ classes, mode, close }) => {
         <Divider className={classes.bottomDivider} light />
         <div className={classes.actions}>
           <AppButton
+            color="transparent"
             className={classes.actionButton}
-            color="simple"
-            onClick={emptyFilters}
+            onClick={() => emptyFilters()}
           >
             Clear
           </AppButton>
-          <AppButton color="primary" onClick={close}>
+          <AppButton color="transparent" onClick={close}>
             Close
           </AppButton>
         </div>

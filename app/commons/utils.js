@@ -65,32 +65,6 @@ export const switchcase = cases => defaultCase => key =>
     : defaultCase;
 
 /**
- * Filtering
- * TODO: buggy combine returns only the last element! why?
- */
-export const getFiltered = (data, filters) => {
-  const groups = Object.keys(PACKAGE_GROUPS);
-
-  const withFiltersData = filters.reduce((acc, filterName) => {
-    const filtered =
-      data &&
-      data.filter(pkg => {
-        if (groups.indexOf(filterName) > -1) {
-          return pkg['__group'] === filterName;
-        }
-
-        return !!pkg[filterName];
-      });
-
-    if (filtered.length) {
-      return acc ? acc.concat(filtered) : [];
-    }
-  }, []);
-
-  return withFiltersData;
-};
-
-/**
  *
  * @param {*} str
  */
@@ -225,17 +199,20 @@ export const parseMap = (response, mode, directory) => {
           mk.log(
             `utils[parseMap]: could not parse package.json in ${directory}`
           );
+
           return;
         }
 
         group = Object.keys(PACKAGE_GROUPS).find(groupName => {
+          debugger;
           return packageJSON[groupName] && packageJSON[groupName][pkgName];
         });
       }
 
+      console.log(group);
       return merge(details, {
         name: name || pkgName,
-        __group: group || '',
+        __group: group,
         __error: hasError,
         __peerMissing: Array.isArray(peerMissing) && peerMissing.length
       });

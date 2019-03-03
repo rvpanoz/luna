@@ -30,14 +30,14 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/BallotOutlined';
 
-import { firstToUpper, switchcase } from 'commons/utils';
+import { switchcase } from 'commons/utils';
 import {
   APP_MODES,
   INFO_MESSAGES,
   PACKAGE_GROUPS
 } from 'constants/AppConstants';
 import { setMode, toggleLoader } from 'models/ui/actions';
-
+import { updatePackages, installPackages } from 'models/packages/actions';
 import TableFilters from './TableFilters';
 import Flags from './Flags';
 import styles from './styles/tableToolbar';
@@ -167,7 +167,8 @@ const TableListToolbar = ({
         directory
       };
 
-      ipcRenderer.send('ipc-event', parameters);
+      dispatch(installPackages(parameters));
+      // ipcRenderer.send('ipc-event', parameters);
     } else {
       ipcRenderer.send('ipc-event', {
         activeManager: manager,
@@ -182,8 +183,7 @@ const TableListToolbar = ({
 
     dispatch(
       toggleLoader({
-        loading: true,
-        message: `${firstToUpper(action)}ing packages..`
+        loading: true
       })
     );
   };
@@ -205,7 +205,6 @@ const TableListToolbar = ({
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
-
           return switchMode(APP_MODES.local, scanDirectory);
         }
       }

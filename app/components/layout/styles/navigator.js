@@ -25,12 +25,14 @@ const styles = theme => ({
     padding: theme.spacing.unit / 2
   },
   homeIcon: {
+    width: 35,
+    height: 35,
+    marginLeft: theme.spacing.unit * 2,
     fill: '#fff'
   },
   title: {
     fontSize: 24,
-    fontFamily: 'Din-Bold',
-    color: theme.palette.secondary.light
+    color: theme.palette.common.white
   },
   itemActionable: {
     '&:hover': {
@@ -53,6 +55,15 @@ const styles = theme => ({
   },
   divider: {
     marginTop: theme.spacing.unit * 2
+  },
+  margin: {
+    margin: theme.spacing.unit
+  },
+  extendedIcon: {
+    marginRight: theme.spacing.unit
+  },
+  actionButton: {
+    paddingTop: theme.spacing.unit
   }
 });
 

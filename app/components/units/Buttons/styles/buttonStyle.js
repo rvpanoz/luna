@@ -19,7 +19,7 @@ const buttonStyle = theme => ({
     position: 'relative',
     padding: `${theme.spacing.unit * 1.35}px ${theme.spacing.unit * 3}px`,
     margin: 0,
-    fontSize: 12,
+    fontSize: 18,
     fontWeight: 400,
     textTransform: 'uppercase',
     letterSpacing: 0,
@@ -40,12 +40,10 @@ const buttonStyle = theme => ({
     width: '100%'
   },
   primary: {
+    ...boxShadow,
     backgroundColor: theme.palette.primary.main,
-    boxShadow,
     '&:hover': {
-      backgroundColor: theme.palette.primary.light,
-      boxShadow:
-        '0 14px 26px -12px rgba(156, 39, 176, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(156, 39, 176, 0.2)'
+      backgroundColor: theme.palette.primary.light
     }
   },
   info: {

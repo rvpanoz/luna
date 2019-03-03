@@ -16,12 +16,16 @@ const setSortOptions = ActionCreator('SET_SORT_OPTIONS');
 const setActive = ActionCreator('SET_ACTIVE_PACKAGE');
 const setActiveError = ActionCreator('SET_ACTIVE_PACKAGE_ERROR');
 const setPackagesError = ActionCreator('SET_PACKAGES_ERROR');
-const updatePackage = ActionCreator('UPDATE_PACKAGE');
 const updateData = ActionCreator('UPDATE_DATA');
 const setPage = ActionCreator('SET_PAGE');
 const setPageRows = ActionCreator('SET_PAGE_ROWS');
 
+const installPackages = ActionCreator('INSTALL_PACKAGES');
+const updatePackages = ActionCreator('UPDATE_PACKAGES');
+
 export {
+  installPackages,
+  updatePackages,
   addActionError,
   addFilter,
   addSelected,
@@ -38,6 +42,5 @@ export {
   setOutdatedSuccess,
   setPage,
   setPageRows,
-  updateData,
-  updatePackage
+  updateData
 };

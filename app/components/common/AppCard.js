@@ -57,14 +57,16 @@ const AppCard = ({
           subheader={subtitle}
         />
       )}
-      <CardContent className={classes.cardContent}>
+      <CardContent>
         <AppLoader loading={loading}>
-          <Typography variant="subtitle1" className={classes.cardCategory}>
-            {description}
-          </Typography>
-          <Typography variant="body2" className={classes.cardDescription}>
-            {total}
-          </Typography>
+          <div className={classes.cardContent}>
+            <Typography variant="subtitle1" className={classes.cardCategory}>
+              {description}
+            </Typography>
+            <Typography variant="body2" className={classes.cardDescription}>
+              {total}
+            </Typography>
+          </div>
         </AppLoader>
       </CardContent>
       <CardActions className={classes.cardActions}>
