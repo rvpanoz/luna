@@ -6,33 +6,20 @@ import classNames from 'classnames';
 import { useDispatch } from 'redux-react-hook';
 import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
-import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
-import LoadIcon from '@material-ui/icons/Archive';
-import ToolsIcon from '@material-ui/icons/Settings';
 import HomeIcon from '@material-ui/icons/Home';
 
+import AppTypography from 'components/units/Typography';
+import AppButton from 'components/units/Buttons/AppButton';
 import { APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
-import { clearPackages } from 'models/packages/actions';
-import { switchcase } from 'commons/utils';
-import styles from './styles/navigator';
 
-const menuItems = [
-  {
-    id: 'Menu',
-    children: [
-      { id: 'Analyze', icon: <LoadIcon />, active: true },
-      { id: 'Tools', icon: <ToolsIcon /> }
-    ]
-  }
-];
+import styles from './styles/navigator';
 
 const Navigator = ({
   classes,
@@ -91,53 +78,20 @@ const Navigator = ({
         >
           <div className={classes.flexContainer}>
             <HomeIcon className={classes.homeIcon} />
-            <Typography className={classNames(classes.title, classes.flexItem)}>
-              Luna
-            </Typography>
           </div>
         </ListItem>
-        {menuItems.map(({ id, children }) => (
-          <React.Fragment key={id}>
-            <ListItem className={classes.categoryHeader}>
-              <ListItemText
-                classes={{
-                  primary: classes.categoryHeaderPrimary
-                }}
-              >
-                {id}
-              </ListItemText>
-            </ListItem>
-            {children.map(({ id: childId, icon, active }) => (
-              <ListItem
-                button
-                dense
-                key={childId}
-                className={classNames(
-                  classes.item,
-                  classes.itemActionable,
-                  active && classes.itemActiveItem
-                )}
-                onClick={() =>
-                  switchcase({
-                    Analyze: () => openPackage(),
-                    Tools: () => {}
-                  })()(childId)
-                }
-              >
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText
-                  classes={{
-                    primary: classes.itemPrimary,
-                    textDense: classes.textDense
-                  }}
-                >
-                  {childId}
-                </ListItemText>
-              </ListItem>
-            ))}
-            <Divider className={classes.divider} />
-          </React.Fragment>
-        ))}
+        <ListItem>
+          <ListItemText className={classes.actionButton}>
+            <AppButton
+              color="primary"
+              fullWidth
+              round
+              onClick={() => openPackage()}
+            >
+              Analyze
+            </AppButton>
+          </ListItemText>
+        </ListItem>
         <ListItem className={classes.categoryHeader}>
           <ListItemText
             classes={{
