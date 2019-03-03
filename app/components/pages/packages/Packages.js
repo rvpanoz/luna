@@ -27,8 +27,6 @@ import {
 } from 'models/packages/actions';
 import { setSnackbar } from 'models/ui/actions';
 import { APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
-
-import { PackageDetails } from 'components/pages/package';
 import AppCard from 'components/common/AppCard';
 
 import TableToolbar from './TableToolbar';
@@ -39,7 +37,14 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
-  common: { directory, manager, mode, loader, notifications },
+  common: {
+    directory,
+    manager,
+    mode,
+    loader,
+    notifications,
+    npm: { paused }
+  },
   repository: {
     active,
     data: { packages, packagesOutdated },
@@ -50,6 +55,7 @@ const mapState = ({
     sorting: { sortBy, sortDir }
   }
 }) => ({
+  paused,
   active,
   lastUpdatedAt,
   directory,
@@ -87,13 +93,12 @@ const Packages = ({ classes }) => {
     sortBy,
     packagesInstallOptions,
     notifications,
-    lastUpdatedAt
+    lastUpdatedAt,
+    paused
   } = useMappedState(mapState);
 
-  const wrapperRef = useRef(null);
   const [counter, setCounter] = useState(0);
-
-  const reload = () => setCounter(counter + 1);
+  const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
   const isSelected = useCallback(
@@ -123,9 +128,10 @@ const Packages = ({ classes }) => {
       ipcEvent: 'get-packages',
       cmd: ['outdated', 'list'],
       mode,
-      directory
+      directory,
+      paused
     },
-    [counter, mode, directory]
+    [counter, paused, mode, directory]
   );
 
   const {
@@ -138,9 +144,12 @@ const Packages = ({ classes }) => {
 
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
-  const nodata = Boolean(dependencies && dependencies.length === 0);
 
   useEffect(() => {
+    if (paused) {
+      return;
+    }
+
     dispatch(
       updateData({
         dependencies,
@@ -154,6 +163,7 @@ const Packages = ({ classes }) => {
     );
   }, [dependenciesSet]);
 
+  // ipcRenderer listeners
   useEffect(() => {
     ipcRenderer.on('yarn-warning-close', () => {
       dispatch(
@@ -169,8 +179,6 @@ const Packages = ({ classes }) => {
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
-
-      reload();
     });
 
     return () =>
@@ -202,7 +210,7 @@ const Packages = ({ classes }) => {
               description="Total"
               subtitle={mode}
               iconHeader="packages"
-              total={packagesData ? packagesData.length : '0'}
+              total={packagesData && packagesData.length}
               small={mode === APP_MODES.local ? projectName : null}
               iconColor="primary"
               footerText={lastUpdatedAt}
@@ -234,7 +242,7 @@ const Packages = ({ classes }) => {
       </section>
       <AppLoader loading={loading} message={message}>
         <Grid container>
-          <Grid item sm={8} md={6} lg={6} xl={6}>
+          <Grid item sm={8} md={8} lg={6} xl={6}>
             <Paper className={classes.root}>
               <div className={classes.toolbar}>
                 <TableToolbar
@@ -246,9 +254,10 @@ const Packages = ({ classes }) => {
                   packagesOutdatedNames={packagesOutdatedNames}
                   packagesInstallOptions={packagesInstallOptions}
                   fromSearch={fromSearch}
-                  reload={reload}
-                  nodata={nodata}
                   scrollWrapper={scrollWrapper}
+                  reload={() => {
+                    setCounter(counter + 1);
+                  }}
                 />
               </div>
               <div className={classes.tableWrapper} ref={wrapperRef}>
@@ -262,7 +271,7 @@ const Packages = ({ classes }) => {
                   <TableHeader
                     packages={dataSlices.map(d => d.name)}
                     numSelected={selected.length}
-                    rowCount={dependencies && dependencies.length}
+                    rowCount={dataSlices && dataSlices.length}
                     sortBy={sortBy}
                     sortDir={sortDir}
                   />
@@ -319,7 +328,7 @@ const Packages = ({ classes }) => {
                   <TableFooter
                     classes={{
                       root: {
-                        [classes.hidden]: nodata
+                        [classes.hidden]: false // nodata
                       }
                     }}
                     rowCount={packagesData && packagesData.length}
@@ -336,9 +345,6 @@ const Packages = ({ classes }) => {
                 </Table>
               </div>
             </Paper>
-          </Grid>
-          <Grid item sm={4} md={4} lg={4} xl={4}>
-            <PackageDetails />
           </Grid>
         </Grid>
       </AppLoader>

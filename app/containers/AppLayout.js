@@ -28,6 +28,7 @@ const mapState = ({
     projectVersion,
     activePage,
     loader: { loading },
+    npm: { paused },
     snackbarOptions
   }
 }) => ({
@@ -41,9 +42,13 @@ const mapState = ({
 
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
-  const { activePage, snackbarOptions, loading, ...rest } = useMappedState(
-    mapState
-  );
+  const {
+    activePage,
+    snackbarOptions,
+    loading,
+    paused,
+    ...rest
+  } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   return (
@@ -68,9 +73,8 @@ const AppLayout = ({ classes }) => {
           <Header onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
           <main className={classes.mainContent}>
             {switchcase({
-              packages: () => <Packages />,
-              tools: () => <Typography>NOT AVAILABLE</Typography>,
-              scripts: () => <Typography>NOT AVAILABLE</Typography>
+              packages: () => <Packages isPaused={paused} />,
+              tools: () => <Typography>NOT AVAILABLE</Typography>
             })(<Packages />)(activePage)}
           </main>
         </div>

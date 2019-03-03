@@ -1,5 +1,5 @@
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-import { defaultFont, flexContainer, grayColor } from 'styles/variables';
+import { defaultFont, flexContainer } from 'styles/variables';
 
 const styles = theme => ({
   root: {
@@ -26,7 +26,7 @@ const styles = theme => ({
   },
   highlight: {
     color: theme.palette.common.white,
-    backgroundColor: lighten(grayColor, 0.1)
+    backgroundColor: lighten(theme.palette.secondary.light, 0.9)
   },
   actions: {
     ...flexContainer,

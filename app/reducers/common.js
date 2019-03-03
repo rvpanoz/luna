@@ -2,8 +2,7 @@
  * global reducer: Handles state management for global operations.
  */
 
-import { identity, merge, assoc, propOr, prop, append, prepend } from 'ramda';
-// import format from 'date-fns/format';
+import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
 
 import {
   updateNotifications,
@@ -24,7 +23,7 @@ import {
 } from 'models/ui/actions';
 import initialState from './initialState';
 
-const { dependencies, ...common } = initialState;
+const { repository, ...common } = initialState;
 
 /**
  *
@@ -38,12 +37,19 @@ const createReducer = (commonState, handlers) => (
 
 const handlers = {
   [setActivePage.type]: (state, { payload: page }) =>
-    assoc('activePage', page, state),
+    merge(state, {
+      activePage: page,
+      npm: {
+        ...state.npm,
+        paused: true
+      }
+    }),
   [uiException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
   [setEnv.type]: (state, { payload: env }) =>
     merge(state, {
       npm: {
+        ...state.npm,
         env
       }
     }),
@@ -66,7 +72,10 @@ const handlers = {
     }),
   [npmCommand.type]: (state, { payload: command }) =>
     merge(state, {
-      commands: append(command, state.commands)
+      npm: {
+        ...state.npm,
+        commands: [...state.npm.commands, command]
+      }
     }),
   [commandError.type]: (state, { payload: error }) =>
     assoc('command_error', error, state),
@@ -81,16 +90,25 @@ const handlers = {
   [clearCommands.type]: state =>
     merge(state, {
       npm: {
+        ...state.npm,
         commands: []
       }
     }),
-  [clearNotifications.type]: state => assoc('notifications', [], state),
+  [clearNotifications.type]: state =>
+    merge(state, {
+      ...state,
+      notifications: []
+    }),
   [setSnackbar.type]: (state, { payload }) =>
     assoc('snackbarOptions', merge(state.snackbarOptions, payload), state),
   [setMode.type]: (state, { payload: { mode, directory } }) =>
     merge(state, {
       mode,
-      directory
+      directory,
+      npm: {
+        ...state.npm,
+        paused: false
+      }
     }),
   [setManager.type]: (state, { payload: { manager } }) =>
     assoc('manager', manager, state),

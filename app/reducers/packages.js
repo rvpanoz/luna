@@ -244,17 +244,6 @@ const handlers = {
       metadata: {
         fromSearch,
         fromSort
-      },
-      project: {
-        name: null,
-        version: null,
-        description: null,
-        license: null,
-        author: null
-      },
-      data: {
-        packagesOutdated: [],
-        packages: []
       }
     }),
   [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>

@@ -16,8 +16,7 @@ import { setPackagesStart, updateData } from 'models/packages/actions';
 
 import styles from './styles/searchBox';
 
-const SearchBox = props => {
-  const { classes, disabled } = props;
+const SearchBox = ({ classes, disabled }) => {
   const rootEl = useRef(null);
   const dispatch = useDispatch();
   const [packageName, setPackageName] = useState('');

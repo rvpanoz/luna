@@ -1,13 +1,5 @@
-import { pipe } from 'rxjs';
-import {
-  map,
-  mergeMap,
-  concatMap,
-  skipWhile,
-  tap,
-  takeUntil
-} from 'rxjs/operators';
-import { combineEpics, ofType, fromEvent, fromPromise } from 'redux-observable';
+import { map, takeWhile, concatMap, skipWhile } from 'rxjs/operators';
+import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
 import {
@@ -15,7 +7,6 @@ import {
   clearCommands,
   clearNotifications
 } from 'models/ui/actions';
-import { INFO_MESSAGES } from 'constants/AppConstants';
 
 import {
   clearPackages,
@@ -53,29 +44,33 @@ const setPackages = payload => ({
   payload
 });
 
-const packagesStartEpic = (action$, state$) =>
+const pauseRequest = () => ({
+  type: 'PAUSE_REQUEST'
+});
+
+const resumeRequest = () => ({
+  type: 'RESUME_REQUEST'
+});
+
+const packagesStartEpic = action$ =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    mergeMap(({ payload: { channel, options } }) => {
-      console.log('fetching..', channel, options);
-      return fromPromise(ipcRenderer.send(channel, options));
-    }),
-    skipWhile(({ payload: { refetch } }) => {
-      const {
-        repository: {
-          data: { packages }
-        }
-      } = state$.value;
+    map(({ payload: { channel, options, paused } }) => {
+      if (paused) {
+        return pauseRequest();
+      }
 
-      return Boolean(packages.length);
+      ipcRenderer.send(channel, options);
+      return resumeRequest();
     }),
+    takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
     concatMap(() => [
+      updateLoader({
+        loading: true
+      }),
       cleanNotifications(),
       cleanPackages(),
-      updateLoader({
-        loading: true,
-        message: INFO_MESSAGES.loading
-      })
+      cleanCommands()
     ])
   );
 
@@ -84,7 +79,7 @@ const packagesSuccessEpic = (action$, state$) =>
     ofType(updateData.type),
     skipWhile(
       ({ payload: { dependencies } }) =>
-        !dependencies || !Array.isArray(dependencies) || !dependencies.length
+        !dependencies || !Array.isArray(dependencies)
     ),
     map(
       ({
@@ -166,10 +161,7 @@ const packagesSuccessEpic = (action$, state$) =>
           }
         } = state$.value;
 
-        const actions = [
-          cleanCommands(),
-          updateLoader({ loading: false, message: null })
-        ];
+        const actions = [updateLoader({ loading: false, message: null })];
 
         if (page !== 0) {
           actions.unshift(setPage({ page: 0 }));

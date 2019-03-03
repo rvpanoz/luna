@@ -10,8 +10,7 @@ import { setPackagesStart } from 'models/packages/actions';
 import { parseMap, switchcase } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
-  const { ipcEvent, mode, directory } = options || {};
-  const listenTo = `${ipcEvent}-close`;
+  const { ipcEvent, mode, directory, paused } = options || {};
 
   const [dependenciesSet, setDependencies] = useState({
     data: [],
@@ -30,46 +29,52 @@ const useIpc = (channel, options, inputs = []) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on(listenTo, (event, status, commandArgs, data, errors) => {
-      if (!data || !status) {
-        return;
+    ipcRenderer.on(
+      `${ipcEvent}-close`,
+      (event, status, commandArgs, data, errors) => {
+        if (!data || !status) {
+          return;
+        }
+
+        const errorsMessages = errors && errors.length ? errors : null;
+        setErrors(errorsMessages);
+
+        const command = commandArgs && commandArgs[0];
+        const [
+          packages,
+          name,
+          version,
+          description,
+          license,
+          author
+        ] = parseMap(data, mode, directory, commandArgs);
+
+        switchcase({
+          list: () =>
+            setDependencies({
+              data: packages && packages.length ? packages : null,
+              projectName: name,
+              projectVersion: version,
+              projectDescription: description,
+              projectLicense: license,
+              projectAuthor: author
+            }),
+          outdated: () => setOutdated({ data: packages })
+        })('list')(command);
       }
-
-      const errorsMessages = errors && errors.length ? errors : null;
-      setErrors(errorsMessages);
-
-      const command = commandArgs && commandArgs[0];
-      const [packages, name, version, description, license, author] = parseMap(
-        data,
-        mode,
-        directory,
-        commandArgs
-      );
-
-      switchcase({
-        list: () =>
-          setDependencies({
-            data: packages && packages.length ? packages : null,
-            projectName: name,
-            projectVersion: version,
-            projectDescription: description,
-            projectLicense: license,
-            projectAuthor: author
-          }),
-        outdated: () => setOutdated({ data: packages })
-      })('list')(command);
-    });
-
-    dispatch(
-      setPackagesStart({
-        channel,
-        options
-      })
     );
 
-    // ipcRenderer.send(channel, options);
+    if (!paused) {
+      dispatch(
+        setPackagesStart({
+          channel,
+          options,
+          paused
+        })
+      );
+    }
 
-    return () => ipcRenderer.removeAllListeners([listenTo]);
+    return () => ipcRenderer.removeAllListeners([`${ipcEvent}-close`]);
   }, inputs);
 
   return [dependenciesSet, outdatedSet, commandErrors];

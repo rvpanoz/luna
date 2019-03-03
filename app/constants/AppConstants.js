@@ -17,7 +17,8 @@ export const APP_GLOBALS = {
 // app modes
 export const APP_MODES = {
   global: 'global',
-  local: 'local'
+  local: 'local',
+  freeze: 'freeze'
 };
 
 export const APP_INFO = {
