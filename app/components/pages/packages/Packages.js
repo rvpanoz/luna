@@ -209,38 +209,24 @@ const Packages = ({ classes }) => {
   return (
     <React.Fragment>
       <section className={cn(classes.cards)}>
-        <Grid container justify="space-between">
-          <Grid item md={3} lg={4} xl={4}>
-            <AppCard
-              avatar
-              title="Packages"
-              contentTitle="Total"
-              subtitle={directory || mode}
-              iconHeader="packages"
-              total={packagesData && packagesData.length}
-              iconColor="primary"
-              footerText={lastUpdatedAt}
-              mode={mode}
-              directory={directory}
-            />
-          </Grid>
-          <Grid item md={3} lg={3} xl={3}>
+        <Grid container>
+          <Grid item md={3} lg={2} xl={2}>
             <AppCard
               avatar
               iconHeader="outdated"
               title="Outdated"
               iconColor="warning"
-              total={packagesOutdated ? packagesOutdated.length : '0'}
+              total={packagesOutdated && packagesOutdated.length}
               contentTitle="Packages"
               link={{ text: 'Update', href: '#' }}
             />
           </Grid>
-          <Grid item md={3} lg={3} xl={3}>
+          <Grid item md={3} lg={2} xl={2}>
             <AppCard
               avatar
               iconHeader="error"
               title="Problems"
-              total={notifications ? notifications.length : '0'}
+              total={notifications && notifications.length}
               iconColor="secondary"
               contentTitle="Found"
               link={{ text: 'View', href: '#' }}
@@ -250,7 +236,7 @@ const Packages = ({ classes }) => {
       </section>
       <AppLoader loading={loading} message={message}>
         <Grid container>
-          <Grid item sm={8} md={8} lg={6} xl={6}>
+          <Grid item md={8} lg={6} xl={6}>
             <Paper className={classes.root}>
               <div className={classes.toolbar}>
                 <TableToolbar

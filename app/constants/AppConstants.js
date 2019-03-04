@@ -2,16 +2,16 @@
  * APP constants
  * */
 
-const APP = 'LUNA';
-const NPM = 'npm';
+const APP_NAME = 'Luna';
+const APP_MANAGER = 'npm';
 
 export const GITHUB = {
   baseUrl: 'https://api.github.com/repos/'
 };
 
 export const APP_GLOBALS = {
-  name: APP,
-  manager: NPM
+  name: APP_NAME,
+  manager: APP_MANAGER
 };
 
 // app modes

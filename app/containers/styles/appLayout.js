@@ -8,12 +8,9 @@ const styles = theme => ({
     minHeight: '100vh'
   },
   drawer: {
-    [theme.breakpoints.up('md')]: {
+    [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
       flexShrink: 0
-    },
-    [theme.breakpoints.up('sm')]: {
-      width: 0
     }
   },
   appContent: {
@@ -25,7 +22,7 @@ const styles = theme => ({
   mainContent: {
     flex: 1,
     padding: theme.spacing.unit * 2,
-    background: lighten('#eaeff1', 0.1),
+    background: lighten('#fff', 0.1),
     overflow: 'hidden'
   }
 });

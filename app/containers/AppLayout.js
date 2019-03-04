@@ -12,7 +12,6 @@ import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
-import { Tools } from 'components/pages/tools';
 
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
@@ -24,19 +23,26 @@ const drawerWidth = 240;
 const mapState = ({
   common: {
     mode,
+    directory,
     projectName,
     projectVersion,
     activePage,
     loader: { loading },
-    npm: { paused },
     snackbarOptions
+  },
+  repository: {
+    data: { packages },
+    metadata: { lastUpdatedAt }
   }
 }) => ({
+  lastUpdatedAt,
   activePage,
+  directory,
   projectName,
   projectVersion,
   loading,
   mode,
+  packages,
   snackbarOptions
 });
 
@@ -45,9 +51,8 @@ const AppLayout = ({ classes }) => {
   const {
     activePage,
     snackbarOptions,
-    loading,
-    paused,
-    ...rest
+    packages,
+    ...restProps
   } = useMappedState(mapState);
   const dispatch = useDispatch();
 
@@ -56,24 +61,30 @@ const AppLayout = ({ classes }) => {
       <div className={classes.root}>
         <CssBaseline />
         <nav className={classes.drawer}>
-          <Hidden smDown implementation="js">
+          <Hidden smUp implementation="js">
             <Navigator
               PaperProps={{ style: { width: drawerWidth } }}
               variant="temporary"
               open={drawerOpen}
               onClose={() => toggleDrawer(!drawerOpen)}
-              {...rest}
+              title="Packages"
+              {...restProps}
             />
           </Hidden>
-          <Hidden mdUp implementation="css">
-            <Navigator PaperProps={{ style: { width: 0 } }} {...rest} />
+          <Hidden xsDown implementation="css">
+            <Navigator
+              title="Packages"
+              total={packages && packages.length}
+              PaperProps={{ style: { width: drawerWidth } }}
+              {...restProps}
+            />
           </Hidden>
         </nav>
         <div className={classes.appContent}>
           <Header onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
           <main className={classes.mainContent}>
             {switchcase({
-              packages: () => <Packages isPaused={paused} />,
+              packages: () => <Packages />,
               tools: () => <Typography>NOT AVAILABLE</Typography>
             })(<Packages />)(activePage)}
           </main>

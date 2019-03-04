@@ -18,7 +18,6 @@ import UpdateIcon from '@material-ui/icons/Update';
 import DependenciesIcon from '@material-ui/icons/List';
 import OutdatedIcon from '@material-ui/icons/VerticalSplit';
 
-import { APP_MODES } from 'constants/AppConstants';
 import AppLoader from 'components/common/AppLoader';
 import { switchcase } from 'commons/utils';
 import styles from './styles/appCardStyles';
@@ -26,7 +25,6 @@ import styles from './styles/appCardStyles';
 const AppCard = ({
   classes,
   title,
-  subtitle,
   contentTitle,
   footerText,
   iconColor,
@@ -35,7 +33,6 @@ const AppCard = ({
   total,
   loading,
   link,
-  mode,
   directory
 }) => {
   const SEPARATOR = path.sep;
@@ -61,6 +58,7 @@ const AppCard = ({
     },
     [directory]
   );
+
   const renderIconHeader = icon =>
     switchcase({
       home: () => <HomeIcon className={classes.cardIcon} />,
@@ -74,7 +72,9 @@ const AppCard = ({
       {iconHeader && (
         <CardHeader
           classes={{
-            root: cn(classes.cardHeader, classes[`${iconColor}CardHeader`]),
+            root: cn(classes.cardHeader, {
+              [classes[`${iconColor}CardHeader`]]: avatar
+            }),
             avatar: classes.cardAvatar,
             title: classes.cardTitle,
             subheader: classes.cardSubtitle,

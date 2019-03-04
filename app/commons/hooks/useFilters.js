@@ -3,7 +3,6 @@ import { PACKAGE_GROUPS } from 'constants/AppConstants';
 
 /**
  * Filtering
- * TODO: buggy combine returns only the last element! why?
  */
 const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);

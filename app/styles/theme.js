@@ -44,7 +44,7 @@ const appTheme = {
   overrides: {
     MuiDrawer: {
       paper: {
-        backgroundColor: '#0c0624'
+        backgroundColor: '#fff'
       }
     },
     MuiButton: {
