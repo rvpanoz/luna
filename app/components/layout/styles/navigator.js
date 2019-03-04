@@ -1,4 +1,4 @@
-import { flexContainer } from 'styles/variables';
+import { grayColor, flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({
   flexContainer: {
@@ -10,18 +10,14 @@ const styles = theme => ({
   },
   categoryHeader: {
     paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit
+    paddingBottom: theme.spacing.unit,
+    borderBottom: '1px solid #eee'
   },
   categoryHeaderPrimary: {
-    color: theme.palette.common.white
-  },
-  item: {
-    padding: theme.spacing.unit,
-    color: 'rgba(255, 255, 255, 0.7)'
+    color: grayColor
   },
   itemCategory: {
-    backgroundColor: '#232f3e',
-    boxShadow: '0 -1px 0 #404854 inset',
+    borderBottom: '1px solid #eee',
     padding: theme.spacing.unit / 2
   },
   homeIcon: {
@@ -31,8 +27,10 @@ const styles = theme => ({
     fill: '#fff'
   },
   title: {
-    fontSize: 24,
-    color: theme.palette.common.white
+    ...defaultFont,
+    color: grayColor,
+    fontSize: 32,
+    paddingLeft: theme.spacing.unit * 3
   },
   itemActionable: {
     '&:hover': {
@@ -44,7 +42,6 @@ const styles = theme => ({
     color: theme.palette.primary.light
   },
   itemPrimary: {
-    color: 'inherit',
     fontSize: theme.typography.fontSize,
     '&$textDense': {
       fontSize: theme.typography.fontSize

@@ -12,20 +12,20 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
-import HomeIcon from '@material-ui/icons/Home';
 
-import AppTypography from 'components/units/Typography';
+import AppTabs from 'components/common/AppTabs';
 import AppButton from 'components/units/Buttons/AppButton';
-import { APP_MODES } from 'constants/AppConstants';
+import { APP_GLOBALS, APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
 
 const Navigator = ({
   classes,
-  projectName,
-  projectVersion,
   mode,
+  lastUpdatedAt,
+  title,
+  total,
   ...other
 }) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
@@ -67,29 +67,36 @@ const Navigator = ({
   }, []);
 
   return (
-    <Drawer variant="temporary" {...other}>
+    <Drawer variant="permanent" {...other}>
       <List disablePadding>
-        <ListItem
-          className={classNames(
-            classes.title,
-            classes.item,
-            classes.itemCategory
-          )}
-        >
-          <div className={classes.flexContainer}>
-            <HomeIcon className={classes.homeIcon} />
-          </div>
+        <ListItem className={classes.categoryHeader}>
+          <ListItemText
+            classes={{
+              primary: classes.categoryHeaderPrimary
+            }}
+          >
+            Luna
+          </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemText className={classes.actionButton}>
-            <AppButton
-              color="primary"
-              fullWidth
-              round
-              onClick={() => openPackage()}
-            >
+            <AppButton color="primary" fullWidth onClick={() => openPackage()}>
               Analyze
             </AppButton>
+          </ListItemText>
+        </ListItem>
+        <ListItem className={classes.categoryHeader}>
+          <ListItemText
+            classes={{
+              primary: classes.categoryHeaderPrimary
+            }}
+          >
+            Details
+          </ListItemText>
+        </ListItem>
+        <ListItem>
+          <ListItemText>
+            <AppTabs />
           </ListItemText>
         </ListItem>
         <ListItem className={classes.categoryHeader}>
@@ -101,6 +108,7 @@ const Navigator = ({
             History
           </ListItemText>
         </ListItem>
+
         {openedDirectories &&
           openedDirectories.map((dir, idx) => (
             <ListItem

@@ -10,7 +10,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import Select from '@material-ui/core/Select';
 
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
-import styles from './styles/types';
+import styles from './styles/controlTypes';
 
 const groups = Object.values(PACKAGE_GROUPS);
 

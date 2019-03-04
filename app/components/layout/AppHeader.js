@@ -42,7 +42,7 @@ const Header = ({ classes, onDrawerToggle }) => {
       <AppBar color="primary" position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={8} alignItems="center">
-            <Hidden xsDown>
+            <Hidden smUp>
               <Grid item>
                 <IconButton
                   color="inherit"

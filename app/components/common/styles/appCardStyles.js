@@ -1,6 +1,5 @@
 import {
   defaultFont,
-  infoColor,
   grayColor,
   defaultBoxShadow,
   flexContainer,
@@ -12,20 +11,10 @@ const styles = theme => ({
     ...flexItem,
     padding: theme.spacing.unit / 2
   },
-  textRight: {
-    textAlign: 'right'
-  },
-  textLeft: {
-    textAlign: 'left'
-  },
   card: {
-    position: 'relative',
-    width: '100%',
-    margin: 0,
     padding: theme.spacing.unit,
     boxShadow: '0 1px 4px 0 rgba(0, 0, 0, 0.14)',
     borderRadius: 5,
-    color: theme.palette.common.black,
     background: theme.palette.common.white
   },
   cardHeader: {
@@ -40,10 +29,7 @@ const styles = theme => ({
     justifyContent: 'space-between'
   },
   cardHeaderContent: {
-    ...flexContainer,
-    flexDirection: 'column',
-    alignItems: 'flex-end',
-    flexFlow: 'unset'
+    margin: `${theme.spacing.unit / 2}px 0 0`
   },
   cardDirectory: {
     ...defaultFont,
@@ -61,12 +47,6 @@ const styles = theme => ({
     ...defaultFont,
     color: grayColor,
     padding: theme.spacing.unit
-  },
-  font16: {
-    fontSize: 16
-  },
-  font24: {
-    fontSize: 24
   },
   cardDescription: {
     ...defaultFont
