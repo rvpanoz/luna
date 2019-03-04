@@ -53,11 +53,11 @@
     "productName": "luna",
     "appId": "org.dev.luna",
     "files": [
-      "app/dist/",
-      "app/app.html",
-      "app/main.prod.js",
-      "app/main.prod.js.map",
-      "package.json"
+      "./dist/**/*",
+      "./app/app.html",
+      "./app/main.prod.js",
+      "./app/main.prod.js.map",
+      "./package.json"
     ],
     "dmg": {
       "contents": [

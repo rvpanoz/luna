@@ -12,7 +12,6 @@ const getFiltered = (data, filters) => {
     const filtered =
       data &&
       data.filter(pkg => {
-        console.log(pkg.__group);
         if (groups.indexOf(filterName) > -1) {
           return pkg['__group'] === filterName;
         }

@@ -31,14 +31,15 @@ const PackageItem = ({
   const rowRef = useRef();
 
   const renderIconByGroup = useCallback(
-    groupName =>
+    group =>
       cond([
         [equals(''), always(null)],
-        [equals('dependencies'), always(null)],
-        [equals('devDependencies'), always(<Chip label="dev" />)],
+        [equals('dependencies'), always(<Chip label="depepency" />)],
+        [equals('devDependencies'), always(<Chip label="devDependency" />)],
         [equals('optionalDependencies'), always(<Chip label="optional" />)],
+        [equals('bundledDependencies'), always(<Chip label="bundle" />)],
         [equals('peerDependencies'), always(<Chip label="peer" />)]
-      ])(groupName),
+      ])(group),
     [group]
   );
 
@@ -80,8 +81,8 @@ const PackageItem = ({
 
       <TableCell padding="none" className={cn(classes.tableCell)}>
         <div className={classes.flexContainer}>
-          {group && typeof group === 'string' ? renderIconByGroup(group) : null}
           <Typography>{name}</Typography>
+          {group && typeof group === 'string' ? renderIconByGroup(group) : null}
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
