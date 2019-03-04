@@ -37,10 +37,12 @@ const styles = theme => ({
     minHeight: 25
   },
   cardContent: {
+    padding: 0
+  },
+  content: {
     ...flexContainer,
     padding: theme.spacing.unit * 2,
-    justifyContent: 'space-between',
-    minHeight: 70
+    justifyContent: 'space-between'
   },
   cardHeaderContent: {
     ...flexContainer,
@@ -75,8 +77,8 @@ const styles = theme => ({
   cardSubtitle: {
     ...defaultFont,
     marginBottom: 0,
-    color: 'rgba(255, 255, 255, 0.62)',
-    margin: '0 0 10px'
+    color: 'rgba(255, 255, 255, 1.62)',
+    margin: `0 0 ${theme.spacing.unit}px`
   },
   cardTitleSmall: {
     ...defaultFont,
@@ -97,6 +99,11 @@ const styles = theme => ({
     top: theme.spacing.unit / 2,
     width: theme.spacing.unit * 2,
     height: theme.spacing.unit * 2
+  },
+  cardLink: {
+    color: theme.palette.primary.main,
+    textDecoration: 'none',
+    ...defaultFont
   },
   primaryIcon: {
     color: theme.palette.primary.light

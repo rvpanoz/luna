@@ -168,24 +168,19 @@ const TableListToolbar = ({
       };
 
       dispatch(installPackages(parameters));
-      // ipcRenderer.send('ipc-event', parameters);
     } else {
-      ipcRenderer.send('ipc-event', {
-        activeManager: manager,
-        ipcEvent: action,
-        cmd: [action],
-        multiple: true,
-        packages: selected,
-        mode,
-        directory
-      });
+      dispatch(
+        updatePackages({
+          activeManager: manager,
+          ipcEvent: action,
+          cmd: [action],
+          multiple: true,
+          packages: selected,
+          mode,
+          directory
+        })
+      );
     }
-
-    dispatch(
-      toggleLoader({
-        loading: true
-      })
-    );
   };
 
   const openPackage = useCallback(() => {

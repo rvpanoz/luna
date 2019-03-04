@@ -25,7 +25,7 @@ import {
   setPage,
   setPageRows
 } from 'models/packages/actions';
-import { setSnackbar } from 'models/ui/actions';
+import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
 import AppCard from 'components/common/AppCard';
 
@@ -179,6 +179,13 @@ const Packages = ({ classes }) => {
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
+
+      dispatch(
+        toggleLoader({
+          loading: false,
+          message: null
+        })
+      );
     });
 
     return () =>
@@ -208,10 +215,9 @@ const Packages = ({ classes }) => {
               avatar
               title="Packages"
               description="Total"
-              subtitle={mode}
+              subtitle={projectName || mode}
               iconHeader="packages"
               total={packagesData && packagesData.length}
-              small={mode === APP_MODES.local ? projectName : null}
               iconColor="primary"
               footerText={lastUpdatedAt}
             />
@@ -222,9 +228,9 @@ const Packages = ({ classes }) => {
               iconHeader="outdated"
               title="Outdated"
               iconColor="warning"
-              footerText={lastUpdatedAt}
               total={packagesOutdated ? packagesOutdated.length : '0'}
               description="Found"
+              link={{ text: 'Update', href: '#' }}
             />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
@@ -235,7 +241,7 @@ const Packages = ({ classes }) => {
               total={notifications ? notifications.length : '0'}
               iconColor="secondary"
               description="Found"
-              footerText={lastUpdatedAt}
+              link={{ text: 'View', href: '#' }}
             />
           </Grid>
         </Grid>

@@ -80,7 +80,7 @@ const installPackagesEpic = action$ =>
   action$.pipe(
     ofType(installPackages.type),
     map(({ payload }) => {
-      ipcRenderer.send(channel, payload);
+      ipcRenderer.send('ipc-event', payload);
 
       return updateLoader({
         loading: true
@@ -88,6 +88,19 @@ const installPackagesEpic = action$ =>
     })
   );
 
+const updatePackagesEpic = action$ =>
+  action$.pipe(
+    ofType(updatePackages.type),
+    map(({ payload }) => {
+      ipcRenderer.send('ipc-event', payload);
+
+      return updateLoader({
+        loading: true
+      });
+    })
+  );
+
+/** TODO: handle empty projects - dependencies craches */
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
@@ -202,5 +215,6 @@ const packagesSuccessEpic = (action$, state$) =>
 export default combineEpics(
   packagesStartEpic,
   packagesSuccessEpic,
-  installPackagesEpic
+  installPackagesEpic,
+  updatePackagesEpic
 );

@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import Typography from '@material-ui/core/Typography';
@@ -31,7 +31,8 @@ const AppCard = ({
   iconHeader,
   avatar,
   total,
-  loading
+  loading,
+  link
 }) => {
   const renderIconHeader = icon =>
     switchcase({
@@ -57,9 +58,13 @@ const AppCard = ({
           subheader={subtitle}
         />
       )}
-      <CardContent>
+      <CardContent
+        classes={{
+          root: classes.cardContent
+        }}
+      >
         <AppLoader loading={loading}>
-          <div className={classes.cardContent}>
+          <div className={classes.content}>
             <Typography variant="subtitle1" className={classes.cardCategory}>
               {description}
             </Typography>
@@ -75,11 +80,15 @@ const AppCard = ({
             className={cn(classes.cardStatsIcon, classes[`${iconColor}Icon`])}
           />
         </div>
-        {footerText && (
+        {link ? (
+          <a href={link.href} className={classes.cardLink}>
+            {link.text}
+          </a>
+        ) : footerText ? (
           <div className={cn(classes.flexItem, classes.textRight)}>
             <Typography variant="caption">{footerText}</Typography>
           </div>
-        )}
+        ) : null}
       </CardActions>
     </Card>
   );
@@ -98,6 +107,7 @@ AppCard.propTypes = {
     PropTypes.number,
     PropTypes.node
   ]),
+  link: PropTypes.objectOf(PropTypes.string),
   footerText: PropTypes.string,
   iconColor: PropTypes.string,
   iconHeader: PropTypes.string,
