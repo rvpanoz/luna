@@ -17,8 +17,7 @@ export const APP_GLOBALS = {
 // app modes
 export const APP_MODES = {
   global: 'global',
-  local: 'local',
-  freeze: 'freeze'
+  local: 'local'
 };
 
 export const APP_INFO = {
@@ -37,6 +36,7 @@ export const PACKAGE_GROUPS = {
   devDependencies: 'save-dev',
   optionalDependencies: 'save-optional',
   bundleDependencies: 'save-bundle',
+  peerDependencies: 'save-peer',
   noSave: 'no-save'
 };
 

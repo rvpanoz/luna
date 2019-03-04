@@ -192,7 +192,7 @@ export const parseMap = (response, mode, directory) => {
       let hasError = typeof details && details.error === 'object';
 
       // find group and attach to package
-      if (mode && mode === APP_MODES.LOCAL) {
+      if (mode && mode === APP_MODES.local) {
         const packageJSON = readPackageJson(directory);
 
         if (!Boolean(packageJSON)) {
@@ -203,13 +203,11 @@ export const parseMap = (response, mode, directory) => {
           return;
         }
 
-        group = Object.keys(PACKAGE_GROUPS).find(groupName => {
-          debugger;
-          return packageJSON[groupName] && packageJSON[groupName][pkgName];
-        });
+        group = Object.keys(PACKAGE_GROUPS).find(
+          groupName => packageJSON[groupName] && packageJSON[groupName][pkgName]
+        );
       }
 
-      console.log(group);
       return merge(details, {
         name: name || pkgName,
         __group: group,

@@ -26,7 +26,7 @@ import {
   setPageRows
 } from 'models/packages/actions';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
-import { APP_MODES, WARNING_MESSAGES } from 'constants/AppConstants';
+import { WARNING_MESSAGES } from 'constants/AppConstants';
 import AppCard from 'components/common/AppCard';
 
 import TableToolbar from './TableToolbar';
@@ -214,12 +214,14 @@ const Packages = ({ classes }) => {
             <AppCard
               avatar
               title="Packages"
-              description="Total"
-              subtitle={projectName || mode}
+              contentTitle="Total"
+              subtitle={directory || mode}
               iconHeader="packages"
               total={packagesData && packagesData.length}
               iconColor="primary"
               footerText={lastUpdatedAt}
+              mode={mode}
+              directory={directory}
             />
           </Grid>
           <Grid item md={3} lg={3} xl={3}>
@@ -229,7 +231,7 @@ const Packages = ({ classes }) => {
               title="Outdated"
               iconColor="warning"
               total={packagesOutdated ? packagesOutdated.length : '0'}
-              description="Found"
+              contentTitle="Packages"
               link={{ text: 'Update', href: '#' }}
             />
           </Grid>
@@ -240,7 +242,7 @@ const Packages = ({ classes }) => {
               title="Problems"
               total={notifications ? notifications.length : '0'}
               iconColor="secondary"
-              description="Found"
+              contentTitle="Found"
               link={{ text: 'View', href: '#' }}
             />
           </Grid>

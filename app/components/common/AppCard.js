@@ -1,5 +1,6 @@
 /* eslint-disable react/require-default-props */
 
+import path from 'path';
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
@@ -17,6 +18,7 @@ import UpdateIcon from '@material-ui/icons/Update';
 import DependenciesIcon from '@material-ui/icons/List';
 import OutdatedIcon from '@material-ui/icons/VerticalSplit';
 
+import { APP_MODES } from 'constants/AppConstants';
 import AppLoader from 'components/common/AppLoader';
 import { switchcase } from 'commons/utils';
 import styles from './styles/appCardStyles';
@@ -25,15 +27,40 @@ const AppCard = ({
   classes,
   title,
   subtitle,
-  description,
+  contentTitle,
   footerText,
   iconColor,
   iconHeader,
   avatar,
   total,
   loading,
-  link
+  link,
+  mode,
+  directory
 }) => {
+  const SEPARATOR = path.sep;
+
+  const fixPath = useCallback(
+    directory => {
+      let newPath;
+
+      if (directory) {
+        try {
+          newPath = path.parse(directory);
+
+          const { dir } = newPath || {};
+          const dirParts = dir.split(SEPARATOR);
+
+          return dirParts[dirParts.length - 1];
+        } catch (error) {
+          throw new Error(error);
+        }
+      }
+
+      return directory;
+    },
+    [directory]
+  );
   const renderIconHeader = icon =>
     switchcase({
       home: () => <HomeIcon className={classes.cardIcon} />,
@@ -55,7 +82,9 @@ const AppCard = ({
           }}
           avatar={avatar && renderIconHeader(iconHeader)}
           title={title}
-          subheader={subtitle}
+          subheader={
+            directory && `${fixPath(directory)}${SEPARATOR}package.json`
+          }
         />
       )}
       <CardContent
@@ -65,28 +94,28 @@ const AppCard = ({
       >
         <AppLoader loading={loading}>
           <div className={classes.content}>
-            <Typography variant="subtitle1" className={classes.cardCategory}>
-              {description}
+            <Typography className={classes.cardContentTitle}>
+              {contentTitle}
             </Typography>
-            <Typography variant="body2" className={classes.cardDescription}>
+            <Typography className={classes.cardContentContext}>
               {total}
             </Typography>
           </div>
         </AppLoader>
       </CardContent>
       <CardActions className={classes.cardActions}>
-        <div className={cn(classes.flexItem, classes.textLeft)}>
-          <UpdateIcon
-            className={cn(classes.cardStatsIcon, classes[`${iconColor}Icon`])}
-          />
-        </div>
+        <UpdateIcon
+          className={cn(classes.cardStatsIcon, classes[`${iconColor}Icon`])}
+        />
         {link ? (
           <a href={link.href} className={classes.cardLink}>
             {link.text}
           </a>
         ) : footerText ? (
-          <div className={cn(classes.flexItem, classes.textRight)}>
-            <Typography variant="caption">{footerText}</Typography>
+          <div>
+            <Typography className={classes.cardStatsText} variant="caption">
+              {footerText}
+            </Typography>
           </div>
         ) : null}
       </CardActions>

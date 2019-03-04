@@ -98,6 +98,7 @@ const TableListToolbar = ({
       const devDependencies = [];
       const optionalDependencies = [];
       const bundleDependencies = [];
+      const peerDependencies = [];
       const noSave = [];
 
       const packagesWithOptions = selected.reduce((acc, packageName) => {
@@ -121,6 +122,9 @@ const TableListToolbar = ({
             case 'no-save':
               noSave.push(packageName);
               break;
+            case 'save-peer':
+              peerDependencies.push(packageName);
+              break;
             default:
               dependencies.push(packageName);
               break;
@@ -132,6 +136,7 @@ const TableListToolbar = ({
           devDependencies,
           optionalDependencies,
           bundleDependencies,
+          peerDependencies,
           noSave
         });
       }, {});
