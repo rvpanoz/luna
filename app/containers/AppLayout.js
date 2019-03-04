@@ -41,6 +41,7 @@ const mapState = ({
   projectVersion,
   loading,
   mode,
+  packages,
   snackbarOptions
 });
 

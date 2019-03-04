@@ -85,6 +85,12 @@ const Navigator = ({
             </AppButton>
           </ListItemText>
         </ListItem>
+
+        <ListItem>
+          <ListItemText>
+            <StatsCard title="Packages" total={total} />
+          </ListItemText>
+        </ListItem>
         <ListItem className={classes.categoryHeader}>
           <ListItemText
             classes={{
