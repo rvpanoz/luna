@@ -13,7 +13,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 
-import StatsCard from 'components/common/StatsCard';
+import AppTabs from 'components/common/AppTabs';
 import AppButton from 'components/units/Buttons/AppButton';
 import { APP_GLOBALS, APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
@@ -69,25 +69,34 @@ const Navigator = ({
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
-        <ListItem className={classNames(classes.title, classes.itemCategory)}>
-          {APP_GLOBALS.name}
+        <ListItem className={classes.categoryHeader}>
+          <ListItemText
+            classes={{
+              primary: classes.categoryHeaderPrimary
+            }}
+          >
+            Luna
+          </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemText className={classes.actionButton}>
-            <AppButton
-              color="primary"
-              fullWidth
-              round
-              onClick={() => openPackage()}
-            >
+            <AppButton color="primary" fullWidth onClick={() => openPackage()}>
               Analyze
             </AppButton>
           </ListItemText>
         </ListItem>
-
+        <ListItem className={classes.categoryHeader}>
+          <ListItemText
+            classes={{
+              primary: classes.categoryHeaderPrimary
+            }}
+          >
+            Details
+          </ListItemText>
+        </ListItem>
         <ListItem>
           <ListItemText>
-            <StatsCard title="Packages" total={total} />
+            <AppTabs />
           </ListItemText>
         </ListItem>
         <ListItem className={classes.categoryHeader}>

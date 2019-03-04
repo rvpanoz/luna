@@ -24,7 +24,7 @@ const styles = theme => ({
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
     [theme.breakpoints.up('md')]: {
-      maxHeight: 540
+      maxHeight: 350
     },
     [theme.breakpoints.up('lg')]: {
       maxHeight: 560

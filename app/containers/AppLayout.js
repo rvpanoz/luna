@@ -31,7 +31,6 @@ const mapState = ({
     snackbarOptions
   },
   repository: {
-    data: { packages },
     metadata: { lastUpdatedAt }
   }
 }) => ({
@@ -42,18 +41,12 @@ const mapState = ({
   projectVersion,
   loading,
   mode,
-  packages,
   snackbarOptions
 });
 
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
-  const {
-    activePage,
-    snackbarOptions,
-    packages,
-    ...restProps
-  } = useMappedState(mapState);
+  const { activePage, snackbarOptions } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   return (
@@ -68,15 +61,12 @@ const AppLayout = ({ classes }) => {
               open={drawerOpen}
               onClose={() => toggleDrawer(!drawerOpen)}
               title="Packages"
-              {...restProps}
             />
           </Hidden>
           <Hidden xsDown implementation="css">
             <Navigator
               title="Packages"
-              total={packages && packages.length}
               PaperProps={{ style: { width: drawerWidth } }}
-              {...restProps}
             />
           </Hidden>
         </nav>

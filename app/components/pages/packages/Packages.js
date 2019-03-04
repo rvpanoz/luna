@@ -207,142 +207,112 @@ const Packages = ({ classes }) => {
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
   return (
-    <React.Fragment>
-      <section className={cn(classes.cards)}>
-        <Grid container>
-          <Grid item md={3} lg={2} xl={2}>
-            <AppCard
-              avatar
-              iconHeader="outdated"
-              title="Outdated"
-              iconColor="warning"
-              total={packagesOutdated && packagesOutdated.length}
-              contentTitle="Packages"
-              link={{ text: 'Update', href: '#' }}
-            />
-          </Grid>
-          <Grid item md={3} lg={2} xl={2}>
-            <AppCard
-              avatar
-              iconHeader="error"
-              title="Problems"
-              total={notifications && notifications.length}
-              iconColor="secondary"
-              contentTitle="Found"
-              link={{ text: 'View', href: '#' }}
-            />
-          </Grid>
-        </Grid>
-      </section>
-      <AppLoader loading={loading} message={message}>
-        <Grid container>
-          <Grid item md={8} lg={6} xl={6}>
-            <Paper className={classes.root}>
-              <div className={classes.toolbar}>
-                <TableToolbar
-                  title="Packages"
-                  manager={manager}
-                  mode={mode}
-                  directory={directory}
-                  selected={selected}
-                  packagesOutdatedNames={packagesOutdatedNames}
-                  packagesInstallOptions={packagesInstallOptions}
-                  fromSearch={fromSearch}
-                  scrollWrapper={scrollWrapper}
-                  reload={() => {
-                    setCounter(counter + 1);
-                  }}
+    <AppLoader loading={loading} message={message}>
+      <Grid container>
+        <Grid item md={8} lg={6} xl={6}>
+          <Paper className={classes.root}>
+            <div className={classes.toolbar}>
+              <TableToolbar
+                title="Packages"
+                manager={manager}
+                mode={mode}
+                directory={directory}
+                selected={selected}
+                packagesOutdatedNames={packagesOutdatedNames}
+                packagesInstallOptions={packagesInstallOptions}
+                fromSearch={fromSearch}
+                scrollWrapper={scrollWrapper}
+                reload={() => {
+                  setCounter(counter + 1);
+                }}
+              />
+            </div>
+            <div className={classes.tableWrapper} ref={wrapperRef}>
+              <Table
+                padding="dense"
+                aria-labelledby="packages-list"
+                className={cn(classes.table, {
+                  [classes.hasFilterBlur]: loading
+                })}
+              >
+                <TableHeader
+                  packages={dataSlices.map(d => d.name)}
+                  numSelected={selected.length}
+                  rowCount={dataSlices && dataSlices.length}
+                  sortBy={sortBy}
+                  sortDir={sortDir}
                 />
-              </div>
-              <div className={classes.tableWrapper} ref={wrapperRef}>
-                <Table
-                  padding="dense"
-                  aria-labelledby="packages-list"
-                  className={cn(classes.table, {
-                    [classes.hasFilterBlur]: loading
-                  })}
-                >
-                  <TableHeader
-                    packages={dataSlices.map(d => d.name)}
-                    numSelected={selected.length}
-                    rowCount={dataSlices && dataSlices.length}
-                    sortBy={sortBy}
-                    sortDir={sortDir}
-                  />
-                  <TableBody>
-                    {sortedPackages &&
-                      sortedPackages.map(
-                        ({
-                          name,
-                          version,
-                          latest,
-                          isOutdated,
-                          peerDependencies,
-                          __group,
-                          __error,
-                          __peerMissing
-                        }) => {
-                          const isPackageSelected = isSelected(name, selected);
-                          const installOptions = Array.isArray(
-                            packagesInstallOptions
-                          )
-                            ? packagesInstallOptions.find(
-                                data => data.name === name
-                              )
-                            : {};
+                <TableBody>
+                  {sortedPackages &&
+                    sortedPackages.map(
+                      ({
+                        name,
+                        version,
+                        latest,
+                        isOutdated,
+                        peerDependencies,
+                        __group,
+                        __error,
+                        __peerMissing
+                      }) => {
+                        const isPackageSelected = isSelected(name, selected);
+                        const installOptions = Array.isArray(
+                          packagesInstallOptions
+                        )
+                          ? packagesInstallOptions.find(
+                              data => data.name === name
+                            )
+                          : {};
 
-                          return (
-                            <PackageItem
-                              key={`pkg-${name}`}
-                              isSelected={isPackageSelected}
-                              installOptions={installOptions}
-                              addSelected={() =>
-                                dispatch(addSelected({ name }))
-                              }
-                              addInstallOption={(pkgName, options) =>
-                                dispatch(
-                                  addInstallOption({ name: pkgName, options })
-                                )
-                              }
-                              name={name}
-                              peerDependencies={peerDependencies}
-                              manager={manager}
-                              version={version}
-                              latest={latest}
-                              isOutdated={isOutdated}
-                              fromSearch={fromSearch}
-                              group={__group}
-                              error={__error}
-                              peerMissing={__peerMissing}
-                            />
-                          );
-                        }
-                      )}
-                  </TableBody>
-                  <TableFooter
-                    classes={{
-                      root: {
-                        [classes.hidden]: false // nodata
+                        return (
+                          <PackageItem
+                            key={`pkg-${name}`}
+                            isSelected={isPackageSelected}
+                            installOptions={installOptions}
+                            addSelected={() => dispatch(addSelected({ name }))}
+                            addInstallOption={(pkgName, options) =>
+                              dispatch(
+                                addInstallOption({ name: pkgName, options })
+                              )
+                            }
+                            name={name}
+                            peerDependencies={peerDependencies}
+                            manager={manager}
+                            version={version}
+                            latest={latest}
+                            isOutdated={isOutdated}
+                            fromSearch={fromSearch}
+                            group={__group}
+                            error={__error}
+                            peerMissing={__peerMissing}
+                          />
+                        );
                       }
-                    }}
-                    rowCount={packagesData && packagesData.length}
-                    page={page}
-                    rowsPerPage={rowsPerPage}
-                    handleChangePage={(e, pageNo) => {
-                      scrollWrapper(0);
-                      dispatch(setPage({ page: pageNo }));
-                    }}
-                    handleChangePageRows={e =>
-                      dispatch(setPageRows({ rowsPerPage: e.target.value }))
+                    )}
+                </TableBody>
+                <TableFooter
+                  classes={{
+                    root: {
+                      [classes.hidden]: false // nodata
                     }
-                  />
-                </Table>
-              </div>
-            </Paper>
-          </Grid>
+                  }}
+                  rowCount={packagesData && packagesData.length}
+                  page={page}
+                  rowsPerPage={rowsPerPage}
+                  handleChangePage={(e, pageNo) => {
+                    scrollWrapper(0);
+                    dispatch(setPage({ page: pageNo }));
+                  }}
+                  handleChangePageRows={e =>
+                    dispatch(setPageRows({ rowsPerPage: e.target.value }))
+                  }
+                />
+              </Table>
+            </div>
+          </Paper>
         </Grid>
-      </AppLoader>
-    </React.Fragment>
+      </Grid>
+    </AppLoader>
   );
 };
 
