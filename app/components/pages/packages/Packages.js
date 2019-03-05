@@ -27,7 +27,6 @@ import {
 } from 'models/packages/actions';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { WARNING_MESSAGES } from 'constants/AppConstants';
-import AppCard from 'components/common/AppCard';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -42,25 +41,22 @@ const mapState = ({
     manager,
     mode,
     loader,
-    notifications,
     npm: { paused }
   },
-  repository: {
+  modules: {
     active,
     data: { packages, packagesOutdated },
     operations: { action, selected, packagesInstallOptions },
     pagination: { page, rowsPerPage },
     filtering: { filters },
-    metadata: { fromSearch, lastUpdatedAt },
+    metadata: { fromSearch },
     sorting: { sortBy, sortDir }
   }
 }) => ({
   paused,
   active,
-  lastUpdatedAt,
   directory,
   manager,
-  notifications,
   mode,
   page,
   rowsPerPage,
@@ -92,8 +88,6 @@ const Packages = ({ classes }) => {
     sortDir,
     sortBy,
     packagesInstallOptions,
-    notifications,
-    lastUpdatedAt,
     paused
   } = useMappedState(mapState);
 
@@ -209,7 +203,7 @@ const Packages = ({ classes }) => {
   return (
     <AppLoader loading={loading} message={message}>
       <Grid container>
-        <Grid item md={8} lg={6} xl={6}>
+        <Grid item md={12} lg={6} xl={6}>
           <Paper className={classes.root}>
             <div className={classes.toolbar}>
               <TableToolbar

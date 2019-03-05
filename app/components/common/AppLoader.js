@@ -22,7 +22,7 @@ const styles = theme => ({
     justifyContent: 'space-around',
     position: 'absolute',
     left: '45%',
-    bottom: theme.spacing.unit * 4,
+    top: '45%',
     margin: `0 ${theme.spacing.unit * 2}px`
   },
   relative: {

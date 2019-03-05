@@ -6,7 +6,7 @@ import mk from '../mk';
 import { APP_MODES, PACKAGE_GROUPS } from '../constants/AppConstants';
 import { pick, merge } from 'ramda';
 
-const _getKeys = obj => Object.keys(obj);
+const SEPARATOR = path.sep;
 
 export const createActionCreator = namespace => actionType => {
   const type = `${namespace}/${actionType}`;
@@ -26,7 +26,7 @@ export const createActionCreator = namespace => actionType => {
  * @param {*} obj
  */
 export const objectEntries = obj => {
-  let ownProps = _getKeys(obj);
+  let ownProps = Object.keys(obj);
   let i = ownProps.length;
   let resArray = new Array(i);
 
@@ -234,4 +234,23 @@ export const parseMessage = error => {
   return !errorMessage
     ? []
     : [errorMessage[0].trim(), errorMessage[1].trim(), errorParts[1]];
+};
+
+export const shrinkDirectory = directory => {
+  let newPath;
+
+  if (directory) {
+    try {
+      newPath = path.parse(directory);
+
+      const { dir } = newPath || {};
+      const dirParts = dir.split(SEPARATOR);
+
+      return `${dirParts[dirParts.length - 1]}${SEPARATOR}package.json`;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  return null;
 };

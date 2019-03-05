@@ -7,15 +7,16 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import Typography from '@material-ui/core/Typography';
 
+import AppLoader from 'components/common/AppLoader';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import styles from './styles/appTabs';
 
-const TabContainer = ({ children, dir }) => (
-  <Typography component="div" style={{ padding: 8 * 2 }}>
-    {children}
+const TabContainer = ({ children, loading }) => (
+  <Typography component="div" style={{ padding: 8 }}>
+    {loading ? 'Loading...' : children}
   </Typography>
 );
 
@@ -23,7 +24,7 @@ TabContainer.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-const AppTabs = ({ classes }) => {
+const AppTabs = ({ classes, children }) => {
   const [value, setValue] = useState(0);
 
   return (
@@ -32,15 +33,27 @@ const AppTabs = ({ classes }) => {
         <Tabs
           value={value}
           onChange={(e, value) => setValue(value)}
-          indicatorColor="primary"
-          textColor="primary"
+          indicatorColor="secondary"
+          textColor="secondary"
         >
           <Tab label="Project" />
           <Tab label="Packages" />
+          <Tab label="Tools" />
         </Tabs>
       </AppBar>
-      {value === 0 && <TabContainer>project info..</TabContainer>}
-      {value === 1 && <TabContainer>packages stats..</TabContainer>}
+
+      {React.Children.map(children, (child, idx) => {
+        if (value === idx) {
+          return (
+            <TabContainer loading={child.props.loading}>
+              {React.cloneElement(child, {
+                items: child.props.items,
+                metadata: child.props.metadata
+              })}
+            </TabContainer>
+          );
+        }
+      })}
     </div>
   );
 };

@@ -30,18 +30,18 @@ const PackageItem = ({
 }) => {
   const rowRef = useRef();
 
-  const renderIconByGroup = useCallback(
-    group =>
-      cond([
-        [equals(''), always(null)],
-        [equals('dependencies'), always(<Chip label="depepency" />)],
-        [equals('devDependencies'), always(<Chip label="devDependency" />)],
-        [equals('optionalDependencies'), always(<Chip label="optional" />)],
-        [equals('bundledDependencies'), always(<Chip label="bundle" />)],
-        [equals('peerDependencies'), always(<Chip label="peer" />)]
-      ])(group),
-    [group]
-  );
+  // const renderIconByGroup = useCallback(
+  //   group =>
+  //     cond([
+  //       [equals(''), always(null)],
+  //       [equals('dependencies'), always(<Chip label="depepency" />)],
+  //       [equals('devDependencies'), always(<Chip label="devDependency" />)],
+  //       [equals('optionalDependencies'), always(<Chip label="optional" />)],
+  //       [equals('bundledDependencies'), always(<Chip label="bundle" />)],
+  //       [equals('peerDependencies'), always(<Chip label="peer" />)]
+  //     ])(group),
+  //   [group]
+  // );
 
   const viewPackage = () =>
     ipcRenderer.send('ipc-event', {
@@ -82,7 +82,6 @@ const PackageItem = ({
       <TableCell padding="none" className={cn(classes.tableCell)}>
         <div className={classes.flexContainer}>
           <Typography>{name}</Typography>
-          {group && typeof group === 'string' ? renderIconByGroup(group) : null}
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>

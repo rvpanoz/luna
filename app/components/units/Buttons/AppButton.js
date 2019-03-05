@@ -42,10 +42,11 @@ AppButton.propTypes = {
     'info',
     'success',
     'warning',
-    'danger',
+    'error',
     'white',
     'transparent',
-    'primary'
+    'primary',
+    'secondary'
   ]),
   round: bool,
   fullWidth: bool,

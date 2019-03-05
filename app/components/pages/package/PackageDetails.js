@@ -45,7 +45,7 @@ const getCleanProps = (val, key) => /^[^_]/.test(key);
 
 const mapState = ({
   common: { mode, packageLoader },
-  repository: {
+  modules: {
     data: { packages },
     active,
     metadata: { fromSearch }

@@ -21,7 +21,7 @@ import { addFilter, clearFilters } from 'models/packages/actions';
 import styles from './styles/tableFilters';
 
 const mapState = ({
-  repository: {
+  modules: {
     filtering: { filters }
   }
 }) => ({
@@ -130,14 +130,7 @@ const TableFilters = ({ classes, mode, close }) => {
         </FormControl>
         <Divider className={classes.bottomDivider} light />
         <div className={classes.actions}>
-          <AppButton
-            color="transparent"
-            className={classes.actionButton}
-            onClick={() => emptyFilters()}
-          >
-            Clear
-          </AppButton>
-          <AppButton color="transparent" onClick={close}>
+          <AppButton color="error" onClick={close}>
             Close
           </AppButton>
         </div>

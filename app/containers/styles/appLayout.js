@@ -1,6 +1,5 @@
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-
-const drawerWidth = 240;
+import { drawerWidth } from 'styles/variables';
 
 const styles = theme => ({
   root: {

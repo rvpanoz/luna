@@ -24,10 +24,10 @@ const styles = theme => ({
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
     [theme.breakpoints.up('md')]: {
-      maxHeight: 350
+      maxHeight: 500
     },
     [theme.breakpoints.up('lg')]: {
-      maxHeight: 560
+      maxHeight: 650
     }
   },
   tableRow: {

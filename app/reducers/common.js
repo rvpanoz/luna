@@ -23,7 +23,7 @@ import {
 } from 'models/ui/actions';
 import initialState from './initialState';
 
-const { repository, ...common } = initialState;
+const { modules, ...common } = initialState;
 
 /**
  *
@@ -74,7 +74,7 @@ const handlers = {
     merge(state, {
       npm: {
         ...state.npm,
-        commands: [...state.npm.commands, command]
+        commands: prepend(command, state.npm.commands)
       }
     }),
   [commandError.type]: (state, { payload: error }) =>
