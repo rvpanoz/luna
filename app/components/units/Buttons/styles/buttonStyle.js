@@ -48,7 +48,7 @@ const buttonStyle = theme => ({
   },
   info: {
     backgroundColor: infoColor,
-    boxShadow,
+    ...boxShadow,
     '&:hover': {
       backgroundColor: infoColor,
       boxShadow:
@@ -57,7 +57,7 @@ const buttonStyle = theme => ({
   },
   success: {
     backgroundColor: successColor,
-    boxShadow,
+    ...boxShadow,
     '&:hover': {
       backgroundColor: successColor,
       boxShadow:
@@ -66,7 +66,7 @@ const buttonStyle = theme => ({
   },
   warning: {
     backgroundColor: theme.palette.warning.main,
-    boxShadow,
+    ...boxShadow,
     '&:hover': {
       backgroundColor: theme.palette.warning.light,
       boxShadow:
@@ -75,7 +75,7 @@ const buttonStyle = theme => ({
   },
   error: {
     backgroundColor: theme.palette.error.main,
-    boxShadow,
+    ...boxShadow,
     '&:hover': {
       backgroundColor: theme.palette.error.light,
       boxShadow:

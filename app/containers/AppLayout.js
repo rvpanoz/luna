@@ -14,39 +14,56 @@ import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
 
 import { setSnackbar } from 'models/ui/actions';
-import { switchcase } from 'commons/utils';
+import { switchcase, shrinkDirectory } from 'commons/utils';
 
+import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
-
-const drawerWidth = 240;
 
 const mapState = ({
   common: {
     mode,
     directory,
-    projectName,
-    projectVersion,
     activePage,
     loader: { loading },
-    snackbarOptions
+    npm: { env },
+    snackbarOptions,
+    notifications
   },
-  repository: {
-    metadata: { lastUpdatedAt }
+  modules: {
+    data: { packages, packagesOutdated },
+    metadata: { lastUpdatedAt },
+    project: { name, version }
   }
 }) => ({
   lastUpdatedAt,
   activePage,
+  mode,
   directory,
-  projectName,
-  projectVersion,
+  packages,
+  packagesOutdated,
+  name,
+  version,
   loading,
   mode,
+  packages,
   snackbarOptions
 });
 
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
-  const { activePage, snackbarOptions } = useMappedState(mapState);
+  const {
+    activePage,
+    snackbarOptions,
+    mode,
+    directory,
+    notifications,
+    packages,
+    packagesOutdated,
+    name,
+    version,
+    env,
+    loading
+  } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   return (
@@ -61,12 +78,31 @@ const AppLayout = ({ classes }) => {
               open={drawerOpen}
               onClose={() => toggleDrawer(!drawerOpen)}
               title="Packages"
+              totalpackages={packages && packages.length}
+              totaloutdated={packagesOutdated && packagesOutdated.length}
+              totalnotifications={notifications && notifications.length}
+              mode={mode}
+              directory={mode === 'local' && shrinkDirectory(directory)}
+              title="Packages"
+              name={name}
+              version={version}
+              env={env}
+              loading={loading}
             />
           </Hidden>
           <Hidden xsDown implementation="css">
             <Navigator
+              totalpackages={packages && packages.length}
+              totaloutdated={packagesOutdated && packagesOutdated.length}
+              totalnotifications={notifications && notifications.length}
+              mode={mode}
+              directory={mode === 'local' && shrinkDirectory(directory)}
               title="Packages"
               PaperProps={{ style: { width: drawerWidth } }}
+              name={name}
+              version={version}
+              env={env}
+              loading={loading}
             />
           </Hidden>
         </nav>

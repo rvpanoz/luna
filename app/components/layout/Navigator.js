@@ -15,7 +15,13 @@ import FolderIcon from '@material-ui/icons/FolderOpen';
 
 import AppTabs from 'components/common/AppTabs';
 import AppButton from 'components/units/Buttons/AppButton';
-import { APP_GLOBALS, APP_MODES } from 'constants/AppConstants';
+
+import {
+  ProjectTab,
+  PackagesTab,
+  ToolsTab
+} from 'components/pages/navigator/tabs';
+import { APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
@@ -23,10 +29,16 @@ import styles from './styles/navigator';
 const Navigator = ({
   classes,
   mode,
+  directory,
+  totalpackages,
+  totaloutdated,
+  totalnotification,
   lastUpdatedAt,
-  title,
-  total,
-  ...other
+  name,
+  version,
+  env,
+  loading,
+  ...restProps
 }) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
   const dispatch = useDispatch();
@@ -67,7 +79,7 @@ const Navigator = ({
   }, []);
 
   return (
-    <Drawer variant="permanent" {...other}>
+    <Drawer variant="permanent" {...restProps}>
       <List disablePadding>
         <ListItem className={classes.categoryHeader}>
           <ListItemText
@@ -85,6 +97,12 @@ const Navigator = ({
             </AppButton>
           </ListItemText>
         </ListItem>
+
+        <ListItem>
+          <ListItemText>
+            <StatsCard title="Packages" total={total} />
+          </ListItemText>
+        </ListItem>
         <ListItem className={classes.categoryHeader}>
           <ListItemText
             classes={{
@@ -96,7 +114,56 @@ const Navigator = ({
         </ListItem>
         <ListItem>
           <ListItemText>
-            <AppTabs />
+            <AppTabs>
+              <ProjectTab
+                items={[
+                  {
+                    primaryText: mode === 'local' ? name : 'Global',
+                    secondaryText: mode === 'global' ? `npm v${env}` : directory
+                  }
+                ]}
+                metadata={lastUpdatedAt}
+                loading={loading}
+              />
+              <PackagesTab
+                items={[
+                  {
+                    primaryText: 'Total',
+                    secondaryText: totalpackages || 0,
+                    color: 'secondary'
+                  },
+                  {
+                    primaryText: 'Outdated',
+                    secondaryText: totaloutdated || 0,
+                    color: 'warning'
+                  },
+                  {
+                    primaryText: 'Problems',
+                    secondaryText: totalnotification || 0,
+                    color: 'error'
+                  }
+                ]}
+                loading={loading}
+              />
+              <ToolsTab
+                items={[
+                  {
+                    primaryText: 'npm audit',
+                    secondaryText: 'Run npm audit'
+                  },
+                  {
+                    primaryText: 'npm doctor',
+                    secondaryText: 'Run npm doctor'
+                  },
+                  {
+                    primaryText: 'lock verify',
+                    secondaryText:
+                      'Report if package.json is out of sync with package-lock.json'
+                  }
+                ]}
+                loading={loading}
+              />
+            </AppTabs>
           </ListItemText>
         </ListItem>
         <ListItem className={classes.categoryHeader}>

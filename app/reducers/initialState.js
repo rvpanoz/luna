@@ -25,7 +25,7 @@ export default {
     loading: false,
     message: null
   },
-  repository: {
+  modules: {
     active: null,
     data: {
       packages: [],

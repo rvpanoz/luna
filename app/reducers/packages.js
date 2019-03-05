@@ -23,7 +23,7 @@ import format from 'date-fns/format';
 
 import initialState from './initialState';
 
-const { repository } = initialState;
+const { modules } = initialState;
 
 const createReducer = (packagesState, handlers) => (
   state = packagesState,
@@ -270,4 +270,4 @@ const handlers = {
     })
 };
 
-export default createReducer(repository, handlers);
+export default createReducer(modules, handlers);

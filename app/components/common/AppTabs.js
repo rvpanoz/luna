@@ -1,62 +1,62 @@
 /* eslint-disable react/require-default-props */
 
 import path from 'path';
-import React, { useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import Typography from '@material-ui/core/Typography';
 
+import AppLoader from 'components/common/AppLoader';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
 import styles from './styles/appTabs';
 
-function TabContainer({ children, dir }) {
-  return (
-    <Typography component="div" style={{ padding: 8 * 3 }}>
-      {children}
-    </Typography>
-  );
-}
+const TabContainer = ({ children, loading }) => (
+  <Typography component="div" style={{ padding: 8 }}>
+    {loading ? 'Loading...' : children}
+  </Typography>
+);
 
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-class AppTabs extends React.Component {
-  state = {
-    value: 0
-  };
+const AppTabs = ({ classes, children }) => {
+  const [value, setValue] = useState(0);
 
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
+  return (
+    <div className={classes.root}>
+      <AppBar position="static" color="default">
+        <Tabs
+          value={value}
+          onChange={(e, value) => setValue(value)}
+          indicatorColor="secondary"
+          textColor="secondary"
+        >
+          <Tab label="Project" />
+          <Tab label="Packages" />
+          <Tab label="Tools" />
+        </Tabs>
+      </AppBar>
 
-  render() {
-    const { classes } = this.props;
-    const { value } = this.state;
-
-    return (
-      <div className={classes.root}>
-        <AppBar position="static" color="default">
-          <Tabs
-            value={this.state.value}
-            onChange={this.handleChange}
-            indicatorColor="primary"
-            textColor="primary"
-          >
-            <Tab label="Project" />
-            <Tab label="Packages" />
-          </Tabs>
-        </AppBar>
-        {value === 0 && <TabContainer>project info..</TabContainer>}
-        {value === 1 && <TabContainer>packages stats..</TabContainer>}
-      </div>
-    );
-  }
-}
+      {React.Children.map(children, (child, idx) => {
+        if (value === idx) {
+          return (
+            <TabContainer loading={child.props.loading}>
+              {React.cloneElement(child, {
+                items: child.props.items,
+                metadata: child.props.metadata
+              })}
+            </TabContainer>
+          );
+        }
+      })}
+    </div>
+  );
+};
 
 AppTabs.propTypes = {
   classes: PropTypes.object.isRequired,
