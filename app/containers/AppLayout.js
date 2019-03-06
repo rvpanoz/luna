@@ -32,7 +32,7 @@ const mapState = ({
   modules: {
     data: { packages, packagesOutdated },
     metadata: { lastUpdatedAt },
-    project: { name, version }
+    project: { name, version, description }
   }
 }) => ({
   lastUpdatedAt,
@@ -44,7 +44,10 @@ const mapState = ({
   name,
   version,
   loading,
+  description,
   mode,
+  env,
+  notifications,
   packages,
   snackbarOptions
 });
@@ -59,10 +62,7 @@ const AppLayout = ({ classes }) => {
     notifications,
     packages,
     packagesOutdated,
-    name,
-    version,
-    env,
-    loading
+    ...restProps
   } = useMappedState(mapState);
   const dispatch = useDispatch();
 
@@ -71,47 +71,23 @@ const AppLayout = ({ classes }) => {
       <div className={classes.root}>
         <CssBaseline />
         <nav className={classes.drawer}>
-          <Hidden smUp implementation="js">
-            <Navigator
-              PaperProps={{ style: { width: drawerWidth } }}
-              variant="temporary"
-              open={drawerOpen}
-              onClose={() => toggleDrawer(!drawerOpen)}
-              title="Packages"
-              totalpackages={packages && packages.length}
-              totaloutdated={packagesOutdated && packagesOutdated.length}
-              totalnotifications={notifications && notifications.length}
-              mode={mode}
-              directory={mode === 'local' && shrinkDirectory(directory)}
-              title="Packages"
-              name={name}
-              version={version}
-              env={env}
-              loading={loading}
-            />
-          </Hidden>
-          <Hidden xsDown implementation="css">
-            <Navigator
-              totalpackages={packages && packages.length}
-              totaloutdated={packagesOutdated && packagesOutdated.length}
-              totalnotifications={notifications && notifications.length}
-              mode={mode}
-              directory={mode === 'local' && shrinkDirectory(directory)}
-              title="Packages"
-              PaperProps={{ style: { width: drawerWidth } }}
-              name={name}
-              version={version}
-              env={env}
-              loading={loading}
-            />
-          </Hidden>
+          <Navigator
+            totalpackages={packages && packages.length}
+            totaloutdated={packagesOutdated && packagesOutdated.length}
+            totalnotifications={notifications && notifications.length}
+            mode={mode}
+            directory={directory && shrinkDirectory(directory)}
+            title="Packages"
+            PaperProps={{ style: { width: drawerWidth } }}
+            {...restProps}
+          />
         </nav>
         <div className={classes.appContent}>
           <Header onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
           <main className={classes.mainContent}>
             {switchcase({
               packages: () => <Packages />,
-              tools: () => <Typography>NOT AVAILABLE</Typography>
+              problems: () => <Typography>NOT AVAILABLE</Typography>
             })(<Packages />)(activePage)}
           </main>
         </div>

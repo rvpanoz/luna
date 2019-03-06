@@ -15,8 +15,8 @@ import Tab from '@material-ui/core/Tab';
 import styles from './styles/appTabs';
 
 const TabContainer = ({ children, loading }) => (
-  <Typography component="div" style={{ padding: 8 }}>
-    {loading ? 'Loading...' : children}
+  <Typography component="div" style={{ padding: 8, minHeight: 215 }}>
+    {loading ? null : children}
   </Typography>
 );
 

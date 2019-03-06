@@ -13,6 +13,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 
+import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
 import AppButton from 'components/units/Buttons/AppButton';
 
@@ -36,6 +37,7 @@ const Navigator = ({
   lastUpdatedAt,
   name,
   version,
+  description,
   env,
   loading,
   ...restProps
@@ -81,18 +83,19 @@ const Navigator = ({
   return (
     <Drawer variant="permanent" {...restProps}>
       <List disablePadding>
-        <ListItem className={classes.categoryHeader}>
-          <ListItemText
-            classes={{
-              primary: classes.categoryHeaderPrimary
-            }}
-          >
-            Luna
+        <ListItem>
+          <ListItemText>
+            <AppLogo />
           </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemText className={classes.actionButton}>
-            <AppButton color="primary" fullWidth onClick={() => openPackage()}>
+            <AppButton
+              color="primary"
+              fullWidth
+              onClick={() => openPackage()}
+              style={{ fontSize: 18 }}
+            >
               Analyze
             </AppButton>
           </ListItemText>
@@ -113,7 +116,15 @@ const Navigator = ({
               <ProjectTab
                 items={[
                   {
-                    primaryText: mode === 'local' ? name : 'Global',
+                    primaryText:
+                      mode === 'local'
+                        ? `${name} v${version || '0.0.0'}`
+                        : 'Global',
+                    secondaryText:
+                      mode === 'local' && description ? description : null
+                  },
+                  {
+                    primaryText: mode === 'global' ? null : 'Directory',
                     secondaryText: mode === 'global' ? `npm v${env}` : directory
                   }
                 ]}
@@ -125,17 +136,20 @@ const Navigator = ({
                   {
                     primaryText: 'Total',
                     secondaryText: totalpackages || 0,
-                    color: 'secondary'
+                    color: 'secondary',
+                    primary: true
                   },
                   {
                     primaryText: 'Outdated',
                     secondaryText: totaloutdated || 0,
-                    color: 'warning'
+                    color: 'warning',
+                    warning: true
                   },
                   {
                     primaryText: 'Problems',
                     secondaryText: totalnotification || 0,
-                    color: 'error'
+                    color: 'error',
+                    error: true
                   }
                 ]}
                 loading={loading}

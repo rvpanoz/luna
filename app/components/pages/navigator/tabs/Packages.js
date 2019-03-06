@@ -9,7 +9,9 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
-import ModulesIcon from '@material-ui/icons/ViewModule';
+import ModulesIcon from '@material-ui/icons/LibraryAddOutlined';
+import UpdateIcon from '@material-ui/icons/Update';
+import ErrorIcon from '@material-ui/icons/ErrorOutlineSharp';
 import Typography from '@material-ui/core/Typography';
 
 import styles from './styles/packages';
@@ -26,14 +28,22 @@ const PackagesTab = ({ classes, items }) => (
                   [classes[`${item.color}Color`]]: item.color
                 })}
               >
-                <ModulesIcon />
+                {item.primary && <ModulesIcon />}
+                {item.warning && <UpdateIcon />}
+                {item.error && <ErrorIcon />}
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={<Typography>{item.primaryText}</Typography>}
+              primary={
+                <Typography className={classes.title} component="p">
+                  {item.primaryText}
+                </Typography>
+              }
             />
             <ListItemSecondaryAction>
-              <Typography>{item.secondaryText}</Typography>
+              <Typography className={classes.stats} component="p">
+                {item.secondaryText}
+              </Typography>
             </ListItemSecondaryAction>
           </ListItem>
         ))}
