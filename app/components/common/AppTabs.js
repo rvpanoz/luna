@@ -33,7 +33,7 @@ const AppTabs = ({ classes, children }) => {
         <Tabs
           value={value}
           onChange={(e, value) => setValue(value)}
-          indicatorColor="secondary"
+          indicatorColor="primary"
           textColor="secondary"
         >
           <Tab label="Project" />

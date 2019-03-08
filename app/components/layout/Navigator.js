@@ -12,6 +12,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
+import ArchiveIcon from '@material-ui/icons/Archive';
+
+import Icon from '@material-ui/core/Icon';
 
 import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
@@ -45,18 +48,6 @@ const Navigator = ({
   const [openedDirectories, setOpenedDirectories] = useState([]);
   const dispatch = useDispatch();
 
-  const handleDirectory = useCallback(directory => {
-    dispatch(setMode({ mode: APP_MODES.local, directory }));
-  }, []);
-
-  useEffect(() => {
-    ipcRenderer.on('loaded-packages-close', (event, directories) => {
-      setOpenedDirectories(directories);
-    });
-
-    return () => ipcRenderer.removeAllListeners('loaded-packages-close');
-  }, [openedDirectories.length]);
-
   const openPackage = useCallback(() => {
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
@@ -74,11 +65,20 @@ const Navigator = ({
       filePath => {
         if (filePath) {
           const directory = filePath.join('');
-          handleDirectory(directory);
+
+          dispatch(setMode({ mode: APP_MODES.local, directory }));
         }
       }
     );
   }, []);
+
+  useEffect(() => {
+    ipcRenderer.on('loaded-packages-close', (event, directories) => {
+      setOpenedDirectories(directories);
+    });
+
+    return () => ipcRenderer.removeAllListeners('loaded-packages-close');
+  }, [openedDirectories]);
 
   return (
     <Drawer variant="permanent" {...restProps}>
@@ -95,7 +95,9 @@ const Navigator = ({
               fullWidth
               onClick={() => openPackage()}
               style={{ fontSize: 18 }}
+              variant="contained"
             >
+              <ArchiveIcon className={classNames(classes.leftIcon)} />
               Analyze
             </AppButton>
           </ListItemText>
