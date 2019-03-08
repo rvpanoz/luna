@@ -11,20 +11,7 @@ import {
   dangerBoxShadow
 } from 'styles/variables';
 
-const snackbarContentStyle = {
-  root: {
-    ...defaultFont,
-    position: 'relative',
-    padding: '20px 15px',
-    lineHeight: '20px',
-    marginBottom: '20px',
-    fontSize: '14px',
-    backgroundColor: 'white',
-    color: '#555555',
-    borderRadius: '3px',
-    boxShadow:
-      '0 12px 20px -10px rgba(255, 255, 255, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 255, 255, 0.2)'
-  },
+const styles = theme => ({
   info: {
     backgroundColor: '#00d3ee',
     color: '#ffffff',
@@ -50,10 +37,18 @@ const snackbarContentStyle = {
     color: '#ffffff',
     ...primaryBoxShadow
   },
+  icon: {
+    fontSize: 20
+  },
+  iconVariant: {
+    opacity: 0.9,
+    marginRight: theme.spacing.unit
+  },
   message: {
-    padding: '0',
-    display: 'block',
-    maxWidth: '89%'
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    maxWidth: 300
   },
   close: {
     width: '14px',
@@ -76,6 +71,6 @@ const snackbarContentStyle = {
     paddingLeft: '65px',
     display: 'block'
   }
-};
+});
 
-export default snackbarContentStyle;
+export default styles;

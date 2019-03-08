@@ -127,7 +127,9 @@ const Navigator = ({
                   {
                     primaryText: mode === 'local' && name ? name : null,
                     secondaryText:
-                      mode === 'local' && description ? description : null
+                      mode === 'local' && description
+                        ? description
+                        : 'No description available'
                   },
                   {
                     primaryText: mode === 'global' ? 'npm' : 'Home',

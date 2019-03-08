@@ -6,12 +6,14 @@ import { ipcRenderer } from 'electron';
 import React, { useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { withErrorBoundary } from 'commons/hocs';
+import { WARNING_MESSAGES } from 'constants/AppConstants';
 
 import {
   commandMessage,
   uiException,
   setEnv,
-  npmCommand
+  npmCommand,
+  setSnackbar
 } from 'models/ui/actions';
 
 import AppLayout from './AppLayout';
@@ -43,6 +45,16 @@ const App = () => {
 
     ipcRenderer.once('get-env-close', (event, env) => {
       dispatch({ type: setEnv.type, payload: env });
+    });
+
+    ipcRenderer.on('yarn-warning-close', () => {
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: 'error',
+          message: WARNING_MESSAGES.yarnlock
+        })
+      );
     });
 
     return () =>

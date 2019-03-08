@@ -27,8 +27,7 @@ import {
   setPageRows,
   setPackagesStart
 } from 'models/packages/actions';
-import { clearAll, setSnackbar, toggleLoader } from 'models/ui/actions';
-import { WARNING_MESSAGES } from 'constants/AppConstants';
+import { clearAll } from 'models/ui/actions';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -144,16 +143,6 @@ const Packages = ({ classes }) => {
   }, [dependenciesSet]);
 
   useEffect(() => {
-    ipcRenderer.on('yarn-warning-close', () => {
-      dispatch(
-        setSnackbar({
-          open: true,
-          type: 'error',
-          message: WARNING_MESSAGES.yarnlock
-        })
-      );
-    });
-
     ipcRenderer.on('action-close', (event, error) => {
       if (error && error.length) {
         dispatch(addActionError({ error }));

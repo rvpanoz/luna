@@ -98,7 +98,7 @@ const AppLayout = ({ classes }) => {
               horizontal: 'right'
             }}
             open={Boolean(snackbarOptions.open)}
-            autoHideDuration={5000}
+            autoHideDuration={999000}
             onClose={() =>
               dispatch(
                 setSnackbar({
