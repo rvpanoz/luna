@@ -5,7 +5,8 @@ import { isPackageOutdated } from 'commons/utils';
 import {
   toggleLoader,
   clearCommands,
-  clearNotifications
+  clearNotifications,
+  clearAll
 } from 'models/ui/actions';
 
 import {
@@ -54,6 +55,19 @@ const resumeRequest = () => ({
   type: 'RESUME_REQUEST'
 });
 
+const cleanAllEpic = action$ =>
+  action$.pipe(
+    ofType(clearAll.type),
+    concatMap(() => [
+      updateLoader({
+        loading: false
+      }),
+      cleanNotifications(),
+      cleanPackages(),
+      cleanCommands()
+    ])
+  );
+
 const packagesStartEpic = action$ =>
   action$.pipe(
     ofType(setPackagesStart.type),
@@ -100,13 +114,11 @@ const updatePackagesEpic = action$ =>
     })
   );
 
-/** TODO: handle empty projects - dependencies craches */
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
-    skipWhile(
-      ({ payload: { dependencies } }) =>
-        !dependencies || !Array.isArray(dependencies)
+    takeWhile(({ payload: { dependencies } }) =>
+      Boolean(dependencies && Array.isArray(dependencies))
     ),
     map(
       ({
@@ -216,5 +228,6 @@ export default combineEpics(
   packagesStartEpic,
   packagesSuccessEpic,
   installPackagesEpic,
+  cleanAllEpic,
   updatePackagesEpic
 );

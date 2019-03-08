@@ -37,17 +37,21 @@ const App = () => {
       }
     });
 
-    // TODO: fix listener once - on
-    ipcRenderer.once('ipcEvent-flow', (event, command) => {
+    ipcRenderer.on('ipcEvent-flow', (event, command) => {
       dispatch({ type: npmCommand.type, payload: { command } });
     });
 
-    ipcRenderer.once('get-env-close', (event, env) =>
-      dispatch({ type: setEnv.type, payload: env })
-    );
+    ipcRenderer.once('get-env-close', (event, env) => {
+      dispatch({ type: setEnv.type, payload: env });
+    });
 
     return () =>
-      ipcRenderer.removeAllListeners(['ipcEvent-error', 'uncaught-exception']);
+      ipcRenderer.removeAllListeners([
+        'ipcEvent-error',
+        'uncaught-exception',
+        'ipcEvent-flow',
+        'get-env-close'
+      ]);
   });
 
   return (

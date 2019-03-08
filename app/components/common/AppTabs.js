@@ -43,9 +43,11 @@ const AppTabs = ({ classes, children }) => {
       </AppBar>
 
       {React.Children.map(children, (child, idx) => {
-        if (value === idx) {
+        if (child.props.loading) {
+          return null;
+        } else if (value === idx) {
           return (
-            <TabContainer loading={child.props.loading}>
+            <TabContainer>
               {React.cloneElement(child, {
                 items: child.props.items,
                 metadata: child.props.metadata

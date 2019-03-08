@@ -1,21 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import cn from 'classnames';
 
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
 import ArrowRightIcon from '@material-ui/icons/ArrowRightAlt';
 import Typography from '@material-ui/core/Typography';
 
 import styles from './styles/tools';
 
-const ToolsTab = ({ classes, items }) => (
+const ToolsTab = ({ classes, items, nodata }) => (
   <div className={classes.tab}>
     <List dense={true}>
       {items &&
@@ -26,7 +23,7 @@ const ToolsTab = ({ classes, items }) => (
               secondary={item.secondaryText}
             />
             <ListItemSecondaryAction>
-              <IconButton aria-label="action">
+              <IconButton aria-label="action" disabled={nodata}>
                 <ArrowRightIcon />
               </IconButton>
             </ListItemSecondaryAction>
@@ -37,7 +34,9 @@ const ToolsTab = ({ classes, items }) => (
 );
 
 ToolsTab.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  items: PropTypes.arrayOf(PropTypes.object),
+  nodata: PropTypes.bool
 };
 
 export default withStyles(styles)(ToolsTab);

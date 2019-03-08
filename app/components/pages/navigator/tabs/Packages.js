@@ -52,7 +52,8 @@ const PackagesTab = ({ classes, items }) => (
 );
 
 PackagesTab.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  items: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default withStyles(styles)(PackagesTab);

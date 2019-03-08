@@ -6,10 +6,11 @@ const styles = theme => ({
   },
   listItem: {
     padding: 0,
-    margin: `${theme.spacing.unit}px 0 ${theme.spacing.unit * 2}px`
+    margin: 0
   },
   secondaryText: {
-    color: grayColor
+    color: grayColor,
+    paddingBottom: theme.spacing.unit * 2
   }
 });
 

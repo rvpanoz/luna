@@ -14,8 +14,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 import ArchiveIcon from '@material-ui/icons/Archive';
 
-import Icon from '@material-ui/core/Icon';
-
 import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
 import AppButton from 'components/units/Buttons/AppButton';
@@ -25,10 +23,17 @@ import {
   PackagesTab,
   ToolsTab
 } from 'components/pages/navigator/tabs';
-import { APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
+
+const runAudit = (mode, directory) =>
+  ipcRenderer.send('ipc-event', {
+    ipcEvent: 'npm-audit',
+    cmd: ['audit'],
+    mode,
+    directory
+  });
 
 const Navigator = ({
   classes,
@@ -48,6 +53,14 @@ const Navigator = ({
   const [openedDirectories, setOpenedDirectories] = useState([]);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    ipcRenderer.on('loaded-packages-close', (event, directories) =>
+      setOpenedDirectories(directories)
+    );
+
+    return () => ipcRenderer.removeAllListeners('loaded-packages-close');
+  }, [openedDirectories]);
+
   const openPackage = useCallback(() => {
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
@@ -64,21 +77,15 @@ const Navigator = ({
       },
       filePath => {
         if (filePath) {
-          const directory = filePath.join('');
-
-          dispatch(setMode({ mode: APP_MODES.local, directory }));
+          dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
         }
       }
     );
   }, []);
 
-  useEffect(() => {
-    ipcRenderer.on('loaded-packages-close', (event, directories) => {
-      setOpenedDirectories(directories);
-    });
-
-    return () => ipcRenderer.removeAllListeners('loaded-packages-close');
-  }, [openedDirectories]);
+  const handleDirectory = useCallback(directory => {
+    dispatch(setMode({ mode: 'local', directory }));
+  }, []);
 
   return (
     <Drawer variant="permanent" {...restProps}>
@@ -118,16 +125,22 @@ const Navigator = ({
               <ProjectTab
                 items={[
                   {
-                    primaryText:
-                      mode === 'local'
-                        ? `${name} v${version || '0.0.0'}`
-                        : 'Global',
+                    primaryText: mode === 'local' && name ? name : null,
                     secondaryText:
                       mode === 'local' && description ? description : null
                   },
                   {
-                    primaryText: mode === 'global' ? null : 'Directory',
-                    secondaryText: mode === 'global' ? `npm v${env}` : directory
+                    primaryText: mode === 'global' ? 'npm' : 'Home',
+                    secondaryText: mode === 'global' ? env.userAgent : directory
+                  },
+                  {
+                    primaryText: mode === 'global' ? 'registry' : null,
+                    secondaryText:
+                      mode === 'global' ? env.metricsRegistry : null
+                  },
+                  {
+                    primaryText: mode === 'global' ? 'cache' : null,
+                    secondaryText: mode === 'global' ? env.cache : null
                   }
                 ]}
                 metadata={lastUpdatedAt}
@@ -172,6 +185,7 @@ const Navigator = ({
                       'Report if package.json is out of sync with package-lock.json'
                   }
                 ]}
+                nodata={totalpackages === 0}
                 loading={loading}
               />
             </AppTabs>
