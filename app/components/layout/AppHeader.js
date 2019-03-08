@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 
@@ -14,7 +14,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import Popover from '@material-ui/core/Popover';
 
+import Settings from './Settings';
 import SearchBox from 'components/common/SearchBox';
 import { setActivePage } from 'models/ui/actions';
 
@@ -25,17 +27,21 @@ const mapState = ({
   common: {
     activePage,
     notifications,
-    loader: { loading }
+    loader: { loading },
+    npm: { env }
   }
 }) => ({
   activePage,
   notifications,
-  loading
+  loading,
+  env
 });
 
 const Header = ({ classes, onDrawerToggle }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+
   const dispatch = useDispatch();
-  const { activePage } = useMappedState(mapState);
+  const { activePage, notifications, loading, env } = useMappedState(mapState);
 
   return (
     <React.Fragment>
@@ -65,7 +71,10 @@ const Header = ({ classes, onDrawerToggle }) => {
             </Grid>
             <Grid item>
               <Tooltip title="open settings">
-                <IconButton color="inherit">
+                <IconButton
+                  color="inherit"
+                  onClick={e => setAnchorEl(e.currentTarget)}
+                >
                   <SettingsIcon />
                 </IconButton>
               </Tooltip>
@@ -116,6 +125,40 @@ const Header = ({ classes, onDrawerToggle }) => {
           <Tab textColor="inherit" label="Problems" value="problems" />
         </Tabs>
       </AppBar>
+      <Popover
+        id="settings-pop"
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center'
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center'
+        }}
+      >
+        <Typography className={classes.settings}>
+          <Settings
+            items={[
+              {
+                primaryText: 'environment',
+                secondaryText: env.userAgent
+              },
+              {
+                primaryText: 'registry',
+                secondaryText: env.metricsRegistry
+              },
+              {
+                primaryText: 'cache',
+                secondaryText: env.cache
+              }
+            ]}
+            loading={loading}
+          />
+        </Typography>
+      </Popover>
     </React.Fragment>
   );
 };

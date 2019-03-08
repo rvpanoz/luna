@@ -29,9 +29,16 @@ const App = () => {
   const { enableNotifications, uiExceptionMessage } = useMappedState(mapState);
 
   useEffect(() => {
-    ipcRenderer.on('uncaught-exception', (event, ...args) =>
-      dispatch({ type: uiException.type, payload: { message: args[0] } })
-    );
+    ipcRenderer.on('uncaught-exception', (event, ...args) => {
+      dispatch({ type: uiException.type, payload: { message: args[0] } });
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: 'error',
+          message: args[0]
+        })
+      );
+    });
 
     ipcRenderer.on('ipcEvent-error', (event, message) => {
       if (enableNotifications) {

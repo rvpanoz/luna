@@ -125,24 +125,16 @@ const Navigator = ({
               <ProjectTab
                 items={[
                   {
-                    primaryText: mode === 'local' && name ? name : null,
+                    primaryText: mode === 'local' && name ? name : 'Global',
                     secondaryText:
                       mode === 'local' && description
                         ? description
                         : 'No description available'
                   },
                   {
-                    primaryText: mode === 'global' ? 'npm' : 'Home',
-                    secondaryText: mode === 'global' ? env.userAgent : directory
-                  },
-                  {
-                    primaryText: mode === 'global' ? 'registry' : null,
+                    primaryText: mode === 'local' && directory ? 'Home' : null,
                     secondaryText:
-                      mode === 'global' ? env.metricsRegistry : null
-                  },
-                  {
-                    primaryText: mode === 'global' ? 'cache' : null,
-                    secondaryText: mode === 'global' ? env.cache : null
+                      mode === 'local' && directory ? directory : null
                   }
                 ]}
                 metadata={lastUpdatedAt}

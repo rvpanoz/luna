@@ -6,9 +6,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-
 import styles from './styles/project';
 
 const key = 'project-tab';
@@ -19,7 +16,9 @@ const ProjectTab = ({ classes, items }) => (
       {items.map((item, idx) => (
         <ListItem key={`${key}item-${idx}`} className={classes.listItem}>
           <ListItemText
-            primary={<Typography variant="h6">{item.primaryText}</Typography>}
+            primary={
+              <Typography variant="subtitle2">{item.primaryText}</Typography>
+            }
             secondary={
               <Typography className={classes.secondaryText} variant="body2">
                 {item.secondaryText}

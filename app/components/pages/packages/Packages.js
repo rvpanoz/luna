@@ -24,10 +24,9 @@ import {
   addInstallOption,
   updateData,
   setPage,
-  setPageRows,
-  setPackagesStart
+  setPageRows
 } from 'models/packages/actions';
-import { clearAll } from 'models/ui/actions';
+import { clearAll, toggleLoader } from 'models/ui/actions';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -143,21 +142,19 @@ const Packages = ({ classes }) => {
   }, [dependenciesSet]);
 
   useEffect(() => {
-    ipcRenderer.on('action-close', (event, error) => {
+    ipcRenderer.on('action-close', (event, error, options) => {
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
 
+      const { action, dirtyPackages } = options;
+
+      console.log(action, dirtyPackages);
+
       dispatch(
-        setPackagesStart({
-          channel: 'ipc-event',
-          options: {
-            ipcEvent: 'get-packages',
-            cmd: ['outdated', 'list'],
-            mode,
-            directory
-          },
-          paused
+        toggleLoader({
+          loader: false,
+          message: null
         })
       );
     });
