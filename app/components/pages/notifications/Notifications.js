@@ -13,10 +13,8 @@ import TableCell from '@material-ui/core/TableCell';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableRow from '@material-ui/core/TableRow';
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 
+import { installPackages } from 'models/packages/actions';
 import NotificationsHeader from './NotificationsHeader';
 import NotificationsToolbar from './NotificationsToolbar';
 
@@ -34,23 +32,35 @@ const mapState = ({
   notifications
 });
 
+const parseRequiredBy = name => name && name.replace('required by', '').trim();
+const parseRequired = (name, position) => name && name.split('@')[position];
+
 const Notifications = ({ classes }) => {
   const [selected, setSelected] = useState([]);
   const { name, mode, directory, notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
-  const handleInstall = peerName => {
+  const handleInstall = () => {
     remote.dialog.showMessageBox(
       remote.getCurrentWindow(),
       {
         title: 'Confirmation',
         type: 'question',
-        message: `Would you like to install ${peerName}?`,
+        message: `Would you like to install the selected packages?`,
         buttons: ['Cancel', 'Install']
       },
       btnIdx => {
         if (Boolean(btnIdx) === true) {
-          console.log(peerName);
+          const parameters = {
+            ipcEvent: 'install',
+            cmd: ['install'],
+            packages: selected,
+            multiple: true,
+            mode,
+            directory
+          };
+          console.log(selected);
+          // dispatch(installPackages(parameters));
         }
       }
     );
@@ -60,7 +70,9 @@ const Notifications = ({ classes }) => {
 
   const handleSelectAllClick = e => {
     if (e.target.checked) {
-      const allSelected = notifications.map((n, idx) => idx);
+      const allSelected = notifications.map((n, idx) =>
+        parseRequired(n.required, 0)
+      );
 
       return setSelected(allSelected);
     }
@@ -68,16 +80,13 @@ const Notifications = ({ classes }) => {
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
-    const selectedIndex = selected.indexOf(id);
+  // TODO: fix selected values tip: use idx to place in specific index
+  const handleClick = (event, name) => {
+    const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
+      newSelected = newSelected.concat(selected, name);
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
@@ -89,55 +98,54 @@ const Notifications = ({ classes }) => {
   };
 
   return (
-    <Grid container spacing={40}>
-      <Grid item md={8} lg={8} xl={8}>
-        <Paper className={classes.root}>
-          <NotificationsToolbar numSelected={selected.length || 0} />
-          <div className={classes.tableWrapper}>
-            <Table className={classes.table} aria-labelledby="tableTitle">
-              <NotificationsHeader
-                numSelected={selected.length || 0}
-                onSelectAllClick={handleSelectAllClick}
-                rowCount={notifications.length || 0}
-              />
-              <TableBody>
-                {notifications.map((n, idx) => {
-                  return (
-                    <TableRow
-                      hover
-                      onClick={event => handleClick(event, idx)}
-                      role="checkbox"
-                      aria-checked={selected.indexOf(idx) > -1}
-                      tabIndex={-1}
-                      key={`notification-item-${idx}`}
-                      selected={selected.indexOf(idx) > -1}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox checked={selected.indexOf(idx) > -1} />
-                      </TableCell>
-                      <TableCell>{n.requiredBy}</TableCell>
-                      <TableCell>{n.required}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
-        </Paper>
-      </Grid>
-      <Grid item md={4} lg={4} xl={4}>
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography
-              className={classes.title}
-              color="textSecondary"
-              gutterBottom
-            >
-              {name || 'Global'}
-            </Typography>
-            <Typography component="p">{directory || null}</Typography>
-          </CardContent>
-        </Card>
+    <Grid container spacing={16}>
+      <Grid item md={10} lg={8} xl={8}>
+        {notifications.length === 0 ? (
+          <Typography variant="subtitle1">No problems found!</Typography>
+        ) : (
+          <Paper className={classes.root}>
+            <NotificationsToolbar
+              numSelected={selected.length || 0}
+              handleInstall={handleInstall}
+            />
+            <div className={classes.tableWrapper}>
+              <Table
+                className={classes.table}
+                aria-labelledby="notificationsHeader"
+              >
+                <NotificationsHeader
+                  numSelected={selected.length || 0}
+                  onSelectAllClick={handleSelectAllClick}
+                  rowCount={notifications.length || 0}
+                />
+                <TableBody>
+                  {notifications.map((n, idx) => {
+                    const name = parseRequired(n.required, 0);
+
+                    return (
+                      <TableRow
+                        hover
+                        onClick={event => handleClick(event, name)}
+                        role="checkbox"
+                        aria-checked={selected.indexOf(name) > -1}
+                        tabIndex={-1}
+                        key={`notification-item-${idx}`}
+                        selected={selected.indexOf(name) > -1}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox checked={selected.indexOf(name) > -1} />
+                        </TableCell>
+                        <TableCell>{parseRequiredBy(n.requiredBy)}</TableCell>
+                        <TableCell>{parseRequired(n.required, 0)}</TableCell>
+                        <TableCell>{parseRequired(n.required, 1)}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+          </Paper>
+        )}
       </Grid>
     </Grid>
   );

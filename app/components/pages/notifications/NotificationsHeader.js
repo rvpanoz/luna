@@ -7,23 +7,29 @@ import Checkbox from '@material-ui/core/Checkbox';
 
 const rows = [
   {
+    id: 'package',
+    numeric: false,
+    disablePadding: false,
+    label: 'Package'
+  },
+  {
     id: 'required',
     numeric: false,
     disablePadding: false,
-    label: 'required'
+    label: 'Missing'
   },
   {
-    id: 'required by',
+    id: 'version',
     numeric: false,
     disablePadding: false,
-    label: 'required by'
+    label: 'Version'
   }
 ];
 
 const NotificationsHeader = ({ onSelectAllClick, numSelected, rowCount }) => (
   <TableHead>
     <TableRow>
-      <TableCell padding="checkbox">
+      <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
           indeterminate={numSelected > 0 && numSelected < rowCount}
           checked={numSelected === rowCount}

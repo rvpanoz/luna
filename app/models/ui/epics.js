@@ -43,22 +43,9 @@ const notificationsEpic = pipe(
   }),
   map(notification => {
     const { messageType, payload } = parseNpmMessage(notification);
+    console.log(messageType, payload);
 
     return switchcase({
-      INFO: () => ({
-        type: addNotification.type,
-        payload: {
-          ...payload,
-          type: 'INFO'
-        }
-      }),
-      WARN: () => ({
-        type: addNotification.type,
-        payload: {
-          ...payload,
-          type: 'WARNING'
-        }
-      }),
       ERR: () => ({
         type: addNotification.type,
         payload: {
@@ -66,7 +53,7 @@ const notificationsEpic = pipe(
           type: 'ERROR'
         }
       })
-    })({ type: addNotification.type, payload: { type: 'INFO' } })(messageType);
+    })({ type: addNotification.type, payload: { type: 'ERROR' } })(messageType);
   })
 );
 

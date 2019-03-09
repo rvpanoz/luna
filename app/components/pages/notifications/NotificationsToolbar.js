@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InstallIcon from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { defaultFont } from 'styles/variables';
+import { defaultFont, flexContainer } from 'styles/variables';
 
 const toolbarStyles = theme => ({
   root: {
@@ -20,6 +20,10 @@ const toolbarStyles = theme => ({
     flex: '1 1 100%'
   },
   actions: {
+    ...flexContainer,
+    alignItems: 'center',
+    flex: '0 0 auto',
+    padding: theme.spacing.unit,
     color: theme.palette.text.secondary
   },
   title: {
@@ -36,7 +40,7 @@ const toolbarStyles = theme => ({
   }
 });
 
-const NotificationsToolbar = ({ numSelected, classes }) => (
+const NotificationsToolbar = ({ numSelected, classes, handleInstall }) => (
   <Toolbar
     disableGutters
     className={cn(classes.root, {
@@ -54,7 +58,7 @@ const NotificationsToolbar = ({ numSelected, classes }) => (
     <div className={classes.actions}>
       {numSelected > 0 ? (
         <Tooltip title="Install">
-          <IconButton aria-label="install_peer">
+          <IconButton aria-label="install_peer" onClick={handleInstall}>
             <InstallIcon />
           </IconButton>
         </Tooltip>
@@ -65,7 +69,8 @@ const NotificationsToolbar = ({ numSelected, classes }) => (
 
 NotificationsToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired
+  numSelected: PropTypes.number.isRequired,
+  handleInstall: PropTypes.func.isRequired
 };
 
 export default withStyles(toolbarStyles)(NotificationsToolbar);

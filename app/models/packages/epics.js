@@ -72,6 +72,7 @@ const packagesStartEpic = action$ =>
   action$.pipe(
     ofType(setPackagesStart.type),
     map(({ payload: { channel, options, paused } }) => {
+      console.log(paused);
       if (paused) {
         return pauseRequest();
       }

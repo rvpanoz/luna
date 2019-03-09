@@ -26,14 +26,6 @@ import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
 
-const runAudit = (mode, directory) =>
-  ipcRenderer.send('ipc-event', {
-    ipcEvent: 'npm-audit',
-    cmd: ['audit'],
-    mode,
-    directory
-  });
-
 const Navigator = ({
   classes,
   mode,
