@@ -1,19 +1,10 @@
-import { defaultFont, successColor, primaryBoxShadow } from 'styles/variables';
+import { defaultFont, flexContainer } from 'styles/variables';
 
 const styles = theme => ({
   root: {
     width: '100%',
-    margin: 0,
-    padding: theme.spacing.unit,
     borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    overflowY: 'scroll',
-    [theme.breakpoints.up('md')]: {
-      maxHeight: 500
-    },
-    [theme.breakpoints.up('lg')]: {
-      maxHeight: 650
-    }
+    borderTopRightRadius: 0
   },
   flexContainer: {
     ...flexContainer,
@@ -70,21 +61,8 @@ const styles = theme => ({
     },
     height: 60
   },
-  color: green[600],
-  '&$checked': {
-    color: green[500]
-  },
   outdated: {
     color: theme.palette.secondary.dark
-  },
-  updated: {
-    color: darken('#00b300', 0.1)
-  },
-  nodata: {
-    padding: theme.spacing.unit * 2.5
-  },
-  icon: {
-    width: '0.85em'
   },
   avatar: {
     color: theme.palette.secondary.light
@@ -97,9 +75,6 @@ const styles = theme => ({
   },
   errorAvatar: {
     backgroundColor: theme.palette.error.light
-  },
-  successAvatar: {
-    backgroundColor: successColor
   },
   warningAvatar: {
     backgroundColor: theme.palette.warning.light
