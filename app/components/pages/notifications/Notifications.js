@@ -19,7 +19,6 @@ import ErrorIcon from '@material-ui/icons/Error';
 import WarningIcon from '@material-ui/icons/Warning';
 import AddIcon from '@material-ui/icons/Add';
 
-import AppCard from 'components/common/AppCard';
 import { toggleLoader } from 'models/ui/actions';
 
 import styles from './styles';
@@ -70,51 +69,23 @@ const Notifications = ({ classes }) => {
         message: `Installing ${peerName}..`
       })
     );
-
-    close();
   };
-
-  const errors = notifications.filter(
-    notification => notification.type === 'ERROR'
-  );
-
-  const warnings = notifications.filter(
-    notification => notification.type === 'WARNING'
-  );
 
   return (
     <section className={classes.root}>
-      <Grid container justify="space-between">
-        <Grid item sm={12} md={2} lg={2} xl={2}>
-          <AppCard
-            title="Warnings"
-            iconColor="warning"
-            description={warnings ? warnings.length : '0'}
-          />
-        </Grid>
-        <Grid item sm={12} md={2} lg={2} xl={2}>
-          <AppCard
-            title="Errors"
-            iconColor="error"
-            description={errors ? errors.length : '0'}
-          />
-        </Grid>
-        <Grid item sm={12} md={6} lg={6} xl={6}>
-          <Paper className={classes.dropdown}>
+      <Grid container>
+        <Grid item md={8} lg={8} xl={8}>
+          <Paper elevation={2}>
             <List dense>
               {notifications &&
                 notifications.map((notification, idx) => {
                   const { requiredBy, required, type } = notification;
+                  const peerName = required && required.split('@');
 
                   return (
-                    <ListItem key={`notification-${idx + 1}`}>
+                    <ListItem key={`notification-item${idx}`}>
                       <ListItemAvatar>
-                        <Avatar
-                          className={cn({
-                            [classes.errorAvatar]: type === 'ERROR',
-                            [classes.warningAvatar]: type === 'WARNING'
-                          })}
-                        >
+                        <Avatar className={classes.avatar}>
                           {type === 'ERROR' && <ErrorIcon />}
                           {type === 'WARNING' && <WarningIcon />}
                         </Avatar>
@@ -125,7 +96,7 @@ const Notifications = ({ classes }) => {
                           <Tooltip title="Install peer">
                             <IconButton
                               aria-label="Install"
-                              onClick={() => handleInstall(required)}
+                              onClick={() => handleInstall(peerName[0])}
                             >
                               <AddIcon />
                             </IconButton>

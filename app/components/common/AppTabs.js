@@ -15,8 +15,8 @@ import Tab from '@material-ui/core/Tab';
 import styles from './styles/appTabs';
 
 const TabContainer = ({ children, loading }) => (
-  <Typography component="div" style={{ padding: 8 }}>
-    {loading ? 'Loading...' : children}
+  <Typography component="div" style={{ padding: 8, minHeight: 215 }}>
+    {loading ? null : children}
   </Typography>
 );
 
@@ -33,7 +33,7 @@ const AppTabs = ({ classes, children }) => {
         <Tabs
           value={value}
           onChange={(e, value) => setValue(value)}
-          indicatorColor="secondary"
+          indicatorColor="primary"
           textColor="secondary"
         >
           <Tab label="Project" />
@@ -43,9 +43,11 @@ const AppTabs = ({ classes, children }) => {
       </AppBar>
 
       {React.Children.map(children, (child, idx) => {
-        if (value === idx) {
+        if (child.props.loading) {
+          return null;
+        } else if (value === idx) {
           return (
-            <TabContainer loading={child.props.loading}>
+            <TabContainer>
               {React.cloneElement(child, {
                 items: child.props.items,
                 metadata: child.props.metadata

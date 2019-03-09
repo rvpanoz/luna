@@ -4,6 +4,7 @@ const ActionCreator = createActionCreator('@@LUNA_APP/UI');
 
 const updateNotifications = ActionCreator('UPDATE_NOTIFICATIONS');
 const addNotification = ActionCreator('ADD_NOTIFICATION');
+const clearAll = ActionCreator('CLEAR_ALL');
 const clearNotifications = ActionCreator('CLEAR_NOTIFICATIONS');
 const clearSnackbar = ActionCreator('CLEAR_SNACKBAR');
 const clearCommands = ActionCreator('CLEAR_COMMANDS');
@@ -39,5 +40,6 @@ export {
   toggleLoader,
   togglePackageLoader,
   npmCommand,
-  uiException
+  uiException,
+  clearAll
 };

@@ -246,7 +246,9 @@ export const shrinkDirectory = directory => {
       const { dir } = newPath || {};
       const dirParts = dir.split(SEPARATOR);
 
-      return `${dirParts[dirParts.length - 1]}${SEPARATOR}package.json`;
+      return `${dirParts[dirParts.length - 2]}${SEPARATOR}${
+        dirParts[dirParts.length - 1]
+      }${SEPARATOR}package.json`;
     } catch (error) {
       throw new Error(error);
     }

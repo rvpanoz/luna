@@ -13,25 +13,27 @@ const key = 'project-tab';
 const ProjectTab = ({ classes, items }) => (
   <div className={classes.tab}>
     <List dense={true}>
-      {items &&
-        items.map((item, idx) => (
-          <ListItem key={`${key}item-${idx}`} className={classes.listItem}>
-            <ListItemText
-              primary={<Typography variant="h6">{item.primaryText}</Typography>}
-              secondary={
-                <Typography className={classes.secondaryText} variant="body2">
-                  {item.secondaryText}
-                </Typography>
-              }
-            />
-          </ListItem>
-        ))}
+      {items.map((item, idx) => (
+        <ListItem key={`${key}item-${idx}`} className={classes.listItem}>
+          <ListItemText
+            primary={
+              <Typography variant="subtitle2">{item.primaryText}</Typography>
+            }
+            secondary={
+              <Typography className={classes.secondaryText} variant="body2">
+                {item.secondaryText}
+              </Typography>
+            }
+          />
+        </ListItem>
+      ))}
     </List>
   </div>
 );
 
 ProjectTab.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  items: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default withStyles(styles)(ProjectTab);

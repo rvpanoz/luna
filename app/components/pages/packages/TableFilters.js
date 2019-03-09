@@ -130,7 +130,7 @@ const TableFilters = ({ classes, mode, close }) => {
         </FormControl>
         <Divider className={classes.bottomDivider} light />
         <div className={classes.actions}>
-          <AppButton color="error" onClick={close}>
+          <AppButton color="secondary" onClick={close}>
             Close
           </AppButton>
         </div>

@@ -19,6 +19,9 @@ const styles = theme => ({
   },
   button: {
     borderColor: lightColor
+  },
+  settings: {
+    margin: theme.spacing.unit * 2
   }
 });
 

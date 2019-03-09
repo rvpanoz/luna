@@ -53,7 +53,7 @@ const TableListToolbar = ({
   reload,
   nodata,
   scrollWrapper,
-  packagesOutdatedNames,
+  outdated,
   packagesInstallOptions
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -73,10 +73,6 @@ const TableListToolbar = ({
     [mode, directory]
   );
 
-  const needUpdate = selected.some(
-    packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-  );
-
   const openFilters = useCallback(
     (e, close) => {
       setAnchorEl(close ? null : e.target);
@@ -85,6 +81,8 @@ const TableListToolbar = ({
     },
     [filtersOn]
   );
+
+  const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
 
   const handleAction = (action, showDialog) => {
     if (showDialog) {
@@ -205,7 +203,7 @@ const TableListToolbar = ({
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
-          return switchMode(APP_MODES.local, scanDirectory);
+          return switchMode('local', scanDirectory);
         }
       }
     );
@@ -218,7 +216,7 @@ const TableListToolbar = ({
           <IconButton
             color="primary"
             aria-label="install selected"
-            onClick={() => handleAction('install', mode === APP_MODES.local)}
+            onClick={() => handleAction('install', mode === 'local')}
           >
             <AddIcon />
           </IconButton>
@@ -279,9 +277,9 @@ const TableListToolbar = ({
           <div>
             <IconButton
               disableRipple
-              disabled={mode === APP_MODES.global}
+              disabled={mode === 'global'}
               aria-label="Show globals"
-              onClick={() => switchMode(APP_MODES.global, null)}
+              onClick={() => switchMode('global', null)}
             >
               <PublicIcon />
             </IconButton>
@@ -332,7 +330,12 @@ const TableListToolbar = ({
         <div className={cn(classes.actions)}>
           {selected.length === 0 && renderToolbarActions()}
           {fromSearch && selected.length ? renderAction('install') : null}
-          {!fromSearch && selected.length && needUpdate
+          {!fromSearch &&
+          selected.length &&
+          selected.some(
+            packageSelected =>
+              packagesOutdatedNames.indexOf(packageSelected) !== -1
+          )
             ? renderAction('update')
             : null}
           {!fromSearch && selected.length ? renderAction('uninstall') : null}
@@ -391,7 +394,7 @@ TableListToolbar.propTypes = {
   directory: PropTypes.string,
   fromSearch: PropTypes.bool,
   scrollWrapper: PropTypes.func,
-  packagesOutdatedNames: PropTypes.arrayOf(PropTypes.string),
+  outdated: PropTypes.arrayOf(PropTypes.object),
   packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 

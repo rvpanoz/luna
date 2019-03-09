@@ -110,7 +110,7 @@ ipcMain.on('ipc-event', (event, options) => {
     if (directory && mode === APP_MODES.local && cmd.includes('list')) {
       const openedPackages = Store.get('openedPackages') || [];
       const yarnLock = fs.existsSync(
-        path.join(path.dirname(directory), 'yarn-lock.json')
+        path.join(path.dirname(directory), 'yarn.lock')
       );
       const dirName = path.dirname(path.resolve(directory));
       const parsedDirectory = path.parse(dirName);
@@ -247,8 +247,8 @@ app.on('ready', async () => {
     event.sender.send('settings-loaded-close', userSettings);
 
     // npm and node info
-    const npmVersion = CheckNpm();
-    event.sender.send('get-env-close', npmVersion);
+    const npmEnv = CheckNpm();
+    event.sender.send('get-env-close', npmEnv);
 
     // directories history
     const openedPackages = Store.get('opened_packages') || [];

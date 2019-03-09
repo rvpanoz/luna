@@ -1,9 +1,6 @@
-/* eslint-disable prefer-promise-reject-errors */
-/* eslint-disable compat/compat */
-/* eslint-disable import/no-dynamic-require */
-/* eslint-disable global-require */
-/* eslint-disable dot-notation */
-/* eslint-disable no-nested-ternary */
+// TODO:  needs work..
+
+/* eslint-disable */
 
 import cp from 'child_process';
 import path from 'path';
@@ -85,7 +82,7 @@ const execute = (
  * use npm
  * */
 
-exports.list = (options, callback) => {
+const list = (options, callback) => {
   const command = ['list'];
   const { mode, directory, linked } = options || {};
 
@@ -116,7 +113,7 @@ exports.list = (options, callback) => {
  * Outdated command
  * use npm
  */
-exports.outdated = (options, callback) => {
+const outdated = (options, callback) => {
   const command = ['outdated'];
   const { mode, directory } = options || {};
 
@@ -144,7 +141,7 @@ exports.outdated = (options, callback) => {
 /**
  * search for packages
  */
-exports.search = (opts, callback) => {
+const search = (opts, callback) => {
   const command = ['search'];
   const { directory, mode, pkgName } = opts;
   const defaults = ['--depth=0', '--json'];
@@ -153,11 +150,12 @@ exports.search = (opts, callback) => {
     return Promise.reject('npm[search] package name parameter must be given');
   }
 
-  const run = [].concat(command, pkgName).concat(defaults);
+  const run = command.concat(defaults, pkgName);
+
   return execute('npm', run, mode, directory, callback);
 };
 
-exports.install = (opts, callback, idx) => {
+const install = (opts, callback, idx) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
@@ -170,7 +168,7 @@ exports.install = (opts, callback, idx) => {
   }
 };
 
-exports.update = (opts, callback) => {
+const update = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
@@ -183,7 +181,7 @@ exports.update = (opts, callback) => {
   }
 };
 
-exports.uninstall = (opts, callback) => {
+const uninstall = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
@@ -197,7 +195,7 @@ exports.uninstall = (opts, callback) => {
 };
 
 // npm view [<@scope>/]<name>[@<version>]
-exports.view = (opts, callback) => {
+const view = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
@@ -209,3 +207,5 @@ exports.view = (opts, callback) => {
     throw new Error(error);
   }
 };
+
+export default { list, outdated, search, install, update, uninstall, view };

@@ -13,6 +13,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 
+import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
 import AppButton from 'components/units/Buttons/AppButton';
 
@@ -21,10 +22,17 @@ import {
   PackagesTab,
   ToolsTab
 } from 'components/pages/navigator/tabs';
-import { APP_MODES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
+
+const runAudit = (mode, directory) =>
+  ipcRenderer.send('ipc-event', {
+    ipcEvent: 'npm-audit',
+    cmd: ['audit'],
+    mode,
+    directory
+  });
 
 const Navigator = ({
   classes,
@@ -32,10 +40,11 @@ const Navigator = ({
   directory,
   totalpackages,
   totaloutdated,
-  totalnotification,
+  totalnotifications,
   lastUpdatedAt,
   name,
   version,
+  description,
   env,
   loading,
   ...restProps
@@ -43,17 +52,13 @@ const Navigator = ({
   const [openedDirectories, setOpenedDirectories] = useState([]);
   const dispatch = useDispatch();
 
-  const handleDirectory = useCallback(directory => {
-    dispatch(setMode({ mode: APP_MODES.local, directory }));
-  }, []);
-
   useEffect(() => {
-    ipcRenderer.on('loaded-packages-close', (event, directories) => {
-      setOpenedDirectories(directories);
-    });
+    ipcRenderer.on('loaded-packages-close', (event, directories) =>
+      setOpenedDirectories(directories)
+    );
 
     return () => ipcRenderer.removeAllListeners('loaded-packages-close');
-  }, [openedDirectories.length]);
+  }, [openedDirectories]);
 
   const openPackage = useCallback(() => {
     remote.dialog.showOpenDialog(
@@ -71,28 +76,33 @@ const Navigator = ({
       },
       filePath => {
         if (filePath) {
-          const directory = filePath.join('');
-          handleDirectory(directory);
+          dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
         }
       }
     );
   }, []);
 
+  const handleDirectory = useCallback(directory => {
+    dispatch(setMode({ mode: 'local', directory }));
+  }, []);
+
   return (
     <Drawer variant="permanent" {...restProps}>
       <List disablePadding>
-        <ListItem className={classes.categoryHeader}>
-          <ListItemText
-            classes={{
-              primary: classes.categoryHeaderPrimary
-            }}
-          >
-            Luna
+        <ListItem>
+          <ListItemText>
+            <AppLogo />
           </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemText className={classes.actionButton}>
-            <AppButton color="primary" fullWidth onClick={() => openPackage()}>
+            <AppButton
+              color="primary"
+              fullWidth
+              onClick={() => openPackage()}
+              style={{ fontSize: 18 }}
+              variant="contained"
+            >
               Analyze
             </AppButton>
           </ListItemText>
@@ -113,8 +123,16 @@ const Navigator = ({
               <ProjectTab
                 items={[
                   {
-                    primaryText: mode === 'local' ? name : 'Global',
-                    secondaryText: mode === 'global' ? `npm v${env}` : directory
+                    primaryText: mode === 'local' && name ? name : 'Global',
+                    secondaryText:
+                      mode === 'local' && description
+                        ? description
+                        : 'No description available'
+                  },
+                  {
+                    primaryText: mode === 'local' && directory ? 'Home' : null,
+                    secondaryText:
+                      mode === 'local' && directory ? directory : null
                   }
                 ]}
                 metadata={lastUpdatedAt}
@@ -125,17 +143,20 @@ const Navigator = ({
                   {
                     primaryText: 'Total',
                     secondaryText: totalpackages || 0,
-                    color: 'secondary'
+                    color: 'secondary',
+                    primary: true
                   },
                   {
                     primaryText: 'Outdated',
                     secondaryText: totaloutdated || 0,
-                    color: 'warning'
+                    color: 'warning',
+                    warning: true
                   },
                   {
                     primaryText: 'Problems',
-                    secondaryText: totalnotification || 0,
-                    color: 'error'
+                    secondaryText: totalnotifications || 0,
+                    color: 'error',
+                    error: true
                   }
                 ]}
                 loading={loading}
@@ -156,6 +177,7 @@ const Navigator = ({
                       'Report if package.json is out of sync with package-lock.json'
                   }
                 ]}
+                nodata={totalpackages === 0}
                 loading={loading}
               />
             </AppTabs>

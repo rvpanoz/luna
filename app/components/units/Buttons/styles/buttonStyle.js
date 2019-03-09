@@ -1,76 +1,44 @@
-// ##############################
-// // // Button styles
-// #############################
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
-import {
-  grayColor,
-  infoColor,
-  successColor,
-  defaultFont,
-  boxShadow
-} from 'styles/variables';
+import { defaultFont, boxShadow } from 'styles/variables';
 
 const buttonStyle = theme => ({
   button: {
     ...defaultFont,
     color: theme.palette.common.white,
     border: 'none',
-    borderRadius: 3,
+    borderRadius: 5,
     position: 'relative',
-    padding: `${theme.spacing.unit * 1.35}px ${theme.spacing.unit * 3}px`,
+    padding: theme.spacing.unit,
     margin: 0,
-    fontSize: 18,
+    fontSize: 14,
     fontWeight: 400,
     textTransform: 'uppercase',
     letterSpacing: 0,
-    transition:
-      'box-shadow 0.2s cubic-bezier(0.4, 0, 1, 1), background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-    lineHeight: 0.75,
     textAlign: 'center',
     whiteSpace: 'nowrap',
     verticalAlign: 'middle',
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: theme.palette.secondary.light,
-      boxShadow:
-        '0 14px 26px -12px rgba(153, 153, 153, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(153, 153, 153, 0.2)'
+      backgroundColor: theme.palette.secondary.light
     }
   },
   fullWidth: {
     width: '100%'
   },
   primary: {
-    ...boxShadow,
     backgroundColor: theme.palette.primary.main,
-    '&:hover': {
-      backgroundColor: theme.palette.primary.light
-    }
-  },
-  info: {
-    backgroundColor: infoColor,
     ...boxShadow,
     '&:hover': {
-      backgroundColor: infoColor,
-      boxShadow:
-        '0 14px 26px -12px rgba(0, 188, 212, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 188, 212, 0.2)'
+      backgroundColor: lighten(theme.palette.primary.light, '0.1')
     }
   },
-  success: {
-    backgroundColor: successColor,
+  secondary: {
+    backgroundColor: theme.palette.secondary.main,
     ...boxShadow,
     '&:hover': {
-      backgroundColor: successColor,
-      boxShadow:
-        '0 14px 26px -12px rgba(76, 175, 80, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(76, 175, 80, 0.2)'
-    }
-  },
-  warning: {
-    backgroundColor: theme.palette.warning.main,
-    ...boxShadow,
-    '&:hover': {
-      backgroundColor: theme.palette.warning.light,
-      boxShadow:
-        '0 14px 26px -12px rgba(255, 152, 0, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(255, 152, 0, 0.2)'
+      color: lighten(theme.palette.common.white, 0.3),
+      backgroundColor: lighten(theme.palette.secondary.light, '0.15')
     }
   },
   error: {
@@ -80,12 +48,6 @@ const buttonStyle = theme => ({
       backgroundColor: theme.palette.error.light,
       boxShadow:
         '0 14px 26px -12px rgba(244, 67, 54, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(244, 67, 54, 0.2)'
-    }
-  },
-  white: {
-    '&,&:focus,&:hover': {
-      backgroundColor: theme.palette.common.white,
-      color: grayColor
     }
   },
   simple: {

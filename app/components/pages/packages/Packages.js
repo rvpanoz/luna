@@ -9,6 +9,7 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
@@ -21,12 +22,12 @@ import {
   addActionError,
   addSelected,
   addInstallOption,
+  setPackagesStart,
   updateData,
   setPage,
   setPageRows
 } from 'models/packages/actions';
-import { setSnackbar, toggleLoader } from 'models/ui/actions';
-import { WARNING_MESSAGES } from 'constants/AppConstants';
+import { clearAll } from 'models/ui/actions';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -94,27 +95,7 @@ const Packages = ({ classes }) => {
   const [counter, setCounter] = useState(0);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
-
-  const isSelected = useCallback(
-    (name, selectedPackages) => selectedPackages.indexOf(name) !== -1,
-    [name, selected]
-  );
-
-  const packagesOutdatedNames =
-    packagesOutdated && packagesOutdated.map(outdated => outdated.name);
-
-  const scrollWrapper = useCallback(
-    top => {
-      const wrapperEl = wrapperRef && wrapperRef.current;
-
-      wrapperEl &&
-        wrapperEl.scroll({
-          top,
-          behavior: 'smooth'
-        });
-    },
-    [top]
-  );
+  const reload = () => setCounter(counter + 1);
 
   const [dependenciesSet, outdatedSet] = useIpc(
     'ipc-event',
@@ -144,6 +125,11 @@ const Packages = ({ classes }) => {
       return;
     }
 
+    if (!dependencies) {
+      dispatch(clearAll());
+      return;
+    }
+
     dispatch(
       updateData({
         dependencies,
@@ -157,34 +143,45 @@ const Packages = ({ classes }) => {
     );
   }, [dependenciesSet]);
 
-  // ipcRenderer listeners
   useEffect(() => {
-    ipcRenderer.on('yarn-warning-close', () => {
-      dispatch(
-        setSnackbar({
-          open: true,
-          type: 'error',
-          message: WARNING_MESSAGES.yarnlock
-        })
-      );
-    });
-
-    ipcRenderer.on(['action-close'], (event, error) => {
+    ipcRenderer.on('action-close', (event, error) => {
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
 
       dispatch(
-        toggleLoader({
-          loading: false,
-          message: null
+        setPackagesStart({
+          channel: 'ipc-event',
+          options: {
+            ipcEvent: 'get-packages',
+            cmd: ['outdated', 'list'],
+            mode,
+            directory
+          }
         })
       );
     });
 
-    return () =>
-      ipcRenderer.removeAllListeners(['action-close', 'yarn-warning-close']);
+    return () => ipcRenderer.removeAllListeners(['action-close']);
   }, []);
+
+  const isSelected = useCallback(
+    (name, selectedPackages) => selectedPackages.indexOf(name) !== -1,
+    [name, selected]
+  );
+
+  const scrollWrapper = useCallback(
+    top => {
+      const wrapperEl = wrapperRef && wrapperRef.current;
+
+      wrapperEl &&
+        wrapperEl.scroll({
+          top,
+          behavior: 'smooth'
+        });
+    },
+    [top]
+  );
 
   // setup packages
   const [packagesData] = useFilters(packages, filters, counter);
@@ -204,106 +201,107 @@ const Packages = ({ classes }) => {
     <AppLoader loading={loading} message={message}>
       <Grid container>
         <Grid item md={12} lg={6} xl={6}>
-          <Paper className={classes.root}>
-            <div className={classes.toolbar}>
-              <TableToolbar
-                title="Packages"
-                manager={manager}
-                mode={mode}
-                directory={directory}
-                selected={selected}
-                packagesOutdatedNames={packagesOutdatedNames}
-                packagesInstallOptions={packagesInstallOptions}
-                fromSearch={fromSearch}
-                scrollWrapper={scrollWrapper}
-                reload={() => {
-                  setCounter(counter + 1);
-                }}
-              />
-            </div>
-            <div className={classes.tableWrapper} ref={wrapperRef}>
-              <Table
-                padding="dense"
-                aria-labelledby="packages-list"
-                className={cn(classes.table, {
-                  [classes.hasFilterBlur]: loading
-                })}
-              >
-                <TableHeader
-                  packages={dataSlices.map(d => d.name)}
-                  numSelected={selected.length}
-                  rowCount={dataSlices && dataSlices.length}
-                  sortBy={sortBy}
-                  sortDir={sortDir}
+          {packagesData.length === 0 ? (
+            <Typography variant="subtitle1">
+              There are not any packages in this project.
+            </Typography>
+          ) : (
+            <Paper className={classes.root}>
+              <div className={classes.toolbar}>
+                <TableToolbar
+                  title="Packages"
+                  manager={manager}
+                  mode={mode}
+                  directory={directory}
+                  selected={selected}
+                  outdated={packagesOutdated}
+                  packagesInstallOptions={packagesInstallOptions}
+                  fromSearch={fromSearch}
+                  scrollWrapper={scrollWrapper}
+                  reload={() => setCounter(counter + 1)}
                 />
-                <TableBody>
-                  {sortedPackages &&
-                    sortedPackages.map(
-                      ({
-                        name,
-                        version,
-                        latest,
-                        isOutdated,
-                        peerDependencies,
-                        __group,
-                        __error,
-                        __peerMissing
-                      }) => {
-                        const isPackageSelected = isSelected(name, selected);
-                        const installOptions = Array.isArray(
-                          packagesInstallOptions
-                        )
-                          ? packagesInstallOptions.find(
-                              data => data.name === name
-                            )
-                          : {};
-
-                        return (
-                          <PackageItem
-                            key={`pkg-${name}`}
-                            isSelected={isPackageSelected}
-                            installOptions={installOptions}
-                            addSelected={() => dispatch(addSelected({ name }))}
-                            addInstallOption={(pkgName, options) =>
-                              dispatch(
-                                addInstallOption({ name: pkgName, options })
+              </div>
+              <div className={classes.tableWrapper} ref={wrapperRef}>
+                <Table
+                  padding="dense"
+                  aria-labelledby="packages-list"
+                  className={cn(classes.table, {
+                    [classes.hasFilterBlur]: loading
+                  })}
+                >
+                  <TableHeader
+                    packages={dataSlices.map(d => d.name)}
+                    numSelected={selected.length}
+                    rowCount={dataSlices && dataSlices.length}
+                    sortBy={sortBy}
+                    sortDir={sortDir}
+                  />
+                  <TableBody>
+                    {sortedPackages &&
+                      sortedPackages.map(
+                        ({
+                          name,
+                          version,
+                          latest,
+                          isOutdated,
+                          peerDependencies,
+                          __group,
+                          __error,
+                          __peerMissing
+                        }) => {
+                          const isPackageSelected = isSelected(name, selected);
+                          const installOptions = Array.isArray(
+                            packagesInstallOptions
+                          )
+                            ? packagesInstallOptions.find(
+                                data => data.name === name
                               )
-                            }
-                            name={name}
-                            peerDependencies={peerDependencies}
-                            manager={manager}
-                            version={version}
-                            latest={latest}
-                            isOutdated={isOutdated}
-                            fromSearch={fromSearch}
-                            group={__group}
-                            error={__error}
-                            peerMissing={__peerMissing}
-                          />
-                        );
-                      }
-                    )}
-                </TableBody>
-                <TableFooter
-                  classes={{
-                    root: {
-                      [classes.hidden]: false // nodata
+                            : {};
+
+                          return (
+                            <PackageItem
+                              key={`pkg-${name}`}
+                              isSelected={isPackageSelected}
+                              installOptions={installOptions}
+                              addSelected={() =>
+                                dispatch(addSelected({ name }))
+                              }
+                              addInstallOption={(pkgName, options) =>
+                                dispatch(
+                                  addInstallOption({ name: pkgName, options })
+                                )
+                              }
+                              name={name}
+                              peerDependencies={peerDependencies}
+                              manager={manager}
+                              version={version}
+                              latest={latest}
+                              isOutdated={isOutdated}
+                              fromSearch={fromSearch}
+                              group={__group}
+                              error={__error}
+                              peerMissing={__peerMissing}
+                            />
+                          );
+                        }
+                      )}
+                  </TableBody>
+                  <TableFooter
+                    rowCount={packagesData && packagesData.length}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    handleChangePage={(e, pageNo) => {
+                      scrollWrapper(0);
+                      dispatch(setPage({ page: pageNo }));
+                    }}
+                    handleChangePageRows={e =>
+                      dispatch(setPageRows({ rowsPerPage: e.target.value }))
                     }
-                  }}
-                  rowCount={packagesData && packagesData.length}
-                  page={page}
-                  rowsPerPage={rowsPerPage}
-                  handleChangePage={(e, pageNo) => {
-                    scrollWrapper(0);
-                    dispatch(setPage({ page: pageNo }));
-                  }}
-                  handleChangePageRows={e =>
-                    dispatch(setPageRows({ rowsPerPage: e.target.value }))
-                  }
-                />
-              </Table>
-            </div>
-          </Paper>
+                  />
+                </Table>
+              </div>
+            </Paper>
+          )}
         </Grid>
       </Grid>
     </AppLoader>

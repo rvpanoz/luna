@@ -69,5 +69,5 @@ export const WARNING_MESSAGES = {
   errorPackages:
     'Some packages have errors. Check your notifications to fix it.',
   yarnlock:
-    'yarn-lock file detected. Please remove before running any action operation.'
+    'yarn-lock file detected. Please remove it before running any action operation'
 };

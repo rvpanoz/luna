@@ -33,7 +33,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.light
   },
   warning: {
-    backgroundColor: amber[700]
+    backgroundColor: theme.palette.warning.light
   },
   primary: {
     backgroundColor: 'transparent'
@@ -48,7 +48,8 @@ const styles = theme => ({
   message: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    maxWidth: 300
   }
 });
 
