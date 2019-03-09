@@ -50,10 +50,6 @@ const App = () => {
       dispatch({ type: npmCommand.type, payload: { command } });
     });
 
-    ipcRenderer.once('get-env-close', (event, env) => {
-      dispatch({ type: setEnv.type, payload: env });
-    });
-
     ipcRenderer.on('yarn-warning-close', () => {
       dispatch(
         setSnackbar({
@@ -64,12 +60,17 @@ const App = () => {
       );
     });
 
+    ipcRenderer.once('get-env-close', (event, env) => {
+      dispatch({ type: setEnv.type, payload: env });
+    });
+
     return () =>
       ipcRenderer.removeAllListeners([
         'ipcEvent-error',
         'uncaught-exception',
         'ipcEvent-flow',
-        'get-env-close'
+        'get-env-close',
+        'yarn-warning-close'
       ]);
   });
 

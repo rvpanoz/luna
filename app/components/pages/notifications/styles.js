@@ -1,69 +1,23 @@
 import { defaultFont, successColor, primaryBoxShadow } from 'styles/variables';
 
 const styles = theme => ({
-  notifications: {
-    zIndex: '4',
+  root: {
+    width: '100%',
+    margin: 0,
+    padding: theme.spacing.unit,
+    overflowY: 'scroll',
     [theme.breakpoints.up('md')]: {
-      position: 'absolute',
-      top: '5px',
-      border: '1px solid #fff',
-      right: '10px',
-      fontSize: '9px',
-      background: theme.palette.error.light,
-      color: '#fff',
-      minWidth: '16px',
-      height: '16px',
-      borderRadius: '10px',
-      textAlign: 'center',
-      lineHeight: '16px',
-      verticalAlign: 'middle',
-      display: 'block'
+      maxHeight: 500
     },
-    [theme.breakpoints.down('sm')]: {
-      ...defaultFont,
-      fontSize: '14px',
-      marginRight: '8px'
+    [theme.breakpoints.up('lg')]: {
+      maxHeight: 650
     }
   },
-  dropdown: {
-    borderRadius: '3px',
-    border: '0',
-    boxShadow: '0 2px 5px 0 rgba(0, 0, 0, 0.26)',
-    top: '100%',
-    zIndex: '1000',
-    minWidth: '160px',
-    padding: '5px 0',
-    margin: '2px 0 0',
-    fontSize: '14px',
-    textAlign: 'left',
-    listStyle: 'none',
-    backgroundColor: '#fff',
-    backgroundClip: 'padding-box'
-  },
-  dropdownItem: {
-    ...defaultFont,
-    fontSize: '13px',
-    padding: '10px 20px',
-    margin: '0 5px',
-    borderRadius: '2px',
-    transition: 'all 150ms linear',
-    display: 'block',
-    clear: 'both',
-    fontWeight: '400',
-    lineHeight: '1.42857143',
-    color: '#333',
-    whiteSpace: 'nowrap',
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.light,
-      color: '#fff',
-      ...primaryBoxShadow
-    }
+  avatar: {
+    color: theme.palette.secondary.light
   },
   errorIcon: {
     color: theme.palette.common.white
-  },
-  successIcon: {
-    color: successColor
   },
   warningIcon: {
     color: theme.palette.common.white

@@ -12,7 +12,6 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
-import ArchiveIcon from '@material-ui/icons/Archive';
 
 import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
@@ -41,7 +40,7 @@ const Navigator = ({
   directory,
   totalpackages,
   totaloutdated,
-  totalnotification,
+  totalnotifications,
   lastUpdatedAt,
   name,
   version,
@@ -104,7 +103,6 @@ const Navigator = ({
               style={{ fontSize: 18 }}
               variant="contained"
             >
-              <ArchiveIcon className={classNames(classes.leftIcon)} />
               Analyze
             </AppButton>
           </ListItemText>
@@ -156,7 +154,7 @@ const Navigator = ({
                   },
                   {
                     primaryText: 'Problems',
-                    secondaryText: totalnotification || 0,
+                    secondaryText: totalnotifications || 0,
                     color: 'error',
                     error: true
                   }

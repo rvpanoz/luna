@@ -22,11 +22,12 @@ import {
   addActionError,
   addSelected,
   addInstallOption,
+  setPackagesStart,
   updateData,
   setPage,
   setPageRows
 } from 'models/packages/actions';
-import { clearAll, toggleLoader } from 'models/ui/actions';
+import { clearAll } from 'models/ui/actions';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -94,6 +95,7 @@ const Packages = ({ classes }) => {
   const [counter, setCounter] = useState(0);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
+  const reload = () => setCounter(counter + 1);
 
   const [dependenciesSet, outdatedSet] = useIpc(
     'ipc-event',
@@ -142,25 +144,25 @@ const Packages = ({ classes }) => {
   }, [dependenciesSet]);
 
   useEffect(() => {
-    ipcRenderer.on('action-close', (event, error, options) => {
+    ipcRenderer.on('action-close', (event, error) => {
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
 
-      const { action, dirtyPackages } = options;
-
-      console.log(action, dirtyPackages);
-
       dispatch(
-        toggleLoader({
-          loader: false,
-          message: null
+        setPackagesStart({
+          channel: 'ipc-event',
+          options: {
+            ipcEvent: 'get-packages',
+            cmd: ['outdated', 'list'],
+            mode,
+            directory
+          }
         })
       );
     });
 
-    return () =>
-      ipcRenderer.removeAllListeners(['action-close', 'yarn-warning-close']);
+    return () => ipcRenderer.removeAllListeners(['action-close']);
   }, []);
 
   const isSelected = useCallback(
@@ -285,11 +287,6 @@ const Packages = ({ classes }) => {
                       )}
                   </TableBody>
                   <TableFooter
-                    classes={{
-                      root: {
-                        [classes.hidden]: false // nodata
-                      }
-                    }}
                     rowCount={packagesData && packagesData.length}
                     page={page}
                     rowsPerPage={rowsPerPage}

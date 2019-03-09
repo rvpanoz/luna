@@ -12,7 +12,7 @@ const key = 'project-tab';
 
 const ProjectTab = ({ classes, items }) => (
   <div className={classes.tab}>
-    <List disablePadding dense={true}>
+    <List dense={true}>
       {items.map((item, idx) => (
         <ListItem key={`${key}item-${idx}`} className={classes.listItem}>
           <ListItemText

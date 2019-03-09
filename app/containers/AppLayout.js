@@ -3,16 +3,14 @@ import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Hidden from '@material-ui/core/Hidden';
 import Snackbar from '@material-ui/core/Snackbar';
-import Typography from '@material-ui/core/Typography';
 import theme from 'styles/theme';
 
 import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
-
+import { Notifications } from 'components/pages/notifications';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 
@@ -87,7 +85,7 @@ const AppLayout = ({ classes }) => {
           <main className={classes.mainContent}>
             {switchcase({
               packages: () => <Packages />,
-              problems: () => <Typography>NOT AVAILABLE</Typography>
+              problems: () => <Notifications />
             })(<Packages />)(activePage)}
           </main>
         </div>
