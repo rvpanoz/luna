@@ -81,11 +81,11 @@ const PackageItem = ({
 
       <TableCell padding="none" className={cn(classes.tableCell)}>
         <div className={classes.flexContainer}>
-          <Typography>{name}</Typography>
+          <Typography className={classes.name}>{name}</Typography>
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        <Typography>{version}</Typography>
+        <Typography>{version || 'N/A'}</Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         <Typography
@@ -106,7 +106,7 @@ PackageItem.propTypes = {
   name: string.isRequired,
   addSelected: func.isRequired,
   isSelected: bool.isRequired,
-  version: string.isRequired,
+  version: string,
   isOutdated: bool.isRequired,
   latest: oneOfType([string, object]),
   group: string,

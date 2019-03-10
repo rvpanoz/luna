@@ -17,9 +17,6 @@ const styles = theme => ({
   toolbar: {
     width: '100%'
   },
-  cards: {
-    paddingBottom: theme.spacing.unit * 4
-  },
   tableWrapper: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
@@ -55,14 +52,10 @@ const styles = theme => ({
   },
   tableCell: {
     ...defaultFont,
-    fontSize: 12,
-    lineHeight: '1.2em',
     textAlign: 'center',
-    '& span': {
-      display: 'inline-block',
+    '& p': {
       overflowWrap: 'break-word'
-    },
-    height: 60
+    }
   },
   color: green[600],
   '&$checked': {
@@ -70,6 +63,12 @@ const styles = theme => ({
   },
   outdated: {
     color: theme.palette.secondary.dark
+  },
+  name: {
+    display: 'inline-block',
+    position: 'relative',
+    minWidth: '90%',
+    textAlign: 'start'
   },
   updated: {
     color: darken('#00b300', 0.1)

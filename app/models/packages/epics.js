@@ -72,7 +72,6 @@ const packagesStartEpic = action$ =>
   action$.pipe(
     ofType(setPackagesStart.type),
     map(({ payload: { channel, options, paused } }) => {
-      console.log(paused);
       if (paused) {
         return pauseRequest();
       }
@@ -135,7 +134,7 @@ const packagesSuccessEpic = (action$, state$) =>
       }) => {
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
           const { name, __peerMissing, __error } = dependency;
-
+          console.log(dependency);
           if (!__peerMissing && !__error) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
             const {

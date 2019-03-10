@@ -1,5 +1,3 @@
-// TODO:  needs work..
-
 /* eslint-disable */
 
 import cp from 'child_process';
@@ -15,7 +13,7 @@ const {
 } = config;
 
 const defaultsArgs = {
-  list: ['--json', '--depth=0', '--parseable', '--long']
+  list: ['--json', '--depth=0', '--parseable']
 };
 
 const cwd = process.cwd();
@@ -29,10 +27,10 @@ const execute = (
 ) => {
   const resultP = new Promise(resolve => {
     const result = [];
-    const errors = [];
+    let errors = '';
 
     log(chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`));
-    callback('flow', null, `${manager} ${commandArgs.join(' ')}`);
+    callback('flow', `${manager} ${commandArgs.join(' ')}`);
 
     // on windows use npm.cmd
     const command = spawn(
@@ -46,11 +44,10 @@ const execute = (
 
     command.stdout.on('data', data => {
       result.push(String(data));
-      callback('data-flow', null, String(data));
     });
 
     command.stderr.on('data', error => {
-      errors.push(String(error));
+      errors += String(error);
       callback('error', String(error), null);
     });
 

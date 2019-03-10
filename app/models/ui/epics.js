@@ -1,5 +1,5 @@
 import { pipe, from } from 'rxjs';
-import { map, mergeMap, filter } from 'rxjs/operators';
+import { map, mergeMap, filter, tap, takeWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { ERROR_TYPES } from 'constants/AppConstants';
@@ -36,14 +36,10 @@ const parseNpmMessage = message => {
 
 const notificationsEpic = pipe(
   ofType(commandMessage.type),
-  mergeMap(({ payload: { message = '' } }) => {
-    const messages = message.split(/\r?\n/);
-
-    return from(messages).pipe(filter(msg => msg || !/^\s*$/.test(msg)));
-  }),
+  takeWhile(({ payload: error }) => Array.isArray(error)),
+  mergeMap(({ payload: { error } }) => from(error)),
   map(notification => {
     const { messageType, payload } = parseNpmMessage(notification);
-    console.log(messageType, payload);
 
     return switchcase({
       ERR: () => ({

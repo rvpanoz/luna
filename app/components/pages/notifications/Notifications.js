@@ -20,13 +20,7 @@ import NotificationsToolbar from './NotificationsToolbar';
 
 import styles from './styles';
 
-const mapState = ({
-  common: { mode, directory, notifications },
-  modules: {
-    project: { name }
-  }
-}) => ({
-  name,
+const mapState = ({ common: { mode, directory, notifications } }) => ({
   mode,
   directory,
   notifications
@@ -37,7 +31,7 @@ const parseRequired = (name, position) => name && name.split('@')[position];
 
 const Notifications = ({ classes }) => {
   const [selected, setSelected] = useState([]);
-  const { name, mode, directory, notifications } = useMappedState(mapState);
+  const { mode, directory, notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   const handleInstall = () => {
@@ -50,7 +44,7 @@ const Notifications = ({ classes }) => {
         buttons: ['Cancel', 'Install']
       },
       btnIdx => {
-        if (Boolean(btnIdx) === true) {
+        if (btnIdx) {
           const parameters = {
             ipcEvent: 'install',
             cmd: ['install'],
@@ -59,13 +53,12 @@ const Notifications = ({ classes }) => {
             mode,
             directory
           };
+
           console.log(selected);
           // dispatch(installPackages(parameters));
         }
       }
     );
-
-    return false;
   };
 
   const handleSelectAllClick = e => {
@@ -80,13 +73,13 @@ const Notifications = ({ classes }) => {
     setSelected([]);
   };
 
-  // TODO: fix selected values tip: use idx to place in specific index
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, name, idx) => {
+    const needle = `${name}-${idx}`;
+    const selectedIndex = selected.indexOf(needle);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, needle);
     } else if (selectedIndex > 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
@@ -121,19 +114,20 @@ const Notifications = ({ classes }) => {
                 <TableBody>
                   {notifications.map((n, idx) => {
                     const name = parseRequired(n.required, 0);
+                    const isSelected = selected.indexOf(`${name}-${idx}`) > -1;
 
                     return (
                       <TableRow
                         hover
-                        onClick={event => handleClick(event, name)}
+                        onClick={event => handleClick(event, name, idx)}
                         role="checkbox"
-                        aria-checked={selected.indexOf(name) > -1}
+                        aria-checked={isSelected}
                         tabIndex={-1}
                         key={`notification-item-${idx}`}
-                        selected={selected.indexOf(name) > -1}
+                        selected={isSelected}
                       >
                         <TableCell padding="checkbox">
-                          <Checkbox checked={selected.indexOf(name) > -1} />
+                          <Checkbox checked={isSelected} />
                         </TableCell>
                         <TableCell>{parseRequiredBy(n.requiredBy)}</TableCell>
                         <TableCell>{parseRequired(n.required, 0)}</TableCell>

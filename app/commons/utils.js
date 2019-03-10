@@ -169,15 +169,15 @@ export const parseMap = (response, mode, directory) => {
   }
 
   try {
-    const packageJson = JSON.parse(response);
-    const { name, version, description, license, author } = packageJson || {};
+    const packageData = JSON.parse(response);
+    const { name, version, description, license, author } = packageData || {};
 
-    const packages = pick(['dependencies'], packageJson);
-    const { dependencies } = packages || {};
+    const packages = pick(['dependencies', 'problems'], packageData);
+    const { dependencies, problems } = packages || {};
 
     const dataArray = dependencies
       ? objectEntries(dependencies)
-      : objectEntries(packageJson);
+      : objectEntries(packageData);
 
     if (!Array.isArray(dataArray) || !dataArray) {
       mk.log(`utils[parseMap]: cound not convert response data to array`);
@@ -189,10 +189,10 @@ export const parseMap = (response, mode, directory) => {
       const { name, peerMissing } = details || {};
 
       let group;
-      let hasError = typeof details && details.error === 'object';
+      let hasError = details && typeof details.error === 'object';
 
       // find group and attach to package
-      if (mode && mode === APP_MODES.local) {
+      if (mode && mode === 'local') {
         const packageJSON = readPackageJson(directory);
 
         if (!Boolean(packageJSON)) {
@@ -212,13 +212,12 @@ export const parseMap = (response, mode, directory) => {
         name: name || pkgName,
         __group: group,
         __error: hasError,
-        __peerMissing: Array.isArray(peerMissing) && peerMissing.length
+        __peerMissing: Boolean(peerMissing)
       });
     });
 
-    return [data, name, version, description, license, author];
+    return [data, problems, name, version, description, license, author];
   } catch (error) {
-    mk.log(error);
     throw new Error(error);
   }
 };

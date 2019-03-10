@@ -2,6 +2,9 @@ import { defaultFont, grayColor } from 'styles/variables';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
+  avatar: {
+    padding: theme.spacing.unit
+  },
   tab: {
     backgroundColor: theme.palette.background.paper
   },

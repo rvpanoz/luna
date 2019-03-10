@@ -9,22 +9,24 @@ import Typography from '@material-ui/core/Typography';
 import styles from './styles/settings';
 
 const Settings = ({ classes, items }) => (
-  <List disablePadding dense={true}>
-    {items.map((item, idx) => (
-      <ListItem key={`settings-item-${idx}`} className={classes.listItem}>
-        <ListItemText
-          primary={
-            <Typography variant="subtitle2">{item.primaryText}</Typography>
-          }
-          secondary={
-            <Typography className={classes.secondaryText} variant="body2">
-              {item.secondaryText}
-            </Typography>
-          }
-        />
-      </ListItem>
-    ))}
-  </List>
+  <section className={classes.root}>
+    <List dense={true}>
+      {items.map((item, idx) => (
+        <ListItem key={`settings-item-${idx}`} className={classes.listItem}>
+          <ListItemText
+            primary={
+              <Typography variant="subtitle2">{item.primaryText}</Typography>
+            }
+            secondary={
+              <Typography className={classes.secondaryText} variant="body2">
+                {item.secondaryText}
+              </Typography>
+            }
+          />
+        </ListItem>
+      ))}
+    </List>
+  </section>
 );
 
 Settings.propTypes = {

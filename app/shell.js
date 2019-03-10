@@ -6,7 +6,6 @@
  * */
 
 import apiManager from './cli/manager';
-import chalk from 'chalk';
 
 /**
  *
@@ -19,23 +18,27 @@ export const runCommand = (options, callback) => {
 
   const combine = () =>
     cmd.map((command, idx) => {
-      const runner = apiManager[command];
+      try {
+        const runner = apiManager[command];
 
-      return runner(rest, callback, idx);
+        return runner(rest, callback, idx);
+      } catch (error) {
+        throw new Error(error);
+      }
     });
 
   Promise.all(combine())
     .then(results => {
       results.forEach(result => {
         const { status, ...values } = result;
-        const { data, error, message, cmd } = values;
+        const { data, errors, cmd } = values;
 
         if (status === 'close') {
-          callback(status, error, message, data, cmd);
+          callback(status, errors, data, cmd);
         }
       });
     })
     .catch(error => {
-      console.log(chalk.red.bold(error));
+      throw new Error(error);
     });
 };
