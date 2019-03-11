@@ -36,10 +36,10 @@ const parseNpmMessage = message => {
 
 const notificationsEpic = pipe(
   ofType(commandMessage.type),
-  takeWhile(({ payload: error }) => Array.isArray(error)),
   mergeMap(({ payload: { error } }) => from(error)),
   map(notification => {
-    const { messageType, payload } = parseNpmMessage(notification);
+    // TODO: handle warnings and errors
+    const { messageType = 'ERR', payload } = parseNpmMessage(notification);
 
     return switchcase({
       ERR: () => ({

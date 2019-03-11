@@ -186,10 +186,9 @@ export const parseMap = (response, mode, directory) => {
 
     const data = dataArray.map(pkgArr => {
       const [pkgName, details] = pkgArr;
-      const { name, peerMissing } = details || {};
+      const { extraneous, problems, invalid, missing } = details || {};
 
       let group;
-      let hasError = details && typeof details.error === 'object';
 
       // find group and attach to package
       if (mode && mode === 'local') {
@@ -209,10 +208,8 @@ export const parseMap = (response, mode, directory) => {
       }
 
       return merge(details, {
-        name: name || pkgName,
-        __group: group,
-        __error: hasError,
-        __peerMissing: Boolean(peerMissing)
+        name: pkgName,
+        __group: group
       });
     });
 

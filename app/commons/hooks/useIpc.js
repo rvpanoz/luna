@@ -39,11 +39,11 @@ const useIpc = (channel, options, inputs = []) => {
       const [
         packages,
         errors,
-        name,
-        version,
-        description,
-        license,
-        author
+        projectName,
+        projectVersion,
+        projectDescription,
+        projectLicense,
+        projectAuthor
       ] = parseMap(data, mode, directory, cmd);
 
       if (errors) {
@@ -54,11 +54,11 @@ const useIpc = (channel, options, inputs = []) => {
         list: () =>
           setDependencies({
             data: packages && packages.length ? packages : null,
-            projectName: name,
-            projectVersion: version,
-            projectDescription: description,
-            projectLicense: license,
-            projectAuthor: author
+            projectName,
+            projectVersion,
+            projectDescription,
+            projectLicense,
+            projectAuthor
           }),
         outdated: () => setOutdated({ data: packages })
       })('list')(command);

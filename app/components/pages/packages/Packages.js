@@ -124,10 +124,6 @@ const Packages = ({ classes }) => {
       return;
     }
 
-    if (!dependencies) {
-      return dispatch(clearAll());
-    }
-
     if (commandErrors) {
       dispatch({
         type: commandMessage.type,
