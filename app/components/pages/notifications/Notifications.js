@@ -48,19 +48,22 @@ const Notifications = ({ classes }) => {
       },
       btnIdx => {
         if (btnIdx) {
-          const packages = selected.map((pkg, idx) => {});
+          const packages = selected.map((pkg, idx) => {
+            const [name, version] = pkg.split('@');
+
+            return `${name}@${version}`;
+          });
 
           const parameters = {
             ipcEvent: 'install',
             cmd: ['install'],
-            packages: selected,
             multiple: true,
+            packages,
             mode,
             directory
           };
 
-          console.log(selected);
-          // dispatch(installPackages(parameters));
+          dispatch(installPackages(parameters));
         }
       }
     );
@@ -73,7 +76,7 @@ const Notifications = ({ classes }) => {
         const version = parseRequired(n.required, 1);
         const { raw } = semver.coerce(version);
 
-        return `${name}-${raw}`;
+        return `${name}@${raw}`;
       });
 
       return setSelected(allSelected);
@@ -83,7 +86,7 @@ const Notifications = ({ classes }) => {
   };
 
   const handleClick = (event, name, version) => {
-    const needle = `${name}-${version}`;
+    const needle = `${name}@${version}`;
     const selectedIndex = selected.indexOf(needle);
     let newSelected = [];
 
@@ -126,7 +129,7 @@ const Notifications = ({ classes }) => {
                     const version = parseRequired(n.required, 1);
                     const { raw } = semver.coerce(version);
 
-                    const isSelected = selected.indexOf(`${name}-${raw}`) > -1;
+                    const isSelected = selected.indexOf(`${name}@${raw}`) > -1;
 
                     return (
                       <TableRow
