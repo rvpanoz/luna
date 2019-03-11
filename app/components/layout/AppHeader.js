@@ -26,13 +26,11 @@ import styles from './styles/appHeader';
 const mapState = ({
   common: {
     activePage,
-    notifications,
     loader: { loading },
     npm: { env }
   }
 }) => ({
   activePage,
-  notifications,
   loading,
   env
 });
@@ -41,7 +39,7 @@ const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const dispatch = useDispatch();
-  const { activePage, notifications, loading, env } = useMappedState(mapState);
+  const { activePage, loading, env } = useMappedState(mapState);
 
   return (
     <React.Fragment>
@@ -139,25 +137,23 @@ const Header = ({ classes, onDrawerToggle }) => {
           horizontal: 'center'
         }}
       >
-        <Typography className={classes.settings}>
-          <Settings
-            items={[
-              {
-                primaryText: 'environment',
-                secondaryText: env.userAgent
-              },
-              {
-                primaryText: 'registry',
-                secondaryText: env.metricsRegistry
-              },
-              {
-                primaryText: 'cache',
-                secondaryText: env.cache
-              }
-            ]}
-            loading={loading}
-          />
-        </Typography>
+        <Settings
+          items={[
+            {
+              primaryText: 'environment',
+              secondaryText: env.userAgent
+            },
+            {
+              primaryText: 'registry',
+              secondaryText: env.metricsRegistry
+            },
+            {
+              primaryText: 'cache',
+              secondaryText: env.cache
+            }
+          ]}
+          loading={loading}
+        />
       </Popover>
     </React.Fragment>
   );

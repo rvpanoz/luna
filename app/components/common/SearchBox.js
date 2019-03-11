@@ -11,7 +11,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/common/SnackbarContent';
 
-import { parseMap } from 'commons/utils';
+import { parseFromSearch } from 'commons/utils';
 import { setPackagesStart, updateData } from 'models/packages/actions';
 
 import styles from './styles/searchBox';
@@ -29,17 +29,21 @@ const SearchBox = ({ classes, disabled }) => {
       return toggleSnackbar(true);
     }
 
-    dispatch(
-      setPackagesStart({
-        fromSearch: true
-      })
-    );
-
-    ipcRenderer.send('ipc-event', {
+    const parameters = {
       ipcEvent: 'search-packages',
       cmd: ['search'],
       pkgName: packageName
-    });
+    };
+
+    dispatch(
+      setPackagesStart({
+        channel: 'ipc-event',
+        fromSearch: true,
+        options: {
+          ...parameters
+        }
+      })
+    );
 
     return false;
   };
@@ -63,19 +67,15 @@ const SearchBox = ({ classes, disabled }) => {
     ipcRenderer.on(
       'search-packages-close',
       (event, status, commandArgs, data) => {
-        try {
-          const [packages] = (data && parseMap(data)) || [];
+        const [packages] = parseFromSearch(data) || [];
 
-          dispatch(
-            updateData({
-              fromSearch: true,
-              outdated: [],
-              dependencies: packages
-            })
-          );
-        } catch (e) {
-          throw new Error(e);
-        }
+        dispatch(
+          updateData({
+            fromSearch: true,
+            outdated: [],
+            dependencies: packages
+          })
+        );
       }
     );
 

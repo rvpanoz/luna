@@ -43,10 +43,8 @@ const mapState = ({
   version,
   loading,
   description,
-  mode,
   env,
   notifications,
-  packages,
   snackbarOptions
 });
 

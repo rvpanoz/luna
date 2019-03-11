@@ -6,8 +6,9 @@ import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 
+import { clearAll } from 'models/ui/actions';
 import { setPackagesStart } from 'models/packages/actions';
-import { parseMap, switchcase } from '../utils';
+import { switchcase, parseDependencies } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
   const { ipcEvent, mode, directory, paused } = options || {};
@@ -29,40 +30,39 @@ const useIpc = (channel, options, inputs = []) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on(
-      `${ipcEvent}-close`,
-      (event, status, commandArgs, data, errors) => {
-        if (!data || !status) {
-          return;
-        }
-
-        const errorsMessages = errors && errors.length ? errors : null;
-        setErrors(errorsMessages);
-
-        const command = commandArgs && commandArgs[0];
-        const [
-          packages,
-          name,
-          version,
-          description,
-          license,
-          author
-        ] = parseMap(data, mode, directory, commandArgs);
-
-        switchcase({
-          list: () =>
-            setDependencies({
-              data: packages && packages.length ? packages : null,
-              projectName: name,
-              projectVersion: version,
-              projectDescription: description,
-              projectLicense: license,
-              projectAuthor: author
-            }),
-          outdated: () => setOutdated({ data: packages })
-        })('list')(command);
+    ipcRenderer.on(`${ipcEvent}-close`, (event, status, cmd, data) => {
+      if (!data) {
+        return dispatch({ type: clearAll.type });
       }
-    );
+
+      const command = cmd && cmd[0];
+      const [
+        packages,
+        errors,
+        projectName,
+        projectVersion,
+        projectDescription,
+        projectLicense,
+        projectAuthor
+      ] = parseDependencies(data, mode, directory, cmd);
+
+      if (errors) {
+        setErrors(errors);
+      }
+
+      switchcase({
+        list: () =>
+          setDependencies({
+            data: packages && packages.length ? packages : null,
+            projectName,
+            projectVersion,
+            projectDescription,
+            projectLicense,
+            projectAuthor
+          }),
+        outdated: () => setOutdated({ data: packages })
+      })('list')(command);
+    });
 
     if (!paused) {
       dispatch(

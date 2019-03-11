@@ -27,7 +27,7 @@ import {
   setPage,
   setPageRows
 } from 'models/packages/actions';
-import { clearAll } from 'models/ui/actions';
+import { clearAll, commandMessage } from 'models/ui/actions';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -95,9 +95,8 @@ const Packages = ({ classes }) => {
   const [counter, setCounter] = useState(0);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
-  const reload = () => setCounter(counter + 1);
 
-  const [dependenciesSet, outdatedSet] = useIpc(
+  const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
     'ipc-event',
     {
       ipcEvent: 'get-packages',
@@ -125,9 +124,11 @@ const Packages = ({ classes }) => {
       return;
     }
 
-    if (!dependencies) {
-      dispatch(clearAll());
-      return;
+    if (commandErrors) {
+      dispatch({
+        type: commandMessage.type,
+        payload: { error: commandErrors }
+      });
     }
 
     dispatch(
@@ -201,7 +202,7 @@ const Packages = ({ classes }) => {
     <AppLoader loading={loading} message={message}>
       <Grid container>
         <Grid item md={12} lg={6} xl={6}>
-          {packagesData.length === 0 ? (
+          {!loading && packagesData.length === 0 ? (
             <Typography variant="subtitle1">
               There are not any packages in this project.
             </Typography>

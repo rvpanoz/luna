@@ -1,13 +1,10 @@
 /* eslint-disable react/require-default-props */
 
-import path from 'path';
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import Typography from '@material-ui/core/Typography';
 
-import AppLoader from 'components/common/AppLoader';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -45,7 +42,9 @@ const AppTabs = ({ classes, children }) => {
       {React.Children.map(children, (child, idx) => {
         if (child.props.loading) {
           return null;
-        } else if (value === idx) {
+        }
+
+        if (value === idx) {
           return (
             <TabContainer>
               {React.cloneElement(child, {
@@ -61,8 +60,8 @@ const AppTabs = ({ classes, children }) => {
 };
 
 AppTabs.propTypes = {
-  classes: PropTypes.object.isRequired,
-  theme: PropTypes.object.isRequired
+  children: PropTypes.node.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(AppTabs);
+export default withStyles(styles)(AppTabs);

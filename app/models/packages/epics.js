@@ -133,37 +133,20 @@ const packagesSuccessEpic = (action$, state$) =>
         }
       }) => {
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
-          const { name, __peerMissing, __error } = dependency;
+          const {
+            name,
+            peerMissing,
+            invalid,
+            extraneous,
+            missing
+          } = dependency;
 
-          if (!__peerMissing && !__error) {
+          if (!peerMissing && !missing && !invalid && !extraneous) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
-            const {
-              author,
-              bugs,
-              deprecated,
-              description,
-              extraneous,
-              licence,
-              peerDependencies,
-              version,
-              __group
-            } = dependency;
-
             const enhancedDependency = {
-              author,
-              bugs,
-              deprecated,
-              description,
-              extraneous,
-              licence,
-              name,
-              peerDependencies,
-              version,
+              ...dependency,
               latest: isOutdated ? outdatedPkg.latest : null,
-              isOutdated,
-              __error,
-              __peerMissing,
-              __group
+              isOutdated
             };
 
             deps.push(enhancedDependency);

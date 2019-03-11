@@ -1,6 +1,10 @@
 import { grayColor } from 'styles/variables';
 
 const styles = theme => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing.unit * 2
+  },
   tab: {
     backgroundColor: theme.palette.background.paper
   },

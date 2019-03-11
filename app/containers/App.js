@@ -9,10 +9,10 @@ import { withErrorBoundary } from 'commons/hocs';
 import { WARNING_MESSAGES } from 'constants/AppConstants';
 
 import {
-  commandMessage,
+  // commandMessage,
   uiException,
   setEnv,
-  npmCommand,
+  // npmCommand,
   setSnackbar
 } from 'models/ui/actions';
 
@@ -20,8 +20,8 @@ import AppLayout from './AppLayout';
 import '../app.global.css';
 
 const mapState = ({ common: { uiExceptionMessage, enableNotifications } }) => ({
-  uiExceptionMessage,
-  enableNotifications
+  uiExceptionMessage
+  // enableNotifications
 });
 
 const App = () => {
@@ -30,25 +30,19 @@ const App = () => {
 
   useEffect(() => {
     ipcRenderer.on('uncaught-exception', (event, ...args) => {
+      console.error(args[0]);
       dispatch({ type: uiException.type, payload: { message: args[0] } });
-      dispatch(
-        setSnackbar({
-          open: true,
-          type: 'error',
-          message: args[0]
-        })
-      );
     });
 
-    ipcRenderer.on('ipcEvent-error', (event, message) => {
-      if (enableNotifications) {
-        dispatch({ type: commandMessage.type, payload: { message } });
-      }
-    });
+    // ipcRenderer.on('ipcEvent-error', (event, message) => {
+    //   if (enableNotifications) {
+    //     dispatch({ type: commandMessage.type, payload: { message } });
+    //   }
+    // });
 
-    ipcRenderer.on('ipcEvent-flow', (event, command) => {
-      dispatch({ type: npmCommand.type, payload: { command } });
-    });
+    // ipcRenderer.on('ipcEvent-flow', (event, command) => {
+    //   dispatch({ type: npmCommand.type, payload: { command } });
+    // });
 
     ipcRenderer.on('yarn-warning-close', () => {
       dispatch(
@@ -66,9 +60,9 @@ const App = () => {
 
     return () =>
       ipcRenderer.removeAllListeners([
-        'ipcEvent-error',
+        // 'ipcEvent-error',
         'uncaught-exception',
-        'ipcEvent-flow',
+        // 'ipcEvent-flow',
         'get-env-close',
         'yarn-warning-close'
       ]);

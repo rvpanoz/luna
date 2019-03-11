@@ -2,7 +2,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable compat/compat */
 
-import { ipcRenderer, remote } from 'electron';
+import { remote } from 'electron';
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
 import { merge, pluck } from 'ramda';
@@ -31,12 +31,8 @@ import LoadIcon from '@material-ui/icons/Archive';
 import PublicIcon from '@material-ui/icons/BallotOutlined';
 
 import { switchcase } from 'commons/utils';
-import {
-  APP_MODES,
-  INFO_MESSAGES,
-  PACKAGE_GROUPS
-} from 'constants/AppConstants';
-import { setMode, toggleLoader } from 'models/ui/actions';
+import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
+import { setMode } from 'models/ui/actions';
 import { updatePackages, installPackages } from 'models/packages/actions';
 import TableFilters from './TableFilters';
 import Flags from './Flags';
@@ -287,7 +283,11 @@ const TableListToolbar = ({
         </Tooltip>
         <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
           <div>
-            <IconButton disableRipple aria-label="back_reload" onClick={reload}>
+            <IconButton
+              disableRipple
+              aria-label="back_reload"
+              onClick={() => reload()}
+            >
               <RefreshIcon />
             </IconButton>
           </div>

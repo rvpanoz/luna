@@ -107,7 +107,7 @@ ipcMain.on('ipc-event', (event, options) => {
       runningTimes += 1;
     }
 
-    if (directory && mode === APP_MODES.local && cmd.includes('list')) {
+    if (directory && mode === 'local' && cmd.includes('list')) {
       const openedPackages = Store.get('openedPackages') || [];
       const yarnLock = fs.existsSync(
         path.join(path.dirname(directory), 'yarn.lock')
@@ -139,11 +139,11 @@ ipcMain.on('ipc-event', (event, options) => {
     event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
   };
 
-  const callback = (status, error, message, ...restArgs) =>
+  const callback = (status, errors, ...restArgs) =>
     switchcase({
-      close: () => onClose(status, error, ...restArgs),
-      error: () => onError(error),
-      flow: () => onFlow(message)
+      close: () => onClose(status, errors, ...restArgs),
+      error: error => onError(error),
+      flow: message => onFlow(message)
     })(null)(status);
 
   /**

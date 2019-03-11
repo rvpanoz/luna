@@ -163,36 +163,39 @@ export const matchType = (subject, needle) => {
  * @param {*} mode
  * @param {*} directory
  */
-export const parseMap = (response, mode, directory) => {
+export const parseDependencies = (response, mode, directory) => {
   if (!response || typeof response !== 'string') {
-    throw new Error('response parameter must be a string');
+    throw new Error(
+      'utils[parseDependencies]: response parameter must be a string'
+    );
   }
 
   try {
-    const packageJson = JSON.parse(response);
-    const { name, version, description, license, author } = packageJson || {};
+    const packageData = JSON.parse(response);
+    const { name, version } = packageData || {};
 
-    const packages = pick(['dependencies'], packageJson);
-    const { dependencies } = packages || {};
+    const packages = pick(['dependencies', 'problems'], packageData);
+    const { dependencies, problems } = packages || {};
 
     const dataArray = dependencies
       ? objectEntries(dependencies)
-      : objectEntries(packageJson);
+      : objectEntries(packageData);
 
     if (!Array.isArray(dataArray) || !dataArray) {
-      mk.log(`utils[parseMap]: cound not convert response data to array`);
+      mk.log(
+        `utils[parseDependencies]: cound not convert response data to array`
+      );
       return;
     }
 
     const data = dataArray.map(pkgArr => {
       const [pkgName, details] = pkgArr;
-      const { name, peerMissing } = details || {};
+      const { name, extraneous, problems, invalid, missing } = details || {};
 
       let group;
-      let hasError = typeof details && details.error === 'object';
 
       // find group and attach to package
-      if (mode && mode === APP_MODES.local) {
+      if (mode && mode === 'local') {
         const packageJSON = readPackageJson(directory);
 
         if (!Boolean(packageJSON)) {
@@ -209,16 +212,37 @@ export const parseMap = (response, mode, directory) => {
       }
 
       return merge(details, {
-        name: name || pkgName,
-        __group: group,
-        __error: hasError,
-        __peerMissing: Array.isArray(peerMissing) && peerMissing.length
+        name: pkgName || name,
+        invalid,
+        missing,
+        extraneous,
+        problems,
+        __group: group
       });
     });
 
-    return [data, name, version, description, license, author];
+    return [data, problems, name, version];
   } catch (error) {
-    mk.log(error);
+    throw new Error(error);
+  }
+};
+
+/**
+ * Parses and maps npm search response
+ * @param {*} response
+ */
+export const parseFromSearch = response => {
+  if (!response || typeof response !== 'string') {
+    throw new Error(
+      'utils[parseFromSearch]: response parameter must be a string'
+    );
+  }
+
+  try {
+    const dataArray = JSON.parse(response);
+
+    return [dataArray];
+  } catch (error) {
     throw new Error(error);
   }
 };

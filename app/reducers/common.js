@@ -103,6 +103,7 @@ const handlers = {
     assoc('snackbarOptions', merge(state.snackbarOptions, payload), state),
   [setMode.type]: (state, { payload: { mode, directory } }) =>
     merge(state, {
+      activePage: 'packages',
       mode,
       directory,
       npm: {
