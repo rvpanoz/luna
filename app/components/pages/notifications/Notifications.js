@@ -106,6 +106,11 @@ const Notifications = ({ classes }) => {
           selectedItem.name === name && semver.gt(selectedItem.version, version)
       );
 
+      const oldSelected = selected.find(
+        selectedItem =>
+          selectedItem.name === name && semver.lt(selectedItem.version, version)
+      );
+
       if (isNewerSelected) {
         dispatch(
           setSnackbar({
@@ -122,6 +127,25 @@ const Notifications = ({ classes }) => {
         .map(selectedItem => selectedItem.idx)
         .indexOf(idx);
       let newSelected = [];
+
+      // switch (true) {
+      //   case selectedIndex === -1:
+      //     if (oldSelected) {
+      //       dispatch(
+      //         setSnackbar({
+      //           open: true,
+      //           type: 'warning',
+      //           message: WARNING_MESSAGES.oldSelected
+      //         })
+      //       );
+
+      //       const { idx } = oldSelected;
+      //       console.log(idx);
+      //     }
+      //     break;
+      //   default:
+      //     break;
+      // }
 
       if (selectedIndex === -1) {
         newSelected = newSelected.concat(selected, needle);
