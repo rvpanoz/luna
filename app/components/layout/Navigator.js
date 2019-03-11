@@ -37,7 +37,6 @@ const Navigator = ({
   name,
   version,
   description,
-  env,
   loading,
   ...restProps
 }) => {
@@ -74,8 +73,8 @@ const Navigator = ({
     );
   }, []);
 
-  const handleDirectory = useCallback(directory => {
-    dispatch(setMode({ mode: 'local', directory }));
+  const handleDirectory = useCallback(dir => {
+    dispatch(setMode({ mode: 'local', directory: dir }));
   }, []);
 
   return (
@@ -215,8 +214,15 @@ const Navigator = ({
 Navigator.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string,
-  projectName: PropTypes.string,
-  projectVersion: PropTypes.string
+  loading: PropTypes.bool,
+  name: PropTypes.string,
+  version: PropTypes.string,
+  description: PropTypes.string,
+  directory: PropTypes.string,
+  totalnotifications: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  totalpackages: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  totaloutdated: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  lastUpdatedAt: PropTypes.string
 };
 
 export default withStyles(styles)(Navigator);

@@ -1,14 +1,13 @@
 /* eslint-disable react/require-default-props */
 
 import { ipcRenderer } from 'electron';
-import React, { useCallback, useRef } from 'react';
+import React, { useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
-import { always, cond, equals } from 'ramda';
 
 import Typography from '@material-ui/core/Typography';
-import Chip from '@material-ui/core/Chip';
+// import Chip from '@material-ui/core/Chip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -26,7 +25,8 @@ const PackageItem = ({
   isOutdated,
   group,
   mode,
-  directory
+  directory,
+  fromSearch
 }) => {
   const rowRef = useRef();
 
@@ -80,12 +80,15 @@ const PackageItem = ({
       </TableCell>
 
       <TableCell padding="none" className={cn(classes.tableCell)}>
-        <div className={classes.flexContainer}>
+        <div className={classes.flexContainerCell}>
           <Typography className={classes.name}>{name}</Typography>
+          <Typography variant="caption" className={classes.group}>
+            {group}
+          </Typography>
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        <Typography>{version || 'N/A'}</Typography>
+        <Typography>{fromSearch ? 'N/A' : version}</Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         <Typography

@@ -1,5 +1,3 @@
-import green from '@material-ui/core/colors/green';
-import pink from '@material-ui/core/colors/pink';
 import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
 
@@ -13,6 +11,12 @@ const styles = theme => ({
     ...flexContainer,
     alignItems: 'center',
     justifyContent: 'space-between'
+  },
+  flexContainerCell: {
+    ...flexContainer,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
   },
   toolbar: {
     width: '100%'
@@ -57,18 +61,9 @@ const styles = theme => ({
       overflowWrap: 'break-word'
     }
   },
-  color: green[600],
-  '&$checked': {
-    color: green[500]
-  },
+
   outdated: {
     color: theme.palette.secondary.dark
-  },
-  name: {
-    display: 'inline-block',
-    position: 'relative',
-    minWidth: '90%',
-    textAlign: 'start'
   },
   updated: {
     color: darken('#00b300', 0.1)
@@ -82,29 +77,11 @@ const styles = theme => ({
   hidden: {
     display: 'none'
   },
-  avatar: {
-    width: 15,
-    height: 15,
-    margin: theme.spacing.unit / 4
-  },
-  dependenciesAvatar: {
-    color: '#fff',
-    backgroundColor: lighten(theme.palette.primary.dark, 0.2)
-  },
-  optionalDependenciesAvatar: {
-    color: '#fff',
-    backgroundColor: lighten(theme.palette.secondary.dark, 0.2)
-  },
-  devDependenciesAvatar: {
-    color: '#fff',
-    backgroundColor: pink[500]
-  },
-  peerDependenciesAvatar: {
-    color: '#fff',
-    backgroundColor: pink[500]
-  },
   chip: {
     margin: theme.spacing.unit
+  },
+  group: {
+    color: darken(theme.palette.secondary.light, 0.2)
   }
 });
 

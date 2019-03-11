@@ -9,10 +9,10 @@ import { withErrorBoundary } from 'commons/hocs';
 import { WARNING_MESSAGES } from 'constants/AppConstants';
 
 import {
-  commandMessage,
+  // commandMessage,
   uiException,
   setEnv,
-  npmCommand,
+  // npmCommand,
   setSnackbar
 } from 'models/ui/actions';
 
@@ -20,8 +20,8 @@ import AppLayout from './AppLayout';
 import '../app.global.css';
 
 const mapState = ({ common: { uiExceptionMessage, enableNotifications } }) => ({
-  uiExceptionMessage,
-  enableNotifications
+  uiExceptionMessage
+  // enableNotifications
 });
 
 const App = () => {

@@ -16,13 +16,13 @@ const rows = [
     id: 'required',
     numeric: false,
     disablePadding: false,
-    label: 'Missing'
+    label: 'Requires'
   },
   {
     id: 'version',
     numeric: false,
     disablePadding: false,
-    label: 'Version'
+    label: 'Min version'
   }
 ];
 

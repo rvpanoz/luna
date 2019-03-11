@@ -1,9 +1,8 @@
+/* eslint-disable array-callback-return */
+
 import { useState, useEffect } from 'react';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 
-/**
- * Filtering
- */
 const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);
 
@@ -12,7 +11,7 @@ const getFiltered = (data, filters) => {
       data &&
       data.filter(pkg => {
         if (groups.indexOf(filterName) > -1) {
-          return pkg['__group'] === filterName;
+          return pkg.__group === filterName;
         }
 
         return !!pkg[filterName];

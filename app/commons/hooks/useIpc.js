@@ -8,7 +8,7 @@ import { useDispatch } from 'redux-react-hook';
 
 import { clearAll } from 'models/ui/actions';
 import { setPackagesStart } from 'models/packages/actions';
-import { parseMap, switchcase } from '../utils';
+import { switchcase, parseDependencies } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
   const { ipcEvent, mode, directory, paused } = options || {};
@@ -44,7 +44,7 @@ const useIpc = (channel, options, inputs = []) => {
         projectDescription,
         projectLicense,
         projectAuthor
-      ] = parseMap(data, mode, directory, cmd);
+      ] = parseDependencies(data, mode, directory, cmd);
 
       if (errors) {
         setErrors(errors);

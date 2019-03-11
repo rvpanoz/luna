@@ -1,5 +1,3 @@
-import { flexContainer, flexItem } from 'styles/variables';
-
 const styles = theme => ({
   root: {
     position: 'relative',

@@ -1,6 +1,9 @@
+/* eslint-disable */
+
 import { remote } from 'electron';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import semver from 'semver';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
@@ -45,6 +48,8 @@ const Notifications = ({ classes }) => {
       },
       btnIdx => {
         if (btnIdx) {
+          const packages = selected.map((pkg, idx) => {});
+
           const parameters = {
             ipcEvent: 'install',
             cmd: ['install'],
@@ -63,9 +68,13 @@ const Notifications = ({ classes }) => {
 
   const handleSelectAllClick = e => {
     if (e.target.checked) {
-      const allSelected = notifications.map((n, idx) =>
-        parseRequired(n.required, 0)
-      );
+      const allSelected = notifications.map((n, idx) => {
+        const name = parseRequired(n.required, 0);
+        const version = parseRequired(n.required, 1);
+        const { raw } = semver.coerce(version);
+
+        return `${name}-${raw}`;
+      });
 
       return setSelected(allSelected);
     }
@@ -73,14 +82,14 @@ const Notifications = ({ classes }) => {
     setSelected([]);
   };
 
-  const handleClick = (event, name, idx) => {
-    const needle = `${name}-${idx}`;
+  const handleClick = (event, name, version) => {
+    const needle = `${name}-${version}`;
     const selectedIndex = selected.indexOf(needle);
     let newSelected = [];
 
     if (selectedIndex === -1) {
       newSelected = newSelected.concat(selected, needle);
-    } else if (selectedIndex > 0) {
+    } else if (selectedIndex >= 0) {
       newSelected = newSelected.concat(
         selected.slice(0, selectedIndex),
         selected.slice(selectedIndex + 1)
@@ -114,12 +123,15 @@ const Notifications = ({ classes }) => {
                 <TableBody>
                   {notifications.map((n, idx) => {
                     const name = parseRequired(n.required, 0);
-                    const isSelected = selected.indexOf(`${name}-${idx}`) > -1;
+                    const version = parseRequired(n.required, 1);
+                    const { raw } = semver.coerce(version);
+
+                    const isSelected = selected.indexOf(`${name}-${raw}`) > -1;
 
                     return (
                       <TableRow
                         hover
-                        onClick={event => handleClick(event, name, idx)}
+                        onClick={event => handleClick(event, name, raw)}
                         role="checkbox"
                         aria-checked={isSelected}
                         tabIndex={-1}
@@ -130,8 +142,8 @@ const Notifications = ({ classes }) => {
                           <Checkbox checked={isSelected} />
                         </TableCell>
                         <TableCell>{parseRequiredBy(n.requiredBy)}</TableCell>
-                        <TableCell>{parseRequired(n.required, 0)}</TableCell>
-                        <TableCell>{parseRequired(n.required, 1)}</TableCell>
+                        <TableCell>{name}</TableCell>
+                        <TableCell>{raw}</TableCell>
                       </TableRow>
                     );
                   })}
