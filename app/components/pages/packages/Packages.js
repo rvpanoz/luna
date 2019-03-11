@@ -246,9 +246,9 @@ const Packages = ({ classes }) => {
                           latest,
                           isOutdated,
                           peerDependencies,
-                          __group,
-                          __error,
-                          __peerMissing
+                          extraneous,
+                          problems,
+                          __group
                         }) => {
                           const isPackageSelected = isSelected(name, selected);
                           const installOptions = Array.isArray(
@@ -280,8 +280,8 @@ const Packages = ({ classes }) => {
                               isOutdated={isOutdated}
                               fromSearch={fromSearch}
                               group={__group}
-                              error={__error}
-                              peerMissing={__peerMissing}
+                              extraneous={extraneous}
+                              problems={problems}
                             />
                           );
                         }

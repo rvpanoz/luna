@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import { remote } from 'electron';
-import React, { useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import semver from 'semver';
 import { withStyles } from '@material-ui/core/styles';
@@ -18,6 +18,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Grid from '@material-ui/core/Grid';
 
 import { installPackages } from 'models/packages/actions';
+import { WARNING_MESSAGES } from 'constants/AppConstants';
+import { setSnackbar } from 'models/ui/actions';
+
 import NotificationsHeader from './NotificationsHeader';
 import NotificationsToolbar from './NotificationsToolbar';
 
@@ -34,10 +37,31 @@ const parseRequired = (name, position) => name && name.split('@')[position];
 
 const Notifications = ({ classes }) => {
   const [selected, setSelected] = useState([]);
+  const [isExtraneous, setExtraneous] = useState(false);
   const { mode, directory, notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
-  const handleInstall = () => {
+  const handleSelectAllClick = e => {
+    if (e.target.checked) {
+      const allSelected = notifications.map((n, idx) => {
+        const name = parseRequired(n.required, 0);
+        const version = parseRequired(n.required, 1);
+        const { raw } = semver.coerce(version);
+
+        return {
+          idx,
+          name,
+          version: raw
+        };
+      });
+
+      return setSelected(allSelected);
+    }
+
+    setSelected([]);
+  };
+
+  const handleInstall = useCallback(() => {
     remote.dialog.showMessageBox(
       remote.getCurrentWindow(),
       {
@@ -67,49 +91,72 @@ const Notifications = ({ classes }) => {
         }
       }
     );
-  };
+  }, [selected]);
 
-  const handleSelectAllClick = e => {
-    if (e.target.checked) {
-      const allSelected = notifications.map((n, idx) => {
-        const name = parseRequired(n.required, 0);
-        const version = parseRequired(n.required, 1);
-        const { raw } = semver.coerce(version);
+  const handleClick = useCallback(
+    (event, name, version, idx) => {
+      const needle = {
+        idx,
+        name,
+        version
+      };
 
-        return `${name}@${raw}`;
+      const isNewerSelected = selected.find(
+        selectedItem =>
+          selectedItem.name === name && semver.gt(selectedItem.version, version)
+      );
+
+      if (isNewerSelected) {
+        dispatch(
+          setSnackbar({
+            open: true,
+            type: 'warning',
+            message: WARNING_MESSAGES.newerSelected
+          })
+        );
+
+        return;
+      }
+
+      const selectedIndex = selected
+        .map(selectedItem => selectedItem.idx)
+        .indexOf(idx);
+      let newSelected = [];
+
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selected, needle);
+      } else if (selectedIndex >= 0) {
+        newSelected = newSelected.concat(
+          selected.slice(0, selectedIndex),
+          selected.slice(selectedIndex + 1)
+        );
+      }
+
+      setSelected(newSelected);
+    },
+    [selected]
+  );
+
+  useEffect(() => {
+    const hasExtraneous =
+      notifications &&
+      notifications.some(notification => {
+        const { required, body } = notification;
+        return body === 'extraneous' || required === 'ENOENT';
       });
 
-      return setSelected(allSelected);
-    }
-
-    setSelected([]);
-  };
-
-  const handleClick = (event, name, version) => {
-    const needle = `${name}@${version}`;
-    const selectedIndex = selected.indexOf(needle);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, needle);
-    } else if (selectedIndex >= 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
+    setExtraneous(hasExtraneous);
+  }, [notifications]);
 
   return (
     <Grid container spacing={16}>
-      <Grid item md={10} lg={8} xl={8}>
-        {notifications.length === 0 ? (
+      <Grid item md={12} lg={8} xl={8}>
+        {!notifications || notifications.length === 0 ? (
           <Typography variant="subtitle1">No problems found!</Typography>
         ) : (
           <Paper className={classes.root}>
             <NotificationsToolbar
+              total={notifications.length}
               numSelected={selected.length || 0}
               handleInstall={handleInstall}
             />
@@ -118,39 +165,71 @@ const Notifications = ({ classes }) => {
                 className={classes.table}
                 aria-labelledby="notificationsHeader"
               >
-                <NotificationsHeader
-                  numSelected={selected.length || 0}
-                  onSelectAllClick={handleSelectAllClick}
-                  rowCount={notifications.length || 0}
-                />
-                <TableBody>
-                  {notifications.map((n, idx) => {
-                    const name = parseRequired(n.required, 0);
-                    const version = parseRequired(n.required, 1);
-                    const { raw } = semver.coerce(version);
+                {isExtraneous ? (
+                  <TableBody>
+                    <TableRow tabIndex={-1} key="extraneous-packages">
+                      <TableCell className={classes.tableCell}>
+                        <Typography>
+                          Found extraneous packages. Run <i>npm prune</i> in the
+                          Tools tab to fix them.
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                ) : (
+                  <React.Fragment>
+                    <NotificationsHeader
+                      numSelected={selected.length || 0}
+                      onSelectAllClick={handleSelectAllClick}
+                      rowCount={notifications.length || 0}
+                    />
+                    <TableBody>
+                      {notifications.map((notification, idx) => {
+                        const { required, requiredBy } = notification;
 
-                    const isSelected = selected.indexOf(`${name}@${raw}`) > -1;
+                        if (!isExtraneous) {
+                          const name = parseRequired(required, 0);
+                          const version = parseRequired(required, 1);
+                          const { raw } = semver.coerce(version) || 'N/A';
 
-                    return (
-                      <TableRow
-                        hover
-                        onClick={event => handleClick(event, name, raw)}
-                        role="checkbox"
-                        aria-checked={isSelected}
-                        tabIndex={-1}
-                        key={`notification-item-${idx}`}
-                        selected={isSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isSelected} />
-                        </TableCell>
-                        <TableCell>{parseRequiredBy(n.requiredBy)}</TableCell>
-                        <TableCell>{name}</TableCell>
-                        <TableCell>{raw}</TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
+                          const isSelected =
+                            selected
+                              .map(selectedItem => selectedItem.idx)
+                              .indexOf(idx) > -1;
+
+                          return (
+                            <TableRow
+                              hover
+                              onClick={event =>
+                                handleClick(event, name, raw, idx)
+                              }
+                              role="checkbox"
+                              aria-checked={isSelected}
+                              tabIndex={-1}
+                              key={`notification-item-${idx}`}
+                              selected={isSelected}
+                            >
+                              <TableCell padding="checkbox">
+                                <Checkbox checked={isSelected} />
+                              </TableCell>
+                              <TableCell className={classes.tableCell}>
+                                <Typography>
+                                  {parseRequiredBy(requiredBy)}
+                                </Typography>
+                              </TableCell>
+                              <TableCell className={classes.tableCell}>
+                                <Typography>{name}</Typography>
+                              </TableCell>
+                              <TableCell className={classes.tableCell}>
+                                <Typography>{raw}</Typography>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        }
+                      })}
+                    </TableBody>
+                  </React.Fragment>
+                )}
               </Table>
             </div>
           </Paper>
@@ -161,7 +240,8 @@ const Notifications = ({ classes }) => {
 };
 
 Notifications.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  notifications: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(Notifications);

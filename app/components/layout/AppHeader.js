@@ -120,7 +120,12 @@ const Header = ({ classes, onDrawerToggle }) => {
           onChange={(e, value) => dispatch(setActivePage(value))}
         >
           <Tab textColor="inherit" label="Packages" value="packages" />
-          <Tab textColor="inherit" label="Problems" value="problems" />
+          <Tab
+            textColor="inherit"
+            label="Problems"
+            value="problems"
+            disabled={loading}
+          />
         </Tabs>
       </AppBar>
       <Popover

@@ -117,8 +117,9 @@ const updatePackagesEpic = action$ =>
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
-    takeWhile(({ payload: { dependencies } }) =>
-      Boolean(dependencies && Array.isArray(dependencies))
+    takeWhile(
+      ({ payload: { dependencies } }) =>
+        Boolean(dependencies) && Array.isArray(dependencies)
     ),
     map(
       ({
@@ -138,10 +139,11 @@ const packagesSuccessEpic = (action$, state$) =>
             peerMissing,
             invalid,
             extraneous,
+            problems,
             missing
           } = dependency;
 
-          if (!peerMissing && !missing && !invalid && !extraneous) {
+          if (!(peerMissing && missing) && !invalid && !extraneous) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
             const enhancedDependency = {
               ...dependency,
@@ -150,6 +152,14 @@ const packagesSuccessEpic = (action$, state$) =>
             };
 
             deps.push(enhancedDependency);
+          } else {
+            deps.push({
+              name,
+              invalid,
+              extraneous,
+              problems,
+              isOutdated: false
+            });
           }
 
           return deps;

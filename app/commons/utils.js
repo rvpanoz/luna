@@ -185,7 +185,17 @@ export const parseDependencies = (response, mode, directory) => {
       mk.log(
         `utils[parseDependencies]: cound not convert response data to array`
       );
+
       return;
+    }
+
+    const noDependencies = dataArray.every(dep => {
+      const [name, details] = dep;
+      return typeof details !== 'object';
+    });
+
+    if (noDependencies) {
+      return [[], [], name, version];
     }
 
     const data = dataArray.map(pkgArr => {
@@ -194,7 +204,6 @@ export const parseDependencies = (response, mode, directory) => {
 
       let group;
 
-      // find group and attach to package
       if (mode && mode === 'local') {
         const packageJSON = readPackageJson(directory);
 

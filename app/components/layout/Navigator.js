@@ -163,6 +163,10 @@ const Navigator = ({
                     secondaryText: 'Run npm doctor'
                   },
                   {
+                    primaryText: 'npm prune',
+                    secondaryText: 'Remove extraneous packages'
+                  },
+                  {
                     primaryText: 'lock verify',
                     secondaryText:
                       'Report if package.json is out of sync with package-lock.json'

@@ -1,13 +1,15 @@
 /* eslint-disable react/require-default-props */
 
 import { ipcRenderer } from 'electron';
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 
+import ErrorIcon from '@material-ui/icons/Error';
+
+import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
-// import Chip from '@material-ui/core/Chip';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -26,22 +28,11 @@ const PackageItem = ({
   group,
   mode,
   directory,
-  fromSearch
+  fromSearch,
+  extraneous,
+  problems
 }) => {
   const rowRef = useRef();
-
-  // const renderIconByGroup = useCallback(
-  //   group =>
-  //     cond([
-  //       [equals(''), always(null)],
-  //       [equals('dependencies'), always(<Chip label="depepency" />)],
-  //       [equals('devDependencies'), always(<Chip label="devDependency" />)],
-  //       [equals('optionalDependencies'), always(<Chip label="optional" />)],
-  //       [equals('bundledDependencies'), always(<Chip label="bundle" />)],
-  //       [equals('peerDependencies'), always(<Chip label="peer" />)]
-  //     ])(group),
-  //   [group]
-  // );
 
   const viewPackage = () =>
     ipcRenderer.send('ipc-event', {
@@ -79,16 +70,40 @@ const PackageItem = ({
         />
       </TableCell>
 
-      <TableCell padding="none" className={cn(classes.tableCell)}>
-        <div className={classes.flexContainerCell}>
-          <Typography className={classes.name}>{name}</Typography>
-          <Typography variant="caption" className={classes.group}>
-            {group}
+      <TableCell padding="none" className={classes.tableCell}>
+        <div
+          className={cn(classes.flexContainerCell, {
+            [classes.flexRow]: extraneous
+          })}
+        >
+          {extraneous && (
+            <Tooltip title="extraneous means a package is installed but is not listed in your project's package.json">
+              <ErrorIcon className={classes.extraneous} />
+            </Tooltip>
+          )}
+          <Typography
+            className={cn({
+              [classes.flexItem]: extraneous
+            })}
+          >
+            {name}
           </Typography>
+          {!extraneous && (
+            <Typography variant="caption" className={classes.group}>
+              {group}
+            </Typography>
+          )}
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        <Typography>{fromSearch ? 'N/A' : version}</Typography>
+        <Typography>
+          {fromSearch ? 'N/A' : version}
+          {extraneous && (
+            <Typography component="span" className={classes.extraneous}>
+              extraneous
+            </Typography>
+          )}
+        </Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         <Typography

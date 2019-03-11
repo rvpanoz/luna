@@ -40,7 +40,12 @@ const toolbarStyles = theme => ({
   }
 });
 
-const NotificationsToolbar = ({ numSelected, classes, handleInstall }) => (
+const NotificationsToolbar = ({
+  numSelected,
+  total,
+  classes,
+  handleInstall
+}) => (
   <Toolbar
     disableGutters
     className={cn(classes.root, {
@@ -51,7 +56,7 @@ const NotificationsToolbar = ({ numSelected, classes, handleInstall }) => (
       {numSelected > 0 ? (
         <Typography variant="subtitle1">{numSelected} selected</Typography>
       ) : (
-        <Typography variant="subtitle1">Problems</Typography>
+        <Typography variant="subtitle1">{`Problems ${total}`}</Typography>
       )}
     </div>
     <div className={classes.spacer} />
@@ -70,6 +75,7 @@ const NotificationsToolbar = ({ numSelected, classes, handleInstall }) => (
 NotificationsToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
   handleInstall: PropTypes.func.isRequired
 };
 

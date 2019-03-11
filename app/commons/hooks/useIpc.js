@@ -36,15 +36,12 @@ const useIpc = (channel, options, inputs = []) => {
       }
 
       const command = cmd && cmd[0];
-      const [
-        packages,
-        errors,
-        projectName,
-        projectVersion,
-        projectDescription,
-        projectLicense,
-        projectAuthor
-      ] = parseDependencies(data, mode, directory, cmd);
+      const [packages, errors, projectName, projectVersion] = parseDependencies(
+        data,
+        mode,
+        directory,
+        cmd
+      );
 
       if (errors) {
         setErrors(errors);
@@ -53,12 +50,9 @@ const useIpc = (channel, options, inputs = []) => {
       switchcase({
         list: () =>
           setDependencies({
-            data: packages && packages.length ? packages : null,
+            data: packages,
             projectName,
-            projectVersion,
-            projectDescription,
-            projectLicense,
-            projectAuthor
+            projectVersion
           }),
         outdated: () => setOutdated({ data: packages })
       })('list')(command);
