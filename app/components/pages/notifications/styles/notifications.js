@@ -6,6 +6,9 @@ const styles = theme => ({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0
   },
+  list: {
+    width: '100%'
+  },
   flexContainer: {
     ...flexContainer,
     alignItems: 'center',

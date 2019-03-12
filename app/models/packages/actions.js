@@ -3,6 +3,9 @@ import { createActionCreator } from 'commons/utils';
 const ActionCreator = createActionCreator('@@LUNA_APP/DATA');
 
 const addActionError = ActionCreator('ACTION_ERROR');
+const addNotificationInstallOption = ActionCreator(
+  'ADD_NOTIFICATION_INSTALL_OPTION'
+);
 const addFilter = ActionCreator('ADD_FILTER');
 const addSelected = ActionCreator('ADD_SELECTED');
 const addInstallOption = ActionCreator('ADD_INSTALL_OPTION');
@@ -29,6 +32,7 @@ export {
   installPackages,
   updatePackages,
   addActionError,
+  addNotificationInstallOption,
   addFilter,
   addSelected,
   addInstallOption,
