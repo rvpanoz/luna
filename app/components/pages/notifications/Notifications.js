@@ -72,11 +72,9 @@ const Notifications = ({ classes }) => {
       },
       btnIdx => {
         if (btnIdx) {
-          const packages = selected.map((pkg, idx) => {
-            const [name, version] = pkg.split('@');
-
-            return `${name}@${version}`;
-          });
+          const packages = selected.map(
+            (pkg, idx) => `${pkg.name}@${pkg.version}`
+          );
 
           const parameters = {
             ipcEvent: 'install',
@@ -101,17 +99,17 @@ const Notifications = ({ classes }) => {
         version
       };
 
-      const isNewerSelected = selected.find(
+      const isNewerVersionSelected = selected.find(
         selectedItem =>
           selectedItem.name === name && semver.gt(selectedItem.version, version)
       );
 
-      const oldSelected = selected.find(
+      const isOldVersionSelected = selected.find(
         selectedItem =>
           selectedItem.name === name && semver.lt(selectedItem.version, version)
       );
 
-      if (isNewerSelected) {
+      if (isNewerVersionSelected) {
         dispatch(
           setSnackbar({
             open: true,
@@ -123,29 +121,22 @@ const Notifications = ({ classes }) => {
         return;
       }
 
+      if (isOldVersionSelected) {
+        dispatch(
+          setSnackbar({
+            open: true,
+            type: 'warning',
+            message: WARNING_MESSAGES.oldSelected
+          })
+        );
+
+        return;
+      }
+
       const selectedIndex = selected
         .map(selectedItem => selectedItem.idx)
         .indexOf(idx);
       let newSelected = [];
-
-      // switch (true) {
-      //   case selectedIndex === -1:
-      //     if (oldSelected) {
-      //       dispatch(
-      //         setSnackbar({
-      //           open: true,
-      //           type: 'warning',
-      //           message: WARNING_MESSAGES.oldSelected
-      //         })
-      //       );
-
-      //       const { idx } = oldSelected;
-      //       console.log(idx);
-      //     }
-      //     break;
-      //   default:
-      //     break;
-      // }
 
       if (selectedIndex === -1) {
         newSelected = newSelected.concat(selected, needle);
