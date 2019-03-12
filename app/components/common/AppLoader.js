@@ -19,20 +19,25 @@ const styles = theme => ({
   loader: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-around',
     position: 'absolute',
-    left: '45%',
-    top: '45%',
-    margin: `0 ${theme.spacing.unit * 2}px`
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    left: '50%',
+    top: '40%',
+    padding: 0,
+    margin: 0
   },
   relative: {
-    left: '45%',
-    position: 'relative',
-    margin: `0 ${theme.spacing.unit * 2}px`
+    left: '50%',
+    position: 'relative'
+  },
+  progress: {
+    padding: 0,
+    margin: 0
   },
   message: {
-    padding: theme.spacing.unit * 2,
-    margin: theme.spacing.unit
+    padding: 0,
+    margin: 0
   }
 });
 
@@ -44,6 +49,7 @@ const AppLoader = ({ loading, classes, children, message, relative, mini }) =>
       })}
     >
       <CircularProgress
+        className={classes.progress}
         color={relative ? 'primary' : 'secondary'}
         size={mini ? 20 : 30}
       />

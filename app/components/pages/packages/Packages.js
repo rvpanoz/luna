@@ -202,7 +202,7 @@ const Packages = ({ classes }) => {
     <AppLoader loading={loading} message={message}>
       <Grid container>
         <Grid item md={12} lg={6} xl={6}>
-          {!loading && packagesData.length === 0 ? (
+          {packagesData.length === 0 ? (
             <Typography variant="subtitle1">
               There are not any packages in this project.
             </Typography>

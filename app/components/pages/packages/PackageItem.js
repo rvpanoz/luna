@@ -129,18 +129,18 @@ const PackageItem = ({
 
 PackageItem.propTypes = {
   classes: objectOf(string).isRequired,
+  latest: oneOfType([string, object]),
+  problems: arrayOf(string),
   name: string.isRequired,
   addSelected: func.isRequired,
   isSelected: bool.isRequired,
+  isOutdated: bool.isRequired,
   fromSearch: bool,
   version: string,
-  isOutdated: bool.isRequired,
-  latest: oneOfType([string, object]),
   group: string,
   manager: string,
   mode: string,
   directory: string,
-  problems: arrayOf(string),
   extraneous: bool
 };
 

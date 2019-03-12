@@ -198,7 +198,9 @@ const packagesSuccessEpic = (action$, state$) =>
           }
         } = state$.value;
 
-        const actions = [updateLoader({ loading: false, message: null })];
+        const actions = dependencies.length
+          ? [updateLoader({ loading: false, message: null })]
+          : [];
 
         if (page !== 0) {
           actions.unshift(setPage({ page: 0 }));
