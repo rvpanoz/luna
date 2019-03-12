@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-expressions */
 
-import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
@@ -19,15 +18,13 @@ import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
 
 import {
-  addActionError,
   addSelected,
   addInstallOption,
-  setPackagesStart,
   updateData,
   setPage,
   setPageRows
 } from 'models/packages/actions';
-import { clearAll, commandMessage } from 'models/ui/actions';
+import { commandMessage } from 'models/ui/actions';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -108,13 +105,7 @@ const Packages = ({ classes }) => {
     [counter, paused, mode, directory]
   );
 
-  const {
-    projectName,
-    projectVersion,
-    projectDescription,
-    projectLicense,
-    projectAuthor
-  } = dependenciesSet || {};
+  const { projectName, projectVersion } = dependenciesSet || {};
 
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
@@ -136,40 +127,10 @@ const Packages = ({ classes }) => {
         dependencies,
         outdated,
         projectName,
-        projectVersion,
-        projectDescription,
-        projectLicense,
-        projectAuthor
+        projectVersion
       })
     );
   }, [dependenciesSet]);
-
-  useEffect(() => {
-    ipcRenderer.on('action-close', (event, error) => {
-      if (error && error.length) {
-        dispatch(addActionError({ error }));
-      }
-
-      dispatch(
-        setPackagesStart({
-          channel: 'ipc-event',
-          options: {
-            ipcEvent: 'get-packages',
-            cmd: ['outdated', 'list'],
-            mode,
-            directory
-          }
-        })
-      );
-    });
-
-    return () => ipcRenderer.removeAllListeners(['action-close']);
-  }, []);
-
-  const isSelected = useCallback(
-    (name, selectedPackages) => selectedPackages.indexOf(name) !== -1,
-    [name, selected]
-  );
 
   const scrollWrapper = useCallback(
     top => {
@@ -250,7 +211,7 @@ const Packages = ({ classes }) => {
                           problems,
                           __group
                         }) => {
-                          const isPackageSelected = isSelected(name, selected);
+                          const isPackageSelected = selected.indexOf(name) > -1;
                           const installOptions = Array.isArray(
                             packagesInstallOptions
                           )

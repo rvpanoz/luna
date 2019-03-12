@@ -69,22 +69,24 @@ const Notifications = ({ classes }) => {
     setSelected([]);
   };
 
-  const handleInstall = useCallback(
-    mode => {
-      remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          title: 'Confirmation',
-          type: 'question',
-          message: `Would you like to install the selected packages?`,
-          buttons: ['Cancel', 'Install']
-        },
-        btnIdx => {
-          if (btnIdx) {
-            const packages = selected.map(
-              (pkg, idx) => `${pkg.name}@${pkg.version}`
-            );
+  const handleInstall = () => {
+    remote.dialog.showMessageBox(
+      remote.getCurrentWindow(),
+      {
+        title: 'Confirmation',
+        type: 'question',
+        message: `Would you like to install the selected packages?`,
+        buttons: ['Cancel', 'Install']
+      },
+      btnIdx => {
+        if (btnIdx) {
+          const packages = selected.map(
+            (pkg, idx) => `${pkg.name}@${pkg.version}`
+          );
 
+          if (mode === 'local') {
+            toggleOptions(true);
+          } else {
             const parameters = {
               ipcEvent: 'install',
               cmd: ['install'],
@@ -97,10 +99,9 @@ const Notifications = ({ classes }) => {
             dispatch(installPackages(parameters));
           }
         }
-      );
-    },
-    [selected]
-  );
+      }
+    );
+  };
 
   const handleClick = useCallback(
     (event, name, version, idx) => {
@@ -162,6 +163,8 @@ const Notifications = ({ classes }) => {
     },
     [selected]
   );
+
+  const handleAction = action => {};
 
   useEffect(() => {
     const hasExtraneous =

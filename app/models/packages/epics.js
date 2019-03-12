@@ -88,8 +88,8 @@ const packagesStartEpic = action$ =>
         message: 'Loading packages..'
       }),
       cleanNotifications(),
-      cleanPackages(),
-      cleanCommands()
+      cleanCommands(),
+      cleanPackages()
     ])
   );
 
