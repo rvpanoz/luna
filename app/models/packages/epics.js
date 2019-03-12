@@ -2,6 +2,8 @@ import { tap, map, takeWhile, concatMap, skipWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
+import { runAudit } from 'models/packages/actions';
+
 import {
   toggleLoader,
   clearCommands,
@@ -82,7 +84,8 @@ const packagesStartEpic = action$ =>
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
     concatMap(() => [
       updateLoader({
-        loading: true
+        loading: true,
+        message: 'Loading packages..'
       }),
       cleanNotifications(),
       cleanPackages(),
@@ -97,7 +100,8 @@ const installPackagesEpic = action$ =>
       ipcRenderer.send('ipc-event', payload);
 
       return updateLoader({
-        loading: true
+        loading: true,
+        message: 'Loading packages..'
       });
     })
   );
@@ -109,7 +113,8 @@ const updatePackagesEpic = action$ =>
       ipcRenderer.send('ipc-event', payload);
 
       return updateLoader({
-        loading: true
+        loading: true,
+        message: 'Loading packages..'
       });
     })
   );
@@ -217,7 +222,17 @@ const packagesSuccessEpic = (action$, state$) =>
     )
   );
 
+const audit = action$ =>
+  action$.pipe(
+    ofType(runAudit.type),
+    map(({ payload: { channel, options, paused } }) => {
+      ipcRenderer.send(channel, options);
+      return resumeRequest();
+    })
+  );
+
 export default combineEpics(
+  audit,
   packagesStartEpic,
   packagesSuccessEpic,
   installPackagesEpic,

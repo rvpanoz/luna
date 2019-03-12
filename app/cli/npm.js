@@ -132,3 +132,17 @@ exports.view = options => {
 
   return run;
 };
+
+/** npm tools */
+exports.audit = options => {
+  const command = ['audit'];
+  const { mode, name, version } = options || {};
+  const defaults = ['--parseable', '--json'];
+
+  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
+
+  // build npm command
+  const run = [].concat(command).concat(commandArgs);
+
+  return run;
+};

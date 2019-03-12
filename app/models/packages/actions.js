@@ -23,6 +23,8 @@ const setPageRows = ActionCreator('SET_PAGE_ROWS');
 const installPackages = ActionCreator('INSTALL_PACKAGES');
 const updatePackages = ActionCreator('UPDATE_PACKAGES');
 
+const runAudit = ActionCreator('RUN_AUDIT');
+
 export {
   installPackages,
   updatePackages,
@@ -42,5 +44,6 @@ export {
   setOutdatedSuccess,
   setPage,
   setPageRows,
-  updateData
+  updateData,
+  runAudit
 };

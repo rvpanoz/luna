@@ -25,7 +25,11 @@ const ToolsTab = ({ classes, items, nodata }) => (
               secondary={item.secondaryText}
             />
             <ListItemSecondaryAction>
-              <IconButton aria-label="action" disabled={nodata}>
+              <IconButton
+                aria-label="action"
+                disabled={nodata}
+                onClick={() => item.handler()}
+              >
                 <ArrowRightIcon />
               </IconButton>
             </ListItemSecondaryAction>

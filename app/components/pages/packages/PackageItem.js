@@ -1,10 +1,18 @@
 /* eslint-disable react/require-default-props */
 
 import { ipcRenderer } from 'electron';
-import React, { useRef, useCallback } from 'react';
+import React, { useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
-import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
+import {
+  arrayOf,
+  bool,
+  objectOf,
+  object,
+  string,
+  func,
+  oneOfType
+} from 'prop-types';
 
 import ErrorIcon from '@material-ui/icons/Error';
 
@@ -124,13 +132,16 @@ PackageItem.propTypes = {
   name: string.isRequired,
   addSelected: func.isRequired,
   isSelected: bool.isRequired,
+  fromSearch: bool,
   version: string,
   isOutdated: bool.isRequired,
   latest: oneOfType([string, object]),
   group: string,
   manager: string,
   mode: string,
-  directory: string
+  directory: string,
+  problems: arrayOf(string),
+  extraneous: bool
 };
 
 export default withStyles(styles)(PackageItem);

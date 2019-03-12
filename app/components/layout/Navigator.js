@@ -22,6 +22,7 @@ import {
   PackagesTab,
   ToolsTab
 } from 'components/pages/navigator/tabs';
+import { runAudit } from 'models/packages/actions';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
@@ -50,6 +51,22 @@ const Navigator = ({
 
     return () => ipcRenderer.removeAllListeners('loaded-packages-close');
   }, [openedDirectories]);
+
+  const runNpmAuditHandler = () => {
+    const parameters = {
+      ipcEvent: 'ipc-event',
+      cmd: ['audit']
+    };
+
+    dispatch(
+      runAudit({
+        channel: 'ipc-event',
+        options: {
+          ...parameters
+        }
+      })
+    );
+  };
 
   const openPackage = useCallback(() => {
     remote.dialog.showOpenDialog(
@@ -156,7 +173,8 @@ const Navigator = ({
                 items={[
                   {
                     primaryText: 'npm audit',
-                    secondaryText: 'Run npm audit'
+                    secondaryText: 'Run npm audit',
+                    handler: runNpmAuditHandler
                   },
                   {
                     primaryText: 'npm doctor',
