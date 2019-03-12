@@ -135,6 +135,7 @@ ipcMain.on('ipc-event', (event, options) => {
       }
     }
 
+    console.log(data);
     event.sender.send('loaded-packages-close', Store.get('openedPackages'));
     event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
   };

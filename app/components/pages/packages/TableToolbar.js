@@ -80,8 +80,8 @@ const TableListToolbar = ({
 
   const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
 
-  const handleAction = (action, showDialog) => {
-    if (showDialog) {
+  const handleAction = (action, mode) => {
+    if (mode === 'local') {
       return toggleOptions(true);
     }
 
@@ -212,7 +212,7 @@ const TableListToolbar = ({
           <IconButton
             color="primary"
             aria-label="install selected"
-            onClick={() => handleAction('install', mode === 'local')}
+            onClick={() => handleAction('install', mode)}
           >
             <AddIcon />
           </IconButton>

@@ -15,14 +15,21 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { installPackages } from 'models/packages/actions';
-import { WARNING_MESSAGES } from 'constants/AppConstants';
+import { WARNING_MESSAGES, INFO_MESSAGES } from 'constants/AppConstants';
 import { setSnackbar } from 'models/ui/actions';
 
 import NotificationsHeader from './NotificationsHeader';
 import NotificationsToolbar from './NotificationsToolbar';
+import Flags from '../packages/Flags';
 
 import styles from './styles';
 
@@ -38,6 +45,7 @@ const parseRequired = (name, position) => name && name.split('@')[position];
 const Notifications = ({ classes }) => {
   const [selected, setSelected] = useState([]);
   const [isExtraneous, setExtraneous] = useState(false);
+  const [optionsOpen, toggleOptions] = useState(false);
   const { mode, directory, notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
@@ -61,35 +69,38 @@ const Notifications = ({ classes }) => {
     setSelected([]);
   };
 
-  const handleInstall = useCallback(() => {
-    remote.dialog.showMessageBox(
-      remote.getCurrentWindow(),
-      {
-        title: 'Confirmation',
-        type: 'question',
-        message: `Would you like to install the selected packages?`,
-        buttons: ['Cancel', 'Install']
-      },
-      btnIdx => {
-        if (btnIdx) {
-          const packages = selected.map(
-            (pkg, idx) => `${pkg.name}@${pkg.version}`
-          );
+  const handleInstall = useCallback(
+    mode => {
+      remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          title: 'Confirmation',
+          type: 'question',
+          message: `Would you like to install the selected packages?`,
+          buttons: ['Cancel', 'Install']
+        },
+        btnIdx => {
+          if (btnIdx) {
+            const packages = selected.map(
+              (pkg, idx) => `${pkg.name}@${pkg.version}`
+            );
 
-          const parameters = {
-            ipcEvent: 'install',
-            cmd: ['install'],
-            multiple: true,
-            packages,
-            mode,
-            directory
-          };
+            const parameters = {
+              ipcEvent: 'install',
+              cmd: ['install'],
+              multiple: true,
+              packages,
+              mode,
+              directory
+            };
 
-          dispatch(installPackages(parameters));
+            dispatch(installPackages(parameters));
+          }
         }
-      }
-    );
-  }, [selected]);
+      );
+    },
+    [selected]
+  );
 
   const handleClick = useCallback(
     (event, name, version, idx) => {
@@ -164,93 +175,119 @@ const Notifications = ({ classes }) => {
   }, [notifications]);
 
   return (
-    <Grid container spacing={16}>
-      <Grid item md={12} lg={8} xl={8}>
-        {!notifications || notifications.length === 0 ? (
-          <Typography variant="subtitle1">No problems found!</Typography>
-        ) : (
-          <Paper className={classes.root}>
-            <NotificationsToolbar
-              total={notifications.length}
-              numSelected={selected.length || 0}
-              handleInstall={handleInstall}
-            />
-            <div className={classes.tableWrapper}>
-              <Table
-                className={classes.table}
-                aria-labelledby="notificationsHeader"
-              >
-                {isExtraneous ? (
-                  <TableBody>
-                    <TableRow tabIndex={-1} key="extraneous-packages">
-                      <TableCell className={classes.tableCell}>
-                        <Typography>
-                          Found extraneous packages. Run <i>npm prune</i> in the
-                          Tools tab to fix them.
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                ) : (
-                  <React.Fragment>
-                    <NotificationsHeader
-                      numSelected={selected.length || 0}
-                      onSelectAllClick={handleSelectAllClick}
-                      rowCount={notifications.length || 0}
-                    />
+    <section className={classes.root}>
+      <Grid container spacing={16}>
+        <Grid item md={12} lg={8} xl={8}>
+          {!notifications || notifications.length === 0 ? (
+            <Typography variant="subtitle1">No problems found!</Typography>
+          ) : (
+            <Paper className={classes.root}>
+              <NotificationsToolbar
+                total={notifications.length}
+                numSelected={selected.length || 0}
+                handleInstall={handleInstall}
+              />
+              <div className={classes.tableWrapper}>
+                <Table
+                  className={classes.table}
+                  aria-labelledby="notificationsHeader"
+                >
+                  {isExtraneous ? (
                     <TableBody>
-                      {notifications.map((notification, idx) => {
-                        const { required, requiredBy } = notification;
-
-                        if (!isExtraneous) {
-                          const name = parseRequired(required, 0);
-                          const version = parseRequired(required, 1);
-                          const { raw } = semver.coerce(version) || 'N/A';
-
-                          const isSelected =
-                            selected
-                              .map(selectedItem => selectedItem.idx)
-                              .indexOf(idx) > -1;
-
-                          return (
-                            <TableRow
-                              hover
-                              onClick={event =>
-                                handleClick(event, name, raw, idx)
-                              }
-                              role="checkbox"
-                              aria-checked={isSelected}
-                              tabIndex={-1}
-                              key={`notification-item-${idx}`}
-                              selected={isSelected}
-                            >
-                              <TableCell padding="checkbox">
-                                <Checkbox checked={isSelected} />
-                              </TableCell>
-                              <TableCell className={classes.tableCell}>
-                                <Typography>
-                                  {parseRequiredBy(requiredBy)}
-                                </Typography>
-                              </TableCell>
-                              <TableCell className={classes.tableCell}>
-                                <Typography>{name}</Typography>
-                              </TableCell>
-                              <TableCell className={classes.tableCell}>
-                                <Typography>{raw}</Typography>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        }
-                      })}
+                      <TableRow tabIndex={-1} key="extraneous-packages">
+                        <TableCell className={classes.tableCell}>
+                          <Typography>
+                            Found extraneous packages. Run <i>npm prune</i> in
+                            the Tools tab to fix them.
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
                     </TableBody>
-                  </React.Fragment>
-                )}
-              </Table>
-            </div>
-          </Paper>
-        )}
+                  ) : (
+                    <React.Fragment>
+                      <NotificationsHeader
+                        numSelected={selected.length || 0}
+                        onSelectAllClick={handleSelectAllClick}
+                        rowCount={notifications.length || 0}
+                      />
+                      <TableBody>
+                        {notifications.map((notification, idx) => {
+                          const { required, requiredBy } = notification;
+
+                          if (!isExtraneous) {
+                            const name = parseRequired(required, 0);
+                            const version = parseRequired(required, 1);
+                            const { raw } = semver.coerce(version) || 'N/A';
+
+                            const isSelected =
+                              selected
+                                .map(selectedItem => selectedItem.idx)
+                                .indexOf(idx) > -1;
+
+                            return (
+                              <TableRow
+                                hover
+                                onClick={event =>
+                                  handleClick(event, name, raw, idx)
+                                }
+                                role="checkbox"
+                                aria-checked={isSelected}
+                                tabIndex={-1}
+                                key={`notification-item-${idx}`}
+                                selected={isSelected}
+                              >
+                                <TableCell padding="checkbox">
+                                  <Checkbox checked={isSelected} />
+                                </TableCell>
+                                <TableCell className={classes.tableCell}>
+                                  <Typography>
+                                    {parseRequiredBy(requiredBy)}
+                                  </Typography>
+                                </TableCell>
+                                <TableCell className={classes.tableCell}>
+                                  <Typography>{name}</Typography>
+                                </TableCell>
+                                <TableCell className={classes.tableCell}>
+                                  <Typography>{raw}</Typography>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          }
+                        })}
+                      </TableBody>
+                    </React.Fragment>
+                  )}
+                </Table>
+              </div>
+            </Paper>
+          )}
+        </Grid>
       </Grid>
-    </Grid>
+      <Dialog
+        open={optionsOpen}
+        onClose={() => toggleOptions(!optionsOpen)}
+        aria-labelledby="install-options"
+        maxWidth="md"
+      >
+        <DialogTitle id="install-options">Install options</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
+          <Flags selected={selected} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => toggleOptions(false)} color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleAction('install')}
+            color="primary"
+            autoFocus
+          >
+            Install
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </section>
   );
 };
 

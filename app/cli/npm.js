@@ -146,3 +146,34 @@ exports.audit = options => {
 
   return run;
 };
+
+// https://docs.npmjs.com/cli/doctor.html
+exports.doctor = options => {
+  const command = ['doctor'];
+  const { mode, name, version } = options || {};
+
+  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : [];
+
+  // build npm command
+  const run = [].concat(command).concat(commandArgs);
+
+  return run;
+};
+
+// @scope>/]<pkg>...] [--production] [--dry-run] [--json]
+exports.prune = options => {
+  const command = ['prune'];
+  const { mode, name, version } = options || {};
+  const defaults = ['--parseable', '--json'];
+
+  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
+
+  // build npm command
+  const run = [].concat(command).concat(commandArgs);
+
+  return run;
+};
+
+exports.lockVerify = options => {
+  // TODO: load lockVerify package
+};
