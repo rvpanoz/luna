@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const useFlags = selected => {
+  console.log(selected);
   const [flags, setFlags] = useState([]);
 
-  return flags;
+  useEffect(() => {}, [selected]);
+
+  return [flags];
 };
 
 export default useFlags;

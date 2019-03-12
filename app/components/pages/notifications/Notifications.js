@@ -72,6 +72,7 @@ const Notifications = ({ classes }) => {
   }, [notifications]);
 
   const [installOptions] = useFlags(selected);
+  console.log(installOptions);
 
   const handleSelectAllClick = e => {
     if (e.target.checked) {
