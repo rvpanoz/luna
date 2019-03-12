@@ -6,15 +6,13 @@ import semver from 'semver';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { pluck, merge } from 'ramda';
+
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import ControlTypes from 'components/common/ControlTypes';
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -27,6 +25,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+
+import useFlags from 'commons/hooks/useFlags';
+import ControlTypes from 'components/common/ControlTypes';
 
 import { installPackages } from 'models/packages/actions';
 import {
@@ -54,7 +55,6 @@ const Notifications = ({ classes }) => {
   const [selected, setSelected] = useState([]);
   const [isExtraneous, setExtraneous] = useState(false);
   const [optionsOpen, toggleOptions] = useState(false);
-  const [installOptions, setInstallOptions] = useState([]);
 
   const { mode, directory, notifications } = useMappedState(mapState);
 
@@ -70,6 +70,8 @@ const Notifications = ({ classes }) => {
 
     setExtraneous(hasExtraneous);
   }, [notifications]);
+
+  const [installOptions] = useFlags(selected);
 
   const handleSelectAllClick = e => {
     if (e.target.checked) {
@@ -257,7 +259,6 @@ const Notifications = ({ classes }) => {
     }
   };
 
-  console.log(installOptions);
   return (
     <section className={classes.root}>
       <Grid container spacing={16}>
@@ -359,35 +360,15 @@ const Notifications = ({ classes }) => {
           <div className={classes.flexContainer} style={{ minWidth: 400 }}>
             <List dense className={classes.list}>
               {selected.map(pkg => {
-                const option =
-                  installOptions &&
-                  installOptions.find(
-                    installOption => installOption.name === pkg.name
-                  );
-                let value;
-
-                if (option) {
-                  const { options } = option;
-                  value = options && options[0];
-                }
-
                 return (
                   <ListItem key={pkg.name}>
                     <ListItemText primary={pkg.name} />
                     <ListItemSecondaryAction>
                       <ControlTypes
-                        selectedValue={value}
+                        selectedValue={'save-prod'}
                         packageName={pkg.name}
                         onSelect={payload => {
-                          const { name, option } = payload;
-
-                          setInstallOptions([
-                            ...installOptions,
-                            {
-                              name,
-                              option
-                            }
-                          ]);
+                          // TODO: add option flag..
                         }}
                       />
                     </ListItemSecondaryAction>
