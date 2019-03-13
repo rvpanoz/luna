@@ -105,11 +105,14 @@ const Notifications = ({ classes }) => {
       directory
     };
 
-    dispatch(installPackages(parameters));
+    console.log(mode, parameters);
+    // dispatch(installPackages(parameters));
   };
 
   const handleInstallLocal = useCallback(() => {
     const packagesWithOptions = setupInstallOptions(selected, installOptions);
+    console.log(packagesWithOptions);
+
     const installations = Object.values(packagesWithOptions);
     const groups = Object.keys(packagesWithOptions);
 
@@ -135,7 +138,8 @@ const Notifications = ({ classes }) => {
       directory
     };
 
-    dispatch(installPackages(parameters));
+    console.log(mode, parameters);
+    //dispatch(installPackages(parameters));
   }, [selected, installOptions]);
 
   const handleClick = useCallback(
@@ -312,7 +316,7 @@ const Notifications = ({ classes }) => {
                 ) {
                   selectedValue = itemOptionsByName.options[0];
                 }
-                console.log(selectedValue);
+
                 return (
                   <ListItem key={pkg.name}>
                     <ListItemText primary={pkg.name} />
