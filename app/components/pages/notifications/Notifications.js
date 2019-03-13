@@ -26,9 +26,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
-import useFlags from 'commons/hooks/useFlags';
 import ControlTypes from 'components/common/ControlTypes';
-
+import { setupInstallOptions } from 'commons/utils';
 import { installPackages } from 'models/packages/actions';
 import {
   WARNING_MESSAGES,
@@ -55,6 +54,7 @@ const Notifications = ({ classes }) => {
   const [selected, setSelected] = useState([]);
   const [isExtraneous, setExtraneous] = useState(false);
   const [optionsOpen, toggleOptions] = useState(false);
+  const [installOptions, setInstallOptions] = useState([]);
 
   const { mode, directory, notifications } = useMappedState(mapState);
 
@@ -70,9 +70,6 @@ const Notifications = ({ classes }) => {
 
     setExtraneous(hasExtraneous);
   }, [notifications]);
-
-  const [installOptions] = useFlags(selected);
-  console.log(installOptions);
 
   const handleSelectAllClick = e => {
     if (e.target.checked) {
@@ -94,22 +91,52 @@ const Notifications = ({ classes }) => {
     setSelected([]);
   };
 
-  const handleAction = () => {
+  const handleInstall = () => {
     if (mode === 'local') {
-      toggleOptions(true);
-    } else {
-      const parameters = {
-        ipcEvent: 'install',
-        cmd: ['install'],
-        multiple: true,
-        packages: selected,
-        mode,
-        directory
-      };
-
-      dispatch(installPackages(parameters));
+      return toggleOptions(true);
     }
+
+    const parameters = {
+      ipcEvent: 'install',
+      cmd: ['install'],
+      multiple: true,
+      packages: selected,
+      mode,
+      directory
+    };
+
+    dispatch(installPackages(parameters));
   };
+
+  const handleInstallLocal = useCallback(() => {
+    const packagesWithOptions = setupInstallOptions(selected, installOptions);
+    const installations = Object.values(packagesWithOptions);
+    const groups = Object.keys(packagesWithOptions);
+
+    // run install multiple times
+    const commands = installations.map((pkgs, idx) => ({
+      operation: 'install',
+      pkgs,
+      group: groups[idx],
+      flags: PACKAGE_GROUPS[groups[idx]]
+    }));
+
+    const parameters = {
+      activeManager: 'npm',
+      ipcEvent: 'install',
+      cmd: pluck('operation', commands.filter(command => command.pkgs.length)),
+      packages: pluck('pkgs', commands.filter(command => command.pkgs.length)),
+      pkgOptions: pluck(
+        'flags',
+        commands.filter(command => command.pkgs.length)
+      ),
+      multiple: true,
+      mode,
+      directory
+    };
+
+    dispatch(installPackages(parameters));
+  }, [selected, installOptions]);
 
   const handleClick = useCallback(
     (event, name, version, idx) => {
@@ -172,94 +199,6 @@ const Notifications = ({ classes }) => {
     [selected]
   );
 
-  const install = () => {
-    const hasFlags = installOptions && installOptions.length;
-
-    if (hasFlags && selected.length) {
-      const dependencies = [];
-      const devDependencies = [];
-      const optionalDependencies = [];
-      const bundleDependencies = [];
-      const peerDependencies = [];
-      const noSave = [];
-
-      const packagesWithOptions = selected.reduce((acc, pkg) => {
-        const flag = notificationsInstallOptions.find(
-          option => option.name === pkg.name
-        );
-
-        const packageName = `${pkg.name}@${pkg.version}`;
-
-        if (!flag) {
-          dependencies.push(packageName);
-        } else {
-          switch (flag.options[0]) {
-            case 'save-dev':
-              devDependencies.push(packageName);
-              break;
-            case 'save-optional':
-              optionalDependencies.push(packageName);
-              break;
-            case 'save-bundle':
-              bundleDependencies.push(packageName);
-              break;
-            case 'no-save':
-              noSave.push(packageName);
-              break;
-            case 'save-peer':
-              peerDependencies.push(packageName);
-              break;
-            default:
-              dependencies.push(packageName);
-              break;
-          }
-        }
-
-        return merge(acc, {
-          dependencies,
-          devDependencies,
-          optionalDependencies,
-          bundleDependencies,
-          peerDependencies,
-          noSave
-        });
-      }, {});
-
-      const installations = Object.values(packagesWithOptions);
-      const groups = Object.keys(packagesWithOptions);
-
-      // run install multiple times
-      const commands = installations.map((pkgs, idx) => ({
-        operation: 'install',
-        pkgs,
-        group: groups[idx],
-        flags: PACKAGE_GROUPS[groups[idx]]
-      }));
-
-      const parameters = {
-        activeManager: 'npm',
-        ipcEvent: 'install',
-        cmd: pluck(
-          'operation',
-          commands.filter(command => command.pkgs.length)
-        ),
-        packages: pluck(
-          'pkgs',
-          commands.filter(command => command.pkgs.length)
-        ),
-        pkgOptions: pluck(
-          'flags',
-          commands.filter(command => command.pkgs.length)
-        ),
-        multiple: true,
-        mode,
-        directory
-      };
-
-      dispatch(installPackages(parameters));
-    }
-  };
-
   return (
     <section className={classes.root}>
       <Grid container spacing={16}>
@@ -271,7 +210,7 @@ const Notifications = ({ classes }) => {
               <NotificationsToolbar
                 total={notifications.length}
                 numSelected={selected.length || 0}
-                handleInstall={handleAction}
+                handleInstall={handleInstall}
               />
               <div className={classes.tableWrapper}>
                 <Table
@@ -361,15 +300,34 @@ const Notifications = ({ classes }) => {
           <div className={classes.flexContainer} style={{ minWidth: 400 }}>
             <List dense className={classes.list}>
               {selected.map(pkg => {
+                let selectedValue = 'save-prod';
+
+                const itemOptionsByName = installOptions.find(
+                  installOption => installOption.name === pkg.name
+                );
+
+                if (
+                  itemOptionsByName &&
+                  typeof itemOptionsByName === 'object'
+                ) {
+                  selectedValue = itemOptionsByName.options[0];
+                }
+                console.log(selectedValue);
                 return (
                   <ListItem key={pkg.name}>
                     <ListItemText primary={pkg.name} />
                     <ListItemSecondaryAction>
                       <ControlTypes
-                        selectedValue={'save-prod'}
+                        selectedValue={selectedValue}
                         packageName={pkg.name}
                         onSelect={payload => {
-                          // TODO: add option flag..
+                          const { name, options } = payload;
+                          const newInstallOptions = [
+                            ...installOptions,
+                            payload
+                          ];
+
+                          setInstallOptions(newInstallOptions);
                         }}
                       />
                     </ListItemSecondaryAction>
@@ -383,7 +341,11 @@ const Notifications = ({ classes }) => {
           <Button onClick={() => toggleOptions(false)} color="secondary">
             Cancel
           </Button>
-          <Button onClick={() => install()} color="primary" autoFocus>
+          <Button
+            onClick={() => handleInstallLocal()}
+            color="primary"
+            autoFocus
+          >
             Install
           </Button>
         </DialogActions>
