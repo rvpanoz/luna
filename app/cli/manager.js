@@ -205,4 +205,68 @@ const view = (opts, callback) => {
   }
 };
 
-export default { list, outdated, search, install, update, uninstall, view };
+const audit = (opts, callback) => {
+  const { mode, directory, activeManager = 'npm' } = opts;
+
+  try {
+    const manager = require(path.resolve(__dirname, activeManager));
+    const run = manager['audit'].call(this, opts);
+
+    return execute(activeManager, run, mode, directory, callback);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const doctor = (opts, callback) => {
+  const { mode, directory, activeManager = 'npm' } = opts;
+
+  try {
+    const manager = require(path.resolve(__dirname, activeManager));
+    const run = manager['doctor'].call(this, opts);
+
+    return execute(activeManager, run, mode, directory, callback);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const prune = (opts, callback) => {
+  const { mode, directory, activeManager = 'npm' } = opts;
+
+  try {
+    const manager = require(path.resolve(__dirname, activeManager));
+    const run = manager['prune'].call(this, opts);
+
+    return execute(activeManager, run, mode, directory, callback);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const lockVerify = (opts, callback) => {
+  const { mode, directory, activeManager = 'npm' } = opts;
+
+  try {
+    const manager = require(path.resolve(__dirname, activeManager));
+    const run = manager['lockVerify'].call(this, opts);
+
+    return execute(activeManager, run, mode, directory, callback);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export default {
+  audit,
+  doctor,
+  prune,
+  lockVerify,
+  list,
+  outdated,
+  search,
+  install,
+  update,
+  uninstall,
+  view
+};

@@ -14,11 +14,12 @@ export const APP_GLOBALS = {
   manager: APP_MANAGER
 };
 
-// app modes
 export const APP_MODES = {
   global: 'global',
   local: 'local'
 };
+
+export const ERROR_TYPES = ['WARN', 'ERR'];
 
 export const APP_INFO = {
   CONFIRMATION: 'Would you like to $action $name@version?',
@@ -28,7 +29,6 @@ export const APP_INFO = {
   NO_DATA: 'No data'
 };
 
-// package actions
 export const APP_ACTIONS = ['install', 'uninstall', 'update', 'view'];
 
 export const PACKAGE_GROUPS = {
@@ -39,15 +39,6 @@ export const PACKAGE_GROUPS = {
   peerDependencies: 'save-peer',
   noSave: 'no-save'
 };
-
-export const COMMAND_OPTIONS = [
-  'save-prod*Package will appear in your dependencies',
-  'save-dev*Package will appear in your devDependencies',
-  'save-optional*Package will appear in your optionalDependencies',
-  "save-exact*Saved dependencies will be configured with an exact version rather than using npm's default semver range operator"
-];
-
-export const ERROR_TYPES = ['WARN', 'ERR'];
 
 export const NPM_CONFIG_VALUES = {
   REGISTRY: 'registry',
@@ -60,7 +51,9 @@ export const INFO_MESSAGES = {
   noData: 'No dependencies found.',
   loaded: 'Package loaded.',
   updating: 'Please wait. Updating packages',
-  installing: 'Please choose installation options'
+  installing: 'Please choose installation options',
+  extraneous:
+    'Found extraneous packages. Run npm prune from the Tools tab to fix them.'
 };
 
 export const WARNING_MESSAGES = {
@@ -69,5 +62,9 @@ export const WARNING_MESSAGES = {
   errorPackages:
     'Some packages have errors. Check your notifications to fix it.',
   yarnlock:
-    'yarn-lock file detected. Please remove it before running any action operation'
+    'yarn-lock file detected. Please remove it before running any action operation',
+  newerSelected:
+    'A package with the same name and newer version is already selected',
+  oldorEqualSelected:
+    'A package with the same name and same or lower version is already selected'
 };

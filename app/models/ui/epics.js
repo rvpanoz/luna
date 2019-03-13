@@ -1,5 +1,5 @@
 import { pipe, from } from 'rxjs';
-import { map, mergeMap, filter, tap, takeWhile } from 'rxjs/operators';
+import { map, mergeMap, takeWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { ERROR_TYPES } from 'constants/AppConstants';
@@ -36,9 +36,9 @@ const parseNpmMessage = message => {
 
 const notificationsEpic = pipe(
   ofType(commandMessage.type),
+  takeWhile(({ payload: error }) => typeof error === 'object'),
   mergeMap(({ payload: { error } }) => from(error)),
   map(notification => {
-    // TODO: handle warnings and errors
     const { messageType = 'ERR', payload } = parseNpmMessage(notification);
 
     return switchcase({

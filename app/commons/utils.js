@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import mk from '../mk';
 import { APP_MODES, PACKAGE_GROUPS } from '../constants/AppConstants';
-import { pick, merge } from 'ramda';
+import { pick, merge, pluck } from 'ramda';
 
 const SEPARATOR = path.sep;
 
@@ -14,8 +14,8 @@ export const createActionCreator = namespace => actionType => {
     type,
     payload
   });
-  actionCreator.type = type;
 
+  actionCreator.type = type;
   Object.freeze(actionCreator);
 
   return actionCreator;
@@ -185,7 +185,17 @@ export const parseDependencies = (response, mode, directory) => {
       mk.log(
         `utils[parseDependencies]: cound not convert response data to array`
       );
+
       return;
+    }
+
+    const noDependencies = dataArray.every(dep => {
+      const [name, details] = dep;
+      return typeof details !== 'object';
+    });
+
+    if (noDependencies) {
+      return [[], [], name, version];
     }
 
     const data = dataArray.map(pkgArr => {
@@ -194,7 +204,6 @@ export const parseDependencies = (response, mode, directory) => {
 
       let group;
 
-      // find group and attach to package
       if (mode && mode === 'local') {
         const packageJSON = readPackageJson(directory);
 
@@ -279,4 +288,57 @@ export const shrinkDirectory = directory => {
   }
 
   return null;
+};
+
+export const setupInstallOptions = (selected, options) => {
+  const dependencies = [];
+  const devDependencies = [];
+  const optionalDependencies = [];
+  const bundleDependencies = [];
+  const peerDependencies = [];
+  const noSave = [];
+
+  const packagesWithOptions =
+    selected &&
+    selected.reduce((acc, pkg) => {
+      const flag = options.find(option => option.name === pkg.name);
+      const { name } = pkg;
+      const packageName = `${name}@latest`;
+
+      if (!flag) {
+        dependencies.push(packageName);
+      } else {
+        switch (flag.options[0]) {
+          case 'save-dev':
+            devDependencies.push(packageName);
+            break;
+          case 'save-optional':
+            optionalDependencies.push(packageName);
+            break;
+          case 'save-bundle':
+            bundleDependencies.push(packageName);
+            break;
+          case 'no-save':
+            noSave.push(packageName);
+            break;
+          case 'save-peer':
+            peerDependencies.push(packageName);
+            break;
+          default:
+            dependencies.push(packageName);
+            break;
+        }
+      }
+
+      return merge(acc, {
+        dependencies,
+        devDependencies,
+        optionalDependencies,
+        bundleDependencies,
+        peerDependencies,
+        noSave
+      });
+    }, {});
+
+  return packagesWithOptions;
 };

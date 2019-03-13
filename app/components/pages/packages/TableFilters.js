@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 
 import { withStyles } from '@material-ui/core/styles';
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import cn from 'classnames';
@@ -16,7 +16,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 
 import { APP_MODES } from 'constants/AppConstants';
 import AppButton from 'components/units/Buttons/AppButton';
-import { addFilter, clearFilters } from 'models/packages/actions';
+import { addFilter } from 'models/packages/actions';
 
 import styles from './styles/tableFilters';
 
@@ -31,11 +31,6 @@ const mapState = ({
 const TableFilters = ({ classes, mode, close }) => {
   const dispatch = useDispatch();
   const { filters } = useMappedState(mapState);
-
-  const emptyFilters = useCallback(
-    () => (filters && filters.length ? dispatch(clearFilters()) : false),
-    [filters]
-  );
 
   return (
     <div className={classes.root}>

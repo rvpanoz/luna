@@ -87,12 +87,11 @@ const handlers = {
     } else {
       newOptions = packagesInstallOptions.map(option => {
         const packageName = option.name;
-        const packageOptions = options;
 
         if (packageName === name) {
           return {
             ...option,
-            options: packageOptions
+            options
           };
         }
 

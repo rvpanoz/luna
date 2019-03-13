@@ -1,6 +1,5 @@
 /**
- *
- * Npm module for npm cli commands
+ * npm module for npm cli commands
  */
 
 /* eslint-disable prefer-promise-reject-errors */
@@ -12,8 +11,7 @@
  */
 exports.install = (options, idx) => {
   const command = ['install'];
-  const { mode, version = null, pkgOptions, multiple, packages } =
-    options || {};
+  const { mode, version, pkgOptions, multiple, packages } = options || {};
   const defaults = [];
 
   if (!packages && !multiple) {
@@ -129,6 +127,48 @@ exports.view = options => {
     .concat(command)
     .concat(version ? [].concat([`${name}@${version}`]) : [name])
     .concat(commandArgs);
+
+  return run;
+};
+
+/** npm tools */
+exports.audit = options => {
+  const command = ['audit'];
+  const { mode } = options || {};
+  const defaults = ['--parseable', '--json'];
+
+  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
+
+  // build npm command
+  const run = [].concat(command).concat(commandArgs);
+
+  return run;
+};
+
+// https://docs.npmjs.com/cli/doctor.html
+exports.doctor = options => {
+  const command = ['doctor'];
+  const { mode } = options || {};
+  const defaults = ['--parseable', '--json'];
+
+  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : [];
+
+  // build npm command
+  const run = [].concat(command).concat(commandArgs);
+
+  return run;
+};
+
+// @scope>/]<pkg>...] [--production] [--dry-run] [--json]
+exports.prune = options => {
+  const command = ['prune'];
+  const { mode } = options || {};
+  const defaults = ['--parseable', '--json'];
+
+  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
+
+  // build npm command
+  const run = [].concat(command).concat(commandArgs);
 
   return run;
 };

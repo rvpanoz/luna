@@ -3,6 +3,9 @@ import { createActionCreator } from 'commons/utils';
 const ActionCreator = createActionCreator('@@LUNA_APP/DATA');
 
 const addActionError = ActionCreator('ACTION_ERROR');
+const addNotificationInstallOption = ActionCreator(
+  'ADD_NOTIFICATION_INSTALL_OPTION'
+);
 const addFilter = ActionCreator('ADD_FILTER');
 const addSelected = ActionCreator('ADD_SELECTED');
 const addInstallOption = ActionCreator('ADD_INSTALL_OPTION');
@@ -23,10 +26,13 @@ const setPageRows = ActionCreator('SET_PAGE_ROWS');
 const installPackages = ActionCreator('INSTALL_PACKAGES');
 const updatePackages = ActionCreator('UPDATE_PACKAGES');
 
+const runAudit = ActionCreator('RUN_AUDIT');
+
 export {
   installPackages,
   updatePackages,
   addActionError,
+  addNotificationInstallOption,
   addFilter,
   addSelected,
   addInstallOption,
@@ -42,5 +48,6 @@ export {
   setOutdatedSuccess,
   setPage,
   setPageRows,
-  updateData
+  updateData,
+  runAudit
 };

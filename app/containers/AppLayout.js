@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { ipcRenderer } from 'electron';
+
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
@@ -11,7 +13,8 @@ import Header from 'components/layout/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
 import { Notifications } from 'components/pages/notifications';
-import { setSnackbar } from 'models/ui/actions';
+import { addActionError } from 'models/packages/actions';
+import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 
 import { drawerWidth } from 'styles/variables';
@@ -58,9 +61,27 @@ const AppLayout = ({ classes }) => {
     notifications,
     packages,
     packagesOutdated,
+    env,
     ...restProps
   } = useMappedState(mapState);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    ipcRenderer.on('action-close', (event, error) => {
+      if (error && error.length) {
+        dispatch(addActionError({ error }));
+      }
+
+      dispatch(
+        toggleLoader({
+          loading: false,
+          message: null
+        })
+      );
+    });
+
+    return () => ipcRenderer.removeAllListeners(['action-close']);
+  }, []);
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -75,6 +96,7 @@ const AppLayout = ({ classes }) => {
             directory={directory && shrinkDirectory(directory)}
             title="Packages"
             PaperProps={{ style: { width: drawerWidth } }}
+            userAgent={env && env.userAgent}
             {...restProps}
           />
         </nav>

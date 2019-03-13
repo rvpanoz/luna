@@ -1,7 +1,8 @@
-import { tap, map, takeWhile, concatMap, skipWhile } from 'rxjs/operators';
+import { map, takeWhile, concatMap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
+
 import {
   toggleLoader,
   clearCommands,
@@ -17,7 +18,8 @@ import {
   setPackagesSuccess,
   setOutdatedSuccess,
   updateData,
-  setPage
+  setPage,
+  runAudit
 } from './actions';
 
 const cleanNotifications = () => ({
@@ -82,11 +84,12 @@ const packagesStartEpic = action$ =>
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
     concatMap(() => [
       updateLoader({
-        loading: true
+        loading: true,
+        message: 'Loading packages..'
       }),
       cleanNotifications(),
-      cleanPackages(),
-      cleanCommands()
+      cleanCommands(),
+      cleanPackages()
     ])
   );
 
@@ -97,7 +100,8 @@ const installPackagesEpic = action$ =>
       ipcRenderer.send('ipc-event', payload);
 
       return updateLoader({
-        loading: true
+        loading: true,
+        message: 'Loading packages..'
       });
     })
   );
@@ -109,7 +113,8 @@ const updatePackagesEpic = action$ =>
       ipcRenderer.send('ipc-event', payload);
 
       return updateLoader({
-        loading: true
+        loading: true,
+        message: 'Loading packages..'
       });
     })
   );
@@ -117,8 +122,9 @@ const updatePackagesEpic = action$ =>
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
-    takeWhile(({ payload: { dependencies } }) =>
-      Boolean(dependencies && Array.isArray(dependencies))
+    takeWhile(
+      ({ payload: { dependencies } }) =>
+        Boolean(dependencies) && Array.isArray(dependencies)
     ),
     map(
       ({
@@ -138,10 +144,11 @@ const packagesSuccessEpic = (action$, state$) =>
             peerMissing,
             invalid,
             extraneous,
+            problems,
             missing
           } = dependency;
 
-          if (!peerMissing && !missing && !invalid && !extraneous) {
+          if (!(peerMissing && missing) && !invalid && !extraneous) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
             const enhancedDependency = {
               ...dependency,
@@ -150,6 +157,14 @@ const packagesSuccessEpic = (action$, state$) =>
             };
 
             deps.push(enhancedDependency);
+          } else {
+            deps.push({
+              name,
+              invalid,
+              extraneous,
+              problems,
+              isOutdated: false
+            });
           }
 
           return deps;
@@ -207,7 +222,17 @@ const packagesSuccessEpic = (action$, state$) =>
     )
   );
 
+const audit = action$ =>
+  action$.pipe(
+    ofType(runAudit.type),
+    map(({ payload: { channel, options } }) => {
+      ipcRenderer.send(channel, options);
+      return resumeRequest();
+    })
+  );
+
 export default combineEpics(
+  audit,
   packagesStartEpic,
   packagesSuccessEpic,
   installPackagesEpic,

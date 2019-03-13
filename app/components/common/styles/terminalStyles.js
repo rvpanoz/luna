@@ -58,7 +58,6 @@ const styles = theme => ({
     wordWrap: 'break-word',
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
-    overflowY: 'auto',
     '& > span': {
       width: '100%',
       padding: theme.spacing.unit

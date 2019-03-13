@@ -22,6 +22,7 @@ import {
   PackagesTab,
   ToolsTab
 } from 'components/pages/navigator/tabs';
+import { runAudit } from 'models/packages/actions';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
@@ -36,8 +37,8 @@ const Navigator = ({
   lastUpdatedAt,
   name,
   version,
-  description,
   loading,
+  userAgent,
   ...restProps
 }) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
@@ -50,6 +51,22 @@ const Navigator = ({
 
     return () => ipcRenderer.removeAllListeners('loaded-packages-close');
   }, [openedDirectories]);
+
+  const runNpmAuditHandler = () => {
+    const parameters = {
+      ipcEvent: 'ipc-event',
+      cmd: ['audit']
+    };
+
+    dispatch(
+      runAudit({
+        channel: 'ipc-event',
+        options: {
+          ...parameters
+        }
+      })
+    );
+  };
 
   const openPackage = useCallback(() => {
     remote.dialog.showOpenDialog(
@@ -114,14 +131,15 @@ const Navigator = ({
               <ProjectTab
                 items={[
                   {
-                    primaryText: mode === 'local' && name ? name : 'Global',
-                    secondaryText:
-                      mode === 'local' && description
-                        ? description
-                        : 'No description available'
+                    primaryText:
+                      mode === 'local' && name
+                        ? `${name} - v${version || '0.0.0'}`
+                        : 'Global',
+                    secondaryText: userAgent
                   },
                   {
-                    primaryText: mode === 'local' && directory ? 'Home' : null,
+                    primaryText:
+                      mode === 'local' && directory ? 'Home directory' : null,
                     secondaryText:
                       mode === 'local' && directory ? directory : null
                   }
@@ -156,11 +174,16 @@ const Navigator = ({
                 items={[
                   {
                     primaryText: 'npm audit',
-                    secondaryText: 'Run npm audit'
+                    secondaryText: 'Run npm audit',
+                    handler: runNpmAuditHandler
                   },
                   {
                     primaryText: 'npm doctor',
                     secondaryText: 'Run npm doctor'
+                  },
+                  {
+                    primaryText: 'npm prune',
+                    secondaryText: 'Remove extraneous packages'
                   },
                   {
                     primaryText: 'lock verify',
@@ -222,7 +245,8 @@ Navigator.propTypes = {
   totalnotifications: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   totalpackages: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   totaloutdated: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  lastUpdatedAt: PropTypes.string
+  lastUpdatedAt: PropTypes.string,
+  userAgent: PropTypes.string
 };
 
 export default withStyles(styles)(Navigator);

@@ -1,4 +1,4 @@
-import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
+import { darken } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({
@@ -17,6 +17,14 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'flex-start'
+  },
+  flexRow: {
+    ...flexContainer,
+    justifyContent: 'flex-start',
+    alignItems: 'center'
+  },
+  flexItem: {
+    padding: theme.spacing.unit
   },
   toolbar: {
     width: '100%'
@@ -61,7 +69,6 @@ const styles = theme => ({
       overflowWrap: 'break-word'
     }
   },
-
   outdated: {
     color: theme.palette.secondary.dark
   },
@@ -76,6 +83,9 @@ const styles = theme => ({
   },
   hidden: {
     display: 'none'
+  },
+  extraneous: {
+    color: darken(theme.palette.secondary.light, 0.1)
   },
   chip: {
     margin: theme.spacing.unit

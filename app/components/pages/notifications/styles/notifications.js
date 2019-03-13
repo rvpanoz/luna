@@ -6,6 +6,9 @@ const styles = theme => ({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0
   },
+  list: {
+    width: '100%'
+  },
   flexContainer: {
     ...flexContainer,
     alignItems: 'center',
@@ -50,16 +53,12 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto'
   },
-  tableCell: {
+  ttableCell: {
     ...defaultFont,
-    fontSize: 12,
-    lineHeight: '1.2em',
     textAlign: 'center',
-    '& span': {
-      display: 'inline-block',
+    '& p': {
       overflowWrap: 'break-word'
-    },
-    height: 60
+    }
   },
   outdated: {
     color: theme.palette.secondary.dark
