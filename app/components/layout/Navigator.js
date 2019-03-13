@@ -37,8 +37,8 @@ const Navigator = ({
   lastUpdatedAt,
   name,
   version,
-  description,
   loading,
+  userAgent,
   ...restProps
 }) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
@@ -131,14 +131,15 @@ const Navigator = ({
               <ProjectTab
                 items={[
                   {
-                    primaryText: mode === 'local' && name ? name : 'Global',
-                    secondaryText:
-                      mode === 'local' && description
-                        ? description
-                        : 'No description available'
+                    primaryText:
+                      mode === 'local' && name
+                        ? `${name} - v${version || '0.0.0'}`
+                        : 'Global',
+                    secondaryText: userAgent
                   },
                   {
-                    primaryText: mode === 'local' && directory ? 'Home' : null,
+                    primaryText:
+                      mode === 'local' && directory ? 'Home directory' : null,
                     secondaryText:
                       mode === 'local' && directory ? directory : null
                   }

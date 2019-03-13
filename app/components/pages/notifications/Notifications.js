@@ -55,7 +55,6 @@ const Notifications = ({ classes }) => {
   const [isExtraneous, setExtraneous] = useState(false);
   const [optionsOpen, toggleOptions] = useState(false);
   const [installOptions, setInstallOptions] = useState([]);
-
   const { mode, directory, notifications } = useMappedState(mapState);
 
   const dispatch = useDispatch();
@@ -91,7 +90,7 @@ const Notifications = ({ classes }) => {
     setSelected([]);
   };
 
-  const handleInstall = () => {
+  const handleInstall = useCallback(() => {
     if (mode === 'local') {
       return toggleOptions(true);
     }
@@ -105,14 +104,11 @@ const Notifications = ({ classes }) => {
       directory
     };
 
-    console.log(mode, parameters);
-    // dispatch(installPackages(parameters));
-  };
+    dispatch(installPackages(parameters));
+  }, [mode]);
 
   const handleInstallLocal = useCallback(() => {
     const packagesWithOptions = setupInstallOptions(selected, installOptions);
-    console.log(packagesWithOptions);
-
     const installations = Object.values(packagesWithOptions);
     const groups = Object.keys(packagesWithOptions);
 
@@ -138,8 +134,8 @@ const Notifications = ({ classes }) => {
       directory
     };
 
-    console.log(mode, parameters);
-    //dispatch(installPackages(parameters));
+    dispatch(installPackages(parameters));
+    toggleOptions(false);
   }, [selected, installOptions]);
 
   const handleClick = useCallback(
@@ -157,10 +153,11 @@ const Notifications = ({ classes }) => {
 
       const isOldVersionSelected = selected.find(
         selectedItem =>
-          selectedItem.name === name && semver.lt(selectedItem.version, version)
+          selectedItem.name === name &&
+          semver.lte(selectedItem.version, version)
       );
 
-      if (isNewerVersionSelected) {
+      if (isNewerVersionSelected && isNewerVersionSelected.idx !== idx) {
         dispatch(
           setSnackbar({
             open: true,
@@ -172,12 +169,12 @@ const Notifications = ({ classes }) => {
         return;
       }
 
-      if (isOldVersionSelected) {
+      if (isOldVersionSelected && isOldVersionSelected.idx !== idx) {
         dispatch(
           setSnackbar({
             open: true,
             type: 'warning',
-            message: WARNING_MESSAGES.oldSelected
+            message: WARNING_MESSAGES.oldorEqualSelected
           })
         );
 
@@ -211,11 +208,13 @@ const Notifications = ({ classes }) => {
             <Typography variant="subtitle1">No problems found!</Typography>
           ) : (
             <Paper className={classes.root}>
-              <NotificationsToolbar
-                total={notifications.length}
-                numSelected={selected.length || 0}
-                handleInstall={handleInstall}
-              />
+              {!isExtraneous && (
+                <NotificationsToolbar
+                  total={notifications.length}
+                  numSelected={selected.length || 0}
+                  handleInstall={handleInstall}
+                />
+              )}
               <div className={classes.tableWrapper}>
                 <Table
                   className={classes.table}
@@ -225,10 +224,7 @@ const Notifications = ({ classes }) => {
                     <TableBody>
                       <TableRow tabIndex={-1} key="extraneous-packages">
                         <TableCell className={classes.tableCell}>
-                          <Typography>
-                            Found extraneous packages. Run <i>npm prune</i> in
-                            the Tools tab to fix them.
-                          </Typography>
+                          <Typography>{INFO_MESSAGES.extraneous}</Typography>
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -303,7 +299,8 @@ const Notifications = ({ classes }) => {
           <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
           <div className={classes.flexContainer} style={{ minWidth: 400 }}>
             <List dense className={classes.list}>
-              {selected.map(pkg => {
+              {selected.map((pkg, idx) => {
+                const { name } = pkg;
                 let selectedValue = 'save-prod';
 
                 const itemOptionsByName = installOptions.find(
@@ -318,8 +315,8 @@ const Notifications = ({ classes }) => {
                 }
 
                 return (
-                  <ListItem key={pkg.name}>
-                    <ListItemText primary={pkg.name} />
+                  <ListItem key={`${name}-${idx}`}>
+                    <ListItemText primary={name} />
                     <ListItemSecondaryAction>
                       <ControlTypes
                         selectedValue={selectedValue}

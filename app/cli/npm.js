@@ -12,8 +12,7 @@
  */
 exports.install = (options, idx) => {
   const command = ['install'];
-  const { mode, version = null, pkgOptions, multiple, packages } =
-    options || {};
+  const { mode, version, pkgOptions, multiple, packages } = options || {};
   const defaults = [];
 
   if (!packages && !multiple) {

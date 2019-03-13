@@ -61,6 +61,7 @@ const AppLayout = ({ classes }) => {
     notifications,
     packages,
     packagesOutdated,
+    env,
     ...restProps
   } = useMappedState(mapState);
   const dispatch = useDispatch();
@@ -69,31 +70,12 @@ const AppLayout = ({ classes }) => {
     ipcRenderer.on('action-close', (event, error, data) => {
       if (error && error.length) {
         dispatch(addActionError({ error }));
-        dispatch(
-          setSnackbar({
-            open: true,
-            type: 'error',
-            message: error
-          })
-        );
       }
 
       dispatch(
         toggleLoader({
           loading: false,
           message: null
-        })
-      );
-
-      dispatch(
-        setPackagesStart({
-          channel: 'ipc-event',
-          options: {
-            ipcEvent: 'get-packages',
-            cmd: ['outdated', 'list'],
-            mode,
-            directory
-          }
         })
       );
     });
@@ -114,6 +96,7 @@ const AppLayout = ({ classes }) => {
             directory={directory && shrinkDirectory(directory)}
             title="Packages"
             PaperProps={{ style: { width: drawerWidth } }}
+            userAgent={env && env.userAgent}
             {...restProps}
           />
         </nav>
