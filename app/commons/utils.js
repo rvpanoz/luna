@@ -14,8 +14,8 @@ export const createActionCreator = namespace => actionType => {
     type,
     payload
   });
-  actionCreator.type = type;
 
+  actionCreator.type = type;
   Object.freeze(actionCreator);
 
   return actionCreator;
@@ -302,8 +302,8 @@ export const setupInstallOptions = (selected, options) => {
     selected &&
     selected.reduce((acc, pkg) => {
       const flag = options.find(option => option.name === pkg.name);
-      const { name, version } = pkg;
-      const packageName = `${name}@${version}`;
+      const { name } = pkg;
+      const packageName = `${name}@latest`;
 
       if (!flag) {
         dependencies.push(packageName);

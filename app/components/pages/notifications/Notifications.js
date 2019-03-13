@@ -99,13 +99,13 @@ const Notifications = ({ classes }) => {
       ipcEvent: 'install',
       cmd: ['install'],
       multiple: true,
-      packages: selected,
+      packages: selected.map(selectedPackage => selectedPackage.name),
       mode,
       directory
     };
 
     dispatch(installPackages(parameters));
-  }, [mode]);
+  }, [mode, selected]);
 
   const handleInstallLocal = useCallback(() => {
     const packagesWithOptions = setupInstallOptions(selected, installOptions);
@@ -319,6 +319,7 @@ const Notifications = ({ classes }) => {
                     <ListItemText primary={name} />
                     <ListItemSecondaryAction>
                       <ControlTypes
+                        single={true}
                         selectedValue={selectedValue}
                         packageName={pkg.name}
                         onSelect={payload => {

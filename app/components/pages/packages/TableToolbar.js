@@ -223,7 +223,7 @@ const TableListToolbar = ({
           <IconButton
             color="primary"
             aria-label="update selected"
-            onClick={() => handleAction('update')}
+            onClick={() => handleAction('update', mode)}
           >
             <UpdateIcon />
           </IconButton>
@@ -234,7 +234,7 @@ const TableListToolbar = ({
           <IconButton
             color="secondary"
             aria-label="uninstall selected"
-            onClick={() => handleAction('uninstall')}
+            onClick={() => handleAction('uninstall', mode)}
           >
             <DeleteIcon />
           </IconButton>
