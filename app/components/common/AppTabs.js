@@ -18,7 +18,8 @@ const TabContainer = ({ children, loading }) => (
 );
 
 TabContainer.propTypes = {
-  children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired,
+  loading: PropTypes.bool
 };
 
 const AppTabs = ({ classes, children }) => {
@@ -29,7 +30,7 @@ const AppTabs = ({ classes, children }) => {
       <AppBar position="static" color="default">
         <Tabs
           value={value}
-          onChange={(e, value) => setValue(value)}
+          onChange={(e, tabValue) => setValue(tabValue)}
           indicatorColor="primary"
           textColor="secondary"
         >

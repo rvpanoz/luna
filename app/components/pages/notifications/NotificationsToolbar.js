@@ -73,7 +73,7 @@ const NotificationsToolbar = ({
 );
 
 NotificationsToolbar.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   numSelected: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
   handleInstall: PropTypes.func.isRequired

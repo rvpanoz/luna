@@ -1,8 +1,7 @@
-import { tap, map, takeWhile, concatMap, skipWhile } from 'rxjs/operators';
+import { map, takeWhile, concatMap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
-import { runAudit } from 'models/packages/actions';
 
 import {
   toggleLoader,
@@ -19,7 +18,8 @@ import {
   setPackagesSuccess,
   setOutdatedSuccess,
   updateData,
-  setPage
+  setPage,
+  runAudit
 } from './actions';
 
 const cleanNotifications = () => ({
@@ -225,7 +225,7 @@ const packagesSuccessEpic = (action$, state$) =>
 const audit = action$ =>
   action$.pipe(
     ofType(runAudit.type),
-    map(({ payload: { channel, options, paused } }) => {
+    map(({ payload: { channel, options } }) => {
       ipcRenderer.send(channel, options);
       return resumeRequest();
     })

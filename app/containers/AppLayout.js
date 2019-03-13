@@ -13,7 +13,7 @@ import Header from 'components/layout/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
 import { Notifications } from 'components/pages/notifications';
-import { addActionError, setPackagesStart } from 'models/packages/actions';
+import { addActionError } from 'models/packages/actions';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 
@@ -67,7 +67,7 @@ const AppLayout = ({ classes }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on('action-close', (event, error, data) => {
+    ipcRenderer.on('action-close', (event, error) => {
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }

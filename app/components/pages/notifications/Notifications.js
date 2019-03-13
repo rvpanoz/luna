@@ -357,7 +357,7 @@ const Notifications = ({ classes }) => {
 };
 
 Notifications.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   notifications: PropTypes.arrayOf(PropTypes.object)
 };
 

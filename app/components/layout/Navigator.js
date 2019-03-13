@@ -245,7 +245,8 @@ Navigator.propTypes = {
   totalnotifications: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   totalpackages: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   totaloutdated: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  lastUpdatedAt: PropTypes.string
+  lastUpdatedAt: PropTypes.string,
+  userAgent: PropTypes.string
 };
 
 export default withStyles(styles)(Navigator);

@@ -1,4 +1,4 @@
-import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
+import { darken } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({

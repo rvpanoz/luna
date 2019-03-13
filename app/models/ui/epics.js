@@ -1,5 +1,5 @@
 import { pipe, from } from 'rxjs';
-import { map, mergeMap, filter, tap, takeWhile } from 'rxjs/operators';
+import { map, mergeMap, takeWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { ERROR_TYPES } from 'constants/AppConstants';

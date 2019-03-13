@@ -18,7 +18,7 @@ import {
 import AppLayout from './AppLayout';
 import '../app.global.css';
 
-const mapState = ({ common: { uiExceptionMessage, enableNotifications } }) => ({
+const mapState = ({ common: { uiExceptionMessage } }) => ({
   uiExceptionMessage
 });
 

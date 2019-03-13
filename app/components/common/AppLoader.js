@@ -15,7 +15,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Typography } from '@material-ui/core';
 
-const styles = theme => ({
+const styles = () => ({
   loader: {
     display: 'flex',
     flexDirection: 'column',

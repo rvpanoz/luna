@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
+import { withStyles } from '@material-ui/core/styles';
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -16,11 +17,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 
-import Settings from './Settings';
 import SearchBox from 'components/common/SearchBox';
 import { setActivePage } from 'models/ui/actions';
 
-import { withStyles } from '@material-ui/core/styles';
+import Settings from './Settings';
 import styles from './styles/appHeader';
 
 const mapState = ({

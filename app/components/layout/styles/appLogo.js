@@ -1,4 +1,4 @@
-import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   main_logo: {

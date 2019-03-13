@@ -4,15 +4,7 @@ import { ipcRenderer } from 'electron';
 import React, { useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
-import {
-  arrayOf,
-  bool,
-  objectOf,
-  object,
-  string,
-  func,
-  oneOfType
-} from 'prop-types';
+import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 
 import ErrorIcon from '@material-ui/icons/Error';
 
@@ -37,8 +29,7 @@ const PackageItem = ({
   mode,
   directory,
   fromSearch,
-  extraneous,
-  problems
+  extraneous
 }) => {
   const rowRef = useRef();
 
@@ -130,7 +121,6 @@ const PackageItem = ({
 PackageItem.propTypes = {
   classes: objectOf(string).isRequired,
   latest: oneOfType([string, object]),
-  problems: arrayOf(string),
   name: string.isRequired,
   addSelected: func.isRequired,
   isSelected: bool.isRequired,

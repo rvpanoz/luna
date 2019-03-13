@@ -1,6 +1,5 @@
 /**
- *
- * Npm module for npm cli commands
+ * npm module for npm cli commands
  */
 
 /* eslint-disable prefer-promise-reject-errors */
@@ -135,7 +134,7 @@ exports.view = options => {
 /** npm tools */
 exports.audit = options => {
   const command = ['audit'];
-  const { mode, name, version } = options || {};
+  const { mode } = options || {};
   const defaults = ['--parseable', '--json'];
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
@@ -149,7 +148,8 @@ exports.audit = options => {
 // https://docs.npmjs.com/cli/doctor.html
 exports.doctor = options => {
   const command = ['doctor'];
-  const { mode, name, version } = options || {};
+  const { mode } = options || {};
+  const defaults = ['--parseable', '--json'];
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : [];
 
@@ -162,7 +162,7 @@ exports.doctor = options => {
 // @scope>/]<pkg>...] [--production] [--dry-run] [--json]
 exports.prune = options => {
   const command = ['prune'];
-  const { mode, name, version } = options || {};
+  const { mode } = options || {};
   const defaults = ['--parseable', '--json'];
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
@@ -171,8 +171,4 @@ exports.prune = options => {
   const run = [].concat(command).concat(commandArgs);
 
   return run;
-};
-
-exports.lockVerify = options => {
-  // TODO: load lockVerify package
 };

@@ -8,7 +8,6 @@ import {
   addFilter,
   addSelected,
   addInstallOption,
-  addNotificationInstallOption,
   clearSelected,
   clearFilters,
   clearPackages,

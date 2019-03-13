@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import anime from 'animejs';
 import cn from 'classnames';
@@ -108,6 +109,10 @@ const AppLogo = ({ classes }) => {
       </div>
     </div>
   );
+};
+
+AppLogo.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
 export default withStyles(styles)(AppLogo);
