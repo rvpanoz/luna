@@ -392,11 +392,7 @@ const TableListToolbar = ({
           <Button onClick={() => toggleOptions(false)} color="secondary">
             Cancel
           </Button>
-          <Button
-            onClick={() => handleAction('install')}
-            color="primary"
-            autoFocus
-          >
+          <Button onClick={() => handleAction()} color="primary" autoFocus>
             Install
           </Button>
         </DialogActions>

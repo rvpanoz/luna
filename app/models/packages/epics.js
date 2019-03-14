@@ -101,7 +101,7 @@ const installPackagesEpic = action$ =>
 
       return updateLoader({
         loading: true,
-        message: 'Loading packages..'
+        message: 'Installing packages..'
       });
     })
   );
@@ -114,7 +114,7 @@ const updatePackagesEpic = action$ =>
 
       return updateLoader({
         loading: true,
-        message: 'Loading packages..'
+        message: 'Updating packages..'
       });
     })
   );

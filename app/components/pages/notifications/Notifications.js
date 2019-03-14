@@ -307,7 +307,6 @@ const Notifications = ({ classes }) => {
                     <ListItemText primary={name} />
                     <ListItemSecondaryAction>
                       <ControlTypes
-                        devOnly
                         packageName={name}
                         onSelect={payload => {
                           const { name, options } = payload;
