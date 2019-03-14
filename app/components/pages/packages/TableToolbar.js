@@ -78,7 +78,7 @@ const TableListToolbar = ({
   const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
 
   const handleAction = action => {
-    if (mode === 'local' && !action) {
+    if (mode === 'local' && action) {
       return toggleOptions(true);
     }
 

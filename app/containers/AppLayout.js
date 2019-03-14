@@ -13,7 +13,7 @@ import Header from 'components/layout/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
 import { Notifications } from 'components/pages/notifications';
-import { addActionError } from 'models/packages/actions';
+import { addActionError, setPackagesStart } from 'models/packages/actions';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 
@@ -68,14 +68,25 @@ const AppLayout = ({ classes }) => {
 
   useEffect(() => {
     ipcRenderer.on('action-close', (event, error) => {
+      console.log(error);
+
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
 
+      const parameters = {
+        ipcEvent: 'get-packages',
+        cmd: ['outdated', 'list'],
+        mode,
+        directory
+      };
+
       dispatch(
-        toggleLoader({
-          loading: false,
-          message: null
+        setPackagesStart({
+          channel: 'ipc-event',
+          options: {
+            ...parameters
+          }
         })
       );
     });
