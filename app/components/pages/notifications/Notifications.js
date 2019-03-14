@@ -301,27 +301,14 @@ const Notifications = ({ classes }) => {
             <List dense className={classes.list}>
               {selected.map((pkg, idx) => {
                 const { name } = pkg;
-                let selectedValue = 'save-prod';
-
-                const itemOptionsByName = installOptions.find(
-                  installOption => installOption.name === pkg.name
-                );
-
-                if (
-                  itemOptionsByName &&
-                  typeof itemOptionsByName === 'object'
-                ) {
-                  selectedValue = itemOptionsByName.options[0];
-                }
 
                 return (
                   <ListItem key={`${name}-${idx}`}>
                     <ListItemText primary={name} />
                     <ListItemSecondaryAction>
                       <ControlTypes
-                        single={true}
-                        selectedValue={selectedValue}
-                        packageName={pkg.name}
+                        devOnly
+                        packageName={name}
                         onSelect={payload => {
                           const { name, options } = payload;
                           const newInstallOptions = [
