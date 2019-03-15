@@ -21,7 +21,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import InputBase from '@material-ui/core/InputBase';
 
+import SearchIcon from '@material-ui/icons/Search';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import UpdateIcon from '@material-ui/icons/Update';
@@ -205,8 +207,8 @@ const TableListToolbar = ({
     );
   }, []);
 
-  const renderAction = action =>
-    switchcase({
+  const renderAction = action => {
+    const actionEl = switchcase({
       install: () => (
         <Tooltip title="Install selected">
           <IconButton
@@ -255,6 +257,9 @@ const TableListToolbar = ({
         </Tooltip>
       )
     })('none')(action);
+
+    return actionEl;
+  };
 
   const renderToolbarActions = useCallback(
     () => (
@@ -311,6 +316,12 @@ const TableListToolbar = ({
     []
   );
 
+  const hasUpdatedPackages =
+    selected.length &&
+    selected.some(
+      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+    );
+
   return (
     <section className={classes.root}>
       <Toolbar
@@ -326,18 +337,20 @@ const TableListToolbar = ({
               : `${selected.length} selected`}
           </Typography>
         </div>
+        <div className={classes.search}>
+          <InputBase
+            placeholder="search packages…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput
+            }}
+          />
+        </div>
         <div className={classes.spacer} />
         <div className={cn(classes.actions)}>
           {selected.length === 0 && renderToolbarActions()}
           {fromSearch && selected.length ? renderAction('install') : null}
-          {!fromSearch &&
-          selected.length &&
-          selected.some(
-            packageSelected =>
-              packagesOutdatedNames.indexOf(packageSelected) !== -1
-          )
-            ? renderAction('update')
-            : null}
+          {!fromSearch && hasUpdatedPackages ? renderAction('update') : null}
           {!fromSearch && selected.length ? renderAction('uninstall') : null}
         </div>
       </Toolbar>
