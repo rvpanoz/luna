@@ -31,15 +31,21 @@ const createReducer = (packagesState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
-  [addActionError.type]: (state, { payload: { actionName, actionError } }) =>
-    merge(state, {
+  [addActionError.type]: (state, { payload: { error } }) => {
+    const {
+      operations: { commandsErrors }
+    } = state;
+
+    const newErrors = prepend(error, commandsErrors);
+
+    return merge(state, {
       ...state,
       operations: {
         ...state.operations,
-        actionName,
-        actionError
+        commandsErrors: newErrors
       }
-    }),
+    });
+  },
   [addFilter.type]: (state, { payload: { filter } }) => {
     const {
       filtering: { filters }

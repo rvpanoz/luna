@@ -34,10 +34,7 @@ export default {
     operations: {
       selected: [],
       packagesInstallOptions: [],
-      action: {
-        name: null,
-        error: null
-      }
+      commandsErrors: []
     },
     project: {
       name: null,

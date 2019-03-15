@@ -36,7 +36,11 @@ import PublicIcon from '@material-ui/icons/BallotOutlined';
 import { switchcase } from 'commons/utils';
 import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
-import { updatePackages, installPackages } from 'models/packages/actions';
+import {
+  updatePackages,
+  installPackages,
+  setPackagesStart
+} from 'models/packages/actions';
 import TableFilters from './TableFilters';
 import Flags from './Flags';
 import styles from './styles/tableToolbar';
@@ -60,6 +64,16 @@ const TableListToolbar = ({
   const [optionsOpen, toggleOptions] = useState(false);
 
   const dispatch = useDispatch();
+
+  const getGlobalPackages = () =>
+    dispatch(
+      setPackagesStart({
+        ipcEvent: 'get-packages',
+        cmd: ['outdated', 'list'],
+        mode: 'global',
+        directory: null
+      })
+    );
 
   const switchMode = () => {
     dispatch(setMode({ mode, directory }));
@@ -289,7 +303,7 @@ const TableListToolbar = ({
               disableRipple
               disabled={mode === 'global'}
               aria-label="show_globals"
-              onClick={() => switchMode('global', null)}
+              onClick={getGlobalPackages}
             >
               <PublicIcon />
             </IconButton>
