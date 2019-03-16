@@ -211,6 +211,7 @@ const audit = action$ =>
     ofType(runAudit.type),
     map(({ payload: { channel, options } }) => {
       ipcRenderer.send(channel, options);
+
       return resumeRequest();
     })
   );

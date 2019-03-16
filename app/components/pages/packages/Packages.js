@@ -158,7 +158,7 @@ const Packages = ({ classes }) => {
     sortDir === 'asc'
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
-
+  console.log(loading);
   return (
     <AppLoader loading={loading} message={message}>
       <Grid container>

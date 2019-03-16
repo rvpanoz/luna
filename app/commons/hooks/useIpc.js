@@ -16,10 +16,7 @@ const useIpc = (channel, options, inputs = []) => {
   const [dependenciesSet, setDependencies] = useState({
     data: [],
     projectName: null,
-    projectVersion: null,
-    projectDescription: null,
-    projectLicense: null,
-    projectAuthor: null
+    projectVersion: null
   });
 
   const [outdatedSet, setOutdated] = useState({

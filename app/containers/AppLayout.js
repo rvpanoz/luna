@@ -68,27 +68,9 @@ const AppLayout = ({ classes }) => {
 
   useEffect(() => {
     ipcRenderer.on('action-close', (event, error) => {
-      console.log(error);
-
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
-
-      // const parameters = {
-      //   ipcEvent: 'get-packages',
-      //   cmd: ['outdated', 'list'],
-      //   mode,
-      //   directory
-      // };
-
-      // dispatch(
-      //   setPackagesStart({
-      //     channel: 'ipc-event',
-      //     options: {
-      //       ...parameters
-      //     }
-      //   })
-      // );
     });
 
     return () => ipcRenderer.removeAllListeners(['action-close']);

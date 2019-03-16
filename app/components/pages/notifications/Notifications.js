@@ -75,6 +75,7 @@ const Notifications = ({ classes }) => {
       notifications &&
       notifications.some(notification => {
         const { required, body } = notification;
+
         return body === 'extraneous' || required === 'ENOENT';
       });
 
@@ -86,7 +87,7 @@ const Notifications = ({ classes }) => {
       const allSelected = notifications.map((n, idx) => {
         const name = parseRequired(n.required, 0);
         const version = parseRequired(n.required, 1);
-        const { raw } = semver.coerce(version);
+        const { raw } = semver.coerce(version) || 'latest';
 
         return {
           idx,
@@ -326,7 +327,6 @@ const Notifications = ({ classes }) => {
                       <ControlTypes
                         packageName={name}
                         onSelect={payload => {
-                          const { name, options } = payload;
                           const newInstallOptions = [
                             ...installOptions,
                             payload
@@ -363,12 +363,12 @@ const Notifications = ({ classes }) => {
           }}
           open={snackbarOpen}
           autoHideDuration={5000}
-          onClose={() => {}}
+          onClose={() => toggleSnackback(false)}
         >
           <SnackbarContent
             variant="error"
-            message="error_message"
-            onClose={() => {}}
+            message={commandsErrors[0]}
+            onClose={() => toggleSnackback(false)}
           />
         </Snackbar>
       )}
