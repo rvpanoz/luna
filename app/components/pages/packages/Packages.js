@@ -70,6 +70,8 @@ const mapState = ({
   sortBy
 });
 
+const IPC_EVENT = 'ipc-event';
+
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
@@ -93,15 +95,17 @@ const Packages = ({ classes }) => {
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
+  const parameters = {
+    ipcEvent: 'get-packages',
+    cmd: ['outdated', 'list'],
+    mode,
+    directory,
+    paused
+  };
+
   const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
-    'ipc-event',
-    {
-      ipcEvent: 'get-packages',
-      cmd: ['outdated', 'list'],
-      mode,
-      directory,
-      paused
-    },
+    IPC_EVENT,
+    parameters,
     [counter, paused, mode, directory]
   );
 
@@ -130,7 +134,7 @@ const Packages = ({ classes }) => {
         projectVersion
       })
     );
-  }, [dependenciesSet]);
+  }, [dependencies, outdated]);
 
   const scrollWrapper = useCallback(
     top => {
@@ -158,14 +162,14 @@ const Packages = ({ classes }) => {
     sortDir === 'asc'
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
-  console.log(loading);
+
   return (
     <AppLoader loading={loading} message={message}>
       <Grid container>
         <Grid item md={12} lg={6} xl={6}>
           {packagesData.length === 0 ? (
             <Typography variant="subtitle1">
-              There are not any packages in this project.
+              No dependencies found for this project.
             </Typography>
           ) : (
             <Paper className={classes.root}>

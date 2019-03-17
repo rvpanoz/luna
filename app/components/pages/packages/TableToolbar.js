@@ -65,17 +65,7 @@ const TableListToolbar = ({
 
   const dispatch = useDispatch();
 
-  const getGlobalPackages = () =>
-    dispatch(
-      setPackagesStart({
-        ipcEvent: 'get-packages',
-        cmd: ['outdated', 'list'],
-        mode: 'global',
-        directory: null
-      })
-    );
-
-  const switchMode = () => {
+  const switchMode = (mode, directory) => {
     dispatch(setMode({ mode, directory }));
 
     if (fromSearch) {
@@ -210,6 +200,7 @@ const TableListToolbar = ({
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
+
           return switchMode('local', scanDirectory);
         }
       }
@@ -303,7 +294,7 @@ const TableListToolbar = ({
               disableRipple
               disabled={mode === 'global'}
               aria-label="show_globals"
-              onClick={getGlobalPackages}
+              onClick={() => switchMode('global', null)}
             >
               <PublicIcon />
             </IconButton>
