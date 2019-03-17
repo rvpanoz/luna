@@ -98,7 +98,7 @@ const SearchBox = ({ classes, disabled }) => {
         </a>
         <InputBase
           disabled={disabled}
-          placeholder="Search for packages…"
+          placeholder="Search npm registry"
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput

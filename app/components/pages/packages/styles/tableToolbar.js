@@ -34,14 +34,6 @@ const styles = theme => ({
     flex: '0 0 auto',
     padding: theme.spacing.unit,
     color: theme.palette.text.secondary
-  },
-  inputRoot: {
-    minWidth: 200,
-    border: '1px solid #eee',
-    borderRadious: 5
-  },
-  inputInput: {
-    padding: theme.spacing.unit / 2
   }
 });
 

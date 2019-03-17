@@ -152,6 +152,20 @@ const Packages = ({ classes }) => {
   // setup packages
   const [packagesData] = useFilters(packages, filters, counter);
 
+  const searchByName = useCallback(
+    element => {
+      const {
+        current: { value }
+      } = element;
+
+      const filteredPackages = packagesData.filter(pkg => pkg.name === value);
+      console.log(filteredPackages);
+
+      return filteredPackages;
+    },
+    [packagesData]
+  );
+
   // pagination
   const dataSlices =
     packagesData &&
@@ -185,6 +199,7 @@ const Packages = ({ classes }) => {
                   fromSearch={fromSearch}
                   scrollWrapper={scrollWrapper}
                   reload={() => setCounter(counter + 1)}
+                  searchByName={searchByName}
                 />
               </div>
               <div className={classes.tableWrapper} ref={wrapperRef}>

@@ -49,7 +49,7 @@ const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
               </MenuItem>
             ))
           ) : (
-            <MenuItem key={`group-save-dev`} value="save-dev">
+            <MenuItem key="group-save-dev" value="save-dev">
               save-dev
             </MenuItem>
           )}

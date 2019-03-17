@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 
 import { withStyles } from '@material-ui/core/styles';
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import cn from 'classnames';
@@ -13,6 +13,9 @@ import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
+
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
 
 import { APP_MODES } from 'constants/AppConstants';
 import AppButton from 'components/units/Buttons/AppButton';
@@ -28,13 +31,33 @@ const mapState = ({
   filters
 });
 
-const TableFilters = ({ classes, mode, close }) => {
-  const dispatch = useDispatch();
+const TableFilters = ({ classes, mode, close, searchByName }) => {
+  const searchInputEl = useRef(null);
   const { filters } = useMappedState(mapState);
+  const dispatch = useDispatch();
 
   return (
     <div className={classes.root}>
       <div className={classes.filterItems}>
+        <div className={classes.search}>
+          <a
+            href="#"
+            className={classes.searchIcon}
+            onClick={() => searchByName(searchInputEl)}
+          >
+            <SearchIcon />
+          </a>
+          <InputBase
+            placeholder="Search packages…"
+            classes={{
+              root: classes.inputRoot,
+              input: classes.inputInput
+            }}
+            inputProps={{
+              ref: searchInputEl
+            }}
+          />
+        </div>
         <FormControl component="fieldset">
           <FormLabel
             component="legend"
@@ -137,7 +160,8 @@ const TableFilters = ({ classes, mode, close }) => {
 TableFilters.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string,
-  close: PropTypes.func
+  close: PropTypes.func,
+  searchByName: PropTypes.func
 };
 
 export default withStyles(styles)(TableFilters);

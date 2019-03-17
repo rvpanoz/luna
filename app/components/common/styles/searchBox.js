@@ -32,6 +32,7 @@ const styles = theme => ({
     lineHeight: '1em'
   },
   inputInput: {
+    color: '#fff',
     paddingTop: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
