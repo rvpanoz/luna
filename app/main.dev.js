@@ -1,19 +1,14 @@
 /* eslint-disable */
 
-/**
- * Applications main process
- */
-
 import ElectronStore from 'electron-store';
 import path from 'path';
 import fs from 'fs';
 import chalk from 'chalk';
 import { merge } from 'ramda';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
-import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 
-import { APP_MODES, APP_ACTIONS } from './constants/AppConstants';
+import { APP_ACTIONS } from './constants/AppConstants';
 import { switchcase } from './commons/utils';
 import MenuBuilder from './menu';
 import mk from './mk';
@@ -35,19 +30,11 @@ const {
   START_MINIMIZED = startMinimized
 } = process.env;
 
-// const APP_PATHS = {
-//   appData: app.getPath('appData'),
-//   userData: app.getPath('userData')
-// };
-// const debug = /--debug/.test(process.argv[2]);
-
-export default class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-}
+const debug = /--debug/.test(process.argv[2]);
+const APP_PATHS = {
+  appData: app.getPath('appData'),
+  userData: app.getPath('userData')
+};
 
 // store initialization
 const Store = new ElectronStore();
@@ -260,11 +247,11 @@ app.on('ready', async () => {
   });
 
   mainWindow.webContents.on('crashed', event => {
-    // console.log(event);
+    log.info(chalk.white.bgRed.bold('[CRASHED]'), event);
   });
 
   mainWindow.on('unresponsive', event => {
-    // console.log(event);
+    log.info(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
   });
 
   mainWindow.on('closed', () => {
@@ -273,8 +260,6 @@ app.on('ready', async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
-
-  new AppUpdater();
 });
 
 process.on('uncaughtException', error => {

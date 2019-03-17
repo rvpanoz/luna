@@ -99,10 +99,14 @@ const installPackagesEpic = action$ =>
     map(({ payload }) => {
       ipcRenderer.send('ipc-event', payload);
 
-      return updateLoader({
-        loading: true,
-        message: 'Loading packages..'
-      });
+      return {
+        type: 'ACTION_INSTALL'
+      };
+
+      // return updateLoader({
+      //   loading: true,
+      //   message: 'Installing packages..'
+      // });
     })
   );
 
@@ -112,10 +116,14 @@ const updatePackagesEpic = action$ =>
     map(({ payload }) => {
       ipcRenderer.send('ipc-event', payload);
 
-      return updateLoader({
-        loading: true,
-        message: 'Loading packages..'
-      });
+      return {
+        type: 'ACTION_UPDATE'
+      };
+
+      // return updateLoader({
+      //   loading: true,
+      //   message: 'Updating packages..'
+      // });
     })
   );
 
@@ -128,15 +136,7 @@ const packagesSuccessEpic = (action$, state$) =>
     ),
     map(
       ({
-        payload: {
-          dependencies,
-          outdated,
-          projectName,
-          projectVersion,
-          projectDescription,
-          projectLicense,
-          projectAuthor
-        }
+        payload: { dependencies, outdated, projectName, projectVersion }
       }) => {
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
           const {
@@ -174,52 +174,36 @@ const packagesSuccessEpic = (action$, state$) =>
           dependencies: withOutdated || dependencies,
           outdated,
           projectName,
-          projectVersion,
-          projectDescription,
-          projectLicense,
-          projectAuthor
+          projectVersion
         };
       }
     ),
-    concatMap(
-      ({
-        dependencies,
-        outdated,
-        projectName,
-        projectVersion,
-        projectDescription,
-        projectLicense,
-        projectAuthor
-      }) => {
-        const {
-          common: { page },
-          modules: {
-            metadata: { fromSearch, fromSort }
-          }
-        } = state$.value;
-
-        const actions = [updateLoader({ loading: false, message: null })];
-
-        if (page !== 0) {
-          actions.unshift(setPage({ page: 0 }));
+    concatMap(({ dependencies, outdated, projectName, projectVersion }) => {
+      const {
+        common: { page },
+        modules: {
+          metadata: { fromSearch, fromSort }
         }
+      } = state$.value;
 
-        return [
-          setPackages({
-            projectName,
-            projectVersion,
-            projectDescription,
-            projectLicense,
-            projectAuthor,
-            fromSearch,
-            fromSort,
-            dependencies
-          }),
-          setOutdated({ outdated }),
-          ...actions
-        ];
+      const actions = [updateLoader({ loading: false, message: null })];
+
+      if (page !== 0) {
+        actions.unshift(setPage({ page: 0 }));
       }
-    )
+
+      return [
+        setPackages({
+          projectName,
+          projectVersion,
+          fromSearch,
+          fromSort,
+          dependencies
+        }),
+        setOutdated({ outdated }),
+        ...actions
+      ];
+    })
   );
 
 const audit = action$ =>
@@ -227,6 +211,7 @@ const audit = action$ =>
     ofType(runAudit.type),
     map(({ payload: { channel, options } }) => {
       ipcRenderer.send(channel, options);
+
       return resumeRequest();
     })
   );

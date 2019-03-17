@@ -59,7 +59,9 @@ const App = () => {
   });
 
   return (
-    <div id="app">{!uiExceptionMessage ? <AppLayout app="Luna" /> : null}</div>
+    <div id="app">
+      {!uiExceptionMessage ? <AppLayout app="Luna" /> : uiExceptionMessage}
+    </div>
   );
 };
 

@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import semver from 'semver';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import { pluck, merge } from 'ramda';
+import { pluck } from 'ramda';
 
+import Snackbar from '@material-ui/core/Snackbar';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -26,6 +27,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
+import SnackbarContent from 'components/common/SnackbarContent';
 import ControlTypes from 'components/common/ControlTypes';
 import { setupInstallOptions } from 'commons/utils';
 import { installPackages } from 'models/packages/actions';
@@ -41,7 +43,13 @@ import NotificationsToolbar from './NotificationsToolbar';
 
 import styles from './styles/notifications';
 
-const mapState = ({ common: { mode, directory, notifications } }) => ({
+const mapState = ({
+  common: { mode, directory, notifications },
+  modules: {
+    operations: { commandsErrors }
+  }
+}) => ({
+  commandsErrors,
   mode,
   directory,
   notifications
@@ -54,8 +62,11 @@ const Notifications = ({ classes }) => {
   const [selected, setSelected] = useState([]);
   const [isExtraneous, setExtraneous] = useState(false);
   const [optionsOpen, toggleOptions] = useState(false);
+  const [snackbarOpen, toggleSnackback] = useState(false);
   const [installOptions, setInstallOptions] = useState([]);
-  const { mode, directory, notifications } = useMappedState(mapState);
+  const { mode, directory, notifications, commandsErrors } = useMappedState(
+    mapState
+  );
 
   const dispatch = useDispatch();
 
@@ -64,6 +75,7 @@ const Notifications = ({ classes }) => {
       notifications &&
       notifications.some(notification => {
         const { required, body } = notification;
+
         return body === 'extraneous' || required === 'ENOENT';
       });
 
@@ -75,7 +87,7 @@ const Notifications = ({ classes }) => {
       const allSelected = notifications.map((n, idx) => {
         const name = parseRequired(n.required, 0);
         const version = parseRequired(n.required, 1);
-        const { raw } = semver.coerce(version);
+        const { raw } = semver.coerce(version) || 'latest';
 
         return {
           idx,
@@ -200,6 +212,12 @@ const Notifications = ({ classes }) => {
     [selected]
   );
 
+  useEffect(() => {
+    if (commandsErrors && commandsErrors.length) {
+      toggleSnackback(true);
+    }
+  }, [commandsErrors]);
+
   return (
     <section className={classes.root}>
       <Grid container spacing={16}>
@@ -301,29 +319,14 @@ const Notifications = ({ classes }) => {
             <List dense className={classes.list}>
               {selected.map((pkg, idx) => {
                 const { name } = pkg;
-                let selectedValue = 'save-prod';
-
-                const itemOptionsByName = installOptions.find(
-                  installOption => installOption.name === pkg.name
-                );
-
-                if (
-                  itemOptionsByName &&
-                  typeof itemOptionsByName === 'object'
-                ) {
-                  selectedValue = itemOptionsByName.options[0];
-                }
 
                 return (
                   <ListItem key={`${name}-${idx}`}>
                     <ListItemText primary={name} />
                     <ListItemSecondaryAction>
                       <ControlTypes
-                        single={true}
-                        selectedValue={selectedValue}
-                        packageName={pkg.name}
+                        packageName={name}
                         onSelect={payload => {
-                          const { name, options } = payload;
                           const newInstallOptions = [
                             ...installOptions,
                             payload
@@ -352,6 +355,23 @@ const Notifications = ({ classes }) => {
           </Button>
         </DialogActions>
       </Dialog>
+      {snackbarOpen && (
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right'
+          }}
+          open={snackbarOpen}
+          autoHideDuration={5000}
+          onClose={() => toggleSnackback(false)}
+        >
+          <SnackbarContent
+            variant="error"
+            message={commandsErrors[0]}
+            onClose={() => toggleSnackback(false)}
+          />
+        </Snackbar>
+      )}
     </section>
   );
 };

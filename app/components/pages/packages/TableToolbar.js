@@ -30,12 +30,17 @@ import UpdateIcon from '@material-ui/icons/Update';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
+import ActionIcon from '@material-ui/icons/CallToAction';
 import PublicIcon from '@material-ui/icons/BallotOutlined';
 
 import { switchcase } from 'commons/utils';
 import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
-import { updatePackages, installPackages } from 'models/packages/actions';
+import {
+  updatePackages,
+  installPackages,
+  setPackagesStart
+} from 'models/packages/actions';
 import TableFilters from './TableFilters';
 import Flags from './Flags';
 import styles from './styles/tableToolbar';
@@ -60,30 +65,24 @@ const TableListToolbar = ({
 
   const dispatch = useDispatch();
 
-  const switchMode = useCallback(
-    (appMode, appDirectory) => {
-      dispatch(setMode({ mode: appMode, directory: appDirectory }));
+  const switchMode = (mode, directory) => {
+    dispatch(setMode({ mode, directory }));
 
-      if (fromSearch) {
-        reload();
-      }
-    },
-    [mode, directory]
-  );
+    if (fromSearch) {
+      reload();
+    }
+  };
 
-  const openFilters = useCallback(
-    (e, close) => {
-      setAnchorEl(close ? null : e.target);
-      toggleFilters(!filtersOn);
-      scrollWrapper(0);
-    },
-    [filtersOn]
-  );
+  const openFilters = (e, close) => {
+    setAnchorEl(close ? null : e.target);
+    toggleFilters(!filtersOn);
+    scrollWrapper(0);
+  };
 
   const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
 
   const handleAction = action => {
-    if (mode === 'local') {
+    if (mode === 'local' && action) {
       return toggleOptions(true);
     }
 
@@ -201,6 +200,7 @@ const TableListToolbar = ({
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
+
           return switchMode('local', scanDirectory);
         }
       }
@@ -214,7 +214,7 @@ const TableListToolbar = ({
           <IconButton
             color="primary"
             aria-label="install selected"
-            onClick={() => handleAction('install', mode)}
+            onClick={() => handleAction('install')}
           >
             <AddIcon />
           </IconButton>
@@ -225,7 +225,7 @@ const TableListToolbar = ({
           <IconButton
             color="primary"
             aria-label="update selected"
-            onClick={() => handleAction('update', mode)}
+            onClick={() => handleAction('update')}
           >
             <UpdateIcon />
           </IconButton>
@@ -236,10 +236,24 @@ const TableListToolbar = ({
           <IconButton
             color="secondary"
             aria-label="uninstall selected"
-            onClick={() => handleAction('uninstall', mode)}
+            onClick={() => handleAction('uninstall')}
           >
             <DeleteIcon />
           </IconButton>
+        </Tooltip>
+      ),
+      prune: () => (
+        <Tooltip title="Run npm prune to remove extraneous packages">
+          <div>
+            <IconButton
+              disableRipple
+              disabled={nodata || fromSearch}
+              aria-label="npm prune"
+              onClick={() => console.log('prune...')}
+            >
+              <ActionIcon />
+            </IconButton>
+          </div>
         </Tooltip>
       ),
       filters: () => (
@@ -268,7 +282,7 @@ const TableListToolbar = ({
           <IconButton
             disableRipple
             color="secondary"
-            aria-label="Open package.json"
+            aria-label="open_package"
             onClick={openPackage}
           >
             <LoadIcon />
@@ -279,7 +293,7 @@ const TableListToolbar = ({
             <IconButton
               disableRipple
               disabled={mode === 'global'}
-              aria-label="Show globals"
+              aria-label="show_globals"
               onClick={() => switchMode('global', null)}
             >
               <PublicIcon />
@@ -303,7 +317,7 @@ const TableListToolbar = ({
               <IconButton
                 disableRipple
                 disabled={nodata || fromSearch}
-                aria-label="Show filters"
+                aria-label="show_filters"
                 onClick={openFilters}
               >
                 <FilterListIcon />
@@ -383,11 +397,7 @@ const TableListToolbar = ({
           <Button onClick={() => toggleOptions(false)} color="secondary">
             Cancel
           </Button>
-          <Button
-            onClick={() => handleAction('install')}
-            color="primary"
-            autoFocus
-          >
+          <Button onClick={() => handleAction()} color="primary" autoFocus>
             Install
           </Button>
         </DialogActions>

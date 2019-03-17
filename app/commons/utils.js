@@ -303,29 +303,28 @@ export const setupInstallOptions = (selected, options) => {
     selected.reduce((acc, pkg) => {
       const flag = options.find(option => option.name === pkg.name);
       const { name } = pkg;
-      const packageName = `${name}@latest`;
 
       if (!flag) {
-        dependencies.push(packageName);
+        dependencies.push(name);
       } else {
         switch (flag.options[0]) {
           case 'save-dev':
-            devDependencies.push(packageName);
+            devDependencies.push(name);
             break;
           case 'save-optional':
-            optionalDependencies.push(packageName);
+            optionalDependencies.push(name);
             break;
           case 'save-bundle':
-            bundleDependencies.push(packageName);
+            bundleDependencies.push(name);
             break;
           case 'no-save':
-            noSave.push(packageName);
+            noSave.push(name);
             break;
           case 'save-peer':
-            peerDependencies.push(packageName);
+            peerDependencies.push(name);
             break;
           default:
-            dependencies.push(packageName);
+            dependencies.push(name);
             break;
         }
       }

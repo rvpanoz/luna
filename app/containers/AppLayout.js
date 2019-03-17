@@ -10,10 +10,10 @@ import theme from 'styles/theme';
 
 import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
-import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/pages/packages';
+import SnackbarContent from 'components/common/SnackbarContent';
 import { Notifications } from 'components/pages/notifications';
-import { addActionError } from 'models/packages/actions';
+import { addActionError, setPackagesStart } from 'models/packages/actions';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 
@@ -71,13 +71,6 @@ const AppLayout = ({ classes }) => {
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
-
-      dispatch(
-        toggleLoader({
-          loading: false,
-          message: null
-        })
-      );
     });
 
     return () => ipcRenderer.removeAllListeners(['action-close']);

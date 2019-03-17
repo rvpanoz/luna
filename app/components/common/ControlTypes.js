@@ -1,7 +1,7 @@
 /* eslint-disable compat/compat */
 /* eslint-disable react/require-default-props */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -14,15 +14,18 @@ import styles from './styles/controlTypes';
 
 const groups = Object.values(PACKAGE_GROUPS);
 
-const ControlTypes = ({
-  classes,
-  packageName,
-  onSelect,
-  selectedValue,
-  single
-}) => {
-  const [groupName, setGroup] = useState(selectedValue || 'save-prod');
-  const data = single ? ['save-dev'] : groups;
+const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
+  const [groupName, setGroup] = useState('save-prod');
+
+  useEffect(() => {
+    if (devOnly) {
+      setGroup('save-dev');
+      onSelect({
+        name: packageName,
+        options: [groupName]
+      });
+    }
+  }, []);
 
   return (
     <FormGroup row>
@@ -39,11 +42,17 @@ const ControlTypes = ({
             });
           }}
         >
-          {data.map(group => (
-            <MenuItem key={`group${group}`} value={group}>
-              {group}
+          {!devOnly || devOnly === false ? (
+            groups.map(group => (
+              <MenuItem key={`group${group}`} value={group}>
+                {group}
+              </MenuItem>
+            ))
+          ) : (
+            <MenuItem key={`group-save-dev`} value="save-dev">
+              save-dev
             </MenuItem>
-          ))}
+          )}
         </Select>
       </FormControl>
     </FormGroup>
@@ -51,15 +60,14 @@ const ControlTypes = ({
 };
 
 ControlTypes.defaultProps = {
-  single: false
+  devOnly: false
 };
 
 ControlTypes.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   packageName: PropTypes.string.isRequired,
   onSelect: PropTypes.func.isRequired,
-  selectedValue: PropTypes.string,
-  single: PropTypes.bool
+  devOnly: PropTypes.bool
 };
 
 export default withStyles(styles)(ControlTypes);

@@ -22,7 +22,7 @@ export const APP_MODES = {
 export const ERROR_TYPES = ['WARN', 'ERR'];
 
 export const APP_INFO = {
-  CONFIRMATION: 'Would you like to $action $name@version?',
+  CONFIRMATION: 'Are you sure?',
   NOT_AVAILABLE: 'N/A',
   NO_NOTIFICATIONS: 'No notifications',
   NO_WORKING_DIRECTORY: 'No working directory',
@@ -36,7 +36,6 @@ export const PACKAGE_GROUPS = {
   devDependencies: 'save-dev',
   optionalDependencies: 'save-optional',
   bundleDependencies: 'save-bundle',
-  peerDependencies: 'save-peer',
   noSave: 'no-save'
 };
 
