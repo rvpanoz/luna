@@ -92,6 +92,7 @@ const Packages = ({ classes }) => {
   } = useMappedState(mapState);
 
   const [counter, setCounter] = useState(0);
+  const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -126,6 +127,7 @@ const Packages = ({ classes }) => {
       });
     }
 
+    console.log(dependencies);
     dispatch(
       updateData({
         dependencies,
@@ -158,18 +160,22 @@ const Packages = ({ classes }) => {
         current: { value }
       } = element;
 
-      const filteredPackages = packagesData.filter(pkg => pkg.name === value);
-      console.log(filteredPackages);
+      const filteredPackages = packagesData.filter(
+        pkg => pkg.name && pkg.name.indexOf(value) > -1
+      );
 
-      return filteredPackages;
+      setFilteredByNamePackages(filteredPackages);
     },
     [packagesData]
   );
 
+  const data = filteredByNamePackages.length
+    ? filteredByNamePackages
+    : packagesData;
+
   // pagination
   const dataSlices =
-    packagesData &&
-    packagesData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   // sorting
   const sortedPackages =
@@ -197,9 +203,12 @@ const Packages = ({ classes }) => {
                   outdated={packagesOutdated}
                   packagesInstallOptions={packagesInstallOptions}
                   fromSearch={fromSearch}
+                  filters={filters}
                   scrollWrapper={scrollWrapper}
                   reload={() => setCounter(counter + 1)}
                   searchByName={searchByName}
+                  filteredByNamePackages={filteredByNamePackages}
+                  setFilteredByNamePackages={setFilteredByNamePackages}
                 />
               </div>
               <div className={classes.tableWrapper} ref={wrapperRef}>
@@ -235,7 +244,7 @@ const Packages = ({ classes }) => {
                             packagesInstallOptions
                           )
                             ? packagesInstallOptions.find(
-                                data => data.name === name
+                                installOption => installOption.name === name
                               )
                             : {};
 

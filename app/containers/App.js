@@ -8,12 +8,7 @@ import { useDispatch, useMappedState } from 'redux-react-hook';
 import { withErrorBoundary } from 'commons/hocs';
 import { WARNING_MESSAGES } from 'constants/AppConstants';
 
-import {
-  uiException,
-  setEnv,
-  npmCommand,
-  setSnackbar
-} from 'models/ui/actions';
+import { uiException, setEnv, setSnackbar } from 'models/ui/actions';
 
 import AppLayout from './AppLayout';
 import '../app.global.css';
@@ -29,10 +24,6 @@ const App = () => {
   useEffect(() => {
     ipcRenderer.on('uncaught-exception', (event, ...args) => {
       dispatch({ type: uiException.type, payload: { message: args[0] } });
-    });
-
-    ipcRenderer.on('ipcEvent-flow', (event, command) => {
-      dispatch({ type: npmCommand.type, payload: { command } });
     });
 
     ipcRenderer.on('yarn-warning-close', () => {

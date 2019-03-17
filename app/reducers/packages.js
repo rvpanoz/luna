@@ -142,8 +142,11 @@ const handlers = {
   },
   [clearFilters.type]: state =>
     merge(state, {
-      ...state.filtering,
-      filters: []
+      ...state,
+      filtering: {
+        filters: [],
+        page: 0
+      }
     }),
   [clearSelected.type]: state =>
     merge(state, {
@@ -158,10 +161,7 @@ const handlers = {
       ...state,
       project: {
         name: null,
-        version: null,
-        description: null,
-        license: null,
-        author: null
+        version: null
       },
       data: {
         packages: [],

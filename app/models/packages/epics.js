@@ -1,4 +1,4 @@
-import { map, takeWhile, concatMap } from 'rxjs/operators';
+import { tap, map, takeWhile, concatMap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
@@ -130,10 +130,14 @@ const updatePackagesEpic = action$ =>
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
-    takeWhile(
-      ({ payload: { dependencies } }) =>
-        Boolean(dependencies) && Array.isArray(dependencies)
-    ),
+    tap(console.log),
+    takeWhile(({ payload: { dependencies } }) => {
+      console.log(
+        dependencies,
+        Array.isArray(dependencies) && dependencies.length
+      );
+      return Array.isArray(dependencies) && dependencies.length;
+    }),
     map(
       ({
         payload: { dependencies, outdated, projectName, projectVersion }
@@ -206,6 +210,7 @@ const packagesSuccessEpic = (action$, state$) =>
     })
   );
 
+// TODO: implement
 const audit = action$ =>
   action$.pipe(
     ofType(runAudit.type),

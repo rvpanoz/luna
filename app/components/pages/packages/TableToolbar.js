@@ -22,6 +22,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
+import ClearIcon from '@material-ui/icons/Clear';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import UpdateIcon from '@material-ui/icons/Update';
@@ -34,7 +35,11 @@ import PublicIcon from '@material-ui/icons/BallotOutlined';
 import { switchcase } from 'commons/utils';
 import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
-import { updatePackages, installPackages } from 'models/packages/actions';
+import {
+  updatePackages,
+  installPackages,
+  clearFilters
+} from 'models/packages/actions';
 import TableFilters from './TableFilters';
 import Flags from './Flags';
 import styles from './styles/tableToolbar';
@@ -47,12 +52,15 @@ const TableListToolbar = ({
   manager,
   directory,
   fromSearch,
+  filters,
   reload,
   nodata,
   scrollWrapper,
   outdated,
   packagesInstallOptions,
-  searchByName
+  searchByName,
+  setFilteredByNamePackages,
+  filteredByNamePackages
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
@@ -78,6 +86,15 @@ const TableListToolbar = ({
 
   const handleAction = useCallback(
     action => {
+      if (action === 'clearFilters') {
+        if (filteredByNamePackages.length) {
+          setFilteredByNamePackages([]);
+        }
+
+        dispatch(clearFilters());
+        return;
+      }
+
       if (mode === 'local' && action === 'install') {
         return toggleOptions(true);
       }
@@ -208,6 +225,17 @@ const TableListToolbar = ({
   const renderAction = useCallback(
     action => {
       const actionEl = switchcase({
+        clearFilters: () => (
+          <Tooltip title="Clear filters">
+            <IconButton
+              color="primary"
+              aria-label="clear filters"
+              onClick={() => handleAction('clearFilters')}
+            >
+              <ClearIcon />
+            </IconButton>
+          </Tooltip>
+        ),
         install: () => (
           <Tooltip title="Install selected">
             <IconButton
@@ -360,6 +388,11 @@ const TableListToolbar = ({
           {fromSearch && selected.length ? renderAction('install') : null}
           {!fromSearch && hasUpdatedPackages ? renderAction('update') : null}
           {!fromSearch && selected.length ? renderAction('uninstall') : null}
+          {(filters && filters.length) || filteredByNamePackages.length
+            ? selected.length
+              ? null
+              : renderAction('clearFilters')
+            : null}
         </div>
       </Toolbar>
       <Popover
@@ -413,10 +446,13 @@ TableListToolbar.propTypes = {
   mode: PropTypes.string,
   manager: PropTypes.string,
   directory: PropTypes.string,
+  filters: PropTypes.arrayOf(PropTypes.string),
   fromSearch: PropTypes.bool,
   searchByName: PropTypes.func,
   scrollWrapper: PropTypes.func,
   outdated: PropTypes.arrayOf(PropTypes.object),
+  filteredByNamePackages: PropTypes.arrayOf(PropTypes.string),
+  setFilteredByNamePackages: PropTypes.func,
   packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
