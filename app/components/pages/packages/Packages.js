@@ -127,7 +127,6 @@ const Packages = ({ classes }) => {
       });
     }
 
-    console.log(dependencies);
     dispatch(
       updateData({
         dependencies,
@@ -136,7 +135,7 @@ const Packages = ({ classes }) => {
         projectVersion
       })
     );
-  }, [dependencies, outdated]);
+  }, [dependenciesSet]);
 
   const scrollWrapper = useCallback(
     top => {

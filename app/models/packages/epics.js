@@ -131,13 +131,7 @@ const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
     tap(console.log),
-    takeWhile(({ payload: { dependencies } }) => {
-      console.log(
-        dependencies,
-        Array.isArray(dependencies) && dependencies.length
-      );
-      return Array.isArray(dependencies) && dependencies.length;
-    }),
+    takeWhile(({ payload: { dependencies } }) => Array.isArray(dependencies)),
     map(
       ({
         payload: { dependencies, outdated, projectName, projectVersion }
@@ -190,7 +184,11 @@ const packagesSuccessEpic = (action$, state$) =>
         }
       } = state$.value;
 
-      const actions = [updateLoader({ loading: false, message: null })];
+      const actions = [];
+
+      if (dependencies && dependencies.length) {
+        actions.push(updateLoader({ loading: false, message: null }));
+      }
 
       if (page !== 0) {
         actions.unshift(setPage({ page: 0 }));
