@@ -190,23 +190,25 @@ const TableListToolbar = ({
         );
       }
     },
-    [selected]
+    [selected, filteredByNamePackages]
   );
 
-  const openPackage = useCallback(() => {
-    remote.dialog.showOpenDialog(
+  const openPackage = () => {
+    const parameters = {
+      title: 'Open package.json file',
+      buttonLabel: 'Analyze',
+      filters: [
+        {
+          name: 'package.json',
+          extensions: ['json']
+        }
+      ],
+      properties: ['openFile']
+    };
+
+    return remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
-      {
-        title: 'Open package.json file',
-        buttonLabel: 'Analyze',
-        filters: [
-          {
-            name: 'package.json',
-            extensions: ['json']
-          }
-        ],
-        properties: ['openFile']
-      },
+      parameters,
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
@@ -215,7 +217,7 @@ const TableListToolbar = ({
         }
       }
     );
-  }, []);
+  };
 
   const renderAction = useCallback(
     action => {
@@ -402,11 +404,7 @@ const TableListToolbar = ({
           horizontal: 'right'
         }}
       >
-        <TableFilters
-          mode={mode}
-          close={() => openFilters(null, true)}
-          searchByName={searchByName}
-        />
+        <TableFilters mode={mode} close={() => openFilters(null, true)} />
       </Popover>
       <Dialog
         open={optionsOpen}
@@ -446,7 +444,7 @@ TableListToolbar.propTypes = {
   searchByName: PropTypes.func,
   scrollWrapper: PropTypes.func,
   outdated: PropTypes.arrayOf(PropTypes.object),
-  filteredByNamePackages: PropTypes.arrayOf(PropTypes.string),
+  filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };

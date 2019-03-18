@@ -159,9 +159,9 @@ const Packages = ({ classes }) => {
         current: { value }
       } = element;
 
-      const filteredPackages = packagesData.filter(
-        pkg => pkg.name && pkg.name.indexOf(value) > -1
-      );
+      const filteredPackages =
+        packagesData &&
+        packagesData.filter(pkg => pkg.name && pkg.name.indexOf(value) > -1);
 
       setFilteredByNamePackages(filteredPackages);
     },

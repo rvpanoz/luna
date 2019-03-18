@@ -1,11 +1,10 @@
 /* eslint-disable react/require-default-props */
 
 import { withStyles } from '@material-ui/core/styles';
-import React, { useRef } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useMappedState } from 'redux-react-hook';
 import cn from 'classnames';
-
+import { remove, prepend } from 'ramda';
 import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -17,38 +16,36 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
-import { APP_MODES } from 'constants/AppConstants';
 import AppButton from 'components/units/Buttons/AppButton';
-import { addFilter } from 'models/packages/actions';
 
 import styles from './styles/tableFilters';
 
-const mapState = ({
-  modules: {
-    filtering: { filters }
-  }
-}) => ({
-  filters
-});
-
-const TableFilters = ({ classes, mode, close, searchByName }) => {
+const TableFilters = ({ classes, mode, close }) => {
   const searchInputEl = useRef(null);
-  const { filters } = useMappedState(mapState);
-  const dispatch = useDispatch();
+  const [filters, setFilters] = useState([]);
+
+  const addFilter = useCallback(
+    ({ type, value }) => {
+      const idx = filters.indexOf(value);
+      const newFilters =
+        idx > -1 ? remove(idx, 1, filters) : prepend(value, filters);
+
+      setFilters(newFilters);
+    },
+    [filters]
+  );
+
+  const handleFilters = useCallback(() => {
+    console.log(filters);
+  });
 
   return (
     <div className={classes.root}>
       <div className={classes.filterItems}>
         <div className={classes.search}>
-          <a
-            href="#"
-            className={classes.searchIcon}
-            onClick={() => searchByName(searchInputEl)}
-          >
-            <SearchIcon />
-          </a>
+          <SearchIcon className={classes.searchIcon} />
           <InputBase
-            placeholder="Search packages…"
+            placeholder="Enter package name"
             classes={{
               root: classes.inputRoot,
               input: classes.inputInput
@@ -56,20 +53,30 @@ const TableFilters = ({ classes, mode, close, searchByName }) => {
             inputProps={{
               ref: searchInputEl
             }}
+            onChange={e => {
+              const { value } = e.currentTarget;
+
+              if (value.length) {
+                addFilter({
+                  type: 'name',
+                  value
+                });
+              }
+            }}
           />
         </div>
         <FormControl component="fieldset">
           <FormLabel
             component="legend"
             className={cn({
-              [classes.hidden]: mode === APP_MODES.global
+              [classes.hidden]: mode === 'global'
             })}
           >
             By group
           </FormLabel>
           <FormGroup
             className={cn(classes.flexContainer, {
-              [classes.hidden]: mode === APP_MODES.global
+              [classes.hidden]: mode === 'global'
             })}
           >
             <FormHelperText> Select packages based on group</FormHelperText>
@@ -78,11 +85,10 @@ const TableFilters = ({ classes, mode, close, searchByName }) => {
                 <Checkbox
                   checked={filters && filters.includes('dependencies')}
                   onChange={() =>
-                    dispatch(
-                      addFilter({
-                        filter: 'dependencies'
-                      })
-                    )
+                    addFilter({
+                      type: 'group',
+                      value: 'dependencies'
+                    })
                   }
                   value="dependencies"
                 />
@@ -94,11 +100,10 @@ const TableFilters = ({ classes, mode, close, searchByName }) => {
                 <Checkbox
                   checked={filters && filters.includes('devDependencies')}
                   onChange={() =>
-                    dispatch(
-                      addFilter({
-                        filter: 'devDependencies'
-                      })
-                    )
+                    addFilter({
+                      type: 'group',
+                      value: 'devDependencies'
+                    })
                   }
                   value="devDependencies"
                 />
@@ -110,11 +115,10 @@ const TableFilters = ({ classes, mode, close, searchByName }) => {
                 <Checkbox
                   checked={filters && filters.includes('optionalDependencies')}
                   onChange={() =>
-                    dispatch(
-                      addFilter({
-                        filter: 'optionalDependencies'
-                      })
-                    )
+                    addFilter({
+                      type: 'group',
+                      value: 'optionalDependencies'
+                    })
                   }
                   value="optionalDependencies"
                 />
@@ -133,11 +137,10 @@ const TableFilters = ({ classes, mode, close, searchByName }) => {
                 <Checkbox
                   checked={filters && filters.includes('latest')}
                   onChange={() =>
-                    dispatch(
-                      addFilter({
-                        filter: 'latest'
-                      })
-                    )
+                    addFilter({
+                      type: 'version',
+                      value: 'latest'
+                    })
                   }
                   value="latest"
                 />
@@ -151,6 +154,9 @@ const TableFilters = ({ classes, mode, close, searchByName }) => {
           <AppButton color="secondary" onClick={close}>
             Close
           </AppButton>
+          <AppButton color="primary" onClick={handleFilters}>
+            Filter
+          </AppButton>
         </div>
       </div>
     </div>
@@ -160,8 +166,7 @@ const TableFilters = ({ classes, mode, close, searchByName }) => {
 TableFilters.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string,
-  close: PropTypes.func,
-  searchByName: PropTypes.func
+  close: PropTypes.func
 };
 
 export default withStyles(styles)(TableFilters);
