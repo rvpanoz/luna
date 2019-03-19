@@ -26,9 +26,17 @@ const TableFilters = ({ classes, mode, close }) => {
 
   const addFilter = useCallback(
     ({ type, value }) => {
-      const idx = filters.indexOf(value);
+      const idx = filters.map(({ type }) => type).indexOf(type);
       const newFilters =
-        idx > -1 ? remove(idx, 1, filters) : prepend(value, filters);
+        idx > -1
+          ? remove(idx, 1, filters)
+          : prepend(
+              {
+                type,
+                value
+              },
+              filters
+            );
 
       setFilters(newFilters);
     },
@@ -56,7 +64,7 @@ const TableFilters = ({ classes, mode, close }) => {
             onChange={e => {
               const { value } = e.currentTarget;
 
-              if (value.length) {
+              if (value && value.length) {
                 addFilter({
                   type: 'name',
                   value
