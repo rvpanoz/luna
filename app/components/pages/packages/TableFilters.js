@@ -52,35 +52,39 @@ const TableFilters = ({ classes, mode, close }) => {
       dispatch(updateFilters({ allFilters: filters }));
     }
 
-    return false;
+    close();
   });
-
+  console.log(filters && filters.map(f => f.value));
   return (
     <div className={classes.root}>
       <div className={classes.filterItems}>
-        <div className={classes.search}>
-          <SearchIcon className={classes.searchIcon} />
-          <InputBase
-            placeholder="Enter package name"
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput
-            }}
-            inputProps={{
-              ref: searchInputEl
-            }}
-            onChange={e => {
-              const { value } = e.currentTarget;
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Package name</FormLabel>
+          <FormGroup>
+            <div className={classes.search}>
+              <SearchIcon className={classes.searchIcon} />
+              <InputBase
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput
+                }}
+                inputProps={{
+                  ref: searchInputEl
+                }}
+                onChange={e => {
+                  const { value } = e.currentTarget;
 
-              if (value && value.length) {
-                addFilter({
-                  type: 'name',
-                  value
-                });
-              }
-            }}
-          />
-        </div>
+                  if (value && value.length) {
+                    addFilter({
+                      type: 'name',
+                      value
+                    });
+                  }
+                }}
+              />
+            </div>
+          </FormGroup>
+        </FormControl>
         <FormControl component="fieldset">
           <FormLabel
             component="legend"
@@ -100,7 +104,8 @@ const TableFilters = ({ classes, mode, close }) => {
               control={
                 <Checkbox
                   checked={
-                    filters && filters.map(f => f.type).includes('dependencies')
+                    filters &&
+                    filters.map(f => f.value).includes('dependencies')
                   }
                   onChange={() =>
                     addFilter({
@@ -118,7 +123,7 @@ const TableFilters = ({ classes, mode, close }) => {
                 <Checkbox
                   checked={
                     filters &&
-                    filters.map(f => f.type).includes('devDpendencies')
+                    filters.map(f => f.value).includes('devDependencies')
                   }
                   onChange={() =>
                     addFilter({
@@ -136,7 +141,7 @@ const TableFilters = ({ classes, mode, close }) => {
                 <Checkbox
                   checked={
                     filters &&
-                    filters.map(f => f.type).includes('optionalDependencies')
+                    filters.map(f => f.value).includes('optionalDependencies')
                   }
                   onChange={() =>
                     addFilter({
