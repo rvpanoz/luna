@@ -17,7 +17,8 @@ import {
   setOutdatedSuccess,
   setSortOptions,
   setPage,
-  setPageRows
+  setPageRows,
+  updateFilters
 } from 'models/packages/actions';
 import format from 'date-fns/format';
 
@@ -43,6 +44,19 @@ const handlers = {
       operations: {
         ...state.operations,
         commandsErrors: newErrors
+      }
+    });
+  },
+  [updateFilters.type]: (state, { payload: { allFilters } }) => {
+    const {
+      filtering: { filters }
+    } = state;
+
+    return merge(state, {
+      ...state,
+      filtering: {
+        ...state.filtering,
+        filters: allFilters
       }
     });
   },

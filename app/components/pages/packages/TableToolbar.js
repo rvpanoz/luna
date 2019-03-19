@@ -439,7 +439,7 @@ TableListToolbar.propTypes = {
   mode: PropTypes.string,
   manager: PropTypes.string,
   directory: PropTypes.string,
-  filters: PropTypes.arrayOf(PropTypes.string),
+  filters: PropTypes.arrayOf(PropTypes.object),
   fromSearch: PropTypes.bool,
   searchByName: PropTypes.func,
   scrollWrapper: PropTypes.func,
