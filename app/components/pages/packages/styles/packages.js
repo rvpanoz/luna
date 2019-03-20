@@ -75,6 +75,9 @@ const styles = theme => ({
   updated: {
     color: darken('#00b300', 0.1)
   },
+  withPadding: {
+    padding: theme.spacing.unit * 2.5
+  },
   nodata: {
     padding: theme.spacing.unit * 2.5
   },

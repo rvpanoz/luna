@@ -92,6 +92,7 @@ const Packages = ({ classes }) => {
   } = useMappedState(mapState);
 
   const [counter, setCounter] = useState(0);
+  const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -134,7 +135,7 @@ const Packages = ({ classes }) => {
         projectVersion
       })
     );
-  }, [dependencies, outdated]);
+  }, [dependenciesSet]);
 
   const scrollWrapper = useCallback(
     top => {
@@ -152,13 +153,31 @@ const Packages = ({ classes }) => {
   // setup packages
   const [packagesData] = useFilters(packages, filters, counter);
 
+  const searchByName = useCallback(
+    element => {
+      const {
+        current: { value }
+      } = element;
+
+      const filteredPackages =
+        packagesData &&
+        packagesData.filter(pkg => pkg.name && pkg.name.indexOf(value) > -1);
+
+      setFilteredByNamePackages(filteredPackages);
+    },
+    [packagesData]
+  );
+
+  const data = filteredByNamePackages.length
+    ? filteredByNamePackages
+    : packagesData;
+
   // pagination
   const dataSlices =
-    packagesData &&
-    packagesData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   // sorting
-  const sortedPackages =
+  const listDataPackages =
     sortDir === 'asc'
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
@@ -167,27 +186,32 @@ const Packages = ({ classes }) => {
     <AppLoader loading={loading} message={message}>
       <Grid container>
         <Grid item md={12} lg={6} xl={6}>
-          {packagesData.length === 0 ? (
-            <Typography variant="subtitle1">
-              No dependencies found for this project.
-            </Typography>
-          ) : (
-            <Paper className={classes.root}>
-              <div className={classes.toolbar}>
-                <TableToolbar
-                  title="Packages"
-                  manager={manager}
-                  mode={mode}
-                  directory={directory}
-                  selected={selected}
-                  outdated={packagesOutdated}
-                  packagesInstallOptions={packagesInstallOptions}
-                  fromSearch={fromSearch}
-                  scrollWrapper={scrollWrapper}
-                  reload={() => setCounter(counter + 1)}
-                />
-              </div>
-              <div className={classes.tableWrapper} ref={wrapperRef}>
+          <Paper className={classes.root}>
+            <div className={classes.toolbar}>
+              <TableToolbar
+                title="Packages"
+                manager={manager}
+                listDataPackages={listDataPackages}
+                mode={mode}
+                directory={directory}
+                selected={selected}
+                outdated={packagesOutdated}
+                packagesInstallOptions={packagesInstallOptions}
+                fromSearch={fromSearch}
+                filters={filters}
+                scrollWrapper={scrollWrapper}
+                reload={() => setCounter(counter + 1)}
+                searchByName={searchByName}
+                filteredByNamePackages={filteredByNamePackages}
+                setFilteredByNamePackages={setFilteredByNamePackages}
+              />
+            </div>
+            <div className={classes.tableWrapper} ref={wrapperRef}>
+              {packagesData.length === 0 ? (
+                <Typography variant="subtitle1" className={classes.withPadding}>
+                  No dependencies found for this project.
+                </Typography>
+              ) : (
                 <Table
                   padding="dense"
                   aria-labelledby="packages-list"
@@ -203,8 +227,8 @@ const Packages = ({ classes }) => {
                     sortDir={sortDir}
                   />
                   <TableBody>
-                    {sortedPackages &&
-                      sortedPackages.map(
+                    {listDataPackages &&
+                      listDataPackages.map(
                         ({
                           name,
                           version,
@@ -220,7 +244,7 @@ const Packages = ({ classes }) => {
                             packagesInstallOptions
                           )
                             ? packagesInstallOptions.find(
-                                data => data.name === name
+                                installOption => installOption.name === name
                               )
                             : {};
 
@@ -265,9 +289,9 @@ const Packages = ({ classes }) => {
                     }
                   />
                 </Table>
-              </div>
-            </Paper>
-          )}
+              )}
+            </div>
+          </Paper>
         </Grid>
       </Grid>
     </AppLoader>

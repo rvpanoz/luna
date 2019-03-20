@@ -49,11 +49,13 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
 
     if (packages && Array.isArray(packages)) {
       packages.forEach(name =>
-        dispatch(
-          addSelected({
-            name
-          })
-        )
+        name !== 'npm'
+          ? dispatch(
+              addSelected({
+                name
+              })
+            )
+          : null
       );
     }
   };
