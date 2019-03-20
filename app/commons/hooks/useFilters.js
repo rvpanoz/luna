@@ -8,16 +8,18 @@ const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);
 
   const withFiltersData = filters.reduce((acc = [], filterDetails) => {
-    const { value } = filterDetails;
+    const { filterType, filterValue } = filterDetails;
 
     const filtered =
       data &&
       data.filter(pkg => {
-        if (groups.indexOf(value) > -1) {
-          return pkg.__group === value;
+        if (groups.indexOf(filterValue) > -1) {
+          return pkg.__group === filterValue;
         }
 
-        return !!pkg[value];
+        return filterType === 'name'
+          ? pkg.name.indexOf(filterValue) > -1
+          : !!pkg[filterValue];
       });
 
     if (filtered.length) {

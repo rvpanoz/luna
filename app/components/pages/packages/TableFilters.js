@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import React, { useRef, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import { remove, prepend, merge } from 'ramda';
+import { remove, prepend } from 'ramda';
 import { useDispatch } from 'redux-react-hook';
 import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -26,18 +26,20 @@ const TableFilters = ({ classes, mode, close }) => {
   const dispatch = useDispatch();
 
   const addFilter = useCallback(
-    ({ typeName, value }) => {
-      const idx = filters.map(({ value }) => value).indexOf(value);
+    ({ filterType, filterValue }) => {
+      const idx = filters
+        .map(filterDetails => filterDetails.filterType)
+        .indexOf(filterType);
 
       const newFilters =
         idx > -1
-          ? typeName !== 'name'
+          ? filterType !== 'name'
             ? remove(idx, 1, filters)
-            : Object.assign([], filters, { [idx]: { type: typeName, value } })
+            : Object.assign([], filters, { [idx]: { filterType, filterValue } })
           : prepend(
               {
-                type: typeName,
-                value
+                filterType,
+                filterValue
               },
               filters
             );
@@ -61,6 +63,7 @@ const TableFilters = ({ classes, mode, close }) => {
         <FormControl component="fieldset">
           <FormLabel component="legend">Package name</FormLabel>
           <FormGroup>
+            <FormHelperText>Fill package name</FormHelperText>
             <div className={classes.search}>
               <SearchIcon className={classes.searchIcon} />
               <InputBase
@@ -76,8 +79,8 @@ const TableFilters = ({ classes, mode, close }) => {
 
                   if (value && value.length) {
                     addFilter({
-                      typeName: 'name',
-                      value
+                      filterType: 'name',
+                      filterValue: value
                     });
                   }
                 }}
@@ -99,18 +102,20 @@ const TableFilters = ({ classes, mode, close }) => {
               [classes.hidden]: mode === 'global'
             })}
           >
-            <FormHelperText> Select packages based on group</FormHelperText>
+            <FormHelperText>Select packages based on group</FormHelperText>
             <FormControlLabel
               control={
                 <Checkbox
                   checked={
                     filters &&
-                    filters.map(f => f.value).includes('dependencies')
+                    filters
+                      .map(({ filterType, filterValue }) => filterValue)
+                      .includes('dependencies')
                   }
                   onChange={() =>
                     addFilter({
-                      typeName: 'group',
-                      value: 'dependencies'
+                      filterType: 'group',
+                      filterValue: 'dependencies'
                     })
                   }
                   value="dependencies"
@@ -123,12 +128,14 @@ const TableFilters = ({ classes, mode, close }) => {
                 <Checkbox
                   checked={
                     filters &&
-                    filters.map(f => f.value).includes('devDependencies')
+                    filters
+                      .map(({ filterType, filterValue }) => filterValue)
+                      .includes('devDependencies')
                   }
                   onChange={() =>
                     addFilter({
-                      typeName: 'group',
-                      value: 'devDependencies'
+                      filterType: 'group',
+                      filterValue: 'devDependencies'
                     })
                   }
                   value="devDependencies"
@@ -141,12 +148,14 @@ const TableFilters = ({ classes, mode, close }) => {
                 <Checkbox
                   checked={
                     filters &&
-                    filters.map(f => f.value).includes('optionalDependencies')
+                    filters
+                      .map(({ filterType, filterValue }) => filterValue)
+                      .includes('optionalDependencies')
                   }
                   onChange={() =>
                     addFilter({
-                      typeName: 'group',
-                      value: 'optionalDependencies'
+                      filterType: 'group',
+                      filterValue: 'optionalDependencies'
                     })
                   }
                   value="optionalDependencies"
@@ -165,12 +174,15 @@ const TableFilters = ({ classes, mode, close }) => {
               control={
                 <Checkbox
                   checked={
-                    filters && filters.map(f => f.type).includes('version')
+                    filters &&
+                    filters
+                      .map(({ filterType, filterValue }) => filterValue)
+                      .includes('latest')
                   }
                   onChange={() =>
                     addFilter({
-                      typeName: 'version',
-                      value: 'latest'
+                      filterType: 'version',
+                      filterValue: 'latest'
                     })
                   }
                   value="latest"

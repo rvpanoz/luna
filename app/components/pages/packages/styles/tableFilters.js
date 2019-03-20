@@ -32,7 +32,7 @@ const styles = theme => ({
     borderRadius: theme.shape.borderRadius,
     color: '#fff',
     backgroundColor: fade(theme.palette.common.black, 0.15),
-    margin: '0px 0px 10px 0px',
+    margin: '10px 0px 10px 0px',
     width: '100%',
     border: '1px solid'
   },

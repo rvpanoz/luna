@@ -51,7 +51,11 @@ const App = () => {
 
   return (
     <div id="app">
-      {!uiExceptionMessage ? <AppLayout app="Luna" /> : uiExceptionMessage}
+      {!uiExceptionMessage ? (
+        <AppLayout app="Luna" />
+      ) : (
+        uiExceptionMessage.message
+      )}
     </div>
   );
 };
