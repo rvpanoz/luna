@@ -99,14 +99,10 @@ const installPackagesEpic = action$ =>
     map(({ payload }) => {
       ipcRenderer.send('ipc-event', payload);
 
-      return {
-        type: 'ACTION_INSTALL'
-      };
-
-      // return updateLoader({
-      //   loading: true,
-      //   message: 'Installing packages..'
-      // });
+      return updateLoader({
+        loading: true,
+        message: 'Installing packages..'
+      });
     })
   );
 
@@ -116,21 +112,16 @@ const updatePackagesEpic = action$ =>
     map(({ payload }) => {
       ipcRenderer.send('ipc-event', payload);
 
-      return {
-        type: 'ACTION_UPDATE'
-      };
-
-      // return updateLoader({
-      //   loading: true,
-      //   message: 'Updating packages..'
-      // });
+      return updateLoader({
+        loading: true,
+        message: 'Updating packages..'
+      });
     })
   );
 
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
-    tap(console.log),
     takeWhile(({ payload: { dependencies } }) => Array.isArray(dependencies)),
     map(
       ({

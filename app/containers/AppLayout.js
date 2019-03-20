@@ -13,8 +13,12 @@ import Header from 'components/layout/AppHeader';
 import { Packages } from 'components/pages/packages';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Notifications } from 'components/pages/notifications';
-import { addActionError } from 'models/packages/actions';
-import { setSnackbar } from 'models/ui/actions';
+import {
+  addActionError,
+  removePackages,
+  updateData
+} from 'models/packages/actions';
+import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 
 import { drawerWidth } from 'styles/variables';
@@ -67,14 +71,39 @@ const AppLayout = ({ classes }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on('action-close', (event, error) => {
+    ipcRenderer.on('action-close', (event, error, message, options) => {
+      const removedOrUpdatedPackages = options && options.slice(2);
+      const operation = options && options[0];
+
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
+
+      if (
+        operation === 'uninstall' &&
+        removedOrUpdatedPackages &&
+        removedOrUpdatedPackages.length
+      ) {
+        dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
+      }
+
+      dispatch(
+        setSnackbar({
+          open: true,
+          message: message ? message : 'Packages updated'
+        })
+      );
+
+      dispatch(
+        toggleLoader({
+          loading: false,
+          message: null
+        })
+      );
     });
 
     return () => ipcRenderer.removeAllListeners(['action-close']);
-  }, []);
+  });
 
   return (
     <MuiThemeProvider theme={theme}>

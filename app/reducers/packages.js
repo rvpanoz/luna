@@ -18,7 +18,8 @@ import {
   setSortOptions,
   setPage,
   setPageRows,
-  updateFilters
+  updateFilters,
+  removePackages
 } from 'models/packages/actions';
 import format from 'date-fns/format';
 
@@ -286,7 +287,40 @@ const handlers = {
         ...state.pagination,
         rowsPerPage
       }
-    })
+    }),
+  [removePackages.type]: (state, { payload: { removedPackages } }) => {
+    const {
+      data: { packages, packagesOutdated }
+    } = state;
+
+    // update packages
+    const newPackages = packages
+      .filter(pkg =>
+        !Boolean(removedPackages.includes(pkg.name)) ? pkg : null
+      )
+      .filter(r => Boolean(r));
+
+    // update outdated packages
+    const newPackagesOutdated = packagesOutdated
+      .filter(pkg =>
+        !Boolean(removedPackages.includes(pkg.name)) ? pkg : null
+      )
+      .filter(r => Boolean(r));
+
+    return merge(state, {
+      ...state,
+      data: {
+        ...state.data,
+        packages: newPackages,
+        packagesOutdated: newPackagesOutdated
+      },
+      operations: {
+        ...state.operations,
+        selected: [],
+        packagesInstallOptions: []
+      }
+    });
+  }
 };
 
 export default createReducer(modules, handlers);
