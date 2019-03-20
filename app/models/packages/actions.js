@@ -26,6 +26,7 @@ const setPageRows = ActionCreator('SET_PAGE_ROWS');
 const updateFilters = ActionCreator('UPDATE_FILTERS');
 const installPackages = ActionCreator('INSTALL_PACKAGES');
 const updatePackages = ActionCreator('UPDATE_PACKAGES');
+const removePackages = ActionCreator('REMOVE_PACKAGES');
 
 const runAudit = ActionCreator('RUN_AUDIT');
 
@@ -51,5 +52,6 @@ export {
   setPageRows,
   updateData,
   updateFilters,
-  runAudit
+  runAudit,
+  removePackages
 };

@@ -13,8 +13,8 @@ import Header from 'components/layout/AppHeader';
 import { Packages } from 'components/pages/packages';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Notifications } from 'components/pages/notifications';
-import { addActionError } from 'models/packages/actions';
-import { setSnackbar } from 'models/ui/actions';
+import { addActionError, removePackages } from 'models/packages/actions';
+import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 
 import { drawerWidth } from 'styles/variables';
@@ -67,14 +67,36 @@ const AppLayout = ({ classes }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on('action-close', (event, error) => {
+    ipcRenderer.on('action-close', (event, error, message, options) => {
+      console.log(options);
+      const removedPackages = options && options.slice(2);
+      console.log(removedPackages);
+
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
+
+      if (removedPackages && removedPackages.length) {
+        dispatch(removePackages({ removedPackages }));
+      }
+
+      dispatch(
+        setSnackbar({
+          open: true,
+          message: message ? message : 'Packages updated'
+        })
+      );
+
+      dispatch(
+        toggleLoader({
+          loading: false,
+          message: null
+        })
+      );
     });
 
     return () => ipcRenderer.removeAllListeners(['action-close']);
-  }, []);
+  });
 
   return (
     <MuiThemeProvider theme={theme}>

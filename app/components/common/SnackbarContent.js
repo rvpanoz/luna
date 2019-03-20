@@ -86,6 +86,10 @@ const AppSnackbarContent = props => {
   );
 };
 
+AppSnackbarContent.defaultProps = {
+  variant: 'info'
+};
+
 AppSnackbarContent.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string),
   className: PropTypes.string,
