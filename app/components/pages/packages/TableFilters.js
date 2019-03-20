@@ -26,17 +26,17 @@ const TableFilters = ({ classes, mode, close }) => {
   const dispatch = useDispatch();
 
   const addFilter = useCallback(
-    ({ type, value }) => {
-      const idx = filters.map(({ type }) => type).indexOf(type);
+    ({ typeName, value }) => {
+      const idx = filters.map(({ value }) => value).indexOf(value);
 
       const newFilters =
         idx > -1
-          ? type !== 'name'
+          ? typeName !== 'name'
             ? remove(idx, 1, filters)
-            : Object.assign([], filters, { [idx]: { type, value } })
+            : Object.assign([], filters, { [idx]: { type: typeName, value } })
           : prepend(
               {
-                type,
+                type: typeName,
                 value
               },
               filters
@@ -54,7 +54,7 @@ const TableFilters = ({ classes, mode, close }) => {
 
     close();
   });
-  console.log(filters && filters.map(f => f.value));
+
   return (
     <div className={classes.root}>
       <div className={classes.filterItems}>
@@ -76,7 +76,7 @@ const TableFilters = ({ classes, mode, close }) => {
 
                   if (value && value.length) {
                     addFilter({
-                      type: 'name',
+                      typeName: 'name',
                       value
                     });
                   }
@@ -92,7 +92,7 @@ const TableFilters = ({ classes, mode, close }) => {
               [classes.hidden]: mode === 'global'
             })}
           >
-            By group
+            Group
           </FormLabel>
           <FormGroup
             className={cn(classes.flexContainer, {
@@ -109,7 +109,7 @@ const TableFilters = ({ classes, mode, close }) => {
                   }
                   onChange={() =>
                     addFilter({
-                      type: 'group',
+                      typeName: 'group',
                       value: 'dependencies'
                     })
                   }
@@ -127,7 +127,7 @@ const TableFilters = ({ classes, mode, close }) => {
                   }
                   onChange={() =>
                     addFilter({
-                      type: 'group',
+                      typeName: 'group',
                       value: 'devDependencies'
                     })
                   }
@@ -145,7 +145,7 @@ const TableFilters = ({ classes, mode, close }) => {
                   }
                   onChange={() =>
                     addFilter({
-                      type: 'group',
+                      typeName: 'group',
                       value: 'optionalDependencies'
                     })
                   }
@@ -158,7 +158,7 @@ const TableFilters = ({ classes, mode, close }) => {
           <FormHelperText />
         </FormControl>
         <FormControl component="fieldset">
-          <FormLabel component="legend">By status</FormLabel>
+          <FormLabel component="legend">Status</FormLabel>
           <FormGroup>
             <FormHelperText> Select outdated packages</FormHelperText>
             <FormControlLabel
@@ -169,7 +169,7 @@ const TableFilters = ({ classes, mode, close }) => {
                   }
                   onChange={() =>
                     addFilter({
-                      type: 'version',
+                      typeName: 'version',
                       value: 'latest'
                     })
                   }

@@ -177,7 +177,7 @@ const Packages = ({ classes }) => {
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   // sorting
-  const sortedPackages =
+  const listDataPackages =
     sortDir === 'asc'
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
@@ -196,6 +196,7 @@ const Packages = ({ classes }) => {
                 <TableToolbar
                   title="Packages"
                   manager={manager}
+                  listDataPackages={listDataPackages}
                   mode={mode}
                   directory={directory}
                   selected={selected}
@@ -226,8 +227,8 @@ const Packages = ({ classes }) => {
                     sortDir={sortDir}
                   />
                   <TableBody>
-                    {sortedPackages &&
-                      sortedPackages.map(
+                    {listDataPackages &&
+                      listDataPackages.map(
                         ({
                           name,
                           version,

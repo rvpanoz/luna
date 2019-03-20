@@ -7,8 +7,8 @@ import { PACKAGE_GROUPS } from 'constants/AppConstants';
 const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);
 
-  const withFiltersData = filters.reduce((acc, filterDetails) => {
-    const { type, value } = filterDetails;
+  const withFiltersData = filters.reduce((acc = [], filterDetails) => {
+    const { value } = filterDetails;
 
     const filtered =
       data &&
@@ -17,11 +17,11 @@ const getFiltered = (data, filters) => {
           return pkg.__group === value;
         }
 
-        return pkg[value] === true;
+        return !!pkg[value];
       });
 
     if (filtered.length) {
-      return acc ? acc.concat(filtered) : [];
+      return acc.concat(filtered);
     }
   }, []);
 
