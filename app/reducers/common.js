@@ -64,7 +64,7 @@ const handlers = {
         {
           type,
           body,
-          required,
+          required: required.charAt(0) === '@' ? required.slice(1) : required,
           requiredBy
         },
         state.notifications

@@ -13,11 +13,7 @@ import Header from 'components/layout/AppHeader';
 import { Packages } from 'components/pages/packages';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Notifications } from 'components/pages/notifications';
-import {
-  addActionError,
-  removePackages,
-  updateData
-} from 'models/packages/actions';
+import { addActionError, removePackages } from 'models/packages/actions';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 
@@ -79,18 +75,14 @@ const AppLayout = ({ classes }) => {
         dispatch(addActionError({ error }));
       }
 
-      if (
-        operation === 'uninstall' &&
-        removedOrUpdatedPackages &&
-        removedOrUpdatedPackages.length
-      ) {
+      if (operation === 'uninstall' && removedOrUpdatedPackages) {
         dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
       }
 
       dispatch(
         setSnackbar({
           open: true,
-          message: message ? message : 'Packages updated'
+          message: message || 'Packages updated'
         })
       );
 

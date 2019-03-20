@@ -153,21 +153,6 @@ const Packages = ({ classes }) => {
   // setup packages
   const [packagesData] = useFilters(packages, filters, counter);
 
-  const searchByName = useCallback(
-    element => {
-      const {
-        current: { value }
-      } = element;
-
-      const filteredPackages =
-        packagesData &&
-        packagesData.filter(pkg => pkg.name && pkg.name.indexOf(value) > -1);
-
-      setFilteredByNamePackages(filteredPackages);
-    },
-    [packagesData]
-  );
-
   const data = filteredByNamePackages.length
     ? filteredByNamePackages
     : packagesData;
@@ -201,7 +186,6 @@ const Packages = ({ classes }) => {
                 filters={filters}
                 scrollWrapper={scrollWrapper}
                 reload={() => setCounter(counter + 1)}
-                searchByName={searchByName}
                 filteredByNamePackages={filteredByNamePackages}
                 setFilteredByNamePackages={setFilteredByNamePackages}
               />
@@ -209,7 +193,7 @@ const Packages = ({ classes }) => {
             <div className={classes.tableWrapper} ref={wrapperRef}>
               {packagesData.length === 0 ? (
                 <Typography variant="subtitle1" className={classes.withPadding}>
-                  No dependencies found for this project.
+                  No dependencies found.
                 </Typography>
               ) : (
                 <Table
