@@ -290,18 +290,36 @@ const handlers = {
     }),
   [removePackages.type]: (state, { payload: { removedPackages } }) => {
     const {
-      data: { packages }
+      data: { packages, packagesOutdated }
     } = state;
 
-    const idxs = packages
-      .map((pkg, idx) => {
-        const isRemoved = Boolean(removedPackages.includes(pkg.name));
-
-        return isRemoved ? idx : null;
-      })
+    // update packages
+    const newPackages = packages
+      .filter(pkg =>
+        !Boolean(removedPackages.includes(pkg.name)) ? pkg : null
+      )
       .filter(r => Boolean(r));
 
-    return state;
+    // update outdated packages
+    const newPackagesOutdated = packagesOutdated
+      .filter(pkg =>
+        !Boolean(removedPackages.includes(pkg.name)) ? pkg : null
+      )
+      .filter(r => Boolean(r));
+
+    return merge(state, {
+      ...state,
+      data: {
+        ...state.data,
+        packages: newPackages,
+        packagesOutdated: newPackagesOutdated
+      },
+      operations: {
+        ...state.operations,
+        selected: [],
+        packagesInstallOptions: []
+      }
+    });
   }
 };
 

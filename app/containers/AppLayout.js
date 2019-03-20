@@ -13,7 +13,11 @@ import Header from 'components/layout/AppHeader';
 import { Packages } from 'components/pages/packages';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Notifications } from 'components/pages/notifications';
-import { addActionError, removePackages } from 'models/packages/actions';
+import {
+  addActionError,
+  removePackages,
+  updateData
+} from 'models/packages/actions';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 
@@ -68,16 +72,19 @@ const AppLayout = ({ classes }) => {
 
   useEffect(() => {
     ipcRenderer.on('action-close', (event, error, message, options) => {
-      console.log(options);
-      const removedPackages = options && options.slice(2);
-      console.log(removedPackages);
+      const removedOrUpdatedPackages = options && options.slice(2);
+      const operation = options && options[0];
 
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
 
-      if (removedPackages && removedPackages.length) {
-        dispatch(removePackages({ removedPackages }));
+      if (
+        operation === 'uninstall' &&
+        removedOrUpdatedPackages &&
+        removedOrUpdatedPackages.length
+      ) {
+        dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
       }
 
       dispatch(
