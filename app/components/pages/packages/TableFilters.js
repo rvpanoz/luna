@@ -20,42 +20,53 @@ import { updateFilters } from 'models/packages/actions';
 import AppButton from 'components/units/Buttons/AppButton';
 import styles from './styles/tableFilters';
 
-const TableFilters = ({ classes, mode, close }) => {
+const TableFilters = ({ classes, mode, close, listFilters }) => {
   const searchInputEl = useRef(null);
-  const [filters, setFilters] = useState([]);
+  const [filters, setFilters] = useState([{ filterType: 'name' }]);
   const dispatch = useDispatch();
 
   const addFilter = useCallback(
     ({ filterType, filterValue }) => {
       const idx = filters
-        .map(filterDetails => filterDetails.filterType)
-        .indexOf(filterType);
+        .map(filterDetails => filterDetails.filterValue)
+        .indexOf(filterValue);
 
-      const newFilters =
-        idx > -1
-          ? filterType !== 'name'
-            ? remove(idx, 1, filters)
-            : Object.assign([], filters, { [idx]: { filterType, filterValue } })
-          : prepend(
+      switch (true) {
+        case idx > -1 && filterType !== 'name':
+          setFilters(remove(idx, 1, filters));
+          break;
+        case filterType === 'name':
+          const newFilters = filters.map(filterDetails => {
+            if (filterDetails.filterType === 'name') {
+              return { filterType, filterValue };
+            }
+
+            return filterDetails;
+          });
+
+          setFilters(newFilters);
+          break;
+        default:
+          setFilters(
+            prepend(
               {
                 filterType,
                 filterValue
               },
               filters
-            );
-
-      setFilters(newFilters);
+            )
+          );
+      }
     },
-    [filters]
+    [filters, listFilters]
   );
 
-  const handleFilters = useCallback(() => {
-    if (filters.length) {
-      dispatch(updateFilters({ allFilters: filters }));
-    }
-
+  const handleFilters = allFilters => {
+    dispatch(updateFilters({ allFilters }));
     close();
-  });
+  };
+
+  const activeFilters = filters.map(({ filterValue }) => filterValue);
 
   return (
     <div className={classes.root}>
@@ -106,12 +117,7 @@ const TableFilters = ({ classes, mode, close }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={
-                    filters &&
-                    filters
-                      .map(({ filterType, filterValue }) => filterValue)
-                      .includes('dependencies')
-                  }
+                  checked={activeFilters.indexOf('dependencies') > -1}
                   onChange={() =>
                     addFilter({
                       filterType: 'group',
@@ -126,12 +132,7 @@ const TableFilters = ({ classes, mode, close }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={
-                    filters &&
-                    filters
-                      .map(({ filterType, filterValue }) => filterValue)
-                      .includes('devDependencies')
-                  }
+                  checked={activeFilters.indexOf('devDependencies') > -1}
                   onChange={() =>
                     addFilter({
                       filterType: 'group',
@@ -146,12 +147,7 @@ const TableFilters = ({ classes, mode, close }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={
-                    filters &&
-                    filters
-                      .map(({ filterType, filterValue }) => filterValue)
-                      .includes('optionalDependencies')
-                  }
+                  checked={activeFilters.indexOf('optionalDependencies') > -1}
                   onChange={() =>
                     addFilter({
                       filterType: 'group',
@@ -173,19 +169,14 @@ const TableFilters = ({ classes, mode, close }) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={
-                    filters &&
-                    filters
-                      .map(({ filterType, filterValue }) => filterValue)
-                      .includes('latest')
-                  }
+                  checked={activeFilters.indexOf('isOutdated') > -1}
                   onChange={() =>
                     addFilter({
                       filterType: 'version',
-                      filterValue: 'latest'
+                      filterValue: 'isOutdated'
                     })
                   }
-                  value="latest"
+                  value="isOutdated"
                 />
               }
               label="Outdated"
@@ -197,7 +188,7 @@ const TableFilters = ({ classes, mode, close }) => {
           <AppButton color="secondary" onClick={close}>
             Close
           </AppButton>
-          <AppButton color="primary" onClick={handleFilters}>
+          <AppButton color="primary" onClick={() => handleFilters(filters)}>
             Filter
           </AppButton>
         </div>
@@ -209,7 +200,8 @@ const TableFilters = ({ classes, mode, close }) => {
 TableFilters.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string,
-  close: PropTypes.func
+  close: PropTypes.func,
+  listFilters: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(TableFilters);

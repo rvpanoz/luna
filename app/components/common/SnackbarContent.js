@@ -96,7 +96,6 @@ AppSnackbarContent.propTypes = {
   message: PropTypes.node,
   onClose: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
   variant: PropTypes.oneOf(['success', 'warning', 'error', 'info', 'primary'])
-    .isRequired
 };
 
 const AppSnackbarContentWrapper = withStyles(styles)(AppSnackbarContent);

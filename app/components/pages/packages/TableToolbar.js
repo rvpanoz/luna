@@ -58,7 +58,6 @@ const TableListToolbar = ({
   scrollWrapper,
   outdated,
   packagesInstallOptions,
-  searchByName,
   setFilteredByNamePackages,
   filteredByNamePackages
 }) => {
@@ -85,7 +84,7 @@ const TableListToolbar = ({
   const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
 
   const handleAction = useCallback(
-    action => {
+    (action, force) => {
       if (action === 'clearFilters') {
         if (filteredByNamePackages.length) {
           setFilteredByNamePackages([]);
@@ -95,7 +94,7 @@ const TableListToolbar = ({
         return;
       }
 
-      if (mode === 'local' && action === 'install') {
+      if (mode === 'local' && action === 'install' && !force) {
         return toggleOptions(true);
       }
 
@@ -190,7 +189,7 @@ const TableListToolbar = ({
         );
       }
     },
-    [selected, filteredByNamePackages]
+    [selected, filteredByNamePackages, packagesInstallOptions]
   );
 
   const openPackage = () => {
@@ -225,7 +224,7 @@ const TableListToolbar = ({
         clearFilters: () => (
           <Tooltip title="Clear filters">
             <IconButton
-              color="primary"
+              color="secondary"
               aria-label="clear filters"
               onClick={() => handleAction('clearFilters')}
             >
@@ -404,7 +403,11 @@ const TableListToolbar = ({
           horizontal: 'right'
         }}
       >
-        <TableFilters mode={mode} close={() => openFilters(null, true)} />
+        <TableFilters
+          mode={mode}
+          close={() => openFilters(null, true)}
+          listFilters={filters}
+        />
       </Popover>
       <Dialog
         open={optionsOpen}
@@ -421,7 +424,11 @@ const TableListToolbar = ({
           <Button onClick={() => toggleOptions(false)} color="secondary">
             Cancel
           </Button>
-          <Button onClick={() => handleAction()} color="primary" autoFocus>
+          <Button
+            onClick={() => handleAction('install', true)}
+            color="primary"
+            autoFocus
+          >
             Install
           </Button>
         </DialogActions>
@@ -441,7 +448,6 @@ TableListToolbar.propTypes = {
   directory: PropTypes.string,
   filters: PropTypes.arrayOf(PropTypes.object),
   fromSearch: PropTypes.bool,
-  searchByName: PropTypes.func,
   scrollWrapper: PropTypes.func,
   outdated: PropTypes.arrayOf(PropTypes.object),
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),

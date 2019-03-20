@@ -48,19 +48,14 @@ const handlers = {
       }
     });
   },
-  [updateFilters.type]: (state, { payload: { allFilters } }) => {
-    const {
-      filtering: { filters }
-    } = state;
-
-    return merge(state, {
+  [updateFilters.type]: (state, { payload: { allFilters } }) =>
+    merge(state, {
       ...state,
       filtering: {
         ...state.filtering,
         filters: allFilters
       }
-    });
-  },
+    }),
   [addFilter.type]: (state, { payload: { filter } }) => {
     const {
       filtering: { filters }
@@ -295,16 +290,12 @@ const handlers = {
 
     // update packages
     const newPackages = packages
-      .filter(pkg =>
-        !Boolean(removedPackages.includes(pkg.name)) ? pkg : null
-      )
+      .filter(pkg => (!removedPackages.includes(pkg.name) ? pkg : null))
       .filter(r => Boolean(r));
 
     // update outdated packages
     const newPackagesOutdated = packagesOutdated
-      .filter(pkg =>
-        !Boolean(removedPackages.includes(pkg.name)) ? pkg : null
-      )
+      .filter(pkg => (!removedPackages.includes(pkg.name) ? pkg : null))
       .filter(r => Boolean(r));
 
     return merge(state, {
