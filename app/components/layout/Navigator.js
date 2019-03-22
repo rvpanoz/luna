@@ -126,7 +126,7 @@ const Navigator = ({
           </ListItemText>
         </ListItem>
         <ListItem>
-          <ListItemText>
+          <ListItemText style={{ height: 345 }}>
             <AppTabs>
               <ProjectTab
                 items={[
