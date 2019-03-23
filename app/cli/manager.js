@@ -25,7 +25,6 @@ const execute = (
   directory,
   callback
 ) => {
-  console.log(commandArgs);
   const resultP = new Promise(resolve => {
     const result = [];
     let errors = '';
@@ -173,7 +172,7 @@ const update = (opts, callback) => {
   try {
     const manager = require(path.resolve(__dirname, activeManager));
     const { update } = manager.default;
-    const run = update(opts, idx);
+    const run = update(opts);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
@@ -187,7 +186,7 @@ const uninstall = (opts, callback) => {
   try {
     const manager = require(path.resolve(__dirname, activeManager));
     const { uninstall } = manager.default;
-    const run = uninstall(opts, idx);
+    const run = uninstall(opts);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {

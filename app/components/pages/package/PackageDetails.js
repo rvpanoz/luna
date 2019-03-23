@@ -195,10 +195,18 @@ const PackageDetails = ({ classes }) => {
   const renderList = useCallback((type, data) => (
     <Paper className={classes.paper}>
       <div className={classes.header}>
-        <Typography>{type}</Typography>
+        {type === 'version' && (
+          <Typography>{`Versions (${data.length})`}</Typography>
+        )}
+        {type === 'dependency' && (
+          <Typography>{`Dependencies (${data.length})`}</Typography>
+        )}
       </div>
       <Divider light />
-      <List dense={true} style={{ overflowY: 'scroll', maxHeight: 425 }}>
+      <List
+        dense={true}
+        style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 425 }}
+      >
         {data.map((item, idx) => (
           <ListItem key={`${type}-item-${idx}`} className={classes.listItem}>
             <ListItemText
@@ -264,7 +272,7 @@ const PackageDetails = ({ classes }) => {
               onClick={e =>
                 setActivePopper({
                   index: 1,
-                  anchorEl: activePopper.index === 2 ? null : e.currentTarget,
+                  anchorEl: e.currentTarget,
                   open: !activePopper.open
                 })
               }
@@ -279,7 +287,7 @@ const PackageDetails = ({ classes }) => {
               onClick={e =>
                 setActivePopper({
                   index: 2,
-                  anchorEl: activePopper.index === 1 ? null : e.currentTarget,
+                  anchorEl: e.currentTarget,
                   open: !activePopper.open
                 })
               }
