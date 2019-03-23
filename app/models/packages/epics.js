@@ -1,4 +1,4 @@
-import { tap, map, takeWhile, concatMap } from 'rxjs/operators';
+import { map, takeWhile, concatMap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
@@ -133,10 +133,10 @@ const packagesSuccessEpic = (action$, state$) =>
             peerMissing,
             invalid,
             extraneous,
-            problems,
+            // problems,
             missing
           } = dependency;
-          if (name === 'redux') console.log(dependency);
+
           if (!peerMissing && !invalid && !extraneous && !missing) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
             const enhancedDependency = {
@@ -147,14 +147,6 @@ const packagesSuccessEpic = (action$, state$) =>
 
             deps.push(enhancedDependency);
           }
-
-          // deps.push({
-          //   name,
-          //   invalid,
-          //   extraneous,
-          //   problems,
-          //   isOutdated: false
-          // });
 
           return deps;
         }, []);

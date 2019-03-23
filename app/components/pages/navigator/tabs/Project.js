@@ -12,14 +12,16 @@ import styles from './styles/project';
 
 const key = 'project-tab';
 
-const ProjectTab = ({ classes, items }) => (
-  <div className={classes.tab}>
+const ProjectTab = ({ classes, items, loading }) => (
+  <div className={classes.tab} style={{ minHeight: 250 }}>
     <List dense={true}>
       {items.map((item, idx) => (
         <ListItem key={`${key}item-${idx}`} className={classes.listItem}>
           <ListItemText
             primary={
-              <Typography variant="subtitle2">{item.primaryText}</Typography>
+              <Typography variant="subtitle2">
+                {loading ? 'loading..' : item.primaryText}
+              </Typography>
             }
             secondary={
               <Typography className={classes.secondaryText} variant="body2">
@@ -35,7 +37,8 @@ const ProjectTab = ({ classes, items }) => (
 
 ProjectTab.propTypes = {
   classes: PropTypes.object.isRequired,
-  items: PropTypes.arrayOf(PropTypes.object).isRequired
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  loading: PropTypes.bool
 };
 
 export default withStyles(styles)(ProjectTab);

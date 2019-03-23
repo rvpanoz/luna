@@ -108,7 +108,6 @@ const AppLayout = ({ classes }) => {
             totalnotifications={notifications && notifications.length}
             mode={mode}
             directory={directory && shrinkDirectory(directory)}
-            title="Packages"
             PaperProps={{ style: { width: drawerWidth } }}
             userAgent={env && env.userAgent}
             {...restProps}

@@ -10,7 +10,8 @@ const styles = theme => ({
   },
   secondaryText: {
     color: grayColor,
-    paddingBottom: theme.spacing.unit * 2
+    paddingBottom: theme.spacing.unit * 2,
+    wordWrap: 'break-word'
   }
 });
 
