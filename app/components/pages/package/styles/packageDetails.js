@@ -1,14 +1,22 @@
 import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import red from '@material-ui/core/colors/red';
+import { defaultFont } from 'styles/variables';
 
 const styles = theme => ({
   actions: {
     display: 'flex'
   },
+  paper: {},
   avatar: {
     width: 50,
     height: 50,
     backgroundColor: red[500]
+  },
+  header: {
+    ...defaultFont,
+    fontSize: 20,
+    fontWeight: 400,
+    padding: theme.spacing.unit
   },
   chip: {
     color: theme.palette.secondary.main,

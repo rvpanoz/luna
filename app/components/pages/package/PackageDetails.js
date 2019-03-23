@@ -12,12 +12,13 @@ import { objectOf, string } from 'prop-types';
 import cn from 'classnames';
 
 import { withStyles } from '@material-ui/core/styles';
-import Popper from '@material-ui/core/Popper';
 import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
+import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Chip from '@material-ui/core/Chip';
@@ -26,19 +27,21 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Delete';
-import InfoIcon from '@material-ui/icons/InfoOutlined';
 import UpdateIcon from '@material-ui/icons/Update';
+import DependenciesIcon from '@material-ui/icons/List';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Fade from '@material-ui/core/Fade';
-
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { togglePackageLoader } from 'models/ui/actions';
 import { setActive } from 'models/packages/actions';
-import { APP_MODES, APP_INFO } from 'constants/AppConstants';
+import { APP_INFO } from 'constants/AppConstants';
 
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
 
-import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
 const getCleanProps = (val, key) => /^[^_]/.test(key);
@@ -62,7 +65,8 @@ const PackageDetails = ({ classes }) => {
   const [license, setLicense] = useState(APP_INFO.NOT_AVAILABLE);
   const [group, setGroup] = useState('global');
   const [expanded, expand] = useState(false);
-  const [popperInfo, togglePopperInfo] = useState({
+  const [activePopper, setActivePopper] = useState({
+    index: 0,
     anchorEl: null,
     open: false
   });
@@ -85,7 +89,7 @@ const PackageDetails = ({ classes }) => {
       return;
     }
 
-    if (mode === APP_MODES.LOCAL && active) {
+    if (mode === 'local' && active) {
       setGroup(pkg.__group);
     }
 
@@ -158,6 +162,43 @@ const PackageDetails = ({ classes }) => {
     return () => ipcRenderer.removeAllListeners(['view-package-close']);
   }, []);
 
+  const renderList = useCallback(
+    (type, data) => (
+      <Paper className={classes.paper}>
+        <div className={classes.header}>
+          <Typography>{type}</Typography>
+        </div>
+        <Divider light />
+        <List dense={true} style={{ overflowY: 'scroll', maxHeight: 425 }}>
+          {data.map((item, idx) => (
+            <ListItem key={`${type}-item-${idx}`} className={classes.listItem}>
+              <ListItemText
+                primary={
+                  <Typography variant="subtitle2">
+                    {typeof item === 'string' ? item : item.name}
+                  </Typography>
+                }
+                secondary={
+                  type === 'dependency' && (
+                    <Typography variant="subtitle2">{item.version}</Typography>
+                  )
+                }
+              />
+              {type === 'version' && (
+                <ListItemSecondaryAction>
+                  <IconButton aria-label="install_version">
+                    <AddIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              )}
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+    ),
+    []
+  );
+
   const renderCard = useCallback(() => (
     <Grid container justify="space-around">
       <Grid item xs={11} md={10} lg={10} xl={10}>
@@ -165,12 +206,14 @@ const PackageDetails = ({ classes }) => {
           <Card className={classes.card}>
             <CardHeader
               action={
-                <Chip
-                  label={`in ${group}`}
-                  className={cn(classes.chip, {
-                    [classes[`${group}Chip`]]: Boolean(group)
-                  })}
-                />
+                mode === 'local' && (
+                  <Chip
+                    label={`in ${group}`}
+                    className={cn(classes.chip, {
+                      [classes[`${group}Chip`]]: Boolean(group)
+                    })}
+                  />
+                )
               }
               title={name}
               subheader={`v${version}`}
@@ -189,17 +232,32 @@ const PackageDetails = ({ classes }) => {
             root: classes.toolbar
           }}
         >
-          <Tooltip title="View details">
+          <Tooltip title="Package versions">
             <IconButton
               disableRipple
               onClick={e =>
-                togglePopperInfo({
-                  anchorEl: popperInfo.anchorEl ? null : e.currentTarget,
-                  open: !popperInfo.open
+                setActivePopper({
+                  index: 1,
+                  anchorEl: activePopper.anchorEl ? null : e.currentTarget,
+                  open: !activePopper.open
                 })
               }
             >
-              <InfoIcon />
+              <UpdateIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Package dependencies">
+            <IconButton
+              disableRipple
+              onClick={e =>
+                setActivePopper({
+                  index: 2,
+                  anchorEl: activePopper.anchorEl ? null : e.currentTarget,
+                  open: !activePopper.open
+                })
+              }
+            >
+              <DependenciesIcon />
             </IconButton>
           </Tooltip>
         </Toolbar>
@@ -207,22 +265,44 @@ const PackageDetails = ({ classes }) => {
     </Grid>
   ));
 
+  const activeDependencies = active && active.dependencies;
+  let dependenciesToArray = [];
+
+  if (activeDependencies) {
+    const dependenciesNames = Object.keys(activeDependencies);
+
+    dependenciesToArray = dependenciesNames.map(dep => ({
+      name: dep,
+      version: activeDependencies[dep]
+    }));
+  }
+
   return (
     <div className={classes.wrapper}>
       <AppLoader loading={packageLoader.loading} relative>
         {active ? renderCard() : null}
       </AppLoader>
       <Popper
-        open={popperInfo.open}
-        anchorEl={popperInfo.anchorEl}
+        open={activePopper.index === 1 && activePopper.open}
+        anchorEl={activePopper.index === 1 && activePopper.anchorEl}
         placement="left-start"
         transition
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
-            <Paper>
-              <PackageInfo license={license} {...active} />
-            </Paper>
+            {renderList('version', active.versions)}
+          </Fade>
+        )}
+      </Popper>
+      <Popper
+        open={activePopper.index === 2 && activePopper.open}
+        anchorEl={activePopper.index === 2 && activePopper.anchorEl}
+        placement="left-start"
+        transition
+      >
+        {({ TransitionProps }) => (
+          <Fade {...TransitionProps} timeout={350}>
+            {renderList('dependency', dependenciesToArray)}
           </Fade>
         )}
       </Popper>

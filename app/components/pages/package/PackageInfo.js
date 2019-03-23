@@ -19,7 +19,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import SearchIcon from '@material-ui/icons/Search';
 import ViewIcon from '@material-ui/icons/ViewArray';
 
-import PaperHeader from 'components/layout/Paper/PaperHeader';
+import AppTabs from 'components/common/AppTabs';
 
 import styles from './styles/packageInfo';
 
@@ -82,11 +82,12 @@ const PackageInfoDetails = ({
 
   return (
     <Paper elevation={2} className={classes.root}>
-      <PaperHeader>
-        <Typography>License:&nbsp;{`${license}`}</Typography>
-      </PaperHeader>
+      <Typography>License:&nbsp;{`${license}`}</Typography>
       <Divider />
-      <AppBar position="static" color="default">
+      <AppTabs>
+        <div>{renderDependencies(dependencies)}</div>
+      </AppTabs>
+      {/* <AppBar position="static" color="default">
         <Tabs
           value={activeTab}
           onChange={(e, value) => setActiveTab(value)}
@@ -103,7 +104,7 @@ const PackageInfoDetails = ({
       )}
       {activeTab === 1 && (
         <TabContainer>{renderDependencies(dependencies)}</TabContainer>
-      )}
+      )} */}
     </Paper>
   );
 };

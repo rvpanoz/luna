@@ -133,8 +133,8 @@ const Navigator = ({
                   {
                     primaryText:
                       mode === 'local' && name
-                        ? `${name} - v${version || '0.0.0'}`
-                        : 'Global',
+                        ? `${name} - v${version || '1.0.0'}`
+                        : 'Global - v1.0.0',
                     secondaryText: userAgent
                   },
                   {
