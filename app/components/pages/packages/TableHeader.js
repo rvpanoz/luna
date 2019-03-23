@@ -37,27 +37,20 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
     )
   );
 
-  const handleSelectAll = () => {
-    const checkBoxElement = checkboxAll && checkboxAll.current;
-
-    const indeterminate =
-      checkBoxElement.dataset && checkBoxElement.dataset.indeterminate;
-
-    if (indeterminate === 'true') {
-      return dispatch(clearSelected());
-    }
-
-    if (packages && Array.isArray(packages)) {
+  const handleSelectAll = e => {
+    if (event.target.checked && packages) {
       packages.forEach(name =>
-        name !== 'npm'
-          ? dispatch(
-              addSelected({
-                name
-              })
-            )
-          : null
+        dispatch(
+          addSelected({
+            name
+          })
+        )
       );
+
+      return;
     }
+
+    return dispatch(clearSelected());
   };
 
   return (
