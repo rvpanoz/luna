@@ -35,7 +35,7 @@ import UpdateIcon from '@material-ui/icons/Update';
 import DependenciesIcon from '@material-ui/icons/List';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { updatePackages } from 'models/packages/actions';
+import { updatePackages, installPackages } from 'models/packages/actions';
 import { APP_INFO } from 'constants/AppConstants';
 
 import AppLoader from 'components/common/AppLoader';
@@ -103,7 +103,22 @@ const PackageDetails = ({ classes }) => {
 
   const renderSearchActions = () => (
     <Tooltip title="install">
-      <IconButton disableRipple onClick={e => console.log(e)}>
+      <IconButton
+        disableRipple
+        onClick={e => {
+          const parameters = {
+            ipcEvent: 'install',
+            cmd: ['install'],
+            name: active.name,
+            pkgOptions: ['--save-prod'],
+            single: true,
+            mode,
+            directory
+          };
+
+          dispatch(installPackages(parameters));
+        }}
+      >
         <AddIcon />
       </IconButton>
     </Tooltip>

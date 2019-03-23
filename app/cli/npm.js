@@ -1,174 +1,57 @@
 /**
- * npm module for npm cli commands
- */
-
-/* eslint-disable prefer-promise-reject-errors */
-/* eslint-disable compat/compat */
-/* eslint-disable no-nested-ternary */
-
-/**
  * npm install [<@scope>/]<name>@<version>
  */
-exports.install = (options, idx) => {
-  const command = ['install'];
-  const { mode, version, pkgOptions, multiple, packages } = options || {};
-  const defaults = [];
 
-  if (!packages && !multiple) {
-    return Promise.reject('npm[install] package name parameter must be given');
-  }
+import install from './npm/install';
+import view from './npm/view';
+import uninstall from './npm/uninstall';
+import update from './npm/update';
 
-  const getNames = () => {
-    if (multiple && Array.isArray(packages[idx])) {
-      return packages[idx];
-    }
-
-    return version ? [`${packages[0]}@${version}`] : packages;
-  };
-
-  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-  const commandOpts =
-    pkgOptions && pkgOptions.length
-      ? [pkgOptions[idx]].map(option => `--${option}`)
-      : [];
-
-  const run = []
-    .concat(command)
-    .concat(commandArgs)
-    .concat(getNames())
-    .concat(commandOpts);
-
-  return run;
+export default {
+  install,
+  view,
+  update,
+  uninstall
 };
 
-/**
- * npm install [<@scope>/]<name>@<version>
- */
-exports.update = options => {
-  const command = ['update'];
-  const { name, mode, version = null, pkgOptions, multiple, packages } =
-    options || {};
-  const defaults = [];
+// /** npm tools */
+// exports.audit = options => {
+//   const command = ['audit'];
+//   const { mode } = options || {};
+//   const defaults = ['--parseable', '--json'];
 
-  if (!name && !multiple) {
-    return Promise.reject('npm[update] package name parameter must be given');
-  }
+//   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
 
-  function getNames() {
-    return multiple && packages && Array.isArray(packages)
-      ? packages
-      : version
-      ? `${name}@${version}`.trim()
-      : name.trim();
-  }
+//   // build npm command
+//   const run = [].concat(command).concat(commandArgs);
 
-  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-  const commandOpts =
-    pkgOptions && pkgOptions.length
-      ? pkgOptions.map(option => `--${option}`)
-      : [];
+//   return run;
+// };
 
-  const run = []
-    .concat(command)
-    .concat(commandArgs)
-    .concat(getNames())
-    .concat(commandOpts);
+// // https://docs.npmjs.com/cli/doctor.html
+// exports.doctor = options => {
+//   const command = ['doctor'];
+//   const { mode } = options || {};
+//   const defaults = ['--parseable', '--json'];
 
-  return run;
-};
+//   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : [];
 
-/**
- * npm uninstall [<@scope>/]<pkg>[@<version>]
- */
-exports.uninstall = options => {
-  const command = ['uninstall'];
-  const { name, mode, multiple, packages } = options;
-  const defaults = [];
+//   // build npm command
+//   const run = [].concat(command).concat(commandArgs);
 
-  function getNames() {
-    if (multiple && packages && Array.isArray(packages)) {
-      return packages;
-    }
+//   return run;
+// };
 
-    if (!name && !multiple) {
-      return Promise.reject(
-        'npm[uninstall] package name parameter must be given'
-      );
-    }
+// // @scope>/]<pkg>...] [--production] [--dry-run] [--json]
+// exports.prune = options => {
+//   const command = ['prune'];
+//   const { mode } = options || {};
+//   const defaults = ['--parseable', '--json'];
 
-    return name;
-  }
+//   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
 
-  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-  const run = []
-    .concat(command)
-    .concat(commandArgs)
-    .concat(getNames());
+//   // build npm command
+//   const run = [].concat(command).concat(commandArgs);
 
-  return run;
-};
-
-/**
- * npm view [<@scope>/]<name>[@<version>]
- */
-exports.view = options => {
-  const command = ['view'];
-  const { mode, name, version } = options || {};
-  const defaults = ['--depth=0', '--json'];
-
-  if (!name) {
-    return Promise.reject('npm[view] package name parameter must be given');
-  }
-
-  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-
-  // build npm command
-  const run = []
-    .concat(command)
-    .concat(version ? [].concat([`${name}@${version}`]) : [name])
-    .concat(commandArgs);
-
-  return run;
-};
-
-/** npm tools */
-exports.audit = options => {
-  const command = ['audit'];
-  const { mode } = options || {};
-  const defaults = ['--parseable', '--json'];
-
-  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-
-  // build npm command
-  const run = [].concat(command).concat(commandArgs);
-
-  return run;
-};
-
-// https://docs.npmjs.com/cli/doctor.html
-exports.doctor = options => {
-  const command = ['doctor'];
-  const { mode } = options || {};
-  const defaults = ['--parseable', '--json'];
-
-  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : [];
-
-  // build npm command
-  const run = [].concat(command).concat(commandArgs);
-
-  return run;
-};
-
-// @scope>/]<pkg>...] [--production] [--dry-run] [--json]
-exports.prune = options => {
-  const command = ['prune'];
-  const { mode } = options || {};
-  const defaults = ['--parseable', '--json'];
-
-  const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-
-  // build npm command
-  const run = [].concat(command).concat(commandArgs);
-
-  return run;
-};
+//   return run;
+// };

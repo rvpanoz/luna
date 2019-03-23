@@ -104,6 +104,7 @@ const installPackagesEpic = action$ =>
   action$.pipe(
     ofType(installPackages.type),
     map(({ payload }) => {
+      console.log(payload);
       ipcRenderer.send('ipc-event', payload);
 
       return updateLoader({
@@ -117,6 +118,7 @@ const viewPackagesEpic = action$ =>
   action$.pipe(
     ofType(viewPackage.type),
     map(({ payload }) => {
+      console.log(payload);
       ipcRenderer.send('ipc-event', payload);
 
       return updatePackageLoader({

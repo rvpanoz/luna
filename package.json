@@ -159,7 +159,7 @@
     "electron": "^4.0.0",
     "electron-builder": "^20.39.0",
     "electron-devtools-installer": "^2.2.4",
-    "eslint": "^5.15.2",
+    "eslint": "^5.15.3",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.6.0",
     "eslint-formatter-pretty": "^2.1.1",
