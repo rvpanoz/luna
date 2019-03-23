@@ -220,6 +220,8 @@ const TableListToolbar = ({
 
   const renderAction = useCallback(
     action => {
+      const hasNpmSelected = selected && selected.indexOf('npm') > -1;
+
       const actionEl = switchcase({
         clearFilters: () => (
           <Tooltip title="Clear filters">
@@ -254,17 +256,21 @@ const TableListToolbar = ({
             </IconButton>
           </Tooltip>
         ),
-        uninstall: () => (
-          <Tooltip title="Uninstall selected">
-            <IconButton
-              color="secondary"
-              aria-label="uninstall selected"
-              onClick={() => handleAction('uninstall')}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ),
+        uninstall: () => {
+          const hasOneSelected = selected && selected.length === 1;
+
+          return hasOneSelected && hasNpmSelected ? null : (
+            <Tooltip title="Uninstall selected">
+              <IconButton
+                color="secondary"
+                aria-label="uninstall selected"
+                onClick={() => handleAction('uninstall')}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          );
+        },
         prune: () => (
           <Tooltip title="Run npm prune to remove extraneous packages">
             <div>
