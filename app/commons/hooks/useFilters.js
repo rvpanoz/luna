@@ -6,29 +6,40 @@ import { PACKAGE_GROUPS } from 'constants/AppConstants';
 
 const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);
-  console.log(filters);
-  const withFiltersData = filters.reduce((acc = [], filterDetails) => {
-    const { filterType, filterValue } = filterDetails;
 
-    const filtered =
-      data &&
-      data.filter(pkg => {
-        const { name } = pkg;
+  const withFiltersData =
+    data &&
+    data.reduce((acc = [], pkg) => {
+      const { name } = pkg;
+      const pkgIn = acc.find(pack => pack.name.indexOf(name) > -1);
 
-        if (groups.indexOf(filterValue) > -1) {
-          return pkg.__group === filterValue;
+      if (pkgIn) {
+        return acc;
+      }
+
+      // for each pkg run filter to match criteria
+      filters.forEach(filterDetails => {
+        const { filterType, filterValue } = filterDetails;
+
+        if (groups.indexOf(filterValue) > -1 && pkg.__group === filterValue) {
+          acc.push(pkg);
         }
 
-        if (filterType === 'name' && filterValue) {
-          return name.indexOf(filterValue) > -1;
+        if (
+          filterType === 'name' &&
+          filterValue &&
+          name.indexOf(filterValue) > -1
+        ) {
+          acc.push(pkg);
         }
 
-        return pkg[filterValue];
+        if (pkg[filterValue]) {
+          acc.push(pkg);
+        }
       });
 
-    console.log(filtered);
-    return acc.concat(filtered);
-  }, []);
+      return acc;
+    }, []);
 
   return withFiltersData;
 };

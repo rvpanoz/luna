@@ -1,7 +1,8 @@
 /* eslint-disable react/require-default-props */
+/* eslint-disable  no-case-declarations */
 
 import { withStyles } from '@material-ui/core/styles';
-import React, { useRef, useCallback, useState } from 'react';
+import React, { useRef, useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { remove, prepend } from 'ramda';
@@ -24,6 +25,20 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
   const searchInputEl = useRef(null);
   const [filters, setFilters] = useState([{ filterType: 'name' }]);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (listFilters.length) {
+      const inputName = searchInputEl && searchInputEl.current;
+      const filterName =
+        listFilters &&
+        listFilters.find(({ filterType }) => filterType === 'name');
+      if (inputName && filterName) {
+        inputName.value = filterName.filterValue || '';
+      }
+
+      setFilters(listFilters);
+    }
+  }, [listFilters]);
 
   const addFilter = useCallback(
     ({ filterType, filterValue }) => {

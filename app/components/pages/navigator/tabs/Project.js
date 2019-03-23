@@ -37,7 +37,8 @@ const ProjectTab = ({ classes, items, loading }) => (
 
 ProjectTab.propTypes = {
   classes: PropTypes.object.isRequired,
-  items: PropTypes.arrayOf(PropTypes.object).isRequired
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  loading: PropTypes.bool
 };
 
 export default withStyles(styles)(ProjectTab);
