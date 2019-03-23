@@ -1,4 +1,3 @@
-import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import red from '@material-ui/core/colors/red';
 import { defaultFont } from 'styles/variables';
 
@@ -6,36 +5,20 @@ const styles = theme => ({
   actions: {
     display: 'flex'
   },
-  paper: {},
   avatar: {
     width: 50,
     height: 50,
     backgroundColor: red[500]
+  },
+  group: {
+    padding: 0,
+    margin: 0
   },
   header: {
     ...defaultFont,
     fontSize: 20,
     fontWeight: 400,
     padding: theme.spacing.unit
-  },
-  chip: {
-    color: theme.palette.secondary.main,
-    margin: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
-  },
-  devDependenciesChip: {
-    backgroundColor: theme.palette.primary.light
-  },
-  dependenciesChip: {
-    backgroundColor: theme.palette.secondary.light
-  },
-  optionalDependenciesChip: {
-    backgroundColor: lighten(theme.palette.primary.light, 0.75)
-  },
-  peerDependenciesChip: {
-    backgroundColor: darken(theme.palette.error.light, 0.6)
-  },
-  globalChip: {
-    backgroundColor: theme.palette.secondary.main
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -51,7 +34,12 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column'
   },
-  wrapper: {}
+  paper: {
+    width: '100%'
+  },
+  wrapper: {
+    width: '100%'
+  }
 });
 
 export default styles;

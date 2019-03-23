@@ -5,8 +5,7 @@
 /* eslint-disable */
 
 import React, { useEffect, useCallback, useState } from 'react';
-import { ipcRenderer } from 'electron';
-import { always, cond, equals, pickBy } from 'ramda';
+import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { objectOf, string } from 'prop-types';
 import cn from 'classnames';
@@ -21,22 +20,22 @@ import CardActions from '@material-ui/core/CardActions';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import Chip from '@material-ui/core/Chip';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Grid from '@material-ui/core/Grid';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Delete';
-import UpdateIcon from '@material-ui/icons/Update';
-import DependenciesIcon from '@material-ui/icons/List';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Fade from '@material-ui/core/Fade';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import { togglePackageLoader } from 'models/ui/actions';
-import { setActive } from 'models/packages/actions';
+
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Delete';
+import UpdateIcon from '@material-ui/icons/Update';
+import DependenciesIcon from '@material-ui/icons/List';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
+import { updatePackages } from 'models/packages/actions';
 import { APP_INFO } from 'constants/AppConstants';
 
 import AppLoader from 'components/common/AppLoader';
@@ -44,20 +43,19 @@ import Transition from 'components/common/Transition';
 
 import styles from './styles/packageDetails';
 
-const getCleanProps = (val, key) => /^[^_]/.test(key);
-
 const mapState = ({
-  common: { mode, packageLoader },
+  common: { mode, directory, packageLoader },
   modules: {
-    data: { packages },
+    data: { packagesOutdated },
     active,
     metadata: { fromSearch }
   }
 }) => ({
   active,
   mode,
+  directory,
   packageLoader,
-  packages,
+  packagesOutdated,
   fromSearch
 });
 
@@ -65,6 +63,7 @@ const PackageDetails = ({ classes }) => {
   const [license, setLicense] = useState(APP_INFO.NOT_AVAILABLE);
   const [group, setGroup] = useState('global');
   const [expanded, expand] = useState(false);
+  const [isOutdated, setOutdated] = useState(false);
   const [activePopper, setActivePopper] = useState({
     index: 0,
     anchorEl: null,
@@ -72,29 +71,35 @@ const PackageDetails = ({ classes }) => {
   });
 
   const dispatch = useDispatch();
-  const { active, packageLoader, mode, packages, fromSearch } = useMappedState(
-    mapState
-  );
+  const {
+    active,
+    packageLoader,
+    mode,
+    directory,
+    fromSearch,
+    packagesOutdated
+  } = useMappedState(mapState);
   const { name, version, description } = active || {};
 
-  const findPackageByName = useCallback(
-    name => (packages && packages.filter(pkg => pkg.name === name)[0]) || null,
-    [active]
-  );
-
   useEffect(() => {
-    const pkg = findPackageByName(name);
-
-    if (!pkg || typeof pkg !== 'object') {
+    if (!active) {
       return;
     }
 
-    if (mode === 'local' && active) {
-      setGroup(pkg.__group);
+    const { name } = active;
+
+    if (mode === 'local') {
+      setGroup(active.__group);
     }
 
-    setLicense(pkg.license || APP_INFO.NOT_AVAILABLE);
-  }, [name]);
+    const newOutdated =
+      packagesOutdated &&
+      packagesOutdated.find(pkgOutdated => pkgOutdated.name === name);
+
+    setOutdated(Boolean(newOutdated));
+
+    setLicense(active.license || APP_INFO.NOT_AVAILABLE);
+  }, [active]);
 
   const renderSearchActions = () => (
     <Tooltip title="install">
@@ -104,15 +109,45 @@ const PackageDetails = ({ classes }) => {
     </Tooltip>
   );
 
-  const renderInstalledActions = () => (
+  const renderOparationActions = (active, isOutdated) => (
     <React.Fragment>
-      <Tooltip title="install">
-        <IconButton disableRipple onClick={e => console.log(e)}>
-          <UpdateIcon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip title="remove">
-        <IconButton disableRipple onClick={e => console.log(e)}>
+      {isOutdated && (
+        <Tooltip title="Update">
+          <IconButton
+            disableRipple
+            color="primary"
+            onClick={e =>
+              dispatch(
+                updatePackages({
+                  ipcEvent: 'ipc-event',
+                  cmd: ['update'],
+                  name: active.name,
+                  mode,
+                  directory
+                })
+              )
+            }
+          >
+            <UpdateIcon />
+          </IconButton>
+        </Tooltip>
+      )}
+      <Tooltip title="Remove">
+        <IconButton
+          disableRipple
+          color="secondary"
+          onClick={() =>
+            dispatch(
+              updatePackages({
+                ipcEvent: 'ipc-event',
+                cmd: ['uninstall'],
+                name: active.name,
+                mode,
+                directory
+              })
+            )
+          }
+        >
           <RemoveIcon />
         </IconButton>
       </Tooltip>
@@ -125,7 +160,7 @@ const PackageDetails = ({ classes }) => {
     return (
       <CardActions className={classes.actions} disableActionSpacing>
         {cond([
-          [equals(false), always(renderInstalledActions())],
+          [equals(false), always(renderOparationActions(active, isOutdated))],
           [equals(true), always(renderSearchActions())]
         ])(fromSearchBool)}
         <IconButton
@@ -140,64 +175,41 @@ const PackageDetails = ({ classes }) => {
         </IconButton>
       </CardActions>
     );
-  }, [fromSearch]);
+  }, [active, isOutdated, fromSearch]);
 
-  useEffect(() => {
-    ipcRenderer.on(['view-close'], (event, status, cmd, data) => {
-      try {
-        const newActive = data && JSON.parse(data);
-        const properties = pickBy(getCleanProps, newActive); //remove __property name
-
-        dispatch(setActive({ active: properties }));
-        dispatch(
-          togglePackageLoader({
-            loading: false
-          })
-        );
-      } catch (err) {
-        throw new Error(err);
-      }
-    });
-
-    return () => ipcRenderer.removeAllListeners(['view-package-close']);
-  }, []);
-
-  const renderList = useCallback(
-    (type, data) => (
-      <Paper className={classes.paper}>
-        <div className={classes.header}>
-          <Typography>{type}</Typography>
-        </div>
-        <Divider light />
-        <List dense={true} style={{ overflowY: 'scroll', maxHeight: 425 }}>
-          {data.map((item, idx) => (
-            <ListItem key={`${type}-item-${idx}`} className={classes.listItem}>
-              <ListItemText
-                primary={
-                  <Typography variant="subtitle2">
-                    {typeof item === 'string' ? item : item.name}
-                  </Typography>
-                }
-                secondary={
-                  type === 'dependency' && (
-                    <Typography variant="subtitle2">{item.version}</Typography>
-                  )
-                }
-              />
-              {type === 'version' && (
-                <ListItemSecondaryAction>
-                  <IconButton aria-label="install_version">
-                    <AddIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              )}
-            </ListItem>
-          ))}
-        </List>
-      </Paper>
-    ),
-    []
-  );
+  const renderList = useCallback((type, data) => (
+    <Paper className={classes.paper}>
+      <div className={classes.header}>
+        <Typography>{type}</Typography>
+      </div>
+      <Divider light />
+      <List dense={true} style={{ overflowY: 'scroll', maxHeight: 425 }}>
+        {data.map((item, idx) => (
+          <ListItem key={`${type}-item-${idx}`} className={classes.listItem}>
+            <ListItemText
+              primary={
+                <Typography variant="subtitle2">
+                  {type === 'version' ? item : item.name}
+                </Typography>
+              }
+              secondary={
+                type === 'dependency' && (
+                  <Typography variant="subtitle2">{item.version}</Typography>
+                )
+              }
+            />
+            {type === 'version' && (
+              <ListItemSecondaryAction>
+                <IconButton aria-label="install_version">
+                  <AddIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            )}
+          </ListItem>
+        ))}
+      </List>
+    </Paper>
+  ));
 
   const renderCard = useCallback(() => (
     <Grid container justify="space-around">
@@ -205,21 +217,19 @@ const PackageDetails = ({ classes }) => {
         <Transition>
           <Card className={classes.card}>
             <CardHeader
-              action={
-                mode === 'local' && (
-                  <Chip
-                    label={`in ${group}`}
-                    className={cn(classes.chip, {
-                      [classes[`${group}Chip`]]: Boolean(group)
-                    })}
-                  />
-                )
+              title={<Typography variant="subtitle1">{name}</Typography>}
+              subheader={
+                <React.Fragment>
+                  <Typography variant="caption">{`v${version} - ${license}`}</Typography>
+                  {mode === 'local' && (
+                    <Typography variant="caption">{group}</Typography>
+                  )}
+                </React.Fragment>
               }
-              title={name}
-              subheader={`v${version}`}
             />
             <CardContent>
-              <Typography component="p">{description}</Typography>
+              <Typography variant="body1">{description}</Typography>
+              <Divider light />
             </CardContent>
             {renderActions(name, fromSearch)}
           </Card>
@@ -234,11 +244,12 @@ const PackageDetails = ({ classes }) => {
         >
           <Tooltip title="Package versions">
             <IconButton
+              color="primary"
               disableRipple
               onClick={e =>
                 setActivePopper({
                   index: 1,
-                  anchorEl: activePopper.anchorEl ? null : e.currentTarget,
+                  anchorEl: activePopper.index === 2 ? null : e.currentTarget,
                   open: !activePopper.open
                 })
               }
@@ -248,11 +259,12 @@ const PackageDetails = ({ classes }) => {
           </Tooltip>
           <Tooltip title="Package dependencies">
             <IconButton
+              color="primary"
               disableRipple
               onClick={e =>
                 setActivePopper({
                   index: 2,
-                  anchorEl: activePopper.anchorEl ? null : e.currentTarget,
+                  anchorEl: activePopper.index === 1 ? null : e.currentTarget,
                   open: !activePopper.open
                 })
               }
@@ -284,24 +296,24 @@ const PackageDetails = ({ classes }) => {
       </AppLoader>
       <Popper
         open={activePopper.index === 1 && activePopper.open}
-        anchorEl={activePopper.index === 1 && activePopper.anchorEl}
+        anchorEl={activePopper.index === 1 ? activePopper.anchorEl : null}
         placement="left-start"
         transition
       >
         {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
+          <Fade {...TransitionProps} timeout={100}>
             {renderList('version', active.versions)}
           </Fade>
         )}
       </Popper>
       <Popper
         open={activePopper.index === 2 && activePopper.open}
-        anchorEl={activePopper.index === 2 && activePopper.anchorEl}
+        anchorEl={activePopper.index === 2 ? activePopper.anchorEl : null}
         placement="left-start"
         transition
       >
         {({ TransitionProps }) => (
-          <Fade {...TransitionProps} timeout={350}>
+          <Fade {...TransitionProps} timeout={100}>
             {renderList('dependency', dependenciesToArray)}
           </Fade>
         )}

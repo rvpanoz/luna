@@ -5,6 +5,7 @@ import { isPackageOutdated } from 'commons/utils';
 
 import {
   toggleLoader,
+  togglePackageLoader,
   clearCommands,
   clearNotifications,
   clearAll
@@ -19,7 +20,8 @@ import {
   setOutdatedSuccess,
   updateData,
   setPage,
-  runAudit
+  runAudit,
+  viewPackage
 } from './actions';
 
 const cleanNotifications = () => ({
@@ -36,6 +38,11 @@ const cleanPackages = () => ({
 
 const updateLoader = payload => ({
   type: toggleLoader.type,
+  payload
+});
+
+const updatePackageLoader = payload => ({
+  type: togglePackageLoader.type,
   payload
 });
 
@@ -102,6 +109,19 @@ const installPackagesEpic = action$ =>
       return updateLoader({
         loading: true,
         message: 'Installing packages..'
+      });
+    })
+  );
+
+const viewPackagesEpic = action$ =>
+  action$.pipe(
+    ofType(viewPackage.type),
+    map(({ payload }) => {
+      ipcRenderer.send('ipc-event', payload);
+
+      return updatePackageLoader({
+        loading: true,
+        message: 'Loading package..'
       });
     })
   );
@@ -208,5 +228,6 @@ export default combineEpics(
   packagesSuccessEpic,
   installPackagesEpic,
   cleanAllEpic,
-  updatePackagesEpic
+  updatePackagesEpic,
+  viewPackagesEpic
 );

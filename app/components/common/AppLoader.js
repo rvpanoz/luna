@@ -23,12 +23,12 @@ const styles = () => ({
     alignItems: 'center',
     justifyContent: 'space-around',
     left: '50%',
-    top: '40%',
+    top: '50%',
     padding: 0,
     margin: 0
   },
   relative: {
-    left: '50%',
+    left: '0%',
     position: 'relative'
   },
   progress: {

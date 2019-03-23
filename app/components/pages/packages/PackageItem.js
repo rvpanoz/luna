@@ -1,6 +1,5 @@
 /* eslint-disable react/require-default-props */
 
-import { ipcRenderer } from 'electron';
 import React, { useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
@@ -19,30 +18,17 @@ import styles from './styles/packages';
 const PackageItem = ({
   classes,
   name,
-  manager,
   isSelected,
   addSelected,
   version,
   latest,
   isOutdated,
   group,
-  mode,
-  directory,
   fromSearch,
-  extraneous
+  extraneous,
+  viewPackage
 }) => {
   const rowRef = useRef();
-
-  const viewPackage = () =>
-    ipcRenderer.send('ipc-event', {
-      activeManager: manager,
-      ipcEvent: 'view',
-      cmd: ['view'],
-      name,
-      version,
-      mode,
-      directory
-    });
 
   return (
     <TableRow
@@ -56,7 +42,7 @@ const PackageItem = ({
       classes={{
         root: classes.tableRow
       }}
-      onClick={viewPackage}
+      onClick={() => viewPackage(name, version)}
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
@@ -121,6 +107,7 @@ const PackageItem = ({
 PackageItem.propTypes = {
   classes: objectOf(string).isRequired,
   latest: oneOfType([string, object]),
+  viewPackage: func.isRequired,
   name: string.isRequired,
   addSelected: func.isRequired,
   isSelected: bool.isRequired,
@@ -128,9 +115,6 @@ PackageItem.propTypes = {
   fromSearch: bool,
   version: string,
   group: string,
-  manager: string,
-  mode: string,
-  directory: string,
   extraneous: bool
 };
 

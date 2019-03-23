@@ -20,6 +20,7 @@ const setActive = ActionCreator('SET_ACTIVE_PACKAGE');
 const setActiveError = ActionCreator('SET_ACTIVE_PACKAGE_ERROR');
 const setPackagesError = ActionCreator('SET_PACKAGES_ERROR');
 const updateData = ActionCreator('UPDATE_DATA');
+const viewPackage = ActionCreator('VIEW_PACKAGE');
 const setPage = ActionCreator('SET_PAGE');
 const setPageRows = ActionCreator('SET_PAGE_ROWS');
 
@@ -53,5 +54,6 @@ export {
   updateData,
   updateFilters,
   runAudit,
-  removePackages
+  removePackages,
+  viewPackage
 };

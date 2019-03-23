@@ -7,14 +7,22 @@ import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Snackbar from '@material-ui/core/Snackbar';
 import theme from 'styles/theme';
-
+import { pickBy } from 'ramda';
 import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
 import { Packages } from 'components/pages/packages';
 import SnackbarContent from 'components/common/SnackbarContent';
 import { Notifications } from 'components/pages/notifications';
-import { addActionError, removePackages } from 'models/packages/actions';
-import { setSnackbar, toggleLoader } from 'models/ui/actions';
+import {
+  addActionError,
+  removePackages,
+  setActive
+} from 'models/packages/actions';
+import {
+  setSnackbar,
+  toggleLoader,
+  togglePackageLoader
+} from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 
 import { drawerWidth } from 'styles/variables';
@@ -96,6 +104,27 @@ const AppLayout = ({ classes }) => {
 
     return () => ipcRenderer.removeAllListeners(['action-close']);
   });
+
+  useEffect(() => {
+    ipcRenderer.on(['view-close'], (event, status, cmd, data) => {
+      try {
+        const newActive = data && JSON.parse(data);
+        const getCleanProps = (val, key) => /^[^_]/.test(key);
+        const properties = pickBy(getCleanProps, newActive); //remove __property name
+
+        dispatch(setActive({ active: properties }));
+        dispatch(
+          togglePackageLoader({
+            loading: false
+          })
+        );
+      } catch (err) {
+        throw new Error(err);
+      }
+    });
+
+    return () => ipcRenderer.removeAllListeners(['view-package-close']);
+  }, []);
 
   return (
     <MuiThemeProvider theme={theme}>

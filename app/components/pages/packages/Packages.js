@@ -22,7 +22,8 @@ import {
   addInstallOption,
   updateData,
   setPage,
-  setPageRows
+  setPageRows,
+  viewPackage
 } from 'models/packages/actions';
 import { commandMessage } from 'models/ui/actions';
 
@@ -138,18 +139,32 @@ const Packages = ({ classes }) => {
     );
   }, [dependenciesSet]);
 
-  const scrollWrapper = useCallback(
-    top => {
-      const wrapperEl = wrapperRef && wrapperRef.current;
+  const scrollWrapper = top => {
+    const wrapperEl = wrapperRef && wrapperRef.current;
 
-      wrapperEl &&
-        wrapperEl.scroll({
-          top,
-          behavior: 'smooth'
-        });
-    },
-    [top]
-  );
+    wrapperEl &&
+      wrapperEl.scroll({
+        top,
+        behavior: 'smooth'
+      });
+  };
+
+  const viewPackageHandler = (name, version) => {
+    const parameters = {
+      activeManager: manager,
+      ipcEvent: 'view',
+      cmd: ['view'],
+      name,
+      version,
+      mode,
+      directory
+    };
+
+    dispatch({
+      type: viewPackage.type,
+      payload: parameters
+    });
+  };
 
   // setup packages
   const [packagesData] = useFilters(packages, filters, counter);
@@ -248,14 +263,15 @@ const Packages = ({ classes }) => {
                               }
                               name={name}
                               peerDependencies={peerDependencies}
-                              manager={manager}
-                              version={version}
                               latest={latest}
+                              version={version}
+                              mode={mode}
                               isOutdated={isOutdated}
                               fromSearch={fromSearch}
                               group={__group}
                               extraneous={extraneous}
                               problems={problems}
+                              viewPackage={viewPackageHandler}
                             />
                           );
                         }
