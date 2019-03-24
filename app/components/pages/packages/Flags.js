@@ -9,7 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ControlTypes from 'components/common/ControlTypes';
-
+import Typography from '@material-ui/core/Typography';
 import { addInstallOption } from 'models/packages/actions';
 import styles from './styles/flags';
 
@@ -42,7 +42,11 @@ const Flags = ({ classes, selected }) => {
 
           return (
             <ListItem key={packageName}>
-              <ListItemText primary={packageName} />
+              <ListItemText
+                primary={
+                  <Typography variant="subtitle1">{packageName}</Typography>
+                }
+              />
               <ListItemSecondaryAction>
                 <ControlTypes
                   selectedValue={value}

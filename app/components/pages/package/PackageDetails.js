@@ -36,7 +36,8 @@ import DependenciesIcon from '@material-ui/icons/List';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { updatePackages, installPackages } from 'models/packages/actions';
-import { APP_INFO } from 'constants/AppConstants';
+import { APP_INFO, PACKAGE_GROUPS } from 'constants/AppConstants';
+import { isPackageOutdated } from 'commons/utils';
 
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
@@ -46,7 +47,7 @@ import styles from './styles/packageDetails';
 const mapState = ({
   common: { mode, directory, packageLoader },
   modules: {
-    data: { packagesOutdated },
+    data: { packages, packagesOutdated },
     active,
     metadata: { fromSearch }
   }
@@ -54,6 +55,7 @@ const mapState = ({
   active,
   mode,
   directory,
+  packages,
   packageLoader,
   packagesOutdated,
   fromSearch
@@ -77,6 +79,7 @@ const PackageDetails = ({ classes }) => {
     mode,
     directory,
     fromSearch,
+    packages,
     packagesOutdated
   } = useMappedState(mapState);
   const { name, version, description } = active || {};
@@ -89,15 +92,13 @@ const PackageDetails = ({ classes }) => {
     const { name } = active;
 
     if (mode === 'local') {
-      setGroup(active.__group);
+      const group = packages.find(pkg => pkg.name === name).__group;
+      setGroup(group);
     }
 
-    const newOutdated =
-      packagesOutdated &&
-      packagesOutdated.find(pkgOutdated => pkgOutdated.name === name);
+    const [newOutdated] = isPackageOutdated(packagesOutdated, name);
 
-    setOutdated(Boolean(newOutdated));
-
+    setOutdated(newOutdated);
     setLicense(active.license || APP_INFO.NOT_AVAILABLE);
   }, [active]);
 
@@ -106,11 +107,14 @@ const PackageDetails = ({ classes }) => {
       <IconButton
         disableRipple
         onClick={e => {
+          const pkgOptions =
+            mode === 'local' ? group && [PACKAGE_GROUPS[group]] : ['save-prod'];
+
           const parameters = {
             ipcEvent: 'install',
             cmd: ['install'],
             name: active.name,
-            pkgOptions: ['--save-prod'],
+            pkgOptions: pkgOptions || [],
             single: true,
             mode,
             directory
@@ -223,7 +227,25 @@ const PackageDetails = ({ classes }) => {
             />
             {type === 'version' && (
               <ListItemSecondaryAction>
-                <IconButton aria-label="install_version">
+                <IconButton
+                  aria-label="install_version"
+                  onClick={e => {
+                    const pkgOptions =
+                      mode === 'local' ? [`--${PACKAGE_GROUPS[group]}`] : [];
+                    const parameters = {
+                      ipcEvent: 'install',
+                      cmd: ['install'],
+                      name: active.name,
+                      version: item,
+                      pkgOptions,
+                      single: true,
+                      mode,
+                      directory
+                    };
+                    console.log(parameters);
+                    dispatch(installPackages(parameters));
+                  }}
+                >
                   <AddIcon />
                 </IconButton>
               </ListItemSecondaryAction>
@@ -240,10 +262,12 @@ const PackageDetails = ({ classes }) => {
         <Transition>
           <Card className={classes.card}>
             <CardHeader
-              title={<Typography variant="subtitle1">{name}</Typography>}
+              title={
+                <Typography variant="subtitle1">{`${name} v${version}`}</Typography>
+              }
               subheader={
                 <React.Fragment>
-                  <Typography variant="caption">{`v${version} - ${license}`}</Typography>
+                  <Typography variant="caption">{license}</Typography>
                   {mode === 'local' && (
                     <Typography variant="caption">{group}</Typography>
                   )}
@@ -314,7 +338,11 @@ const PackageDetails = ({ classes }) => {
 
   return (
     <div className={classes.wrapper}>
-      <AppLoader loading={packageLoader.loading} relative>
+      <AppLoader
+        loading={packageLoader.loading}
+        message={packageLoader.message}
+        relative
+      >
         {active ? renderCard() : null}
       </AppLoader>
       <Popper

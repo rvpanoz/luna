@@ -7,6 +7,7 @@
  */
 
 const install = (options, idx) => {
+  console.log('npm/install', options);
   const command = ['install'];
   const { mode, version, name, pkgOptions, multiple, packages, single } =
     options || {};

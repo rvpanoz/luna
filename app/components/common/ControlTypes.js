@@ -6,8 +6,10 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import styles from './styles/controlTypes';
@@ -16,6 +18,16 @@ const groups = Object.values(PACKAGE_GROUPS);
 
 const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
   const [groupName, setGroup] = useState('save-prod');
+
+  const handleExact = e => {
+    const { value, checked } = e.currentTarget;
+    console.log(checked);
+
+    onSelect({
+      name: packageName,
+      options: ['save-exact']
+    });
+  };
 
   useEffect(() => {
     if (devOnly) {
@@ -55,6 +67,11 @@ const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
           )}
         </Select>
       </FormControl>
+      <FormControlLabel
+        className={classes.formControl}
+        control={<Checkbox onChange={e => handleExact(e)} value="save-exact" />}
+        label="exact"
+      />
     </FormGroup>
   );
 };

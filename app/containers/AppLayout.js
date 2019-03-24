@@ -59,8 +59,11 @@ const mapState = ({
   snackbarOptions
 });
 
+const useForceUpdate = () => useState()[1];
+
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
+  const [forceComponentToUpdate, setForceComponentToUpdate] = useState(false);
   const {
     activePage,
     snackbarOptions,
@@ -83,6 +86,7 @@ const AppLayout = ({ classes }) => {
         dispatch(addActionError({ error }));
       }
 
+      // TODO: fix this
       if (operation === 'uninstall' && removedOrUpdatedPackages) {
         dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
       }

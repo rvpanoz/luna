@@ -104,7 +104,6 @@ const installPackagesEpic = action$ =>
   action$.pipe(
     ofType(installPackages.type),
     map(({ payload }) => {
-      console.log(payload);
       ipcRenderer.send('ipc-event', payload);
 
       return updateLoader({
@@ -118,7 +117,6 @@ const viewPackagesEpic = action$ =>
   action$.pipe(
     ofType(viewPackage.type),
     map(({ payload }) => {
-      console.log(payload);
       ipcRenderer.send('ipc-event', payload);
 
       return updatePackageLoader({
@@ -152,14 +150,14 @@ const packagesSuccessEpic = (action$, state$) =>
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
           const {
             name,
-            peerMissing,
             invalid,
             extraneous,
+            // peerMissing,
             // problems,
             missing
           } = dependency;
-
-          if (!peerMissing && !invalid && !extraneous && !missing) {
+          console.log(dependency);
+          if (!invalid && !extraneous && !missing) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
             const enhancedDependency = {
               ...dependency,

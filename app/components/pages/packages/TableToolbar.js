@@ -419,7 +419,7 @@ const TableListToolbar = ({
         open={optionsOpen}
         onClose={() => toggleOptions(!optionsOpen)}
         aria-labelledby="install-options"
-        maxWidth="md"
+        maxWidth="xl"
       >
         <DialogTitle id="install-options">Install options</DialogTitle>
         <DialogContent>

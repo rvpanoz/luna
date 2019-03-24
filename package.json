@@ -213,6 +213,7 @@
     "ramda": "^0.26.1",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "react-hot-loader": "^4.8.0",
     "react-redux": "^5.1.1",
     "redux": "^4.0.1",
     "redux-observable": "^1.0.0",
