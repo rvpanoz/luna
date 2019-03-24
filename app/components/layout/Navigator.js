@@ -105,11 +105,12 @@ const Navigator = ({
         <ListItem>
           <ListItemText className={classes.actionButton}>
             <AppButton
+              disabled={loading}
               color="primary"
               fullWidth
+              round
               onClick={() => openPackage()}
-              style={{ fontSize: 18 }}
-              variant="contained"
+              variant="outlined"
             >
               Analyze
             </AppButton>
@@ -139,9 +140,13 @@ const Navigator = ({
                   },
                   {
                     primaryText:
-                      mode === 'local' && directory ? 'Home directory' : null,
+                      mode === 'local' && directory && !loading
+                        ? 'Home directory'
+                        : null,
                     secondaryText:
-                      mode === 'local' && directory ? directory : null
+                      mode === 'local' && directory && !loading
+                        ? directory
+                        : null
                   }
                 ]}
                 metadata={lastUpdatedAt}
@@ -211,6 +216,7 @@ const Navigator = ({
           openedDirectories.map((dir, idx) => (
             <ListItem
               dense
+              disabled={loading}
               button
               onClick={() => handleDirectory(dir.directory)}
               key={`directory-${idx + 1}`}

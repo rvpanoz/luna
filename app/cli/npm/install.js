@@ -7,7 +7,6 @@
  */
 
 const install = (options, idx) => {
-  console.log('npm/install', options);
   const command = ['install'];
   const { mode, version, name, pkgOptions, multiple, packages, single } =
     options || {};
@@ -30,10 +29,21 @@ const install = (options, idx) => {
   };
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-  const commandOpts =
-    (single
-      ? pkgOptions
-      : pkgOptions && [pkgOptions[idx]].map(option => `--${option}`)) || [];
+
+  const commandOpts = single
+    ? pkgOptions || []
+    : pkgOptions &&
+      [pkgOptions[idx]].map(option => {
+        console.log(option);
+
+        return typeof option === 'string'
+          ? `--${option}`
+          : Array.isArray(option) && option.options.map(o => `--${o}`);
+      });
+
+  console.log({ pkgOptions, commandArgs });
+
+  return Promise.reject('DEV_ERROR');
 
   const run = []
     .concat(command)

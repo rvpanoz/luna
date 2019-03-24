@@ -36,7 +36,8 @@ export const PACKAGE_GROUPS = {
   devDependencies: 'save-dev',
   optionalDependencies: 'save-optional',
   bundleDependencies: 'save-bundle',
-  noSave: 'no-save'
+  noSave: 'no-save',
+  saveExact: 'save-exact'
 };
 
 export const NPM_CONFIG_VALUES = {

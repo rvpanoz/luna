@@ -23,7 +23,7 @@ const updateData = ActionCreator('UPDATE_DATA');
 const viewPackage = ActionCreator('VIEW_PACKAGE');
 const setPage = ActionCreator('SET_PAGE');
 const setPageRows = ActionCreator('SET_PAGE_ROWS');
-
+const clearInstallOptions = ActionCreator('CLEAR_INSTALL_OPTIONS');
 const updateFilters = ActionCreator('UPDATE_FILTERS');
 const installPackages = ActionCreator('INSTALL_PACKAGES');
 const updatePackages = ActionCreator('UPDATE_PACKAGES');
@@ -55,5 +55,6 @@ export {
   updateFilters,
   runAudit,
   removePackages,
-  viewPackage
+  viewPackage,
+  clearInstallOptions
 };

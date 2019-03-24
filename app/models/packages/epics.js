@@ -156,7 +156,7 @@ const packagesSuccessEpic = (action$, state$) =>
             // problems,
             missing
           } = dependency;
-          console.log(dependency);
+
           if (!invalid && !extraneous && !missing) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
             const enhancedDependency = {

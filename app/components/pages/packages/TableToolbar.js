@@ -37,6 +37,7 @@ import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
 import {
   updatePackages,
+  clearInstallOptions,
   installPackages,
   clearFilters
 } from 'models/packages/actions';
@@ -106,6 +107,7 @@ const TableListToolbar = ({
         const optionalDependencies = [];
         const bundleDependencies = [];
         const noSave = [];
+        const saveExact = [];
 
         const packagesWithOptions = selected.reduce((acc, packageName) => {
           const flag = packagesInstallOptions.find(
@@ -115,23 +117,30 @@ const TableListToolbar = ({
           if (!flag) {
             dependencies.push(packageName);
           } else {
-            switch (flag.options[0]) {
-              case 'save-dev':
-                devDependencies.push(packageName);
-                break;
-              case 'save-optional':
-                optionalDependencies.push(packageName);
-                break;
-              case 'save-bundle':
-                bundleDependencies.push(packageName);
-                break;
-              case 'no-save':
-                noSave.push(packageName);
-                break;
-              default:
-                dependencies.push(packageName);
-                break;
-            }
+            const { options } = flag;
+
+            options.forEach(option => {
+              switch (option) {
+                case 'save-dev':
+                  devDependencies.push(packageName);
+                  break;
+                case 'save-optional':
+                  optionalDependencies.push(packageName);
+                  break;
+                case 'save-bundle':
+                  bundleDependencies.push(packageName);
+                  break;
+                case 'no-save':
+                  noSave.push(packageName);
+                  break;
+                case 'save-exact':
+                  saveExact.push(packageName);
+                  break;
+                default:
+                  dependencies.push(packageName);
+                  break;
+              }
+            });
           }
 
           return merge(acc, {
@@ -139,7 +148,8 @@ const TableListToolbar = ({
             devDependencies,
             optionalDependencies,
             bundleDependencies,
-            noSave
+            noSave,
+            saveExact
           });
         }, {});
 
@@ -174,7 +184,8 @@ const TableListToolbar = ({
           directory
         };
 
-        dispatch(installPackages(parameters));
+        console.log(parameters);
+        // dispatch(installPackages(parameters));
       } else {
         dispatch(
           updatePackages({
@@ -417,17 +428,25 @@ const TableListToolbar = ({
       </Popover>
       <Dialog
         open={optionsOpen}
-        onClose={() => toggleOptions(!optionsOpen)}
+        onClose={() => {
+          dispatch({ type: clearInstallOptions.type });
+          toggleOptions(!optionsOpen);
+        }}
         aria-labelledby="install-options"
-        maxWidth="xl"
       >
-        <DialogTitle id="install-options">Install options</DialogTitle>
+        <DialogTitle>Installation options</DialogTitle>
         <DialogContent>
           <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
           <Flags selected={selected} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => toggleOptions(false)} color="secondary">
+          <Button
+            onClick={() => {
+              dispatch({ type: clearInstallOptions.type });
+              toggleOptions(false);
+            }}
+            color="secondary"
+          >
             Cancel
           </Button>
           <Button

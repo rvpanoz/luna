@@ -19,7 +19,8 @@ import {
   setPage,
   setPageRows,
   updateFilters,
-  removePackages
+  removePackages,
+  clearInstallOptions
 } from 'models/packages/actions';
 import format from 'date-fns/format';
 
@@ -79,49 +80,70 @@ const handlers = {
       payload: { name, options }
     } = action;
 
-    let newOptions = [];
-
     const idx = selected.indexOf(name);
-    const packageInstallOptions =
-      packagesInstallOptions &&
-      packagesInstallOptions.find(
-        installOptions => installOptions.name === name
-      );
 
     if (idx === -1) {
       return state;
     }
 
-    if (!packageInstallOptions) {
-      newOptions = prepend(
-        {
-          name,
-          options
-        },
-        packagesInstallOptions
-      );
-    } else {
-      newOptions = packagesInstallOptions.map(option => {
-        const packageName = option.name;
+    const packageOptions = packagesInstallOptions.find(
+      option => option.name === name
+    );
 
-        if (packageName === name) {
-          return {
-            ...option,
-            options
-          };
+    if (!packageOptions) {
+      return merge(state, {
+        ...state,
+        operations: {
+          ...state.operations,
+          packagesInstallOptions: prepend(
+            {
+              name,
+              options
+            },
+            packagesInstallOptions
+          )
         }
+      });
+    } else {
+      const hasExactOptionIndex = options.indexOf('save-exact');
+      const hasExactPackageIndex = packageOptions.options.indexOf('save-exact');
 
-        return option;
+      if (hasExactOptionIndex > -1 && hasExactPackageIndex > -1) {
+        return merge(state, {
+          ...state,
+          operations: {
+            ...state.operations,
+            packagesInstallOptions: remove(
+              hasExactPackageIndex,
+              1,
+              packageOptions
+            )
+          }
+        });
+      }
+
+      if (hasExactOptionIndex > -1 && hasExactPackageIndex === -1) {
+        return merge(state, {
+          ...state,
+          operations: {
+            ...state.operations,
+            packagesInstallOptions: merge(packageOptions, {
+              ...packageOptions,
+              options: packageOptions.options.concat(options)
+            })
+          }
+        });
+      }
+
+      return merge(state, {
+        ...state,
+        operations: {
+          ...state.operations,
+          packagesInstallOptions:
+            hasExactPackageIndex > -1 ? options.concat(['save-exact']) : options
+        }
       });
     }
-
-    return merge(state, {
-      ...state,
-      operations: {
-        ...state.operations,
-        packagesInstallOptions: newOptions
-      }
-    });
   },
   [addSelected.type]: (state, action) => {
     const {
@@ -156,6 +178,14 @@ const handlers = {
       filtering: {
         filters: [],
         page: 0
+      }
+    }),
+  [clearInstallOptions.type]: state =>
+    merge(state, {
+      ...state,
+      operations: {
+        ...state.operations,
+        packagesInstallOptions: []
       }
     }),
   [clearSelected.type]: state =>
