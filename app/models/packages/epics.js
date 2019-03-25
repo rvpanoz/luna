@@ -5,6 +5,7 @@ import { isPackageOutdated } from 'commons/utils';
 
 import {
   toggleLoader,
+  togglePackageLoader,
   clearCommands,
   clearNotifications,
   clearAll
@@ -19,7 +20,8 @@ import {
   setOutdatedSuccess,
   updateData,
   setPage,
-  runAudit
+  runAudit,
+  viewPackage
 } from './actions';
 
 const cleanNotifications = () => ({
@@ -36,6 +38,11 @@ const cleanPackages = () => ({
 
 const updateLoader = payload => ({
   type: toggleLoader.type,
+  payload
+});
+
+const updatePackageLoader = payload => ({
+  type: togglePackageLoader.type,
   payload
 });
 
@@ -106,6 +113,19 @@ const installPackagesEpic = action$ =>
     })
   );
 
+const viewPackagesEpic = action$ =>
+  action$.pipe(
+    ofType(viewPackage.type),
+    map(({ payload }) => {
+      ipcRenderer.send('ipc-event', payload);
+
+      return updatePackageLoader({
+        loading: true,
+        message: 'Loading package..'
+      });
+    })
+  );
+
 const updatePackagesEpic = action$ =>
   action$.pipe(
     ofType(updatePackages.type),
@@ -130,14 +150,14 @@ const packagesSuccessEpic = (action$, state$) =>
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
           const {
             name,
-            peerMissing,
             invalid,
             extraneous,
+            // peerMissing,
             // problems,
             missing
           } = dependency;
 
-          if (!peerMissing && !invalid && !extraneous && !missing) {
+          if (!invalid && !extraneous && !missing) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
             const enhancedDependency = {
               ...dependency,
@@ -208,5 +228,6 @@ export default combineEpics(
   packagesSuccessEpic,
   installPackagesEpic,
   cleanAllEpic,
-  updatePackagesEpic
+  updatePackagesEpic,
+  viewPackagesEpic
 );

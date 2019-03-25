@@ -1,11 +1,11 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable compat/compat */
+/* eslint-disable object-shorthand */
 
 import { remote } from 'electron';
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
-import { merge, pluck } from 'ramda';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -33,16 +33,29 @@ import ActionIcon from '@material-ui/icons/CallToAction';
 import PublicIcon from '@material-ui/icons/BallotOutlined';
 
 import { switchcase } from 'commons/utils';
-import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
+import { INFO_MESSAGES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
 import {
   updatePackages,
+  clearInstallOptions,
   installPackages,
   clearFilters
 } from 'models/packages/actions';
 import TableFilters from './TableFilters';
 import Flags from './Flags';
 import styles from './styles/tableToolbar';
+
+const remoteOptions = {
+  title: 'Open package.json file',
+  buttonLabel: 'Analyze',
+  filters: [
+    {
+      name: 'package.json',
+      extensions: ['json']
+    }
+  ],
+  properties: ['openFile']
+};
 
 const TableListToolbar = ({
   classes,
@@ -98,82 +111,44 @@ const TableListToolbar = ({
         return toggleOptions(true);
       }
 
-      const hasFlags = packagesInstallOptions && packagesInstallOptions.length;
-
-      if (hasFlags && selected.length) {
-        const dependencies = [];
-        const devDependencies = [];
-        const optionalDependencies = [];
-        const bundleDependencies = [];
-        const noSave = [];
-
-        const packagesWithOptions = selected.reduce((acc, packageName) => {
-          const flag = packagesInstallOptions.find(
-            option => option.name === packageName
+      if (packagesInstallOptions.length && selected.length) {
+        const commands = selected.map(selectedPackage => {
+          const selectedPackageOptions = packagesInstallOptions.find(
+            option => option.name === selectedPackage
           );
 
-          if (!flag) {
-            dependencies.push(packageName);
-          } else {
-            switch (flag.options[0]) {
-              case 'save-dev':
-                devDependencies.push(packageName);
-                break;
-              case 'save-optional':
-                optionalDependencies.push(packageName);
-                break;
-              case 'save-bundle':
-                bundleDependencies.push(packageName);
-                break;
-              case 'no-save':
-                noSave.push(packageName);
-                break;
-              default:
-                dependencies.push(packageName);
-                break;
-            }
+          if (selectedPackageOptions) {
+            const { name, options } = selectedPackageOptions;
+
+            return {
+              operation: 'install',
+              package: name,
+              options: options
+            };
           }
 
-          return merge(acc, {
-            dependencies,
-            devDependencies,
-            optionalDependencies,
-            bundleDependencies,
-            noSave
-          });
-        }, {});
+          return {
+            operation: 'install',
+            package: selectedPackage,
+            options: ['save-prod']
+          };
+        });
 
-        const installations = Object.values(packagesWithOptions);
-        const groups = Object.keys(packagesWithOptions);
-
-        // run install multiple times
-        const commands = installations.map((pkgs, idx) => ({
-          operation: 'install',
-          pkgs,
-          group: groups[idx],
-          flags: PACKAGE_GROUPS[groups[idx]]
-        }));
+        const operations = commands.map(command => command.operation);
+        const packages = commands.map(command => command.package);
+        const pkgOptions = commands.map(command => command.options);
 
         const parameters = {
           activeManager: manager,
           ipcEvent: 'install',
-          cmd: pluck(
-            'operation',
-            commands.filter(command => command.pkgs.length)
-          ),
-          packages: pluck(
-            'pkgs',
-            commands.filter(command => command.pkgs.length)
-          ),
-          pkgOptions: pluck(
-            'flags',
-            commands.filter(command => command.pkgs.length)
-          ),
+          cmd: operations,
+          packages,
+          pkgOptions,
           multiple: true,
           mode,
           directory
         };
-
+        console.log(parameters);
         dispatch(installPackages(parameters));
       } else {
         dispatch(
@@ -192,22 +167,10 @@ const TableListToolbar = ({
     [selected, filteredByNamePackages, packagesInstallOptions]
   );
 
-  const openPackage = () => {
-    const parameters = {
-      title: 'Open package.json file',
-      buttonLabel: 'Analyze',
-      filters: [
-        {
-          name: 'package.json',
-          extensions: ['json']
-        }
-      ],
-      properties: ['openFile']
-    };
-
-    return remote.dialog.showOpenDialog(
+  const openPackage = () =>
+    remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
-      parameters,
+      remoteOptions,
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
@@ -216,7 +179,6 @@ const TableListToolbar = ({
         }
       }
     );
-  };
 
   const renderAction = useCallback(
     action => {
@@ -417,17 +379,25 @@ const TableListToolbar = ({
       </Popover>
       <Dialog
         open={optionsOpen}
-        onClose={() => toggleOptions(!optionsOpen)}
+        onClose={() => {
+          dispatch({ type: clearInstallOptions.type });
+          toggleOptions(!optionsOpen);
+        }}
         aria-labelledby="install-options"
-        maxWidth="md"
       >
-        <DialogTitle id="install-options">Install options</DialogTitle>
+        <DialogTitle>Installation options</DialogTitle>
         <DialogContent>
           <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
           <Flags selected={selected} />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => toggleOptions(false)} color="secondary">
+          <Button
+            onClick={() => {
+              dispatch({ type: clearInstallOptions.type });
+              toggleOptions(false);
+            }}
+            color="secondary"
+          >
             Cancel
           </Button>
           <Button

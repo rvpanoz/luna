@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-expressions */
 
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -22,9 +22,11 @@ import {
   addInstallOption,
   updateData,
   setPage,
-  setPageRows
+  setPageRows,
+  viewPackage
 } from 'models/packages/actions';
 import { commandMessage } from 'models/ui/actions';
+import { PackageDetails } from 'components/pages/package';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -137,18 +139,32 @@ const Packages = ({ classes }) => {
     );
   }, [dependenciesSet]);
 
-  const scrollWrapper = useCallback(
-    top => {
-      const wrapperEl = wrapperRef && wrapperRef.current;
+  const scrollWrapper = top => {
+    const wrapperEl = wrapperRef && wrapperRef.current;
 
-      wrapperEl &&
-        wrapperEl.scroll({
-          top,
-          behavior: 'smooth'
-        });
-    },
-    [top]
-  );
+    wrapperEl &&
+      wrapperEl.scroll({
+        top,
+        behavior: 'smooth'
+      });
+  };
+
+  const viewPackageHandler = (name, version) => {
+    const viewParameters = {
+      activeManager: manager,
+      ipcEvent: 'view',
+      cmd: ['view'],
+      name,
+      version,
+      mode,
+      directory
+    };
+
+    dispatch({
+      type: viewPackage.type,
+      payload: viewParameters
+    });
+  };
 
   // setup packages
   const [packagesData] = useFilters(packages, filters, counter);
@@ -170,7 +186,7 @@ const Packages = ({ classes }) => {
   return (
     <AppLoader loading={loading} message={message}>
       <Grid container>
-        <Grid item md={12} lg={6} xl={6}>
+        <Grid item md={12} lg={8} xl={6}>
           <Paper className={classes.root}>
             <div className={classes.toolbar}>
               <TableToolbar
@@ -247,14 +263,15 @@ const Packages = ({ classes }) => {
                               }
                               name={name}
                               peerDependencies={peerDependencies}
-                              manager={manager}
-                              version={version}
                               latest={latest}
+                              version={version}
+                              mode={mode}
                               isOutdated={isOutdated}
                               fromSearch={fromSearch}
                               group={__group}
                               extraneous={extraneous}
                               problems={problems}
+                              viewPackage={viewPackageHandler}
                             />
                           );
                         }
@@ -276,6 +293,9 @@ const Packages = ({ classes }) => {
               )}
             </div>
           </Paper>
+        </Grid>
+        <Grid item md={12} lg={4} xl={6}>
+          <PackageDetails />
         </Grid>
       </Grid>
     </AppLoader>

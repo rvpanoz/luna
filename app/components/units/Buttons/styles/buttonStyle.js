@@ -52,7 +52,7 @@ const buttonStyle = theme => ({
   },
   simple: {
     '&,&:focus,&:hover': {
-      color: theme.palette.error.light,
+      color: theme.palette.secondary.light,
       background: 'transparent',
       boxShadow: 'none'
     }
@@ -65,7 +65,7 @@ const buttonStyle = theme => ({
     }
   },
   round: {
-    borderRadius: '30px'
+    borderRadius: 30
   },
   disabled: {
     opacity: '0.65',

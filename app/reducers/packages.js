@@ -19,7 +19,8 @@ import {
   setPage,
   setPageRows,
   updateFilters,
-  removePackages
+  removePackages,
+  clearInstallOptions
 } from 'models/packages/actions';
 import format from 'date-fns/format';
 
@@ -79,39 +80,74 @@ const handlers = {
       payload: { name, options }
     } = action;
 
-    let newOptions = [];
-
     const idx = selected.indexOf(name);
-    const packageInstallOptions =
-      packagesInstallOptions &&
-      packagesInstallOptions.find(
-        installOptions => installOptions.name === name
-      );
 
     if (idx === -1) {
       return state;
     }
 
-    if (!packageInstallOptions) {
-      newOptions = prepend(
-        {
-          name,
-          options
-        },
-        packagesInstallOptions
-      );
-    } else {
-      newOptions = packagesInstallOptions.map(option => {
-        const packageName = option.name;
+    const packageOptions = packagesInstallOptions.find(
+      option => option.name === name
+    );
 
-        if (packageName === name) {
-          return {
-            ...option,
-            options
-          };
+    if (!packageOptions) {
+      return merge(state, {
+        ...state,
+        operations: {
+          ...state.operations,
+          packagesInstallOptions: prepend(
+            {
+              name,
+              options
+            },
+            packagesInstallOptions
+          )
         }
+      });
+    }
 
-        return option;
+    const hasExactOptionIndex = options.indexOf('save-exact');
+    const hasExactPackageIndex = packageOptions.options.indexOf('save-exact');
+
+    if (hasExactOptionIndex > -1 && hasExactPackageIndex > -1) {
+      return merge(state, {
+        ...state,
+        operations: {
+          ...state.operations,
+          packagesInstallOptions: packagesInstallOptions.map(o => {
+            const optionName = o.name;
+
+            if (optionName === name) {
+              return {
+                name: o.name,
+                options: remove(hasExactPackageIndex, 1, packageOptions.options)
+              };
+            }
+
+            return o;
+          })
+        }
+      });
+    }
+
+    if (hasExactOptionIndex > -1 && hasExactPackageIndex === -1) {
+      return merge(state, {
+        ...state,
+        operations: {
+          ...state.operations,
+          packagesInstallOptions: packagesInstallOptions.map(o => {
+            const optionName = o.name;
+
+            if (optionName === name) {
+              return {
+                name: o.name,
+                options: o.options.concat(options)
+              };
+            }
+
+            return o;
+          })
+        }
       });
     }
 
@@ -119,7 +155,21 @@ const handlers = {
       ...state,
       operations: {
         ...state.operations,
-        packagesInstallOptions: newOptions
+        packagesInstallOptions: packagesInstallOptions.map(o => {
+          const optionName = o.name;
+
+          if (optionName === name) {
+            return {
+              name: o.name,
+              options:
+                hasExactPackageIndex > -1
+                  ? options.concat(['save-exact'])
+                  : options
+            };
+          }
+
+          return o;
+        })
       }
     });
   },
@@ -156,6 +206,14 @@ const handlers = {
       filtering: {
         filters: [],
         page: 0
+      }
+    }),
+  [clearInstallOptions.type]: state =>
+    merge(state, {
+      ...state,
+      operations: {
+        ...state.operations,
+        packagesInstallOptions: []
       }
     }),
   [clearSelected.type]: state =>

@@ -20,7 +20,7 @@ const cwd = process.cwd();
 
 const execute = (
   manager = defaultManager,
-  commandArgs,
+  commandArgs = [],
   mode,
   directory,
   callback
@@ -157,11 +157,12 @@ const install = (opts, callback, idx) => {
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
-    const run = manager['install'].call(this, opts, idx);
+    const { install } = manager.default;
+    const run = install(opts, idx);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -170,11 +171,12 @@ const update = (opts, callback) => {
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
-    const run = manager['update'].call(this, opts);
+    const { update } = manager.default;
+    const run = update(opts);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -183,11 +185,12 @@ const uninstall = (opts, callback) => {
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
-    const run = manager['uninstall'].call(this, opts);
+    const { uninstall } = manager.default;
+    const run = uninstall(opts);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -197,11 +200,12 @@ const view = (opts, callback) => {
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
-    const run = manager['view'].call(this, opts);
+    const { view } = manager.default;
+    const run = view(opts);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 

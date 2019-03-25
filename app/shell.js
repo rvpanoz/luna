@@ -39,6 +39,6 @@ export const runCommand = (options, callback) => {
       });
     })
     .catch(error => {
-      throw new Error(error);
+      Promise.reject(error);
     });
 };

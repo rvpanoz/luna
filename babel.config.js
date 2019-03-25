@@ -2,7 +2,7 @@
 
 const developmentEnvironments = ['development', 'test'];
 
-const developmentPlugins = [];
+const developmentPlugins = [require('react-hot-loader/babel')];
 
 const productionPlugins = [
   require('babel-plugin-dev-expression'),
