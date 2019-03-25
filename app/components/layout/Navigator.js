@@ -106,11 +106,9 @@ const Navigator = ({
           <ListItemText className={classes.actionButton}>
             <AppButton
               disabled={loading}
-              color="primary"
+              color="secondary"
               fullWidth
-              round
               onClick={() => openPackage()}
-              variant="outlined"
             >
               Analyze
             </AppButton>

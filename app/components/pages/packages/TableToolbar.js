@@ -45,6 +45,18 @@ import TableFilters from './TableFilters';
 import Flags from './Flags';
 import styles from './styles/tableToolbar';
 
+const remoteOptions = {
+  title: 'Open package.json file',
+  buttonLabel: 'Analyze',
+  filters: [
+    {
+      name: 'package.json',
+      extensions: ['json']
+    }
+  ],
+  properties: ['openFile']
+};
+
 const TableListToolbar = ({
   classes,
   selected,
@@ -99,93 +111,45 @@ const TableListToolbar = ({
         return toggleOptions(true);
       }
 
-      const hasFlags = packagesInstallOptions && packagesInstallOptions.length;
-
-      if (hasFlags && selected.length) {
-        const dependencies = [];
-        const devDependencies = [];
-        const optionalDependencies = [];
-        const bundleDependencies = [];
-        const noSave = [];
-        const saveExact = [];
-
-        const packagesWithOptions = selected.reduce((acc, packageName) => {
-          const flag = packagesInstallOptions.find(
-            option => option.name === packageName
+      if (packagesInstallOptions.length && selected.length) {
+        const commands = selected.map((selectedPackage, idx) => {
+          const selectedPackageOptions = packagesInstallOptions.find(
+            option => option.name === selectedPackage
           );
 
-          if (!flag) {
-            dependencies.push(packageName);
+          if (selectedPackageOptions) {
+            const { name, options } = selectedPackageOptions;
+
+            return {
+              operation: 'install',
+              package: name,
+              options: options
+            };
           } else {
-            const { options } = flag;
-
-            options.forEach(option => {
-              switch (option) {
-                case 'save-dev':
-                  devDependencies.push(packageName);
-                  break;
-                case 'save-optional':
-                  optionalDependencies.push(packageName);
-                  break;
-                case 'save-bundle':
-                  bundleDependencies.push(packageName);
-                  break;
-                case 'no-save':
-                  noSave.push(packageName);
-                  break;
-                case 'save-exact':
-                  saveExact.push(packageName);
-                  break;
-                default:
-                  dependencies.push(packageName);
-                  break;
-              }
-            });
+            return {
+              operation: 'install',
+              package: selectedPackage,
+              options: ['save-prod']
+            };
           }
+        });
 
-          return merge(acc, {
-            dependencies,
-            devDependencies,
-            optionalDependencies,
-            bundleDependencies,
-            noSave,
-            saveExact
-          });
-        }, {});
-
-        const installations = Object.values(packagesWithOptions);
-        const groups = Object.keys(packagesWithOptions);
-
-        // run install multiple times
-        const commands = installations.map((pkgs, idx) => ({
-          operation: 'install',
-          pkgs,
-          group: groups[idx],
-          flags: PACKAGE_GROUPS[groups[idx]]
-        }));
+        const operations = commands.map(command => command.operation);
+        const packages = commands.map(command => command.package);
+        const pkgOptions = commands.map(command => command.options);
 
         const parameters = {
           activeManager: manager,
           ipcEvent: 'install',
-          cmd: pluck(
-            'operation',
-            commands.filter(command => command.pkgs.length)
-          ),
-          packages: pluck(
-            'pkgs',
-            commands.filter(command => command.pkgs.length)
-          ),
-          pkgOptions: pluck(
-            'flags',
-            commands.filter(command => command.pkgs.length)
-          ),
+          cmd: operations,
+          packages,
+          pkgOptions,
           multiple: true,
           mode,
           directory
         };
-
         console.log(parameters);
-        // dispatch(installPackages(parameters));
+        dispatch(installPackages(parameters));
       } else {
         dispatch(
           updatePackages({
@@ -203,22 +167,10 @@ const TableListToolbar = ({
     [selected, filteredByNamePackages, packagesInstallOptions]
   );
 
-  const openPackage = () => {
-    const parameters = {
-      title: 'Open package.json file',
-      buttonLabel: 'Analyze',
-      filters: [
-        {
-          name: 'package.json',
-          extensions: ['json']
-        }
-      ],
-      properties: ['openFile']
-    };
-
-    return remote.dialog.showOpenDialog(
+  const openPackage = () =>
+    remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
-      parameters,
+      remoteOptions,
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');
@@ -227,7 +179,6 @@ const TableListToolbar = ({
         }
       }
     );
-  };
 
   const renderAction = useCallback(
     action => {

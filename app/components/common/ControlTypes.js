@@ -20,8 +20,7 @@ const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
   const [groupName, setGroup] = useState('save-prod');
 
   const handleExact = e => {
-    const { value, checked } = e.currentTarget;
-    console.log(checked);
+    const { value } = e.currentTarget;
 
     onSelect({
       name: packageName,
@@ -55,11 +54,13 @@ const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
           }}
         >
           {!devOnly || devOnly === false ? (
-            groups.map(group => (
-              <MenuItem key={`group${group}`} value={group}>
-                {group}
-              </MenuItem>
-            ))
+            groups.map(group =>
+              group !== 'save-exact' ? (
+                <MenuItem key={`group${group}`} value={group}>
+                  {group}
+                </MenuItem>
+              ) : null
+            )
           ) : (
             <MenuItem key="group-save-dev" value="save-dev">
               save-dev

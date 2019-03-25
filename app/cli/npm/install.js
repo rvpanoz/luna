@@ -16,41 +16,25 @@ const install = (options, idx) => {
     return Promise.reject('npm[install] package name parameter must be given');
   }
 
-  const getNames = () => {
-    if (single) {
-      return version ? [`${name}@${version}`] : [name];
-    }
-
-    if (multiple && Array.isArray(packages[idx])) {
-      return packages[idx];
-    }
-
-    return version ? [`${packages[0]}@${version}`] : packages;
-  };
-
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
 
   const commandOpts = single
     ? pkgOptions || []
-    : pkgOptions &&
-      [pkgOptions[idx]].map(option => {
-        console.log(option);
+    : pkgOptions && pkgOptions[idx].map(option => `--${option}`);
 
-        return typeof option === 'string'
-          ? `--${option}`
-          : Array.isArray(option) && option.options.map(o => `--${o}`);
-      });
-
-  console.log({ pkgOptions, commandArgs });
-
-  return Promise.reject('DEV_ERROR');
+  const packagesToInstall = single
+    ? version
+      ? [`${name}@${version}`]
+      : [name]
+    : [packages[idx]];
 
   const run = []
     .concat(command)
     .concat(commandArgs)
-    .concat(getNames())
+    .concat(packagesToInstall)
     .concat(commandOpts);
 
+  console.log(run);
   return run;
 };
 

@@ -162,7 +162,7 @@ const install = (opts, callback, idx) => {
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -176,7 +176,7 @@ const update = (opts, callback) => {
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -190,7 +190,7 @@ const uninstall = (opts, callback) => {
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -205,7 +205,7 @@ const view = (opts, callback) => {
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 

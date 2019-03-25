@@ -113,11 +113,22 @@ const handlers = {
           ...state,
           operations: {
             ...state.operations,
-            packagesInstallOptions: remove(
-              hasExactPackageIndex,
-              1,
-              packageOptions
-            )
+            packagesInstallOptions: packagesInstallOptions.map(o => {
+              const optionName = o.name;
+
+              if (optionName === name) {
+                return {
+                  name: o.name,
+                  options: remove(
+                    hasExactPackageIndex,
+                    1,
+                    packageOptions.options
+                  )
+                };
+              }
+
+              return o;
+            })
           }
         });
       }
@@ -127,9 +138,17 @@ const handlers = {
           ...state,
           operations: {
             ...state.operations,
-            packagesInstallOptions: merge(packageOptions, {
-              ...packageOptions,
-              options: packageOptions.options.concat(options)
+            packagesInstallOptions: packagesInstallOptions.map(o => {
+              const optionName = o.name;
+
+              if (optionName === name) {
+                return {
+                  name: o.name,
+                  options: o.options.concat(options)
+                };
+              }
+
+              return o;
             })
           }
         });
@@ -139,8 +158,21 @@ const handlers = {
         ...state,
         operations: {
           ...state.operations,
-          packagesInstallOptions:
-            hasExactPackageIndex > -1 ? options.concat(['save-exact']) : options
+          packagesInstallOptions: packagesInstallOptions.map(o => {
+            const optionName = o.name;
+
+            if (optionName === name) {
+              return {
+                name: o.name,
+                options:
+                  hasExactPackageIndex > -1
+                    ? options.concat(['save-exact'])
+                    : options
+              };
+            }
+
+            return o;
+          })
         }
       });
     }
