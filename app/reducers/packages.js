@@ -104,56 +104,12 @@ const handlers = {
           )
         }
       });
-    } else {
-      const hasExactOptionIndex = options.indexOf('save-exact');
-      const hasExactPackageIndex = packageOptions.options.indexOf('save-exact');
+    }
 
-      if (hasExactOptionIndex > -1 && hasExactPackageIndex > -1) {
-        return merge(state, {
-          ...state,
-          operations: {
-            ...state.operations,
-            packagesInstallOptions: packagesInstallOptions.map(o => {
-              const optionName = o.name;
+    const hasExactOptionIndex = options.indexOf('save-exact');
+    const hasExactPackageIndex = packageOptions.options.indexOf('save-exact');
 
-              if (optionName === name) {
-                return {
-                  name: o.name,
-                  options: remove(
-                    hasExactPackageIndex,
-                    1,
-                    packageOptions.options
-                  )
-                };
-              }
-
-              return o;
-            })
-          }
-        });
-      }
-
-      if (hasExactOptionIndex > -1 && hasExactPackageIndex === -1) {
-        return merge(state, {
-          ...state,
-          operations: {
-            ...state.operations,
-            packagesInstallOptions: packagesInstallOptions.map(o => {
-              const optionName = o.name;
-
-              if (optionName === name) {
-                return {
-                  name: o.name,
-                  options: o.options.concat(options)
-                };
-              }
-
-              return o;
-            })
-          }
-        });
-      }
-
+    if (hasExactOptionIndex > -1 && hasExactPackageIndex > -1) {
       return merge(state, {
         ...state,
         operations: {
@@ -164,10 +120,7 @@ const handlers = {
             if (optionName === name) {
               return {
                 name: o.name,
-                options:
-                  hasExactPackageIndex > -1
-                    ? options.concat(['save-exact'])
-                    : options
+                options: remove(hasExactPackageIndex, 1, packageOptions.options)
               };
             }
 
@@ -176,6 +129,49 @@ const handlers = {
         }
       });
     }
+
+    if (hasExactOptionIndex > -1 && hasExactPackageIndex === -1) {
+      return merge(state, {
+        ...state,
+        operations: {
+          ...state.operations,
+          packagesInstallOptions: packagesInstallOptions.map(o => {
+            const optionName = o.name;
+
+            if (optionName === name) {
+              return {
+                name: o.name,
+                options: o.options.concat(options)
+              };
+            }
+
+            return o;
+          })
+        }
+      });
+    }
+
+    return merge(state, {
+      ...state,
+      operations: {
+        ...state.operations,
+        packagesInstallOptions: packagesInstallOptions.map(o => {
+          const optionName = o.name;
+
+          if (optionName === name) {
+            return {
+              name: o.name,
+              options:
+                hasExactPackageIndex > -1
+                  ? options.concat(['save-exact'])
+                  : options
+            };
+          }
+
+          return o;
+        })
+      }
+    });
   },
   [addSelected.type]: (state, action) => {
     const {

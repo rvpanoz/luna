@@ -19,14 +19,11 @@ const groups = Object.values(PACKAGE_GROUPS);
 const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
   const [groupName, setGroup] = useState('save-prod');
 
-  const handleExact = e => {
-    const { value } = e.currentTarget;
-
+  const handleExact = () =>
     onSelect({
       name: packageName,
       options: ['save-exact']
     });
-  };
 
   useEffect(() => {
     if (devOnly) {

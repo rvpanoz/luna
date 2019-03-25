@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-expressions */
 
-import React, { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -26,12 +26,12 @@ import {
   viewPackage
 } from 'models/packages/actions';
 import { commandMessage } from 'models/ui/actions';
+import { PackageDetails } from 'components/pages/package';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
-import { PackageDetails } from 'components/pages/package';
 
 import styles from './styles/packages';
 
@@ -150,7 +150,7 @@ const Packages = ({ classes }) => {
   };
 
   const viewPackageHandler = (name, version) => {
-    const parameters = {
+    const viewParameters = {
       activeManager: manager,
       ipcEvent: 'view',
       cmd: ['view'],
@@ -162,7 +162,7 @@ const Packages = ({ classes }) => {
 
     dispatch({
       type: viewPackage.type,
-      payload: parameters
+      payload: viewParameters
     });
   };
 

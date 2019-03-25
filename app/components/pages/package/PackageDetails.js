@@ -103,44 +103,67 @@ const PackageDetails = ({ classes }) => {
     setLicense(active.license || APP_INFO.NOT_AVAILABLE);
   }, [active]);
 
-  const renderSearchActions = () => (
-    <Tooltip title="install">
-      <IconButton
-        disableRipple
-        onClick={e => {
-          const pkgOptions =
-            mode === 'local' ? group && [PACKAGE_GROUPS[group]] : ['save-prod'];
+  const renderActions = useCallback(() => {
+    const renderSearchActions = () => (
+      <Tooltip title="install">
+        <IconButton
+          disableRipple
+          onClick={e => {
+            const pkgOptions =
+              mode === 'local'
+                ? group && [PACKAGE_GROUPS[group]]
+                : ['save-prod'];
 
-          const parameters = {
-            ipcEvent: 'install',
-            cmd: ['install'],
-            name: active.name,
-            pkgOptions: pkgOptions || [],
-            single: true,
-            mode,
-            directory
-          };
+            const parameters = {
+              ipcEvent: 'install',
+              cmd: ['install'],
+              name: active.name,
+              pkgOptions: pkgOptions || [],
+              single: true,
+              mode,
+              directory
+            };
 
-          dispatch(installPackages(parameters));
-        }}
-      >
-        <AddIcon />
-      </IconButton>
-    </Tooltip>
-  );
+            dispatch(installPackages(parameters));
+          }}
+        >
+          <AddIcon />
+        </IconButton>
+      </Tooltip>
+    );
 
-  const renderOparationActions = (active, isOutdated) => (
-    <React.Fragment>
-      {isOutdated && (
-        <Tooltip title="Update">
+    const renderOparationActions = () => (
+      <React.Fragment>
+        {isOutdated && (
+          <Tooltip title="Update">
+            <IconButton
+              disableRipple
+              color="primary"
+              onClick={e =>
+                dispatch(
+                  updatePackages({
+                    ipcEvent: 'ipc-event',
+                    cmd: ['update'],
+                    name: active.name,
+                    mode,
+                    directory
+                  })
+                )
+              }
+            >
+              <UpdateIcon />
+            </IconButton>
+          </Tooltip>
+        )}
+        <Tooltip title="Remove">
           <IconButton
             disableRipple
-            color="primary"
-            onClick={e =>
+            color="secondary"
+            onClick={() =>
               dispatch(
                 updatePackages({
                   ipcEvent: 'ipc-event',
-                  cmd: ['update'],
+                  cmd: ['uninstall'],
                   name: active.name,
                   mode,
                   directory
@@ -148,39 +171,18 @@ const PackageDetails = ({ classes }) => {
               )
             }
           >
-            <UpdateIcon />
+            <RemoveIcon />
           </IconButton>
         </Tooltip>
-      )}
-      <Tooltip title="Remove">
-        <IconButton
-          disableRipple
-          color="secondary"
-          onClick={() =>
-            dispatch(
-              updatePackages({
-                ipcEvent: 'ipc-event',
-                cmd: ['uninstall'],
-                name: active.name,
-                mode,
-                directory
-              })
-            )
-          }
-        >
-          <RemoveIcon />
-        </IconButton>
-      </Tooltip>
-    </React.Fragment>
-  );
+      </React.Fragment>
+    );
 
-  const renderActions = useCallback(
-    () => (
+    return (
       <CardActions className={classes.actions} disableActionSpacing>
         {cond([
-          [equals(false), always(renderOparationActions(active, isOutdated))],
+          [equals(false), always(renderOparationActions())],
           [equals(true), always(renderSearchActions())]
-        ])(fromSearch)}
+        ])(Boolean(fromSearch))}
         <IconButton
           className={cn(classes.expand, {
             [classes.expandOpen]: expanded
@@ -192,9 +194,8 @@ const PackageDetails = ({ classes }) => {
           <ExpandMoreIcon />
         </IconButton>
       </CardActions>
-    ),
-    [active, isOutdated, fromSearch, expanded]
-  );
+    );
+  }, [active, isOutdated, fromSearch, expanded]);
 
   const renderList = useCallback((type, data) => (
     <Paper className={classes.paper}>
@@ -268,16 +269,16 @@ const PackageDetails = ({ classes }) => {
                 }
                 subheader={
                   <React.Fragment>
-                    <Typography variant="caption">{license}</Typography>
+                    <Typography variant="caption">{`License: ${license}`}</Typography>
                     {mode === 'local' && (
                       <Typography variant="caption">{group}</Typography>
                     )}
+                    <Divider className={classes.diveder} light />
                   </React.Fragment>
                 }
               />
               <CardContent>
                 <Typography variant="body1">{description}</Typography>
-                <Divider light />
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                   <Typography paragraph>Method:</Typography>
                   <Typography paragraph>
@@ -338,17 +339,17 @@ const PackageDetails = ({ classes }) => {
     [active, expanded, activePopper]
   );
 
-  const activeDependencies = active && active.dependencies;
-  let dependenciesToArray = [];
+  // const activeDependencies = active && active.dependencies;
+  // let dependenciesToArray = [];
 
-  if (activeDependencies) {
-    const dependenciesNames = Object.keys(activeDependencies);
+  // if (activeDependencies) {
+  //   const dependenciesNames = Object.keys(activeDependencies);
 
-    dependenciesToArray = dependenciesNames.map(dep => ({
-      name: dep,
-      version: activeDependencies[dep]
-    }));
-  }
+  //   dependenciesToArray = dependenciesNames.map(dep => ({
+  //     name: dep,
+  //     version: activeDependencies[dep]
+  //   }));
+  // }
 
   return (
     <div className={classes.wrapper}>
@@ -379,7 +380,7 @@ const PackageDetails = ({ classes }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            {renderList('dependency', dependenciesToArray)}
+            {renderList('dependency', [])}
           </Fade>
         )}
       </Popper>

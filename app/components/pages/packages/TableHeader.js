@@ -38,7 +38,7 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
   );
 
   const handleSelectAll = e => {
-    if (event.target.checked && packages) {
+    if (e.target.checked && packages) {
       packages.forEach(name =>
         dispatch(
           addSelected({

@@ -1,11 +1,11 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable compat/compat */
+/* eslint-disable object-shorthand */
 
 import { remote } from 'electron';
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
-import { merge, pluck } from 'ramda';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -33,7 +33,7 @@ import ActionIcon from '@material-ui/icons/CallToAction';
 import PublicIcon from '@material-ui/icons/BallotOutlined';
 
 import { switchcase } from 'commons/utils';
-import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
+import { INFO_MESSAGES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
 import {
   updatePackages,
@@ -112,7 +112,7 @@ const TableListToolbar = ({
       }
 
       if (packagesInstallOptions.length && selected.length) {
-        const commands = selected.map((selectedPackage, idx) => {
+        const commands = selected.map(selectedPackage => {
           const selectedPackageOptions = packagesInstallOptions.find(
             option => option.name === selectedPackage
           );
@@ -125,13 +125,13 @@ const TableListToolbar = ({
               package: name,
               options: options
             };
-          } else {
-            return {
-              operation: 'install',
-              package: selectedPackage,
-              options: ['save-prod']
-            };
           }
+
+          return {
+            operation: 'install',
+            package: selectedPackage,
+            options: ['save-prod']
+          };
         });
 
         const operations = commands.map(command => command.operation);

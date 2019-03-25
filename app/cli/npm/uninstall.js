@@ -1,3 +1,7 @@
+/* eslint-disable prefer-promise-reject-errors */
+/* eslint-disable compat/compat */
+/* eslint-disable no-nested-ternary */
+
 /**
  * npm uninstall [<@scope>/]<pkg>[@<version>]
  */

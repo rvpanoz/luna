@@ -1,4 +1,3 @@
-import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 import red from '@material-ui/core/colors/red';
 import { defaultFont } from 'styles/variables';
 
@@ -10,6 +9,9 @@ const styles = theme => ({
     width: 50,
     height: 50,
     backgroundColor: red[500]
+  },
+  divider: {
+    padding: theme.spacing.unit
   },
   group: {
     padding: 0,

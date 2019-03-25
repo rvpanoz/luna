@@ -1,5 +1,4 @@
 import { ipcRenderer } from 'electron';
-
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -59,11 +58,8 @@ const mapState = ({
   snackbarOptions
 });
 
-const useForceUpdate = () => useState()[1];
-
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
-  const [forceComponentToUpdate, setForceComponentToUpdate] = useState(false);
   const {
     activePage,
     snackbarOptions,
@@ -114,7 +110,7 @@ const AppLayout = ({ classes }) => {
       try {
         const newActive = data && JSON.parse(data);
         const getCleanProps = (val, key) => /^[^_]/.test(key);
-        const properties = pickBy(getCleanProps, newActive); //remove __property name
+        const properties = pickBy(getCleanProps, newActive);
 
         dispatch(setActive({ active: properties }));
         dispatch(
