@@ -214,7 +214,8 @@ const audit = (opts, callback) => {
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
-    const run = manager['audit'].call(this, opts);
+    const { audit } = manager.default;
+    const run = audit(opts);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
@@ -227,7 +228,8 @@ const doctor = (opts, callback) => {
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
-    const run = manager['doctor'].call(this, opts);
+    const { doctor } = manager.default;
+    const run = doctor(opts);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
@@ -240,7 +242,8 @@ const prune = (opts, callback) => {
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
-    const run = manager['prune'].call(this, opts);
+    const { prune } = manager.default;
+    const run = prune(opts);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
@@ -253,7 +256,8 @@ const lockVerify = (opts, callback) => {
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
-    const run = manager['lockVerify'].call(this, opts);
+    const { lockVerify } = manager.default;
+    const run = lockVerify(opts);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {

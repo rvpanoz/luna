@@ -33,6 +33,7 @@ import ActionIcon from '@material-ui/icons/CallToAction';
 import PublicIcon from '@material-ui/icons/BallotOutlined';
 
 import { switchcase } from 'commons/utils';
+import { navigatorParameters } from 'commons/parameters';
 import { INFO_MESSAGES } from 'constants/AppConstants';
 import { setMode } from 'models/ui/actions';
 import {
@@ -44,18 +45,6 @@ import {
 import TableFilters from './TableFilters';
 import Flags from './Flags';
 import styles from './styles/tableToolbar';
-
-const remoteOptions = {
-  title: 'Open package.json file',
-  buttonLabel: 'Analyze',
-  filters: [
-    {
-      name: 'package.json',
-      extensions: ['json']
-    }
-  ],
-  properties: ['openFile']
-};
 
 const TableListToolbar = ({
   classes,
@@ -148,7 +137,7 @@ const TableListToolbar = ({
           mode,
           directory
         };
-        console.log(parameters);
+
         dispatch(installPackages(parameters));
       } else {
         dispatch(
@@ -170,7 +159,7 @@ const TableListToolbar = ({
   const openPackage = () =>
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
-      remoteOptions,
+      navigatorParameters,
       filePath => {
         if (filePath) {
           const scanDirectory = filePath.join('');

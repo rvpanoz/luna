@@ -74,6 +74,11 @@ const AppLayout = ({ classes }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    ipcRenderer.on('tool-close', (event, error, result) => {
+      console.log(error);
+      console.log(result);
+    });
+
     ipcRenderer.on('action-close', (event, error, message, options) => {
       const removedOrUpdatedPackages = options && options.slice(2);
       const operation = options && options[0];

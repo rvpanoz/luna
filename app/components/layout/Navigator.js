@@ -16,6 +16,7 @@ import FolderIcon from '@material-ui/icons/FolderOpen';
 import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
 import AppButton from 'components/units/Buttons/AppButton';
+import { navigatorParameters } from 'commons/parameters';
 
 import {
   ProjectTab,
@@ -54,8 +55,10 @@ const Navigator = ({
 
   const runNpmAuditHandler = () => {
     const parameters = {
-      ipcEvent: 'ipc-event',
-      cmd: ['audit']
+      ipcEvent: 'audit',
+      cmd: ['audit'],
+      mode,
+      directory
     };
 
     dispatch(
@@ -71,17 +74,7 @@ const Navigator = ({
   const openPackage = useCallback(() => {
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
-      {
-        title: 'Open package.json file',
-        buttonLabel: 'Analyze',
-        filters: [
-          {
-            name: 'package.json',
-            extensions: ['json']
-          }
-        ],
-        properties: ['openFile']
-      },
+      navigatorParameters,
       filePath => {
         if (filePath) {
           dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
@@ -105,10 +98,13 @@ const Navigator = ({
         <ListItem>
           <ListItemText className={classes.actionButton}>
             <AppButton
+              style={{ fontSize: 20 }}
               disabled={loading}
               color="secondary"
               fullWidth
+              round
               onClick={() => openPackage()}
+              border
             >
               Analyze
             </AppButton>

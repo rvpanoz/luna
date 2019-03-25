@@ -65,7 +65,15 @@ const buttonStyle = theme => ({
     }
   },
   round: {
-    borderRadius: 30
+    border: '1px solid',
+    borderColor: theme.palette.primary.light,
+    borderRadius: 30,
+    color: theme.palette.secondary.main,
+    '&,&:focus,&:hover': {
+      color: theme.palette.secondary.light,
+      background: 'transparent',
+      boxShadow: 'none'
+    }
   },
   disabled: {
     opacity: '0.65',

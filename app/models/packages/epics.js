@@ -211,7 +211,6 @@ const packagesSuccessEpic = (action$, state$) =>
     })
   );
 
-// TODO: implement
 const audit = action$ =>
   action$.pipe(
     ofType(runAudit.type),
