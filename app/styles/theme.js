@@ -19,17 +19,17 @@ const theme = createMuiTheme({
       dark: '#006db3'
     },
     secondary: {
-      light: lighten('#e51a90', 0.1),
+      light: lighten('#e51a90', 0.9),
       main: '#e51a90',
       dark: darken('#e51a90', 0.1)
     },
     error: {
-      light: lighten('#D8000C', 0.1),
+      light: lighten('#D8000C', 0.9),
       main: '#D8000C',
       dark: darken('#D8000C', 0.1)
     },
     warning: {
-      light: lighten('#ffae42', 0.1),
+      light: lighten('#ffae42', 0.9),
       main: '#ffae42',
       dark: darken('#ffae42', 0.1)
     }

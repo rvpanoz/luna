@@ -1,3 +1,4 @@
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 import red from '@material-ui/core/colors/red';
 import { defaultFont } from 'styles/variables';
 
@@ -16,6 +17,7 @@ const styles = theme => ({
   },
   header: {
     ...defaultFont,
+    backgroundColor: theme.palette.secondary.light,
     fontSize: 20,
     fontWeight: 400,
     padding: theme.spacing.unit

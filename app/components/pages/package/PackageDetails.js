@@ -22,6 +22,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
+import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import Fade from '@material-ui/core/Fade';
 import List from '@material-ui/core/List';
@@ -173,15 +174,13 @@ const PackageDetails = ({ classes }) => {
     </React.Fragment>
   );
 
-  const renderActions = useCallback(() => {
-    const fromSearchBool = Boolean(fromSearch);
-
-    return (
+  const renderActions = useCallback(
+    () => (
       <CardActions className={classes.actions} disableActionSpacing>
         {cond([
           [equals(false), always(renderOparationActions(active, isOutdated))],
           [equals(true), always(renderSearchActions())]
-        ])(fromSearchBool)}
+        ])(fromSearch)}
         <IconButton
           className={cn(classes.expand, {
             [classes.expandOpen]: expanded
@@ -193,8 +192,9 @@ const PackageDetails = ({ classes }) => {
           <ExpandMoreIcon />
         </IconButton>
       </CardActions>
-    );
-  }, [active, isOutdated, fromSearch]);
+    ),
+    [active, isOutdated, fromSearch, expanded]
+  );
 
   const renderList = useCallback((type, data) => (
     <Paper className={classes.paper}>
@@ -242,7 +242,7 @@ const PackageDetails = ({ classes }) => {
                       mode,
                       directory
                     };
-                    console.log(parameters);
+
                     dispatch(installPackages(parameters));
                   }}
                 >
@@ -256,73 +256,87 @@ const PackageDetails = ({ classes }) => {
     </Paper>
   ));
 
-  const renderCard = useCallback(() => (
-    <Grid container justify="space-around">
-      <Grid item xs={11} md={10} lg={10} xl={10}>
-        <Transition>
-          <Card className={classes.card}>
-            <CardHeader
-              title={
-                <Typography variant="subtitle1">{`${name} v${version}`}</Typography>
-              }
-              subheader={
-                <React.Fragment>
-                  <Typography variant="caption">{license}</Typography>
-                  {mode === 'local' && (
-                    <Typography variant="caption">{group}</Typography>
-                  )}
-                </React.Fragment>
-              }
-            />
-            <CardContent>
-              <Typography variant="body1">{description}</Typography>
-              <Divider light />
-            </CardContent>
-            {renderActions(name, fromSearch)}
-          </Card>
-        </Transition>
+  const renderCard = useCallback(
+    () => (
+      <Grid container justify="space-around">
+        <Grid item xs={11} md={10} lg={10} xl={10}>
+          <Transition>
+            <Card className={classes.card}>
+              <CardHeader
+                title={
+                  <Typography variant="subtitle1">{`${name} v${version}`}</Typography>
+                }
+                subheader={
+                  <React.Fragment>
+                    <Typography variant="caption">{license}</Typography>
+                    {mode === 'local' && (
+                      <Typography variant="caption">{group}</Typography>
+                    )}
+                  </React.Fragment>
+                }
+              />
+              <CardContent>
+                <Typography variant="body1">{description}</Typography>
+                <Divider light />
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <Typography paragraph>Method:</Typography>
+                  <Typography paragraph>
+                    Heat 1/2 cup of the broth in a pot until simmering, add
+                    saffron and set aside for 10 minutes.
+                  </Typography>
+                  <Typography>
+                    Set aside off of the heat to let rest for 10 minutes, and
+                    then serve.
+                  </Typography>
+                </Collapse>
+              </CardContent>
+              {renderActions(name, fromSearch)}
+            </Card>
+          </Transition>
+        </Grid>
+        <Grid item xs={1} md={1} lg={1} xl={1}>
+          <Toolbar
+            variant="dense"
+            classes={{
+              root: classes.toolbar
+            }}
+          >
+            <Tooltip title="Package versions">
+              <IconButton
+                color="primary"
+                disableRipple
+                onClick={e =>
+                  setActivePopper({
+                    index: activePopper.index === 1 ? 0 : 1,
+                    anchorEl: e.currentTarget,
+                    open: activePopper.index !== 1
+                  })
+                }
+              >
+                <UpdateIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Package dependencies">
+              <IconButton
+                color="primary"
+                disableRipple
+                onClick={e =>
+                  setActivePopper({
+                    index: activePopper.index === 2 ? 0 : 2,
+                    anchorEl: e.currentTarget,
+                    open: activePopper.index !== 2
+                  })
+                }
+              >
+                <DependenciesIcon />
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
+        </Grid>
       </Grid>
-      <Grid item xs={1} md={1} lg={1} xl={1}>
-        <Toolbar
-          variant="dense"
-          classes={{
-            root: classes.toolbar
-          }}
-        >
-          <Tooltip title="Package versions">
-            <IconButton
-              color="primary"
-              disableRipple
-              onClick={e =>
-                setActivePopper({
-                  index: 1,
-                  anchorEl: e.currentTarget,
-                  open: !activePopper.open
-                })
-              }
-            >
-              <UpdateIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Package dependencies">
-            <IconButton
-              color="primary"
-              disableRipple
-              onClick={e =>
-                setActivePopper({
-                  index: 2,
-                  anchorEl: e.currentTarget,
-                  open: !activePopper.open
-                })
-              }
-            >
-              <DependenciesIcon />
-            </IconButton>
-          </Tooltip>
-        </Toolbar>
-      </Grid>
-    </Grid>
-  ));
+    ),
+    [active, expanded, activePopper]
+  );
 
   const activeDependencies = active && active.dependencies;
   let dependenciesToArray = [];
@@ -346,7 +360,7 @@ const PackageDetails = ({ classes }) => {
         {active ? renderCard() : null}
       </AppLoader>
       <Popper
-        open={activePopper.index === 1 && activePopper.open}
+        open={activePopper.index === 1}
         anchorEl={activePopper.index === 1 ? activePopper.anchorEl : null}
         placement="left-start"
         transition
@@ -358,7 +372,7 @@ const PackageDetails = ({ classes }) => {
         )}
       </Popper>
       <Popper
-        open={activePopper.index === 2 && activePopper.open}
+        open={activePopper.index === 2}
         anchorEl={activePopper.index === 2 ? activePopper.anchorEl : null}
         placement="left-start"
         transition
