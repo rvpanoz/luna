@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { dialog } from 'electron';
+import { remote } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -14,14 +14,6 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRightAlt';
 import Typography from '@material-ui/core/Typography';
 
 import styles from './styles/tools';
-
-const showDialog = () => {
-  return dialog.showMessageBox({
-    title: 'Run npm tool',
-    type: 'question',
-    message: 'Would you like to run '
-  });
-};
 
 const ToolsTab = ({ classes, items, nodata }) => (
   <div className={classes.tab}>
@@ -37,7 +29,24 @@ const ToolsTab = ({ classes, items, nodata }) => (
               <IconButton
                 aria-label="action"
                 disabled={nodata}
-                onClick={() => showDialog()}
+                onClick={() =>
+                  remote.dialog.showMessageBox(
+                    remote.getCurrentWindow(),
+                    {
+                      title: 'Confirmation',
+                      type: 'question',
+                      message: `Would you like to run ${
+                        item.primaryText
+                      }? \nNote: It will take some time `,
+                      buttons: ['Cancel', 'Run']
+                    },
+                    btnIdx => {
+                      if (Boolean(btnIdx) === true) {
+                        item.handler();
+                      }
+                    }
+                  )
+                }
               >
                 <ArrowRightIcon />
               </IconButton>

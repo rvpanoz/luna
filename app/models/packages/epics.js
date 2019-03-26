@@ -218,7 +218,10 @@ const npmToolsEpic = action$ =>
     map(({ payload: { channel, options } }) => {
       ipcRenderer.send(channel, options);
 
-      return resumeRequest();
+      return updateLoader({
+        loading: true,
+        message: 'Running..'
+      });
     })
   );
 

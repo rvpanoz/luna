@@ -11,6 +11,14 @@ import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
 import { Packages } from 'components/pages/packages';
 import SnackbarContent from 'components/common/SnackbarContent';
+
+import Button from '@material-ui/core/Button';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+
 import { Notifications } from 'components/pages/notifications';
 import {
   addActionError,
@@ -60,6 +68,8 @@ const mapState = ({
 
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
+  const [dialog, setDialog] = useState({ open: false, content: null });
+
   const {
     activePage,
     snackbarOptions,
@@ -76,8 +86,34 @@ const AppLayout = ({ classes }) => {
 
   useEffect(() => {
     ipcRenderer.on('tool-close', (event, error, result) => {
-      console.log(error);
-      console.log(result);
+      if (error) {
+        dispatch(
+          setSnackbar({
+            open: true,
+            type: 'error',
+            message: error
+          })
+        );
+      }
+
+      if (result) {
+        try {
+          const resultJson = JSON.parse(result);
+          console.log(resultJson);
+
+          setDialog({
+            open: true,
+            content: resultJson
+          });
+        } catch (error) {}
+      }
+
+      dispatch(
+        toggleLoader({
+          loading: false,
+          message: null
+        })
+      );
     });
 
     ipcRenderer.on('action-close', (event, error, message, options) => {
@@ -188,6 +224,25 @@ const AppLayout = ({ classes }) => {
               }
             />
           </Snackbar>
+        )}
+        {dialog && dialog.open && (
+          <Dialog open={dialog.open} aria-labelledby="results-tools">
+            <DialogTitle>Results</DialogTitle>
+            <DialogContent>content...</DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() =>
+                  setDialog({
+                    open: false,
+                    content: null
+                  })
+                }
+                color="secondary"
+              >
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
         )}
       </div>
     </MuiThemeProvider>
