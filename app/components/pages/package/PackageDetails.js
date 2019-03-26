@@ -293,7 +293,7 @@ const PackageDetails = ({ classes }) => {
                     {mode === 'local' && (
                       <Typography variant="caption">{`Group: ${group}`}</Typography>
                     )}
-                    <Divider className={classes.diveder} light />
+                    <Divider className={classes.divider} light />
                   </React.Fragment>
                 }
               />

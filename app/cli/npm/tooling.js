@@ -28,8 +28,4 @@ const prune = options => {
   return run;
 };
 
-const lockVerify = options => {
-  // TODO..
-};
-
-export { audit, doctor, prune, lockVerify };
+export { audit, doctor, prune };

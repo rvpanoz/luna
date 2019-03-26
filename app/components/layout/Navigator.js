@@ -118,7 +118,7 @@ const Navigator = ({
           </ListItemText>
         </ListItem>
         <ListItem>
-          <ListItemText style={{ height: 345 }}>
+          <ListItemText style={{ height: 245 }}>
             <AppTabs>
               <ProjectTab
                 items={[
@@ -182,12 +182,6 @@ const Navigator = ({
                     primaryText: 'npm prune',
                     secondaryText: 'Remove extraneous packages',
                     handler: () => runNpmTool('prune')
-                  },
-                  {
-                    primaryText: 'lock verify',
-                    secondaryText:
-                      'Report if package.json is out of sync with package-lock.json',
-                    handler: () => runNpmTool('lockVerify')
                   }
                 ]}
                 nodata={totalpackages === 0}

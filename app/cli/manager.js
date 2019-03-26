@@ -226,12 +226,10 @@ const runAudit = (opts, callback) => {
 };
 
 const runDoctor = (opts, callback) => {
-  console.log('running npm doctor');
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
-    console.log(manager);
     const { doctor } = manager.default;
     const run = doctor(opts);
 
@@ -255,25 +253,10 @@ const runPrune = (opts, callback) => {
   }
 };
 
-const runLockVerify = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
-
-  try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { lockVerify } = manager.default;
-    const run = lockVerify(opts);
-
-    return execute(activeManager, run, mode, directory, callback);
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
 export default {
   audit: runAudit,
   doctor: runDoctor,
   prune: runPrune,
-  lockVerify: runLockVerify,
   list,
   outdated,
   search,
