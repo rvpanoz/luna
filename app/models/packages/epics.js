@@ -20,7 +20,7 @@ import {
   setOutdatedSuccess,
   updateData,
   setPage,
-  runAudit,
+  runTool,
   viewPackage
 } from './actions';
 
@@ -211,9 +211,9 @@ const packagesSuccessEpic = (action$, state$) =>
     })
   );
 
-const audit = action$ =>
+const npmToolsEpic = action$ =>
   action$.pipe(
-    ofType(runAudit.type),
+    ofType(runTool.type),
     map(({ payload: { channel, options } }) => {
       ipcRenderer.send(channel, options);
 
@@ -222,7 +222,7 @@ const audit = action$ =>
   );
 
 export default combineEpics(
-  audit,
+  npmToolsEpic,
   packagesStartEpic,
   packagesSuccessEpic,
   installPackagesEpic,

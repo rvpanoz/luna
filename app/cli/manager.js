@@ -5,17 +5,19 @@ import path from 'path';
 import chalk from 'chalk';
 import mk from '../mk';
 
-const { spawn } = cp;
+const { spawn, exec } = cp;
 const { log } = console;
 const { config } = mk;
 const {
   defaultSettings: { defaultManager }
 } = config;
 
+// default arguments
 const defaultsArgs = {
   list: ['--json', '--depth=0', '--parseable']
 };
 
+// current working directory
 const cwd = process.cwd();
 
 const execute = (
@@ -33,7 +35,7 @@ const execute = (
     callback('flow', `${manager} ${commandArgs.join(' ')}`);
 
     // on windows use npm.cmd
-    const command = spawn(
+    const command = cp.spawn(
       /^win/.test(process.platform) ? `${manager}.cmd` : manager,
       commandArgs,
       {
@@ -209,7 +211,7 @@ const view = (opts, callback) => {
   }
 };
 
-const audit = (opts, callback) => {
+const runAudit = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
@@ -223,11 +225,13 @@ const audit = (opts, callback) => {
   }
 };
 
-const doctor = (opts, callback) => {
+const runDoctor = (opts, callback) => {
+  console.log('running npm doctor');
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
     const manager = require(path.resolve(__dirname, activeManager));
+    console.log(manager);
     const { doctor } = manager.default;
     const run = doctor(opts);
 
@@ -237,7 +241,7 @@ const doctor = (opts, callback) => {
   }
 };
 
-const prune = (opts, callback) => {
+const runPrune = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
@@ -251,7 +255,7 @@ const prune = (opts, callback) => {
   }
 };
 
-const lockVerify = (opts, callback) => {
+const runLockVerify = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
@@ -266,10 +270,10 @@ const lockVerify = (opts, callback) => {
 };
 
 export default {
-  audit,
-  doctor,
-  prune,
-  lockVerify,
+  audit: runAudit,
+  doctor: runDoctor,
+  prune: runPrune,
+  lockVerify: runLockVerify,
   list,
   outdated,
   search,

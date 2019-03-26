@@ -23,7 +23,7 @@ import {
   PackagesTab,
   ToolsTab
 } from 'components/pages/navigator/tabs';
-import { runAudit } from 'models/packages/actions';
+import { runTool } from 'models/packages/actions';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
@@ -53,16 +53,16 @@ const Navigator = ({
     return () => ipcRenderer.removeAllListeners('loaded-packages-close');
   }, [openedDirectories]);
 
-  const runNpmAuditHandler = () => {
+  const runNpmTool = toolName => {
     const parameters = {
-      ipcEvent: 'audit',
-      cmd: ['audit'],
+      ipcEvent: toolName,
+      cmd: [toolName],
       mode,
       directory
     };
 
     dispatch(
-      runAudit({
+      runTool({
         channel: 'ipc-event',
         options: {
           ...parameters
@@ -174,20 +174,23 @@ const Navigator = ({
                   {
                     primaryText: 'npm audit',
                     secondaryText: 'Run npm audit',
-                    handler: runNpmAuditHandler
+                    handler: () => runNpmTool('audit')
                   },
                   {
                     primaryText: 'npm doctor',
-                    secondaryText: 'Run npm doctor'
+                    secondaryText: 'Run npm doctor',
+                    handler: () => runNpmTool('doctor')
                   },
                   {
                     primaryText: 'npm prune',
-                    secondaryText: 'Remove extraneous packages'
+                    secondaryText: 'Remove extraneous packages',
+                    handler: () => runNpmTool('prune')
                   },
                   {
                     primaryText: 'lock verify',
                     secondaryText:
-                      'Report if package.json is out of sync with package-lock.json'
+                      'Report if package.json is out of sync with package-lock.json',
+                    handler: () => runNpmTool('lockVerify')
                   }
                 ]}
                 nodata={totalpackages === 0}

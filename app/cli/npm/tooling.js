@@ -10,4 +10,26 @@ const audit = options => {
   return run;
 };
 
-export { audit };
+const doctor = options => {
+  const command = ['doctor'];
+  const defaults = ['--json', '--parseable'];
+
+  const run = [].concat(command).concat(defaults);
+
+  return run;
+};
+
+const prune = options => {
+  const command = ['prune'];
+  const defaults = ['--json', '--parseable'];
+
+  const run = [].concat(command).concat(defaults);
+
+  return run;
+};
+
+const lockVerify = options => {
+  // TODO..
+};
+
+export { audit, doctor, prune, lockVerify };
