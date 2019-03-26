@@ -71,6 +71,7 @@ const AppLayout = ({ classes }) => {
     env,
     ...restProps
   } = useMappedState(mapState);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -108,7 +109,7 @@ const AppLayout = ({ classes }) => {
     });
 
     return () => ipcRenderer.removeAllListeners(['action-close']);
-  });
+  }, []);
 
   useEffect(() => {
     ipcRenderer.on(['view-close'], (event, status, cmd, data) => {

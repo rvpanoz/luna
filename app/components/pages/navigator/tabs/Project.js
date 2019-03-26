@@ -18,11 +18,7 @@ const ProjectTab = ({ classes, items, loading }) => (
       {items.map((item, idx) => (
         <ListItem key={`${key}item-${idx}`} className={classes.listItem}>
           <ListItemText
-            primary={
-              <Typography variant="subtitle2">
-                {loading ? 'loading..' : item.primaryText}
-              </Typography>
-            }
+            primary={<Typography variant="h6">{item.primaryText}</Typography>}
             secondary={
               <Typography className={classes.secondaryText} variant="body2">
                 {item.secondaryText}

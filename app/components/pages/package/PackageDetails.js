@@ -203,6 +203,7 @@ const PackageDetails = ({ classes }) => {
           [equals(true), always(renderSearchActions())]
         ])(Boolean(fromSearch))}
         <IconButton
+          disableRipple
           className={cn(classes.expand, {
             [classes.expandOpen]: expanded
           })}
@@ -290,7 +291,7 @@ const PackageDetails = ({ classes }) => {
                   <React.Fragment>
                     <Typography variant="caption">{`License: ${license}`}</Typography>
                     {mode === 'local' && (
-                      <Typography variant="caption">{group}</Typography>
+                      <Typography variant="caption">{`Group: ${group}`}</Typography>
                     )}
                     <Divider className={classes.diveder} light />
                   </React.Fragment>

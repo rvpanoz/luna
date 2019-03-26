@@ -2,7 +2,7 @@
 
 const audit = options => {
   const command = ['audit'];
-  const defaults = ['--json', '--parseable'];
+  const defaults = ['--json'];
   const { fix } = options;
 
   const run = [].concat(command).concat(defaults);
@@ -12,7 +12,7 @@ const audit = options => {
 
 const doctor = options => {
   const command = ['doctor'];
-  const defaults = ['--json', '--parseable'];
+  const defaults = ['--json'];
 
   const run = [].concat(command).concat(defaults);
 
@@ -21,7 +21,7 @@ const doctor = options => {
 
 const prune = options => {
   const command = ['prune'];
-  const defaults = ['--json', '--parseable'];
+  const defaults = ['--json'];
 
   const run = [].concat(command).concat(defaults);
 

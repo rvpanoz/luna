@@ -52,7 +52,7 @@ const Navigator = ({
     );
 
     return () => ipcRenderer.removeAllListeners('loaded-packages-close');
-  }, [openedDirectories]);
+  }, []);
 
   const runNpmTool = toolName => {
     const parameters = {
@@ -82,10 +82,6 @@ const Navigator = ({
         }
       }
     );
-  }, []);
-
-  const handleDirectory = useCallback(dir => {
-    dispatch(setMode({ mode: 'local', directory: dir }));
   }, []);
 
   return (
@@ -216,7 +212,9 @@ const Navigator = ({
               dense
               disabled={loading}
               button
-              onClick={() => handleDirectory(dir.directory)}
+              onClick={() =>
+                dispatch(setMode({ mode: 'local', directory: dir.directory }))
+              }
               key={`directory-${idx + 1}`}
               className={classNames(classes.item)}
             >

@@ -234,6 +234,13 @@ const handlers = {
       data: {
         packages: [],
         packagesOutdated: []
+      },
+      operations: {
+        selected: [],
+        packagesInstallOptions: []
+      },
+      filtering: {
+        filters: []
       }
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {

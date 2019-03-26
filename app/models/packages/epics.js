@@ -69,7 +69,8 @@ const cleanAllEpic = action$ =>
     ofType(clearAll.type),
     concatMap(() => [
       updateLoader({
-        loading: false
+        loading: false,
+        message: null
       }),
       cleanNotifications(),
       cleanPackages(),
@@ -94,9 +95,9 @@ const packagesStartEpic = action$ =>
         loading: true,
         message: 'Loading packages..'
       }),
+      cleanPackages(),
       cleanNotifications(),
-      cleanCommands(),
-      cleanPackages()
+      cleanCommands()
     ])
   );
 
