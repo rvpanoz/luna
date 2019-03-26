@@ -34,17 +34,13 @@ const execute = (
     log(chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`));
     callback('flow', `${manager} ${commandArgs.join(' ')}`);
 
-    const workingDir = directory && path.parse(directory);
-    const { dir } = workingDir || {};
-    console.log(dir);
-
     // on windows use npm.cmd
     const command = cp.spawn(
       /^win/.test(process.platform) ? `${manager}.cmd` : manager,
       commandArgs,
       {
         env: process.env,
-        cwd: mode === 'local' && dir ? dir : cwd
+        cwd: mode === 'local' && directory ? path.dirname(directory) : cwd
       }
     );
 
