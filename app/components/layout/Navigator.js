@@ -32,6 +32,7 @@ const Navigator = ({
   classes,
   mode,
   directory,
+  fullDirectory,
   totalpackages,
   totaloutdated,
   totalnotifications,
@@ -58,7 +59,7 @@ const Navigator = ({
       ipcEvent: toolName,
       cmd: [toolName],
       mode,
-      directory
+      directory: fullDirectory
     };
 
     dispatch(

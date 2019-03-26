@@ -141,6 +141,7 @@ const AppLayout = ({ classes }) => {
             totaloutdated={packagesOutdated && packagesOutdated.length}
             totalnotifications={notifications && notifications.length}
             mode={mode}
+            fullDirectory={directory}
             directory={directory && shrinkDirectory(directory)}
             PaperProps={{ style: { width: drawerWidth } }}
             userAgent={env && env.userAgent}
