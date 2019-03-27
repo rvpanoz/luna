@@ -14,8 +14,8 @@ import Typography from '@material-ui/core/Typography';
 
 import styles from './styles/installFromSources';
 
-const ToolsTab = ({ classes }) => (
-  <div className={classes.tab}>
+const InstallFromSource = ({ classes }) => (
+  <div className={classes.paper}>
     <List dense={true}>
       <ListItem key="project-install" className={classes.listItem}>
         <ListItemText
@@ -105,8 +105,8 @@ const ToolsTab = ({ classes }) => (
   </div>
 );
 
-ToolsTab.propTypes = {
+InstallFromSource.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(ToolsTab);
+export default withStyles(styles)(InstallFromSource);

@@ -11,8 +11,11 @@ const styles = theme => ({
     height: 50,
     backgroundColor: red[500]
   },
+  badge: {
+    margin: theme.spacing.unit
+  },
   divider: {
-    padding: theme.spacing.unit
+    margin: theme.spacing.unit
   },
   group: {
     padding: 0,

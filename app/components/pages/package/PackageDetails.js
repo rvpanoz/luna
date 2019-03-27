@@ -23,6 +23,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Collapse from '@material-ui/core/Collapse';
+import Badge from '@material-ui/core/Badge';
 import Grid from '@material-ui/core/Grid';
 import Fade from '@material-ui/core/Fade';
 import List from '@material-ui/core/List';
@@ -42,7 +43,7 @@ import { isPackageOutdated } from 'commons/utils';
 
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
-
+import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
 const mapState = ({
@@ -277,38 +278,41 @@ const PackageDetails = ({ classes }) => {
     </Paper>
   ));
 
-  const renderCard = useCallback(
-    () => (
+  const renderCard = useCallback(() => {
+    const title = isOutdated ? (
+      <Badge
+        className={classes.badge}
+        color="secondary"
+        variant="standard"
+        badgeContent="update"
+      >
+        <Typography variant="h6">{`${name} v${version}`}</Typography>
+      </Badge>
+    ) : (
+      <Typography variant="h6">{`${name} v${version}`}</Typography>
+    );
+
+    return (
       <Grid container justify="space-around">
         <Grid item xs={11} md={10} lg={10} xl={10}>
           <Transition>
             <Card className={classes.card}>
               <CardHeader
-                title={
-                  <Typography variant="h6">{`${name} v${version}`}</Typography>
-                }
+                title={title}
                 subheader={
                   <React.Fragment>
                     <Typography variant="caption">{`License: ${license}`}</Typography>
                     {mode === 'local' && (
                       <Typography variant="caption">{`Group: ${group}`}</Typography>
                     )}
-                    <Divider className={classes.divider} light />
                   </React.Fragment>
                 }
               />
               <CardContent>
                 <Typography variant="body1">{description}</Typography>
+                <Divider className={classes.divider} light />
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <Typography paragraph>Method:</Typography>
-                  <Typography paragraph>
-                    Heat 1/2 cup of the broth in a pot until simmering, add
-                    saffron and set aside for 10 minutes.
-                  </Typography>
-                  <Typography>
-                    Set aside off of the heat to let rest for 10 minutes, and
-                    then serve.
-                  </Typography>
+                  <PackageInfo active={active} />
                 </Collapse>
               </CardContent>
               {renderActions(name, fromSearch)}
@@ -355,9 +359,8 @@ const PackageDetails = ({ classes }) => {
           </Toolbar>
         </Grid>
       </Grid>
-    ),
-    [active, expanded, activePopper]
-  );
+    );
+  }, [active, expanded, activePopper]);
 
   return (
     <div className={classes.wrapper}>
