@@ -30,11 +30,11 @@ const buttonStyle = theme => ({
     }
   },
   secondary: {
-    backgroundColor: theme.palette.secondary.dark,
+    color: theme.palette.secondary.main,
     ...boxShadow,
     '&:hover': {
-      color: theme.palette.common.white,
-      backgroundColor: lighten(theme.palette.secondary.dark, 0.5)
+      color: theme.palette.primary.main,
+      backgroundColor: lighten(theme.palette.secondary.light, 0.9)
     }
   },
   error: {

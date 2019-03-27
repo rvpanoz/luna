@@ -28,4 +28,11 @@ const prune = options => {
   return run;
 };
 
-export { audit, doctor, prune };
+const dedupe = options => {
+  const command = ['dedupe'];
+ 
+  const run = [].concat(command).concat(defaults);
+  return run;
+};
+
+export { audit, doctor, prune, dedupe };

@@ -10,7 +10,7 @@ const install = (options, idx) => {
   const command = ['install'];
   const { mode, version, name, pkgOptions, multiple, packages, single } =
     options || {};
-  const defaults = [];
+  const defaults = ['--ignore-scripts'];
 
   if (!packages && !multiple && !name) {
     return Promise.reject('npm[install] package name parameter must be given');
@@ -31,7 +31,7 @@ const install = (options, idx) => {
   const run = []
     .concat(command)
     .concat(commandArgs)
-    .concat(packagesToInstall)
+    .concat(packagesToInstall.filter(pkg => pkg !== undefined))
     .concat(commandOpts);
 
   console.log(run);

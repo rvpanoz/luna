@@ -4,6 +4,7 @@
 
 /* eslint-disable */
 
+import { remote } from 'electron';
 import React, { useEffect, useCallback, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
@@ -18,11 +19,13 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Divider from '@material-ui/core/Divider';
+import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Collapse from '@material-ui/core/Collapse';
+import Badge from '@material-ui/core/Badge';
 import Grid from '@material-ui/core/Grid';
 import Fade from '@material-ui/core/Fade';
 import List from '@material-ui/core/List';
@@ -42,7 +45,7 @@ import { isPackageOutdated } from 'commons/utils';
 
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
-
+import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
 const mapState = ({
@@ -158,7 +161,7 @@ const PackageDetails = ({ classes }) => {
             <IconButton
               disableRipple
               color="primary"
-              onClick={e =>
+              onClick={() =>
                 dispatch(
                   updatePackages({
                     ipcEvent: 'ipc-event',
@@ -202,17 +205,19 @@ const PackageDetails = ({ classes }) => {
           [equals(false), always(renderOparationActions())],
           [equals(true), always(renderSearchActions())]
         ])(Boolean(fromSearch))}
-        <IconButton
-          disableRipple
-          className={cn(classes.expand, {
-            [classes.expandOpen]: expanded
-          })}
-          onClick={() => expand(!expanded)}
-          aria-expanded={expanded}
-          aria-label="Show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
+        <Hidden mdDown>
+          <IconButton
+            disableRipple
+            className={cn(classes.expand, {
+              [classes.expandOpen]: expanded
+            })}
+            onClick={() => expand(!expanded)}
+            aria-expanded={expanded}
+            aria-label="Show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </Hidden>
       </CardActions>
     );
   }, [active, isOutdated, fromSearch, expanded]);
@@ -264,7 +269,22 @@ const PackageDetails = ({ classes }) => {
                       directory
                     };
 
-                    dispatch(installPackages(parameters));
+                    remote.dialog.showMessageBox(
+                      remote.getCurrentWindow(),
+                      {
+                        title: 'Confirmation',
+                        type: 'question',
+                        message: `Would you like to install ${
+                          active.name
+                        }@${item}?`,
+                        buttons: ['Cancel', 'Run']
+                      },
+                      btnIdx => {
+                        if (Boolean(btnIdx) === true) {
+                          dispatch(installPackages(parameters));
+                        }
+                      }
+                    );
                   }}
                 >
                   <AddIcon />
@@ -277,46 +297,46 @@ const PackageDetails = ({ classes }) => {
     </Paper>
   ));
 
-  const renderCard = useCallback(
-    () => (
+  const renderCard = useCallback(() => {
+    return (
       <Grid container justify="space-around">
-        <Grid item xs={11} md={10} lg={10} xl={10}>
+        <Grid item md={10} lg={10} xl={10}>
           <Transition>
             <Card className={classes.card}>
               <CardHeader
                 title={
-                  <Typography variant="h6">{`${name} v${version}`}</Typography>
+                  <Typography variant="h6">{`${name} v${version ||
+                    '0.0.0'}`}</Typography>
                 }
+                className={classes.cardHeader}
                 subheader={
                   <React.Fragment>
                     <Typography variant="caption">{`License: ${license}`}</Typography>
                     {mode === 'local' && (
                       <Typography variant="caption">{`Group: ${group}`}</Typography>
                     )}
-                    <Divider className={classes.divider} light />
                   </React.Fragment>
                 }
               />
-              <CardContent>
+              <CardContent className={classes.cardContent}>
                 <Typography variant="body1">{description}</Typography>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <Typography paragraph>Method:</Typography>
-                  <Typography paragraph>
-                    Heat 1/2 cup of the broth in a pot until simmering, add
-                    saffron and set aside for 10 minutes.
-                  </Typography>
-                  <Typography>
-                    Set aside off of the heat to let rest for 10 minutes, and
-                    then serve.
-                  </Typography>
-                </Collapse>
+                <Divider className={classes.divider} light />
+                <Hidden mdDown>
+                  <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <PackageInfo active={active} />
+                  </Collapse>
+                </Hidden>
+                <Hidden lgUp>
+                  <PackageInfo active={active} short />
+                </Hidden>
               </CardContent>
               {renderActions(name, fromSearch)}
             </Card>
           </Transition>
         </Grid>
-        <Grid item xs={1} md={1} lg={1} xl={1}>
+        <Grid item md={1} lg={1} xl={1}>
           <Toolbar
+            disableGutters
             variant="dense"
             classes={{
               root: classes.toolbar
@@ -355,9 +375,8 @@ const PackageDetails = ({ classes }) => {
           </Toolbar>
         </Grid>
       </Grid>
-    ),
-    [active, expanded, activePopper]
-  );
+    );
+  }, [active, expanded, activePopper]);
 
   return (
     <div className={classes.wrapper}>

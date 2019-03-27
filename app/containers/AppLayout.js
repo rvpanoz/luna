@@ -146,10 +146,6 @@ const AppLayout = ({ classes }) => {
       );
     });
 
-    return () => ipcRenderer.removeAllListeners(['action-close']);
-  }, []);
-
-  useEffect(() => {
     ipcRenderer.on(['view-close'], (event, status, cmd, data) => {
       try {
         const newActive = data && JSON.parse(data);
@@ -167,7 +163,12 @@ const AppLayout = ({ classes }) => {
       }
     });
 
-    return () => ipcRenderer.removeAllListeners(['view-package-close']);
+    return () =>
+      ipcRenderer.removeAllListeners([
+        'action-close',
+        'tool-close',
+        'view-package-close'
+      ]);
   }, []);
 
   return (

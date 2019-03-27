@@ -253,10 +253,25 @@ const runPrune = (opts, callback) => {
   }
 };
 
+const runDedupe = (opts, callback) => {
+  const { mode, directory, activeManager = 'npm' } = opts;
+
+  try {
+    const manager = require(path.resolve(__dirname, activeManager));
+    const { dedupe } = manager.default;
+    const run = dedupe(opts);
+
+    return execute(activeManager, run, mode, directory, callback);
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
 export default {
   audit: runAudit,
   doctor: runDoctor,
   prune: runPrune,
+  dedupe: runDedupe,
   list,
   outdated,
   search,

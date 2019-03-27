@@ -118,7 +118,7 @@ const Navigator = ({
           </ListItemText>
         </ListItem>
         <ListItem>
-          <ListItemText style={{ height: 245 }}>
+          <ListItemText style={{ height: 345 }}>
             <AppTabs>
               <ProjectTab
                 items={[
@@ -169,19 +169,29 @@ const Navigator = ({
               <ToolsTab
                 items={[
                   {
+                    mode,
                     primaryText: 'npm audit',
                     secondaryText: 'Run npm audit',
                     handler: () => runNpmTool('audit')
                   },
                   {
+                    mode,
                     primaryText: 'npm doctor',
                     secondaryText: 'Run npm doctor',
                     handler: () => runNpmTool('doctor')
                   },
                   {
+                    mode,
                     primaryText: 'npm prune',
                     secondaryText: 'Remove extraneous packages',
                     handler: () => runNpmTool('prune')
+                  },
+                  {
+                    mode,
+                    primaryText: 'npm dedupe',
+                    secondaryText:
+                      'Searches the local package tree and attempts to simplify the overall structure',
+                    handler: () => runNpmTool('dedupe')
                   }
                 ]}
                 nodata={totalpackages === 0}
@@ -242,6 +252,7 @@ Navigator.propTypes = {
   totalpackages: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   totaloutdated: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   lastUpdatedAt: PropTypes.string,
+  fullDirectory: PropTypes.string,
   userAgent: PropTypes.string
 };
 

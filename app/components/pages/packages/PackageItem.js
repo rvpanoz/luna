@@ -6,6 +6,7 @@ import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 
 import ErrorIcon from '@material-ui/icons/Error';
+import CheckIcon from '@material-ui/icons/Check';
 
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
@@ -97,7 +98,7 @@ const PackageItem = ({
             [classes.updated]: !isOutdated
           })}
         >
-          {latest || version}
+          {latest || (fromSearch ? version : <CheckIcon />)}
         </Typography>
       </TableCell>
     </TableRow>

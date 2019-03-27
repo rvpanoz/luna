@@ -196,7 +196,7 @@ const Packages = ({ classes }) => {
   return (
     <AppLoader loading={loading} message={message}>
       <Grid container>
-        <Grid item md={12} lg={8} xl={6}>
+        <Grid item md={8} lg={6} xl={6}>
           <Paper className={classes.root}>
             <div className={classes.toolbar}>
               <TableToolbar
@@ -304,7 +304,7 @@ const Packages = ({ classes }) => {
             </div>
           </Paper>
         </Grid>
-        <Grid item md={12} lg={4} xl={6}>
+        <Grid item md={4} lg={6} xl={6}>
           <PackageDetails />
         </Grid>
       </Grid>
