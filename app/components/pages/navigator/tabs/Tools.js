@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography';
 
 import styles from './styles/tools';
 
-const ToolsTab = ({ classes, items, nodata }) => (
+const ToolsTab = ({ classes, items, nodata, mode }) => (
   <div className={classes.tab}>
     <List dense={true}>
       {items &&
@@ -28,7 +28,7 @@ const ToolsTab = ({ classes, items, nodata }) => (
             <ListItemSecondaryAction>
               <IconButton
                 aria-label="action"
-                disabled={nodata}
+                disabled={nodata || mode === 'global'}
                 onClick={() =>
                   remote.dialog.showMessageBox(
                     remote.getCurrentWindow(),
@@ -37,7 +37,7 @@ const ToolsTab = ({ classes, items, nodata }) => (
                       type: 'question',
                       message: `Would you like to run ${
                         item.primaryText
-                      }? \nNote: It will take some time `,
+                      }? \nNote: This process will take some time `,
                       buttons: ['Cancel', 'Run']
                     },
                     btnIdx => {
@@ -60,6 +60,7 @@ const ToolsTab = ({ classes, items, nodata }) => (
 ToolsTab.propTypes = {
   classes: PropTypes.object.isRequired,
   items: PropTypes.arrayOf(PropTypes.object),
+  mode: PropTypes.string,
   nodata: PropTypes.bool
 };
 

@@ -169,19 +169,28 @@ const Navigator = ({
               <ToolsTab
                 items={[
                   {
+                    mode,
                     primaryText: 'npm audit',
                     secondaryText: 'Run npm audit',
                     handler: () => runNpmTool('audit')
                   },
                   {
+                    mode,
                     primaryText: 'npm doctor',
                     secondaryText: 'Run npm doctor',
                     handler: () => runNpmTool('doctor')
                   },
                   {
+                    mode,
                     primaryText: 'npm prune',
                     secondaryText: 'Remove extraneous packages',
                     handler: () => runNpmTool('prune')
+                  },
+                  {
+                    mode,
+                    primaryText: 'npm prune',
+                    secondaryText: 'Searches the local package tree and attempts to simplify the overall structure',
+                    handler: () => runNpmTool('dedupe')
                   }
                 ]}
                 nodata={totalpackages === 0}
