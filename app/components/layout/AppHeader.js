@@ -17,7 +17,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+// import DialogContentText from '@material-ui/core/DialogContentText';
+
 import SearchBox from 'components/common/SearchBox';
+import InstallFromSource from 'components/common/InstallFromSource';
 import { setActivePage } from 'models/ui/actions';
 
 import Settings from './Settings';
@@ -37,7 +44,7 @@ const mapState = ({
 
 const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-
+  const [dialog, setDialog] = useState({ open: false });
   const dispatch = useDispatch();
   const { activePage, loading, env } = useMappedState(mapState);
 
@@ -100,6 +107,7 @@ const Header = ({ classes, onDrawerToggle }) => {
                 variant="outlined"
                 color="inherit"
                 size="small"
+                onClick={() => setDialog({ open: true })}
               >
                 Install
               </Button>
@@ -160,6 +168,27 @@ const Header = ({ classes, onDrawerToggle }) => {
           loading={loading}
         />
       </Popover>
+      {dialog && dialog.open && (
+        <Dialog open={dialog.open} aria-labelledby="install-from-source">
+          <DialogTitle>Install from source</DialogTitle>
+          <DialogContent>
+            <InstallFromSource />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() =>
+                setDialog({
+                  open: false,
+                  content: null
+                })
+              }
+              color="secondary"
+            >
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </React.Fragment>
   );
 };
