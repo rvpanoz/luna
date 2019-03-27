@@ -17,7 +17,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
+// import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { Notifications } from 'components/pages/notifications';
 import {
@@ -99,13 +99,14 @@ const AppLayout = ({ classes }) => {
       if (result) {
         try {
           const resultJson = JSON.parse(result);
-          console.log(resultJson);
 
           setDialog({
             open: true,
             content: resultJson
           });
-        } catch (error) {}
+        } catch (err) {
+          throw new Error(err);
+        }
       }
 
       dispatch(
@@ -117,14 +118,15 @@ const AppLayout = ({ classes }) => {
     });
 
     ipcRenderer.on('action-close', (event, error, message, options) => {
-      const removedOrUpdatedPackages = options && options.slice(2);
       const operation = options && options[0];
+      const removedOrUpdatedPackages =
+        options &&
+        options.filter(option => option !== operation || option !== '-g');
 
       if (error && error.length) {
         dispatch(addActionError({ error }));
       }
 
-      // TODO: fix this
       if (operation === 'uninstall' && removedOrUpdatedPackages) {
         dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
       }

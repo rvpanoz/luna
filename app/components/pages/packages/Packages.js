@@ -23,6 +23,7 @@ import {
   updateData,
   setPage,
   setPageRows,
+  setPackagesStart,
   viewPackage
 } from 'models/packages/actions';
 import { commandMessage } from 'models/ui/actions';
@@ -93,7 +94,6 @@ const Packages = ({ classes }) => {
     paused
   } = useMappedState(mapState);
 
-  const [counter, setCounter] = useState(0);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
@@ -109,13 +109,23 @@ const Packages = ({ classes }) => {
   const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
     IPC_EVENT,
     parameters,
-    [counter, paused, mode, directory]
+    [mode, directory]
   );
 
   const { projectName, projectVersion } = dependenciesSet || {};
 
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
+
+  const startPackages = () =>
+    dispatch(
+      setPackagesStart({
+        channel: IPC_EVENT,
+        options: {
+          ...parameters
+        }
+      })
+    );
 
   useEffect(() => {
     if (paused) {
@@ -167,7 +177,7 @@ const Packages = ({ classes }) => {
   };
 
   // setup packages
-  const [packagesData] = useFilters(packages, filters, counter);
+  const [packagesData] = useFilters(packages, filters);
 
   const data = filteredByNamePackages.length
     ? filteredByNamePackages
@@ -201,7 +211,7 @@ const Packages = ({ classes }) => {
                 fromSearch={fromSearch}
                 filters={filters}
                 scrollWrapper={scrollWrapper}
-                reload={() => setCounter(counter + 1)}
+                reload={() => startPackages()}
                 filteredByNamePackages={filteredByNamePackages}
                 setFilteredByNamePackages={setFilteredByNamePackages}
               />

@@ -29,7 +29,6 @@ import UpdateIcon from '@material-ui/icons/Update';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/Archive';
-import ActionIcon from '@material-ui/icons/CallToAction';
 import PublicIcon from '@material-ui/icons/BallotOutlined';
 
 import { switchcase } from 'commons/utils';
@@ -190,7 +189,22 @@ const TableListToolbar = ({
             <IconButton
               color="primary"
               aria-label="install selected"
-              onClick={() => handleAction('install')}
+              onClick={() =>
+                remote.dialog.showMessageBox(
+                  remote.getCurrentWindow(),
+                  {
+                    title: 'Install packages',
+                    type: 'question',
+                    message: `The selected packages will be installed. Continue?`,
+                    buttons: ['Cancel', 'Install']
+                  },
+                  btnIdx => {
+                    if (Boolean(btnIdx) === true) {
+                      handleAction('install');
+                    }
+                  }
+                )
+              }
             >
               <AddIcon />
             </IconButton>
@@ -201,7 +215,22 @@ const TableListToolbar = ({
             <IconButton
               color="primary"
               aria-label="update selected"
-              onClick={() => handleAction('update')}
+              onClick={() =>
+                remote.dialog.showMessageBox(
+                  remote.getCurrentWindow(),
+                  {
+                    title: 'Update packages',
+                    type: 'question',
+                    message: `Update the selected packages?`,
+                    buttons: ['Cancel', 'Update']
+                  },
+                  btnIdx => {
+                    if (Boolean(btnIdx) === true) {
+                      handleAction('update');
+                    }
+                  }
+                )
+              }
             >
               <UpdateIcon />
             </IconButton>
@@ -215,27 +244,28 @@ const TableListToolbar = ({
               <IconButton
                 color="secondary"
                 aria-label="uninstall selected"
-                onClick={() => handleAction('uninstall')}
+                onClick={() =>
+                  remote.dialog.showMessageBox(
+                    remote.getCurrentWindow(),
+                    {
+                      title: 'Uninstall packages',
+                      type: 'question',
+                      message: `The selected packages will be removed. Continue?`,
+                      buttons: ['Cancel', 'Uninstall']
+                    },
+                    btnIdx => {
+                      if (Boolean(btnIdx) === true) {
+                        handleAction('uninstall');
+                      }
+                    }
+                  )
+                }
               >
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
           );
         },
-        prune: () => (
-          <Tooltip title="Run npm prune to remove extraneous packages">
-            <div>
-              <IconButton
-                disableRipple
-                disabled={nodata || fromSearch}
-                aria-label="npm prune"
-                onClick={() => console.log('prune...')}
-              >
-                <ActionIcon />
-              </IconButton>
-            </div>
-          </Tooltip>
-        ),
         filters: () => (
           <Tooltip title="Show filters">
             <div>
