@@ -1,5 +1,6 @@
-import red from '@material-ui/core/colors/red';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont } from 'styles/variables';
+import red from '@material-ui/core/colors/red';
 
 const styles = theme => ({
   actions: {
@@ -19,7 +20,7 @@ const styles = theme => ({
   },
   header: {
     ...defaultFont,
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: lighten(theme.palette.secondary.light, 0.9),
     fontSize: 20,
     fontWeight: 400,
     padding: theme.spacing.unit

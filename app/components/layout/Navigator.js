@@ -16,13 +16,14 @@ import FolderIcon from '@material-ui/icons/FolderOpen';
 import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
 import AppButton from 'components/units/Buttons/AppButton';
+import { navigatorParameters } from 'commons/parameters';
 
 import {
   ProjectTab,
   PackagesTab,
   ToolsTab
 } from 'components/pages/navigator/tabs';
-import { runAudit } from 'models/packages/actions';
+import { runTool } from 'models/packages/actions';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
@@ -31,6 +32,7 @@ const Navigator = ({
   classes,
   mode,
   directory,
+  fullDirectory,
   totalpackages,
   totaloutdated,
   totalnotifications,
@@ -50,16 +52,18 @@ const Navigator = ({
     );
 
     return () => ipcRenderer.removeAllListeners('loaded-packages-close');
-  }, [openedDirectories]);
+  }, []);
 
-  const runNpmAuditHandler = () => {
+  const runNpmTool = toolName => {
     const parameters = {
-      ipcEvent: 'ipc-event',
-      cmd: ['audit']
+      ipcEvent: toolName,
+      cmd: [toolName],
+      mode,
+      directory: fullDirectory
     };
 
     dispatch(
-      runAudit({
+      runTool({
         channel: 'ipc-event',
         options: {
           ...parameters
@@ -71,27 +75,13 @@ const Navigator = ({
   const openPackage = useCallback(() => {
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
-      {
-        title: 'Open package.json file',
-        buttonLabel: 'Analyze',
-        filters: [
-          {
-            name: 'package.json',
-            extensions: ['json']
-          }
-        ],
-        properties: ['openFile']
-      },
+      navigatorParameters,
       filePath => {
         if (filePath) {
           dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
         }
       }
     );
-  }, []);
-
-  const handleDirectory = useCallback(dir => {
-    dispatch(setMode({ mode: 'local', directory: dir }));
   }, []);
 
   return (
@@ -105,10 +95,13 @@ const Navigator = ({
         <ListItem>
           <ListItemText className={classes.actionButton}>
             <AppButton
+              style={{ fontSize: 20 }}
               disabled={loading}
               color="secondary"
               fullWidth
+              round
               onClick={() => openPackage()}
+              border
             >
               Analyze
             </AppButton>
@@ -125,7 +118,7 @@ const Navigator = ({
           </ListItemText>
         </ListItem>
         <ListItem>
-          <ListItemText style={{ height: 345 }}>
+          <ListItemText style={{ height: 245 }}>
             <AppTabs>
               <ProjectTab
                 items={[
@@ -178,20 +171,17 @@ const Navigator = ({
                   {
                     primaryText: 'npm audit',
                     secondaryText: 'Run npm audit',
-                    handler: runNpmAuditHandler
+                    handler: () => runNpmTool('audit')
                   },
                   {
                     primaryText: 'npm doctor',
-                    secondaryText: 'Run npm doctor'
+                    secondaryText: 'Run npm doctor',
+                    handler: () => runNpmTool('doctor')
                   },
                   {
                     primaryText: 'npm prune',
-                    secondaryText: 'Remove extraneous packages'
-                  },
-                  {
-                    primaryText: 'lock verify',
-                    secondaryText:
-                      'Report if package.json is out of sync with package-lock.json'
+                    secondaryText: 'Remove extraneous packages',
+                    handler: () => runNpmTool('prune')
                   }
                 ]}
                 nodata={totalpackages === 0}
@@ -216,7 +206,9 @@ const Navigator = ({
               dense
               disabled={loading}
               button
-              onClick={() => handleDirectory(dir.directory)}
+              onClick={() =>
+                dispatch(setMode({ mode: 'local', directory: dir.directory }))
+              }
               key={`directory-${idx + 1}`}
               className={classNames(classes.item)}
             >

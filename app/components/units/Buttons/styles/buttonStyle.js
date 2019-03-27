@@ -1,6 +1,5 @@
 import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
-
-import { defaultFont, boxShadow } from 'styles/variables';
+import { defaultFont, boxShadow, defaultBoxShadow } from 'styles/variables';
 
 const buttonStyle = theme => ({
   button: {
@@ -18,32 +17,29 @@ const buttonStyle = theme => ({
     textAlign: 'center',
     whiteSpace: 'nowrap',
     verticalAlign: 'middle',
-    cursor: 'pointer',
-    '&:hover': {
-      backgroundColor: theme.palette.secondary.light
-    }
+    cursor: 'pointer'
   },
   fullWidth: {
     width: '100%'
   },
   primary: {
     backgroundColor: theme.palette.primary.main,
-    ...boxShadow,
+    ...defaultBoxShadow,
     '&:hover': {
       backgroundColor: darken(theme.palette.primary.light, 0.1)
     }
   },
   secondary: {
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.secondary.dark,
     ...boxShadow,
     '&:hover': {
-      color: lighten(theme.palette.common.white, 0.3),
-      backgroundColor: lighten(theme.palette.secondary.light, '0.15')
+      color: theme.palette.common.white,
+      backgroundColor: lighten(theme.palette.secondary.dark, 0.5)
     }
   },
   error: {
     backgroundColor: theme.palette.error.main,
-    ...boxShadow,
+    ...defaultBoxShadow,
     '&:hover': {
       backgroundColor: theme.palette.error.light,
       boxShadow:
@@ -65,7 +61,7 @@ const buttonStyle = theme => ({
     }
   },
   round: {
-    borderRadius: 30
+    borderRadius: 50
   },
   disabled: {
     opacity: '0.65',

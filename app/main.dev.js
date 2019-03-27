@@ -8,7 +8,7 @@ import { merge } from 'ramda';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import log from 'electron-log';
 
-import { APP_ACTIONS } from './constants/AppConstants';
+import { APP_TOOLS, APP_ACTIONS } from './constants/AppConstants';
 import { switchcase } from './commons/utils';
 import MenuBuilder from './menu';
 import mk from './mk';
@@ -84,6 +84,7 @@ ipcMain.on('ipc-event', (event, options) => {
   const onClose = (status, errors, data, cmd) => {
     const { directory, mode } = rest;
     const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
+    const toolsIndex = APP_TOOLS.indexOf(ipcEvent);
     const commands = options.cmd;
 
     if (actionIndex > -1 && ipcEvent !== 'view') {
@@ -92,6 +93,10 @@ ipcMain.on('ipc-event', (event, options) => {
       }
 
       runningTimes += 1;
+    }
+
+    if (toolsIndex > -1) {
+      return event.sender.send('tool-close', errors, data, cmd);
     }
 
     if (directory && mode === 'local' && cmd.includes('list')) {

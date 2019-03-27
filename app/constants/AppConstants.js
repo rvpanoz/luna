@@ -30,6 +30,7 @@ export const APP_INFO = {
 };
 
 export const APP_ACTIONS = ['install', 'uninstall', 'update', 'view'];
+export const APP_TOOLS = ['audit', 'doctor', 'prune', 'lockVerify'];
 
 export const PACKAGE_GROUPS = {
   dependencies: 'save-prod',

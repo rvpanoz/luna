@@ -234,6 +234,13 @@ const handlers = {
       data: {
         packages: [],
         packagesOutdated: []
+      },
+      operations: {
+        selected: [],
+        packagesInstallOptions: []
+      },
+      filtering: {
+        filters: []
       }
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
@@ -347,14 +354,14 @@ const handlers = {
     } = state;
 
     // update packages
-    const newPackages = packages
-      .filter(pkg => (!removedPackages.includes(pkg.name) ? pkg : null))
-      .filter(r => Boolean(r));
+    const newPackages = packages.filter(
+      pkg => removedPackages.indexOf(pkg.name) === -1
+    );
 
     // update outdated packages
-    const newPackagesOutdated = packagesOutdated
-      .filter(pkg => (!removedPackages.includes(pkg.name) ? pkg : null))
-      .filter(r => Boolean(r));
+    const newPackagesOutdated = packagesOutdated.filter(
+      pkg => removedPackages.indexOf(pkg.name) === -1
+    );
 
     return merge(state, {
       ...state,

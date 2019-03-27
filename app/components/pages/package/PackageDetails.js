@@ -67,6 +67,8 @@ const PackageDetails = ({ classes }) => {
   const [group, setGroup] = useState('global');
   const [expanded, expand] = useState(false);
   const [isOutdated, setOutdated] = useState(false);
+  const [versions, setVersions] = useState([]);
+  const [dependencies, setDependencies] = useState([]);
   const [activePopper, setActivePopper] = useState({
     index: 0,
     anchorEl: null,
@@ -98,9 +100,26 @@ const PackageDetails = ({ classes }) => {
     }
 
     const [newOutdated] = isPackageOutdated(packagesOutdated, name);
-
     setOutdated(newOutdated);
-    setLicense(active.license || APP_INFO.NOT_AVAILABLE);
+
+    if (active.license) {
+      setLicense(active.license);
+    }
+
+    if (active.version) {
+      setVersions(active.versions);
+    }
+
+    if (active.dependencies) {
+      const dependenciesNames = Object.keys(active.dependencies);
+
+      const dependenciesToArray = dependenciesNames.map(dep => ({
+        name: dep,
+        version: active.dependencies[dep]
+      }));
+
+      setDependencies(dependenciesToArray);
+    }
   }, [active]);
 
   const renderActions = useCallback(() => {
@@ -184,6 +203,7 @@ const PackageDetails = ({ classes }) => {
           [equals(true), always(renderSearchActions())]
         ])(Boolean(fromSearch))}
         <IconButton
+          disableRipple
           className={cn(classes.expand, {
             [classes.expandOpen]: expanded
           })}
@@ -265,15 +285,15 @@ const PackageDetails = ({ classes }) => {
             <Card className={classes.card}>
               <CardHeader
                 title={
-                  <Typography variant="subtitle1">{`${name} v${version}`}</Typography>
+                  <Typography variant="h6">{`${name} v${version}`}</Typography>
                 }
                 subheader={
                   <React.Fragment>
                     <Typography variant="caption">{`License: ${license}`}</Typography>
                     {mode === 'local' && (
-                      <Typography variant="caption">{group}</Typography>
+                      <Typography variant="caption">{`Group: ${group}`}</Typography>
                     )}
-                    <Divider className={classes.diveder} light />
+                    <Divider className={classes.divider} light />
                   </React.Fragment>
                 }
               />
@@ -339,18 +359,6 @@ const PackageDetails = ({ classes }) => {
     [active, expanded, activePopper]
   );
 
-  // const activeDependencies = active && active.dependencies;
-  // let dependenciesToArray = [];
-
-  // if (activeDependencies) {
-  //   const dependenciesNames = Object.keys(activeDependencies);
-
-  //   dependenciesToArray = dependenciesNames.map(dep => ({
-  //     name: dep,
-  //     version: activeDependencies[dep]
-  //   }));
-  // }
-
   return (
     <div className={classes.wrapper}>
       <AppLoader
@@ -368,7 +376,7 @@ const PackageDetails = ({ classes }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            {renderList('version', active.versions)}
+            {renderList('version', versions)}
           </Fade>
         )}
       </Popper>
@@ -380,7 +388,7 @@ const PackageDetails = ({ classes }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            {renderList('dependency', [])}
+            {renderList('dependency', dependencies)}
           </Fade>
         )}
       </Popper>

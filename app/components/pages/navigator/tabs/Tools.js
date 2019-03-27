@@ -1,5 +1,6 @@
 /* eslint-disable */
 
+import { remote } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -28,7 +29,24 @@ const ToolsTab = ({ classes, items, nodata }) => (
               <IconButton
                 aria-label="action"
                 disabled={nodata}
-                onClick={() => item.handler()}
+                onClick={() =>
+                  remote.dialog.showMessageBox(
+                    remote.getCurrentWindow(),
+                    {
+                      title: 'Confirmation',
+                      type: 'question',
+                      message: `Would you like to run ${
+                        item.primaryText
+                      }? \nNote: It will take some time `,
+                      buttons: ['Cancel', 'Run']
+                    },
+                    btnIdx => {
+                      if (Boolean(btnIdx) === true) {
+                        item.handler();
+                      }
+                    }
+                  )
+                }
               >
                 <ArrowRightIcon />
               </IconButton>

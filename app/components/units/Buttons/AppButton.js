@@ -12,6 +12,7 @@ const AppButton = ({
   classes,
   color,
   round,
+  border,
   children,
   fullWidth,
   disabled,
@@ -20,6 +21,7 @@ const AppButton = ({
   const btnClasses = cx({
     [classes[color]]: color,
     [classes.round]: round,
+    [classes.border]: border,
     [classes.fullWidth]: fullWidth,
     [classes.disabled]: disabled
   });

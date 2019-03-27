@@ -29,7 +29,7 @@ const installPackages = ActionCreator('INSTALL_PACKAGES');
 const updatePackages = ActionCreator('UPDATE_PACKAGES');
 const removePackages = ActionCreator('REMOVE_PACKAGES');
 
-const runAudit = ActionCreator('RUN_AUDIT');
+const runTool = ActionCreator('RUN_TOOL');
 
 export {
   installPackages,
@@ -53,7 +53,7 @@ export {
   setPageRows,
   updateData,
   updateFilters,
-  runAudit,
+  runTool,
   removePackages,
   viewPackage,
   clearInstallOptions

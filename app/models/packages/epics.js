@@ -20,7 +20,7 @@ import {
   setOutdatedSuccess,
   updateData,
   setPage,
-  runAudit,
+  runTool,
   viewPackage
 } from './actions';
 
@@ -69,7 +69,8 @@ const cleanAllEpic = action$ =>
     ofType(clearAll.type),
     concatMap(() => [
       updateLoader({
-        loading: false
+        loading: false,
+        message: null
       }),
       cleanNotifications(),
       cleanPackages(),
@@ -94,9 +95,9 @@ const packagesStartEpic = action$ =>
         loading: true,
         message: 'Loading packages..'
       }),
+      cleanPackages(),
       cleanNotifications(),
-      cleanCommands(),
-      cleanPackages()
+      cleanCommands()
     ])
   );
 
@@ -211,19 +212,21 @@ const packagesSuccessEpic = (action$, state$) =>
     })
   );
 
-// TODO: implement
-const audit = action$ =>
+const npmToolsEpic = action$ =>
   action$.pipe(
-    ofType(runAudit.type),
+    ofType(runTool.type),
     map(({ payload: { channel, options } }) => {
       ipcRenderer.send(channel, options);
 
-      return resumeRequest();
+      return updateLoader({
+        loading: true,
+        message: 'Running..'
+      });
     })
   );
 
 export default combineEpics(
-  audit,
+  npmToolsEpic,
   packagesStartEpic,
   packagesSuccessEpic,
   installPackagesEpic,
