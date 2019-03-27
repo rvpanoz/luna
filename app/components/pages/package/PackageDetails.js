@@ -4,6 +4,7 @@
 
 /* eslint-disable */
 
+import { remote } from 'electron';
 import React, { useEffect, useCallback, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
@@ -18,6 +19,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardActions from '@material-ui/core/CardActions';
 import Divider from '@material-ui/core/Divider';
+import Hidden from '@material-ui/core/Hidden';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -159,7 +161,7 @@ const PackageDetails = ({ classes }) => {
             <IconButton
               disableRipple
               color="primary"
-              onClick={e =>
+              onClick={() =>
                 dispatch(
                   updatePackages({
                     ipcEvent: 'ipc-event',
@@ -203,17 +205,19 @@ const PackageDetails = ({ classes }) => {
           [equals(false), always(renderOparationActions())],
           [equals(true), always(renderSearchActions())]
         ])(Boolean(fromSearch))}
-        <IconButton
-          disableRipple
-          className={cn(classes.expand, {
-            [classes.expandOpen]: expanded
-          })}
-          onClick={() => expand(!expanded)}
-          aria-expanded={expanded}
-          aria-label="Show more"
-        >
-          <ExpandMoreIcon />
-        </IconButton>
+        <Hidden mdDown>
+          <IconButton
+            disableRipple
+            className={cn(classes.expand, {
+              [classes.expandOpen]: expanded
+            })}
+            onClick={() => expand(!expanded)}
+            aria-expanded={expanded}
+            aria-label="Show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </Hidden>
       </CardActions>
     );
   }, [active, isOutdated, fromSearch, expanded]);
@@ -265,7 +269,22 @@ const PackageDetails = ({ classes }) => {
                       directory
                     };
 
-                    dispatch(installPackages(parameters));
+                    remote.dialog.showMessageBox(
+                      remote.getCurrentWindow(),
+                      {
+                        title: 'Confirmation',
+                        type: 'question',
+                        message: `Would you like to install ${
+                          active.name
+                        }@${item}?`,
+                        buttons: ['Cancel', 'Run']
+                      },
+                      btnIdx => {
+                        if (Boolean(btnIdx) === true) {
+                          dispatch(installPackages(parameters));
+                        }
+                      }
+                    );
                   }}
                 >
                   <AddIcon />
@@ -279,26 +298,17 @@ const PackageDetails = ({ classes }) => {
   ));
 
   const renderCard = useCallback(() => {
-    const title = isOutdated ? (
-      <Badge
-        className={classes.badge}
-        color="secondary"
-        variant="standard"
-        badgeContent="update"
-      >
-        <Typography variant="h6">{`${name} v${version}`}</Typography>
-      </Badge>
-    ) : (
-      <Typography variant="h6">{`${name} v${version}`}</Typography>
-    );
-
     return (
       <Grid container justify="space-around">
-        <Grid item xs={11} md={10} lg={10} xl={10}>
+        <Grid item md={10} lg={10} xl={10}>
           <Transition>
             <Card className={classes.card}>
               <CardHeader
-                title={title}
+                title={
+                  <Typography variant="h6">{`${name} v${version ||
+                    '0.0.0'}`}</Typography>
+                }
+                className={classes.cardHeader}
                 subheader={
                   <React.Fragment>
                     <Typography variant="caption">{`License: ${license}`}</Typography>
@@ -308,19 +318,25 @@ const PackageDetails = ({ classes }) => {
                   </React.Fragment>
                 }
               />
-              <CardContent>
+              <CardContent className={classes.cardContent}>
                 <Typography variant="body1">{description}</Typography>
                 <Divider className={classes.divider} light />
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <PackageInfo active={active} />
-                </Collapse>
+                <Hidden mdDown>
+                  <Collapse in={expanded} timeout="auto" unmountOnExit>
+                    <PackageInfo active={active} />
+                  </Collapse>
+                </Hidden>
+                <Hidden lgUp>
+                  <PackageInfo active={active} short />
+                </Hidden>
               </CardContent>
               {renderActions(name, fromSearch)}
             </Card>
           </Transition>
         </Grid>
-        <Grid item xs={1} md={1} lg={1} xl={1}>
+        <Grid item md={1} lg={1} xl={1}>
           <Toolbar
+            disableGutters
             variant="dense"
             classes={{
               root: classes.toolbar

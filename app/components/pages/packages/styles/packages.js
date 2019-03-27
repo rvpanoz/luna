@@ -70,7 +70,7 @@ const styles = theme => ({
     }
   },
   outdated: {
-    color: theme.palette.secondary.dark
+    color: darken(theme.palette.error.main, 0.9)
   },
   updated: {
     color: darken('#00b300', 0.1)

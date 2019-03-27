@@ -1,4 +1,10 @@
+import { flexContainer } from 'styles/variables';
+
 const styles = theme => ({
+  flexContainer: {
+    ...flexContainer,
+    flexDirection: 'column'
+  },
   root: {
     flexGrow: 1,
     maxWidth: 752

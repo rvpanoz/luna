@@ -6,6 +6,16 @@ const styles = theme => ({
   actions: {
     display: 'flex'
   },
+  card: {},
+  cardHeader: {
+    padding: theme.spacing.unit
+  },
+  cardContent: {
+    maxHeight: 375,
+    overflowY: 'scroll',
+    overflowX: 'hidden',
+    padding: theme.spacing.unit
+  },
   avatar: {
     width: 50,
     height: 50,

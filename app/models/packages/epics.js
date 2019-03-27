@@ -118,11 +118,13 @@ const viewPackagesEpic = action$ =>
   action$.pipe(
     ofType(viewPackage.type),
     map(({ payload }) => {
+      const { name } = payload;
+
       ipcRenderer.send('ipc-event', payload);
 
       return updatePackageLoader({
         loading: true,
-        message: 'Loading package..'
+        message: `Loading ${name}`
       });
     })
   );

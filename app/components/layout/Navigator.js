@@ -118,7 +118,7 @@ const Navigator = ({
           </ListItemText>
         </ListItem>
         <ListItem>
-          <ListItemText style={{ height: 245 }}>
+          <ListItemText style={{ height: 345 }}>
             <AppTabs>
               <ProjectTab
                 items={[
@@ -188,8 +188,9 @@ const Navigator = ({
                   },
                   {
                     mode,
-                    primaryText: 'npm prune',
-                    secondaryText: 'Searches the local package tree and attempts to simplify the overall structure',
+                    primaryText: 'npm dedupe',
+                    secondaryText:
+                      'Searches the local package tree and attempts to simplify the overall structure',
                     handler: () => runNpmTool('dedupe')
                   }
                 ]}
@@ -251,6 +252,7 @@ Navigator.propTypes = {
   totalpackages: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   totaloutdated: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   lastUpdatedAt: PropTypes.string,
+  fullDirectory: PropTypes.string,
   userAgent: PropTypes.string
 };
 
