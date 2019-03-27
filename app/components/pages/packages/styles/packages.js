@@ -32,6 +32,7 @@ const styles = theme => ({
   tableWrapper: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
+    padding: theme.spacing.unit,
     [theme.breakpoints.up('md')]: {
       maxHeight: 500
     },
@@ -71,6 +72,11 @@ const styles = theme => ({
   },
   outdated: {
     color: darken(theme.palette.error.main, 0.9)
+  },
+  transition: {
+    transition: theme.transitions.create('width', {
+      duration: theme.transitions.duration.shortest
+    })
   },
   updated: {
     color: darken('#00b300', 0.1)

@@ -26,7 +26,7 @@ const Flags = ({ classes, selected }) => {
   const { packagesInstallOptions } = useMappedState(mapState);
 
   return (
-    <div className={classes.flexContainer} style={{ minWidth: 400 }}>
+    <div className={classes.flexContainer}>
       <List dense className={classes.list}>
         {selected.map(packageName => {
           const option =

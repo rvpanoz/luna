@@ -398,6 +398,7 @@ const TableListToolbar = ({
       </Popover>
       <Dialog
         open={optionsOpen}
+        fullWidth
         onClose={() => {
           dispatch({ type: clearInstallOptions.type });
           toggleOptions(!optionsOpen);
