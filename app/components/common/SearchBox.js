@@ -16,7 +16,7 @@ import { setPackagesStart, updateData } from 'models/packages/actions';
 
 import styles from './styles/searchBox';
 
-const SearchBox = ({ classes, disabled }) => {
+const SearchBox = ({ classes, disabled, onlineStatus }) => {
   const rootEl = useRef(null);
   const dispatch = useDispatch();
   const [packageName, setPackageName] = useState('');
@@ -97,7 +97,9 @@ const SearchBox = ({ classes, disabled }) => {
           <SearchIcon />
         </a>
         <InputBase
-          disabled={disabled}
+          disabled={
+            disabled || (onlineStatus && onlineStatus.status === 'offline')
+          }
           placeholder="Search npm registry"
           classes={{
             root: classes.inputRoot,
@@ -129,7 +131,8 @@ const SearchBox = ({ classes, disabled }) => {
 
 SearchBox.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  onlineStatus: PropTypes.object
 };
 
 export default withStyles(styles)(SearchBox);

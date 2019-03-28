@@ -155,6 +155,11 @@ ipcMain.on('ipc-event', (event, options) => {
   }
 });
 
+// channel: general
+ipcMain.on('online-status-changed', (event, status) => {
+  // TODO: implementation
+});
+
 app.on('window-all-closed', () => {
   /**
    * Respect the OSX convention of having the application
@@ -224,10 +229,8 @@ app.on('ready', async () => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'did-finish-load event fired');
 
     if (!mainWindow) {
-      throw new Error('mainWindow is not defined!');
+      throw new Error('mainWindow is not defined');
     }
-
-    mainWindow.openDevTools();
 
     if (START_MINIMIZED) {
       mainWindow.minimize();
@@ -236,21 +239,26 @@ app.on('ready', async () => {
       mainWindow.focus();
     }
 
+    if (NODE_ENV === 'development') {
+      mainWindow.openDevTools();
+    }
+
+    // npm and node info
+    const npmEnv = CheckNpm();
+
+    if (npmEnv.error) {
+      event.sender.send('npm-error', String(npmEnv.error));
+    } else {
+      event.sender.send('get-env-close', npmEnv);
+    }
+
     // user settings
     const userSettings = Store.get('user_settings') || defaultSettings;
     event.sender.send('settings-loaded-close', userSettings);
 
-    // npm and node info
-    const npmEnv = CheckNpm();
-    event.sender.send('get-env-close', npmEnv);
-
     // directories history
     const openedPackages = Store.get('opened_packages') || [];
     event.sender.send('loaded-packages-close', openedPackages);
-
-    if (NODE_ENV === 'development') {
-      mainWindow.openDevTools();
-    }
   });
 
   mainWindow.webContents.on('crashed', event => {

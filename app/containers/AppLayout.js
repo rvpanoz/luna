@@ -86,6 +86,7 @@ const AppLayout = ({ classes }) => {
 
   useEffect(() => {
     ipcRenderer.on('tool-close', (event, error, result) => {
+      console.log(1, error);
       if (error) {
         dispatch(
           setSnackbar({
@@ -99,13 +100,13 @@ const AppLayout = ({ classes }) => {
       if (result) {
         try {
           const resultJson = JSON.parse(result);
-
+          console.log(resultJson, result);
           setDialog({
             open: true,
-            content: resultJson
+            content: resultJson || result
           });
         } catch (err) {
-          throw new Error(err);
+          return;
         }
       }
 
@@ -197,22 +198,14 @@ const AppLayout = ({ classes }) => {
             })(<Packages />)(activePage)}
           </main>
         </div>
-        {snackbarOptions && snackbarOptions.open && (
+        {snackbarOptions && snackbarOptions.open && snackbarOptions.message && (
           <Snackbar
             anchorOrigin={{
               vertical: 'bottom',
-              horizontal: 'right'
+              horizontal: snackbarOptions.type === 'error' ? 'center' : 'right'
             }}
-            open={Boolean(snackbarOptions.open)}
-            autoHideDuration={999000}
-            onClose={() =>
-              dispatch(
-                setSnackbar({
-                  open: false,
-                  message: null
-                })
-              )
-            }
+            open={snackbarOptions.open}
+            autoHideDuration={5000}
           >
             <SnackbarContent
               variant={snackbarOptions.type}
@@ -221,7 +214,8 @@ const AppLayout = ({ classes }) => {
                 dispatch(
                   setSnackbar({
                     open: false,
-                    message: null
+                    message: null,
+                    type: null
                   })
                 )
               }

@@ -19,7 +19,8 @@ import {
   togglePackageLoader,
   uiException,
   npmCommand,
-  setActivePage
+  setActivePage,
+  updateStatus
 } from 'models/ui/actions';
 import initialState from './initialState';
 
@@ -44,6 +45,8 @@ const handlers = {
         paused: true
       }
     }),
+  [updateStatus.type]: (state, { payload: status }) =>
+    assoc('onlineStatus', status, state),
   [uiException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
   [setEnv.type]: (state, { payload: env }) =>

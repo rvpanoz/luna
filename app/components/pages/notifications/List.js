@@ -56,12 +56,12 @@ const NotificationsList = ({ classes }) => {
   const { notifications } = useMappedState(mapState);
 
   return (
-    <Paper elevation={2} className={classes.paper}>
+    <Paper className={classes.paper}>
       <div className={classes.container}>
         <List
           component="nav"
           subheader={
-            <ListSubheader disableSticky>
+            <ListSubheader disableSticky className={classes.header}>
               <Typography variant="h6">{`Problems ${
                 notifications.length
               }`}</Typography>
@@ -70,14 +70,21 @@ const NotificationsList = ({ classes }) => {
           className={classes.root}
         >
           <Divider light className={classes.divider} />
-          {notifications.map((notification, idx) => {
-            return (
-              <WithStylesNotificationItem
-                key={`not-${idx}`}
-                {...notification}
-              />
-            );
-          })}
+
+          {notifications.length === 0 ? (
+            <Typography variant="subtitle1" className={classes.withPadding}>
+              No problems found
+            </Typography>
+          ) : (
+            notifications.map((notification, idx) => {
+              return (
+                <WithStylesNotificationItem
+                  key={`not-${idx}`}
+                  {...notification}
+                />
+              );
+            })
+          )}
         </List>
       </div>
     </Paper>

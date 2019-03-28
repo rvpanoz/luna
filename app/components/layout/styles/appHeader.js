@@ -20,6 +20,9 @@ const styles = theme => ({
   button: {
     borderColor: lightColor
   },
+  dialogTitle: {
+    padding: theme.spacing.unit * 2
+  },
   settings: {
     margin: theme.spacing.unit * 2
   }
