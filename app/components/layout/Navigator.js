@@ -27,6 +27,7 @@ import { runTool } from 'models/packages/actions';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
+import { Typography } from '@material-ui/core';
 
 const Navigator = ({
   classes,
@@ -107,7 +108,6 @@ const Navigator = ({
             </AppButton>
           </ListItemText>
         </ListItem>
-
         <ListItem className={classes.categoryHeader}>
           <ListItemText
             classes={{
@@ -118,7 +118,7 @@ const Navigator = ({
           </ListItemText>
         </ListItem>
         <ListItem>
-          <ListItemText style={{ height: 345 }}>
+          <ListItemText style={{ height: 315 }}>
             <AppTabs>
               <ProjectTab
                 items={[
@@ -132,7 +132,7 @@ const Navigator = ({
                   {
                     primaryText:
                       mode === 'local' && directory && !loading
-                        ? 'Home directory'
+                        ? 'Working directory'
                         : null,
                     secondaryText:
                       mode === 'local' && directory && !loading
@@ -216,6 +216,7 @@ const Navigator = ({
               dense
               disabled={loading}
               button
+              title={`load ${dir.name}`}
               onClick={() =>
                 dispatch(setMode({ mode: 'local', directory: dir.directory }))
               }
@@ -223,16 +224,15 @@ const Navigator = ({
               className={classNames(classes.item)}
             >
               <ListItemIcon>
-                <FolderIcon />
+                <FolderIcon color="secondary" />
               </ListItemIcon>
               <ListItemText
                 classes={{
                   primary: classes.itemPrimary,
                   textDense: classes.textDense
                 }}
-              >
-                {dir.name}
-              </ListItemText>
+                primary={dir.name}
+              />
             </ListItem>
           ))}
       </List>

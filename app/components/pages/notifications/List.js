@@ -5,69 +5,82 @@ import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
 import ListSubheader from '@material-ui/core/ListSubheader';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
+import Divider from '@material-ui/core/Divider';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
 
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
+import AddIcon from '@material-ui/icons/Add';
 
 import NotificationsIcon from '@material-ui/icons/NotificationsActive';
 import NotificationsIcon1 from '@material-ui/icons/NotificationsActiveOutlined';
 import NotificationsIcon2 from '@material-ui/icons/NotificationsActiveTwoTone';
 
-import styles from './styles/notifications';
+import styles from './styles/list';
 
 const mapState = ({ common: { notifications } }) => ({
   notifications
 });
 
-const NotificationsItem = ({ classes }) => {
-  const [expanded, expand] = useState(false);
-
-  return (
-    <React.Fragment>
-      <ListItem button onClick={() => expand(!expanded)}>
-        <ListItemIcon>
-          <NotificationsIcon2 />
-        </ListItemIcon>
-        <ListItemText inset primary="Notification" />
-        {expanded ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          <ListItem button className={classes.nested}>
-            <ListItemIcon>
-              <NotificationsIcon1 />
-            </ListItemIcon>
-            <ListItemText inset primary="notification_text" />
-          </ListItem>
-        </List>
-      </Collapse>
-    </React.Fragment>
-  );
-};
+const NotificationsItem = ({ classes, type, body, required, requiredBy }) => (
+  <ListItem>
+    <ListItemAvatar>
+      <Avatar className={classes.avatar} style={{ backgroundColor: '#fff' }}>
+        <NotificationsIcon2
+          color={type === 'ERROR' ? 'secondary' : 'default'}
+        />
+      </Avatar>
+    </ListItemAvatar>
+    <ListItemText primary={required} secondary={requiredBy} />
+    <ListItemSecondaryAction>
+      <IconButton aria-label="install-notification">
+        <AddIcon />
+      </IconButton>
+    </ListItemSecondaryAction>
+  </ListItem>
+);
 
 const WithStylesNotificationItem = withStyles({})(NotificationsItem);
 
 const NotificationsList = ({ classes }) => {
   const { notifications } = useMappedState(mapState);
-  console.log(notifications);
 
   return (
-    <List
-      component="nav"
-      subheader={<ListSubheader component="div">Packages</ListSubheader>}
-      className={classes.root}
-    >
-      {notifications.map((notification, idx) => {
-        return (
-          <WithStylesNotificationItem key={`not-${idx}`} {...notification} />
-        );
-      })}
-    </List>
+    <Paper elevation={2} className={classes.paper}>
+      <div className={classes.container}>
+        <List
+          component="nav"
+          subheader={
+            <ListSubheader disableSticky>
+              <Typography variant="h6">{`Problems ${
+                notifications.length
+              }`}</Typography>
+            </ListSubheader>
+          }
+          className={classes.root}
+        >
+          <Divider light className={classes.divider} />
+          {notifications.map((notification, idx) => {
+            return (
+              <WithStylesNotificationItem
+                key={`not-${idx}`}
+                {...notification}
+              />
+            );
+          })}
+        </List>
+      </div>
+    </Paper>
   );
 };
 

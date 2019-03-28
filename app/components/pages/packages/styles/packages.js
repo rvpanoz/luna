@@ -71,7 +71,7 @@ const styles = theme => ({
     }
   },
   outdated: {
-    color: darken(theme.palette.error.main, 0.9)
+    color: darken(theme.palette.error.main, 0.1)
   },
   transition: {
     transition: theme.transitions.create('width', {
@@ -104,7 +104,7 @@ const styles = theme => ({
   },
   name: {
     [theme.breakpoints.up('md')]: {
-      maxWidth: 200
+      maxWidth: 250
     },
     [theme.breakpoints.up('lg')]: {
       width: 'auto'

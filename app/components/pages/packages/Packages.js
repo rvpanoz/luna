@@ -257,6 +257,7 @@ const Packages = ({ classes }) => {
                           peerDependencies,
                           extraneous,
                           problems,
+                          missing,
                           __group
                         }) => {
                           const isPackageSelected = selected.indexOf(name) > -1;

@@ -41,7 +41,7 @@ const handlers = {
       activePage: page,
       npm: {
         ...state.npm,
-        paused: page !== 'packages'
+        paused: true
       }
     }),
   [uiException.type]: (state, { payload: message }) =>

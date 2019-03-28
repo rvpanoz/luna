@@ -73,6 +73,9 @@ const styles = theme => ({
   },
   iconSmall: {
     fontSize: 20
+  },
+  historyDirectory: {
+    wordWrap: 'break-word'
   }
 });
 
