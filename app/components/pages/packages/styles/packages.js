@@ -78,11 +78,6 @@ const styles = theme => ({
       duration: theme.transitions.duration.shortest
     })
   },
-  transition: {
-    transition: theme.transitions.create('width', {
-      duration: theme.transitions.duration.shortest
-    })
-  },
   updated: {
     color: lighten('#00b300', 0.1)
   },
