@@ -85,7 +85,6 @@ const AppLayout = ({ classes }) => {
 
   useEffect(() => {
     ipcRenderer.on('tool-close', (event, error, result) => {
-      console.log(1, error);
       if (error) {
         dispatch(
           setSnackbar({
@@ -99,7 +98,7 @@ const AppLayout = ({ classes }) => {
       if (result) {
         try {
           const resultJson = JSON.parse(result);
-          console.log(resultJson, result);
+
           setDialog({
             open: true,
             content: resultJson || result

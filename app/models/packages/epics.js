@@ -151,7 +151,6 @@ const packagesSuccessEpic = (action$, state$) =>
       ({
         payload: { dependencies, outdated, projectName, projectVersion }
       }) => {
-        let enhancedDependency = null;
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
           const {
             invalid,
@@ -176,19 +175,11 @@ const packagesSuccessEpic = (action$, state$) =>
               latest: isOutdated ? outdatedPkg.latest : null,
               isOutdated
             };
-          } else {
-            enhancedDependency = {
-              ...dependency,
-              latest: true,
-              isOutdated: false,
-              missing,
-              invalid,
-              peerMissing,
-              problems
-            };
+
+            deps.push(enhancedDependency);
           }
 
-          return [...deps, enhancedDependency];
+          return deps;
         }, []);
 
         return {

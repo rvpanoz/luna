@@ -2,7 +2,6 @@ export default {
   mode: 'global',
   manager: 'npm',
   activePage: 'packages',
-  onlineStatus: 'online',
   directory: null,
   enableNotifications: true,
   notifications: [],
