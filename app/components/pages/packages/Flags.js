@@ -11,6 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ControlTypes from 'components/common/ControlTypes';
 import Typography from '@material-ui/core/Typography';
 import { addInstallOption } from 'models/packages/actions';
+
 import styles from './styles/flags';
 
 const mapState = ({

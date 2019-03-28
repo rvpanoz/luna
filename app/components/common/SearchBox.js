@@ -97,9 +97,7 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
           <SearchIcon />
         </a>
         <InputBase
-          disabled={
-            disabled || (onlineStatus && onlineStatus.status === 'offline')
-          }
+          disabled={disabled || onlineStatus === 'offline'}
           placeholder="Search npm registry"
           classes={{
             root: classes.inputRoot,
@@ -132,7 +130,7 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
 SearchBox.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   disabled: PropTypes.bool,
-  onlineStatus: PropTypes.object
+  onlineStatus: PropTypes.string
 };
 
 export default withStyles(styles)(SearchBox);

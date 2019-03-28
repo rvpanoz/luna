@@ -150,42 +150,36 @@ const packagesSuccessEpic = (action$, state$) =>
       ({
         payload: { dependencies, outdated, projectName, projectVersion }
       }) => {
-        let enhancedDependency = null;
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
           const {
-            name,
             invalid,
             extraneous,
             peerMissing,
             problems,
-            missing
+            missing,
+            ...rest
           } = dependency;
 
-          if (!invalid && !extraneous && !missing) {
+          const { name } = rest;
+
+          if (!invalid && !extraneous && !missing && !peerMissing) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
 
-            enhancedDependency = {
-              ...dependency,
+            const enhancedDependency = {
+              ...rest,
+              name,
               latest: isOutdated ? outdatedPkg.latest : null,
               isOutdated
             };
-          } else {
-            enhancedDependency = {
-              ...dependency,
-              latest: true,
-              isOutdated: false,
-              missing,
-              invalid,
-              peerMissing,
-              problems
-            };
+
+            deps.push(enhancedDependency);
           }
 
-          return [...deps, enhancedDependency];
+          return deps;
         }, []);
 
         return {
-          dependencies: withOutdated || dependencies,
+          dependencies: withOutdated.filter(dependency => Boolean(dependency)),
           outdated,
           projectName,
           projectVersion

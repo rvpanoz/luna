@@ -91,8 +91,7 @@ const TableListToolbar = ({
           setFilteredByNamePackages([]);
         }
 
-        dispatch(clearFilters());
-        return;
+        return dispatch(clearFilters());
       }
 
       if (mode === 'local' && action === 'install' && !force) {

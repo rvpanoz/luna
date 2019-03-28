@@ -17,7 +17,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { Notifications } from 'components/pages/notifications';
 import {
@@ -86,7 +85,6 @@ const AppLayout = ({ classes }) => {
 
   useEffect(() => {
     ipcRenderer.on('tool-close', (event, error, result) => {
-      console.log(1, error);
       if (error) {
         dispatch(
           setSnackbar({
@@ -100,7 +98,7 @@ const AppLayout = ({ classes }) => {
       if (result) {
         try {
           const resultJson = JSON.parse(result);
-          console.log(resultJson, result);
+
           setDialog({
             open: true,
             content: resultJson || result
@@ -168,7 +166,7 @@ const AppLayout = ({ classes }) => {
       ipcRenderer.removeAllListeners([
         'action-close',
         'tool-close',
-        'view-package-close'
+        'view-close'
       ]);
   }, []);
 
@@ -194,7 +192,9 @@ const AppLayout = ({ classes }) => {
           <main className={classes.mainContent}>
             {switchcase({
               packages: () => <Packages />,
-              problems: () => <Notifications />
+              problems: () => (
+                <Notifications mode={mode} directory={directory} />
+              )
             })(<Packages />)(activePage)}
           </main>
         </div>

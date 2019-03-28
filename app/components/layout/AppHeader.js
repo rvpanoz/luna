@@ -31,13 +31,13 @@ import styles from './styles/appHeader';
 
 const mapState = ({
   common: {
-    onlineStatus,
+    onlineStatus: { status },
     activePage,
     loader: { loading },
     npm: { env }
   }
 }) => ({
-  onlineStatus,
+  status,
   activePage,
   loading,
   env
@@ -47,7 +47,7 @@ const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [dialog, setDialog] = useState({ open: false });
   const dispatch = useDispatch();
-  const { activePage, loading, env, onlineStatus } = useMappedState(mapState);
+  const { activePage, loading, env, status } = useMappedState(mapState);
 
   return (
     <React.Fragment>
@@ -68,7 +68,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             </Hidden>
             <Grid item xs />
             <Grid item>
-              <SearchBox onlineStatus={onlineStatus} disabled={loading} />
+              <SearchBox onlineStatus={status} disabled={loading} />
             </Grid>
             <Grid item>
               <Typography className={classes.link} component="a" href="#">

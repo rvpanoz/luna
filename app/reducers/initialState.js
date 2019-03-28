@@ -2,10 +2,12 @@ export default {
   mode: 'global',
   manager: 'npm',
   activePage: 'packages',
-  onlineStatus: 'online',
   directory: null,
   enableNotifications: true,
   notifications: [],
+  onlineStatus: {
+    status: 'online'
+  },
   npm: {
     commands: [],
     paused: false,

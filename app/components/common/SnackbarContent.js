@@ -3,14 +3,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+
+import green from '@material-ui/core/colors/green';
+import IconButton from '@material-ui/core/IconButton';
+import SnackbarContent from '@material-ui/core/SnackbarContent';
+import Typography from '@material-ui/core/Typography';
+
+import WarningIcon from '@material-ui/icons/Warning';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
-import green from '@material-ui/core/colors/green';
-import IconButton from '@material-ui/core/IconButton';
-import SnackbarContent from '@material-ui/core/SnackbarContent';
-import WarningIcon from '@material-ui/icons/Warning';
+
 import { withStyles } from '@material-ui/core/styles';
 
 const variantIcon = {
@@ -18,7 +22,7 @@ const variantIcon = {
   warning: WarningIcon,
   error: ErrorIcon,
   info: InfoIcon,
-  primary: () => {}
+  primary: () => InfoIcon
 };
 
 const styles = theme => ({
@@ -52,20 +56,21 @@ const styles = theme => ({
   }
 });
 
-const AppSnackbarContent = props => {
-  const { classes, message, onClose, variant, ...other } = props;
-  const Icon = variantIcon[variant];
-
+const AppSnackbarContent = ({
+  classes,
+  message,
+  onClose,
+  variant,
+  ...other
+}) => {
   return (
     <SnackbarContent
       className={classNames(classes[variant], classes.root)}
       aria-describedby="cli-snackbar"
       message={
         <span id="cli-snackbar" className={classes.message}>
-          {variant !== 'primary' && (
-            <Icon className={classNames(classes.icon, classes.iconVariant)} />
-          )}
-          {message}
+          <InfoIcon className={classNames(classes.icon, classes.iconVariant)} />
+          <Typography style={{ color: '#fff' }}>{message}</Typography>
         </span>
       }
       action={[

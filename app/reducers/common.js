@@ -45,8 +45,13 @@ const handlers = {
         paused: true
       }
     }),
-  [updateStatus.type]: (state, { payload: status }) =>
-    assoc('onlineStatus', status, state),
+  [updateStatus.type]: (state, { payload: { status } }) =>
+    merge(state, {
+      onlineStatus: {
+        ...state.onlineStatus,
+        status
+      }
+    }),
   [uiException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
   [setEnv.type]: (state, { payload: env }) =>

@@ -1,4 +1,4 @@
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({
@@ -71,7 +71,7 @@ const styles = theme => ({
     }
   },
   outdated: {
-    color: darken(theme.palette.error.main, 0.1)
+    color: lighten(theme.palette.error.main, 0.1)
   },
   transition: {
     transition: theme.transitions.create('width', {
@@ -79,7 +79,7 @@ const styles = theme => ({
     })
   },
   updated: {
-    color: darken('#00b300', 0.1)
+    color: lighten('#00b300', 0.1)
   },
   withPadding: {
     padding: theme.spacing.unit * 2.5

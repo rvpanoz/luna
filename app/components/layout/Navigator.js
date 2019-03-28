@@ -27,7 +27,7 @@ import { runTool } from 'models/packages/actions';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
-import { Typography } from '@material-ui/core';
+import { Divider } from '@material-ui/core';
 
 const Navigator = ({
   classes,
@@ -127,7 +127,7 @@ const Navigator = ({
                       mode === 'local' && name
                         ? `${name} - v${version || '1.0.0'}`
                         : 'Global - v1.0.0',
-                    secondaryText: userAgent
+                    secondaryText: `Last updated: ${lastUpdatedAt}`
                   },
                   {
                     primaryText:

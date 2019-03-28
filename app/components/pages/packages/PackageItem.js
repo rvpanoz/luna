@@ -5,8 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 
-import ErrorIcon from '@material-ui/icons/Error';
-import CheckIcon from '@material-ui/icons/Check';
+import ErrorIcon from '@material-ui/icons/ErrorTwoTone';
+import CheckIcon from '@material-ui/icons/CheckTwoTone';
 
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
@@ -23,7 +23,6 @@ const PackageItem = ({
   addSelected,
   version,
   latest,
-  isOutdated,
   group,
   fromSearch,
   extraneous,
@@ -92,14 +91,13 @@ const PackageItem = ({
         </Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        <Typography
-          className={cn({
-            [classes.outdated]: isOutdated,
-            [classes.updated]: !isOutdated
-          })}
-        >
-          {latest || (fromSearch ? version : <CheckIcon />)}
-        </Typography>
+        {latest ? (
+          <Typography className={classes.outdated}>{latest}</Typography>
+        ) : (
+          <Typography>
+            <CheckIcon className={classes.updated} />
+          </Typography>
+        )}
       </TableCell>
     </TableRow>
   );
@@ -112,7 +110,6 @@ PackageItem.propTypes = {
   name: string.isRequired,
   addSelected: func.isRequired,
   isSelected: bool.isRequired,
-  isOutdated: bool.isRequired,
   fromSearch: bool,
   version: string,
   group: string,

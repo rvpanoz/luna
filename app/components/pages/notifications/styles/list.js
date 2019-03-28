@@ -25,7 +25,7 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit
   },
   avatar: {
-    backgroundColor: theme.palette.common.white
+    backgroundColor: '#fff'
   },
   withPadding: {
     padding: theme.spacing.unit + 4
