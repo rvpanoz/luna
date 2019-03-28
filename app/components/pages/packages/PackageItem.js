@@ -68,7 +68,7 @@ const PackageItem = ({
             </Tooltip>
           )}
           <Typography
-            className={cn({
+            className={cn(classes.name, {
               [classes.flexItem]: extraneous
             })}
           >

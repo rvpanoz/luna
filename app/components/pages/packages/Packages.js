@@ -203,8 +203,8 @@ const Packages = ({ classes }) => {
         <Grid
           item
           md={active || packageLoader.loading ? 8 : 11}
-          lg={6}
-          xl={6}
+          lg={active || packageLoader.loading ? 8 : 11}
+          xl={active || packageLoader.loading ? 8 : 11}
           className={classes.transition}
         >
           <Paper className={classes.root}>
@@ -314,7 +314,7 @@ const Packages = ({ classes }) => {
             </div>
           </Paper>
         </Grid>
-        <Grid item md={active ? 4 : 1} lg={6} xl={6}>
+        <Grid item md={active ? 4 : 1} lg={active ? 4 : 1} xl={active ? 4 : 1}>
           <PackageDetails />
         </Grid>
       </Grid>

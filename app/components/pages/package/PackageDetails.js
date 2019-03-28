@@ -350,7 +350,14 @@ const PackageDetails = ({ classes }) => {
               <IconButton
                 color="secondary"
                 disableRipple
-                onClick={e => dispatch(setActive({ active: null }))}
+                onClick={() => {
+                  setActivePopper({
+                    index: 0,
+                    anchorEl: null,
+                    open: false
+                  });
+                  dispatch(setActive({ active: null }));
+                }}
               >
                 <CloseIcon />
               </IconButton>

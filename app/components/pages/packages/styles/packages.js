@@ -101,6 +101,17 @@ const styles = theme => ({
   },
   group: {
     color: darken(theme.palette.secondary.light, 0.2)
+  },
+  name: {
+    [theme.breakpoints.up('md')]: {
+      maxWidth: 200
+    },
+    [theme.breakpoints.up('lg')]: {
+      width: 'auto'
+    },
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   }
 });
 
