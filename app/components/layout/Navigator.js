@@ -29,6 +29,7 @@ import { runTool } from 'models/packages/actions';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
+import { Typography } from '@material-ui/core';
 
 const Navigator = ({
   classes,
