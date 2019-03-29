@@ -76,6 +76,16 @@ const styles = theme => ({
   },
   historyDirectory: {
     wordWrap: 'break-word'
+  },
+  fabButton: {
+    width: '100%',
+    fontSize: 20
+  },
+  margin: {
+    margin: theme.spacing.unit
+  },
+  extendedIcon: {
+    marginRight: theme.spacing.unit
   }
 });
 

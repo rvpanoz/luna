@@ -265,7 +265,6 @@ const PackageDetails = ({ classes }) => {
                     const pkgOptions =
                       mode === 'local' ? [PACKAGE_GROUPS[group]] : [];
 
-                    console.log(name, mode, pkgOptions);
                     const parameters = {
                       ipcEvent: 'install',
                       cmd: ['install'],

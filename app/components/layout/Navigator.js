@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
 import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,7 +12,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
+import AddIcon from '@material-ui/icons/AddTwoTone';
 
+import Fab from '@material-ui/core/Fab';
 import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
 import AppButton from 'components/units/Buttons/AppButton';
@@ -95,7 +97,18 @@ const Navigator = ({
         </ListItem>
         <ListItem>
           <ListItemText className={classes.actionButton}>
-            <AppButton
+            <Fab
+              variant="extended"
+              color="secondary"
+              aria-label="analyze"
+              className={cn(classes.fabButton, classes.margin)}
+              onClick={() => openPackage()}
+            >
+              <AddIcon className={classes.extendedIcon} />
+              Analyze project
+            </Fab>
+
+            {/* <AppButton
               style={{ fontSize: 20 }}
               disabled={loading}
               color="secondary"
@@ -105,7 +118,7 @@ const Navigator = ({
               border
             >
               Analyze
-            </AppButton>
+            </AppButton> */}
           </ListItemText>
         </ListItem>
         <ListItem className={classes.categoryHeader}>
@@ -221,7 +234,7 @@ const Navigator = ({
                 dispatch(setMode({ mode: 'local', directory: dir.directory }))
               }
               key={`directory-${idx + 1}`}
-              className={classNames(classes.item)}
+              className={classes.item}
             >
               <ListItemIcon>
                 <FolderIcon color="secondary" />
