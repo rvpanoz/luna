@@ -18,8 +18,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import IconButton from '@material-ui/core/IconButton';
 
+import IconButton from '@material-ui/core/IconButton';
+import Toolbar from '@material-ui/core/Toolbar';
 import { INFO_MESSAGES } from 'constants/AppConstants';
 import { installPackages, clearInstallOptions } from 'models/packages/actions';
 import AddIcon from '@material-ui/icons/Add';
@@ -50,7 +51,6 @@ const NotificationsItem = ({
 }) => {
   const [dialogOpen, toggleDialog] = useState(false);
   const packageName = required && required.split('@')[0];
-  console.log(packageName);
 
   const dispatch = useDispatch();
 
@@ -142,6 +142,9 @@ const NotificationsList = ({ classes, mode, directory }) => {
   return (
     <Paper className={classes.paper}>
       <div className={classes.container}>
+        <Toolbar>
+          <Button>Fix all</Button>
+        </Toolbar>
         <List
           component="nav"
           subheader={

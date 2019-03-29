@@ -236,7 +236,7 @@ app.on('ready', async () => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready-to-show event fired');
     log.info(chalk.white.bgWhite.bold('[INFO]'), 'opening loading screen');
 
-    loadingScreen.show();
+    // loadingScreen.show();
   });
 
   mainWindow.webContents.on('did-finish-load', async event => {
@@ -246,21 +246,19 @@ app.on('ready', async () => {
       throw new Error('mainWindow is not defined');
     }
 
-    loadingScreen.hide();
-    loadingScreen.close();
+    // loadingScreen.hide();
+    // loadingScreen.close();
 
-    setTimeout(() => {
-      if (START_MINIMIZED) {
-        mainWindow.minimize();
-      } else {
-        mainWindow.show();
-        mainWindow.focus();
-      }
+    if (START_MINIMIZED) {
+      mainWindow.minimize();
+    } else {
+      mainWindow.show();
+      mainWindow.focus();
+    }
 
-      if (NODE_ENV === 'development') {
-        mainWindow.openDevTools();
-      }
-    }, 1500);
+    if (NODE_ENV === 'development') {
+      mainWindow.openDevTools();
+    }
 
     // npm and node info
     const npmEnv = await CheckNpm();
