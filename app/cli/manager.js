@@ -49,8 +49,10 @@ const execute = (
     });
 
     command.stderr.on('data', error => {
-      errors += String(error);
-      callback('error', String(error), null);
+      const errorString = String(error);
+
+      errors += errorString;
+      callback('error', String(errorString), null);
     });
 
     command.on('exit', code => {
@@ -265,7 +267,7 @@ const runDedupe = (opts, callback) => {
   } catch (error) {
     throw new Error(error);
   }
-}
+};
 
 export default {
   audit: runAudit,

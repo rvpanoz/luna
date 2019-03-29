@@ -91,8 +91,7 @@ const TableListToolbar = ({
           setFilteredByNamePackages([]);
         }
 
-        dispatch(clearFilters());
-        return;
+        return dispatch(clearFilters());
       }
 
       if (mode === 'local' && action === 'install' && !force) {
@@ -359,7 +358,7 @@ const TableListToolbar = ({
         })}
       >
         <div className={classes.header}>
-          <Typography variant="subtitle1">
+          <Typography variant="h6">
             {selected && selected.length === 0
               ? title
               : `${selected.length} selected`}
@@ -398,6 +397,7 @@ const TableListToolbar = ({
       </Popover>
       <Dialog
         open={optionsOpen}
+        fullWidth
         onClose={() => {
           dispatch({ type: clearInstallOptions.type });
           toggleOptions(!optionsOpen);

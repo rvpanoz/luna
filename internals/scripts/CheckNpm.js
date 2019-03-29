@@ -20,7 +20,9 @@ const checkNpm = () => {
       globalConfig: env['global-config']
     };
   } catch (error) {
-    throw new Error(error);
+    return {
+      error
+    };
   }
 };
 

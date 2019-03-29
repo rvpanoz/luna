@@ -80,7 +80,7 @@ const handlers = {
       payload: { name, options }
     } = action;
 
-    const idx = selected.indexOf(name);
+    const idx = selected.length ? selected.indexOf(name) : 0;
 
     if (idx === -1) {
       return state;

@@ -25,7 +25,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Collapse from '@material-ui/core/Collapse';
-import Badge from '@material-ui/core/Badge';
 import Grid from '@material-ui/core/Grid';
 import Fade from '@material-ui/core/Fade';
 import List from '@material-ui/core/List';
@@ -34,12 +33,17 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import AddIcon from '@material-ui/icons/Add';
+import CloseIcon from '@material-ui/icons/Close';
 import RemoveIcon from '@material-ui/icons/Delete';
 import UpdateIcon from '@material-ui/icons/Update';
 import DependenciesIcon from '@material-ui/icons/List';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { updatePackages, installPackages } from 'models/packages/actions';
+import {
+  updatePackages,
+  installPackages,
+  setActive
+} from 'models/packages/actions';
 import { APP_INFO, PACKAGE_GROUPS } from 'constants/AppConstants';
 import { isPackageOutdated } from 'commons/utils';
 
@@ -131,16 +135,17 @@ const PackageDetails = ({ classes }) => {
         <IconButton
           disableRipple
           onClick={e => {
+            const { name } = active;
             const pkgOptions =
               mode === 'local'
                 ? group && [PACKAGE_GROUPS[group]]
                 : ['save-prod'];
-
+            console.log(name, pkgOptions);
             const parameters = {
               ipcEvent: 'install',
               cmd: ['install'],
-              name: active.name,
-              pkgOptions: pkgOptions || [],
+              name,
+              pkgOptions,
               single: true,
               mode,
               directory
@@ -256,12 +261,14 @@ const PackageDetails = ({ classes }) => {
                 <IconButton
                   aria-label="install_version"
                   onClick={e => {
+                    const { name } = active;
                     const pkgOptions =
-                      mode === 'local' ? [`--${PACKAGE_GROUPS[group]}`] : [];
+                      mode === 'local' ? [PACKAGE_GROUPS[group]] : [];
+
                     const parameters = {
                       ipcEvent: 'install',
                       cmd: ['install'],
-                      name: active.name,
+                      name,
                       version: item,
                       pkgOptions,
                       single: true,
@@ -342,6 +349,22 @@ const PackageDetails = ({ classes }) => {
               root: classes.toolbar
             }}
           >
+            <Tooltip title="Clear active package">
+              <IconButton
+                color="secondary"
+                disableRipple
+                onClick={() => {
+                  setActivePopper({
+                    index: 0,
+                    anchorEl: null,
+                    open: false
+                  });
+                  dispatch(setActive({ active: null }));
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Tooltip>
             <Tooltip title="Package versions">
               <IconButton
                 color="primary"
@@ -380,11 +403,7 @@ const PackageDetails = ({ classes }) => {
 
   return (
     <div className={classes.wrapper}>
-      <AppLoader
-        loading={packageLoader.loading}
-        message={packageLoader.message}
-        relative
-      >
+      <AppLoader loading={packageLoader.loading} relative>
         {active ? renderCard() : null}
       </AppLoader>
       <Popper

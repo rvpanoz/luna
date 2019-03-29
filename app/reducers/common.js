@@ -19,7 +19,8 @@ import {
   togglePackageLoader,
   uiException,
   npmCommand,
-  setActivePage
+  setActivePage,
+  updateStatus
 } from 'models/ui/actions';
 import initialState from './initialState';
 
@@ -41,7 +42,14 @@ const handlers = {
       activePage: page,
       npm: {
         ...state.npm,
-        paused: page !== 'packages'
+        paused: true
+      }
+    }),
+  [updateStatus.type]: (state, { payload: { status } }) =>
+    merge(state, {
+      onlineStatus: {
+        ...state.onlineStatus,
+        status
       }
     }),
   [uiException.type]: (state, { payload: message }) =>
@@ -91,6 +99,7 @@ const handlers = {
     merge(state, {
       npm: {
         ...state.npm,
+        paused: false, // enable fetching
         commands: []
       }
     }),

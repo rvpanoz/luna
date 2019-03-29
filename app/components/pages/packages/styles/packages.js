@@ -1,4 +1,4 @@
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({
@@ -32,6 +32,7 @@ const styles = theme => ({
   tableWrapper: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
+    padding: theme.spacing.unit,
     [theme.breakpoints.up('md')]: {
       maxHeight: 500
     },
@@ -70,10 +71,15 @@ const styles = theme => ({
     }
   },
   outdated: {
-    color: darken(theme.palette.error.main, 0.9)
+    color: lighten(theme.palette.error.main, 0.1)
+  },
+  transition: {
+    transition: theme.transitions.create('width', {
+      duration: theme.transitions.duration.shortest
+    })
   },
   updated: {
-    color: darken('#00b300', 0.1)
+    color: lighten('#00b300', 0.1)
   },
   withPadding: {
     padding: theme.spacing.unit * 2.5
@@ -87,6 +93,9 @@ const styles = theme => ({
   hidden: {
     display: 'none'
   },
+  missing: {
+    color: darken(theme.palette.secondary.light, 0.5)
+  },
   extraneous: {
     color: darken(theme.palette.secondary.light, 0.1)
   },
@@ -95,6 +104,17 @@ const styles = theme => ({
   },
   group: {
     color: darken(theme.palette.secondary.light, 0.2)
+  },
+  name: {
+    [theme.breakpoints.up('md')]: {
+      maxWidth: 250
+    },
+    [theme.breakpoints.up('lg')]: {
+      width: 'auto'
+    },
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   }
 });
 

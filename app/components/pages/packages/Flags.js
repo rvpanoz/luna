@@ -11,6 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ControlTypes from 'components/common/ControlTypes';
 import Typography from '@material-ui/core/Typography';
 import { addInstallOption } from 'models/packages/actions';
+
 import styles from './styles/flags';
 
 const mapState = ({
@@ -26,7 +27,7 @@ const Flags = ({ classes, selected }) => {
   const { packagesInstallOptions } = useMappedState(mapState);
 
   return (
-    <div className={classes.flexContainer} style={{ minWidth: 400 }}>
+    <div className={classes.flexContainer}>
       <List dense className={classes.list}>
         {selected.map(packageName => {
           const option =

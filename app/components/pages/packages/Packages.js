@@ -42,6 +42,7 @@ const mapState = ({
     manager,
     mode,
     loader,
+    packageLoader,
     npm: { paused }
   },
   modules: {
@@ -62,6 +63,7 @@ const mapState = ({
   page,
   rowsPerPage,
   loader,
+  packageLoader,
   action,
   filters,
   packages,
@@ -78,6 +80,7 @@ const IPC_EVENT = 'ipc-event';
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
+    packageLoader,
     packages,
     packagesOutdated,
     mode,
@@ -91,7 +94,8 @@ const Packages = ({ classes }) => {
     sortDir,
     sortBy,
     packagesInstallOptions,
-    paused
+    paused,
+    active
   } = useMappedState(mapState);
 
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
@@ -196,7 +200,13 @@ const Packages = ({ classes }) => {
   return (
     <AppLoader loading={loading} message={message}>
       <Grid container>
-        <Grid item md={8} lg={6} xl={6}>
+        <Grid
+          item
+          md={active || packageLoader.loading ? 8 : 11}
+          lg={active || packageLoader.loading ? 8 : 11}
+          xl={active || packageLoader.loading ? 8 : 11}
+          className={classes.transition}
+        >
           <Paper className={classes.root}>
             <div className={classes.toolbar}>
               <TableToolbar
@@ -247,6 +257,7 @@ const Packages = ({ classes }) => {
                           peerDependencies,
                           extraneous,
                           problems,
+                          missing,
                           __group
                         }) => {
                           const isPackageSelected = selected.indexOf(name) > -1;
@@ -276,6 +287,7 @@ const Packages = ({ classes }) => {
                               latest={latest}
                               version={version}
                               mode={mode}
+                              missing={missing}
                               isOutdated={isOutdated}
                               fromSearch={fromSearch}
                               group={__group}
@@ -304,7 +316,7 @@ const Packages = ({ classes }) => {
             </div>
           </Paper>
         </Grid>
-        <Grid item md={4} lg={6} xl={6}>
+        <Grid item md={active ? 4 : 1} lg={active ? 4 : 1} xl={active ? 4 : 1}>
           <PackageDetails />
         </Grid>
       </Grid>

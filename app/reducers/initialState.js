@@ -5,6 +5,9 @@ export default {
   directory: null,
   enableNotifications: true,
   notifications: [],
+  onlineStatus: {
+    status: 'online'
+  },
   npm: {
     commands: [],
     paused: false,

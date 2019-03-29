@@ -73,6 +73,14 @@ const styles = theme => ({
   },
   iconSmall: {
     fontSize: 20
+  },
+  historyDirectory: {
+    wordWrap: 'break-word'
+  },
+  fabButton: {
+    width: '100%',
+    fontSize: 20,
+    textTransform: 'lowercase'
   }
 });
 

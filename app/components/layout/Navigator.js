@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
 import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,10 +12,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
+import AddIcon from '@material-ui/icons/AddTwoTone';
 
+import Fab from '@material-ui/core/Fab';
 import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
-import AppButton from 'components/units/Buttons/AppButton';
+// import AppButton from 'components/units/Buttons/AppButton';
 import { navigatorParameters } from 'commons/parameters';
 
 import {
@@ -94,20 +96,18 @@ const Navigator = ({
         </ListItem>
         <ListItem>
           <ListItemText className={classes.actionButton}>
-            <AppButton
-              style={{ fontSize: 20 }}
-              disabled={loading}
+            <Fab
+              variant="extended"
               color="secondary"
-              fullWidth
-              round
+              size="large"
+              aria-label="analyze"
+              className={cn(classes.fabButton, classes.margin)}
               onClick={() => openPackage()}
-              border
             >
-              Analyze
-            </AppButton>
+              <AddIcon className={classes.extendedIcon} />
+            </Fab>
           </ListItemText>
         </ListItem>
-
         <ListItem className={classes.categoryHeader}>
           <ListItemText
             classes={{
@@ -118,7 +118,7 @@ const Navigator = ({
           </ListItemText>
         </ListItem>
         <ListItem>
-          <ListItemText style={{ height: 345 }}>
+          <ListItemText style={{ height: 315 }}>
             <AppTabs>
               <ProjectTab
                 items={[
@@ -127,12 +127,12 @@ const Navigator = ({
                       mode === 'local' && name
                         ? `${name} - v${version || '1.0.0'}`
                         : 'Global - v1.0.0',
-                    secondaryText: userAgent
+                    secondaryText: `Last updated: ${lastUpdatedAt}`
                   },
                   {
                     primaryText:
                       mode === 'local' && directory && !loading
-                        ? 'Home directory'
+                        ? 'Working directory'
                         : null,
                     secondaryText:
                       mode === 'local' && directory && !loading
@@ -189,8 +189,7 @@ const Navigator = ({
                   {
                     mode,
                     primaryText: 'npm dedupe',
-                    secondaryText:
-                      'Searches the local package tree and attempts to simplify the overall structure',
+                    secondaryText: 'Run npm dedupe',
                     handler: () => runNpmTool('dedupe')
                   }
                 ]}
@@ -216,23 +215,23 @@ const Navigator = ({
               dense
               disabled={loading}
               button
+              title={`load ${dir.name}`}
               onClick={() =>
                 dispatch(setMode({ mode: 'local', directory: dir.directory }))
               }
               key={`directory-${idx + 1}`}
-              className={classNames(classes.item)}
+              className={classes.item}
             >
               <ListItemIcon>
-                <FolderIcon />
+                <FolderIcon color="secondary" />
               </ListItemIcon>
               <ListItemText
                 classes={{
                   primary: classes.itemPrimary,
                   textDense: classes.textDense
                 }}
-              >
-                {dir.name}
-              </ListItemText>
+                primary={dir.name}
+              />
             </ListItem>
           ))}
       </List>

@@ -1,16 +1,15 @@
 // npm tooling
 
-const audit = options => {
+const audit = () => {
   const command = ['audit'];
   const defaults = ['--json'];
-  const { fix } = options;
 
   const run = [].concat(command).concat(defaults);
 
   return run;
 };
 
-const doctor = options => {
+const doctor = () => {
   const command = ['doctor'];
   const defaults = ['--json'];
 
@@ -19,7 +18,7 @@ const doctor = options => {
   return run;
 };
 
-const prune = options => {
+const prune = () => {
   const command = ['prune'];
   const defaults = ['--json'];
 
@@ -28,10 +27,10 @@ const prune = options => {
   return run;
 };
 
-const dedupe = options => {
+const dedupe = () => {
   const command = ['dedupe'];
- 
-  const run = [].concat(command).concat(defaults);
+
+  const run = [].concat(command);
   return run;
 };
 

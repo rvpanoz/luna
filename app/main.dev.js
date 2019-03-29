@@ -46,6 +46,7 @@ Store.set('openedPackages', []);
 const settings = Store.get('user_settings');
 
 let mainWindow = null;
+let loadingScreen = null;
 
 if (NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -67,6 +68,37 @@ const installExtensions = async () => {
   return Promise.all(
     extensions.map(name => installer.default(installer[name], forceDownload))
   ).catch(console.log);
+};
+
+// handle local events
+const handleLocalEvents = (event, mode, directory) => {
+  const openedPackages = Store.get('openedPackages') || [];
+  const yarnLock = fs.existsSync(
+    path.join(path.dirname(directory), 'yarn.lock')
+  );
+  const dirName = path.dirname(path.resolve(directory));
+  const parsedDirectory = path.parse(dirName);
+  const { name } = parsedDirectory || {};
+
+  if (yarnLock) {
+    event.sender.send('yarn-warning-close');
+  }
+
+  const inDirectories = openedPackages.some(
+    pkg => pkg.directory && pkg.directory.includes(dirName)
+  );
+
+  if (!inDirectories) {
+    Store.set('openedPackages', [
+      ...openedPackages,
+      {
+        name,
+        directory: path.join(dirName, 'package.json')
+      }
+    ]);
+  }
+
+  event.sender.send('loaded-packages-close', Store.get('openedPackages'));
 };
 
 /**
@@ -100,31 +132,7 @@ ipcMain.on('ipc-event', (event, options) => {
     }
 
     if (directory && mode === 'local' && cmd.includes('list')) {
-      const openedPackages = Store.get('openedPackages') || [];
-      const yarnLock = fs.existsSync(
-        path.join(path.dirname(directory), 'yarn.lock')
-      );
-      const dirName = path.dirname(path.resolve(directory));
-      const parsedDirectory = path.parse(dirName);
-      const { name } = parsedDirectory || {};
-
-      if (yarnLock) {
-        event.sender.send('yarn-warning-close');
-      }
-
-      const inDirectories = openedPackages.some(
-        pkg => pkg.directory && pkg.directory.includes(dirName)
-      );
-
-      if (!inDirectories) {
-        Store.set('openedPackages', [
-          ...openedPackages,
-          {
-            name,
-            directory: path.join(dirName, 'package.json')
-          }
-        ]);
-      }
+      handleLocalEvents(event, mode, directory);
     }
 
     event.sender.send('loaded-packages-close', Store.get('openedPackages'));
@@ -153,6 +161,11 @@ ipcMain.on('ipc-event', (event, options) => {
     mk.log(error.message);
     throw new Error(error);
   }
+});
+
+// channel: general
+ipcMain.on('online-status-changed', (event, status) => {
+  // TODO: implementation
 });
 
 app.on('window-all-closed', () => {
@@ -214,18 +227,27 @@ app.on('ready', async () => {
     icon: path.join(__dirname, 'resources/icon.ico')
   });
 
+  // loadingScreen = new BrowserWindow({ show: false, frame: false });
+  // loadingScreen.loadURL(`file://${__dirname}/loadingScreen.html`);
+
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', event => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready-to-show event fired');
+    log.info(chalk.white.bgGreen.bold('[INFO]'), 'opening loading screen');
+
+    // loadingScreen.show();
   });
 
-  mainWindow.webContents.on('did-finish-load', event => {
+  mainWindow.webContents.on('did-finish-load', async event => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'did-finish-load event fired');
 
     if (!mainWindow) {
-      throw new Error('mainWindow is not defined!');
+      throw new Error('mainWindow is not defined');
     }
+
+    // loadingScreen.hide();
+    // loadingScreen.close();
 
     if (START_MINIMIZED) {
       mainWindow.minimize();
@@ -234,21 +256,28 @@ app.on('ready', async () => {
       mainWindow.focus();
     }
 
+    if (NODE_ENV === 'development') {
+      mainWindow.openDevTools();
+    }
+
+    // npm and node info
+    const npmEnv = await CheckNpm();
+
+    if (npmEnv.error) {
+      event.sender.send('npm-error', String(npmEnv.error));
+    } else {
+      event.sender.send('get-env-close', npmEnv);
+    }
+
     // user settings
     const userSettings = Store.get('user_settings') || defaultSettings;
     event.sender.send('settings-loaded-close', userSettings);
-
-    // npm and node info
-    const npmEnv = CheckNpm();
-    event.sender.send('get-env-close', npmEnv);
 
     // directories history
     const openedPackages = Store.get('opened_packages') || [];
     event.sender.send('loaded-packages-close', openedPackages);
 
-    if (NODE_ENV === 'development') {
-      mainWindow.openDevTools();
-    }
+    log.info(chalk.white.bgGreen.bold('[INFO]'), 'destroying loading screen');
   });
 
   mainWindow.webContents.on('crashed', event => {

@@ -21,12 +21,10 @@ const InstallFromSource = ({ classes }) => (
         <ListItemText
           primary={<Typography>Package.json</Typography>}
           secondary={
-            <Typography variant="caption">
+            <Typography variant="caption" component="p">
               Install the dependencies in the local node_modules folder. In
               global mode, it installs the current package context (ie, the
-              current working directory) as a global package. By default, npm
-              install will install all modules listed as dependencies in
-              package.json.
+              current working directory) as a global package.
             </Typography>
           }
         />

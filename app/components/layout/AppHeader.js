@@ -16,12 +16,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
-
+import Divider from '@material-ui/core/Divider';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
 
 import SearchBox from 'components/common/SearchBox';
 import InstallFromSource from 'components/common/InstallFromSource';
@@ -32,11 +31,13 @@ import styles from './styles/appHeader';
 
 const mapState = ({
   common: {
+    onlineStatus: { status },
     activePage,
     loader: { loading },
     npm: { env }
   }
 }) => ({
+  status,
   activePage,
   loading,
   env
@@ -46,7 +47,7 @@ const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [dialog, setDialog] = useState({ open: false });
   const dispatch = useDispatch();
-  const { activePage, loading, env } = useMappedState(mapState);
+  const { activePage, loading, env, status } = useMappedState(mapState);
 
   return (
     <React.Fragment>
@@ -67,7 +68,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             </Hidden>
             <Grid item xs />
             <Grid item>
-              <SearchBox />
+              <SearchBox onlineStatus={status} disabled={loading} />
             </Grid>
             <Grid item>
               <Typography className={classes.link} component="a" href="#">
@@ -170,7 +171,10 @@ const Header = ({ classes, onDrawerToggle }) => {
       </Popover>
       {dialog && dialog.open && (
         <Dialog open={dialog.open} aria-labelledby="install-from-source">
-          <DialogTitle>Install from source</DialogTitle>
+          <DialogTitle classes={{ root: classes.dialogTitle }}>
+            Install from source
+          </DialogTitle>
+          <Divider light />
           <DialogContent>
             <InstallFromSource />
           </DialogContent>

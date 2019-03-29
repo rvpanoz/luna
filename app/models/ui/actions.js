@@ -21,8 +21,10 @@ const togglePackageLoader = ActionCreator('TOGGLE_PACKAGE_LOADER');
 const uiException = ActionCreator('UI_EXCEPTION_ERROR');
 const npmCommand = ActionCreator('NPM_COMMAND');
 const setActivePage = ActionCreator('SET_ACTIVE_PAGE');
+const updateStatus = ActionCreator('UPDATE_ONLINE_STATUS');
 
 export {
+  updateStatus,
   updateNotifications,
   addNotification,
   clearNotifications,

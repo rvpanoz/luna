@@ -5,9 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 
-import ErrorIcon from '@material-ui/icons/Error';
-import CheckIcon from '@material-ui/icons/Check';
-
+import ErrorIcon from '@material-ui/icons/ErrorTwoTone';
+import CheckIcon from '@material-ui/icons/CheckTwoTone';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
@@ -22,11 +21,13 @@ const PackageItem = ({
   isSelected,
   addSelected,
   version,
-  latest,
   isOutdated,
+  latest,
   group,
   fromSearch,
   extraneous,
+  missing,
+  peerMissing,
   viewPackage
 }) => {
   const rowRef = useRef();
@@ -63,17 +64,21 @@ const PackageItem = ({
           })}
         >
           {extraneous && (
-            <Tooltip title="extraneous means a package is installed but is not listed in your project's package.json">
+            <Tooltip title="extraneous package">
               <ErrorIcon className={classes.extraneous} />
             </Tooltip>
           )}
-          <Typography
-            className={cn({
-              [classes.flexItem]: extraneous
-            })}
-          >
-            {name}
-          </Typography>
+
+          {missing || peerMissing ? (
+            <Tooltip title="package is missing or has peer dependencies missing">
+              <Typography className={cn(classes.name, classes.missing)}>
+                {name}
+              </Typography>
+            </Tooltip>
+          ) : (
+            <Typography className={classes.name}>{name}</Typography>
+          )}
+
           {!extraneous && (
             <Typography variant="caption" className={classes.group}>
               {group}
@@ -83,7 +88,7 @@ const PackageItem = ({
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         <Typography>
-          {fromSearch ? 'N/A' : version}
+          {fromSearch || !version ? 'N/A' : version}
           {extraneous && (
             <Typography component="span" className={classes.extraneous}>
               extraneous
@@ -92,14 +97,19 @@ const PackageItem = ({
         </Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        <Typography
-          className={cn({
-            [classes.outdated]: isOutdated,
-            [classes.updated]: !isOutdated
-          })}
-        >
-          {latest || (fromSearch ? version : <CheckIcon />)}
-        </Typography>
+        {latest && isOutdated && (
+          <Typography className={classes.outdated}>{latest}</Typography>
+        )}
+        {!isOutdated && !missing && (
+          <Typography>
+            <CheckIcon className={classes.updated} />
+          </Typography>
+        )}
+        {missing && !version && !latest && (
+          <Typography>
+            <Typography>N/A</Typography>
+          </Typography>
+        )}
       </TableCell>
     </TableRow>
   );
@@ -112,11 +122,13 @@ PackageItem.propTypes = {
   name: string.isRequired,
   addSelected: func.isRequired,
   isSelected: bool.isRequired,
-  isOutdated: bool.isRequired,
   fromSearch: bool,
   version: string,
   group: string,
-  extraneous: bool
+  peerMissing: bool,
+  extraneous: bool,
+  missing: bool,
+  isOutdated: bool
 };
 
 export default withStyles(styles)(PackageItem);

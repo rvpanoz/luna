@@ -17,7 +17,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-// import DialogContentText from '@material-ui/core/DialogContentText';
 
 import { Notifications } from 'components/pages/notifications';
 import {
@@ -102,10 +101,10 @@ const AppLayout = ({ classes }) => {
 
           setDialog({
             open: true,
-            content: resultJson
+            content: resultJson || result
           });
         } catch (err) {
-          throw new Error(err);
+          return;
         }
       }
 
@@ -124,6 +123,7 @@ const AppLayout = ({ classes }) => {
         options.filter(option => option !== operation || option !== '-g');
 
       if (error && error.length) {
+        console.log(error);
         dispatch(addActionError({ error }));
       }
 
@@ -167,7 +167,7 @@ const AppLayout = ({ classes }) => {
       ipcRenderer.removeAllListeners([
         'action-close',
         'tool-close',
-        'view-package-close'
+        'view-close'
       ]);
   }, []);
 
@@ -193,26 +193,20 @@ const AppLayout = ({ classes }) => {
           <main className={classes.mainContent}>
             {switchcase({
               packages: () => <Packages />,
-              problems: () => <Notifications />
+              problems: () => (
+                <Notifications mode={mode} directory={directory} />
+              )
             })(<Packages />)(activePage)}
           </main>
         </div>
-        {snackbarOptions && snackbarOptions.open && (
+        {snackbarOptions && snackbarOptions.open && snackbarOptions.message && (
           <Snackbar
             anchorOrigin={{
               vertical: 'bottom',
-              horizontal: 'right'
+              horizontal: snackbarOptions.type === 'error' ? 'center' : 'right'
             }}
-            open={Boolean(snackbarOptions.open)}
-            autoHideDuration={999000}
-            onClose={() =>
-              dispatch(
-                setSnackbar({
-                  open: false,
-                  message: null
-                })
-              )
-            }
+            open={snackbarOptions.open}
+            autoHideDuration={5000}
           >
             <SnackbarContent
               variant={snackbarOptions.type}
@@ -221,7 +215,8 @@ const AppLayout = ({ classes }) => {
                 dispatch(
                   setSnackbar({
                     open: false,
-                    message: null
+                    message: null,
+                    type: null
                   })
                 )
               }

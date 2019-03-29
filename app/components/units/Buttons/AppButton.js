@@ -49,9 +49,11 @@ AppButton.propTypes = {
     'transparent',
     'primary',
     'secondary',
+    'secondaryLarge',
     'simple'
   ]),
   round: bool,
+  border: bool,
   fullWidth: bool,
   disabled: bool
 };
