@@ -1,8 +1,9 @@
-export const prune = () => {
+const prune = () => {
   const command = ['prune'];
   const defaults = ['--json', '--verbose'];
 
   const run = [].concat(command).concat(defaults);
-
   return run;
 };
+
+export default prune;
