@@ -231,7 +231,6 @@ app.on('ready', async () => {
   // loadingScreen.loadURL(`file://${__dirname}/loadingScreen.html`);
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
-  loadingScreen.loadURL(`file://${__dirname}/loadingScreen.html`);
 
   mainWindow.once('ready-to-show', event => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready-to-show event fired');

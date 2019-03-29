@@ -29,7 +29,6 @@ import { runTool } from 'models/packages/actions';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
-import { Divider } from '@material-ui/core';
 
 const Navigator = ({
   classes,
