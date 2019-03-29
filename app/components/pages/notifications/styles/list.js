@@ -17,6 +17,10 @@ const styles = theme => ({
       maxHeight: 775
     }
   },
+  flexContainer: {
+    ...flexContainer,
+    justifyContent: 'space-between'
+  },
   header: {
     flex: '0 0 auto',
     padding: theme.spacing.unit + 4
@@ -29,6 +33,9 @@ const styles = theme => ({
   },
   withPadding: {
     padding: theme.spacing.unit + 4
+  },
+  item: {
+    ...defaultFont
   }
 });
 

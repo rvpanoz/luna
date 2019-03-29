@@ -1,3 +1,5 @@
+/* eslint-disable  no-nested-ternary */
+
 /**
  * App with error boundary
  */

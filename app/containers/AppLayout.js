@@ -123,6 +123,7 @@ const AppLayout = ({ classes }) => {
         options.filter(option => option !== operation || option !== '-g');
 
       if (error && error.length) {
+        console.log(error);
         dispatch(addActionError({ error }));
       }
 

@@ -10,7 +10,7 @@ const install = (options, idx) => {
   const command = ['install'];
   const { mode, version, name, pkgOptions, multiple, packages, single } =
     options || {};
-  const defaults = ['--ignore-scripts'];
+  const defaults = ['--ignore-scripts', '--verbose'];
 
   if (!packages && !multiple && !name) {
     return Promise.reject('npm[install] package name parameter must be given');

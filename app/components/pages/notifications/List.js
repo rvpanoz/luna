@@ -1,9 +1,12 @@
-import React, { useCallback, useState, useEffect } from 'react';
+/* eslint-disable react/require-default-props */
+/* eslint-disable react/no-array-index-key */
+
+import { remote } from 'electron';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
-import ListSubheader from '@material-ui/core/ListSubheader';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -42,7 +45,6 @@ const mapState = ({
 const NotificationsItem = ({
   classes,
   type,
-  body,
   mode,
   directory,
   installationOptions,
@@ -72,14 +74,28 @@ const NotificationsItem = ({
         directory
       };
 
-      dispatch(installPackages(parameters));
-      toggleDialog(false);
+      remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          title: 'Confirmation',
+          type: 'question',
+          message: `Would you like to install ${name}?`,
+          buttons: ['Cancel', 'Install']
+        },
+        btnIdx => {
+          if (Boolean(btnIdx) === true) {
+            dispatch(installPackages(parameters));
+
+            return toggleDialog(false);
+          }
+        }
+      );
     },
-    [mode, directory]
+    [mode, directory, installationOptions]
   );
 
   return (
-    <React.Fragment>
+    <section className={classes.item}>
       <ListItem>
         <ListItemAvatar>
           <Avatar style={{ backgroundColor: '#fff' }}>
@@ -130,8 +146,18 @@ const NotificationsItem = ({
           </Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+    </section>
   );
+};
+
+NotificationsItem.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  mode: PropTypes.string,
+  directory: PropTypes.string,
+  installationOptions: PropTypes.arrayOf(PropTypes.object),
+  required: PropTypes.string,
+  requiredBy: PropTypes.string,
+  type: PropTypes.string
 };
 
 const WithStylesNotificationItem = withStyles({})(NotificationsItem);
@@ -142,36 +168,31 @@ const NotificationsList = ({ classes, mode, directory }) => {
   return (
     <Paper className={classes.paper}>
       <div className={classes.container}>
-        <Toolbar>
-          <Button>Fix all</Button>
-        </Toolbar>
-        <List
-          component="nav"
-          subheader={
-            <ListSubheader disableSticky className={classes.header}>
-              <Typography variant="h6">{`Problems ${
-                notifications.length
-              }`}</Typography>
-            </ListSubheader>
-          }
-          className={classes.root}
-        >
+        <div className={classes.flexContainer}>
+          <div className={classes.header}>
+            <Typography variant="h6">
+              {`Problems ${notifications.length}`}
+            </Typography>
+          </div>
+          <Toolbar>
+            <Button>Fix all</Button>
+          </Toolbar>
+        </div>
+        <List className={classes.list}>
           {notifications.length === 0 ? (
             <Typography variant="subtitle1" className={classes.withPadding}>
               No problems found
             </Typography>
           ) : (
-            notifications.map((notification, idx) => {
-              return (
-                <WithStylesNotificationItem
-                  key={`notfcn-${idx}`}
-                  mode={mode}
-                  directory={directory}
-                  installationOptions={packagesInstallOptions}
-                  {...notification}
-                />
-              );
-            })
+            notifications.map((notification, idx) => (
+              <WithStylesNotificationItem
+                key={`notification-${idx}`}
+                mode={mode}
+                directory={directory}
+                installationOptions={packagesInstallOptions}
+                {...notification}
+              />
+            ))
           )}
         </List>
       </div>
@@ -180,7 +201,7 @@ const NotificationsList = ({ classes, mode, directory }) => {
 };
 
 NotificationsList.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string,
   directory: PropTypes.string
 };

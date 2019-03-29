@@ -227,14 +227,14 @@ app.on('ready', async () => {
     icon: path.join(__dirname, 'resources/icon.ico')
   });
 
-  loadingScreen = new BrowserWindow({ show: false, frame: false });
+  // loadingScreen = new BrowserWindow({ show: false, frame: false });
+  // loadingScreen.loadURL(`file://${__dirname}/loadingScreen.html`);
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
-  loadingScreen.loadURL(`file://${__dirname}/loadingScreen.html`);
 
   mainWindow.once('ready-to-show', event => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready-to-show event fired');
-    log.info(chalk.white.bgWhite.bold('[INFO]'), 'opening loading screen');
+    log.info(chalk.white.bgGreen.bold('[INFO]'), 'opening loading screen');
 
     // loadingScreen.show();
   });
@@ -277,7 +277,7 @@ app.on('ready', async () => {
     const openedPackages = Store.get('opened_packages') || [];
     event.sender.send('loaded-packages-close', openedPackages);
 
-    log.info(chalk.white.bgWhite.bold('[INFO]'), 'destroying loading screen');
+    log.info(chalk.white.bgGreen.bold('[INFO]'), 'destroying loading screen');
   });
 
   mainWindow.webContents.on('crashed', event => {

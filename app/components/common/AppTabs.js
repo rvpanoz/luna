@@ -12,7 +12,7 @@ import Tab from '@material-ui/core/Tab';
 import styles from './styles/appTabs';
 
 const TabContainer = ({ children, loading }) => (
-  <Typography component="div" style={{ padding: 8, minHeight: 267 }}>
+  <Typography component="div" style={{ padding: 8, minHeight: 265 }}>
     {loading ? null : children}
   </Typography>
 );
@@ -27,12 +27,12 @@ const AppTabs = ({ classes, children }) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default">
+      <AppBar position="static" color="inherit">
         <Tabs
           value={value}
           onChange={(e, tabValue) => setValue(tabValue)}
-          indicatorColor="secondary"
-          textColor="primary"
+          indicatorColor="primary"
+          textColor="secondary"
         >
           <Tab label="Project" />
           <Tab label="Packages" />

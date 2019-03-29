@@ -99,6 +99,7 @@ const handlers = {
     merge(state, {
       npm: {
         ...state.npm,
+        paused: false, // enable fetching
         commands: []
       }
     }),

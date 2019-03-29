@@ -7,7 +7,6 @@ import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 
 import ErrorIcon from '@material-ui/icons/ErrorTwoTone';
 import CheckIcon from '@material-ui/icons/CheckTwoTone';
-import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
@@ -126,6 +125,7 @@ PackageItem.propTypes = {
   fromSearch: bool,
   version: string,
   group: string,
+  peerMissing: bool,
   extraneous: bool,
   missing: bool,
   isOutdated: bool

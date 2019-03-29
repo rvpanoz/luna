@@ -17,7 +17,7 @@ import AddIcon from '@material-ui/icons/AddTwoTone';
 import Fab from '@material-ui/core/Fab';
 import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
-import AppButton from 'components/units/Buttons/AppButton';
+// import AppButton from 'components/units/Buttons/AppButton';
 import { navigatorParameters } from 'commons/parameters';
 
 import {
@@ -29,7 +29,6 @@ import { runTool } from 'models/packages/actions';
 import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
-import { Divider } from '@material-ui/core';
 
 const Navigator = ({
   classes,
@@ -100,25 +99,13 @@ const Navigator = ({
             <Fab
               variant="extended"
               color="secondary"
+              size="large"
               aria-label="analyze"
               className={cn(classes.fabButton, classes.margin)}
               onClick={() => openPackage()}
             >
               <AddIcon className={classes.extendedIcon} />
-              Analyze project
             </Fab>
-
-            {/* <AppButton
-              style={{ fontSize: 20 }}
-              disabled={loading}
-              color="secondary"
-              fullWidth
-              round
-              onClick={() => openPackage()}
-              border
-            >
-              Analyze
-            </AppButton> */}
           </ListItemText>
         </ListItem>
         <ListItem className={classes.categoryHeader}>
@@ -202,8 +189,7 @@ const Navigator = ({
                   {
                     mode,
                     primaryText: 'npm dedupe',
-                    secondaryText:
-                      'Searches the local package tree and attempts to simplify the overall structure',
+                    secondaryText: 'Run npm dedupe',
                     handler: () => runNpmTool('dedupe')
                   }
                 ]}

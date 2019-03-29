@@ -79,13 +79,8 @@ const styles = theme => ({
   },
   fabButton: {
     width: '100%',
-    fontSize: 20
-  },
-  margin: {
-    margin: theme.spacing.unit
-  },
-  extendedIcon: {
-    marginRight: theme.spacing.unit
+    fontSize: 20,
+    textTransform: 'lowercase'
   }
 });
 

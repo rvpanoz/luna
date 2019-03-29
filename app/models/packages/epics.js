@@ -1,4 +1,4 @@
-import { map, takeWhile, concatMap } from 'rxjs/operators';
+import { map, takeWhile, concatMap, tap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
@@ -145,6 +145,7 @@ const updatePackagesEpic = action$ =>
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
+    tap(console.log),
     takeWhile(({ payload: { dependencies } }) => Array.isArray(dependencies)),
     map(
       ({

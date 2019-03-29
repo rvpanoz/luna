@@ -17,14 +17,6 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import { withStyles } from '@material-ui/core/styles';
 
-const variantIcon = {
-  success: CheckCircleIcon,
-  warning: WarningIcon,
-  error: ErrorIcon,
-  info: InfoIcon,
-  primary: () => InfoIcon
-};
-
 const styles = theme => ({
   success: {
     backgroundColor: green[600]
@@ -62,34 +54,49 @@ const AppSnackbarContent = ({
   onClose,
   variant,
   ...other
-}) => {
-  return (
-    <SnackbarContent
-      className={classNames(classes[variant], classes.root)}
-      aria-describedby="cli-snackbar"
-      message={
-        <span id="cli-snackbar" className={classes.message}>
+}) => (
+  <SnackbarContent
+    className={classNames(classes[variant], classes.root)}
+    aria-describedby="cli-snackbar"
+    message={
+      <span id="cli-snackbar" className={classes.message}>
+        {variant === 'info' && (
           <InfoIcon className={classNames(classes.icon, classes.iconVariant)} />
-          <Typography style={{ color: '#fff' }}>{message}</Typography>
-        </span>
-      }
-      action={[
-        typeof onClose === 'function' && (
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            className={classes.close}
-            onClick={onClose}
-          >
-            <CloseIcon className={classes.icon} />
-          </IconButton>
-        )
-      ]}
-      {...other}
-    />
-  );
-};
+        )}
+        {variant === 'error' && (
+          <ErrorIcon
+            className={classNames(classes.icon, classes.iconVariant)}
+          />
+        )}
+        {variant === 'warning' && (
+          <WarningIcon
+            className={classNames(classes.icon, classes.iconVariant)}
+          />
+        )}
+        {variant === 'success' && (
+          <CheckCircleIcon
+            className={classNames(classes.icon, classes.iconVariant)}
+          />
+        )}
+        <Typography style={{ color: '#fff' }}>{message}</Typography>
+      </span>
+    }
+    action={[
+      typeof onClose === 'function' && (
+        <IconButton
+          key="close"
+          aria-label="Close"
+          color="inherit"
+          className={classes.close}
+          onClick={onClose}
+        >
+          <CloseIcon className={classes.icon} />
+        </IconButton>
+      )
+    ]}
+    {...other}
+  />
+);
 
 AppSnackbarContent.defaultProps = {
   variant: 'info'
