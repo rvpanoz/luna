@@ -200,10 +200,10 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
         </FormControl>
         <Divider className={classes.bottomDivider} light />
         <div className={classes.actions}>
-          <AppButton color="secondary" onClick={close}>
+          <AppButton color="transparent" onClick={close}>
             Close
           </AppButton>
-          <AppButton color="primary" onClick={() => handleFilters(filters)}>
+          <AppButton color="simple" onClick={() => handleFilters(filters)}>
             Filter
           </AppButton>
         </div>

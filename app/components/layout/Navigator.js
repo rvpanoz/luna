@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import { useDispatch } from 'redux-react-hook';
 import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
@@ -13,11 +12,9 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 import AddIcon from '@material-ui/icons/AddTwoTone';
-
-import Fab from '@material-ui/core/Fab';
+import Button from '@material-ui/core/Button';
 import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
-// import AppButton from 'components/units/Buttons/AppButton';
 import { navigatorParameters } from 'commons/parameters';
 
 import {
@@ -96,16 +93,17 @@ const Navigator = ({
         </ListItem>
         <ListItem>
           <ListItemText className={classes.actionButton}>
-            <Fab
-              variant="extended"
+            <Button
+              className={classes.margin}
               color="secondary"
+              variant="outlined"
+              fullWidth
               size="large"
-              aria-label="analyze"
-              className={cn(classes.fabButton, classes.margin)}
               onClick={() => openPackage()}
             >
               <AddIcon className={classes.extendedIcon} />
-            </Fab>
+              <span className={classes.label}>Analyze</span>
+            </Button>
           </ListItemText>
         </ListItem>
         <ListItem className={classes.categoryHeader}>
@@ -127,9 +125,11 @@ const Navigator = ({
                       mode === 'local' && name
                         ? `${name} - v${version || '1.0.0'}`
                         : 'Global - v1.0.0',
-                    secondaryText: `Last updated: ${lastUpdatedAt}`
+                    secondaryText: `Last updated: ${lastUpdatedAt}`,
+                    caption: true
                   },
                   {
+                    caption: true,
                     primaryText:
                       mode === 'local' && directory && !loading
                         ? 'Working directory'

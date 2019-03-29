@@ -16,6 +16,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -175,7 +176,9 @@ const NotificationsList = ({ classes, mode, directory }) => {
             </Typography>
           </div>
           <Toolbar>
-            <Button>Fix all</Button>
+            <Button color="secondary" variant="outlined">
+              Fix all
+            </Button>
           </Toolbar>
         </div>
         <List className={classes.list}>

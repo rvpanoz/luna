@@ -20,6 +20,8 @@ const install = (options, idx) => {
 
   const commandOpts = single
     ? pkgOptions
+      ? pkgOptions.map(option => `--${option}`)
+      : []
     : pkgOptions && pkgOptions[idx].map(option => `--${option}`);
 
   const packagesToInstall = single

@@ -22,6 +22,9 @@ const buttonStyle = theme => ({
   fullWidth: {
     width: '100%'
   },
+  noShadow: {
+    boxShadow: '0 !important'
+  },
   primary: {
     backgroundColor: theme.palette.primary.main,
     ...defaultBoxShadow,
@@ -55,8 +58,8 @@ const buttonStyle = theme => ({
   },
   simple: {
     '&,&:focus,&:hover': {
-      color: theme.palette.secondary.light,
-      background: 'transparent',
+      color: theme.palette.common.white,
+      backgroundColor: theme.palette.secondary.main,
       boxShadow: 'none'
     }
   },

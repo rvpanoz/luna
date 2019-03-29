@@ -77,10 +77,13 @@ const styles = theme => ({
   historyDirectory: {
     wordWrap: 'break-word'
   },
-  fabButton: {
-    width: '100%',
-    fontSize: 20,
-    textTransform: 'lowercase'
+  label: {
+    ...defaultFont,
+    fontSize: 22,
+    fontWeight: 400,
+    display: 'inline-block',
+    position: 'relative',
+    top: theme.spacing.unit / 4
   }
 });
 
