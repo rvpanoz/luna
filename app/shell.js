@@ -5,7 +5,7 @@
  * npm [cmd] [[<@scope>/]<pkg> ...]
  * */
 
-import manager from './cli/manager';
+import { apiManager as manager } from './cli';
 
 /**
  *

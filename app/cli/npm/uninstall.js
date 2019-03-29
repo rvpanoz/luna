@@ -9,7 +9,7 @@
 const uninstall = options => {
   const command = ['uninstall'];
   const { name, mode, multiple, packages } = options;
-  const defaults = [];
+  const defaults = ['--verbose'];
 
   function getNames() {
     if (multiple && packages && Array.isArray(packages)) {
