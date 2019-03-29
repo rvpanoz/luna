@@ -5,7 +5,7 @@ import path from 'path';
 import chalk from 'chalk';
 import mk from '../mk';
 
-const { spawn, exec } = cp;
+const { spawn } = cp;
 const { log } = console;
 const { config } = mk;
 const {
@@ -14,7 +14,7 @@ const {
 
 // default arguments
 const defaultsArgs = {
-  list: ['--json', '--depth=0', '--parseable']
+  list: ['--json', '--depth=0', '--parseable', '--verbose']
 };
 
 // current working directory
@@ -35,7 +35,7 @@ const execute = (
     callback('flow', `${manager} ${commandArgs.join(' ')}`);
 
     // on windows use npm.cmd
-    const command = cp.spawn(
+    const command = spawn(
       /^win/.test(process.platform) ? `${manager}.cmd` : manager,
       commandArgs,
       {
@@ -64,10 +64,12 @@ const execute = (
         chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
       );
 
+      const resultString = result.join('');
+
       const results = {
         status: 'close',
         errors,
-        data: result.join(''),
+        data: resultString,
         cmd: commandArgs
       };
 
@@ -79,9 +81,8 @@ const execute = (
 };
 
 /**
- * List command
- * use npm
- * */
+ * List command - use npm
+ **/
 
 const list = (options, callback) => {
   const command = ['list'];
@@ -111,8 +112,7 @@ const list = (options, callback) => {
 };
 
 /**
- * Outdated command
- * use npm
+ * Outdated command - use npm
  */
 const outdated = (options, callback) => {
   const command = ['outdated'];
@@ -140,7 +140,7 @@ const outdated = (options, callback) => {
 };
 
 /**
- * search for packages
+ * search for packages - use npm
  */
 const search = (opts, callback) => {
   const command = ['search'];
@@ -160,11 +160,15 @@ const install = (opts, callback, idx) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { install } = manager.default;
-    const run = install(opts, idx);
+    const install = require('./npm/install').default;
 
-    return execute(activeManager, run, mode, directory, callback);
+    if (typeof install === 'function') {
+      const run = install(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:install is not defined');
   } catch (error) {
     Promise.reject(error);
   }
@@ -174,11 +178,15 @@ const update = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { update } = manager.default;
-    const run = update(opts);
+    const update = require('./npm/update').default;
 
-    return execute(activeManager, run, mode, directory, callback);
+    if (typeof update === 'function') {
+      const run = update(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:update is not defined');
   } catch (error) {
     Promise.reject(error);
   }
@@ -188,11 +196,15 @@ const uninstall = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { uninstall } = manager.default;
-    const run = uninstall(opts);
+    const uninstall = require('./npm/uninstall').default;
 
-    return execute(activeManager, run, mode, directory, callback);
+    if (typeof uninstall === 'function') {
+      const run = uninstall(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:uninstall is not defined');
   } catch (error) {
     Promise.reject(error);
   }
@@ -203,11 +215,15 @@ const view = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { view } = manager.default;
-    const run = view(opts);
+    const view = require('./npm/view').default;
 
-    return execute(activeManager, run, mode, directory, callback);
+    if (typeof view === 'function') {
+      const run = view(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:view is not defined');
   } catch (error) {
     Promise.reject(error);
   }
@@ -217,11 +233,15 @@ const runAudit = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { audit } = manager.default;
-    const run = audit(opts);
+    const audit = require('./npm/tooling/audit').default;
 
-    return execute(activeManager, run, mode, directory, callback);
+    if (typeof audit === 'function') {
+      const run = audit(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:audit is not defined');
   } catch (error) {
     throw new Error(error);
   }
@@ -231,11 +251,15 @@ const runDoctor = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { doctor } = manager.default;
-    const run = doctor(opts);
+    const doctor = require('./npm/tooling/doctor').default;
 
-    return execute(activeManager, run, mode, directory, callback);
+    if (typeof doctor === 'function') {
+      const run = doctor(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:doctor is not defined');
   } catch (error) {
     throw new Error(error);
   }
@@ -245,11 +269,15 @@ const runPrune = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { prune } = manager.default;
-    const run = prune(opts);
+    const prune = require('./npm/tooling/prune').default;
 
-    return execute(activeManager, run, mode, directory, callback);
+    if (typeof prune === 'function') {
+      const run = prune(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:prune is not defined');
   } catch (error) {
     throw new Error(error);
   }
@@ -259,11 +287,15 @@ const runDedupe = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { dedupe } = manager.default;
-    const run = dedupe(opts);
+    const dedupe = require('./npm/tooling/dedupe').default;
 
-    return execute(activeManager, run, mode, directory, callback);
+    if (typeof dedupe === 'function') {
+      const run = dedupe(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:dedupe is not defined');
   } catch (error) {
     throw new Error(error);
   }

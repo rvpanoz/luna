@@ -1,12 +1,11 @@
 /* eslint-disable */
-import path from 'path';
 
 /**
  * Run shell commands
  * npm [cmd] [[<@scope>/]<pkg> ...]
  * */
 
-const apiManager = require(path.resolve(__dirname, 'cli/manager'));
+import { apiManager as manager } from './cli';
 
 /**
  *
@@ -20,7 +19,7 @@ export const runCommand = (options, callback) => {
   const combine = () =>
     cmd.map((command, idx) => {
       try {
-        const runner = apiManager.default[command];
+        const runner = manager[command];
 
         return runner(rest, callback, idx);
       } catch (error) {

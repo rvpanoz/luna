@@ -227,16 +227,10 @@ app.on('ready', async () => {
     icon: path.join(__dirname, 'resources/icon.ico')
   });
 
-  // loadingScreen = new BrowserWindow({ show: false, frame: false });
-  // loadingScreen.loadURL(`file://${__dirname}/loadingScreen.html`);
-
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', event => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready-to-show event fired');
-    log.info(chalk.white.bgGreen.bold('[INFO]'), 'opening loading screen');
-
-    // loadingScreen.show();
   });
 
   mainWindow.webContents.on('did-finish-load', async event => {
@@ -246,8 +240,12 @@ app.on('ready', async () => {
       throw new Error('mainWindow is not defined');
     }
 
-    // loadingScreen.hide();
-    // loadingScreen.close();
+    if (START_MINIMIZED) {
+      mainWindow.minimize();
+    } else {
+      mainWindow.show();
+      mainWindow.focus();
+    }
 
     if (START_MINIMIZED) {
       mainWindow.minimize();
@@ -276,8 +274,6 @@ app.on('ready', async () => {
     // directories history
     const openedPackages = Store.get('opened_packages') || [];
     event.sender.send('loaded-packages-close', openedPackages);
-
-    log.info(chalk.white.bgGreen.bold('[INFO]'), 'destroying loading screen');
   });
 
   mainWindow.webContents.on('crashed', event => {
