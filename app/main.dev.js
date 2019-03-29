@@ -257,18 +257,16 @@ app.on('ready', async () => {
       mainWindow.focus();
     }
 
-    setTimeout(() => {
-      if (START_MINIMIZED) {
-        mainWindow.minimize();
-      } else {
-        mainWindow.show();
-        mainWindow.focus();
-      }
+    if (START_MINIMIZED) {
+      mainWindow.minimize();
+    } else {
+      mainWindow.show();
+      mainWindow.focus();
+    }
 
-      if (NODE_ENV === 'development') {
-        mainWindow.openDevTools();
-      }
-    }, 1500);
+    if (NODE_ENV === 'development') {
+      mainWindow.openDevTools();
+    }
 
     // npm and node info
     const npmEnv = await CheckNpm();
