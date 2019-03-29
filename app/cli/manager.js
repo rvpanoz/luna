@@ -5,7 +5,7 @@ import path from 'path';
 import chalk from 'chalk';
 import mk from '../mk';
 
-const { spawn, exec } = cp;
+const { spawn } = cp;
 const { log } = console;
 const { config } = mk;
 const {
@@ -14,7 +14,7 @@ const {
 
 // default arguments
 const defaultsArgs = {
-  list: ['--json', '--depth=0', '--parseable']
+  list: ['--json', '--depth=0', '--parseable', '--verbose']
 };
 
 // current working directory
@@ -35,7 +35,7 @@ const execute = (
     callback('flow', `${manager} ${commandArgs.join(' ')}`);
 
     // on windows use npm.cmd
-    const command = cp.spawn(
+    const command = spawn(
       /^win/.test(process.platform) ? `${manager}.cmd` : manager,
       commandArgs,
       {
@@ -64,10 +64,12 @@ const execute = (
         chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
       );
 
+      const resultString = result.join('');
+
       const results = {
         status: 'close',
         errors,
-        data: result.join(''),
+        data: resultString,
         cmd: commandArgs
       };
 
@@ -79,9 +81,8 @@ const execute = (
 };
 
 /**
- * List command
- * use npm
- * */
+ * List command - use npm
+ **/
 
 const list = (options, callback) => {
   const command = ['list'];
@@ -111,8 +112,7 @@ const list = (options, callback) => {
 };
 
 /**
- * Outdated command
- * use npm
+ * Outdated command - use npm
  */
 const outdated = (options, callback) => {
   const command = ['outdated'];
@@ -140,7 +140,7 @@ const outdated = (options, callback) => {
 };
 
 /**
- * search for packages
+ * search for packages - use npm
  */
 const search = (opts, callback) => {
   const command = ['search'];
@@ -160,8 +160,9 @@ const install = (opts, callback, idx) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { install } = manager.default;
+    const commands = require('./npm');
+
+    const { install } = commands.default;
     const run = install(opts, idx);
 
     return execute(activeManager, run, mode, directory, callback);
@@ -174,8 +175,8 @@ const update = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { update } = manager.default;
+    const commands = require('./npm');
+    const { update } = commands.default;
     const run = update(opts);
 
     return execute(activeManager, run, mode, directory, callback);
@@ -188,8 +189,8 @@ const uninstall = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { uninstall } = manager.default;
+    const commands = require('./npm');
+    const { uninstall } = commands.default;
     const run = uninstall(opts);
 
     return execute(activeManager, run, mode, directory, callback);
@@ -203,8 +204,8 @@ const view = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { view } = manager.default;
+    const commands = require('./npm');
+    const { view } = commands.default;
     const run = view(opts);
 
     return execute(activeManager, run, mode, directory, callback);
@@ -217,8 +218,8 @@ const runAudit = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { audit } = manager.default;
+    const commands = require('./npm');
+    const { audit } = commands.default;
     const run = audit(opts);
 
     return execute(activeManager, run, mode, directory, callback);
@@ -231,8 +232,8 @@ const runDoctor = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { doctor } = manager.default;
+    const commands = require('./npm');
+    const { doctor } = commands.default;
     const run = doctor(opts);
 
     return execute(activeManager, run, mode, directory, callback);
@@ -245,8 +246,8 @@ const runPrune = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { prune } = manager.default;
+    const commands = require('./npm');
+    const { prune } = commands.default;
     const run = prune(opts);
 
     return execute(activeManager, run, mode, directory, callback);
@@ -259,8 +260,8 @@ const runDedupe = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const manager = require(path.resolve(__dirname, activeManager));
-    const { dedupe } = manager.default;
+    const commands = require('./npm');
+    const { dedupe } = commands.default;
     const run = dedupe(opts);
 
     return execute(activeManager, run, mode, directory, callback);
