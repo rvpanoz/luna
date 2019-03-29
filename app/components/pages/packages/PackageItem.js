@@ -7,7 +7,7 @@ import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 
 import ErrorIcon from '@material-ui/icons/ErrorTwoTone';
 import CheckIcon from '@material-ui/icons/CheckTwoTone';
-
+import Badge from '@material-ui/core/Badge';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
@@ -26,6 +26,7 @@ const PackageItem = ({
   group,
   fromSearch,
   extraneous,
+  missing,
   viewPackage
 }) => {
   const rowRef = useRef();
@@ -62,17 +63,19 @@ const PackageItem = ({
           })}
         >
           {extraneous && (
-            <Tooltip title="extraneous means a package is installed but is not listed in your project's package.json">
+            <Tooltip title="extraneous package">
               <ErrorIcon className={classes.extraneous} />
             </Tooltip>
           )}
-          <Typography
-            className={cn(classes.name, {
-              [classes.flexItem]: extraneous
-            })}
-          >
-            {name}
-          </Typography>
+
+          {missing ? (
+            <Tooltip title="package is missing">
+              <Typography className={classes.name}>{name}</Typography>
+            </Tooltip>
+          ) : (
+            <Typography className={classes.name}>{name}</Typography>
+          )}
+
           {!extraneous && (
             <Typography variant="caption" className={classes.group}>
               {group}
@@ -113,7 +116,8 @@ PackageItem.propTypes = {
   fromSearch: bool,
   version: string,
   group: string,
-  extraneous: bool
+  extraneous: bool,
+  missing: bool
 };
 
 export default withStyles(styles)(PackageItem);

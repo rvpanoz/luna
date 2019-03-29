@@ -36,7 +36,6 @@ const install = (options, idx) => {
     .concat(packagesToInstall.filter(pkg => Boolean(pkg)))
     .concat(commandOptions);
 
-  console.log(run);
   return run;
 };
 

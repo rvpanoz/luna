@@ -162,12 +162,15 @@ const packagesSuccessEpic = (action$, state$) =>
 
           const { name } = rest;
 
-          if (!invalid && !extraneous && !missing && !peerMissing) {
+          if (!invalid) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
 
             const enhancedDependency = {
               ...rest,
               name,
+              extraneous,
+              missing,
+              peerMissing,
               latest: isOutdated ? outdatedPkg.latest : null,
               isOutdated
             };

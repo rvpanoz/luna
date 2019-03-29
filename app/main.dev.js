@@ -69,6 +69,38 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
+// handle local events
+// handle local events
+const handleLocalEvents = (event, mode, directory) => {
+  const openedPackages = Store.get('openedPackages') || [];
+  const yarnLock = fs.existsSync(
+    path.join(path.dirname(directory), 'yarn.lock')
+  );
+  const dirName = path.dirname(path.resolve(directory));
+  const parsedDirectory = path.parse(dirName);
+  const { name } = parsedDirectory || {};
+
+  if (yarnLock) {
+    event.sender.send('yarn-warning-close');
+  }
+
+  const inDirectories = openedPackages.some(
+    pkg => pkg.directory && pkg.directory.includes(dirName)
+  );
+
+  if (!inDirectories) {
+    Store.set('openedPackages', [
+      ...openedPackages,
+      {
+        name,
+        directory: path.join(dirName, 'package.json')
+      }
+    ]);
+  }
+
+  event.sender.send('loaded-packages-close', Store.get('openedPackages'));
+};
+
 /**
  * Listen to ipcRenderer events
  */
@@ -100,31 +132,7 @@ ipcMain.on('ipc-event', (event, options) => {
     }
 
     if (directory && mode === 'local' && cmd.includes('list')) {
-      const openedPackages = Store.get('openedPackages') || [];
-      const yarnLock = fs.existsSync(
-        path.join(path.dirname(directory), 'yarn.lock')
-      );
-      const dirName = path.dirname(path.resolve(directory));
-      const parsedDirectory = path.parse(dirName);
-      const { name } = parsedDirectory || {};
-
-      if (yarnLock) {
-        event.sender.send('yarn-warning-close');
-      }
-
-      const inDirectories = openedPackages.some(
-        pkg => pkg.directory && pkg.directory.includes(dirName)
-      );
-
-      if (!inDirectories) {
-        Store.set('openedPackages', [
-          ...openedPackages,
-          {
-            name,
-            directory: path.join(dirName, 'package.json')
-          }
-        ]);
-      }
+      handleLocalEvents(event, mode, directory);
     }
 
     event.sender.send('loaded-packages-close', Store.get('openedPackages'));

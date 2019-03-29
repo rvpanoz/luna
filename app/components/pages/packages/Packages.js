@@ -287,6 +287,7 @@ const Packages = ({ classes }) => {
                               latest={latest}
                               version={version}
                               mode={mode}
+                              missing={missing}
                               isOutdated={isOutdated}
                               fromSearch={fromSearch}
                               group={__group}
