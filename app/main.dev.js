@@ -231,6 +231,7 @@ app.on('ready', async () => {
   // loadingScreen.loadURL(`file://${__dirname}/loadingScreen.html`);
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
+  loadingScreen.loadURL(`file://${__dirname}/loadingScreen.html`);
 
   mainWindow.once('ready-to-show', event => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready-to-show event fired');
@@ -256,9 +257,18 @@ app.on('ready', async () => {
       mainWindow.focus();
     }
 
-    if (NODE_ENV === 'development') {
-      mainWindow.openDevTools();
-    }
+    setTimeout(() => {
+      if (START_MINIMIZED) {
+        mainWindow.minimize();
+      } else {
+        mainWindow.show();
+        mainWindow.focus();
+      }
+
+      if (NODE_ENV === 'development') {
+        mainWindow.openDevTools();
+      }
+    }, 1500);
 
     // npm and node info
     const npmEnv = await CheckNpm();
