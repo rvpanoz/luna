@@ -93,6 +93,9 @@ const styles = theme => ({
   hidden: {
     display: 'none'
   },
+  missing: {
+    color: darken(theme.palette.secondary.light, 0.5)
+  },
   extraneous: {
     color: darken(theme.palette.secondary.light, 0.1)
   },

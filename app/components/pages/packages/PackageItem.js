@@ -22,11 +22,13 @@ const PackageItem = ({
   isSelected,
   addSelected,
   version,
+  isOutdated,
   latest,
   group,
   fromSearch,
   extraneous,
   missing,
+  peerMissing,
   viewPackage
 }) => {
   const rowRef = useRef();
@@ -68,9 +70,11 @@ const PackageItem = ({
             </Tooltip>
           )}
 
-          {missing ? (
-            <Tooltip title="package is missing">
-              <Typography className={classes.name}>{name}</Typography>
+          {missing || peerMissing ? (
+            <Tooltip title="package is missing or has peer dependencies missing">
+              <Typography className={cn(classes.name, classes.missing)}>
+                {name}
+              </Typography>
             </Tooltip>
           ) : (
             <Typography className={classes.name}>{name}</Typography>
@@ -85,7 +89,7 @@ const PackageItem = ({
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         <Typography>
-          {fromSearch ? 'N/A' : version}
+          {fromSearch || !version ? 'N/A' : version}
           {extraneous && (
             <Typography component="span" className={classes.extraneous}>
               extraneous
@@ -94,11 +98,17 @@ const PackageItem = ({
         </Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        {latest ? (
+        {latest && isOutdated && (
           <Typography className={classes.outdated}>{latest}</Typography>
-        ) : (
+        )}
+        {!isOutdated && !missing && (
           <Typography>
             <CheckIcon className={classes.updated} />
+          </Typography>
+        )}
+        {missing && !version && !latest && (
+          <Typography>
+            <Typography>N/A</Typography>
           </Typography>
         )}
       </TableCell>
@@ -117,7 +127,8 @@ PackageItem.propTypes = {
   version: string,
   group: string,
   extraneous: bool,
-  missing: bool
+  missing: bool,
+  isOutdated: bool
 };
 
 export default withStyles(styles)(PackageItem);

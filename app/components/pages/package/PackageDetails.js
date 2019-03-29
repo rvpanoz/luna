@@ -135,16 +135,17 @@ const PackageDetails = ({ classes }) => {
         <IconButton
           disableRipple
           onClick={e => {
+            const { name } = active;
             const pkgOptions =
               mode === 'local'
                 ? group && [PACKAGE_GROUPS[group]]
                 : ['save-prod'];
-
+            console.log(name, pkgOptions);
             const parameters = {
               ipcEvent: 'install',
               cmd: ['install'],
-              name: active.name,
-              pkgOptions: pkgOptions || [],
+              name,
+              pkgOptions,
               single: true,
               mode,
               directory
@@ -260,12 +261,15 @@ const PackageDetails = ({ classes }) => {
                 <IconButton
                   aria-label="install_version"
                   onClick={e => {
+                    const { name } = active;
                     const pkgOptions =
-                      mode === 'local' ? [`--${PACKAGE_GROUPS[group]}`] : [];
+                      mode === 'local' ? [PACKAGE_GROUPS[group]] : [];
+
+                    console.log(name, mode, pkgOptions);
                     const parameters = {
                       ipcEvent: 'install',
                       cmd: ['install'],
-                      name: active.name,
+                      name,
                       version: item,
                       pkgOptions,
                       single: true,

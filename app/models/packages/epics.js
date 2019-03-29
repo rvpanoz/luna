@@ -196,7 +196,7 @@ const packagesSuccessEpic = (action$, state$) =>
           metadata: { fromSearch, fromSort }
         }
       } = state$.value;
-
+      console.log(dependencies);
       const actions = [];
 
       if (dependencies) {

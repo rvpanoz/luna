@@ -46,6 +46,7 @@ Store.set('openedPackages', []);
 const settings = Store.get('user_settings');
 
 let mainWindow = null;
+let loadingScreen = null;
 
 if (NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -69,7 +70,6 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-// handle local events
 // handle local events
 const handleLocalEvents = (event, mode, directory) => {
   const openedPackages = Store.get('openedPackages') || [];
@@ -227,32 +227,43 @@ app.on('ready', async () => {
     icon: path.join(__dirname, 'resources/icon.ico')
   });
 
+  loadingScreen = new BrowserWindow({ show: false, frame: false });
+
   mainWindow.loadURL(`file://${__dirname}/app.html`);
+  loadingScreen.loadURL(`file://${__dirname}/loadingScreen.html`);
 
   mainWindow.once('ready-to-show', event => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready-to-show event fired');
+    log.info(chalk.white.bgWhite.bold('[INFO]'), 'opening loading screen');
+
+    loadingScreen.show();
   });
 
-  mainWindow.webContents.on('did-finish-load', event => {
+  mainWindow.webContents.on('did-finish-load', async event => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'did-finish-load event fired');
 
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');
     }
 
-    if (START_MINIMIZED) {
-      mainWindow.minimize();
-    } else {
-      mainWindow.show();
-      mainWindow.focus();
-    }
+    loadingScreen.hide();
+    loadingScreen.close();
 
-    if (NODE_ENV === 'development') {
-      mainWindow.openDevTools();
-    }
+    setTimeout(() => {
+      if (START_MINIMIZED) {
+        mainWindow.minimize();
+      } else {
+        mainWindow.show();
+        mainWindow.focus();
+      }
+
+      if (NODE_ENV === 'development') {
+        mainWindow.openDevTools();
+      }
+    }, 1500);
 
     // npm and node info
-    const npmEnv = CheckNpm();
+    const npmEnv = await CheckNpm();
 
     if (npmEnv.error) {
       event.sender.send('npm-error', String(npmEnv.error));
@@ -267,6 +278,8 @@ app.on('ready', async () => {
     // directories history
     const openedPackages = Store.get('opened_packages') || [];
     event.sender.send('loaded-packages-close', openedPackages);
+
+    log.info(chalk.white.bgWhite.bold('[INFO]'), 'destroying loading screen');
   });
 
   mainWindow.webContents.on('crashed', event => {
