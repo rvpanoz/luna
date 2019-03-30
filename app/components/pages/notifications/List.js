@@ -2,7 +2,7 @@
 /* eslint-disable react/no-array-index-key */
 
 import { remote } from 'electron';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
@@ -15,22 +15,12 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-
 import IconButton from '@material-ui/core/IconButton';
-import Toolbar from '@material-ui/core/Toolbar';
-import { INFO_MESSAGES } from 'constants/AppConstants';
-import { installPackages, clearInstallOptions } from 'models/packages/actions';
+
 import AddIcon from '@material-ui/icons/Add';
-import Flags from 'components/pages/packages/Flags';
 import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 
+import { installPackages } from 'models/packages/actions';
 import styles from './styles/list';
 
 const mapState = ({ common: { notifications } }) => ({
@@ -45,7 +35,6 @@ const NotificationsItem = ({
   required,
   requiredBy
 }) => {
-  const [dialogOpen, toggleDialog] = useState(false);
   const packageParts = required && required.split('@');
 
   const packageName = packageParts && packageParts[0];
@@ -55,9 +44,9 @@ const NotificationsItem = ({
   let version = null;
 
   if (packageVersion) {
-    const versionCoerced = semver.coerce(packageVersion);
+    const versionCoerced = semver.valid(semver.coerce(packageVersion));
 
-    version = versionCoerced ? versionCoerced.version : version;
+    version = versionCoerced || version;
   }
 
   const handleInstall = useCallback(() => {
@@ -81,8 +70,6 @@ const NotificationsItem = ({
       btnIdx => {
         if (Boolean(btnIdx) === true) {
           dispatch(installPackages(parameters));
-
-          return toggleDialog(false);
         }
       }
     );
@@ -101,6 +88,7 @@ const NotificationsItem = ({
         <ListItemText primary={required} secondary={requiredBy} />
         <ListItemSecondaryAction>
           <IconButton
+            title="Install package"
             aria-label="install-notification"
             onClick={() => handleInstall(packageName, true)}
           >
@@ -108,38 +96,6 @@ const NotificationsItem = ({
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
-      <Dialog
-        open={dialogOpen}
-        fullWidth
-        onClose={() => {
-          dispatch({ type: clearInstallOptions.type });
-        }}
-        aria-labelledby="install-options"
-      >
-        <DialogTitle>Installation options</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
-          <Flags selected={[packageName]} />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch({ type: clearInstallOptions.type });
-              toggleDialog(false);
-            }}
-            color="secondary"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => handleInstall(packageName)}
-            color="primary"
-            autoFocus
-          >
-            Install
-          </Button>
-        </DialogActions>
-      </Dialog>
     </section>
   );
 };
@@ -157,59 +113,6 @@ const WithStylesNotificationItem = withStyles({})(NotificationsItem);
 
 const NotificationsList = ({ classes, mode, directory }) => {
   const { notifications, packagesInstallOptions } = useMappedState(mapState);
-  const dispatch = useDispatch();
-
-  const handleInstallAll = useCallback(() => {
-    const allPackages =
-      notifications &&
-      notifications.reduce((all, pkg) => {
-        const { required } = pkg;
-        const packageParts = required && required.split('@');
-        const packageName = packageParts[0];
-        const packageVersion = packageParts[1];
-
-        let version = null;
-
-        if (packageVersion) {
-          const versionCoerced = semver.coerce(packageVersion);
-
-          version = versionCoerced ? versionCoerced.version : version;
-        }
-
-        if (all.indexOf(packageName) === -1) {
-          const packageWithVersion = version
-            ? `${packageName}@${version}`
-            : packageName;
-          all.push(packageWithVersion);
-        }
-
-        return all;
-      }, []);
-
-    const parameters = {
-      ipcEvent: 'install',
-      cmd: ['install'],
-      multiple: true,
-      packages: allPackages,
-      mode,
-      directory
-    };
-
-    remote.dialog.showMessageBox(
-      remote.getCurrentWindow(),
-      {
-        title: 'Confirmation',
-        type: 'question',
-        message: `Would you like to install all packages?`,
-        buttons: ['Cancel', 'Install']
-      },
-      btnIdx => {
-        if (Boolean(btnIdx) === true) {
-          dispatch(installPackages(parameters));
-        }
-      }
-    );
-  }, [mode, directory, notifications]);
 
   return (
     <Paper className={classes.paper}>
@@ -220,17 +123,6 @@ const NotificationsList = ({ classes, mode, directory }) => {
               {`Problems ${notifications.length}`}
             </Typography>
           </div>
-          {notifications.length > 0 ? (
-            <Toolbar>
-              <Button
-                color="secondary"
-                variant="outlined"
-                onClick={() => handleInstallAll()}
-              >
-                Fix all
-              </Button>
-            </Toolbar>
-          ) : null}
         </div>
         <List className={classes.list}>
           {notifications.length === 0 ? (

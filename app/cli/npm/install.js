@@ -10,7 +10,7 @@ const install = (options, idx) => {
   const command = ['install'];
   const { mode, version, name, pkgOptions, multiple, packages, single } =
     options || {};
-  const defaults = [];
+  const defaults = ['--ignore-scripts', '--verbose'];
 
   if (!packages && !multiple && !name) {
     return Promise.reject(
@@ -38,21 +38,19 @@ const install = (options, idx) => {
   }
 
   let commandOptsMultiple = [];
+
   if (pkgOptions && Array.isArray(pkgOptions)) {
-    if (idx > -1) {
+    if (idx > -1 && pkgOptions.length > 1) {
       commandOptsMultiple = pkgOptions[idx].map(option => `--${option}`);
     } else {
       commandOptsMultiple = pkgOptions.map(option => `--${option}`);
     }
   }
 
-  const commandOptions = single
+  const runningCommandsOptions = single
     ? commandOptsSingle
-    : multiple
-    ? commandOptsMultiple
-    : [];
+    : commandOptsMultiple;
 
-  const runningCommandsOptions = commandOptions || [];
   const packagesToInstall = single
     ? packagesToInstallSingle
     : packagesToInstallMultiple;
