@@ -88,6 +88,7 @@ const styles = theme => ({
   listWrapper: {
     whiteSpace: 'nowrap',
     padding: theme.spacing.unit,
+    overflow: 'hidden',
     [theme.breakpoints.up('md')]: {
       maxHeight: 500,
       overflowY: 'scroll'
@@ -98,10 +99,7 @@ const styles = theme => ({
   },
   listItem: {
     ...defaultFont,
-    paddingTop: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit,
-    paddingBottom: 0,
-    paddingRight: 0
+    padding: theme.spacing.unit
   }
 });
 

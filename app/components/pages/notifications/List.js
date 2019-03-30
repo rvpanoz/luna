@@ -15,14 +15,12 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-
 import IconButton from '@material-ui/core/IconButton';
-import Toolbar from '@material-ui/core/Toolbar';
-import { installPackages } from 'models/packages/actions';
+
 import AddIcon from '@material-ui/icons/Add';
 import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 
+import { installPackages } from 'models/packages/actions';
 import styles from './styles/list';
 
 const mapState = ({ common: { notifications } }) => ({
@@ -50,8 +48,6 @@ const NotificationsItem = ({
 
     version = versionCoerced || version;
   }
-
-  console.log(version);
 
   const handleInstall = useCallback(() => {
     const parameters = {
@@ -92,6 +88,7 @@ const NotificationsItem = ({
         <ListItemText primary={required} secondary={requiredBy} />
         <ListItemSecondaryAction>
           <IconButton
+            title="Install package"
             aria-label="install-notification"
             onClick={() => handleInstall(packageName, true)}
           >
@@ -116,59 +113,6 @@ const WithStylesNotificationItem = withStyles({})(NotificationsItem);
 
 const NotificationsList = ({ classes, mode, directory }) => {
   const { notifications, packagesInstallOptions } = useMappedState(mapState);
-  const dispatch = useDispatch();
-
-  const handleInstallAll = useCallback(() => {
-    const allPackages =
-      notifications &&
-      notifications.reduce((all, pkg) => {
-        const { required } = pkg;
-        const packageParts = required && required.split('@');
-        const packageName = packageParts[0];
-        const packageVersion = packageParts[1];
-
-        let version = null;
-
-        if (packageVersion) {
-          const versionCoerced = semver.coerce(packageVersion);
-
-          version = versionCoerced ? versionCoerced.version : version;
-        }
-
-        if (all.indexOf(packageName) === -1) {
-          const packageWithVersion = version
-            ? `${packageName}@${version}`
-            : packageName;
-          all.push(packageWithVersion);
-        }
-
-        return all;
-      }, []);
-
-    const parameters = {
-      ipcEvent: 'install',
-      cmd: ['install'],
-      multiple: true,
-      packages: allPackages,
-      mode,
-      directory
-    };
-
-    remote.dialog.showMessageBox(
-      remote.getCurrentWindow(),
-      {
-        title: 'Confirmation',
-        type: 'question',
-        message: `Would you like to install all packages?`,
-        buttons: ['Cancel', 'Install']
-      },
-      btnIdx => {
-        if (Boolean(btnIdx) === true) {
-          dispatch(installPackages(parameters));
-        }
-      }
-    );
-  }, [mode, directory, notifications]);
 
   return (
     <Paper className={classes.paper}>
@@ -179,17 +123,6 @@ const NotificationsList = ({ classes, mode, directory }) => {
               {`Problems ${notifications.length}`}
             </Typography>
           </div>
-          {notifications.length > 0 ? (
-            <Toolbar>
-              <Button
-                color="secondary"
-                variant="outlined"
-                onClick={() => handleInstallAll()}
-              >
-                Fix all
-              </Button>
-            </Toolbar>
-          ) : null}
         </div>
         <List className={classes.list}>
           {notifications.length === 0 ? (

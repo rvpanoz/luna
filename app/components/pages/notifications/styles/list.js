@@ -7,6 +7,9 @@ const styles = theme => ({
     borderTopRightRadius: 0
   },
   container: {
+    width: '100%'
+  },
+  list: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
     padding: theme.spacing.unit,
@@ -14,7 +17,7 @@ const styles = theme => ({
       maxHeight: 500
     },
     [theme.breakpoints.up('lg')]: {
-      maxHeight: 775
+      maxHeight: 750
     }
   },
   flexContainer: {

@@ -126,7 +126,7 @@ const AppLayout = ({ classes }) => {
         options &&
         options.filter(option => option !== operation || option !== '-g');
       let message = 'Packages updated';
-      console.log(error, cliMessage);
+
       if (error && error.length) {
         const errors = error.split('npm');
         const timings = errors
@@ -146,12 +146,7 @@ const AppLayout = ({ classes }) => {
         dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
       }
 
-      dispatch(
-        setSnackbar({
-          open: true,
-          message
-        })
-      );
+      console.log(message, cliMessage);
 
       dispatch(
         toggleLoader({
