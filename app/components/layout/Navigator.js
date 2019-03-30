@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'redux-react-hook';
 import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
+import cn from 'classnames';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -86,7 +87,7 @@ const Navigator = ({
   return (
     <Drawer variant="permanent" {...restProps}>
       <List disablePadding>
-        <ListItem>
+        <ListItem className={classes.listItem}>
           <ListItemText>
             <AppLogo />
           </ListItemText>
@@ -106,7 +107,7 @@ const Navigator = ({
             </Button>
           </ListItemText>
         </ListItem>
-        <ListItem className={classes.categoryHeader}>
+        <ListItem className={cn(classes.categoryHeader, classes.listItem)}>
           <ListItemText
             classes={{
               primary: classes.categoryHeaderPrimary
@@ -199,7 +200,7 @@ const Navigator = ({
             </AppTabs>
           </ListItemText>
         </ListItem>
-        <ListItem className={classes.categoryHeader}>
+        <ListItem className={cn(classes.categoryHeader, classes.listItem)}>
           <ListItemText
             classes={{
               primary: classes.categoryHeaderPrimary
@@ -222,7 +223,7 @@ const Navigator = ({
                   dispatch(setMode({ mode: 'local', directory: dir.directory }))
                 }
                 key={`directory-${idx + 1}`}
-                className={classes.item}
+                className={classes.listItem}
               >
                 <ListItemIcon>
                   <FolderIcon color="secondary" />

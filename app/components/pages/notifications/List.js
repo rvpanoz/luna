@@ -2,7 +2,7 @@
 /* eslint-disable react/no-array-index-key */
 
 import { remote } from 'electron';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
@@ -17,18 +17,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-
 import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
-import { INFO_MESSAGES } from 'constants/AppConstants';
-import { installPackages, clearInstallOptions } from 'models/packages/actions';
+import { installPackages } from 'models/packages/actions';
 import AddIcon from '@material-ui/icons/Add';
-import Flags from 'components/pages/packages/Flags';
 import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 
 import styles from './styles/list';
@@ -45,7 +37,6 @@ const NotificationsItem = ({
   required,
   requiredBy
 }) => {
-  const [dialogOpen, toggleDialog] = useState(false);
   const packageParts = required && required.split('@');
 
   const packageName = packageParts && packageParts[0];
@@ -55,10 +46,12 @@ const NotificationsItem = ({
   let version = null;
 
   if (packageVersion) {
-    const versionCoerced = semver.coerce(packageVersion);
+    const versionCoerced = semver.valid(semver.coerce(packageVersion));
 
-    version = versionCoerced ? versionCoerced.version : version;
+    version = versionCoerced || version;
   }
+
+  console.log(version);
 
   const handleInstall = useCallback(() => {
     const parameters = {
@@ -81,8 +74,6 @@ const NotificationsItem = ({
       btnIdx => {
         if (Boolean(btnIdx) === true) {
           dispatch(installPackages(parameters));
-
-          return toggleDialog(false);
         }
       }
     );
@@ -108,38 +99,6 @@ const NotificationsItem = ({
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
-      <Dialog
-        open={dialogOpen}
-        fullWidth
-        onClose={() => {
-          dispatch({ type: clearInstallOptions.type });
-        }}
-        aria-labelledby="install-options"
-      >
-        <DialogTitle>Installation options</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
-          <Flags selected={[packageName]} />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch({ type: clearInstallOptions.type });
-              toggleDialog(false);
-            }}
-            color="secondary"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => handleInstall(packageName)}
-            color="primary"
-            autoFocus
-          >
-            Install
-          </Button>
-        </DialogActions>
-      </Dialog>
     </section>
   );
 };
