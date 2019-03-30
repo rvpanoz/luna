@@ -60,8 +60,11 @@ const pauseRequest = () => ({
   type: 'PAUSE_REQUEST'
 });
 
-const resumeRequest = () => ({
-  type: 'RESUME_REQUEST'
+const resumeRequest = forceUpdate => ({
+  type: 'RESUME_REQUEST',
+  payload: {
+    forceUpdate
+  }
 });
 
 const cleanAllEpic = action$ =>
@@ -78,27 +81,55 @@ const cleanAllEpic = action$ =>
     ])
   );
 
-const packagesStartEpic = action$ =>
+const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    map(({ payload: { channel, options, paused } }) => {
+    map(({ payload: { channel, options, paused, forceUpdate } }) => {
       if (paused) {
         return pauseRequest();
+      }
+
+      if (forceUpdate) {
+        return resumeRequest(forceUpdate);
       }
 
       ipcRenderer.send(channel, options);
       return resumeRequest();
     }),
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
-    concatMap(() => [
-      updateLoader({
-        loading: true,
-        message: 'Loading packages..'
-      }),
-      cleanPackages(),
-      cleanNotifications(),
-      cleanCommands()
-    ])
+    concatMap(({ type, payload }) => {
+      const { forceUpdate } = payload;
+      const {
+        modules: {
+          data: { packages, packagesOutdated },
+          project: { name, version }
+        }
+      } = state$.value;
+
+      if (forceUpdate) {
+        return [
+          {
+            type: updateData.type,
+            payload: {
+              dependencies: packages,
+              outdated: packagesOutdated,
+              projectName: name,
+              projectVersion: version
+            }
+          }
+        ];
+      }
+
+      return [
+        updateLoader({
+          loading: true,
+          message: 'Loading packages..'
+        }),
+        cleanPackages(),
+        cleanNotifications(),
+        cleanCommands()
+      ];
+    })
   );
 
 const installPackagesEpic = action$ =>

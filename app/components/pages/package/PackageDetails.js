@@ -318,8 +318,10 @@ const PackageDetails = ({ classes }) => {
                 className={classes.cardHeader}
                 subheader={
                   <React.Fragment>
-                    <Typography variant="caption">{`License: ${license}`}</Typography>
-                    {mode === 'local' && (
+                    {license && (
+                      <Typography variant="caption">{`License: ${license}`}</Typography>
+                    )}
+                    {mode === 'local' && group && (
                       <Typography variant="caption">{`Group: ${group}`}</Typography>
                     )}
                   </React.Fragment>

@@ -108,8 +108,6 @@ const handleLocalEvents = (event, mode, directory) => {
 // channel: ipc-event
 ipcMain.on('ipc-event', (event, options) => {
   const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
-  const onError = error => event.sender.send('ipcEvent-error', error);
-  const onFlow = message => event.sender.send('ipcEvent-flow', message);
 
   let runningTimes = 1;
 
@@ -141,9 +139,7 @@ ipcMain.on('ipc-event', (event, options) => {
 
   const callback = (status, errors, ...restArgs) =>
     switchcase({
-      close: () => onClose(status, errors, ...restArgs),
-      error: error => onError(error),
-      flow: message => onFlow(message)
+      close: () => onClose(status, errors, ...restArgs)
     })(null)(status);
 
   /**

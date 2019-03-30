@@ -26,7 +26,7 @@ const styles = theme => ({
   },
   header: {
     flex: '0 0 auto',
-    padding: theme.spacing.unit + 4
+    padding: theme.spacing.unit * 2 + 4
   },
   divider: {
     marginBottom: theme.spacing.unit

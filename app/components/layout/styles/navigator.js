@@ -94,6 +94,7 @@ const styles = theme => ({
       overflowY: 'scroll'
     },
     [theme.breakpoints.up('lg')]: {
+      overflowY: 'scroll',
       maxHeight: 650
     }
   },

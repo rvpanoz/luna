@@ -83,7 +83,6 @@ const App = () => {
       ipcRenderer.removeAllListeners([
         'uncaught-exception',
         'npm-error',
-        'ipcEvent-flow',
         'get-env-close',
         'yarn-warning-close'
       ]);

@@ -1,12 +1,13 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-expressions */
 
+import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
-import { objectOf, string } from 'prop-types';
+import { bool, objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
-
+import { pickBy } from 'ramda';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -24,9 +25,16 @@ import {
   setPage,
   setPageRows,
   setPackagesStart,
-  viewPackage
+  viewPackage,
+  setActive,
+  removePackages
 } from 'models/packages/actions';
-import { commandMessage } from 'models/ui/actions';
+import {
+  commandMessage,
+  toggleLoader,
+  togglePackageLoader,
+  setSnackbar
+} from 'models/ui/actions';
 import { PackageDetails } from 'components/pages/package';
 
 import TableToolbar from './TableToolbar';
@@ -98,6 +106,7 @@ const Packages = ({ classes }) => {
     active
   } = useMappedState(mapState);
 
+  const [forceUpdate, setforceUpdate] = useState(false);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
@@ -107,13 +116,14 @@ const Packages = ({ classes }) => {
     cmd: ['outdated', 'list'],
     mode,
     directory,
-    paused
+    paused,
+    forceUpdate
   };
 
   const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
     IPC_EVENT,
     parameters,
-    [mode, directory]
+    [mode, directory, forceUpdate]
   );
 
   const { projectName, projectVersion } = dependenciesSet || {};
@@ -132,6 +142,8 @@ const Packages = ({ classes }) => {
     );
 
   useEffect(() => {
+    setforceUpdate(false);
+
     if (paused) {
       return;
     }
@@ -145,13 +157,92 @@ const Packages = ({ classes }) => {
 
     dispatch(
       updateData({
-        dependencies,
-        outdated,
+        dependencies: forceUpdate ? packages : dependencies,
+        outdated: forceUpdate ? packagesOutdated : outdated,
         projectName,
         projectVersion
       })
     );
   }, [dependenciesSet]);
+
+  useEffect(() => {
+    ipcRenderer.on('action-close', (event, error, cliMessage, options) => {
+      const operation = options && options[0];
+      const argv = options && options[1];
+
+      const removedOrUpdatedPackages =
+        options &&
+        options.filter(
+          option =>
+            option.indexOf(operation) === -1 &&
+            option.indexOf(argv) === -1 &&
+            option.indexOf('-g') === -1
+        );
+
+      let message = 'Packages updated';
+
+      if (error && error.length) {
+        const errors = error.split('npm');
+        const timings = errors
+          .filter(err => {
+            const newErr = err.trim();
+
+            return newErr.indexOf('info') > -1;
+          })
+          .map(e => e.trim());
+
+        if (timings.length) {
+          message = timings[timings.length - 1];
+        }
+      }
+
+      if (
+        operation === 'uninstall' &&
+        removedOrUpdatedPackages &&
+        removePackages.length
+      ) {
+        dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
+        setforceUpdate(true);
+      }
+
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: 'info',
+          message: cliMessage
+        })
+      );
+
+      dispatch(
+        toggleLoader({
+          loading: false,
+          message: null
+        })
+      );
+    });
+
+    ipcRenderer.on('view-close', (event, status, cmd, data) => {
+      try {
+        const newActive = data && JSON.parse(data);
+        const getCleanProps = (val, key) => /^[^_]/.test(key);
+        const properties = pickBy(getCleanProps, newActive);
+
+        dispatch(setActive({ active: properties }));
+        dispatch(
+          togglePackageLoader({
+            loading: false
+          })
+        );
+      } catch (err) {
+        throw new Error(err);
+      }
+    });
+
+    return () =>
+      ['action-close', 'view-close'].forEach(listener =>
+        ipcRenderer.removeAllListeners(listener)
+      );
+  }, []);
 
   const scrollWrapper = top => {
     const wrapperEl = wrapperRef && wrapperRef.current;
@@ -330,7 +421,8 @@ const Packages = ({ classes }) => {
 };
 
 Packages.propTypes = {
-  classes: objectOf(string).isRequired
+  classes: objectOf(string).isRequired,
+  forceUpdate: bool
 };
 
 const withStylesPackages = withStyles(styles)(Packages);
