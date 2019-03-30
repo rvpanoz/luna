@@ -34,7 +34,7 @@ const AppButton = ({
 };
 
 AppButton.defaultProps = {
-  color: 'white'
+  color: 'transparent'
 };
 
 AppButton.propTypes = {
@@ -45,7 +45,6 @@ AppButton.propTypes = {
     'success',
     'warning',
     'error',
-    'white',
     'transparent',
     'primary',
     'secondary',

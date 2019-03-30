@@ -89,7 +89,14 @@ const PackageInfo = ({ classes, active, short }) => {
 };
 
 PackageInfo.propTypes = {
-  active: PropTypes.objectOf(PropTypes.string).isRequired,
+  active: PropTypes.objectOf(
+    PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+      PropTypes.array,
+      PropTypes.bool
+    ])
+  ).isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   short: PropTypes.bool
 };

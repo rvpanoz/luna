@@ -6,7 +6,7 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-
+import semver from 'semver';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -16,6 +16,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -32,13 +33,7 @@ import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 
 import styles from './styles/list';
 
-const mapState = ({
-  common: { notifications },
-  modules: {
-    operations: { packagesInstallOptions }
-  }
-}) => ({
-  packagesInstallOptions,
+const mapState = ({ common: { notifications } }) => ({
   notifications
 });
 
@@ -47,52 +42,51 @@ const NotificationsItem = ({
   type,
   mode,
   directory,
-  installationOptions,
   required,
   requiredBy
 }) => {
   const [dialogOpen, toggleDialog] = useState(false);
-  const packageName = required && required.split('@')[0];
+  const packageParts = required && required.split('@');
 
+  const packageName = packageParts && packageParts[0];
+  const packageVersion = packageParts && packageParts[1];
   const dispatch = useDispatch();
 
-  const handleInstall = useCallback(
-    (name, showOptions) => {
-      if (mode === 'local' && showOptions) {
-        return toggleDialog(!dialogOpen);
-      }
+  let version = null;
 
-      const { options } = installationOptions || {};
+  if (packageVersion) {
+    const versionCoerced = semver.coerce(packageVersion);
 
-      const parameters = {
-        ipcEvent: 'install',
-        cmd: ['install'],
-        single: true,
-        name,
-        pkgOptions: options,
-        mode,
-        directory
-      };
+    version = versionCoerced ? versionCoerced.version : version;
+  }
 
-      remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          title: 'Confirmation',
-          type: 'question',
-          message: `Would you like to install ${name}?`,
-          buttons: ['Cancel', 'Install']
-        },
-        btnIdx => {
-          if (Boolean(btnIdx) === true) {
-            dispatch(installPackages(parameters));
+  const handleInstall = useCallback(() => {
+    const parameters = {
+      ipcEvent: 'install',
+      cmd: ['install'],
+      single: true,
+      name: version ? `${packageName}@${version}` : packageName,
+      mode,
+      directory
+    };
 
-            return toggleDialog(false);
-          }
+    remote.dialog.showMessageBox(
+      remote.getCurrentWindow(),
+      {
+        title: 'Confirmation',
+        type: 'question',
+        message: `Would you like to install ${parameters.name}?`,
+        buttons: ['Cancel', 'Install']
+      },
+      btnIdx => {
+        if (Boolean(btnIdx) === true) {
+          dispatch(installPackages(parameters));
+
+          return toggleDialog(false);
         }
-      );
-    },
-    [mode, directory, installationOptions]
-  );
+      }
+    );
+  }, [mode, directory, packageName, packageVersion]);
 
   return (
     <section className={classes.item}>
@@ -154,7 +148,6 @@ NotificationsItem.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string,
   directory: PropTypes.string,
-  installationOptions: PropTypes.arrayOf(PropTypes.object),
   required: PropTypes.string,
   requiredBy: PropTypes.string,
   type: PropTypes.string
@@ -164,6 +157,59 @@ const WithStylesNotificationItem = withStyles({})(NotificationsItem);
 
 const NotificationsList = ({ classes, mode, directory }) => {
   const { notifications, packagesInstallOptions } = useMappedState(mapState);
+  const dispatch = useDispatch();
+
+  const handleInstallAll = useCallback(() => {
+    const allPackages =
+      notifications &&
+      notifications.reduce((all, pkg) => {
+        const { required } = pkg;
+        const packageParts = required && required.split('@');
+        const packageName = packageParts[0];
+        const packageVersion = packageParts[1];
+
+        let version = null;
+
+        if (packageVersion) {
+          const versionCoerced = semver.coerce(packageVersion);
+
+          version = versionCoerced ? versionCoerced.version : version;
+        }
+
+        if (all.indexOf(packageName) === -1) {
+          const packageWithVersion = version
+            ? `${packageName}@${version}`
+            : packageName;
+          all.push(packageWithVersion);
+        }
+
+        return all;
+      }, []);
+
+    const parameters = {
+      ipcEvent: 'install',
+      cmd: ['install'],
+      multiple: true,
+      packages: allPackages,
+      mode,
+      directory
+    };
+
+    remote.dialog.showMessageBox(
+      remote.getCurrentWindow(),
+      {
+        title: 'Confirmation',
+        type: 'question',
+        message: `Would you like to install all packages?`,
+        buttons: ['Cancel', 'Install']
+      },
+      btnIdx => {
+        if (Boolean(btnIdx) === true) {
+          dispatch(installPackages(parameters));
+        }
+      }
+    );
+  }, [mode, directory, notifications]);
 
   return (
     <Paper className={classes.paper}>
@@ -174,9 +220,17 @@ const NotificationsList = ({ classes, mode, directory }) => {
               {`Problems ${notifications.length}`}
             </Typography>
           </div>
-          <Toolbar>
-            <Button>Fix all</Button>
-          </Toolbar>
+          {notifications.length > 0 ? (
+            <Toolbar>
+              <Button
+                color="secondary"
+                variant="outlined"
+                onClick={() => handleInstallAll()}
+              >
+                Fix all
+              </Button>
+            </Toolbar>
+          ) : null}
         </div>
         <List className={classes.list}>
           {notifications.length === 0 ? (

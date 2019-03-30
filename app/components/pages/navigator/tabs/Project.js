@@ -22,7 +22,10 @@ const ProjectTab = ({ classes, items }) => (
               <Typography variant="subtitle1">{item.primaryText}</Typography>
             }
             secondary={
-              <Typography className={classes.secondaryText} variant="body2">
+              <Typography
+                className={classes.secondaryText}
+                variant={item.caption ? 'caption' : 'body2'}
+              >
                 {item.secondaryText}
               </Typography>
             }

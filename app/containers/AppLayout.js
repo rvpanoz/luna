@@ -19,11 +19,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
 import { Notifications } from 'components/pages/notifications';
-import {
-  addActionError,
-  removePackages,
-  setActive
-} from 'models/packages/actions';
+import { removePackages, setActive } from 'models/packages/actions';
 import {
   setSnackbar,
   toggleLoader,
@@ -84,47 +80,66 @@ const AppLayout = ({ classes }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on('tool-close', (event, error, result) => {
-      if (error) {
-        dispatch(
-          setSnackbar({
+    ipcRenderer.on('tool-close', (event, toolError, result) => {
+      try {
+        const resultJson = JSON.parse(result);
+        const { error } = resultJson;
+
+        if (error && typeof error === 'object') {
+          dispatch(
+            setSnackbar({
+              open: true,
+              type: 'error',
+              message: `${error.code}:${error.summary}`
+            })
+          );
+        } else {
+          setDialog({
             open: true,
-            type: 'error',
-            message: error
+            content: 'tool_report'
+          });
+        }
+
+        dispatch(
+          toggleLoader({
+            loading: false,
+            message: null
+          })
+        );
+      } catch (err) {
+        setDialog({
+          open: true,
+          content: result
+        });
+        dispatch(
+          toggleLoader({
+            loading: false,
+            message: null
           })
         );
       }
-
-      if (result) {
-        try {
-          const resultJson = JSON.parse(result);
-
-          setDialog({
-            open: true,
-            content: resultJson || result
-          });
-        } catch (err) {
-          return;
-        }
-      }
-
-      dispatch(
-        toggleLoader({
-          loading: false,
-          message: null
-        })
-      );
     });
 
-    ipcRenderer.on('action-close', (event, error, message, options) => {
+    ipcRenderer.on('action-close', (event, error, cliMessage, options) => {
       const operation = options && options[0];
       const removedOrUpdatedPackages =
         options &&
         options.filter(option => option !== operation || option !== '-g');
-
+      let message = 'Packages updated';
+      console.log(error, cliMessage);
       if (error && error.length) {
-        console.log(error);
-        dispatch(addActionError({ error }));
+        const errors = error.split('npm');
+        const timings = errors
+          .filter(err => {
+            const newErr = err.trim();
+
+            return newErr.indexOf('info') > -1;
+          })
+          .map(e => e.trim());
+
+        if (timings.length) {
+          message = timings[timings.length - 1];
+        }
       }
 
       if (operation === 'uninstall' && removedOrUpdatedPackages) {
@@ -134,7 +149,7 @@ const AppLayout = ({ classes }) => {
       dispatch(
         setSnackbar({
           open: true,
-          message: message || 'Packages updated'
+          message
         })
       );
 
@@ -146,7 +161,7 @@ const AppLayout = ({ classes }) => {
       );
     });
 
-    ipcRenderer.on(['view-close'], (event, status, cmd, data) => {
+    ipcRenderer.on('view-close', (event, status, cmd, data) => {
       try {
         const newActive = data && JSON.parse(data);
         const getCleanProps = (val, key) => /^[^_]/.test(key);
@@ -226,7 +241,7 @@ const AppLayout = ({ classes }) => {
         {dialog && dialog.open && (
           <Dialog open={dialog.open} aria-labelledby="results-tools">
             <DialogTitle>Results</DialogTitle>
-            <DialogContent>content...</DialogContent>
+            <DialogContent>{dialog.content}</DialogContent>
             <DialogActions>
               <Button
                 onClick={() =>

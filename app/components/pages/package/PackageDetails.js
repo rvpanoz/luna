@@ -140,7 +140,7 @@ const PackageDetails = ({ classes }) => {
               mode === 'local'
                 ? group && [PACKAGE_GROUPS[group]]
                 : ['save-prod'];
-            console.log(name, pkgOptions);
+
             const parameters = {
               ipcEvent: 'install',
               cmd: ['install'],
