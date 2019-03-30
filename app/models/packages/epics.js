@@ -164,7 +164,13 @@ const updatePackagesEpic = action$ =>
   action$.pipe(
     ofType(updatePackages.type),
     map(({ payload }) => {
+      const { ipcEvent } = payload;
+
       ipcRenderer.send('ipc-event', payload);
+
+      if (ipcEvent === 'uninstall') {
+        return pauseRequest();
+      }
 
       return updateLoader({
         loading: true,
