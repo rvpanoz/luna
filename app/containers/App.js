@@ -32,13 +32,7 @@ const App = () => {
   const { uiExceptionMessage } = useMappedState(mapState);
 
   useEffect(() => {
-    dispatch({
-      type: updateStatus.type,
-      payload: { status: navigator.onLine ? 'online' : 'offline' }
-    });
-
     const updateOnlineStatus = () => {
-      console.log(navigator.onLine);
       ipcRenderer.send(
         'online-status-changed',
         navigator.onLine ? 'online' : 'offline'
@@ -50,8 +44,16 @@ const App = () => {
       });
     };
 
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
+    // Passing in true for the third parameter causes the event to be captured on the way down.
+    // Stopping propagation means that the event never reaches the listeners that are listening for it.
+    window.addEventListener('online', updateOnlineStatus, true);
+    window.addEventListener('offline', updateOnlineStatus, true);
+  });
+  useEffect(() => {
+    dispatch({
+      type: updateStatus.type,
+      payload: { status: navigator.onLine ? 'online' : 'offline' }
+    });
 
     ipcRenderer.on('uncaught-exception', (event, ...args) => {
       dispatch({ type: uiException.type, payload: { message: args[0] } });

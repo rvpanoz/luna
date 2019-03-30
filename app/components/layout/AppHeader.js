@@ -110,7 +110,7 @@ const Header = ({ classes, onDrawerToggle }) => {
                 size="small"
                 onClick={() => setDialog({ open: true })}
               >
-                Install
+                Actions
               </Button>
             </Grid>
           </Grid>

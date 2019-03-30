@@ -84,6 +84,17 @@ const styles = theme => ({
     display: 'inline-block',
     position: 'relative',
     top: theme.spacing.unit / 4
+  },
+  listWrapper: {
+    whiteSpace: 'nowrap',
+    overflowY: 'scroll',
+    padding: theme.spacing.unit,
+    [theme.breakpoints.up('md')]: {
+      maxHeight: 500
+    },
+    [theme.breakpoints.up('lg')]: {
+      maxHeight: 650
+    }
   }
 });
 

@@ -10,33 +10,58 @@ const install = (options, idx) => {
   const command = ['install'];
   const { mode, version, name, pkgOptions, multiple, packages, single } =
     options || {};
-  const defaults = ['--ignore-scripts', '--verbose'];
+  const defaults = [];
 
   if (!packages && !multiple && !name) {
-    return Promise.reject('npm[install] package name parameter must be given');
+    return Promise.reject(
+      'npm[install] package name or packages parameters must be given'
+    );
   }
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-
-  const commandOpts = single
-    ? pkgOptions
+  const commandOptsSingle =
+    pkgOptions && Array.isArray(pkgOptions)
       ? pkgOptions.map(option => `--${option}`)
-      : []
-    : pkgOptions && pkgOptions[idx].map(option => `--${option}`);
+      : null;
+  const packagesToInstallSingle = version ? [`${name}@${version}`] : [name];
 
+  let packagesToInstallMultiple = [];
+
+  if (packages && Array.isArray(packages) && !name) {
+    if (idx > -1 && packages.length > 1) {
+      packagesToInstallMultiple = packages[idx];
+    } else {
+      packagesToInstallMultiple = packages;
+    }
+  } else {
+    packagesToInstallMultiple = [name];
+  }
+
+  let commandOptsMultiple = [];
+  if (pkgOptions && Array.isArray(pkgOptions)) {
+    if (idx > -1) {
+      commandOptsMultiple = pkgOptions[idx].map(option => `--${option}`);
+    } else {
+      commandOptsMultiple = pkgOptions.map(option => `--${option}`);
+    }
+  }
+
+  const commandOptions = single
+    ? commandOptsSingle
+    : multiple
+    ? commandOptsMultiple
+    : [];
+
+  const runningCommandsOptions = commandOptions || [];
   const packagesToInstall = single
-    ? version
-      ? [`${name}@${version}`]
-      : [name]
-    : [packages[idx]];
-
-  const commandOptions = commandOpts || [];
+    ? packagesToInstallSingle
+    : packagesToInstallMultiple;
 
   const run = []
     .concat(command)
     .concat(commandArgs)
-    .concat(packagesToInstall.filter(pkg => Boolean(pkg)))
-    .concat(commandOptions);
+    .concat(packagesToInstall)
+    .concat(runningCommandsOptions);
 
   return run;
 };

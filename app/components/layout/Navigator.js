@@ -208,33 +208,36 @@ const Navigator = ({
             History
           </ListItemText>
         </ListItem>
-
-        {openedDirectories &&
-          openedDirectories.map((dir, idx) => (
-            <ListItem
-              dense
-              disabled={loading}
-              button
-              title={`load ${dir.name}`}
-              onClick={() =>
-                dispatch(setMode({ mode: 'local', directory: dir.directory }))
-              }
-              key={`directory-${idx + 1}`}
-              className={classes.item}
-            >
-              <ListItemIcon>
-                <FolderIcon color="secondary" />
-              </ListItemIcon>
-              <ListItemText
-                classes={{
-                  primary: classes.itemPrimary,
-                  textDense: classes.textDense
-                }}
-                primary={dir.name}
-              />
-            </ListItem>
-          ))}
       </List>
+      <div className={classes.listWrapper}>
+        <List disablePadding>
+          {openedDirectories &&
+            openedDirectories.map((dir, idx) => (
+              <ListItem
+                dense
+                disabled={loading}
+                button
+                title={`load ${dir.name}`}
+                onClick={() =>
+                  dispatch(setMode({ mode: 'local', directory: dir.directory }))
+                }
+                key={`directory-${idx + 1}`}
+                className={classes.item}
+              >
+                <ListItemIcon>
+                  <FolderIcon color="secondary" />
+                </ListItemIcon>
+                <ListItemText
+                  classes={{
+                    primary: classes.itemPrimary,
+                    textDense: classes.textDense
+                  }}
+                  primary={dir.name}
+                />
+              </ListItem>
+            ))}
+        </List>
+      </div>
     </Drawer>
   );
 };

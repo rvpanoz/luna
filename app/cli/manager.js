@@ -163,7 +163,7 @@ const install = (opts, callback, idx) => {
     const install = require('./npm/install').default;
 
     if (typeof install === 'function') {
-      const run = install(opts);
+      const run = install(opts, idx);
 
       return execute(activeManager, run, mode, directory, callback);
     }
