@@ -1,6 +1,6 @@
 const doctor = () => {
   const command = ['doctor'];
-  const defaults = ['--json', '--verbose'];
+  const defaults = ['--json'];
 
   const run = [].concat(command).concat(defaults);
   return run;
