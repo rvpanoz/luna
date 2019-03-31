@@ -49,31 +49,35 @@ const NotificationsItem = ({
     version = versionCoerced || version;
   }
 
-  const handleInstall = useCallback(() => {
-    const parameters = {
-      ipcEvent: 'install',
-      cmd: ['install'],
-      single: true,
-      name: version ? `${packageName}@${version}` : packageName,
-      mode,
-      directory
-    };
+  const handleInstall = useCallback(
+    () =>
+      remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          title: 'Confirmation',
+          type: 'question',
+          message: `Would you like to install ${
+            version ? `${packageName}@${version}` : packageName
+          }?`,
+          buttons: ['Cancel', 'Install']
+        },
+        btnIdx => {
+          if (Boolean(btnIdx) === true) {
+            const parameters = {
+              ipcEvent: 'install',
+              cmd: ['install'],
+              single: true,
+              name: version ? `${packageName}@${version}` : packageName,
+              mode,
+              directory
+            };
 
-    remote.dialog.showMessageBox(
-      remote.getCurrentWindow(),
-      {
-        title: 'Confirmation',
-        type: 'question',
-        message: `Would you like to install ${parameters.name}?`,
-        buttons: ['Cancel', 'Install']
-      },
-      btnIdx => {
-        if (Boolean(btnIdx) === true) {
-          dispatch(installPackages(parameters));
+            dispatch(installPackages(parameters));
+          }
         }
-      }
-    );
-  }, [mode, directory, packageName, packageVersion]);
+      ),
+    [mode, directory, packageName, packageVersion]
+  );
 
   return (
     <section className={classes.item}>

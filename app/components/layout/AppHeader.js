@@ -34,20 +34,26 @@ const mapState = ({
     onlineStatus: { status },
     activePage,
     loader: { loading },
-    npm: { env }
+    npm: { env },
+    mode,
+    directory
   }
 }) => ({
   status,
   activePage,
   loading,
-  env
+  env,
+  mode,
+  directory
 });
 
 const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [dialog, setDialog] = useState({ open: false });
   const dispatch = useDispatch();
-  const { activePage, loading, env, status } = useMappedState(mapState);
+  const { activePage, loading, env, status, mode, directory } = useMappedState(
+    mapState
+  );
 
   return (
     <React.Fragment>
@@ -76,7 +82,7 @@ const Header = ({ classes, onDrawerToggle }) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title="open settings">
+              <Tooltip title="Open settings">
                 <IconButton
                   color="inherit"
                   onClick={e => setAnchorEl(e.currentTarget)}
@@ -176,7 +182,16 @@ const Header = ({ classes, onDrawerToggle }) => {
           </DialogTitle>
           <Divider light />
           <DialogContent>
-            <InstallFromSource />
+            <InstallFromSource
+              mode={mode}
+              directory={directory}
+              close={() =>
+                setDialog({
+                  open: false,
+                  content: null
+                })
+              }
+            />
           </DialogContent>
           <DialogActions>
             <Button

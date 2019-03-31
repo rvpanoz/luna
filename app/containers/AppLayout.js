@@ -72,9 +72,7 @@ const AppLayout = ({ classes }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('layout render');
-
-    ipcRenderer.once('tool-close', (event, toolError, result) =>
+    ipcRenderer.once('tool-close', () =>
       dispatch(
         toggleLoader({
           loading: false,

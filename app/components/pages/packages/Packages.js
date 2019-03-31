@@ -113,6 +113,7 @@ const Packages = ({ classes }) => {
     operationCommand
   } = useMappedState(mapState);
 
+  const [forceRender, setforceRender] = useState(0);
   const [forceUpdate, setforceUpdate] = useState(0);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
@@ -130,7 +131,7 @@ const Packages = ({ classes }) => {
   const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
     IPC_EVENT,
     parameters,
-    [mode, directory, forceUpdate]
+    [mode, directory, forceUpdate, forceRender]
   );
 
   const { projectName, projectVersion } = dependenciesSet || {};
@@ -175,26 +176,26 @@ const Packages = ({ classes }) => {
       const operation = options && options[0];
       const argv = options && options[1];
 
-      const removedOrUpdatedPackages =
-        options &&
-        options.filter(
-          option =>
-            option.indexOf(operation) === -1 &&
-            option.indexOf(argv) === -1 &&
-            option.indexOf('-g') === -1
-        );
-
       if (error && error.length) {
         console.error(error); // TODO: logic
       }
 
-      if (
-        operation === 'uninstall' &&
-        removedOrUpdatedPackages &&
-        removePackages.length
-      ) {
-        dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
-        setforceUpdate(forceUpdate + 1);
+      if (operation === 'uninstall') {
+        const removedOrUpdatedPackages =
+          options &&
+          options.filter(
+            option =>
+              option.indexOf(operation) === -1 &&
+              option.indexOf(argv) === -1 &&
+              option.indexOf('-g') === -1
+          );
+
+        if (removedOrUpdatedPackages && removedOrUpdatedPackages.length) {
+          dispatch(
+            removePackages({ removedPackages: removedOrUpdatedPackages })
+          );
+          setforceUpdate(forceUpdate + 1);
+        }
       }
 
       dispatch(clearRunningCommand());
@@ -213,6 +214,12 @@ const Packages = ({ classes }) => {
           message: null
         })
       );
+
+      if (operation !== 'uninstall') {
+        setforceRender(1);
+      } else {
+        setforceRender(0);
+      }
     });
 
     ipcRenderer.on('view-close', (event, status, cmd, data) => {

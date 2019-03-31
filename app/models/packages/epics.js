@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import { map, takeWhile, concatMap, tap } from 'rxjs/operators';
+import { map, mergeMap, takeWhile, concatMap, tap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
@@ -11,7 +11,8 @@ import {
   clearCommands,
   clearNotifications,
   clearAll,
-  setRunningCommand
+  setRunningCommand,
+  setActivePage
 } from 'models/ui/actions';
 
 import {
@@ -151,13 +152,16 @@ const packagesStartEpic = (action$, state$) =>
 const installPackagesEpic = action$ =>
   action$.pipe(
     ofType(installPackages.type),
-    map(({ payload }) => {
+    mergeMap(({ payload }) => {
       ipcRenderer.send('ipc-event', payload);
 
-      return updateLoader({
-        loading: true,
-        message: 'Installing packages..'
-      });
+      return [
+        updateLoader({
+          loading: true,
+          message: 'Installing packages..'
+        }),
+        setActivePage('packages')
+      ];
     })
   );
 
