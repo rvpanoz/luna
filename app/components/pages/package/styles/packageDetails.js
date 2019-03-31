@@ -57,6 +57,9 @@ const styles = theme => ({
   },
   wrapper: {
     width: '100%'
+  },
+  withPadding: {
+    padding: theme.spacing.unit
   }
 });
 

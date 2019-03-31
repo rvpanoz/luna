@@ -128,7 +128,7 @@ const Navigator = ({
           </ListItemText>
         </ListItem>
         <ListItem>
-          <ListItemText style={{ height: 315 }}>
+          <ListItemText style={{ height: 250 }}>
             <AppTabs>
               <ProjectTab
                 items={[
@@ -198,12 +198,6 @@ const Navigator = ({
                     primaryText: 'npm prune',
                     secondaryText: 'Remove extraneous packages',
                     handler: () => runNpmTool('prune')
-                  },
-                  {
-                    mode,
-                    primaryText: 'npm dedupe',
-                    secondaryText: 'Run npm dedupe',
-                    handler: () => runNpmTool('dedupe')
                   }
                 ]}
                 nodata={packages && packages.length === 0}

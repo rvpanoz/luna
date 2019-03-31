@@ -175,26 +175,26 @@ const Packages = ({ classes }) => {
       const operation = options && options[0];
       const argv = options && options[1];
 
-      const removedOrUpdatedPackages =
-        options &&
-        options.filter(
-          option =>
-            option.indexOf(operation) === -1 &&
-            option.indexOf(argv) === -1 &&
-            option.indexOf('-g') === -1
-        );
-
       if (error && error.length) {
         console.error(error); // TODO: logic
       }
 
-      if (
-        operation === 'uninstall' &&
-        removedOrUpdatedPackages &&
-        removePackages.length
-      ) {
-        dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
-        setforceUpdate(forceUpdate + 1);
+      if (operation === 'uninstall') {
+        const removedOrUpdatedPackages =
+          options &&
+          options.filter(
+            option =>
+              option.indexOf(operation) === -1 &&
+              option.indexOf(argv) === -1 &&
+              option.indexOf('-g') === -1
+          );
+
+        if (removedOrUpdatedPackages && removedOrUpdatedPackages.length) {
+          dispatch(
+            removePackages({ removedPackages: removedOrUpdatedPackages })
+          );
+          setforceUpdate(forceUpdate + 1);
+        }
       }
 
       dispatch(clearRunningCommand());

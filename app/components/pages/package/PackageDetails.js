@@ -36,7 +36,8 @@ import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
 import RemoveIcon from '@material-ui/icons/Delete';
 import UpdateIcon from '@material-ui/icons/Update';
-import DependenciesIcon from '@material-ui/icons/List';
+import VersionsIcon from '@material-ui/icons/LabelOutlined';
+import DependenciesIcon from '@material-ui/icons/ListOutlined';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import {
@@ -71,9 +72,7 @@ const mapState = ({
 
 const PackageDetails = ({ classes }) => {
   const [license, setLicense] = useState(APP_INFO.NOT_AVAILABLE);
-  const [group, setGroup] = useState('global');
   const [expanded, expand] = useState(false);
-  const [isOutdated, setOutdated] = useState(false);
   const [versions, setVersions] = useState([]);
   const [dependencies, setDependencies] = useState([]);
   const [activePopper, setActivePopper] = useState({
@@ -98,16 +97,6 @@ const PackageDetails = ({ classes }) => {
     if (!active) {
       return;
     }
-
-    const { name } = active;
-
-    if (mode === 'local') {
-      const group = packages.find(pkg => pkg.name === name).__group;
-      setGroup(group);
-    }
-
-    const [newOutdated] = isPackageOutdated(packagesOutdated, name);
-    setOutdated(newOutdated);
 
     if (active.license) {
       setLicense(active.license);
@@ -159,18 +148,67 @@ const PackageDetails = ({ classes }) => {
       </Tooltip>
     );
 
-    const renderOparationActions = () => (
-      <React.Fragment>
-        {isOutdated && (
-          <Tooltip title="Update">
+    const renderOperationActions = () => {
+      const isOutdated = active
+        ? isPackageOutdated(packagesOutdated, active.name)[0]
+        : false;
+
+      return (
+        <React.Fragment>
+          {isOutdated && (
+            <React.Fragment>
+              <Tooltip title="Update to latest">
+                <IconButton
+                  disableRipple
+                  color="primary"
+                  onClick={() => {
+                    const parameters = {
+                      ipcEvent: 'install',
+                      cmd: ['install'],
+                      name,
+                      version: 'latest',
+                      single: true,
+                      pkgOptions: [],
+                      mode,
+                      directory
+                    };
+
+                    dispatch(installPackages(parameters));
+                  }}
+                >
+                  <AddIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Update">
+                <IconButton
+                  disableRipple
+                  color="primary"
+                  onClick={() =>
+                    dispatch(
+                      updatePackages({
+                        ipcEvent: 'update',
+                        cmd: ['update'],
+                        name: active.name,
+                        mode,
+                        directory
+                      })
+                    )
+                  }
+                >
+                  <UpdateIcon />
+                </IconButton>
+              </Tooltip>
+            </React.Fragment>
+          )}
+          <Tooltip title="Remove">
             <IconButton
               disableRipple
-              color="primary"
+              color="secondary"
               onClick={() =>
                 dispatch(
                   updatePackages({
-                    ipcEvent: 'ipc-event',
-                    cmd: ['update'],
+                    ipcEvent: 'uninstall',
+                    cmd: ['uninstall'],
                     name: active.name,
                     mode,
                     directory
@@ -178,36 +216,17 @@ const PackageDetails = ({ classes }) => {
                 )
               }
             >
-              <UpdateIcon />
+              <RemoveIcon />
             </IconButton>
           </Tooltip>
-        )}
-        <Tooltip title="Remove">
-          <IconButton
-            disableRipple
-            color="secondary"
-            onClick={() =>
-              dispatch(
-                updatePackages({
-                  ipcEvent: 'ipc-event',
-                  cmd: ['uninstall'],
-                  name: active.name,
-                  mode,
-                  directory
-                })
-              )
-            }
-          >
-            <RemoveIcon />
-          </IconButton>
-        </Tooltip>
-      </React.Fragment>
-    );
+        </React.Fragment>
+      );
+    };
 
     return (
       <CardActions className={classes.actions} disableActionSpacing>
         {cond([
-          [equals(false), always(renderOparationActions())],
+          [equals(false), always(renderOperationActions())],
           [equals(true), always(renderSearchActions())]
         ])(Boolean(fromSearch))}
         <Hidden mdDown>
@@ -225,7 +244,7 @@ const PackageDetails = ({ classes }) => {
         </Hidden>
       </CardActions>
     );
-  }, [active, isOutdated, fromSearch, expanded]);
+  }, [active, fromSearch, expanded]);
 
   const renderList = useCallback((type, data) => (
     <Paper className={classes.paper}>
@@ -238,69 +257,73 @@ const PackageDetails = ({ classes }) => {
         )}
       </div>
       <Divider light />
-      <List
-        dense={true}
-        style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 425 }}
-      >
-        {data.map((item, idx) => (
-          <ListItem key={`${type}-item-${idx}`} className={classes.listItem}>
-            <ListItemText
-              primary={
-                <Typography variant="subtitle2">
-                  {type === 'version' ? item : item.name}
-                </Typography>
-              }
-              secondary={
-                type === 'dependency' && (
-                  <Typography variant="subtitle2">{item.version}</Typography>
-                )
-              }
-            />
-            {type === 'version' && (
-              <ListItemSecondaryAction>
-                <IconButton
-                  aria-label="install_version"
-                  onClick={e => {
-                    const { name } = active;
-                    const pkgOptions =
-                      mode === 'local' ? [PACKAGE_GROUPS[group]] : [];
+      {data.length === 0 ? (
+        <Typography className={classes.withPadding}>No data found</Typography>
+      ) : (
+        <List
+          dense={true}
+          style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 425 }}
+        >
+          {data.map((item, idx) => (
+            <ListItem key={`${type}-item-${idx}`} className={classes.listItem}>
+              <ListItemText
+                primary={
+                  <Typography variant="subtitle2">
+                    {type === 'version' ? item : item.name}
+                  </Typography>
+                }
+                secondary={
+                  type === 'dependency' && (
+                    <Typography variant="subtitle2">{item.version}</Typography>
+                  )
+                }
+              />
+              {type === 'version' && (
+                <ListItemSecondaryAction>
+                  <IconButton
+                    aria-label="install_version"
+                    onClick={e => {
+                      const { name } = active;
+                      const pkgOptions =
+                        mode === 'local' ? [PACKAGE_GROUPS[group]] : [];
 
-                    const parameters = {
-                      ipcEvent: 'install',
-                      cmd: ['install'],
-                      name,
-                      version: item,
-                      pkgOptions,
-                      single: true,
-                      mode,
-                      directory
-                    };
+                      const parameters = {
+                        ipcEvent: 'install',
+                        cmd: ['install'],
+                        name,
+                        version: item,
+                        pkgOptions,
+                        single: true,
+                        mode,
+                        directory
+                      };
 
-                    remote.dialog.showMessageBox(
-                      remote.getCurrentWindow(),
-                      {
-                        title: 'Confirmation',
-                        type: 'question',
-                        message: `Would you like to install ${
-                          active.name
-                        }@${item}?`,
-                        buttons: ['Cancel', 'Run']
-                      },
-                      btnIdx => {
-                        if (Boolean(btnIdx) === true) {
-                          dispatch(installPackages(parameters));
+                      remote.dialog.showMessageBox(
+                        remote.getCurrentWindow(),
+                        {
+                          title: 'Confirmation',
+                          type: 'question',
+                          message: `Would you like to install ${
+                            active.name
+                          }@${item}?`,
+                          buttons: ['Cancel', 'Run']
+                        },
+                        btnIdx => {
+                          if (Boolean(btnIdx) === true) {
+                            dispatch(installPackages(parameters));
+                          }
                         }
-                      }
-                    );
-                  }}
-                >
-                  <AddIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            )}
-          </ListItem>
-        ))}
-      </List>
+                      );
+                    }}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              )}
+            </ListItem>
+          ))}
+        </List>
+      )}
     </Paper>
   ));
 
@@ -321,8 +344,10 @@ const PackageDetails = ({ classes }) => {
                     {license && (
                       <Typography variant="caption">{`License: ${license}`}</Typography>
                     )}
-                    {mode === 'local' && group && (
-                      <Typography variant="caption">{`Group: ${group}`}</Typography>
+                    {mode === 'local' && (
+                      <Typography variant="caption">{`Group: ${
+                        packages.find(pkg => pkg.name === name).__group
+                      }`}</Typography>
                     )}
                   </React.Fragment>
                 }
@@ -379,7 +404,7 @@ const PackageDetails = ({ classes }) => {
                   })
                 }
               >
-                <UpdateIcon />
+                <VersionsIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title="Package dependencies">
