@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch } from 'redux-react-hook';
+import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
@@ -28,14 +28,22 @@ import { setMode } from 'models/ui/actions';
 
 import styles from './styles/navigator';
 
+const mapState = ({
+  common: { notifications },
+  modules: {
+    data: { packages, packagesOutdated }
+  }
+}) => ({
+  notifications,
+  packages,
+  packagesOutdated
+});
+
 const Navigator = ({
   classes,
   mode,
   directory,
   fullDirectory,
-  totalpackages,
-  totaloutdated,
-  totalnotifications,
   lastUpdatedAt,
   name,
   version,
@@ -44,6 +52,9 @@ const Navigator = ({
   ...restProps
 }) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
+  const { notifications, packages, packagesOutdated } = useMappedState(
+    mapState
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -148,19 +159,20 @@ const Navigator = ({
                 items={[
                   {
                     primaryText: 'Total',
-                    secondaryText: totalpackages || 0,
+                    secondaryText: (packages && packages.length) || 0,
                     color: 'secondary',
                     primary: true
                   },
                   {
                     primaryText: 'Outdated',
-                    secondaryText: totaloutdated || 0,
+                    secondaryText:
+                      (packagesOutdated && packagesOutdated.length) || 0,
                     color: 'warning',
                     warning: true
                   },
                   {
                     primaryText: 'Problems',
-                    secondaryText: totalnotifications || 0,
+                    secondaryText: (notifications && notifications.length) || 0,
                     color: 'error',
                     error: true
                   }
@@ -194,7 +206,7 @@ const Navigator = ({
                     handler: () => runNpmTool('dedupe')
                   }
                 ]}
-                nodata={totalpackages === 0}
+                nodata={packages && packages.length === 0}
                 loading={loading}
               />
             </AppTabs>
@@ -251,9 +263,6 @@ Navigator.propTypes = {
   version: PropTypes.string,
   description: PropTypes.string,
   directory: PropTypes.string,
-  totalnotifications: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  totalpackages: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  totaloutdated: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   lastUpdatedAt: PropTypes.string,
   fullDirectory: PropTypes.string,
   userAgent: PropTypes.string

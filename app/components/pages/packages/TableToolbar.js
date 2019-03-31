@@ -98,7 +98,7 @@ const TableListToolbar = ({
         return toggleOptions(true);
       }
 
-      if (packagesInstallOptions.length && selected.length) {
+      if (action === 'install' && selected.length) {
         const commands = selected.map(selectedPackage => {
           const selectedPackageOptions = packagesInstallOptions.find(
             option => option.name === selectedPackage
@@ -108,14 +108,14 @@ const TableListToolbar = ({
             const { name, options } = selectedPackageOptions;
 
             return {
-              operation: 'install',
+              operation: action,
               package: name,
               options: options
             };
           }
 
           return {
-            operation: 'install',
+            operation: action,
             package: selectedPackage,
             options: ['save-prod']
           };

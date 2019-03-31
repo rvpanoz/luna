@@ -22,6 +22,8 @@ const uiException = ActionCreator('UI_EXCEPTION_ERROR');
 const npmCommand = ActionCreator('NPM_COMMAND');
 const setActivePage = ActionCreator('SET_ACTIVE_PAGE');
 const updateStatus = ActionCreator('UPDATE_ONLINE_STATUS');
+const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
+const clearRunningCommand = ActionCreator('CLEAR_RUNNING_COMMAND');
 
 export {
   updateStatus,
@@ -43,5 +45,7 @@ export {
   togglePackageLoader,
   npmCommand,
   uiException,
-  clearAll
+  clearAll,
+  clearRunningCommand,
+  setRunningCommand
 };

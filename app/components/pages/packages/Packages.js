@@ -1,12 +1,13 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-expressions */
 
+import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
-
+import { pickBy } from 'ramda';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -24,9 +25,17 @@ import {
   setPage,
   setPageRows,
   setPackagesStart,
-  viewPackage
+  viewPackage,
+  setActive,
+  removePackages
 } from 'models/packages/actions';
-import { commandMessage } from 'models/ui/actions';
+import {
+  commandMessage,
+  toggleLoader,
+  togglePackageLoader,
+  setSnackbar,
+  clearRunningCommand
+} from 'models/ui/actions';
 import { PackageDetails } from 'components/pages/package';
 
 import TableToolbar from './TableToolbar';
@@ -43,7 +52,7 @@ const mapState = ({
     mode,
     loader,
     packageLoader,
-    npm: { paused }
+    npm: { paused, operationStatus, operationPackages, operationCommand }
   },
   modules: {
     active,
@@ -72,7 +81,10 @@ const mapState = ({
   packagesInstallOptions,
   fromSearch,
   sortDir,
-  sortBy
+  sortBy,
+  operationStatus,
+  operationPackages,
+  operationCommand
 });
 
 const IPC_EVENT = 'ipc-event';
@@ -95,9 +107,13 @@ const Packages = ({ classes }) => {
     sortBy,
     packagesInstallOptions,
     paused,
-    active
+    active,
+    operationStatus,
+    operationPackages,
+    operationCommand
   } = useMappedState(mapState);
 
+  const [forceUpdate, setforceUpdate] = useState(0);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
@@ -107,13 +123,14 @@ const Packages = ({ classes }) => {
     cmd: ['outdated', 'list'],
     mode,
     directory,
-    paused
+    paused,
+    forceUpdate
   };
 
   const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
     IPC_EVENT,
     parameters,
-    [mode, directory]
+    [mode, directory, forceUpdate]
   );
 
   const { projectName, projectVersion } = dependenciesSet || {};
@@ -145,13 +162,81 @@ const Packages = ({ classes }) => {
 
     dispatch(
       updateData({
-        dependencies,
-        outdated,
+        dependencies: forceUpdate ? packages : dependencies,
+        outdated: forceUpdate ? packagesOutdated : outdated,
         projectName,
         projectVersion
       })
     );
   }, [dependenciesSet]);
+
+  useEffect(() => {
+    ipcRenderer.on('action-close', (event, error, cliMessage, options) => {
+      const operation = options && options[0];
+      const argv = options && options[1];
+
+      const removedOrUpdatedPackages =
+        options &&
+        options.filter(
+          option =>
+            option.indexOf(operation) === -1 &&
+            option.indexOf(argv) === -1 &&
+            option.indexOf('-g') === -1
+        );
+
+      if (error && error.length) {
+        console.error(error); // TODO: logic
+      }
+
+      if (
+        operation === 'uninstall' &&
+        removedOrUpdatedPackages &&
+        removePackages.length
+      ) {
+        dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
+        setforceUpdate(forceUpdate + 1);
+      }
+
+      dispatch(clearRunningCommand());
+
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: 'info',
+          message: cliMessage
+        })
+      );
+
+      dispatch(
+        toggleLoader({
+          loading: false,
+          message: null
+        })
+      );
+    });
+
+    ipcRenderer.on('view-close', (event, status, cmd, data) => {
+      try {
+        const newActive = data && JSON.parse(data);
+        const getCleanProps = (val, key) => /^[^_]/.test(key);
+        const properties = pickBy(getCleanProps, newActive);
+
+        dispatch(setActive({ active: properties }));
+        dispatch(
+          togglePackageLoader({
+            loading: false
+          })
+        );
+      } catch (err) {
+        throw new Error(err);
+      }
+    });
+
+    return () =>
+      ['action-close', 'view-close'].forEach(listener =>
+        ipcRenderer.removeAllListeners(listener)
+      );
+  }, [forceUpdate]);
 
   const scrollWrapper = top => {
     const wrapperEl = wrapperRef && wrapperRef.current;
@@ -269,6 +354,11 @@ const Packages = ({ classes }) => {
                               )
                             : {};
 
+                          const inOperation =
+                            operationStatus !== 'idle' &&
+                            operationCommand !== 'install' &&
+                            operationPackages.indexOf(name) > -1;
+
                           return (
                             <PackageItem
                               key={`pkg-${name}`}
@@ -294,6 +384,7 @@ const Packages = ({ classes }) => {
                               extraneous={extraneous}
                               problems={problems}
                               viewPackage={viewPackageHandler}
+                              inOperation={inOperation}
                             />
                           );
                         }

@@ -26,6 +26,7 @@ const getFiltered = (data, filters) => {
         }
 
         if (
+          acc.indexOf(pkg) === -1 &&
           filterType === 'name' &&
           filterValue &&
           name.indexOf(filterValue) > -1
@@ -33,7 +34,7 @@ const getFiltered = (data, filters) => {
           acc.push(pkg);
         }
 
-        if (pkg[filterValue]) {
+        if (pkg[filterValue] && acc.indexOf(pkg) === -1) {
           acc.push(pkg);
         }
       });

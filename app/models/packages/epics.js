@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import { map, takeWhile, concatMap, tap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
@@ -8,7 +10,8 @@ import {
   togglePackageLoader,
   clearCommands,
   clearNotifications,
-  clearAll
+  clearAll,
+  setRunningCommand
 } from 'models/ui/actions';
 
 import {
@@ -60,8 +63,24 @@ const pauseRequest = () => ({
   type: 'PAUSE_REQUEST'
 });
 
-const resumeRequest = () => ({
-  type: 'RESUME_REQUEST'
+const resumeRequest = forceUpdate => ({
+  type: 'RESUME_REQUEST',
+  payload: {
+    forceUpdate
+  }
+});
+
+const updateCommand = ({
+  operationStatus,
+  operationPackages,
+  operationCommand
+}) => ({
+  type: setRunningCommand.type,
+  payload: {
+    operationStatus,
+    operationPackages,
+    operationCommand
+  }
 });
 
 const cleanAllEpic = action$ =>
@@ -78,27 +97,55 @@ const cleanAllEpic = action$ =>
     ])
   );
 
-const packagesStartEpic = action$ =>
+const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    map(({ payload: { channel, options, paused } }) => {
+    map(({ payload: { channel, options, paused, forceUpdate } }) => {
       if (paused) {
         return pauseRequest();
+      }
+
+      if (forceUpdate) {
+        return resumeRequest(forceUpdate);
       }
 
       ipcRenderer.send(channel, options);
       return resumeRequest();
     }),
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
-    concatMap(() => [
-      updateLoader({
-        loading: true,
-        message: 'Loading packages..'
-      }),
-      cleanPackages(),
-      cleanNotifications(),
-      cleanCommands()
-    ])
+    concatMap(({ type, payload }) => {
+      const { forceUpdate } = payload;
+      const {
+        modules: {
+          data: { packages, packagesOutdated },
+          project: { name, version }
+        }
+      } = state$.value;
+
+      if (forceUpdate) {
+        return [
+          {
+            type: updateData.type,
+            payload: {
+              dependencies: packages,
+              outdated: packagesOutdated,
+              projectName: name,
+              projectVersion: version
+            }
+          }
+        ];
+      }
+
+      return [
+        updateLoader({
+          loading: true,
+          message: 'Loading packages..'
+        }),
+        cleanPackages(),
+        cleanNotifications(),
+        cleanCommands()
+      ];
+    })
   );
 
 const installPackagesEpic = action$ =>
@@ -132,20 +179,38 @@ const viewPackagesEpic = action$ =>
 const updatePackagesEpic = action$ =>
   action$.pipe(
     ofType(updatePackages.type),
-    map(({ payload }) => {
+    concatMap(({ payload }) => {
+      const { ipcEvent, packages, name } = payload;
+
       ipcRenderer.send('ipc-event', payload);
 
-      return updateLoader({
-        loading: true,
-        message: 'Updating packages..'
-      });
+      if (ipcEvent === 'uninstall') {
+        return [
+          updateCommand({
+            operationStatus: 'running',
+            operationCommand: ipcEvent,
+            operationPackages: packages && packages.length ? packages : name
+          })
+        ];
+      }
+
+      return [
+        updateLoader({
+          loading: true,
+          message: 'Updating packages..'
+        }),
+        updateCommand({
+          operationStatus: 'running',
+          operationCommand: ipcEvent,
+          operationPackages: packages && packages.length ? packages : name
+        })
+      ];
     })
   );
 
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
-    tap(console.log),
     takeWhile(({ payload: { dependencies } }) => Array.isArray(dependencies)),
     map(
       ({

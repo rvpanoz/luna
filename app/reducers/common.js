@@ -20,7 +20,9 @@ import {
   uiException,
   npmCommand,
   setActivePage,
-  updateStatus
+  updateStatus,
+  setRunningCommand,
+  clearRunningCommand
 } from 'models/ui/actions';
 import initialState from './initialState';
 
@@ -37,6 +39,27 @@ const createReducer = (commonState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [clearRunningCommand.type]: state =>
+    merge(state, {
+      npm: {
+        ...state.npm,
+        operationStatus: 'idle',
+        operationPackages: [],
+        operationCommand: null
+      }
+    }),
+  [setRunningCommand.type]: (
+    state,
+    { payload: { operationStatus, operationPackages, operationCommand } }
+  ) =>
+    merge(state, {
+      npm: {
+        ...state.npm,
+        operationStatus,
+        operationPackages,
+        operationCommand
+      }
+    }),
   [setActivePage.type]: (state, { payload: page }) =>
     merge(state, {
       activePage: page,

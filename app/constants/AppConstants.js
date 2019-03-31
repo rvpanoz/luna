@@ -36,7 +36,6 @@ export const PACKAGE_GROUPS = {
   dependencies: 'save-prod',
   devDependencies: 'save-dev',
   optionalDependencies: 'save-optional',
-  bundleDependencies: 'save-bundle',
   noSave: 'no-save',
   saveExact: 'save-exact'
 };

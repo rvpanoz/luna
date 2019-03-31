@@ -160,10 +160,10 @@ const install = (opts, callback, idx) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const install = require('./npm/install').default;
+    const runInstall = require('./npm/install').default;
 
-    if (typeof install === 'function') {
-      const run = install(opts, idx);
+    if (typeof runInstall === 'function') {
+      const run = runInstall(opts, idx);
 
       return execute(activeManager, run, mode, directory, callback);
     }
@@ -178,10 +178,10 @@ const update = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const update = require('./npm/update').default;
+    const runUpdate = require('./npm/update').default;
 
-    if (typeof update === 'function') {
-      const run = update(opts);
+    if (typeof runUpdate === 'function') {
+      const run = runUpdate(opts);
 
       return execute(activeManager, run, mode, directory, callback);
     }
@@ -196,10 +196,10 @@ const uninstall = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const uninstall = require('./npm/uninstall').default;
+    const runUninstall = require('./npm/uninstall').default;
 
-    if (typeof uninstall === 'function') {
-      const run = uninstall(opts);
+    if (typeof runUninstall === 'function') {
+      const run = runUninstall(opts);
 
       return execute(activeManager, run, mode, directory, callback);
     }
@@ -215,10 +215,10 @@ const view = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
-    const view = require('./npm/view').default;
+    const runView = require('./npm/view').default;
 
-    if (typeof view === 'function') {
-      const run = view(opts);
+    if (typeof runView === 'function') {
+      const run = runView(opts);
 
       return execute(activeManager, run, mode, directory, callback);
     }

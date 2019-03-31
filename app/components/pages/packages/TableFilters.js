@@ -77,7 +77,15 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
   );
 
   const handleFilters = allFilters => {
-    dispatch(updateFilters({ allFilters }));
+    const hasFilters =
+      allFilters.length === 1
+        ? allFilters.every(({ filterValue }) => filterValue !== undefined)
+        : true;
+
+    if (hasFilters) {
+      dispatch(updateFilters({ allFilters }));
+    }
+
     close();
   };
 
