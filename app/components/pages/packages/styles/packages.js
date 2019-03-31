@@ -70,6 +70,9 @@ const styles = theme => ({
       overflowWrap: 'break-word'
     }
   },
+  loader: {
+    marginLeft: theme.spacing.unit
+  },
   outdated: {
     color: lighten(theme.palette.error.main, 0.1)
   },
@@ -82,10 +85,10 @@ const styles = theme => ({
     color: lighten('#00b300', 0.1)
   },
   withPadding: {
-    padding: theme.spacing.unit * 2.5
+    padding: theme.spacing.unit + 4
   },
   nodata: {
-    padding: theme.spacing.unit * 2.5
+    padding: theme.spacing.unit + 4
   },
   icon: {
     width: '0.85em'
@@ -94,10 +97,10 @@ const styles = theme => ({
     display: 'none'
   },
   missing: {
-    color: darken(theme.palette.secondary.light, 0.5)
+    color: darken(theme.palette.secondary.dark, 0.75)
   },
   extraneous: {
-    color: darken(theme.palette.secondary.light, 0.1)
+    color: darken(theme.palette.secondary.dark, 0.75)
   },
   chip: {
     margin: theme.spacing.unit

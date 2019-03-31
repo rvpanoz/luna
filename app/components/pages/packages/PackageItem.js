@@ -13,6 +13,8 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 import styles from './styles/packages';
 
 const PackageItem = ({
@@ -28,7 +30,8 @@ const PackageItem = ({
   extraneous,
   missing,
   peerMissing,
-  viewPackage
+  viewPackage,
+  inOperation
 }) => {
   const rowRef = useRef();
 
@@ -44,14 +47,20 @@ const PackageItem = ({
       classes={{
         root: classes.tableRow
       }}
-      onClick={() => viewPackage(name, version)}
+      onClick={() => (inOperation ? {} : viewPackage(name, version))}
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
+          disabled={inOperation}
           checked={isSelected}
           disableRipple
           onClick={e => {
             e.stopPropagation();
+
+            if (inOperation) {
+              return;
+            }
+
             addSelected();
           }}
         />
@@ -70,13 +79,33 @@ const PackageItem = ({
           )}
 
           {missing || peerMissing ? (
-            <Tooltip title="package is missing or has peer dependencies missing">
-              <Typography className={cn(classes.name, classes.missing)}>
-                {name}
-              </Typography>
-            </Tooltip>
+            <div className={classes.flexContainer}>
+              <Tooltip title="package is missing or has peer dependencies missing">
+                <Typography className={cn(classes.name, classes.missing)}>
+                  {name}
+                </Typography>
+              </Tooltip>
+              {inOperation && (
+                <CircularProgress
+                  size={15}
+                  thickness={5}
+                  className={classes.loader}
+                  color="primary"
+                />
+              )}
+            </div>
           ) : (
-            <Typography className={classes.name}>{name}</Typography>
+            <div className={classes.flexContainer}>
+              <Typography className={classes.name}>{name}</Typography>
+              {inOperation && (
+                <CircularProgress
+                  size={15}
+                  thickness={5}
+                  className={classes.loader}
+                  color="primary"
+                />
+              )}
+            </div>
           )}
 
           {!extraneous && (
@@ -105,11 +134,7 @@ const PackageItem = ({
             <CheckIcon className={classes.updated} />
           </Typography>
         )}
-        {missing && !version && !latest && (
-          <Typography>
-            <Typography>N/A</Typography>
-          </Typography>
-        )}
+        {missing && !version && !latest && <Typography>N/A</Typography>}
       </TableCell>
     </TableRow>
   );
@@ -128,7 +153,8 @@ PackageItem.propTypes = {
   peerMissing: bool,
   extraneous: bool,
   missing: bool,
-  isOutdated: bool
+  isOutdated: bool,
+  inOperation: bool
 };
 
 export default withStyles(styles)(PackageItem);

@@ -4,7 +4,7 @@
 import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
-import { bool, objectOf, string } from 'prop-types';
+import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { pickBy } from 'ramda';
@@ -33,7 +33,8 @@ import {
   commandMessage,
   toggleLoader,
   togglePackageLoader,
-  setSnackbar
+  setSnackbar,
+  clearRunningCommand
 } from 'models/ui/actions';
 import { PackageDetails } from 'components/pages/package';
 
@@ -51,7 +52,7 @@ const mapState = ({
     mode,
     loader,
     packageLoader,
-    npm: { paused }
+    npm: { paused, operationStatus, operationPackages, operationCommand }
   },
   modules: {
     active,
@@ -80,7 +81,10 @@ const mapState = ({
   packagesInstallOptions,
   fromSearch,
   sortDir,
-  sortBy
+  sortBy,
+  operationStatus,
+  operationPackages,
+  operationCommand
 });
 
 const IPC_EVENT = 'ipc-event';
@@ -103,10 +107,13 @@ const Packages = ({ classes }) => {
     sortBy,
     packagesInstallOptions,
     paused,
-    active
+    active,
+    operationStatus,
+    operationPackages,
+    operationCommand
   } = useMappedState(mapState);
 
-  const [forceUpdate, setforceUpdate] = useState(false);
+  const [forceUpdate, setforceUpdate] = useState(0);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
@@ -142,8 +149,6 @@ const Packages = ({ classes }) => {
     );
 
   useEffect(() => {
-    setforceUpdate(false);
-
     if (paused) {
       return;
     }
@@ -179,21 +184,8 @@ const Packages = ({ classes }) => {
             option.indexOf('-g') === -1
         );
 
-      let message = 'Packages updated';
-
       if (error && error.length) {
-        const errors = error.split('npm');
-        const timings = errors
-          .filter(err => {
-            const newErr = err.trim();
-
-            return newErr.indexOf('info') > -1;
-          })
-          .map(e => e.trim());
-
-        if (timings.length) {
-          message = timings[timings.length - 1];
-        }
+        console.error(error); // TODO: logic
       }
 
       if (
@@ -202,8 +194,10 @@ const Packages = ({ classes }) => {
         removePackages.length
       ) {
         dispatch(removePackages({ removedPackages: removedOrUpdatedPackages }));
-        setforceUpdate(true);
+        setforceUpdate(forceUpdate + 1);
       }
+
+      dispatch(clearRunningCommand());
 
       dispatch(
         setSnackbar({
@@ -242,7 +236,7 @@ const Packages = ({ classes }) => {
       ['action-close', 'view-close'].forEach(listener =>
         ipcRenderer.removeAllListeners(listener)
       );
-  }, []);
+  }, [forceUpdate]);
 
   const scrollWrapper = top => {
     const wrapperEl = wrapperRef && wrapperRef.current;
@@ -360,6 +354,11 @@ const Packages = ({ classes }) => {
                               )
                             : {};
 
+                          const inOperation =
+                            operationStatus !== 'idle' &&
+                            operationCommand !== 'install' &&
+                            operationPackages.indexOf(name) > -1;
+
                           return (
                             <PackageItem
                               key={`pkg-${name}`}
@@ -385,6 +384,7 @@ const Packages = ({ classes }) => {
                               extraneous={extraneous}
                               problems={problems}
                               viewPackage={viewPackageHandler}
+                              inOperation={inOperation}
                             />
                           );
                         }
@@ -421,8 +421,7 @@ const Packages = ({ classes }) => {
 };
 
 Packages.propTypes = {
-  classes: objectOf(string).isRequired,
-  forceUpdate: bool
+  classes: objectOf(string).isRequired
 };
 
 const withStylesPackages = withStyles(styles)(Packages);

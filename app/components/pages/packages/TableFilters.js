@@ -82,7 +82,6 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
         ? allFilters.every(({ filterValue }) => filterValue !== undefined)
         : true;
 
-    console.log(allFilters);
     if (hasFilters) {
       dispatch(updateFilters({ allFilters }));
     }

@@ -11,7 +11,10 @@ export default {
   npm: {
     commands: [],
     paused: false,
-    env: ''
+    env: '',
+    operationStatus: 'idle',
+    operationPackages: [],
+    operationCommand: null
   },
   uiException: {
     message: null

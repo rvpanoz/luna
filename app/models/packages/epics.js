@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import { map, takeWhile, concatMap, tap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
@@ -8,7 +10,8 @@ import {
   togglePackageLoader,
   clearCommands,
   clearNotifications,
-  clearAll
+  clearAll,
+  setRunningCommand
 } from 'models/ui/actions';
 
 import {
@@ -64,6 +67,19 @@ const resumeRequest = forceUpdate => ({
   type: 'RESUME_REQUEST',
   payload: {
     forceUpdate
+  }
+});
+
+const updateCommand = ({
+  operationStatus,
+  operationPackages,
+  operationCommand
+}) => ({
+  type: setRunningCommand.type,
+  payload: {
+    operationStatus,
+    operationPackages,
+    operationCommand
   }
 });
 
@@ -163,26 +179,38 @@ const viewPackagesEpic = action$ =>
 const updatePackagesEpic = action$ =>
   action$.pipe(
     ofType(updatePackages.type),
-    map(({ payload }) => {
-      const { ipcEvent } = payload;
+    concatMap(({ payload }) => {
+      const { ipcEvent, packages, name } = payload;
 
       ipcRenderer.send('ipc-event', payload);
 
       if (ipcEvent === 'uninstall') {
-        return pauseRequest();
+        return [
+          updateCommand({
+            operationStatus: 'running',
+            operationCommand: ipcEvent,
+            operationPackages: packages && packages.length ? packages : name
+          })
+        ];
       }
 
-      return updateLoader({
-        loading: true,
-        message: 'Updating packages..'
-      });
+      return [
+        updateLoader({
+          loading: true,
+          message: 'Updating packages..'
+        }),
+        updateCommand({
+          operationStatus: 'running',
+          operationCommand: ipcEvent,
+          operationPackages: packages && packages.length ? packages : name
+        })
+      ];
     })
   );
 
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
-    tap(console.log),
     takeWhile(({ payload: { dependencies } }) => Array.isArray(dependencies)),
     map(
       ({
