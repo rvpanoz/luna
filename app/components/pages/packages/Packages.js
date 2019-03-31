@@ -113,7 +113,6 @@ const Packages = ({ classes }) => {
     operationCommand
   } = useMappedState(mapState);
 
-  const [forceRender, setforceRender] = useState(0);
   const [forceUpdate, setforceUpdate] = useState(0);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
@@ -131,7 +130,7 @@ const Packages = ({ classes }) => {
   const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
     IPC_EVENT,
     parameters,
-    [mode, directory, forceUpdate, forceRender]
+    [mode, directory, forceUpdate]
   );
 
   const { projectName, projectVersion } = dependenciesSet || {};
@@ -214,12 +213,6 @@ const Packages = ({ classes }) => {
           message: null
         })
       );
-
-      if (operation !== 'uninstall') {
-        setforceRender(1);
-      } else {
-        setforceRender(0);
-      }
     });
 
     ipcRenderer.on('view-close', (event, status, cmd, data) => {

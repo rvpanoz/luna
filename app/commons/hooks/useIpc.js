@@ -11,8 +11,7 @@ import { setPackagesStart } from 'models/packages/actions';
 import { switchcase, parseDependencies } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
-  const { ipcEvent, mode, directory, paused, forceUpdate, forceRender } =
-    options || {};
+  const { ipcEvent, mode, directory, paused, forceUpdate } = options || {};
 
   const [dependenciesSet, setDependencies] = useState({
     data: [],
@@ -56,7 +55,7 @@ const useIpc = (channel, options, inputs = []) => {
       })('list')(command);
     });
 
-    if (!paused || forceRender > 0) {
+    if (!paused) {
       dispatch(
         setPackagesStart({
           channel,
