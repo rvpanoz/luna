@@ -301,11 +301,49 @@ const runDedupe = (opts, callback) => {
   }
 };
 
+const runVerify = (opts, callback) => {
+  const { mode, directory, activeManager = 'npm' } = opts;
+
+  try {
+    const verify = require('./npm/tooling/verify').default;
+
+    if (typeof verify === 'function') {
+      const run = verify(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:verify is not defined');
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const runClean = (opts, callback) => {
+  const { mode, directory, activeManager = 'npm' } = opts;
+
+  try {
+    const clean = require('./npm/tooling/clean').default;
+
+    if (typeof clean === 'function') {
+      const run = clean(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:clean is not defined');
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export default {
   audit: runAudit,
   doctor: runDoctor,
   prune: runPrune,
   dedupe: runDedupe,
+  verify: runVerify,
+  clean: runClean,
   list,
   outdated,
   search,

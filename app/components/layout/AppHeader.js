@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -24,7 +24,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import SearchBox from 'components/common/SearchBox';
 import InstallFromSource from 'components/common/InstallFromSource';
-import { setActivePage } from 'models/ui/actions';
+import { setActivePage, runCacheOperation } from 'models/ui/actions';
 
 import Settings from './Settings';
 import styles from './styles/appHeader';
@@ -55,6 +55,26 @@ const Header = ({ classes, onDrawerToggle }) => {
   );
 
   const dispatch = useDispatch();
+
+  const handleCache = useCallback(() => {
+    // clear npm cache, npm verify cache
+
+    const parameters = {
+      ipcEvent: 'verify',
+      cmd: ['verify'],
+      mode,
+      directory
+    };
+
+    dispatch(
+      runCacheOperation({
+        channel: 'ipc-event',
+        options: {
+          ...parameters
+        }
+      })
+    );
+  }, [mode, directory]);
 
   return (
     <React.Fragment>
@@ -161,16 +181,18 @@ const Header = ({ classes, onDrawerToggle }) => {
         <Settings
           items={[
             {
-              primaryText: 'environment',
+              primaryText: 'Environment',
               secondaryText: env.userAgent
             },
             {
-              primaryText: 'registry',
+              primaryText: 'Registry',
               secondaryText: env.metricsRegistry
             },
             {
-              primaryText: 'cache',
-              secondaryText: env.cache
+              primaryText: 'Cache',
+              secondaryText: env.cache,
+              action: () => handleCache(),
+              title: 'Verify npm cache'
             }
           ]}
           loading={loading}

@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron';
 import { pipe, from } from 'rxjs';
 import { map, mergeMap, takeWhile } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
@@ -5,7 +6,7 @@ import { combineEpics, ofType } from 'redux-observable';
 import { ERROR_TYPES } from 'constants/AppConstants';
 import { parseMessage, switchcase, matchType } from 'commons/utils';
 
-import { addNotification, commandMessage } from './actions';
+import { addNotification, commandMessage, runCacheOperation } from './actions';
 
 /**
  *
@@ -34,6 +35,10 @@ const parseNpmMessage = message => {
   };
 };
 
+const resumeRequest = () => ({
+  type: 'RESUME_REQUEST'
+});
+
 const notificationsEpic = pipe(
   ofType(commandMessage.type),
   takeWhile(({ payload: error }) => typeof error === 'object'),
@@ -53,4 +58,14 @@ const notificationsEpic = pipe(
   })
 );
 
-export default combineEpics(notificationsEpic);
+const npmCacheEpic = pipe(
+  ofType(runCacheOperation.type),
+  map(({ payload }) => {
+    console.log(payload);
+    ipcRenderer.send('ipc-event', payload);
+
+    return resumeRequest();
+  })
+);
+
+export default combineEpics(notificationsEpic, npmCacheEpic);

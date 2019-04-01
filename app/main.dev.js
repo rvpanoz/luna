@@ -115,6 +115,7 @@ ipcMain.on('ipc-event', (event, options) => {
     const { directory, mode } = rest;
     const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
     const toolsIndex = APP_TOOLS.indexOf(ipcEvent);
+    const settingsIndex = APP_TOOLS.indexOf(ipcEvent);
     const commands = options.cmd;
 
     if (actionIndex > -1 && ipcEvent !== 'view') {
@@ -127,6 +128,10 @@ ipcMain.on('ipc-event', (event, options) => {
 
     if (toolsIndex > -1) {
       return event.sender.send('tool-close', errors, data, cmd);
+    }
+
+    if (settingsIndex > -1) {
+      return event.sender.send('settings-close', errors, data, cmd);
     }
 
     if (directory && mode === 'local' && cmd.indexOf('list') > -1) {

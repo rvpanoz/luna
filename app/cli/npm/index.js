@@ -8,6 +8,8 @@ import audit from './tooling/audit';
 import doctor from './tooling/doctor';
 import prune from './tooling/prune';
 import dedupe from './tooling/dedupe';
+import verify from './tooling/verify';
+import clean from './tooling/clean';
 
 export default {
   install,
@@ -17,5 +19,7 @@ export default {
   audit,
   doctor,
   prune,
-  dedupe
+  dedupe,
+  verify,
+  clean
 };
