@@ -11,13 +11,14 @@ import Typography from '@material-ui/core/Typography';
 
 import styles from './styles/packageInfo';
 
-const PackageInfo = ({ classes, active, short }) => {
+const PackageInfo = ({ classes, active, dependencies, short }) => {
   const enchancedActive = Object.assign({}, active, {
     repository: active.repository || {},
     dist: active.dist || {}
   });
 
   const {
+    versions,
     homepage,
     repository: { url },
     dist: { tarball },
@@ -28,6 +29,34 @@ const PackageInfo = ({ classes, active, short }) => {
     <React.Fragment>
       {short ? null : (
         <List dense={true}>
+          <ListItem key="active-versions" className={classes.listItem}>
+            <ListItemText
+              primary={
+                <Typography variant="subtitle1" color="primary">
+                  Versions
+                </Typography>
+              }
+              secondary={
+                <Typography variant="caption">
+                  {versions ? versions.length : 'N/A'}
+                </Typography>
+              }
+            />
+          </ListItem>
+          <ListItem key="active-dependencies" className={classes.listItem}>
+            <ListItemText
+              primary={
+                <Typography variant="subtitle1" color="primary">
+                  Dependencies
+                </Typography>
+              }
+              secondary={
+                <Typography variant="caption">
+                  {dependencies ? dependencies.length : 'N/A'}
+                </Typography>
+              }
+            />
+          </ListItem>
           <ListItem key="active-homepage" className={classes.listItem}>
             <ListItemText
               primary={
@@ -98,7 +127,8 @@ PackageInfo.propTypes = {
     ])
   ).isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  short: PropTypes.bool
+  short: PropTypes.bool,
+  dependencies: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(PackageInfo);

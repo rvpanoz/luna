@@ -45,7 +45,7 @@ import {
   installPackages,
   setActive
 } from 'models/packages/actions';
-import { APP_INFO, PACKAGE_GROUPS } from 'constants/AppConstants';
+import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import { isPackageOutdated } from 'commons/utils';
 
 import AppLoader from 'components/common/AppLoader';
@@ -71,9 +71,7 @@ const mapState = ({
 });
 
 const PackageDetails = ({ classes }) => {
-  const [license, setLicense] = useState(APP_INFO.NOT_AVAILABLE);
   const [expanded, expand] = useState(false);
-  const [versions, setVersions] = useState([]);
   const [dependencies, setDependencies] = useState([]);
   const [activePopper, setActivePopper] = useState({
     index: 0,
@@ -96,14 +94,6 @@ const PackageDetails = ({ classes }) => {
   useEffect(() => {
     if (!active) {
       return;
-    }
-
-    if (active.license) {
-      setLicense(active.license);
-    }
-
-    if (active.version) {
-      setVersions(active.versions);
     }
 
     if (active.dependencies) {
@@ -129,7 +119,7 @@ const PackageDetails = ({ classes }) => {
               {
                 title: 'Confirmation',
                 type: 'question',
-                message: `Would you like to install ${active.name}?`,
+                message: `Install ${active.name} Continue?`,
                 buttons: ['Cancel', 'Install']
               },
               btnIdx => {
@@ -180,10 +170,10 @@ const PackageDetails = ({ classes }) => {
                       {
                         title: 'Confirmation',
                         type: 'question',
-                        message: `Would you like to install ${
+                        message: `Install ${
                           active.name
-                        } latest version?`,
-                        buttons: ['Cancel', 'Uninstall']
+                        } latest version Continue?`,
+                        buttons: ['Cancel', 'Install']
                       },
                       btnIdx => {
                         if (Boolean(btnIdx) === true) {
@@ -217,7 +207,7 @@ const PackageDetails = ({ classes }) => {
                       {
                         title: 'Confirmation',
                         type: 'question',
-                        message: `Would you like to update ${active.name}?`,
+                        message: `Update ${active.name} Continue?`,
                         buttons: ['Cancel', 'Update']
                       },
                       btnIdx => {
@@ -252,7 +242,7 @@ const PackageDetails = ({ classes }) => {
                   {
                     title: 'Confirmation',
                     type: 'question',
-                    message: `Would you like to uninstall ${active.name}?`,
+                    message: `Uninstall ${active.name} Continue?`,
                     buttons: ['Cancel', 'Uninstall']
                   },
                   btnIdx => {
@@ -396,9 +386,8 @@ const PackageDetails = ({ classes }) => {
                 className={classes.cardHeader}
                 subheader={
                   <React.Fragment>
-                    {license && (
-                      <Typography variant="caption">{`License: ${license}`}</Typography>
-                    )}
+                    <Typography variant="caption">{`License: ${active.license ||
+                      'N/A'}`}</Typography>
                     {mode === 'local' && !fromSearch && (
                       <Typography variant="caption">{`Group: ${
                         packages.find(pkg => pkg.name === name).__group
@@ -412,7 +401,7 @@ const PackageDetails = ({ classes }) => {
                 <Divider className={classes.divider} light />
                 <Hidden mdDown>
                   <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <PackageInfo active={active} />
+                    <PackageInfo active={active} dependencies={dependencies} />
                   </Collapse>
                 </Hidden>
                 <Hidden lgUp>
@@ -496,7 +485,7 @@ const PackageDetails = ({ classes }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            {renderList('version', versions)}
+            {renderList('version', (active && active.versions) || [])}
           </Fade>
         )}
       </Popper>

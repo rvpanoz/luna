@@ -131,13 +131,14 @@ const Header = ({ classes, onDrawerToggle }) => {
             </Grid>
             <Grid item>
               <Button
+                title="Open install options"
                 className={classes.button}
                 variant="outlined"
                 color="inherit"
                 size="small"
                 onClick={() => setDialog({ open: true })}
               >
-                Actions
+                Install
               </Button>
             </Grid>
           </Grid>
@@ -162,6 +163,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             value="problems"
             disabled={loading}
           />
+          <Tab textColor="inherit" label="Reports" value="reports" />
         </Tabs>
       </AppBar>
       <Popover
@@ -201,7 +203,7 @@ const Header = ({ classes, onDrawerToggle }) => {
       {dialog && dialog.open && (
         <Dialog open={dialog.open} aria-labelledby="install-from-source">
           <DialogTitle classes={{ root: classes.dialogTitle }}>
-            Install from source
+            Install packages
           </DialogTitle>
           <Divider light />
           <DialogContent>

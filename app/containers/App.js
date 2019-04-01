@@ -75,7 +75,7 @@ const App = () => {
       );
     });
 
-    ipcRenderer.once('get-env-close', (event, env) => {
+    ipcRenderer.on('get-env-close', (event, env) => {
       dispatch({ type: setEnv.type, payload: env });
     });
 

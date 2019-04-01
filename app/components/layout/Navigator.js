@@ -1,4 +1,5 @@
 /* eslint-disable react/require-default-props */
+/* eslint-disable no-nested-ternary */
 
 import React, { useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
@@ -137,8 +138,8 @@ const Navigator = ({
                     primaryText: loading
                       ? 'loading..'
                       : mode === 'local' && name
-                      ? `${name} - v${version || '1.0.0'}`
-                      : 'Global - v1.0.0',
+                      ? `${name} v${version || '1.0.0'}`
+                      : 'Global packages',
                     secondaryText: `Last updated: ${lastUpdatedAt}`,
                     caption: true
                   },

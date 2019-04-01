@@ -158,7 +158,7 @@
     "electron": "^4.1.1",
     "electron-builder": "^20.39.0",
     "electron-devtools-installer": "^2.2.4",
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-prettier": "^3.6.0",
     "eslint-formatter-pretty": "^2.1.1",
@@ -167,7 +167,7 @@
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-react": "^7.12.4",
     "fbjs-scripts": "^1.2.0",
     "file-loader": "^2.0.0",
@@ -196,7 +196,7 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "@material-ui/core": "^3.9.2",
+    "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
     "animejs": "^3.0.1",
     "chalk": "^2.4.2",

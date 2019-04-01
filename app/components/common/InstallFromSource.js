@@ -25,9 +25,15 @@ const InstallFromSource = ({ classes, mode, directory, close }) => {
       <List dense>
         <ListItem key="project-install" className={classes.listItem}>
           <ListItemText
-            primary={<Typography>Package.json</Typography>}
+            primary={
+              <Typography className={classes.title}>package.json</Typography>
+            }
             secondary={
-              <Typography variant="caption" component="p">
+              <Typography
+                className={classes.description}
+                variant="caption"
+                component="p"
+              >
                 Install the dependencies in the local node_modules folder. In
                 global mode, it installs the current package context (ie, the
                 current working directory) as a global package.
@@ -36,6 +42,7 @@ const InstallFromSource = ({ classes, mode, directory, close }) => {
           />
           <ListItemSecondaryAction>
             <IconButton
+              color="primary"
               title="Install from .package.json"
               aria-label="action"
               onClick={() =>
@@ -44,7 +51,7 @@ const InstallFromSource = ({ classes, mode, directory, close }) => {
                   {
                     title: 'Install from package.json',
                     type: 'question',
-                    message: `Install the dependencies from package.json file. Continue?`,
+                    message: `Do you want to install the dependencies from package.json file?`,
                     buttons: ['Cancel', 'Install']
                   },
                   btnIdx => {

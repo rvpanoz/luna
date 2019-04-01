@@ -110,6 +110,7 @@ const Packages = ({ classes }) => {
     operationCommand
   } = useMappedState(mapState);
 
+  const [forceIpcCall, setforceIpcCall] = useState(true);
   const [forceUpdate, setforceUpdate] = useState(0);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
@@ -121,13 +122,14 @@ const Packages = ({ classes }) => {
     mode,
     directory,
     paused,
-    forceUpdate
+    forceUpdate,
+    forceIpcCall
   };
 
   const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
     IPC_EVENT,
     parameters,
-    [mode, directory, forceUpdate]
+    [mode, directory, forceUpdate, forceIpcCall]
   );
 
   const { projectName, projectVersion } = dependenciesSet || {};
@@ -146,6 +148,8 @@ const Packages = ({ classes }) => {
     );
 
   useEffect(() => {
+    setforceIpcCall(true);
+
     if (paused) {
       return;
     }
@@ -191,6 +195,7 @@ const Packages = ({ classes }) => {
             removePackages({ removedPackages: removedOrUpdatedPackages })
           );
           setforceUpdate(forceUpdate + 1);
+          setforceIpcCall(false);
         }
       }
 

@@ -101,18 +101,22 @@ const cleanAllEpic = action$ =>
 const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    map(({ payload: { channel, options, paused, forceUpdate } }) => {
-      if (paused) {
-        return pauseRequest();
-      }
+    map(
+      ({
+        payload: { channel, options, paused, forceUpdate, forceIpcCall }
+      }) => {
+        if (paused) {
+          return pauseRequest();
+        }
 
-      if (forceUpdate) {
-        return resumeRequest(forceUpdate);
-      }
+        if (forceUpdate && !forceIpcCall) {
+          return resumeRequest(forceUpdate);
+        }
 
-      ipcRenderer.send(channel, options);
-      return resumeRequest();
-    }),
+        ipcRenderer.send(channel, options);
+        return resumeRequest();
+      }
+    ),
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
     concatMap(({ type, payload }) => {
       const { forceUpdate } = payload;

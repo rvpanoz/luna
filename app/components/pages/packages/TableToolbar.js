@@ -220,7 +220,7 @@ const TableListToolbar = ({
                   {
                     title: 'Update packages',
                     type: 'question',
-                    message: `Update the selected packages?`,
+                    message: `The selected packages will be updated. Continue?`,
                     buttons: ['Cancel', 'Update']
                   },
                   btnIdx => {
