@@ -103,7 +103,7 @@ const Navigator = ({
             <AppLogo />
           </ListItemText>
         </ListItem>
-        <ListItem>
+        <ListItem className={classes.listItemHalfPadding}>
           <ListItemText className={classes.actionButton}>
             <Button
               disabled={loading}
@@ -134,23 +134,26 @@ const Navigator = ({
               <ProjectTab
                 items={[
                   {
-                    primaryText:
-                      mode === 'local' && name
-                        ? `${name} - v${version || '1.0.0'}`
-                        : 'Global - v1.0.0',
+                    primaryText: loading
+                      ? 'loading..'
+                      : mode === 'local' && name
+                      ? `${name} - v${version || '1.0.0'}`
+                      : 'Global - v1.0.0',
                     secondaryText: `Last updated: ${lastUpdatedAt}`,
                     caption: true
                   },
                   {
                     caption: true,
-                    primaryText:
-                      mode === 'local' && directory && !loading
-                        ? 'Working directory'
-                        : null,
-                    secondaryText:
-                      mode === 'local' && directory && !loading
-                        ? directory
-                        : null
+                    primaryText: loading
+                      ? 'loading..'
+                      : mode === 'local' && directory
+                      ? 'Working directory'
+                      : null,
+                    secondaryText: loading
+                      ? 'loading..'
+                      : mode === 'local' && directory
+                      ? directory
+                      : null
                   }
                 ]}
                 metadata={lastUpdatedAt}

@@ -82,8 +82,7 @@ const styles = theme => ({
     fontSize: 22,
     fontWeight: 400,
     display: 'inline-block',
-    position: 'relative',
-    top: theme.spacing.unit / 4
+    position: 'relative'
   },
   listWrapper: {
     whiteSpace: 'nowrap',
@@ -101,6 +100,10 @@ const styles = theme => ({
   listItem: {
     ...defaultFont,
     padding: theme.spacing.unit
+  },
+  listItemHalfPadding: {
+    ...defaultFont,
+    padding: theme.spacing.unit / 2
   }
 });
 
