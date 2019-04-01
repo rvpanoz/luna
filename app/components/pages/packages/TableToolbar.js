@@ -34,7 +34,7 @@ import PublicIcon from '@material-ui/icons/BallotOutlined';
 import { switchcase } from 'commons/utils';
 import { navigatorParameters } from 'commons/parameters';
 import { INFO_MESSAGES } from 'constants/AppConstants';
-import { setMode } from 'models/ui/actions';
+
 import {
   updatePackages,
   clearInstallOptions,
@@ -60,6 +60,7 @@ const TableListToolbar = ({
   outdated,
   packagesInstallOptions,
   setFilteredByNamePackages,
+  switchMode,
   filteredByNamePackages
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -67,14 +68,6 @@ const TableListToolbar = ({
   const [optionsOpen, toggleOptions] = useState(false);
 
   const dispatch = useDispatch();
-
-  const switchMode = (appMode, appDirectory) => {
-    dispatch(setMode({ mode: appMode, directory: appDirectory }));
-
-    if (fromSearch) {
-      reload();
-    }
-  };
 
   const openFilters = (e, close) => {
     setAnchorEl(close ? null : e.target);
@@ -194,7 +187,7 @@ const TableListToolbar = ({
                   {
                     title: 'Install packages',
                     type: 'question',
-                    message: `The selected packages will be installed. Continue?`,
+                    message: `Do you want to install the selected packages?`,
                     buttons: ['Cancel', 'Install']
                   },
                   btnIdx => {
@@ -220,7 +213,7 @@ const TableListToolbar = ({
                   {
                     title: 'Update packages',
                     type: 'question',
-                    message: `The selected packages will be updated. Continue?`,
+                    message: `Do you want to update the selected packages?`,
                     buttons: ['Cancel', 'Update']
                   },
                   btnIdx => {
@@ -249,7 +242,7 @@ const TableListToolbar = ({
                     {
                       title: 'Uninstall packages',
                       type: 'question',
-                      message: `The selected packages will be removed. Continue?`,
+                      message: `Do you want to uninstall the selected packages?`,
                       buttons: ['Cancel', 'Uninstall']
                     },
                     btnIdx => {
@@ -447,6 +440,7 @@ TableListToolbar.propTypes = {
   outdated: PropTypes.arrayOf(PropTypes.object),
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
+  switchMode: PropTypes.func.isRequired,
   packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 

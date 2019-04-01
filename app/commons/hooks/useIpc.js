@@ -11,8 +11,7 @@ import { setPackagesStart } from 'models/packages/actions';
 import { switchcase, parseDependencies } from '../utils';
 
 const useIpc = (channel, options, inputs = []) => {
-  const { ipcEvent, mode, directory, paused, forceUpdate, forceIpcCall } =
-    options || {};
+  const { ipcEvent, mode, directory, paused, forceUpdate } = options || {};
 
   const [dependenciesSet, setDependencies] = useState({
     data: [],
@@ -62,8 +61,7 @@ const useIpc = (channel, options, inputs = []) => {
           channel,
           options,
           paused,
-          forceUpdate,
-          forceIpcCall
+          forceUpdate
         })
       );
     }

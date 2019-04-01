@@ -34,7 +34,8 @@ import {
   toggleLoader,
   togglePackageLoader,
   setSnackbar,
-  clearRunningCommand
+  clearRunningCommand,
+  setMode
 } from 'models/ui/actions';
 import { PackageDetails } from 'components/pages/package';
 
@@ -110,7 +111,6 @@ const Packages = ({ classes }) => {
     operationCommand
   } = useMappedState(mapState);
 
-  const [forceIpcCall, setforceIpcCall] = useState(true);
   const [forceUpdate, setforceUpdate] = useState(0);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
@@ -122,14 +122,13 @@ const Packages = ({ classes }) => {
     mode,
     directory,
     paused,
-    forceUpdate,
-    forceIpcCall
+    forceUpdate
   };
 
   const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
     IPC_EVENT,
     parameters,
-    [mode, directory, forceUpdate, forceIpcCall]
+    [mode, directory, forceUpdate]
   );
 
   const { projectName, projectVersion } = dependenciesSet || {};
@@ -147,9 +146,15 @@ const Packages = ({ classes }) => {
       })
     );
 
-  useEffect(() => {
-    setforceIpcCall(true);
+  const switchMode = (appMode, appDirectory) => {
+    dispatch(setMode({ mode: appMode, directory: appDirectory }));
 
+    if (fromSearch) {
+      reload();
+    }
+  };
+
+  useEffect(() => {
     if (paused) {
       return;
     }
@@ -177,7 +182,7 @@ const Packages = ({ classes }) => {
       const argv = options && options[1];
 
       if (error && error.length) {
-        console.error(error); // TODO: logic
+        console.error(error);
       }
 
       if (operation === 'uninstall') {
@@ -195,7 +200,6 @@ const Packages = ({ classes }) => {
             removePackages({ removedPackages: removedOrUpdatedPackages })
           );
           setforceUpdate(forceUpdate + 1);
-          setforceIpcCall(false);
         }
       }
 
@@ -308,6 +312,7 @@ const Packages = ({ classes }) => {
                 fromSearch={fromSearch}
                 filters={filters}
                 scrollWrapper={scrollWrapper}
+                switchMode={switchMode}
                 reload={() => startPackages()}
                 filteredByNamePackages={filteredByNamePackages}
                 setFilteredByNamePackages={setFilteredByNamePackages}
