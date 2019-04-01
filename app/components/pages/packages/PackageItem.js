@@ -5,8 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 
-import ErrorIcon from '@material-ui/icons/ErrorTwoTone';
-import CheckIcon from '@material-ui/icons/CheckTwoTone';
+import ErrorIcon from '@material-ui/icons/ErrorOutlined';
+import CheckIcon from '@material-ui/icons/CheckOutlined';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
@@ -80,10 +80,11 @@ const PackageItem = ({
 
           {missing || peerMissing ? (
             <div className={classes.flexContainer}>
+              <Typography className={cn(classes.name, classes.missing)}>
+                {name}
+              </Typography>
               <Tooltip title="package is missing or has peer dependencies missing">
-                <Typography className={cn(classes.name, classes.missing)}>
-                  {name}
-                </Typography>
+                <ErrorIcon color="secondary" />
               </Tooltip>
               {inOperation && (
                 <CircularProgress
@@ -129,7 +130,8 @@ const PackageItem = ({
         {latest && isOutdated && (
           <Typography className={classes.outdated}>{latest}</Typography>
         )}
-        {!isOutdated && !missing && (
+        {fromSearch && version}
+        {!isOutdated && !missing && !fromSearch && (
           <Typography>
             <CheckIcon className={classes.updated} />
           </Typography>

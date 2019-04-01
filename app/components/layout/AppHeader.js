@@ -50,10 +50,11 @@ const mapState = ({
 const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [dialog, setDialog] = useState({ open: false });
-  const dispatch = useDispatch();
   const { activePage, loading, env, status, mode, directory } = useMappedState(
     mapState
   );
+
+  const dispatch = useDispatch();
 
   return (
     <React.Fragment>
