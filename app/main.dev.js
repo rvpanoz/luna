@@ -129,11 +129,10 @@ ipcMain.on('ipc-event', (event, options) => {
       return event.sender.send('tool-close', errors, data, cmd);
     }
 
-    if (directory && mode === 'local' && cmd.includes('list')) {
+    if (directory && mode === 'local' && cmd.indexOf('list') > -1) {
       handleLocalEvents(event, mode, directory);
     }
 
-    event.sender.send('loaded-packages-close', Store.get('openedPackages'));
     event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
   };
 

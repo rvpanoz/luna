@@ -51,7 +51,6 @@ const mapState = ({
     manager,
     mode,
     loader,
-    packageLoader,
     npm: { paused, operationStatus, operationPackages, operationCommand }
   },
   modules: {
@@ -72,7 +71,6 @@ const mapState = ({
   page,
   rowsPerPage,
   loader,
-  packageLoader,
   action,
   filters,
   packages,
@@ -92,7 +90,6 @@ const IPC_EVENT = 'ipc-event';
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
-    packageLoader,
     packages,
     packagesOutdated,
     mode,
@@ -287,9 +284,9 @@ const Packages = ({ classes }) => {
       <Grid container>
         <Grid
           item
-          md={active || packageLoader.loading ? 8 : 12}
-          lg={active || packageLoader.loading ? 8 : 12}
-          xl={active || packageLoader.loading ? 8 : 12}
+          md={active ? 8 : 11}
+          lg={active ? 8 : 11}
+          xl={active ? 8 : 11}
           className={classes.transition}
         >
           <Paper className={classes.root}>
@@ -407,12 +404,7 @@ const Packages = ({ classes }) => {
             </div>
           </Paper>
         </Grid>
-        <Grid
-          item
-          md={active ? 4 : false}
-          lg={active ? 4 : false}
-          xl={active ? 4 : false}
-        >
+        <Grid item md={active ? 4 : 1} lg={active ? 4 : 1} xl={active ? 4 : 1}>
           <PackageDetails />
         </Grid>
       </Grid>

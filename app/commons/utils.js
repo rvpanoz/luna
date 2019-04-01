@@ -341,3 +341,32 @@ export const setupInstallOptions = (selected, options) => {
 
   return packagesWithOptions;
 };
+
+export const parseNpmAudit = data => {
+  try {
+    const dataToJson = JSON.parse(data);
+    const {
+      metadata: { vulnerabilities }
+    } = dataToJson;
+
+    const vulnerabilitiesKeys = Object.keys(vulnerabilities);
+
+    return (
+      vulnerabilitiesKeys &&
+      vulnerabilitiesKeys.map(key => ({
+        name: key,
+        value: vulnerabilities[key]
+      }))
+    );
+  } catch (error) {}
+};
+
+export const parseNpmPrune = data => {
+  try {
+    const dataToJson = JSON.parse(data);
+
+    return dataToJson;
+  } catch (error) {}
+};
+
+export const parseNpmDoctor = data => {};

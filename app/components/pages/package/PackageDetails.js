@@ -123,25 +123,38 @@ const PackageDetails = ({ classes }) => {
       <Tooltip title="install">
         <IconButton
           disableRipple
-          onClick={e => {
-            const { name } = active;
-            const pkgOptions =
-              mode === 'local'
-                ? group && [PACKAGE_GROUPS[group]]
-                : ['save-prod'];
+          onClick={e =>
+            remote.dialog.showMessageBox(
+              remote.getCurrentWindow(),
+              {
+                title: 'Confirmation',
+                type: 'question',
+                message: `Would you like to install ${active.name}?`,
+                buttons: ['Cancel', 'Install']
+              },
+              btnIdx => {
+                if (Boolean(btnIdx) === true) {
+                  const { name } = active;
+                  const pkgOptions =
+                    mode === 'local'
+                      ? group && [PACKAGE_GROUPS[group]]
+                      : ['save-prod'];
 
-            const parameters = {
-              ipcEvent: 'install',
-              cmd: ['install'],
-              name,
-              pkgOptions,
-              single: true,
-              mode,
-              directory
-            };
+                  const parameters = {
+                    ipcEvent: 'install',
+                    cmd: ['install'],
+                    name,
+                    pkgOptions,
+                    single: true,
+                    mode,
+                    directory
+                  };
 
-            dispatch(installPackages(parameters));
-          }}
+                  dispatch(installPackages(parameters));
+                }
+              }
+            )
+          }
         >
           <AddIcon />
         </IconButton>
@@ -161,20 +174,35 @@ const PackageDetails = ({ classes }) => {
                 <IconButton
                   disableRipple
                   color="primary"
-                  onClick={() => {
-                    const parameters = {
-                      ipcEvent: 'install',
-                      cmd: ['install'],
-                      name,
-                      version: 'latest',
-                      single: true,
-                      pkgOptions: [],
-                      mode,
-                      directory
-                    };
+                  onClick={() =>
+                    remote.dialog.showMessageBox(
+                      remote.getCurrentWindow(),
+                      {
+                        title: 'Confirmation',
+                        type: 'question',
+                        message: `Would you like to install ${
+                          active.name
+                        } latest version?`,
+                        buttons: ['Cancel', 'Uninstall']
+                      },
+                      btnIdx => {
+                        if (Boolean(btnIdx) === true) {
+                          const parameters = {
+                            ipcEvent: 'install',
+                            cmd: ['install'],
+                            name,
+                            version: 'latest',
+                            single: true,
+                            pkgOptions: [],
+                            mode,
+                            directory
+                          };
 
-                    dispatch(installPackages(parameters));
-                  }}
+                          dispatch(installPackages(parameters));
+                        }
+                      }
+                    )
+                  }
                 >
                   <AddIcon />
                 </IconButton>
@@ -184,14 +212,27 @@ const PackageDetails = ({ classes }) => {
                   disableRipple
                   color="primary"
                   onClick={() =>
-                    dispatch(
-                      updatePackages({
-                        ipcEvent: 'update',
-                        cmd: ['update'],
-                        name: active.name,
-                        mode,
-                        directory
-                      })
+                    remote.dialog.showMessageBox(
+                      remote.getCurrentWindow(),
+                      {
+                        title: 'Confirmation',
+                        type: 'question',
+                        message: `Would you like to update ${active.name}?`,
+                        buttons: ['Cancel', 'Update']
+                      },
+                      btnIdx => {
+                        if (Boolean(btnIdx) === true) {
+                          dispatch(
+                            updatePackages({
+                              ipcEvent: 'update',
+                              cmd: ['update'],
+                              name: active.name,
+                              mode,
+                              directory
+                            })
+                          );
+                        }
+                      }
                     )
                   }
                 >
@@ -202,17 +243,31 @@ const PackageDetails = ({ classes }) => {
           )}
           <Tooltip title="Remove">
             <IconButton
+              disabled={Boolean(active && active.name === 'npm')}
               disableRipple
               color="secondary"
               onClick={() =>
-                dispatch(
-                  updatePackages({
-                    ipcEvent: 'uninstall',
-                    cmd: ['uninstall'],
-                    name: active.name,
-                    mode,
-                    directory
-                  })
+                remote.dialog.showMessageBox(
+                  remote.getCurrentWindow(),
+                  {
+                    title: 'Confirmation',
+                    type: 'question',
+                    message: `Would you like to uninstall ${active.name}?`,
+                    buttons: ['Cancel', 'Uninstall']
+                  },
+                  btnIdx => {
+                    if (Boolean(btnIdx) === true) {
+                      dispatch(
+                        updatePackages({
+                          ipcEvent: 'uninstall',
+                          cmd: ['uninstall'],
+                          name: active.name,
+                          mode,
+                          directory
+                        })
+                      );
+                    }
+                  }
                 )
               }
             >
@@ -306,7 +361,7 @@ const PackageDetails = ({ classes }) => {
                           message: `Would you like to install ${
                             active.name
                           }@${item}?`,
-                          buttons: ['Cancel', 'Run']
+                          buttons: ['Cancel', 'Install']
                         },
                         btnIdx => {
                           if (Boolean(btnIdx) === true) {
@@ -344,7 +399,7 @@ const PackageDetails = ({ classes }) => {
                     {license && (
                       <Typography variant="caption">{`License: ${license}`}</Typography>
                     )}
-                    {mode === 'local' && (
+                    {mode === 'local' && !fromSearch && (
                       <Typography variant="caption">{`Group: ${
                         packages.find(pkg => pkg.name === name).__group
                       }`}</Typography>
@@ -430,7 +485,7 @@ const PackageDetails = ({ classes }) => {
 
   return (
     <div className={classes.wrapper}>
-      <AppLoader loading={packageLoader.loading} relative>
+      <AppLoader loading={packageLoader.loading} relative mini>
         {active ? renderCard() : null}
       </AppLoader>
       <Popper

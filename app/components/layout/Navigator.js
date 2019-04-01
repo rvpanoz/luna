@@ -106,6 +106,7 @@ const Navigator = ({
         <ListItem>
           <ListItemText className={classes.actionButton}>
             <Button
+              disabled={loading}
               className={classes.margin}
               color="secondary"
               variant="outlined"
