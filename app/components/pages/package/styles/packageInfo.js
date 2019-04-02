@@ -1,4 +1,5 @@
-import { flexContainer } from 'styles/variables';
+import { flexContainer, defaultFont, grayColor } from 'styles/variables';
+import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   flexContainer: {
@@ -30,6 +31,20 @@ const styles = theme => ({
   errorColor: {
     color: theme.palette.common.white,
     backgroundColor: theme.palette.error.light
+  },
+  label: {
+    ...defaultFont,
+    fontSize: 20,
+    color: theme.palette.secondary.light
+  },
+  link: {
+    ...defaultFont,
+    fontSize: 16,
+    color: grayColor,
+    textDecoration: 'none',
+    '&:hover': {
+      color: darken(grayColor, 0.4)
+    }
   }
 });
 

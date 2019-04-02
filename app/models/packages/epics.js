@@ -116,7 +116,7 @@ const packagesStartEpic = (action$, state$) =>
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
     concatMap(({ type, payload }) => {
       const { forceUpdate } = payload;
-      console.log(forceUpdate);
+
       const {
         modules: {
           data: { packages, packagesOutdated },
