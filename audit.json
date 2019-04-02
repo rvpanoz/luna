@@ -1,0 +1,414 @@
+{
+  "added": [],
+  "removed": [],
+  "updated": [],
+  "moved": [],
+  "failed": [
+    {
+      "action": "add",
+      "name": "abbrev",
+      "version": "1.1.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/abbrev"
+    },
+    {
+      "action": "add",
+      "name": "ansi-regex",
+      "version": "2.1.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/ansi-regex"
+    },
+    {
+      "action": "add",
+      "name": "aproba",
+      "version": "1.2.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/aproba"
+    },
+    {
+      "action": "add",
+      "name": "balanced-match",
+      "version": "1.0.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/balanced-match"
+    },
+    {
+      "action": "add",
+      "name": "chownr",
+      "version": "1.1.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/chownr"
+    },
+    {
+      "action": "add",
+      "name": "code-point-at",
+      "version": "1.1.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/code-point-at"
+    },
+    {
+      "action": "add",
+      "name": "concat-map",
+      "version": "0.0.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/concat-map"
+    },
+    {
+      "action": "add",
+      "name": "brace-expansion",
+      "version": "1.1.11",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/brace-expansion"
+    },
+    {
+      "action": "add",
+      "name": "console-control-strings",
+      "version": "1.1.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/console-control-strings"
+    },
+    {
+      "action": "add",
+      "name": "core-util-is",
+      "version": "1.0.2",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/core-util-is"
+    },
+    {
+      "action": "add",
+      "name": "deep-extend",
+      "version": "0.6.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/deep-extend"
+    },
+    {
+      "action": "add",
+      "name": "delegates",
+      "version": "1.0.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/delegates"
+    },
+    {
+      "action": "add",
+      "name": "detect-libc",
+      "version": "1.0.3",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/detect-libc"
+    },
+    {
+      "action": "add",
+      "name": "fs.realpath",
+      "version": "1.0.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/fs.realpath"
+    },
+    {
+      "action": "add",
+      "name": "has-unicode",
+      "version": "2.0.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/has-unicode"
+    },
+    {
+      "action": "add",
+      "name": "inherits",
+      "version": "2.0.3",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/inherits"
+    },
+    {
+      "action": "add",
+      "name": "ini",
+      "version": "1.3.5",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/ini"
+    },
+    {
+      "action": "add",
+      "name": "isarray",
+      "version": "1.0.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/isarray"
+    },
+    {
+      "action": "add",
+      "name": "minimatch",
+      "version": "3.0.4",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/minimatch"
+    },
+    {
+      "action": "add",
+      "name": "ignore-walk",
+      "version": "3.0.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/ignore-walk"
+    },
+    {
+      "action": "add",
+      "name": "minimist",
+      "version": "0.0.8",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/minimist"
+    },
+    {
+      "action": "add",
+      "name": "mkdirp",
+      "version": "0.5.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/mkdirp"
+    },
+    {
+      "action": "add",
+      "name": "ms",
+      "version": "2.0.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/ms"
+    },
+    {
+      "action": "add",
+      "name": "debug",
+      "version": "2.6.9",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/debug"
+    },
+    {
+      "action": "add",
+      "name": "npm-bundled",
+      "version": "1.0.5",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/npm-bundled"
+    },
+    {
+      "action": "add",
+      "name": "npm-packlist",
+      "version": "1.2.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/npm-packlist"
+    },
+    {
+      "action": "add",
+      "name": "number-is-nan",
+      "version": "1.0.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/number-is-nan"
+    },
+    {
+      "action": "add",
+      "name": "is-fullwidth-code-point",
+      "version": "1.0.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/is-fullwidth-code-point"
+    },
+    {
+      "action": "add",
+      "name": "object-assign",
+      "version": "4.1.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/object-assign"
+    },
+    {
+      "action": "add",
+      "name": "os-homedir",
+      "version": "1.0.2",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/os-homedir"
+    },
+    {
+      "action": "add",
+      "name": "os-tmpdir",
+      "version": "1.0.2",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/os-tmpdir"
+    },
+    {
+      "action": "add",
+      "name": "osenv",
+      "version": "0.1.5",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/osenv"
+    },
+    {
+      "action": "add",
+      "name": "nopt",
+      "version": "4.0.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/nopt"
+    },
+    {
+      "action": "add",
+      "name": "path-is-absolute",
+      "version": "1.0.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/path-is-absolute"
+    },
+    {
+      "action": "add",
+      "name": "process-nextick-args",
+      "version": "2.0.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/process-nextick-args"
+    },
+    {
+      "action": "add",
+      "name": "minimist",
+      "version": "1.2.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/rc/node_modules/minimist"
+    },
+    {
+      "action": "add",
+      "name": "safe-buffer",
+      "version": "5.1.2",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/safe-buffer"
+    },
+    {
+      "action": "add",
+      "name": "safer-buffer",
+      "version": "2.1.2",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/safer-buffer"
+    },
+    {
+      "action": "add",
+      "name": "iconv-lite",
+      "version": "0.4.24",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/iconv-lite"
+    },
+    {
+      "action": "add",
+      "name": "sax",
+      "version": "1.2.4",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/sax"
+    },
+    {
+      "action": "add",
+      "name": "needle",
+      "version": "2.2.4",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/needle"
+    },
+    {
+      "action": "add",
+      "name": "semver",
+      "version": "5.6.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/semver"
+    },
+    {
+      "action": "add",
+      "name": "set-blocking",
+      "version": "2.0.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/set-blocking"
+    },
+    {
+      "action": "add",
+      "name": "signal-exit",
+      "version": "3.0.2",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/signal-exit"
+    },
+    {
+      "action": "add",
+      "name": "string_decoder",
+      "version": "1.1.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/string_decoder"
+    },
+    {
+      "action": "add",
+      "name": "strip-ansi",
+      "version": "3.0.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/strip-ansi"
+    },
+    {
+      "action": "add",
+      "name": "string-width",
+      "version": "1.0.2",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/string-width"
+    },
+    {
+      "action": "add",
+      "name": "strip-json-comments",
+      "version": "2.0.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/strip-json-comments"
+    },
+    {
+      "action": "add",
+      "name": "rc",
+      "version": "1.2.8",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/rc"
+    },
+    {
+      "action": "add",
+      "name": "util-deprecate",
+      "version": "1.0.2",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/util-deprecate"
+    },
+    {
+      "action": "add",
+      "name": "readable-stream",
+      "version": "2.3.6",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/readable-stream"
+    },
+    {
+      "action": "add",
+      "name": "are-we-there-yet",
+      "version": "1.1.5",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/are-we-there-yet"
+    },
+    {
+      "action": "add",
+      "name": "wide-align",
+      "version": "1.1.3",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/wide-align"
+    },
+    {
+      "action": "add",
+      "name": "gauge",
+      "version": "2.7.4",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/gauge"
+    },
+    {
+      "action": "add",
+      "name": "npmlog",
+      "version": "4.1.2",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/npmlog"
+    },
+    {
+      "action": "add",
+      "name": "wrappy",
+      "version": "1.0.2",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/wrappy"
+    },
+    {
+      "action": "add",
+      "name": "once",
+      "version": "1.4.0",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/once"
+    },
+    {
+      "action": "add",
+      "name": "inflight",
+      "version": "1.0.6",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/inflight"
+    },
+    {
+      "action": "add",
+      "name": "glob",
+      "version": "7.1.3",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/glob"
+    },
+    {
+      "action": "add",
+      "name": "rimraf",
+      "version": "2.6.3",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/rimraf"
+    },
+    {
+      "action": "add",
+      "name": "yallist",
+      "version": "3.0.3",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/yallist"
+    },
+    {
+      "action": "add",
+      "name": "minipass",
+      "version": "2.3.5",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/minipass"
+    },
+    {
+      "action": "add",
+      "name": "fs-minipass",
+      "version": "1.2.5",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/fs-minipass"
+    },
+    {
+      "action": "add",
+      "name": "minizlib",
+      "version": "1.2.1",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/minizlib"
+    },
+    {
+      "action": "add",
+      "name": "tar",
+      "version": "4.4.8",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/tar"
+    },
+    {
+      "action": "add",
+      "name": "node-pre-gyp",
+      "version": "0.10.3",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents/node_modules/node-pre-gyp"
+    },
+    {
+      "action": "add",
+      "name": "fsevents",
+      "version": "1.2.7",
+      "path": "/home/rvpanoz/Projects/electron/luna/node_modules/fsevents"
+    }
+  ],
+  "warnings": [
+    "SKIPPING OPTIONAL DEPENDENCY: fsevents@1.2.7 (node_modules/fsevents):\nSKIPPING OPTIONAL DEPENDENCY: Unsupported platform for fsevents@1.2.7: wanted {\"os\":\"darwin\",\"arch\":\"any\"} (current: {\"os\":\"linux\",\"arch\":\"x64\"})\nSKIPPING OPTIONAL DEPENDENCY: Valid OS:    darwin\nSKIPPING OPTIONAL DEPENDENCY: Valid Arch:  any\nSKIPPING OPTIONAL DEPENDENCY: Actual OS:   linux\nSKIPPING OPTIONAL DEPENDENCY: Actual Arch: x64"
+  ],
+  "elapsed": 7459
+}

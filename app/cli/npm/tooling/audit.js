@@ -1,8 +1,15 @@
-const audit = () => {
+const audit = options => {
   const command = ['audit'];
   const defaults = ['--json'];
+  let commandOptions;
 
-  const run = [].concat(command).concat(defaults);
+  if (options.options && options.options.length) {
+    commandOptions = defaults.concat(options.options);
+  } else {
+    commandOptions = defaults;
+  }
+
+  const run = [].concat(command).concat(commandOptions);
   return run;
 };
 

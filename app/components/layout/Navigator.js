@@ -66,20 +66,15 @@ const Navigator = ({
     return () => ipcRenderer.removeAllListeners('loaded-packages-close');
   }, []);
 
-  const runNpmTool = toolName => {
-    const parameters = {
-      ipcEvent: toolName,
-      cmd: [toolName],
-      mode,
-      directory: fullDirectory
-    };
-
+  const runNpmTool = (toolName, options) => {
     dispatch(
       runTool({
         channel: 'ipc-event',
-        options: {
-          ...parameters
-        }
+        ipcEvent: toolName,
+        cmd: [toolName],
+        options,
+        mode,
+        directory: fullDirectory
       })
     );
   };
@@ -190,18 +185,6 @@ const Navigator = ({
                     primaryText: 'npm audit',
                     secondaryText: 'Run npm audit',
                     handler: () => runNpmTool('audit')
-                  },
-                  {
-                    mode,
-                    primaryText: 'npm doctor',
-                    secondaryText: 'Run npm doctor',
-                    handler: () => runNpmTool('doctor')
-                  },
-                  {
-                    mode,
-                    primaryText: 'npm prune',
-                    secondaryText: 'Remove extraneous packages',
-                    handler: () => runNpmTool('prune')
                   }
                 ]}
                 nodata={packages && packages.length === 0}

@@ -1,5 +1,5 @@
 import { lighten } from '@material-ui/core/styles/colorManipulator';
-import { drawerWidth } from 'styles/variables';
+import { defaultFont, drawerWidth } from 'styles/variables';
 
 const styles = theme => ({
   root: {
@@ -23,6 +23,22 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
     background: lighten('#fff', 0.1),
     overflow: 'hidden'
+  },
+  label: {
+    ...defaultFont,
+    fontSize: 20
+  },
+  subheader: {
+    ...defaultFont,
+    fontSize: 16
+  },
+  value: {
+    ...defaultFont,
+    fontSize: 22,
+    color: theme.palette.secondary.light
+  },
+  list: {
+    paddingTop: theme.spacing.unit * 2
   }
 });
 

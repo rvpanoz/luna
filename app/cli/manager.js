@@ -4,6 +4,7 @@ import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
 import mk from '../mk';
+import { runInThisContext } from 'vm';
 
 const { spawn } = cp;
 const { log } = console;
@@ -144,7 +145,7 @@ const outdated = (options, callback) => {
  */
 const search = (opts, callback) => {
   const command = ['search'];
-  const { directory, mode, pkgName } = opts;
+  const { directory, mode, pkgName } = opts || {};
   const defaults = ['--depth=0', '--json'];
 
   if (!pkgName) {
@@ -157,7 +158,7 @@ const search = (opts, callback) => {
 };
 
 const install = (opts, callback, idx) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+  const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const runInstall = require('./npm/install').default;
@@ -175,7 +176,7 @@ const install = (opts, callback, idx) => {
 };
 
 const update = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+  const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const runUpdate = require('./npm/update').default;
@@ -193,7 +194,7 @@ const update = (opts, callback) => {
 };
 
 const uninstall = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+  const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const runUninstall = require('./npm/uninstall').default;
@@ -212,7 +213,7 @@ const uninstall = (opts, callback) => {
 
 // npm view [<@scope>/]<name>[@<version>]
 const view = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+  const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const runView = require('./npm/view').default;
@@ -230,8 +231,8 @@ const view = (opts, callback) => {
 };
 
 const runAudit = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
-
+  const { mode, directory, activeManager = 'npm', fix = false } = opts || {};
+  console.log(opts);
   try {
     const audit = require('./npm/tooling/audit').default;
 
@@ -248,7 +249,7 @@ const runAudit = (opts, callback) => {
 };
 
 const runDoctor = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+  const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const doctor = require('./npm/tooling/doctor').default;
@@ -266,7 +267,7 @@ const runDoctor = (opts, callback) => {
 };
 
 const runPrune = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+  const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const prune = require('./npm/tooling/prune').default;
@@ -284,7 +285,7 @@ const runPrune = (opts, callback) => {
 };
 
 const runDedupe = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+  const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const dedupe = require('./npm/tooling/dedupe').default;
@@ -337,7 +338,26 @@ const runClean = (opts, callback) => {
   }
 };
 
+const runInit = (opts, callback) => {
+  const { mode, directory, activeManager = 'npm' } = opts;
+
+  try {
+    const init = require('./npm/tooling/init').default;
+
+    if (typeof init === 'function') {
+      const run = init(opts);
+
+      return execute(activeManager, run, mode, directory, callback);
+    }
+
+    Promise.reject('cli:init is not defined');
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export default {
+  init: runInit,
   audit: runAudit,
   doctor: runDoctor,
   prune: runPrune,

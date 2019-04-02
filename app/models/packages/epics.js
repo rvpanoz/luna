@@ -295,12 +295,12 @@ const packagesSuccessEpic = (action$, state$) =>
 const npmToolsEpic = action$ =>
   action$.pipe(
     ofType(runTool.type),
-    map(({ payload: { channel, options } }) => {
-      ipcRenderer.send(channel, options);
+    map(({ payload }) => {
+      ipcRenderer.send('ipc-event', payload);
 
       return updateLoader({
         loading: true,
-        message: 'Running..'
+        message: 'Running npm audit'
       });
     })
   );

@@ -12,8 +12,10 @@ import Header from 'components/layout/AppHeader';
 import { Packages } from 'components/pages/packages';
 import SnackbarContent from 'components/common/SnackbarContent';
 
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -26,13 +28,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import { Notifications } from 'components/pages/notifications';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
-import {
-  switchcase,
-  shrinkDirectory,
-  parseNpmDoctor,
-  parseNpmAudit,
-  parseNpmPrune
-} from 'commons/utils';
+import { runTool } from 'models/packages/actions';
+import { switchcase, shrinkDirectory, parseNpmAudit } from 'commons/utils';
 
 import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
@@ -83,22 +80,31 @@ const AppLayout = ({ classes }) => {
 
   const dispatch = useDispatch();
 
+  const runNpmTool = (toolName, options) => {
+    setDialog({
+      open: false,
+      content: null
+    });
+
+    dispatch(
+      runTool({
+        channel: 'ipc-event',
+        ipcEvent: toolName,
+        cmd: [toolName],
+        options,
+        mode,
+        directory
+      })
+    );
+  };
+
   useEffect(() => {
     ipcRenderer.on('tool-close', (event, errors, cliResult, command) => {
       const toolName = command && command[0];
 
       const content = switchcase({
-        audit: () => parseNpmAudit(cliResult),
-        prune: () => parseNpmPrune(cliResult),
-        doctor: () => parseNpmDoctor(cliResult)
+        audit: () => parseNpmAudit(cliResult)
       })(null)(toolName);
-
-      if (cliResult) {
-        setDialog({
-          open: true,
-          content: content || []
-        });
-      }
 
       dispatch(
         toggleLoader({
@@ -106,6 +112,20 @@ const AppLayout = ({ classes }) => {
           message: null
         })
       );
+
+      if (content) {
+        setDialog({
+          open: true,
+          content
+        });
+      } else {
+        dispatch(
+          setSnackbar({
+            open: true,
+            message: 'npm audit fix completed'
+          })
+        );
+      }
     });
 
     return () => ipcRenderer.removeAllListeners('tool-close');
@@ -160,23 +180,63 @@ const AppLayout = ({ classes }) => {
             />
           </Snackbar>
         )}
-        {dialog && dialog.open && (
-          <Dialog open={dialog.open} aria-labelledby="results-tools">
+        {dialog && dialog.content && (
+          <Dialog
+            fullWidth
+            open={dialog.open}
+            aria-labelledby="npm-audit-results"
+          >
             <DialogTitle>Results</DialogTitle>
             <DialogContent>
-              <List dense>
-                {dialog.content.map(item => (
-                  <ListItem key={item.name}>
-                    <ListItemText
-                      primary={
-                        <Typography veriant="h6">{item.name}</Typography>
-                      }
-                    />
-                    <ListItemSecondaryAction>
-                      <Typography veriant="h6">{item.value}</Typography>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
+              <Grid container justify="space-between">
+                {dialog.content
+                  .filter(item => !Array.isArray(item.value))
+                  .map(item => (
+                    <Grid item key={item.name}>
+                      <Typography className={classes.label}>
+                        {item.name === 'dependencies'
+                          ? item.name
+                          : item.name.split('Dependencies').join('\t')}
+                      </Typography>
+                      <Typography className={classes.value}>
+                        {item.value}
+                      </Typography>
+                    </Grid>
+                  ))}
+              </Grid>
+              <Divider light />
+              <List
+                disablePadding
+                dense
+                subheader={
+                  <Typography className={classes.subheader}>
+                    Vulnerabilities
+                  </Typography>
+                }
+                className={classes.list}
+              >
+                {dialog.content
+                  .filter(item => Array.isArray(item.value))
+                  .map(item => {
+                    const { value } = item;
+
+                    return value.map(valueItem => (
+                      <ListItem key={valueItem.name}>
+                        <ListItemText
+                          primary={
+                            <Typography className={classes.label}>
+                              {valueItem.name}
+                            </Typography>
+                          }
+                        />
+                        <ListItemSecondaryAction>
+                          <Typography className={classes.value}>
+                            {valueItem.value}
+                          </Typography>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                    ));
+                  })}
               </List>
             </DialogContent>
             <DialogActions>
@@ -190,6 +250,12 @@ const AppLayout = ({ classes }) => {
                 color="secondary"
               >
                 Close
+              </Button>
+              <Button
+                color="primary"
+                onClick={() => runNpmTool('audit', ['fix'])}
+              >
+                Fix
               </Button>
             </DialogActions>
           </Dialog>

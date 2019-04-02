@@ -24,7 +24,6 @@ const setActivePage = ActionCreator('SET_ACTIVE_PAGE');
 const updateStatus = ActionCreator('UPDATE_ONLINE_STATUS');
 const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const clearRunningCommand = ActionCreator('CLEAR_RUNNING_COMMAND');
-const runCacheOperation = ActionCreator('RUN_CACHE_OPERATION');
 
 export {
   updateStatus,
@@ -48,6 +47,5 @@ export {
   uiException,
   clearAll,
   clearRunningCommand,
-  setRunningCommand,
-  runCacheOperation
+  setRunningCommand
 };

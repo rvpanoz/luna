@@ -343,30 +343,58 @@ export const setupInstallOptions = (selected, options) => {
 };
 
 export const parseNpmAudit = data => {
+  console.log(data);
   try {
     const dataToJson = JSON.parse(data);
-    const {
-      metadata: { vulnerabilities }
-    } = dataToJson;
+    const fs = require('fs');
 
-    const vulnerabilitiesKeys = Object.keys(vulnerabilities);
+    fs.writeFileSync('audit.json', data, {
+      encoding: 'utf-8'
+    });
 
-    return (
-      vulnerabilitiesKeys &&
-      vulnerabilitiesKeys.map(key => ({
-        name: key,
-        value: vulnerabilities[key]
-      }))
-    );
-  } catch (error) {}
+    const { error } = dataToJson;
+
+    if (error) {
+      const { code, summary } = error;
+
+      return {
+        error: true,
+        message: `${code}: ${summary}`
+      };
+    }
+
+    const { metadata } = dataToJson;
+
+    if (!metadata) {
+      return dataToJson; // fix option
+    }
+
+    const dataKeys = Object.keys(metadata);
+
+    const result = dataKeys.map(dataKey => {
+      const valueObject = typeof metadata[dataKey] === 'object';
+
+      if (valueObject) {
+        const valueKeys = Object.keys(metadata[dataKey]);
+        const valueResult = valueKeys.map(valueKey => ({
+          name: valueKey,
+          value: metadata[dataKey][valueKey]
+        }));
+
+        return {
+          name: dataKey,
+          value: valueResult
+        };
+      } else {
+        return {
+          name: dataKey,
+          value: metadata[dataKey]
+        };
+      }
+    });
+
+    return result;
+  } catch (error) {
+    Promise.reject(error);
+  }
 };
-
-export const parseNpmPrune = data => {
-  try {
-    const dataToJson = JSON.parse(data);
-
-    return dataToJson;
-  } catch (error) {}
-};
-
-export const parseNpmDoctor = data => {};
