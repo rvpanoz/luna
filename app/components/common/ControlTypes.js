@@ -19,12 +19,6 @@ const groups = Object.values(PACKAGE_GROUPS);
 const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
   const [groupName, setGroup] = useState('save-prod');
 
-  const handleExact = () =>
-    onSelect({
-      name: packageName,
-      options: ['save-exact']
-    });
-
   useEffect(() => {
     if (devOnly) {
       setGroup('save-dev');
@@ -33,7 +27,7 @@ const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
         options: [groupName]
       });
     }
-  }, []);
+  }, [devOnly, groupName, packageName, onSelect]);
 
   return (
     <FormGroup row>
@@ -67,7 +61,17 @@ const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
       </FormControl>
       <FormControlLabel
         className={classes.formControl}
-        control={<Checkbox onChange={e => handleExact(e)} value="save-exact" />}
+        control={
+          <Checkbox
+            onChange={() =>
+              onSelect({
+                name: packageName,
+                options: ['save-exact']
+              })
+            }
+            value="save-exact"
+          />
+        }
         label="exact"
       />
     </FormGroup>

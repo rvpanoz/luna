@@ -16,12 +16,14 @@ import { apiManager as manager } from './cli';
 export const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
+  // returns an array of Promises
   const combine = () =>
     cmd.map((command, idx) => {
       try {
         const runner = manager[command];
+        const result = runner(rest, callback, idx);
 
-        return runner(rest, callback, idx);
+        return result;
       } catch (error) {
         throw new Error(error);
       }

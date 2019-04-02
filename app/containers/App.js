@@ -48,7 +48,8 @@ const App = () => {
     // Stopping propagation means that the event never reaches the listeners that are listening for it.
     window.addEventListener('online', updateOnlineStatus, true);
     window.addEventListener('offline', updateOnlineStatus, true);
-  });
+  }, [dispatch]);
+
   useEffect(() => {
     dispatch({
       type: updateStatus.type,
@@ -75,7 +76,7 @@ const App = () => {
       );
     });
 
-    ipcRenderer.once('get-env-close', (event, env) => {
+    ipcRenderer.on('get-env-close', (event, env) => {
       dispatch({ type: setEnv.type, payload: env });
     });
 
@@ -86,7 +87,7 @@ const App = () => {
         'get-env-close',
         'yarn-warning-close'
       ]);
-  }, []);
+  }, [dispatch]);
 
   return (
     <div id="app">

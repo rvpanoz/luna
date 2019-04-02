@@ -97,8 +97,6 @@ const handleLocalEvents = (event, mode, directory) => {
       }
     ]);
   }
-
-  event.sender.send('loaded-packages-close', Store.get('openedPackages'));
 };
 
 /**
@@ -138,6 +136,7 @@ ipcMain.on('ipc-event', (event, options) => {
       handleLocalEvents(event, mode, directory);
     }
 
+    event.sender.send('loaded-packages-close', Store.get('openedPackages'));
     event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
   };
 
@@ -290,4 +289,5 @@ app.on('ready', async () => {
 process.on('uncaughtException', error => {
   log.error('[ERROR]', error.message);
   mainWindow.webContents.send('uncaught-exception', error.message);
+  app.quit();
 });

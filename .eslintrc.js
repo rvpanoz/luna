@@ -12,6 +12,8 @@ module.exports = {
     node: true
   },
   rules: {
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
     'linebreak-style': 0,
     'arrow-parens': ['off'],
     'compat/compat': 'error',
@@ -44,7 +46,7 @@ module.exports = {
     'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx'] }],
     'react/prefer-stateless-function': 'off'
   },
-  plugins: ['import', 'promise', 'compat', 'react'],
+  plugins: ['import', 'promise', 'compat', 'react', 'react-hooks'],
   settings: {
     'import/resolver': {
       webpack: {

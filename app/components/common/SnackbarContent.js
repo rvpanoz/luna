@@ -15,6 +15,8 @@ import ErrorIcon from '@material-ui/icons/Error';
 import InfoIcon from '@material-ui/icons/Info';
 import CloseIcon from '@material-ui/icons/Close';
 
+import { defaultFont } from 'styles/variables';
+
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -41,10 +43,9 @@ const styles = theme => ({
     marginRight: theme.spacing.unit
   },
   message: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    maxWidth: 300
+    ...defaultFont,
+    color: theme.palette.common.white,
+    fontSize: 14
   }
 });
 
@@ -60,9 +61,9 @@ const AppSnackbarContent = ({
     aria-describedby="cli-snackbar"
     message={
       <span id="cli-snackbar" className={classes.message}>
-        {variant === 'info' && (
+        {/* {variant === 'info' && (
           <InfoIcon className={classNames(classes.icon, classes.iconVariant)} />
-        )}
+        )} */}
         {variant === 'error' && (
           <ErrorIcon
             className={classNames(classes.icon, classes.iconVariant)}
@@ -78,7 +79,7 @@ const AppSnackbarContent = ({
             className={classNames(classes.icon, classes.iconVariant)}
           />
         )}
-        <Typography style={{ color: '#fff' }}>{message}</Typography>
+        <Typography className={classes.message}>{message}</Typography>
       </span>
     }
     action={[

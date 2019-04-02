@@ -18,6 +18,8 @@ const install = (options, idx) => {
     single,
     packageJson
   } = options || {};
+
+  // '--unsafe-perm use root'
   const defaults = ['--ignore-scripts', '--verbose'];
 
   if (!packages && !multiple && !name && !packageJson) {
@@ -51,12 +53,8 @@ const install = (options, idx) => {
 
   let commandOptsMultiple = [];
 
-  if (pkgOptions && Array.isArray(pkgOptions)) {
-    if (idx > -1 && pkgOptions.length > 1) {
-      commandOptsMultiple = pkgOptions[idx].map(option => `--${option}`);
-    } else {
-      commandOptsMultiple = pkgOptions.map(option => `--${option}`);
-    }
+  if (pkgOptions && Array.isArray(pkgOptions) && pkgOptions.length) {
+    commandOptsMultiple = pkgOptions[idx].map(option => `--${option}`);
   }
 
   const runningCommandsOptions = single

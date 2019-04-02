@@ -80,13 +80,14 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
     );
 
     return () => ipcRenderer.removeAllListeners(['search-packages-close']);
-  });
+  }, [dispatch]);
 
   useEffect(() => {
-    if (rootEl && rootEl.current) {
-      rootEl.current.addEventListener('keyup', onKeyUp, () => {});
+    const { current } = rootEl;
+    if (current) {
+      current.addEventListener('keyup', onKeyUp, () => {});
 
-      return () => rootEl.current.removeEventListener('keyup', onKeyUp);
+      return () => current.removeEventListener('keyup', onKeyUp);
     }
   });
 

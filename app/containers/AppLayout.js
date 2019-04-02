@@ -96,7 +96,7 @@ const AppLayout = ({ classes }) => {
       if (cliResult) {
         setDialog({
           open: true,
-          content: content || 'No results'
+          content: content || []
         });
       }
 
@@ -109,7 +109,7 @@ const AppLayout = ({ classes }) => {
     });
 
     return () => ipcRenderer.removeAllListeners('tool-close');
-  }, []);
+  }, [dispatch]);
 
   return (
     <MuiThemeProvider theme={theme}>

@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { ipcRenderer } from 'electron';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -30,11 +30,11 @@ import {
   removePackages
 } from 'models/packages/actions';
 import {
-  commandMessage,
   toggleLoader,
   togglePackageLoader,
   setSnackbar,
-  clearRunningCommand
+  clearRunningCommand,
+  setMode
 } from 'models/ui/actions';
 import { PackageDetails } from 'components/pages/package';
 
@@ -127,34 +127,46 @@ const Packages = ({ classes }) => {
   const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
     IPC_EVENT,
     parameters,
-    [mode, directory, forceUpdate]
+    [mode, directory]
   );
 
-  const { projectName, projectVersion } = dependenciesSet || {};
+  const startPackages = useCallback(() => {
+    const startParameters = {
+      ipcEvent: 'get-packages',
+      cmd: ['outdated', 'list'],
+      mode,
+      directory
+    };
 
-  const dependencies = dependenciesSet.data;
-  const outdated = outdatedSet.data;
-
-  const startPackages = () =>
     dispatch(
       setPackagesStart({
         channel: IPC_EVENT,
         options: {
-          ...parameters
+          ...startParameters
         }
       })
     );
+  }, [mode, directory]);
+
+  const switchMode = (appMode, appDirectory) => {
+    dispatch(setMode({ mode: appMode, directory: appDirectory }));
+
+    if (fromSearch) {
+      startPackages();
+    }
+  };
 
   useEffect(() => {
+    const { projectName, projectVersion } = dependenciesSet || {};
+    const dependencies = dependenciesSet.data;
+    const outdated = outdatedSet.data;
+
     if (paused) {
       return;
     }
 
-    if (commandErrors) {
-      dispatch({
-        type: commandMessage.type,
-        payload: { error: commandErrors }
-      });
+    if (forceUpdate > 0) {
+      setforceUpdate(0);
     }
 
     dispatch(
@@ -165,15 +177,20 @@ const Packages = ({ classes }) => {
         projectVersion
       })
     );
-  }, [dependenciesSet]);
+  }, [dependenciesSet, outdatedSet, commandErrors]);
 
   useEffect(() => {
-    ipcRenderer.on('action-close', (event, error, cliMessage, options) => {
+    ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
       const operation = options && options[0];
       const argv = options && options[1];
+      let errorMessages = [];
 
-      if (error && error.length) {
-        console.error(error); // TODO: logic
+      if (output && output.length) {
+        const outputParts = output.split('\n');
+
+        errorMessages = outputParts.filter(
+          outputPart => outputPart.indexOf('npm ERR!') === 0
+        );
       }
 
       if (operation === 'uninstall') {
@@ -190,24 +207,50 @@ const Packages = ({ classes }) => {
           dispatch(
             removePackages({ removedPackages: removedOrUpdatedPackages })
           );
+
+          // update packages without fetching
           setforceUpdate(forceUpdate + 1);
+
+          // clear npm running operation
+          dispatch(clearRunningCommand());
+
+          dispatch(
+            toggleLoader({
+              loading: false,
+              message: null
+            })
+          );
+
+          dispatch(
+            setSnackbar({
+              open: true,
+              type: errorMessages.length ? 'error' : 'info',
+              message: errorMessages.length
+                ? `Packages removed with errors \n${errorMessages[1]}\n${
+                    errorMessages[2]
+                  }`
+                : 'Packages removed'
+            })
+          );
         }
+
+        return;
       }
 
+      // must clean up and here
       dispatch(clearRunningCommand());
+
+      startPackages();
 
       dispatch(
         setSnackbar({
           open: true,
-          type: 'info',
-          message: cliMessage
-        })
-      );
-
-      dispatch(
-        toggleLoader({
-          loading: false,
-          message: null
+          type: errorMessages.length ? 'error' : 'info',
+          message: errorMessages.length
+            ? `Packages updated with errors \n${errorMessages[1]}\n${
+                errorMessages[2]
+              }`
+            : 'Packages updated'
         })
       );
     });
@@ -233,7 +276,7 @@ const Packages = ({ classes }) => {
       ['action-close', 'view-close'].forEach(listener =>
         ipcRenderer.removeAllListeners(listener)
       );
-  }, [forceUpdate]);
+  }, [forceUpdate, dispatch]);
 
   const scrollWrapper = top => {
     const wrapperEl = wrapperRef && wrapperRef.current;
@@ -303,6 +346,7 @@ const Packages = ({ classes }) => {
                 fromSearch={fromSearch}
                 filters={filters}
                 scrollWrapper={scrollWrapper}
+                switchMode={switchMode}
                 reload={() => startPackages()}
                 filteredByNamePackages={filteredByNamePackages}
                 setFilteredByNamePackages={setFilteredByNamePackages}

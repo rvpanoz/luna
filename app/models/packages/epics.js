@@ -116,6 +116,7 @@ const packagesStartEpic = (action$, state$) =>
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
     concatMap(({ type, payload }) => {
       const { forceUpdate } = payload;
+      console.log(forceUpdate);
       const {
         modules: {
           data: { packages, packagesOutdated },
@@ -193,7 +194,7 @@ const updatePackagesEpic = action$ =>
           updateCommand({
             operationStatus: 'running',
             operationCommand: ipcEvent,
-            operationPackages: packages && packages.length ? packages : name
+            operationPackages: packages && packages.length ? packages : [name]
           })
         ];
       }
@@ -206,7 +207,7 @@ const updatePackagesEpic = action$ =>
         updateCommand({
           operationStatus: 'running',
           operationCommand: ipcEvent,
-          operationPackages: packages && packages.length ? packages : name
+          operationPackages: packages && packages.length ? packages : [name]
         })
       ];
     })
