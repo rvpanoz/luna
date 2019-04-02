@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { ipcRenderer } from 'electron';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -30,7 +30,6 @@ import {
   removePackages
 } from 'models/packages/actions';
 import {
-  commandMessage,
   toggleLoader,
   togglePackageLoader,
   setSnackbar,
@@ -128,19 +127,26 @@ const Packages = ({ classes }) => {
   const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
     IPC_EVENT,
     parameters,
-    [mode, directory, forceUpdate]
+    [mode, directory]
   );
 
-  const startPackages = () => {
+  const startPackages = useCallback(() => {
+    const startParameters = {
+      ipcEvent: 'get-packages',
+      cmd: ['outdated', 'list'],
+      mode,
+      directory
+    };
+
     dispatch(
       setPackagesStart({
         channel: IPC_EVENT,
         options: {
-          ...parameters
+          ...startParameters
         }
       })
     );
-  };
+  }, [mode, directory]);
 
   const switchMode = (appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
@@ -162,10 +168,6 @@ const Packages = ({ classes }) => {
     if (forceUpdate > 0) {
       setforceUpdate(0);
     }
-
-    // if (commandErrors) {
-    //   console.log(commandMessage.type, commandErrors);
-    // }
 
     dispatch(
       updateData({
@@ -208,27 +210,37 @@ const Packages = ({ classes }) => {
 
           // update packages without fetching
           setforceUpdate(forceUpdate + 1);
+
+          // clear npm running operation
+          dispatch(clearRunningCommand());
+
+          dispatch(
+            toggleLoader({
+              loading: false,
+              message: null
+            })
+          );
+
+          dispatch(
+            setSnackbar({
+              open: true,
+              type: errorMessages.length ? 'error' : 'info',
+              message: errorMessages.length
+                ? `Packages removed with errors \n${errorMessages[1]}\n${
+                    errorMessages[2]
+                  }`
+                : 'Packages removed'
+            })
+          );
         }
+
+        return;
       }
 
+      // must clean up and here
       dispatch(clearRunningCommand());
 
-      dispatch(
-        toggleLoader({
-          loading: false,
-          message: null
-        })
-      );
-
-      if (errorMessages.length) {
-        dispatch(
-          setSnackbar({
-            open: true,
-            type: 'error',
-            message: 'Operation completederrors'
-          })
-        );
-      }
+      startPackages();
 
       dispatch(
         setSnackbar({

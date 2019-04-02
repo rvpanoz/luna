@@ -194,7 +194,7 @@ const updatePackagesEpic = action$ =>
           updateCommand({
             operationStatus: 'running',
             operationCommand: ipcEvent,
-            operationPackages: packages && packages.length ? packages : name
+            operationPackages: packages && packages.length ? packages : [name]
           })
         ];
       }
@@ -207,7 +207,7 @@ const updatePackagesEpic = action$ =>
         updateCommand({
           operationStatus: 'running',
           operationCommand: ipcEvent,
-          operationPackages: packages && packages.length ? packages : name
+          operationPackages: packages && packages.length ? packages : [name]
         })
       ];
     })
