@@ -349,7 +349,6 @@ const handlers = {
       }
     }),
   [removePackages.type]: (state, { payload: { removedPackages } }) => {
-    console.log(removedPackages);
     const {
       data: { packages, packagesOutdated }
     } = state;

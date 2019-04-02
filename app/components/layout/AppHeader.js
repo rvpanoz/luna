@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -24,7 +24,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import SearchBox from 'components/common/SearchBox';
 import InstallFromSource from 'components/common/InstallFromSource';
-import { setActivePage, runCacheOperation } from 'models/ui/actions';
+import { setActivePage } from 'models/ui/actions';
 
 import Settings from './Settings';
 import styles from './styles/appHeader';
@@ -55,26 +55,6 @@ const Header = ({ classes, onDrawerToggle }) => {
   );
 
   const dispatch = useDispatch();
-
-  const handleCache = useCallback(() => {
-    // clear npm cache, npm verify cache
-
-    const parameters = {
-      ipcEvent: 'verify',
-      cmd: ['verify'],
-      mode,
-      directory
-    };
-
-    dispatch(
-      runCacheOperation({
-        channel: 'ipc-event',
-        options: {
-          ...parameters
-        }
-      })
-    );
-  }, [mode, directory, dispatch]);
 
   return (
     <React.Fragment>
@@ -131,18 +111,6 @@ const Header = ({ classes, onDrawerToggle }) => {
             </Grid>
             <Grid item>
               <Button
-                title="Create package.json"
-                className={classes.button}
-                variant="outlined"
-                color="inherit"
-                size="small"
-                onClick={() => setDialog({ open: true })}
-              >
-                Create
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
                 title="Open install options"
                 className={classes.button}
                 variant="outlined"
@@ -175,7 +143,6 @@ const Header = ({ classes, onDrawerToggle }) => {
             value="problems"
             disabled={loading}
           />
-          <Tab textColor="inherit" label="Reports" value="reports" />
         </Tabs>
       </AppBar>
       <Popover
@@ -204,9 +171,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             },
             {
               primaryText: 'Cache',
-              secondaryText: env.cache,
-              action: () => handleCache(),
-              title: 'Verify npm cache'
+              secondaryText: env.cache
             }
           ]}
           loading={loading}
