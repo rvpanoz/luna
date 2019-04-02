@@ -146,7 +146,7 @@ const Packages = ({ classes }) => {
         }
       })
     );
-  }, [mode, directory]);
+  }, [mode, directory, dispatch]);
 
   const switchMode = (appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
@@ -276,7 +276,7 @@ const Packages = ({ classes }) => {
       ['action-close', 'view-close'].forEach(listener =>
         ipcRenderer.removeAllListeners(listener)
       );
-  }, [forceUpdate, dispatch]);
+  }, [forceUpdate, dispatch, startPackages]);
 
   const scrollWrapper = top => {
     const wrapperEl = wrapperRef && wrapperRef.current;
