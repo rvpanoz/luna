@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import SettingsIcon from '@material-ui/icons/Settings';
+import SystemIcon from '@material-ui/icons/InfoRounded';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -26,7 +26,7 @@ import SearchBox from 'components/common/SearchBox';
 import InstallFromSource from 'components/common/InstallFromSource';
 import { setActivePage } from 'models/ui/actions';
 
-import Settings from './Settings';
+import System from './System';
 import styles from './styles/appHeader';
 
 const mapState = ({
@@ -83,12 +83,12 @@ const Header = ({ classes, onDrawerToggle }) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title="Open settings">
+              <Tooltip title="Preview system">
                 <IconButton
                   color="inherit"
                   onClick={e => setAnchorEl(e.currentTarget)}
                 >
-                  <SettingsIcon />
+                  <SystemIcon />
                 </IconButton>
               </Tooltip>
             </Grid>
@@ -110,16 +110,17 @@ const Header = ({ classes, onDrawerToggle }) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Button
-                title="Open install options"
-                className={classes.button}
-                variant="outlined"
-                color="inherit"
-                size="small"
-                onClick={() => setDialog({ open: true })}
-              >
-                Install
-              </Button>
+              <Tooltip title="Open install options">
+                <Button
+                  className={classes.button}
+                  variant="outlined"
+                  color="inherit"
+                  size="small"
+                  onClick={() => setDialog({ open: true })}
+                >
+                  Install
+                </Button>
+              </Tooltip>
             </Grid>
           </Grid>
         </Toolbar>
@@ -146,7 +147,7 @@ const Header = ({ classes, onDrawerToggle }) => {
         </Tabs>
       </AppBar>
       <Popover
-        id="settings-pop"
+        id="system-pop"
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
@@ -159,7 +160,7 @@ const Header = ({ classes, onDrawerToggle }) => {
           horizontal: 'center'
         }}
       >
-        <Settings
+        <System
           items={[
             {
               primaryText: 'Environment',

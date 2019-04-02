@@ -1,3 +1,6 @@
+import { defaultFont, grayColor } from 'styles/variables';
+import { darken } from '@material-ui/core/styles/colorManipulator';
+
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -6,8 +9,14 @@ const styles = theme => ({
   tab: {
     backgroundColor: theme.palette.background.paper
   },
-  title: {
-    margin: `${theme.spacing.unit * 4}px 0 ${theme.spacing.unit * 2}px`
+  label: {
+    ...defaultFont,
+    fontSize: 18,
+    color: darken(grayColor, 0.5)
+  },
+  secondaryText: {
+    ...defaultFont,
+    color: darken(grayColor, 0.2)
   },
   listItem: {
     padding: theme.spacing.unit,

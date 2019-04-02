@@ -13,18 +13,15 @@ import { Packages } from 'components/pages/packages';
 import SnackbarContent from 'components/common/SnackbarContent';
 
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import AppBar from '@material-ui/core/AppBar';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 
 import { Notifications } from 'components/pages/notifications';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
@@ -62,9 +59,23 @@ const mapState = ({
   snackbarOptions
 });
 
+const TabContainer = ({ children }) => (
+  <Typography component="div" style={{ padding: 8 * 3 }}>
+    {children}
+  </Typography>
+);
+
+TabContainer.propTypes = {
+  children: PropTypes.node.isRequired
+};
+
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
-  const [dialog, setDialog] = useState({ open: false, content: null });
+  const [dialog, setDialog] = useState({
+    open: false,
+    content: null,
+    activeTab: 'dependencies'
+  });
 
   const {
     activePage,
@@ -83,7 +94,8 @@ const AppLayout = ({ classes }) => {
   const runNpmTool = (toolName, options) => {
     setDialog({
       open: false,
-      content: null
+      content: null,
+      activeTab: 'dependencies'
     });
 
     dispatch(
@@ -106,6 +118,29 @@ const AppLayout = ({ classes }) => {
         audit: () => parseNpmAudit(cliResult)
       })(null)(toolName);
 
+      const contentData = content.reduce(
+        (acc, data) => {
+          const { value } = data;
+          const isValueArray = Array.isArray(value);
+
+          if (isValueArray) {
+            return {
+              ...acc,
+              vulnerabilities: value
+            };
+          }
+
+          return {
+            ...acc,
+            dependencies: [...acc.dependencies, data]
+          };
+        },
+        {
+          dependencies: [],
+          vulnerabilities: []
+        }
+      );
+
       dispatch(
         toggleLoader({
           loading: false,
@@ -113,10 +148,11 @@ const AppLayout = ({ classes }) => {
         })
       );
 
-      if (content) {
+      if (content && contentData) {
         setDialog({
+          ...dialog,
           open: true,
-          content
+          content: contentData
         });
       } else {
         dispatch(
@@ -188,56 +224,56 @@ const AppLayout = ({ classes }) => {
           >
             <DialogTitle>Results</DialogTitle>
             <DialogContent>
-              <Grid container justify="space-between">
-                {dialog.content
-                  .filter(item => !Array.isArray(item.value))
-                  .map(item => (
-                    <Grid item key={item.name}>
-                      <Typography className={classes.label}>
-                        {item.name === 'dependencies'
-                          ? item.name
-                          : item.name.split('Dependencies').join('\t')}
-                      </Typography>
-                      <Typography className={classes.value}>
-                        {item.value}
-                      </Typography>
-                    </Grid>
-                  ))}
-              </Grid>
-              <Divider light />
-              <List
-                disablePadding
-                dense
-                subheader={
-                  <Typography className={classes.subheader}>
-                    Vulnerabilities
-                  </Typography>
-                }
-                className={classes.list}
+              <AppBar
+                component="div"
+                className={classes.secondaryBar}
+                color="primary"
+                position="static"
+                elevation={0}
               >
-                {dialog.content
-                  .filter(item => Array.isArray(item.value))
-                  .map(item => {
-                    const { value } = item;
-
-                    return value.map(valueItem => (
-                      <ListItem key={valueItem.name}>
-                        <ListItemText
-                          primary={
-                            <Typography className={classes.label}>
-                              {valueItem.name}
-                            </Typography>
-                          }
-                        />
-                        <ListItemSecondaryAction>
-                          <Typography className={classes.value}>
-                            {valueItem.value}
-                          </Typography>
-                        </ListItemSecondaryAction>
-                      </ListItem>
-                    ));
-                  })}
-              </List>
+                <Tabs
+                  value={dialog.activeTab}
+                  textColor="inherit"
+                  onChange={(e, value) =>
+                    setDialog({
+                      ...dialog,
+                      activeTab: value
+                    })
+                  }
+                >
+                  <Tab
+                    textColor="inherit"
+                    label="Dependencies"
+                    value="dependencies"
+                  />
+                  <Tab
+                    textColor="inherit"
+                    label="Vulnerabilities"
+                    value="vulnerabilities"
+                  />
+                </Tabs>
+              </AppBar>
+              {dialog.activeTab === 'dependencies' && (
+                <TabContainer>
+                  <Grid container>
+                    {dialog.content.dependencies.map(item => (
+                      <Grid item key={item.name}>
+                        <Typography className={classes.label}>
+                          {item.name === 'dependencies'
+                            ? item.name
+                            : item.name.split('Dependencies').join('\t')}
+                        </Typography>
+                        <Typography className={classes.value}>
+                          {item.value}
+                        </Typography>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </TabContainer>
+              )}
+              {dialog.activeTab === 'vulnerabilities' && (
+                <TabContainer>Item Two</TabContainer>
+              )}
             </DialogContent>
             <DialogActions>
               <Button

@@ -7,6 +7,8 @@ import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
+
+import Tooltip from '@material-ui/core/Tooltip';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -93,28 +95,33 @@ const Navigator = ({
   return (
     <Drawer variant="permanent" {...restProps}>
       <List disablePadding>
-        <ListItem className={classes.listItem}>
+        <ListItem className={classes.listItem} key="app-logo">
           <ListItemText>
             <AppLogo />
           </ListItemText>
         </ListItem>
-        <ListItem className={classes.listItemHalfPadding}>
+        <ListItem className={classes.listItemHalfPadding} key="big-button">
           <ListItemText className={classes.actionButton}>
-            <Button
-              disabled={loading}
-              className={classes.margin}
-              color="secondary"
-              variant="outlined"
-              fullWidth
-              size="large"
-              onClick={() => openPackage()}
-            >
-              <AddIcon className={classes.extendedIcon} />
-              <span className={classes.label}>Analyze</span>
-            </Button>
+            <Tooltip title="Open local directory">
+              <Button
+                disabled={loading}
+                className={classes.margin}
+                color="secondary"
+                variant="outlined"
+                fullWidth
+                size="large"
+                onClick={() => openPackage()}
+              >
+                <AddIcon className={classes.extendedIcon} />
+                <span className={classes.label}>Analyze</span>
+              </Button>
+            </Tooltip>
           </ListItemText>
         </ListItem>
-        <ListItem className={cn(classes.categoryHeader, classes.listItem)}>
+        <ListItem
+          className={cn(classes.categoryHeader, classes.listItem)}
+          key="app-tabs"
+        >
           <ListItemText
             classes={{
               primary: classes.categoryHeaderPrimary
@@ -123,7 +130,7 @@ const Navigator = ({
             Details
           </ListItemText>
         </ListItem>
-        <ListItem>
+        <ListItem key="app-tabs-content">
           <ListItemText style={{ height: 250 }}>
             <AppTabs>
               <ProjectTab
@@ -193,7 +200,10 @@ const Navigator = ({
             </AppTabs>
           </ListItemText>
         </ListItem>
-        <ListItem className={cn(classes.categoryHeader, classes.listItem)}>
+        <ListItem
+          className={cn(classes.categoryHeader, classes.listItem)}
+          key="history"
+        >
           <ListItemText
             classes={{
               primary: classes.categoryHeaderPrimary
@@ -207,28 +217,30 @@ const Navigator = ({
         <List disablePadding>
           {openedDirectories &&
             openedDirectories.map((dir, idx) => (
-              <ListItem
-                dense
-                disabled={loading}
-                button
-                title={`load ${dir.name}`}
-                onClick={() =>
-                  dispatch(setMode({ mode: 'local', directory: dir.directory }))
-                }
-                key={`directory-${idx + 1}`}
-                className={classes.listItem}
-              >
-                <ListItemIcon>
-                  <FolderIcon color="secondary" />
-                </ListItemIcon>
-                <ListItemText
-                  classes={{
-                    primary: classes.itemPrimary,
-                    textDense: classes.textDense
-                  }}
-                  primary={dir.name}
-                />
-              </ListItem>
+              <Tooltip title={`Load ${dir.name}`} key={`directory-${idx + 1}`}>
+                <ListItem
+                  dense
+                  disabled={loading}
+                  button
+                  onClick={() =>
+                    dispatch(
+                      setMode({ mode: 'local', directory: dir.directory })
+                    )
+                  }
+                  className={classes.listItem}
+                >
+                  <ListItemIcon>
+                    <FolderIcon color="secondary" />
+                  </ListItemIcon>
+                  <ListItemText
+                    classes={{
+                      primary: classes.itemPrimary,
+                      textDense: classes.textDense
+                    }}
+                    primary={dir.name}
+                  />
+                </ListItem>
+              </Tooltip>
             ))}
         </List>
       </div>

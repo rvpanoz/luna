@@ -231,8 +231,8 @@ const view = (opts, callback) => {
 };
 
 const runAudit = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm', fix = false } = opts || {};
-  console.log(opts);
+  const { mode, directory, activeManager = 'npm' } = opts || {};
+
   try {
     const audit = require('./npm/tooling/audit').default;
 
