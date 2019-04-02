@@ -131,11 +131,6 @@ const Packages = ({ classes }) => {
     [mode, directory, forceUpdate]
   );
 
-  const { projectName, projectVersion } = dependenciesSet || {};
-
-  const dependencies = dependenciesSet.data;
-  const outdated = outdatedSet.data;
-
   const startPackages = () => {
     dispatch(
       setPackagesStart({
@@ -156,13 +151,21 @@ const Packages = ({ classes }) => {
   };
 
   useEffect(() => {
+    const { projectName, projectVersion } = dependenciesSet || {};
+    const dependencies = dependenciesSet.data;
+    const outdated = outdatedSet.data;
+
     if (paused) {
       return;
     }
 
-    if (commandErrors) {
-      console.log(commandMessage.type, commandErrors);
+    if (forceUpdate > 0) {
+      setforceUpdate(0);
     }
+
+    // if (commandErrors) {
+    //   console.log(commandMessage.type, commandErrors);
+    // }
 
     dispatch(
       updateData({
@@ -172,15 +175,20 @@ const Packages = ({ classes }) => {
         projectVersion
       })
     );
-  }, [dependenciesSet]);
+  }, [dependenciesSet, outdatedSet, commandErrors]);
 
   useEffect(() => {
-    ipcRenderer.on('action-close', (event, error, cliMessage, options) => {
+    ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
       const operation = options && options[0];
       const argv = options && options[1];
+      let errorMessages = [];
 
-      if (error && error.length) {
-        console.error(error);
+      if (output && output.length) {
+        const outputParts = output.split('\n');
+
+        errorMessages = outputParts.filter(
+          outputPart => outputPart.indexOf('npm ERR!') === 0
+        );
       }
 
       if (operation === 'uninstall') {
@@ -206,17 +214,31 @@ const Packages = ({ classes }) => {
       dispatch(clearRunningCommand());
 
       dispatch(
-        setSnackbar({
-          open: true,
-          type: 'info',
-          message: 'Packages updated'
-        })
-      );
-
-      dispatch(
         toggleLoader({
           loading: false,
           message: null
+        })
+      );
+
+      if (errorMessages.length) {
+        dispatch(
+          setSnackbar({
+            open: true,
+            type: 'error',
+            message: 'Operation completederrors'
+          })
+        );
+      }
+
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: errorMessages.length ? 'error' : 'info',
+          message: errorMessages.length
+            ? `Packages updated with errors \n${errorMessages[1]}\n${
+                errorMessages[2]
+              }`
+            : 'Packages updated'
         })
       );
     });
