@@ -10,14 +10,15 @@ const styles = theme => ({
     margin: 0
   },
   secondaryText: {
-    color: grayColor,
-    paddingBottom: theme.spacing.unit * 2,
+    color: darken(grayColor, 0.2),
+    paddingBottom: theme.spacing.unit,
     wordWrap: 'break-word'
   },
   label: {
     ...defaultFont,
     fontSize: 18,
-    color: darken(grayColor, 0.2),
+    paddingTop: theme.spacing.unit / 2,
+    color: darken(grayColor, 0.5),
     lineHeight: '1.5em'
   }
 });

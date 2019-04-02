@@ -23,8 +23,16 @@ const ToolsTab = ({ classes, items, nodata, mode }) => (
         items.map((item, idx) => (
           <ListItem key={`tooitem-${idx}`} className={classes.listItem}>
             <ListItemText
-              primary={<Typography>{item.primaryText}</Typography>}
-              secondary={item.secondaryText}
+              primary={
+                <Typography className={classes.label}>
+                  {item.primaryText}
+                </Typography>
+              }
+              secondary={
+                <Typography className={classes.secondaryText}>
+                  {item.secondaryText}
+                </Typography>
+              }
             />
             <ListItemSecondaryAction>
               <Tooltip title="Run command">
