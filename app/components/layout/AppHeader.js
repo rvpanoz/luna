@@ -74,7 +74,7 @@ const Header = ({ classes, onDrawerToggle }) => {
         }
       })
     );
-  }, [mode, directory]);
+  }, [mode, directory, dispatch]);
 
   return (
     <React.Fragment>
@@ -128,6 +128,18 @@ const Header = ({ classes, onDrawerToggle }) => {
               <Typography color="inherit" variant="h5">
                 Dashboard
               </Typography>
+            </Grid>
+            <Grid item>
+              <Button
+                title="Create package.json"
+                className={classes.button}
+                variant="outlined"
+                color="inherit"
+                size="small"
+                onClick={() => setDialog({ open: true })}
+              >
+                Create
+              </Button>
             </Grid>
             <Grid item>
               <Button

@@ -18,6 +18,8 @@ const install = (options, idx) => {
     single,
     packageJson
   } = options || {};
+
+  // '--unsafe-perm use root'
   const defaults = ['--ignore-scripts', '--verbose'];
 
   if (!packages && !multiple && !name && !packageJson) {

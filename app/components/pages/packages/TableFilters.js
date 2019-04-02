@@ -73,7 +73,7 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
           );
       }
     },
-    [filters, listFilters]
+    [filters]
   );
 
   const handleFilters = allFilters => {

@@ -68,6 +68,7 @@ const TableListToolbar = ({
   const [optionsOpen, toggleOptions] = useState(false);
 
   const dispatch = useDispatch();
+  const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
 
   const openFilters = (e, close) => {
     setAnchorEl(close ? null : e.target);
@@ -75,263 +76,246 @@ const TableListToolbar = ({
     scrollWrapper(0);
   };
 
-  const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
-
-  const handleAction = useCallback(
-    (action, force) => {
-      if (action === 'clearFilters') {
-        if (filteredByNamePackages.length) {
-          setFilteredByNamePackages([]);
-        }
-
-        return dispatch(clearFilters());
+  const handleAction = (action, force) => {
+    if (action === 'clearFilters') {
+      if (filteredByNamePackages.length) {
+        setFilteredByNamePackages([]);
       }
 
-      if (mode === 'local' && action === 'install' && !force) {
-        return toggleOptions(true);
-      }
+      return dispatch(clearFilters());
+    }
 
-      if (action === 'install' && selected.length) {
-        const commands = selected.map(selectedPackage => {
-          const selectedPackageOptions = packagesInstallOptions.find(
-            option => option.name === selectedPackage
-          );
+    if (mode === 'local' && action === 'install' && !force) {
+      return toggleOptions(true);
+    }
 
-          if (selectedPackageOptions) {
-            const { name, options } = selectedPackageOptions;
+    if (action === 'install' && selected.length) {
+      const commands = selected.map(selectedPackage => {
+        const selectedPackageOptions = packagesInstallOptions.find(
+          option => option.name === selectedPackage
+        );
 
-            return {
-              operation: action,
-              package: name,
-              options: options
-            };
-          }
+        if (selectedPackageOptions) {
+          const { name, options } = selectedPackageOptions;
 
           return {
             operation: action,
-            package: selectedPackage,
-            options: ['save-prod']
+            package: name,
+            options: options
           };
-        });
+        }
 
-        const operations = commands.map(command => command.operation);
-        const packages = commands.map(command => command.package);
-        const pkgOptions = commands.map(command => command.options);
+        return {
+          operation: action,
+          package: selectedPackage,
+          options: ['save-prod']
+        };
+      });
 
-        const parameters = {
+      const operations = commands.map(command => command.operation);
+      const packages = commands.map(command => command.package);
+      const pkgOptions = commands.map(command => command.options);
+
+      const parameters = {
+        activeManager: manager,
+        ipcEvent: 'install',
+        cmd: operations,
+        packages,
+        pkgOptions,
+        multiple: true,
+        mode,
+        directory
+      };
+
+      dispatch(installPackages(parameters));
+    } else {
+      dispatch(
+        updatePackages({
           activeManager: manager,
-          ipcEvent: 'install',
-          cmd: operations,
-          packages,
-          pkgOptions,
+          ipcEvent: action,
+          cmd: [action],
           multiple: true,
+          packages: selected,
           mode,
           directory
-        };
-
-        dispatch(installPackages(parameters));
-      } else {
-        dispatch(
-          updatePackages({
-            activeManager: manager,
-            ipcEvent: action,
-            cmd: [action],
-            multiple: true,
-            packages: selected,
-            mode,
-            directory
-          })
-        );
-      }
-    },
-    [selected, filteredByNamePackages, packagesInstallOptions]
-  );
+        })
+      );
+    }
+  };
 
   const openPackage = () =>
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
       navigatorParameters,
-      filePath => {
-        if (filePath) {
-          const scanDirectory = filePath.join('');
-
-          return switchMode('local', scanDirectory);
-        }
-      }
+      filePath => (filePath ? switchMode('local', filePath.join('')) : null)
     );
 
-  const renderAction = useCallback(
-    action => {
-      const hasNpmSelected = selected && selected.indexOf('npm') > -1;
+  const renderAction = action => {
+    const hasNpmSelected = selected && selected.indexOf('npm') > -1;
 
-      const actionEl = switchcase({
-        clearFilters: () => (
-          <Tooltip title="Clear filters">
-            <IconButton
-              color="secondary"
-              aria-label="clear filters"
-              onClick={() => handleAction('clearFilters')}
-            >
-              <ClearIcon />
-            </IconButton>
-          </Tooltip>
-        ),
-        install: () => (
-          <Tooltip title="Install selected">
-            <IconButton
-              color="primary"
-              aria-label="install selected"
-              onClick={() =>
-                remote.dialog.showMessageBox(
-                  remote.getCurrentWindow(),
-                  {
-                    title: 'Install packages',
-                    type: 'question',
-                    message: `Do you want to install the selected packages?`,
-                    buttons: ['Cancel', 'Install']
-                  },
-                  btnIdx => {
-                    if (Boolean(btnIdx) === true) {
-                      handleAction('install');
-                    }
-                  }
-                )
-              }
-            >
-              <AddIcon />
-            </IconButton>
-          </Tooltip>
-        ),
-        update: () => (
-          <Tooltip title="Update selected">
-            <IconButton
-              color="primary"
-              aria-label="update selected"
-              onClick={() =>
-                remote.dialog.showMessageBox(
-                  remote.getCurrentWindow(),
-                  {
-                    title: 'Update packages',
-                    type: 'question',
-                    message: `Do you want to update the selected packages?`,
-                    buttons: ['Cancel', 'Update']
-                  },
-                  btnIdx => {
-                    if (Boolean(btnIdx) === true) {
-                      handleAction('update');
-                    }
-                  }
-                )
-              }
-            >
-              <UpdateIcon />
-            </IconButton>
-          </Tooltip>
-        ),
-        uninstall: () => {
-          const hasOneSelected = selected && selected.length === 1;
-
-          return hasOneSelected && hasNpmSelected ? null : (
-            <Tooltip title="Uninstall selected">
-              <IconButton
-                color="secondary"
-                aria-label="uninstall selected"
-                onClick={() =>
-                  remote.dialog.showMessageBox(
-                    remote.getCurrentWindow(),
-                    {
-                      title: 'Uninstall packages',
-                      type: 'question',
-                      message: `Do you want to uninstall the selected packages?`,
-                      buttons: ['Cancel', 'Uninstall']
-                    },
-                    btnIdx => {
-                      if (Boolean(btnIdx) === true) {
-                        handleAction('uninstall');
-                      }
-                    }
-                  )
-                }
-              >
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          );
-        },
-        filters: () => (
-          <Tooltip title="Show filters">
-            <div>
-              <IconButton
-                disableRipple
-                disabled={nodata || fromSearch}
-                aria-label="Show filters"
-                onClick={openFilters}
-              >
-                <FilterListIcon />
-              </IconButton>
-            </div>
-          </Tooltip>
-        )
-      })('none')(action);
-
-      return actionEl;
-    },
-    [selected]
-  );
-
-  const renderToolbarActions = useCallback(
-    () => (
-      <React.Fragment>
-        <Tooltip title="Open package.json">
+    const actionEl = switchcase({
+      clearFilters: () => (
+        <Tooltip title="Clear filters">
           <IconButton
-            disableRipple
             color="secondary"
-            aria-label="open_package"
-            onClick={openPackage}
+            aria-label="clear filters"
+            onClick={() => handleAction('clearFilters')}
           >
-            <LoadIcon />
+            <ClearIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Show global packages">
-          <div>
-            <IconButton
-              disableRipple
-              disabled={mode === 'global'}
-              aria-label="show_globals"
-              onClick={() => switchMode('global', null)}
-            >
-              <PublicIcon />
-            </IconButton>
-          </div>
+      ),
+      install: () => (
+        <Tooltip title="Install selected">
+          <IconButton
+            color="primary"
+            aria-label="install selected"
+            onClick={() =>
+              remote.dialog.showMessageBox(
+                remote.getCurrentWindow(),
+                {
+                  title: 'Install packages',
+                  type: 'question',
+                  message: `Do you want to install the selected packages?`,
+                  buttons: ['Cancel', 'Install']
+                },
+                btnIdx => {
+                  if (Boolean(btnIdx) === true) {
+                    handleAction('install');
+                  }
+                }
+              )
+            }
+          >
+            <AddIcon />
+          </IconButton>
         </Tooltip>
-        <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
-          <div>
-            <IconButton
-              disableRipple
-              aria-label="back_reload"
-              onClick={() => reload()}
-            >
-              <RefreshIcon />
-            </IconButton>
-          </div>
+      ),
+      update: () => (
+        <Tooltip title="Update selected">
+          <IconButton
+            color="primary"
+            aria-label="update selected"
+            onClick={() =>
+              remote.dialog.showMessageBox(
+                remote.getCurrentWindow(),
+                {
+                  title: 'Update packages',
+                  type: 'question',
+                  message: `Do you want to update the selected packages?`,
+                  buttons: ['Cancel', 'Update']
+                },
+                btnIdx => {
+                  if (Boolean(btnIdx) === true) {
+                    handleAction('update');
+                  }
+                }
+              )
+            }
+          >
+            <UpdateIcon />
+          </IconButton>
         </Tooltip>
-        {!fromSearch && (
-          <Tooltip title="Show filters">
-            <div>
-              <IconButton
-                disableRipple
-                disabled={nodata || fromSearch}
-                aria-label="show_filters"
-                onClick={openFilters}
-              >
-                <FilterListIcon />
-              </IconButton>
-            </div>
+      ),
+      uninstall: () => {
+        const hasOneSelected = selected && selected.length === 1;
+
+        return hasOneSelected && hasNpmSelected ? null : (
+          <Tooltip title="Uninstall selected">
+            <IconButton
+              color="secondary"
+              aria-label="uninstall selected"
+              onClick={() =>
+                remote.dialog.showMessageBox(
+                  remote.getCurrentWindow(),
+                  {
+                    title: 'Uninstall packages',
+                    type: 'question',
+                    message: `Do you want to uninstall the selected packages?`,
+                    buttons: ['Cancel', 'Uninstall']
+                  },
+                  btnIdx => {
+                    if (Boolean(btnIdx) === true) {
+                      handleAction('uninstall');
+                    }
+                  }
+                )
+              }
+            >
+              <DeleteIcon />
+            </IconButton>
           </Tooltip>
-        )}
-      </React.Fragment>
-    ),
-    []
+        );
+      },
+      filters: () => (
+        <Tooltip title="Show filters">
+          <div>
+            <IconButton
+              disableRipple
+              disabled={nodata || fromSearch}
+              aria-label="Show filters"
+              onClick={openFilters}
+            >
+              <FilterListIcon />
+            </IconButton>
+          </div>
+        </Tooltip>
+      )
+    })('none')(action);
+
+    return actionEl;
+  };
+
+  const renderToolbarActions = () => (
+    <React.Fragment>
+      <Tooltip title="Open package.json">
+        <IconButton
+          disableRipple
+          color="secondary"
+          aria-label="open_package"
+          onClick={openPackage}
+        >
+          <LoadIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Show global packages">
+        <div>
+          <IconButton
+            disableRipple
+            disabled={mode === 'global'}
+            aria-label="show_globals"
+            onClick={() => switchMode('global', null)}
+          >
+            <PublicIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
+      <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
+        <div>
+          <IconButton
+            disableRipple
+            aria-label="back_reload"
+            onClick={() => reload()}
+          >
+            <RefreshIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
+      {!fromSearch && (
+        <Tooltip title="Show filters">
+          <div>
+            <IconButton
+              disableRipple
+              disabled={nodata || fromSearch}
+              aria-label="show_filters"
+              onClick={openFilters}
+            >
+              <FilterListIcon />
+            </IconButton>
+          </div>
+        </Tooltip>
+      )}
+    </React.Fragment>
   );
 
   const hasUpdatedPackages = useCallback(

@@ -10,8 +10,8 @@ import { clearAll } from 'models/ui/actions';
 import { setPackagesStart } from 'models/packages/actions';
 import { switchcase, parseDependencies } from '../utils';
 
-const useIpc = (channel, options, inputs = []) => {
-  const { ipcEvent, mode, directory, paused, forceUpdate } = options || {};
+const useIpc = (channel, options, inputs) => {
+  const [mode, directory, forceUpdate] = inputs;
 
   const [dependenciesSet, setDependencies] = useState({
     data: [],
@@ -27,6 +27,8 @@ const useIpc = (channel, options, inputs = []) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const { ipcEvent, paused } = options || {};
+
     ipcRenderer.on(`${ipcEvent}-close`, (event, status, cmd, data) => {
       if (!data) {
         return dispatch({ type: clearAll.type });
@@ -67,7 +69,7 @@ const useIpc = (channel, options, inputs = []) => {
     }
 
     return () => ipcRenderer.removeAllListeners([`${ipcEvent}-close`]);
-  }, inputs);
+  }, [dispatch, mode, directory, forceUpdate]);
 
   return [dependenciesSet, outdatedSet, commandErrors];
 };

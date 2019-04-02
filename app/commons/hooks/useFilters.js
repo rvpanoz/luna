@@ -55,7 +55,7 @@ const useFilters = (allData, filters, force) => {
     if (Array.isArray(withFiltersPackages)) {
       applyFilters(withFiltersPackages);
     }
-  }, [filters, force]);
+  }, [filters, force, allData]);
 
   return [filtered];
 };

@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
 
-import React, { useCallback, useRef } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { and } from 'ramda';
 import { useDispatch } from 'redux-react-hook';
@@ -27,15 +27,13 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
   const dispatch = useDispatch();
   const checkboxAll = useRef(null);
 
-  const toggleSort = useCallback(prop =>
+  const toggleSort = prop =>
     dispatch(
       setSortOptions({
         sortDir: sortDir === 'desc' ? 'asc' : 'desc',
         sortBy: prop
-      }),
-      [sortDir]
-    )
-  );
+      })
+    );
 
   const handleSelectAll = e => {
     if (e.target.checked && packages) {

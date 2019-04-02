@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable no-nested-ternary */
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer, remote } from 'electron';
@@ -84,7 +84,7 @@ const Navigator = ({
     );
   };
 
-  const openPackage = useCallback(() => {
+  const openPackage = () =>
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
       navigatorParameters,
@@ -94,7 +94,6 @@ const Navigator = ({
         }
       }
     );
-  }, []);
 
   return (
     <Drawer variant="permanent" {...restProps}>

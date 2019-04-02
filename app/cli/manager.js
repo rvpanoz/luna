@@ -14,7 +14,7 @@ const {
 
 // default arguments
 const defaultsArgs = {
-  list: ['--json', '--depth=0', '--parseable', '--verbose']
+  list: ['--json', '--depth=0']
 };
 
 // current working directory

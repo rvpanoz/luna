@@ -164,7 +164,7 @@ export const matchType = (subject, needle) => {
  * @param {*} directory
  */
 export const parseDependencies = (response, mode, directory) => {
-  if (!response || typeof response !== 'string') {
+  if (typeof response !== 'string') {
     throw new Error(
       'utils[parseDependencies]: response parameter must be a string'
     );

@@ -136,7 +136,7 @@ const Packages = ({ classes }) => {
   const dependencies = dependenciesSet.data;
   const outdated = outdatedSet.data;
 
-  const startPackages = () =>
+  const startPackages = () => {
     dispatch(
       setPackagesStart({
         channel: IPC_EVENT,
@@ -145,12 +145,13 @@ const Packages = ({ classes }) => {
         }
       })
     );
+  };
 
   const switchMode = (appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
 
     if (fromSearch) {
-      reload();
+      startPackages();
     }
   };
 
@@ -160,10 +161,7 @@ const Packages = ({ classes }) => {
     }
 
     if (commandErrors) {
-      dispatch({
-        type: commandMessage.type,
-        payload: { error: commandErrors }
-      });
+      console.log(commandMessage.type, commandErrors);
     }
 
     dispatch(
@@ -199,6 +197,8 @@ const Packages = ({ classes }) => {
           dispatch(
             removePackages({ removedPackages: removedOrUpdatedPackages })
           );
+
+          // update packages without fetching
           setforceUpdate(forceUpdate + 1);
         }
       }
@@ -209,7 +209,7 @@ const Packages = ({ classes }) => {
         setSnackbar({
           open: true,
           type: 'info',
-          message: cliMessage
+          message: 'Packages updated'
         })
       );
 
@@ -242,7 +242,7 @@ const Packages = ({ classes }) => {
       ['action-close', 'view-close'].forEach(listener =>
         ipcRenderer.removeAllListeners(listener)
       );
-  }, [forceUpdate]);
+  }, [forceUpdate, dispatch]);
 
   const scrollWrapper = top => {
     const wrapperEl = wrapperRef && wrapperRef.current;

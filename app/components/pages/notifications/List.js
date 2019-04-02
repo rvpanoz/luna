@@ -76,7 +76,7 @@ const NotificationsItem = ({
           }
         }
       ),
-    [mode, directory, packageName, packageVersion]
+    [mode, directory, packageName, dispatch, version]
   );
 
   return (

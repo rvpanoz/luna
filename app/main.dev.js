@@ -289,4 +289,5 @@ app.on('ready', async () => {
 process.on('uncaughtException', error => {
   log.error('[ERROR]', error.message);
   mainWindow.webContents.send('uncaught-exception', error.message);
+  app.quit();
 });
