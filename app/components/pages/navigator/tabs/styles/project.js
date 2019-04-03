@@ -3,6 +3,7 @@ import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   tab: {
+    padding: theme.spacing.unit / 2,
     backgroundColor: theme.palette.background.paper
   },
   listItem: {
@@ -12,7 +13,8 @@ const styles = theme => ({
   secondaryText: {
     color: darken(grayColor, 0.2),
     paddingBottom: theme.spacing.unit,
-    wordWrap: 'break-word'
+    wordWrap: 'break-word',
+    fontSize: 12
   },
   label: {
     ...defaultFont,

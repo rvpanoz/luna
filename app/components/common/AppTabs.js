@@ -27,17 +27,40 @@ const AppTabs = ({ classes, children }) => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="inherit">
+      <AppBar
+        position="static"
+        color="inherit"
+        classes={{
+          root: classes.appBar
+        }}
+      >
         <Tabs
           value={value}
           onChange={(e, tabValue) => setValue(tabValue)}
           classes={{
+            root: classes.noMargin,
             indicator: classes.indicator
           }}
+          variant="fullWidth"
         >
-          <Tab label="Project" />
-          <Tab label="Packages" />
-          <Tab label="Tools" />
+          <Tab
+            classes={{
+              label: classes.tabLabel
+            }}
+            label="Project"
+          />
+          <Tab
+            classes={{
+              label: classes.tabLabel
+            }}
+            label="Packages"
+          />
+          <Tab
+            classes={{
+              label: classes.tabLabel
+            }}
+            label="Tooling"
+          />
         </Tabs>
       </AppBar>
 

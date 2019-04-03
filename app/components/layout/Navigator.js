@@ -130,7 +130,7 @@ const Navigator = ({
             Details
           </ListItemText>
         </ListItem>
-        <ListItem key="app-tabs-content">
+        <ListItem key="app-tabs-content" disableGutters>
           <ListItemText style={{ height: 250 }}>
             <AppTabs>
               <ProjectTab

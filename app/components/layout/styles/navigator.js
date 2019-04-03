@@ -60,7 +60,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit
   },
   actionButton: {
-    paddingTop: theme.spacing.unit
+    paddingTop: 0
   },
   button: {
     margin: theme.spacing.unit
@@ -99,8 +99,7 @@ const styles = theme => ({
     }
   },
   listItem: {
-    ...defaultFont,
-    padding: theme.spacing.unit
+    ...defaultFont
   },
   listItemHalfPadding: {
     ...defaultFont,

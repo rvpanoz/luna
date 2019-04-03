@@ -12,6 +12,9 @@ const styles = theme => ({
       flexShrink: 0
     }
   },
+  paperDialog: {
+    minHeight: 475
+  },
   appContent: {
     flex: 1,
     display: 'flex',

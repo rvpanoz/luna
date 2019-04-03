@@ -343,9 +343,9 @@ export const setupInstallOptions = (selected, options) => {
 };
 
 export const parseNpmAudit = data => {
-  console.log(data);
   try {
     const dataToJson = JSON.parse(data);
+
     const fs = require('fs');
 
     fs.writeFileSync('audit.json', data, {

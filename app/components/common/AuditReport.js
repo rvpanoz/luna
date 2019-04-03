@@ -1,63 +1,24 @@
 /* eslint-disable react/require-default-props */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import styles from './styles/auditReport';
 
-const cardsStyles = theme => ({
-  card: {
-    width: '100%',
-    padding: theme.spacing.unit
-  },
-  title: {
-    fontSize: 18
-  },
-  value: {
-    fontSize: 22
-  }
-});
-
-const ItemCard = ({ classes, name, value }) => (
-  <Card className={classes.card}>
-    <CardContent>
-      <Typography
-        variant="h4"
-        className={classes.title}
-        color="textSecondary"
-        gutterBottom
-      >
-        {name}
-      </Typography>
-      <Typography
-        className={classes.value}
-        variant="h5"
-        component="h2"
-        color="secondary"
-      >
-        {value}
-      </Typography>
-    </CardContent>
-  </Card>
-);
-
-ItemCard.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  name: PropTypes.string,
-  value: PropTypes.oneOf([PropTypes.array, PropTypes.string])
-};
-
-const WithStylesItemCard = withStyles(cardsStyles)(ItemCard);
-
 const AuditReport = ({ classes, title, data }) => {
   const [reportData, setReportData] = useState([]);
-  console.log(data);
+  const [activeTab, setActiveTab] = useState('0');
 
   useEffect(() => {
     const contentData =
@@ -76,7 +37,7 @@ const AuditReport = ({ classes, title, data }) => {
 
           return {
             ...acc,
-            dependencies: [...acc.dependencies, data]
+            dependencies: [...acc.dependencies, dataItem]
           };
         },
         {
@@ -92,36 +53,58 @@ const AuditReport = ({ classes, title, data }) => {
 
   const { dependencies, vulnerabilities } = reportData || {};
 
+  const renderStatistics = useCallback(
+    () => (
+      <List>
+        {dependencies &&
+          dependencies.map(itemDep => (
+            <ListItem className={classes.listItem} key={itemDep.name}>
+              <ListItemText>{itemDep.name}</ListItemText>
+              <ListItemSecondaryAction>{itemDep.value}</ListItemSecondaryAction>
+            </ListItem>
+          ))}
+      </List>
+    ),
+    [dependencies, classes]
+  );
+
+  const renderVulnerabilities = useCallback(
+    () => (
+      <List disablePadding>
+        {vulnerabilities &&
+          vulnerabilities.map(itemDep => (
+            <ListItem className={classes.listItem} key={itemDep.name}>
+              <ListItemText>{itemDep.name}</ListItemText>
+              <ListItemSecondaryAction>{itemDep.value}</ListItemSecondaryAction>
+            </ListItem>
+          ))}
+      </List>
+    ),
+    [vulnerabilities, classes]
+  );
+
   return (
     <section className={classes.root}>
-      <Typography className={classes.header}>{title}</Typography>
-      <Divider light />
-      {!data ? (
-        <Typography className={classes.nodata}>No results found</Typography>
-      ) : (
-        <div className={classes.container}>
-          <div className={classes.column}>
-            {dependencies &&
-              dependencies.map(itemDep => (
-                <WithStylesItemCard
-                  key={itemDep.name}
-                  name={itemDep.name}
-                  value={itemDep.value}
-                />
-              ))}
-          </div>
-          <div className={classes.column}>
-            {vulnerabilities &&
-              vulnerabilities.map(itemDep => (
-                <WithStylesItemCard
-                  key={itemDep.name}
-                  name={itemDep.name}
-                  value={itemDep.value}
-                />
-              ))}
-          </div>
+      <div className={classes.container}>
+        <Typography className={classes.header}>{title}</Typography>
+        <div className={classes.tabs}>
+          <Tabs
+            value={activeTab}
+            textColor="primary"
+            onChange={(e, value) => setActiveTab(value)}
+            classes={{
+              indicator: classes.indicator
+            }}
+          >
+            <Tab label="Statistics" value="0" />
+            <Tab label="Vulnerabilities" value="1" />
+          </Tabs>
         </div>
-      )}
+      </div>
+      <div className={classes.content}>
+        {activeTab === '0' && renderStatistics()}
+        {activeTab === '1' && renderVulnerabilities()}
+      </div>
     </section>
   );
 };

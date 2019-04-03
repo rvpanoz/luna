@@ -1,4 +1,5 @@
-import { flexContainer } from 'styles/variables';
+import { flexContainer, defaultFont, grayColor } from 'styles/variables';
+import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   root: {
@@ -11,14 +12,23 @@ const styles = theme => ({
     flexBasis: '100%',
     flex: 1,
     justifyContent: 'space-between',
-    padding: theme.spacing.unit
+    padding: theme.spacing.unit,
+    alignItems: 'center'
   },
   header: {
+    ...defaultFont,
     flex: '0 0 auto',
-    padding: theme.spacing.unit * 2 + 4
+    fontSize: 22,
+    color: darken(grayColor, 0.5)
+  },
+  tabs: {
+    flex: '0 0 auto'
   },
   column: {
     height: '100%'
+  },
+  indicator: {
+    backgroundColor: theme.palette.secondary.light
   }
 });
 
