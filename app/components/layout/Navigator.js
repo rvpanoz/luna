@@ -192,12 +192,6 @@ const Navigator = ({
                     primaryText: 'npm audit',
                     secondaryText: 'Run npm audit',
                     handler: () => runNpmTool('audit')
-                  },
-                  {
-                    mode,
-                    primaryText: 'lock verify',
-                    secondaryText: 'Run lock verify',
-                    handler: () => runNpmTool('lockVerify')
                   }
                 ]}
                 nodata={packages && packages.length === 0}

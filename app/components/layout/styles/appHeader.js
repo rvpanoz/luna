@@ -1,5 +1,5 @@
 import { defaultFont, grayColor } from 'styles/variables';
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
@@ -17,7 +17,7 @@ const styles = theme => ({
     textDecoration: 'none',
     color: theme.palette.common.white,
     '&:hover': {
-      color: darken(grayColor, 0.7)
+      color: lighten(grayColor, 0.7)
     }
   },
   button: {

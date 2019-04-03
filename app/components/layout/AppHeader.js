@@ -16,8 +16,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
-import Divider from '@material-ui/core/Divider';
-import DialogTitle from '@material-ui/core/DialogTitle';
+
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -28,7 +27,7 @@ import ErrorIcon from '@material-ui/icons/WarningOutlined';
 import SearchBox from 'components/common/SearchBox';
 import InstallFromSource from 'components/common/InstallFromSource';
 import { setActivePage } from 'models/ui/actions';
-
+import { installPackages } from 'models/packages/actions';
 import System from './System';
 import styles from './styles/appHeader';
 
@@ -88,6 +87,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             <Grid item>
               <Tooltip title="Preview system">
                 <IconButton
+                  disableRipple
                   color="inherit"
                   onClick={e => setAnchorEl(e.currentTarget)}
                 >
@@ -196,10 +196,6 @@ const Header = ({ classes, onDrawerToggle }) => {
       </Popover>
       {dialog && dialog.open && (
         <Dialog open={dialog.open} aria-labelledby="install-from-source">
-          <DialogTitle classes={{ root: classes.dialogTitle }}>
-            Install packages
-          </DialogTitle>
-          <Divider light />
           <DialogContent>
             <InstallFromSource
               mode={mode}
@@ -223,6 +219,26 @@ const Header = ({ classes, onDrawerToggle }) => {
               color="secondary"
             >
               Close
+            </Button>
+            <Button
+              color="primary"
+              onClick={() => {
+                const parameters = {
+                  ipcEvent: 'install',
+                  cmd: ['install'],
+                  packageJson: true,
+                  mode,
+                  directory
+                };
+
+                dispatch(installPackages(parameters));
+                setDialog({
+                  open: false,
+                  content: null
+                });
+              }}
+            >
+              Install
             </Button>
           </DialogActions>
         </Dialog>

@@ -98,8 +98,7 @@ const AppLayout = ({ classes }) => {
       const toolName = command && command[0];
 
       const content = switchcase({
-        audit: () => parseNpmAudit(cliResult),
-        lockVerify: () => parseLock(cliResult)
+        audit: () => parseNpmAudit(cliResult)
       })(null)(toolName);
 
       dispatch(
@@ -184,9 +183,15 @@ const AppLayout = ({ classes }) => {
             fullWidth
             open={dialog.open}
             aria-labelledby="npm-audit-results"
+            classes={{
+              paper: classes.paperDialog
+            }}
           >
             <DialogContent>
-              <AuditReport title="Results - audit" data={dialog.content} />
+              <AuditReport
+                title="Results - npm audit"
+                data={dialog && dialog.content}
+              />
             </DialogContent>
             <DialogActions>
               <Button
@@ -202,7 +207,15 @@ const AppLayout = ({ classes }) => {
               </Button>
               <Button
                 color="primary"
-                onClick={() => runAudit('audit', ['fix'])}
+                variant="outlined"
+                onClick={() => {
+                  setDialog({
+                    open: false,
+                    content: null
+                  });
+
+                  runAudit('audit', ['fix']);
+                }}
               >
                 Fix
               </Button>
