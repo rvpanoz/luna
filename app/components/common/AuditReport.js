@@ -6,6 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
@@ -57,44 +59,63 @@ const WithStylesItemCard = withStyles(cardsStyles)(ItemCard);
 
 const AuditReport = ({ classes, title, data }) => {
   const [reportData, setReportData] = useState([]);
-  console.log(data);
 
-  useEffect(() => {
-    const contentData =
-      data &&
-      data.reduce(
-        (acc, dataItem) => {
-          const { value } = dataItem;
-          const isValueArray = Array.isArray(value);
+  // useEffect(() => {
+  //   const contentData =
+  //     data &&
+  //     data.reduce(
+  //       (acc, dataItem) => {
+  //         const { value } = dataItem;
+  //         const isValueArray = Array.isArray(value);
 
-          if (isValueArray) {
-            return {
-              ...acc,
-              vulnerabilities: value
-            };
-          }
+  //         if (isValueArray) {
+  //           return {
+  //             ...acc,
+  //             vulnerabilities: value
+  //           };
+  //         }
 
-          return {
-            ...acc,
-            dependencies: [...acc.dependencies, data]
-          };
-        },
-        {
-          dependencies: [],
-          vulnerabilities: []
-        }
-      );
+  //         return {
+  //           ...acc,
+  //           dependencies: [...acc.dependencies, data]
+  //         };
+  //       },
+  //       {
+  //         dependencies: [],
+  //         vulnerabilities: []
+  //       }
+  //     );
 
-    if (contentData) {
-      setReportData(contentData);
-    }
-  }, [data]);
+  //   if (contentData) {
+  //     setReportData(contentData);
+  //   }
+  // }, [data]);
 
   const { dependencies, vulnerabilities } = reportData || {};
 
   return (
     <section className={classes.root}>
-      <Typography className={classes.header}>{title}</Typography>
+      <div className={classes.container}>
+        <div className={classes.title}>
+          <Typography className={classes.header}>{title}</Typography>
+        </div>
+        <div className={classes.tabs}>
+          <Tabs
+            value="0"
+            indicatorColor="primary"
+            textColor="primary"
+            onChange={() => {}}
+          >
+            <Tab label="Active" />
+            <Tab label="Disabled" disabled />
+            <Tab label="Active" />
+          </Tabs>
+        </div>
+      </div>
+
+      <div className={classes.container} />
+
+      {/* <Typography className={classes.header}>{title}</Typography>
       <Divider light />
       {!data ? (
         <Typography className={classes.nodata}>No results found</Typography>
@@ -121,7 +142,7 @@ const AuditReport = ({ classes, title, data }) => {
               ))}
           </div>
         </div>
-      )}
+      )} */}
     </section>
   );
 };

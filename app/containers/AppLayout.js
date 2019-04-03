@@ -111,20 +111,20 @@ const AppLayout = ({ classes }) => {
 
       console.log(cliResult);
 
-      // if (content) {
-      //   setDialog({
-      //     ...dialog,
-      //     open: true,
-      //     content
-      //   });
-      // } else {
-      //   dispatch(
-      //     setSnackbar({
-      //       open: true,
-      //       message: 'npm audit fix completed'
-      //     })
-      //   );
-      // }
+      if (content) {
+        setDialog({
+          ...dialog,
+          open: true,
+          content
+        });
+      } else {
+        dispatch(
+          setSnackbar({
+            open: true,
+            message: 'npm audit fix completed'
+          })
+        );
+      }
     });
 
     return () => ipcRenderer.removeAllListeners('tool-close');

@@ -14,8 +14,10 @@ const styles = theme => ({
     padding: theme.spacing.unit
   },
   header: {
-    flex: '0 0 auto',
-    padding: theme.spacing.unit * 2 + 4
+    flex: '0 0 auto'
+  },
+  tabs: {
+    flex: '1 0 auto'
   },
   column: {
     height: '100%'

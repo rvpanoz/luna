@@ -35,9 +35,24 @@ const AppTabs = ({ classes, children }) => {
             indicator: classes.indicator
           }}
         >
-          <Tab label="Project" />
-          <Tab label="Packages" />
-          <Tab label="Tools" />
+          <Tab
+            classes={{
+              label: classes.tabLabel
+            }}
+            label="Project"
+          />
+          <Tab
+            classes={{
+              label: classes.tabLabel
+            }}
+            label="Packages"
+          />
+          <Tab
+            classes={{
+              label: classes.tabLabel
+            }}
+            label="Tools"
+          />
         </Tabs>
       </AppBar>
 
