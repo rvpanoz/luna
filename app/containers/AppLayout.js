@@ -125,7 +125,7 @@ const AppLayout = ({ classes }) => {
     });
 
     return () => ipcRenderer.removeAllListeners('tool-close');
-  }, [dispatch]);
+  }, [dispatch, dialog]);
 
   return (
     <MuiThemeProvider theme={theme}>
