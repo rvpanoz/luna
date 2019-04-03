@@ -16,7 +16,8 @@ const styles = theme => ({
   },
   secondaryText: {
     ...defaultFont,
-    color: darken(grayColor, 0.2)
+    color: darken(grayColor, 0.2),
+    fontSize: 12
   },
   listItem: {
     padding: theme.spacing.unit,

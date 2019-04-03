@@ -13,6 +13,13 @@ const styles = theme => ({
     ...defaultFont,
     fontSize: 14,
     paddingBottom: theme.spacing.unit
+  },
+  noMargin: {
+    margin: 0
+  },
+  appBar: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit / 2
   }
 });
 

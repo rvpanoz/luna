@@ -130,7 +130,7 @@ const Navigator = ({
             Details
           </ListItemText>
         </ListItem>
-        <ListItem key="app-tabs-content">
+        <ListItem key="app-tabs-content" disableGutters>
           <ListItemText style={{ height: 250 }}>
             <AppTabs>
               <ProjectTab
@@ -196,8 +196,7 @@ const Navigator = ({
                   {
                     mode,
                     primaryText: 'lock verify',
-                    secondaryText:
-                      'Report if your package.json is out of sync with your package-lock.json',
+                    secondaryText: 'Run lock verify',
                     handler: () => runNpmTool('lockVerify')
                   }
                 ]}

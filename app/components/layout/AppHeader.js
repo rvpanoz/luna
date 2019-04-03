@@ -22,6 +22,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
+import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
+import ErrorIcon from '@material-ui/icons/WarningOutlined';
+
 import SearchBox from 'components/common/SearchBox';
 import InstallFromSource from 'components/common/InstallFromSource';
 import { setActivePage } from 'models/ui/actions';
@@ -145,12 +148,14 @@ const Header = ({ classes, onDrawerToggle }) => {
             classes={{
               label: classes.tabLabel
             }}
+            icon={<PackagesIcon />}
           />
           <Tab
             textColor="inherit"
             label="Problems"
             value="problems"
             disabled={loading}
+            icon={<ErrorIcon color="inherit" />}
             classes={{
               label: classes.tabLabel
             }}

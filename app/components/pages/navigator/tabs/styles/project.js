@@ -12,7 +12,8 @@ const styles = theme => ({
   secondaryText: {
     color: darken(grayColor, 0.2),
     paddingBottom: theme.spacing.unit,
-    wordWrap: 'break-word'
+    wordWrap: 'break-word',
+    fontSize: 12
   },
   label: {
     ...defaultFont,

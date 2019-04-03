@@ -30,29 +30,24 @@ const InstallFromSource = ({ classes, mode, directory, close }) => {
               <Typography className={classes.title}>package.json</Typography>
             }
             secondary={
-              <Typography
-                className={classes.description}
-                variant="caption"
-                component="p"
-              >
-                Install the dependencies in the local node_modules folder. In
-                global mode, it installs the current package context (ie, the
-                current working directory) as a global package.
+              <Typography className={classes.description} component="p">
+                Install the dependencies from package.json file. The command
+                will make use of the current selected directory package.json
+                file.
               </Typography>
             }
           />
           <ListItemSecondaryAction>
-            <Tooltip title="Install from .package.json">
+            <Tooltip title="Install from package.json">
               <IconButton
-                color="primary"
-                aria-label="action"
+                aria-label="action-package-json"
                 onClick={() =>
                   remote.dialog.showMessageBox(
                     remote.getCurrentWindow(),
                     {
                       title: 'Install from package.json',
                       type: 'question',
-                      message: `Do you want to install the dependencies from package.json file?`,
+                      message: `Do you want to install the dependencies from the selected directory package.json file?`,
                       buttons: ['Cancel', 'Install']
                     },
                     btnIdx => {
