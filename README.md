@@ -28,7 +28,7 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 
 > Rewrite almost every component using React Hooks
 
-> Use rxjs to handle ipcRenderer events.
+> Use rxjs to handle Electron's IPC Communication between Renderer and Main Processes
 
 > New design from scratch with MaterialUI
 
@@ -62,5 +62,6 @@ _ReactJS https://reactjs.org/_
 _Material-ui https://material-ui-next.com/_
 
 _Webpack https://github.com/webpack/webpack_
+
 
 ### In memory of my friend luna - rest in peace my love :heart:
