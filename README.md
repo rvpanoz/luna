@@ -24,17 +24,22 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
      title="luna-icon" src="./resources/img/luna-v3.0.0.png">
 </div>
 
+## Major changes from version 2
+
+> Rewrite almost every component using React Hooks
+
+> Use rxjs to handle ipcRenderer events.
+
+> New design from scratch with MaterialUI
+
+> Better API for npm cli
+
+> Bug fixes
+
+
 ## Binaries
 
 > binaries for windows and macOS will uploaded soon - stay tuned! :eyes:
-
-## Major changes since version 2
-
-> Rewrite almost every component using React Hooks
-> Use rxjs to handle ipcRenderer events.
-> New design from scratch with MaterialUI
-> Better API for npm cli
-> Bug fixes
 
 ## Development
 
