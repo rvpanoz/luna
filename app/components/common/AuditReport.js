@@ -117,7 +117,7 @@ AuditReport.defaultProps = {
 AuditReport.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   title: PropTypes.string,
-  data: PropTypes.objectOf(PropTypes.array)
+  data: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(AuditReport);
