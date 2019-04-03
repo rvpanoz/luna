@@ -345,13 +345,6 @@ export const setupInstallOptions = (selected, options) => {
 export const parseNpmAudit = data => {
   try {
     const dataToJson = JSON.parse(data);
-
-    const fs = require('fs');
-
-    fs.writeFileSync('audit.json', data, {
-      encoding: 'utf-8'
-    });
-
     const { error } = dataToJson;
 
     if (error) {

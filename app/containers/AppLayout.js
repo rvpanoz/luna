@@ -108,8 +108,6 @@ const AppLayout = ({ classes }) => {
         })
       );
 
-      console.log(cliResult);
-
       if (content) {
         setDialog({
           ...dialog,
