@@ -35,7 +35,7 @@ const ToolsTab = ({ classes, items, nodata, mode }) => (
               }
             />
             <ListItemSecondaryAction>
-              <Tooltip title="Run command">
+              <Tooltip title={`Execute ${item.primaryText}`}>
                 <div>
                   <IconButton
                     aria-label="action"

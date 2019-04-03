@@ -4,7 +4,7 @@ import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
 import mk from '../mk';
-import { runInThisContext } from 'vm';
+import lockVerify from 'lock-verify';
 
 const { spawn } = cp;
 const { log } = console;
@@ -356,6 +356,25 @@ const runInit = (opts, callback) => {
   }
 };
 
+const runLockVerify = (opts, callback) => {
+  const { mode, directory } = opts || {};
+
+  lockVerify(directory).then(result => {
+    result.warnings.forEach(w => console.error('Warning:', w));
+
+    if (!result.status) {
+      result.errors.forEach(e => console.error(e));
+    }
+
+    return {
+      status: 'close',
+      errors: [],
+      data: result,
+      cmd: ['lockVerify']
+    };
+  });
+};
+
 export default {
   init: runInit,
   audit: runAudit,
@@ -364,6 +383,7 @@ export default {
   dedupe: runDedupe,
   verify: runVerify,
   clean: runClean,
+  lockVerify: runLockVerify,
   list,
   outdated,
   search,

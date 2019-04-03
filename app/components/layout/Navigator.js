@@ -192,6 +192,13 @@ const Navigator = ({
                     primaryText: 'npm audit',
                     secondaryText: 'Run npm audit',
                     handler: () => runNpmTool('audit')
+                  },
+                  {
+                    mode,
+                    primaryText: 'lock verify',
+                    secondaryText:
+                      'Report if your package.json is out of sync with your package-lock.json',
+                    handler: () => runNpmTool('lockVerify')
                   }
                 ]}
                 nodata={packages && packages.length === 0}

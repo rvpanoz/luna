@@ -98,7 +98,8 @@ const AppLayout = ({ classes }) => {
       const toolName = command && command[0];
 
       const content = switchcase({
-        audit: () => parseNpmAudit(cliResult)
+        audit: () => parseNpmAudit(cliResult),
+        lockVerify: () => parseLock(cliResult)
       })(null)(toolName);
 
       dispatch(
@@ -108,20 +109,22 @@ const AppLayout = ({ classes }) => {
         })
       );
 
-      if (content) {
-        setDialog({
-          ...dialog,
-          open: true,
-          content
-        });
-      } else {
-        dispatch(
-          setSnackbar({
-            open: true,
-            message: 'npm audit fix completed'
-          })
-        );
-      }
+      console.log(cliResult);
+
+      // if (content) {
+      //   setDialog({
+      //     ...dialog,
+      //     open: true,
+      //     content
+      //   });
+      // } else {
+      //   dispatch(
+      //     setSnackbar({
+      //       open: true,
+      //       message: 'npm audit fix completed'
+      //     })
+      //   );
+      // }
     });
 
     return () => ipcRenderer.removeAllListeners('tool-close');
