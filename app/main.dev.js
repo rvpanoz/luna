@@ -239,8 +239,6 @@ app.on('ready', async () => {
       throw new Error('mainWindow is not defined');
     }
 
-    mainWindow.openDevTools();
-
     if (START_MINIMIZED) {
       mainWindow.minimize();
     } else {
