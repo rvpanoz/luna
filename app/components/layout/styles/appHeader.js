@@ -1,3 +1,6 @@
+import { defaultFont, grayColor } from 'styles/variables';
+import { darken } from '@material-ui/core/styles/colorManipulator';
+
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
 const styles = theme => ({
@@ -12,9 +15,9 @@ const styles = theme => ({
   },
   link: {
     textDecoration: 'none',
-    color: lightColor,
+    color: theme.palette.common.white,
     '&:hover': {
-      color: theme.palette.common.white
+      color: darken(grayColor, 0.7)
     }
   },
   button: {
@@ -25,6 +28,11 @@ const styles = theme => ({
   },
   settings: {
     margin: theme.spacing.unit * 2
+  },
+  tabLabel: {
+    ...defaultFont,
+    fontSize: 16,
+    paddingBottom: theme.spacing.unit
   }
 });
 

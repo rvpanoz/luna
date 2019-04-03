@@ -79,7 +79,7 @@ const styles = theme => ({
   },
   label: {
     ...defaultFont,
-    top: 2,
+    top: 0,
     fontSize: 22,
     fontWeight: 400,
     display: 'inline-block',

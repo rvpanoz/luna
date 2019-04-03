@@ -324,46 +324,50 @@ const PackageDetails = ({ classes }) => {
                 }
               />
               {type === 'version' && (
-                <ListItemSecondaryAction>
-                  <IconButton
-                    aria-label="install_version"
-                    onClick={e => {
-                      const { name } = active;
-                      const pkgOptions =
-                        mode === 'local' ? [PACKAGE_GROUPS[group]] : [];
+                <Tooltip title={`Install version ${item}`}>
+                  <div>
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        aria-label="install_version"
+                        onClick={e => {
+                          const { name } = active;
+                          const pkgOptions =
+                            mode === 'local' ? [PACKAGE_GROUPS[group]] : [];
 
-                      const parameters = {
-                        ipcEvent: 'install',
-                        cmd: ['install'],
-                        name,
-                        version: item,
-                        pkgOptions,
-                        single: true,
-                        mode,
-                        directory
-                      };
+                          const parameters = {
+                            ipcEvent: 'install',
+                            cmd: ['install'],
+                            name,
+                            version: item,
+                            pkgOptions,
+                            single: true,
+                            mode,
+                            directory
+                          };
 
-                      remote.dialog.showMessageBox(
-                        remote.getCurrentWindow(),
-                        {
-                          title: 'Confirmation',
-                          type: 'question',
-                          message: `Would you like to install ${
-                            active.name
-                          }@${item}?`,
-                          buttons: ['Cancel', 'Install']
-                        },
-                        btnIdx => {
-                          if (Boolean(btnIdx) === true) {
-                            dispatch(installPackages(parameters));
-                          }
-                        }
-                      );
-                    }}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
+                          remote.dialog.showMessageBox(
+                            remote.getCurrentWindow(),
+                            {
+                              title: 'Confirmation',
+                              type: 'question',
+                              message: `Would you like to install ${
+                                active.name
+                              }@${item}?`,
+                              buttons: ['Cancel', 'Install']
+                            },
+                            btnIdx => {
+                              if (Boolean(btnIdx) === true) {
+                                dispatch(installPackages(parameters));
+                              }
+                            }
+                          );
+                        }}
+                      >
+                        <AddIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </div>
+                </Tooltip>
               )}
             </ListItem>
           ))}
