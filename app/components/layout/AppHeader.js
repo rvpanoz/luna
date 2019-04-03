@@ -134,15 +134,26 @@ const Header = ({ classes, onDrawerToggle }) => {
       >
         <Tabs
           value={activePage}
+          indicatorColor="secondary"
           textColor="inherit"
           onChange={(e, value) => dispatch(setActivePage(value))}
         >
-          <Tab textColor="inherit" label="Packages" value="packages" />
+          <Tab
+            textColor="inherit"
+            label="Packages"
+            value="packages"
+            classes={{
+              label: classes.tabLabel
+            }}
+          />
           <Tab
             textColor="inherit"
             label="Problems"
             value="problems"
             disabled={loading}
+            classes={{
+              label: classes.tabLabel
+            }}
           />
         </Tabs>
       </AppBar>

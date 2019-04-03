@@ -9,20 +9,15 @@ import theme from 'styles/theme';
 
 import Navigator from 'components/layout/Navigator';
 import Header from 'components/layout/AppHeader';
-import { Packages } from 'components/pages/packages';
 import SnackbarContent from 'components/common/SnackbarContent';
+import AuditReport from 'components/common/AuditReport';
 
-import Grid from '@material-ui/core/Grid';
-import AppBar from '@material-ui/core/AppBar';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
 import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import Typography from '@material-ui/core/Typography';
 
+import { Packages } from 'components/pages/packages';
 import { Notifications } from 'components/pages/notifications';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
 import { runTool } from 'models/packages/actions';
@@ -59,22 +54,11 @@ const mapState = ({
   snackbarOptions
 });
 
-const TabContainer = ({ children }) => (
-  <Typography component="div" style={{ padding: 8 * 3 }}>
-    {children}
-  </Typography>
-);
-
-TabContainer.propTypes = {
-  children: PropTypes.node.isRequired
-};
-
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
   const [dialog, setDialog] = useState({
     open: false,
-    content: null,
-    activeTab: 'dependencies'
+    content: null
   });
 
   const {
@@ -91,11 +75,10 @@ const AppLayout = ({ classes }) => {
 
   const dispatch = useDispatch();
 
-  const runNpmTool = (toolName, options) => {
+  const runAudit = (toolName, options) => {
     setDialog({
       open: false,
-      content: null,
-      activeTab: 'dependencies'
+      content: null
     });
 
     dispatch(
@@ -118,29 +101,6 @@ const AppLayout = ({ classes }) => {
         audit: () => parseNpmAudit(cliResult)
       })(null)(toolName);
 
-      const contentData = content.reduce(
-        (acc, data) => {
-          const { value } = data;
-          const isValueArray = Array.isArray(value);
-
-          if (isValueArray) {
-            return {
-              ...acc,
-              vulnerabilities: value
-            };
-          }
-
-          return {
-            ...acc,
-            dependencies: [...acc.dependencies, data]
-          };
-        },
-        {
-          dependencies: [],
-          vulnerabilities: []
-        }
-      );
-
       dispatch(
         toggleLoader({
           loading: false,
@@ -148,11 +108,11 @@ const AppLayout = ({ classes }) => {
         })
       );
 
-      if (content && contentData) {
+      if (content) {
         setDialog({
           ...dialog,
           open: true,
-          content: contentData
+          content
         });
       } else {
         dispatch(
@@ -165,7 +125,7 @@ const AppLayout = ({ classes }) => {
     });
 
     return () => ipcRenderer.removeAllListeners('tool-close');
-  }, [dispatch]);
+  }, [dispatch, dialog]);
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -222,58 +182,8 @@ const AppLayout = ({ classes }) => {
             open={dialog.open}
             aria-labelledby="npm-audit-results"
           >
-            <DialogTitle>Results</DialogTitle>
             <DialogContent>
-              <AppBar
-                component="div"
-                className={classes.secondaryBar}
-                color="primary"
-                position="static"
-                elevation={0}
-              >
-                <Tabs
-                  value={dialog.activeTab}
-                  textColor="inherit"
-                  onChange={(e, value) =>
-                    setDialog({
-                      ...dialog,
-                      activeTab: value
-                    })
-                  }
-                >
-                  <Tab
-                    textColor="inherit"
-                    label="Dependencies"
-                    value="dependencies"
-                  />
-                  <Tab
-                    textColor="inherit"
-                    label="Vulnerabilities"
-                    value="vulnerabilities"
-                  />
-                </Tabs>
-              </AppBar>
-              {dialog.activeTab === 'dependencies' && (
-                <TabContainer>
-                  <Grid container>
-                    {dialog.content.dependencies.map(item => (
-                      <Grid item key={item.name}>
-                        <Typography className={classes.label}>
-                          {item.name === 'dependencies'
-                            ? item.name
-                            : item.name.split('Dependencies').join('\t')}
-                        </Typography>
-                        <Typography className={classes.value}>
-                          {item.value}
-                        </Typography>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </TabContainer>
-              )}
-              {dialog.activeTab === 'vulnerabilities' && (
-                <TabContainer>Item Two</TabContainer>
-              )}
+              <AuditReport title="Results - audit" data={dialog.content} />
             </DialogContent>
             <DialogActions>
               <Button
@@ -289,7 +199,7 @@ const AppLayout = ({ classes }) => {
               </Button>
               <Button
                 color="primary"
-                onClick={() => runNpmTool('audit', ['fix'])}
+                onClick={() => runAudit('audit', ['fix'])}
               >
                 Fix
               </Button>

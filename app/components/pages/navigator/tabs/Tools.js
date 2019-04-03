@@ -36,30 +36,32 @@ const ToolsTab = ({ classes, items, nodata, mode }) => (
             />
             <ListItemSecondaryAction>
               <Tooltip title="Run command">
-                <IconButton
-                  aria-label="action"
-                  disabled={nodata || mode === 'global'}
-                  onClick={() =>
-                    remote.dialog.showMessageBox(
-                      remote.getCurrentWindow(),
-                      {
-                        title: 'Confirmation',
-                        type: 'question',
-                        message: `Would you like to run ${
-                          item.primaryText
-                        }? \nNote: This process will take some time `,
-                        buttons: ['Cancel', 'Run']
-                      },
-                      btnIdx => {
-                        if (Boolean(btnIdx) === true) {
-                          item.handler();
+                <div>
+                  <IconButton
+                    aria-label="action"
+                    disabled={nodata || mode === 'global'}
+                    onClick={() =>
+                      remote.dialog.showMessageBox(
+                        remote.getCurrentWindow(),
+                        {
+                          title: 'Confirmation',
+                          type: 'question',
+                          message: `Would you like to run ${
+                            item.primaryText
+                          }? \nNote: This process will take some time `,
+                          buttons: ['Cancel', 'Run']
+                        },
+                        btnIdx => {
+                          if (Boolean(btnIdx) === true) {
+                            item.handler();
+                          }
                         }
-                      }
-                    )
-                  }
-                >
-                  <ArrowRightIcon />
-                </IconButton>
+                      )
+                    }
+                  >
+                    <ArrowRightIcon />
+                  </IconButton>
+                </div>
               </Tooltip>
             </ListItemSecondaryAction>
           </ListItem>
