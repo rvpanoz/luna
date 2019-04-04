@@ -26,15 +26,17 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 
 ## Major changes from version 2
 
-> Rewrite almost every component using React Hooks
+- Rewrite almost every component using React Hooks
 
-> Use rxjs to handle Electron's IPC Communication between Renderer and Main Processes
+- Use rxjs/redux-observable to handle Electron's IPC Communication between Renderer and Main Processes
 
-> New design from scratch with MaterialUI
+- New design - MaterialUI
 
-> Better API for npm cli
+- Better API for npm cli
 
-> Bug fixes
+- Bug fixes
+
+- Electron v4 and webpack v4 added
 
 
 ## Binaries
