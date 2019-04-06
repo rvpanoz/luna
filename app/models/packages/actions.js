@@ -1,6 +1,6 @@
 import { createActionCreator } from 'commons/utils';
 
-const ActionCreator = createActionCreator('@@LUNA_APP/DATA');
+const ActionCreator = createActionCreator('@@LUNA_APP/PACKAGES');
 
 const addActionError = ActionCreator('ACTION_ERROR');
 const addNotificationInstallOption = ActionCreator(
