@@ -43,6 +43,16 @@ npm desktop manager for handling npm packages. Supported platforms: OS X Windows
 
 > binaries for windows and macOS will uploaded soon - stay tuned! :eyes:
 
+## Running
+
+Install application's dependencies:
+
+`npm install`
+
+Start the application
+
+`npm start`
+
 ## Development
 
 Install application's dependencies:
