@@ -27,7 +27,7 @@ import {
   ToolsTab
 } from 'components/pages/navigator/tabs';
 import { runTool } from 'models/packages/actions';
-import { setMode } from 'models/ui/actions';
+import { setMode } from 'models/common/actions';
 
 import styles from './styles/navigator';
 

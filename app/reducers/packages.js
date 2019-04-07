@@ -2,25 +2,13 @@
  * Packages reducer: Handles state management for packages operations
  */
 
-import { identity, merge, prepend, prop, propOr, remove } from 'ramda';
+import { identity, merge, prop, propOr } from 'ramda';
 import {
-  addActionError,
-  addFilter,
-  addSelected,
-  addInstallOption,
-  clearSelected,
-  clearFilters,
   clearPackages,
-  setActive,
   setPackagesStart,
   setPackagesSuccess,
   setOutdatedSuccess,
-  setSortOptions,
-  setPage,
-  setPageRows,
-  updateFilters,
-  removePackages,
-  clearInstallOptions
+  removePackages
 } from 'models/packages/actions';
 import format from 'date-fns/format';
 
@@ -34,196 +22,6 @@ const createReducer = (packagesState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
-  [addActionError.type]: (state, { payload: { error } }) => {
-    const {
-      operations: { commandsErrors }
-    } = state;
-
-    const newErrors = prepend(error, commandsErrors);
-
-    return merge(state, {
-      ...state,
-      operations: {
-        ...state.operations,
-        commandsErrors: newErrors
-      }
-    });
-  },
-  [updateFilters.type]: (state, { payload: { allFilters } }) =>
-    merge(state, {
-      ...state,
-      filtering: {
-        ...state.filtering,
-        filters: allFilters
-      }
-    }),
-  [addFilter.type]: (state, { payload: { filter } }) => {
-    const {
-      filtering: { filters }
-    } = state;
-    const idx = filters.indexOf(filter);
-
-    return merge(state, {
-      ...state,
-      filtering: {
-        ...state.filtering,
-        page: 0,
-        filters: idx !== -1 ? remove(idx, 1, filters) : prepend(filter, filters)
-      }
-    });
-  },
-  [addInstallOption.type]: (state, action) => {
-    const {
-      operations: { packagesInstallOptions, selected }
-    } = state;
-    const {
-      payload: { name, options }
-    } = action;
-
-    const idx = selected.length ? selected.indexOf(name) : 0;
-
-    if (idx === -1) {
-      return state;
-    }
-
-    const packageOptions = packagesInstallOptions.find(
-      option => option.name === name
-    );
-
-    if (!packageOptions) {
-      return merge(state, {
-        ...state,
-        operations: {
-          ...state.operations,
-          packagesInstallOptions: prepend(
-            {
-              name,
-              options
-            },
-            packagesInstallOptions
-          )
-        }
-      });
-    }
-
-    const hasExactOptionIndex = options.indexOf('save-exact');
-    const hasExactPackageIndex = packageOptions.options.indexOf('save-exact');
-
-    if (hasExactOptionIndex > -1 && hasExactPackageIndex > -1) {
-      return merge(state, {
-        ...state,
-        operations: {
-          ...state.operations,
-          packagesInstallOptions: packagesInstallOptions.map(o => {
-            const optionName = o.name;
-
-            if (optionName === name) {
-              return {
-                name: o.name,
-                options: remove(hasExactPackageIndex, 1, packageOptions.options)
-              };
-            }
-
-            return o;
-          })
-        }
-      });
-    }
-
-    if (hasExactOptionIndex > -1 && hasExactPackageIndex === -1) {
-      return merge(state, {
-        ...state,
-        operations: {
-          ...state.operations,
-          packagesInstallOptions: packagesInstallOptions.map(o => {
-            const optionName = o.name;
-
-            if (optionName === name) {
-              return {
-                name: o.name,
-                options: o.options.concat(options)
-              };
-            }
-
-            return o;
-          })
-        }
-      });
-    }
-
-    return merge(state, {
-      ...state,
-      operations: {
-        ...state.operations,
-        packagesInstallOptions: packagesInstallOptions.map(o => {
-          const optionName = o.name;
-
-          if (optionName === name) {
-            return {
-              name: o.name,
-              options:
-                hasExactPackageIndex > -1
-                  ? options.concat(['save-exact'])
-                  : options
-            };
-          }
-
-          return o;
-        })
-      }
-    });
-  },
-  [addSelected.type]: (state, action) => {
-    const {
-      operations: { selected }
-    } = state;
-    const {
-      payload: { name, force }
-    } = action;
-
-    const idx = selected.indexOf(name);
-    let newSelected = [];
-
-    if (idx !== -1 && Boolean(force) === true) {
-      newSelected = selected;
-    } else if (idx !== -1 && !force) {
-      newSelected = remove(idx, 1, selected);
-    } else {
-      newSelected = prepend(name, selected);
-    }
-
-    return merge(state, {
-      ...state,
-      operations: {
-        ...state.operations,
-        selected: newSelected
-      }
-    });
-  },
-  [clearFilters.type]: state =>
-    merge(state, {
-      ...state,
-      filtering: {
-        filters: [],
-        page: 0
-      }
-    }),
-  [clearInstallOptions.type]: state =>
-    merge(state, {
-      ...state,
-      operations: {
-        ...state.operations,
-        packagesInstallOptions: []
-      }
-    }),
-  [clearSelected.type]: state =>
-    merge(state, {
-      ...state,
-      operations: {
-        packagesInstallOptions: [],
-        selected: []
-      }
-    }),
   [clearPackages.type]: state =>
     merge(state, {
       ...state,
@@ -302,14 +100,6 @@ const handlers = {
       }
     });
   },
-  [setActive.type]: (state, { payload }) => {
-    const { active } = payload;
-
-    return merge(state, {
-      ...state,
-      active
-    });
-  },
   [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
     merge(state, {
       ...state,
@@ -324,28 +114,6 @@ const handlers = {
       metadata: {
         fromSearch,
         fromSort
-      }
-    }),
-  [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
-    merge(state, {
-      ...state,
-      sorting: {
-        sortBy,
-        sortDir
-      }
-    }),
-  [setPage.type]: (state, { payload: { page } }) =>
-    merge(state, {
-      pagination: {
-        ...state.pagination,
-        page
-      }
-    }),
-  [setPageRows.type]: (state, { payload: { rowsPerPage } }) =>
-    merge(state, {
-      pagination: {
-        ...state.pagination,
-        rowsPerPage
       }
     }),
   [removePackages.type]: (state, { payload: { removedPackages } }) => {

@@ -1,46 +1,72 @@
-export default {
-  mode: 'global',
-  manager: 'npm',
+/**
+ * Application's initial state structure
+ */
+
+const initialState = {
+  active: null,
   activePage: 'packages',
   directory: null,
-  enableNotifications: true,
-  notifications: [],
-  onlineStatus: {
-    status: 'online'
+  manager: 'npm',
+  mode: 'global',
+  onlineStatus: 'offline',
+  operations: {
+    operations: {
+      packagesInstallOptions: []
+    }
+  },
+  notifications: {
+    byNotificationId: [],
+    allNotificationsIds: []
   },
   npm: {
     commands: [],
     paused: false,
     env: '',
+    command_error: '',
+    command_message: '',
     operationStatus: 'idle',
     operationPackages: [],
     operationCommand: null
   },
-  uiException: {
-    message: null
-  },
-  snackbarOptions: {
-    open: false,
-    message: null
-  },
-  loader: {
-    loading: false,
-    message: null
-  },
-  packageLoader: {
-    loading: false,
-    message: null
-  },
-  modules: {
-    active: null,
-    data: {
-      packages: [],
-      packagesOutdated: []
+  ui: {
+    activePage: 'packages',
+    commandsErrors: [],
+    filtering: {
+      filters: []
     },
-    operations: {
-      selected: [],
-      packagesInstallOptions: [],
-      commandsErrors: []
+    loaders: {
+      loader: {
+        loading: false,
+        message: null
+      },
+      packageLoader: {
+        loading: false,
+        message: null
+      }
+    },
+    pagination: {
+      page: 0,
+      rowsPerPage: 10
+    },
+    snackbar: {
+      open: false,
+      message: null
+    },
+    sorting: {
+      sortBy: 'name',
+      sortDir: 'asc'
+    },
+    selected: [],
+    uiException: null
+  },
+  packagesData: {
+    packages: {
+      byName: [],
+      allNames: []
+    },
+    packagesOutdated: {
+      byPackageName: [],
+      allPackagesNames: []
     },
     project: {
       name: null,
@@ -48,22 +74,8 @@ export default {
       description: null,
       license: null,
       author: null
-    },
-    sorting: {
-      sortBy: 'name',
-      sortDir: 'asc'
-    },
-    filtering: {
-      filters: []
-    },
-    pagination: {
-      page: 0,
-      rowsPerPage: 10
-    },
-    metadata: {
-      lastUpdatedAt: null,
-      fromSearch: false,
-      fromSort: false
     }
   }
 };
+
+export default initialState;

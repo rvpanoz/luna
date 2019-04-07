@@ -8,12 +8,12 @@ import { isPackageOutdated } from 'commons/utils';
 import {
   toggleLoader,
   togglePackageLoader,
-  clearCommands,
-  clearNotifications,
   clearAll,
-  setRunningCommand,
-  setActivePage
+  setActivePage,
+  setPage
 } from 'models/ui/actions';
+import { clearNotifications } from 'models/notifications/actions';
+import { clearCommands, setRunningCommand } from 'models/npm/actions';
 
 import {
   clearPackages,
@@ -23,7 +23,6 @@ import {
   setPackagesSuccess,
   setOutdatedSuccess,
   updateData,
-  setPage,
   runTool,
   viewPackage
 } from './actions';

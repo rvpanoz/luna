@@ -11,11 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
-import {
-  addSelected,
-  clearSelected,
-  setSortOptions
-} from 'models/packages/actions';
+import { addSelected, clearSelected, setSortOptions } from 'models/ui/actions';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },

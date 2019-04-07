@@ -19,23 +19,25 @@ import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
 
 import {
-  addSelected,
-  addInstallOption,
   updateData,
-  setPage,
-  setPageRows,
   setPackagesStart,
   viewPackage,
-  setActive,
   removePackages
 } from 'models/packages/actions';
+
 import {
+  addSelected,
   toggleLoader,
   togglePackageLoader,
   setSnackbar,
-  clearRunningCommand,
-  setMode
+  setPage,
+  setPageRows
 } from 'models/ui/actions';
+
+import { clearRunningCommand } from 'models/npm/actions';
+
+import { setMode, setActive, addInstallOption } from 'models/common/actions';
+
 import { PackageDetails } from 'components/pages/package';
 
 import TableToolbar from './TableToolbar';
