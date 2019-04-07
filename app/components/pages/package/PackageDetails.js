@@ -10,8 +10,8 @@ import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { objectOf, string } from 'prop-types';
 import cn from 'classnames';
-
 import { withStyles } from '@material-ui/core/styles';
+
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Card from '@material-ui/core/Card';
@@ -40,22 +40,22 @@ import VersionsIcon from '@material-ui/icons/LabelOutlined';
 import DependenciesIcon from '@material-ui/icons/ListOutlined';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import {
-  updatePackages,
-  installPackages,
-  setActive
-} from 'models/packages/actions';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import { isPackageOutdated } from 'commons/utils';
-
+import { updatePackages, installPackages } from 'models/packages/actions';
+import { setActive } from 'models/common/actions';
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
+
 import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
 const mapState = ({
-  common: { mode, directory, packageLoader },
-  modules: {
+  common: { mode, directory },
+  ui: {
+    loaders: { packageLoader }
+  },
+  packagesData: {
     data: { packages, packagesOutdated },
     active,
     metadata: { fromSearch }

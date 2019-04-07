@@ -14,10 +14,7 @@ const initialState = {
       packagesInstallOptions: []
     }
   },
-  notifications: {
-    byNotificationId: [],
-    allNotificationsIds: []
-  },
+  notifications: [],
   npm: {
     commands: [],
     paused: false,
@@ -57,16 +54,21 @@ const initialState = {
       sortDir: 'asc'
     },
     selected: [],
-    uiException: null
+    uiException: null,
+    metadata: {
+      lastUpdatedAt: null,
+      fromSearch: false,
+      fromSort: false
+    }
   },
   packagesData: {
     packages: {
-      byName: [],
-      allNames: []
-    },
-    packagesOutdated: {
       byPackageName: [],
       allPackagesNames: []
+    },
+    packagesOutdated: {
+      byPackageOutdatedName: [],
+      allPackagesOutdatedNames: []
     },
     project: {
       name: null,

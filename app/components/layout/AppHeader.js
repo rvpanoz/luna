@@ -16,7 +16,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -28,20 +27,20 @@ import SearchBox from 'components/common/SearchBox';
 import InstallFromSource from 'components/common/InstallFromSource';
 import { setActivePage } from 'models/ui/actions';
 import { installPackages } from 'models/packages/actions';
+
 import System from './System';
 import styles from './styles/appHeader';
 
 const mapState = ({
-  common: {
-    onlineStatus: { status },
-    activePage,
-    loader: { loading },
-    npm: { env },
-    mode,
-    directory
+  npm: { env },
+  common: { onlineStatus, activePage, mode, directory },
+  ui: {
+    loaders: {
+      loader: { loading }
+    }
   }
 }) => ({
-  status,
+  onlineStatus,
   activePage,
   loading,
   env,

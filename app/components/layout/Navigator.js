@@ -32,10 +32,8 @@ import { setMode } from 'models/common/actions';
 import styles from './styles/navigator';
 
 const mapState = ({
-  common: { notifications },
-  modules: {
-    data: { packages, packagesOutdated }
-  }
+  notifications,
+  packagesData: { packages, packagesOutdated }
 }) => ({
   notifications,
   packages,

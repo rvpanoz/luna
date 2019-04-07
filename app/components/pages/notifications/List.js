@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import semver from 'semver';
+
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -23,7 +24,7 @@ import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 import { installPackages } from 'models/packages/actions';
 import styles from './styles/list';
 
-const mapState = ({ common: { notifications } }) => ({
+const mapState = ({ notifications }) => ({
   notifications
 });
 
@@ -36,7 +37,6 @@ const NotificationsItem = ({
   requiredBy
 }) => {
   const packageParts = required && required.split('@');
-
   const packageName = packageParts && packageParts[0];
   const packageVersion = packageParts && packageParts[1];
   const dispatch = useDispatch();
