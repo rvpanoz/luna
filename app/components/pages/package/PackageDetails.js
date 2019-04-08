@@ -51,20 +51,17 @@ import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
 const mapState = ({
-  common: { mode, directory },
+  common: { active, mode, directory },
   ui: {
-    loaders: { packageLoader }
-  },
-  packagesData: {
-    data: { packages, packagesOutdated },
-    active,
+    loaders: { packageLoader },
     metadata: { fromSearch }
-  }
+  },
+  packages: { packagesData, packagesOutdated }
 }) => ({
   active,
   mode,
   directory,
-  packages,
+  packagesData,
   packageLoader,
   packagesOutdated,
   fromSearch
@@ -86,7 +83,7 @@ const PackageDetails = ({ classes }) => {
     mode,
     directory,
     fromSearch,
-    packages,
+    packagesData,
     packagesOutdated
   } = useMappedState(mapState);
   const { name, version, description } = active || {};
@@ -394,7 +391,7 @@ const PackageDetails = ({ classes }) => {
                       'N/A'}`}</Typography>
                     {mode === 'local' && !fromSearch && (
                       <Typography variant="caption">{`Group: ${
-                        packages.find(pkg => pkg.name === name).__group
+                        packagesData.find(pkg => pkg.name === name).__group
                       }`}</Typography>
                     )}
                   </React.Fragment>

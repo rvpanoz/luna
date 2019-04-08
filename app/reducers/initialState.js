@@ -61,14 +61,8 @@ const initialState = {
     }
   },
   packages: {
-    packagesData: {
-      byPackageName: [],
-      allPackagesNames: []
-    },
-    packagesOutdated: {
-      byPackageOutdatedName: [],
-      allPackagesOutdatedNames: []
-    },
+    packagesData: [],
+    packagesOutdated: [],
     project: {
       name: null,
       version: null,

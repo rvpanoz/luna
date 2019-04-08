@@ -14,7 +14,7 @@ import {
 
 import initialState from './initialState';
 
-const { npm, notifications, packagesData, ui, ...common } = initialState;
+const { npm, notifications, packages, ui, ...common } = initialState;
 
 const createReducer = (commonState, handlers) => (
   state = commonState,

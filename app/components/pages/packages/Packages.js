@@ -149,14 +149,6 @@ const Packages = ({ classes }) => {
     );
   }, [mode, directory, dispatch]);
 
-  const switchMode = (appMode, appDirectory) => {
-    dispatch(setMode({ mode: appMode, directory: appDirectory }));
-
-    if (fromSearch) {
-      startPackages();
-    }
-  };
-
   useEffect(() => {
     const { projectName, projectVersion } = dependenciesSet || {};
     const dependencies = dependenciesSet.data;
@@ -278,6 +270,14 @@ const Packages = ({ classes }) => {
         ipcRenderer.removeAllListeners(listener)
       );
   }, [forceUpdate, dispatch, startPackages]);
+
+  const switchMode = (appMode, appDirectory) => {
+    dispatch(setMode({ mode: appMode, directory: appDirectory }));
+
+    if (fromSearch) {
+      startPackages();
+    }
+  };
 
   const scrollWrapper = top => {
     const wrapperEl = wrapperRef && wrapperRef.current;

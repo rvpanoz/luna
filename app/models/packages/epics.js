@@ -117,8 +117,9 @@ const packagesStartEpic = (action$, state$) =>
       const { forceUpdate } = payload;
 
       const {
-        modules: {
-          data: { packages, packagesOutdated },
+        packages: {
+          packagesData,
+          packagesOutdated,
           project: { name, version }
         }
       } = state$.value;
@@ -128,7 +129,7 @@ const packagesStartEpic = (action$, state$) =>
           {
             type: updateData.type,
             payload: {
-              dependencies: packages,
+              dependencies: packagesData,
               outdated: packagesOutdated,
               projectName: name,
               projectVersion: version
@@ -261,8 +262,8 @@ const packagesSuccessEpic = (action$, state$) =>
     ),
     concatMap(({ dependencies, outdated, projectName, projectVersion }) => {
       const {
-        common: { page },
-        modules: {
+        ui: {
+          page,
           metadata: { fromSearch, fromSort }
         }
       } = state$.value;

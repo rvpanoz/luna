@@ -55,16 +55,22 @@ const handlers = {
     assoc('uiException', message, state),
   [toggleLoader.type]: (state, { payload: { loading, message } }) =>
     merge(state, {
-      loader: {
-        loading,
-        message
+      loaders: {
+        ...state.loaders,
+        loader: {
+          loading,
+          message
+        }
       }
     }),
   [togglePackageLoader.type]: (state, { payload: { loading, message } }) =>
     merge(state, {
-      packageLoader: {
-        loading,
-        message
+      loaders: {
+        ...state.loaders,
+        packageLoader: {
+          loading,
+          message
+        }
       }
     }),
   [updateFilters.type]: (state, { payload: { allFilters } }) =>
@@ -92,9 +98,7 @@ const handlers = {
   },
 
   [addSelected.type]: (state, action) => {
-    const {
-      operations: { selected }
-    } = state;
+    const { selected } = state;
     const {
       payload: { name, force }
     } = action;
@@ -112,10 +116,7 @@ const handlers = {
 
     return merge(state, {
       ...state,
-      operations: {
-        ...state.operations,
-        selected: newSelected
-      }
+      selected: newSelected
     });
   },
   [clearFilters.type]: state =>
@@ -129,10 +130,7 @@ const handlers = {
   [clearSelected.type]: state =>
     merge(state, {
       ...state,
-      operations: {
-        packagesInstallOptions: [],
-        selected: []
-      }
+      selected: []
     }),
   [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
     merge(state, {
