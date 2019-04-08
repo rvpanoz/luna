@@ -27,17 +27,17 @@ import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
 
 const mapState = ({
-  common: {
-    mode,
-    directory,
-    activePage,
-    loader: { loading },
-    npm: { env },
-    snackbarOptions,
-    notifications
+  npm: { env },
+  notifications,
+  common: { mode, directory, activePage },
+  ui: {
+    loaders: {
+      loader: { loading }
+    },
+    snackbar,
+    metadata: { lastUpdatedAt }
   },
-  modules: {
-    metadata: { lastUpdatedAt },
+  packages: {
     project: { name, version, description }
   }
 }) => ({
@@ -51,7 +51,7 @@ const mapState = ({
   description,
   env,
   notifications,
-  snackbarOptions
+  snackbar
 });
 
 const AppLayout = ({ classes }) => {
@@ -63,7 +63,7 @@ const AppLayout = ({ classes }) => {
 
   const {
     activePage,
-    snackbarOptions,
+    snackbar,
     mode,
     directory,
     notifications,
@@ -152,18 +152,18 @@ const AppLayout = ({ classes }) => {
             })(<Packages />)(activePage)}
           </main>
         </div>
-        {snackbarOptions && snackbarOptions.open && snackbarOptions.message && (
+        {snackbar && snackbar.open && (
           <Snackbar
             anchorOrigin={{
               vertical: 'bottom',
-              horizontal: snackbarOptions.type === 'error' ? 'center' : 'right'
+              horizontal: snackbar.type === 'error' ? 'center' : 'right'
             }}
-            open={snackbarOptions.open}
+            open={snackbar.open}
             autoHideDuration={5000}
           >
             <SnackbarContent
-              variant={snackbarOptions.type}
-              message={snackbarOptions.message}
+              variant={snackbar.type}
+              message={snackbar.message}
               onClose={() =>
                 dispatch(
                   setSnackbar({

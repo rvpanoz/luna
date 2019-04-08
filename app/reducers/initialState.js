@@ -10,9 +10,8 @@ const initialState = {
   mode: 'global',
   onlineStatus: 'offline',
   operations: {
-    operations: {
-      packagesInstallOptions: []
-    }
+    action: null,
+    packagesInstallOptions: []
   },
   notifications: [],
   npm: {
@@ -26,7 +25,6 @@ const initialState = {
     operationCommand: null
   },
   ui: {
-    activePage: 'packages',
     commandsErrors: [],
     filtering: {
       filters: []
@@ -46,6 +44,7 @@ const initialState = {
       rowsPerPage: 10
     },
     snackbar: {
+      type: 'info',
       open: false,
       message: null
     },
@@ -61,8 +60,8 @@ const initialState = {
       fromSort: false
     }
   },
-  packagesData: {
-    packages: {
+  packages: {
+    packagesData: {
       byPackageName: [],
       allPackagesNames: []
     },

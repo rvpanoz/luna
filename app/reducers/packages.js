@@ -14,7 +14,7 @@ import format from 'date-fns/format';
 
 import initialState from './initialState';
 
-const { modules } = initialState;
+const { packages } = initialState;
 
 const createReducer = (packagesState, handlers) => (
   state = packagesState,
@@ -29,17 +29,8 @@ const handlers = {
         name: null,
         version: null
       },
-      data: {
-        packages: [],
-        packagesOutdated: []
-      },
-      operations: {
-        selected: [],
-        packagesInstallOptions: []
-      },
-      filtering: {
-        filters: []
-      }
+      packagesData: [],
+      packagesOutdated: []
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
     const {
@@ -55,14 +46,7 @@ const handlers = {
 
     return merge(state, {
       ...state,
-      data: {
-        ...state.data,
-        packages: dependencies
-      },
-      operations: {
-        selected: [],
-        packagesInstallOptions: []
-      },
+      packagesData: dependencies,
       project: {
         ...state.project,
         name: projectName,
@@ -70,22 +54,6 @@ const handlers = {
         description: projectDescription,
         license: projectLicense,
         author: projectAuthor
-      },
-      filtering: {
-        filters: []
-      },
-      metadata: {
-        ...state.metadata,
-        lastUpdatedAt:
-          fromSort || fromSearch
-            ? state.lastUpdatedAt
-            : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
-        fromSearch,
-        fromSort
-      },
-      pagination: {
-        ...state.pagination,
-        page: 0
       }
     });
   },
@@ -94,35 +62,14 @@ const handlers = {
 
     return merge(state, {
       ...state,
-      data: {
-        ...state.data,
-        packagesOutdated: outdated
-      }
+      packagesOutdated: outdated
     });
   },
-  [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
-    merge(state, {
-      ...state,
-      active: null,
-      filtering: {
-        filters: []
-      },
-      operations: {
-        selected: [],
-        packagesInstallOptions: []
-      },
-      metadata: {
-        fromSearch,
-        fromSort
-      }
-    }),
   [removePackages.type]: (state, { payload: { removedPackages } }) => {
-    const {
-      data: { packages, packagesOutdated }
-    } = state;
+    const { packagesData, packagesOutdated } = state;
 
     // update packages
-    const newPackages = packages.filter(
+    const newPackages = packagesData.filter(
       pkg => removedPackages.indexOf(pkg.name) === -1
     );
 
@@ -133,18 +80,10 @@ const handlers = {
 
     return merge(state, {
       ...state,
-      data: {
-        ...state.data,
-        packages: newPackages,
-        packagesOutdated: newPackagesOutdated
-      },
-      operations: {
-        ...state.operations,
-        selected: [],
-        packagesInstallOptions: []
-      }
+      packagesData: newPackages,
+      packagesOutdated: newPackagesOutdated
     });
   }
 };
 
-export default createReducer(modules, handlers);
+export default createReducer(packages, handlers);

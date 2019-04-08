@@ -35,9 +35,7 @@ import {
 } from 'models/ui/actions';
 
 import { clearRunningCommand } from 'models/npm/actions';
-
 import { setMode, setActive, addInstallOption } from 'models/common/actions';
-
 import { PackageDetails } from 'components/pages/package';
 
 import TableToolbar from './TableToolbar';
@@ -48,21 +46,22 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
+  npm: { paused, operationStatus, operationPackages, operationCommand },
   common: {
+    active,
     directory,
     manager,
     mode,
-    loader,
-    npm: { paused, operationStatus, operationPackages, operationCommand }
+    operations: { packagesInstallOptions, action }
   },
-  modules: {
-    active,
-    data: { packages, packagesOutdated },
-    operations: { action, selected, packagesInstallOptions },
+  packages: { packagesData, packagesOutdated },
+  ui: {
+    loaders: { loader },
     pagination: { page, rowsPerPage },
     filtering: { filters },
     metadata: { fromSearch },
-    sorting: { sortBy, sortDir }
+    sorting: { sortBy, sortDir },
+    selected
   }
 }) => ({
   paused,
@@ -75,7 +74,7 @@ const mapState = ({
   loader,
   action,
   filters,
-  packages,
+  packagesData,
   packagesOutdated,
   selected,
   packagesInstallOptions,
@@ -92,7 +91,7 @@ const IPC_EVENT = 'ipc-event';
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
-    packages,
+    packagesData,
     packagesOutdated,
     mode,
     page,
@@ -308,11 +307,11 @@ const Packages = ({ classes }) => {
   };
 
   // setup packages
-  const [packagesData] = useFilters(packages, filters);
+  const [filteredPackages] = useFilters(packagesData, filters);
 
   const data = filteredByNamePackages.length
     ? filteredByNamePackages
-    : packagesData;
+    : filteredPackages;
 
   // pagination
   const dataSlices =
