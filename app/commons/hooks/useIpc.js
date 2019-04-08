@@ -31,7 +31,7 @@ const useIpc = (channel, options, inputs) => {
 
     ipcRenderer.on(`${ipcEvent}-close`, (event, status, cmd, data) => {
       if (!data || !isJson(data)) {
-        return dispatch({ type: clearAll });
+        return;
       }
 
       const command = cmd && cmd[0];

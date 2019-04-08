@@ -101,6 +101,9 @@ const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
     map(({ payload: { channel, options, paused, forceUpdate } }) => {
+      console.log('paused', paused);
+      console.log('forceUpdate', forceUpdate);
+
       if (paused) {
         return pauseRequest();
       }
@@ -142,10 +145,10 @@ const packagesStartEpic = (action$, state$) =>
         updateLoader({
           loading: true,
           message: 'Loading packages..'
-        }),
-        cleanPackages(),
-        cleanNotifications(),
-        cleanCommands()
+        })
+        // cleanPackages(),
+        // cleanNotifications(),
+        // cleanCommands()
       ];
     })
   );
