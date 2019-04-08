@@ -4,7 +4,6 @@
 
 const initialState = {
   active: null,
-  activePage: 'packages',
   directory: null,
   manager: 'npm',
   mode: 'global',
@@ -25,6 +24,7 @@ const initialState = {
     operationCommand: null
   },
   ui: {
+    activePage: 'packages',
     commandsErrors: [],
     filtering: {
       filters: []

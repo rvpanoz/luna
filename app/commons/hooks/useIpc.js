@@ -8,6 +8,7 @@ import { useDispatch } from 'redux-react-hook';
 
 import { clearAll } from 'models/ui/actions';
 import { setPackagesStart } from 'models/packages/actions';
+import { setActive } from 'models/common/actions';
 import { switchcase, parseDependencies } from '../utils';
 
 const useIpc = (channel, options, inputs) => {
@@ -58,6 +59,7 @@ const useIpc = (channel, options, inputs) => {
     });
 
     if (!paused) {
+      dispatch(setActive({ active: null }));
       dispatch(
         setPackagesStart({
           channel,

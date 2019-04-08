@@ -10,7 +10,6 @@ import {
   setOutdatedSuccess,
   removePackages
 } from 'models/packages/actions';
-import format from 'date-fns/format';
 
 import initialState from './initialState';
 
