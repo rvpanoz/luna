@@ -51,11 +51,12 @@ import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
 const mapState = ({
-  common: { active, mode, directory },
+  common: { mode, directory },
   ui: {
     loaders: { packageLoader }
   },
   packages: {
+    active,
     packagesData,
     packagesOutdated,
     metadata: { fromSearch }

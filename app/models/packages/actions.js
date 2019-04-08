@@ -2,6 +2,7 @@ import { createActionCreator } from 'commons/utils';
 
 const ActionCreator = createActionCreator('@@LUNA_APP/PACKAGES');
 
+const clearAll = ActionCreator('CLEAR_ALL');
 const clearPackages = ActionCreator('CLEAR_PACKAGES');
 const setPackagesStart = ActionCreator('SET_PACKAGES_START');
 const setPackagesSuccess = ActionCreator('SET_PACKAGES_SUCCESS');
@@ -20,6 +21,7 @@ const runTool = ActionCreator('RUN_TOOL');
 export {
   installPackages,
   updatePackages,
+  clearAll,
   clearPackages,
   setActive,
   setPackagesStart,

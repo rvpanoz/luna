@@ -24,8 +24,14 @@ import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 import { installPackages } from 'models/packages/actions';
 import styles from './styles/list';
 
-const mapState = ({ notifications }) => ({
-  notifications
+const mapState = ({
+  notifications: { notifications },
+  common: {
+    operations: { packagesInstallOptions }
+  }
+}) => ({
+  notifications,
+  packagesInstallOptions
 });
 
 const NotificationsItem = ({

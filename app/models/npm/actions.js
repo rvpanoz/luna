@@ -11,6 +11,8 @@ const setEnv = ActionCreator('SET_ENV');
 const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const clearRunningCommand = ActionCreator('CLEAR_RUNNING_COMMAND');
 
+const runAudit = ActionCreator('RUN_AUDIT');
+
 export {
   addActionError,
   clearCommands,
@@ -19,5 +21,6 @@ export {
   setEnv,
   npmCommand,
   clearRunningCommand,
-  setRunningCommand
+  setRunningCommand,
+  runAudit
 };

@@ -58,6 +58,7 @@ const mapState = ({
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
   const [dialog, setDialog] = useState({
+    type: 'info',
     open: false,
     content: null
   });
@@ -68,7 +69,7 @@ const AppLayout = ({ classes }) => {
     mode,
     directory,
     notifications,
-    packages,
+    packagesData,
     packagesOutdated,
     env,
     ...restProps

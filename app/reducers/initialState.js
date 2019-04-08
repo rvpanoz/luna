@@ -14,7 +14,6 @@ const initialState = {
   notifications: [],
   npm: {
     commands: [],
-    paused: false,
     env: '',
     command_error: '',
     command_message: '',
@@ -23,6 +22,7 @@ const initialState = {
     operationCommand: null
   },
   ui: {
+    paused: false,
     activePage: 'packages',
     commandsErrors: [],
     filtering: {

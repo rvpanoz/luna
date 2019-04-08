@@ -8,14 +8,15 @@ import { isPackageOutdated } from 'commons/utils';
 import {
   toggleLoader,
   togglePackageLoader,
-  clearAll,
   setActivePage,
   setPage
 } from 'models/ui/actions';
+
 import { clearNotifications } from 'models/notifications/actions';
 import { clearCommands, setRunningCommand } from 'models/npm/actions';
 
 import {
+  clearAll,
   clearPackages,
   installPackages,
   updatePackages,
@@ -23,7 +24,6 @@ import {
   setPackagesSuccess,
   setOutdatedSuccess,
   updateData,
-  runTool,
   viewPackage
 } from './actions';
 
@@ -83,7 +83,7 @@ const updateCommand = ({
   }
 });
 
-const cleanAllEpic = action$ =>
+const clearAllEpic = action$ =>
   action$.pipe(
     ofType(clearAll.type),
     concatMap(() => [
@@ -262,8 +262,8 @@ const packagesSuccessEpic = (action$, state$) =>
     ),
     concatMap(({ dependencies, outdated, projectName, projectVersion }) => {
       const {
-        ui: {
-          page,
+        ui: { page },
+        packages: {
           metadata: { fromSearch, fromSort }
         }
       } = state$.value;
@@ -292,25 +292,11 @@ const packagesSuccessEpic = (action$, state$) =>
     })
   );
 
-const npmToolsEpic = action$ =>
-  action$.pipe(
-    ofType(runTool.type),
-    map(({ payload }) => {
-      ipcRenderer.send('ipc-event', payload);
-
-      return updateLoader({
-        loading: true,
-        message: 'Running npm audit'
-      });
-    })
-  );
-
 export default combineEpics(
-  npmToolsEpic,
   packagesStartEpic,
   packagesSuccessEpic,
   installPackagesEpic,
-  cleanAllEpic,
+  clearAllEpic,
   updatePackagesEpic,
   viewPackagesEpic
 );

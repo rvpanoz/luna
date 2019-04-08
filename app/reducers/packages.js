@@ -11,7 +11,7 @@ import {
   removePackages,
   setActive
 } from 'models/packages/actions';
-
+import format from 'date-fns/format';
 import initialState from './initialState';
 
 const { packages } = initialState;
@@ -35,13 +35,19 @@ const handlers = {
   [clearPackages.type]: state =>
     merge(state, {
       ...state,
+      paused: false,
       active: null,
       project: {
         name: null,
-        version: null
+        version: null,
+        description: null
       },
       packagesData: [],
-      packagesOutdated: []
+      packagesOutdated: [],
+      metadata: {
+        fromSearch: false,
+        fromSort: false
+      }
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
     const {
@@ -68,7 +74,11 @@ const handlers = {
       },
       metadata: {
         fromSearch,
-        fromSort
+        fromSort,
+        lastUpdatedAt:
+          fromSort || fromSearch
+            ? state.metadata.lastUpdatedAt
+            : format(new Date(), 'DD/MM/YYYY h:mm')
       }
     });
   },

@@ -33,8 +33,9 @@ import styles from './styles/appHeader';
 
 const mapState = ({
   npm: { env },
-  common: { onlineStatus, activePage, mode, directory },
+  common: { onlineStatus, mode, directory },
   ui: {
+    activePage,
     loaders: {
       loader: { loading }
     }

@@ -6,7 +6,6 @@ const addFilter = ActionCreator('ADD_FILTER');
 const addSelected = ActionCreator('ADD_SELECTED');
 const clearSelected = ActionCreator('CLEAR_SELECTED');
 const clearFilters = ActionCreator('CLEAR_FILTERS');
-const clearAll = ActionCreator('CLEAR_ALL');
 const clearSnackbar = ActionCreator('CLEAR_SNACKBAR');
 const setSnackbar = ActionCreator('SET_SNACKBAR');
 const showError = ActionCreator('SHOW_ERROR');
@@ -36,6 +35,5 @@ export {
   setPageRows,
   updateFilters,
   toggleLoader,
-  togglePackageLoader,
-  clearAll
+  togglePackageLoader
 };

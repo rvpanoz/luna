@@ -37,21 +37,26 @@ const handlers = {
   [setActivePage.type]: (state, { payload: page }) =>
     merge(state, {
       activePage: page,
-      npm: {
-        ...state.npm,
-        paused: true
-      }
+      paused: true
     }),
   [clearSnackbar.type]: state =>
     merge(state, {
-      snackbarOptions: {
-        open: false,
+      snackbar: {
+        ...state.snackbar,
         type: 'info',
+        open: false,
         message: null
       }
     }),
-  [setSnackbar.type]: (state, { payload }) =>
-    assoc('snackbarOptions', merge(state.snackbarOptions, payload), state),
+  [setSnackbar.type]: (state, { type, open, message }) =>
+    merge(state, {
+      snackbar: {
+        ...state.snackbar,
+        type,
+        open,
+        message
+      }
+    }),
   [setUIException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
   [toggleLoader.type]: (state, { payload: { loading, message } }) =>

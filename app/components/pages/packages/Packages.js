@@ -47,7 +47,7 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
-  npm: { paused, operationStatus, operationPackages, operationCommand },
+  npm: { operationStatus, operationPackages, operationCommand },
   common: {
     directory,
     manager,
@@ -61,6 +61,7 @@ const mapState = ({
     metadata: { fromSearch }
   },
   ui: {
+    paused,
     loaders: { loader },
     pagination: { page, rowsPerPage },
     filtering: { filters },

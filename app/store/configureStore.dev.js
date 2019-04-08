@@ -12,11 +12,13 @@ import { createEpicMiddleware } from 'redux-observable';
 // epics
 import { epics as packagesEpics } from 'models/packages';
 import { epics as uiEpics } from 'models/ui';
+import { epics as npmEpics } from 'models/npm';
 
 // reducers
 import rootReducer from '../reducers';
 
-const reduxLogger = /--redux-logger/.test(process.argv[3]);
+// TODO: fix it
+// const reduxLogger = /--redux-logger/.test(process.argv[3]);
 
 const configureStore = initialState => {
   const epicMiddleware = createEpicMiddleware();
@@ -29,9 +31,7 @@ const configureStore = initialState => {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    if (reduxLogger) {
-      middleware.push(logger);
-    }
+    middleware.push(logger);
   }
 
   // If redux DevTools Extension is installed use it, otherwise use redux compose
@@ -56,6 +56,7 @@ const configureStore = initialState => {
 
   epicMiddleware.run(uiEpics);
   epicMiddleware.run(packagesEpics);
+  epicMiddleware.run(npmEpics);
 
   return store;
 };
