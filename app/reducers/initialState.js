@@ -3,7 +3,6 @@
  */
 
 const initialState = {
-  active: null,
   directory: null,
   manager: 'npm',
   mode: 'global',
@@ -53,14 +52,10 @@ const initialState = {
       sortDir: 'asc'
     },
     selected: [],
-    uiException: null,
-    metadata: {
-      lastUpdatedAt: null,
-      fromSearch: false,
-      fromSort: false
-    }
+    uiException: null
   },
   packages: {
+    active: null,
     packagesData: [],
     packagesOutdated: [],
     project: {
@@ -69,6 +64,11 @@ const initialState = {
       description: null,
       license: null,
       author: null
+    },
+    metadata: {
+      lastUpdatedAt: null,
+      fromSearch: false,
+      fromSort: false
     }
   }
 };

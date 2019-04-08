@@ -6,7 +6,6 @@ import { assoc, identity, merge, prepend, prop, propOr, remove } from 'ramda';
 import {
   addInstallOption,
   clearInstallOptions,
-  setActive,
   setManager,
   setMode,
   updateStatus
@@ -125,8 +124,6 @@ const handlers = {
         packagesInstallOptions: []
       }
     }),
-  [setActive.type]: (state, { payload: { active } }) =>
-    assoc('active', active, state),
   [setMode.type]: (state, { payload: { mode, directory } }) =>
     merge(state, {
       active: null,

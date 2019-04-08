@@ -21,6 +21,7 @@ import AppLoader from 'components/common/AppLoader';
 import {
   updateData,
   setPackagesStart,
+  setActive,
   viewPackage,
   removePackages
 } from 'models/packages/actions';
@@ -35,7 +36,7 @@ import {
 } from 'models/ui/actions';
 
 import { clearRunningCommand } from 'models/npm/actions';
-import { setMode, setActive, addInstallOption } from 'models/common/actions';
+import { setMode, addInstallOption } from 'models/common/actions';
 import { PackageDetails } from 'components/pages/package';
 
 import TableToolbar from './TableToolbar';
@@ -48,18 +49,21 @@ import styles from './styles/packages';
 const mapState = ({
   npm: { paused, operationStatus, operationPackages, operationCommand },
   common: {
-    active,
     directory,
     manager,
     mode,
     operations: { packagesInstallOptions, action }
   },
-  packages: { packagesData, packagesOutdated },
+  packages: {
+    active,
+    packagesData,
+    packagesOutdated,
+    metadata: { fromSearch }
+  },
   ui: {
     loaders: { loader },
     pagination: { page, rowsPerPage },
     filtering: { filters },
-    metadata: { fromSearch },
     sorting: { sortBy, sortDir },
     selected
   }
@@ -164,7 +168,7 @@ const Packages = ({ classes }) => {
 
     dispatch(
       updateData({
-        dependencies: forceUpdate ? packages : dependencies,
+        dependencies: forceUpdate ? packagesData : dependencies,
         outdated: forceUpdate ? packagesOutdated : outdated,
         projectName,
         projectVersion

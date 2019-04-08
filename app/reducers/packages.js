@@ -2,13 +2,14 @@
  * Packages reducer: Handles state management for packages operations
  */
 
-import { identity, merge, prop, propOr } from 'ramda';
+import { assoc, identity, merge, prop, propOr } from 'ramda';
 import {
   clearPackages,
   setPackagesStart,
   setPackagesSuccess,
   setOutdatedSuccess,
-  removePackages
+  removePackages,
+  setActive
 } from 'models/packages/actions';
 
 import initialState from './initialState';
@@ -21,9 +22,20 @@ const createReducer = (packagesState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
+    merge(state, {
+      ...state,
+      metadata: {
+        fromSearch,
+        fromSort
+      }
+    }),
+  [setActive.type]: (state, { payload: { active } }) =>
+    assoc('active', active, state),
   [clearPackages.type]: state =>
     merge(state, {
       ...state,
+      active: null,
       project: {
         name: null,
         version: null
@@ -53,6 +65,10 @@ const handlers = {
         description: projectDescription,
         license: projectLicense,
         author: projectAuthor
+      },
+      metadata: {
+        fromSearch,
+        fromSort
       }
     });
   },

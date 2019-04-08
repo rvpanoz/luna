@@ -9,6 +9,7 @@ const setOutdatedSuccess = ActionCreator('SET_OUTDATED_SUCCESS');
 const setPackagesError = ActionCreator('SET_PACKAGES_ERROR');
 const updateData = ActionCreator('UPDATE_DATA');
 const viewPackage = ActionCreator('VIEW_PACKAGE');
+const setActive = ActionCreator('SET_ACTIVE');
 
 const installPackages = ActionCreator('INSTALL_PACKAGES');
 const updatePackages = ActionCreator('UPDATE_PACKAGES');
@@ -20,6 +21,7 @@ export {
   installPackages,
   updatePackages,
   clearPackages,
+  setActive,
   setPackagesStart,
   setPackagesSuccess,
   setPackagesError,

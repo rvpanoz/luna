@@ -53,10 +53,13 @@ import styles from './styles/packageDetails';
 const mapState = ({
   common: { active, mode, directory },
   ui: {
-    loaders: { packageLoader },
-    metadata: { fromSearch }
+    loaders: { packageLoader }
   },
-  packages: { packagesData, packagesOutdated }
+  packages: {
+    packagesData,
+    packagesOutdated,
+    metadata: { fromSearch }
+  }
 }) => ({
   active,
   mode,

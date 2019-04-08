@@ -21,7 +21,6 @@ import {
   updateFilters
 } from 'models/ui/actions';
 
-import { setPackagesStart } from 'models/packages/actions';
 import initialState from './initialState';
 
 const { ui } = initialState;
@@ -35,33 +34,6 @@ const createReducer = (uiState, handlers) => (state = uiState, action) =>
   propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
-  [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
-    merge(state, {
-      ...state,
-      commandsErrors: [],
-      filtering: {
-        filters: []
-      },
-      pagination: {
-        page: 0,
-        rowsPerPage: 10
-      },
-      snackbar: {
-        type: 'info',
-        open: false,
-        message: null
-      },
-      sorting: {
-        sortBy: 'name',
-        sortDir: 'asc'
-      },
-      selected: [],
-      uiException: null,
-      metadata: {
-        fromSearch,
-        fromSort
-      }
-    }),
   [setActivePage.type]: (state, { payload: page }) =>
     merge(state, {
       activePage: page,

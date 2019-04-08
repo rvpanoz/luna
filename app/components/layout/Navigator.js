@@ -33,8 +33,19 @@ import styles from './styles/navigator';
 
 const mapState = ({
   notifications,
-  packages: { packagesData, packagesOutdated }
+  packages: {
+    packagesData,
+    packagesOutdated,
+    metadata: { lastUpdatedAt }
+  },
+  ui: {
+    loaders: {
+      loader: { loading }
+    }
+  }
 }) => ({
+  loading,
+  lastUpdatedAt,
   notifications,
   packagesData,
   packagesOutdated

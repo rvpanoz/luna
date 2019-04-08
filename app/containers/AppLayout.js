@@ -29,16 +29,17 @@ import styles from './styles/appLayout';
 const mapState = ({
   npm: { env },
   notifications,
-  common: { mode, directory, activePage },
+  common: { mode, directory },
   ui: {
+    activePage,
     loaders: {
       loader: { loading }
     },
-    snackbar,
-    metadata: { lastUpdatedAt }
+    snackbar
   },
   packages: {
-    project: { name, version, description }
+    project: { name, version, description },
+    metadata: { lastUpdatedAt }
   }
 }) => ({
   lastUpdatedAt,
