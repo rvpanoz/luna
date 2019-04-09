@@ -39,38 +39,23 @@ const handlers = {
   },
   [clearRunningCommand.type]: state =>
     merge(state, {
-      npm: {
-        ...state.npm,
-        operationStatus: 'idle',
-        operationPackages: [],
-        operationCommand: null
-      }
+      operationStatus: 'idle',
+      operationPackages: [],
+      operationCommand: null
     }),
   [setRunningCommand.type]: (
     state,
     { payload: { operationStatus, operationPackages, operationCommand } }
   ) =>
     merge(state, {
-      npm: {
-        ...state.npm,
-        operationStatus,
-        operationPackages,
-        operationCommand
-      }
+      operationStatus,
+      operationPackages,
+      operationCommand
     }),
-  [setEnv.type]: (state, { payload: env }) =>
-    merge(state, {
-      npm: {
-        ...state.npm,
-        env
-      }
-    }),
+  [setEnv.type]: (state, { payload: env }) => assoc('env', env, state),
   [npmCommand.type]: (state, { payload: command }) =>
     merge(state, {
-      npm: {
-        ...state.npm,
-        commands: prepend(command, state.npm.commands)
-      }
+      commands: prepend(command, state.npm.commands)
     }),
   [commandError.type]: (state, { payload: error }) =>
     assoc('command_error', error, state),
@@ -78,10 +63,7 @@ const handlers = {
     assoc('command_message', message, state),
   [clearCommands.type]: state =>
     merge(state, {
-      npm: {
-        ...state.npm,
-        commands: []
-      }
+      commands: []
     })
 };
 

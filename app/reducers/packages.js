@@ -24,7 +24,6 @@ const createReducer = (packagesState, handlers) => (
 const handlers = {
   [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
     merge(state, {
-      ...state,
       metadata: {
         fromSearch,
         fromSort
@@ -34,7 +33,6 @@ const handlers = {
     assoc('active', active, state),
   [clearPackages.type]: state =>
     merge(state, {
-      ...state,
       paused: false,
       active: null,
       project: {
@@ -43,11 +41,7 @@ const handlers = {
         description: null
       },
       packagesData: [],
-      packagesOutdated: [],
-      metadata: {
-        fromSearch: false,
-        fromSort: false
-      }
+      packagesOutdated: []
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
     const {
@@ -62,7 +56,6 @@ const handlers = {
     } = payload;
 
     return merge(state, {
-      ...state,
       packagesData: dependencies,
       project: {
         ...state.project,

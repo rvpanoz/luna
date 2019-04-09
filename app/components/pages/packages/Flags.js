@@ -15,8 +15,8 @@ import { addInstallOption } from 'models/common/actions';
 import styles from './styles/flags';
 
 const mapState = ({
-  modules: {
-    operations: { packagesInstallOptions }
+  common: {
+    operation: { packagesInstallOptions }
   }
 }) => ({
   packagesInstallOptions

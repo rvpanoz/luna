@@ -42,8 +42,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import { isPackageOutdated } from 'commons/utils';
-import { updatePackages, installPackages } from 'models/packages/actions';
-import { setActive } from 'models/common/actions';
+import {
+  updatePackages,
+  installPackages,
+  setActive
+} from 'models/packages/actions';
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
 
@@ -112,43 +115,45 @@ const PackageDetails = ({ classes }) => {
   const renderActions = useCallback(() => {
     const renderSearchActions = () => (
       <Tooltip title="install">
-        <IconButton
-          disableRipple
-          onClick={e =>
-            remote.dialog.showMessageBox(
-              remote.getCurrentWindow(),
-              {
-                title: 'Confirmation',
-                type: 'question',
-                message: `Do you want to install ${active.name}?`,
-                buttons: ['Cancel', 'Install']
-              },
-              btnIdx => {
-                if (Boolean(btnIdx) === true) {
-                  const { name } = active;
-                  const pkgOptions =
-                    mode === 'local'
-                      ? group && [PACKAGE_GROUPS[group]]
-                      : ['save-prod'];
+        <div>
+          <IconButton
+            disableRipple
+            onClick={e =>
+              remote.dialog.showMessageBox(
+                remote.getCurrentWindow(),
+                {
+                  title: 'Confirmation',
+                  type: 'question',
+                  message: `Do you want to install ${active.name}?`,
+                  buttons: ['Cancel', 'Install']
+                },
+                btnIdx => {
+                  if (Boolean(btnIdx) === true) {
+                    const { name } = active;
+                    const pkgOptions =
+                      mode === 'local'
+                        ? group && [PACKAGE_GROUPS[group]]
+                        : ['save-prod'];
 
-                  const parameters = {
-                    ipcEvent: 'install',
-                    cmd: ['install'],
-                    name,
-                    pkgOptions,
-                    single: true,
-                    mode,
-                    directory
-                  };
+                    const parameters = {
+                      ipcEvent: 'install',
+                      cmd: ['install'],
+                      name,
+                      pkgOptions,
+                      single: true,
+                      mode,
+                      directory
+                    };
 
-                  dispatch(installPackages(parameters));
+                    dispatch(installPackages(parameters));
+                  }
                 }
-              }
-            )
-          }
-        >
-          <AddIcon />
-        </IconButton>
+              )
+            }
+          >
+            <AddIcon />
+          </IconButton>
+        </div>
       </Tooltip>
     );
 
@@ -162,108 +167,114 @@ const PackageDetails = ({ classes }) => {
           {isOutdated && (
             <React.Fragment>
               <Tooltip title="Update to latest">
-                <IconButton
-                  disableRipple
-                  color="primary"
-                  onClick={() =>
-                    remote.dialog.showMessageBox(
-                      remote.getCurrentWindow(),
-                      {
-                        title: 'Confirmation',
-                        type: 'question',
-                        message: `Do you want to install ${
-                          active.name
-                        } latest version?`,
-                        buttons: ['Cancel', 'Install']
-                      },
-                      btnIdx => {
-                        if (Boolean(btnIdx) === true) {
-                          const parameters = {
-                            ipcEvent: 'install',
-                            cmd: ['install'],
-                            name,
-                            version: 'latest',
-                            single: true,
-                            pkgOptions: [],
-                            mode,
-                            directory
-                          };
-
-                          dispatch(installPackages(parameters));
-                        }
-                      }
-                    )
-                  }
-                >
-                  <AddIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Update">
-                <IconButton
-                  disableRipple
-                  color="primary"
-                  onClick={() =>
-                    remote.dialog.showMessageBox(
-                      remote.getCurrentWindow(),
-                      {
-                        title: 'Confirmation',
-                        type: 'question',
-                        message: `Do you want to update ${active.name}?`,
-                        buttons: ['Cancel', 'Update']
-                      },
-                      btnIdx => {
-                        if (Boolean(btnIdx) === true) {
-                          dispatch(
-                            updatePackages({
-                              ipcEvent: 'update',
-                              cmd: ['update'],
-                              name: active.name,
+                <div>
+                  <IconButton
+                    disableRipple
+                    color="primary"
+                    onClick={() =>
+                      remote.dialog.showMessageBox(
+                        remote.getCurrentWindow(),
+                        {
+                          title: 'Confirmation',
+                          type: 'question',
+                          message: `Do you want to install ${
+                            active.name
+                          } latest version?`,
+                          buttons: ['Cancel', 'Install']
+                        },
+                        btnIdx => {
+                          if (Boolean(btnIdx) === true) {
+                            const parameters = {
+                              ipcEvent: 'install',
+                              cmd: ['install'],
+                              name,
+                              version: 'latest',
+                              single: true,
+                              pkgOptions: [],
                               mode,
                               directory
-                            })
-                          );
+                            };
+
+                            dispatch(installPackages(parameters));
+                          }
                         }
-                      }
-                    )
-                  }
-                >
-                  <UpdateIcon />
-                </IconButton>
+                      )
+                    }
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </div>
+              </Tooltip>
+              <Tooltip title="Update">
+                <div>
+                  <IconButton
+                    disableRipple
+                    color="primary"
+                    onClick={() =>
+                      remote.dialog.showMessageBox(
+                        remote.getCurrentWindow(),
+                        {
+                          title: 'Confirmation',
+                          type: 'question',
+                          message: `Do you want to update ${active.name}?`,
+                          buttons: ['Cancel', 'Update']
+                        },
+                        btnIdx => {
+                          if (Boolean(btnIdx) === true) {
+                            dispatch(
+                              updatePackages({
+                                ipcEvent: 'update',
+                                cmd: ['update'],
+                                name: active.name,
+                                mode,
+                                directory
+                              })
+                            );
+                          }
+                        }
+                      )
+                    }
+                  >
+                    <UpdateIcon />
+                  </IconButton>
+                </div>
               </Tooltip>
             </React.Fragment>
           )}
           <Tooltip title="Remove">
-            <IconButton
-              disabled={Boolean(active && active.name === 'npm')}
-              disableRipple
-              color="secondary"
-              onClick={() =>
-                remote.dialog.showMessageBox(
-                  remote.getCurrentWindow(),
-                  {
-                    title: 'Confirmation',
-                    type: 'question',
-                    message: `Do you want to uninstall ${active.name}?`,
-                    buttons: ['Cancel', 'Uninstall']
-                  },
-                  btnIdx => {
-                    if (Boolean(btnIdx) === true) {
-                      dispatch(
-                        updatePackages({
-                          ipcEvent: 'uninstall',
-                          cmd: ['uninstall'],
-                          name: active.name,
-                          mode,
-                          directory
-                        })
-                      );
+            <div>
+              <IconButton
+                disabled={Boolean(active && active.name === 'npm')}
+                disableRipple
+                color="secondary"
+                onClick={() =>
+                  remote.dialog.showMessageBox(
+                    remote.getCurrentWindow(),
+                    {
+                      title: 'Confirmation',
+                      type: 'question',
+                      message: `Do you want to uninstall ${active.name}?`,
+                      buttons: ['Cancel', 'Uninstall']
+                    },
+                    btnIdx => {
+                      if (Boolean(btnIdx) === true) {
+                        dispatch(
+                          updatePackages({
+                            ipcEvent: 'uninstall',
+                            cmd: ['uninstall'],
+                            name: active.name,
+                            mode,
+                            directory
+                          })
+                        );
+                      }
                     }
-                  }
-                )
-              }
-            >
-              <RemoveIcon />
-            </IconButton>
+                  )
+                }
+              >
+                <RemoveIcon />
+              </IconButton>
+            </div>
           </Tooltip>
         </React.Fragment>
       );

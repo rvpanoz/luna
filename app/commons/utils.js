@@ -1,8 +1,10 @@
+/* eslint-disable */
+
 import fs from 'fs';
 import path from 'path';
+import { pick, merge } from 'ramda';
 import mk from '../mk';
 import { PACKAGE_GROUPS } from '../constants/AppConstants';
-import { pick, merge } from 'ramda';
 
 const SEPARATOR = path.sep;
 

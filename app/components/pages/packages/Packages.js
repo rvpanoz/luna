@@ -136,7 +136,7 @@ const Packages = ({ classes }) => {
     [mode, directory]
   );
 
-  const startPackages = useCallback(() => {
+  const startPackages = () => {
     const startParameters = {
       ipcEvent: 'get-packages',
       cmd: ['outdated', 'list'],
@@ -152,17 +152,19 @@ const Packages = ({ classes }) => {
         }
       })
     );
-  }, [mode, directory, dispatch]);
+  };
 
   useEffect(() => {
     const { projectName, projectVersion } = dependenciesSet || {};
     const dependencies = dependenciesSet.data;
     const outdated = outdatedSet.data;
 
+    // paused npm command
     if (paused) {
       return;
     }
 
+    // restore initial value
     if (forceUpdate > 0) {
       setforceUpdate(0);
     }
@@ -182,6 +184,9 @@ const Packages = ({ classes }) => {
       const operation = options && options[0];
       const argv = options && options[1];
       let errorMessages = [];
+
+      // clean up first
+      dispatch(clearRunningCommand());
 
       if (output && output.length) {
         const outputParts = output.split('\n');
@@ -209,9 +214,6 @@ const Packages = ({ classes }) => {
           // update packages without fetching
           setforceUpdate(forceUpdate + 1);
 
-          // clear npm running operation
-          dispatch(clearRunningCommand());
-
           dispatch(
             toggleLoader({
               loading: false,
@@ -234,9 +236,6 @@ const Packages = ({ classes }) => {
 
         return;
       }
-
-      // must clean up and here
-      dispatch(clearRunningCommand());
 
       startPackages();
 

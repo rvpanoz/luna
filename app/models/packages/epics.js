@@ -9,7 +9,8 @@ import {
   toggleLoader,
   togglePackageLoader,
   setActivePage,
-  setPage
+  setPage,
+  clearSelected
 } from 'models/ui/actions';
 
 import { clearNotifications } from 'models/notifications/actions';
@@ -27,16 +28,17 @@ import {
   viewPackage
 } from './actions';
 
-const cleanNotifications = () => ({
-  type: clearNotifications.type
-});
-
-const cleanCommands = () => ({
-  type: clearCommands.type
-});
-
-const cleanPackages = () => ({
-  type: clearPackages.type
+const updateCommand = ({
+  operationStatus,
+  operationPackages,
+  operationCommand
+}) => ({
+  type: setRunningCommand.type,
+  payload: {
+    operationStatus,
+    operationPackages,
+    operationCommand
+  }
 });
 
 const updateLoader = payload => ({
@@ -59,41 +61,17 @@ const setPackages = payload => ({
   payload
 });
 
-const pauseRequest = () => ({
-  type: 'PAUSE_REQUEST'
-});
-
-const resumeRequest = forceUpdate => ({
-  type: 'RESUME_REQUEST',
-  payload: {
-    forceUpdate
-  }
-});
-
-const updateCommand = ({
-  operationStatus,
-  operationPackages,
-  operationCommand
-}) => ({
-  type: setRunningCommand.type,
-  payload: {
-    operationStatus,
-    operationPackages,
-    operationCommand
-  }
+const clearAllData = () => ({
+  type: clearAll.type
 });
 
 const clearAllEpic = action$ =>
   action$.pipe(
     ofType(clearAll.type),
     concatMap(() => [
-      updateLoader({
-        loading: false,
-        message: null
-      }),
-      cleanNotifications(),
-      cleanPackages(),
-      cleanCommands()
+      { type: clearPackages.type },
+      { type: clearCommands.type },
+      { type: clearNotifications.type }
     ])
   );
 
@@ -101,24 +79,20 @@ const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
     map(({ payload: { channel, options, paused, forceUpdate } }) => {
-      console.log('paused', paused);
-      console.log('forceUpdate', forceUpdate);
-
       if (paused) {
-        return pauseRequest();
+        return { type: 'PAUSE_REQUEST' };
       }
 
       if (forceUpdate) {
-        return resumeRequest(forceUpdate);
+        return { type: 'RESUME_REQUEST', payload: { forceUpdate } };
       }
 
       ipcRenderer.send(channel, options);
-      return resumeRequest();
+      return { type: 'RESUME_REQUEST' };
     }),
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
     concatMap(({ type, payload }) => {
-      const { forceUpdate } = payload;
-
+      const { forceUpdate } = payload || {};
       const {
         packages: {
           packagesData,
@@ -127,7 +101,7 @@ const packagesStartEpic = (action$, state$) =>
         }
       } = state$.value;
 
-      if (forceUpdate > 0) {
+      if (forceUpdate) {
         return [
           {
             type: updateData.type,
@@ -146,9 +120,7 @@ const packagesStartEpic = (action$, state$) =>
           loading: true,
           message: 'Loading packages..'
         }),
-        {
-          type: clearAll.type
-        }
+        clearAllData()
       ];
     })
   );
@@ -198,7 +170,10 @@ const updatePackagesEpic = action$ =>
             operationStatus: 'running',
             operationCommand: ipcEvent,
             operationPackages: packages && packages.length ? packages : [name]
-          })
+          }),
+          {
+            type: clearSelected.type
+          }
         ];
       }
 
