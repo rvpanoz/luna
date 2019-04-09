@@ -127,7 +127,7 @@ const packagesStartEpic = (action$, state$) =>
         }
       } = state$.value;
 
-      if (forceUpdate) {
+      if (forceUpdate > 0) {
         return [
           {
             type: updateData.type,
@@ -145,10 +145,10 @@ const packagesStartEpic = (action$, state$) =>
         updateLoader({
           loading: true,
           message: 'Loading packages..'
-        })
-        // cleanPackages(),
-        // cleanNotifications(),
-        // cleanCommands()
+        }),
+        {
+          type: clearAll.type
+        }
       ];
     })
   );

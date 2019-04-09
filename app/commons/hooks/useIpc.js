@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 
-import { clearAll } from 'models/packages/actions';
 import { setPackagesStart } from 'models/packages/actions';
 import { switchcase, parseDependencies, isJson } from 'commons/utils';
 
