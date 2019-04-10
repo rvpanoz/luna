@@ -1,64 +1,69 @@
-export default {
-  mode: 'global',
-  manager: 'npm',
-  activePage: 'packages',
+/**
+ * Application's initial state structure
+ */
+
+const initialState = {
   directory: null,
-  enableNotifications: true,
-  notifications: [],
-  onlineStatus: {
-    status: 'online'
+  manager: 'npm',
+  mode: 'global',
+  onlineStatus: 'offline',
+  operations: {
+    action: null,
+    packagesInstallOptions: []
   },
+  notifications: [],
   npm: {
     commands: [],
-    paused: false,
     env: '',
+    command_error: '',
+    command_message: '',
     operationStatus: 'idle',
     operationPackages: [],
     operationCommand: null
   },
-  uiException: {
-    message: null
+  ui: {
+    paused: false,
+    activePage: 'packages',
+    commandsErrors: [],
+    filtering: {
+      filters: []
+    },
+    loaders: {
+      loader: {
+        loading: false,
+        message: null
+      },
+      packageLoader: {
+        loading: false,
+        message: null
+      }
+    },
+    pagination: {
+      page: 0,
+      rowsPerPage: 10
+    },
+    snackbar: {
+      type: 'info',
+      open: false,
+      message: null
+    },
+    sorting: {
+      sortBy: 'name',
+      sortDir: 'asc'
+    },
+    selected: [],
+    uiException: null
   },
-  snackbarOptions: {
-    open: false,
-    message: null
-  },
-  loader: {
-    loading: false,
-    message: null
-  },
-  packageLoader: {
-    loading: false,
-    message: null
-  },
-  modules: {
+  packages: {
     active: null,
-    data: {
-      packages: [],
-      packagesOutdated: []
-    },
-    operations: {
-      selected: [],
-      packagesInstallOptions: [],
-      commandsErrors: []
-    },
+    packagesData: [],
+    packagesOutdated: [],
     project: {
       name: null,
       version: null,
       description: null,
       license: null,
       author: null
-    },
-    sorting: {
-      sortBy: 'name',
-      sortDir: 'asc'
-    },
-    filtering: {
-      filters: []
-    },
-    pagination: {
-      page: 0,
-      rowsPerPage: 10
     },
     metadata: {
       lastUpdatedAt: null,
@@ -67,3 +72,5 @@ export default {
     }
   }
 };
+
+export default initialState;

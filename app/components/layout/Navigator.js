@@ -27,18 +27,27 @@ import {
   ToolsTab
 } from 'components/pages/navigator/tabs';
 import { runTool } from 'models/packages/actions';
-import { setMode } from 'models/ui/actions';
+import { setMode } from 'models/common/actions';
 
 import styles from './styles/navigator';
 
 const mapState = ({
-  common: { notifications },
-  modules: {
-    data: { packages, packagesOutdated }
+  notifications,
+  packages: {
+    packagesData,
+    packagesOutdated,
+    metadata: { lastUpdatedAt }
+  },
+  ui: {
+    loaders: {
+      loader: { loading }
+    }
   }
 }) => ({
+  loading,
+  lastUpdatedAt,
   notifications,
-  packages,
+  packagesData,
   packagesOutdated
 });
 
@@ -55,7 +64,7 @@ const Navigator = ({
   ...restProps
 }) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
-  const { notifications, packages, packagesOutdated } = useMappedState(
+  const { notifications, packagesData, packagesOutdated } = useMappedState(
     mapState
   );
   const dispatch = useDispatch();
@@ -165,7 +174,7 @@ const Navigator = ({
                 items={[
                   {
                     primaryText: 'Total',
-                    secondaryText: (packages && packages.length) || 0,
+                    secondaryText: (packagesData && packagesData.length) || 0,
                     color: 'secondary',
                     primary: true
                   },
@@ -194,7 +203,7 @@ const Navigator = ({
                     handler: () => runNpmTool('audit')
                   }
                 ]}
-                nodata={packages && packages.length === 0}
+                nodata={packagesData && packagesData.length === 0}
                 loading={loading}
               />
             </AppTabs>

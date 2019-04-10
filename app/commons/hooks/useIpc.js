@@ -6,9 +6,8 @@ import { useState, useEffect } from 'react';
 import { ipcRenderer } from 'electron';
 import { useDispatch } from 'redux-react-hook';
 
-import { clearAll } from 'models/ui/actions';
 import { setPackagesStart } from 'models/packages/actions';
-import { switchcase, parseDependencies } from '../utils';
+import { switchcase, parseDependencies, isJson } from 'commons/utils';
 
 const useIpc = (channel, options, inputs) => {
   const [mode, directory] = inputs;
@@ -30,8 +29,8 @@ const useIpc = (channel, options, inputs) => {
     const { ipcEvent, paused, forceUpdate } = options || {};
 
     ipcRenderer.on(`${ipcEvent}-close`, (event, status, cmd, data) => {
-      if (!data) {
-        return dispatch({ type: clearAll.type });
+      if (!data || !isJson(data)) {
+        return;
       }
 
       const command = cmd && cmd[0];

@@ -2,9 +2,9 @@
 
 import fs from 'fs';
 import path from 'path';
+import { pick, merge } from 'ramda';
 import mk from '../mk';
-import { APP_MODES, PACKAGE_GROUPS } from '../constants/AppConstants';
-import { pick, merge, pluck } from 'ramda';
+import { PACKAGE_GROUPS } from '../constants/AppConstants';
 
 const SEPARATOR = path.sep;
 
