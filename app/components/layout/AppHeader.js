@@ -139,7 +139,14 @@ const Header = ({ classes, onDrawerToggle }) => {
           value={activePage}
           indicatorColor="secondary"
           textColor="inherit"
-          onChange={(e, value) => dispatch(setActivePage(value))}
+          onChange={(e, value) =>
+            dispatch(
+              setActivePage({
+                page: value,
+                paused: true
+              })
+            )
+          }
         >
           <Tab
             textColor="inherit"

@@ -136,7 +136,10 @@ const installPackagesEpic = action$ =>
           loading: true,
           message: 'Installing packages..'
         }),
-        setActivePage('packages')
+        setActivePage({
+          page: 'packages',
+          paused: false
+        })
       ];
     })
   );

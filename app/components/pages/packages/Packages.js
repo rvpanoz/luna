@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { ipcRenderer } from 'electron';
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -157,7 +157,7 @@ const Packages = ({ classes }) => {
   useEffect(() => {
     const { projectName, projectVersion } = dependenciesSet || {};
     const dependencies = dependenciesSet.data;
-    const outdated = outdatedSet.data;
+    const outdated = dependenciesSet.data;
 
     // paused npm command
     if (paused) {

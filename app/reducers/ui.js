@@ -34,10 +34,10 @@ const createReducer = (uiState, handlers) => (state = uiState, action) =>
   propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
-  [setActivePage.type]: (state, { payload: page }) =>
+  [setActivePage.type]: (state, { payload: { page, paused } }) =>
     merge(state, {
       activePage: page,
-      paused: true
+      paused
     }),
   [clearSnackbar.type]: state =>
     merge(state, {
