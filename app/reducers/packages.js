@@ -34,7 +34,6 @@ const handlers = {
     assoc('active', active, state),
   [clearPackages.type]: state =>
     merge(state, {
-      paused: false,
       active: null,
       project: {
         name: null,

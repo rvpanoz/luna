@@ -10,8 +10,6 @@ import { setPackagesStart } from 'models/packages/actions';
 import { switchcase, parseDependencies, isJson } from 'commons/utils';
 
 const useIpc = (channel, options, inputs) => {
-  const [mode, directory] = inputs;
-
   const [dependenciesSet, setDependencies] = useState({
     data: [],
     projectName: null,
@@ -26,6 +24,7 @@ const useIpc = (channel, options, inputs) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    const [mode, directory] = inputs;
     const { ipcEvent, paused, forceUpdate } = options || {};
 
     ipcRenderer.on(`${ipcEvent}-close`, (event, status, cmd, data) => {
@@ -70,7 +69,7 @@ const useIpc = (channel, options, inputs) => {
     }
 
     return () => ipcRenderer.removeAllListeners([`${ipcEvent}-close`]);
-  }, [dispatch, mode, directory]);
+  }, [...inputs, dispatch]);
 
   return [dependenciesSet, outdatedSet, commandErrors];
 };

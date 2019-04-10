@@ -257,7 +257,7 @@ const packagesSuccessEpic = (action$, state$) =>
 
       const actions = [];
 
-      if (dependencies) {
+      if (dependencies && dependencies.length) {
         actions.push(updateLoader({ loading: false, message: null }));
       }
 

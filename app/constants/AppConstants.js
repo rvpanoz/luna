@@ -19,6 +19,8 @@ export const APP_MODES = {
   local: 'local'
 };
 
+export const DEFAULT_MODE = 'Global mode';
+export const DEFAULT_VERSION = '1.0.0';
 export const ERROR_TYPES = ['WARN', 'ERR'];
 
 export const APP_INFO = {

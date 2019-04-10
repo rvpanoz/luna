@@ -48,7 +48,6 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
-  npm: { operationStatus, operationPackages, operationCommand },
   common: {
     directory,
     manager,
@@ -61,6 +60,7 @@ const mapState = ({
     packagesOutdated,
     metadata: { fromSearch }
   },
+  npm: { operationStatus, operationPackages, operationCommand },
   ui: {
     paused,
     loaders: { loader },
@@ -116,7 +116,7 @@ const Packages = ({ classes }) => {
     operationPackages,
     operationCommand
   } = useMappedState(mapState);
-
+  console.log(mode, directory);
   const [forceUpdate, setforceUpdate] = useState(0);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
@@ -131,19 +131,14 @@ const Packages = ({ classes }) => {
     forceUpdate
   };
 
-  const startPackages = () => {
-    const startParameters = {
-      ipcEvent: 'get-packages',
-      cmd: ['outdated', 'list'],
-      mode,
-      directory
-    };
-
+  const fetchPackages = () => {
     dispatch(
       setPackagesStart({
         channel: IPC_EVENT,
         options: {
-          ...startParameters
+          ...parameters,
+          paused: false,
+          forceUpdate: 0
         }
       })
     );
@@ -153,7 +148,7 @@ const Packages = ({ classes }) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
 
     if (fromSearch) {
-      startPackages();
+      fetchPackages();
     }
   };
 
@@ -283,9 +278,6 @@ const Packages = ({ classes }) => {
         return;
       }
 
-      // fetch packages
-      startPackages();
-
       dispatch(
         setSnackbar({
           open: true,
@@ -297,6 +289,8 @@ const Packages = ({ classes }) => {
             : 'Packages updated'
         })
       );
+
+      fetchPackages();
     });
 
     ipcRenderer.on('view-close', (event, status, cmd, data) => {
@@ -320,7 +314,7 @@ const Packages = ({ classes }) => {
       ['action-close', 'view-close'].forEach(listener =>
         ipcRenderer.removeAllListeners(listener)
       );
-  }, [forceUpdate, dispatch, startPackages]);
+  }, [forceUpdate, dispatch, fetchPackages]);
 
   // setup packages
   const [filteredPackages] = useFilters(packagesData, filters);
@@ -364,7 +358,7 @@ const Packages = ({ classes }) => {
                 filters={filters}
                 scrollWrapper={scrollWrapper}
                 switchMode={switchMode}
-                reload={() => startPackages()}
+                reload={() => fetchPackages()}
                 filteredByNamePackages={filteredByNamePackages}
                 setFilteredByNamePackages={setFilteredByNamePackages}
               />
