@@ -5,15 +5,15 @@ import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 
-import ErrorIcon from '@material-ui/icons/ErrorOutlined';
-import CheckIcon from '@material-ui/icons/CheckOutlined';
-import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-
 import CircularProgress from '@material-ui/core/CircularProgress';
+
+import ErrorIcon from '@material-ui/icons/ErrorOutlined';
+import CheckIcon from '@material-ui/icons/CheckOutlined';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import styles from './styles/packages';
 

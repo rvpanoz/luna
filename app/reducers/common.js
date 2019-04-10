@@ -1,165 +1,139 @@
 /**
- * global reducer: Handles state management for global operations.
+ * Common reducer: Handles state management for common operations
  */
 
-import { identity, merge, assoc, propOr, prop, prepend } from 'ramda';
-
+import { assoc, identity, merge, prepend, prop, propOr, remove } from 'ramda';
 import {
-  updateNotifications,
-  addNotification,
-  clearNotifications,
-  clearCommands,
-  clearSnackbar,
-  commandError,
-  setSnackbar,
+  addInstallOption,
+  clearInstallOptions,
   setManager,
   setMode,
-  setEnv,
-  toggleLoader,
-  togglePackageLoader,
-  uiException,
-  npmCommand,
-  setActivePage,
-  updateStatus,
-  setRunningCommand,
-  clearRunningCommand
-} from 'models/ui/actions';
+  updateStatus
+} from 'models/common/actions';
+
 import initialState from './initialState';
 
-const { modules, ...common } = initialState;
+const { npm, notifications, packages, ui, ...common } = initialState;
 
-/**
- *
- * @param {*} commonState
- * @param {*} handlers
- */
 const createReducer = (commonState, handlers) => (
   state = commonState,
   action
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
-  [clearRunningCommand.type]: state =>
-    merge(state, {
-      npm: {
-        ...state.npm,
-        operationStatus: 'idle',
-        operationPackages: [],
-        operationCommand: null
+  [addInstallOption.type]: (state, action) => {
+    const {
+      operations: { packagesInstallOptions }
+    } = state;
+    const {
+      payload: { name, options }
+    } = action;
+
+    const packageOptions = packagesInstallOptions.find(
+      option => option.name === name
+    );
+
+    if (!packageOptions) {
+      return merge(state, {
+        ...state,
+        operations: {
+          ...state.operations,
+          packagesInstallOptions: prepend(
+            {
+              name,
+              options
+            },
+            packagesInstallOptions
+          )
+        }
+      });
+    }
+
+    const hasExactOptionIndex = options.indexOf('save-exact');
+    const hasExactPackageIndex = packageOptions.options.indexOf('save-exact');
+
+    if (hasExactOptionIndex > -1 && hasExactPackageIndex > -1) {
+      return merge(state, {
+        ...state,
+        operations: {
+          ...state.operations,
+          packagesInstallOptions: packagesInstallOptions.map(o => {
+            const optionName = o.name;
+
+            if (optionName === name) {
+              return {
+                name: o.name,
+                options: remove(hasExactPackageIndex, 1, packageOptions.options)
+              };
+            }
+
+            return o;
+          })
+        }
+      });
+    }
+
+    if (hasExactOptionIndex > -1 && hasExactPackageIndex === -1) {
+      return merge(state, {
+        ...state,
+        operations: {
+          ...state.operations,
+          packagesInstallOptions: packagesInstallOptions.map(o => {
+            const optionName = o.name;
+
+            if (optionName === name) {
+              return {
+                name: o.name,
+                options: o.options.concat(options)
+              };
+            }
+
+            return o;
+          })
+        }
+      });
+    }
+
+    return merge(state, {
+      ...state,
+      operations: {
+        ...state.operations,
+        packagesInstallOptions: packagesInstallOptions.map(o => {
+          const optionName = o.name;
+
+          if (optionName === name) {
+            return {
+              name: o.name,
+              options:
+                hasExactPackageIndex > -1
+                  ? options.concat(['save-exact'])
+                  : options
+            };
+          }
+
+          return o;
+        })
       }
-    }),
-  [setRunningCommand.type]: (
-    state,
-    { payload: { operationStatus, operationPackages, operationCommand } }
-  ) =>
-    merge(state, {
-      npm: {
-        ...state.npm,
-        operationStatus,
-        operationPackages,
-        operationCommand
-      }
-    }),
-  [setActivePage.type]: (state, { payload: page }) =>
-    merge(state, {
-      activePage: page,
-      npm: {
-        ...state.npm,
-        paused: true
-      }
-    }),
-  [updateStatus.type]: (state, { payload: { status } }) =>
-    merge(state, {
-      onlineStatus: {
-        ...state.onlineStatus,
-        status
-      }
-    }),
-  [uiException.type]: (state, { payload: message }) =>
-    assoc('uiException', message, state),
-  [setEnv.type]: (state, { payload: env }) =>
-    merge(state, {
-      npm: {
-        ...state.npm,
-        env
-      }
-    }),
-  [updateNotifications.type]: (state, { payload: { notifications } }) =>
-    assoc('notifications', notifications, state),
-  [addNotification.type]: (
-    state,
-    { payload: { type, body, required, requiredBy } }
-  ) =>
-    merge(state, {
-      notifications: prepend(
-        {
-          type,
-          body,
-          required: required.charAt(0) === '@' ? required.slice(1) : required,
-          requiredBy
-        },
-        state.notifications
-      )
-    }),
-  [npmCommand.type]: (state, { payload: command }) =>
-    merge(state, {
-      npm: {
-        ...state.npm,
-        commands: prepend(command, state.npm.commands)
-      }
-    }),
-  [commandError.type]: (state, { payload: error }) =>
-    assoc('command_error', error, state),
-  [clearSnackbar.type]: state =>
-    merge(state, {
-      snackbarOptions: {
-        open: false,
-        type: 'info',
-        message: null
-      }
-    }),
-  [clearCommands.type]: state =>
-    merge(state, {
-      npm: {
-        ...state.npm,
-        paused: false, // enable fetching
-        commands: []
-      }
-    }),
-  [clearNotifications.type]: state =>
+    });
+  },
+  [clearInstallOptions.type]: state =>
     merge(state, {
       ...state,
-      notifications: []
+      operations: {
+        ...state.operations,
+        packagesInstallOptions: []
+      }
     }),
-  [setSnackbar.type]: (state, { payload }) =>
-    assoc('snackbarOptions', merge(state.snackbarOptions, payload), state),
   [setMode.type]: (state, { payload: { mode, directory } }) =>
     merge(state, {
       activePage: 'packages',
       mode,
-      directory,
-      npm: {
-        ...state.npm,
-        paused: false
-      }
+      directory
     }),
   [setManager.type]: (state, { payload: { manager } }) =>
     assoc('manager', manager, state),
-  [toggleLoader.type]: (state, { payload: { loading, message } }) =>
-    merge(state, {
-      loader: {
-        loading,
-        message
-      }
-    }),
-  [togglePackageLoader.type]: (state, { payload: { loading, message } }) =>
-    merge(state, {
-      packageLoader: {
-        loading,
-        message
-      }
-    })
+  [updateStatus.type]: (state, { payload: { status } }) =>
+    assoc('onlineStatus', status, state)
 };
 
-const reducer = createReducer(common, handlers);
-export default reducer;
+export default createReducer(common, handlers);

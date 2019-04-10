@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { ipcRenderer } from 'electron';
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -19,23 +19,24 @@ import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
 
 import {
-  addSelected,
-  addInstallOption,
   updateData,
-  setPage,
-  setPageRows,
   setPackagesStart,
-  viewPackage,
   setActive,
+  viewPackage,
   removePackages
 } from 'models/packages/actions';
+
 import {
+  addSelected,
   toggleLoader,
   togglePackageLoader,
   setSnackbar,
-  clearRunningCommand,
-  setMode
+  setPage,
+  setPageRows
 } from 'models/ui/actions';
+
+import { clearRunningCommand } from 'models/npm/actions';
+import { setMode, addInstallOption } from 'models/common/actions';
 import { PackageDetails } from 'components/pages/package';
 
 import TableToolbar from './TableToolbar';
@@ -46,21 +47,26 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
+  npm: { operationStatus, operationPackages, operationCommand },
   common: {
     directory,
     manager,
     mode,
-    loader,
-    npm: { paused, operationStatus, operationPackages, operationCommand }
+    operations: { packagesInstallOptions, action }
   },
-  modules: {
+  packages: {
     active,
-    data: { packages, packagesOutdated },
-    operations: { action, selected, packagesInstallOptions },
+    packagesData,
+    packagesOutdated,
+    metadata: { fromSearch }
+  },
+  ui: {
+    paused,
+    loaders: { loader },
     pagination: { page, rowsPerPage },
     filtering: { filters },
-    metadata: { fromSearch },
-    sorting: { sortBy, sortDir }
+    sorting: { sortBy, sortDir },
+    selected
   }
 }) => ({
   paused,
@@ -73,7 +79,7 @@ const mapState = ({
   loader,
   action,
   filters,
-  packages,
+  packagesData,
   packagesOutdated,
   selected,
   packagesInstallOptions,
@@ -90,7 +96,7 @@ const IPC_EVENT = 'ipc-event';
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
-    packages,
+    packagesData,
     packagesOutdated,
     mode,
     page,
@@ -130,7 +136,7 @@ const Packages = ({ classes }) => {
     [mode, directory]
   );
 
-  const startPackages = useCallback(() => {
+  const startPackages = () => {
     const startParameters = {
       ipcEvent: 'get-packages',
       cmd: ['outdated', 'list'],
@@ -146,32 +152,26 @@ const Packages = ({ classes }) => {
         }
       })
     );
-  }, [mode, directory, dispatch]);
-
-  const switchMode = (appMode, appDirectory) => {
-    dispatch(setMode({ mode: appMode, directory: appDirectory }));
-
-    if (fromSearch) {
-      startPackages();
-    }
   };
 
   useEffect(() => {
     const { projectName, projectVersion } = dependenciesSet || {};
     const dependencies = dependenciesSet.data;
-    const outdated = outdatedSet.data;
+    const outdated = dependenciesSet.data;
 
+    // paused npm command
     if (paused) {
       return;
     }
 
+    // restore initial value
     if (forceUpdate > 0) {
       setforceUpdate(0);
     }
 
     dispatch(
       updateData({
-        dependencies: forceUpdate ? packages : dependencies,
+        dependencies: forceUpdate ? packagesData : dependencies,
         outdated: forceUpdate ? packagesOutdated : outdated,
         projectName,
         projectVersion
@@ -184,6 +184,9 @@ const Packages = ({ classes }) => {
       const operation = options && options[0];
       const argv = options && options[1];
       let errorMessages = [];
+
+      // clean up first
+      dispatch(clearRunningCommand());
 
       if (output && output.length) {
         const outputParts = output.split('\n');
@@ -211,9 +214,6 @@ const Packages = ({ classes }) => {
           // update packages without fetching
           setforceUpdate(forceUpdate + 1);
 
-          // clear npm running operation
-          dispatch(clearRunningCommand());
-
           dispatch(
             toggleLoader({
               loading: false,
@@ -236,9 +236,6 @@ const Packages = ({ classes }) => {
 
         return;
       }
-
-      // must clean up and here
-      dispatch(clearRunningCommand());
 
       startPackages();
 
@@ -278,6 +275,14 @@ const Packages = ({ classes }) => {
       );
   }, [forceUpdate, dispatch, startPackages]);
 
+  const switchMode = (appMode, appDirectory) => {
+    dispatch(setMode({ mode: appMode, directory: appDirectory }));
+
+    if (fromSearch) {
+      startPackages();
+    }
+  };
+
   const scrollWrapper = top => {
     const wrapperEl = wrapperRef && wrapperRef.current;
 
@@ -306,11 +311,11 @@ const Packages = ({ classes }) => {
   };
 
   // setup packages
-  const [packagesData] = useFilters(packages, filters);
+  const [filteredPackages] = useFilters(packagesData, filters);
 
   const data = filteredByNamePackages.length
     ? filteredByNamePackages
-    : packagesData;
+    : filteredPackages;
 
   // pagination
   const dataSlices =

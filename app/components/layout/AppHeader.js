@@ -16,7 +16,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -28,20 +27,21 @@ import SearchBox from 'components/common/SearchBox';
 import InstallFromSource from 'components/common/InstallFromSource';
 import { setActivePage } from 'models/ui/actions';
 import { installPackages } from 'models/packages/actions';
+
 import System from './System';
 import styles from './styles/appHeader';
 
 const mapState = ({
-  common: {
-    onlineStatus: { status },
+  npm: { env },
+  common: { onlineStatus, mode, directory },
+  ui: {
     activePage,
-    loader: { loading },
-    npm: { env },
-    mode,
-    directory
+    loaders: {
+      loader: { loading }
+    }
   }
 }) => ({
-  status,
+  onlineStatus,
   activePage,
   loading,
   env,
@@ -139,7 +139,14 @@ const Header = ({ classes, onDrawerToggle }) => {
           value={activePage}
           indicatorColor="secondary"
           textColor="inherit"
-          onChange={(e, value) => dispatch(setActivePage(value))}
+          onChange={(e, value) =>
+            dispatch(
+              setActivePage({
+                page: value,
+                paused: true
+              })
+            )
+          }
         >
           <Tab
             textColor="inherit"

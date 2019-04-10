@@ -27,18 +27,19 @@ import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
 
 const mapState = ({
-  common: {
-    mode,
-    directory,
+  npm: { env },
+  notifications,
+  common: { mode, directory },
+  ui: {
     activePage,
-    loader: { loading },
-    npm: { env },
-    snackbarOptions,
-    notifications
+    loaders: {
+      loader: { loading }
+    },
+    snackbar
   },
-  modules: {
-    metadata: { lastUpdatedAt },
-    project: { name, version, description }
+  packages: {
+    project: { name, version, description },
+    metadata: { lastUpdatedAt }
   }
 }) => ({
   lastUpdatedAt,
@@ -51,23 +52,24 @@ const mapState = ({
   description,
   env,
   notifications,
-  snackbarOptions
+  snackbar
 });
 
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
   const [dialog, setDialog] = useState({
+    type: 'info',
     open: false,
     content: null
   });
 
   const {
     activePage,
-    snackbarOptions,
+    snackbar,
     mode,
     directory,
     notifications,
-    packages,
+    packagesData,
     packagesOutdated,
     env,
     ...restProps
@@ -152,18 +154,18 @@ const AppLayout = ({ classes }) => {
             })(<Packages />)(activePage)}
           </main>
         </div>
-        {snackbarOptions && snackbarOptions.open && snackbarOptions.message && (
+        {snackbar && snackbar.open && (
           <Snackbar
             anchorOrigin={{
               vertical: 'bottom',
-              horizontal: snackbarOptions.type === 'error' ? 'center' : 'right'
+              horizontal: snackbar.type === 'error' ? 'center' : 'right'
             }}
-            open={snackbarOptions.open}
+            open={snackbar.open}
             autoHideDuration={5000}
           >
             <SnackbarContent
-              variant={snackbarOptions.type}
-              message={snackbarOptions.message}
+              variant={snackbar.type}
+              message={snackbar.message}
               onClose={() =>
                 dispatch(
                   setSnackbar({

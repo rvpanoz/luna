@@ -17,7 +17,7 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
-import { updateFilters } from 'models/packages/actions';
+import { updateFilters } from 'models/ui/actions';
 import AppButton from 'components/units/Buttons/AppButton';
 import styles from './styles/tableFilters';
 
