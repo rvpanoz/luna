@@ -10,26 +10,23 @@ import { useDispatch, useMappedState } from 'redux-react-hook';
 import { withErrorBoundary } from 'commons/hocs';
 import { WARNING_MESSAGES } from 'constants/AppConstants';
 
-import {
-  uiException,
-  setEnv,
-  setSnackbar,
-  updateStatus
-} from 'models/ui/actions';
+import { setEnv } from 'models/npm/actions';
+import { updateStatus } from 'models/common/actions';
+import { setUIException, setSnackbar } from 'models/ui/actions';
 
 import AppLayout from './AppLayout';
 import AppError from './AppError';
 
 import '../app.global.css';
 
-const mapState = ({ common: { uiExceptionMessage } }) => ({
-  uiExceptionMessage
+const mapState = ({ ui: { uiException } }) => ({
+  uiException
 });
 
 const App = () => {
   const dispatch = useDispatch();
   const [npmError, setNpmError] = useState(null);
-  const { uiExceptionMessage } = useMappedState(mapState);
+  const { uiException } = useMappedState(mapState);
 
   useEffect(() => {
     const updateOnlineStatus = () => {
@@ -57,7 +54,7 @@ const App = () => {
     });
 
     ipcRenderer.on('uncaught-exception', (event, ...args) => {
-      dispatch({ type: uiException.type, payload: { message: args[0] } });
+      dispatch({ type: setUIException.type, payload: { message: args[0] } });
     });
 
     ipcRenderer.on('npm-error', (event, ...args) => {
@@ -93,10 +90,10 @@ const App = () => {
     <div id="app">
       {npmError ? (
         <AppError error={npmError} />
-      ) : !uiExceptionMessage ? (
+      ) : !uiException ? (
         <AppLayout app="Luna" />
       ) : (
-        uiExceptionMessage.message
+        uiException
       )}
     </div>
   );

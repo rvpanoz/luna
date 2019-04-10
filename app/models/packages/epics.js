@@ -8,14 +8,16 @@ import { isPackageOutdated } from 'commons/utils';
 import {
   toggleLoader,
   togglePackageLoader,
-  clearCommands,
-  clearNotifications,
-  clearAll,
-  setRunningCommand,
-  setActivePage
+  setActivePage,
+  setPage,
+  clearSelected
 } from 'models/ui/actions';
 
+import { clearNotifications } from 'models/notifications/actions';
+import { clearCommands, setRunningCommand } from 'models/npm/actions';
+
 import {
+  clearAll,
   clearPackages,
   installPackages,
   updatePackages,
@@ -23,21 +25,20 @@ import {
   setPackagesSuccess,
   setOutdatedSuccess,
   updateData,
-  setPage,
-  runTool,
   viewPackage
 } from './actions';
 
-const cleanNotifications = () => ({
-  type: clearNotifications.type
-});
-
-const cleanCommands = () => ({
-  type: clearCommands.type
-});
-
-const cleanPackages = () => ({
-  type: clearPackages.type
+const updateCommand = ({
+  operationStatus,
+  operationPackages,
+  operationCommand
+}) => ({
+  type: setRunningCommand.type,
+  payload: {
+    operationStatus,
+    operationPackages,
+    operationCommand
+  }
 });
 
 const updateLoader = payload => ({
@@ -60,41 +61,17 @@ const setPackages = payload => ({
   payload
 });
 
-const pauseRequest = () => ({
-  type: 'PAUSE_REQUEST'
+const clearAllData = () => ({
+  type: clearAll.type
 });
 
-const resumeRequest = forceUpdate => ({
-  type: 'RESUME_REQUEST',
-  payload: {
-    forceUpdate
-  }
-});
-
-const updateCommand = ({
-  operationStatus,
-  operationPackages,
-  operationCommand
-}) => ({
-  type: setRunningCommand.type,
-  payload: {
-    operationStatus,
-    operationPackages,
-    operationCommand
-  }
-});
-
-const cleanAllEpic = action$ =>
+const clearAllEpic = action$ =>
   action$.pipe(
     ofType(clearAll.type),
     concatMap(() => [
-      updateLoader({
-        loading: false,
-        message: null
-      }),
-      cleanNotifications(),
-      cleanPackages(),
-      cleanCommands()
+      { type: clearPackages.type },
+      { type: clearCommands.type },
+      { type: clearNotifications.type }
     ])
   );
 
@@ -103,23 +80,23 @@ const packagesStartEpic = (action$, state$) =>
     ofType(setPackagesStart.type),
     map(({ payload: { channel, options, paused, forceUpdate } }) => {
       if (paused) {
-        return pauseRequest();
+        return { type: 'PAUSE_REQUEST' };
       }
 
       if (forceUpdate) {
-        return resumeRequest(forceUpdate);
+        return { type: 'RESUME_REQUEST', payload: { forceUpdate } };
       }
 
       ipcRenderer.send(channel, options);
-      return resumeRequest();
+      return { type: 'RESUME_REQUEST' };
     }),
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
     concatMap(({ type, payload }) => {
-      const { forceUpdate } = payload;
-
+      const { forceUpdate } = payload || {};
       const {
-        modules: {
-          data: { packages, packagesOutdated },
+        packages: {
+          packagesData,
+          packagesOutdated,
           project: { name, version }
         }
       } = state$.value;
@@ -129,7 +106,7 @@ const packagesStartEpic = (action$, state$) =>
           {
             type: updateData.type,
             payload: {
-              dependencies: packages,
+              dependencies: packagesData,
               outdated: packagesOutdated,
               projectName: name,
               projectVersion: version
@@ -143,9 +120,7 @@ const packagesStartEpic = (action$, state$) =>
           loading: true,
           message: 'Loading packages..'
         }),
-        cleanPackages(),
-        cleanNotifications(),
-        cleanCommands()
+        clearAllData()
       ];
     })
   );
@@ -161,7 +136,10 @@ const installPackagesEpic = action$ =>
           loading: true,
           message: 'Installing packages..'
         }),
-        setActivePage('packages')
+        setActivePage({
+          page: 'packages',
+          paused: false
+        })
       ];
     })
   );
@@ -195,7 +173,10 @@ const updatePackagesEpic = action$ =>
             operationStatus: 'running',
             operationCommand: ipcEvent,
             operationPackages: packages && packages.length ? packages : [name]
-          })
+          }),
+          {
+            type: clearSelected.type
+          }
         ];
       }
 
@@ -262,8 +243,8 @@ const packagesSuccessEpic = (action$, state$) =>
     ),
     concatMap(({ dependencies, outdated, projectName, projectVersion }) => {
       const {
-        common: { page },
-        modules: {
+        ui: { page },
+        packages: {
           metadata: { fromSearch, fromSort }
         }
       } = state$.value;
@@ -292,25 +273,11 @@ const packagesSuccessEpic = (action$, state$) =>
     })
   );
 
-const npmToolsEpic = action$ =>
-  action$.pipe(
-    ofType(runTool.type),
-    map(({ payload }) => {
-      ipcRenderer.send('ipc-event', payload);
-
-      return updateLoader({
-        loading: true,
-        message: 'Running npm audit'
-      });
-    })
-  );
-
 export default combineEpics(
-  npmToolsEpic,
   packagesStartEpic,
   packagesSuccessEpic,
   installPackagesEpic,
-  cleanAllEpic,
+  clearAllEpic,
   updatePackagesEpic,
   viewPackagesEpic
 );

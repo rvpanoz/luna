@@ -35,12 +35,10 @@ import { switchcase } from 'commons/utils';
 import { navigatorParameters } from 'commons/parameters';
 import { INFO_MESSAGES } from 'constants/AppConstants';
 
-import {
-  updatePackages,
-  clearInstallOptions,
-  installPackages,
-  clearFilters
-} from 'models/packages/actions';
+import { updatePackages, installPackages } from 'models/packages/actions';
+import { clearInstallOptions } from 'models/common/actions';
+import { clearFilters } from 'models/ui/actions';
+
 import TableFilters from './TableFilters';
 import Flags from './Flags';
 import styles from './styles/tableToolbar';

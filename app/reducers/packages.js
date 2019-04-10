@@ -2,31 +2,19 @@
  * Packages reducer: Handles state management for packages operations
  */
 
-import { identity, merge, prepend, prop, propOr, remove } from 'ramda';
+import { assoc, identity, merge, prop, propOr } from 'ramda';
 import {
-  addActionError,
-  addFilter,
-  addSelected,
-  addInstallOption,
-  clearSelected,
-  clearFilters,
   clearPackages,
-  setActive,
   setPackagesStart,
   setPackagesSuccess,
   setOutdatedSuccess,
-  setSortOptions,
-  setPage,
-  setPageRows,
-  updateFilters,
   removePackages,
-  clearInstallOptions
+  setActive
 } from 'models/packages/actions';
 import format from 'date-fns/format';
-
 import initialState from './initialState';
 
-const { modules } = initialState;
+const { packages } = initialState;
 
 const createReducer = (packagesState, handlers) => (
   state = packagesState,
@@ -34,214 +22,26 @@ const createReducer = (packagesState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
-  [addActionError.type]: (state, { payload: { error } }) => {
-    const {
-      operations: { commandsErrors }
-    } = state;
-
-    const newErrors = prepend(error, commandsErrors);
-
-    return merge(state, {
-      ...state,
-      operations: {
-        ...state.operations,
-        commandsErrors: newErrors
-      }
-    });
-  },
-  [updateFilters.type]: (state, { payload: { allFilters } }) =>
+  [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
     merge(state, {
-      ...state,
-      filtering: {
-        ...state.filtering,
-        filters: allFilters
+      metadata: {
+        fromSearch,
+        fromSort
       }
     }),
-  [addFilter.type]: (state, { payload: { filter } }) => {
-    const {
-      filtering: { filters }
-    } = state;
-    const idx = filters.indexOf(filter);
-
-    return merge(state, {
-      ...state,
-      filtering: {
-        ...state.filtering,
-        page: 0,
-        filters: idx !== -1 ? remove(idx, 1, filters) : prepend(filter, filters)
-      }
-    });
-  },
-  [addInstallOption.type]: (state, action) => {
-    const {
-      operations: { packagesInstallOptions, selected }
-    } = state;
-    const {
-      payload: { name, options }
-    } = action;
-
-    const idx = selected.length ? selected.indexOf(name) : 0;
-
-    if (idx === -1) {
-      return state;
-    }
-
-    const packageOptions = packagesInstallOptions.find(
-      option => option.name === name
-    );
-
-    if (!packageOptions) {
-      return merge(state, {
-        ...state,
-        operations: {
-          ...state.operations,
-          packagesInstallOptions: prepend(
-            {
-              name,
-              options
-            },
-            packagesInstallOptions
-          )
-        }
-      });
-    }
-
-    const hasExactOptionIndex = options.indexOf('save-exact');
-    const hasExactPackageIndex = packageOptions.options.indexOf('save-exact');
-
-    if (hasExactOptionIndex > -1 && hasExactPackageIndex > -1) {
-      return merge(state, {
-        ...state,
-        operations: {
-          ...state.operations,
-          packagesInstallOptions: packagesInstallOptions.map(o => {
-            const optionName = o.name;
-
-            if (optionName === name) {
-              return {
-                name: o.name,
-                options: remove(hasExactPackageIndex, 1, packageOptions.options)
-              };
-            }
-
-            return o;
-          })
-        }
-      });
-    }
-
-    if (hasExactOptionIndex > -1 && hasExactPackageIndex === -1) {
-      return merge(state, {
-        ...state,
-        operations: {
-          ...state.operations,
-          packagesInstallOptions: packagesInstallOptions.map(o => {
-            const optionName = o.name;
-
-            if (optionName === name) {
-              return {
-                name: o.name,
-                options: o.options.concat(options)
-              };
-            }
-
-            return o;
-          })
-        }
-      });
-    }
-
-    return merge(state, {
-      ...state,
-      operations: {
-        ...state.operations,
-        packagesInstallOptions: packagesInstallOptions.map(o => {
-          const optionName = o.name;
-
-          if (optionName === name) {
-            return {
-              name: o.name,
-              options:
-                hasExactPackageIndex > -1
-                  ? options.concat(['save-exact'])
-                  : options
-            };
-          }
-
-          return o;
-        })
-      }
-    });
-  },
-  [addSelected.type]: (state, action) => {
-    const {
-      operations: { selected }
-    } = state;
-    const {
-      payload: { name, force }
-    } = action;
-
-    const idx = selected.indexOf(name);
-    let newSelected = [];
-
-    if (idx !== -1 && Boolean(force) === true) {
-      newSelected = selected;
-    } else if (idx !== -1 && !force) {
-      newSelected = remove(idx, 1, selected);
-    } else {
-      newSelected = prepend(name, selected);
-    }
-
-    return merge(state, {
-      ...state,
-      operations: {
-        ...state.operations,
-        selected: newSelected
-      }
-    });
-  },
-  [clearFilters.type]: state =>
-    merge(state, {
-      ...state,
-      filtering: {
-        filters: [],
-        page: 0
-      }
-    }),
-  [clearInstallOptions.type]: state =>
-    merge(state, {
-      ...state,
-      operations: {
-        ...state.operations,
-        packagesInstallOptions: []
-      }
-    }),
-  [clearSelected.type]: state =>
-    merge(state, {
-      ...state,
-      operations: {
-        packagesInstallOptions: [],
-        selected: []
-      }
-    }),
+  [setActive.type]: (state, { payload: { active } }) =>
+    assoc('active', active, state),
   [clearPackages.type]: state =>
     merge(state, {
-      ...state,
+      paused: false,
+      active: null,
       project: {
         name: null,
-        version: null
+        version: null,
+        description: null
       },
-      data: {
-        packages: [],
-        packagesOutdated: []
-      },
-      operations: {
-        selected: [],
-        packagesInstallOptions: []
-      },
-      filtering: {
-        filters: []
-      }
+      packagesData: [],
+      packagesOutdated: []
     }),
   [setPackagesSuccess.type]: (state, { payload }) => {
     const {
@@ -256,15 +56,7 @@ const handlers = {
     } = payload;
 
     return merge(state, {
-      ...state,
-      data: {
-        ...state.data,
-        packages: dependencies
-      },
-      operations: {
-        selected: [],
-        packagesInstallOptions: []
-      },
+      packagesData: dependencies,
       project: {
         ...state.project,
         name: projectName,
@@ -273,21 +65,13 @@ const handlers = {
         license: projectLicense,
         author: projectAuthor
       },
-      filtering: {
-        filters: []
-      },
       metadata: {
-        ...state.metadata,
+        fromSearch,
+        fromSort,
         lastUpdatedAt:
           fromSort || fromSearch
-            ? state.lastUpdatedAt
-            : format(new Date(), 'DD/MM/YYYY h:mm:ss'),
-        fromSearch,
-        fromSort
-      },
-      pagination: {
-        ...state.pagination,
-        page: 0
+            ? state.metadata.lastUpdatedAt
+            : format(new Date(), 'DD/MM/YYYY h:mm')
       }
     });
   },
@@ -296,65 +80,14 @@ const handlers = {
 
     return merge(state, {
       ...state,
-      data: {
-        ...state.data,
-        packagesOutdated: outdated
-      }
+      packagesOutdated: outdated
     });
   },
-  [setActive.type]: (state, { payload }) => {
-    const { active } = payload;
-
-    return merge(state, {
-      ...state,
-      active
-    });
-  },
-  [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
-    merge(state, {
-      ...state,
-      active: null,
-      filtering: {
-        filters: []
-      },
-      operations: {
-        selected: [],
-        packagesInstallOptions: []
-      },
-      metadata: {
-        fromSearch,
-        fromSort
-      }
-    }),
-  [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
-    merge(state, {
-      ...state,
-      sorting: {
-        sortBy,
-        sortDir
-      }
-    }),
-  [setPage.type]: (state, { payload: { page } }) =>
-    merge(state, {
-      pagination: {
-        ...state.pagination,
-        page
-      }
-    }),
-  [setPageRows.type]: (state, { payload: { rowsPerPage } }) =>
-    merge(state, {
-      pagination: {
-        ...state.pagination,
-        rowsPerPage
-      }
-    }),
   [removePackages.type]: (state, { payload: { removedPackages } }) => {
-    const {
-      data: { packages, packagesOutdated }
-    } = state;
+    const { packagesData, packagesOutdated } = state;
 
     // update packages
-    const newPackages = packages.filter(
+    const newPackages = packagesData.filter(
       pkg => removedPackages.indexOf(pkg.name) === -1
     );
 
@@ -365,18 +98,10 @@ const handlers = {
 
     return merge(state, {
       ...state,
-      data: {
-        ...state.data,
-        packages: newPackages,
-        packagesOutdated: newPackagesOutdated
-      },
-      operations: {
-        ...state.operations,
-        selected: [],
-        packagesInstallOptions: []
-      }
+      packagesData: newPackages,
+      packagesOutdated: newPackagesOutdated
     });
   }
 };
 
-export default createReducer(modules, handlers);
+export default createReducer(packages, handlers);
