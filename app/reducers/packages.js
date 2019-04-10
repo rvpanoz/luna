@@ -15,6 +15,7 @@ import format from 'date-fns/format';
 import initialState from './initialState';
 
 const { packages } = initialState;
+const newDateFormatted = format(new Date(), 'DD/MM/YYYY h:mm');
 
 const createReducer = (packagesState, handlers) => (
   state = packagesState,
@@ -43,19 +44,22 @@ const handlers = {
       packagesData: [],
       packagesOutdated: []
     }),
-  [setPackagesSuccess.type]: (state, { payload }) => {
-    const {
-      dependencies,
-      projectName,
-      projectVersion,
-      projectDescription,
-      projectLicense,
-      projectAuthor,
-      fromSort,
-      fromSearch
-    } = payload;
-
-    return merge(state, {
+  [setPackagesSuccess.type]: (
+    state,
+    {
+      payload: {
+        dependencies,
+        projectName,
+        projectVersion,
+        projectDescription,
+        projectLicense,
+        projectAuthor,
+        fromSort,
+        fromSearch
+      }
+    }
+  ) =>
+    merge(state, {
       packagesData: dependencies,
       project: {
         ...state.project,
@@ -66,23 +70,21 @@ const handlers = {
         author: projectAuthor
       },
       metadata: {
+        ...state.metadata,
         fromSearch,
         fromSort,
         lastUpdatedAt:
           fromSort || fromSearch
             ? state.metadata.lastUpdatedAt
-            : format(new Date(), 'DD/MM/YYYY h:mm')
+            : newDateFormatted
       }
-    });
-  },
-  [setOutdatedSuccess.type]: (state, { payload }) => {
-    const { outdated } = payload;
+    }),
 
-    return merge(state, {
+  [setOutdatedSuccess.type]: (state, { payload: { outdated } }) =>
+    merge(state, {
       ...state,
       packagesOutdated: outdated
-    });
-  },
+    }),
   [removePackages.type]: (state, { payload: { removedPackages } }) => {
     const { packagesData, packagesOutdated } = state;
 

@@ -68,7 +68,7 @@ const clearAllData = () => ({
 const clearAllEpic = action$ =>
   action$.pipe(
     ofType(clearAll.type),
-    concatMap(() => [
+    mergeMap(() => [
       { type: clearPackages.type },
       { type: clearCommands.type },
       { type: clearNotifications.type }
@@ -162,7 +162,7 @@ const viewPackagesEpic = action$ =>
 const updatePackagesEpic = action$ =>
   action$.pipe(
     ofType(updatePackages.type),
-    concatMap(({ payload }) => {
+    mergeMap(({ payload }) => {
       const { ipcEvent, packages, name } = payload;
 
       ipcRenderer.send('ipc-event', payload);
@@ -200,10 +200,17 @@ const packagesSuccessEpic = (action$, state$) =>
     takeWhile(({ payload: { dependencies } }) => Array.isArray(dependencies)),
     map(
       ({
-        payload: { dependencies, outdated, projectName, projectVersion }
+        payload: {
+          dependencies,
+          outdated,
+          projectName,
+          projectVersion,
+          projectDescription
+        }
       }) => {
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
           const {
+            name,
             invalid,
             extraneous,
             peerMissing,
@@ -211,8 +218,6 @@ const packagesSuccessEpic = (action$, state$) =>
             missing,
             ...rest
           } = dependency;
-
-          const { name } = rest;
 
           if (!invalid && !peerMissing) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
@@ -237,7 +242,8 @@ const packagesSuccessEpic = (action$, state$) =>
           dependencies: withOutdated.filter(dependency => Boolean(dependency)),
           outdated,
           projectName,
-          projectVersion
+          projectVersion,
+          projectDescription
         };
       }
     ),

@@ -102,7 +102,6 @@ const handlers = {
       }
     });
   },
-
   [addSelected.type]: (state, action) => {
     const { selected } = state;
     const {
@@ -127,7 +126,6 @@ const handlers = {
   },
   [clearFilters.type]: state =>
     merge(state, {
-      ...state,
       filtering: {
         filters: [],
         page: 0

@@ -32,7 +32,8 @@ import {
   togglePackageLoader,
   setSnackbar,
   setPage,
-  setPageRows
+  setPageRows,
+  clearSelected
 } from 'models/ui/actions';
 
 import { clearRunningCommand } from 'models/npm/actions';
@@ -130,12 +131,6 @@ const Packages = ({ classes }) => {
     forceUpdate
   };
 
-  const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
-    IPC_EVENT,
-    parameters,
-    [mode, directory]
-  );
-
   const startPackages = () => {
     const startParameters = {
       ipcEvent: 'get-packages',
@@ -154,10 +149,52 @@ const Packages = ({ classes }) => {
     );
   };
 
+  const switchMode = (appMode, appDirectory) => {
+    dispatch(setMode({ mode: appMode, directory: appDirectory }));
+
+    if (fromSearch) {
+      startPackages();
+    }
+  };
+
+  const scrollWrapper = top => {
+    const wrapperEl = wrapperRef && wrapperRef.current;
+
+    wrapperEl &&
+      wrapperEl.scroll({
+        top,
+        behavior: 'smooth'
+      });
+  };
+
+  const viewPackageHandler = (name, version) => {
+    const viewParameters = {
+      activeManager: manager,
+      ipcEvent: 'view',
+      cmd: ['view'],
+      name,
+      version,
+      mode,
+      directory
+    };
+
+    dispatch({
+      type: viewPackage.type,
+      payload: viewParameters
+    });
+  };
+
+  const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
+    IPC_EVENT,
+    parameters,
+    [mode, directory]
+  );
+
   useEffect(() => {
-    const { projectName, projectVersion } = dependenciesSet || {};
+    const { projectName, projectVersion, projectDescription } =
+      dependenciesSet || {};
     const dependencies = dependenciesSet.data;
-    const outdated = dependenciesSet.data;
+    const outdated = outdatedSet.data;
 
     // paused npm command
     if (paused) {
@@ -174,7 +211,8 @@ const Packages = ({ classes }) => {
         dependencies: forceUpdate ? packagesData : dependencies,
         outdated: forceUpdate ? packagesOutdated : outdated,
         projectName,
-        projectVersion
+        projectVersion,
+        projectDescription
       })
     );
   }, [dependenciesSet, outdatedSet, commandErrors]);
@@ -187,6 +225,7 @@ const Packages = ({ classes }) => {
 
       // clean up first
       dispatch(clearRunningCommand());
+      dispatch(clearSelected());
 
       if (output && output.length) {
         const outputParts = output.split('\n');
@@ -214,6 +253,13 @@ const Packages = ({ classes }) => {
           // update packages without fetching
           setforceUpdate(forceUpdate + 1);
 
+          // clean up active package
+          dispatch(
+            setActive({
+              active: null
+            })
+          );
+
           dispatch(
             toggleLoader({
               loading: false,
@@ -237,6 +283,7 @@ const Packages = ({ classes }) => {
         return;
       }
 
+      // fetch packages
       startPackages();
 
       dispatch(
@@ -274,41 +321,6 @@ const Packages = ({ classes }) => {
         ipcRenderer.removeAllListeners(listener)
       );
   }, [forceUpdate, dispatch, startPackages]);
-
-  const switchMode = (appMode, appDirectory) => {
-    dispatch(setMode({ mode: appMode, directory: appDirectory }));
-
-    if (fromSearch) {
-      startPackages();
-    }
-  };
-
-  const scrollWrapper = top => {
-    const wrapperEl = wrapperRef && wrapperRef.current;
-
-    wrapperEl &&
-      wrapperEl.scroll({
-        top,
-        behavior: 'smooth'
-      });
-  };
-
-  const viewPackageHandler = (name, version) => {
-    const viewParameters = {
-      activeManager: manager,
-      ipcEvent: 'view',
-      cmd: ['view'],
-      name,
-      version,
-      mode,
-      directory
-    };
-
-    dispatch({
-      type: viewPackage.type,
-      payload: viewParameters
-    });
-  };
 
   // setup packages
   const [filteredPackages] = useFilters(packagesData, filters);
@@ -437,7 +449,7 @@ const Packages = ({ classes }) => {
                       )}
                   </TableBody>
                   <TableFooter
-                    rowCount={packagesData && packagesData.length}
+                    rowCount={data && data.length}
                     page={page}
                     rowsPerPage={rowsPerPage}
                     handleChangePage={(e, pageNo) => {

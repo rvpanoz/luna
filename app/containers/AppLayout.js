@@ -119,6 +119,7 @@ const AppLayout = ({ classes }) => {
       } else {
         dispatch(
           setSnackbar({
+            type: 'info',
             open: true,
             message: 'npm audit fix completed'
           })
@@ -171,7 +172,7 @@ const AppLayout = ({ classes }) => {
                   setSnackbar({
                     open: false,
                     message: null,
-                    type: null
+                    type: 'info'
                   })
                 )
               }
