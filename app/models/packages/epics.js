@@ -1,6 +1,16 @@
 /* eslint-disable no-unused-vars */
 
-import { map, mergeMap, takeWhile, concatMap, tap } from 'rxjs/operators';
+import {
+  map,
+  mergeMap,
+  takeWhile,
+  concatMap,
+  filter,
+  tap,
+  takeLast,
+  takeUntil,
+  last
+} from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
@@ -217,6 +227,12 @@ const packagesSuccessEpic = (action$, state$) =>
           projectDescription
         }
       }) => {
+        if (!dependencies.length) {
+          return {
+            dependencies
+          };
+        }
+
         const withOutdated = dependencies.reduce((deps = [], dependency) => {
           const {
             name,
@@ -266,12 +282,12 @@ const packagesSuccessEpic = (action$, state$) =>
 
       const actions = [];
 
-      if (dependencies && dependencies.length) {
-        actions.push(updateLoader({ loading: false, message: null }));
-      }
-
       if (page !== 0) {
         actions.unshift(setPage({ page: 0 }));
+      }
+
+      if (dependencies && !dependencies.length) {
+        return [updateLoader({ loading: false, message: null })];
       }
 
       return [
@@ -283,7 +299,8 @@ const packagesSuccessEpic = (action$, state$) =>
           dependencies
         }),
         setOutdated({ outdated }),
-        ...actions
+        ...actions,
+        updateLoader({ loading: false, message: null })
       ];
     })
   );
