@@ -22,9 +22,9 @@ const useIpc = (channel, options, inputs) => {
 
   const [commandErrors, setErrors] = useState(null);
   const dispatch = useDispatch();
+  const [mode, directory] = inputs;
 
   useEffect(() => {
-    const [mode, directory] = inputs;
     const { ipcEvent, paused, forceUpdate } = options || {};
 
     ipcRenderer.on(`${ipcEvent}-close`, (event, status, cmd, data) => {
@@ -69,7 +69,7 @@ const useIpc = (channel, options, inputs) => {
     }
 
     return () => ipcRenderer.removeAllListeners([`${ipcEvent}-close`]);
-  }, [...inputs, dispatch]);
+  }, [channel, mode, directory, options, dispatch]);
 
   return [dependenciesSet, outdatedSet, commandErrors];
 };

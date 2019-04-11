@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { ipcRenderer } from 'electron';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -116,7 +116,7 @@ const Packages = ({ classes }) => {
     operationPackages,
     operationCommand
   } = useMappedState(mapState);
-  console.log(mode, directory);
+
   const [forceUpdate, setforceUpdate] = useState(0);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
@@ -131,7 +131,7 @@ const Packages = ({ classes }) => {
     forceUpdate
   };
 
-  const fetchPackages = () => {
+  const fetchPackages = useCallback(() => {
     dispatch(
       setPackagesStart({
         channel: IPC_EVENT,
@@ -142,7 +142,7 @@ const Packages = ({ classes }) => {
         }
       })
     );
-  };
+  }, [parameters, dispatch]);
 
   const switchMode = (appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
@@ -179,11 +179,11 @@ const Packages = ({ classes }) => {
     });
   };
 
-  const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
-    IPC_EVENT,
-    parameters,
-    [mode, directory]
-  );
+  const [dependenciesSet, outdatedSet] = useIpc(IPC_EVENT, parameters, [
+    mode,
+    directory,
+    dispatch
+  ]);
 
   useEffect(() => {
     const { projectName, projectVersion, projectDescription } =
@@ -210,7 +210,15 @@ const Packages = ({ classes }) => {
         projectDescription
       })
     );
-  }, [dependenciesSet, outdatedSet, commandErrors]);
+  }, [
+    dependenciesSet,
+    outdatedSet.data,
+    paused,
+    forceUpdate,
+    packagesData,
+    packagesOutdated,
+    dispatch
+  ]);
 
   useEffect(() => {
     ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
