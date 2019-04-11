@@ -1,6 +1,6 @@
 import { createActionCreator } from 'commons/utils';
 
-const ActionCreator = createActionCreator('@@LUNA_APP/NPM');
+const ActionCreator = createActionCreator('@@LU/NPM');
 
 const addActionError = ActionCreator('ACTION_ERROR');
 const clearCommands = ActionCreator('CLEAR_COMMANDS');

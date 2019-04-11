@@ -53,7 +53,7 @@ const install = (options, idx) => {
 
   let commandOptsMultiple = [];
 
-  if (pkgOptions && Array.isArray(pkgOptions) && pkgOptions.length) {
+  if (pkgOptions && Array.isArray(pkgOptions) && pkgOptions[idx]) {
     commandOptsMultiple = pkgOptions[idx].map(option => `--${option}`);
   }
 

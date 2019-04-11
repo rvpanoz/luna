@@ -18,7 +18,7 @@ import { epics as npmEpics } from 'models/npm';
 import rootReducer from '../reducers';
 
 // TODO: fix it
-// const reduxLogger = /--redux-logger/.test(process.argv[3]);
+const reduxLogger = /--redux-logger/.test(process.argv[3]);
 
 const configureStore = initialState => {
   const epicMiddleware = createEpicMiddleware();
@@ -31,7 +31,9 @@ const configureStore = initialState => {
   });
 
   if (process.env.NODE_ENV === 'development') {
-    middleware.push(logger);
+    if (reduxLogger) {
+      middleware.push(logger);
+    }
   }
 
   // If redux DevTools Extension is installed use it, otherwise use redux compose
