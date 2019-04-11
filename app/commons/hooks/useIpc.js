@@ -9,7 +9,8 @@ import { useDispatch } from 'redux-react-hook';
 import { setPackagesStart } from 'models/packages/actions';
 import { switchcase, parseDependencies, isJson } from 'commons/utils';
 
-const useIpc = (channel, options, inputs) => {
+const useIpc = (channel, ipcParameters, inputs) => {
+  const { ipcEvent, paused, forceUpdate } = ipcParameters || {};
   const [mode, directory] = inputs;
 
   const [dependenciesSet, setDependencies] = useState({
@@ -26,20 +27,19 @@ const useIpc = (channel, options, inputs) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const { ipcEvent, paused, forceUpdate } = options || {};
-
     ipcRenderer.on(`${ipcEvent}-close`, (event, status, cmd, data) => {
       if (!data || !isJson(data)) {
         return;
       }
 
-      const command = cmd && cmd[0];
-      const [packages, errors, projectName, projectVersion] = parseDependencies(
-        data,
-        mode,
-        directory,
-        cmd
-      );
+      const [command] = cmd;
+      const [
+        packages,
+        errors,
+        projectName,
+        projectVersion,
+        projectDescription
+      ] = parseDependencies(data, mode, directory, cmd);
 
       if (errors) {
         setErrors(errors);
@@ -50,7 +50,8 @@ const useIpc = (channel, options, inputs) => {
           setDependencies({
             data: packages,
             projectName,
-            projectVersion
+            projectVersion,
+            projectDescription
           }),
         outdated: () => setOutdated({ data: packages })
       })('list')(command);
@@ -60,7 +61,7 @@ const useIpc = (channel, options, inputs) => {
       dispatch(
         setPackagesStart({
           channel,
-          options,
+          options: ipcParameters,
           paused,
           forceUpdate
         })
@@ -68,7 +69,7 @@ const useIpc = (channel, options, inputs) => {
     }
 
     return () => ipcRenderer.removeAllListeners([`${ipcEvent}-close`]);
-  }, [dispatch, mode, directory]);
+  }, [mode, directory]);
 
   return [dependenciesSet, outdatedSet, commandErrors];
 };

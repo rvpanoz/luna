@@ -15,17 +15,18 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
-import AddIcon from '@material-ui/icons/AddTwoTone';
 import Button from '@material-ui/core/Button';
 import AppLogo from 'components/layout/AppLogo';
 import AppTabs from 'components/common/AppTabs';
 import { navigatorParameters } from 'commons/parameters';
+import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';
 
 import {
   ProjectTab,
   PackagesTab,
   ToolsTab
 } from 'components/pages/navigator/tabs';
+import { setActivePage } from 'models/ui/actions';
 import { runTool } from 'models/packages/actions';
 import { setMode } from 'models/common/actions';
 
@@ -96,6 +97,12 @@ const Navigator = ({
       navigatorParameters,
       filePath => {
         if (filePath) {
+          dispatch(
+            setActivePage({
+              page: 'packages',
+              paused: false
+            })
+          );
           dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
         }
       }
@@ -114,15 +121,14 @@ const Navigator = ({
             <Tooltip title="Open local directory">
               <Button
                 disabled={loading}
-                className={classes.margin}
+                className={cn(classes.label, classes.margin)}
                 color="secondary"
                 variant="outlined"
                 fullWidth
                 size="large"
                 onClick={() => openPackage()}
               >
-                <AddIcon className={classes.extendedIcon} />
-                <span className={classes.label}>Analyze</span>
+                Analyze
               </Button>
             </Tooltip>
           </ListItemText>
@@ -148,8 +154,8 @@ const Navigator = ({
                     primaryText: loading
                       ? 'loading..'
                       : mode === 'local' && name
-                      ? `${name} v${version || '1.0.0'}`
-                      : 'Global packages',
+                      ? `${name} v${version || DEFAULT_VERSION}`
+                      : DEFAULT_MODE,
                     secondaryText: `Last updated: ${lastUpdatedAt}`,
                     caption: true
                   },
@@ -231,11 +237,14 @@ const Navigator = ({
                   dense
                   disabled={loading}
                   button
-                  onClick={() =>
+                  onClick={() => {
+                    dispatch(
+                      setActivePage({ page: 'packages', paused: false })
+                    );
                     dispatch(
                       setMode({ mode: 'local', directory: dir.directory })
-                    )
-                  }
+                    );
+                  }}
                   className={classes.listItem}
                 >
                   <ListItemIcon>

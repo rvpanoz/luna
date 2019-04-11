@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 
 import { ipcRenderer } from 'electron';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -32,9 +32,12 @@ import {
   togglePackageLoader,
   setSnackbar,
   setPage,
-  setPageRows
+  setPageRows,
+  setActivePage,
+  clearSelected
 } from 'models/ui/actions';
 
+import { FATAL_ERROR } from 'constants/AppConstants';
 import { clearRunningCommand } from 'models/npm/actions';
 import { setMode, addInstallOption } from 'models/common/actions';
 import { PackageDetails } from 'components/pages/package';
@@ -47,7 +50,6 @@ import PackageItem from './PackageItem';
 import styles from './styles/packages';
 
 const mapState = ({
-  npm: { operationStatus, operationPackages, operationCommand },
   common: {
     directory,
     manager,
@@ -60,6 +62,7 @@ const mapState = ({
     packagesOutdated,
     metadata: { fromSearch }
   },
+  npm: { operationStatus, operationPackages, operationCommand },
   ui: {
     paused,
     loaders: { loader },
@@ -130,156 +133,30 @@ const Packages = ({ classes }) => {
     forceUpdate
   };
 
-  const [dependenciesSet, outdatedSet, commandErrors] = useIpc(
-    IPC_EVENT,
-    parameters,
-    [mode, directory]
-  );
-
-  const startPackages = () => {
-    const startParameters = {
-      ipcEvent: 'get-packages',
-      cmd: ['outdated', 'list'],
-      mode,
-      directory
-    };
-
+  const fetchPackages = useCallback(() => {
+    dispatch({
+      type: setActivePage.type,
+      payload: {
+        page: 'packages',
+        paused: false
+      }
+    });
     dispatch(
       setPackagesStart({
         channel: IPC_EVENT,
         options: {
-          ...startParameters
+          ...parameters
         }
       })
     );
-  };
-
-  useEffect(() => {
-    const { projectName, projectVersion } = dependenciesSet || {};
-    const dependencies = dependenciesSet.data;
-    const outdated = dependenciesSet.data;
-
-    // paused npm command
-    if (paused) {
-      return;
-    }
-
-    // restore initial value
-    if (forceUpdate > 0) {
-      setforceUpdate(0);
-    }
-
-    dispatch(
-      updateData({
-        dependencies: forceUpdate ? packagesData : dependencies,
-        outdated: forceUpdate ? packagesOutdated : outdated,
-        projectName,
-        projectVersion
-      })
-    );
-  }, [dependenciesSet, outdatedSet, commandErrors]);
-
-  useEffect(() => {
-    ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
-      const operation = options && options[0];
-      const argv = options && options[1];
-      let errorMessages = [];
-
-      // clean up first
-      dispatch(clearRunningCommand());
-
-      if (output && output.length) {
-        const outputParts = output.split('\n');
-
-        errorMessages = outputParts.filter(
-          outputPart => outputPart.indexOf('npm ERR!') === 0
-        );
-      }
-
-      if (operation === 'uninstall') {
-        const removedOrUpdatedPackages =
-          options &&
-          options.filter(
-            option =>
-              option.indexOf(operation) === -1 &&
-              option.indexOf(argv) === -1 &&
-              option.indexOf('-g') === -1
-          );
-
-        if (removedOrUpdatedPackages && removedOrUpdatedPackages.length) {
-          dispatch(
-            removePackages({ removedPackages: removedOrUpdatedPackages })
-          );
-
-          // update packages without fetching
-          setforceUpdate(forceUpdate + 1);
-
-          dispatch(
-            toggleLoader({
-              loading: false,
-              message: null
-            })
-          );
-
-          dispatch(
-            setSnackbar({
-              open: true,
-              type: errorMessages.length ? 'error' : 'info',
-              message: errorMessages.length
-                ? `Packages removed with errors \n${errorMessages[1]}\n${
-                    errorMessages[2]
-                  }`
-                : 'Packages removed'
-            })
-          );
-        }
-
-        return;
-      }
-
-      startPackages();
-
-      dispatch(
-        setSnackbar({
-          open: true,
-          type: errorMessages.length ? 'error' : 'info',
-          message: errorMessages.length
-            ? `Packages updated with errors \n${errorMessages[1]}\n${
-                errorMessages[2]
-              }`
-            : 'Packages updated'
-        })
-      );
-    });
-
-    ipcRenderer.on('view-close', (event, status, cmd, data) => {
-      try {
-        const newActive = data && JSON.parse(data);
-        const getCleanProps = (val, key) => /^[^_]/.test(key);
-        const properties = pickBy(getCleanProps, newActive);
-
-        dispatch(setActive({ active: properties }));
-        dispatch(
-          togglePackageLoader({
-            loading: false
-          })
-        );
-      } catch (err) {
-        throw new Error(err);
-      }
-    });
-
-    return () =>
-      ['action-close', 'view-close'].forEach(listener =>
-        ipcRenderer.removeAllListeners(listener)
-      );
-  }, [forceUpdate, dispatch, startPackages]);
+  }, [parameters, dispatch]);
 
   const switchMode = (appMode, appDirectory) => {
+    dispatch(setActivePage({ page: 'packages', paused: false }));
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
 
     if (fromSearch) {
-      startPackages();
+      fetchPackages();
     }
   };
 
@@ -309,6 +186,152 @@ const Packages = ({ classes }) => {
       payload: viewParameters
     });
   };
+
+  const [dependenciesSet, outdatedSet] = useIpc(IPC_EVENT, parameters, [
+    mode,
+    directory
+  ]);
+
+  useEffect(() => {
+    // store packages and outdated
+    const defaultPackages = packagesData;
+    const defaultOutdated = packagesOutdated;
+
+    // project info
+    const { projectName, projectVersion, projectDescription } =
+      dependenciesSet || {};
+
+    const dependencies = dependenciesSet.data;
+    const outdated = outdatedSet.data;
+
+    // paused npm command
+    if (paused) {
+      return;
+    }
+
+    // restore initial value
+    if (forceUpdate > 0) {
+      setforceUpdate(0);
+    }
+
+    dispatch(
+      updateData({
+        dependencies: forceUpdate ? defaultPackages : dependencies,
+        outdated: forceUpdate ? defaultOutdated : outdated,
+        projectName,
+        projectVersion,
+        projectDescription
+      })
+    );
+  }, [dependenciesSet, outdatedSet.data, paused, forceUpdate, dispatch]);
+
+  useEffect(() => {
+    ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
+      const operation = options && options[0];
+      const argv = options && options[1];
+      let errorMessages = [];
+
+      // clean up first
+      dispatch(clearRunningCommand());
+      dispatch(clearSelected());
+
+      if (output && output.length) {
+        const outputParts = output.split('\n');
+
+        errorMessages = outputParts.filter(
+          outputPart => outputPart.indexOf('npm ERR!') === 0
+        );
+      }
+
+      if (operation === 'uninstall') {
+        const removedOrUpdatedPackages =
+          options &&
+          options.filter(
+            option =>
+              option.indexOf(operation) === -1 &&
+              option.indexOf(argv) === -1 &&
+              option.indexOf('-g') === -1
+          );
+
+        if (removedOrUpdatedPackages && removedOrUpdatedPackages.length) {
+          dispatch(
+            removePackages({ removedPackages: removedOrUpdatedPackages })
+          );
+
+          // update packages without fetching
+          setforceUpdate(forceUpdate + 1);
+
+          // clean up active package
+          dispatch(
+            setActive({
+              active: null
+            })
+          );
+
+          dispatch(
+            setSnackbar({
+              open: true,
+              type: errorMessages.length ? 'error' : 'info',
+              message: errorMessages.length
+                ? `Packages removed with errors \n${errorMessages[1]}\n${
+                    errorMessages[2]
+                  }`
+                : 'Packages removed'
+            })
+          );
+
+          dispatch(
+            toggleLoader({
+              loading: false,
+              message: null
+            })
+          );
+        }
+
+        return;
+      }
+
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: errorMessages.length ? 'error' : 'info',
+          message: errorMessages.length
+            ? `Packages updated with errors \n${errorMessages[1]}\n${
+                errorMessages[2]
+              }`
+            : 'Packages updated'
+        })
+      );
+
+      fetchPackages();
+    });
+
+    ipcRenderer.on('view-close', (event, status, cmd, data) => {
+      try {
+        const newActive = data && JSON.parse(data);
+        const getCleanProps = (val, key) => /^[^_]/.test(key);
+        const properties = pickBy(getCleanProps, newActive);
+
+        dispatch(setActive({ active: properties }));
+        dispatch(
+          togglePackageLoader({
+            loading: false
+          })
+        );
+      } catch (err) {
+        setSnackbar({
+          open: true,
+          type: 'error',
+          message: err.message || FATAL_ERROR
+        });
+      }
+    });
+
+    return () =>
+      ['action-close', 'view-close'].forEach(listener =>
+        ipcRenderer.removeAllListeners(listener)
+      );
+  }, [forceUpdate, dispatch, fetchPackages]);
 
   // setup packages
   const [filteredPackages] = useFilters(packagesData, filters);
@@ -352,7 +375,7 @@ const Packages = ({ classes }) => {
                 filters={filters}
                 scrollWrapper={scrollWrapper}
                 switchMode={switchMode}
-                reload={() => startPackages()}
+                reload={fetchPackages}
                 filteredByNamePackages={filteredByNamePackages}
                 setFilteredByNamePackages={setFilteredByNamePackages}
               />
@@ -437,7 +460,7 @@ const Packages = ({ classes }) => {
                       )}
                   </TableBody>
                   <TableFooter
-                    rowCount={packagesData && packagesData.length}
+                    rowCount={data && data.length}
                     page={page}
                     rowsPerPage={rowsPerPage}
                     handleChangePage={(e, pageNo) => {
