@@ -26,6 +26,7 @@ import {
   PackagesTab,
   ToolsTab
 } from 'components/pages/navigator/tabs';
+import { setActivePage } from 'models/ui/actions';
 import { runTool } from 'models/packages/actions';
 import { setMode } from 'models/common/actions';
 
@@ -96,6 +97,12 @@ const Navigator = ({
       navigatorParameters,
       filePath => {
         if (filePath) {
+          dispatch(
+            setActivePage({
+              page: 'packages',
+              paused: false
+            })
+          );
           dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
         }
       }
@@ -230,11 +237,14 @@ const Navigator = ({
                   dense
                   disabled={loading}
                   button
-                  onClick={() =>
+                  onClick={() => {
+                    dispatch(
+                      setActivePage({ page: 'packages', paused: false })
+                    );
                     dispatch(
                       setMode({ mode: 'local', directory: dir.directory })
-                    )
-                  }
+                    );
+                  }}
                   className={classes.listItem}
                 >
                   <ListItemIcon>

@@ -22,6 +22,7 @@ export const APP_MODES = {
 export const DEFAULT_MODE = 'Global mode';
 export const DEFAULT_VERSION = '1.0.0';
 export const ERROR_TYPES = ['WARN', 'ERR'];
+export const FATAL_ERROR = 'Fatal error. Please try again';
 
 export const APP_INFO = {
   CONFIRMATION: 'Are you sure?',

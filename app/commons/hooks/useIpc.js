@@ -9,7 +9,10 @@ import { useDispatch } from 'redux-react-hook';
 import { setPackagesStart } from 'models/packages/actions';
 import { switchcase, parseDependencies, isJson } from 'commons/utils';
 
-const useIpc = (channel, options, inputs) => {
+const useIpc = (channel, ipcParameters, inputs) => {
+  const { ipcEvent, paused, forceUpdate } = ipcParameters || {};
+  const [mode, directory] = inputs;
+
   const [dependenciesSet, setDependencies] = useState({
     data: [],
     projectName: null,
@@ -22,17 +25,14 @@ const useIpc = (channel, options, inputs) => {
 
   const [commandErrors, setErrors] = useState(null);
   const dispatch = useDispatch();
-  const [mode, directory] = inputs;
 
   useEffect(() => {
-    const { ipcEvent, paused, forceUpdate } = options || {};
-
     ipcRenderer.on(`${ipcEvent}-close`, (event, status, cmd, data) => {
       if (!data || !isJson(data)) {
         return;
       }
 
-      const command = cmd && cmd[0];
+      const [command] = cmd;
       const [
         packages,
         errors,
@@ -61,7 +61,7 @@ const useIpc = (channel, options, inputs) => {
       dispatch(
         setPackagesStart({
           channel,
-          options,
+          options: ipcParameters,
           paused,
           forceUpdate
         })
@@ -69,7 +69,7 @@ const useIpc = (channel, options, inputs) => {
     }
 
     return () => ipcRenderer.removeAllListeners([`${ipcEvent}-close`]);
-  }, [channel, mode, directory, options, dispatch]);
+  }, [mode, directory]);
 
   return [dependenciesSet, outdatedSet, commandErrors];
 };

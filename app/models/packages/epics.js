@@ -78,7 +78,12 @@ const clearAllEpic = action$ =>
 const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    map(({ payload: { channel, options, paused, forceUpdate } }) => {
+    map(({ payload: { channel, options } }) => {
+      const { forceUpdate } = options || {};
+      const {
+        ui: { paused }
+      } = state$.value;
+
       if (paused) {
         return { type: 'PAUSE_REQUEST' };
       }
@@ -184,6 +189,10 @@ const updatePackagesEpic = action$ =>
         updateLoader({
           loading: true,
           message: 'Updating packages..'
+        }),
+        setActivePage({
+          page: 'packages',
+          paused: false
         }),
         updateCommand({
           operationStatus: 'running',

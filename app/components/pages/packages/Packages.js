@@ -33,9 +33,11 @@ import {
   setSnackbar,
   setPage,
   setPageRows,
+  setActivePage,
   clearSelected
 } from 'models/ui/actions';
 
+import { FATAL_ERROR } from 'constants/AppConstants';
 import { clearRunningCommand } from 'models/npm/actions';
 import { setMode, addInstallOption } from 'models/common/actions';
 import { PackageDetails } from 'components/pages/package';
@@ -132,19 +134,25 @@ const Packages = ({ classes }) => {
   };
 
   const fetchPackages = useCallback(() => {
+    dispatch({
+      type: setActivePage.type,
+      payload: {
+        page: 'packages',
+        paused: false
+      }
+    });
     dispatch(
       setPackagesStart({
         channel: IPC_EVENT,
         options: {
-          ...parameters,
-          paused: false,
-          forceUpdate: 0
+          ...parameters
         }
       })
     );
   }, [parameters, dispatch]);
 
   const switchMode = (appMode, appDirectory) => {
+    dispatch(setActivePage({ page: 'packages', paused: false }));
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
 
     if (fromSearch) {
@@ -181,13 +189,18 @@ const Packages = ({ classes }) => {
 
   const [dependenciesSet, outdatedSet] = useIpc(IPC_EVENT, parameters, [
     mode,
-    directory,
-    dispatch
+    directory
   ]);
 
   useEffect(() => {
+    // store packages and outdated
+    const defaultPackages = packagesData;
+    const defaultOutdated = packagesOutdated;
+
+    // project info
     const { projectName, projectVersion, projectDescription } =
       dependenciesSet || {};
+
     const dependencies = dependenciesSet.data;
     const outdated = outdatedSet.data;
 
@@ -203,22 +216,14 @@ const Packages = ({ classes }) => {
 
     dispatch(
       updateData({
-        dependencies: forceUpdate ? packagesData : dependencies,
-        outdated: forceUpdate ? packagesOutdated : outdated,
+        dependencies: forceUpdate ? defaultPackages : dependencies,
+        outdated: forceUpdate ? defaultOutdated : outdated,
         projectName,
         projectVersion,
         projectDescription
       })
     );
-  }, [
-    dependenciesSet,
-    outdatedSet.data,
-    paused,
-    forceUpdate,
-    packagesData,
-    packagesOutdated,
-    dispatch
-  ]);
+  }, [dependenciesSet, outdatedSet.data, paused, forceUpdate, dispatch]);
 
   useEffect(() => {
     ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
@@ -264,13 +269,6 @@ const Packages = ({ classes }) => {
           );
 
           dispatch(
-            toggleLoader({
-              loading: false,
-              message: null
-            })
-          );
-
-          dispatch(
             setSnackbar({
               open: true,
               type: errorMessages.length ? 'error' : 'info',
@@ -279,6 +277,13 @@ const Packages = ({ classes }) => {
                     errorMessages[2]
                   }`
                 : 'Packages removed'
+            })
+          );
+
+          dispatch(
+            toggleLoader({
+              loading: false,
+              message: null
             })
           );
         }
@@ -314,7 +319,11 @@ const Packages = ({ classes }) => {
           })
         );
       } catch (err) {
-        throw new Error(err);
+        setSnackbar({
+          open: true,
+          type: 'error',
+          message: err.message || FATAL_ERROR
+        });
       }
     });
 
@@ -366,7 +375,7 @@ const Packages = ({ classes }) => {
                 filters={filters}
                 scrollWrapper={scrollWrapper}
                 switchMode={switchMode}
-                reload={() => fetchPackages()}
+                reload={fetchPackages}
                 filteredByNamePackages={filteredByNamePackages}
                 setFilteredByNamePackages={setFilteredByNamePackages}
               />

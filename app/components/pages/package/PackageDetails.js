@@ -342,7 +342,6 @@ const PackageDetails = ({ classes }) => {
                       <IconButton
                         aria-label="install_version"
                         onClick={() => {
-                          console.log(active);
                           const { name, group } = active;
                           const pkgOptions =
                             mode === 'local' ? [PACKAGE_GROUPS[group]] : [];
