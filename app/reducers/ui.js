@@ -42,7 +42,6 @@ const handlers = {
   [clearSnackbar.type]: state =>
     merge(state, {
       snackbar: {
-        ...state.snackbar,
         type: 'info',
         open: false,
         message: null
@@ -51,7 +50,6 @@ const handlers = {
   [setSnackbar.type]: (state, { type, open, message }) =>
     merge(state, {
       snackbar: {
-        ...state.snackbar,
         type,
         open,
         message
