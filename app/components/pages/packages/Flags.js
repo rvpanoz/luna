@@ -16,7 +16,7 @@ import styles from './styles/flags';
 
 const mapState = ({
   common: {
-    operation: { packagesInstallOptions }
+    operations: { packagesInstallOptions }
   }
 }) => ({
   packagesInstallOptions

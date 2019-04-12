@@ -23,7 +23,8 @@ import {
   setPackagesStart,
   setActive,
   viewPackage,
-  removePackages
+  removePackages,
+  clearPackages
 } from 'models/packages/actions';
 
 import {
@@ -129,8 +130,7 @@ const Packages = ({ classes }) => {
     cmd: ['outdated', 'list'],
     mode,
     directory,
-    paused,
-    forceUpdate
+    paused
   };
 
   const fetchPackages = useCallback(() => {
@@ -193,53 +193,60 @@ const Packages = ({ classes }) => {
   ]);
 
   useEffect(() => {
-    // store packages and outdated
-    const defaultPackages = packagesData;
-    const defaultOutdated = packagesOutdated;
+    const dependencies = dependenciesSet.data;
+    const outdated = outdatedSet.data;
+
+    if (paused) {
+      return;
+    }
+
+    // handle empty dependencies
+    if (!dependencies || !dependencies.length) {
+      dispatch(clearPackages());
+      dispatch(
+        toggleLoader({
+          loading: false,
+          message: null
+        })
+      );
+
+      return;
+    }
 
     // project info
     const { projectName, projectVersion, projectDescription } =
       dependenciesSet || {};
 
-    const dependencies = dependenciesSet.data;
-    const outdated = outdatedSet.data;
-
-    // paused npm command
-    if (paused) {
-      return;
-    }
-
-    // restore initial value
-    if (forceUpdate > 0) {
-      setforceUpdate(0);
-    }
-
     dispatch(
       updateData({
-        dependencies: forceUpdate ? defaultPackages : dependencies,
-        outdated: forceUpdate ? defaultOutdated : outdated,
+        dependencies,
+        outdated,
         projectName,
         projectVersion,
         projectDescription
       })
     );
-  }, [dependenciesSet, outdatedSet.data, paused, forceUpdate, dispatch]);
+  }, [dependenciesSet, outdatedSet.data, paused, dispatch]);
 
   useEffect(() => {
     ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
-      const operation = options && options[0];
-      const argv = options && options[1];
-      let errorMessages = [];
+      const [operation, argv] = options;
+      const errorMessages = [];
 
       // clean up first
       dispatch(clearRunningCommand());
       dispatch(clearSelected());
+      dispatch(
+        setActive({
+          active: null
+        })
+      );
 
-      if (output && output.length) {
+      if (output && typeof output === 'string') {
         const outputParts = output.split('\n');
 
-        errorMessages = outputParts.filter(
-          outputPart => outputPart.indexOf('npm ERR!') === 0
+        errorMessages.concat(
+          outputParts.filter(outputPart => outputPart.indexOf('npm ERR!') === 0)
         );
       }
 
@@ -260,13 +267,6 @@ const Packages = ({ classes }) => {
 
           // update packages without fetching
           setforceUpdate(forceUpdate + 1);
-
-          // clean up active package
-          dispatch(
-            setActive({
-              active: null
-            })
-          );
 
           dispatch(
             setSnackbar({
@@ -331,7 +331,7 @@ const Packages = ({ classes }) => {
       ['action-close', 'view-close'].forEach(listener =>
         ipcRenderer.removeAllListeners(listener)
       );
-  }, [forceUpdate, dispatch, fetchPackages]);
+  }, [forceUpdate, dispatch, fetchPackages, packagesData, packagesOutdated]);
 
   // setup packages
   const [filteredPackages] = useFilters(packagesData, filters);
