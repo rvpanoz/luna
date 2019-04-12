@@ -8,6 +8,8 @@ import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { pickBy } from 'ramda';
+import { FATAL_ERROR } from 'constants/AppConstants';
+
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -17,6 +19,7 @@ import Grid from '@material-ui/core/Grid';
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
+import { PackageDetails } from 'components/pages/package';
 
 import {
   updateData,
@@ -38,10 +41,9 @@ import {
   clearSelected
 } from 'models/ui/actions';
 
-import { FATAL_ERROR } from 'constants/AppConstants';
+import { updateNotifications } from 'models/notifications/actions';
 import { clearRunningCommand } from 'models/npm/actions';
 import { setMode, addInstallOption } from 'models/common/actions';
-import { PackageDetails } from 'components/pages/package';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -187,10 +189,11 @@ const Packages = ({ classes }) => {
     });
   };
 
-  const [dependenciesSet, outdatedSet] = useIpc(IPC_EVENT, parameters, [
-    mode,
-    directory
-  ]);
+  const [dependenciesSet, outdatedSet, problems] = useIpc(
+    IPC_EVENT,
+    parameters,
+    [mode, directory]
+  );
 
   useEffect(() => {
     const dependencies = dependenciesSet.data;
@@ -213,6 +216,14 @@ const Packages = ({ classes }) => {
       return;
     }
 
+    if (problems && problems.length) {
+      dispatch(
+        updateNotifications({
+          notifications: problems
+        })
+      );
+    }
+
     // project info
     const { projectName, projectVersion, projectDescription } =
       dependenciesSet || {};
@@ -226,7 +237,7 @@ const Packages = ({ classes }) => {
         projectDescription
       })
     );
-  }, [dependenciesSet, outdatedSet.data, paused, dispatch]);
+  }, [dependenciesSet, outdatedSet.data, paused, problems, dispatch]);
 
   useEffect(() => {
     ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
