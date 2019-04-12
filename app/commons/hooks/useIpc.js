@@ -10,7 +10,7 @@ import { setPackagesStart } from 'models/packages/actions';
 import { switchcase, parseDependencies, isJson } from 'commons/utils';
 
 const useIpc = (channel, ipcParameters, inputs) => {
-  const { ipcEvent, paused, forceUpdate } = ipcParameters || {};
+  const { ipcEvent, paused } = ipcParameters || {};
   const [mode, directory] = inputs;
 
   const [dependenciesSet, setDependencies] = useState({
@@ -62,8 +62,7 @@ const useIpc = (channel, ipcParameters, inputs) => {
         setPackagesStart({
           channel,
           options: ipcParameters,
-          paused,
-          forceUpdate
+          paused
         })
       );
     }

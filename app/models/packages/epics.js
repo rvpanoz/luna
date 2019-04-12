@@ -79,7 +79,6 @@ const clearAllEpic = action$ =>
   action$.pipe(
     ofType(clearAll.type),
     mergeMap(() => [
-      { type: clearPackages.type },
       { type: clearCommands.type },
       { type: clearNotifications.type }
     ])
@@ -89,7 +88,6 @@ const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
     map(({ payload: { channel, options } }) => {
-      const { forceUpdate } = options || {};
       const {
         ui: { paused }
       } = state$.value;
@@ -98,46 +96,18 @@ const packagesStartEpic = (action$, state$) =>
         return { type: 'PAUSE_REQUEST' };
       }
 
-      if (forceUpdate) {
-        return { type: 'RESUME_REQUEST', payload: { forceUpdate } };
-      }
-
       ipcRenderer.send(channel, options);
+
       return { type: 'RESUME_REQUEST' };
     }),
     takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
-    concatMap(({ type, payload }) => {
-      const { forceUpdate } = payload || {};
-      const {
-        packages: {
-          packagesData,
-          packagesOutdated,
-          project: { name, version }
-        }
-      } = state$.value;
-
-      if (forceUpdate) {
-        return [
-          {
-            type: updateData.type,
-            payload: {
-              dependencies: packagesData,
-              outdated: packagesOutdated,
-              projectName: name,
-              projectVersion: version
-            }
-          }
-        ];
-      }
-
-      return [
-        updateLoader({
-          loading: true,
-          message: 'Loading packages..'
-        }),
-        clearAllData()
-      ];
-    })
+    concatMap(() => [
+      updateLoader({
+        loading: true,
+        message: 'Loading packages..'
+      }),
+      clearAllData()
+    ])
   );
 
 const installPackagesEpic = action$ =>
@@ -227,44 +197,43 @@ const packagesSuccessEpic = (action$, state$) =>
           projectDescription
         }
       }) => {
-        if (!dependencies.length) {
-          return {
-            dependencies
-          };
-        }
-
-        const withOutdated = dependencies.reduce((deps = [], dependency) => {
-          const {
-            name,
-            invalid,
-            extraneous,
-            peerMissing,
-            problems,
-            missing,
-            ...rest
-          } = dependency;
-
-          if (!invalid && !peerMissing) {
-            const [isOutdated, outdatedPkg] = isPackageOutdated(outdated, name);
-
-            const enhancedDependency = {
-              ...rest,
+        const enhancedDependencies = dependencies
+          .filter(dependency => dependency && typeof dependency === 'object')
+          .reduce((deps = [], dependency) => {
+            const {
               name,
+              invalid,
               extraneous,
-              missing,
               peerMissing,
-              latest: isOutdated ? outdatedPkg.latest : null,
-              isOutdated
-            };
+              problems,
+              missing,
+              ...rest
+            } = dependency;
 
-            deps.push(enhancedDependency);
-          }
+            if (!invalid && !peerMissing) {
+              const [isOutdated, outdatedPkg] = isPackageOutdated(
+                outdated,
+                name
+              );
 
-          return deps;
-        }, []);
+              const enhancedDependency = {
+                ...rest,
+                name,
+                extraneous,
+                missing,
+                peerMissing,
+                latest: isOutdated ? outdatedPkg.latest : null,
+                isOutdated
+              };
+
+              deps.push(enhancedDependency);
+            }
+
+            return deps;
+          }, []);
 
         return {
-          dependencies: withOutdated.filter(dependency => Boolean(dependency)),
+          dependencies: enhancedDependencies,
           outdated,
           projectName,
           projectVersion,
@@ -284,10 +253,6 @@ const packagesSuccessEpic = (action$, state$) =>
 
       if (page !== 0) {
         actions.unshift(setPage({ page: 0 }));
-      }
-
-      if (dependencies && !dependencies.length) {
-        return [updateLoader({ loading: false, message: null })];
       }
 
       return [
