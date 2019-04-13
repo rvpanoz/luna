@@ -74,8 +74,9 @@ const mapState = ({
   fromSearch
 });
 
-const PackageDetails = ({ classes }) => {
+const PackageDetails = ({ classes, group }) => {
   const [expanded, expand] = useState(false);
+  const [activeGroup, setActiveGroup] = useState(null);
   const [dependencies, setDependencies] = useState([]);
   const [activePopper, setActivePopper] = useState({
     index: 0,
@@ -110,7 +111,7 @@ const PackageDetails = ({ classes }) => {
 
       setDependencies(dependenciesToArray);
     }
-  }, [active]);
+  }, [active, mode]);
 
   const renderActions = useCallback(() => {
     const renderSearchActions = () => (
@@ -130,10 +131,13 @@ const PackageDetails = ({ classes }) => {
                 btnIdx => {
                   if (Boolean(btnIdx) === true) {
                     const { name } = active;
-                    const pkgOptions =
+                    const group =
                       mode === 'local'
-                        ? group && [PACKAGE_GROUPS[group]]
-                        : ['save-prod'];
+                        ? packagesData.find(pkg => pkg.name === name).__group
+                        : null;
+                    const pkgOptions = group
+                      ? [PACKAGE_GROUPS[group]]
+                      : ['save-prod'];
 
                     const parameters = {
                       ipcEvent: 'install',
@@ -342,21 +346,6 @@ const PackageDetails = ({ classes }) => {
                       <IconButton
                         aria-label="install_version"
                         onClick={() => {
-                          const { name, group } = active;
-                          const pkgOptions =
-                            mode === 'local' ? [PACKAGE_GROUPS[group]] : [];
-
-                          const parameters = {
-                            ipcEvent: 'install',
-                            cmd: ['install'],
-                            name,
-                            version: item,
-                            pkgOptions,
-                            single: true,
-                            mode,
-                            directory
-                          };
-
                           remote.dialog.showMessageBox(
                             remote.getCurrentWindow(),
                             {
@@ -369,6 +358,28 @@ const PackageDetails = ({ classes }) => {
                             },
                             btnIdx => {
                               if (Boolean(btnIdx) === true) {
+                                const { name } = active;
+                                const group =
+                                  mode === 'local'
+                                    ? packagesData.find(
+                                        pkg => pkg.name === name
+                                      ).__group
+                                    : null;
+                                const pkgOptions = group
+                                  ? [PACKAGE_GROUPS[group]]
+                                  : ['save-prod'];
+
+                                const parameters = {
+                                  ipcEvent: 'install',
+                                  cmd: ['install'],
+                                  name,
+                                  version: item,
+                                  pkgOptions,
+                                  single: true,
+                                  mode,
+                                  directory
+                                };
+
                                 dispatch(installPackages(parameters));
                               }
                             }
@@ -389,6 +400,11 @@ const PackageDetails = ({ classes }) => {
   ));
 
   const renderCard = useCallback(() => {
+    const group =
+      mode === 'local'
+        ? packagesData.find(pkg => pkg.name === active.name).__group
+        : null;
+
     return (
       <Grid container justify="space-around">
         <Grid item md={10} lg={10} xl={10}>
@@ -405,9 +421,8 @@ const PackageDetails = ({ classes }) => {
                     <Typography variant="caption">{`License: ${active.license ||
                       'N/A'}`}</Typography>
                     {mode === 'local' && !fromSearch && (
-                      <Typography variant="caption">{`Group: ${
-                        packagesData.find(pkg => pkg.name === name).__group
-                      }`}</Typography>
+                      <Typography variant="caption">{`Group: ${group ||
+                        'N/A'}`}</Typography>
                     )}
                   </React.Fragment>
                 }
@@ -486,7 +501,7 @@ const PackageDetails = ({ classes }) => {
         </Grid>
       </Grid>
     );
-  }, [active, expanded, activePopper]);
+  }, [active, mode, expanded, activePopper]);
 
   return (
     <div className={classes.wrapper}>
@@ -522,7 +537,8 @@ const PackageDetails = ({ classes }) => {
 };
 
 PackageDetails.propTypes = {
-  classes: objectOf(string).isRequired
+  classes: objectOf(string).isRequired,
+  group: string
 };
 
 export default withStyles(styles)(PackageDetails);

@@ -44,7 +44,7 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
       return;
     }
 
-    return dispatch(clearSelected());
+    dispatch(clearSelected());
   };
 
   return (

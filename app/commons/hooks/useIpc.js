@@ -9,9 +9,11 @@ import { useDispatch } from 'redux-react-hook';
 import { setPackagesStart } from 'models/packages/actions';
 import { switchcase, parseDependencies, isJson } from 'commons/utils';
 
+const IPC_EVENT = 'ipc-event';
+
 const useIpc = (channel, ipcParameters, inputs) => {
-  const { ipcEvent, paused } = ipcParameters || {};
-  const [mode, directory] = inputs;
+  const { ipcEvent = IPC_EVENT } = ipcParameters;
+  const [mode, directory, paused] = inputs;
 
   const [dependenciesSet, setDependencies] = useState({
     data: []
@@ -63,25 +65,25 @@ const useIpc = (channel, ipcParameters, inputs) => {
             projectVersion,
             projectDescription
           }),
-        outdated: () => {
-          console.log(packages);
-          return setOutdated({ data: packages });
-        }
+        outdated: () => setOutdated({ data: packages })
       })('list')(command);
     });
 
-    if (!paused) {
-      dispatch(
-        setPackagesStart({
-          channel,
-          options: ipcParameters,
-          paused
-        })
-      );
+    if (paused) {
+      return;
     }
 
+    dispatch(
+      setPackagesStart({
+        channel,
+        options: {
+          ...ipcParameters
+        }
+      })
+    );
+
     return () => ipcRenderer.removeAllListeners([`${ipcEvent}-close`]);
-  }, [mode, directory]);
+  }, [mode, directory, dispatch]);
 
   return [dependenciesSet, outdatedSet, projectSet, commandErrors];
 };

@@ -13,12 +13,14 @@ import WarningIcon from '@material-ui/icons/Warning';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
-// import InfoIcon from '@material-ui/icons/Info';
+import InfoIcon from '@material-ui/icons/Info';
 
-import { defaultFont } from 'styles/variables';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
+  root: {
+    width: '100%'
+  },
   success: {
     backgroundColor: green[600]
   },
@@ -42,9 +44,11 @@ const styles = theme => ({
     marginRight: theme.spacing.unit
   },
   message: {
-    ...defaultFont,
-    color: theme.palette.common.white,
-    fontSize: 14
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  text: {
+    color: theme.palette.common.white
   }
 });
 
@@ -59,10 +63,10 @@ const AppSnackbarContent = ({
     className={classNames(classes[variant], classes.root)}
     aria-describedby="cli-snackbar"
     message={
-      <span id="cli-snackbar" className={classes.message}>
-        {/* {variant === 'info' && (
+      <div id="cli-snackbar" className={classes.message}>
+        {variant === 'info' && (
           <InfoIcon className={classNames(classes.icon, classes.iconVariant)} />
-        )} */}
+        )}
         {variant === 'error' && (
           <ErrorIcon
             className={classNames(classes.icon, classes.iconVariant)}
@@ -78,8 +82,8 @@ const AppSnackbarContent = ({
             className={classNames(classes.icon, classes.iconVariant)}
           />
         )}
-        <Typography className={classes.message}>{message}</Typography>
-      </span>
+        <Typography className={classes.text}>{message}</Typography>
+      </div>
     }
     action={[
       typeof onClose === 'function' && (
