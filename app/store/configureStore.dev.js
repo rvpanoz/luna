@@ -37,7 +37,7 @@ const configureStore = initialState => {
     }
   }
 
-  // If redux DevTools Extension is installed use it, otherwise use redux compose
+  // if redux DevTools Extension is installed use it, otherwise use redux compose
 
   /* eslint-disable no-underscore-dangle */
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__

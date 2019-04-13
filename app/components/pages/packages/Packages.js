@@ -26,8 +26,7 @@ import {
   setPackagesStart,
   setActive,
   viewPackage,
-  removePackages,
-  clearPackages
+  removePackages
 } from 'models/packages/actions';
 
 import {
@@ -189,7 +188,7 @@ const Packages = ({ classes }) => {
     });
   };
 
-  const [dependenciesSet, outdatedSet, problems] = useIpc(
+  const [dependenciesSet, outdatedSet, projectSet, notifications] = useIpc(
     IPC_EVENT,
     parameters,
     [mode, directory]
@@ -204,40 +203,40 @@ const Packages = ({ classes }) => {
     }
 
     // handle empty dependencies
-    if (!dependencies || !dependencies.length) {
-      dispatch(clearPackages());
-      dispatch(
-        toggleLoader({
-          loading: false,
-          message: null
-        })
-      );
+    // if (!dependencies || !dependencies.length) {
+    //   dispatch(
+    //     toggleLoader({
+    //       loading: false,
+    //       message: null
+    //     })
+    //   );
 
-      return;
-    }
+    //   return;
+    // }
 
-    if (problems && problems.length) {
+    if (notifications && Array.isArray(notifications)) {
       dispatch(
         updateNotifications({
-          notifications: problems
+          notifications
         })
       );
     }
-
-    // project info
-    const { projectName, projectVersion, projectDescription } =
-      dependenciesSet || {};
 
     dispatch(
       updateData({
         dependencies,
         outdated,
-        projectName,
-        projectVersion,
-        projectDescription
+        ...projectSet
       })
     );
-  }, [dependenciesSet, outdatedSet.data, paused, problems, dispatch]);
+  }, [
+    dependenciesSet,
+    outdatedSet,
+    projectSet,
+    paused,
+    notifications,
+    dispatch
+  ]);
 
   useEffect(() => {
     ipcRenderer.on('action-close', (event, output, cliMessage, options) => {

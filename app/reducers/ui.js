@@ -47,7 +47,7 @@ const handlers = {
         message: null
       }
     }),
-  [setSnackbar.type]: (state, { type, open, message }) =>
+  [setSnackbar.type]: (state, { payload: { type, open, message } }) =>
     merge(state, {
       snackbar: {
         type,

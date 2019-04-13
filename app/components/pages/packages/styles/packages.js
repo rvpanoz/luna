@@ -24,7 +24,7 @@ const styles = theme => ({
     alignItems: 'center'
   },
   flexItem: {
-    padding: theme.spacing.unit
+    marginRight: theme.spacing.unit
   },
   toolbar: {
     width: '100%'
@@ -97,16 +97,16 @@ const styles = theme => ({
     display: 'none'
   },
   missing: {
-    color: darken(theme.palette.secondary.dark, 0.75)
+    color: darken(theme.palette.error.main, 0.1)
   },
   extraneous: {
-    color: darken(theme.palette.secondary.dark, 0.75)
+    color: darken(theme.palette.error.main, 0.1)
   },
   chip: {
     margin: theme.spacing.unit
   },
   group: {
-    color: darken(theme.palette.secondary.light, 0.2)
+    color: darken(theme.palette.secondary.light, 0.1)
   },
   name: {
     [theme.breakpoints.up('md')]: {

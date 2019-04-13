@@ -1,6 +1,6 @@
 import { createActionCreator } from 'commons/utils';
 
-const ActionCreator = createActionCreator('@ALU/COMMON');
+const ActionCreator = createActionCreator('@@LUNA/COMMON');
 
 const addInstallOption = ActionCreator('ADD_INSTALL_OPTION');
 const clearInstallOptions = ActionCreator('CLEAR_INSTALL_OPTIONS');

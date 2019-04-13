@@ -1,23 +1,20 @@
 import { map } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
-import { ipcRenderer } from 'electron';
 
-import { toggleLoader } from 'models/ui/actions';
+import { setSnackbar } from 'models/ui/actions';
+import { updateStatus } from 'models/common/actions';
 
-const updateLoader = payload => ({
-  type: toggleLoader.type,
-  payload
-});
-
-const loaderEpic = action$ =>
+const onlineStatusEpic = action$ =>
   action$.pipe(
-    ofType(toggleLoader.type),
-    map(({ payload }) => {
-      console.log(payload);
-      return {
-        type: 'UI_LOADER'
-      };
-    })
+    ofType(updateStatus.type),
+    map(({ payload: { status } }) => ({
+      type: setSnackbar.type,
+      payload: {
+        type: 'info',
+        open: true,
+        message: `App is now ${status}`
+      }
+    }))
   );
 
-export default combineEpics(loaderEpic);
+export default combineEpics(onlineStatusEpic);
