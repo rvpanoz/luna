@@ -12,6 +12,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/common/SnackbarContent';
 
 import { parseFromSearch } from 'commons/utils';
+import { setActivePage } from 'models/ui/actions';
 import { setPackagesStart, updateData } from 'models/packages/actions';
 
 import styles from './styles/searchBox';
@@ -34,6 +35,14 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
       cmd: ['search'],
       pkgName: packageName
     };
+
+    dispatch({
+      type: setActivePage.type,
+      payload: {
+        page: 'packages',
+        paused: false
+      }
+    });
 
     dispatch(
       setPackagesStart({

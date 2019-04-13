@@ -29,7 +29,7 @@ const install = (options, idx) => {
   }
 
   if (packageJson) {
-    return [].concat(command).concat(defaults);
+    return command.concat(defaults);
   }
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
@@ -51,9 +51,10 @@ const install = (options, idx) => {
     packagesToInstallMultiple = [name];
   }
 
-  let commandOptsMultiple = [];
+  let commandOptsMultiple = ['save-prod'];
+  const [commandFlags] = pkgOptions;
 
-  if (pkgOptions && Array.isArray(pkgOptions) && pkgOptions[idx]) {
+  if (Array.isArray(commandFlags)) {
     commandOptsMultiple = pkgOptions[idx].map(option => `--${option}`);
   }
 

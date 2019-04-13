@@ -29,11 +29,13 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
   useEffect(() => {
     if (listFilters.length) {
       const inputName = searchInputEl && searchInputEl.current;
-      const filterName =
+      const filter =
         listFilters &&
         listFilters.find(({ filterType }) => filterType === 'name');
-      if (inputName && filterName) {
-        inputName.value = filterName.filterValue || '';
+      if (inputName && filter) {
+        const { filterValue } = filter || {};
+
+        inputName.value = filterValue || '';
       }
 
       setFilters(listFilters);
