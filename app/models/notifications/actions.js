@@ -1,6 +1,6 @@
 import { createActionCreator } from 'commons/utils';
 
-const ActionCreator = createActionCreator('@ALU/NOTIFICATIONS');
+const ActionCreator = createActionCreator('@@LUNA/NOTIFICATIONS');
 
 const addNotification = ActionCreator('ADD_NOTIFICATION');
 const clearNotifications = ActionCreator('CLEAR_NOTIFICATIONS');

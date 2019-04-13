@@ -13,6 +13,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { epics as packagesEpics } from 'models/packages';
 import { epics as uiEpics } from 'models/ui';
 import { epics as npmEpics } from 'models/npm';
+import { epics as notificationsEpics } from 'models/notifications';
 
 // reducers
 import rootReducer from '../reducers';
@@ -36,7 +37,7 @@ const configureStore = initialState => {
     }
   }
 
-  // If redux DevTools Extension is installed use it, otherwise use redux compose
+  // if redux DevTools Extension is installed use it, otherwise use redux compose
 
   /* eslint-disable no-underscore-dangle */
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__
@@ -59,6 +60,7 @@ const configureStore = initialState => {
   epicMiddleware.run(uiEpics);
   epicMiddleware.run(packagesEpics);
   epicMiddleware.run(npmEpics);
+  epicMiddleware.run(notificationsEpics);
 
   return store;
 };

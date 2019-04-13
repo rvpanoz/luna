@@ -8,6 +8,8 @@ import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { pickBy } from 'ramda';
+import { FATAL_ERROR } from 'constants/AppConstants';
+
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
@@ -17,14 +19,14 @@ import Grid from '@material-ui/core/Grid';
 import useIpc from 'commons/hooks/useIpc';
 import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
+import { PackageDetails } from 'components/pages/package';
 
 import {
   updateData,
   setPackagesStart,
   setActive,
   viewPackage,
-  removePackages,
-  clearPackages
+  removePackages
 } from 'models/packages/actions';
 
 import {
@@ -38,10 +40,9 @@ import {
   clearSelected
 } from 'models/ui/actions';
 
-import { FATAL_ERROR } from 'constants/AppConstants';
+import { updateNotifications } from 'models/notifications/actions';
 import { clearRunningCommand } from 'models/npm/actions';
 import { setMode, addInstallOption } from 'models/common/actions';
-import { PackageDetails } from 'components/pages/package';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -187,10 +188,11 @@ const Packages = ({ classes }) => {
     });
   };
 
-  const [dependenciesSet, outdatedSet] = useIpc(IPC_EVENT, parameters, [
-    mode,
-    directory
-  ]);
+  const [dependenciesSet, outdatedSet, projectSet, notifications] = useIpc(
+    IPC_EVENT,
+    parameters,
+    [mode, directory]
+  );
 
   useEffect(() => {
     const dependencies = dependenciesSet.data;
@@ -201,32 +203,40 @@ const Packages = ({ classes }) => {
     }
 
     // handle empty dependencies
-    if (!dependencies || !dependencies.length) {
-      dispatch(clearPackages());
+    // if (!dependencies || !dependencies.length) {
+    //   dispatch(
+    //     toggleLoader({
+    //       loading: false,
+    //       message: null
+    //     })
+    //   );
+
+    //   return;
+    // }
+
+    if (notifications && Array.isArray(notifications)) {
       dispatch(
-        toggleLoader({
-          loading: false,
-          message: null
+        updateNotifications({
+          notifications
         })
       );
-
-      return;
     }
-
-    // project info
-    const { projectName, projectVersion, projectDescription } =
-      dependenciesSet || {};
 
     dispatch(
       updateData({
         dependencies,
         outdated,
-        projectName,
-        projectVersion,
-        projectDescription
+        ...projectSet
       })
     );
-  }, [dependenciesSet, outdatedSet.data, paused, dispatch]);
+  }, [
+    dependenciesSet,
+    outdatedSet,
+    projectSet,
+    paused,
+    notifications,
+    dispatch
+  ]);
 
   useEffect(() => {
     ipcRenderer.on('action-close', (event, output, cliMessage, options) => {

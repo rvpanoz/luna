@@ -33,7 +33,7 @@ import { setMode } from 'models/common/actions';
 import styles from './styles/navigator';
 
 const mapState = ({
-  notifications,
+  notifications: { notifications },
   packages: {
     packagesData,
     packagesOutdated,
