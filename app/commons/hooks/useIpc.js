@@ -14,13 +14,17 @@ const useIpc = (channel, ipcParameters, inputs) => {
   const [mode, directory] = inputs;
 
   const [dependenciesSet, setDependencies] = useState({
-    data: [],
-    projectName: null,
-    projectVersion: null
+    data: []
   });
 
   const [outdatedSet, setOutdated] = useState({
     data: []
+  });
+
+  const [projectSet, setProject] = useState({
+    projectName: null,
+    projectVersion: null,
+    projectDescription: null
   });
 
   const [commandErrors, setErrors] = useState(null);
@@ -45,6 +49,12 @@ const useIpc = (channel, ipcParameters, inputs) => {
         setErrors(errors);
       }
 
+      setProject({
+        projectName,
+        projectVersion,
+        projectDescription
+      });
+
       switchcase({
         list: () =>
           setDependencies({
@@ -53,7 +63,10 @@ const useIpc = (channel, ipcParameters, inputs) => {
             projectVersion,
             projectDescription
           }),
-        outdated: () => setOutdated({ data: packages })
+        outdated: () => {
+          console.log(packages);
+          return setOutdated({ data: packages });
+        }
       })('list')(command);
     });
 
@@ -70,7 +83,7 @@ const useIpc = (channel, ipcParameters, inputs) => {
     return () => ipcRenderer.removeAllListeners([`${ipcEvent}-close`]);
   }, [mode, directory]);
 
-  return [dependenciesSet, outdatedSet, commandErrors];
+  return [dependenciesSet, outdatedSet, projectSet, commandErrors];
 };
 
 export default useIpc;

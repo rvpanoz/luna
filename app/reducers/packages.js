@@ -38,7 +38,9 @@ const handlers = {
       project: {
         name: null,
         version: null,
-        description: null
+        description: null,
+        license: null,
+        author: null
       },
       packagesData: [],
       packagesOutdated: []
