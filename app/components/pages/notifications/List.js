@@ -43,8 +43,7 @@ const NotificationsItem = ({
   requiredBy
 }) => {
   const packageParts = required && required.split('@');
-  const packageName = packageParts && packageParts[0];
-  const packageVersion = packageParts && packageParts[1];
+  const [packageName, packageVersion] = packageParts;
   const dispatch = useDispatch();
 
   let version = null;

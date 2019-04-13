@@ -79,18 +79,23 @@ const PackageItem = ({
           )}
 
           {missing || peerMissing ? (
-            <div className={classes.flexContainer}>
-              <Typography className={cn(classes.name, classes.missing)}>
-                {name}
-              </Typography>
+            <div className={cn(classes.flexContainer)}>
               <Tooltip title="package is missing or has peer dependencies missing">
-                <ErrorIcon color="secondary" />
+                <Typography
+                  className={cn(
+                    classes.name,
+                    classes.missing,
+                    classes.flexItem
+                  )}
+                >
+                  {name}
+                </Typography>
               </Tooltip>
               {inOperation && (
                 <CircularProgress
                   size={15}
                   thickness={5}
-                  className={classes.loader}
+                  className={cn(classes.loader, classes.flexItem)}
                   color="primary"
                 />
               )}
@@ -110,7 +115,12 @@ const PackageItem = ({
           )}
 
           {!extraneous && (
-            <Typography variant="caption" className={classes.group}>
+            <Typography
+              variant="caption"
+              className={cn(classes.group, {
+                [classes.missing]: missing
+              })}
+            >
               {group}
             </Typography>
           )}

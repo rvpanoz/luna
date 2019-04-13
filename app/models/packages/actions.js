@@ -1,6 +1,6 @@
 import { createActionCreator } from 'commons/utils';
 
-const ActionCreator = createActionCreator('@ALU/PACKAGES');
+const ActionCreator = createActionCreator('@@LUNA/PACKAGES');
 
 const clearAll = ActionCreator('CLEAR_ALL');
 const clearPackages = ActionCreator('CLEAR_PACKAGES');

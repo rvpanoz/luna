@@ -71,19 +71,7 @@ const setPackages = payload => ({
   payload
 });
 
-const clearAllData = () => ({
-  type: clearAll.type
-});
-
-const clearAllEpic = action$ =>
-  action$.pipe(
-    ofType(clearAll.type),
-    mergeMap(() => [
-      { type: clearCommands.type },
-      { type: clearNotifications.type }
-    ])
-  );
-
+// TODO: meet:question
 const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
@@ -100,13 +88,15 @@ const packagesStartEpic = (action$, state$) =>
 
       return { type: 'RESUME_REQUEST' };
     }),
-    takeWhile(({ type }) => type !== 'PAUSE_REQUEST'),
+    takeWhile(({ type }) => type === 'RESUME_REQUEST'),
     concatMap(() => [
       updateLoader({
         loading: true,
         message: 'Loading packages..'
       }),
-      clearAllData()
+      { type: clearCommands.type },
+      { type: clearNotifications.type },
+      { type: clearPackages.type }
     ])
   );
 
@@ -183,6 +173,7 @@ const updatePackagesEpic = action$ =>
     })
   );
 
+// TODO: meet:question
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
@@ -274,7 +265,6 @@ export default combineEpics(
   packagesStartEpic,
   packagesSuccessEpic,
   installPackagesEpic,
-  clearAllEpic,
   updatePackagesEpic,
   viewPackagesEpic
 );

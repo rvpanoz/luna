@@ -12,6 +12,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { epics as packagesEpics } from 'models/packages';
 import { epics as uiEpics } from 'models/ui';
 import { epics as npmEpics } from 'models/npm';
+import { epics as notificationsEpics } from 'models/notifications';
 
 // reducers
 import rootReducer from '../reducers';
@@ -20,11 +21,11 @@ const configureStore = initialState => {
   // create epic middleware
   const epicMiddleware = createEpicMiddleware();
 
-  // redux Configuration
+  // redux configuration
   const middleware = [epicMiddleware];
   const enhancers = [];
 
-  // apply Middleware & Compose Enhancers
+  // apply middleware & compose Enhancers
   enhancers.push(applyMiddleware(...middleware));
   const enhancer = compose(...enhancers);
 
@@ -34,6 +35,7 @@ const configureStore = initialState => {
   epicMiddleware.run(uiEpics);
   epicMiddleware.run(packagesEpics);
   epicMiddleware.run(npmEpics);
+  epicMiddleware.run(notificationsEpics);
 
   return store;
 };
