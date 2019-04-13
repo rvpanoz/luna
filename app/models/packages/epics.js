@@ -1,16 +1,5 @@
-/* eslint-disable no-unused-vars */
-
-import {
-  map,
-  mergeMap,
-  takeWhile,
-  concatMap,
-  filter,
-  tap,
-  takeLast,
-  takeUntil,
-  last
-} from 'rxjs/operators';
+import { pipe } from 'rxjs';
+import { map, mergeMap, takeWhile, concatMap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
@@ -27,7 +16,6 @@ import { clearNotifications } from 'models/notifications/actions';
 import { clearCommands, setRunningCommand } from 'models/npm/actions';
 
 import {
-  clearAll,
   clearPackages,
   installPackages,
   updatePackages,
@@ -71,7 +59,7 @@ const setPackages = payload => ({
   payload
 });
 
-// TODO: meet:question
+// TODO: :question
 const packagesStartEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
@@ -100,80 +88,77 @@ const packagesStartEpic = (action$, state$) =>
     ])
   );
 
-const installPackagesEpic = action$ =>
-  action$.pipe(
-    ofType(installPackages.type),
-    mergeMap(({ payload }) => {
-      ipcRenderer.send('ipc-event', payload);
+const installPackagesEpic = pipe(
+  ofType(installPackages.type),
+  mergeMap(({ payload }) => {
+    ipcRenderer.send('ipc-event', payload);
 
-      return [
-        updateLoader({
-          loading: true,
-          message: 'Installing packages..'
-        }),
-        setActivePage({
-          page: 'packages',
-          paused: false
-        })
-      ];
-    })
-  );
-
-const viewPackagesEpic = action$ =>
-  action$.pipe(
-    ofType(viewPackage.type),
-    map(({ payload }) => {
-      const { name } = payload;
-
-      ipcRenderer.send('ipc-event', payload);
-
-      return updatePackageLoader({
+    return [
+      updateLoader({
         loading: true,
-        message: `Loading ${name}`
-      });
-    })
-  );
+        message: 'Installing packages..'
+      }),
+      setActivePage({
+        page: 'packages',
+        paused: false
+      })
+    ];
+  })
+);
 
-const updatePackagesEpic = action$ =>
-  action$.pipe(
-    ofType(updatePackages.type),
-    mergeMap(({ payload }) => {
-      const { ipcEvent, packages, name } = payload;
+const viewPackagesEpic = pipe(
+  ofType(viewPackage.type),
+  map(({ payload }) => {
+    const { name } = payload;
 
-      ipcRenderer.send('ipc-event', payload);
+    ipcRenderer.send('ipc-event', payload);
 
-      if (ipcEvent === 'uninstall') {
-        return [
-          updateCommand({
-            operationStatus: 'running',
-            operationCommand: ipcEvent,
-            operationPackages: packages && packages.length ? packages : [name]
-          }),
-          {
-            type: clearSelected.type
-          }
-        ];
-      }
+    return updatePackageLoader({
+      loading: true,
+      message: `Loading ${name}`
+    });
+  })
+);
 
+const updatePackagesEpic = pipe(
+  ofType(updatePackages.type),
+  mergeMap(({ payload }) => {
+    const { ipcEvent, packages, name } = payload;
+
+    ipcRenderer.send('ipc-event', payload);
+
+    if (ipcEvent === 'uninstall') {
       return [
-        updateLoader({
-          loading: true,
-          message: 'Updating packages..'
-        }),
-        setActivePage({
-          page: 'packages',
-          paused: false
-        }),
         updateCommand({
           operationStatus: 'running',
           operationCommand: ipcEvent,
           operationPackages: packages && packages.length ? packages : [name]
-        })
+        }),
+        {
+          type: clearSelected.type
+        }
       ];
-    })
-  );
+    }
 
-// TODO: meet:question
+    return [
+      updateLoader({
+        loading: true,
+        message: 'Updating packages..'
+      }),
+      setActivePage({
+        page: 'packages',
+        paused: false
+      }),
+      updateCommand({
+        operationStatus: 'running',
+        operationCommand: ipcEvent,
+        operationPackages: packages && packages.length ? packages : [name]
+      })
+    ];
+  })
+);
+
+// TODO: :question
 const packagesSuccessEpic = (action$, state$) =>
   action$.pipe(
     ofType(updateData.type),
@@ -232,33 +217,50 @@ const packagesSuccessEpic = (action$, state$) =>
         };
       }
     ),
-    concatMap(({ dependencies, outdated, projectName, projectVersion }) => {
-      const {
-        ui: { page },
-        packages: {
-          metadata: { fromSearch, fromSort }
+    concatMap(
+      ({
+        dependencies,
+        outdated,
+        projectName,
+        projectVersion,
+        projectDescription
+      }) => {
+        const {
+          ui: { page },
+          packages: {
+            metadata: { fromSearch, fromSort }
+          }
+        } = state$.value;
+
+        const actions = [];
+
+        if (page !== 0) {
+          actions.unshift(setPage({ page: 0 }));
         }
-      } = state$.value;
 
-      const actions = [];
+        if (dependencies.length) {
+          actions.push(
+            updateLoader({
+              loading: false,
+              message: null
+            })
+          );
+        }
 
-      if (page !== 0) {
-        actions.unshift(setPage({ page: 0 }));
+        return [
+          setPackages({
+            projectName,
+            projectVersion,
+            projectDescription,
+            fromSearch,
+            fromSort,
+            dependencies
+          }),
+          setOutdated({ outdated }),
+          ...actions
+        ];
       }
-
-      return [
-        setPackages({
-          projectName,
-          projectVersion,
-          fromSearch,
-          fromSort,
-          dependencies
-        }),
-        setOutdated({ outdated }),
-        ...actions,
-        updateLoader({ loading: false, message: null })
-      ];
-    })
+    )
   );
 
 export default combineEpics(

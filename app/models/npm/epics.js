@@ -1,3 +1,4 @@
+import { pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
@@ -10,17 +11,16 @@ const updateLoader = payload => ({
   payload
 });
 
-const npmRunAuditEpic = action$ =>
-  action$.pipe(
-    ofType(runAudit.type),
-    map(({ payload }) => {
-      ipcRenderer.send('ipc-event', payload);
+const npmRunAuditEpic = pipe(
+  ofType(runAudit.type),
+  map(({ payload }) => {
+    ipcRenderer.send('ipc-event', payload);
 
-      return updateLoader({
-        loading: true,
-        message: 'Running npm audit'
-      });
-    })
-  );
+    return updateLoader({
+      loading: true,
+      message: 'Running npm audit'
+    });
+  })
+);
 
 export default combineEpics(npmRunAuditEpic);
