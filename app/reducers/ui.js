@@ -36,6 +36,7 @@ const createReducer = (uiState, handlers) => (state = uiState, action) =>
 const handlers = {
   [setActivePage.type]: (state, { payload: { page, paused } }) =>
     merge(state, {
+      ...state,
       activePage: page,
       paused
     }),
@@ -109,7 +110,7 @@ const handlers = {
     const idx = selected.indexOf(name);
     let newSelected = [];
 
-    if (idx !== -1 && Boolean(force) === true) {
+    if (idx !== -1 && force) {
       newSelected = selected;
     } else if (idx !== -1 && !force) {
       newSelected = remove(idx, 1, selected);

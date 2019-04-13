@@ -28,8 +28,8 @@ import styles from './styles/appLayout';
 
 const mapState = ({
   npm: { env },
-  notifications,
-  common: { mode, directory },
+  notifications: { notifications },
+  common: { mode, directory, onlineStatus },
   ui: {
     activePage,
     loaders: {
@@ -42,6 +42,7 @@ const mapState = ({
     metadata: { lastUpdatedAt }
   }
 }) => ({
+  onlineStatus,
   lastUpdatedAt,
   activePage,
   mode,
@@ -72,6 +73,7 @@ const AppLayout = ({ classes }) => {
     packagesData,
     packagesOutdated,
     env,
+    onlineStatus,
     ...restProps
   } = useMappedState(mapState);
 
@@ -159,14 +161,33 @@ const AppLayout = ({ classes }) => {
           <Snackbar
             anchorOrigin={{
               vertical: 'bottom',
-              horizontal: snackbar.type === 'error' ? 'center' : 'right'
+              horizontal: 'right'
             }}
             open={snackbar.open}
-            autoHideDuration={5000}
+            autoHideDuration={onlineStatus === 'online' ? 55000 : 999999}
+            onClose={() =>
+              dispatch(
+                setSnackbar({
+                  open: false,
+                  message: null,
+                  type: 'info'
+                })
+              )
+            }
+            ClickAwayListenerProps={{
+              onClickAway: () =>
+                dispatch(
+                  setSnackbar({
+                    open: false,
+                    message: null,
+                    type: 'info'
+                  })
+                )
+            }}
           >
             <SnackbarContent
-              variant={snackbar.type}
-              message={snackbar.message}
+              variant={onlineStatus === 'offline' ? 'error' : snackbar.type}
+              message={`${snackbar.message}`}
               onClose={() =>
                 dispatch(
                   setSnackbar({

@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-expressions */
+/* eslint-disable no-underscore-dangle */
 
 import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
@@ -142,15 +143,17 @@ const Packages = ({ classes }) => {
         paused: false
       }
     });
+
     dispatch(
       setPackagesStart({
         channel: IPC_EVENT,
+        paused: false,
         options: {
           ...parameters
         }
       })
     );
-  }, [parameters, dispatch]);
+  }, [mode, directory, parameters, dispatch]);
 
   const switchMode = (appMode, appDirectory) => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
@@ -194,33 +197,20 @@ const Packages = ({ classes }) => {
     [mode, directory]
   );
 
+  // update packages
   useEffect(() => {
-    const dependencies = dependenciesSet.data;
-    const outdated = outdatedSet.data;
-
     if (paused) {
       return;
     }
 
-    // handle empty dependencies
-    // if (!dependencies || !dependencies.length) {
-    //   dispatch(
-    //     toggleLoader({
-    //       loading: false,
-    //       message: null
-    //     })
-    //   );
+    const dependencies = dependenciesSet.data;
+    const outdated = outdatedSet.data;
 
-    //   return;
-    // }
-
-    if (notifications && Array.isArray(notifications)) {
-      dispatch(
-        updateNotifications({
-          notifications
-        })
-      );
-    }
+    dispatch(
+      setActive({
+        active: null
+      })
+    );
 
     dispatch(
       updateData({
@@ -229,28 +219,28 @@ const Packages = ({ classes }) => {
         ...projectSet
       })
     );
-  }, [
-    dependenciesSet,
-    outdatedSet,
-    projectSet,
-    paused,
-    notifications,
-    dispatch
-  ]);
+  }, [dependenciesSet, outdatedSet.data, projectSet, paused, dispatch]);
 
+  // update notifications
+  useEffect(() => {
+    if (notifications && Array.isArray(notifications)) {
+      dispatch(
+        updateNotifications({
+          notifications
+        })
+      );
+    }
+  }, [notifications, dispatch]);
+
+  // npm operations listeners
   useEffect(() => {
     ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
       const [operation, argv] = options;
       const errorMessages = [];
 
-      // clean up first
+      // clean up
       dispatch(clearRunningCommand());
       dispatch(clearSelected());
-      dispatch(
-        setActive({
-          active: null
-        })
-      );
 
       if (output && typeof output === 'string') {
         const outputParts = output.split('\n');
@@ -286,7 +276,7 @@ const Packages = ({ classes }) => {
                 ? `Packages removed with errors \n${errorMessages[1]}\n${
                     errorMessages[2]
                   }`
-                : 'Packages removed'
+                : cliMessage
             })
           );
 
@@ -322,7 +312,15 @@ const Packages = ({ classes }) => {
         const getCleanProps = (val, key) => /^[^_]/.test(key);
         const properties = pickBy(getCleanProps, newActive);
 
-        dispatch(setActive({ active: properties }));
+        dispatch(
+          setActive({
+            active: {
+              ...properties,
+              group: newActive.__group
+            }
+          })
+        );
+
         dispatch(
           togglePackageLoader({
             loading: false
@@ -343,7 +341,7 @@ const Packages = ({ classes }) => {
       );
   }, [forceUpdate, dispatch, fetchPackages, packagesData, packagesOutdated]);
 
-  // setup packages
+  // setup packages with filters
   const [filteredPackages] = useFilters(packagesData, filters);
 
   const data = filteredByNamePackages.length
@@ -406,7 +404,7 @@ const Packages = ({ classes }) => {
                   <TableHeader
                     packages={dataSlices.map(d => d.name)}
                     numSelected={selected.length}
-                    rowCount={dataSlices && dataSlices.length}
+                    rowCount={listDataPackages && listDataPackages.length}
                     sortBy={sortBy}
                     sortDir={sortDir}
                   />

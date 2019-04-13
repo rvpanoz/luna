@@ -73,6 +73,7 @@ const NotificationsItem = ({
               cmd: ['install'],
               single: true,
               name: version ? `${packageName}@${version}` : packageName,
+              pkgOptions: [],
               mode,
               directory
             };
@@ -129,7 +130,7 @@ const NotificationsList = ({ classes, mode, directory }) => {
         <div className={classes.flexContainer}>
           <div className={classes.header}>
             <Typography variant="h6">
-              {`Problems ${notifications.length}`}
+              {`Problems ${notifications ? notifications.length : 0}`}
             </Typography>
           </div>
         </div>
