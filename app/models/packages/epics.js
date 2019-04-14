@@ -1,5 +1,14 @@
 import { pipe } from 'rxjs';
-import { map, mergeMap, takeWhile, concatMap } from 'rxjs/operators';
+import {
+  map,
+  tap,
+  filter,
+  mergeMap,
+  takeWhile,
+  concatMap,
+  withLatestFrom,
+  ignoreElements
+} from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
@@ -60,33 +69,77 @@ const setPackages = payload => ({
 });
 
 // TODO: :question
-const packagesStartEpic = (action$, state$) =>
+
+const ON = Symbol('ON');
+const OFF = Symbol('OFF');
+
+const isCommand = data => [ON, OFF].includes(data);
+
+const onOff = (replay = false) => src$ =>
+  src$.pipe(
+    withLatestFrom(src$.pipe(filter(isCommand))),
+    filter(([value, command]) => command === ON),
+    map(([value]) => value),
+    filter(data => !isCommand(data))
+  );
+/** ********* */
+
+const packagesStartNpmListEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    map(({ payload: { channel, options } }) => {
+    mergeMap(({ payload: { channel, options } }) => {
       const {
         ui: { paused }
       } = state$.value;
-
-      if (paused) {
-        return { type: 'PAUSE_REQUEST' };
-      }
-
-      ipcRenderer.send(channel, options);
-
-      return { type: 'RESUME_REQUEST' };
+      return [paused ? OFF : ON, { payload: { channel, options } }];
     }),
-    takeWhile(({ type }) => type === 'RESUME_REQUEST'),
+    onOff(),
+    tap(({ payload: { channel, options } }) =>
+      ipcRenderer.send(channel, options)
+    ),
+    ignoreElements()
+  );
+
+const packagesStartEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(setPackagesStart.type),
+    mergeMap(({ payload: { channel, options } }) => {
+      const {
+        ui: { paused }
+      } = state$.value;
+      return [paused ? OFF : ON, {}];
+    }),
+    onOff(),
     concatMap(() => [
       updateLoader({
         loading: true,
         message: 'Loading packages..'
       }),
-      { type: clearCommands.type },
-      { type: clearNotifications.type },
-      { type: clearPackages.type }
+      clearCommands(),
+      clearNotifications(),
+      clearPackages()
     ])
   );
+
+// const packagesStartEpic = (action$, state$) =>
+//   action$.pipe(
+//     ofType(setPackagesStart.type),
+//     map(({ payload: { channel, options } }) => {
+//       const {
+//         ui: { paused }
+//       } = state$.value;
+//
+//       if (paused) {
+//         return { type: 'PAUSE_REQUEST' };
+//       }
+//
+//       ipcRenderer.send(channel, options);
+//
+//       return { type: 'RESUME_REQUEST' };
+//     }),
+//     takeWhile(({ type }) => type === 'RESUME_REQUEST'),
+//
+//   );
 
 const installPackagesEpic = pipe(
   ofType(installPackages.type),
@@ -263,9 +316,58 @@ const packagesSuccessEpic = (action$, state$) =>
     )
   );
 
+const takeX = (action$, state$) =>
+  action$.pipe(
+    ofType(t1, t2),
+    switchMap(() => {
+      ipcRenderer.removeAllListeners();
+
+      return new Observable(observer => {
+        ipcRenderer.on(`${ipcEvent}-close`, (event, status, cmd, data) => {
+          if (!data || !isJson(data)) {
+            return;
+          }
+
+          const [command] = cmd;
+          const [
+            packages,
+            errors,
+            projectName,
+            projectVersion,
+            projectDescription
+          ] = parseDependencies(data, mode, directory, cmd);
+
+          if (errors) {
+            setErrors(errors);
+          }
+
+          setProject({
+            projectName,
+            projectVersion,
+            projectDescription
+          });
+
+          switchcase({
+            list: () =>
+              observer.next(
+                setDependencies({
+                  data: packages,
+                  projectName,
+                  projectVersion,
+                  projectDescription
+                })
+              ),
+            outdated: () => observer.next(setOutdated({ data: packages }))
+          })('list')(command);
+        });
+      });
+    })
+  );
+
 export default combineEpics(
   packagesStartEpic,
   packagesSuccessEpic,
+  packagesStartNpmListEpic,
   installPackagesEpic,
   updatePackagesEpic,
   viewPackagesEpic
