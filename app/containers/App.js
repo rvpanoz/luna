@@ -11,7 +11,7 @@ import { withErrorBoundary } from 'commons/hocs';
 import { WARNING_MESSAGES } from 'constants/AppConstants';
 
 import { setEnv } from 'models/npm/actions';
-import { updateStatus } from 'models/common/actions';
+import { initActions, updateStatus } from 'models/common/actions';
 import { setUIException, setSnackbar } from 'models/ui/actions';
 
 import AppLayout from './AppLayout';
@@ -25,7 +25,7 @@ const mapState = ({ ui: { uiException } }) => ({
 
 const App = () => {
   const dispatch = useDispatch();
-  const [npmError, setNpmError] = useState(null);
+  const [npmError] = useState(null);
   const { uiException } = useMappedState(mapState);
 
   useEffect(() => {
@@ -41,26 +41,17 @@ const App = () => {
       });
     };
 
-    // Passing in true for the third parameter causes the event to be captured on the way down.
-    // Stopping propagation means that the event never reaches the listeners that are listening for it.
+    // passing in true for the third parameter causes the event to be captured on the way down.
+    // stopping propagation means that the event never reaches the listeners that are listening for it.
     window.addEventListener('online', updateOnlineStatus, true);
     window.addEventListener('offline', updateOnlineStatus, true);
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch({
-      type: updateStatus.type,
-      payload: { status: navigator.onLine ? 'online' : 'offline' }
-    });
+    ipcRenderer.on('finish-loaded', () => dispatch(initActions()));
 
     ipcRenderer.on('uncaught-exception', (event, ...args) => {
       dispatch({ type: setUIException.type, payload: { message: args[0] } });
-    });
-
-    ipcRenderer.on('npm-error', (event, ...args) => {
-      const error = args && args[0];
-
-      setNpmError(error);
     });
 
     ipcRenderer.on('yarn-warning-close', () => {
@@ -80,7 +71,6 @@ const App = () => {
     return () =>
       ipcRenderer.removeAllListeners([
         'uncaught-exception',
-        'npm-error',
         'get-env-close',
         'yarn-warning-close'
       ]);
