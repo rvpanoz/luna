@@ -266,6 +266,7 @@ app.on('ready', async () => {
     // directories history
     const openedPackages = Store.get('opened_packages') || [];
     event.sender.send('loaded-packages-close', openedPackages);
+    event.sender.send('finish-loaded');
   });
 
   mainWindow.webContents.on('crashed', event => {

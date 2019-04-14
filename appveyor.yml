@@ -26,7 +26,7 @@ clone_depth: 1
 install:
   - ps: Install-Product node $env:nodejs_version x64
   - set CI=true
-  - npm
+  - npm install
 
 test_script:
   - npm run package-ci
