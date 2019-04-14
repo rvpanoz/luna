@@ -4,16 +4,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'redux-react-hook';
-import { ipcRenderer } from 'electron';
 
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/common/SnackbarContent';
 
-import { parseFromSearch } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
-import { setPackagesStart, updateData } from 'models/packages/actions';
+import { setPackagesStart } from 'models/packages/actions';
 
 import styles from './styles/searchBox';
 
@@ -71,25 +69,6 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
       handleSearch();
     }
   };
-
-  useEffect(() => {
-    ipcRenderer.on(
-      'search-packages-close',
-      (event, status, commandArgs, data) => {
-        const [packages] = parseFromSearch(data) || [];
-
-        dispatch(
-          updateData({
-            fromSearch: true,
-            outdated: [],
-            dependencies: packages
-          })
-        );
-      }
-    );
-
-    return () => ipcRenderer.removeAllListeners(['search-packages-close']);
-  }, [dispatch]);
 
   useEffect(() => {
     const { current } = rootEl;

@@ -1,5 +1,17 @@
 import { pipe } from 'rxjs';
-import { map, mergeMap, takeWhile, concatMap } from 'rxjs/operators';
+import {
+  map,
+  tap,
+  mergeMap,
+  switchMap,
+  concatMap,
+  withLatestFrom,
+  filter,
+  ignoreElements,
+  takeWhile,
+  catchError
+} from 'rxjs/operators';
+
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { isPackageOutdated } from 'commons/utils';
@@ -8,12 +20,13 @@ import {
   toggleLoader,
   togglePackageLoader,
   setActivePage,
-  setPage,
+  setSnackbar,
   clearSelected
 } from 'models/ui/actions';
 
 import { clearNotifications } from 'models/notifications/actions';
 import { clearCommands, setRunningCommand } from 'models/npm/actions';
+import { initActions } from 'models/common/actions';
 
 import {
   clearPackages,
@@ -21,10 +34,20 @@ import {
   updatePackages,
   setPackagesStart,
   setPackagesSuccess,
-  setOutdatedSuccess,
-  updateData,
-  viewPackage
+  mapPackages,
+  viewPackage,
+  getPackagesListener,
+  searchPackagesListener,
+  viewPackageListener,
+  npmActionsListener
 } from './actions';
+
+import {
+  onGetPackages$,
+  onSearchPackages$,
+  onNpmActions$,
+  onViewPackage$
+} from './listeners';
 
 const updateCommand = ({
   operationStatus,
@@ -49,42 +72,69 @@ const updatePackageLoader = payload => ({
   payload
 });
 
-const setOutdated = payload => ({
-  type: setOutdatedSuccess.type,
-  payload
-});
-
 const setPackages = payload => ({
   type: setPackagesSuccess.type,
   payload
 });
 
-// TODO: :question
-const packagesStartEpic = (action$, state$) =>
+const ON = Symbol('ON');
+const OFF = Symbol('OFF');
+
+const isPaused = data => [ON, OFF].includes(data);
+const onOffOperator = () => src$ =>
+  src$.pipe(
+    withLatestFrom(src$.pipe(filter(isPaused))),
+    filter(([value, paused]) => paused === ON), // eslint-disable-line
+    map(([value]) => value),
+    filter(data => !isPaused(data))
+  );
+
+const onInitActionsEpic = pipe(
+  ofType(initActions.type),
+  mergeMap(() => [
+    getPackagesListener(),
+    searchPackagesListener(),
+    viewPackageListener(),
+    npmActionsListener()
+  ])
+);
+
+const startEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
-    map(({ payload: { channel, options } }) => {
+    mergeMap(({ payload: { channel, options } }) => {
       const {
         ui: { paused }
       } = state$.value;
 
-      if (paused) {
-        return { type: 'PAUSE_REQUEST' };
-      }
-
-      ipcRenderer.send(channel, options);
-
-      return { type: 'RESUME_REQUEST' };
+      return [paused ? OFF : ON, { payload: { channel, options } }];
     }),
-    takeWhile(({ type }) => type === 'RESUME_REQUEST'),
+    onOffOperator(),
+    tap(({ payload: { channel, options } }) =>
+      ipcRenderer.send(channel, options)
+    ),
+    ignoreElements()
+  );
+
+const startCleanPackages = (action$, state$) =>
+  action$.pipe(
+    ofType(setPackagesStart.type),
+    mergeMap(() => {
+      const {
+        ui: { paused }
+      } = state$.value;
+
+      return [paused ? OFF : ON, {}];
+    }),
+    onOffOperator(),
     concatMap(() => [
       updateLoader({
         loading: true,
         message: 'Loading packages..'
       }),
-      { type: clearCommands.type },
-      { type: clearNotifications.type },
-      { type: clearPackages.type }
+      clearCommands(),
+      clearNotifications(),
+      clearPackages()
     ])
   );
 
@@ -106,7 +156,7 @@ const installPackagesEpic = pipe(
   })
 );
 
-const viewPackagesEpic = pipe(
+const viewPackageEpic = pipe(
   ofType(viewPackage.type),
   map(({ payload }) => {
     const { name } = payload;
@@ -158,21 +208,24 @@ const updatePackagesEpic = pipe(
   })
 );
 
-// TODO: :question
-const packagesSuccessEpic = (action$, state$) =>
+const onMapPackagesEpic = (action$, state$) =>
   action$.pipe(
-    ofType(updateData.type),
-    takeWhile(({ payload: { dependencies } }) => Array.isArray(dependencies)),
+    ofType(mapPackages.type),
     map(
       ({
         payload: {
           dependencies,
-          outdated,
           projectName,
           projectVersion,
-          projectDescription
+          projectDescription,
+          fromSearch,
+          fromSort
         }
       }) => {
+        const {
+          packages: { packagesOutdated }
+        } = state$.value;
+
         const enhancedDependencies = dependencies
           .filter(dependency => dependency && typeof dependency === 'object')
           .reduce((deps = [], dependency) => {
@@ -188,7 +241,7 @@ const packagesSuccessEpic = (action$, state$) =>
 
             if (!invalid && !peerMissing) {
               const [isOutdated, outdatedPkg] = isPackageOutdated(
-                outdated,
+                packagesOutdated,
                 name
               );
 
@@ -208,65 +261,96 @@ const packagesSuccessEpic = (action$, state$) =>
             return deps;
           }, []);
 
-        return {
+        return setPackages({
           dependencies: enhancedDependencies,
-          outdated,
           projectName,
           projectVersion,
-          projectDescription
-        };
-      }
-    ),
-    concatMap(
-      ({
-        dependencies,
-        outdated,
-        projectName,
-        projectVersion,
-        projectDescription
-      }) => {
-        const {
-          ui: { page },
-          packages: {
-            metadata: { fromSearch, fromSort }
-          }
-        } = state$.value;
-
-        const actions = [];
-
-        if (page !== 0) {
-          actions.unshift(setPage({ page: 0 }));
-        }
-
-        if (dependencies.length) {
-          actions.push(
-            updateLoader({
-              loading: false,
-              message: null
-            })
-          );
-        }
-
-        return [
-          setPackages({
-            projectName,
-            projectVersion,
-            projectDescription,
-            fromSearch,
-            fromSort,
-            dependencies
-          }),
-          setOutdated({ outdated }),
-          ...actions
-        ];
+          projectDescription,
+          fromSearch,
+          fromSort
+        });
       }
     )
   );
 
+const getPackagesListenerEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(getPackagesListener.type),
+    switchMap(() => {
+      const {
+        common: { mode, directory }
+      } = state$.value;
+
+      return onGetPackages$({
+        mode,
+        directory
+      });
+    }),
+    catchError(err =>
+      setSnackbar({
+        type: 'error',
+        open: true,
+        message: err
+      })
+    )
+  );
+
+const searchPackagesListenerEpic = action$ =>
+  action$.pipe(
+    ofType(searchPackagesListener.type),
+    switchMap(() => onSearchPackages$),
+    catchError(err =>
+      setSnackbar({
+        type: 'error',
+        open: true,
+        message: err
+      })
+    )
+  );
+
+const npmActionsListenerEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(npmActionsListener.type),
+    switchMap(() => {
+      const {
+        common: { mode, directory }
+      } = state$.value;
+
+      return onNpmActions$({ mode, directory });
+    }),
+    tap(console.log),
+    catchError(err =>
+      setSnackbar({
+        type: 'error',
+        open: true,
+        message: err
+      })
+    )
+  );
+
+const viewPackageListenerEpic = action$ =>
+  action$.pipe(
+    ofType(viewPackageListener.type),
+    switchMap(() => onViewPackage$),
+    catchError(err =>
+      setSnackbar({
+        type: 'error',
+        open: true,
+        message: err
+      })
+    )
+  );
+
 export default combineEpics(
-  packagesStartEpic,
-  packagesSuccessEpic,
+  onInitActionsEpic,
+  startCleanPackages,
+  startEpic,
   installPackagesEpic,
   updatePackagesEpic,
-  viewPackagesEpic
+  viewPackageEpic,
+  viewPackageListenerEpic,
+  getPackagesListenerEpic,
+  searchPackagesListenerEpic,
+  npmActionsListenerEpic,
+  onMapPackagesEpic
 );
