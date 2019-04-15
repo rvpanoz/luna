@@ -27,7 +27,8 @@ import {
   ToolsTab
 } from 'components/pages/navigator/tabs';
 import { setActivePage } from 'models/ui/actions';
-import { setMode, runNpmAudit } from 'models/common/actions';
+import { setMode } from 'models/common/actions';
+import { runAudit } from 'models/npm/actions';
 
 import styles from './styles/navigator';
 
@@ -194,7 +195,7 @@ const Navigator = ({
                     secondaryText: 'Run npm audit',
                     handler: () =>
                       dispatch(
-                        runNpmAudit({
+                        runAudit({
                           channel: 'ipc-event',
                           ipcEvent: 'audit',
                           cmd: ['audit'],

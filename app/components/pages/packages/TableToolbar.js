@@ -148,6 +148,14 @@ const TableListToolbar = ({
       filePath => (filePath ? switchMode('local', filePath.join('')) : null)
     );
 
+  const installPackageJson = () => {
+    remote.dialog.showOpenDialog(
+      remote.getCurrentWindow(),
+      navigatorParameters,
+      filePath => (filePath ? console.log(filePath) : null)
+    );
+  };
+
   const renderAction = action => {
     const hasNpmSelected = selected && selected.indexOf('npm') > -1;
 
@@ -266,10 +274,19 @@ const TableListToolbar = ({
 
   const renderToolbarActions = () => (
     <React.Fragment>
-      <Tooltip title="Open package.json">
+      <Tooltip title="Install from package.json">
         <IconButton
           disableRipple
           color="secondary"
+          aria-label="install_packagejson"
+          onClick={installPackageJson}
+        >
+          <AddIcon />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Open package.json">
+        <IconButton
+          disableRipple
           aria-label="open_package"
           onClick={openPackage}
         >

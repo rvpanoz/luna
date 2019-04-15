@@ -112,7 +112,7 @@ const Header = ({ classes, onDrawerToggle }) => {
                 Dashboard
               </Typography>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <Tooltip title="Open install options">
                 <Button
                   className={classes.button}
@@ -124,7 +124,7 @@ const Header = ({ classes, onDrawerToggle }) => {
                   Install
                 </Button>
               </Tooltip>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Toolbar>
       </AppBar>
