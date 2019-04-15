@@ -20,7 +20,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { Packages } from 'components/pages/packages';
 import { Notifications } from 'components/pages/notifications';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
-import { runTool } from 'models/packages/actions';
 import { switchcase, shrinkDirectory, parseNpmAudit } from 'commons/utils';
 
 import { drawerWidth } from 'styles/variables';
@@ -78,24 +77,6 @@ const AppLayout = ({ classes }) => {
   } = useMappedState(mapState);
 
   const dispatch = useDispatch();
-
-  const runAudit = (toolName, options) => {
-    setDialog({
-      open: false,
-      content: null
-    });
-
-    dispatch(
-      runTool({
-        channel: 'ipc-event',
-        ipcEvent: toolName,
-        cmd: [toolName],
-        options,
-        mode,
-        directory
-      })
-    );
-  };
 
   useEffect(() => {
     ipcRenderer.on('tool-close', (event, errors, cliResult, command) => {
@@ -226,20 +207,6 @@ const AppLayout = ({ classes }) => {
                 color="secondary"
               >
                 Close
-              </Button>
-              <Button
-                color="primary"
-                variant="outlined"
-                onClick={() => {
-                  setDialog({
-                    open: false,
-                    content: null
-                  });
-
-                  runAudit('audit', ['fix']);
-                }}
-              >
-                Fix
               </Button>
             </DialogActions>
           </Dialog>

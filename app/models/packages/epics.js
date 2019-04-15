@@ -8,7 +8,6 @@ import {
   withLatestFrom,
   filter,
   ignoreElements,
-  takeWhile,
   catchError
 } from 'rxjs/operators';
 
