@@ -1,5 +1,4 @@
-import { ipcRenderer } from 'electron';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
@@ -19,8 +18,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import { Packages } from 'components/pages/packages';
 import { Notifications } from 'components/pages/notifications';
-import { setSnackbar, toggleLoader } from 'models/ui/actions';
-import { switchcase, shrinkDirectory, parseNpmAudit } from 'commons/utils';
+import { setSnackbar } from 'models/ui/actions';
+import { switchcase, shrinkDirectory } from 'commons/utils';
 
 import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
@@ -77,41 +76,6 @@ const AppLayout = ({ classes }) => {
   } = useMappedState(mapState);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    ipcRenderer.on('tool-close', (event, errors, cliResult, command) => {
-      const toolName = command && command[0];
-
-      const content = switchcase({
-        audit: () => parseNpmAudit(cliResult)
-      })(null)(toolName);
-
-      dispatch(
-        toggleLoader({
-          loading: false,
-          message: null
-        })
-      );
-
-      if (content) {
-        setDialog({
-          ...dialog,
-          open: true,
-          content
-        });
-      } else {
-        dispatch(
-          setSnackbar({
-            type: 'info',
-            open: true,
-            message: 'npm audit fix completed'
-          })
-        );
-      }
-    });
-
-    return () => ipcRenderer.removeAllListeners('tool-close');
-  }, [dispatch, dialog]);
 
   return (
     <MuiThemeProvider theme={theme}>

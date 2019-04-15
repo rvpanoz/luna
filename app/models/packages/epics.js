@@ -25,7 +25,6 @@ import {
 
 import { clearNotifications } from 'models/notifications/actions';
 import { clearCommands, setRunningCommand } from 'models/npm/actions';
-import { initActions } from 'models/common/actions';
 
 import {
   clearPackages,
@@ -87,16 +86,6 @@ const onOffOperator = () => src$ =>
     map(([value]) => value),
     filter(data => !isPaused(data))
   );
-
-const onInitActionsEpic = pipe(
-  ofType(initActions.type),
-  mergeMap(() => [
-    getPackagesListener(),
-    searchPackagesListener(),
-    viewPackageListener(),
-    npmActionsListener()
-  ])
-);
 
 const startEpic = (action$, state$) =>
   action$.pipe(
@@ -341,7 +330,6 @@ const viewPackageListenerEpic = action$ =>
   );
 
 export default combineEpics(
-  onInitActionsEpic,
   startCleanPackages,
   startEpic,
   installPackagesEpic,
