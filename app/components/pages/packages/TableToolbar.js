@@ -164,7 +164,7 @@ const TableListToolbar = ({
         <Tooltip title="Clear filters">
           <IconButton
             color="secondary"
-            aria-label="clear filters"
+            aria-label="clear_filters"
             onClick={() => handleAction('clearFilters')}
           >
             <ClearIcon />
@@ -175,7 +175,7 @@ const TableListToolbar = ({
         <Tooltip title="Install selected">
           <IconButton
             color="primary"
-            aria-label="install selected"
+            aria-label="install_selected"
             onClick={() =>
               remote.dialog.showMessageBox(
                 remote.getCurrentWindow(),
@@ -197,11 +197,37 @@ const TableListToolbar = ({
           </IconButton>
         </Tooltip>
       ),
+      latest: () => (
+        <Tooltip title="Install latest">
+          <IconButton
+            color="primary"
+            aria-label="install_latest"
+            onClick={() =>
+              remote.dialog.showMessageBox(
+                remote.getCurrentWindow(),
+                {
+                  title: 'Install latest version',
+                  type: 'question',
+                  message: `Do you want to install the latest version of the selected packages?`,
+                  buttons: ['Cancel', 'Install']
+                },
+                btnIdx => {
+                  if (Boolean(btnIdx) === true) {
+                    handleAction('install', true);
+                  }
+                }
+              )
+            }
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+      ),
       update: () => (
         <Tooltip title="Update selected">
           <IconButton
             color="primary"
-            aria-label="update selected"
+            aria-label="update_selected"
             onClick={() =>
               remote.dialog.showMessageBox(
                 remote.getCurrentWindow(),
@@ -360,6 +386,9 @@ const TableListToolbar = ({
         <div className={cn(classes.actions)}>
           {selected.length === 0 && renderToolbarActions()}
           {fromSearch && selected.length ? renderAction('install') : null}
+          {!fromSearch && hasUpdatedPackages && selected.length
+            ? renderAction('latest')
+            : null}
           {!fromSearch && hasUpdatedPackages ? renderAction('update') : null}
           {!fromSearch && selected.length ? renderAction('uninstall') : null}
           {(filters && filters.length) || filteredByNamePackages.length

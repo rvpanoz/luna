@@ -1,4 +1,12 @@
 import { pipe } from 'rxjs';
+import { PACKAGE_GROUPS } from 'constants/AppConstants';
+import {
+  readPackageJson,
+  objectEntries,
+  isPackageOutdated
+} from 'commons/utils';
+import { pick } from 'ramda';
+
 import {
   map,
   tap,
@@ -13,7 +21,6 @@ import {
 
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
-import { isPackageOutdated } from 'commons/utils';
 
 import {
   toggleLoader,
@@ -92,10 +99,33 @@ const startEpic = (action$, state$) =>
     ofType(setPackagesStart.type),
     mergeMap(({ payload: { channel, options } }) => {
       const {
-        ui: { paused }
+        ui: { paused },
+        common: { mode, directory }
       } = state$.value;
 
-      return [paused ? OFF : ON, { payload: { channel, options } }];
+      let _mode = options.model;
+      let _directory = options.directory;
+
+      if (!_mode) {
+        _mode = mode;
+      }
+
+      if (mode === 'local' && !_directory) {
+        _directory = directory;
+      }
+
+      return [
+        paused ? OFF : ON,
+        {
+          payload: {
+            channel,
+            options: Object.assign({}, options, {
+              mode: _mode,
+              directory: _directory
+            })
+          }
+        }
+      ];
     }),
     onOffOperator(),
     tap(({ payload: { channel, options } }) =>
@@ -202,7 +232,7 @@ const onMapPackagesEpic = (action$, state$) =>
     map(
       ({
         payload: {
-          dependencies,
+          data,
           projectName,
           projectVersion,
           projectDescription,
@@ -211,43 +241,61 @@ const onMapPackagesEpic = (action$, state$) =>
         }
       }) => {
         const {
+          common: { mode, directory },
           packages: { packagesOutdated }
         } = state$.value;
 
-        const enhancedDependencies = dependencies
-          .filter(dependency => dependency && typeof dependency === 'object')
-          .reduce((deps = [], dependency) => {
-            const {
-              name,
-              invalid,
-              extraneous,
-              peerMissing,
-              problems,
-              missing,
-              ...rest
-            } = dependency;
+        const enhancedDependencies = data.reduce((deps = [], dependency) => {
+          const [pkgName, details] = fromSearch
+            ? [
+                dependency.name,
+                {
+                  version: dependency.version,
+                  description: dependency.description
+                }
+              ]
+            : dependency;
 
-            if (!invalid && !peerMissing) {
-              const [isOutdated, outdatedPkg] = isPackageOutdated(
-                packagesOutdated,
-                name
-              );
+          const { extraneous, invalid, missing, peerMissing } =
+            dependency || {};
+          let group;
 
-              const enhancedDependency = {
-                ...rest,
-                name,
-                extraneous,
-                missing,
-                peerMissing,
-                latest: isOutdated ? outdatedPkg.latest : null,
-                isOutdated
-              };
+          if (mode === 'local') {
+            const packageJSON = readPackageJson(directory);
 
-              deps.push(enhancedDependency);
+            if (!packageJSON) {
+              return null;
             }
 
-            return deps;
-          }, []);
+            group = Object.keys(PACKAGE_GROUPS).find(
+              groupName =>
+                packageJSON[groupName] && packageJSON[groupName][pkgName]
+            );
+          }
+
+          if (!invalid && !peerMissing) {
+            const [isOutdated, outdatedPkg] = isPackageOutdated(
+              packagesOutdated,
+              pkgName
+            );
+
+            const enhancedDependency = {
+              ...details,
+              name: pkgName,
+              extraneous,
+              missing,
+              peerMissing,
+              latest: isOutdated ? outdatedPkg.latest : null,
+              isOutdated,
+              __fromSearch: fromSearch,
+              __group: group
+            };
+
+            deps.push(enhancedDependency);
+          }
+
+          return deps;
+        }, []);
 
         return setPackages({
           dependencies: enhancedDependencies,
@@ -261,27 +309,17 @@ const onMapPackagesEpic = (action$, state$) =>
     )
   );
 
-const getPackagesListenerEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(getPackagesListener.type),
-    switchMap(() => {
-      const {
-        common: { mode, directory }
-      } = state$.value;
-
-      return onGetPackages$({
-        mode,
-        directory
-      });
-    }),
-    catchError(err =>
-      setSnackbar({
-        type: 'error',
-        open: true,
-        message: err
-      })
-    )
-  );
+const getPackagesListenerEpic = pipe(
+  ofType(getPackagesListener.type),
+  switchMap(() => onGetPackages$),
+  catchError(err =>
+    setSnackbar({
+      type: 'error',
+      open: true,
+      message: err
+    })
+  )
+);
 
 const searchPackagesListenerEpic = action$ =>
   action$.pipe(
@@ -306,7 +344,6 @@ const npmActionsListenerEpic = (action$, state$) =>
 
       return onNpmActions$({ mode, directory });
     }),
-    tap(console.log),
     catchError(err =>
       setSnackbar({
         type: 'error',

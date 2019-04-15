@@ -26,6 +26,7 @@ const handlers = {
   [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
     merge(state, {
       metadata: {
+        ...state.metadata,
         fromSearch,
         fromSort
       }
@@ -43,7 +44,12 @@ const handlers = {
         author: null
       },
       packagesData: [],
-      packagesOutdated: []
+      packagesOutdated: [],
+      metadata: {
+        ...state.metadata,
+        fromSearch: false,
+        fromSort: false
+      }
     }),
   [setPackagesSuccess.type]: (
     state,

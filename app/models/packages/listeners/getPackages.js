@@ -2,32 +2,36 @@ import { ipcRenderer } from 'electron';
 import { toggleLoader } from 'models/ui/actions';
 import { updateNotifications } from 'models/notifications/actions';
 import { Observable } from 'rxjs';
-import { switchcase, parseDependencies, isJson } from 'commons/utils';
+import { pick } from 'ramda';
+import { switchcase, objectEntries, isJson } from 'commons/utils';
 import { mapPackages, setOutdatedSuccess } from '../actions';
 
-const onGetPackages$ = options =>
-  new Observable(observer => {
-    const { mode, directory } = options || {};
+const onGetPackages$ = new Observable(observer => {
+  // remove listener
+  ipcRenderer.removeAllListeners(['get-packages-close']);
 
-    ipcRenderer.removeAllListeners(['get-packages-close']);
-    ipcRenderer.on('get-packages-close', (event, status, cmd, data) => {
-      if (!data || !isJson(data)) {
-        return;
-      }
+  // register listener
+  ipcRenderer.on('get-packages-close', (event, status, cmd, response) => {
+    if (!response || !isJson(response)) {
+      return;
+    }
 
-      const [command] = cmd;
-      const [
-        packages,
-        errors,
-        projectName,
-        projectVersion,
-        projectDescription
-      ] = parseDependencies(data, mode, directory, cmd);
+    const [command] = cmd;
 
-      if (errors) {
+    try {
+      const packageData = JSON.parse(response);
+      const { name, version, description } = packageData || {};
+      const packages = pick(['dependencies', 'problems'], packageData);
+      const { dependencies, problems } = packages || {};
+
+      const dataArray = dependencies
+        ? objectEntries(dependencies)
+        : objectEntries(packageData);
+
+      if (problems) {
         observer.next(
           updateNotifications({
-            notifications: errors
+            notifications: problems
           })
         );
       }
@@ -36,10 +40,10 @@ const onGetPackages$ = options =>
         list: () => {
           observer.next(
             mapPackages({
-              dependencies: packages,
-              projectName,
-              projectVersion,
-              projectDescription
+              data: dataArray,
+              projectName: name,
+              projectVersion: version,
+              projectDescription: description
             })
           );
 
@@ -52,11 +56,14 @@ const onGetPackages$ = options =>
         outdated: () =>
           observer.next(
             setOutdatedSuccess({
-              outdated: packages
+              outdated: dataArray
             })
           )
       })('list')(command);
-    });
+    } catch (error) {
+      observer.error({ type: 'APP_ERROR' });
+    }
   });
+});
 
 export default onGetPackages$;

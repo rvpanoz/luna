@@ -8,32 +8,28 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import SystemIcon from '@material-ui/icons/InfoRounded';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 
+import MenuIcon from '@material-ui/icons/Menu';
+import SettingsIcon from '@material-ui/icons/Settings';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
 
 import SearchBox from 'components/common/SearchBox';
-import InstallFromSource from 'components/common/InstallFromSource';
+import { setMode } from 'models/common/actions';
 import { setActivePage } from 'models/ui/actions';
-import { installPackages } from 'models/packages/actions';
 
 import System from './System';
 import styles from './styles/appHeader';
 
 const mapState = ({
   npm: { env },
-  common: { onlineStatus, mode, directory },
+  common: { onlineStatus },
   ui: {
     activePage,
     loaders: {
@@ -44,22 +40,17 @@ const mapState = ({
   onlineStatus,
   activePage,
   loading,
-  env,
-  mode,
-  directory
+  env
 });
 
 const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [dialog, setDialog] = useState({ open: false });
-  const { activePage, loading, env, status, mode, directory } = useMappedState(
-    mapState
-  );
+  const { activePage, loading, env, status } = useMappedState(mapState);
 
   const dispatch = useDispatch();
 
   return (
-    <React.Fragment>
+    <section className={classes.root}>
       <AppBar color="primary" position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={8} alignItems="center">
@@ -91,7 +82,7 @@ const Header = ({ classes, onDrawerToggle }) => {
                   color="inherit"
                   onClick={e => setAnchorEl(e.currentTarget)}
                 >
-                  <SystemIcon />
+                  <SettingsIcon />
                 </IconButton>
               </Tooltip>
             </Grid>
@@ -113,15 +104,22 @@ const Header = ({ classes, onDrawerToggle }) => {
               </Typography>
             </Grid>
             {/* <Grid item>
-              <Tooltip title="Open install options">
+              <Tooltip title="Load global packages">
                 <Button
                   className={classes.button}
                   variant="outlined"
                   color="inherit"
                   size="small"
-                  onClick={() => setDialog({ open: true })}
+                  onClick={() =>
+                    dispatch(
+                      setMode({
+                        mode: 'global',
+                        directory: null
+                      })
+                    )
+                  }
                 >
-                  Install
+                  Global packages
                 </Button>
               </Tooltip>
             </Grid> */}
@@ -201,56 +199,7 @@ const Header = ({ classes, onDrawerToggle }) => {
           loading={loading}
         />
       </Popover>
-      {dialog && dialog.open && (
-        <Dialog open={dialog.open} aria-labelledby="install-from-source">
-          <DialogContent>
-            <InstallFromSource
-              mode={mode}
-              directory={directory}
-              close={() =>
-                setDialog({
-                  open: false,
-                  content: null
-                })
-              }
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() =>
-                setDialog({
-                  open: false,
-                  content: null
-                })
-              }
-              color="secondary"
-            >
-              Close
-            </Button>
-            <Button
-              color="primary"
-              onClick={() => {
-                const parameters = {
-                  ipcEvent: 'install',
-                  cmd: ['install'],
-                  packageJson: true,
-                  mode,
-                  directory
-                };
-
-                dispatch(installPackages(parameters));
-                setDialog({
-                  open: false,
-                  content: null
-                });
-              }}
-            >
-              Install
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-    </React.Fragment>
+    </section>
   );
 };
 
