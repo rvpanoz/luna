@@ -4,13 +4,11 @@ import { toggleLoader, clearSelected, setSnackbar } from 'models/ui/actions';
 import { removePackages, setPackagesStart } from 'models/packages/actions';
 import { clearRunningCommand } from 'models/npm/actions';
 
-const onNpmActions$ = ({ mode, directory }) =>
-  new Observable(observer => {
-    // remove listener
-    ipcRenderer.removeAllListeners(['action-close']);
+const onNpmActions$ = new Observable(observer => {
+  ipcRenderer.removeAllListeners(['action-close']);
 
-    // register listener
-    ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
+  ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
+    try {
       const [operation, argv] = options;
       const errorMessages = [];
 
@@ -51,17 +49,17 @@ const onNpmActions$ = ({ mode, directory }) =>
                 : cliMessage
             })
           );
-
-          observer.next(
-            toggleLoader({
-              loading: false,
-              message: null
-            })
-          );
-
-          observer.complete();
         }
+
+        return;
       }
+
+      observer.next(
+        toggleLoader({
+          loading: false,
+          message: null
+        })
+      );
 
       observer.next(
         setPackagesStart({
@@ -72,7 +70,10 @@ const onNpmActions$ = ({ mode, directory }) =>
           }
         })
       );
-    });
+    } catch (error) {
+      observer.error(error);
+    }
   });
+});
 
 export default onNpmActions$;
