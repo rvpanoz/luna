@@ -6,7 +6,10 @@ import { clearRunningCommand } from 'models/npm/actions';
 
 const onNpmActions$ = ({ mode, directory }) =>
   new Observable(observer => {
+    // remove listener
     ipcRenderer.removeAllListeners(['action-close']);
+
+    // register listener
     ipcRenderer.on('action-close', (event, output, cliMessage, options) => {
       const [operation, argv] = options;
       const errorMessages = [];
@@ -65,9 +68,7 @@ const onNpmActions$ = ({ mode, directory }) =>
           channel: 'ipc-event',
           options: {
             ipcEvent: 'get-packages',
-            cmd: ['outdated', 'list'],
-            mode,
-            directory
+            cmd: ['outdated', 'list']
           }
         })
       );

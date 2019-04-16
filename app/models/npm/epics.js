@@ -1,15 +1,35 @@
 import { pipe } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, catchError, switchMap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 
-import { toggleLoader } from 'models/ui/actions';
-import { runAudit } from 'models/npm/actions';
+import { toggleLoader, setSnackbar } from 'models/ui/actions';
+import { runAudit, npmToolsListener } from 'models/npm/actions';
+import { onNpmTools$ } from './listeners';
 
 const updateLoader = payload => ({
   type: toggleLoader.type,
   payload
 });
+
+const npmToolsListenerEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(npmToolsListener.type),
+    switchMap(() => {
+      const {
+        common: { mode, directory }
+      } = state$.value;
+
+      return onNpmTools$({ mode, directory });
+    }),
+    catchError(err =>
+      setSnackbar({
+        type: 'error',
+        open: true,
+        message: err
+      })
+    )
+  );
 
 const npmRunAuditEpic = pipe(
   ofType(runAudit.type),
@@ -23,4 +43,4 @@ const npmRunAuditEpic = pipe(
   })
 );
 
-export default combineEpics(npmRunAuditEpic);
+export default combineEpics(npmRunAuditEpic, npmToolsListenerEpic);

@@ -5,7 +5,7 @@
  */
 
 import { ipcRenderer } from 'electron';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { withErrorBoundary } from 'commons/hocs';
 import { WARNING_MESSAGES } from 'constants/AppConstants';
@@ -15,7 +15,6 @@ import { initActions, updateStatus } from 'models/common/actions';
 import { setUIException, setSnackbar } from 'models/ui/actions';
 
 import AppLayout from './AppLayout';
-import AppError from './AppError';
 
 import '../app.global.css';
 
@@ -25,7 +24,6 @@ const mapState = ({ ui: { uiException } }) => ({
 
 const App = () => {
   const dispatch = useDispatch();
-  const [npmError] = useState(null);
   const { uiException } = useMappedState(mapState);
 
   useEffect(() => {
@@ -77,15 +75,7 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <div id="app">
-      {npmError ? (
-        <AppError error={npmError} />
-      ) : !uiException ? (
-        <AppLayout app="Luna" />
-      ) : (
-        uiException
-      )}
-    </div>
+    <div id="app">{!uiException ? <AppLayout app="Luna" /> : uiException}</div>
   );
 };
 

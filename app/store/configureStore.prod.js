@@ -12,6 +12,7 @@ import { createEpicMiddleware } from 'redux-observable';
 import { epics as packagesEpics } from 'models/packages';
 import { epics as uiEpics } from 'models/ui';
 import { epics as npmEpics } from 'models/npm';
+import { epics as commonEpics } from 'models/common';
 import { epics as notificationsEpics } from 'models/notifications';
 
 // reducers
@@ -36,6 +37,7 @@ const configureStore = initialState => {
   epicMiddleware.run(packagesEpics);
   epicMiddleware.run(npmEpics);
   epicMiddleware.run(notificationsEpics);
+  epicMiddleware.run(commonEpics);
 
   return store;
 };
