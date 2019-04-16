@@ -1,11 +1,7 @@
-/**
- * Package details
- */
-
-/* eslint-disable */
+/* eslint-disable no-underscore-dangle */
 
 import { remote } from 'electron';
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { objectOf, string } from 'prop-types';
@@ -74,9 +70,8 @@ const mapState = ({
   fromSearch
 });
 
-const PackageDetails = ({ classes, group }) => {
+const PackageDetails = ({ classes }) => {
   const [expanded, expand] = useState(false);
-  const [activeGroup, setActiveGroup] = useState(null);
   const [dependencies, setDependencies] = useState([]);
   const [activePopper, setActivePopper] = useState({
     index: 0,
@@ -96,6 +91,11 @@ const PackageDetails = ({ classes, group }) => {
   } = useMappedState(mapState);
   const { name, version, description } = active || {};
 
+  const group =
+    mode === 'local'
+      ? packagesData.find(pkg => pkg.name === name).__group
+      : null;
+
   useEffect(() => {
     if (!active) {
       return;
@@ -113,13 +113,14 @@ const PackageDetails = ({ classes, group }) => {
     }
   }, [active]);
 
-  const renderActions = useCallback(() => {
+  const renderActions = () => {
     const renderSearchActions = () => (
-      <Tooltip title="install">
+      <Tooltip title="Install">
         <div>
           <IconButton
             disableRipple
-            onClick={e =>
+            color="primary"
+            onClick={() =>
               remote.dialog.showMessageBox(
                 remote.getCurrentWindow(),
                 {
@@ -130,11 +131,6 @@ const PackageDetails = ({ classes, group }) => {
                 },
                 btnIdx => {
                   if (Boolean(btnIdx) === true) {
-                    const { name } = active;
-                    const group =
-                      mode === 'local'
-                        ? packagesData.find(pkg => pkg.name === name).__group
-                        : null;
                     const pkgOptions = group
                       ? [PACKAGE_GROUPS[group]]
                       : ['save-prod'];
@@ -305,9 +301,9 @@ const PackageDetails = ({ classes, group }) => {
         </Hidden>
       </CardActions>
     );
-  }, [active, fromSearch, expanded]);
+  };
 
-  const renderList = useCallback((type, data) => (
+  const renderList = (type, data) => (
     <Paper className={classes.paper}>
       <div className={classes.header}>
         {type === 'version' && (
@@ -322,11 +318,14 @@ const PackageDetails = ({ classes, group }) => {
         <Typography className={classes.withPadding}>No data found</Typography>
       ) : (
         <List
-          dense={true}
+          dense
           style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 425 }}
         >
           {data.map((item, idx) => (
-            <ListItem key={`${type}-item-${idx}`} className={classes.listItem}>
+            <ListItem
+              key={`${type}-item-${idx + 1}`}
+              className={classes.listItem}
+            >
               <ListItemText
                 primary={
                   <Typography variant="subtitle2">
@@ -358,13 +357,6 @@ const PackageDetails = ({ classes, group }) => {
                             },
                             btnIdx => {
                               if (Boolean(btnIdx) === true) {
-                                const { name } = active;
-                                const group =
-                                  mode === 'local'
-                                    ? packagesData.find(
-                                        pkg => pkg.name === name
-                                      ).__group
-                                    : null;
                                 const pkgOptions = group
                                   ? [PACKAGE_GROUPS[group]]
                                   : ['save-prod'];
@@ -397,111 +389,104 @@ const PackageDetails = ({ classes, group }) => {
         </List>
       )}
     </Paper>
-  ));
+  );
 
-  const renderCard = useCallback(() => {
-    const group =
-      mode === 'local'
-        ? packagesData.find(pkg => pkg.name === active.name).__group
-        : null;
-
-    return (
-      <Grid container justify="space-around">
-        <Grid item md={10} lg={10} xl={10}>
-          <Transition>
-            <Card className={classes.card}>
-              <CardHeader
-                title={
-                  <Typography variant="h6">{`${name} v${version ||
-                    '0.0.0'}`}</Typography>
-                }
-                className={classes.cardHeader}
-                subheader={
-                  <React.Fragment>
-                    <Typography variant="caption">{`License: ${active.license ||
+  const renderCard = () => (
+    <Grid container justify="space-around">
+      <Grid item md={10} lg={10} xl={10}>
+        <Transition>
+          <Card className={classes.card}>
+            <CardHeader
+              title={
+                <Typography variant="h6">{`${name} v${version ||
+                  '0.0.0'}`}</Typography>
+              }
+              className={classes.cardHeader}
+              subheader={
+                <React.Fragment>
+                  <Typography variant="caption">{`License: ${active.license ||
+                    'N/A'}`}</Typography>
+                  {mode === 'local' && !fromSearch && (
+                    <Typography variant="caption">{`Group: ${group ||
                       'N/A'}`}</Typography>
-                    {mode === 'local' && !fromSearch && (
-                      <Typography variant="caption">{`Group: ${group ||
-                        'N/A'}`}</Typography>
-                    )}
-                  </React.Fragment>
-                }
-              />
-              <CardContent className={classes.cardContent}>
-                <Typography variant="body1">{description}</Typography>
-                <Divider className={classes.divider} light />
-                <Hidden mdDown>
-                  <Collapse in={expanded} timeout="auto" unmountOnExit>
-                    <PackageInfo active={active} dependencies={dependencies} />
-                  </Collapse>
-                </Hidden>
-                <Hidden lgUp>
-                  <PackageInfo active={active} short />
-                </Hidden>
-              </CardContent>
-              {renderActions(name, fromSearch)}
-            </Card>
-          </Transition>
-        </Grid>
-        <Grid item md={1} lg={1} xl={1}>
-          <Toolbar
-            disableGutters
-            variant="dense"
-            classes={{
-              root: classes.toolbar
-            }}
-          >
-            <Tooltip title="Clear active package">
-              <IconButton
-                color="secondary"
-                disableRipple
-                onClick={() => {
-                  setActivePopper({
-                    index: 0,
-                    anchorEl: null,
-                    open: false
-                  });
-                  dispatch(setActive({ active: null }));
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Package versions">
-              <IconButton
-                color="primary"
-                disableRipple
-                onClick={e =>
-                  setActivePopper({
-                    index: activePopper.index === 1 ? 0 : 1,
-                    anchorEl: e.currentTarget,
-                    open: activePopper.index !== 1
-                  })
-                }
-              >
-                <VersionsIcon />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Package dependencies">
-              <IconButton
-                color="primary"
-                disableRipple
-                onClick={e =>
-                  setActivePopper({
-                    index: activePopper.index === 2 ? 0 : 2,
-                    anchorEl: e.currentTarget,
-                    open: activePopper.index !== 2
-                  })
-                }
-              >
-                <DependenciesIcon />
-              </IconButton>
-            </Tooltip>
-          </Toolbar>
-        </Grid>
+                  )}
+                </React.Fragment>
+              }
+            />
+            <CardContent className={classes.cardContent}>
+              <Typography variant="body1">{description}</Typography>
+              <Divider className={classes.divider} light />
+              <Hidden mdDown>
+                <Collapse in={expanded} timeout="auto" unmountOnExit>
+                  <PackageInfo active={active} dependencies={dependencies} />
+                </Collapse>
+              </Hidden>
+              <Hidden lgUp>
+                <PackageInfo active={active} short />
+              </Hidden>
+            </CardContent>
+            {renderActions(name, fromSearch)}
+          </Card>
+        </Transition>
       </Grid>
-    );
-  }, [active, mode, expanded, activePopper]);
+      <Grid item md={1} lg={1} xl={1}>
+        <Toolbar
+          disableGutters
+          variant="dense"
+          classes={{
+            root: classes.toolbar
+          }}
+        >
+          <Tooltip title="Clear active package">
+            <IconButton
+              color="secondary"
+              disableRipple
+              onClick={() => {
+                setActivePopper({
+                  index: 0,
+                  anchorEl: null,
+                  open: false
+                });
+                dispatch(setActive({ active: null }));
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Package versions">
+            <IconButton
+              color="primary"
+              disableRipple
+              onClick={e =>
+                setActivePopper({
+                  index: activePopper.index === 1 ? 0 : 1,
+                  anchorEl: e.currentTarget,
+                  open: activePopper.index !== 1
+                })
+              }
+            >
+              <VersionsIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Package dependencies">
+            <IconButton
+              color="primary"
+              disableRipple
+              onClick={e =>
+                setActivePopper({
+                  index: activePopper.index === 2 ? 0 : 2,
+                  anchorEl: e.currentTarget,
+                  open: activePopper.index !== 2
+                })
+              }
+            >
+              <DependenciesIcon />
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
+      </Grid>
+    </Grid>
+  );
 
   return (
     <div className={classes.wrapper}>
@@ -534,6 +519,10 @@ const PackageDetails = ({ classes, group }) => {
       </Popper>
     </div>
   );
+};
+
+PackageDetails.defaultProps = {
+  group: null
 };
 
 PackageDetails.propTypes = {

@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { toggleLoader, setSnackbar } from 'models/ui/actions';
@@ -15,6 +13,8 @@ const onNpmTools$ = new Observable(observer => {
       audit: () => parseNpmAudit(cliResult)
     })(null)(tool);
 
+    console.log(content);
+
     observer.next(
       toggleLoader({
         loading: false,
@@ -26,7 +26,7 @@ const onNpmTools$ = new Observable(observer => {
       setSnackbar({
         open: true,
         type: 'info',
-        message: content
+        message: 'Audit completed'
       })
     );
   });

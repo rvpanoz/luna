@@ -303,7 +303,7 @@ const TableListToolbar = ({
       <Tooltip title="Install from package.json">
         <IconButton
           disableRipple
-          color="secondary"
+          color="primary"
           aria-label="install_packagejson"
           onClick={installPackageJson}
         >
