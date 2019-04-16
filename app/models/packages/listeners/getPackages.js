@@ -56,7 +56,14 @@ const onGetPackages$ = new Observable(observer => {
         outdated: () =>
           observer.next(
             setOutdatedSuccess({
-              outdated: dataArray
+              outdated: dataArray.map(arr => {
+                const [pkgName, details] = arr;
+
+                return {
+                  name: pkgName,
+                  ...details
+                };
+              })
             })
           )
       })('list')(command);
