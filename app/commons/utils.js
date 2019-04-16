@@ -191,6 +191,7 @@ export const parseDependencies = (response, mode, directory) => {
 
     const noDependencies = dataArray.every(dep => {
       const [name, details] = dep;
+
       return typeof details !== 'object';
     });
 
@@ -204,7 +205,7 @@ export const parseDependencies = (response, mode, directory) => {
 
       let group;
 
-      if (mode && mode === 'local') {
+      if (mode === 'local') {
         const packageJSON = readPackageJson(directory);
 
         if (!Boolean(packageJSON)) {

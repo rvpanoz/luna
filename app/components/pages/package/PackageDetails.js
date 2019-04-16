@@ -111,7 +111,7 @@ const PackageDetails = ({ classes, group }) => {
 
       setDependencies(dependenciesToArray);
     }
-  }, [active, mode]);
+  }, [active]);
 
   const renderActions = useCallback(() => {
     const renderSearchActions = () => (

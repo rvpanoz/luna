@@ -108,14 +108,14 @@ const Packages = ({ classes }) => {
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
-  const parameters = {
-    ipcEvent: 'get-packages',
-    cmd: ['outdated', 'list'],
-    mode,
-    directory
-  };
+  const fetchPackages = useCallback(() => {
+    const parameters = {
+      ipcEvent: 'get-packages',
+      cmd: ['outdated', 'list'],
+      mode,
+      directory
+    };
 
-  const fetchPackages = () => {
     dispatch({
       type: setActivePage.type,
       payload: {
@@ -132,7 +132,7 @@ const Packages = ({ classes }) => {
         }
       })
     );
-  };
+  }, [mode, directory, dispatch]);
 
   const switchMode = (appMode, appDirectory) => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
@@ -176,7 +176,7 @@ const Packages = ({ classes }) => {
     }
 
     fetchPackages();
-  }, [mode, directory]);
+  }, [mode, directory, fetchPackages, paused]);
 
   // setup packages with filters
   const [filteredPackages] = useFilters(packagesData, filters);

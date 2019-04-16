@@ -127,6 +127,7 @@ const handlers = {
   [setMode.type]: (state, { payload: { mode, directory } }) =>
     merge(state, {
       activePage: 'packages',
+      paused: false,
       mode,
       directory
     }),

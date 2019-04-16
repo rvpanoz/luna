@@ -27,8 +27,8 @@ import {
   ToolsTab
 } from 'components/pages/navigator/tabs';
 import { setActivePage } from 'models/ui/actions';
-import { runTool } from 'models/packages/actions';
 import { setMode } from 'models/common/actions';
+import { runAudit } from 'models/npm/actions';
 
 import styles from './styles/navigator';
 
@@ -77,19 +77,6 @@ const Navigator = ({
 
     return () => ipcRenderer.removeAllListeners('loaded-packages-close');
   }, []);
-
-  const runNpmTool = (toolName, options) => {
-    dispatch(
-      runTool({
-        channel: 'ipc-event',
-        ipcEvent: toolName,
-        cmd: [toolName],
-        options,
-        mode,
-        directory: fullDirectory
-      })
-    );
-  };
 
   const openPackage = () =>
     remote.dialog.showOpenDialog(
@@ -206,7 +193,16 @@ const Navigator = ({
                     mode,
                     primaryText: 'npm audit',
                     secondaryText: 'Run npm audit',
-                    handler: () => runNpmTool('audit')
+                    handler: () =>
+                      dispatch(
+                        runAudit({
+                          channel: 'ipc-event',
+                          ipcEvent: 'audit',
+                          cmd: ['audit'],
+                          mode,
+                          directory: fullDirectory
+                        })
+                      )
                   }
                 ]}
                 nodata={packagesData && packagesData.length === 0}

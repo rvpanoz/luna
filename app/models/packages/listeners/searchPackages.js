@@ -13,7 +13,7 @@ const onSearchPackages$ = new Observable(observer => {
 
       observer.next(
         mapPackages({
-          dependencies: packages,
+          data: packages,
           fromSearch: true
         })
       );

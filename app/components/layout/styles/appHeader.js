@@ -4,6 +4,9 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 const lightColor = 'rgba(255, 255, 255, 0.7)';
 
 const styles = theme => ({
+  root: {
+    width: '100%'
+  },
   secondaryBar: {
     zIndex: 0
   },
