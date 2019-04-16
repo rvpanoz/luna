@@ -5,10 +5,12 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'redux-react-hook';
 
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/common/SnackbarContent';
+import InputBase from '@material-ui/core/InputBase';
+
+import SearchIcon from '@material-ui/icons/Search';
+import ClearIcon from '@material-ui/icons/Clear';
 
 import { setActivePage } from 'models/ui/actions';
 import { setPackagesStart } from 'models/packages/actions';
@@ -16,10 +18,21 @@ import { setPackagesStart } from 'models/packages/actions';
 import styles from './styles/searchBox';
 
 const SearchBox = ({ classes, disabled, onlineStatus }) => {
-  const rootEl = useRef(null);
+  const searchInputEl = useRef(null);
   const dispatch = useDispatch();
   const [packageName, setPackageName] = useState('');
   const [snackbarOpen, toggleSnackbar] = useState(false);
+
+  const handleClear = () => {
+    const { current } = searchInputEl;
+
+    if (current) {
+      current.value = '';
+      setPackageName(current.value);
+    }
+
+    return false;
+  };
 
   const handleSearch = () => {
     toggleSnackbar(false);
@@ -71,7 +84,8 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
   };
 
   useEffect(() => {
-    const { current } = rootEl;
+    const { current } = searchInputEl;
+
     if (current) {
       current.addEventListener('keyup', onKeyUp, () => {});
 
@@ -82,9 +96,16 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
   return (
     <React.Fragment>
       <div className={classes.search}>
-        <a href="#" className={classes.searchIcon} onClick={handleSearch}>
-          <SearchIcon />
-        </a>
+        {packageName && packageName.length ? (
+          <a href="#" className={classes.searchIcon} onClick={handleClear}>
+            <ClearIcon />
+          </a>
+        ) : (
+          <a href="#" className={classes.searchIcon} onClick={handleSearch}>
+            <SearchIcon />
+          </a>
+        )}
+
         <InputBase
           disabled={disabled || onlineStatus === 'offline'}
           placeholder="Search npm registry"
@@ -93,7 +114,7 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
             input: classes.inputInput
           }}
           inputProps={{
-            ref: rootEl
+            ref: searchInputEl
           }}
         />
       </div>

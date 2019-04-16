@@ -10,6 +10,7 @@ const npmCommand = ActionCreator('NPM_COMMAND');
 const setEnv = ActionCreator('SET_ENV');
 const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const clearRunningCommand = ActionCreator('CLEAR_RUNNING_COMMAND');
+const npmToolsListener = ActionCreator('REGISTER_LISTENER_TOOLS');
 
 const runAudit = ActionCreator('RUN_AUDIT');
 
@@ -22,5 +23,6 @@ export {
   npmCommand,
   clearRunningCommand,
   setRunningCommand,
-  runAudit
+  runAudit,
+  npmToolsListener
 };

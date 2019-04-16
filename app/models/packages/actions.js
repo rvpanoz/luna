@@ -21,8 +21,6 @@ const searchPackagesListener = ActionCreator('REGISTER_LISTENER_SEARCH');
 const viewPackageListener = ActionCreator('REGISTER_LISTENER_PACKAGE');
 const npmActionsListener = ActionCreator('REGISTER_LISTENER_ACTION');
 
-const runTool = ActionCreator('RUN_TOOL');
-
 export {
   mapPackages,
   installPackages,
@@ -34,7 +32,6 @@ export {
   setPackagesSuccess,
   setPackagesError,
   setOutdatedSuccess,
-  runTool,
   removePackages,
   viewPackage,
   npmActionsListener,
