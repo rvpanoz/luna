@@ -40,7 +40,7 @@ before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
 
 cache:
-  yarn: true
+  npm: true
   directories:
     - node_modules
     - $(npm config get prefix)/lib/node_modules
@@ -52,7 +52,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export CXX="g++-8"; fi
 
 install:
-  - yarn --ignore-engines
+  - npm i --ignore-engines
   # On Linux, initialize "virtual display". See before_script
   - |
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then
@@ -75,10 +75,9 @@ before_script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sleep 3; fi
 
 script:
-  - yarn package-ci
-  - yarn lint
-  - yarn flow
-  # HACK: Temporarily ignore `yarn test` on linux
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then yarn test; fi
-  - yarn build-e2e
-  - yarn test-e2e
+  - npm run package-ci
+  - npm run lint
+  # HACK: Temporarily ignore `npm run test` on linux
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run test; fi
+  - npm run build-e2e
+  - npm run test-e2e
