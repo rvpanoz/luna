@@ -7,10 +7,8 @@ import { switchcase, objectEntries, isJson } from 'commons/utils';
 import { mapPackages, setOutdatedSuccess } from '../actions';
 
 const onGetPackages$ = new Observable(observer => {
-  // remove listener
   ipcRenderer.removeAllListeners(['get-packages-close']);
 
-  // register listener
   ipcRenderer.on('get-packages-close', (event, status, cmd, response) => {
     if (!response || !isJson(response)) {
       return;
@@ -68,7 +66,7 @@ const onGetPackages$ = new Observable(observer => {
           )
       })('list')(command);
     } catch (error) {
-      observer.error({ type: 'APP_ERROR' });
+      observer.error(error);
     }
   });
 });

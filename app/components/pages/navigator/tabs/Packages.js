@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -14,10 +12,10 @@ import styles from './styles/packages';
 
 const PackagesTab = ({ classes, items }) => (
   <div className={classes.tab}>
-    <List dense={true}>
+    <List>
       {items &&
-        items.map((item, idx) => (
-          <ListItem key={`pjitem-${idx}`} className={classes.listItem}>
+        items.map(item => (
+          <ListItem key={`packages-${item.name}`} className={classes.listItem}>
             <ListItemText
               primary={
                 <Typography className={classes.title} component="p">
@@ -37,7 +35,7 @@ const PackagesTab = ({ classes, items }) => (
 );
 
 PackagesTab.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 

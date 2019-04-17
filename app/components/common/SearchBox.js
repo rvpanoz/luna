@@ -12,7 +12,7 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 
-import { setActivePage } from 'models/ui/actions';
+import { setActivePage, clearFilters } from 'models/ui/actions';
 import { setPackagesStart } from 'models/packages/actions';
 
 import styles from './styles/searchBox';
@@ -46,6 +46,8 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
       cmd: ['search'],
       pkgName: packageName
     };
+
+    dispatch(clearFilters());
 
     dispatch({
       type: setActivePage.type,

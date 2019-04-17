@@ -1,5 +1,5 @@
-import { lighten } from '@material-ui/core/styles/colorManipulator';
-import { defaultFont, flexContainer } from 'styles/variables';
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
+import { defaultFont, flexContainer, grayColor } from 'styles/variables';
 
 const styles = theme => ({
   root: {
@@ -17,6 +17,7 @@ const styles = theme => ({
   },
   title: {
     display: 'flex',
+    color: darken(grayColor, 0.2),
     flexDirection: 'column',
     justifyContent: 'flex-start'
   },

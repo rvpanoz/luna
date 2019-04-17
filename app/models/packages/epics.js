@@ -1,11 +1,8 @@
+/* eslint-disable no-underscore-dangle */
+
 import { pipe } from 'rxjs';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
-import {
-  readPackageJson,
-  objectEntries,
-  isPackageOutdated
-} from 'commons/utils';
-import { pick } from 'ramda';
+import { readPackageJson, isPackageOutdated } from 'commons/utils';
 
 import {
   map,
@@ -321,37 +318,29 @@ const getPackagesListenerEpic = pipe(
   )
 );
 
-const searchPackagesListenerEpic = action$ =>
-  action$.pipe(
-    ofType(searchPackagesListener.type),
-    switchMap(() => onSearchPackages$),
-    catchError(err =>
-      setSnackbar({
-        type: 'error',
-        open: true,
-        message: err
-      })
-    )
-  );
+const searchPackagesListenerEpic = pipe(
+  ofType(searchPackagesListener.type),
+  switchMap(() => onSearchPackages$),
+  catchError(err =>
+    setSnackbar({
+      type: 'error',
+      open: true,
+      message: err
+    })
+  )
+);
 
-const npmActionsListenerEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(npmActionsListener.type),
-    switchMap(() => {
-      const {
-        common: { mode, directory }
-      } = state$.value;
-
-      return onNpmActions$({ mode, directory });
-    }),
-    catchError(err =>
-      setSnackbar({
-        type: 'error',
-        open: true,
-        message: err
-      })
-    )
-  );
+const npmActionsListenerEpic = pipe(
+  ofType(npmActionsListener.type),
+  switchMap(() => onNpmActions$),
+  catchError(err =>
+    setSnackbar({
+      type: 'error',
+      open: true,
+      message: err
+    })
+  )
+);
 
 const viewPackageListenerEpic = action$ =>
   action$.pipe(

@@ -4,7 +4,6 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
 import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,11 +16,11 @@ import Popover from '@material-ui/core/Popover';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
+import SecurityIcon from '@material-ui/icons/SecurityOutlined';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
 
 import SearchBox from 'components/common/SearchBox';
-import { setMode } from 'models/common/actions';
 import { setActivePage } from 'models/ui/actions';
 
 import System from './System';
@@ -103,26 +102,6 @@ const Header = ({ classes, onDrawerToggle }) => {
                 Dashboard
               </Typography>
             </Grid>
-            {/* <Grid item>
-              <Tooltip title="Load global packages">
-                <Button
-                  className={classes.button}
-                  variant="outlined"
-                  color="inherit"
-                  size="small"
-                  onClick={() =>
-                    dispatch(
-                      setMode({
-                        mode: 'global',
-                        directory: null
-                      })
-                    )
-                  }
-                >
-                  Global packages
-                </Button>
-              </Tooltip>
-            </Grid> */}
           </Grid>
         </Toolbar>
       </AppBar>
@@ -161,6 +140,16 @@ const Header = ({ classes, onDrawerToggle }) => {
             value="problems"
             disabled={loading}
             icon={<ErrorIcon color="inherit" />}
+            classes={{
+              label: classes.tabLabel
+            }}
+          />
+          <Tab
+            textColor="inherit"
+            label="Audit"
+            value="audit"
+            disabled={loading}
+            icon={<SecurityIcon color="inherit" />}
             classes={{
               label: classes.tabLabel
             }}

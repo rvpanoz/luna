@@ -8,13 +8,10 @@ const mk = {
   config: {
     defaultSettings: {
       defaultManager: 'npm',
-      registry: 'https://registry.npmjs.org/',
-      startMinimized: false,
-      fetchGithub: false,
-      showDetails: false
+      registry: 'https://registry.npmjs.org/'
     }
   },
-  _cnc(...args) {
+  cnc(...args) {
     let txt = '';
     const values = Object.values(args);
 
@@ -51,7 +48,7 @@ const mk = {
     const fs = require('fs');
 
     // eslint-disable-next-line no-underscore-dangle
-    const txt = this._cnc(args);
+    const txt = this.cnc(args);
 
     fs.writeFileSync('debug.log', `${txt}\n`, { flag: 'a' });
   }
