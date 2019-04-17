@@ -2,6 +2,6 @@
 
 import ProjectTab from './Project';
 import PackagesTab from './Packages';
-import ToolsTab from './Tools';
+import ActionsTab from './Actions';
 
-export { ProjectTab, PackagesTab, ToolsTab };
+export { ProjectTab, PackagesTab, ActionsTab };

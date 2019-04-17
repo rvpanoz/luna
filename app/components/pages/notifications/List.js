@@ -134,7 +134,7 @@ const NotificationsList = ({ classes, mode, directory }) => {
       <div className={classes.container}>
         <div className={classes.flexContainer}>
           <div className={classes.header}>
-            <Typography variant="h6">
+            <Typography variant="h6" className={classes.title}>
               {`Problems ${notifications ? notifications.length : 0}`}
             </Typography>
           </div>

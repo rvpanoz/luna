@@ -30,7 +30,7 @@ node_modules
 # OSX
 .DS_Store
 
-# App packaged
+# App dist packaged
 release
 app/main.prod.js
 app/main.prod.js.map

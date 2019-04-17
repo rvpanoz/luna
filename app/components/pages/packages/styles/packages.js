@@ -65,6 +65,7 @@ const styles = theme => ({
   },
   tableCell: {
     ...defaultFont,
+    fontSize: '1rem',
     textAlign: 'center',
     '& p': {
       overflowWrap: 'break-word'
@@ -109,6 +110,8 @@ const styles = theme => ({
     color: darken(theme.palette.secondary.light, 0.1)
   },
   name: {
+    ...defaultFont,
+    fontSize: '1rem',
     [theme.breakpoints.up('md')]: {
       maxWidth: 250
     },
