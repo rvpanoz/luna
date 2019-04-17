@@ -10,6 +10,7 @@ import semver from 'semver';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -97,13 +98,17 @@ const NotificationsItem = ({
         </ListItemAvatar>
         <ListItemText primary={required} secondary={requiredBy} />
         <ListItemSecondaryAction>
-          <IconButton
-            title="Install package"
-            aria-label="install-notification"
-            onClick={() => handleInstall(packageName, true)}
+          <Tooltip
+            title={`Install ${packageName}`}
+            key={`${packageName}-${packageVersion}`}
           >
-            <AddIcon color="primary" />
-          </IconButton>
+            <IconButton
+              aria-label="install-notification"
+              onClick={() => handleInstall(packageName, true)}
+            >
+              <AddIcon color="primary" />
+            </IconButton>
+          </Tooltip>
         </ListItemSecondaryAction>
       </ListItem>
     </section>
@@ -129,7 +134,7 @@ const NotificationsList = ({ classes, mode, directory }) => {
       <div className={classes.container}>
         <div className={classes.flexContainer}>
           <div className={classes.header}>
-            <Typography variant="h6">
+            <Typography variant="h6" className={classes.title}>
               {`Problems ${notifications ? notifications.length : 0}`}
             </Typography>
           </div>

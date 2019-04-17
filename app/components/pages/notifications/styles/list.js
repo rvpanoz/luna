@@ -1,4 +1,5 @@
-import { defaultFont, flexContainer } from 'styles/variables';
+import { defaultFont, flexContainer, grayColor } from 'styles/variables';
+import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   paper: {
@@ -8,6 +9,12 @@ const styles = theme => ({
   },
   container: {
     width: '100%'
+  },
+  title: {
+    display: 'flex',
+    color: darken(grayColor, 0.2),
+    flexDirection: 'column',
+    justifyContent: 'flex-start'
   },
   list: {
     whiteSpace: 'nowrap',

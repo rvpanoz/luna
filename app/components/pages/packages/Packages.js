@@ -210,7 +210,7 @@ const Packages = ({ classes }) => {
               <TableToolbar
                 title="Packages"
                 manager={manager}
-                listDataPackages={listDataPackages}
+                total={(packagesData && packagesData.length) || 0}
                 mode={mode}
                 directory={directory}
                 selected={selected}

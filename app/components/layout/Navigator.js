@@ -24,7 +24,7 @@ import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';
 import {
   ProjectTab,
   PackagesTab,
-  ToolsTab
+  ActionsTab
 } from 'components/pages/navigator/tabs';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
@@ -187,9 +187,10 @@ const Navigator = ({
                 ]}
                 loading={loading}
               />
-              <ToolsTab
+              <ActionsTab
                 items={[
                   {
+                    name: 'audit',
                     mode,
                     primaryText: 'npm audit',
                     secondaryText: 'Run npm audit',

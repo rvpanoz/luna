@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable react/require-default-props */
 
 import { remote } from 'electron';
 import React from 'react';
@@ -16,12 +16,39 @@ import Typography from '@material-ui/core/Typography';
 
 import styles from './styles/tools';
 
-const ToolsTab = ({ classes, items, nodata, mode }) => (
+const renderAction = (classes, nodata) => (
+  <ListItem key="install_packagejson_all" className={classes.listItem}>
+    <ListItemText
+      primary={<Typography className={classes.label}>Install</Typography>}
+      secondary={
+        <Typography className={classes.secondaryText}>
+          Install all dependencies from a package.json file
+        </Typography>
+      }
+    />
+    <ListItemSecondaryAction>
+      <Tooltip title="Install packages">
+        <div>
+          <IconButton
+            aria-label="action_install"
+            disabled={nodata}
+            onClick={() => console.log(1)}
+          >
+            <ArrowRightIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
+    </ListItemSecondaryAction>
+  </ListItem>
+);
+
+const ActionsTab = ({ classes, items, nodata, mode }) => (
   <div className={classes.tab}>
-    <List dense={true}>
+    <List dense>
+      {renderAction(classes, nodata)}
       {items &&
-        items.map((item, idx) => (
-          <ListItem key={`tooitem-${idx}`} className={classes.listItem}>
+        items.map(item => (
+          <ListItem key={`action-${item.name}`} className={classes.listItem}>
             <ListItemText
               primary={
                 <Typography className={classes.label}>
@@ -70,11 +97,11 @@ const ToolsTab = ({ classes, items, nodata, mode }) => (
   </div>
 );
 
-ToolsTab.propTypes = {
-  classes: PropTypes.object.isRequired,
+ActionsTab.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   items: PropTypes.arrayOf(PropTypes.object),
   mode: PropTypes.string,
   nodata: PropTypes.bool
 };
 
-export default withStyles(styles)(ToolsTab);
+export default withStyles(styles)(ActionsTab);

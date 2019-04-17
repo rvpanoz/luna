@@ -16,6 +16,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
+import { Audit } from 'components/pages/npm/';
 import { Packages } from 'components/pages/packages';
 import { Notifications } from 'components/pages/notifications';
 import { setSnackbar } from 'models/ui/actions';
@@ -98,7 +99,8 @@ const AppLayout = ({ classes }) => {
               packages: () => <Packages />,
               problems: () => (
                 <Notifications mode={mode} directory={directory} />
-              )
+              ),
+              audit: () => <Audit mode={mode} directory={directory} />
             })(<Packages />)(activePage)}
           </main>
         </div>
