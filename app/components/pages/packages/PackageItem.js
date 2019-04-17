@@ -34,7 +34,7 @@ const PackageItem = ({
   inOperation
 }) => {
   const rowRef = useRef();
-
+  // console.log(name, latest, fromSearch, group, isOutdated, version);
   return (
     <TableRow
       key={`pkg-${name}`}
@@ -77,7 +77,7 @@ const PackageItem = ({
               <ErrorIcon className={classes.extraneous} />
             </Tooltip>
           )}
-
+          {/* TODO: extraneous pkgs - UI */}
           {missing || peerMissing ? (
             <div className={cn(classes.flexContainer)}>
               <Tooltip title="package is missing or has peer dependencies missing">

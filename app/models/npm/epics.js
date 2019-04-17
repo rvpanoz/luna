@@ -12,24 +12,17 @@ const updateLoader = payload => ({
   payload
 });
 
-const npmToolsListenerEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(npmToolsListener.type),
-    switchMap(() => {
-      const {
-        common: { mode, directory }
-      } = state$.value;
-
-      return onNpmTools$({ mode, directory });
-    }),
-    catchError(err =>
-      setSnackbar({
-        type: 'error',
-        open: true,
-        message: err
-      })
-    )
-  );
+const npmToolsListenerEpic = pipe(
+  ofType(npmToolsListener.type),
+  switchMap(() => onNpmTools$),
+  catchError(err =>
+    setSnackbar({
+      type: 'error',
+      open: true,
+      message: err
+    })
+  )
+);
 
 const npmRunAuditEpic = pipe(
   ofType(runAudit.type),

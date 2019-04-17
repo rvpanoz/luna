@@ -6,23 +6,28 @@ import { mapPackages } from '../actions';
 
 const onSearchPackages$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['search-packages-close']);
+
   ipcRenderer.on(
     'search-packages-close',
     (event, status, commandArgs, data) => {
-      const [packages] = parseFromSearch(data) || [];
+      try {
+        const [packages] = parseFromSearch(data) || [];
 
-      observer.next(
-        mapPackages({
-          data: packages,
-          fromSearch: true
-        })
-      );
+        observer.next(
+          mapPackages({
+            data: packages,
+            fromSearch: true
+          })
+        );
 
-      observer.next(
-        toggleLoader({
-          loading: false
-        })
-      );
+        observer.next(
+          toggleLoader({
+            loading: false
+          })
+        );
+      } catch (error) {
+        observer.error(error);
+      }
     }
   );
 });

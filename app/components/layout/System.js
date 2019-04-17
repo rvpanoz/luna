@@ -12,7 +12,7 @@ const Settings = ({ classes, items }) => (
   <section className={classes.root}>
     <List dense>
       {items.map((item, idx) => (
-        <ListItem key={`settings-item-${idx}`} className={classes.listItem}>
+        <ListItem key={`settings-item-${idx + 1}`} className={classes.listItem}>
           <ListItemText
             primary={
               <Typography variant="subtitle2">{item.primaryText}</Typography>
@@ -30,7 +30,7 @@ const Settings = ({ classes, items }) => (
 );
 
 Settings.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 

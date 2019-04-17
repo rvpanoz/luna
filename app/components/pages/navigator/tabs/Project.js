@@ -1,4 +1,4 @@
-/* eslint-disable */
+/* eslint-disable react/require-default-props */
 
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -12,14 +12,12 @@ import Typography from '@material-ui/core/Typography';
 import AppLoader from 'components/common/AppLoader';
 import styles from './styles/project';
 
-const key = 'project-tab';
-
 const ProjectTab = ({ classes, items, loading }) => (
   <div className={classes.tab} style={{ minHeight: 250 }}>
     <AppLoader loading={loading} relative>
-      <List dense={true}>
-        {items.map((item, idx) => (
-          <ListItem key={`${key}item-${idx}`} className={classes.listItem}>
+      <List>
+        {items.map(item => (
+          <ListItem key={`${item.name}`} className={classes.listItem}>
             <ListItemText
               primary={
                 <Typography className={classes.label} component="p">
@@ -43,7 +41,7 @@ const ProjectTab = ({ classes, items, loading }) => (
 );
 
 ProjectTab.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   loading: PropTypes.bool
 };

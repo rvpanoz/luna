@@ -28,8 +28,8 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import UpdateIcon from '@material-ui/icons/Update';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-import LoadIcon from '@material-ui/icons/Archive';
-import PublicIcon from '@material-ui/icons/BallotOutlined';
+import LoadIcon from '@material-ui/icons/ArchiveOutlined';
+import SwitchIcon from '@material-ui/icons/LoopOutlined';
 
 import { switchcase } from 'commons/utils';
 import { navigatorParameters } from 'commons/parameters';
@@ -59,7 +59,8 @@ const TableListToolbar = ({
   packagesInstallOptions,
   setFilteredByNamePackages,
   switchMode,
-  filteredByNamePackages
+  filteredByNamePackages,
+  total
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
@@ -147,14 +148,6 @@ const TableListToolbar = ({
       navigatorParameters,
       filePath => (filePath ? switchMode('local', filePath.join('')) : null)
     );
-
-  const installPackageJson = () => {
-    remote.dialog.showOpenDialog(
-      remote.getCurrentWindow(),
-      navigatorParameters,
-      filePath => (filePath ? console.log(filePath) : null)
-    );
-  };
 
   const renderAction = action => {
     const hasNpmSelected = selected && selected.indexOf('npm') > -1;
@@ -300,18 +293,9 @@ const TableListToolbar = ({
 
   const renderToolbarActions = () => (
     <React.Fragment>
-      <Tooltip title="Install from package.json">
-        <IconButton
-          disableRipple
-          color="secondary"
-          aria-label="install_packagejson"
-          onClick={installPackageJson}
-        >
-          <AddIcon />
-        </IconButton>
-      </Tooltip>
       <Tooltip title="Open package.json">
         <IconButton
+          color="primary"
           disableRipple
           aria-label="open_package"
           onClick={openPackage}
@@ -327,18 +311,7 @@ const TableListToolbar = ({
             aria-label="show_globals"
             onClick={() => switchMode('global', null)}
           >
-            <PublicIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
-      <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
-        <div>
-          <IconButton
-            disableRipple
-            aria-label="back_reload"
-            onClick={() => reload()}
-          >
-            <RefreshIcon />
+            <SwitchIcon />
           </IconButton>
         </div>
       </Tooltip>
@@ -356,6 +329,17 @@ const TableListToolbar = ({
           </div>
         </Tooltip>
       )}
+      <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
+        <div>
+          <IconButton
+            disableRipple
+            aria-label="back_reload"
+            onClick={() => reload()}
+          >
+            <RefreshIcon />
+          </IconButton>
+        </div>
+      </Tooltip>
     </React.Fragment>
   );
 
@@ -376,9 +360,9 @@ const TableListToolbar = ({
         })}
       >
         <div className={classes.header}>
-          <Typography variant="h6">
+          <Typography variant="h6" className={classes.title}>
             {selected && selected.length === 0
-              ? title
+              ? `${title} ${total}`
               : `${selected.length} selected`}
           </Typography>
         </div>
@@ -464,6 +448,7 @@ TableListToolbar.propTypes = {
   directory: PropTypes.string,
   filters: PropTypes.arrayOf(PropTypes.object),
   fromSearch: PropTypes.bool,
+  total: PropTypes.number,
   scrollWrapper: PropTypes.func,
   outdated: PropTypes.arrayOf(PropTypes.object),
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
