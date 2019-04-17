@@ -92,7 +92,7 @@ const PackageDetails = ({ classes }) => {
   const { name, version, description } = active || {};
 
   const group =
-    mode === 'local'
+    mode === 'local' && active
       ? packagesData.find(pkg => pkg.name === name).__group
       : null;
 
