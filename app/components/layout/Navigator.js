@@ -138,26 +138,23 @@ const Navigator = ({
               <ProjectTab
                 items={[
                   {
-                    primaryText: loading
-                      ? 'loading..'
-                      : mode === 'local' && name
-                      ? `${name} v${version || DEFAULT_VERSION}`
-                      : DEFAULT_MODE,
+                    name: 'mode',
+                    primaryText:
+                      mode === 'local' && name
+                        ? `${name} v${version || DEFAULT_VERSION}`
+                        : DEFAULT_MODE,
                     secondaryText: `Last updated: ${lastUpdatedAt}`,
                     caption: true
                   },
                   {
+                    name: 'directory',
                     caption: true,
-                    primaryText: loading
-                      ? 'loading..'
-                      : mode === 'local' && directory
-                      ? 'Working directory'
-                      : null,
-                    secondaryText: loading
-                      ? 'loading..'
-                      : mode === 'local' && directory
-                      ? directory
-                      : null
+                    primaryText:
+                      mode === 'local' && directory
+                        ? 'Working directory'
+                        : null,
+                    secondaryText:
+                      mode === 'local' && directory ? directory : null
                   }
                 ]}
                 metadata={lastUpdatedAt}
@@ -166,12 +163,14 @@ const Navigator = ({
               <PackagesTab
                 items={[
                   {
+                    name: 'total-packages',
                     primaryText: 'Total',
                     secondaryText: (packagesData && packagesData.length) || 0,
                     color: 'secondary',
                     primary: true
                   },
                   {
+                    name: 'outdated-packages',
                     primaryText: 'Outdated',
                     secondaryText:
                       (packagesOutdated && packagesOutdated.length) || 0,
@@ -179,6 +178,7 @@ const Navigator = ({
                     warning: true
                   },
                   {
+                    name: 'problems-packages',
                     primaryText: 'Problems',
                     secondaryText: (notifications && notifications.length) || 0,
                     color: 'error',
@@ -193,7 +193,7 @@ const Navigator = ({
                     name: 'audit',
                     mode,
                     primaryText: 'npm audit',
-                    secondaryText: 'Run npm audit',
+                    secondaryText: 'Scan project for vulnerabilities',
                     handler: () =>
                       dispatch(
                         runAudit({

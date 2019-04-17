@@ -19,15 +19,15 @@ import styles from './styles/tools';
 const renderAction = (classes, nodata) => (
   <ListItem key="install_packagejson_all" className={classes.listItem}>
     <ListItemText
-      primary={<Typography className={classes.label}>Install</Typography>}
+      primary={<Typography className={classes.label}>npm install</Typography>}
       secondary={
         <Typography className={classes.secondaryText}>
-          Install all dependencies from a package.json file
+          Install from package.json
         </Typography>
       }
     />
     <ListItemSecondaryAction>
-      <Tooltip title="Install packages">
+      <Tooltip title="Select package.json">
         <div>
           <IconButton
             aria-label="action_install"
