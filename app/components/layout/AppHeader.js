@@ -13,6 +13,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
+import Button from '@material-ui/core/Button';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -101,6 +102,22 @@ const Header = ({ classes, onDrawerToggle }) => {
               <Typography color="inherit" variant="h5">
                 Dashboard
               </Typography>
+            </Grid>
+            <Grid item>
+              <Tooltip title="Create package.json">
+                <div>
+                  <Button
+                    className={classes.button}
+                    color="inherit"
+                    variant="outlined"
+                    color="inherit"
+                    size="small"
+                    onClick={() => console.log('ok..')}
+                  >
+                    Create
+                  </Button>
+                </div>
+              </Tooltip>
             </Grid>
           </Grid>
         </Toolbar>
