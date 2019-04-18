@@ -22,7 +22,7 @@ const initialState = {
     operationCommand: null
   },
   ui: {
-    paused: false,
+    paused: true,
     activePage: 'packages',
     commandsErrors: [],
     filtering: {

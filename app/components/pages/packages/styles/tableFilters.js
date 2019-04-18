@@ -1,4 +1,5 @@
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import { defaultFont } from 'styles/variables';
 
 const styles = theme => ({
   root: {
@@ -53,12 +54,7 @@ const styles = theme => ({
     lineHeight: '1em'
   },
   inputInput: {
-    color: '#001',
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 5,
-    width: 150
+    ...defaultFont
   }
 });
 
