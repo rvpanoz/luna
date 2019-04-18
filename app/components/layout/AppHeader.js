@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
+import { ipcRenderer, remote } from 'electron';
 
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
@@ -14,12 +15,22 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 import SecurityIcon from '@material-ui/icons/SecurityOutlined';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
+
+import { directoryParameters } from 'commons/parameters';
+import InitForm from 'components/common/InitForm';
 
 import SearchBox from 'components/common/SearchBox';
 import { setActivePage } from 'models/ui/actions';
@@ -45,9 +56,27 @@ const mapState = ({
 
 const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [initFlowDialog, setInitFlowDialog] = useState({
+    open: false,
+    directory: null
+  });
   const { activePage, loading, env, status } = useMappedState(mapState);
 
   const dispatch = useDispatch();
+
+  const startInitFlow = () =>
+    remote.dialog.showOpenDialog(
+      remote.getCurrentWindow(),
+      directoryParameters,
+      filePath =>
+        setInitFlowDialog({
+          open: true,
+          directory: filePath
+        })
+    );
+
+  // TODO: implementation
+  const npmInit = () => {};
 
   return (
     <section className={classes.root}>
@@ -110,9 +139,8 @@ const Header = ({ classes, onDrawerToggle }) => {
                     className={classes.button}
                     color="inherit"
                     variant="outlined"
-                    color="inherit"
                     size="small"
-                    onClick={() => console.log('ok..')}
+                    onClick={() => startInitFlow()}
                   >
                     Create
                   </Button>
@@ -205,6 +233,21 @@ const Header = ({ classes, onDrawerToggle }) => {
           loading={loading}
         />
       </Popover>
+      <Dialog
+        open={initFlowDialog.open}
+        maxWidth="md"
+        onClose={() => setInitFlowDialog({ open: false, directory: null })}
+        aria-labelledby="npm-init"
+      >
+        <DialogTitle>Create a package.json file</DialogTitle>
+        <DialogContent>
+          <Typography variant="subtitle2">Directory</Typography>
+          <Typography variant="caption">{initFlowDialog.directory}</Typography>
+          <InitForm
+            onClose={() => setInitFlowDialog({ open: false, directory: null })}
+          />
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

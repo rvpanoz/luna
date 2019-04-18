@@ -2,7 +2,7 @@ export const viewParameters = {};
 
 export const directoryParameters = {
   title: 'Choose directory',
-  buttonLabel: 'Init',
+  buttonLabel: 'Open',
   properties: ['openDirectory']
 };
 
