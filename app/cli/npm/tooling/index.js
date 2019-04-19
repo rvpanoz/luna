@@ -1,6 +1,4 @@
 import audit from './audit';
-import doctor from './doctor';
-import prune from './prune';
-import dedupe from './dedupe';
+import init from './init';
 
-export default { audit, doctor, prune, dedupe };
+export default { audit, init };

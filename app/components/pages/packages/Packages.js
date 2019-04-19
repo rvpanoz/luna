@@ -226,7 +226,7 @@ const Packages = ({ classes }) => {
               />
             </div>
             <div className={classes.tableWrapper} ref={wrapperRef}>
-              {packagesData.length === 0 ? (
+              {!packagesData || packagesData.length === 0 ? (
                 <Typography variant="subtitle1" className={classes.withPadding}>
                   No dependencies found.
                 </Typography>

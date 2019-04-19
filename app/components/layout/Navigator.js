@@ -26,6 +26,7 @@ import {
   PackagesTab,
   ActionsTab
 } from 'components/pages/navigator/tabs';
+import { installPackages } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runAudit } from 'models/npm/actions';
@@ -94,6 +95,31 @@ const Navigator = ({
         }
       }
     );
+
+  const installPackagesJson = () => {
+    const parameters = {
+      ipcEvent: 'install',
+      cmd: ['install'],
+      packageJson: true,
+      mode,
+      directory: fullDirectory
+    };
+
+    remote.dialog.showMessageBox(
+      remote.getCurrentWindow(),
+      {
+        title: 'Confirmation',
+        type: 'question',
+        message: `Would you like to install all the packages from \n${directory}? \n\nNote: This process will take some time `,
+        buttons: ['Cancel', 'Install']
+      },
+      btnIdx => {
+        if (Boolean(btnIdx) === true) {
+          dispatch(installPackages(parameters));
+        }
+      }
+    );
+  };
 
   return (
     <Drawer variant="permanent" {...restProps}>
@@ -188,6 +214,7 @@ const Navigator = ({
                 loading={loading}
               />
               <ActionsTab
+                installPackages={installPackagesJson}
                 items={[
                   {
                     name: 'audit',

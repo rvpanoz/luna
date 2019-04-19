@@ -2,8 +2,7 @@ const dedupe = () => {
   const command = ['dedupe'];
   const defaults = ['--json', '--verbose'];
 
-  const run = [].concat(command).concat(defaults);
-  return run;
+  return command.concat(defaults);
 };
 
 export default dedupe;

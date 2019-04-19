@@ -23,8 +23,6 @@ const onNpmActions$ = new Observable(observer => {
         );
       }
 
-      console.log(errorMessages);
-
       if (operation === 'uninstall') {
         const removedOrUpdatedPackages =
           options &&

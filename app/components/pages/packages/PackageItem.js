@@ -34,7 +34,7 @@ const PackageItem = ({
   inOperation
 }) => {
   const rowRef = useRef();
-  // console.log(name, latest, fromSearch, group, isOutdated, version);
+
   return (
     <TableRow
       key={`pkg-${name}`}

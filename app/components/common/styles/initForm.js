@@ -1,5 +1,5 @@
-import { fade, darken } from '@material-ui/core/styles/colorManipulator';
-import { defaultFont, grayColor } from 'styles/variables';
+import { darken } from '@material-ui/core/styles/colorManipulator';
+import { grayColor } from 'styles/variables';
 
 const styles = theme => ({
   actions: {
@@ -8,32 +8,13 @@ const styles = theme => ({
     alignItems: 'flex-start',
     marginTop: theme.spacing.unit
   },
-  description: {
-    height: 75,
-    overflow: 'hidden'
+  caption: {
+    color: darken(grayColor, 0.6),
+    marginTop: theme.spacing.unit * 2
   },
-  form: {
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  formControl: {
-    paddingTop: theme.spacing.unit
-  },
-  formItem: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    color: '#fff',
-    backgroundColor: fade(theme.palette.common.black, 0.15),
-    margin: `${theme.spacing.unit}px 0px ${theme.spacing.unit}px 0px`,
-    width: '100%',
-    border: '1px solid'
-  },
-  inputRoot: {
-    ...defaultFont
-  },
-  inputInput: {
-    display: 'inline-block',
-    color: darken(grayColor, 0.5),
+  options: {
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit / 2,
     padding: theme.spacing.unit
   }
 });

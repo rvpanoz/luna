@@ -303,7 +303,7 @@ const TableListToolbar = ({
           <LoadIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip title="Show global packages">
+      <Tooltip title="Switch to global packages">
         <div>
           <IconButton
             disableRipple

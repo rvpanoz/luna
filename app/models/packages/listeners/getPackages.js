@@ -34,11 +34,15 @@ const onGetPackages$ = new Observable(observer => {
         );
       }
 
+      const noDependencies = dataArray.every(dep =>
+        dep && dep[1] ? typeof dep[1] !== 'object' : false
+      );
+
       switchcase({
         list: () => {
           observer.next(
             mapPackages({
-              data: dataArray,
+              data: noDependencies ? [] : dataArray,
               projectName: name,
               projectVersion: version,
               projectDescription: description
