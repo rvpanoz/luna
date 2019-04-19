@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 
 import styles from './styles/tools';
 
-const renderAction = (classes, nodata) => (
+const renderAction = (classes, nodata, installPackages) => (
   <ListItem key="install_packagejson_all" className={classes.listItem}>
     <ListItemText
       primary={<Typography className={classes.label}>npm install</Typography>}
@@ -32,7 +32,7 @@ const renderAction = (classes, nodata) => (
           <IconButton
             aria-label="action_install"
             disabled={nodata}
-            onClick={() => console.log(1)}
+            onClick={installPackages}
           >
             <ArrowRightIcon />
           </IconButton>
@@ -42,10 +42,10 @@ const renderAction = (classes, nodata) => (
   </ListItem>
 );
 
-const ActionsTab = ({ classes, items, nodata, mode }) => (
+const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
   <div className={classes.tab}>
     <List dense>
-      {renderAction(classes, nodata)}
+      {renderAction(classes, nodata, installPackages)}
       {items &&
         items.map(item => (
           <ListItem key={`action-${item.name}`} className={classes.listItem}>
@@ -75,7 +75,7 @@ const ActionsTab = ({ classes, items, nodata, mode }) => (
                           type: 'question',
                           message: `Would you like to run ${
                             item.primaryText
-                          }? \nNote: This process will take some time `,
+                          }? \n\nNote: This process will take some time `,
                           buttons: ['Cancel', 'Run']
                         },
                         btnIdx => {
@@ -101,7 +101,8 @@ ActionsTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   items: PropTypes.arrayOf(PropTypes.object),
   mode: PropTypes.string,
-  nodata: PropTypes.bool
+  nodata: PropTypes.bool,
+  installPackages: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(ActionsTab);

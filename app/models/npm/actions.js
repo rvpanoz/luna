@@ -13,6 +13,7 @@ const clearRunningCommand = ActionCreator('CLEAR_RUNNING_COMMAND');
 const npmToolsListener = ActionCreator('REGISTER_LISTENER_TOOLS');
 
 const runAudit = ActionCreator('RUN_AUDIT');
+const runInit = ActionCreator('RUN_INIT');
 
 export {
   addActionError,
@@ -24,5 +25,6 @@ export {
   clearRunningCommand,
   setRunningCommand,
   runAudit,
+  runInit,
   npmToolsListener
 };

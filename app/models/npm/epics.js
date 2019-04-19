@@ -4,7 +4,7 @@ import { combineEpics, ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 
 import { toggleLoader, setSnackbar } from 'models/ui/actions';
-import { runAudit, npmToolsListener } from 'models/npm/actions';
+import { runAudit, runInit, npmToolsListener } from 'models/npm/actions';
 import { onNpmTools$ } from './listeners';
 
 const updateLoader = payload => ({
@@ -27,13 +27,31 @@ const npmToolsListenerEpic = pipe(
 const npmRunAuditEpic = pipe(
   ofType(runAudit.type),
   map(({ payload }) => {
+    const { fix } = payload;
+
     ipcRenderer.send('ipc-event', payload);
 
     return updateLoader({
       loading: true,
-      message: 'Running npm audit'
+      message: `Running npm audit ${fix && ' fix'}`
     });
   })
 );
 
-export default combineEpics(npmRunAuditEpic, npmToolsListenerEpic);
+const npmRunInitEpic = pipe(
+  ofType(runInit.type),
+  map(({ payload }) => {
+    ipcRenderer.send('ipc-event', payload);
+
+    return updateLoader({
+      loading: true,
+      message: 'Running npm init'
+    });
+  })
+);
+
+export default combineEpics(
+  npmRunAuditEpic,
+  npmRunInitEpic,
+  npmToolsListenerEpic
+);

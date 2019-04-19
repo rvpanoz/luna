@@ -14,8 +14,7 @@ const audit = options => {
     commandOptions = defaults;
   }
 
-  const run = [].concat(command).concat(commandOptions);
-  return run;
+  return command.concat(commandOptions);
 };
 
 export default audit;
