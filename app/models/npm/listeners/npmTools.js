@@ -1,19 +1,21 @@
+import path from 'path';
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { toggleLoader, setSnackbar } from 'models/ui/actions';
-import { switchcase, parseNpmAudit } from 'commons/utils';
+import { setMode } from 'models/common/actions';
+// import { switchcase, parseNpmAudit } from 'commons/utils';
 
 const onNpmTools$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['tool-close']);
 
   ipcRenderer.on('tool-close', (event, errors, cliResult, command) => {
-    const [tool] = command;
+    /* eslint-disable-next-line */
+    const [operation, parameters, directory] = command;
 
-    const content = switchcase({
-      audit: () => parseNpmAudit(cliResult)
-    })(null)(tool);
-
-    console.log(content);
+    // const content = switchcase({
+    //   audit: () => parseNpmAudit(cliResult),
+    //   init: () => cliResult
+    // })(null)(operation);
 
     observer.next(
       toggleLoader({
@@ -22,11 +24,20 @@ const onNpmTools$ = new Observable(observer => {
       })
     );
 
+    if (operation === 'init' && directory) {
+      observer.next(
+        setMode({
+          mode: 'local',
+          directory: path.join(directory, 'package.json')
+        })
+      );
+    }
+
     observer.next(
       setSnackbar({
         open: true,
         type: 'info',
-        message: 'Audit completed'
+        message: `npm ${operation} completed`
       })
     );
   });

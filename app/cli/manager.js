@@ -1,10 +1,14 @@
-/* eslint-disable */
+/* eslint-disable compat/compat */
+/* eslint-disable prefer-promise-reject-errors */
+/* eslint-disable global-require */
+/* eslint-disable  no-nested-ternary */
+/* eslint-disable  promise/catch-or-return */
 
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-import mk from '../mk';
 import lockVerify from 'lock-verify';
+import mk from '../mk';
 
 const { spawn } = cp;
 const { log } = console;
@@ -28,6 +32,12 @@ const execute = (
   directory,
   callback
 ) => {
+  const [operation] = commandArgs;
+  mk.log(
+    `execute command ${operation} with args: ${commandArgs.join(
+      ','
+    )} - ${mode} - ${directory}`
+  );
   const resultP = new Promise(resolve => {
     const result = [];
     let errors = '';
@@ -41,7 +51,12 @@ const execute = (
       commandArgs,
       {
         env: process.env,
-        cwd: mode === 'local' && directory ? path.dirname(directory) : cwd
+        cwd:
+          mode === 'local' && directory
+            ? operation === 'init'
+              ? path.resolve(directory)
+              : path.dirname(directory)
+            : cwd
       }
     );
 
@@ -80,10 +95,6 @@ const execute = (
 
   return resultP;
 };
-
-/**
- * List command - use npm
- **/
 
 const list = (options, callback) => {
   const command = ['list'];
@@ -356,8 +367,8 @@ const runInit = (opts, callback) => {
   }
 };
 
-const runLockVerify = (opts, callback) => {
-  const { mode, directory } = opts || {};
+const runLockVerify = opts => {
+  const { directory } = opts || {};
 
   lockVerify(directory).then(result => {
     result.warnings.forEach(w => console.error('Warning:', w));

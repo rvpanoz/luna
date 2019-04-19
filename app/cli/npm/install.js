@@ -29,7 +29,7 @@ const install = (options, idx) => {
   }
 
   if (packageJson) {
-    return command.concat(defaults);
+    return command.concat(['--ignore-scripts']);
   }
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;

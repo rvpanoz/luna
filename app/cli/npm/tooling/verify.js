@@ -2,8 +2,7 @@ const verify = () => {
   const command = ['cache'];
   const defaults = ['verify'];
 
-  const run = [].concat(command).concat(defaults);
-  return run;
+  return command.concat(defaults);
 };
 
 export default verify;

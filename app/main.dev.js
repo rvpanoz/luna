@@ -100,7 +100,7 @@ const handleLocalEvents = (event, mode, directory) => {
 };
 
 /**
- * Listen to ipcRenderer events
+ * ipc-event events
  */
 
 // channel: ipc-event
@@ -125,7 +125,12 @@ ipcMain.on('ipc-event', (event, options) => {
     }
 
     if (toolsIndex > -1) {
-      return event.sender.send('tool-close', errors, data, cmd);
+      return event.sender.send(
+        'tool-close',
+        errors,
+        data,
+        cmd.concat(directory)
+      );
     }
 
     if (settingsIndex > -1) {
@@ -166,6 +171,10 @@ ipcMain.on('ipc-event', (event, options) => {
 ipcMain.on('online-status-changed', (event, status) => {
   // TODO: implementation
 });
+
+/**
+ * app listeners
+ */
 
 app.on('window-all-closed', () => {
   /**

@@ -15,11 +15,16 @@ import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
 
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+
 import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
-import SecurityIcon from '@material-ui/icons/SecurityOutlined';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
+
+import NpmInit from 'components/common/NpmInit';
 
 import SearchBox from 'components/common/SearchBox';
 import { setActivePage } from 'models/ui/actions';
@@ -45,6 +50,9 @@ const mapState = ({
 
 const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [initFlowDialog, setInitFlowDialog] = useState({
+    open: false
+  });
   const { activePage, loading, env, status } = useMappedState(mapState);
 
   const dispatch = useDispatch();
@@ -110,9 +118,8 @@ const Header = ({ classes, onDrawerToggle }) => {
                     className={classes.button}
                     color="inherit"
                     variant="outlined"
-                    color="inherit"
                     size="small"
-                    onClick={() => console.log('ok..')}
+                    onClick={() => setInitFlowDialog({ open: true })}
                   >
                     Create
                   </Button>
@@ -161,16 +168,6 @@ const Header = ({ classes, onDrawerToggle }) => {
               label: classes.tabLabel
             }}
           />
-          <Tab
-            textColor="inherit"
-            label="Audit"
-            value="audit"
-            disabled={loading}
-            icon={<SecurityIcon color="inherit" />}
-            classes={{
-              label: classes.tabLabel
-            }}
-          />
         </Tabs>
       </AppBar>
       <Popover
@@ -205,6 +202,20 @@ const Header = ({ classes, onDrawerToggle }) => {
           loading={loading}
         />
       </Popover>
+      <Dialog
+        open={initFlowDialog.open}
+        maxWidth="sm"
+        onClose={() => setInitFlowDialog({ open: false })}
+        aria-labelledby="npm-init"
+      >
+        <DialogTitle>Create a package.json file</DialogTitle>
+        <DialogContent>
+          <NpmInit
+            directory={initFlowDialog.directory}
+            onClose={() => setInitFlowDialog({ open: false })}
+          />
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
