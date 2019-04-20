@@ -80,12 +80,12 @@ const TableListToolbar = ({
       setFilteredByNamePackages([]);
     }
 
-    return dispatch(clearFilters());
+    dispatch(clearFilters());
   };
 
   const handleAction = (action, force) => {
     if (action === 'clearFilters') {
-      clearAllFilters();
+      return clearAllFilters();
     }
 
     if (mode === 'local' && action === 'install' && !force) {

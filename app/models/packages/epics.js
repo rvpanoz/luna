@@ -239,7 +239,10 @@ const onMapPackagesEpic = (action$, state$) =>
       }) => {
         const {
           common: { mode, directory },
-          packages: { packagesOutdated }
+          packages: {
+            packagesOutdated,
+            project: { name, version, description }
+          }
         } = state$.value;
 
         const enhancedDependencies = data.reduce((deps = [], dependency) => {
@@ -298,9 +301,9 @@ const onMapPackagesEpic = (action$, state$) =>
         // console.log(enhancedDependencies);
         return setPackages({
           dependencies: enhancedDependencies,
-          projectName,
-          projectVersion,
-          projectDescription,
+          projectName: projectName || name,
+          projectVersion: projectVersion || version,
+          projectDescription: projectDescription || description,
           fromSearch,
           fromSort
         });

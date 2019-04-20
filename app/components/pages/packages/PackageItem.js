@@ -11,13 +11,12 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import ErrorIcon from '@material-ui/icons/ErrorOutlined';
-import WarningIcon from '@material-ui/icons/WarningOutlined';
-import CheckIcon from '@material-ui/icons/CheckOutlined';
-import UpdateIcon from '@material-ui/icons/UpdateOutlined';
+import ErrorIcon from '@material-ui/icons/ErrorTwoTone';
+import WarningIcon from '@material-ui/icons/WarningTwoTone';
+import CheckIcon from '@material-ui/icons/CheckTwoTone';
+import UpdateIcon from '@material-ui/icons/UpdateTwoTone';
 import Tooltip from '@material-ui/core/Tooltip';
 
-import { switchcase } from 'commons/utils';
 import styles from './styles/packages';
 
 const PackageItem = ({
@@ -38,17 +37,6 @@ const PackageItem = ({
   hasError
 }) => {
   const rowRef = useRef();
-
-  // console.log({
-  //   name,
-  //   extraneous,
-  //   missing,
-  //   peerMissing,
-  //   fromSearch,
-  //   group,
-  //   version,
-  //   latest
-  // });
 
   return (
     <TableRow
@@ -98,7 +86,7 @@ const PackageItem = ({
               />
             )}
           </div>
-          {!extraneous && group && (
+          {!extraneous && group && !fromSearch && (
             <Typography variant="caption" className={classes.group}>
               {group}
             </Typography>
@@ -111,27 +99,60 @@ const PackageItem = ({
         </Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        {latest && !hasError ? (
-          <Typography className={cn(classes.typo, classes.outdated)}>
-            {latest}
-          </Typography>
-        ) : !latest && !hasError ? (
-          <Typography className={classes.typo}>N/A</Typography>
-        ) : null}
-        {fromSearch && !hasError && version}
+        <Typography
+          className={cn(classes.typo, {
+            [classes.outdated]: isOutdated
+          })}
+        >
+          {!isOutdated && !hasError && !fromSearch && 'Yes'}
+          {isOutdated && !hasError && !fromSearch && latest}
+          {hasError && 'N/A'}
+        </Typography>
+
+        <Typography className={classes.typo}>
+          {fromSearch && !hasError && version}
+        </Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        <Typography className={classes.typo}>
-          {missing && <WarningIcon className={classes.statusMissing} />}
-          {peerMissing && <WarningIcon className={classes.statusPeerMissing} />}
-          {isOutdated && <UpdateIcon className={classes.statusOutdated} />}
-          {!isOutdated && !peerMissing && !missing && version && (
-            <CheckIcon className={classes.statusOK} />
-          )}
-          {!isOutdated && !peerMissing && !missing && !version && (
-            <ErrorIcon className={classes.statusError} />
-          )}
-        </Typography>
+        {missing && (
+          <Tooltip title="Package is missing">
+            <Typography className={classes.typo}>
+              <WarningIcon className={classes.statusMissing} />
+            </Typography>
+          </Tooltip>
+        )}
+
+        {peerMissing && (
+          <Tooltip title="Package has peer missing">
+            <Typography className={classes.typo}>
+              <WarningIcon className={classes.statusPeerMissing} />
+            </Typography>
+          </Tooltip>
+        )}
+
+        {isOutdated && (
+          <Tooltip title="Package has peer missing">
+            <Typography className={classes.typo}>
+              <UpdateIcon className={classes.statusOutdated} />
+            </Typography>
+          </Tooltip>
+        )}
+
+        {!isOutdated && !peerMissing && !missing && version && (
+          <Tooltip title="Package is up to date">
+            <Typography className={classes.typo}>
+              <CheckIcon className={classes.statusOK} />
+            </Typography>
+          </Tooltip>
+        )}
+
+        {!isOutdated && !peerMissing && !missing && !version && (
+          <Tooltip title="Package has errors">
+            <Typography className={classes.typo}>
+              <ErrorIcon className={classes.statusError} />
+            </Typography>
+          </Tooltip>
+        )}
       </TableCell>
     </TableRow>
   );
@@ -151,7 +172,8 @@ PackageItem.propTypes = {
   extraneous: bool,
   missing: bool,
   isOutdated: bool,
-  inOperation: bool
+  inOperation: bool,
+  hasError: bool
 };
 
 export default withStyles(styles)(PackageItem);

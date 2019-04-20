@@ -25,7 +25,7 @@ const onGetPackages$ = new Observable(observer => {
       const dataArray = dependencies
         ? objectEntries(dependencies)
         : objectEntries(packageData);
-      console.log(dataArray);
+
       if (problems) {
         observer.next(
           updateNotifications({

@@ -29,7 +29,6 @@ import styles from './styles/tableFilters';
 
 const TableFilters = ({
   classes,
-  theme,
   mode,
   close,
   clearAllFilters,
@@ -147,16 +146,18 @@ const TableFilters = ({
             }}
           >
             <Tooltip title="Clear all">
-              <IconButton
-                disableRipple
-                color="secondary"
-                onClick={() => {
-                  clearAllFilters();
-                  close();
-                }}
-              >
-                <ClearIcon />
-              </IconButton>
+              <div>
+                <IconButton
+                  disableRipple
+                  color="secondary"
+                  onClick={() => {
+                    clearAllFilters();
+                    close();
+                  }}
+                >
+                  <ClearIcon />
+                </IconButton>
+              </div>
             </Tooltip>
           </Toolbar>
         </div>
@@ -269,6 +270,4 @@ TableFilters.propTypes = {
   listFilters: PropTypes.arrayOf(PropTypes.object)
 };
 
-export default withStyles(styles, {
-  withTheme: true
-})(TableFilters);
+export default withStyles(styles)(TableFilters);

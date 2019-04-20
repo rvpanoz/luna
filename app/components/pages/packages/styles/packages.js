@@ -8,7 +8,8 @@ const styles = theme => ({
     borderTopRightRadius: 0
   },
   typo: {
-    ...defaultFont
+    ...defaultFont,
+    fontSize: 16
   },
   flexContainer: {
     ...flexContainer,
@@ -98,22 +99,22 @@ const styles = theme => ({
     display: 'none'
   },
   statusMissing: {
-    color: darken(theme.palette.error.main, 0.1)
+    color: darken(theme.palette.secondary.main, 0.1)
   },
   statusOK: {
     color: lighten('#00b300', 0.3)
   },
   statusPeerMissing: {
-    color: lighten(theme.palette.error.main, 0.3)
+    color: darken(theme.palette.secondary.main, 0.1)
   },
   statusOutdated: {
-    color: lighten(theme.palette.primary.main, 0.3)
+    color: lighten(theme.palette.primary.main, 0.1)
   },
   statusExtraneous: {
-    color: lighten(theme.palette.error.main, 0.3)
+    color: darken(theme.palette.secondary.main, 0.1)
   },
   statusError: {
-    color: lighten(theme.palette.error.dark, 0.5)
+    color: darken(theme.palette.secondary.main, 0.1)
   },
   chip: {
     margin: theme.spacing.unit
@@ -125,7 +126,7 @@ const styles = theme => ({
     ...defaultFont,
     fontSize: '1rem',
     [theme.breakpoints.up('md')]: {
-      maxWidth: 250
+      maxWidth: 300
     },
     [theme.breakpoints.up('lg')]: {
       width: 'auto'

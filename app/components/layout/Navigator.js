@@ -166,7 +166,7 @@ const Navigator = ({
                   {
                     name: 'mode',
                     primaryText:
-                      mode === 'local' && name
+                      mode === 'local'
                         ? `${name} v${version || DEFAULT_VERSION}`
                         : DEFAULT_MODE,
                     secondaryText: `Last updated: ${lastUpdatedAt}`,
