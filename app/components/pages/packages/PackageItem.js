@@ -39,16 +39,16 @@ const PackageItem = ({
 }) => {
   const rowRef = useRef();
 
-  console.log({
-    name,
-    extraneous,
-    missing,
-    peerMissing,
-    fromSearch,
-    group,
-    version,
-    latest
-  });
+  // console.log({
+  //   name,
+  //   extraneous,
+  //   missing,
+  //   peerMissing,
+  //   fromSearch,
+  //   group,
+  //   version,
+  //   latest
+  // });
 
   return (
     <TableRow

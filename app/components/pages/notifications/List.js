@@ -140,7 +140,7 @@ const NotificationsList = ({ classes, mode, directory }) => {
           </div>
         </div>
         <List className={classes.list}>
-          {notifications.length === 0 ? (
+          {!notifications || notifications.length === 0 ? (
             <Typography variant="subtitle1" className={classes.withPadding}>
               No problems found
             </Typography>

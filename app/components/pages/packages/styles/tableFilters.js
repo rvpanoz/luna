@@ -60,6 +60,9 @@ const styles = theme => ({
     paddingRight: theme.spacing.unit,
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit * 5
+  },
+  toolbar: {
+    height: 10
   }
 });
 
