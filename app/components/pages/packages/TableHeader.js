@@ -16,7 +16,8 @@ import { addSelected, clearSelected, setSortOptions } from 'models/ui/actions';
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'version', disablePadding: true, label: 'Installed' },
-  { id: 'latest', disablePadding: true, label: 'Latest' }
+  { id: 'latest', disablePadding: true, label: 'Latest' },
+  { id: 'Status', disablePadding: true, label: 'Status' }
 ];
 
 const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {

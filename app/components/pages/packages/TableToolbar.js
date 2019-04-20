@@ -75,13 +75,17 @@ const TableListToolbar = ({
     scrollWrapper(0);
   };
 
+  const clearAllFilters = () => {
+    if (filteredByNamePackages.length) {
+      setFilteredByNamePackages([]);
+    }
+
+    dispatch(clearFilters());
+  };
+
   const handleAction = (action, force) => {
     if (action === 'clearFilters') {
-      if (filteredByNamePackages.length) {
-        setFilteredByNamePackages([]);
-      }
-
-      return dispatch(clearFilters());
+      return clearAllFilters();
     }
 
     if (mode === 'local' && action === 'install' && !force) {
@@ -398,6 +402,7 @@ const TableListToolbar = ({
           mode={mode}
           close={() => openFilters(null, true)}
           listFilters={filters}
+          clearAllFilters={clearAllFilters}
         />
       </Popover>
       <Dialog

@@ -46,13 +46,13 @@ const App = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    ipcRenderer.on('finish-loaded', () => dispatch(initActions()));
+    ipcRenderer.once('finish-loaded', () => dispatch(initActions()));
 
     ipcRenderer.on('uncaught-exception', (event, ...args) => {
       dispatch({ type: setUIException.type, payload: { message: args[0] } });
     });
 
-    ipcRenderer.on('yarn-warning-close', () => {
+    ipcRenderer.once('yarn-warning-close', () => {
       dispatch(
         setSnackbar({
           open: true,

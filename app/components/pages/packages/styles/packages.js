@@ -7,6 +7,10 @@ const styles = theme => ({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0
   },
+  typo: {
+    ...defaultFont,
+    fontSize: 16
+  },
   flexContainer: {
     ...flexContainer,
     alignItems: 'center',
@@ -82,9 +86,6 @@ const styles = theme => ({
       duration: theme.transitions.duration.shortest
     })
   },
-  updated: {
-    color: lighten('#00b300', 0.1)
-  },
   withPadding: {
     padding: theme.spacing.unit + 4
   },
@@ -97,23 +98,35 @@ const styles = theme => ({
   hidden: {
     display: 'none'
   },
-  missing: {
-    color: darken(theme.palette.error.main, 0.1)
+  statusMissing: {
+    color: darken(theme.palette.secondary.main, 0.1)
   },
-  extraneous: {
-    color: darken(theme.palette.error.main, 0.1)
+  statusOK: {
+    color: lighten('#00b300', 0.3)
+  },
+  statusPeerMissing: {
+    color: darken(theme.palette.secondary.main, 0.1)
+  },
+  statusOutdated: {
+    color: lighten(theme.palette.primary.main, 0.1)
+  },
+  statusExtraneous: {
+    color: darken(theme.palette.secondary.main, 0.1)
+  },
+  statusError: {
+    color: darken(theme.palette.secondary.main, 0.1)
   },
   chip: {
     margin: theme.spacing.unit
   },
   group: {
-    color: darken(theme.palette.secondary.light, 0.1)
+    color: darken(theme.palette.secondary.light, 0.3)
   },
   name: {
     ...defaultFont,
     fontSize: '1rem',
     [theme.breakpoints.up('md')]: {
-      maxWidth: 250
+      maxWidth: 300
     },
     [theme.breakpoints.up('lg')]: {
       width: 'auto'

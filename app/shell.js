@@ -6,6 +6,7 @@
  * */
 
 import { apiManager as manager } from './cli';
+import mk from './mk';
 
 /**
  *
@@ -25,7 +26,8 @@ export const runCommand = (options, callback) => {
 
         return result;
       } catch (error) {
-        throw new Error(error);
+        mk.log(error);
+        return;
       }
     });
 

@@ -257,6 +257,7 @@ const Packages = ({ classes }) => {
                           extraneous,
                           problems,
                           missing,
+                          __hasError,
                           __group
                         }) => {
                           const isPackageSelected = selected.indexOf(name) > -1;
@@ -294,6 +295,7 @@ const Packages = ({ classes }) => {
                               missing={missing}
                               isOutdated={isOutdated}
                               fromSearch={fromSearch}
+                              hasError={__hasError}
                               group={__group}
                               extraneous={extraneous}
                               problems={problems}

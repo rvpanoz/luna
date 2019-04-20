@@ -7,21 +7,33 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { remove, prepend } from 'ramda';
 import { useDispatch } from 'redux-react-hook';
+
 import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
+import Toolbar from '@material-ui/core/Toolbar';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputBase from '@material-ui/core/InputBase';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
+
 import SearchIcon from '@material-ui/icons/Search';
+import ClearIcon from '@material-ui/icons/ClearAll';
 
 import { updateFilters } from 'models/ui/actions';
-import AppButton from 'components/units/Buttons/AppButton';
 import styles from './styles/tableFilters';
 
-const TableFilters = ({ classes, mode, close, listFilters }) => {
+const TableFilters = ({
+  classes,
+  mode,
+  close,
+  clearAllFilters,
+  listFilters
+}) => {
   const searchInputEl = useRef(null);
   const [filters, setFilters] = useState([{ filterType: 'name' }]);
   const dispatch = useDispatch();
@@ -96,34 +108,60 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
   return (
     <div className={classes.root}>
       <div className={classes.filterItems}>
-        <FormControl component="fieldset">
-          <FormLabel component="legend">Package name</FormLabel>
-          <FormGroup>
-            <FormHelperText>Fill package name</FormHelperText>
-            <div className={classes.search}>
-              <SearchIcon className={classes.searchIcon} />
-              <InputBase
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput
-                }}
-                inputProps={{
-                  ref: searchInputEl
-                }}
-                onChange={e => {
-                  const { value } = e.currentTarget;
+        <div className={classes.flexContainer}>
+          <div style={{ flex: 1 }}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Package name</FormLabel>
+              <FormGroup>
+                <FormHelperText>Fill package name</FormHelperText>
+                <div className={classes.search}>
+                  <SearchIcon className={classes.searchIcon} />
+                  <InputBase
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput
+                    }}
+                    inputProps={{
+                      ref: searchInputEl
+                    }}
+                    onChange={e => {
+                      const { value } = e.currentTarget;
 
-                  if (value && value.length) {
-                    addFilter({
-                      filterType: 'name',
-                      filterValue: value
-                    });
-                  }
-                }}
-              />
-            </div>
-          </FormGroup>
-        </FormControl>
+                      if (value && value.length) {
+                        addFilter({
+                          filterType: 'name',
+                          filterValue: value
+                        });
+                      }
+                    }}
+                  />
+                </div>
+              </FormGroup>
+            </FormControl>
+          </div>
+          <Toolbar
+            disableGutters
+            classes={{
+              root: classes.toolbar
+            }}
+          >
+            <Tooltip title="Clear all">
+              <div>
+                <IconButton
+                  disableRipple
+                  color="secondary"
+                  onClick={() => {
+                    clearAllFilters();
+                    close();
+                  }}
+                >
+                  <ClearIcon />
+                </IconButton>
+              </div>
+            </Tooltip>
+          </Toolbar>
+        </div>
+
         <FormControl component="fieldset">
           <FormLabel
             component="legend"
@@ -210,12 +248,14 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
         </FormControl>
         <Divider className={classes.bottomDivider} light />
         <div className={classes.actions}>
-          <AppButton color="transparent" onClick={close}>
-            Close
-          </AppButton>
-          <AppButton color="simple" onClick={() => handleFilters(filters)}>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={() => handleFilters(filters)}
+          >
             Filter
-          </AppButton>
+          </Button>
+          <Button onClick={close}>Close</Button>
         </div>
       </div>
     </div>
@@ -224,8 +264,9 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
 
 TableFilters.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  close: PropTypes.func.isRequired,
+  clearAllFilters: PropTypes.func.isRequired,
   mode: PropTypes.string,
-  close: PropTypes.func,
   listFilters: PropTypes.arrayOf(PropTypes.object)
 };
 

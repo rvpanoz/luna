@@ -239,10 +239,15 @@ const onMapPackagesEpic = (action$, state$) =>
       }) => {
         const {
           common: { mode, directory },
-          packages: { packagesOutdated }
+          packages: {
+            packagesOutdated,
+            project: { name, version, description }
+          }
         } = state$.value;
 
         const enhancedDependencies = data.reduce((deps = [], dependency) => {
+          let group;
+
           const [pkgName, details] = fromSearch
             ? [
                 dependency.name,
@@ -253,9 +258,7 @@ const onMapPackagesEpic = (action$, state$) =>
               ]
             : dependency;
 
-          const { extraneous, invalid, missing, peerMissing } =
-            dependency || {};
-          let group;
+          const { extraneous, invalid, missing, peerMissing } = details || {};
 
           if (mode === 'local') {
             const packageJSON = readPackageJson(directory);
@@ -270,7 +273,7 @@ const onMapPackagesEpic = (action$, state$) =>
             );
           }
 
-          if (!invalid && !peerMissing) {
+          if (!invalid) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(
               packagesOutdated,
               pkgName
@@ -284,6 +287,7 @@ const onMapPackagesEpic = (action$, state$) =>
               peerMissing,
               latest: isOutdated ? outdatedPkg.latest : null,
               isOutdated,
+              __hasError: missing || peerMissing || extraneous,
               __fromSearch: fromSearch,
               __group: group
             };
@@ -294,11 +298,12 @@ const onMapPackagesEpic = (action$, state$) =>
           return deps;
         }, []);
 
+        // console.log(enhancedDependencies);
         return setPackages({
           dependencies: enhancedDependencies,
-          projectName,
-          projectVersion,
-          projectDescription,
+          projectName: projectName || name,
+          projectVersion: projectVersion || version,
+          projectDescription: projectDescription || description,
           fromSearch,
           fromSort
         });

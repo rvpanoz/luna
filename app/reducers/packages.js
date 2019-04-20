@@ -36,13 +36,6 @@ const handlers = {
   [clearPackages.type]: state =>
     merge(state, {
       active: null,
-      project: {
-        name: null,
-        version: null,
-        description: null,
-        license: null,
-        author: null
-      },
       packagesData: [],
       packagesOutdated: [],
       metadata: {
@@ -80,10 +73,7 @@ const handlers = {
         ...state.metadata,
         fromSearch,
         fromSort,
-        lastUpdatedAt:
-          fromSort || fromSearch
-            ? state.metadata.lastUpdatedAt
-            : newDateFormatted
+        lastUpdatedAt: newDateFormatted
       }
     }),
 

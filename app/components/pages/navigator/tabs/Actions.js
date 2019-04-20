@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 
 import styles from './styles/tools';
 
-const renderAction = (classes, nodata, installPackages) => (
+const renderAction = (classes, nodata, mode, installPackages) => (
   <ListItem key="install_packagejson_all" className={classes.listItem}>
     <ListItemText
       primary={<Typography className={classes.label}>npm install</Typography>}
@@ -27,11 +27,17 @@ const renderAction = (classes, nodata, installPackages) => (
       }
     />
     <ListItemSecondaryAction>
-      <Tooltip title="Select package.json">
+      <Tooltip
+        title={
+          mode === 'global'
+            ? 'Not available in global mode'
+            : 'Select package.json'
+        }
+      >
         <div>
           <IconButton
             aria-label="action_install"
-            disabled={nodata}
+            disabled={nodata || mode === 'global'}
             onClick={installPackages}
           >
             <ArrowRightIcon />
@@ -45,7 +51,7 @@ const renderAction = (classes, nodata, installPackages) => (
 const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
   <div className={classes.tab}>
     <List dense>
-      {renderAction(classes, nodata, installPackages)}
+      {renderAction(classes, nodata, mode, installPackages)}
       {items &&
         items.map(item => (
           <ListItem key={`action-${item.name}`} className={classes.listItem}>
@@ -62,7 +68,13 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
               }
             />
             <ListItemSecondaryAction>
-              <Tooltip title={`Execute ${item.primaryText}`}>
+              <Tooltip
+                title={
+                  mode === 'global'
+                    ? 'Not available in global mode'
+                    : `Execute ${item.primaryText}`
+                }
+              >
                 <div>
                   <IconButton
                     aria-label="action"
