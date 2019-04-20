@@ -17,6 +17,7 @@ import {
   setUIException,
   setSortOptions,
   setPage,
+  setDialog,
   setPageRows,
   updateFilters
 } from 'models/ui/actions';
@@ -155,6 +156,17 @@ const handlers = {
       pagination: {
         ...state.pagination,
         rowsPerPage
+      }
+    }),
+  [setDialog.type]: (state, { payload: { open, name, content } }) =>
+    merge(state, {
+      dialog: {
+        ...state.dialog,
+        open,
+        report: {
+          name,
+          content
+        }
       }
     })
 };

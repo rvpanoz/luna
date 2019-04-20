@@ -18,6 +18,7 @@ const setPageRows = ActionCreator('SET_PAGE_ROWS');
 const setSortOptions = ActionCreator('SET_SORT_OPTIONS');
 const setUIException = ActionCreator('SET_UIEXCEPTION');
 const updateFilters = ActionCreator('UPDATE_FILTERS');
+const setDialog = ActionCreator('SET_DIALOG');
 
 export {
   addFilter,
@@ -28,6 +29,7 @@ export {
   setActivePage,
   setSnackbar,
   showError,
+  setDialog,
   showWarning,
   setSortOptions,
   setPage,

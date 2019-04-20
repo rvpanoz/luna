@@ -126,7 +126,7 @@ const styles = theme => ({
     ...defaultFont,
     fontSize: '1rem',
     [theme.breakpoints.up('md')]: {
-      maxWidth: 300
+      maxWidth: '100%'
     },
     [theme.breakpoints.up('lg')]: {
       width: 'auto'

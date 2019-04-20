@@ -34,6 +34,7 @@ const PackageItem = ({
   peerMissing,
   viewPackage,
   inOperation,
+  inPackageJson,
   hasError
 }) => {
   const rowRef = useRef();
@@ -54,7 +55,7 @@ const PackageItem = ({
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
-          disabled={inOperation}
+          disabled={inOperation || (inPackageJson && fromSearch)}
           checked={isSelected}
           disableRipple
           onClick={e => {
@@ -130,8 +131,8 @@ const PackageItem = ({
           </Tooltip>
         )}
 
-        {isOutdated && (
-          <Tooltip title="Package has peer missing">
+        {isOutdated && !hasError && (
+          <Tooltip title="Package has an updated version">
             <Typography className={classes.typo}>
               <UpdateIcon className={classes.statusOutdated} />
             </Typography>
@@ -173,7 +174,8 @@ PackageItem.propTypes = {
   missing: bool,
   isOutdated: bool,
   inOperation: bool,
-  hasError: bool
+  hasError: bool,
+  inPackageJson: bool
 };
 
 export default withStyles(styles)(PackageItem);

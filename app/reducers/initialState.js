@@ -25,6 +25,13 @@ const initialState = {
     paused: false,
     activePage: 'packages',
     commandsErrors: [],
+    dialog: {
+      open: false,
+      report: {
+        name: null,
+        content: null
+      }
+    },
     filtering: {
       filters: []
     },

@@ -357,13 +357,15 @@ export const parseNpmAudit = data => {
       };
     }
 
-    const { metadata } = dataToJson;
+    const { metadata } = dataToJson || {};
 
     if (!metadata) {
-      return dataToJson; // fix option
+      return {
+        fix: true
+      }; // run with fix option
     }
 
-    const dataKeys = Object.keys(metadata);
+    const dataKeys = metadata ? Object.keys(metadata) : dataToJson;
 
     const result = dataKeys.map(dataKey => {
       const valueObject = typeof metadata[dataKey] === 'object';
