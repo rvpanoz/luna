@@ -54,7 +54,12 @@ const styles = theme => ({
     lineHeight: '1em'
   },
   inputInput: {
-    ...defaultFont
+    ...defaultFont,
+    color: '#001',
+    paddingTop: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 5
   }
 });
 

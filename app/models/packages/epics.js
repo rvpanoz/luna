@@ -237,7 +237,6 @@ const onMapPackagesEpic = (action$, state$) =>
           fromSort
         }
       }) => {
-        console.log(data);
         const {
           common: { mode, directory },
           packages: { packagesOutdated }
@@ -270,7 +269,7 @@ const onMapPackagesEpic = (action$, state$) =>
                 packageJSON[groupName] && packageJSON[groupName][pkgName]
             );
           }
-          console.log(dependency);
+
           if (!invalid) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(
               packagesOutdated,
@@ -285,6 +284,7 @@ const onMapPackagesEpic = (action$, state$) =>
               peerMissing,
               latest: isOutdated ? outdatedPkg.latest : null,
               isOutdated,
+              __hasError: missing || peerMissing || extraneous,
               __fromSearch: fromSearch,
               __group: group
             };
@@ -295,6 +295,7 @@ const onMapPackagesEpic = (action$, state$) =>
           return deps;
         }, []);
 
+        // console.log(enhancedDependencies);
         return setPackages({
           dependencies: enhancedDependencies,
           projectName,

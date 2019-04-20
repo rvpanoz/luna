@@ -15,8 +15,9 @@ import ErrorIcon from '@material-ui/icons/ErrorOutlined';
 import WarningIcon from '@material-ui/icons/WarningOutlined';
 import CheckIcon from '@material-ui/icons/CheckOutlined';
 import UpdateIcon from '@material-ui/icons/UpdateOutlined';
-// import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from '@material-ui/core/Tooltip';
 
+import { switchcase } from 'commons/utils';
 import styles from './styles/packages';
 
 const PackageItem = ({
@@ -33,20 +34,21 @@ const PackageItem = ({
   missing,
   peerMissing,
   viewPackage,
-  inOperation
+  inOperation,
+  hasError
 }) => {
   const rowRef = useRef();
 
-  // console.log({
-  //   name,
-  //   extraneous,
-  //   missing,
-  //   peerMissing,
-  //   fromSearch,
-  //   group,
-  //   version,
-  //   latest
-  // });
+  console.log({
+    name,
+    extraneous,
+    missing,
+    peerMissing,
+    fromSearch,
+    group,
+    version,
+    latest
+  });
 
   return (
     <TableRow
@@ -109,17 +111,14 @@ const PackageItem = ({
         </Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        {latest && isOutdated && (
-          <Typography className={cn(classes.type, classes.outdated)}>
+        {latest && !hasError ? (
+          <Typography className={cn(classes.typo, classes.outdated)}>
             {latest}
           </Typography>
-        )}
-        {fromSearch && version}
-        {(peerMissing || missing) &&
-          !version &&
-          !latest &&
-          !fromSearch &&
-          !isOutdated && <Typography className={classes.typo}>N/A</Typography>}
+        ) : !latest && !hasError ? (
+          <Typography className={classes.typo}>N/A</Typography>
+        ) : null}
+        {fromSearch && !hasError && version}
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         <Typography className={classes.typo}>
