@@ -12,8 +12,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import ErrorIcon from '@material-ui/icons/ErrorOutlined';
+import WarningIcon from '@material-ui/icons/WarningOutlined';
 import CheckIcon from '@material-ui/icons/CheckOutlined';
-import Tooltip from '@material-ui/core/Tooltip';
+import UpdateIcon from '@material-ui/icons/UpdateOutlined';
+// import Tooltip from '@material-ui/core/Tooltip';
 
 import styles from './styles/packages';
 
@@ -34,6 +36,17 @@ const PackageItem = ({
   inOperation
 }) => {
   const rowRef = useRef();
+
+  // console.log({
+  //   name,
+  //   extraneous,
+  //   missing,
+  //   peerMissing,
+  //   fromSearch,
+  //   group,
+  //   version,
+  //   latest
+  // });
 
   return (
     <TableRow
@@ -72,81 +85,54 @@ const PackageItem = ({
             [classes.flexRow]: extraneous
           })}
         >
-          {extraneous && (
-            <Tooltip title="extraneous package">
-              <ErrorIcon className={classes.extraneous} />
-            </Tooltip>
-          )}
-          {/* TODO: extraneous pkgs - UI */}
-          {missing || peerMissing ? (
-            <div className={cn(classes.flexContainer)}>
-              <Tooltip title="package is missing or has peer dependencies missing">
-                <Typography
-                  className={cn(
-                    classes.name,
-                    classes.missing,
-                    classes.flexItem
-                  )}
-                >
-                  {name}
-                </Typography>
-              </Tooltip>
-              {inOperation && (
-                <CircularProgress
-                  size={15}
-                  thickness={5}
-                  className={cn(classes.loader, classes.flexItem)}
-                  color="primary"
-                />
-              )}
-            </div>
-          ) : (
-            <div className={classes.flexContainer}>
-              <Typography className={classes.name}>{name}</Typography>
-              {inOperation && (
-                <CircularProgress
-                  size={15}
-                  thickness={5}
-                  className={classes.loader}
-                  color="primary"
-                />
-              )}
-            </div>
-          )}
-
-          {!extraneous && (
-            <Typography
-              variant="caption"
-              className={cn(classes.group, {
-                [classes.missing]: missing
-              })}
-            >
+          <div className={classes.flexContainer}>
+            <Typography className={classes.name}>{name}</Typography>
+            {inOperation && (
+              <CircularProgress
+                size={15}
+                thickness={5}
+                className={classes.loader}
+                color="primary"
+              />
+            )}
+          </div>
+          {!extraneous && group && (
+            <Typography variant="caption" className={classes.group}>
               {group}
             </Typography>
           )}
         </div>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        <Typography>
+        <Typography className={classes.typo}>
           {fromSearch || !version ? 'N/A' : version}
-          {extraneous && (
-            <Typography component="span" className={classes.extraneous}>
-              extraneous
-            </Typography>
-          )}
         </Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
         {latest && isOutdated && (
-          <Typography className={classes.outdated}>{latest}</Typography>
-        )}
-        {fromSearch && version}
-        {!isOutdated && !missing && !fromSearch && (
-          <Typography>
-            <CheckIcon className={classes.updated} />
+          <Typography className={cn(classes.type, classes.outdated)}>
+            {latest}
           </Typography>
         )}
-        {missing && !version && !latest && <Typography>N/A</Typography>}
+        {fromSearch && version}
+        {(peerMissing || missing) &&
+          !version &&
+          !latest &&
+          !fromSearch &&
+          !isOutdated && <Typography className={classes.typo}>N/A</Typography>}
+      </TableCell>
+      <TableCell padding="none" className={classes.tableCell}>
+        <Typography className={classes.typo}>
+          {missing && <WarningIcon className={classes.statusMissing} />}
+          {peerMissing && <WarningIcon className={classes.statusPeerMissing} />}
+          {isOutdated && <UpdateIcon className={classes.statusOutdated} />}
+          {!isOutdated && !peerMissing && !missing && version && (
+            <CheckIcon className={classes.statusOK} />
+          )}
+          {!isOutdated && !peerMissing && !missing && !version && (
+            <ErrorIcon className={classes.statusError} />
+          )}
+        </Typography>
       </TableCell>
     </TableRow>
   );

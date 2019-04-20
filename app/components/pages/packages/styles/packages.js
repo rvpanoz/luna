@@ -7,6 +7,9 @@ const styles = theme => ({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0
   },
+  typo: {
+    ...defaultFont
+  },
   flexContainer: {
     ...flexContainer,
     alignItems: 'center',
@@ -82,9 +85,6 @@ const styles = theme => ({
       duration: theme.transitions.duration.shortest
     })
   },
-  updated: {
-    color: lighten('#00b300', 0.1)
-  },
   withPadding: {
     padding: theme.spacing.unit + 4
   },
@@ -97,17 +97,29 @@ const styles = theme => ({
   hidden: {
     display: 'none'
   },
-  missing: {
+  statusMissing: {
     color: darken(theme.palette.error.main, 0.1)
   },
-  extraneous: {
-    color: darken(theme.palette.error.main, 0.1)
+  statusOK: {
+    color: lighten('#00b300', 0.3)
+  },
+  statusPeerMissing: {
+    color: lighten(theme.palette.error.main, 0.3)
+  },
+  statusOutdated: {
+    color: lighten(theme.palette.primary.main, 0.3)
+  },
+  statusExtraneous: {
+    color: lighten(theme.palette.error.main, 0.3)
+  },
+  statusError: {
+    color: lighten(theme.palette.error.dark, 0.5)
   },
   chip: {
     margin: theme.spacing.unit
   },
   group: {
-    color: darken(theme.palette.secondary.light, 0.1)
+    color: darken(theme.palette.secondary.light, 0.3)
   },
   name: {
     ...defaultFont,

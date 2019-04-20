@@ -215,6 +215,7 @@ const Navigator = ({
               />
               <ActionsTab
                 installPackages={installPackagesJson}
+                mode={mode}
                 items={[
                   {
                     name: 'audit',

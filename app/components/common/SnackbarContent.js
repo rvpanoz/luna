@@ -16,6 +16,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import InfoIcon from '@material-ui/icons/Info';
 
 import { withStyles } from '@material-ui/core/styles';
+import { defaultFont } from 'styles/variables';
 
 const styles = theme => ({
   root: {
@@ -44,10 +45,11 @@ const styles = theme => ({
     marginRight: theme.spacing.unit
   },
   message: {
-    display: 'flex',
-    justifyContent: 'space-between'
+    display: 'flex'
+    // justifyContent: 'space-between'
   },
   text: {
+    ...defaultFont,
     color: theme.palette.common.white
   }
 });

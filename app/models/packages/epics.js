@@ -237,12 +237,15 @@ const onMapPackagesEpic = (action$, state$) =>
           fromSort
         }
       }) => {
+        console.log(data);
         const {
           common: { mode, directory },
           packages: { packagesOutdated }
         } = state$.value;
 
         const enhancedDependencies = data.reduce((deps = [], dependency) => {
+          let group;
+
           const [pkgName, details] = fromSearch
             ? [
                 dependency.name,
@@ -253,9 +256,7 @@ const onMapPackagesEpic = (action$, state$) =>
               ]
             : dependency;
 
-          const { extraneous, invalid, missing, peerMissing } =
-            dependency || {};
-          let group;
+          const { extraneous, invalid, missing, peerMissing } = details || {};
 
           if (mode === 'local') {
             const packageJSON = readPackageJson(directory);
@@ -269,8 +270,8 @@ const onMapPackagesEpic = (action$, state$) =>
                 packageJSON[groupName] && packageJSON[groupName][pkgName]
             );
           }
-
-          if (!invalid && !peerMissing) {
+          console.log(dependency);
+          if (!invalid) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(
               packagesOutdated,
               pkgName
