@@ -4,6 +4,7 @@
 
 const mk = {
   logToFile: true,
+  logToConsole: false,
   syslog: true,
   config: {
     defaultSettings: {
@@ -40,8 +41,10 @@ const mk = {
 
     args.unshift('\n');
 
-    // eslint-disable-next-line prefer-spread
-    cons.log.apply(cons, args);
+    if (this.logToConsole) {
+      // eslint-disable-next-line prefer-spread
+      cons.log.apply(cons, args);
+    }
   },
   debug(args) {
     // eslint-disable-next-line global-require

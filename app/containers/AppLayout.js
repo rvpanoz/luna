@@ -16,12 +16,11 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
-import { Audit } from 'components/pages/npm/';
 import { Packages } from 'components/pages/packages';
 import { Notifications } from 'components/pages/notifications';
-import { setSnackbar } from 'models/ui/actions';
+import { runAudit } from 'models/npm/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
-
+import { setDialog, setSnackbar } from 'models/ui/actions';
 import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
 
@@ -34,6 +33,7 @@ const mapState = ({
     loaders: {
       loader: { loading }
     },
+    dialog,
     snackbar
   },
   packages: {
@@ -41,6 +41,7 @@ const mapState = ({
     metadata: { lastUpdatedAt }
   }
 }) => ({
+  dialog,
   onlineStatus,
   lastUpdatedAt,
   activePage,
@@ -57,16 +58,12 @@ const mapState = ({
 
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
-  const [dialog, setDialog] = useState({
-    type: 'info',
-    open: false,
-    content: null
-  });
 
   const {
     activePage,
     snackbar,
     mode,
+    dialog,
     directory,
     notifications,
     packagesData,
@@ -77,6 +74,15 @@ const AppLayout = ({ classes }) => {
   } = useMappedState(mapState);
 
   const dispatch = useDispatch();
+
+  const closeDialog = () =>
+    dispatch(
+      setDialog({
+        open: false,
+        name: null,
+        content: null
+      })
+    );
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -99,8 +105,7 @@ const AppLayout = ({ classes }) => {
               packages: () => <Packages />,
               problems: () => (
                 <Notifications mode={mode} directory={directory} />
-              ),
-              audit: () => <Audit mode={mode} directory={directory} />
+              )
             })(<Packages />)(activePage)}
           </main>
         </div>
@@ -133,8 +138,8 @@ const AppLayout = ({ classes }) => {
             }}
           >
             <SnackbarContent
-              variant={onlineStatus === 'offline' ? 'error' : snackbar.type}
-              message={`${snackbar.message}`}
+              variant={snackbar.type}
+              message={snackbar.message}
               onClose={() =>
                 dispatch(
                   setSnackbar({
@@ -147,7 +152,7 @@ const AppLayout = ({ classes }) => {
             />
           </Snackbar>
         )}
-        {dialog && dialog.content && (
+        {dialog && dialog.open && (
           <Dialog
             fullWidth
             open={dialog.open}
@@ -159,19 +164,30 @@ const AppLayout = ({ classes }) => {
             <DialogContent>
               <AuditReport
                 title="Results - npm audit"
-                data={dialog && dialog.content}
+                data={dialog && dialog.report.content}
               />
             </DialogContent>
             <DialogActions>
               <Button
-                onClick={() =>
-                  setDialog({
-                    open: false,
-                    content: null
-                  })
-                }
-                color="secondary"
+                onClick={() => {
+                  dispatch(
+                    runAudit({
+                      channel: 'ipc-event',
+                      ipcEvent: 'audit',
+                      cmd: ['audit'],
+                      fix: true,
+                      mode,
+                      directory
+                    })
+                  );
+
+                  closeDialog();
+                }}
+                color="primary"
               >
+                Fix
+              </Button>
+              <Button onClick={() => closeDialog()} color="secondary">
                 Close
               </Button>
             </DialogActions>

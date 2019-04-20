@@ -6,12 +6,11 @@ https://docs.npmjs.com/cli/audit
 const audit = options => {
   const command = ['audit'];
   const defaults = ['--json'];
-  let commandOptions;
+  const { fix } = options || {};
+  let commandOptions = defaults;
 
-  if (options.options && options.options.length) {
-    commandOptions = defaults.concat(options.options);
-  } else {
-    commandOptions = defaults;
+  if (fix) {
+    commandOptions = [].concat(['fix'], defaults);
   }
 
   return command.concat(commandOptions);

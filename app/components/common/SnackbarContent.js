@@ -46,7 +46,6 @@ const styles = theme => ({
   },
   message: {
     display: 'flex'
-    // justifyContent: 'space-between'
   },
   text: {
     ...defaultFont,

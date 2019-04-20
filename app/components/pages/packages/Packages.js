@@ -7,6 +7,7 @@ import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
+import { pick } from 'ramda';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -27,6 +28,7 @@ import {
 } from 'models/ui/actions';
 import { setMode, addInstallOption } from 'models/common/actions';
 
+import { readPackageJson, objectEntries } from 'commons/utils';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
@@ -104,6 +106,7 @@ const Packages = ({ classes }) => {
     operationCommand
   } = useMappedState(mapState);
 
+  const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
@@ -173,6 +176,18 @@ const Packages = ({ classes }) => {
   useEffect(() => {
     if (paused) {
       return;
+    }
+
+    if (mode === 'local' && directory) {
+      const newPackagesFromPackageJson = readPackageJson(directory);
+      const jsonPackages = objectEntries(
+        pick(
+          ['dependencies', 'devDependencies', 'optionalDependencies'],
+          newPackagesFromPackageJson
+        )
+      );
+
+      setPackageJsonPackages(jsonPackages);
     }
 
     fetchPackages();
@@ -274,6 +289,16 @@ const Packages = ({ classes }) => {
                             operationCommand !== 'install' &&
                             operationPackages.indexOf(name) > -1;
 
+                          const inPackageJson = packagesFromPackageJson.some(
+                            pkg => {
+                              /* eslint-disable-next-line */
+                              const [pkgGroup, pkgDetails] = pkg;
+                              const [pkgName] = Object.keys(pkgDetails);
+
+                              return pkgName === name;
+                            }
+                          );
+
                           return (
                             <PackageItem
                               key={`pkg-${name}`}
@@ -301,6 +326,7 @@ const Packages = ({ classes }) => {
                               problems={problems}
                               viewPackage={viewPackageHandler}
                               inOperation={inOperation}
+                              inPackageJson={inPackageJson}
                             />
                           );
                         }
@@ -324,7 +350,7 @@ const Packages = ({ classes }) => {
           </Paper>
         </Grid>
         <Grid item md={active ? 4 : 1} lg={active ? 4 : 1} xl={active ? 4 : 1}>
-          <PackageDetails />
+          <PackageDetails i />
         </Grid>
       </Grid>
     </AppLoader>

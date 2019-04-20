@@ -1,9 +1,6 @@
-import path from 'path';
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
-import { toggleLoader, setSnackbar } from 'models/ui/actions';
-import { setMode } from 'models/common/actions';
-// import { switchcase, parseNpmAudit } from 'commons/utils';
+import { switchcase, parseNpmAudit } from 'commons/utils';
 
 const onNpmTools$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['tool-close']);
@@ -12,34 +9,36 @@ const onNpmTools$ = new Observable(observer => {
     /* eslint-disable-next-line */
     const [operation, parameters, directory] = command;
 
-    // const content = switchcase({
-    //   audit: () => parseNpmAudit(cliResult),
-    //   init: () => cliResult
-    // })(null)(operation);
+    const content = switchcase({
+      audit: () => parseNpmAudit(cliResult),
+      init: () => cliResult
+    })(null)(operation);
 
-    observer.next(
-      toggleLoader({
-        loading: false,
-        message: null
-      })
-    );
+    const { error, message } = content;
 
-    if (operation === 'init' && directory) {
-      observer.next(
-        setMode({
-          mode: 'local',
-          directory: path.join(directory, 'package.json')
-        })
-      );
+    if (error) {
+      observer.error(message);
     }
 
-    observer.next(
-      setSnackbar({
-        open: true,
-        type: 'info',
-        message: `npm ${operation} completed`
-      })
-    );
+    if (operation === 'init' && directory) {
+      observer.next({
+        operation: 'init',
+        directory
+      });
+    }
+
+    if (operation === 'audit') {
+      const { fix } = content;
+
+      if (fix) {
+        observer.next(content);
+      } else {
+        observer.next({
+          operation,
+          content
+        });
+      }
+    }
   });
 });
 

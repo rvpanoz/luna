@@ -103,14 +103,14 @@ const TableListToolbar = ({
 
           return {
             operation: action,
-            package: name,
+            package: `${name}@latest`,
             options: options
           };
         }
 
         return {
           operation: action,
-          package: selectedPackage,
+          package: `${selectedPackage}@latest`,
           options: ['save-prod']
         };
       });
