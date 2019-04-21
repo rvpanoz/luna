@@ -90,11 +90,16 @@ const PackageDetails = ({ classes }) => {
     packagesOutdated
   } = useMappedState(mapState);
   const { name, version, description } = active || {};
+  let group = null;
 
-  const group =
+  const activeGroup =
     mode === 'local' && active
-      ? packagesData.find(pkg => pkg.name === name).__group
+      ? packagesData.find(pkg => pkg.name === name)
       : null;
+
+  if (activeGroup && activeGroup.__group) {
+    group = activeGroup.__group;
+  }
 
   useEffect(() => {
     if (!active) {

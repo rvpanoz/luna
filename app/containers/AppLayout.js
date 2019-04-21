@@ -6,8 +6,8 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Snackbar from '@material-ui/core/Snackbar';
 import theme from 'styles/theme';
 
-import Navigator from 'components/layout/Navigator';
-import Header from 'components/layout/AppHeader';
+import AppNavigator from 'containers/AppNavigator';
+import AppHeader from 'containers/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
 import AuditReport from 'components/common/AuditReport';
 
@@ -89,7 +89,7 @@ const AppLayout = ({ classes }) => {
       <div className={classes.root}>
         <CssBaseline />
         <nav className={classes.drawer}>
-          <Navigator
+          <AppNavigator
             mode={mode}
             fullDirectory={directory}
             directory={directory && shrinkDirectory(directory)}
@@ -99,7 +99,7 @@ const AppLayout = ({ classes }) => {
           />
         </nav>
         <div className={classes.appContent}>
-          <Header onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
+          <AppHeader onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
           <main className={classes.mainContent}>
             {switchcase({
               packages: () => <Packages />,

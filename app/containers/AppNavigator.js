@@ -16,7 +16,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 import Button from '@material-ui/core/Button';
-import AppLogo from 'components/layout/AppLogo';
+import AppLogo from 'components/common/AppLogo';
 import AppTabs from 'components/common/AppTabs';
 import { navigatorParameters } from 'commons/parameters';
 import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';

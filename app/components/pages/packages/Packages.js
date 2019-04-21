@@ -238,6 +238,7 @@ const Packages = ({ classes }) => {
                 reload={fetchPackages}
                 filteredByNamePackages={filteredByNamePackages}
                 setFilteredByNamePackages={setFilteredByNamePackages}
+                packagesFromPackageJson={packagesFromPackageJson}
               />
             </div>
             <div className={classes.tableWrapper} ref={wrapperRef}>

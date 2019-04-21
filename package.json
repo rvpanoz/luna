@@ -1,8 +1,8 @@
 {
   "name": "luna",
   "productName": "luna",
-  "version": "3.0.0",
-  "description": "Luna is a management tool for developers to organize npm packages. You can install, view, update, uninstall your npm global packages or manage your packages from a local directory.",
+  "version": "3.1.0",
+  "description": "npm desktop manager for handling npm packages. Supported platforms: OS X Windows and Linux. Build on Electron",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",

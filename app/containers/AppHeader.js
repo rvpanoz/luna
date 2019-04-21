@@ -25,11 +25,11 @@ import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
 
 import NpmInit from 'components/common/NpmInit';
-
+import System from 'components/common/System';
 import SearchBox from 'components/common/SearchBox';
+
 import { setActivePage } from 'models/ui/actions';
 
-import System from './System';
 import styles from './styles/appHeader';
 
 const mapState = ({

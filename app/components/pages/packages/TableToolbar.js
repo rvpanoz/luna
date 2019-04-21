@@ -2,6 +2,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable compat/compat */
 /* eslint-disable object-shorthand */
+/* eslint-disable array-callback-return */
 
 import { remote } from 'electron';
 import React, { useState, useCallback } from 'react';
@@ -33,7 +34,7 @@ import SwitchIcon from '@material-ui/icons/LoopOutlined';
 
 import { switchcase } from 'commons/utils';
 import { navigatorParameters } from 'commons/parameters';
-import { INFO_MESSAGES } from 'constants/AppConstants';
+import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
 
 import { updatePackages, installPackages } from 'models/packages/actions';
 import { clearInstallOptions } from 'models/common/actions';
@@ -54,12 +55,13 @@ const TableListToolbar = ({
   filters,
   reload,
   nodata,
-  scrollWrapper,
   outdated,
   packagesInstallOptions,
   setFilteredByNamePackages,
-  switchMode,
   filteredByNamePackages,
+  packagesFromPackageJson,
+  scrollWrapper,
+  switchMode,
   total
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -94,25 +96,56 @@ const TableListToolbar = ({
 
     if (action === 'install' && selected.length) {
       const commands = selected.map(selectedPackage => {
-        const selectedPackageOptions = packagesInstallOptions.find(
-          option => option.name === selectedPackage
-        );
+        switch (mode) {
+          case 'local':
+            if (packagesInstallOptions && packagesInstallOptions.length) {
+              const selectedPackageOptions = packagesInstallOptions.find(
+                option => option.name === selectedPackage
+              );
 
-        if (selectedPackageOptions) {
-          const { name, options } = selectedPackageOptions;
+              /* eslint-disable-next-line */
+              const { name, options } = selectedPackageOptions;
 
-          return {
-            operation: action,
-            package: `${name}@latest`,
-            options: options
-          };
+              return {
+                operation: action,
+                package: `${selectedPackage}@latest`,
+                options
+              };
+            }
+
+            if (packagesFromPackageJson && !packagesInstallOptions.length) {
+              const packagesOptions = packagesFromPackageJson.reduce(
+                (acc = [], opt) => {
+                  const [group, packages] = opt;
+
+                  if (group !== 'dependencies') {
+                    const names = Object.keys(packages);
+                    const inPackages = names.indexOf(selectedPackage) > -1;
+
+                    if (inPackages) {
+                      return [].concat(PACKAGE_GROUPS[group]);
+                    }
+                  }
+
+                  return acc;
+                },
+                ['save-prod']
+              );
+
+              return {
+                operation: action,
+                package: `${selectedPackage}@latest`,
+                options: packagesOptions
+              };
+            }
+            break;
+          default:
+            return {
+              operation: action,
+              package: `${selectedPackage}@latest`,
+              options: ['save-prod']
+            };
         }
-
-        return {
-          operation: action,
-          package: `${selectedPackage}@latest`,
-          options: ['save-prod']
-        };
       });
 
       const operations = commands.map(command => command.operation);
@@ -459,7 +492,8 @@ TableListToolbar.propTypes = {
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   switchMode: PropTypes.func.isRequired,
-  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
+  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object),
+  packagesFromPackageJson: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(TableListToolbar);
