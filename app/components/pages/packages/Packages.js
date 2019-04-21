@@ -28,7 +28,7 @@ import {
 } from 'models/ui/actions';
 import { setMode, addInstallOption } from 'models/common/actions';
 
-import { readPackageJson, objectEntries } from 'commons/utils';
+import { scrollWrapper, readPackageJson, objectEntries } from 'commons/utils';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
@@ -51,7 +51,6 @@ const mapState = ({
   },
   npm: { operationStatus, operationPackages, operationCommand },
   ui: {
-    activePage,
     paused,
     loaders: { loader },
     pagination: { page, rowsPerPage },
@@ -62,7 +61,6 @@ const mapState = ({
 }) => ({
   paused,
   active,
-  activePage,
   directory,
   manager,
   mode,
@@ -105,8 +103,7 @@ const Packages = ({ classes }) => {
     active,
     operationStatus,
     operationPackages,
-    operationCommand,
-    activePage
+    operationCommand
   } = useMappedState(mapState);
 
   const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
@@ -114,35 +111,26 @@ const Packages = ({ classes }) => {
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
-  const fetchPackages = useCallback(() => {
-    const parameters = {
-      ipcEvent: 'get-packages',
-      cmd: ['outdated', 'list'],
-      mode,
-      directory
-    };
+  const fetchPackages = useCallback(
+    () =>
+      dispatch(
+        setPackagesStart({
+          channel: IPC_EVENT,
+          options: {
+            ipcEvent: 'get-packages',
+            cmd: ['outdated', 'list'],
+            mode,
+            directory
+          }
+        })
+      ),
+    [dispatch, mode, directory]
+  );
 
-    // if (mode === 'local' && directory) {
-    //   const newPackagesFromPackageJson = readPackageJson(directory);
-    //   const jsonPackages = objectEntries(
-    //     pick(
-    //       ['dependencies', 'devDependencies', 'optionalDependencies'],
-    //       newPackagesFromPackageJson
-    //     )
-    //   );
-    // ``
-    //   setPackageJsonPackages(jsonPackages);
-    // }
-
-    dispatch(
-      setPackagesStart({
-        channel: IPC_EVENT,
-        options: {
-          ...parameters
-        }
-      })
-    );
-  }, [mode, directory, dispatch]);
+  const reload = () => {
+    dispatch(setActivePage({ page: 'packages', paused: false }));
+    fetchPackages();
+  };
 
   const switchMode = (appMode, appDirectory) => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
@@ -151,16 +139,6 @@ const Packages = ({ classes }) => {
     if (fromSearch) {
       fetchPackages();
     }
-  };
-
-  const scrollWrapper = top => {
-    const wrapperEl = wrapperRef && wrapperRef.current;
-
-    wrapperEl &&
-      wrapperEl.scroll({
-        top,
-        behavior: 'smooth'
-      });
   };
 
   const viewPackageHandler = (name, version) => {
@@ -185,8 +163,24 @@ const Packages = ({ classes }) => {
       return;
     }
 
+    // TODO: mode logic to epic
+    // quick fix to get package groups from package.json in local
+    if (mode === 'local' && directory) {
+      const newPackagesFromPackageJson = readPackageJson(directory);
+      const jsonPackages = objectEntries(
+        pick(
+          ['dependencies', 'devDependencies', 'optionalDependencies'],
+          newPackagesFromPackageJson
+        )
+      );
+
+      setPackageJsonPackages(jsonPackages);
+    } else {
+      setPackageJsonPackages([]);
+    }
+
     fetchPackages();
-  }, [mode, directory, fetchPackages, paused]);
+  }, [fetchPackages, mode, directory, paused]);
 
   // setup packages with filters
   const [filteredPackages] = useFilters(packagesData, filters);
@@ -228,9 +222,11 @@ const Packages = ({ classes }) => {
                 packagesInstallOptions={packagesInstallOptions}
                 fromSearch={fromSearch}
                 filters={filters}
-                scrollWrapper={scrollWrapper}
+                scrollWrapper={() =>
+                  scrollWrapper(wrapperRef && wrapperRef.current, 0)
+                }
                 switchMode={switchMode}
-                reload={fetchPackages}
+                reload={reload}
                 filteredByNamePackages={filteredByNamePackages}
                 setFilteredByNamePackages={setFilteredByNamePackages}
                 packagesFromPackageJson={packagesFromPackageJson}
@@ -333,7 +329,7 @@ const Packages = ({ classes }) => {
                     page={page}
                     rowsPerPage={rowsPerPage}
                     handleChangePage={(e, pageNo) => {
-                      scrollWrapper(0);
+                      scrollWrapper(wrapperRef && wrapperRef.current, 0);
                       dispatch(setPage({ page: pageNo }));
                     }}
                     handleChangePageRows={e =>

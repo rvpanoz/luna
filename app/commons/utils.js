@@ -394,3 +394,11 @@ export const parseNpmAudit = data => {
     Promise.reject(error);
   }
 };
+
+/** scroll to top */
+export const scrollWrapper = (element, top) =>
+  element &&
+  element.scroll({
+    top,
+    behavior: 'smooth'
+  });

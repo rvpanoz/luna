@@ -6,7 +6,7 @@ import { pick } from 'ramda';
 import { switchcase, objectEntries, isJson } from 'commons/utils';
 import { mapPackages, setOutdatedSuccess } from '../actions';
 
-const onGetPackages$ = (mode, directoryj) =>
+const onGetPackages$ = () =>
   new Observable(observer => {
     ipcRenderer.removeAllListeners(['get-packages-close']);
 
@@ -16,18 +16,6 @@ const onGetPackages$ = (mode, directoryj) =>
       }
 
       const [command] = cmd;
-
-      if (mode === 'local' && directory) {
-        const newPackagesFromPackageJson = readPackageJson(directory);
-        const jsonPackages = objectEntries(
-          pick(
-            ['dependencies', 'devDependencies', 'optionalDependencies'],
-            newPackagesFromPackageJson
-          )
-        );
-        ``;
-        setPackageJsonPackages(jsonPackages);
-      }
 
       try {
         const packageData = JSON.parse(response);

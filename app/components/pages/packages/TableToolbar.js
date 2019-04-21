@@ -67,7 +67,7 @@ const TableListToolbar = ({
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
   const [optionsOpen, toggleOptions] = useState(false);
-
+  console.log(packagesFromPackageJson);
   const dispatch = useDispatch();
   const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
 
@@ -104,7 +104,10 @@ const TableListToolbar = ({
               );
 
               /* eslint-disable-next-line */
-              const { name, options } = selectedPackageOptions;
+              const { name, options } = selectedPackageOptions || {
+                name: selectedPackage,
+                options: ['save-prod']
+              };
 
               return {
                 operation: action,
@@ -492,8 +495,10 @@ TableListToolbar.propTypes = {
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   switchMode: PropTypes.func.isRequired,
-  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
-  // packagesFromPackageJson: PropTypes.arrayOf(PropTypes.array)
+  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object),
+  packagesFromPackageJson: PropTypes.arrayOf(
+    PropTypes.arrayOf(PropTypes.string)
+  )
 };
 
 export default withStyles(styles)(TableListToolbar);

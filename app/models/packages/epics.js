@@ -83,6 +83,7 @@ const ON = Symbol('ON');
 const OFF = Symbol('OFF');
 
 const isPaused = data => [ON, OFF].includes(data);
+
 const onOffOperator = () => src$ =>
   src$.pipe(
     withLatestFrom(src$.pipe(filter(isPaused))),
@@ -100,25 +101,14 @@ const startEpic = (action$, state$) =>
         common: { mode, directory }
       } = state$.value;
 
-      let _mode = options.model;
-      let _directory = options.directory;
-
-      if (!_mode) {
-        _mode = mode;
-      }
-
-      if (mode === 'local' && !_directory) {
-        _directory = directory;
-      }
-
       return [
         paused ? OFF : ON,
         {
           payload: {
             channel,
             options: Object.assign({}, options, {
-              mode: _mode,
-              directory: _directory
+              mode,
+              directory
             })
           }
         }
@@ -315,7 +305,14 @@ const onMapPackagesEpic = (action$, state$) =>
 const getPackagesListenerEpic = (action$, state$) =>
   action$.pipe(
     ofType(getPackagesListener.type),
-    switchMap(() => onGetPackages$(state$.value.mode)),
+    switchMap(() => {
+      const {
+        common: { mode, directory }
+      } = state$.value;
+      console.log(mode, directory);
+      return onGetPackages$(mode, directory);
+    }),
+    tap(console.log),
     catchError(err =>
       setSnackbar({
         type: 'error',
