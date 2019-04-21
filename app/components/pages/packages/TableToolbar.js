@@ -36,7 +36,10 @@ import { switchcase } from 'commons/utils';
 import { navigatorParameters } from 'commons/parameters';
 import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
 
-import { updatePackages, installPackages } from 'models/packages/actions';
+import {
+  updatePackages,
+  installMultiplePackages
+} from 'models/packages/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { clearFilters } from 'models/ui/actions';
 
@@ -67,7 +70,7 @@ const TableListToolbar = ({
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
   const [optionsOpen, toggleOptions] = useState(false);
-  console.log(packagesFromPackageJson);
+
   const dispatch = useDispatch();
   const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
 
@@ -123,7 +126,7 @@ const TableListToolbar = ({
 
                   if (group !== 'dependencies') {
                     const names = Object.keys(packages);
-                    const inPackages = names.indexOf(selectedPackage) > -1;
+                    const inPackages = names[selectedPackage];
 
                     if (inPackages) {
                       return [].concat(PACKAGE_GROUPS[group]);
@@ -145,7 +148,7 @@ const TableListToolbar = ({
           default:
             return {
               operation: action,
-              package: `${selectedPackage}@latest`,
+              package: `${selectedPackage}`,
               options: ['save-prod']
             };
         }
@@ -165,8 +168,7 @@ const TableListToolbar = ({
         mode,
         directory
       };
-
-      dispatch(installPackages(parameters));
+      dispatch(installMultiplePackages({ selected }));
     } else {
       dispatch(
         updatePackages({
@@ -497,7 +499,7 @@ TableListToolbar.propTypes = {
   switchMode: PropTypes.func.isRequired,
   packagesInstallOptions: PropTypes.arrayOf(PropTypes.object),
   packagesFromPackageJson: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.string)
+    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object]))
   )
 };
 

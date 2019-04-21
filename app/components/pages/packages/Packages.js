@@ -165,19 +165,19 @@ const Packages = ({ classes }) => {
 
     // TODO: mode logic to epic
     // quick fix to get package groups from package.json in local
-    if (mode === 'local' && directory) {
-      const newPackagesFromPackageJson = readPackageJson(directory);
-      const jsonPackages = objectEntries(
-        pick(
-          ['dependencies', 'devDependencies', 'optionalDependencies'],
-          newPackagesFromPackageJson
-        )
-      );
+    // if (mode === 'local' && directory) {
+    //   const newPackagesFromPackageJson = readPackageJson(directory);
+    //   const jsonPackages = objectEntries(
+    //     pick(
+    //       ['dependencies', 'devDependencies', 'optionalDependencies'],
+    //       newPackagesFromPackageJson
+    //     )
+    //   );
 
-      setPackageJsonPackages(jsonPackages);
-    } else {
-      setPackageJsonPackages([]);
-    }
+    //   setPackageJsonPackages(jsonPackages);
+    // } else {
+    //   setPackageJsonPackages([]);
+    // }
 
     fetchPackages();
   }, [fetchPackages, mode, directory, paused]);

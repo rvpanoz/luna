@@ -2,7 +2,12 @@
 
 import { pipe } from 'rxjs';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
-import { readPackageJson, isPackageOutdated } from 'commons/utils';
+import {
+  readPackageJson,
+  isPackageOutdated,
+  objectEntries
+} from 'commons/utils';
+import { pick } from 'ramda';
 
 import {
   map,
@@ -13,7 +18,8 @@ import {
   withLatestFrom,
   filter,
   ignoreElements,
-  catchError
+  catchError,
+  merge
 } from 'rxjs/operators';
 
 import { combineEpics, ofType } from 'redux-observable';
@@ -33,6 +39,7 @@ import { clearCommands, setRunningCommand } from 'models/npm/actions';
 import {
   clearPackages,
   installPackages,
+  installMultiplePackages,
   updatePackages,
   setPackagesStart,
   setPackagesSuccess,
@@ -145,23 +152,87 @@ const startCleanPackages = (action$, state$) =>
     ])
   );
 
-const installPackagesEpic = pipe(
-  ofType(installPackages.type),
-  mergeMap(({ payload }) => {
-    ipcRenderer.send('ipc-event', payload);
+const installPackagesEpic = action$ =>
+  action$.pipe(
+    ofType(installPackages.type),
+    mergeMap(({ payload }) => {
+      ipcRenderer.send('ipc-event', payload);
 
-    return [
-      updateLoader({
-        loading: true,
-        message: 'Installing packages..'
-      }),
-      setActivePage({
-        page: 'packages',
-        paused: false
-      })
-    ];
-  })
-);
+      return [
+        updateLoader({
+          loading: true,
+          message: 'Installing packages..'
+        }),
+        setActivePage({
+          page: 'packages',
+          paused: false
+        })
+      ];
+    })
+  );
+
+const installMultiplePackagesEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(installMultiplePackages.type),
+    map(() => {
+      const {
+        common: {
+          operations: { packagesInstallOptions },
+          directory
+        }
+      } = state$.value;
+
+      const packagesFromPackageJson = readPackageJson(directory);
+      const packagesInstallOptionsFromJson = objectEntries(
+        pick(
+          ['dependencies', 'devDependencies', 'optionalDependencies'],
+          packagesFromPackageJson
+        )
+      );
+
+      return {
+        options: packagesInstallOptionsFromJson || []
+      };
+    }),
+    tap(console.log),
+    mergeMap(({ options }) => {
+      const {
+        common: {
+          mode,
+          directory,
+          selected,
+          operations: { packagesInstallOptions }
+        }
+      } = state$.value;
+
+      const pkgOptions =
+        (packagesInstallOptions.length && packagesInstallOptions) || options;
+
+      const parameters = {
+        ipcEvent: 'install',
+        cmd: ['install'],
+        packages: selected,
+        pkgOptions,
+        multiple: true,
+        mode,
+        directory
+      };
+
+      console.log(parameters);
+      // ipcRenderer.send('ipc-event', payload);
+
+      return [
+        updateLoader({
+          loading: true,
+          message: 'Installing packages..'
+        }),
+        setActivePage({
+          page: 'packages',
+          paused: false
+        })
+      ];
+    })
+  );
 
 const viewPackageEpic = pipe(
   ofType(viewPackage.type),
@@ -265,7 +336,7 @@ const onMapPackagesEpic = (action$, state$) =>
             );
           }
 
-          if (!invalid) {
+          if (!invalid && !peerMissing && !missing && !extraneous) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(
               packagesOutdated,
               pkgName
@@ -305,14 +376,7 @@ const onMapPackagesEpic = (action$, state$) =>
 const getPackagesListenerEpic = (action$, state$) =>
   action$.pipe(
     ofType(getPackagesListener.type),
-    switchMap(() => {
-      const {
-        common: { mode, directory }
-      } = state$.value;
-      console.log(mode, directory);
-      return onGetPackages$(mode, directory);
-    }),
-    tap(console.log),
+    switchMap(() => onGetPackages$()),
     catchError(err =>
       setSnackbar({
         type: 'error',
@@ -363,6 +427,7 @@ export default combineEpics(
   startCleanPackages,
   startEpic,
   installPackagesEpic,
+  installMultiplePackagesEpic,
   updatePackagesEpic,
   viewPackageEpic,
   viewPackageListenerEpic,
