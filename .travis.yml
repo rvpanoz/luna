@@ -1,6 +1,7 @@
 matrix:
   allow_failures:
     - os: windows
+    - os: osx
   include:
     - os: osx
       language: node_js
@@ -77,7 +78,3 @@ before_script:
 script:
   - npm run package-ci
   - npm run lint
-  # HACK: Temporarily ignore `npm run test` on linux
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run test; fi
-  - npm run build-e2e
-  - npm run test-e2e
