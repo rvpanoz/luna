@@ -492,8 +492,8 @@ TableListToolbar.propTypes = {
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   switchMode: PropTypes.func.isRequired,
-  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object),
-  packagesFromPackageJson: PropTypes.arrayOf(PropTypes.object)
+  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
+  // packagesFromPackageJson: PropTypes.arrayOf(PropTypes.array)
 };
 
 export default withStyles(styles)(TableListToolbar);
