@@ -26,7 +26,7 @@ import {
   setSnackbar,
   clearSelected
 } from 'models/ui/actions';
-
+import { clearInstallOptions } from 'models/common/actions';
 import { clearNotifications } from 'models/notifications/actions';
 import { clearCommands, setRunningCommand } from 'models/npm/actions';
 
@@ -147,8 +147,10 @@ const startCleanPackages = (action$, state$) =>
         loading: true,
         message: 'Loading packages..'
       }),
+      clearSelected(),
       clearCommands(),
       clearNotifications(),
+      clearInstallOptions(),
       clearPackages()
     ])
   );
@@ -298,7 +300,6 @@ const onMapPackagesEpic = (action$, state$) =>
           return deps;
         }, []);
 
-        // console.log(enhancedDependencies);
         return setPackages({
           dependencies: enhancedDependencies,
           projectName: projectName || name,

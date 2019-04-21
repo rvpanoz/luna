@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
+import { clearInstallOptions } from 'models/common/actions';
 import { toggleLoader, clearSelected, setSnackbar } from 'models/ui/actions';
 import { removePackages, setPackagesStart } from 'models/packages/actions';
 import { clearRunningCommand } from 'models/npm/actions';
@@ -53,6 +54,9 @@ const onNpmActions$ = new Observable(observer => {
 
         return;
       }
+
+      // clean up
+      observer.next(clearInstallOptions());
 
       observer.next(
         toggleLoader({
