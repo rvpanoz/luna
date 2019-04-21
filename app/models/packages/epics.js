@@ -312,17 +312,18 @@ const onMapPackagesEpic = (action$, state$) =>
     )
   );
 
-const getPackagesListenerEpic = pipe(
-  ofType(getPackagesListener.type),
-  switchMap(() => onGetPackages$),
-  catchError(err =>
-    setSnackbar({
-      type: 'error',
-      open: true,
-      message: err
-    })
-  )
-);
+const getPackagesListenerEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(getPackagesListener.type),
+    switchMap(() => onGetPackages$(state$.value.mode)),
+    catchError(err =>
+      setSnackbar({
+        type: 'error',
+        open: true,
+        message: err
+      })
+    )
+  );
 
 const searchPackagesListenerEpic = pipe(
   ofType(searchPackagesListener.type),

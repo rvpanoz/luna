@@ -51,6 +51,7 @@ const mapState = ({
   },
   npm: { operationStatus, operationPackages, operationCommand },
   ui: {
+    activePage,
     paused,
     loaders: { loader },
     pagination: { page, rowsPerPage },
@@ -61,6 +62,7 @@ const mapState = ({
 }) => ({
   paused,
   active,
+  activePage,
   directory,
   manager,
   mode,
@@ -103,7 +105,8 @@ const Packages = ({ classes }) => {
     active,
     operationStatus,
     operationPackages,
-    operationCommand
+    operationCommand,
+    activePage
   } = useMappedState(mapState);
 
   const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
@@ -119,13 +122,17 @@ const Packages = ({ classes }) => {
       directory
     };
 
-    dispatch({
-      type: setActivePage.type,
-      payload: {
-        page: 'packages',
-        paused: false
-      }
-    });
+    // if (mode === 'local' && directory) {
+    //   const newPackagesFromPackageJson = readPackageJson(directory);
+    //   const jsonPackages = objectEntries(
+    //     pick(
+    //       ['dependencies', 'devDependencies', 'optionalDependencies'],
+    //       newPackagesFromPackageJson
+    //     )
+    //   );
+    // ``
+    //   setPackageJsonPackages(jsonPackages);
+    // }
 
     dispatch(
       setPackagesStart({
@@ -176,18 +183,6 @@ const Packages = ({ classes }) => {
   useEffect(() => {
     if (paused) {
       return;
-    }
-
-    if (mode === 'local' && directory) {
-      const newPackagesFromPackageJson = readPackageJson(directory);
-      const jsonPackages = objectEntries(
-        pick(
-          ['dependencies', 'devDependencies', 'optionalDependencies'],
-          newPackagesFromPackageJson
-        )
-      );
-
-      setPackageJsonPackages(jsonPackages);
     }
 
     fetchPackages();
