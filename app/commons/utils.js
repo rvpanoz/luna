@@ -142,7 +142,7 @@ export const readPackageJson = directory => {
     return JSON.parse(packageJSON);
   } catch (error) {
     mk.log(error);
-    return false;
+    return null;
   }
 };
 

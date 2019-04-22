@@ -10,21 +10,23 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ControlTypes from 'components/common/ControlTypes';
 import Typography from '@material-ui/core/Typography';
-import { addInstallOption } from 'models/common/actions';
+import { addInstallOption } from 'models/packages/actions';
 
 import styles from './styles/flags';
 
 const mapState = ({
+  ui: { selected },
   common: {
     operations: { packagesInstallOptions }
   }
 }) => ({
+  selected,
   packagesInstallOptions
 });
 
-const Flags = ({ classes, selected }) => {
+const Flags = ({ classes }) => {
   const dispatch = useDispatch();
-  const { packagesInstallOptions } = useMappedState(mapState);
+  const { packagesInstallOptions, selected } = useMappedState(mapState);
 
   return (
     <div className={classes.flexContainer}>

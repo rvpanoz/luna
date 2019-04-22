@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
+import fs from 'fs';
 import { pipe } from 'rxjs';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import {
@@ -18,8 +19,7 @@ import {
   withLatestFrom,
   filter,
   ignoreElements,
-  catchError,
-  merge
+  catchError
 } from 'rxjs/operators';
 
 import { combineEpics, ofType } from 'redux-observable';
@@ -58,6 +58,15 @@ import {
   onViewPackage$
 } from './listeners';
 
+const IPC_EVENT = 'ipc-event';
+const MESSAGES = {
+  install: 'Installing packages..',
+  update: 'Updating packages..',
+  loading: 'Loading packages..'
+};
+const ON = Symbol('ON');
+const OFF = Symbol('OFF');
+
 const updateCommand = ({
   operationStatus,
   operationPackages,
@@ -86,11 +95,9 @@ const setPackages = payload => ({
   payload
 });
 
-const ON = Symbol('ON');
-const OFF = Symbol('OFF');
-
 const isPaused = data => [ON, OFF].includes(data);
 
+// operator to handle pause event
 const onOffOperator = () => src$ =>
   src$.pipe(
     withLatestFrom(src$.pipe(filter(isPaused))),
@@ -142,7 +149,7 @@ const startCleanPackages = (action$, state$) =>
     concatMap(() => [
       updateLoader({
         loading: true,
-        message: 'Loading packages..'
+        message: MESSAGES.loading
       }),
       clearSelected(),
       clearCommands(),
@@ -156,12 +163,12 @@ const installPackagesEpic = action$ =>
   action$.pipe(
     ofType(installPackages.type),
     mergeMap(({ payload }) => {
-      ipcRenderer.send('ipc-event', payload);
+      ipcRenderer.send(IPC_EVENT, payload);
 
       return [
         updateLoader({
           loading: true,
-          message: 'Installing packages..'
+          message: MESSAGES.install
         }),
         setActivePage({
           page: 'packages',
@@ -177,61 +184,129 @@ const installMultiplePackagesEpic = (action$, state$) =>
     map(() => {
       const {
         common: {
-          operations: { packagesInstallOptions },
-          directory
-        }
-      } = state$.value;
-
-      const packagesFromPackageJson = readPackageJson(directory);
-      const packagesInstallOptionsFromJson = objectEntries(
-        pick(
-          ['dependencies', 'devDependencies', 'optionalDependencies'],
-          packagesFromPackageJson
-        )
-      );
-
-      return {
-        options: packagesInstallOptionsFromJson || []
-      };
-    }),
-    tap(console.log),
-    mergeMap(({ options }) => {
-      const {
-        common: {
           mode,
           directory,
-          selected,
           operations: { packagesInstallOptions }
         }
       } = state$.value;
 
-      const pkgOptions =
-        (packagesInstallOptions.length && packagesInstallOptions) || options;
+      if (mode === 'global') {
+        return [];
+      }
 
-      const parameters = {
-        ipcEvent: 'install',
-        cmd: ['install'],
-        packages: selected,
-        pkgOptions,
-        multiple: true,
-        mode,
-        directory
-      };
+      if (packagesInstallOptions && packagesInstallOptions.length) {
+        return packagesInstallOptions;
+      }
 
-      console.log(parameters);
-      // ipcRenderer.send('ipc-event', payload);
+      const packagesFromPackageJson = readPackageJson(directory);
+      const packagesInstallOptionsFromJson = packagesFromPackageJson
+        ? objectEntries(
+            pick(
+              ['dependencies', 'devDependencies', 'optionalDependencies'],
+              packagesFromPackageJson
+            )
+          )
+        : [];
 
-      return [
-        updateLoader({
-          loading: true,
-          message: 'Installing packages..'
-        }),
-        setActivePage({
-          page: 'packages',
-          paused: false
-        })
-      ];
-    })
+      return packagesInstallOptionsFromJson;
+    }),
+    tap(console.log),
+    ignoreElements()
+    // map(() => {
+    //   const {
+    //     ui: { selected },
+    //     common: {
+    //       mode,
+    //       directory,
+    //       operations: { packagesInstallOptions }
+    //     }
+    //   } = state$.value;
+
+    //   if (mode === 'global') {
+    //     return [];
+    //   }
+
+    //   if (packagesInstallOptions && packagesInstallOptions.length) {
+    //     return packagesInstallOptions;
+    //   }
+
+    //   const packagesInstallOptionsFromJson = packagesFromPackageJson
+    //     ? objectEntries(
+    //         pick(
+    //           ['dependencies', 'devDependencies', 'optionalDependencies'],
+    //           packagesFromPackageJson
+    //         )
+    //       )
+    //     : [];
+
+    //   console.log(packagesFromPackageJson);
+    //   return selected.map(selectedPackage => {
+    //     return packagesInstallOptionsFromJson.reduce((acc = [], opt) => {
+    //       const [group, packages] = opt;
+
+    //       if (group !== 'dependencies') {
+    //         const names = Object.keys(packages);
+    //         const inPackages = names[selectedPackage];
+
+    //         if (inPackages) {
+    //           return [
+    //             ...acc,
+    //             {
+    //               name: selectedPackage,
+    //               options: [PACKAGE_GROUPS[group]]
+    //             }
+    //           ];
+    //         }
+
+    //         return [
+    //           ...acc,
+    //           {
+    //             name: selectedPackage,
+    //             options: ['save-prod']
+    //           }
+    //         ];
+    //       }
+
+    //       return acc;
+    //     }, []);
+    //   });
+    // }),
+    // tap(console.log),
+    // ignoreElements(),
+    // mergeMap(options => {
+    //   const {
+    //     ui: { selected },
+    //     common: { mode, directory }
+    //   } = state$.value;
+
+    //   const commands = options.length
+    //     ? options.map(() => 'install')
+    //     : ['install'];
+    //   const parameters = {
+    //     ipcEvent: 'install',
+    //     cmd: commands,
+    //     packages: selected,
+    //     pkgOptions: options,
+    //     multiple: true,
+    //     mode,
+    //     directory
+    //   };
+
+    //   console.log(parameters);
+    //   // ipcRenderer.send(IPC_EVENT, payload);
+
+    //   return [
+    //     updateLoader({
+    //       loading: true,
+    //       message: MESSAGES.install
+    //     }),
+    //     setActivePage({
+    //       page: 'packages',
+    //       paused: false
+    //     })
+    //   ];
+    // }),
+    // tap(console.log)
   );
 
 const viewPackageEpic = pipe(
@@ -248,43 +323,53 @@ const viewPackageEpic = pipe(
   })
 );
 
-const updatePackagesEpic = pipe(
-  ofType(updatePackages.type),
-  mergeMap(({ payload }) => {
-    const { ipcEvent, packages, name } = payload;
+const updatePackagesEpic = action$ =>
+  action$.pipe(
+    ofType(updatePackages.type),
+    mergeMap(({ payload }) => {
+      const {
+        common: { mode, directory }
+      } = state$.value;
+      const { ipcEvent, packages, name } = payload;
 
-    ipcRenderer.send('ipc-event', payload);
+      ipcRenderer.send(
+        'ipc-event',
+        Object.assign({}, payload, {
+          mode,
+          directory
+        })
+      );
 
-    if (ipcEvent === 'uninstall') {
+      if (ipcEvent === 'uninstall') {
+        return [
+          updateCommand({
+            operationStatus: 'running',
+            operationCommand: ipcEvent,
+            operationPackages: packages && packages.length ? packages : [name]
+          }),
+          {
+            type: clearSelected.type
+          }
+        ];
+      }
+
       return [
+        updateLoader({
+          loading: true,
+          message: MESSAGES.update
+        }),
+        setActivePage({
+          page: 'packages',
+          paused: false
+        }),
         updateCommand({
           operationStatus: 'running',
           operationCommand: ipcEvent,
           operationPackages: packages && packages.length ? packages : [name]
-        }),
-        {
-          type: clearSelected.type
-        }
+        })
       ];
-    }
-
-    return [
-      updateLoader({
-        loading: true,
-        message: 'Updating packages..'
-      }),
-      setActivePage({
-        page: 'packages',
-        paused: false
-      }),
-      updateCommand({
-        operationStatus: 'running',
-        operationCommand: ipcEvent,
-        operationPackages: packages && packages.length ? packages : [name]
-      })
-    ];
-  })
-);
+    })
+  );
 
 const onMapPackagesEpic = (action$, state$) =>
   action$.pipe(

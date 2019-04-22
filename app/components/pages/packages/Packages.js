@@ -28,7 +28,7 @@ import {
 } from 'models/ui/actions';
 import { setMode, addInstallOption } from 'models/common/actions';
 
-import { scrollWrapper, readPackageJson, objectEntries } from 'commons/utils';
+import { scrollWrapper } from 'commons/utils';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
@@ -52,7 +52,7 @@ const mapState = ({
   npm: { operationStatus, operationPackages, operationCommand },
   ui: {
     paused,
-    loaders: { loader },
+    loaders: { loader, packageLoader },
     pagination: { page, rowsPerPage },
     filtering: { filters },
     sorting: { sortBy, sortDir },
@@ -67,6 +67,7 @@ const mapState = ({
   page,
   rowsPerPage,
   loader,
+  packageLoader,
   action,
   filters,
   packagesData,
@@ -86,6 +87,7 @@ const IPC_EVENT = 'ipc-event';
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
+    packageLoader,
     packagesData,
     packagesOutdated,
     mode,
@@ -163,7 +165,7 @@ const Packages = ({ classes }) => {
       return;
     }
 
-    // TODO: mode logic to epic
+    // TODO: move logic to epic
     // quick fix to get package groups from package.json in local
     // if (mode === 'local' && directory) {
     //   const newPackagesFromPackageJson = readPackageJson(directory);
@@ -312,13 +314,13 @@ const Packages = ({ classes }) => {
                               missing={missing}
                               isOutdated={isOutdated}
                               fromSearch={fromSearch}
-                              hasError={__hasError}
-                              group={__group}
                               extraneous={extraneous}
                               problems={problems}
                               viewPackage={viewPackageHandler}
                               inOperation={inOperation}
                               inPackageJson={inPackageJson}
+                              hasError={__hasError}
+                              group={__group}
                             />
                           );
                         }
