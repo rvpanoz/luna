@@ -20,7 +20,6 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 
 import ClearIcon from '@material-ui/icons/Clear';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -33,8 +32,6 @@ import SwitchIcon from '@material-ui/icons/LoopOutlined';
 
 import { switchcase } from 'commons/utils';
 import { navigatorParameters } from 'commons/parameters';
-import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
-
 import {
   updatePackages,
   installMultiplePackages
@@ -52,7 +49,7 @@ const TableListToolbar = ({
   title,
   mode,
   manager,
-  directory,
+  packagesInstallOptions,
   fromSearch,
   filters,
   reload,
@@ -262,16 +259,6 @@ const TableListToolbar = ({
 
   const renderToolbarActions = () => (
     <React.Fragment>
-      <Tooltip title="Open package.json">
-        <IconButton
-          color="primary"
-          disableRipple
-          aria-label="open_package"
-          onClick={openPackage}
-        >
-          <LoadIcon />
-        </IconButton>
-      </Tooltip>
       <Tooltip title="Switch to global packages">
         <div>
           <IconButton
@@ -283,6 +270,16 @@ const TableListToolbar = ({
             <SwitchIcon />
           </IconButton>
         </div>
+      </Tooltip>
+      <Tooltip title="Open package.json">
+        <IconButton
+          color="primary"
+          disableRipple
+          aria-label="open_package"
+          onClick={openPackage}
+        >
+          <LoadIcon />
+        </IconButton>
       </Tooltip>
       {!fromSearch && (
         <Tooltip title="Show filters">
@@ -379,9 +376,11 @@ const TableListToolbar = ({
         }}
         aria-labelledby="install-options"
       >
-        <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
         <DialogContent>
-          <Flags />
+          <Flags
+            selected={selected}
+            packagesInstallOptions={packagesInstallOptions}
+          />
         </DialogContent>
         <DialogActions>
           <Button
@@ -414,7 +413,6 @@ TableListToolbar.propTypes = {
   title: PropTypes.string,
   mode: PropTypes.string,
   manager: PropTypes.string,
-  directory: PropTypes.string,
   filters: PropTypes.arrayOf(PropTypes.object),
   fromSearch: PropTypes.bool,
   total: PropTypes.number,
@@ -423,10 +421,7 @@ TableListToolbar.propTypes = {
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   switchMode: PropTypes.func.isRequired,
-  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object),
-  packagesFromPackageJson: PropTypes.arrayOf(
-    PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object]))
-  )
+  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(TableListToolbar);

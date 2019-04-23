@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 
-import fs from 'fs';
 import { pipe } from 'rxjs';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import {
@@ -159,7 +158,7 @@ const startCleanPackages = (action$, state$) =>
     ])
   );
 
-const installPackagesEpic = action$ =>
+const installPackageEpic = action$ =>
   action$.pipe(
     ofType(installPackages.type),
     mergeMap(({ payload }) => {
@@ -191,11 +190,17 @@ const installMultiplePackagesEpic = (action$, state$) =>
       } = state$.value;
 
       if (mode === 'global') {
-        return [];
+        return {
+          from: 'global',
+          options: []
+        };
       }
 
       if (packagesInstallOptions && packagesInstallOptions.length) {
-        return packagesInstallOptions;
+        return {
+          from: 'flags',
+          options: packagesInstallOptions
+        };
       }
 
       const packagesFromPackageJson = readPackageJson(directory);
@@ -208,105 +213,68 @@ const installMultiplePackagesEpic = (action$, state$) =>
           )
         : [];
 
-      return packagesInstallOptionsFromJson;
+      return {
+        from: 'json',
+        options: packagesInstallOptionsFromJson
+      };
+    }),
+    mergeMap(({ from, options }) => {
+      const {
+        ui: { selected }
+      } = state$.value;
+
+      return selected.map(selectedPackage => {
+        let details;
+
+        if (from === 'json') {
+          details = options.filter(option => {
+            /* eslint-disable-next-line */
+            const [groupName, dependencies] = option;
+
+            return dependencies[selectedPackage];
+          });
+
+          /* eslint-disable-next-line */
+          const [group, packages] = details[0];
+
+          return {
+            type: 'ADD_OPTIONS',
+            name: selectedPackage,
+            options: group ? [].concat(PACKAGE_GROUPS[group]) : []
+          };
+        }
+
+        return {
+          type: 'ADD_OPTIONS',
+          name: selectedPackage,
+          options: options.find(option => option.name === selectedPackage)
+            .options
+        };
+      });
     }),
     tap(console.log),
-    ignoreElements()
-    // map(() => {
-    //   const {
-    //     ui: { selected },
-    //     common: {
-    //       mode,
-    //       directory,
-    //       operations: { packagesInstallOptions }
-    //     }
-    //   } = state$.value;
+    map(({ name, options }) => {
+      const {
+        common: { mode, directory }
+      } = state$.value;
 
-    //   if (mode === 'global') {
-    //     return [];
-    //   }
+      const parameters = {
+        ipcEvent: 'install',
+        cmd: ['install'],
+        name,
+        pkgOptions: options,
+        single: true,
+        mode,
+        directory
+      };
 
-    //   if (packagesInstallOptions && packagesInstallOptions.length) {
-    //     return packagesInstallOptions;
-    //   }
+      ipcRenderer.send(IPC_EVENT, parameters);
 
-    //   const packagesInstallOptionsFromJson = packagesFromPackageJson
-    //     ? objectEntries(
-    //         pick(
-    //           ['dependencies', 'devDependencies', 'optionalDependencies'],
-    //           packagesFromPackageJson
-    //         )
-    //       )
-    //     : [];
-
-    //   console.log(packagesFromPackageJson);
-    //   return selected.map(selectedPackage => {
-    //     return packagesInstallOptionsFromJson.reduce((acc = [], opt) => {
-    //       const [group, packages] = opt;
-
-    //       if (group !== 'dependencies') {
-    //         const names = Object.keys(packages);
-    //         const inPackages = names[selectedPackage];
-
-    //         if (inPackages) {
-    //           return [
-    //             ...acc,
-    //             {
-    //               name: selectedPackage,
-    //               options: [PACKAGE_GROUPS[group]]
-    //             }
-    //           ];
-    //         }
-
-    //         return [
-    //           ...acc,
-    //           {
-    //             name: selectedPackage,
-    //             options: ['save-prod']
-    //           }
-    //         ];
-    //       }
-
-    //       return acc;
-    //     }, []);
-    //   });
-    // }),
-    // tap(console.log),
-    // ignoreElements(),
-    // mergeMap(options => {
-    //   const {
-    //     ui: { selected },
-    //     common: { mode, directory }
-    //   } = state$.value;
-
-    //   const commands = options.length
-    //     ? options.map(() => 'install')
-    //     : ['install'];
-    //   const parameters = {
-    //     ipcEvent: 'install',
-    //     cmd: commands,
-    //     packages: selected,
-    //     pkgOptions: options,
-    //     multiple: true,
-    //     mode,
-    //     directory
-    //   };
-
-    //   console.log(parameters);
-    //   // ipcRenderer.send(IPC_EVENT, payload);
-
-    //   return [
-    //     updateLoader({
-    //       loading: true,
-    //       message: MESSAGES.install
-    //     }),
-    //     setActivePage({
-    //       page: 'packages',
-    //       paused: false
-    //     })
-    //   ];
-    // }),
-    // tap(console.log)
+      return updateLoader({
+        loading: true,
+        message: MESSAGES.install
+      });
+    })
   );
 
 const viewPackageEpic = pipe(
@@ -323,7 +291,7 @@ const viewPackageEpic = pipe(
   })
 );
 
-const updatePackagesEpic = action$ =>
+const updatePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(updatePackages.type),
     mergeMap(({ payload }) => {
@@ -358,10 +326,10 @@ const updatePackagesEpic = action$ =>
           loading: true,
           message: MESSAGES.update
         }),
-        setActivePage({
-          page: 'packages',
-          paused: false
-        }),
+        // setActivePage({
+        //   page: 'packages',
+        //   paused: false
+        // }),
         updateCommand({
           operationStatus: 'running',
           operationCommand: ipcEvent,
@@ -458,18 +426,17 @@ const onMapPackagesEpic = (action$, state$) =>
     )
   );
 
-const getPackagesListenerEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(getPackagesListener.type),
-    switchMap(() => onGetPackages$()),
-    catchError(err =>
-      setSnackbar({
-        type: 'error',
-        open: true,
-        message: err
-      })
-    )
-  );
+const getPackagesListenerEpic = pipe(
+  ofType(getPackagesListener.type),
+  switchMap(() => onGetPackages$()),
+  catchError(err =>
+    setSnackbar({
+      type: 'error',
+      open: true,
+      message: err
+    })
+  )
+);
 
 const searchPackagesListenerEpic = pipe(
   ofType(searchPackagesListener.type),
@@ -511,7 +478,7 @@ const viewPackageListenerEpic = action$ =>
 export default combineEpics(
   startCleanPackages,
   startEpic,
-  installPackagesEpic,
+  installPackageEpic,
   installMultiplePackagesEpic,
   updatePackagesEpic,
   viewPackageEpic,
