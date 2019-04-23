@@ -62,7 +62,7 @@ const NotificationsItem = ({
         {
           title: 'Confirmation',
           type: 'question',
-          message: `Would you like to install ${
+          message: `\nWould you like to install ${
             version ? `${packageName}@${version}` : packageName
           }?`,
           buttons: ['Cancel', 'Install']

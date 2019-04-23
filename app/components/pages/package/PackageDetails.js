@@ -355,7 +355,7 @@ const PackageDetails = ({ classes }) => {
                             {
                               title: 'Confirmation',
                               type: 'question',
-                              message: `Would you like to install ${
+                              message: `\nWould you like to install ${
                                 active.name
                               }@${item}?`,
                               buttons: ['Cancel', 'Install']

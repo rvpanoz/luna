@@ -4,8 +4,8 @@
 
 const initialState = {
   manager: 'npm',
-  mode: 'local',
-  directory: '/home/rvpanoz/Projects/electron/luna-empty/package.json',
+  mode: 'global',
+  directory: null,
   onlineStatus: 'offline',
   operations: {
     action: null,
