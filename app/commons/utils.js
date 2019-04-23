@@ -142,7 +142,7 @@ export const readPackageJson = directory => {
     return JSON.parse(packageJSON);
   } catch (error) {
     mk.log(error);
-    return false;
+    return null;
   }
 };
 
@@ -394,3 +394,11 @@ export const parseNpmAudit = data => {
     Promise.reject(error);
   }
 };
+
+/** scroll to top */
+export const scrollWrapper = (element, top) =>
+  element &&
+  element.scroll({
+    top,
+    behavior: 'smooth'
+  });

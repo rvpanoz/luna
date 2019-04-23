@@ -2,7 +2,12 @@
 
 import { pipe } from 'rxjs';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
-import { readPackageJson, isPackageOutdated } from 'commons/utils';
+import {
+  readPackageJson,
+  isPackageOutdated,
+  objectEntries
+} from 'commons/utils';
+import { pick } from 'ramda';
 
 import {
   map,
@@ -33,6 +38,7 @@ import { clearCommands, setRunningCommand } from 'models/npm/actions';
 import {
   clearPackages,
   installPackages,
+  installMultiplePackages,
   updatePackages,
   setPackagesStart,
   setPackagesSuccess,
@@ -50,6 +56,15 @@ import {
   onNpmActions$,
   onViewPackage$
 } from './listeners';
+
+const IPC_EVENT = 'ipc-event';
+const MESSAGES = {
+  install: 'Installing packages..',
+  update: 'Updating packages..',
+  loading: 'Loading packages..'
+};
+const ON = Symbol('ON');
+const OFF = Symbol('OFF');
 
 const updateCommand = ({
   operationStatus,
@@ -79,10 +94,9 @@ const setPackages = payload => ({
   payload
 });
 
-const ON = Symbol('ON');
-const OFF = Symbol('OFF');
-
 const isPaused = data => [ON, OFF].includes(data);
+
+// operator to handle pause event
 const onOffOperator = () => src$ =>
   src$.pipe(
     withLatestFrom(src$.pipe(filter(isPaused))),
@@ -100,25 +114,14 @@ const startEpic = (action$, state$) =>
         common: { mode, directory }
       } = state$.value;
 
-      let _mode = options.model;
-      let _directory = options.directory;
-
-      if (!_mode) {
-        _mode = mode;
-      }
-
-      if (mode === 'local' && !_directory) {
-        _directory = directory;
-      }
-
       return [
         paused ? OFF : ON,
         {
           payload: {
             channel,
             options: Object.assign({}, options, {
-              mode: _mode,
-              directory: _directory
+              mode,
+              directory
             })
           }
         }
@@ -145,7 +148,7 @@ const startCleanPackages = (action$, state$) =>
     concatMap(() => [
       updateLoader({
         loading: true,
-        message: 'Loading packages..'
+        message: MESSAGES.loading
       }),
       clearSelected(),
       clearCommands(),
@@ -155,23 +158,124 @@ const startCleanPackages = (action$, state$) =>
     ])
   );
 
-const installPackagesEpic = pipe(
-  ofType(installPackages.type),
-  mergeMap(({ payload }) => {
-    ipcRenderer.send('ipc-event', payload);
+const installPackageEpic = action$ =>
+  action$.pipe(
+    ofType(installPackages.type),
+    mergeMap(({ payload }) => {
+      ipcRenderer.send(IPC_EVENT, payload);
 
-    return [
-      updateLoader({
+      return [
+        updateLoader({
+          loading: true,
+          message: MESSAGES.install
+        }),
+        setActivePage({
+          page: 'packages',
+          paused: false
+        })
+      ];
+    })
+  );
+
+const installMultiplePackagesEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(installMultiplePackages.type),
+    map(() => {
+      const {
+        common: {
+          mode,
+          directory,
+          operations: { packagesInstallOptions }
+        }
+      } = state$.value;
+
+      if (mode === 'global') {
+        return {
+          from: 'global',
+          options: []
+        };
+      }
+
+      if (packagesInstallOptions && packagesInstallOptions.length) {
+        return {
+          from: 'flags',
+          options: packagesInstallOptions
+        };
+      }
+
+      const packagesFromPackageJson = readPackageJson(directory);
+      const packagesInstallOptionsFromJson = packagesFromPackageJson
+        ? objectEntries(
+            pick(
+              ['dependencies', 'devDependencies', 'optionalDependencies'],
+              packagesFromPackageJson
+            )
+          )
+        : [];
+
+      return {
+        from: 'json',
+        options: packagesInstallOptionsFromJson
+      };
+    }),
+    mergeMap(({ from, options }) => {
+      const {
+        ui: { selected }
+      } = state$.value;
+
+      return selected.map(selectedPackage => {
+        let details;
+
+        if (from === 'json') {
+          details = options.filter(option => {
+            /* eslint-disable-next-line */
+            const [groupName, dependencies] = option;
+
+            return dependencies[selectedPackage];
+          });
+
+          /* eslint-disable-next-line */
+          const [group, packages] = details[0];
+
+          return {
+            type: 'ADD_OPTIONS',
+            name: selectedPackage,
+            options: group ? [].concat(PACKAGE_GROUPS[group]) : []
+          };
+        }
+
+        return {
+          type: 'ADD_OPTIONS',
+          name: selectedPackage,
+          options: options.find(option => option.name === selectedPackage)
+            .options
+        };
+      });
+    }),
+    tap(console.log),
+    map(({ name, options }) => {
+      const {
+        common: { mode, directory }
+      } = state$.value;
+
+      const parameters = {
+        ipcEvent: 'install',
+        cmd: ['install'],
+        name,
+        pkgOptions: options,
+        single: true,
+        mode,
+        directory
+      };
+
+      ipcRenderer.send(IPC_EVENT, parameters);
+
+      return updateLoader({
         loading: true,
-        message: 'Installing packages..'
-      }),
-      setActivePage({
-        page: 'packages',
-        paused: false
-      })
-    ];
-  })
-);
+        message: MESSAGES.install
+      });
+    })
+  );
 
 const viewPackageEpic = pipe(
   ofType(viewPackage.type),
@@ -187,43 +291,53 @@ const viewPackageEpic = pipe(
   })
 );
 
-const updatePackagesEpic = pipe(
-  ofType(updatePackages.type),
-  mergeMap(({ payload }) => {
-    const { ipcEvent, packages, name } = payload;
+const updatePackagesEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(updatePackages.type),
+    mergeMap(({ payload }) => {
+      const {
+        common: { mode, directory }
+      } = state$.value;
+      const { ipcEvent, packages, name } = payload;
 
-    ipcRenderer.send('ipc-event', payload);
+      ipcRenderer.send(
+        'ipc-event',
+        Object.assign({}, payload, {
+          mode,
+          directory
+        })
+      );
 
-    if (ipcEvent === 'uninstall') {
+      if (ipcEvent === 'uninstall') {
+        return [
+          updateCommand({
+            operationStatus: 'running',
+            operationCommand: ipcEvent,
+            operationPackages: packages && packages.length ? packages : [name]
+          }),
+          {
+            type: clearSelected.type
+          }
+        ];
+      }
+
       return [
+        updateLoader({
+          loading: true,
+          message: MESSAGES.update
+        }),
+        // setActivePage({
+        //   page: 'packages',
+        //   paused: false
+        // }),
         updateCommand({
           operationStatus: 'running',
           operationCommand: ipcEvent,
           operationPackages: packages && packages.length ? packages : [name]
-        }),
-        {
-          type: clearSelected.type
-        }
+        })
       ];
-    }
-
-    return [
-      updateLoader({
-        loading: true,
-        message: 'Updating packages..'
-      }),
-      setActivePage({
-        page: 'packages',
-        paused: false
-      }),
-      updateCommand({
-        operationStatus: 'running',
-        operationCommand: ipcEvent,
-        operationPackages: packages && packages.length ? packages : [name]
-      })
-    ];
-  })
-);
+    })
+  );
 
 const onMapPackagesEpic = (action$, state$) =>
   action$.pipe(
@@ -275,7 +389,7 @@ const onMapPackagesEpic = (action$, state$) =>
             );
           }
 
-          if (!invalid) {
+          if (!invalid && !peerMissing && !missing && !extraneous) {
             const [isOutdated, outdatedPkg] = isPackageOutdated(
               packagesOutdated,
               pkgName
@@ -314,7 +428,7 @@ const onMapPackagesEpic = (action$, state$) =>
 
 const getPackagesListenerEpic = pipe(
   ofType(getPackagesListener.type),
-  switchMap(() => onGetPackages$),
+  switchMap(() => onGetPackages$()),
   catchError(err =>
     setSnackbar({
       type: 'error',
@@ -364,7 +478,8 @@ const viewPackageListenerEpic = action$ =>
 export default combineEpics(
   startCleanPackages,
   startEpic,
-  installPackagesEpic,
+  installPackageEpic,
+  installMultiplePackagesEpic,
   updatePackagesEpic,
   viewPackageEpic,
   viewPackageListenerEpic,

@@ -1,4 +1,5 @@
-import { flexContainer } from 'styles/variables';
+import { darken } from '@material-ui/core/styles/colorManipulator';
+import { defaultFont, flexContainer, grayColor } from 'styles/variables';
 
 const styles = () => ({
   list: {
@@ -6,6 +7,13 @@ const styles = () => ({
   },
   flexContainer: {
     ...flexContainer
+  },
+  title: {
+    ...defaultFont,
+    fontSize: 18,
+    display: 'flex',
+    color: darken(grayColor, 0.2),
+    flexDirection: 'column'
   }
 });
 

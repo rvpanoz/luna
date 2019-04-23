@@ -15,7 +15,7 @@
     "lint-styles-fix": "npm run --silent lint-styles --fix; exit 0",
     "package": "npm run build && electron-builder build --publish never",
     "package-all": "npm run build && electron-builder build -mwl",
-    "package-ci": "npm run postinstall && npm run build && electron-builder --publish always",
+    "package-ci": "npm run postinstall && npm run build && electron-builder --publish never",
     "package-linux": "npm run build && electron-builder build --linux",
     "package-win": "npm run build && electron-builder -c.extraMetadata.main=app/main.prod.js build --win --x64",
     "postinstall": "npm run build-dll",

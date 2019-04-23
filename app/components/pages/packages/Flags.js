@@ -1,8 +1,9 @@
 /* eslint-disable prefer-destructuring */
+/* eslint-disable react/require-default-props */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useMappedState } from 'redux-react-hook';
+import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -10,24 +11,31 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ControlTypes from 'components/common/ControlTypes';
 import Typography from '@material-ui/core/Typography';
+
 import { addInstallOption } from 'models/common/actions';
+import { INFO_MESSAGES } from 'constants/AppConstants';
 
 import styles from './styles/flags';
 
-const mapState = ({
-  common: {
-    operations: { packagesInstallOptions }
-  }
-}) => ({
-  packagesInstallOptions
-});
-
-const Flags = ({ classes, selected }) => {
+const Flags = ({ classes, packagesInstallOptions, selected }) => {
   const dispatch = useDispatch();
-  const { packagesInstallOptions } = useMappedState(mapState);
+
+  useEffect(() => {
+    selected.forEach(selectedPackages =>
+      dispatch(
+        addInstallOption({
+          name: selectedPackages,
+          options: ['save-prod']
+        })
+      )
+    );
+  }, [selected, dispatch]);
 
   return (
     <div className={classes.flexContainer}>
+      <Typography variant="subtitle1" className={classes.title}>
+        {INFO_MESSAGES.installing}
+      </Typography>
       <List dense className={classes.list}>
         {selected.map(packageName => {
           const option =
@@ -35,11 +43,6 @@ const Flags = ({ classes, selected }) => {
             packagesInstallOptions.find(
               installOption => installOption.name === packageName
             );
-          let value;
-
-          if (option) {
-            value = option.options[0];
-          }
 
           return (
             <ListItem key={packageName}>
@@ -50,9 +53,16 @@ const Flags = ({ classes, selected }) => {
               />
               <ListItemSecondaryAction>
                 <ControlTypes
-                  selectedValue={value}
+                  selectedValue={option && option.options[0]}
                   packageName={packageName}
-                  onSelect={payload => dispatch(addInstallOption(payload))}
+                  onSelect={({ name, options }) =>
+                    dispatch(
+                      addInstallOption({
+                        name,
+                        options
+                      })
+                    )
+                  }
                 />
               </ListItemSecondaryAction>
             </ListItem>
@@ -65,7 +75,8 @@ const Flags = ({ classes, selected }) => {
 
 Flags.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  selected: PropTypes.arrayOf(PropTypes.string).isRequired
+  selected: PropTypes.arrayOf(PropTypes.string).isRequired,
+  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(Flags);

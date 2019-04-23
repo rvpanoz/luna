@@ -1,7 +1,7 @@
 /* eslint-disable compat/compat */
 /* eslint-disable react/require-default-props */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -16,18 +16,8 @@ import styles from './styles/controlTypes';
 
 const groups = Object.values(PACKAGE_GROUPS);
 
-const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
+const ControlTypes = ({ classes, packageName, onSelect }) => {
   const [groupName, setGroup] = useState('save-prod');
-
-  useEffect(() => {
-    if (devOnly) {
-      setGroup('save-dev');
-      onSelect({
-        name: packageName,
-        options: [groupName]
-      });
-    }
-  }, [devOnly, groupName, packageName, onSelect]);
 
   return (
     <FormGroup row>
@@ -44,18 +34,12 @@ const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
             });
           }}
         >
-          {!devOnly || devOnly === false ? (
-            groups.map(group =>
-              group !== 'save-exact' ? (
-                <MenuItem key={`group${group}`} value={group}>
-                  {group}
-                </MenuItem>
-              ) : null
-            )
-          ) : (
-            <MenuItem key="group-save-dev" value="save-dev">
-              save-dev
-            </MenuItem>
+          {groups.map(group =>
+            group !== 'save-exact' ? (
+              <MenuItem key={`group${group}`} value={group}>
+                {group}
+              </MenuItem>
+            ) : null
           )}
         </Select>
       </FormControl>
@@ -78,15 +62,10 @@ const ControlTypes = ({ classes, packageName, onSelect, devOnly }) => {
   );
 };
 
-ControlTypes.defaultProps = {
-  devOnly: false
-};
-
 ControlTypes.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   packageName: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired,
-  devOnly: PropTypes.bool
+  onSelect: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(ControlTypes);

@@ -17,11 +17,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 
 import ClearIcon from '@material-ui/icons/Clear';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -34,9 +32,10 @@ import SwitchIcon from '@material-ui/icons/LoopOutlined';
 
 import { switchcase } from 'commons/utils';
 import { navigatorParameters } from 'commons/parameters';
-import { INFO_MESSAGES, PACKAGE_GROUPS } from 'constants/AppConstants';
-
-import { updatePackages, installPackages } from 'models/packages/actions';
+import {
+  updatePackages,
+  installMultiplePackages
+} from 'models/packages/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { clearFilters } from 'models/ui/actions';
 
@@ -50,16 +49,14 @@ const TableListToolbar = ({
   title,
   mode,
   manager,
-  directory,
+  packagesInstallOptions,
   fromSearch,
   filters,
   reload,
   nodata,
   outdated,
-  packagesInstallOptions,
   setFilteredByNamePackages,
   filteredByNamePackages,
-  packagesFromPackageJson,
   scrollWrapper,
   switchMode,
   total
@@ -90,93 +87,25 @@ const TableListToolbar = ({
       return clearAllFilters();
     }
 
+    if (!selected.length) {
+      return;
+    }
+
     if (mode === 'local' && action === 'install' && !force) {
       return toggleOptions(true);
     }
 
-    if (action === 'install' && selected.length) {
-      const commands = selected.map(selectedPackage => {
-        switch (mode) {
-          case 'local':
-            if (packagesInstallOptions && packagesInstallOptions.length) {
-              const selectedPackageOptions = packagesInstallOptions.find(
-                option => option.name === selectedPackage
-              );
-
-              /* eslint-disable-next-line */
-              const { name, options } = selectedPackageOptions;
-
-              return {
-                operation: action,
-                package: `${selectedPackage}@latest`,
-                options
-              };
-            }
-
-            if (packagesFromPackageJson && !packagesInstallOptions.length) {
-              const packagesOptions = packagesFromPackageJson.reduce(
-                (acc = [], opt) => {
-                  const [group, packages] = opt;
-
-                  if (group !== 'dependencies') {
-                    const names = Object.keys(packages);
-                    const inPackages = names.indexOf(selectedPackage) > -1;
-
-                    if (inPackages) {
-                      return [].concat(PACKAGE_GROUPS[group]);
-                    }
-                  }
-
-                  return acc;
-                },
-                ['save-prod']
-              );
-
-              return {
-                operation: action,
-                package: `${selectedPackage}@latest`,
-                options: packagesOptions
-              };
-            }
-            break;
-          default:
-            return {
-              operation: action,
-              package: `${selectedPackage}@latest`,
-              options: ['save-prod']
-            };
-        }
-      });
-
-      const operations = commands.map(command => command.operation);
-      const packages = commands.map(command => command.package);
-      const pkgOptions = commands.map(command => command.options);
-
-      const parameters = {
-        activeManager: manager,
-        ipcEvent: 'install',
-        cmd: operations,
-        packages,
-        pkgOptions,
-        multiple: true,
-        mode,
-        directory
-      };
-
-      dispatch(installPackages(parameters));
-    } else {
-      dispatch(
-        updatePackages({
-          activeManager: manager,
-          ipcEvent: action,
-          cmd: [action],
-          multiple: true,
-          packages: selected,
-          mode,
-          directory
-        })
-      );
-    }
+    return action === 'install'
+      ? dispatch(installMultiplePackages())
+      : dispatch(
+          updatePackages({
+            activeManager: manager,
+            ipcEvent: action,
+            cmd: [action],
+            multiple: true,
+            packages: selected
+          })
+        );
   };
 
   const openPackage = () =>
@@ -212,7 +141,7 @@ const TableListToolbar = ({
                 {
                   title: 'Install packages',
                   type: 'question',
-                  message: `Do you want to install the selected packages?`,
+                  message: `\nDo you want to install the selected packages?`,
                   buttons: ['Cancel', 'Install']
                 },
                 btnIdx => {
@@ -238,7 +167,7 @@ const TableListToolbar = ({
                 {
                   title: 'Install latest version',
                   type: 'question',
-                  message: `Do you want to install the latest version of the selected packages?`,
+                  message: `\nDo you want to install the latest version of the selected packages?`,
                   buttons: ['Cancel', 'Install']
                 },
                 btnIdx => {
@@ -264,7 +193,7 @@ const TableListToolbar = ({
                 {
                   title: 'Update packages',
                   type: 'question',
-                  message: `Do you want to update the selected packages?`,
+                  message: `\nDo you want to update the selected packages?`,
                   buttons: ['Cancel', 'Update']
                 },
                 btnIdx => {
@@ -293,7 +222,7 @@ const TableListToolbar = ({
                   {
                     title: 'Uninstall packages',
                     type: 'question',
-                    message: `Do you want to uninstall the selected packages?`,
+                    message: `\nDo you want to uninstall the selected packages?`,
                     buttons: ['Cancel', 'Uninstall']
                   },
                   btnIdx => {
@@ -330,16 +259,6 @@ const TableListToolbar = ({
 
   const renderToolbarActions = () => (
     <React.Fragment>
-      <Tooltip title="Open package.json">
-        <IconButton
-          color="primary"
-          disableRipple
-          aria-label="open_package"
-          onClick={openPackage}
-        >
-          <LoadIcon />
-        </IconButton>
-      </Tooltip>
       <Tooltip title="Switch to global packages">
         <div>
           <IconButton
@@ -351,6 +270,16 @@ const TableListToolbar = ({
             <SwitchIcon />
           </IconButton>
         </div>
+      </Tooltip>
+      <Tooltip title="Open package.json">
+        <IconButton
+          color="primary"
+          disableRipple
+          aria-label="open_package"
+          onClick={openPackage}
+        >
+          <LoadIcon />
+        </IconButton>
       </Tooltip>
       {!fromSearch && (
         <Tooltip title="Show filters">
@@ -442,20 +371,21 @@ const TableListToolbar = ({
         open={optionsOpen}
         fullWidth
         onClose={() => {
-          dispatch({ type: clearInstallOptions.type });
+          dispatch(clearInstallOptions());
           toggleOptions(!optionsOpen);
         }}
         aria-labelledby="install-options"
       >
-        <DialogTitle>Installation options</DialogTitle>
         <DialogContent>
-          <DialogContentText>{INFO_MESSAGES.installing}</DialogContentText>
-          <Flags selected={selected} />
+          <Flags
+            selected={selected}
+            packagesInstallOptions={packagesInstallOptions}
+          />
         </DialogContent>
         <DialogActions>
           <Button
             onClick={() => {
-              dispatch({ type: clearInstallOptions.type });
+              dispatch(clearInstallOptions());
               toggleOptions(false);
             }}
             color="secondary"
@@ -483,7 +413,6 @@ TableListToolbar.propTypes = {
   title: PropTypes.string,
   mode: PropTypes.string,
   manager: PropTypes.string,
-  directory: PropTypes.string,
   filters: PropTypes.arrayOf(PropTypes.object),
   fromSearch: PropTypes.bool,
   total: PropTypes.number,
@@ -492,8 +421,7 @@ TableListToolbar.propTypes = {
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   switchMode: PropTypes.func.isRequired,
-  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object),
-  packagesFromPackageJson: PropTypes.arrayOf(PropTypes.object)
+  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(TableListToolbar);
