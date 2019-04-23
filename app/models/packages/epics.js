@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 
-import { pipe } from 'rxjs';
+import { of, pipe } from 'rxjs';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import {
   readPackageJson,
@@ -218,52 +218,67 @@ const installMultiplePackagesEpic = (action$, state$) =>
         options: packagesInstallOptionsFromJson
       };
     }),
-    mergeMap(({ from, options }) => {
+    switchMap(({ from, options }) => {
       const {
         ui: { selected }
       } = state$.value;
 
-      return selected.map(selectedPackage => {
-        let details;
+      return of(
+        selected.map(selectedPackage => {
+          let details;
 
-        if (from === 'json') {
-          details = options.filter(option => {
+          if (from === 'json') {
+            details = options.filter(option => {
+              /* eslint-disable-next-line */
+              const [groupName, dependencies] = option;
+
+              return dependencies[selectedPackage];
+            });
+
             /* eslint-disable-next-line */
-            const [groupName, dependencies] = option;
+            const [group, packages] = details[0];
 
-            return dependencies[selectedPackage];
-          });
+            return {
+              type: 'ADD_OPTIONS',
+              name: selectedPackage,
+              options: group ? [].concat(PACKAGE_GROUPS[group]) : []
+            };
+          }
 
-          /* eslint-disable-next-line */
-          const [group, packages] = details[0];
+          if (from === 'flags') {
+            return {
+              type: 'ADD_OPTIONS',
+              name: selectedPackage,
+              options: options
+                ? options.find(option => option.name === selectedPackage)
+                    .options
+                : []
+            };
+          }
 
           return {
             type: 'ADD_OPTIONS',
             name: selectedPackage,
-            options: group ? [].concat(PACKAGE_GROUPS[group]) : []
+            options: []
           };
-        }
-
-        return {
-          type: 'ADD_OPTIONS',
-          name: selectedPackage,
-          options: options.find(option => option.name === selectedPackage)
-            .options
-        };
-      });
+        })
+      );
     }),
-    tap(console.log),
-    map(({ name, options }) => {
+    map(commandOptions => {
       const {
+        ui: { selected },
         common: { mode, directory }
       } = state$.value;
 
+      const options = commandOptions.map(opt => opt.options);
+      const mergedOptions = [].concat(options);
+
       const parameters = {
         ipcEvent: 'install',
-        cmd: ['install'],
-        name,
-        pkgOptions: options,
-        single: true,
+        cmd: options.map(() => 'install'),
+        packages: selected,
+        pkgOptions: mergedOptions,
+        multiple: true,
         mode,
         directory
       };
@@ -326,10 +341,10 @@ const updatePackagesEpic = (action$, state$) =>
           loading: true,
           message: MESSAGES.update
         }),
-        // setActivePage({
-        //   page: 'packages',
-        //   paused: false
-        // }),
+        setActivePage({
+          page: 'packages',
+          paused: false
+        }),
         updateCommand({
           operationStatus: 'running',
           operationCommand: ipcEvent,

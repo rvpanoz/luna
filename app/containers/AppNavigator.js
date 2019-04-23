@@ -110,7 +110,7 @@ const Navigator = ({
       {
         title: 'Confirmation',
         type: 'question',
-        message: `Would you like to install all the packages from \n${directory}? \n\nNote: This process will take some time `,
+        message: `\nWould you like to install all the packages from \n${directory}? \n\nNote: This process will take some time `,
         buttons: ['Cancel', 'Install']
       },
       btnIdx => {

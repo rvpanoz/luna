@@ -7,7 +7,6 @@ import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
-import { pick } from 'ramda';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -87,7 +86,6 @@ const IPC_EVENT = 'ipc-event';
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
-    packageLoader,
     packagesData,
     packagesOutdated,
     mode,
@@ -108,7 +106,10 @@ const Packages = ({ classes }) => {
     operationCommand
   } = useMappedState(mapState);
 
+  // TODO: fix me
+  /* eslint-disable-next-line */
   const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
+
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
@@ -164,22 +165,6 @@ const Packages = ({ classes }) => {
     if (paused) {
       return;
     }
-
-    // TODO: move logic to epic
-    // quick fix to get package groups from package.json in local
-    // if (mode === 'local' && directory) {
-    //   const newPackagesFromPackageJson = readPackageJson(directory);
-    //   const jsonPackages = objectEntries(
-    //     pick(
-    //       ['dependencies', 'devDependencies', 'optionalDependencies'],
-    //       newPackagesFromPackageJson
-    //     )
-    //   );
-
-    //   setPackageJsonPackages(jsonPackages);
-    // } else {
-    //   setPackageJsonPackages([]);
-    // }
 
     fetchPackages();
   }, [fetchPackages, mode, directory, paused]);

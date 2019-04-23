@@ -85,7 +85,7 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: `Would you like to run ${
+                          message: `\nWould you like to run ${
                             item.primaryText
                           }? \n\nNote: This process will take some time `,
                           buttons: ['Cancel', 'Run']
