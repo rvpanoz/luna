@@ -131,7 +131,7 @@ const PackageDetails = ({ classes }) => {
                 {
                   title: 'Confirmation',
                   type: 'question',
-                  message: `Do you want to install ${active.name}?`,
+                  message: `\nDo you want to install ${active.name}?`,
                   buttons: ['Cancel', 'Install']
                 },
                 btnIdx => {
@@ -182,7 +182,7 @@ const PackageDetails = ({ classes }) => {
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: `Do you want to install ${
+                          message: `\nDo you want to install ${
                             active.name
                           } latest version?`,
                           buttons: ['Cancel', 'Install']
@@ -221,7 +221,7 @@ const PackageDetails = ({ classes }) => {
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: `Do you want to update ${active.name}?`,
+                          message: `\nDo you want to update ${active.name}?`,
                           buttons: ['Cancel', 'Update']
                         },
                         btnIdx => {
@@ -258,7 +258,7 @@ const PackageDetails = ({ classes }) => {
                     {
                       title: 'Confirmation',
                       type: 'question',
-                      message: `Do you want to uninstall ${active.name}?`,
+                      message: `\nDo you want to uninstall ${active.name}?`,
                       buttons: ['Cancel', 'Uninstall']
                     },
                     btnIdx => {
