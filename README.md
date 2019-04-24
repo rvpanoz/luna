@@ -2,7 +2,7 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
 
-npm desktop manager for handling npm packages. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
+npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
 
 ## Features
 
