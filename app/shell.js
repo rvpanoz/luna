@@ -1,4 +1,5 @@
-/* eslint-disable */
+/* eslint-disable compat/compat */
+/* eslint-disable import/prefer-default-export */
 
 /**
  * Run shell commands
@@ -14,10 +15,10 @@ import mk from './mk';
  * @param {*} callback
  */
 
-export const runCommand = (options, callback) => {
+const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
-  // returns an array of Promises
+  // an array of Promises
   const combine = () =>
     cmd.map((command, idx) => {
       try {
@@ -27,22 +28,23 @@ export const runCommand = (options, callback) => {
         return result;
       } catch (error) {
         mk.log(error);
-        return;
+
+        throw new Error(error);
       }
     });
 
   Promise.all(combine())
-    .then(results => {
+    .then(results =>
       results.forEach(result => {
         const { status, ...values } = result;
-        const { data, errors, cmd } = values;
+        const { data, errors, ...restValues } = values;
 
         if (status === 'close') {
-          callback(status, errors, data, cmd);
+          callback(status, errors, data, restValues.cmd);
         }
-      });
-    })
-    .catch(error => {
-      Promise.reject(error);
-    });
+      })
+    )
+    .catch(error => Promise.reject(error));
 };
+
+export { runCommand };
