@@ -70,7 +70,6 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-// handle local events
 const handleLocalEvents = (event, mode, directory) => {
   const openedPackages = Store.get('openedPackages') || [];
   const yarnLock = fs.existsSync(
@@ -100,8 +99,42 @@ const handleLocalEvents = (event, mode, directory) => {
 };
 
 /**
- * ipc-event events
+ * Event handling
  */
+
+ipcMain.on('npm-list', (event, options) => {
+  const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
+
+  const onComplete = (status, errors, data) => {
+    const { directory, mode } = rest;
+
+    if (directory && mode === 'local') {
+      handleLocalEvents(event, mode, directory);
+    }
+
+    event.sender.send('npm-list-complete', status, data, errors, options);
+  };
+
+  const callback = (status, errors, ...restArgs) =>
+    switchcase({
+      close: () => onComplete(status, errors, ...restArgs)
+    })(null)(status);
+
+  /**
+   * run command: npm list <options>
+   */
+  try {
+    const params = merge(settings, {
+      activeManager,
+      ...rest
+    });
+
+    runCommand(params, callback);
+  } catch (error) {
+    mk.log(error.message);
+    throw new Error(error);
+  }
+});
 
 // channel: ipc-event
 ipcMain.on('ipc-event', (event, options) => {

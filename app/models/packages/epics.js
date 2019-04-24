@@ -57,6 +57,8 @@ import {
   onViewPackage$
 } from './listeners';
 
+import mk from '../../mk';
+
 const IPC_EVENT = 'ipc-event';
 const MESSAGES = {
   install: 'Installing packages..',
@@ -131,6 +133,15 @@ const startEpic = (action$, state$) =>
     tap(({ payload: { channel, options } }) =>
       ipcRenderer.send(channel, options)
     ),
+    catchError(error => {
+      mk.log(error);
+
+      setSnackbar({
+        type: 'error',
+        open: true,
+        message: 'Sorry an error occured. Please try again'
+      });
+    }),
     ignoreElements()
   );
 
@@ -443,14 +454,16 @@ const onMapPackagesEpic = (action$, state$) =>
 
 const getPackagesListenerEpic = pipe(
   ofType(getPackagesListener.type),
-  switchMap(() => onGetPackages$()),
-  catchError(err =>
+  switchMap(() => onGetPackages$),
+  catchError(err => {
+    mk.log(err);
+
     setSnackbar({
       type: 'error',
       open: true,
-      message: err
-    })
-  )
+      message: 'Sorry an error occured. Please try again'
+    });
+  })
 );
 
 const searchPackagesListenerEpic = pipe(

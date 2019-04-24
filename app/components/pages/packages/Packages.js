@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-underscore-dangle */
 
-import React, { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -81,8 +81,6 @@ const mapState = ({
   operationCommand
 });
 
-const IPC_EVENT = 'ipc-event';
-
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
@@ -114,25 +112,16 @@ const Packages = ({ classes }) => {
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
-  const fetchPackages = useCallback(
-    () =>
-      dispatch(
-        setPackagesStart({
-          channel: IPC_EVENT,
-          options: {
-            ipcEvent: 'get-packages',
-            cmd: ['outdated', 'list'],
-            mode,
-            directory
-          }
-        })
-      ),
-    [dispatch, mode, directory]
-  );
-
   const reload = () => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
-    fetchPackages();
+    dispatch(
+      setPackagesStart({
+        channel: 'npm-list',
+        options: {
+          cmd: ['outdated', 'list']
+        }
+      })
+    );
   };
 
   const switchMode = (appMode, appDirectory) => {
@@ -140,7 +129,14 @@ const Packages = ({ classes }) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
 
     if (fromSearch) {
-      fetchPackages();
+      dispatch(
+        setPackagesStart({
+          channel: 'npm-list',
+          options: {
+            cmd: ['outdated', 'list']
+          }
+        })
+      );
     }
   };
 
@@ -166,8 +162,15 @@ const Packages = ({ classes }) => {
       return;
     }
 
-    fetchPackages();
-  }, [fetchPackages, mode, directory, paused]);
+    dispatch(
+      setPackagesStart({
+        channel: 'npm-list',
+        options: {
+          cmd: ['outdated', 'list']
+        }
+      })
+    );
+  }, [dispatch, mode, directory, paused]);
 
   // setup packages with filters
   const [filteredPackages] = useFilters(packagesData, filters);
