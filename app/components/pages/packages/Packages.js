@@ -104,7 +104,6 @@ const Packages = ({ classes }) => {
     operationCommand
   } = useMappedState(mapState);
 
-  // TODO: fix me
   /* eslint-disable-next-line */
   const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
 
@@ -158,9 +157,10 @@ const Packages = ({ classes }) => {
   };
 
   useEffect(() => {
-    if (paused) {
-      return;
-    }
+    console.log(`app is ${paused ? 'paused' : 'not paused'}`);
+    // if (paused) {
+    //   return;
+    // }
 
     dispatch(
       setPackagesStart({

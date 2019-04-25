@@ -22,7 +22,7 @@ const { startMinimized, defaultManager } = defaultSettings;
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 1024,
+  MIN_WIDTH = 1280 || 1024,
   MIN_HEIGHT = 768,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS,
@@ -112,7 +112,7 @@ ipcMain.on('npm-list', (event, options) => {
       handleLocalEvents(event, mode, directory);
     }
 
-    event.sender.send('npm-list-complete', status, data, errors, options);
+    event.sender.send('npm-list-completed', status, data, errors, options);
   };
 
   const callback = (status, errors, ...restArgs) =>

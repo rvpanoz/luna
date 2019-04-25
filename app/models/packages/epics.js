@@ -15,8 +15,6 @@ import {
   mergeMap,
   switchMap,
   concatMap,
-  withLatestFrom,
-  filter,
   ignoreElements,
   catchError
 } from 'rxjs/operators';
@@ -57,14 +55,11 @@ import {
   onViewPackage$
 } from './listeners';
 
+import { onOffOperator } from './operators';
+import MESSAGES from './messages';
 import mk from '../../mk';
 
 const IPC_EVENT = 'ipc-event';
-const MESSAGES = {
-  install: 'Installing packages..',
-  update: 'Updating packages..',
-  loading: 'Loading packages..'
-};
 const ON = Symbol('ON');
 const OFF = Symbol('OFF');
 
@@ -96,17 +91,6 @@ const setPackages = payload => ({
   payload
 });
 
-const isPaused = data => [ON, OFF].includes(data);
-
-// operator to handle pause event
-const onOffOperator = () => src$ =>
-  src$.pipe(
-    withLatestFrom(src$.pipe(filter(isPaused))),
-    filter(([value, paused]) => paused === ON), // eslint-disable-line
-    map(([value]) => value),
-    filter(data => !isPaused(data))
-  );
-
 const startEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
@@ -129,7 +113,8 @@ const startEpic = (action$, state$) =>
         }
       ];
     }),
-    onOffOperator(),
+    // tap(console.log),
+    onOffOperator([ON, OFF]),
     tap(({ payload: { channel, options } }) =>
       ipcRenderer.send(channel, options)
     ),
@@ -155,7 +140,7 @@ const startCleanPackages = (action$, state$) =>
 
       return [paused ? OFF : ON, {}];
     }),
-    onOffOperator(),
+    onOffOperator([ON, OFF]),
     concatMap(() => [
       updateLoader({
         loading: true,
@@ -454,16 +439,16 @@ const onMapPackagesEpic = (action$, state$) =>
 
 const getPackagesListenerEpic = pipe(
   ofType(getPackagesListener.type),
-  switchMap(() => onGetPackages$),
-  catchError(err => {
-    mk.log(err);
+  switchMap(() => onGetPackages$)
+  // catchError(err => {
+  //   mk.log(err);
 
-    setSnackbar({
-      type: 'error',
-      open: true,
-      message: 'Sorry an error occured. Please try again'
-    });
-  })
+  //   setSnackbar({
+  //     type: 'error',
+  //     open: true,
+  //     message: 'Sorry an error occured. Please try again'
+  //   });
+  // })
 );
 
 const searchPackagesListenerEpic = pipe(
