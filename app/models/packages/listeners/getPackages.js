@@ -7,16 +7,17 @@ import { switchcase, objectEntries, isJson } from 'commons/utils';
 import { mapPackages, setOutdatedSuccess } from '../actions';
 
 const onGetPackages$ = new Observable(observer => {
-  const listener = () => {
-    console.log(response);
-    if (!response || !isJson(response)) {
+  const onComplete = (event, ...rest) => {
+    const [data, errors, options] = rest;
+
+    if (!data || !isJson(data)) {
       return;
     }
 
     const command = 'list';
 
     try {
-      const packageData = JSON.parse(response);
+      const packageData = JSON.parse(data);
       const { name, version, description } = packageData || {};
       const packages = pick(['dependencies', 'problems'], packageData);
       const { dependencies, problems } = packages || {};
@@ -73,8 +74,15 @@ const onGetPackages$ = new Observable(observer => {
     }
   };
 
-  // ipcRenderer.removeListener('npm-list-completed', () => console.log(1));
-  ipcRenderer.once('npm-list-completed', (event, response) => listener);
+  const onFlow = (event, ...rest) => {
+    const [data] = rest;
+    console.log(data);
+  };
+
+  ipcRenderer.removeAllListeners(['npm-list-completed', 'npm-list-flow']);
+
+  ipcRenderer.on('npm-list-flow', onFlow);
+  ipcRenderer.on('npm-list-completed', onComplete);
 });
 
 export default onGetPackages$;

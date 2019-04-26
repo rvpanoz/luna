@@ -17,12 +17,10 @@ const {
   defaultSettings: { defaultManager }
 } = config;
 
-// default arguments
 const defaultsArgs = {
   list: ['--json', '--depth=0']
 };
 
-// current working directory
 const cwd = process.cwd();
 
 const execute = (
@@ -33,17 +31,12 @@ const execute = (
   callback
 ) => {
   const [operation] = commandArgs;
-  mk.log(
-    `execute command ${operation} with args: ${commandArgs.join(
-      ','
-    )} - ${mode} - ${directory}`
-  );
+
   const resultP = new Promise(resolve => {
     const result = [];
     let errors = '';
 
     log(chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`));
-    callback('flow', `${manager} ${commandArgs.join(' ')}`);
 
     // on windows use npm.cmd
     const command = spawn(
@@ -62,6 +55,7 @@ const execute = (
 
     command.stdout.on('data', data => {
       result.push(String(data));
+      callback('flow', String(data), null);
     });
 
     command.stderr.on('data', error => {

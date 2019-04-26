@@ -18,7 +18,7 @@ import mk from './mk';
 const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
-  // an array of Promises
+  // an array of promises with npm commands to run
   const combine = () =>
     cmd.map((command, idx) => {
       try {
@@ -36,12 +36,9 @@ const runCommand = (options, callback) => {
   Promise.all(combine())
     .then(results =>
       results.forEach(result => {
-        const { status, ...values } = result;
-        const { data, errors, ...restValues } = values;
+        mk.log(result);
 
-        if (status === 'close') {
-          callback(status, errors, data, restValues.cmd);
-        }
+        return callback(result);
       })
     )
     .catch(error => Promise.reject(error));

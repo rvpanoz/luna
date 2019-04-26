@@ -46,7 +46,7 @@ Store.set('openedPackages', []);
 const settings = Store.get('user_settings');
 
 let mainWindow = null;
-let loadingScreen = null;
+// let loadingScreen = null;
 
 if (NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -58,6 +58,10 @@ if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
 
   DEBUG_DEV && require('electron-debug')();
   require('module').globalPaths.push(p);
+  require('electron-reload')(__dirname, {
+    electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
+    hardResetMethod: 'exit'
+  });
 }
 
 const installExtensions = async () => {
@@ -102,27 +106,34 @@ const handleLocalEvents = (event, mode, directory) => {
  * Event handling
  */
 
+// channel: npm-list
 ipcMain.on('npm-list', (event, options) => {
   const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
 
-  const onComplete = (status, errors, data) => {
+  const onFlow = chunk => event.sender.send('npm-list-flow', chunk);
+  const onError = error => event.sender.send('npm-list-error', error);
+
+  const onComplete = (errors, data) => {
     const { directory, mode } = rest;
 
     if (directory && mode === 'local') {
       handleLocalEvents(event, mode, directory);
     }
 
-    event.sender.send('npm-list-completed', status, data, errors, options);
+    event.sender.send('npm-list-completed', data, errors, options);
   };
 
-  const callback = (status, errors, ...restArgs) =>
-    switchcase({
-      close: () => onComplete(status, errors, ...restArgs)
+  const callback = result => {
+    const { status, errors, data } = result;
+    console.log(status);
+    return switchcase({
+      flow: dataChunk => onFlow(dataChunk),
+      close: () => onComplete(errors, data),
+      error: error => onError(error)
     })(null)(status);
+  };
 
-  /**
-   * run command: npm list <options>
-   */
+  // run command: npm list <options>
   try {
     const params = merge(settings, {
       activeManager,
@@ -132,7 +143,7 @@ ipcMain.on('npm-list', (event, options) => {
     runCommand(params, callback);
   } catch (error) {
     mk.log(error.message);
-    throw new Error(error);
+    event.sender.send('npm-list-error', error);
   }
 });
 
@@ -174,7 +185,7 @@ ipcMain.on('ipc-event', (event, options) => {
       handleLocalEvents(event, mode, directory);
     }
 
-    event.sender.send('loaded-packages-close', Store.get('openedPackages'));
+    event.sender.send('history-close', Store.get('openedPackages'));
     event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
   };
 

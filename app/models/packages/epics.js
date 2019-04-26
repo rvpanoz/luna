@@ -60,8 +60,8 @@ import MESSAGES from './messages';
 import mk from '../../mk';
 
 const IPC_EVENT = 'ipc-event';
-const ON = Symbol('ON');
-const OFF = Symbol('OFF');
+const ON = 'ON';
+const OFF = 'OFF';
 
 const updateCommand = ({
   operationStatus,
@@ -113,8 +113,7 @@ const startEpic = (action$, state$) =>
         }
       ];
     }),
-    // tap(console.log),
-    onOffOperator([ON, OFF]),
+    onOffOperator(ON, OFF),
     tap(({ payload: { channel, options } }) =>
       ipcRenderer.send(channel, options)
     ),
