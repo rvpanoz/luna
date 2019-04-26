@@ -59,8 +59,8 @@ if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
   DEBUG_DEV && require('electron-debug')();
   require('module').globalPaths.push(p);
   require('electron-reload')(__dirname, {
-    electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
-    hardResetMethod: 'exit'
+    electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
+    // hardResetMethod: 'quit'
   });
 }
 
@@ -126,6 +126,7 @@ ipcMain.on('npm-list', (event, options) => {
   const callback = result => {
     const { status, errors, data } = result;
     console.log(status);
+
     return switchcase({
       flow: dataChunk => onFlow(dataChunk),
       close: () => onComplete(errors, data),
@@ -305,12 +306,9 @@ app.on('ready', async () => {
 
     // npm and node info
     const npmEnv = await CheckNpm();
+    const npmEnvError = npmEnv && npmEnv.error;
 
-    if (npmEnv.error) {
-      event.sender.send('npm-error', String(npmEnv.error));
-    } else {
-      event.sender.send('get-env-close', npmEnv);
-    }
+    event.sender.send('npm-env-close', npmEnvError, npmEnv);
 
     // user settings
     const userSettings = Store.get('user_settings') || defaultSettings;
@@ -318,16 +316,22 @@ app.on('ready', async () => {
 
     // directories history
     const openedPackages = Store.get('opened_packages') || [];
-    event.sender.send('loaded-packages-close', openedPackages);
+    event.sender.send('history-close', openedPackages);
+
+    // signal finish
     event.sender.send('finish-loaded');
   });
 
   mainWindow.webContents.on('crashed', event => {
-    log.info(chalk.white.bgRed.bold('[CRASHED]'), event);
+    log.error(chalk.white.bgRed.bold('[CRASHED]'), event);
+    mk.log(event);
+    throw new Error('[WINDOW: CRASHED]');
   });
 
   mainWindow.on('unresponsive', event => {
-    log.info(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
+    log.error(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
+    mk.log(event);
+    throw new Error('[WINDOW: UNRESPONSIVE]');
   });
 
   mainWindow.on('closed', () => {
@@ -339,7 +343,6 @@ app.on('ready', async () => {
 });
 
 process.on('uncaughtException', error => {
-  log.error('[ERROR]', error.message);
-  mainWindow.webContents.send('uncaught-exception', error.message);
-  app.quit();
+  log.error('[ERROR]', error);
+  mainWindow.webContents.send('uncaught-exception', error);
 });

@@ -48,11 +48,11 @@ const App = () => {
   useEffect(() => {
     ipcRenderer.once('finish-loaded', () => dispatch(initActions()));
 
-    ipcRenderer.on('uncaught-exception', (event, ...args) => {
+    ipcRenderer.once('uncaught-exception', (event, ...args) => {
       dispatch({ type: setUIException.type, payload: { message: args[0] } });
     });
 
-    ipcRenderer.once('yarn-warning-close', () => {
+    ipcRenderer.once('yarn-env-close', () => {
       dispatch(
         setSnackbar({
           open: true,
@@ -62,15 +62,15 @@ const App = () => {
       );
     });
 
-    ipcRenderer.on('get-env-close', (event, env) => {
+    ipcRenderer.once('npm-env-close', (event, error, env) => {
       dispatch({ type: setEnv.type, payload: env });
     });
 
     return () =>
       ipcRenderer.removeAllListeners([
         'uncaught-exception',
-        'get-env-close',
-        'yarn-warning-close'
+        'npm-env-close',
+        'yarn-env-close'
       ]);
   }, [dispatch]);
 

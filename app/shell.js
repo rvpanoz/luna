@@ -6,6 +6,7 @@
  * npm [cmd] [[<@scope>/]<pkg> ...]
  * */
 
+import log from 'electron-log';
 import { apiManager as manager } from './cli';
 import mk from './mk';
 
@@ -27,8 +28,7 @@ const runCommand = (options, callback) => {
 
         return result;
       } catch (error) {
-        mk.log(error);
-
+        log.error(error);
         throw new Error(error);
       }
     });
@@ -36,9 +36,9 @@ const runCommand = (options, callback) => {
   Promise.all(combine())
     .then(results =>
       results.forEach(result => {
-        mk.log(result);
+        // log.info(result);
 
-        return callback(result);
+        callback(result);
       })
     )
     .catch(error => Promise.reject(error));
