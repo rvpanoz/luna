@@ -58,10 +58,11 @@ if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
 
   DEBUG_DEV && require('electron-debug')();
   require('module').globalPaths.push(p);
-  require('electron-reload')(__dirname, {
-    electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
-    // hardResetMethod: 'quit'
-  });
+
+  // require('electron-reload')(__dirname, {
+  //   electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
+  //   hardResetMethod: 'exit'
+  // });
 }
 
 const installExtensions = async () => {

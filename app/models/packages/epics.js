@@ -15,6 +15,8 @@ import {
   mergeMap,
   switchMap,
   concatMap,
+  withLatestFrom,
+  filter,
   ignoreElements,
   catchError
 } from 'rxjs/operators';
@@ -45,7 +47,9 @@ import {
   getPackagesListener,
   searchPackagesListener,
   viewPackageListener,
-  npmActionsListener
+  npmActionsListener,
+  prepareInstall,
+  addInstallationOption
 } from './actions';
 
 import {
@@ -74,6 +78,16 @@ const updateCommand = ({
     operationPackages,
     operationCommand
   }
+});
+
+const addInstallationOptionAction = payload => ({
+  type: addInstallationOption.type,
+  payload
+});
+
+const prepareInstallationOptions = payload => ({
+  type: prepareInstall.type,
+  payload
 });
 
 const updateLoader = payload => ({
@@ -153,7 +167,9 @@ const startCleanPackages = (action$, state$) =>
     ])
   );
 
-const installPackageEpic = action$ =>
+// installation
+
+const installPackagesEpic = action$ =>
   action$.pipe(
     ofType(installPackages.type),
     mergeMap(({ payload }) => {
@@ -172,93 +188,125 @@ const installPackageEpic = action$ =>
     })
   );
 
-const installMultiplePackagesEpic = (action$, state$) =>
+// deprecated
+// const installMultiplePackagesEpic = (action$, state$) =>
+//   action$.pipe(
+//     ofType(installMultiplePackages.type),
+//     map(() => {
+//       const {
+//         common: {
+//           mode,
+//           directory,
+//           operations: { packagesInstallOptions }
+//         }
+//       } = state$.value;
+
+//       if (mode === 'global') {
+//         return {
+//           from: 'global',
+//           options: []
+//         };
+//       }
+
+//       if (packagesInstallOptions && packagesInstallOptions.length) {
+//         return {
+//           from: 'flags',
+//           options: packagesInstallOptions
+//         };
+//       }
+
+//       const packagesFromPackageJson = readPackageJson(directory);
+//       const packagesInstallOptionsFromJson = packagesFromPackageJson
+//         ? objectEntries(
+//             pick(
+//               ['dependencies', 'devDependencies', 'optionalDependencies'],
+//               packagesFromPackageJson
+//             )
+//           )
+//         : [];
+
+//       return {
+//         from: 'json',
+//         options: packagesInstallOptionsFromJson
+//       };
+//     }),
+//     switchMap(({ from, options }) => {
+//       const {
+//         ui: { selected }
+//       } = state$.value;
+
+//       return of(
+//         selected.map(selectedPackage => {
+//           let details;
+
+//           if (from === 'json') {
+//             details = options.filter(option => {
+//               /* eslint-disable-next-line */
+//               const [groupName, dependencies] = option;
+
+//               return dependencies[selectedPackage];
+//             });
+
+//             /* eslint-disable-next-line */
+//             const [group, packages] = details[0];
+
+//             return {
+//               type: 'ADD_OPTIONS',
+//               name: selectedPackage,
+//               options: group ? [].concat(PACKAGE_GROUPS[group]) : []
+//             };
+//           }
+
+//           if (from === 'flags') {
+//             return {
+//               type: 'ADD_OPTIONS',
+//               name: selectedPackage,
+//               options: options
+//                 ? options.find(option => option.name === selectedPackage)
+//                     .options
+//                 : []
+//             };
+//           }
+
+//           return {
+//             type: 'ADD_OPTIONS',
+//             name: selectedPackage,
+//             options: []
+//           };
+//         })
+//       );
+//     }),
+//     map(commandOptions => {
+//       const {
+//         ui: { selected },
+//         common: { mode, directory }
+//       } = state$.value;
+
+//       const options = commandOptions.map(opt => opt.options);
+//       const mergedOptions = [].concat(options);
+
+//       const parameters = {
+//         ipcEvent: 'install',
+//         cmd: options.map(() => 'install'),
+//         packages: selected,
+//         pkgOptions: mergedOptions,
+//         multiple: true,
+//         mode,
+//         directory
+//       };
+
+//       ipcRenderer.send(IPC_EVENT, parameters);
+
+//       return updateLoader({
+//         loading: true,
+//         message: MESSAGES.install
+//       });
+//     })
+//   );
+
+const completeInstallationEpic = (action$, state$) =>
   action$.pipe(
-    ofType(installMultiplePackages.type),
-    map(() => {
-      const {
-        common: {
-          mode,
-          directory,
-          operations: { packagesInstallOptions }
-        }
-      } = state$.value;
-
-      if (mode === 'global') {
-        return {
-          from: 'global',
-          options: []
-        };
-      }
-
-      if (packagesInstallOptions && packagesInstallOptions.length) {
-        return {
-          from: 'flags',
-          options: packagesInstallOptions
-        };
-      }
-
-      const packagesFromPackageJson = readPackageJson(directory);
-      const packagesInstallOptionsFromJson = packagesFromPackageJson
-        ? objectEntries(
-            pick(
-              ['dependencies', 'devDependencies', 'optionalDependencies'],
-              packagesFromPackageJson
-            )
-          )
-        : [];
-
-      return {
-        from: 'json',
-        options: packagesInstallOptionsFromJson
-      };
-    }),
-    switchMap(({ from, options }) => {
-      const {
-        ui: { selected }
-      } = state$.value;
-
-      return of(
-        selected.map(selectedPackage => {
-          let details;
-
-          if (from === 'json') {
-            details = options.filter(option => {
-              /* eslint-disable-next-line */
-              const [groupName, dependencies] = option;
-
-              return dependencies[selectedPackage];
-            });
-
-            /* eslint-disable-next-line */
-            const [group, packages] = details[0];
-
-            return {
-              type: 'ADD_OPTIONS',
-              name: selectedPackage,
-              options: group ? [].concat(PACKAGE_GROUPS[group]) : []
-            };
-          }
-
-          if (from === 'flags') {
-            return {
-              type: 'ADD_OPTIONS',
-              name: selectedPackage,
-              options: options
-                ? options.find(option => option.name === selectedPackage)
-                    .options
-                : []
-            };
-          }
-
-          return {
-            type: 'ADD_OPTIONS',
-            name: selectedPackage,
-            options: []
-          };
-        })
-      );
-    }),
+    ofType(addInstallationOption.type),
     map(commandOptions => {
       const {
         ui: { selected },
@@ -287,6 +335,70 @@ const installMultiplePackagesEpic = (action$, state$) =>
     })
   );
 
+const installMultiplePackagesFromGlobalEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(installMultiplePackages.type),
+    withLatestFrom(state$),
+    filter(
+      ([
+        ,
+        {
+          common: { mode }
+        }
+      ]) => mode === 'global'
+    ),
+    map(() =>
+      prepareInstallationOptions({
+        from: 'global',
+        options: []
+      })
+    )
+  );
+
+const prepareInstallEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(prepareInstall.type),
+    switchMap(({ from, options }) => {
+      const {
+        ui: { selected }
+      } = state$.value;
+
+      selected.map(selectedPackage => {
+        let details;
+
+        if (from === 'json') {
+          details = options.filter(option => {
+            const [, dependencies] = option;
+
+            return dependencies[selectedPackage];
+          });
+
+          const [group] = details;
+
+          return addInstallationOptionAction({
+            name: selectedPackage,
+            options: group ? [].concat(PACKAGE_GROUPS[group]) : []
+          });
+        }
+
+        if (from === 'flags') {
+          return addInstallationOptionAction({
+            name: selectedPackage,
+            options: options
+              ? options.find(option => option.name === selectedPackage).options
+              : []
+          });
+        }
+
+        return addInstallationOptionAction({
+          name: selectedPackage,
+          options: []
+        });
+      });
+    })
+  );
+
+// view
 const viewPackageEpic = pipe(
   ofType(viewPackage.type),
   map(({ payload }) => {
@@ -438,16 +550,16 @@ const onMapPackagesEpic = (action$, state$) =>
 
 const getPackagesListenerEpic = pipe(
   ofType(getPackagesListener.type),
-  switchMap(() => onGetPackages$)
-  // catchError(err => {
-  //   mk.log(err);
+  switchMap(() => onGetPackages$),
+  catchError(err => {
+    mk.log(err);
 
-  //   setSnackbar({
-  //     type: 'error',
-  //     open: true,
-  //     message: 'Sorry an error occured. Please try again'
-  //   });
-  // })
+    setSnackbar({
+      type: 'error',
+      open: true,
+      message: 'Sorry an error occured. Please try again'
+    });
+  })
 );
 
 const searchPackagesListenerEpic = pipe(
@@ -490,8 +602,13 @@ const viewPackageListenerEpic = action$ =>
 export default combineEpics(
   startCleanPackages,
   startEpic,
-  installPackageEpic,
-  installMultiplePackagesEpic,
+
+  installPackagesEpic,
+  installMultiplePackagesFromGlobalEpic,
+  prepareInstallEpic,
+  completeInstallationEpic,
+
+  // installMultiplePackagesEpic,
   updatePackagesEpic,
   viewPackageEpic,
   viewPackageListenerEpic,

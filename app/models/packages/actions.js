@@ -22,7 +22,12 @@ const searchPackagesListener = ActionCreator('REGISTER_LISTENER_SEARCH');
 const viewPackageListener = ActionCreator('REGISTER_LISTENER_PACKAGE');
 const npmActionsListener = ActionCreator('REGISTER_LISTENER_ACTION');
 
+const prepareInstall = ActionCreator('PREPARE_INSTALL');
+const addInstallationOption = ActionCreator('ADD_INSTALLATION_OPTION');
+
 export {
+  addInstallationOption,
+  prepareInstall,
   mapPackages,
   installPackages,
   installMultiplePackages,
