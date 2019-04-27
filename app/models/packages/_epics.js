@@ -59,6 +59,8 @@ import {
   onViewPackage$
 } from './listeners';
 
+import { installationEpic } from './installationEpics';
+
 import { onOffOperator } from './operators';
 import MESSAGES from './messages';
 import mk from '../../mk';
@@ -168,25 +170,6 @@ const startCleanPackages = (action$, state$) =>
   );
 
 // installation
-
-const installPackagesEpic = action$ =>
-  action$.pipe(
-    ofType(installPackages.type),
-    mergeMap(({ payload }) => {
-      ipcRenderer.send(IPC_EVENT, payload);
-
-      return [
-        updateLoader({
-          loading: true,
-          message: MESSAGES.install
-        }),
-        setActivePage({
-          page: 'packages',
-          paused: false
-        })
-      ];
-    })
-  );
 
 // deprecated
 // const installMultiplePackagesEpic = (action$, state$) =>
@@ -603,10 +586,12 @@ export default combineEpics(
   startCleanPackages,
   startEpic,
 
-  installPackagesEpic,
-  installMultiplePackagesFromGlobalEpic,
-  prepareInstallEpic,
-  completeInstallationEpic,
+  installPackagesEpics,
+
+  // installPackagesEpic,
+  // installMultiplePackagesFromGlobalEpic,
+  // prepareInstallEpic,
+  // completeInstallationEpic,
 
   // installMultiplePackagesEpic,
   updatePackagesEpic,

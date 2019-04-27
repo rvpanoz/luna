@@ -16,7 +16,7 @@ import { epics as npmEpics } from 'models/npm';
 import { epics as commonEpics } from 'models/common';
 import { epics as notificationsEpics } from 'models/notifications';
 
-// reducers
+// root reducer
 import rootReducer from '../reducers';
 
 // TODO: fix it
