@@ -58,11 +58,6 @@ if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
 
   DEBUG_DEV && require('electron-debug')();
   require('module').globalPaths.push(p);
-
-  // require('electron-reload')(__dirname, {
-  //   electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
-  //   hardResetMethod: 'exit'
-  // });
 }
 
 const installExtensions = async () => {
@@ -126,7 +121,6 @@ ipcMain.on('npm-list', (event, options) => {
 
   const callback = result => {
     const { status, errors, data } = result;
-    console.log(status);
 
     return switchcase({
       flow: dataChunk => onFlow(dataChunk),
@@ -325,13 +319,11 @@ app.on('ready', async () => {
 
   mainWindow.webContents.on('crashed', event => {
     log.error(chalk.white.bgRed.bold('[CRASHED]'), event);
-    mk.log(event);
     throw new Error('[WINDOW: CRASHED]');
   });
 
   mainWindow.on('unresponsive', event => {
     log.error(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
-    mk.log(event);
     throw new Error('[WINDOW: UNRESPONSIVE]');
   });
 

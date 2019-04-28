@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
-import { pipe } from 'rxjs';
+
 import {
   mergeMap,
   concatMap,
@@ -13,8 +13,9 @@ import { clearSelected, toggleLoader } from 'models/ui/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { clearNotifications } from 'models/notifications/actions';
 import { clearCommands } from 'models/npm/actions';
-import { clearPackages, setPackagesStart } from 'models/packages/actions';
-import { onOffOperator } from 'models/packages/operators';
+
+import { onOffOperator } from '../operators';
+import { clearPackages, setPackagesStart } from '../actions';
 
 import MESSAGES from '../messages';
 
@@ -58,18 +59,20 @@ const initEpic = (action$, state$) =>
     ignoreElements()
   );
 
-const clearEpic = pipe(
-  concatMap(() => [
-    updateLoader({
-      loading: true,
-      message: MESSAGES.loading
-    }),
-    clearSelected(),
-    clearCommands(),
-    clearNotifications(),
-    clearInstallOptions(),
-    clearPackages()
-  ])
-);
+const clearEpic = action$ =>
+  action$.pipe(
+    ofType(setPackagesStart.type),
+    mergeMap(() => [
+      updateLoader({
+        loading: true,
+        message: MESSAGES.loading
+      }),
+      clearSelected(),
+      clearCommands(),
+      clearNotifications(),
+      clearInstallOptions(),
+      clearPackages()
+    ])
+  );
 
 export { initEpic, clearEpic };
