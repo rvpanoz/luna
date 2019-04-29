@@ -62,6 +62,7 @@ const initEpic = (action$, state$) =>
 const clearEpic = action$ =>
   action$.pipe(
     ofType(setPackagesStart.type),
+    onOffOperator(ON, OFF),
     mergeMap(() => [
       updateLoader({
         loading: true,

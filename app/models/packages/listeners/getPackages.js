@@ -4,7 +4,7 @@ import { updateNotifications } from 'models/notifications/actions';
 import { Observable } from 'rxjs';
 import { pick } from 'ramda';
 import { switchcase, objectEntries, isJson } from 'commons/utils';
-import { mapPackages, setOutdatedSuccess } from '../actions';
+import { mapPackages, mapOutdatedPackages } from '../actions';
 
 const onGetPackages$ = new Observable(observer => {
   const onComplete = (event, ...rest) => {
@@ -14,7 +14,7 @@ const onGetPackages$ = new Observable(observer => {
       return;
     }
 
-    const command = 'list';
+    const [command] = options;
 
     try {
       const packageData = JSON.parse(data);
@@ -57,15 +57,8 @@ const onGetPackages$ = new Observable(observer => {
         },
         outdated: () =>
           observer.next(
-            setOutdatedSuccess({
-              outdated: dataArray.map(arr => {
-                const [pkgName, details] = arr;
-
-                return {
-                  name: pkgName,
-                  ...details
-                };
-              })
+            mapOutdatedPackages({
+              data: noDependencies ? [] : dataArray
             })
           )
       })('list')(command);

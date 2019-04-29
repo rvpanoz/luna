@@ -7,10 +7,7 @@ import { onGetPackages$ } from '../listeners';
 const getPackagesListenerEpic = action$ =>
   action$.pipe(
     ofType(getPackagesListener.type),
-    switchMap(() => onGetPackages$),
-    catchError(error => {
-      console.error(error);
-    })
+    switchMap(() => onGetPackages$)
   );
 
 export { getPackagesListenerEpic };

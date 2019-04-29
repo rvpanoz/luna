@@ -2,8 +2,9 @@
  * Packages reducer: Handles state management for packages operations
  */
 
-import { assoc, identity, merge, prop, propOr } from 'ramda';
+import { assoc, identity, merge, prop, propOr, prepend } from 'ramda';
 import {
+  addOutdatedPackage,
   clearPackages,
   setPackagesStart,
   setPackagesSuccess,
@@ -76,7 +77,20 @@ const handlers = {
         lastUpdatedAt: newDateFormatted
       }
     }),
+  [addOutdatedPackage.type]: (state, { payload: { dependency } }) => {
+    const {
+      packagesOutdated
+    } = state
 
+    return merge(state, {
+      ...state,
+      packagesOutdated: prepend(
+        dependency,
+        packagesOutdated
+      )
+    })
+
+  },
   [setOutdatedSuccess.type]: (state, { payload: { outdated } }) =>
     merge(state, {
       ...state,

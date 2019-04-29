@@ -1,102 +1,132 @@
-import { catchError, map } from 'rxjs/operators';
+/* eslint-disable */
+
+/**
+ * Transformation epics
+ */
+
+import {
+  catchError,
+  map,
+  tap,
+  concatMap,
+  mergeMap,
+  switchMap,
+  withLatestFrom,
+  takeWhile,
+  takeUntil,
+  filter,
+  combineLatest,
+  delay,
+  ignoreElements
+} from 'rxjs/operators';
+
+import { from, of, pipe } from 'rxjs';
 import { ofType } from 'redux-observable';
 
-import { readPackageJson, isPackageOutdated } from 'commons/utils';
-import { mapPackages, setPackagesSuccess } from '../actions';
+import { PACKAGE_GROUPS } from 'constants/AppConstants';
+import { readPackageJson } from 'commons/utils';
 
-const setPackages = payload => ({
+import {
+  addOutdatedPackage,
+  mapPackages,
+  mapOutdatedPackages,
+  mergePackages,
+  setPackagesSuccess,
+  setOutdatedSuccess,
+  transformOutdatedPackages,
+  transformDependency,
+  transformationCompleted
+} from '../actions';
+
+const setUpdatedPackages = payload => ({
   type: setPackagesSuccess.type,
   payload
 });
 
-const mapPackagesEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(mapPackages.type),
-    map(
-      ({
-        payload: {
-          data,
-          projectName,
-          projectVersion,
-          projectDescription,
-          fromSearch,
-          fromSort
-        }
-      }) => {
-        const {
-          common: { mode, directory },
-          packages: {
-            packagesOutdated,
-            project: { name, version, description }
-          }
-        } = state$.value;
+const setOutdatedPackages = payload => ({
+  type: setOutdatedSuccess.type,
+  payload
+});
 
-        const enhancedDependencies = data.reduce((deps = [], dependency) => {
-          let group;
+const mergePackagesEpic = pipe(
+  ofType(mergePackages.type),
+  tap(console.log)
+);
 
-          const [pkgName, details] = fromSearch
-            ? [
-                dependency.name,
-                {
-                  version: dependency.version,
-                  description: dependency.description
-                }
-              ]
-            : dependency;
+const mapPackagesEpic = pipe(
+  ofType(mapPackages.type),
+  ignoreElements()
+);
 
-          const { extraneous, invalid, missing, peerMissing } = details || {};
+const mapOutdatedPackagesEpic = pipe(
+  ofType(mapOutdatedPackages.type),
+  switchMap(({ payload: { data } }) => from(data).pipe(
+    concatMap(dependency => {
+      const [name, details] = dependency;
 
-          if (mode === 'local') {
-            const packageJSON = readPackageJson(directory);
-
-            if (!packageJSON) {
-              return null;
-            }
-
-            group = Object.keys(PACKAGE_GROUPS).find(
-              groupName =>
-                packageJSON[groupName] && packageJSON[groupName][pkgName]
-            );
-          }
-
-          if (!invalid && !peerMissing && !missing && !extraneous) {
-            const [isOutdated, outdatedPkg] = isPackageOutdated(
-              packagesOutdated,
-              pkgName
-            );
-
-            const enhancedDependency = {
-              ...details,
-              name: pkgName,
-              extraneous,
-              missing,
-              peerMissing,
-              latest: isOutdated ? outdatedPkg.latest : null,
-              isOutdated,
-              __hasError: missing || peerMissing || extraneous,
-              __fromSearch: fromSearch,
-              __group: group
-            };
-
-            deps.push(enhancedDependency);
-          }
-
-          return deps;
-        }, []);
-
-        return setPackages({
-          dependencies: enhancedDependencies,
-          projectName: projectName || name,
-          projectVersion: projectVersion || version,
-          projectDescription: projectDescription || description,
-          fromSearch,
-          fromSort
-        });
-      }
-    ),
-    catchError(error => {
-      console.error(error); // TODO: handle
+      return [{
+        name,
+        isOutdated: true,
+        ...details
+      }]
     })
-  );
+  )),
+  map(dependency => addOutdatedPackage({ dependency }))
+)
 
-export { mapPackagesEpic };
+// TODO: how to use this and merge the result
+const transformOutdatedPackagesEpic = pipe(
+  ofType(transformOutdatedPackages.type),
+  // tap(console.log),
+  // ignoreElements()
+)
+
+const transformUpdatedPackagesEpic = action$ => action$.pipe(
+  ofType(transformUpdatedPackages.type),
+  ignoreElements()
+)
+
+const transformDependencyEpic = pipe(
+  ofType(transformDependency.type),
+  ignoreElements()
+);
+
+
+const transformLocalDependencyEpic = (action$, state$) => action$.pipe(
+  ofType(transformDependency.type),
+  filter(() => {
+    const {
+      common: { mode }
+    } = state$.value;
+
+    return mode === 'local'
+  }),
+  map(({ payload: { dependency } }) => {
+    const {
+      common: { directory }
+    } = state$.value;
+
+    const packageJSON = readPackageJson(directory);
+
+    const group = Object.keys(PACKAGE_GROUPS).find(
+      groupName =>
+        packageJSON[groupName] && packageJSON[groupName][dependency.name]
+    );
+
+    return transformationCompleted({
+      dependency: {
+        ...details,
+        name,
+        __group: group || null
+      }
+    });
+  }),
+  tap(() => console.log('transformLocalDependencyEpic'))
+)
+
+const transformCompletedEpic = pipe(
+  ofType(transformationCompleted.type),
+  ignoreElements()
+)
+
+export { mapPackagesEpic, mapOutdatedPackagesEpic, transformOutdatedPackagesEpic };

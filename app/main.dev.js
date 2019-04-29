@@ -22,7 +22,7 @@ const { startMinimized, defaultManager } = defaultSettings;
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 1280 || 1024,
+  MIN_WIDTH = 1024,
   MIN_HEIGHT = 768,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS,
@@ -109,27 +109,26 @@ ipcMain.on('npm-list', (event, options) => {
   const onFlow = chunk => event.sender.send('npm-list-flow', chunk);
   const onError = error => event.sender.send('npm-list-error', error);
 
-  const onComplete = (errors, data) => {
+  const onComplete = (errors, data, cmd) => {
     const { directory, mode } = rest;
 
     if (directory && mode === 'local') {
       handleLocalEvents(event, mode, directory);
     }
 
-    event.sender.send('npm-list-completed', data, errors, options);
+    event.sender.send('npm-list-completed', data, errors, cmd);
   };
 
   const callback = result => {
-    const { status, errors, data } = result;
+    const { status, errors, data, cmd } = result;
 
     return switchcase({
       flow: dataChunk => onFlow(dataChunk),
-      close: () => onComplete(errors, data),
+      close: () => onComplete(errors, data, cmd),
       error: error => onError(error)
     })(null)(status);
   };
 
-  // run command: npm list <options>
   try {
     const params = merge(settings, {
       activeManager,
@@ -138,7 +137,7 @@ ipcMain.on('npm-list', (event, options) => {
 
     runCommand(params, callback);
   } catch (error) {
-    mk.log(error.message);
+    log.error(error.message);
     event.sender.send('npm-list-error', error);
   }
 });
