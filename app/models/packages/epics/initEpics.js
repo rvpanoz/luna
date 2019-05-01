@@ -4,6 +4,7 @@ import { ofType } from 'redux-observable';
 import {
   mergeMap,
   concatMap,
+  map,
   ignoreElements,
   catchError,
   tap
@@ -53,14 +54,7 @@ const initEpic = (action$, state$) =>
     tap(({ payload: { channel, options } }) =>
       ipcRenderer.send(channel, options)
     ),
-    ignoreElements()
-  );
-
-const clearEpic = action$ =>
-  action$.pipe(
-    ofType(setPackagesStart.type),
-    onOffOperator(ON, OFF),
-    mergeMap(() => [
+    concatMap(() => [
       updateLoader({
         loading: true,
         message: MESSAGES.loading
@@ -70,7 +64,7 @@ const clearEpic = action$ =>
       clearNotifications(),
       clearInstallOptions(),
       clearPackages()
-    ])
+    ]),
   );
 
-export { initEpic, clearEpic };
+export { initEpic };

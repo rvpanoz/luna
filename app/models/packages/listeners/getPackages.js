@@ -68,17 +68,16 @@ const onGetPackages$ = new Observable(observer => {
   };
 
   const onFlow = (event, ...rest) => {
-    const [data] = rest;
-    // console.log(data);
+    console.log(data);
   };
 
   // clean up
-  ipcRenderer.removeListener('npm-list-completed', onComplete);
-  ipcRenderer.removeListener('npm-list-flow', onFlow);
+  ipcRenderer.removeListener('npm-command-completed', onComplete);
+  ipcRenderer.removeListener('npm-command-flow', onFlow);
 
   // register listeners
-  ipcRenderer.on('npm-list-flow', onFlow);
-  ipcRenderer.on('npm-list-completed', onComplete);
+  ipcRenderer.on('npm-command-flow', onFlow);
+  ipcRenderer.on('npm-command-completed', onComplete);
 });
 
 export default onGetPackages$;

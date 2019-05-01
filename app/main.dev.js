@@ -102,12 +102,12 @@ const handleLocalEvents = (event, mode, directory) => {
  * Event handling
  */
 
-// channel: npm-list
-ipcMain.on('npm-list', (event, options) => {
+// channel: npm-command
+ipcMain.on('npm-command', (event, options) => {
   const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
 
-  const onFlow = chunk => event.sender.send('npm-list-flow', chunk);
-  const onError = error => event.sender.send('npm-list-error', error);
+  const onFlow = chunk => event.sender.send('npm-command-flow', chunk);
+  const onError = error => event.sender.send('npm-command-error', error);
 
   const onComplete = (errors, data, cmd) => {
     const { directory, mode } = rest;
@@ -116,7 +116,7 @@ ipcMain.on('npm-list', (event, options) => {
       handleLocalEvents(event, mode, directory);
     }
 
-    event.sender.send('npm-list-completed', data, errors, cmd);
+    event.sender.send('npm-command-completed', data, errors, cmd);
   };
 
   const callback = result => {
@@ -138,73 +138,73 @@ ipcMain.on('npm-list', (event, options) => {
     runCommand(params, callback);
   } catch (error) {
     log.error(error.message);
-    event.sender.send('npm-list-error', error);
+    event.sender.send('npm-command-error', error);
   }
 });
 
 // channel: ipc-event
-ipcMain.on('ipc-event', (event, options) => {
-  const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
+// ipcMain.on('ipc-event', (event, options) => {
+//   const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
 
-  let runningTimes = 1;
+//   let runningTimes = 1;
 
-  const onClose = (status, errors, data, cmd) => {
-    const { directory, mode } = rest;
-    const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
-    const toolsIndex = APP_TOOLS.indexOf(ipcEvent);
-    const settingsIndex = APP_TOOLS.indexOf(ipcEvent);
-    const commands = options.cmd;
+//   const onClose = (status, errors, data, cmd) => {
+//     const { directory, mode } = rest;
+//     const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
+//     const toolsIndex = APP_TOOLS.indexOf(ipcEvent);
+//     const settingsIndex = APP_TOOLS.indexOf(ipcEvent);
+//     const commands = options.cmd;
 
-    if (actionIndex > -1 && ipcEvent !== 'view') {
-      if (commands.length === runningTimes) {
-        return event.sender.send('action-close', errors, data, cmd);
-      }
+//     if (actionIndex > -1 && ipcEvent !== 'view') {
+//       if (commands.length === runningTimes) {
+//         return event.sender.send('action-close', errors, data, cmd);
+//       }
 
-      runningTimes += 1;
-    }
+//       runningTimes += 1;
+//     }
 
-    if (toolsIndex > -1) {
-      return event.sender.send(
-        'tool-close',
-        errors,
-        data,
-        cmd.concat(directory)
-      );
-    }
+//     if (toolsIndex > -1) {
+//       return event.sender.send(
+//         'tool-close',
+//         errors,
+//         data,
+//         cmd.concat(directory)
+//       );
+//     }
 
-    if (settingsIndex > -1) {
-      return event.sender.send('settings-close', errors, data, cmd);
-    }
+//     if (settingsIndex > -1) {
+//       return event.sender.send('settings-close', errors, data, cmd);
+//     }
 
-    if (directory && mode === 'local' && cmd.indexOf('list') > -1) {
-      handleLocalEvents(event, mode, directory);
-    }
+//     if (directory && mode === 'local' && cmd.indexOf('list') > -1) {
+//       handleLocalEvents(event, mode, directory);
+//     }
 
-    event.sender.send('history-close', Store.get('openedPackages'));
-    event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
-  };
+//     event.sender.send('history-close', Store.get('openedPackages'));
+//     event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
+//   };
 
-  const callback = (status, errors, ...restArgs) =>
-    switchcase({
-      close: () => onClose(status, errors, ...restArgs)
-    })(null)(status);
+//   const callback = (status, errors, ...restArgs) =>
+//     switchcase({
+//       close: () => onClose(status, errors, ...restArgs)
+//     })(null)(status);
 
-  /**
-   * At this point we try to run a shell command sending output
-   * to renderer process via ipc events
-   */
-  try {
-    const params = merge(settings, {
-      activeManager,
-      ...rest
-    });
+//   /**
+//    * At this point we try to run a shell command sending output
+//    * to renderer process via ipc events
+//    */
+//   try {
+//     const params = merge(settings, {
+//       activeManager,
+//       ...rest
+//     });
 
-    runCommand(params, callback);
-  } catch (error) {
-    mk.log(error.message);
-    throw new Error(error);
-  }
-});
+//     runCommand(params, callback);
+//   } catch (error) {
+//     mk.log(error.message);
+//     throw new Error(error);
+//   }
+// });
 
 // channel: general
 ipcMain.on('online-status-changed', (event, status) => {
@@ -318,12 +318,12 @@ app.on('ready', async () => {
 
   mainWindow.webContents.on('crashed', event => {
     log.error(chalk.white.bgRed.bold('[CRASHED]'), event);
-    throw new Error('[WINDOW: CRASHED]');
+    app.quit() // TODO: handle this
   });
 
   mainWindow.on('unresponsive', event => {
     log.error(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
-    throw new Error('[WINDOW: UNRESPONSIVE]');
+    app.quit() // TODO: handle this
   });
 
   mainWindow.on('closed', () => {

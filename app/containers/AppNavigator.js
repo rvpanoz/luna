@@ -76,7 +76,7 @@ const Navigator = ({
       setOpenedDirectories(directories)
     );
 
-    return () => ipcRenderer.removeListener('history-close');
+    return () => ipcRenderer.removeAllListeners(['history-close']);
   }, []);
 
   const openPackage = () =>
