@@ -4,8 +4,7 @@ import { initEpic, clearEpic } from './initEpics';
 import { getPackagesListenerEpic } from './listEpics';
 import {
   mapPackagesEpic,
-  mapOutdatedPackagesEpic,
-  transformOutdatedPackagesEpic
+  mapOutdatedPackagesEpic
 } from './transformEpics';
 
 export default combineEpics(
@@ -14,6 +13,5 @@ export default combineEpics(
   initEpic,
   installPackagesEpic,
   mapPackagesEpic,
-  mapOutdatedPackagesEpic,
-  transformOutdatedPackagesEpic
+  mapOutdatedPackagesEpic
 );

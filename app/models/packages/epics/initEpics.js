@@ -53,9 +53,6 @@ const initEpic = (action$, state$) =>
     tap(({ payload: { channel, options } }) =>
       ipcRenderer.send(channel, options)
     ),
-    catchError(error => {
-      console.error(error); // TODO: handle
-    }),
     ignoreElements()
   );
 
