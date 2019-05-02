@@ -26,7 +26,7 @@ const installMultiplePackages = ActionCreator('INSTALL_MULTIPLE_PACKAGES');
 const updatePackages = ActionCreator('UPDATE_PACKAGES');
 const removePackages = ActionCreator('REMOVE_PACKAGES');
 
-const getPackagesListener = ActionCreator('REGISTER_LISTENER_PACKAGES');
+const listPackagesListener = ActionCreator('REGISTER_LISTENER_PACKAGES');
 const searchPackagesListener = ActionCreator('REGISTER_LISTENER_SEARCH');
 const viewPackageListener = ActionCreator('REGISTER_LISTENER_PACKAGE');
 const npmActionsListener = ActionCreator('REGISTER_LISTENER_ACTION');
@@ -60,7 +60,7 @@ export {
   removePackages,
   viewPackage,
   npmActionsListener,
-  getPackagesListener,
+  listPackagesListener,
   searchPackagesListener,
   viewPackageListener
 };

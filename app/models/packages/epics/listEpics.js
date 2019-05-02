@@ -1,26 +1,13 @@
 import { catchError, switchMap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 
-import { getPackagesListener, viewPackageListener } from '../actions';
-import { onGetPackages$, onViewPackage$ } from '../listeners';
+import { listPackagesListener } from '../actions';
+import { onListPackages$ } from '../listeners';
 
-const getPackagesListenerEpic = action$ =>
+const listPackagesListenerEpic = action$ =>
   action$.pipe(
-    ofType(getPackagesListener.type),
-    switchMap(() => onGetPackages$)
+    ofType(listPackagesListener.type),
+    switchMap(() => onListPackages$)
   );
 
-const viewPackageListenerEpic = action$ =>
-  action$.pipe(
-    ofType(viewPackageListener.type),
-    switchMap(() => onViewPackage$),
-    catchError(err =>
-      setSnackbar({
-        type: 'error',
-        open: true,
-        message: err
-      })
-    )
-  );
-
-export { getPackagesListenerEpic, viewPackageListenerEpic };
+export { listPackagesListenerEpic };

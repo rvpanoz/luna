@@ -1,14 +1,15 @@
 import { combineEpics } from 'redux-observable';
 import { installPackagesEpic } from './installationEpics';
 import { initEpic } from './initEpics';
-import { getPackagesListenerEpic, viewPackageListenerEpic } from './listEpics';
+import { listPackagesListenerEpic } from './listEpics';
+import { viewPackageListenerEpic } from './viewEpics'
 import {
   mapPackagesEpic,
   mapOutdatedPackagesEpic
 } from './transformEpics';
 
 export default combineEpics(
-  getPackagesListenerEpic,
+  listPackagesListenerEpic,
   viewPackageListenerEpic,
   initEpic,
   installPackagesEpic,

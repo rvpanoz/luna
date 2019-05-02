@@ -6,7 +6,7 @@ import { pick } from 'ramda';
 import { switchcase, objectEntries, isJson } from 'commons/utils';
 import { mapPackages, mapOutdatedPackages } from '../actions';
 
-const onGetPackages$ = new Observable(observer => {
+const onListPackages$ = new Observable(observer => {
   const onComplete = (event, ...rest) => {
     const [data, errors, options] = rest;
 
@@ -80,4 +80,4 @@ const onGetPackages$ = new Observable(observer => {
   ipcRenderer.on('npm-command-completed', onComplete);
 });
 
-export default onGetPackages$;
+export default onListPackages$;
