@@ -1,13 +1,35 @@
-import { catchError, switchMap } from 'rxjs/operators';
+import { ipcRenderer } from 'electron';
+import { catchError, map, tap, switchMap, ignoreElements } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
+import { pipe } from 'rxjs';
 
-import { viewPackageListener } from '../actions';
+import { togglePackageLoader } from 'models/ui/actions'
+import { viewPackageStart, viewPackageListener } from '../actions';
 import { onViewPackage$ } from '../listeners';
 
-const viewPackageListenerEpic = action$ =>
-    action$.pipe(
-        ofType(viewPackageListener.type),
-        switchMap(() => onViewPackage$)
-    );
+const updatePackageLoader = payload => ({
+    type: togglePackageLoader.type,
+    payload
+});
 
-export { viewPackageListenerEpic };
+const viewPackageEpic = pipe(
+    ofType(viewPackageStart.type),
+    map(() => updatePackageLoader({
+        loading: true
+    }))
+);
+
+const viewPackageLoaderEpic = pipe(
+    ofType(viewPackageStart.type),
+    tap(({ payload: { options } }) => {
+        ipcRenderer.send('npm-view', options)
+    }),
+    ignoreElements()
+);
+
+const viewPackageListenerEpic = pipe(
+    ofType(viewPackageListener.type),
+    switchMap(() => onViewPackage$)
+);
+
+export { viewPackageEpic, viewPackageLoaderEpic, viewPackageListenerEpic };

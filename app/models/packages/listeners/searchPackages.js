@@ -5,11 +5,12 @@ import { parseFromSearch } from 'commons/utils';
 import { mapPackages } from '../actions';
 
 const onSearchPackages$ = new Observable(observer => {
-  ipcRenderer.removeAllListeners(['search-packages-close']);
+  ipcRenderer.removeAllListeners(['npm-search-completed']);
 
   ipcRenderer.on(
-    'search-packages-close',
-    (event, status, commandArgs, data) => {
+    'npm-search-completed',
+    (event, data, errors, cmd) => {
+
       try {
         const [packages] = parseFromSearch(data) || [];
 

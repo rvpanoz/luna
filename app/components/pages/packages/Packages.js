@@ -18,7 +18,7 @@ import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
 import { PackageDetails } from 'components/pages/package';
 
-import { setPackagesStart, viewPackage } from 'models/packages/actions';
+import { setPackagesStart, viewPackageStart } from 'models/packages/actions';
 import {
   addSelected,
   setPage,
@@ -138,8 +138,8 @@ const Packages = ({ classes }) => {
     }
   };
 
-  const viewPackageHandler = (name, version) => dispatch(viewPackage({
-    channel: 'npm-command',
+  const viewPackageHandler = (name, version) => dispatch(viewPackageStart({
+    channel: 'npm-view',
     options: {
       cmd: ['view'],
       name,

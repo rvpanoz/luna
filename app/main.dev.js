@@ -2,22 +2,20 @@
 
 import ElectronStore from 'electron-store';
 import path from 'path';
-import fs from 'fs';
 import chalk from 'chalk';
-import { merge } from 'ramda';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import log from 'electron-log';
 
 import { APP_TOOLS, APP_ACTIONS } from './constants/AppConstants';
-import { switchcase } from './commons/utils';
 import MenuBuilder from './menu';
 import mk from './mk';
-import { runCommand } from './shell';
 import { CheckNpm } from '../internals/scripts';
+
+import { onNpmView, onNpmList, onNpmSearch } from './mainProcess';
 
 const { config } = mk;
 const { defaultSettings } = config || {};
-const { startMinimized, defaultManager } = defaultSettings;
+const { startMinimized } = defaultSettings;
 
 const {
   DEBUG_PROD = 0,
@@ -42,11 +40,7 @@ const Store = new ElectronStore();
 // clear opened packages
 Store.set('openedPackages', []);
 
-// user settings
-const settings = Store.get('user_settings');
-
 let mainWindow = null;
-// let loadingScreen = null;
 
 if (NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -70,77 +64,33 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-const handleLocalEvents = (event, mode, directory) => {
-  const openedPackages = Store.get('openedPackages') || [];
-  const yarnLock = fs.existsSync(
-    path.join(path.dirname(directory), 'yarn.lock')
-  );
-  const dirName = path.dirname(path.resolve(directory));
-  const parsedDirectory = path.parse(dirName);
-  const { name } = parsedDirectory || {};
-
-  if (yarnLock) {
-    event.sender.send('yarn-warning-close');
-  }
-
-  const inDirectories = openedPackages.some(
-    pkg => pkg.directory && pkg.directory.includes(dirName)
-  );
-
-  if (!inDirectories) {
-    Store.set('openedPackages', [
-      ...openedPackages,
-      {
-        name,
-        directory: path.join(dirName, 'package.json')
-      }
-    ]);
-  }
-};
 
 /**
  * Event handling
+ * send asynchronous messages between main and renderer process
+ * https://electronjs.org/docs/api/ipc-renderer
  */
 
-// channel: npm-command
-ipcMain.on('npm-command', (event, options) => {
-  const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
+/**
+ * Channel: npm-command
+ * Supports: npm-list, npm-oudated
+ * 
+ * */
+ipcMain.on('npm-command', (event, options) => onNpmList(event, options, Store));
 
-  const onFlow = chunk => event.sender.send('npm-command-flow', chunk);
-  const onError = error => event.sender.send('npm-command-error', error);
+/**
+ * Channel: npm-search
+ * Supports: npm-search
+ * 
+ * */
+ipcMain.on('npm-search', (event, options) => onNpmSearch(event, options, Store));
 
-  const onComplete = (errors, data, cmd) => {
-    const { directory, mode } = rest;
-
-    if (directory && mode === 'local') {
-      handleLocalEvents(event, mode, directory);
-    }
-
-    event.sender.send('npm-command-completed', data, errors, cmd);
-  };
-
-  const callback = result => {
-    const { status, errors, data, cmd } = result;
-
-    return switchcase({
-      flow: dataChunk => onFlow(dataChunk),
-      close: () => onComplete(errors, data, cmd),
-      error: error => onError(error)
-    })(null)(status);
-  };
-
-  try {
-    const params = merge(settings, {
-      activeManager,
-      ...rest
-    });
-
-    runCommand(params, callback);
-  } catch (error) {
-    log.error(error.message);
-    event.sender.send('npm-command-error', error);
-  }
-});
+/**
+ * Channel: npm-view
+ * Supports: npm-view
+ * 
+ * */
+ipcMain.on('npm-view', (event, options) => onNpmView(event, options, Store));
 
 // channel: ipc-event
 // ipcMain.on('ipc-event', (event, options) => {

@@ -8,7 +8,6 @@
 
 import log from 'electron-log';
 import { apiManager as manager } from './cli';
-import mk from './mk';
 
 /**
  *
@@ -17,6 +16,7 @@ import mk from './mk';
  */
 
 const runCommand = (options, callback) => {
+  console.log(options)
   const { cmd, ...rest } = options || {};
 
   // an array of promises with npm commands to run
@@ -35,13 +35,12 @@ const runCommand = (options, callback) => {
 
   Promise.all(combine())
     .then(results =>
-      results.forEach(result => {
-        // log.info(result);
-
-        callback(result);
-      })
+      results.forEach(result => callback(result))
     )
-    .catch(error => Promise.reject(error));
+    .catch(error => {
+      log.error(error)
+      Promise.reject(error)
+    });
 };
 
 export { runCommand };
