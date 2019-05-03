@@ -16,6 +16,7 @@ import { apiManager as manager } from './cli';
  */
 
 const runCommand = (options, callback) => {
+  console.log(options);
   const { cmd, ...rest } = options || {};
 
   // an array of promises with npm commands to run
