@@ -11,71 +11,71 @@ const { defaultSettings } = config || {};
 const { defaultManager } = defaultSettings;
 
 const onNpmList = (event, options, store) => {
-    const settings = store.get('user_settings');
-    const { activeManager = defaultManager, ...rest } = options || {};
+  const settings = store.get('user_settings');
+  const { activeManager = defaultManager, ...rest } = options || {};
 
-    const handleLocalEvents = (event, directory) => {
-        const openedPackages = store.get('openedPackages') || [];
-        const yarnLock = fs.existsSync(
-            path.join(path.dirname(directory), 'yarn.lock')
-        );
-        const dirName = path.dirname(path.resolve(directory));
-        const parsedDirectory = path.parse(dirName);
-        const { name } = parsedDirectory || {};
+  const handleLocalEvents = directory => {
+    const openedPackages = store.get('openedPackages') || [];
+    const yarnLock = fs.existsSync(
+      path.join(path.dirname(directory), 'yarn.lock')
+    );
+    const dirName = path.dirname(path.resolve(directory));
+    const parsedDirectory = path.parse(dirName);
+    const { name } = parsedDirectory || {};
 
-        if (yarnLock) {
-            event.sender.send('yarn-warning-close');
-        }
-
-        const inDirectories = openedPackages.some(
-            pkg => pkg.directory && pkg.directory.includes(dirName)
-        );
-
-        if (!inDirectories) {
-            store.set('openedPackages', [
-                ...openedPackages,
-                {
-                    name,
-                    directory: path.join(dirName, 'package.json')
-                }
-            ]);
-        }
-    };
-
-    const onFlow = chunk => event.sender.send('npm-command-flow', chunk);
-    const onError = error => event.sender.send('npm-command-error', error);
-
-    const onComplete = (errors, data, cmd) => {
-        const { directory, mode } = rest;
-
-        if (directory && mode === 'local') {
-            handleLocalEvents(event, directory);
-        }
-
-        event.sender.send('npm-command-completed', data, errors, cmd);
-    };
-
-    const callback = result => {
-        const { status, errors, data, cmd } = result;
-
-        return switchcase({
-            flow: dataChunk => onFlow(dataChunk),
-            close: () => onComplete(errors, data, cmd),
-            error: error => onError(error)
-        })(null)(status);
-    };
-
-    try {
-        const params = merge(settings, {
-            activeManager,
-            ...rest
-        });
-
-        runCommand(params, callback);
-    } catch (error) {
-        log.error(error.message);
-        event.sender.send('npm-command-error', error);
+    if (yarnLock) {
+      event.sender.send('yarn-warning-close');
     }
-}
 
-export default onNpmList
+    const inDirectories = openedPackages.some(
+      pkg => pkg.directory && pkg.directory.includes(dirName)
+    );
+
+    if (!inDirectories) {
+      store.set('openedPackages', [
+        ...openedPackages,
+        {
+          name,
+          directory: path.join(dirName, 'package.json')
+        }
+      ]);
+    }
+  };
+
+  const onFlow = chunk => event.sender.send('npm-command-flow', chunk);
+  const onError = error => event.sender.send('npm-command-error', error);
+
+  const onComplete = (errors, data, cmd) => {
+    const { directory, mode } = rest;
+
+    if (directory && mode === 'local') {
+      handleLocalEvents(directory);
+    }
+
+    event.sender.send('npm-command-completed', data, errors, cmd);
+  };
+
+  const callback = result => {
+    const { status, errors, data, cmd } = result;
+
+    return switchcase({
+      flow: dataChunk => onFlow(dataChunk),
+      close: () => onComplete(errors, data, cmd),
+      error: error => onError(error)
+    })(null)(status);
+  };
+
+  try {
+    const params = merge(settings, {
+      activeManager,
+      ...rest
+    });
+
+    runCommand(params, callback);
+  } catch (error) {
+    log.error(error.message);
+    event.sender.send('npm-command-error', error);
+  }
+};
+
+export default onNpmList;

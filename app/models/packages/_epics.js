@@ -1,4 +1,4 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable */
 
 import { of, pipe } from 'rxjs';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';

@@ -1,14 +1,9 @@
+/* eslint-disable import/prefer-default-export */
+
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 
-import {
-  mergeMap,
-  concatMap,
-  map,
-  ignoreElements,
-  catchError,
-  tap
-} from 'rxjs/operators';
+import { mergeMap, concatMap, tap } from 'rxjs/operators';
 
 import { clearSelected, toggleLoader } from 'models/ui/actions';
 import { clearInstallOptions } from 'models/common/actions';
@@ -64,7 +59,7 @@ const initEpic = (action$, state$) =>
       clearNotifications(),
       clearInstallOptions(),
       clearPackages()
-    ]),
+    ])
   );
 
 export { initEpic };

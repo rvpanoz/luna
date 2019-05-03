@@ -1,7 +1,7 @@
-import { catchError, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 
-import { pipe } from 'rxjs'
+import { pipe } from 'rxjs';
 
 import { listPackagesListener, searchPackagesListener } from '../actions';
 import { onListPackages$, onSearchPackages$ } from '../listeners';
@@ -14,6 +14,6 @@ const listPackagesListenerEpic = pipe(
 const searchPackagesListenerEpic = pipe(
   ofType(searchPackagesListener.type),
   switchMap(() => onSearchPackages$)
-)
+);
 
 export { listPackagesListenerEpic, searchPackagesListenerEpic };

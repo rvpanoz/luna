@@ -7,30 +7,26 @@ import { mapPackages } from '../actions';
 const onSearchPackages$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-search-completed']);
 
-  ipcRenderer.on(
-    'npm-search-completed',
-    (event, data, errors, cmd) => {
+  ipcRenderer.on('npm-search-completed', (event, data) => {
+    try {
+      const [packages] = parseFromSearch(data) || [];
 
-      try {
-        const [packages] = parseFromSearch(data) || [];
+      observer.next(
+        mapPackages({
+          data: packages,
+          fromSearch: true
+        })
+      );
 
-        observer.next(
-          mapPackages({
-            data: packages,
-            fromSearch: true
-          })
-        );
-
-        observer.next(
-          toggleLoader({
-            loading: false
-          })
-        );
-      } catch (error) {
-        observer.error(error);
-      }
+      observer.next(
+        toggleLoader({
+          loading: false
+        })
+      );
+    } catch (error) {
+      observer.error(error);
     }
-  );
+  });
 });
 
 export default onSearchPackages$;

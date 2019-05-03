@@ -16,7 +16,7 @@ import { apiManager as manager } from './cli';
  */
 
 const runCommand = (options, callback) => {
-  console.log(options)
+  console.log(options);
   const { cmd, ...rest } = options || {};
 
   // an array of promises with npm commands to run
@@ -34,12 +34,10 @@ const runCommand = (options, callback) => {
     });
 
   Promise.all(combine())
-    .then(results =>
-      results.forEach(result => callback(result))
-    )
+    .then(results => results.forEach(result => callback(result)))
     .catch(error => {
-      log.error(error)
-      Promise.reject(error)
+      log.error(error);
+      return Promise.reject(error);
     });
 };
 

@@ -8,6 +8,7 @@ import { mapPackages, mapOutdatedPackages } from '../actions';
 
 const onListPackages$ = new Observable(observer => {
   const onComplete = (event, ...rest) => {
+    /* eslint-disable-next-line */
     const [data, errors, options] = rest;
 
     if (!data || !isJson(data)) {
@@ -67,8 +68,9 @@ const onListPackages$ = new Observable(observer => {
     }
   };
 
+  /* eslint-disable-next-line */
   const onFlow = (event, ...rest) => {
-    console.log(data);
+    // TODO: handle
   };
 
   // clean up

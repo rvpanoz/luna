@@ -59,20 +59,20 @@ const execute = (
       const dataString = String(data);
 
       result.push(dataString);
-      // callback({
-      //   status: 'flow',
-      //   data: dataString
-      // });
+      callback({
+        status: 'flow',
+        data: dataString
+      });
     });
 
     command.stderr.on('data', error => {
       const errorString = String(error);
 
       errors += errorString;
-      // callback({
-      //   status: 'error',
-      //   errors: String(error)
-      // });
+      callback({
+        status: 'error',
+        errors: String(error)
+      });
     });
 
     command.on('exit', code => {

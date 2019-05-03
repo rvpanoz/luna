@@ -1,10 +1,10 @@
 /* eslint-disable import/prefer-default-export */
 
 /**
- * RX operators
+ * RX custom operators
  * */
 
-import { map, withLatestFrom, filter, tap } from 'rxjs/operators';
+import { map, withLatestFrom, filter } from 'rxjs/operators';
 
 const onOffOperator = (on, off) => src$ => {
   const isPaused = data => [on, off].includes(data);
