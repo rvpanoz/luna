@@ -6,8 +6,8 @@
  * npm [cmd] [[<@scope>/]<pkg> ...]
  * */
 
+import log from 'electron-log';
 import { apiManager as manager } from './cli';
-import mk from './mk';
 
 /**
  *
@@ -16,9 +16,10 @@ import mk from './mk';
  */
 
 const runCommand = (options, callback) => {
+  console.log(options);
   const { cmd, ...rest } = options || {};
 
-  // an array of Promises
+  // an array of promises with npm commands to run
   const combine = () =>
     cmd.map((command, idx) => {
       try {
@@ -27,24 +28,17 @@ const runCommand = (options, callback) => {
 
         return result;
       } catch (error) {
-        mk.log(error);
-
+        log.error(error);
         throw new Error(error);
       }
     });
 
   Promise.all(combine())
-    .then(results =>
-      results.forEach(result => {
-        const { status, ...values } = result;
-        const { data, errors, ...restValues } = values;
-
-        if (status === 'close') {
-          callback(status, errors, data, restValues.cmd);
-        }
-      })
-    )
-    .catch(error => Promise.reject(error));
+    .then(results => results.forEach(result => callback(result)))
+    .catch(error => {
+      log.error(error);
+      return Promise.reject(error);
+    });
 };
 
 export { runCommand };

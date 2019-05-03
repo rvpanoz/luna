@@ -72,11 +72,11 @@ const Navigator = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on('loaded-packages-close', (event, directories) =>
+    ipcRenderer.on('history-close', (event, directories) =>
       setOpenedDirectories(directories)
     );
 
-    return () => ipcRenderer.removeAllListeners('loaded-packages-close');
+    return () => ipcRenderer.removeAllListeners(['history-close']);
   }, []);
 
   const openPackage = () =>

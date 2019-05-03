@@ -5,31 +5,28 @@ import { parseFromSearch } from 'commons/utils';
 import { mapPackages } from '../actions';
 
 const onSearchPackages$ = new Observable(observer => {
-  ipcRenderer.removeAllListeners(['search-packages-close']);
+  ipcRenderer.removeAllListeners(['npm-search-completed']);
 
-  ipcRenderer.on(
-    'search-packages-close',
-    (event, status, commandArgs, data) => {
-      try {
-        const [packages] = parseFromSearch(data) || [];
+  ipcRenderer.on('npm-search-completed', (event, data) => {
+    try {
+      const [packages] = parseFromSearch(data) || [];
 
-        observer.next(
-          mapPackages({
-            data: packages,
-            fromSearch: true
-          })
-        );
+      observer.next(
+        mapPackages({
+          data: packages,
+          fromSearch: true
+        })
+      );
 
-        observer.next(
-          toggleLoader({
-            loading: false
-          })
-        );
-      } catch (error) {
-        observer.error(error);
-      }
+      observer.next(
+        toggleLoader({
+          loading: false
+        })
+      );
+    } catch (error) {
+      observer.error(error);
     }
-  );
+  });
 });
 
 export default onSearchPackages$;
