@@ -1,15 +1,17 @@
+/* eslint-disable */
 /* eslint-disable no-underscore-dangle */
 
 import { ipcRenderer } from 'electron';
 import { togglePackageLoader } from 'models/ui/actions';
 import { Observable } from 'rxjs';
 import { pickBy } from 'ramda';
+
 import { setActive } from '../actions';
 
 const onViewPackage$ = new Observable(observer => {
-  ipcRenderer.removeAllListeners(['view-close']);
+  ipcRenderer.removeAllListeners(['npm-view-completed']);
 
-  ipcRenderer.on('view-close', (event, status, cmd, data) => {
+  ipcRenderer.on('npm-view-completed', (event, data, errors) => {
     try {
       const newActive = data && JSON.parse(data);
       const getCleanProps = (val, key) => /^[^_]/.test(key);

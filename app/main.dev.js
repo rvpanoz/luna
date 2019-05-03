@@ -2,22 +2,20 @@
 
 import ElectronStore from 'electron-store';
 import path from 'path';
-import fs from 'fs';
 import chalk from 'chalk';
-import { merge } from 'ramda';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import log from 'electron-log';
 
 import { APP_TOOLS, APP_ACTIONS } from './constants/AppConstants';
-import { switchcase } from './commons/utils';
 import MenuBuilder from './menu';
 import mk from './mk';
-import { runCommand } from './shell';
 import { CheckNpm } from '../internals/scripts';
+
+import { onNpmView, onNpmList, onNpmSearch } from './mainProcess';
 
 const { config } = mk;
 const { defaultSettings } = config || {};
-const { startMinimized, defaultManager } = defaultSettings;
+const { startMinimized } = defaultSettings;
 
 const {
   DEBUG_PROD = 0,
@@ -42,11 +40,7 @@ const Store = new ElectronStore();
 // clear opened packages
 Store.set('openedPackages', []);
 
-// user settings
-const settings = Store.get('user_settings');
-
 let mainWindow = null;
-let loadingScreen = null;
 
 if (NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -70,102 +64,97 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-// handle local events
-const handleLocalEvents = (event, mode, directory) => {
-  const openedPackages = Store.get('openedPackages') || [];
-  const yarnLock = fs.existsSync(
-    path.join(path.dirname(directory), 'yarn.lock')
-  );
-  const dirName = path.dirname(path.resolve(directory));
-  const parsedDirectory = path.parse(dirName);
-  const { name } = parsedDirectory || {};
-
-  if (yarnLock) {
-    event.sender.send('yarn-warning-close');
-  }
-
-  const inDirectories = openedPackages.some(
-    pkg => pkg.directory && pkg.directory.includes(dirName)
-  );
-
-  if (!inDirectories) {
-    Store.set('openedPackages', [
-      ...openedPackages,
-      {
-        name,
-        directory: path.join(dirName, 'package.json')
-      }
-    ]);
-  }
-};
 
 /**
- * ipc-event events
+ * Event handling
+ * send asynchronous messages between main and renderer process
+ * https://electronjs.org/docs/api/ipc-renderer
  */
 
+/**
+ * Channel: npm-command
+ * Supports: npm-list, npm-oudated
+ * 
+ * */
+ipcMain.on('npm-command', (event, options) => onNpmList(event, options, Store));
+
+/**
+ * Channel: npm-search
+ * Supports: npm-search
+ * 
+ * */
+ipcMain.on('npm-search', (event, options) => onNpmSearch(event, options, Store));
+
+/**
+ * Channel: npm-view
+ * Supports: npm-view
+ * 
+ * */
+ipcMain.on('npm-view', (event, options) => onNpmView(event, options, Store));
+
 // channel: ipc-event
-ipcMain.on('ipc-event', (event, options) => {
-  const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
+// ipcMain.on('ipc-event', (event, options) => {
+//   const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
 
-  let runningTimes = 1;
+//   let runningTimes = 1;
 
-  const onClose = (status, errors, data, cmd) => {
-    const { directory, mode } = rest;
-    const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
-    const toolsIndex = APP_TOOLS.indexOf(ipcEvent);
-    const settingsIndex = APP_TOOLS.indexOf(ipcEvent);
-    const commands = options.cmd;
+//   const onClose = (status, errors, data, cmd) => {
+//     const { directory, mode } = rest;
+//     const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
+//     const toolsIndex = APP_TOOLS.indexOf(ipcEvent);
+//     const settingsIndex = APP_TOOLS.indexOf(ipcEvent);
+//     const commands = options.cmd;
 
-    if (actionIndex > -1 && ipcEvent !== 'view') {
-      if (commands.length === runningTimes) {
-        return event.sender.send('action-close', errors, data, cmd);
-      }
+//     if (actionIndex > -1 && ipcEvent !== 'view') {
+//       if (commands.length === runningTimes) {
+//         return event.sender.send('action-close', errors, data, cmd);
+//       }
 
-      runningTimes += 1;
-    }
+//       runningTimes += 1;
+//     }
 
-    if (toolsIndex > -1) {
-      return event.sender.send(
-        'tool-close',
-        errors,
-        data,
-        cmd.concat(directory)
-      );
-    }
+//     if (toolsIndex > -1) {
+//       return event.sender.send(
+//         'tool-close',
+//         errors,
+//         data,
+//         cmd.concat(directory)
+//       );
+//     }
 
-    if (settingsIndex > -1) {
-      return event.sender.send('settings-close', errors, data, cmd);
-    }
+//     if (settingsIndex > -1) {
+//       return event.sender.send('settings-close', errors, data, cmd);
+//     }
 
-    if (directory && mode === 'local' && cmd.indexOf('list') > -1) {
-      handleLocalEvents(event, mode, directory);
-    }
+//     if (directory && mode === 'local' && cmd.indexOf('list') > -1) {
+//       handleLocalEvents(event, mode, directory);
+//     }
 
-    event.sender.send('loaded-packages-close', Store.get('openedPackages'));
-    event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
-  };
+//     event.sender.send('history-close', Store.get('openedPackages'));
+//     event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
+//   };
 
-  const callback = (status, errors, ...restArgs) =>
-    switchcase({
-      close: () => onClose(status, errors, ...restArgs)
-    })(null)(status);
+//   const callback = (status, errors, ...restArgs) =>
+//     switchcase({
+//       close: () => onClose(status, errors, ...restArgs)
+//     })(null)(status);
 
-  /**
-   * At this point we try to run a shell command sending output
-   * to renderer process via ipc events
-   */
-  try {
-    const params = merge(settings, {
-      activeManager,
-      ...rest
-    });
+//   /**
+//    * At this point we try to run a shell command sending output
+//    * to renderer process via ipc events
+//    */
+//   try {
+//     const params = merge(settings, {
+//       activeManager,
+//       ...rest
+//     });
 
-    runCommand(params, callback);
-  } catch (error) {
-    mk.log(error.message);
-    throw new Error(error);
-  }
-});
+//     runCommand(params, callback);
+//   } catch (error) {
+//     mk.log(error.message);
+//     throw new Error(error);
+//   }
+// });
 
 // channel: general
 ipcMain.on('online-status-changed', (event, status) => {
@@ -261,12 +250,9 @@ app.on('ready', async () => {
 
     // npm and node info
     const npmEnv = await CheckNpm();
+    const npmEnvError = npmEnv && npmEnv.error;
 
-    if (npmEnv.error) {
-      event.sender.send('npm-error', String(npmEnv.error));
-    } else {
-      event.sender.send('get-env-close', npmEnv);
-    }
+    event.sender.send('npm-env-close', npmEnvError, npmEnv);
 
     // user settings
     const userSettings = Store.get('user_settings') || defaultSettings;
@@ -274,16 +260,20 @@ app.on('ready', async () => {
 
     // directories history
     const openedPackages = Store.get('opened_packages') || [];
-    event.sender.send('loaded-packages-close', openedPackages);
+    event.sender.send('history-close', openedPackages);
+
+    // signal finish
     event.sender.send('finish-loaded');
   });
 
   mainWindow.webContents.on('crashed', event => {
-    log.info(chalk.white.bgRed.bold('[CRASHED]'), event);
+    log.error(chalk.white.bgRed.bold('[CRASHED]'), event);
+    app.quit() // TODO: handle this
   });
 
   mainWindow.on('unresponsive', event => {
-    log.info(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
+    log.error(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
+    app.quit() // TODO: handle this
   });
 
   mainWindow.on('closed', () => {
@@ -295,7 +285,6 @@ app.on('ready', async () => {
 });
 
 process.on('uncaughtException', error => {
-  log.error('[ERROR]', error.message);
-  mainWindow.webContents.send('uncaught-exception', error.message);
-  app.quit();
+  log.error('[ERROR]', error);
+  mainWindow.webContents.send('uncaught-exception', error);
 });

@@ -7,22 +7,20 @@
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
+import log from 'electron-log';
 import lockVerify from 'lock-verify';
 import mk from '../mk';
 
 const { spawn } = cp;
-const { log } = console;
 const { config } = mk;
 const {
   defaultSettings: { defaultManager }
 } = config;
 
-// default arguments
 const defaultsArgs = {
   list: ['--json', '--depth=0']
 };
 
-// current working directory
 const cwd = process.cwd();
 
 const execute = (
@@ -33,17 +31,14 @@ const execute = (
   callback
 ) => {
   const [operation] = commandArgs;
-  mk.log(
-    `execute command ${operation} with args: ${commandArgs.join(
-      ','
-    )} - ${mode} - ${directory}`
-  );
+
   const resultP = new Promise(resolve => {
     const result = [];
     let errors = '';
 
-    log(chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`));
-    callback('flow', `${manager} ${commandArgs.join(' ')}`);
+    log.info(
+      chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
+    );
 
     // on windows use npm.cmd
     const command = spawn(
@@ -61,22 +56,31 @@ const execute = (
     );
 
     command.stdout.on('data', data => {
-      result.push(String(data));
+      const dataString = String(data);
+
+      result.push(dataString);
+      callback({
+        status: 'flow',
+        data: dataString
+      });
     });
 
     command.stderr.on('data', error => {
       const errorString = String(error);
 
       errors += errorString;
-      callback('error', String(errorString), null);
+      callback({
+        status: 'error',
+        errors: String(error)
+      });
     });
 
     command.on('exit', code => {
-      log(chalk.yellow.bold(`child exited with code ${code}`));
+      log.info(chalk.yellow.bold(`child exited with code ${code}`));
     });
 
     command.on('close', () => {
-      log(
+      log.info(
         chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
       );
 

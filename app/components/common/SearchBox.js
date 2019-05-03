@@ -41,12 +41,6 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
       return toggleSnackbar(true);
     }
 
-    const parameters = {
-      ipcEvent: 'search-packages',
-      cmd: ['search'],
-      pkgName: packageName
-    };
-
     dispatch(clearFilters());
 
     dispatch({
@@ -59,10 +53,10 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
 
     dispatch(
       setPackagesStart({
-        channel: 'ipc-event',
-        fromSearch: true,
+        channel: 'npm-search',
         options: {
-          ...parameters
+          cmd: ['search'],
+          pkgName: packageName
         }
       })
     );
@@ -89,7 +83,7 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
     const { current } = searchInputEl;
 
     if (current) {
-      current.addEventListener('keyup', onKeyUp, () => {});
+      current.addEventListener('keyup', onKeyUp, () => { });
 
       return () => current.removeEventListener('keyup', onKeyUp);
     }
@@ -103,10 +97,10 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
             <ClearIcon />
           </a>
         ) : (
-          <a href="#" className={classes.searchIcon} onClick={handleSearch}>
-            <SearchIcon />
-          </a>
-        )}
+            <a href="#" className={classes.searchIcon} onClick={handleSearch}>
+              <SearchIcon />
+            </a>
+          )}
 
         <InputBase
           disabled={disabled || onlineStatus === 'offline'}

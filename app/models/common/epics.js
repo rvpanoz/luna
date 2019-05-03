@@ -3,7 +3,7 @@ import { mergeMap } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import {
-  getPackagesListener,
+  listPackagesListener,
   searchPackagesListener,
   viewPackageListener,
   npmActionsListener
@@ -15,7 +15,7 @@ import { initActions } from 'models/common/actions';
 const onInitActionsEpic = pipe(
   ofType(initActions.type),
   mergeMap(() => [
-    getPackagesListener(),
+    listPackagesListener(),
     searchPackagesListener(),
     viewPackageListener(),
     npmActionsListener(),
