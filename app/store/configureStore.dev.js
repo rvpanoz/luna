@@ -16,10 +16,9 @@ import { epics as npmEpics } from 'models/npm';
 import { epics as commonEpics } from 'models/common';
 import { epics as notificationsEpics } from 'models/notifications';
 
-// reducers
+// root reducer
 import rootReducer from '../reducers';
 
-// TODO: fix it
 const reduxLogger = /--redux-logger/.test(process.argv[3]);
 
 const configureStore = initialState => {
@@ -39,8 +38,6 @@ const configureStore = initialState => {
   }
 
   // if redux DevTools Extension is installed use it, otherwise use redux compose
-
-  /* eslint-disable no-underscore-dangle */
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
