@@ -11,7 +11,7 @@ import MenuBuilder from './menu';
 import mk from './mk';
 import { CheckNpm } from '../internals/scripts';
 
-import { onNpmView, onNpmList, onNpmSearch } from './mainProcess';
+import { onNpmView, onNpmList, onNpmSearch, onNpmInstall } from './mainProcess';
 
 const { config } = mk;
 const { defaultSettings } = config || {};
@@ -73,92 +73,43 @@ const installExtensions = async () => {
 
 /**
  * Channel: npm-command
- * Supports: npm-list, npm-oudated
+ * Supports: npm ls <@scope>/]<pkg>, npm outdated <@scope>/<pkg>
+ * https://docs.npmjs.com/cli/ls.html
  * 
  * */
 ipcMain.on('npm-command', (event, options) => onNpmList(event, options, Store));
 
 /**
  * Channel: npm-search
- * Supports: npm-search
+ * Supports: npm search [search terms ...]
+ * https://docs.npmjs.com/cli/search.html
  * 
  * */
 ipcMain.on('npm-search', (event, options) => onNpmSearch(event, options, Store));
 
 /**
  * Channel: npm-view
- * Supports: npm-view
+ * Supports: npm view <@scope>/<name>@<version>
+ * https://docs.npmjs.com/cli/view.html
  * 
  * */
 ipcMain.on('npm-view', (event, options) => onNpmView(event, options, Store));
 
-// channel: ipc-event
-// ipcMain.on('ipc-event', (event, options) => {
-//   const { ipcEvent, activeManager = defaultManager, ...rest } = options || {};
+/**
+ * Channel: npm-install
+ * Supports: npm install <@scope>/<name>@<version>
+ * https://docs.npmjs.com/cli/install.html
+ * 
+ * */
+ipcMain.on('npm-install', (event, options) => onNpmInstall(event, options, Store));
 
-//   let runningTimes = 1;
-
-//   const onClose = (status, errors, data, cmd) => {
-//     const { directory, mode } = rest;
-//     const actionIndex = APP_ACTIONS.indexOf(ipcEvent);
-//     const toolsIndex = APP_TOOLS.indexOf(ipcEvent);
-//     const settingsIndex = APP_TOOLS.indexOf(ipcEvent);
-//     const commands = options.cmd;
-
-//     if (actionIndex > -1 && ipcEvent !== 'view') {
-//       if (commands.length === runningTimes) {
-//         return event.sender.send('action-close', errors, data, cmd);
-//       }
-
-//       runningTimes += 1;
-//     }
-
-//     if (toolsIndex > -1) {
-//       return event.sender.send(
-//         'tool-close',
-//         errors,
-//         data,
-//         cmd.concat(directory)
-//       );
-//     }
-
-//     if (settingsIndex > -1) {
-//       return event.sender.send('settings-close', errors, data, cmd);
-//     }
-
-//     if (directory && mode === 'local' && cmd.indexOf('list') > -1) {
-//       handleLocalEvents(event, mode, directory);
-//     }
-
-//     event.sender.send('history-close', Store.get('openedPackages'));
-//     event.sender.send(`${ipcEvent}-close`, status, cmd, data, errors, options);
-//   };
-
-//   const callback = (status, errors, ...restArgs) =>
-//     switchcase({
-//       close: () => onClose(status, errors, ...restArgs)
-//     })(null)(status);
-
-//   /**
-//    * At this point we try to run a shell command sending output
-//    * to renderer process via ipc events
-//    */
-//   try {
-//     const params = merge(settings, {
-//       activeManager,
-//       ...rest
-//     });
-
-//     runCommand(params, callback);
-//   } catch (error) {
-//     mk.log(error.message);
-//     throw new Error(error);
-//   }
-// });
-
-// channel: general
+/**
+ * Channel: general
+ * Supports: 
+ * 
+ * */
 ipcMain.on('online-status-changed', (event, status) => {
-  // TODO: implementation
+
 });
 
 /**
