@@ -25,7 +25,7 @@ import {
   ProjectTab,
   PackagesTab,
   ActionsTab
-} from 'components/pages/navigator/tabs';
+} from 'components/views/navigator/tabs';
 import { installPackages } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';

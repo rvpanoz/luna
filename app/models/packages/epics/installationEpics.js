@@ -30,7 +30,6 @@ const updateLoader = payload => ({
   payload
 });
 
-// TODO: continue...
 const installPackageEpic = action$ =>
   action$.pipe(
     ofType(installPackage.type),

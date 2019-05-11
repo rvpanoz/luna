@@ -16,8 +16,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
-import { Packages } from 'components/pages/packages';
-import { Notifications } from 'components/pages/notifications';
+import { Packages } from 'components/views/packages';
+import { Notifications } from 'components/views/notifications';
 import { runAudit } from 'models/npm/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 import { setDialog, setSnackbar } from 'models/ui/actions';
