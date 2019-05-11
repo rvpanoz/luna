@@ -41,6 +41,7 @@ npm desktop manager for handling npm dependencies. Supported platforms: OS X Win
 ## Binaries
 
 > binaries for windows and macOS will uploaded soon - stay tuned! :eyes:
+>
 > if someone wants to help me with the build on these OS feel free to contact me :)
 
 ## Running
@@ -79,7 +80,7 @@ _RxJS https://rxjs-dev.firebaseapp.com/_
 
 ### In memory of my friend luna - rest in peace my love :heart:
 
-<div style="display:block;border-radius:5px; border: 2px solid transparent; border-image: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82); width:100%;height:100%;position:relative;">
+<div style="display:block;border-radius:5px; border: 2px solid transparent; border-image: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82); width:100px;position:relative;">
 <img align="center" width="100%" height="100%"
      title="this is luna" src="./resources/img/luna.jpg">
 </div>
