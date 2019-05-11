@@ -36,7 +36,7 @@ npm desktop manager for handling npm dependencies. Supported platforms: OS X Win
 
 > binaries for windows and macOS will uploaded soon - stay tuned! :eyes:
 >
-> if someone wants to help me to build on these OS feel free to contact me :)
+> if someone wants to help me build on these OS feel free to contact me :)
 
 ## Running
 
