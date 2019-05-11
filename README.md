@@ -27,21 +27,16 @@ npm desktop manager for handling npm dependencies. Supported platforms: OS X Win
 ## Major changes from version 2
 
 - Rewrite almost every component using React Hooks
-
 - Use rxjs/redux-observable to handle Electron's IPC Communication between Renderer and Main Processes
-
 - New design - MaterialUI
-
 - Better API for npm cli
-
-- Bug fixes
-
 - Electron v4 and webpack v4 added
-
 
 ## Binaries
 
 > binaries for windows and macOS will uploaded soon - stay tuned! :eyes:
+>
+> if someone wants to help me build on these OS feel free to contact me :)
 
 ## Running
 
@@ -75,5 +70,11 @@ _Material-ui https://material-ui-next.com/_
 
 _Webpack https://github.com/webpack/webpack_
 
+_RxJS https://rxjs-dev.firebaseapp.com/_
 
 ### In memory of my friend luna - rest in peace my love :heart:
+
+<div style="display:block;border-radius:5px; border: 2px solid #ef4e7b;position:relative;width:150px">
+<img align="center" width="150" height="200"
+     title="this is luna" src="./resources/img/luna.jpg">
+</div>
