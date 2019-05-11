@@ -27,22 +27,16 @@ npm desktop manager for handling npm dependencies. Supported platforms: OS X Win
 ## Major changes from version 2
 
 - Rewrite almost every component using React Hooks
-
 - Use rxjs/redux-observable to handle Electron's IPC Communication between Renderer and Main Processes
-
 - New design - MaterialUI
-
 - Better API for npm cli
-
-- Bug fixes
-
 - Electron v4 and webpack v4 added
 
 ## Binaries
 
 > binaries for windows and macOS will uploaded soon - stay tuned! :eyes:
 >
-> if someone wants to help me with the build on these OS feel free to contact me :)
+> if someone wants to help me to build on these OS feel free to contact me :)
 
 ## Running
 
