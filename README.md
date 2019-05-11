@@ -74,7 +74,7 @@ _RxJS https://rxjs-dev.firebaseapp.com/_
 
 ### In memory of my friend luna - rest in peace my love :heart:
 
-<div style="display:block;border-radius:5px; border: 2px solid transparent; border-image: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82); width:100px;position:relative;">
-<img align="center" width="100%" height="100%"
+<div style="display:block;border-radius:5px; border: 2px solid transparent; border-image: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82); ;position:relative;">
+<img align="center" width="150" height="200"
      title="this is luna" src="./resources/img/luna.jpg">
 </div>
