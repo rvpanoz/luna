@@ -4,7 +4,6 @@ import { useDispatch } from 'redux-react-hook';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 
@@ -21,6 +20,7 @@ const InitView = ({ classes, onClose }) => {
       remote.getCurrentWindow(),
       directoryParameters,
       filePath =>
+        filePath &&
         setInitOptions({
           ...initOptions,
           directory: filePath[0]
