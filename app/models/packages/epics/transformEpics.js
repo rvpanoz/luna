@@ -43,41 +43,40 @@ const mapPackagesEpic = (action$, state$) =>
           projectVersion
         }
       }) => {
-        const enchancedDependencies = data.reduce(
-          (alldependencies, dependency) => {
-            const {
-              common: { mode, directory },
-              packages: {
-                packagesOutdated,
-                project: { name, version, description }
-              }
-            } = state$.value;
+        const {
+          common: { mode, directory },
+          packages: {
+            packagesOutdated,
+            project: { name, version, description }
+          }
+        } = state$.value;
 
+        const enhancedDependencies = data.reduce(
+          (alldependencies, dependency) => {
             const [pkgName, details] = fromSearch
               ? [
-                  dependency.name,
-                  {
-                    version: dependency.version,
-                    description: dependency.description
-                  }
-                ]
+                dependency.name,
+                {
+                  version: dependency.version,
+                  description: dependency.description
+                }
+              ]
               : dependency;
 
             const { extraneous, invalid, missing, peerMissing, problems } =
               details || {};
-            const [isOutdated, outdatedPkg] = isPackageOutdated(
-              packagesOutdated,
-              name
-            );
 
-            const packageJSON = readPackageJson(directory); // side effect
+            const isOutdated = packagesOutdated.some(o => o.name === pkgName);
+            const outdatedPkg = packagesOutdated.find(o => o.name === pkgName);
+
+            const packageJSON = readPackageJson(directory); //side effect
 
             const group =
               mode === 'local'
                 ? Object.keys(PACKAGE_GROUPS).find(
-                    groupName =>
-                      packageJSON[groupName] && packageJSON[groupName][pkgName]
-                  )
+                  groupName =>
+                    packageJSON[groupName] && packageJSON[groupName][pkgName]
+                )
                 : null;
 
             return [
@@ -85,7 +84,7 @@ const mapPackagesEpic = (action$, state$) =>
               {
                 name: pkgName,
                 isOutdated,
-                latest: isOutdated ? outdatedPkg.latest : null,
+                latest: isOutdated && outdatedPkg ? outdatedPkg.latest : dependency.version,
                 __invalid: invalid,
                 __hasError: missing || peerMissing || extraneous,
                 __fromSearch: fromSearch,
@@ -98,7 +97,7 @@ const mapPackagesEpic = (action$, state$) =>
         );
 
         return {
-          alldependencies: enchancedDependencies,
+          alldependencies: enhancedDependencies,
           projectName,
           projectDescription,
           projectVersion,

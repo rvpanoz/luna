@@ -158,9 +158,7 @@ const PackageDetails = ({ classes }) => {
     );
 
     const renderOperationActions = () => {
-      const isOutdated = active
-        ? isPackageOutdated(packagesOutdated, active.name)[0]
-        : false;
+      const isOutdated = false // TODO: fixme
 
       return (
         <React.Fragment>

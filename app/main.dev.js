@@ -83,7 +83,7 @@ const installExtensions = async () => {
  */
 
 /**
- * Channel: npm-command
+ * Channel: npm-list-outaded
  * Supports: npm list <@scope>/]<pkg>, npm outdated <@scope>/<pkg>
  * https://docs.npmjs.com/cli/ls.html
  * https://docs.npmjs.com/cli/outdated.html

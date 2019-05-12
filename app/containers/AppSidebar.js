@@ -81,7 +81,7 @@ const AppSidebar = ({
     return () => ipcRenderer.removeAllListeners(['history-close']);
   }, []);
 
-  const openPackage = () =>
+  const loadDirectory = () =>
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
       navigatorParameters,
@@ -133,7 +133,7 @@ const AppSidebar = ({
         </ListItem>
         <ListItem className={classes.listItemHalfPadding} key="big-button">
           <ListItemText className={classes.actionButton}>
-            <Tooltip title="Open local directory">
+            <Tooltip title="Load local directory from a package.json file">
               <Button
                 disabled={loading}
                 className={cn(classes.label, classes.margin)}
@@ -141,7 +141,7 @@ const AppSidebar = ({
                 variant="outlined"
                 fullWidth
                 size="large"
-                onClick={() => openPackage()}
+                onClick={() => loadDirectory()}
               >
                 Analyze
               </Button>
