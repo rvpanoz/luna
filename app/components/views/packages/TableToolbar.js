@@ -40,7 +40,7 @@ import { clearInstallOptions } from 'models/common/actions';
 import { clearFilters } from 'models/ui/actions';
 
 import TableFilters from './TableFilters';
-import Flags from './Flags';
+import Options from './Options';
 import styles from './styles/tableToolbar';
 
 const TableListToolbar = ({
@@ -98,14 +98,14 @@ const TableListToolbar = ({
     return action === 'install'
       ? dispatch(installMultiplePackages())
       : dispatch(
-          updatePackages({
-            activeManager: manager,
-            ipcEvent: action,
-            cmd: [action],
-            multiple: true,
-            packages: selected
-          })
-        );
+        updatePackages({
+          activeManager: manager,
+          ipcEvent: action,
+          cmd: [action],
+          multiple: true,
+          packages: selected
+        })
+      );
   };
 
   const openPackage = () =>
@@ -311,9 +311,9 @@ const TableListToolbar = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-      selected.some(
-        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-      ),
+    selected.some(
+      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+    ),
     [selected]
   );
 
@@ -377,8 +377,7 @@ const TableListToolbar = ({
         aria-labelledby="install-options"
       >
         <DialogContent>
-          <Flags
-            selected={selected}
+          <Options selected={selected}
             packagesInstallOptions={packagesInstallOptions}
           />
         </DialogContent>

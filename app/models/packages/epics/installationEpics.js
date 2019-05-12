@@ -1,12 +1,12 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
-import { map, tap, mergeMap } from 'rxjs/operators';
+import { map, tap, mergeMap, ignoreElements } from 'rxjs/operators';
 
 import { setActivePage, clearSelected, toggleLoader } from 'models/ui/actions';
 import { setRunningCommand } from 'models/npm/actions';
 import {
   addInstallationOption,
-  installPackages,
+  installPackage,
   updatePackages
 } from 'models/packages/actions';
 
@@ -25,17 +25,79 @@ const updateCommand = ({
   }
 });
 
-const IPC_EVENT = 'ipc-event';
-
 const updateLoader = payload => ({
   type: toggleLoader.type,
   payload
 });
 
-const installPackagesEpic = action$ =>
+const installPackageEpic = action$ =>
   action$.pipe(
-    ofType(installPackages.type),
-    tap(console.log)
+    ofType(installPackage.type),
+    tap(console.log),
+    ignoreElements()
+  );
+
+const installMultiplePackagesFromGlobalEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(installMultiplePackages.type),
+    withLatestFrom(state$),
+    filter(
+      ([
+        ,
+        {
+          common: { mode }
+        }
+      ]) => mode === 'global'
+    ),
+    map(() =>
+      prepareInstallationOptions({
+        from: 'global',
+        options: []
+      })
+    )
+  );
+
+const prepareInstallEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(prepareInstall.type),
+    switchMap(({ from, options }) => {
+      const {
+        ui: { selected }
+      } = state$.value;
+
+      selected.map(selectedPackage => {
+        let details;
+
+        if (from === 'json') {
+          details = options.filter(option => {
+            const [, dependencies] = option;
+
+            return dependencies[selectedPackage];
+          });
+
+          const [group] = details;
+
+          return addInstallationOptionAction({
+            name: selectedPackage,
+            options: group ? [].concat(PACKAGE_GROUPS[group]) : []
+          });
+        }
+
+        if (from === 'flags') {
+          return addInstallationOptionAction({
+            name: selectedPackage,
+            options: options
+              ? options.find(option => option.name === selectedPackage).options
+              : []
+          });
+        }
+
+        return addInstallationOptionAction({
+          name: selectedPackage,
+          options: []
+        });
+      });
+    })
   );
 
 const completeInstallationEpic = (action$, state$) =>
@@ -117,4 +179,4 @@ const updatePackagesEpic = (action$, state$) =>
     })
   );
 
-export { completeInstallationEpic, installPackagesEpic, updatePackagesEpic };
+export { completeInstallationEpic, installPackageEpic, updatePackagesEpic };
