@@ -17,7 +17,7 @@ import { INFO_MESSAGES } from 'constants/AppConstants';
 
 import styles from './styles/flags';
 
-const Flags = ({ classes, packagesInstallOptions, selected }) => {
+const Options = ({ classes, packagesInstallOptions, selected }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -73,10 +73,10 @@ const Flags = ({ classes, packagesInstallOptions, selected }) => {
   );
 };
 
-Flags.propTypes = {
+Options.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
   packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
-export default withStyles(styles)(Flags);
+export default withStyles(styles)(Options);
