@@ -28,7 +28,7 @@ import {
 import { navigatorParameters } from 'commons/parameters';
 import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';
 
-import { installPackages } from 'models/packages/actions';
+import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runAudit } from 'models/npm/actions';
@@ -81,7 +81,7 @@ const AppSidebar = ({
     return () => ipcRenderer.removeAllListeners(['history-close']);
   }, []);
 
-  const openPackage = () =>
+  const loadDirectory = () =>
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
       navigatorParameters,
@@ -117,7 +117,7 @@ const AppSidebar = ({
       },
       btnIdx => {
         if (Boolean(btnIdx) === true) {
-          dispatch(installPackages(parameters));
+          dispatch(installPackage(parameters));
         }
       }
     );
@@ -133,7 +133,7 @@ const AppSidebar = ({
         </ListItem>
         <ListItem className={classes.listItemHalfPadding} key="big-button">
           <ListItemText className={classes.actionButton}>
-            <Tooltip title="Open local directory">
+            <Tooltip title="Load local directory from a package.json file">
               <Button
                 disabled={loading}
                 className={cn(classes.label, classes.margin)}
@@ -141,7 +141,7 @@ const AppSidebar = ({
                 variant="outlined"
                 fullWidth
                 size="large"
-                onClick={() => openPackage()}
+                onClick={() => loadDirectory()}
               >
                 Analyze
               </Button>

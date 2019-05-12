@@ -49,7 +49,7 @@ export const isUrl = url => {
  */
 export const firstToUpper = str => {
   return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
       return index !== 0 ? letter.toLowerCase() : letter.toUpperCase();
     })
     .replace(/\s+/g, '');
@@ -114,22 +114,6 @@ export const isAlpha = version => {
 };
 
 /**
- * Get package outdated
- * @param {*} outdated
- * @param {*} name
- */
-export const isPackageOutdated = (outdated, name) => {
-  if (!Array.isArray(outdated)) {
-    return [false, null];
-  }
-
-  return [
-    outdated.some(o => o.name === name),
-    outdated.find(f => f.name === name)
-  ];
-};
-
-/**
  * Read package.json from a directory
  * @param {*} directory
  */
@@ -155,86 +139,6 @@ export const matchType = (subject, needle) => {
   const prefixRegX = new RegExp(needle);
 
   return prefixRegX.test(subject);
-};
-
-/**
- * Parses and maps npm list response
- * @param {*} response
- * @param {*} mode
- * @param {*} directory
- */
-export const parseDependencies = (response, mode, directory) => {
-  if (typeof response !== 'string') {
-    throw new Error(
-      'utils[parseDependencies]: response parameter must be a string'
-    );
-  }
-
-  try {
-    const packageData = JSON.parse(response);
-    const { name, version } = packageData || {};
-
-    const packages = pick(['dependencies', 'problems'], packageData);
-    const { dependencies, problems } = packages || {};
-
-    const dataArray = dependencies
-      ? objectEntries(dependencies)
-      : objectEntries(packageData);
-
-    if (!Array.isArray(dataArray) || !dataArray) {
-      mk.log(
-        `utils[parseDependencies]: cound not convert response data to array`
-      );
-
-      return;
-    }
-
-    const noDependencies = dataArray.every(dep => {
-      const [name, details] = dep;
-
-      return typeof details !== 'object';
-    });
-
-    if (noDependencies) {
-      return [[], [], name, version];
-    }
-
-    const data = dataArray.map(pkgArr => {
-      const [pkgName, details] = pkgArr;
-      const { name, extraneous, problems, invalid, missing } = details || {};
-
-      let group;
-
-      if (mode === 'local') {
-        const packageJSON = readPackageJson(directory);
-
-        if (!Boolean(packageJSON)) {
-          mk.log(
-            `utils[parseMap]: could not parse package.json in ${directory}`
-          );
-
-          return;
-        }
-
-        group = Object.keys(PACKAGE_GROUPS).find(
-          groupName => packageJSON[groupName] && packageJSON[groupName][pkgName]
-        );
-      }
-
-      return merge(details, {
-        name: pkgName || name,
-        invalid,
-        missing,
-        extraneous,
-        problems,
-        __group: group
-      });
-    });
-
-    return [data, problems, name, version];
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 /**
@@ -282,65 +186,13 @@ export const shrinkDirectory = directory => {
 
       return `${dirParts[dirParts.length - 2]}${SEPARATOR}${
         dirParts[dirParts.length - 1]
-      }${SEPARATOR}package.json`;
+        }${SEPARATOR}package.json`;
     } catch (error) {
       throw new Error(error);
     }
   }
 
   return null;
-};
-
-export const setupInstallOptions = (selected, options) => {
-  const dependencies = [];
-  const devDependencies = [];
-  const optionalDependencies = [];
-  const bundleDependencies = [];
-  const peerDependencies = [];
-  const noSave = [];
-
-  const packagesWithOptions =
-    selected &&
-    selected.reduce((acc, pkg) => {
-      const flag = options.find(option => option.name === pkg.name);
-      const { name } = pkg;
-
-      if (!flag) {
-        dependencies.push(name);
-      } else {
-        switch (flag.options[0]) {
-          case 'save-dev':
-            devDependencies.push(name);
-            break;
-          case 'save-optional':
-            optionalDependencies.push(name);
-            break;
-          case 'save-bundle':
-            bundleDependencies.push(name);
-            break;
-          case 'no-save':
-            noSave.push(name);
-            break;
-          case 'save-peer':
-            peerDependencies.push(name);
-            break;
-          default:
-            dependencies.push(name);
-            break;
-        }
-      }
-
-      return merge(acc, {
-        dependencies,
-        devDependencies,
-        optionalDependencies,
-        bundleDependencies,
-        peerDependencies,
-        noSave
-      });
-    }, {});
-
-  return packagesWithOptions;
 };
 
 export const parseNpmAudit = data => {

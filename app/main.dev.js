@@ -1,4 +1,10 @@
-/* eslint-disable */
+/* eslint-disable global-require */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable compat/compat */
+
+/**
+ * Electron's main process
+ */
 
 import ElectronStore from 'electron-store';
 import path from 'path';
@@ -6,12 +12,15 @@ import chalk from 'chalk';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import log from 'electron-log';
 
-import { APP_TOOLS, APP_ACTIONS } from './constants/AppConstants';
 import MenuBuilder from './menu';
 import mk from './mk';
+import {
+  onNpmListOutdated,
+  onNpmView,
+  onNpmSearch,
+  onNpmInstall
+} from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
-
-import { onNpmView, onNpmList, onNpmSearch, onNpmInstall } from './mainProcess';
 
 const { config } = mk;
 const { defaultSettings } = config || {};
@@ -28,7 +37,10 @@ const {
   START_MINIMIZED = startMinimized
 } = process.env;
 
+/* eslint-disable-next-line */
 const debug = /--debug/.test(process.argv[2]);
+
+/* eslint-disable-next-line */
 const APP_PATHS = {
   appData: app.getPath('appData'),
   userData: app.getPath('userData')
@@ -64,7 +76,6 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-
 /**
  * Event handling
  * send asynchronous messages between main and renderer process
@@ -72,26 +83,31 @@ const installExtensions = async () => {
  */
 
 /**
- * Channel: npm-command
- * Supports: npm ls <@scope>/]<pkg>, npm outdated <@scope>/<pkg>
+ * Channel: npm-list-outaded
+ * Supports: npm list <@scope>/]<pkg>, npm outdated <@scope>/<pkg>
  * https://docs.npmjs.com/cli/ls.html
- * 
+ * https://docs.npmjs.com/cli/outdated.html
+ *
  * */
-ipcMain.on('npm-command', (event, options) => onNpmList(event, options, Store));
+ipcMain.on('npm-list-outdated', (event, options) =>
+  onNpmListOutdated(event, options, Store)
+);
 
 /**
  * Channel: npm-search
  * Supports: npm search [search terms ...]
  * https://docs.npmjs.com/cli/search.html
- * 
+ *
  * */
-ipcMain.on('npm-search', (event, options) => onNpmSearch(event, options, Store));
+ipcMain.on('npm-search', (event, options) =>
+  onNpmSearch(event, options, Store)
+);
 
 /**
  * Channel: npm-view
  * Supports: npm view <@scope>/<name>@<version>
  * https://docs.npmjs.com/cli/view.html
- * 
+ *
  * */
 ipcMain.on('npm-view', (event, options) => onNpmView(event, options, Store));
 
@@ -99,17 +115,20 @@ ipcMain.on('npm-view', (event, options) => onNpmView(event, options, Store));
  * Channel: npm-install
  * Supports: npm install <@scope>/<name>@<version>
  * https://docs.npmjs.com/cli/install.html
- * 
+ *
  * */
-ipcMain.on('npm-install', (event, options) => onNpmInstall(event, options, Store));
+ipcMain.on('npm-install', (event, options) =>
+  onNpmInstall(event, options, Store)
+);
 
 /**
- * Channel: general
- * Supports: 
- * 
+ * Channel: app
+ *
  * */
-ipcMain.on('online-status-changed', (event, status) => {
 
+/* eslint-disable-next-line */
+ipcMain.on('app-online-status-changed', (event, status) => {
+  // TODO: handle this
 });
 
 /**
@@ -127,6 +146,7 @@ app.on('window-all-closed', () => {
   }
 });
 
+/* eslint-disable-next-line */
 app.once('browser-window-created', (event, webContents) => {
   log.info(
     chalk.white.bgBlue.bold('[EVENT]'),
@@ -134,6 +154,7 @@ app.once('browser-window-created', (event, webContents) => {
   );
 });
 
+/* eslint-disable-next-line */
 app.once('web-contents-created', (event, webContents) => {
   log.info(
     chalk.white.bgBlue.bold('[EVENT]'),
@@ -177,7 +198,7 @@ app.on('ready', async () => {
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  mainWindow.once('ready-to-show', event => {
+  mainWindow.once('ready-to-show', () => {
     log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready-to-show event fired');
   });
 
@@ -219,12 +240,12 @@ app.on('ready', async () => {
 
   mainWindow.webContents.on('crashed', event => {
     log.error(chalk.white.bgRed.bold('[CRASHED]'), event);
-    app.quit() // TODO: handle this
+    app.quit(); // TODO: handle this
   });
 
   mainWindow.on('unresponsive', event => {
     log.error(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
-    app.quit() // TODO: handle this
+    app.quit(); // TODO: handle this
   });
 
   mainWindow.on('closed', () => {

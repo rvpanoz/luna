@@ -10,7 +10,7 @@ const setOutdatedSuccess = ActionCreator('SET_OUTDATED_SUCCESS');
 const setPackagesError = ActionCreator('SET_PACKAGES_ERROR');
 
 const mapPackages = ActionCreator('MAP_PACKAGES');
-const mapOutdatedPackages = ActionCreator('MAP_OUTDATED_PACKAGES')
+const mapOutdatedPackages = ActionCreator('MAP_OUTDATED_PACKAGES');
 const mergePackages = ActionCreator('MERGE_PACKAGES');
 const viewPackageStart = ActionCreator('VIEW_PACKAGE_START');
 const setActive = ActionCreator('SET_ACTIVE');
@@ -20,14 +20,16 @@ const updatePackages = ActionCreator('UPDATE_PACKAGES');
 const removePackages = ActionCreator('REMOVE_PACKAGES');
 const prepareInstall = ActionCreator('PREPARE_INSTALL');
 const addInstallationOption = ActionCreator('ADD_INSTALLATION_OPTION');
-const addOutdatedPackage = ActionCreator('ADD_UPDATED_PACKAGE')
+const addOutdatedPackage = ActionCreator('ADD_UPDATED_PACKAGE');
 
 const transformDependency = ActionCreator('TRANSFORM_DEPENDENCY');
 const transformationCompleted = ActionCreator('TRANSFORMATION_COMPLETED');
-const transformOutdatedPackages = ActionCreator('TRANSFORM_OUTDATED')
-const transformUpdatedPackages = ActionCreator('TRANSFORM_UPDATED')
+const transformOutdatedPackages = ActionCreator('TRANSFORM_OUTDATED');
+const transformUpdatedPackages = ActionCreator('TRANSFORM_UPDATED');
 
-const listPackagesListener = ActionCreator('REGISTER_LISTENER_PACKAGES');
+const listOutdatedPackagesListener = ActionCreator(
+  'REGISTER_LISTENER_PACKAGES'
+);
 const searchPackagesListener = ActionCreator('REGISTER_LISTENER_SEARCH');
 const viewPackageListener = ActionCreator('REGISTER_LISTENER_PACKAGE');
 const npmActionsListener = ActionCreator('REGISTER_LISTENER_ACTION');
@@ -56,7 +58,7 @@ export {
   removePackages,
   viewPackageStart,
   npmActionsListener,
-  listPackagesListener,
+  listOutdatedPackagesListener,
   searchPackagesListener,
   viewPackageListener
 };

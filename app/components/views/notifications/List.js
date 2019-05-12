@@ -22,7 +22,7 @@ import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 
-import { installPackages } from 'models/packages/actions';
+import { installPackage } from 'models/packages/actions';
 import styles from './styles/list';
 
 const mapState = ({
@@ -79,7 +79,7 @@ const NotificationsItem = ({
               directory
             };
 
-            dispatch(installPackages(parameters));
+            dispatch(installPackage(parameters));
           }
         }
       ),

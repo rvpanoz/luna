@@ -114,7 +114,7 @@ const Packages = ({ classes }) => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
     dispatch(
       setPackagesStart({
-        channel: 'npm-command',
+        channel: 'npm-list-outdated',
         options: {
           cmd: ['outdated', 'list']
         }
@@ -129,7 +129,7 @@ const Packages = ({ classes }) => {
     if (fromSearch) {
       dispatch(
         setPackagesStart({
-          channel: 'npm-command',
+          channel: 'npm-list-outdated',
           options: {
             cmd: ['outdated', 'list']
           }
@@ -150,26 +150,25 @@ const Packages = ({ classes }) => {
   useEffect(() => {
     dispatch(
       setPackagesStart({
-        channel: 'npm-command',
+        channel: 'npm-list-outdated',
         options: {
-          cmd: ['outdated', 'list']
+          cmd: ['outdated', 'list'],
+          mode
         }
       })
     );
-  }, [dispatch]);
+  }, [mode, dispatch]);
 
-  // setup packages with filters
+
   const [filteredPackages] = useFilters(packagesData, filters);
 
   const data = filteredByNamePackages.length
     ? filteredByNamePackages
     : filteredPackages;
 
-  // pagination
   const dataSlices =
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-  // sorting
   const listDataPackages =
     sortDir === 'asc'
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
