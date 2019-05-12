@@ -3,18 +3,12 @@ import { toggleLoader } from 'models/ui/actions';
 import { updateNotifications } from 'models/notifications/actions';
 import { Observable } from 'rxjs';
 import { pick } from 'ramda';
-import { switchcase, objectEntries, isJson } from 'commons/utils';
+import { switchcase, objectEntries } from 'commons/utils';
 import { mapPackages, mapOutdatedPackages } from '../actions';
 
 const onListPackages$ = new Observable(observer => {
   const onComplete = (event, ...rest) => {
-    /* eslint-disable-next-line */
     const [data, errors, options] = rest;
-
-    if (!data || !isJson(data)) {
-      return;
-    }
-
     const [command] = options;
 
     try {
@@ -27,6 +21,7 @@ const onListPackages$ = new Observable(observer => {
         ? objectEntries(dependencies)
         : objectEntries(packageData);
 
+      console.log(problems)
       if (problems) {
         observer.next(
           updateNotifications({
@@ -70,7 +65,7 @@ const onListPackages$ = new Observable(observer => {
 
   /* eslint-disable-next-line */
   const onFlow = (event, ...rest) => {
-    // TODO: handle
+    console.log(rest)
   };
 
   // clean up

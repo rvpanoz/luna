@@ -126,11 +126,9 @@
   "keywords": [
     "electron",
     "npm",
-    "yarn",
     "react",
     "redux",
     "node-packages",
-    "webpack",
     "npm-management"
   ],
   "homepage": "https://github.com/rvpanoz/luna#readme",
