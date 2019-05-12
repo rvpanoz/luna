@@ -1,3 +1,7 @@
+/**
+ * AppLayout
+ */
+
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -6,21 +10,22 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Snackbar from '@material-ui/core/Snackbar';
 import theme from 'styles/theme';
 
-import AppNavigator from 'containers/AppNavigator';
-import AppHeader from 'containers/AppHeader';
-import SnackbarContent from 'components/common/SnackbarContent';
-import AuditReport from 'components/common/AuditReport';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
-import { Packages } from 'components/pages/packages';
-import { Notifications } from 'components/pages/notifications';
+import AppSidebar from 'containers/AppSidebar';
+import AppHeader from 'containers/AppHeader';
+import SnackbarContent from 'components/common/SnackbarContent';
+import AuditReport from 'components/common/AuditReport';
+import { Packages } from 'components/views/packages';
+import { Notifications } from 'components/views/notifications';
+
 import { runAudit } from 'models/npm/actions';
-import { switchcase, shrinkDirectory } from 'commons/utils';
 import { setDialog, setSnackbar } from 'models/ui/actions';
+
+import { switchcase, shrinkDirectory } from 'commons/utils';
 import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
 
@@ -89,7 +94,7 @@ const AppLayout = ({ classes }) => {
       <div className={classes.root}>
         <CssBaseline />
         <nav className={classes.drawer}>
-          <AppNavigator
+          <AppSidebar
             mode={mode}
             fullDirectory={directory}
             directory={directory && shrinkDirectory(directory)}

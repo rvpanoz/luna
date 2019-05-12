@@ -1,27 +1,13 @@
-/* eslint-disable */
 
 /**
  * Transformation epics
  */
 
 import {
-  catchError,
   map,
-  tap,
-  concatMap,
-  mergeMap,
-  switchMap,
-  withLatestFrom,
-  takeWhile,
-  takeUntil,
-  filter,
-  combineLatest,
-  delay,
-  reduce,
-  ignoreElements
 } from 'rxjs/operators';
 
-import { from, of, pipe } from 'rxjs';
+import { pipe } from 'rxjs';
 import { ofType } from 'redux-observable';
 
 import { PACKAGE_GROUPS } from 'constants/AppConstants';

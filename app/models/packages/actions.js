@@ -14,7 +14,7 @@ const mapOutdatedPackages = ActionCreator('MAP_OUTDATED_PACKAGES')
 const mergePackages = ActionCreator('MERGE_PACKAGES');
 const viewPackageStart = ActionCreator('VIEW_PACKAGE_START');
 const setActive = ActionCreator('SET_ACTIVE');
-const installPackages = ActionCreator('INSTALL_PACKAGES');
+const installPackage = ActionCreator('INSTALL_PACKAGE');
 const installMultiplePackages = ActionCreator('INSTALL_MULTIPLE_PACKAGES');
 const updatePackages = ActionCreator('UPDATE_PACKAGES');
 const removePackages = ActionCreator('REMOVE_PACKAGES');
@@ -43,7 +43,7 @@ export {
   mapPackages,
   mapOutdatedPackages,
   mergePackages,
-  installPackages,
+  installPackage,
   installMultiplePackages,
   updatePackages,
   clearAll,

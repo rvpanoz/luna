@@ -16,22 +16,24 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import FolderIcon from '@material-ui/icons/FolderOpen';
 import Button from '@material-ui/core/Button';
+
 import AppLogo from 'components/common/AppLogo';
 import AppTabs from 'components/common/AppTabs';
-import { navigatorParameters } from 'commons/parameters';
-import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';
-
 import {
   ProjectTab,
   PackagesTab,
   ActionsTab
-} from 'components/pages/navigator/tabs';
+} from 'components/views/sidebar/tabs';
+
+import { navigatorParameters } from 'commons/parameters';
+import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';
+
 import { installPackages } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runAudit } from 'models/npm/actions';
 
-import styles from './styles/navigator';
+import styles from './styles/appSidebar';
 
 const mapState = ({
   notifications: { notifications },
@@ -53,7 +55,7 @@ const mapState = ({
   packagesOutdated
 });
 
-const Navigator = ({
+const AppSidebar = ({
   classes,
   mode,
   directory,
@@ -291,7 +293,7 @@ const Navigator = ({
   );
 };
 
-Navigator.propTypes = {
+AppSidebar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string,
   loading: PropTypes.bool,
@@ -304,4 +306,4 @@ Navigator.propTypes = {
   userAgent: PropTypes.string
 };
 
-export default withStyles(styles)(Navigator);
+export default withStyles(styles)(AppSidebar);

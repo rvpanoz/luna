@@ -16,7 +16,7 @@ import Grid from '@material-ui/core/Grid';
 
 import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
-import { PackageDetails } from 'components/pages/package';
+import { PackageDetails } from 'components/views/package';
 
 import { setPackagesStart, viewPackageStart } from 'models/packages/actions';
 import {
