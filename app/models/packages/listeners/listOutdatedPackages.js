@@ -6,9 +6,9 @@ import { pick } from 'ramda';
 import { switchcase, objectEntries } from 'commons/utils';
 import { mapPackages, mapOutdatedPackages } from '../actions';
 
-const onListPackages$ = new Observable(observer => {
+const onListOutdatedPackages$ = new Observable(observer => {
   const onComplete = (event, ...rest) => {
-    const [data, errors, options] = rest;
+    const [data, , options] = rest;
     const [command] = options;
 
     try {
@@ -21,7 +21,6 @@ const onListPackages$ = new Observable(observer => {
         ? objectEntries(dependencies)
         : objectEntries(packageData);
 
-      console.log(problems)
       if (problems) {
         observer.next(
           updateNotifications({
@@ -65,16 +64,16 @@ const onListPackages$ = new Observable(observer => {
 
   /* eslint-disable-next-line */
   const onFlow = (event, ...rest) => {
-    console.log(rest)
+    // TODO: handle this
   };
 
-  // clean up
-  ipcRenderer.removeListener('npm-command-completed', onComplete);
-  ipcRenderer.removeListener('npm-command-flow', onFlow);
+  // clean up listeners
+  ipcRenderer.removeListener('npm-list-outdated-completed', onComplete);
+  ipcRenderer.removeListener('npm-list-outdated-flow', onFlow);
 
   // register listeners
-  ipcRenderer.on('npm-command-flow', onFlow);
-  ipcRenderer.on('npm-command-completed', onComplete);
+  ipcRenderer.on('npm-list-outdated-flow', onFlow);
+  ipcRenderer.on('npm-list-outdated-completed', onComplete);
 });
 
-export default onListPackages$;
+export default onListOutdatedPackages$;

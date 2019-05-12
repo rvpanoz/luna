@@ -1,11 +1,10 @@
+/* eslint-disable */
 
 /**
  * Transformation epics
  */
 
-import {
-  map,
-} from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { pipe } from 'rxjs';
 import { ofType } from 'redux-observable';
@@ -17,7 +16,7 @@ import {
   mapPackages,
   mapOutdatedPackages,
   setPackagesSuccess,
-  setOutdatedSuccess,
+  setOutdatedSuccess
 } from '../actions';
 
 const setPackages = payload => ({
@@ -30,93 +29,122 @@ const setOutdatedPackages = payload => ({
   payload
 });
 
-const mapPackagesEpic = (action$, state$) => action$.pipe(
-  ofType(mapPackages.type),
-  map(({ payload: { data, fromSearch, fromSort, projectName, projectDescription, projectVersion } }) => {
-    const enchancedDependencies = data.reduce((alldependencies, dependency) => {
-      const {
-        common: { mode, directory },
-        packages: {
-          packagesOutdated,
-          project: { name, version, description }
+const mapPackagesEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(mapPackages.type),
+    map(
+      ({
+        payload: {
+          data,
+          fromSearch,
+          fromSort,
+          projectName,
+          projectDescription,
+          projectVersion
         }
-      } = state$.value;
-
-      const [pkgName, details] = fromSearch
-        ? [
-          dependency.name,
-          {
-            version: dependency.version,
-            description: dependency.description
+      }) => {
+        const {
+          common: { mode, directory },
+          packages: {
+            packagesOutdated,
+            project: { name, version, description }
           }
-        ]
-        : dependency;
+        } = state$.value;
 
-      const { extraneous, invalid, missing, peerMissing, problems } = details || {}
-      const [isOutdated, outdatedPkg] = isPackageOutdated(
-        packagesOutdated,
-        name
-      );
+        const enhancedDependencies = data.reduce(
+          (alldependencies, dependency) => {
+            const [pkgName, details] = fromSearch
+              ? [
+                dependency.name,
+                {
+                  version: dependency.version,
+                  description: dependency.description
+                }
+              ]
+              : dependency;
 
-      const packageJSON = readPackageJson(directory); // side effect
+            const { extraneous, invalid, missing, peerMissing, problems } =
+              details || {};
 
-      const group = mode === 'local' ? Object.keys(PACKAGE_GROUPS).find(
-        groupName =>
-          packageJSON[groupName] && packageJSON[groupName][pkgName]
-      ) : null
+            const isOutdated = packagesOutdated.some(o => o.name === pkgName);
+            const outdatedPkg = packagesOutdated.find(o => o.name === pkgName);
 
-      return [...alldependencies, {
-        name: pkgName,
-        isOutdated,
-        latest: isOutdated ? outdatedPkg.latest : null,
-        __invalid: invalid,
-        __hasError: missing || peerMissing || extraneous,
-        __fromSearch: fromSearch,
-        __group: group,
-        ...details,
-      }]
-    }, [])
+            const packageJSON = readPackageJson(directory); //side effect
 
-    return {
-      alldependencies: enchancedDependencies,
-      projectName,
-      projectDescription,
-      projectVersion,
-      fromSearch,
-      fromSort
-    }
-  }),
-  map(({
-    alldependencies,
-    projectName,
-    projectDescription,
-    projectVersion,
-    fromSearch,
-    fromSort
-  }) => setPackages({
-    dependencies: alldependencies.filter(dependency => !Boolean(dependency.__invalid)),
-    projectName,
-    projectDescription,
-    projectVersion,
-    fromSearch,
-    fromSort
-  }))
-);
+            const group =
+              mode === 'local'
+                ? Object.keys(PACKAGE_GROUPS).find(
+                  groupName =>
+                    packageJSON[groupName] && packageJSON[groupName][pkgName]
+                )
+                : null;
+
+            return [
+              ...alldependencies,
+              {
+                name: pkgName,
+                isOutdated,
+                latest: isOutdated && outdatedPkg ? outdatedPkg.latest : dependency.version,
+                __invalid: invalid,
+                __hasError: missing || peerMissing || extraneous,
+                __fromSearch: fromSearch,
+                __group: group,
+                ...details
+              }
+            ];
+          },
+          []
+        );
+
+        return {
+          alldependencies: enhancedDependencies,
+          projectName,
+          projectDescription,
+          projectVersion,
+          fromSearch,
+          fromSort
+        };
+      }
+    ),
+    map(
+      ({
+        alldependencies,
+        projectName,
+        projectDescription,
+        projectVersion,
+        fromSearch,
+        fromSort
+      }) =>
+        setPackages({
+          dependencies: alldependencies.filter(
+            dependency => !Boolean(dependency.__invalid)
+          ),
+          projectName,
+          projectDescription,
+          projectVersion,
+          fromSearch,
+          fromSort
+        })
+    )
+  );
 
 const mapOutdatedPackagesEpic = pipe(
   ofType(mapOutdatedPackages.type),
-  map(({ payload: { data } }) => data.reduce(
-    (alldependencies, dependency) => {
+  map(({ payload: { data } }) =>
+    data.reduce((alldependencies, dependency) => {
       const [name, details] = dependency;
 
-      return [...alldependencies, {
-        name,
-        isOutdated: true,
-        ...details
-      }]
-    }, []
-  )),
+      return [
+        ...alldependencies,
+        {
+          name,
+          isOutdated: true,
+          ...details
+        }
+      ];
+    }, [])
+  ),
   map(alldependencies => setOutdatedPackages({ outdated: alldependencies }))
-)
+);
 
 export { mapPackagesEpic, mapOutdatedPackagesEpic };
