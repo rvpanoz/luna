@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { map, tap, mergeMap, ignoreElements } from 'rxjs/operators';

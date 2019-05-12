@@ -28,7 +28,7 @@ import {
 import { navigatorParameters } from 'commons/parameters';
 import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';
 
-import { installPackages } from 'models/packages/actions';
+import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runAudit } from 'models/npm/actions';
@@ -117,7 +117,7 @@ const AppSidebar = ({
       },
       btnIdx => {
         if (Boolean(btnIdx) === true) {
-          dispatch(installPackages(parameters));
+          dispatch(installPackage(parameters));
         }
       }
     );

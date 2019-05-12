@@ -10,7 +10,7 @@ const { config } = mk;
 const { defaultSettings } = config || {};
 const { defaultManager } = defaultSettings;
 
-const onNpmList = (event, options, store) => {
+const onNpmListOutdated = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
@@ -42,8 +42,8 @@ const onNpmList = (event, options, store) => {
     }
   };
 
-  const onFlow = chunk => event.sender.send('npm-command-flow', chunk);
-  const onError = error => event.sender.send('npm-command-error', error);
+  const onFlow = chunk => event.sender.send('npm-list-outdated-flow', chunk);
+  const onError = error => event.sender.send('npm-list-outdated-error', error);
 
   const onComplete = (errors, data, cmd) => {
     const { directory, mode } = rest;
@@ -52,7 +52,7 @@ const onNpmList = (event, options, store) => {
       handleLocalEvents(directory);
     }
 
-    event.sender.send('npm-command-completed', data, errors, cmd);
+    event.sender.send('npm-list-outdated-completed', data, errors, cmd);
   };
 
   const callback = result => {
@@ -74,8 +74,8 @@ const onNpmList = (event, options, store) => {
     runCommand(params, callback);
   } catch (error) {
     log.error(error.message);
-    event.sender.send('npm-command-error', error);
+    event.sender.send('npm-list-outdated-error', error);
   }
 };
 
-export default onNpmList;
+export default onNpmListOutdated;
