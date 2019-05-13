@@ -18,7 +18,6 @@ const createReducer = (notificationsState, handlers) => (
   action
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
-// TODO: change payload
 const handlers = {
   [updateNotifications.type]: (state, { payload: { data } }) =>
     assoc('notifications', data, state),

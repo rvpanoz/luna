@@ -32,10 +32,22 @@ const updateLoader = payload => ({
   payload
 });
 
-const installPackageEpic = action$ =>
+const installPackageEpic = (action$, state$) =>
   action$.pipe(
     ofType(installPackage.type),
-    tap(console.log),
+    tap(({ payload }) => {
+      const {
+        common: { mode, directory }
+      } = state$.value;
+
+      ipcRenderer.send(
+        'npm-install',
+        Object.assign({}, payload, {
+          mode,
+          directory
+        })
+      );
+    }),
     ignoreElements()
   );
 
@@ -57,6 +69,28 @@ const installMultiplePackagesFromGlobalEpic = (action$, state$) =>
         options: []
       })
     )
+  );
+
+const installMultiplePackagesFromLocalEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(installMultiplePackages.type),
+    withLatestFrom(state$),
+    filter(
+      ([
+        ,
+        {
+          common: { mode }
+        }
+      ]) => mode === 'local'
+    ),
+    map(({ payload }) => {
+      console.log(payload);
+
+      return prepareInstallationOptions({
+        from: 'flags',
+        options: []
+      });
+    })
   );
 
 const prepareInstallEpic = (action$, state$) =>
@@ -116,7 +150,7 @@ const completeInstallationEpic = (action$, state$) =>
 
       const parameters = {
         ipcEvent: 'install',
-        cmd: options.map(() => 'install'),
+        cmd: options.mapt(() => 'install'),
         packages: selected,
         pkgOptions: mergedOptions,
         multiple: true,
@@ -124,7 +158,7 @@ const completeInstallationEpic = (action$, state$) =>
         directory
       };
 
-      ipcRenderer.send(IPC_EVENT, parameters);
+      ipcRenderer.send('npm-install', parameters);
 
       return updateLoader({
         loading: true,
@@ -133,6 +167,7 @@ const completeInstallationEpic = (action$, state$) =>
     })
   );
 
+// TODO: wip
 const updatePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(updatePackages.type),
@@ -181,4 +216,10 @@ const updatePackagesEpic = (action$, state$) =>
     })
   );
 
-export { completeInstallationEpic, installPackageEpic, updatePackagesEpic };
+export {
+  completeInstallationEpic,
+  installPackageEpic,
+  installMultiplePackagesFromGlobalEpic,
+  prepareInstallEpic,
+  updatePackagesEpic
+};
