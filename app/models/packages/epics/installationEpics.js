@@ -32,6 +32,10 @@ const updateLoader = payload => ({
   payload
 });
 
+/**
+ * Install single package
+ * supports global and local mode
+ */
 const installPackageEpic = (action$, state$) =>
   action$.pipe(
     ofType(installPackage.type),
@@ -217,9 +221,10 @@ const updatePackagesEpic = (action$, state$) =>
   );
 
 export {
-  completeInstallationEpic,
   installPackageEpic,
   installMultiplePackagesFromGlobalEpic,
+  installMultiplePackagesFromLocalEpic,
   prepareInstallEpic,
+  completeInstallationEpic,
   updatePackagesEpic
 };
