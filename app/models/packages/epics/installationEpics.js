@@ -32,6 +32,17 @@ const updateLoader = payload => ({
   payload
 });
 
+const updateLoaderEpic = action$ =>
+  action$.pipe(
+    ofType(installPackage.type),
+    map(() =>
+      updateLoader({
+        loading: true,
+        message: 'Install package'
+      })
+    )
+  );
+
 /**
  * Install single package
  * supports global and local mode
@@ -226,5 +237,6 @@ export {
   installMultiplePackagesFromLocalEpic,
   prepareInstallEpic,
   completeInstallationEpic,
-  updatePackagesEpic
+  updatePackagesEpic,
+  updateLoaderEpic
 };

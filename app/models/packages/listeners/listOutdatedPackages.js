@@ -11,6 +11,10 @@ const onListOutdatedPackages$ = new Observable(observer => {
     const [data, , options] = rest;
     const [command] = options;
 
+    if (!data || data.length === 0) {
+      return;
+    }
+
     try {
       const packageData = JSON.parse(data);
       const { name, version, description } = packageData || {};
