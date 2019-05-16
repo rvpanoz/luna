@@ -2,15 +2,19 @@
 
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
-import { map, tap, mergeMap, ignoreElements } from 'rxjs/operators';
+import { pipe } from 'rxjs';
+import { map, tap, mergeMap, switchMap, ignoreElements } from 'rxjs/operators';
 
 import { setActivePage, clearSelected, toggleLoader } from 'models/ui/actions';
 import { setRunningCommand } from 'models/npm/actions';
 import {
   addInstallationOption,
   installPackage,
+  installPackageListener,
   updatePackages
 } from 'models/packages/actions';
+
+import { onNpmInstall$ } from '../listeners';
 
 import MESSAGES from '../messages';
 
@@ -32,15 +36,17 @@ const updateLoader = payload => ({
   payload
 });
 
-const updateLoaderEpic = action$ =>
+const showLoaderEpic = action$ =>
   action$.pipe(
     ofType(installPackage.type),
-    map(() =>
-      updateLoader({
+    map(({ payload }) => {
+      const { name } = payload;
+
+      return updateLoader({
         loading: true,
-        message: 'Install package'
-      })
-    )
+        message: `Installing ${name}`
+      });
+    })
   );
 
 /**
@@ -64,6 +70,12 @@ const installPackageEpic = (action$, state$) =>
       );
     }),
     ignoreElements()
+  );
+
+const installMultiplePackagesEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(installMultiplePackages.type),
+    withLatestFrom(state$)
   );
 
 const installMultiplePackagesFromGlobalEpic = (action$, state$) =>
@@ -182,7 +194,6 @@ const completeInstallationEpic = (action$, state$) =>
     })
   );
 
-// TODO: wip
 const updatePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(updatePackages.type),
@@ -231,12 +242,19 @@ const updatePackagesEpic = (action$, state$) =>
     })
   );
 
+// listener epics
+const installPackageListenerEpic = pipe(
+  ofType(installPackageListener.type),
+  switchMap(() => onNpmInstall$)
+);
+
 export {
+  installPackageListenerEpic,
   installPackageEpic,
   installMultiplePackagesFromGlobalEpic,
   installMultiplePackagesFromLocalEpic,
   prepareInstallEpic,
   completeInstallationEpic,
   updatePackagesEpic,
-  updateLoaderEpic
+  showLoaderEpic
 };

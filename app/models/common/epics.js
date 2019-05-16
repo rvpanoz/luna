@@ -6,11 +6,16 @@ import {
   listOutdatedPackagesListener,
   searchPackagesListener,
   viewPackageListener,
+  installPackageListener,
   npmActionsListener
 } from 'models/packages/actions';
 
 import { npmToolsListener } from 'models/npm/actions';
 import { initActions } from 'models/common/actions';
+
+/**
+ * Register listeners - actions
+ */
 
 const onInitActionsEpic = pipe(
   ofType(initActions.type),
@@ -18,6 +23,7 @@ const onInitActionsEpic = pipe(
     listOutdatedPackagesListener(),
     searchPackagesListener(),
     viewPackageListener(),
+    installPackageListener(),
     npmActionsListener(),
     npmToolsListener()
   ])

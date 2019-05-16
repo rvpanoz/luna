@@ -66,17 +66,10 @@ const onListOutdatedPackages$ = new Observable(observer => {
     }
   };
 
-  /* eslint-disable-next-line */
-  const onFlow = (event, ...rest) => {
-    // TODO: handle this
-  };
-
   // clean up listeners
   ipcRenderer.removeListener('npm-list-outdated-completed', onComplete);
-  ipcRenderer.removeListener('npm-list-outdated-flow', onFlow);
 
-  // register listeners
-  ipcRenderer.on('npm-list-outdated-flow', onFlow);
+  // register listener
   ipcRenderer.on('npm-list-outdated-completed', onComplete);
 });
 
