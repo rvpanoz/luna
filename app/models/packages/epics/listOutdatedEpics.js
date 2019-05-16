@@ -6,6 +6,7 @@ import {
   listOutdatedPackagesListener,
   searchPackagesListener
 } from '../actions';
+
 import { onListOutdatedPackages$, onSearchPackages$ } from '../listeners';
 
 const listOutdatedPackagesListenerEpic = pipe(

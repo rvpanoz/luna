@@ -30,8 +30,12 @@ const transformUpdatedPackages = ActionCreator('TRANSFORM_UPDATED');
 const listOutdatedPackagesListener = ActionCreator(
   'REGISTER_LISTENER_PACKAGES'
 );
+
 const searchPackagesListener = ActionCreator('REGISTER_LISTENER_SEARCH');
 const viewPackageListener = ActionCreator('REGISTER_LISTENER_PACKAGE');
+const installPackageListener = ActionCreator(
+  'REGISTER_LISTENER_INSTALL_PACKAGE'
+);
 const npmActionsListener = ActionCreator('REGISTER_LISTENER_ACTION');
 
 export {
@@ -58,6 +62,7 @@ export {
   removePackages,
   viewPackageStart,
   npmActionsListener,
+  installPackageListener,
   listOutdatedPackagesListener,
   searchPackagesListener,
   viewPackageListener

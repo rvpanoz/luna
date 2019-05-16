@@ -65,7 +65,7 @@ const execute = (
       });
     });
 
-    command.stderr.on('data', error => {
+    command.stderr.on('error', error => {
       const errorString = String(error);
 
       errors += errorString;
