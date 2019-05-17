@@ -1,5 +1,6 @@
 # Luna - npm management through a modern UI :hibiscus:
 
+[![Build Status](https://travis-ci.com/rvpanoz/luna.svg?branch=master)](https://travis-ci.com/rvpanoz/luna)
 [![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
 
 npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
