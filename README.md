@@ -96,6 +96,5 @@ Luna is a very active project so feel free to submit issues and enhancement requ
 ### In memory of my friend luna - rest in peace my love :heart:
 
 <div style="display:block;border-radius:5px; border: 2px solid #ef4e7b;position:relative;width:150px">
-<img align="center" width="150" height="200"
-     title="this is luna" src="./resources/img/luna.jpg">
+<img align="center" title="this is luna" src="./resources/img/luna.jpg">
 </div>
