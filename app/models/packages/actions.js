@@ -18,6 +18,7 @@ const installPackage = ActionCreator('INSTALL_PACKAGE');
 const installMultiplePackages = ActionCreator('INSTALL_MULTIPLE_PACKAGES');
 const updatePackages = ActionCreator('UPDATE_PACKAGES');
 const uninstallPackages = ActionCreator('UNINSTALL_PACKAGES');
+const removePackages = ActionCreator('REMOVE_PACKAGES');
 const prepareInstall = ActionCreator('PREPARE_INSTALL');
 const addInstallationOption = ActionCreator('ADD_INSTALLATION_OPTION');
 const addOutdatedPackage = ActionCreator('ADD_UPDATED_PACKAGE');
@@ -30,11 +31,13 @@ const transformUpdatedPackages = ActionCreator('TRANSFORM_UPDATED');
 const listOutdatedPackagesListener = ActionCreator(
   'REGISTER_LISTENER_PACKAGES'
 );
-
 const searchPackagesListener = ActionCreator('REGISTER_LISTENER_SEARCH');
 const viewPackageListener = ActionCreator('REGISTER_LISTENER_PACKAGE');
 const installPackageListener = ActionCreator(
   'REGISTER_LISTENER_INSTALL_PACKAGE'
+);
+const uninstallPackagesListener = ActionCreator(
+  'REGISTER_LISTENER_UNINSTALL_PACKAGES'
 );
 const npmActionsListener = ActionCreator('REGISTER_LISTENER_ACTION');
 
@@ -46,10 +49,11 @@ export {
   addOutdatedPackage,
   addInstallationOption,
   prepareInstall,
-  uninstallPackages,
+  removePackages,
   mapPackages,
   mapOutdatedPackages,
   mergePackages,
+  uninstallPackages,
   installPackage,
   installMultiplePackages,
   updatePackages,
@@ -62,6 +66,7 @@ export {
   setOutdatedSuccess,
   viewPackageStart,
   npmActionsListener,
+  uninstallPackagesListener,
   installPackageListener,
   listOutdatedPackagesListener,
   searchPackagesListener,

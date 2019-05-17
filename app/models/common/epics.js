@@ -7,7 +7,7 @@ import {
   searchPackagesListener,
   viewPackageListener,
   installPackageListener,
-  npmActionsListener
+  uninstallPackagesListener,
 } from 'models/packages/actions';
 
 import { npmToolsListener } from 'models/npm/actions';
@@ -24,7 +24,7 @@ const onInitActionsEpic = pipe(
     searchPackagesListener(),
     viewPackageListener(),
     installPackageListener(),
-    npmActionsListener(),
+    uninstallPackagesListener(),
     npmToolsListener()
   ])
 );
