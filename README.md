@@ -19,12 +19,10 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 - Get notifications for missing dependencies or extraneous dependencies
 - Run npm tools like npm audit
 
-
 ### Build status
 
 [![Build Status](https://travis-ci.com/rvpanoz/luna.svg?branch=master)](https://travis-ci.com/rvpanoz/luna)
 [![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
-
 
 ### Screenshots
 
@@ -59,7 +57,6 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 - [Rxjs](https://rxjs-dev.firebaseapp.com/) - [🛠️](https://stackshare.io/rxjs) - [🐙](https://github.com/Reactive-Extensions/RxJS) - Reactive extensions library for Javascript
 - [Material-UI](https://material-ui.com//) - [🛠️](https://stackshare.io/material-ui) - [🐙](https://github.com/mui-org/material-ui) - React components that implement Google's Material Design.
 
-
 ### Running the application
 
 Install application's dependencies:
@@ -69,7 +66,6 @@ Install application's dependencies:
 Start the application
 
 `npm start`
-
 
 ### Development and Contributing
 
@@ -89,11 +85,9 @@ In order to start the development server and run the app in development mode:
 
 `npm run dev`
 
-
 ### Issues
 
 Luna is a very active project so feel free to submit issues and enhancement requests.
-
 
 ### Binaries
 
