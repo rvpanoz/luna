@@ -1,10 +1,11 @@
 # Luna - npm management through a modern UI.
-
 npm desktop manager for handling npm dependencies. Build on Electron :hibiscus:
+
 
 ## Motivation
 
 Luna was created with main purpose to handle and install npm dependencies in a ease way. It provides a useful and modern UI in order to enhance the user experience. In addition I wanted to create a project with the latest web technologies combined in one application. 
+
 
 ## Features
 
@@ -18,13 +19,12 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 - Get notifications for missing dependencies or extraneous dependencies
 - Run npm tools like npm audit
 
+
 ## Build status
 
 [![Build Status](https://travis-ci.com/rvpanoz/luna.svg?branch=master)](https://travis-ci.com/rvpanoz/luna)
-
-## Code factor
-
 [![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
+
 
 ## Screenshots
 
@@ -32,6 +32,7 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 <img align="center" width="100%" height="100%"
      title="luna-icon" src="./resources/img/luna-v3.0.0.png">
 </div>
+
 
 ## Tech Stack
 
@@ -42,13 +43,8 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 - [Rxjs](https://rxjs-dev.firebaseapp.com/) - [🛠️](https://stackshare.io/rxjs) - [🐙](https://github.com/Reactive-Extensions/RxJS) - Reactive extensions library for Javascript
 - [Material-UI](https://material-ui.com//) - [🛠️](https://stackshare.io/material-ui) - [🐙](https://github.com/mui-org/material-ui) - React components that implement Google's Material Design.
 
-## Binaries
 
-> binaries for windows and macOS will uploaded soon - stay tuned! :eyes:
->
-> if someone wants to help me build on these OS feel free to contact me :)
-
-## Running
+## Running the application
 
 Install application's dependencies:
 
@@ -58,7 +54,8 @@ Start the application
 
 `npm start`
 
-## Development
+
+## Development and Contributing
 
 Install application's dependencies:
 
@@ -67,6 +64,14 @@ Install application's dependencies:
 In order to start the development server and run the app in development mode:
 
 `npm run dev`
+
+
+## Binaries
+
+> binaries for windows and macOS will uploaded soon - stay tuned! :eyes:
+>
+> if someone wants to help me build on these OS feel free to contact me :)
+
 
 ---
 
