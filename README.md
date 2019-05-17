@@ -7,7 +7,6 @@ npm desktop manager for handling npm dependencies. Supported platforms: OS X Win
 
 Luna was created with main purpose to handle and install npm dependencies in a ease way. It provides a useful and modern UI in order to enhance the user experience. In addition I wanted to create a project with the latest web technologies combined in one application.
 
-
 ### Features
 
 - Manage global and local packages
@@ -49,7 +48,7 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 </div>
 
 
-## Tech Stack
+### Tech Stack
 
 ### Tech Stack
 
