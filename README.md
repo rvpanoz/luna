@@ -1,17 +1,19 @@
-# Luna - npm management through a modern UI :hibiscus:
+# Luna - npm management through a modern UI.
 
-[![Build Status](https://travis-ci.com/rvpanoz/luna.svg?branch=master)](https://travis-ci.com/rvpanoz/luna)
-[![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
+npm desktop manager for handling npm dependencies. Build on Electron :hibiscus:
 
-npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. Build on <code>Electron</code>
+## Motivation
+
+Luna was created with main purpose to handle and install npm dependencies in a ease way. It provides a useful and modern UI in order to enhance the user experience. In addition I wanted to create a project with the latest web technologies combined in one application. 
+
+---
 
 ## Features
 
-- Manage global packages
-- Analyze a local directory using package.json
+- Manage global and local packages
 - Search npm for new packages
-- Install new packages - multiple
-- Uninstall packages - multiple
+- Install/Update/Uninstall packages
+- Uninstall packages
 - Update existing packages
 - Filter packages by type or outdated
 - Preview package details (versions, statistics, dependencies and more)
@@ -20,18 +22,23 @@ npm desktop manager for handling npm dependencies. Supported platforms: OS X Win
 
 ---
 
+## Build status
+
+[![Build Status](https://travis-ci.com/rvpanoz/luna.svg?branch=master)](https://travis-ci.com/rvpanoz/luna)
+
+## Code factor
+
+[![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
+
+## Screenshots
+
+
 <div style="display:block;border-radius:5px; border: 2px solid transparent; border-image: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82); width:100%;height:100%;position:relative;">
 <img align="center" width="100%" height="100%"
      title="luna-icon" src="./resources/img/luna-v3.0.0.png">
 </div>
 
-## Major changes from version 2
 
-- Rewrite almost every component using React Hooks
-- Use rxjs/redux-observable to handle Electron's IPC Communication between Renderer and Main Processes
-- New design - MaterialUI
-- Better API for npm cli
-- Electron v4 and webpack v4 added
 
 ## Binaries
 
