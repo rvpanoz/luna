@@ -2,11 +2,9 @@
 
 npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. Build on Electron :hibiscus:
 
-
 ### Motivation
 
 Luna was created with main purpose to handle and install npm dependencies in a ease way. It provides a useful and modern UI in order to enhance the user experience. In addition I wanted to create a project with the latest web technologies combined in one application.
-
 
 ### Features
 
@@ -20,34 +18,30 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 - Get notifications for missing dependencies or extraneous dependencies
 - Run npm tools like npm audit
 
-
 ### Build status
 
 [![Build Status](https://travis-ci.com/rvpanoz/luna.svg?branch=master)](https://travis-ci.com/rvpanoz/luna)
 [![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
 
-
 ### Screenshots
 
-<div style="padding: 0;margin: 0;display: flex;justify-content: space-around">
-  <div style="padding: 5px;margin-top:5px">
-    <img width="75%" height="75%"
-     title="luna-1" src="./resources/img/luna-1.png"/>
+<div style="display: flex; flex-wrap: wrap;padding: 0 4px;">
+  <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
+    <img style="margin-top: 8px; vertical-align: middle;" title="luna-1" src="./resources/img/luna-1.png"/>
   </div>
-  <div style="padding: 5px">
-    <img width="75%" height="75%"
-     title="luna-1" src="./resources/img/luna-2.png"/>
+  <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
+    <img style="margin-top: 8px;
+  vertical-align: middle;" title="luna-2" src="./resources/img/luna-2.png"/>
   </div>
-  <div style="padding: 5px">
-    <img width="75%" height="75%"
-     title="luna-1" src="./resources/img/luna-3.png"/>
+  <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
+    <img style="margin-top: 8px;
+  vertical-align: middle;" title="luna-3" src="./resources/img/luna-3.png"/>
   </div>
-  <div style="padding: 5px">
-    <img width="75%" height="75%"
-     title="luna-1" src="./resources/img/luna-4.png"/>
+  <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
+    <img style="margin-top: 8px;
+  vertical-align: middle;" title="luna-4" src="./resources/img/luna-4.png"/>
   </div>
 </div>
-
 
 ### Tech Stack
 
@@ -60,7 +54,6 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 - [Rxjs](https://rxjs-dev.firebaseapp.com/) - [🛠️](https://stackshare.io/rxjs) - [🐙](https://github.com/Reactive-Extensions/RxJS) - Reactive extensions library for Javascript
 - [Material-UI](https://material-ui.com//) - [🛠️](https://stackshare.io/material-ui) - [🐙](https://github.com/mui-org/material-ui) - React components that implement Google's Material Design.
 
-
 ### Running the application
 
 Install application's dependencies:
@@ -70,7 +63,6 @@ Install application's dependencies:
 Start the application
 
 `npm start`
-
 
 ### Development and Contributing
 
@@ -90,11 +82,9 @@ In order to start the development server and run the app in development mode:
 
 `npm run dev`
 
-
 ### Issues
 
 Luna is a very active project so feel free to submit issues and enhancement requests.
-
 
 ### Binaries
 
@@ -103,7 +93,6 @@ Luna is a very active project so feel free to submit issues and enhancement requ
 > if someone wants to help me build on these OS feel free to contact me :)
 
 ---
-
 
 ### In memory of my friend luna - rest in peace my love :heart:
 
