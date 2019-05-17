@@ -25,24 +25,24 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 
 ### Screenshots
 
-<ul style="padding: 0;margin: 0;list-style: none;display: -webkit-box;display: -moz-box;display: -ms-flexbox;display: -webkit-flex;display: flex;justify-content: space-around">
-  <li style="padding: 5px;margin-top:5px">
-    <img width="100%" height="100%"
+<div style="padding: 0;margin: 0;display: flex;justify-content: space-around">
+  <div style="padding: 5px;margin-top:5px">
+    <img width="75%" height="75%"
      title="luna-1" src="./resources/img/luna-1.png"/>
-  </li>
-  <li style="padding: 5px">
-    <img width="100%" height="100%"
+  </div>
+  <div style="padding: 5px">
+    <img width="75%" height="75%"
      title="luna-1" src="./resources/img/luna-2.png"/>
-  </li>
-  <li style="padding: 5px">
-    <img width="100%" height="100%"
+  </div>
+  <div style="padding: 5px">
+    <img width="75%" height="75%"
      title="luna-1" src="./resources/img/luna-3.png"/>
-  </li>
-  <li style="padding: 5px">
-    <img width="100%" height="100%"
+  </div>
+  <div style="padding: 5px">
+    <img width="75%" height="75%"
      title="luna-1" src="./resources/img/luna-4.png"/>
-  </li>
-</ul>
+  </div>
+</div>
 
 ### Tech Stack
 
