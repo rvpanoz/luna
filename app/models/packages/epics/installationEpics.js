@@ -10,6 +10,7 @@ import { setRunningCommand } from 'models/npm/actions';
 import {
   addInstallationOption,
   installPackage,
+  installMultiplePackages,
   installPackageListener,
   updatePackages
 } from 'models/packages/actions';
@@ -72,94 +73,22 @@ const installPackageEpic = (action$, state$) =>
     ignoreElements()
   );
 
+/**
+ *  WIP
+ *  Install multiple packages
+ *  supports global and local mode
+ */
 const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(installMultiplePackages.type),
-    withLatestFrom(state$)
-  );
-
-const installMultiplePackagesFromGlobalEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(installMultiplePackages.type),
-    withLatestFrom(state$),
-    filter(
-      ([
-        ,
-        {
-          common: { mode }
-        }
-      ]) => mode === 'global'
-    ),
-    map(() =>
-      prepareInstallationOptions({
-        from: 'global',
-        options: []
-      })
-    )
-  );
-
-const installMultiplePackagesFromLocalEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(installMultiplePackages.type),
-    withLatestFrom(state$),
-    filter(
-      ([
-        ,
-        {
-          common: { mode }
-        }
-      ]) => mode === 'local'
-    ),
-    map(({ payload }) => {
-      console.log(payload);
-
-      return prepareInstallationOptions({
-        from: 'flags',
-        options: []
-      });
-    })
-  );
-
-const prepareInstallEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(prepareInstall.type),
-    switchMap(({ from, options }) => {
+    tap(console.log),
+    mergeMap(() => {
       const {
+        common: { mode, directory },
         ui: { selected }
       } = state$.value;
 
-      selected.map(selectedPackage => {
-        let details;
-
-        if (from === 'json') {
-          details = options.filter(option => {
-            const [, dependencies] = option;
-
-            return dependencies[selectedPackage];
-          });
-
-          const [group] = details;
-
-          return addInstallationOptionAction({
-            name: selectedPackage,
-            options: group ? [].concat(PACKAGE_GROUPS[group]) : []
-          });
-        }
-
-        if (from === 'flags') {
-          return addInstallationOptionAction({
-            name: selectedPackage,
-            options: options
-              ? options.find(option => option.name === selectedPackage).options
-              : []
-          });
-        }
-
-        return addInstallationOptionAction({
-          name: selectedPackage,
-          options: []
-        });
-      });
+      return [];
     })
   );
 
@@ -251,9 +180,7 @@ const installPackageListenerEpic = pipe(
 export {
   installPackageListenerEpic,
   installPackageEpic,
-  installMultiplePackagesFromGlobalEpic,
-  installMultiplePackagesFromLocalEpic,
-  prepareInstallEpic,
+  installMultiplePackagesEpic,
   completeInstallationEpic,
   updatePackagesEpic,
   showLoaderEpic

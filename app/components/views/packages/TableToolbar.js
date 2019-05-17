@@ -92,20 +92,22 @@ const TableListToolbar = ({
     }
 
     if (mode === 'local' && action === 'install' && !force) {
-      return toggleOptions(true);
+      toggleOptions(true);
+
+      return;
     }
 
     return action === 'install'
       ? dispatch(installMultiplePackages())
       : dispatch(
-        updatePackages({
-          activeManager: manager,
-          ipcEvent: action,
-          cmd: [action],
-          multiple: true,
-          packages: selected
-        })
-      );
+          updatePackages({
+            activeManager: manager,
+            ipcEvent: action,
+            cmd: [action],
+            multiple: true,
+            packages: selected
+          })
+        );
   };
 
   const openPackage = () =>
@@ -215,7 +217,7 @@ const TableListToolbar = ({
           <Tooltip title="Uninstall selected">
             <IconButton
               color="secondary"
-              aria-label="uninstall selected"
+              aria-label="uninstall_selected"
               onClick={() =>
                 remote.dialog.showMessageBox(
                   remote.getCurrentWindow(),
@@ -244,7 +246,7 @@ const TableListToolbar = ({
             <IconButton
               disableRipple
               disabled={nodata || fromSearch}
-              aria-label="Show filters"
+              aria-label="show_filters"
               onClick={openFilters}
             >
               <FilterListIcon />
@@ -311,9 +313,9 @@ const TableListToolbar = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-    selected.some(
-      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-    ),
+      selected.some(
+        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+      ),
     [selected]
   );
 
@@ -329,7 +331,7 @@ const TableListToolbar = ({
           <Typography variant="h6" className={classes.title}>
             {selected && selected.length === 0
               ? `${title} ${total}`
-              : `${selected.length} selected`}
+              : `${selected.length} packages selected`}
           </Typography>
         </div>
         <div className={classes.spacer} />
@@ -377,7 +379,8 @@ const TableListToolbar = ({
         aria-labelledby="install-options"
       >
         <DialogContent>
-          <Options selected={selected}
+          <Options
+            selected={selected}
             packagesInstallOptions={packagesInstallOptions}
           />
         </DialogContent>
