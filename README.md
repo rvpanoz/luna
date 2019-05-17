@@ -1,6 +1,6 @@
-## Luna - npm management through a modern UI.
+## Luna - npm management through a modern UI. Build with Electron :hibiscus:
 
-npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. Build on Electron :hibiscus:
+npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. 
 
 ### Motivation
 
@@ -45,8 +45,6 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 
 ### Tech Stack
 
-### Tech Stack
-
 - [Electron](https://electronjs.org//) - [🛠](https://stackshare.io/electron) - [🐙](https://github.com/electron/electron) - Build cross-platform desktop apps with JavaScript, HTML, and CSS
 - [React](https://reactjs.org/) - [🛠](https://stackshare.io/react) - [🐙](https://github.com/facebook/react) - React is a JavaScript library for building user interfaces
 - [Webpack](https://webpack.js.org/) - [🛠️](https://stackshare.io/webpack) - [🐙](https://github.com/webpack/webpack) - A static module bundler for modern JavaScript applications.
@@ -78,7 +76,7 @@ Install application's dependencies:
 
 `npm install`
 
-In order to start the development server and run the app in development mode:
+Start the development server and run the app in development mode:
 
 `npm run dev`
 
