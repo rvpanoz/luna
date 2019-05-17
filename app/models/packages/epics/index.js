@@ -7,6 +7,7 @@ import { initEpic } from './initEpics';
 import {
   installPackageListenerEpic,
   installPackageEpic,
+  installMultiplePackagesEpic,
   showLoaderEpic
 } from './installationEpics';
 
@@ -23,7 +24,7 @@ import {
   viewPackageListenerEpic
 } from './viewEpics';
 
-// transformation epics
+// transformation related epics
 import { mapPackagesEpic, mapOutdatedPackagesEpic } from './transformEpics';
 
 export default combineEpics(
@@ -34,6 +35,7 @@ export default combineEpics(
   viewPackageEpic,
   viewPackageLoaderEpic,
   initEpic,
+  installMultiplePackagesEpic,
   installPackageEpic,
   showLoaderEpic,
   mapPackagesEpic,
