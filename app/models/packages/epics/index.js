@@ -11,6 +11,11 @@ import {
   showLoaderEpic
 } from './installationEpics';
 
+// uninstall related epics
+import {
+  uninstallPackagesListenerEpic,
+} from './uninstallEpics'
+
 // list, outdated, search related epics
 import {
   listOutdatedPackagesListenerEpic,
@@ -32,6 +37,7 @@ export default combineEpics(
   searchPackagesListenerEpic,
   viewPackageListenerEpic,
   installPackageListenerEpic,
+  uninstallPackagesListenerEpic,
   viewPackageEpic,
   viewPackageLoaderEpic,
   initEpic,

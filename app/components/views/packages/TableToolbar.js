@@ -33,6 +33,7 @@ import SwitchIcon from '@material-ui/icons/LoopOutlined';
 import { switchcase } from 'commons/utils';
 import { navigatorParameters } from 'commons/parameters';
 import {
+  uninstallPackages,
   updatePackages,
   installMultiplePackages
 } from 'models/packages/actions';
@@ -83,6 +84,7 @@ const TableListToolbar = ({
   };
 
   const handleAction = (action, force) => {
+    debugger;
     if (action === 'clearFilters') {
       return clearAllFilters();
     }
@@ -97,17 +99,29 @@ const TableListToolbar = ({
       return;
     }
 
-    return action === 'install'
-      ? dispatch(installMultiplePackages())
-      : dispatch(
-          updatePackages({
-            activeManager: manager,
-            ipcEvent: action,
-            cmd: [action],
-            multiple: true,
-            packages: selected
-          })
-        );
+    if (action === 'install') {
+      return dispatch(installMultiplePackages())
+    }
+
+    if (action === 'uninstall') {
+      return dispatch(uninstallPackages({
+        activeManager: manager,
+        ipcEvent: 'npm-uninstall',
+        cmd: ['uninstall'],
+        multiple: true,
+        packages: selected
+      }))
+    }
+
+    dispatch(
+      updatePackages({
+        activeManager: manager,
+        ipcEvent: `npm-${action}`,
+        cmd: [action],
+        multiple: true,
+        packages: selected
+      })
+    );
   };
 
   const openPackage = () =>
@@ -313,9 +327,9 @@ const TableListToolbar = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-      selected.some(
-        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-      ),
+    selected.some(
+      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+    ),
     [selected]
   );
 
