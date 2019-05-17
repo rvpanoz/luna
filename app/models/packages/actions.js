@@ -17,7 +17,7 @@ const setActive = ActionCreator('SET_ACTIVE');
 const installPackage = ActionCreator('INSTALL_PACKAGE');
 const installMultiplePackages = ActionCreator('INSTALL_MULTIPLE_PACKAGES');
 const updatePackages = ActionCreator('UPDATE_PACKAGES');
-const removePackages = ActionCreator('REMOVE_PACKAGES');
+const uninstallPackages = ActionCreator('UNINSTALL_PACKAGES');
 const prepareInstall = ActionCreator('PREPARE_INSTALL');
 const addInstallationOption = ActionCreator('ADD_INSTALLATION_OPTION');
 const addOutdatedPackage = ActionCreator('ADD_UPDATED_PACKAGE');
@@ -46,6 +46,7 @@ export {
   addOutdatedPackage,
   addInstallationOption,
   prepareInstall,
+  uninstallPackages,
   mapPackages,
   mapOutdatedPackages,
   mergePackages,
@@ -59,7 +60,6 @@ export {
   setPackagesSuccess,
   setPackagesError,
   setOutdatedSuccess,
-  removePackages,
   viewPackageStart,
   npmActionsListener,
   installPackageListener,

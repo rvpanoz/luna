@@ -18,7 +18,8 @@ import {
   onNpmListOutdated,
   onNpmView,
   onNpmSearch,
-  onNpmInstall
+  onNpmInstall,
+  onNpmUninstall
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
 
@@ -91,6 +92,16 @@ const installExtensions = async () => {
  * */
 ipcMain.on('npm-list-outdated', (event, options) =>
   onNpmListOutdated(event, options, Store)
+);
+
+/**
+ * Channel: npm-uninstall
+ * Supports: npm uninstall <@scope>/]<pkg>
+ * https://docs.npmjs.com/cli/uninstall.html
+ *
+ * */
+ipcMain.on('npm-uninstall', (event, options) =>
+  onNpmUninstall(event, options, Store)
 );
 
 /**
