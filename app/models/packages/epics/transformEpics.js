@@ -1,7 +1,4 @@
-
-/**
- * Transformation epics
- */
+/* eslint-disable no-underscore-dangle */
 
 import { map } from 'rxjs/operators';
 
@@ -9,7 +6,7 @@ import { pipe } from 'rxjs';
 import { ofType } from 'redux-observable';
 
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
-import { readPackageJson, isPackageOutdated } from 'commons/utils';
+import { readPackageJson } from 'commons/utils';
 
 import {
   mapPackages,
@@ -45,8 +42,8 @@ const mapPackagesEpic = (action$, state$) =>
         const {
           common: { mode, directory },
           packages: {
-            packagesOutdated,
-            project: { name, version, description }
+            packagesOutdated
+            // project: { name, version, description }
           }
         } = state$.value;
 
@@ -54,28 +51,29 @@ const mapPackagesEpic = (action$, state$) =>
           (alldependencies, dependency) => {
             const [pkgName, details] = fromSearch
               ? [
-                dependency.name,
-                {
-                  version: dependency.version,
-                  description: dependency.description
-                }
-              ]
+                  dependency.name,
+                  {
+                    version: dependency.version,
+                    description: dependency.description
+                  }
+                ]
               : dependency;
 
+            // eslint-disable-next-line
             const { extraneous, invalid, missing, peerMissing, problems } =
               details || {};
 
             const isOutdated = packagesOutdated.some(o => o.name === pkgName);
             const outdatedPkg = packagesOutdated.find(o => o.name === pkgName);
 
-            const packageJSON = readPackageJson(directory); //side effect
+            const packageJSON = readPackageJson(directory); // side effect
 
             const group =
               mode === 'local'
                 ? Object.keys(PACKAGE_GROUPS).find(
-                  groupName =>
-                    packageJSON[groupName] && packageJSON[groupName][pkgName]
-                )
+                    groupName =>
+                      packageJSON[groupName] && packageJSON[groupName][pkgName]
+                  )
                 : null;
 
             return [
@@ -83,7 +81,10 @@ const mapPackagesEpic = (action$, state$) =>
               {
                 name: pkgName,
                 isOutdated,
-                latest: isOutdated && outdatedPkg ? outdatedPkg.latest : dependency.version,
+                latest:
+                  isOutdated && outdatedPkg
+                    ? outdatedPkg.latest
+                    : dependency.version,
                 __invalid: invalid,
                 __hasError: missing || peerMissing || extraneous,
                 __fromSearch: fromSearch,
@@ -116,7 +117,7 @@ const mapPackagesEpic = (action$, state$) =>
       }) =>
         setPackages({
           dependencies: alldependencies.filter(
-            dependency => !Boolean(dependency.__invalid)
+            dependency => !dependency.__invalid
           ),
           projectName,
           projectDescription,
