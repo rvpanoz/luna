@@ -13,6 +13,7 @@ import {
 
 // uninstall related epics
 import {
+  uninstallPackagesEpic,
   uninstallPackagesListenerEpic,
 } from './uninstallEpics'
 
@@ -37,6 +38,7 @@ export default combineEpics(
   searchPackagesListenerEpic,
   viewPackageListenerEpic,
   installPackageListenerEpic,
+  uninstallPackagesEpic,
   uninstallPackagesListenerEpic,
   viewPackageEpic,
   viewPackageLoaderEpic,

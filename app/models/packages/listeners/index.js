@@ -5,11 +5,13 @@ import onSearchPackages$ from './searchPackages';
 import onViewPackage$ from './viewPackage';
 import onNpmActions$ from './npmActions';
 import onNpmInstall$ from './npmInstall';
+import onNpmUninstall$ from './npmUninstall';
 
 export {
   onListOutdatedPackages$,
   onNpmActions$,
   onSearchPackages$,
   onViewPackage$,
-  onNpmInstall$
+  onNpmInstall$,
+  onNpmUninstall$
 };
