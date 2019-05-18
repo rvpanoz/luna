@@ -7,35 +7,18 @@ import { removePackages } from '../actions';
 const onNpmUninstall$ = new Observable(observer => {
     ipcRenderer.removeAllListeners(['npm-uninstall-completed']);
 
-    ipcRenderer.on('npm-uninstall-completed', (event, errors, data) => {
-        console.log(data)
+    ipcRenderer.on('npm-uninstall-completed', (event, resultMessage, errors, packages) => {
+        observer.next(
+            removePackages({ removedPackages: packages })
+        );
 
-        // const removedOrUpdatedPackages =
-        //     options &&
-        //     options.filter(
-        //         option =>
-        //             option.indexOf(operation) === -1 &&
-        //             option.indexOf(argv) === -1 &&
-        //             option.indexOf('-g') === -1
-        //     );
-
-        // if (removedOrUpdatedPackages && removedOrUpdatedPackages.length) {
-        //     observer.next(
-        //         removePackages({ removedPackages: removedOrUpdatedPackages })
-        //     );
-
-        //     observer.next(
-        //         setSnackbar({
-        //             open: true,
-        //             type: errorMessages.length ? 'error' : 'info',
-        //             message: errorMessages.length
-        //                 ? `Packages removed with errors \n${errorMessages[1]}\n${
-        //                 errorMessages[2]
-        //                 }`
-        //                 : cliMessage
-        //         })
-        //     );
-        // }
+        observer.next(
+            setSnackbar({
+                open: true,
+                type: 'info',
+                message: resultMessage
+            })
+        );
     });
 
     ipcRenderer.on('npm-uninstall-error', (event, error) => {

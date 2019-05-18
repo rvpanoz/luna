@@ -14,14 +14,15 @@ const onNpmUninstall = (event, options, store) => {
 
     const onFlow = chunk => event.sender.send('npm-uninstall-flow', chunk);
     const onError = error => event.sender.send('npm-uninstall-error', error);
-    const onComplete = (errors, data, cmd) => event.sender.send('npm-uninstall-completed', data, errors, cmd);
+    const onComplete = (errors, result, removedPackages) => event.sender.send('npm-uninstall-completed', result, errors, removedPackages);
 
     const callback = result => {
-        const { status, errors, data, cmd } = result;
+        const { status, errors, data } = result;
+        const { packages } = options;
 
         return switchcase({
             flow: dataChunk => onFlow(dataChunk),
-            close: () => onComplete(errors, data, cmd),
+            close: () => onComplete(errors, data, packages),
             error: error => onError(error)
         })(null)(status);
     };

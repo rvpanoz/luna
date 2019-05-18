@@ -84,7 +84,6 @@ const TableListToolbar = ({
   };
 
   const handleAction = (action, force) => {
-    debugger;
     if (action === 'clearFilters') {
       return clearAllFilters();
     }
