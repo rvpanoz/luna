@@ -92,9 +92,9 @@ Luna is a very active project so feel free to submit issues and enhancement requ
 
 ### Binaries
 
-> binaries for windows and macOS will uploaded soon - stay tuned! :eyes:
+> binaries for macOS will uploaded soon - stay tuned! :eyes:
 >
-> if someone wants to help me build on these OS feel free to contact me :)
+> if someone wants to help me build on macOS feel free to contact me :)
 
 ---
 
