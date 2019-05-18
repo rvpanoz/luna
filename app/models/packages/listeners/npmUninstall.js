@@ -1,29 +1,58 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 
-import { setSnackbar } from 'models/ui/actions'
-import { removePackages } from '../actions';
+import { setRunningCommand } from 'models/npm/actions';
+import { setSnackbar } from 'models/ui/actions';
+import { removePackages, setActive } from '../actions';
+
+const updateCommand = ({
+  operationStatus,
+  operationPackages,
+  operationCommand
+}) => ({
+  type: setRunningCommand.type,
+  payload: {
+    operationStatus,
+    operationPackages,
+    operationCommand
+  }
+});
 
 const onNpmUninstall$ = new Observable(observer => {
-    ipcRenderer.removeAllListeners(['npm-uninstall-completed']);
+  ipcRenderer.removeAllListeners(['npm-uninstall-completed']);
 
-    ipcRenderer.on('npm-uninstall-completed', (event, resultMessage, errors, packages) => {
-        observer.next(
-            removePackages({ removedPackages: packages })
-        );
+  ipcRenderer.on(
+    'npm-uninstall-completed',
+    (event, resultMessage, errors, packages) => {
+      observer.next(
+        setActive({
+          active: null
+        })
+      );
 
-        observer.next(
-            setSnackbar({
-                open: true,
-                type: 'info',
-                message: resultMessage
-            })
-        );
-    });
+      observer.next(
+        updateCommand({
+          operationStatus: 'idle',
+          operationCommand: null,
+          operationPackages: []
+        })
+      );
 
-    ipcRenderer.on('npm-uninstall-error', (event, error) => {
-        observer.error(error);
-    });
+      observer.next(removePackages({ removedPackages: packages }));
+
+      observer.next(
+        setSnackbar({
+          open: true,
+          type: 'info',
+          message: resultMessage
+        })
+      );
+    }
+  );
+
+  ipcRenderer.on('npm-uninstall-error', (event, error) => {
+    observer.error(error);
+  });
 });
 
 export default onNpmUninstall$;

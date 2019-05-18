@@ -40,6 +40,7 @@ import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import {
   updatePackages,
   installPackage,
+  uninstallPackages,
   setActive
 } from 'models/packages/actions';
 import AppLoader from 'components/common/AppLoader';
@@ -254,12 +255,11 @@ const PackageDetails = ({ classes }) => {
                     btnIdx => {
                       if (Boolean(btnIdx) === true) {
                         dispatch(
-                          updatePackages({
-                            ipcEvent: 'uninstall',
+                          uninstallPackages({
+                            ipcEvent: 'npm-uninstall',
                             cmd: ['uninstall'],
-                            name: active.name,
-                            mode,
-                            directory
+                            multiple: true,
+                            packages: [active.name]
                           })
                         );
                       }
