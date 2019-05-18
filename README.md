@@ -1,6 +1,14 @@
 ## Luna - npm management through a modern UI. Build with Electron :hibiscus:
 
-npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. 
+<p align="center">
+  <img alt="Luna" src="./resources/img/icon.png">
+</p>
+
+<p align="center">npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux.</p>
+
+[![Build Status](https://travis-ci.com/rvpanoz/luna.svg?branch=master)](https://travis-ci.com/rvpanoz/luna)
+[![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 
 ### Motivation
 
@@ -27,11 +35,6 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 - [Babel](https://babeljs.io/) - [🛠️](https://stackshare.io/babel) - [🐙](https://github.com/babel/babel) - A JavaScript compiler; use next generation JavaScript, today.
 - [Rxjs](https://rxjs-dev.firebaseapp.com/) - [🛠️](https://stackshare.io/rxjs) - [🐙](https://github.com/Reactive-Extensions/RxJS) - Reactive extensions library for Javascript
 - [Material-UI](https://material-ui.com//) - [🛠️](https://stackshare.io/material-ui) - [🐙](https://github.com/mui-org/material-ui) - React components that implement Google's Material Design.
-
-### Build status
-
-[![Build Status](https://travis-ci.com/rvpanoz/luna.svg?branch=master)](https://travis-ci.com/rvpanoz/luna)
-[![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
 
 ### Screenshots
 
