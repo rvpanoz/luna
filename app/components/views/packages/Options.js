@@ -11,11 +11,12 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ControlTypes from 'components/common/ControlTypes';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
 import { addInstallOption } from 'models/common/actions';
 import { INFO_MESSAGES } from 'constants/AppConstants';
 
-import styles from './styles/flags';
+import styles from './styles/options';
 
 const Options = ({ classes, packagesInstallOptions, selected }) => {
   const dispatch = useDispatch();
@@ -32,10 +33,11 @@ const Options = ({ classes, packagesInstallOptions, selected }) => {
   }, [selected, dispatch]);
 
   return (
-    <div className={classes.flexContainer}>
+    <div>
       <Typography variant="subtitle1" className={classes.title}>
         {INFO_MESSAGES.installing}
       </Typography>
+      <Divider light />
       <List dense className={classes.list}>
         {selected.map(packageName => {
           const option =

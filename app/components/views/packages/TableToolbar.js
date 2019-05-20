@@ -99,17 +99,27 @@ const TableListToolbar = ({
     }
 
     if (action === 'install') {
-      return dispatch(installMultiplePackages())
+      return dispatch(
+        installMultiplePackages({
+          activeManager: manager,
+          ipcEvent: 'npm-install',
+          cmd: selected.map(() => 'install'),
+          multiple: true,
+          packages: selected
+        })
+      );
     }
 
     if (action === 'uninstall') {
-      return dispatch(uninstallPackages({
-        activeManager: manager,
-        ipcEvent: 'npm-uninstall',
-        cmd: ['uninstall'],
-        multiple: true,
-        packages: selected
-      }))
+      return dispatch(
+        uninstallPackages({
+          activeManager: manager,
+          ipcEvent: 'npm-uninstall',
+          cmd: ['uninstall'],
+          multiple: true,
+          packages: selected
+        })
+      );
     }
 
     dispatch(
@@ -326,9 +336,9 @@ const TableListToolbar = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-    selected.some(
-      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-    ),
+      selected.some(
+        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+      ),
     [selected]
   );
 
