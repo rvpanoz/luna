@@ -39,15 +39,13 @@ const updateLoader = payload => ({
 
 const showLoaderEpic = action$ =>
   action$.pipe(
-    ofType(installPackage.type),
-    map(({ payload }) => {
-      const { name } = payload;
-
-      return updateLoader({
+    ofType(installPackage.type, installMultiplePackages.type),
+    map(() =>
+      updateLoader({
         loading: true,
-        message: `Installing ${name}`
-      });
-    })
+        message: `Installing packages..`
+      })
+    )
   );
 
 /**
@@ -74,101 +72,34 @@ const installPackageEpic = (action$, state$) =>
   );
 
 /**
- *  WIP
  *  Install multiple packages
  *  supports global and local mode
  */
 const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(installMultiplePackages.type),
-    tap(console.log),
-    mergeMap(() => {
+    tap(({ payload }) => {
       const {
-        common: { mode, directory },
-        ui: { selected }
+        common: {
+          mode,
+          directory,
+          operations: { packagesInstallOptions }
+        }
       } = state$.value;
 
-      return [];
-    })
-  );
-
-const completeInstallationEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(addInstallationOption.type),
-    map(commandOptions => {
-      const {
-        ui: { selected },
-        common: { mode, directory }
-      } = state$.value;
-
-      const options = commandOptions.map(opt => opt.options);
-      const mergedOptions = [].concat(options);
-
+      const options = packagesInstallOptions
+        ? packagesInstallOptions.map(opt => opt.options)
+        : [];
       const parameters = {
-        ipcEvent: 'install',
-        cmd: options.mapt(() => 'install'),
-        packages: selected,
-        pkgOptions: mergedOptions,
-        multiple: true,
+        ...payload,
+        pkgOptions: options,
         mode,
         directory
       };
 
       ipcRenderer.send('npm-install', parameters);
-
-      return updateLoader({
-        loading: true,
-        message: MESSAGES.install
-      });
-    })
-  );
-
-const updatePackagesEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(updatePackages.type),
-    mergeMap(({ payload }) => {
-      const {
-        common: { mode, directory }
-      } = state$.value;
-      const { ipcEvent, packages, name } = payload;
-
-      ipcRenderer.send(
-        IPC_EVENT,
-        Object.assign({}, payload, {
-          mode,
-          directory
-        })
-      );
-
-      if (ipcEvent === 'uninstall') {
-        return [
-          updateCommand({
-            operationStatus: 'running',
-            operationCommand: ipcEvent,
-            operationPackages: packages && packages.length ? packages : [name]
-          }),
-          {
-            type: clearSelected.type
-          }
-        ];
-      }
-
-      return [
-        updateLoader({
-          loading: true,
-          message: MESSAGES.update
-        }),
-        setActivePage({
-          page: 'packages',
-          paused: false
-        }),
-        updateCommand({
-          operationStatus: 'running',
-          operationCommand: ipcEvent,
-          operationPackages: packages && packages.length ? packages : [name]
-        })
-      ];
-    })
+    }),
+    ignoreElements()
   );
 
 // listener epics
@@ -181,7 +112,5 @@ export {
   installPackageListenerEpic,
   installPackageEpic,
   installMultiplePackagesEpic,
-  completeInstallationEpic,
-  updatePackagesEpic,
   showLoaderEpic
 };

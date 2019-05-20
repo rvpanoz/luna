@@ -52,6 +52,7 @@ const onNpmListOutdated = (event, options, store) => {
       handleLocalEvents(directory);
     }
 
+    event.sender.send('loaded-packages-close', store.get('openedPackages'));
     event.sender.send('npm-list-outdated-completed', data, errors, cmd);
   };
 

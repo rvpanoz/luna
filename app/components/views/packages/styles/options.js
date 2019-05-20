@@ -10,6 +10,7 @@ const styles = () => ({
   },
   title: {
     ...defaultFont,
+    paddingBottom: 4,
     fontSize: 18,
     display: 'flex',
     color: darken(grayColor, 0.2),

@@ -36,7 +36,7 @@ const updateCommandEpic = pipe(
     uninstallPackages.type
   ),
   mergeMap(({ payload }) => {
-    const { packages, cmd } = payload;
+    const { packages, cmd } = payload || {};
     const [runningCommand] = cmd;
 
     return [

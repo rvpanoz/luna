@@ -74,11 +74,11 @@ const AppSidebar = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on('history-close', (event, directories) =>
+    ipcRenderer.on('loaded-packages-close', (event, directories) =>
       setOpenedDirectories(directories)
     );
 
-    return () => ipcRenderer.removeAllListeners(['history-close']);
+    return () => ipcRenderer.removeAllListeners(['loaded-packages-close']);
   }, []);
 
   const loadDirectory = () =>
