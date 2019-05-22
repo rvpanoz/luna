@@ -27,6 +27,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Button from '@material-ui/core/Button';
 
 import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
@@ -43,14 +47,20 @@ import {
   uninstallPackages,
   setActive
 } from 'models/packages/actions';
+import { clearInstallOptions } from 'models/common/actions';
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
 
+import Options from '../packages/Options';
 import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
 const mapState = ({
-  common: { mode, directory },
+  common: {
+    mode,
+    directory,
+    operations: { packagesInstallOptions }
+  },
   ui: {
     loaders: { packageLoader }
   },
@@ -73,6 +83,7 @@ const mapState = ({
 const PackageDetails = ({ classes }) => {
   const [expanded, expand] = useState(false);
   const [dependencies, setDependencies] = useState([]);
+  const [optionsOpen, toggleOptions] = useState(false);
   const [activePopper, setActivePopper] = useState({
     index: 0,
     anchorEl: null,
@@ -107,7 +118,6 @@ const PackageDetails = ({ classes }) => {
 
     if (active.dependencies) {
       const dependenciesNames = Object.keys(active.dependencies);
-
       const dependenciesToArray = dependenciesNames.map(dep => ({
         name: dep,
         version: active.dependencies[dep]
@@ -119,7 +129,7 @@ const PackageDetails = ({ classes }) => {
 
   const renderActions = () => {
     const renderSearchActions = () => (
-      <Tooltip title="Install">
+      <Tooltip title="Install package">
         <div>
           <IconButton
             disableRipple
@@ -135,6 +145,10 @@ const PackageDetails = ({ classes }) => {
                 },
                 btnIdx => {
                   if (Boolean(btnIdx) === true) {
+                    if (mode === 'local') {
+                      return toggleOptions(true);
+                    }
+
                     const pkgOptions = group
                       ? [PACKAGE_GROUPS[group]]
                       : ['save-prod'];
@@ -201,7 +215,7 @@ const PackageDetails = ({ classes }) => {
                   </IconButton>
                 </div>
               </Tooltip>
-              <Tooltip title="Update">
+              <Tooltip title="Update package">
                 <div>
                   <IconButton
                     disableRipple
@@ -237,7 +251,7 @@ const PackageDetails = ({ classes }) => {
               </Tooltip>
             </React.Fragment>
           )}
-          <Tooltip title="Remove">
+          <Tooltip title="Remove package">
             <div>
               <IconButton
                 disabled={Boolean(active && active.name === 'npm')}
@@ -512,6 +526,55 @@ const PackageDetails = ({ classes }) => {
           </Fade>
         )}
       </Popper>
+      <Dialog
+        open={optionsOpen}
+        fullWidth
+        onClose={() => {
+          dispatch(clearInstallOptions());
+          toggleOptions(!optionsOpen);
+        }}
+        aria-labelledby="installation-options"
+      >
+        <DialogContent>
+          <Options
+            selected={active ? [active.name] : []}
+            packagesInstallOptions={[
+              {
+                name: active && active.name,
+                options: ['save-prod']
+              }
+            ]}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(clearInstallOptions());
+              toggleOptions(false);
+            }}
+            color="secondary"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() =>
+              dispatch(
+                installPackage({
+                  cmd: ['install'],
+                  name: active.name,
+                  version: 'latest',
+                  single: true,
+                  pkgOptions: packagesInstallOptions
+                })
+              )
+            }
+            color="primary"
+            autoFocus
+          >
+            Install
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
