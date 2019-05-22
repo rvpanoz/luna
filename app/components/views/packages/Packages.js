@@ -316,7 +316,10 @@ const Packages = ({ classes }) => {
           </Paper>
         </Grid>
         <Grid item md={active ? 4 : 1} lg={active ? 4 : 1} xl={active ? 4 : 1}>
-          <PackageDetails i />
+          <PackageDetails toggleOptions={toggleOptions} addSelected={() =>
+            dispatch(addSelected({ name: active ? active.name : null }))
+          }
+          />
         </Grid>
       </Grid>
     </AppLoader>
