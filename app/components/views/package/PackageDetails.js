@@ -80,10 +80,10 @@ const mapState = ({
   fromSearch
 });
 
-const PackageDetails = ({ classes }) => {
+const PackageDetails = ({ classes, toggleOptions, selected }) => {
   const [expanded, expand] = useState(false);
   const [dependencies, setDependencies] = useState([]);
-  const [optionsOpen, toggleOptions] = useState(false);
+  // const [optionsOpen, toggleOptions] = useState(false);
   const [activePopper, setActivePopper] = useState({
     index: 0,
     anchorEl: null,
@@ -125,6 +125,8 @@ const PackageDetails = ({ classes }) => {
 
       setDependencies(dependenciesToArray);
     }
+
+
   }, [active]);
 
   const renderActions = () => {
@@ -192,7 +194,7 @@ const PackageDetails = ({ classes }) => {
                           type: 'question',
                           message: `\nDo you want to install ${
                             active.name
-                          } latest version?`,
+                            } latest version?`,
                           buttons: ['Cancel', 'Install']
                         },
                         btnIdx => {
@@ -326,77 +328,77 @@ const PackageDetails = ({ classes }) => {
       {data.length === 0 ? (
         <Typography className={classes.withPadding}>No data found</Typography>
       ) : (
-        <List
-          dense
-          style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 425 }}
-        >
-          {data.map((item, idx) => (
-            <ListItem
-              key={`${type}-item-${idx + 1}`}
-              className={classes.listItem}
-            >
-              <ListItemText
-                primary={
-                  <Typography variant="subtitle2">
-                    {type === 'version' ? item : item.name}
-                  </Typography>
-                }
-                secondary={
-                  type === 'dependency' && (
-                    <Typography variant="subtitle2">{item.version}</Typography>
-                  )
-                }
-              />
-              {type === 'version' && (
-                <Tooltip title={`Install version ${item}`}>
-                  <div>
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        aria-label="install_version"
-                        onClick={() => {
-                          remote.dialog.showMessageBox(
-                            remote.getCurrentWindow(),
-                            {
-                              title: 'Confirmation',
-                              type: 'question',
-                              message: `\nWould you like to install ${
-                                active.name
-                              }@${item}?`,
-                              buttons: ['Cancel', 'Install']
-                            },
-                            btnIdx => {
-                              if (Boolean(btnIdx) === true) {
-                                const pkgOptions = group
-                                  ? [PACKAGE_GROUPS[group]]
-                                  : ['save-prod'];
+          <List
+            dense
+            style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 425 }}
+          >
+            {data.map((item, idx) => (
+              <ListItem
+                key={`${type}-item-${idx + 1}`}
+                className={classes.listItem}
+              >
+                <ListItemText
+                  primary={
+                    <Typography variant="subtitle2">
+                      {type === 'version' ? item : item.name}
+                    </Typography>
+                  }
+                  secondary={
+                    type === 'dependency' && (
+                      <Typography variant="subtitle2">{item.version}</Typography>
+                    )
+                  }
+                />
+                {type === 'version' && (
+                  <Tooltip title={`Install version ${item}`}>
+                    <div>
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          aria-label="install_version"
+                          onClick={() => {
+                            remote.dialog.showMessageBox(
+                              remote.getCurrentWindow(),
+                              {
+                                title: 'Confirmation',
+                                type: 'question',
+                                message: `\nWould you like to install ${
+                                  active.name
+                                  }@${item}?`,
+                                buttons: ['Cancel', 'Install']
+                              },
+                              btnIdx => {
+                                if (Boolean(btnIdx) === true) {
+                                  const pkgOptions = group
+                                    ? [PACKAGE_GROUPS[group]]
+                                    : ['save-prod'];
 
-                                const parameters = {
-                                  ipcEvent: 'install',
-                                  cmd: ['install'],
-                                  name,
-                                  version: item,
-                                  pkgOptions,
-                                  single: true,
-                                  mode,
-                                  directory
-                                };
+                                  const parameters = {
+                                    ipcEvent: 'install',
+                                    cmd: ['install'],
+                                    name,
+                                    version: item,
+                                    pkgOptions,
+                                    single: true,
+                                    mode,
+                                    directory
+                                  };
 
-                                dispatch(installPackage(parameters));
+                                  dispatch(installPackage(parameters));
+                                }
                               }
-                            }
-                          );
-                        }}
-                      >
-                        <AddIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </div>
-                </Tooltip>
-              )}
-            </ListItem>
-          ))}
-        </List>
-      )}
+                            );
+                          }}
+                        >
+                          <AddIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </div>
+                  </Tooltip>
+                )}
+              </ListItem>
+            ))}
+          </List>
+        )}
     </Paper>
   );
 
@@ -526,7 +528,7 @@ const PackageDetails = ({ classes }) => {
           </Fade>
         )}
       </Popper>
-      <Dialog
+      {/* <Dialog
         open={optionsOpen}
         fullWidth
         onClose={() => {
@@ -574,7 +576,7 @@ const PackageDetails = ({ classes }) => {
             Install
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };
