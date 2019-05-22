@@ -22,10 +22,10 @@ const Options = ({ classes, packagesInstallOptions, selected }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    selected.forEach(selectedPackages =>
+    selected.forEach(selectedPackage =>
       dispatch(
         addInstallOption({
-          name: selectedPackages,
+          name: selectedPackage,
           options: ['save-prod']
         })
       )
