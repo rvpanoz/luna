@@ -332,9 +332,9 @@ const TableListToolbar = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-      selected.some(
-        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-      ),
+    selected.some(
+      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+    ),
     [selected]
   );
 
@@ -350,7 +350,7 @@ const TableListToolbar = ({
           <Typography variant="h6" className={classes.title}>
             {selected && selected.length === 0
               ? `${title} ${total}`
-              : `${selected.length} packages selected`}
+              : `${selected.length} package(s) selected`}
           </Typography>
         </div>
         <div className={classes.spacer} />

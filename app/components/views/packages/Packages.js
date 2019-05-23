@@ -170,7 +170,7 @@ const Packages = ({ classes }) => {
         }
       })
     );
-  }, [mode, dispatch]);
+  }, [mode, directory, dispatch]);
 
   const [filteredPackages] = useFilters(packagesData, filters);
 
@@ -229,107 +229,107 @@ const Packages = ({ classes }) => {
                     No dependencies found.
                   </Typography>
                 ) : (
-                  <Table
-                    padding="dense"
-                    aria-labelledby="packages-list"
-                    className={cn(classes.table, {
-                      [classes.hasFilterBlur]: loading
-                    })}
-                  >
-                    <TableHeader
-                      packages={dataSlices.map(d => d.name)}
-                      numSelected={selected.length}
-                      rowCount={listDataPackages && listDataPackages.length}
-                      sortBy={sortBy}
-                      sortDir={sortDir}
-                    />
-                    <TableBody>
-                      {listDataPackages &&
-                        listDataPackages.map(
-                          ({
-                            name,
-                            version,
-                            latest,
-                            isOutdated,
-                            peerDependencies,
-                            extraneous,
-                            problems,
-                            missing,
-                            __hasError,
-                            __group
-                          }) => {
-                            const isPackageSelected =
-                              selected.indexOf(name) > -1;
-                            const installOptions = Array.isArray(
-                              packagesInstallOptions
-                            )
-                              ? packagesInstallOptions.find(
+                    <Table
+                      padding="dense"
+                      aria-labelledby="packages-list"
+                      className={cn(classes.table, {
+                        [classes.hasFilterBlur]: loading
+                      })}
+                    >
+                      <TableHeader
+                        packages={dataSlices.map(d => d.name)}
+                        numSelected={selected.length}
+                        rowCount={listDataPackages && listDataPackages.length}
+                        sortBy={sortBy}
+                        sortDir={sortDir}
+                      />
+                      <TableBody>
+                        {listDataPackages &&
+                          listDataPackages.map(
+                            ({
+                              name,
+                              version,
+                              latest,
+                              isOutdated,
+                              peerDependencies,
+                              extraneous,
+                              problems,
+                              missing,
+                              __hasError,
+                              __group
+                            }) => {
+                              const isPackageSelected =
+                                selected.indexOf(name) > -1;
+                              const installOptions = Array.isArray(
+                                packagesInstallOptions
+                              )
+                                ? packagesInstallOptions.find(
                                   installOption => installOption.name === name
                                 )
-                              : {};
+                                : {};
 
-                            const inOperation =
-                              operationStatus !== 'idle' &&
-                              operationCommand !== 'install' &&
-                              operationPackages.indexOf(name) > -1;
+                              const inOperation =
+                                operationStatus !== 'idle' &&
+                                operationCommand !== 'install' &&
+                                operationPackages.indexOf(name) > -1;
 
-                            const inPackageJson = packagesFromPackageJson.some(
-                              pkg => {
-                                /* eslint-disable-next-line */
-                                const [pkgGroup, pkgDetails] = pkg;
-                                const [pkgName] = Object.keys(pkgDetails);
+                              const inPackageJson = packagesFromPackageJson.some(
+                                pkg => {
+                                  /* eslint-disable-next-line */
+                                  const [pkgGroup, pkgDetails] = pkg;
+                                  const [pkgName] = Object.keys(pkgDetails);
 
-                                return pkgName === name;
-                              }
-                            );
-
-                            return (
-                              <PackageItem
-                                key={`pkg-${name}`}
-                                isSelected={isPackageSelected}
-                                installOptions={installOptions}
-                                addSelected={() =>
-                                  dispatch(addSelected({ name }))
+                                  return pkgName === name;
                                 }
-                                addInstallOption={(pkgName, options) =>
-                                  dispatch(
-                                    addInstallOption({ name: pkgName, options })
-                                  )
-                                }
-                                name={name}
-                                peerDependencies={peerDependencies}
-                                latest={latest}
-                                version={version}
-                                mode={mode}
-                                missing={missing}
-                                isOutdated={isOutdated}
-                                fromSearch={fromSearch}
-                                extraneous={extraneous}
-                                problems={problems}
-                                viewPackage={viewPackageHandler}
-                                inOperation={inOperation}
-                                inPackageJson={inPackageJson}
-                                hasError={__hasError}
-                                group={__group}
-                              />
-                            );
-                          }
-                        )}
-                    </TableBody>
-                    <TableFooter
-                      rowCount={data && data.length}
-                      page={page}
-                      rowsPerPage={rowsPerPage}
-                      handleChangePage={(e, pageNo) => {
-                        scrollWrapper(wrapperRef && wrapperRef.current, 0);
-                        dispatch(setPage({ page: pageNo }));
-                      }}
-                      handleChangePageRows={e =>
-                        dispatch(setPageRows({ rowsPerPage: e.target.value }))
-                      }
-                    />
-                  </Table>
-                )}
+                              );
+
+                              return (
+                                <PackageItem
+                                  key={`pkg-${name}`}
+                                  isSelected={isPackageSelected}
+                                  installOptions={installOptions}
+                                  addSelected={() =>
+                                    dispatch(addSelected({ name }))
+                                  }
+                                  addInstallOption={(pkgName, options) =>
+                                    dispatch(
+                                      addInstallOption({ name: pkgName, options })
+                                    )
+                                  }
+                                  name={name}
+                                  peerDependencies={peerDependencies}
+                                  latest={latest}
+                                  version={version}
+                                  mode={mode}
+                                  missing={missing}
+                                  isOutdated={isOutdated}
+                                  fromSearch={fromSearch}
+                                  extraneous={extraneous}
+                                  problems={problems}
+                                  viewPackage={viewPackageHandler}
+                                  inOperation={inOperation}
+                                  inPackageJson={inPackageJson}
+                                  hasError={__hasError}
+                                  group={__group}
+                                />
+                              );
+                            }
+                          )}
+                      </TableBody>
+                      <TableFooter
+                        rowCount={data && data.length}
+                        page={page}
+                        rowsPerPage={rowsPerPage}
+                        handleChangePage={(e, pageNo) => {
+                          scrollWrapper(wrapperRef && wrapperRef.current, 0);
+                          dispatch(setPage({ page: pageNo }));
+                        }}
+                        handleChangePageRows={e =>
+                          dispatch(setPageRows({ rowsPerPage: e.target.value }))
+                        }
+                      />
+                    </Table>
+                  )}
               </div>
             </Paper>
           </Grid>
@@ -375,15 +375,15 @@ const Packages = ({ classes }) => {
             Cancel
           </Button>
           <Button
-            onClick={() =>
-              installMultiplePackages({
-                activeManager: manager,
+            onClick={() => {
+              dispatch(installMultiplePackages({
                 ipcEvent: 'npm-install',
                 cmd: selected.map(() => 'install'),
                 multiple: true,
                 packages: selected
-              })
-            }
+              }))
+              toggleOptions(false);
+            }}
             color="primary"
             autoFocus
           >
