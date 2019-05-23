@@ -9,10 +9,14 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 
 import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
@@ -32,6 +36,7 @@ import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
+import Options from './Options';
 
 import styles from './styles/packages';
 
@@ -105,7 +110,7 @@ const Packages = ({ classes }) => {
 
   /* eslint-disable-next-line */
   const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
-
+  const [optionsOpen, toggleOptions] = useState(false);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
@@ -138,14 +143,17 @@ const Packages = ({ classes }) => {
     }
   };
 
-  const viewPackageHandler = (name, version) => dispatch(viewPackageStart({
-    channel: 'npm-view',
-    options: {
-      cmd: ['view'],
-      name,
-      version
-    }
-  }));
+  const viewPackageHandler = (name, version) =>
+    dispatch(
+      viewPackageStart({
+        channel: 'npm-view',
+        options: {
+          cmd: ['view'],
+          name,
+          version
+        }
+      })
+    );
 
   useEffect(() => {
     dispatch(
@@ -158,7 +166,6 @@ const Packages = ({ classes }) => {
       })
     );
   }, [mode, dispatch]);
-
 
   const [filteredPackages] = useFilters(packagesData, filters);
 
@@ -175,43 +182,47 @@ const Packages = ({ classes }) => {
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
   return (
-    <AppLoader loading={loading} message={message}>
-      <Grid container>
-        <Grid
-          item
-          md={active ? 8 : 11}
-          lg={active ? 8 : 11}
-          xl={active ? 8 : 11}
-          className={classes.transition}
-        >
-          <Paper className={classes.root}>
-            <div className={classes.toolbar}>
-              <TableToolbar
-                title="Packages"
-                manager={manager}
-                total={(packagesData && packagesData.length) || 0}
-                mode={mode}
-                directory={directory}
-                selected={selected}
-                outdated={packagesOutdated}
-                packagesInstallOptions={packagesInstallOptions}
-                fromSearch={fromSearch}
-                filters={filters}
-                scrollWrapper={() =>
-                  scrollWrapper(wrapperRef && wrapperRef.current, 0)
-                }
-                switchMode={switchMode}
-                reload={reload}
-                filteredByNamePackages={filteredByNamePackages}
-                setFilteredByNamePackages={setFilteredByNamePackages}
-              />
-            </div>
-            <div className={classes.tableWrapper} ref={wrapperRef}>
-              {!packagesData || packagesData.length === 0 ? (
-                <Typography variant="subtitle1" className={classes.withPadding}>
-                  No dependencies found.
-                </Typography>
-              ) : (
+    <React.Fragment>
+      <AppLoader loading={loading} message={message}>
+        <Grid container>
+          <Grid
+            item
+            md={active ? 8 : 11}
+            lg={active ? 8 : 11}
+            xl={active ? 8 : 11}
+            className={classes.transition}
+          >
+            <Paper className={classes.root}>
+              <div className={classes.toolbar}>
+                <TableToolbar
+                  title="Packages"
+                  manager={manager}
+                  total={(packagesData && packagesData.length) || 0}
+                  mode={mode}
+                  directory={directory}
+                  selected={selected}
+                  outdated={packagesOutdated}
+                  packagesInstallOptions={packagesInstallOptions}
+                  fromSearch={fromSearch}
+                  filters={filters}
+                  scrollWrapper={() =>
+                    scrollWrapper(wrapperRef && wrapperRef.current, 0)
+                  }
+                  switchMode={switchMode}
+                  reload={reload}
+                  filteredByNamePackages={filteredByNamePackages}
+                  setFilteredByNamePackages={setFilteredByNamePackages}
+                />
+              </div>
+              <div className={classes.tableWrapper} ref={wrapperRef}>
+                {!packagesData || packagesData.length === 0 ? (
+                  <Typography
+                    variant="subtitle1"
+                    className={classes.withPadding}
+                  >
+                    No dependencies found.
+                  </Typography>
+                ) : (
                   <Table
                     padding="dense"
                     aria-labelledby="packages-list"
@@ -241,13 +252,14 @@ const Packages = ({ classes }) => {
                             __hasError,
                             __group
                           }) => {
-                            const isPackageSelected = selected.indexOf(name) > -1;
+                            const isPackageSelected =
+                              selected.indexOf(name) > -1;
                             const installOptions = Array.isArray(
                               packagesInstallOptions
                             )
                               ? packagesInstallOptions.find(
-                                installOption => installOption.name === name
-                              )
+                                  installOption => installOption.name === name
+                                )
                               : {};
 
                             const inOperation =
@@ -312,17 +324,60 @@ const Packages = ({ classes }) => {
                     />
                   </Table>
                 )}
-            </div>
-          </Paper>
+              </div>
+            </Paper>
+          </Grid>
+          <Grid
+            item
+            md={active ? 4 : 1}
+            lg={active ? 4 : 1}
+            xl={active ? 4 : 1}
+          >
+            <PackageDetails
+              toggleOptions={toggleOptions}
+              addSelected={() =>
+                dispatch(addSelected({ name: active ? active.name : null }))
+              }
+            />
+          </Grid>
         </Grid>
-        <Grid item md={active ? 4 : 1} lg={active ? 4 : 1} xl={active ? 4 : 1}>
-          <PackageDetails toggleOptions={toggleOptions} addSelected={() =>
-            dispatch(addSelected({ name: active ? active.name : null }))
-          }
+      </AppLoader>
+
+      <Dialog
+        open={optionsOpen}
+        fullWidth
+        onClose={() => {
+          dispatch(clearInstallOptions());
+          toggleOptions(!optionsOpen);
+        }}
+        aria-labelledby="install-options"
+      >
+        <DialogContent>
+          <Options
+            selected={selected}
+            packagesInstallOptions={packagesInstallOptions}
           />
-        </Grid>
-      </Grid>
-    </AppLoader>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              dispatch(clearInstallOptions());
+              toggleOptions(false);
+            }}
+            color="secondary"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => handleAction('install', true)}
+            color="primary"
+            autoFocus
+          >
+            Install
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
   );
 };
 
