@@ -336,9 +336,9 @@ const TableListToolbar = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-    selected.some(
-      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-    ),
+      selected.some(
+        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+      ),
     [selected]
   );
 
@@ -392,7 +392,7 @@ const TableListToolbar = ({
           clearAllFilters={clearAllFilters}
         />
       </Popover>
-      <Dialog
+      {/* <Dialog
         open={optionsOpen}
         fullWidth
         onClose={() => {
@@ -425,7 +425,7 @@ const TableListToolbar = ({
             Install
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </section>
   );
 };
