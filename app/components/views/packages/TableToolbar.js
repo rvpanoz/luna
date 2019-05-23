@@ -37,7 +37,6 @@ import {
   updatePackages,
   installMultiplePackages
 } from 'models/packages/actions';
-import { clearInstallOptions } from 'models/common/actions';
 import { clearFilters } from 'models/ui/actions';
 
 import TableFilters from './TableFilters';
@@ -50,7 +49,7 @@ const TableListToolbar = ({
   title,
   mode,
   manager,
-  packagesInstallOptions,
+  toggleOptions,
   fromSearch,
   filters,
   reload,
@@ -64,7 +63,6 @@ const TableListToolbar = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
-  const [optionsOpen, toggleOptions] = useState(false);
 
   const dispatch = useDispatch();
   const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
@@ -93,9 +91,7 @@ const TableListToolbar = ({
     }
 
     if (mode === 'local' && action === 'install' && !force) {
-      toggleOptions(true);
-
-      return;
+      return toggleOptions(true);
     }
 
     if (action === 'install') {
@@ -392,40 +388,6 @@ const TableListToolbar = ({
           clearAllFilters={clearAllFilters}
         />
       </Popover>
-      {/* <Dialog
-        open={optionsOpen}
-        fullWidth
-        onClose={() => {
-          dispatch(clearInstallOptions());
-          toggleOptions(!optionsOpen);
-        }}
-        aria-labelledby="install-options"
-      >
-        <DialogContent>
-          <Options
-            selected={selected}
-            packagesInstallOptions={packagesInstallOptions}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch(clearInstallOptions());
-              toggleOptions(false);
-            }}
-            color="secondary"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => handleAction('install', true)}
-            color="primary"
-            autoFocus
-          >
-            Install
-          </Button>
-        </DialogActions>
-      </Dialog> */}
     </section>
   );
 };

@@ -21,6 +21,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import useFilters from 'commons/hooks/useFilters';
 import AppLoader from 'components/common/AppLoader';
 import { PackageDetails } from 'components/views/package';
+import { scrollWrapper } from 'commons/utils';
 
 import { setPackagesStart, viewPackageStart } from 'models/packages/actions';
 import {
@@ -29,9 +30,13 @@ import {
   setPageRows,
   setActivePage
 } from 'models/ui/actions';
-import { setMode, addInstallOption } from 'models/common/actions';
+import {
+  setMode,
+  clearInstallOptions,
+  addInstallOption
+} from 'models/common/actions';
+import { installMultiplePackages } from 'models/packages/actions';
 
-import { scrollWrapper } from 'commons/utils';
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
@@ -208,6 +213,7 @@ const Packages = ({ classes }) => {
                   scrollWrapper={() =>
                     scrollWrapper(wrapperRef && wrapperRef.current, 0)
                   }
+                  toggleOptions={toggleOptions}
                   switchMode={switchMode}
                   reload={reload}
                   filteredByNamePackages={filteredByNamePackages}
@@ -369,7 +375,15 @@ const Packages = ({ classes }) => {
             Cancel
           </Button>
           <Button
-            onClick={() => handleAction('install', true)}
+            onClick={() =>
+              installMultiplePackages({
+                activeManager: manager,
+                ipcEvent: 'npm-install',
+                cmd: selected.map(() => 'install'),
+                multiple: true,
+                packages: selected
+              })
+            }
             color="primary"
             autoFocus
           >
