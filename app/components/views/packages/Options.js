@@ -19,18 +19,8 @@ import { INFO_MESSAGES } from 'constants/AppConstants';
 import styles from './styles/options';
 
 const Options = ({ classes, packagesInstallOptions, selected }) => {
+  console.log(packagesInstallOptions, selected);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    selected.forEach(selectedPackage =>
-      dispatch(
-        addInstallOption({
-          name: selectedPackage,
-          options: ['save-prod']
-        })
-      )
-    );
-  }, [selected, dispatch]);
 
   return (
     <div>

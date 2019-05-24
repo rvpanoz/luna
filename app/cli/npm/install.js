@@ -51,7 +51,7 @@ const install = (options, idx) => {
     packagesToInstallMultiple = [name];
   }
 
-  let commandOptsMultiple = ['save-prod'];
+  let commandOptsMultiple = ['--save-prod'];
   const [commandFlags] = pkgOptions;
 
   if (Array.isArray(commandFlags)) {

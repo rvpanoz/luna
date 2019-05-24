@@ -90,6 +90,7 @@ const installMultiplePackagesEpic = (action$, state$) =>
       const options = packagesInstallOptions
         ? packagesInstallOptions.map(opt => opt.options)
         : [];
+
       const parameters = {
         ...payload,
         pkgOptions: options,

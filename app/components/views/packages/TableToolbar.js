@@ -97,7 +97,6 @@ const TableListToolbar = ({
     if (action === 'install') {
       return dispatch(
         installMultiplePackages({
-          activeManager: manager,
           ipcEvent: 'npm-install',
           cmd: selected.map(() => 'install'),
           multiple: true,
@@ -109,7 +108,6 @@ const TableListToolbar = ({
     if (action === 'uninstall') {
       return dispatch(
         uninstallPackages({
-          activeManager: manager,
           ipcEvent: 'npm-uninstall',
           cmd: ['uninstall'],
           multiple: true,
@@ -118,15 +116,16 @@ const TableListToolbar = ({
       );
     }
 
-    dispatch(
-      updatePackages({
-        activeManager: manager,
-        ipcEvent: `npm-${action}`,
-        cmd: [action],
-        multiple: true,
-        packages: selected
-      })
-    );
+    if (action === 'update') {
+      return dispatch(
+        updatePackages({
+          ipcEvent: 'npm-update',
+          cmd: selected.map(() => 'update'),
+          multiple: true,
+          packages: selected
+        })
+      );
+    }
   };
 
   const openPackage = () =>
@@ -280,6 +279,16 @@ const TableListToolbar = ({
 
   const renderToolbarActions = () => (
     <React.Fragment>
+      <Tooltip title="Open package.json">
+        <IconButton
+          color="primary"
+          disableRipple
+          aria-label="open_package"
+          onClick={openPackage}
+        >
+          <LoadIcon />
+        </IconButton>
+      </Tooltip>
       <Tooltip title="Switch to global packages">
         <div>
           <IconButton
@@ -291,16 +300,6 @@ const TableListToolbar = ({
             <SwitchIcon />
           </IconButton>
         </div>
-      </Tooltip>
-      <Tooltip title="Open package.json">
-        <IconButton
-          color="primary"
-          disableRipple
-          aria-label="open_package"
-          onClick={openPackage}
-        >
-          <LoadIcon />
-        </IconButton>
       </Tooltip>
       {!fromSearch && (
         <Tooltip title="Show filters">
@@ -332,9 +331,9 @@ const TableListToolbar = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-    selected.some(
-      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-    ),
+      selected.some(
+        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+      ),
     [selected]
   );
 

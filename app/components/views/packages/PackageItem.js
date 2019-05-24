@@ -147,8 +147,8 @@ const PackageItem = ({
           </Tooltip>
         )}
 
-        {!isOutdated && !peerMissing && !missing && !version && (
-          <Tooltip title="Package has errors">
+        {missing && (
+          <Tooltip title="Package is missing">
             <Typography className={classes.typo}>
               <ErrorIcon className={classes.statusError} />
             </Typography>
