@@ -39,6 +39,8 @@ const TableFilters = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
+    searchInputEl.current.focus();
+
     if (listFilters.length) {
       const inputName = searchInputEl && searchInputEl.current;
       const filter =
@@ -110,7 +112,7 @@ const TableFilters = ({
       <div className={classes.filterItems}>
         <div className={classes.flexContainer}>
           <div style={{ flex: 1 }}>
-            <FormControl component="fieldset">
+            <FormControl component="fieldset" style={{ width: '100%' }}>
               <FormLabel component="legend">Package name</FormLabel>
               <FormGroup>
                 <FormHelperText>Fill package name</FormHelperText>
