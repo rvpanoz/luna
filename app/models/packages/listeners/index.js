@@ -6,6 +6,7 @@ import onViewPackage$ from './viewPackage';
 import onNpmActions$ from './npmActions';
 import onNpmInstall$ from './npmInstall';
 import onNpmUninstall$ from './npmUninstall';
+import onNpmUpdate$ from './npmUpdate';
 
 export {
   onListOutdatedPackages$,
@@ -13,5 +14,6 @@ export {
   onSearchPackages$,
   onViewPackage$,
   onNpmInstall$,
-  onNpmUninstall$
+  onNpmUninstall$,
+  onNpmUpdate$
 };

@@ -36,6 +36,9 @@ const viewPackageListener = ActionCreator('REGISTER_LISTENER_PACKAGE');
 const installPackageListener = ActionCreator(
   'REGISTER_LISTENER_INSTALL_PACKAGE'
 );
+const updatedPackagesListener = ActionCreator(
+  'REGISTER_LISTENER_UPDATE_PACKAGES'
+);
 const uninstallPackagesListener = ActionCreator(
   'REGISTER_LISTENER_UNINSTALL_PACKAGES'
 );
@@ -70,5 +73,6 @@ export {
   installPackageListener,
   listOutdatedPackagesListener,
   searchPackagesListener,
-  viewPackageListener
+  viewPackageListener,
+  updatedPackagesListener
 };
