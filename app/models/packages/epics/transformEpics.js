@@ -42,8 +42,8 @@ const mapPackagesEpic = (action$, state$) =>
         const {
           common: { mode, directory },
           packages: {
-            packagesOutdated
-            // project: { name, version, description }
+            packagesOutdated,
+            project: { name, version, description }
           }
         } = state$.value;
 
@@ -86,7 +86,9 @@ const mapPackagesEpic = (action$, state$) =>
                     ? outdatedPkg.latest
                     : dependency.version,
                 __invalid: invalid,
-                __hasError: missing || peerMissing || extraneous,
+                __hasError: extraneous,
+                __missing: missing,
+                __peerMissing: peerMissing,
                 __fromSearch: fromSearch,
                 __group: group,
                 ...details
