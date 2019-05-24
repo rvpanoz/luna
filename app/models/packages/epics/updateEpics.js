@@ -4,7 +4,7 @@ import { pipe } from 'rxjs';
 import { tap, switchMap, ignoreElements } from 'rxjs/operators';
 
 import {
-  updatePackages
+  updatePackages,
   updatePackagesListener
 } from 'models/packages/actions';
 

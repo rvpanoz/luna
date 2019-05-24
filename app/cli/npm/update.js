@@ -20,8 +20,8 @@ const update = options => {
     return multiple && packages && Array.isArray(packages)
       ? packages
       : version
-      ? `${name}@${version}`.trim()
-      : name.trim();
+        ? `${name}@${version}`.trim()
+        : name.trim();
   }
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
@@ -32,8 +32,8 @@ const update = options => {
 
   const run = []
     .concat(command)
-    .concat(commandArgs)
     .concat(getNames())
+    .concat(commandArgs)
     .concat(commandOpts);
 
   return run;

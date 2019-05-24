@@ -81,7 +81,7 @@ const TableListToolbar = ({
     dispatch(clearFilters());
   };
 
-  const handleAction = (action, force) => {
+  const handleAction = (action, force, latest) => {
     if (action === 'clearFilters') {
       return clearAllFilters();
     }
@@ -100,7 +100,7 @@ const TableListToolbar = ({
           ipcEvent: 'npm-install',
           cmd: selected.map(() => 'install'),
           multiple: true,
-          packages: selected
+          packages: latest ? selected.map(selectedPackage => `${selectedPackage}@latest`) : selected
         })
       );
     }
@@ -192,7 +192,7 @@ const TableListToolbar = ({
                 },
                 btnIdx => {
                   if (Boolean(btnIdx) === true) {
-                    handleAction('install', true);
+                    handleAction('install', true, true);
                   }
                 }
               )
@@ -331,9 +331,9 @@ const TableListToolbar = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-      selected.some(
-        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-      ),
+    selected.some(
+      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+    ),
     [selected]
   );
 

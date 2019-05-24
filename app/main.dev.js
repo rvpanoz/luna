@@ -19,6 +19,7 @@ import {
   onNpmView,
   onNpmSearch,
   onNpmInstall,
+  onNpmUpdate,
   onNpmUninstall
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
@@ -130,6 +131,16 @@ ipcMain.on('npm-view', (event, options) => onNpmView(event, options, Store));
  * */
 ipcMain.on('npm-install', (event, options) =>
   onNpmInstall(event, options, Store)
+);
+
+/**
+ * Channel: npm-update
+ * Supports: npm update <@scope>/<name>@<version>
+ * https://docs.npmjs.com/cli/update.html
+ *
+ * */
+ipcMain.on('npm-update', (event, options) =>
+  onNpmUpdate(event, options, Store)
 );
 
 /**

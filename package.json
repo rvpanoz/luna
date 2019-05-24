@@ -138,7 +138,7 @@
     "@babel/plugin-proposal-function-bind": "^7.0.0",
     "@babel/plugin-transform-react-constant-elements": "^7.0.0",
     "@babel/plugin-transform-react-inline-elements": "^7.0.0",
-    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
     "babel-eslint": "^10.0.1",
