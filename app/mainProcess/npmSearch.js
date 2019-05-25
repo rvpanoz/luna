@@ -34,7 +34,7 @@ const onNpmSearch = (event, options, store) => {
     runCommand(params, callback);
   } catch (error) {
     log.error(error);
-    event.sender.send('npm-search-fatal-error', error && error.message);
+    event.sender.send('npm-search-error', error && error.message);
   }
 };
 

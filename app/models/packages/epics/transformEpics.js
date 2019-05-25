@@ -42,8 +42,8 @@ const mapPackagesEpic = (action$, state$) =>
         const {
           common: { mode, directory },
           packages: {
-            packagesOutdated,
-            project: { name, version, description }
+            packagesOutdated
+            // project: { name, version, description }
           }
         } = state$.value;
 

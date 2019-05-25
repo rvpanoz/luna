@@ -8,8 +8,7 @@
 
 const update = options => {
   const command = ['update'];
-  const { name, mode, version = null, pkgOptions, multiple, packages } =
-    options || {};
+  const { name, mode, pkgOptions, multiple, packages } = options || {};
   const defaults = ['--verbose'];
 
   if (!name && !multiple) {
@@ -19,9 +18,7 @@ const update = options => {
   function getNames() {
     return multiple && packages && Array.isArray(packages)
       ? packages
-      : version
-        ? `${name}@${version}`.trim()
-        : name.trim();
+      : name.trim();
   }
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;

@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable react/require-default-props */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -19,7 +19,6 @@ import { INFO_MESSAGES } from 'constants/AppConstants';
 import styles from './styles/options';
 
 const Options = ({ classes, packagesInstallOptions, selected }) => {
-  console.log(packagesInstallOptions, selected);
   const dispatch = useDispatch();
 
   return (

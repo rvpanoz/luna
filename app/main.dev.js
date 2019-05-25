@@ -262,12 +262,12 @@ app.on('ready', async () => {
 
   mainWindow.webContents.on('crashed', event => {
     log.error(chalk.white.bgRed.bold('[CRASHED]'), event);
-    app.quit(); // TODO: handle this
+    app.quit();
   });
 
   mainWindow.on('unresponsive', event => {
     log.error(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
-    app.quit(); // TODO: handle this
+    app.quit();
   });
 
   mainWindow.on('closed', () => {

@@ -9,49 +9,36 @@ const { defaultSettings } = config || {};
 const { defaultManager } = defaultSettings;
 
 const onNpmUpdate = (event, options, store) => {
-    const settings = store.get('user_settings');
-    const { activeManager = defaultManager, ...rest } = options || {};
-    const commands = options.cmd;
+  const settings = store.get('user_settings');
+  const { activeManager = defaultManager, ...rest } = options || {};
 
-    let runningTimes = 1;
+  const onFlow = chunk => event.sender.send('npm-update-flow', chunk);
+  const onError = error => event.sender.send('npm-update-error', error);
+  const onComplete = result =>
+    event.sender.send('npm-update-completed', result);
 
-    const onFlow = chunk => event.sender.send('npm-update-flow', chunk);
-    const onError = error => event.sender.send('npm-update-error', error);
+  const callback = result => {
+    const { status, errors, data } = result;
 
-    const onComplete = (errors, data, cmd) => {
-        if (commands.length === runningTimes) {
-            runningTimes = 1;
-            return event.sender.send('npm-update-completed', data, errors, cmd);
-        }
+    return switchcase({
+      flow: dataChunk => onFlow(dataChunk),
+      close: () => onComplete(errors, data),
+      error: error => onError(error)
+    })(null)(status);
+  };
 
-        runningTimes += 1;
-    };
+  // run npm update and send the result to renderer process via ipc event
+  try {
+    const params = merge(settings, {
+      activeManager,
+      ...rest
+    });
 
-    const callback = result => {
-        const { status, errors, data, cmd } = result;
-
-        return switchcase({
-            flow: dataChunk => onFlow(dataChunk),
-            close: () => onComplete(errors, data, cmd),
-            error: error => onError(error)
-        })(null)(status);
-    };
-
-    /**
-     * At this point we try to run a shell command sending output
-     * to renderer process via ipc events
-     */
-    try {
-        const params = merge(settings, {
-            activeManager,
-            ...rest
-        });
-
-        runCommand(params, callback);
-    } catch (error) {
-        log.error(error.message);
-        event.sender.send('npm-update-error', error);
-    }
+    runCommand(params, callback);
+  } catch (error) {
+    log.error(error.message);
+    event.sender.send('npm-update-error', error);
+  }
 };
 
 export default onNpmUpdate;
