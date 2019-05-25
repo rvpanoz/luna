@@ -122,6 +122,8 @@ const TableListToolbar = ({
         })
       );
     }
+
+    return false;
   };
 
   const openPackage = () =>

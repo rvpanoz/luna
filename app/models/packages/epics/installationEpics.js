@@ -3,34 +3,16 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
-import { map, tap, mergeMap, switchMap, ignoreElements } from 'rxjs/operators';
+import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
 
-import { setActivePage, clearSelected, toggleLoader } from 'models/ui/actions';
-import { setRunningCommand } from 'models/npm/actions';
+import { toggleLoader } from 'models/ui/actions';
 import {
-  addInstallationOption,
   installPackage,
   installMultiplePackages,
-  installPackageListener,
-  updatePackages
+  installPackageListener
 } from 'models/packages/actions';
 
 import { onNpmInstall$ } from '../listeners';
-
-import MESSAGES from '../messages';
-
-const updateCommand = ({
-  operationStatus,
-  operationPackages,
-  operationCommand
-}) => ({
-  type: setRunningCommand.type,
-  payload: {
-    operationStatus,
-    operationPackages,
-    operationCommand
-  }
-});
 
 const updateLoader = payload => ({
   type: toggleLoader.type,
