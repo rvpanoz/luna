@@ -6,10 +6,12 @@ import {
   installPackage,
   installMultiplePackages,
   uninstallPackages,
+  updatePackages,
   listOutdatedPackagesListener,
   searchPackagesListener,
   viewPackageListener,
   installPackageListener,
+  updatePackagesListener,
   uninstallPackagesListener
 } from 'models/packages/actions';
 import { clearSelected } from 'models/ui/actions';
@@ -33,6 +35,7 @@ const updateCommandEpic = pipe(
   ofType(
     installPackage.type,
     installMultiplePackages.type,
+    updatePackages.type,
     uninstallPackages.type
   ),
   mergeMap(({ payload }) => {
@@ -61,6 +64,7 @@ const onInitActionsEpic = pipe(
     searchPackagesListener(),
     viewPackageListener(),
     installPackageListener(),
+    updatePackagesListener(),
     uninstallPackagesListener(),
     npmToolsListener()
   ])

@@ -16,10 +16,6 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Popover from '@material-ui/core/Popover';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 
 import ClearIcon from '@material-ui/icons/Clear';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -40,7 +36,6 @@ import {
 import { clearFilters } from 'models/ui/actions';
 
 import TableFilters from './TableFilters';
-import Options from './Options';
 import styles from './styles/tableToolbar';
 
 const TableListToolbar = ({
@@ -48,7 +43,6 @@ const TableListToolbar = ({
   selected,
   title,
   mode,
-  manager,
   toggleOptions,
   fromSearch,
   filters,
@@ -81,7 +75,7 @@ const TableListToolbar = ({
     dispatch(clearFilters());
   };
 
-  const handleAction = (action, force) => {
+  const handleAction = (action, force, latest) => {
     if (action === 'clearFilters') {
       return clearAllFilters();
     }
@@ -100,7 +94,9 @@ const TableListToolbar = ({
           ipcEvent: 'npm-install',
           cmd: selected.map(() => 'install'),
           multiple: true,
-          packages: selected
+          packages: latest
+            ? selected.map(selectedPackage => `${selectedPackage}@latest`)
+            : selected
         })
       );
     }
@@ -120,12 +116,14 @@ const TableListToolbar = ({
       return dispatch(
         updatePackages({
           ipcEvent: 'npm-update',
-          cmd: selected.map(() => 'update'),
+          cmd: ['update'],
           multiple: true,
           packages: selected
         })
       );
     }
+
+    return false;
   };
 
   const openPackage = () =>
@@ -192,7 +190,7 @@ const TableListToolbar = ({
                 },
                 btnIdx => {
                   if (Boolean(btnIdx) === true) {
-                    handleAction('install', true);
+                    handleAction('install', true, true);
                   }
                 }
               )
@@ -398,7 +396,6 @@ TableListToolbar.propTypes = {
   selected: PropTypes.arrayOf(PropTypes.string),
   title: PropTypes.string,
   mode: PropTypes.string,
-  manager: PropTypes.string,
   filters: PropTypes.arrayOf(PropTypes.object),
   fromSearch: PropTypes.bool,
   total: PropTypes.number,
@@ -407,7 +404,7 @@ TableListToolbar.propTypes = {
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   switchMode: PropTypes.func.isRequired,
-  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
+  toggleOptions: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(TableListToolbar);
