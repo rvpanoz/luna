@@ -105,7 +105,6 @@ const Packages = ({ classes }) => {
     filters,
     rowsPerPage,
     directory,
-    manager,
     selected,
     fromSearch,
     sortDir,
@@ -205,12 +204,12 @@ const Packages = ({ classes }) => {
               <div className={classes.toolbar}>
                 <TableToolbar
                   title="Packages"
-                  manager={manager}
                   total={(packagesData && packagesData.length) || 0}
                   mode={mode}
                   directory={directory}
                   selected={selected}
                   outdated={packagesOutdated}
+                  packagesData={packagesData}
                   packagesInstallOptions={packagesInstallOptions}
                   fromSearch={fromSearch}
                   filters={filters}

@@ -3,6 +3,7 @@
 /* eslint-disable compat/compat */
 /* eslint-disable object-shorthand */
 /* eslint-disable array-callback-return */
+/* eslint-disable no-underscore-dangle */
 
 import { remote } from 'electron';
 import React, { useState, useCallback } from 'react';
@@ -26,6 +27,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import LoadIcon from '@material-ui/icons/ArchiveOutlined';
 import SwitchIcon from '@material-ui/icons/LoopOutlined';
 
+import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import { switchcase } from 'commons/utils';
 import { navigatorParameters } from 'commons/parameters';
 import {
@@ -53,7 +55,8 @@ const TableListToolbar = ({
   filteredByNamePackages,
   scrollWrapper,
   switchMode,
-  total
+  total,
+  packagesData
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
@@ -89,11 +92,21 @@ const TableListToolbar = ({
     }
 
     if (action === 'install') {
+      const pkgOptions = selected.map(packageName => {
+        const packageDetails = packagesData.find(
+          packageDataDetails => packageDataDetails.name === packageName
+        );
+        const { __group } = packageDetails;
+
+        return [PACKAGE_GROUPS[__group]];
+      });
+
       return dispatch(
         installMultiplePackages({
           ipcEvent: 'npm-install',
           cmd: selected.map(() => 'install'),
           multiple: true,
+          pkgOptions,
           packages: latest
             ? selected.map(selectedPackage => `${selectedPackage}@latest`)
             : selected
@@ -401,6 +414,7 @@ TableListToolbar.propTypes = {
   total: PropTypes.number,
   scrollWrapper: PropTypes.func,
   outdated: PropTypes.arrayOf(PropTypes.object),
+  packagesData: PropTypes.arrayOf(PropTypes.object),
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   switchMode: PropTypes.func.isRequired,
