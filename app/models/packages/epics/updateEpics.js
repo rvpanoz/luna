@@ -1,14 +1,31 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
-import { tap, switchMap, ignoreElements } from 'rxjs/operators';
+import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
 
+import { toggleLoader } from 'models/ui/actions';
 import {
   updatePackages,
   updatePackagesListener
 } from 'models/packages/actions';
 
 import { onNpmUpdate$ } from '../listeners';
+
+const updateLoader = payload => ({
+  type: toggleLoader.type,
+  payload
+});
+
+const showUpdateLoaderEpic = action$ =>
+  action$.pipe(
+    ofType(updatePackages.type),
+    map(() =>
+      updateLoader({
+        loading: true,
+        message: `Updating packages..`
+      })
+    )
+  );
 
 /**
  * Update packages
@@ -39,4 +56,4 @@ const updatePackagesListenerEpic = pipe(
   switchMap(() => onNpmUpdate$)
 );
 
-export { updatePackagesEpic, updatePackagesListenerEpic };
+export { updatePackagesEpic, updatePackagesListenerEpic, showUpdateLoaderEpic };

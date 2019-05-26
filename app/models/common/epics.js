@@ -6,6 +6,7 @@ import {
   installPackage,
   installMultiplePackages,
   uninstallPackages,
+  updatePackages,
   listOutdatedPackagesListener,
   searchPackagesListener,
   viewPackageListener,
@@ -34,6 +35,7 @@ const updateCommandEpic = pipe(
   ofType(
     installPackage.type,
     installMultiplePackages.type,
+    updatePackages.type,
     uninstallPackages.type
   ),
   mergeMap(({ payload }) => {

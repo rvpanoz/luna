@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
@@ -19,7 +17,7 @@ const updateLoader = payload => ({
   payload
 });
 
-const showLoaderEpic = action$ =>
+const showInstallLoaderEpic = action$ =>
   action$.pipe(
     ofType(installPackage.type, installMultiplePackages.type),
     map(() =>
@@ -95,5 +93,5 @@ export {
   installPackageListenerEpic,
   installPackageEpic,
   installMultiplePackagesEpic,
-  showLoaderEpic
+  showInstallLoaderEpic
 };

@@ -8,7 +8,7 @@ import {
   installPackageListenerEpic,
   installPackageEpic,
   installMultiplePackagesEpic,
-  showLoaderEpic
+  showInstallLoaderEpic
 } from './installationEpics';
 
 // uninstall related epics
@@ -31,7 +31,11 @@ import {
 } from './viewEpics';
 
 // update related epics
-import { updatePackagesEpic, updatePackagesListenerEpic } from './updateEpics';
+import {
+  updatePackagesEpic,
+  updatePackagesListenerEpic,
+  showUpdateLoaderEpic
+} from './updateEpics';
 
 // transformation related epics
 import { mapPackagesEpic, mapOutdatedPackagesEpic } from './transformEpics';
@@ -50,7 +54,8 @@ export default combineEpics(
   initEpic,
   installMultiplePackagesEpic,
   installPackageEpic,
-  showLoaderEpic,
+  showInstallLoaderEpic,
+  showUpdateLoaderEpic,
   mapPackagesEpic,
   mapOutdatedPackagesEpic
 );

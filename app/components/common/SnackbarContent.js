@@ -20,7 +20,8 @@ import { defaultFont } from 'styles/variables';
 
 const styles = theme => ({
   root: {
-    width: '100%'
+    width: '100%',
+    maxWidth: '100%'
   },
   success: {
     backgroundColor: green[600]

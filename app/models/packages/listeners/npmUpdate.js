@@ -32,9 +32,9 @@ const onNpmUpdate$ = new Observable(observer => {
 
       observer.next(
         setPackagesStart({
-          channel: 'npm-update',
+          channel: 'npm-list-outdated',
           options: {
-            cmd: ['update']
+            cmd: ['outdated', 'list']
           }
         })
       );
