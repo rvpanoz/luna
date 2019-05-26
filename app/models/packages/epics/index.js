@@ -8,14 +8,14 @@ import {
   installPackageListenerEpic,
   installPackageEpic,
   installMultiplePackagesEpic,
-  showLoaderEpic
+  showInstallLoaderEpic
 } from './installationEpics';
 
 // uninstall related epics
 import {
   uninstallPackagesEpic,
-  uninstallPackagesListenerEpic,
-} from './uninstallEpics'
+  uninstallPackagesListenerEpic
+} from './uninstallEpics';
 
 // list, outdated, search related epics
 import {
@@ -30,6 +30,13 @@ import {
   viewPackageListenerEpic
 } from './viewEpics';
 
+// update related epics
+import {
+  updatePackagesEpic,
+  updatePackagesListenerEpic,
+  showUpdateLoaderEpic
+} from './updateEpics';
+
 // transformation related epics
 import { mapPackagesEpic, mapOutdatedPackagesEpic } from './transformEpics';
 
@@ -42,10 +49,13 @@ export default combineEpics(
   uninstallPackagesListenerEpic,
   viewPackageEpic,
   viewPackageLoaderEpic,
+  updatePackagesEpic,
+  updatePackagesListenerEpic,
   initEpic,
   installMultiplePackagesEpic,
   installPackageEpic,
-  showLoaderEpic,
+  showInstallLoaderEpic,
+  showUpdateLoaderEpic,
   mapPackagesEpic,
   mapOutdatedPackagesEpic
 );

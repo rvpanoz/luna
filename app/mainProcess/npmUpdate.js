@@ -8,23 +8,26 @@ const { config } = mk;
 const { defaultSettings } = config || {};
 const { defaultManager } = defaultSettings;
 
-const onNpmSearch = (event, options, store) => {
+const onNpmUpdate = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
-  const onError = error => event.sender.send('npm-search-error', error);
-  const onComplete = (errors, data) =>
-    event.sender.send('npm-search-completed', data, errors);
+  const onFlow = chunk => event.sender.send('npm-update-flow', chunk);
+  const onError = error => event.sender.send('npm-update-error', error);
+  const onComplete = result =>
+    event.sender.send('npm-update-completed', result);
 
   const callback = result => {
     const { status, errors, data } = result;
 
     return switchcase({
+      flow: dataChunk => onFlow(dataChunk),
       close: () => onComplete(errors, data),
       error: error => onError(error)
     })(null)(status);
   };
 
+  // run npm update and send the result to renderer process via ipc event
   try {
     const params = merge(settings, {
       activeManager,
@@ -33,9 +36,9 @@ const onNpmSearch = (event, options, store) => {
 
     runCommand(params, callback);
   } catch (error) {
-    log.error(error);
-    event.sender.send('npm-search-error', error && error.message);
+    log.error(error.message);
+    event.sender.send('npm-update-error', error);
   }
 };
 
-export default onNpmSearch;
+export default onNpmUpdate;

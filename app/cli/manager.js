@@ -86,20 +86,25 @@ const execute = (
 
       const resultString = result.join('');
 
-      const results = {
+      const commandResult = {
         status: 'close',
         errors,
         data: resultString,
         cmd: commandArgs
       };
 
-      return resolve(results);
+      return resolve(commandResult);
     });
   });
 
   return resultP;
 };
 
+/**
+ * npm list
+ * @param {*} options
+ * @param {*} callback
+ */
 const list = (options, callback) => {
   const command = ['list'];
   const { mode, directory, linked } = options || {};
@@ -128,7 +133,9 @@ const list = (options, callback) => {
 };
 
 /**
- * Outdated command - use npm
+ * npm outdated
+ * @param {*} options
+ * @param {*} callback
  */
 const outdated = (options, callback) => {
   const command = ['outdated'];
@@ -156,7 +163,9 @@ const outdated = (options, callback) => {
 };
 
 /**
- * search for packages - use npm
+ * npm search
+ * @param {*} opts
+ * @param {*} callback
  */
 const search = (opts, callback) => {
   const command = ['search'];
@@ -172,6 +181,12 @@ const search = (opts, callback) => {
   return execute('npm', run, mode, directory, callback);
 };
 
+/**
+ * npm install
+ * @param {*} opts
+ * @param {*} callback
+ * @param {*} idx
+ */
 const install = (opts, callback, idx) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
@@ -190,6 +205,11 @@ const install = (opts, callback, idx) => {
   }
 };
 
+/**
+ * npm update
+ * @param {*} opts
+ * @param {*} callback
+ */
 const update = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
@@ -208,6 +228,11 @@ const update = (opts, callback) => {
   }
 };
 
+/**
+ * npm uninstall
+ * @param {*} opts
+ * @param {*} callback
+ */
 const uninstall = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
@@ -226,7 +251,11 @@ const uninstall = (opts, callback) => {
   }
 };
 
-// npm view [<@scope>/]<name>[@<version>]
+/**
+ * npm view
+ * @param {*} opts
+ * @param {*} callback
+ */
 const view = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
@@ -245,6 +274,11 @@ const view = (opts, callback) => {
   }
 };
 
+/**
+ * npm audit
+ * @param {*} opts
+ * @param {*} callback
+ */
 const runAudit = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
@@ -263,6 +297,11 @@ const runAudit = (opts, callback) => {
   }
 };
 
+/**
+ * npm doctor
+ * @param {*} opts
+ * @param {*} callback
+ */
 const runDoctor = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
@@ -281,6 +320,11 @@ const runDoctor = (opts, callback) => {
   }
 };
 
+/**
+ * npm prune
+ * @param {*} opts
+ * @param {*} callback
+ */
 const runPrune = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
@@ -299,6 +343,11 @@ const runPrune = (opts, callback) => {
   }
 };
 
+/**
+ * npm dedupe
+ * @param {*} opts
+ * @param {*} callback
+ */
 const runDedupe = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
@@ -317,6 +366,11 @@ const runDedupe = (opts, callback) => {
   }
 };
 
+/**
+ *
+ * @param {*} opts
+ * @param {*} callback
+ */
 const runVerify = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
@@ -335,6 +389,11 @@ const runVerify = (opts, callback) => {
   }
 };
 
+/**
+ * npm cache clean
+ * @param {*} opts
+ * @param {*} callback
+ */
 const runClean = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
@@ -353,6 +412,11 @@ const runClean = (opts, callback) => {
   }
 };
 
+/**
+ * npm init
+ * @param {*} opts
+ * @param {*} callback
+ */
 const runInit = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
@@ -371,14 +435,18 @@ const runInit = (opts, callback) => {
   }
 };
 
+/**
+ *
+ * @param {*} opts
+ */
 const runLockVerify = opts => {
   const { directory } = opts || {};
 
   lockVerify(directory).then(result => {
-    result.warnings.forEach(w => console.error('Warning:', w));
+    result.warnings.forEach(warning => console.error('Warning:', warning));
 
     if (!result.status) {
-      result.errors.forEach(e => console.error(e));
+      result.errors.forEach(error => console.error(error));
     }
 
     return {

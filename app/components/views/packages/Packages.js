@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable no-nested-ternary */
 
 import React, { useEffect, useState, useRef } from 'react';
 import cn from 'classnames';
@@ -23,7 +24,11 @@ import AppLoader from 'components/common/AppLoader';
 import { PackageDetails } from 'components/views/package';
 import { scrollWrapper } from 'commons/utils';
 
-import { setPackagesStart, viewPackageStart } from 'models/packages/actions';
+import {
+  setPackagesStart,
+  viewPackageStart,
+  installMultiplePackages
+} from 'models/packages/actions';
 import {
   addSelected,
   setPage,
@@ -35,7 +40,6 @@ import {
   clearInstallOptions,
   addInstallOption
 } from 'models/common/actions';
-import { installMultiplePackages } from 'models/packages/actions';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';

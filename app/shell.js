@@ -1,16 +1,11 @@
 /* eslint-disable compat/compat */
 /* eslint-disable import/prefer-default-export */
 
-/**
- * Run shell commands
- * npm [cmd] [[<@scope>/]<pkg> ...]
- * */
-
 import log from 'electron-log';
 import { apiManager as manager } from './cli';
 
 /**
- *
+ * Run shell commands
  * @param {*} options
  * @param {*} callback
  */

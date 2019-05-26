@@ -8,8 +8,7 @@
 
 const update = options => {
   const command = ['update'];
-  const { name, mode, version = null, pkgOptions, multiple, packages } =
-    options || {};
+  const { name, mode, pkgOptions, multiple, packages } = options || {};
   const defaults = ['--verbose'];
 
   if (!name && !multiple) {
@@ -19,8 +18,6 @@ const update = options => {
   function getNames() {
     return multiple && packages && Array.isArray(packages)
       ? packages
-      : version
-      ? `${name}@${version}`.trim()
       : name.trim();
   }
 
@@ -32,8 +29,8 @@ const update = options => {
 
   const run = []
     .concat(command)
-    .concat(commandArgs)
     .concat(getNames())
+    .concat(commandArgs)
     .concat(commandOpts);
 
   return run;
