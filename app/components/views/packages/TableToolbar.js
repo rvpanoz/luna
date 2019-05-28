@@ -92,14 +92,17 @@ const TableListToolbar = ({
     }
 
     if (action === 'install') {
-      const pkgOptions = selected.map(packageName => {
-        const packageDetails = packagesData.find(
-          packageDataDetails => packageDataDetails.name === packageName
-        );
-        const { __group } = packageDetails;
+      const pkgOptions =
+        mode === 'local'
+          ? selected.map(packageName => {
+              const packageDetails = packagesData.find(
+                packageDataDetails => packageDataDetails.name === packageName
+              );
+              const { __group } = packageDetails;
 
-        return [PACKAGE_GROUPS[__group]];
-      });
+              return [PACKAGE_GROUPS[__group]];
+            })
+          : [];
 
       return dispatch(
         installMultiplePackages({

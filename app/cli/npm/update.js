@@ -3,9 +3,9 @@
 /* eslint-disable no-nested-ternary */
 
 /**
- * npm update [<@scope>/]<name>[@<version>]
+ * npm update
+ * @param {*} options
  */
-
 const update = options => {
   const command = ['update'];
   const { name, mode, pkgOptions, multiple, packages } = options || {};

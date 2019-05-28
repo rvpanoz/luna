@@ -3,9 +3,9 @@
 /* eslint-disable no-nested-ternary */
 
 /**
- * npm install [<@scope>/]<name>@<version>
+ * npm install
+ * @param {*} options
  */
-
 const install = (options, idx) => {
   const command = ['install'];
   const {
@@ -38,8 +38,10 @@ const install = (options, idx) => {
       ? pkgOptions.map(option => `--${option}`)
       : null;
   const packagesToInstallSingle = version ? [`${name}@${version}`] : [name];
+  const [commandFlags] = pkgOptions;
 
   let packagesToInstallMultiple = [];
+  let commandOptsMultiple = ['--save-prod'];
 
   if (packages && Array.isArray(packages) && !name) {
     if (idx > -1 && packages.length > 1) {
@@ -50,9 +52,6 @@ const install = (options, idx) => {
   } else {
     packagesToInstallMultiple = [name];
   }
-
-  let commandOptsMultiple = ['--save-prod'];
-  const [commandFlags] = pkgOptions;
 
   if (Array.isArray(commandFlags)) {
     commandOptsMultiple = pkgOptions[idx].map(option => `--${option}`);
