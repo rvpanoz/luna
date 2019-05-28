@@ -229,7 +229,7 @@ const Packages = ({ classes }) => {
                     variant="subtitle1"
                     className={classes.withPadding}
                   >
-                    No dependencies found.
+                    {fromSearch ? 'No packages found' : 'No dependencies found'}
                   </Typography>
                 ) : (
                   <Table

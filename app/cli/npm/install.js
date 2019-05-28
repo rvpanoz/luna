@@ -5,6 +5,7 @@
 /**
  * npm install
  * @param {*} options
+ * @param {*} idx
  */
 const install = (options, idx) => {
   const command = ['install'];
@@ -43,7 +44,7 @@ const install = (options, idx) => {
   let packagesToInstallMultiple = [];
   let commandOptsMultiple = ['--save-prod'];
 
-  if (packages && Array.isArray(packages) && !name) {
+  if (Array.isArray(packages) && !name) {
     if (idx > -1 && packages.length > 1) {
       packagesToInstallMultiple = packages[idx];
     } else {
@@ -53,6 +54,7 @@ const install = (options, idx) => {
     packagesToInstallMultiple = [name];
   }
 
+  console.log(pkgOptions, idx);
   if (Array.isArray(commandFlags)) {
     commandOptsMultiple = pkgOptions[idx].map(option => `--${option}`);
   }
