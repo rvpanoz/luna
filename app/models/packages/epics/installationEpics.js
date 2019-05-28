@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
@@ -67,12 +69,18 @@ const installMultiplePackagesEpic = (action$, state$) =>
         }
       } = state$.value;
 
-      const options = packagesInstallOptions
+      const { cmd, multiple, packages, ipcEvent, pkgOptions } = payload;
+      const options = Array.isArray(pkgOptions)
+        ? pkgOptions
+        : packagesInstallOptions
         ? packagesInstallOptions.map(opt => opt.options)
         : [];
 
       const parameters = {
-        ...payload,
+        ipcEvent,
+        cmd,
+        multiple,
+        packages,
         pkgOptions: options,
         mode,
         directory

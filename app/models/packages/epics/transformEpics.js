@@ -42,8 +42,8 @@ const mapPackagesEpic = (action$, state$) =>
         const {
           common: { mode, directory },
           packages: {
-            packagesOutdated
-            // project: { name, version, description }
+            packagesOutdated,
+            project: { name, version, description }
           }
         } = state$.value;
 
@@ -100,9 +100,9 @@ const mapPackagesEpic = (action$, state$) =>
 
         return {
           alldependencies: enhancedDependencies,
-          projectName,
-          projectDescription,
-          projectVersion,
+          projectName: fromSearch ? name : projectName,
+          projectDescription: fromSearch ? description : projectDescription,
+          projectVersion: fromSearch ? version : projectVersion,
           fromSearch,
           fromSort
         };

@@ -78,18 +78,12 @@ const handlers = {
       }
     }),
   [addOutdatedPackage.type]: (state, { payload: { dependency } }) => {
-    const {
-      packagesOutdated
-    } = state
+    const { packagesOutdated } = state;
 
     return merge(state, {
       ...state,
-      packagesOutdated: prepend(
-        dependency,
-        packagesOutdated
-      )
-    })
-
+      packagesOutdated: prepend(dependency, packagesOutdated)
+    });
   },
   [setOutdatedSuccess.type]: (state, { payload: { outdated } }) =>
     merge(state, {
@@ -101,12 +95,12 @@ const handlers = {
 
     // update packages
     const newPackages = packagesData.filter(
-      pkg => removedPackages.indexOf(pkg.name) === -1
+      pkg => removedPackages.indexOf(pkg.name) === -1 || pkg.name === 'npm'
     );
 
     // update outdated packages
     const newPackagesOutdated = packagesOutdated.filter(
-      pkg => removedPackages.indexOf(pkg.name) === -1
+      pkg => removedPackages.indexOf(pkg.name) === -1 || pkg.name === 'npm'
     );
 
     return merge(state, {
