@@ -119,7 +119,11 @@ const mapPackagesEpic = (action$, state$) =>
       }) =>
         setPackages({
           dependencies: alldependencies.filter(
-            dependency => !dependency.__invalid
+            dependency =>
+              !dependency.__invalid &&
+              !dependency.__hasError &&
+              !dependency.__peerMissing &&
+              !dependency.__peerMissing
           ),
           projectName,
           projectDescription,
