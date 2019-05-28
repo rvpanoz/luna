@@ -37,10 +37,6 @@ const onNpmInstall = (event, options, store) => {
     })(null)(status);
   };
 
-  /**
-   * At this point we try to run a shell command sending output
-   * to renderer process via ipc events
-   */
   try {
     const params = merge(settings, {
       activeManager,

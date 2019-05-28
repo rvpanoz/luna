@@ -1,11 +1,10 @@
 /* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable compat/compat */
-/* eslint-disable no-nested-ternary */
 
 /**
- * npm view [<@scope>/]<name>[@<version>]
+ * npm view
+ * @param {*} options
  */
-
 const view = options => {
   const command = ['view'];
   const { mode, name, version } = options || {};
@@ -16,8 +15,6 @@ const view = options => {
   }
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-
-  // build npm command
   const run = []
     .concat(command)
     .concat(version ? [].concat([`${name}@${version}`]) : [name])

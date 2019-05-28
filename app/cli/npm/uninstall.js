@@ -1,19 +1,19 @@
 /* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable compat/compat */
-/* eslint-disable no-nested-ternary */
 
 /**
- * npm uninstall [<@scope>/]<pkg>[@<version>]
+ * npm uninstall
+ * @param {*} options
  */
-
 const uninstall = options => {
   const command = ['uninstall'];
   const { name, mode, multiple, packages } = options;
   const defaults = ['--verbose'];
 
   function getNames() {
-    if (multiple && packages && Array.isArray(packages)) {
-      return packages;
+    if (multiple && Array.isArray(packages)) {
+      // do not uninstall npm
+      return packages.filter(pkgName => pkgName !== 'npm');
     }
 
     if (!name && !multiple) {

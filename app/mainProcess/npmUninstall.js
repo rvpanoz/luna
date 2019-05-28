@@ -33,7 +33,6 @@ const onNpmUninstall = (event, options, store) => {
     })(null)(status);
   };
 
-  // run npm uninstall and send the result to renderer process via ipc event
   try {
     const params = merge(settings, {
       activeManager,
