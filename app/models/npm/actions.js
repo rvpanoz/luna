@@ -12,9 +12,11 @@ const setEnv = ActionCreator('SET_ENV');
 const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const npmCommand = ActionCreator('NPM_COMMAND');
 const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
+const updateNpmDoctorData = ActionCreator('UPDATE_NPM_DOCTOR_DATA');
 
 // listeners
 const npmAuditListener = ActionCreator('REGISTER_LISTENER_AUDIT');
+const npmDoctorListener = ActionCreator('REGISTER_LISTENER_DOCTOR');
 
 // operations
 const runInstall = ActionCreator('RUN_INSTALL');
@@ -24,6 +26,7 @@ const runUninstall = ActionCreator('RUN_UNINSTALL');
 // utilities
 const runAudit = ActionCreator('RUN_AUDIT');
 const runInit = ActionCreator('RUN_INIT');
+const runDoctor = ActionCreator('RUN_DOCTOR');
 
 export {
   addActionError,
@@ -39,6 +42,9 @@ export {
   runUninstall,
   runAudit,
   runInit,
+  runDoctor,
+  npmDoctorListener,
   npmAuditListener,
+  updateNpmDoctorData,
   updateNpmAuditData
 };
