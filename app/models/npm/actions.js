@@ -11,6 +11,7 @@ const clearRunningCommand = ActionCreator('CLEAR_RUNNING_COMMAND');
 const setEnv = ActionCreator('SET_ENV');
 const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const npmCommand = ActionCreator('NPM_COMMAND');
+const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
 
 // listeners
 const npmAuditListener = ActionCreator('REGISTER_LISTENER_AUDIT');
@@ -38,5 +39,6 @@ export {
   runUninstall,
   runAudit,
   runInit,
-  npmAuditListener
+  npmAuditListener,
+  updateNpmAuditData
 };

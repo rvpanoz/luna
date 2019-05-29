@@ -23,6 +23,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
+import ListIcon from '@material-ui/icons/ListOutlined';
 
 import NpmInit from 'components/common/NpmInit';
 import System from 'components/common/System';
@@ -157,6 +158,16 @@ const Header = ({ classes, onDrawerToggle }) => {
               label: classes.tabLabel
             }}
             icon={<PackagesIcon />}
+          />
+          <Tab
+            textColor="inherit"
+            label="Reports"
+            value="audit"
+            disabled={loading}
+            icon={<ListIcon color="inherit" />}
+            classes={{
+              label: classes.tabLabel
+            }}
           />
           <Tab
             textColor="inherit"

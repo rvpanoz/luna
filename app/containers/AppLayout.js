@@ -18,9 +18,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import AppSidebar from 'containers/AppSidebar';
 import AppHeader from 'containers/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
-import AuditReport from 'components/common/AuditReport';
+
 import { Packages } from 'components/views/packages';
 import { Notifications } from 'components/views/notifications';
+import { Audit } from 'components/views/reports';
 
 import { runAudit } from 'models/npm/actions';
 import { setDialog, setSnackbar } from 'models/ui/actions';
@@ -30,7 +31,7 @@ import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
 
 const mapState = ({
-  npm: { env },
+  npm: { env, auditData },
   notifications: { notifications },
   common: { mode, directory, onlineStatus },
   ui: {
@@ -46,6 +47,7 @@ const mapState = ({
     metadata: { lastUpdatedAt }
   }
 }) => ({
+  auditData,
   dialog,
   onlineStatus,
   lastUpdatedAt,
@@ -68,6 +70,7 @@ const AppLayout = ({ classes }) => {
     activePage,
     snackbar,
     mode,
+    auditData,
     dialog,
     directory,
     notifications,
@@ -79,15 +82,6 @@ const AppLayout = ({ classes }) => {
   } = useMappedState(mapState);
 
   const dispatch = useDispatch();
-
-  const closeDialog = () =>
-    dispatch(
-      setDialog({
-        open: false,
-        name: null,
-        content: null
-      })
-    );
 
   return (
     <MuiThemeProvider theme={theme}>
@@ -110,7 +104,8 @@ const AppLayout = ({ classes }) => {
               packages: () => <Packages />,
               problems: () => (
                 <Notifications mode={mode} directory={directory} />
-              )
+              ),
+              audit: () => <Audit />
             })(<Packages />)(activePage)}
           </main>
         </div>
@@ -156,47 +151,6 @@ const AppLayout = ({ classes }) => {
               }
             />
           </Snackbar>
-        )}
-        {dialog && dialog.open && (
-          <Dialog
-            fullWidth
-            open={dialog.open}
-            aria-labelledby="npm-audit-results"
-            classes={{
-              paper: classes.paperDialog
-            }}
-          >
-            <DialogContent>
-              <AuditReport
-                title="Results - npm audit"
-                data={dialog && dialog.report.content}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => {
-                  dispatch(
-                    runAudit({
-                      channel: 'ipc-event',
-                      ipcEvent: 'audit',
-                      cmd: ['audit'],
-                      fix: true,
-                      mode,
-                      directory
-                    })
-                  );
-
-                  closeDialog();
-                }}
-                color="primary"
-              >
-                Fix
-              </Button>
-              <Button onClick={() => closeDialog()} color="secondary">
-                Close
-              </Button>
-            </DialogActions>
-          </Dialog>
         )}
       </div>
     </MuiThemeProvider>

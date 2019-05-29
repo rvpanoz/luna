@@ -11,7 +11,8 @@ import {
   setEnv,
   npmCommand,
   setRunningCommand,
-  clearRunningCommand
+  clearRunningCommand,
+  updateNpmAuditData
 } from 'models/npm/actions';
 
 import initialState from './initialState';
@@ -22,6 +23,9 @@ const createReducer = (npmState, handlers) => (state = npmState, action) =>
   propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [updateNpmAuditData.type]: (state, { payload: { data } }) =>
+    assoc('auditData', data, state),
+
   [addActionError.type]: (state, { payload: { error } }) => {
     const {
       operations: { commandsErrors }

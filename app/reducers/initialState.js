@@ -19,7 +19,8 @@ const initialState = {
     command_message: '',
     operationStatus: 'idle',
     operationPackages: [],
-    operationCommand: null
+    operationCommand: null,
+    auditData: null
   },
   ui: {
     paused: false,
