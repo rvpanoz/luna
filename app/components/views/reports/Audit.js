@@ -8,7 +8,7 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
-
+import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 
@@ -23,26 +23,13 @@ const mapState = ({ npm: { auditData } }) => ({
 
 const AuditReport = ({ classes }) => {
   const { auditData } = useMappedState(mapState);
-  const [activeTab, setActiveTab] = useState('0');
+  console.log(auditData);
 
   return (
     <section className={classes.root}>
-      <div className={classes.container}>
-        <Typography className={classes.header}>Audit results</Typography>
-        <div className={classes.tabs}>
-          <Tabs
-            value={activeTab}
-            textColor="primary"
-            onChange={(e, value) => setActiveTab(value)}
-            classes={{
-              indicator: classes.indicator
-            }}
-          >
-            <Tab label="Statistics" value="0" />
-            <Tab label="Vulnerabilities" value="1" />
-          </Tabs>
-        </div>
-      </div>
+      {!auditData
+        ? 'No audit data found. Please run npm audit from actions'
+        : null}
     </section>
   );
 };
