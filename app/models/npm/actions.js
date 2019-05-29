@@ -12,6 +12,7 @@ const setEnv = ActionCreator('SET_ENV');
 const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const npmCommand = ActionCreator('NPM_COMMAND');
 const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
+const updateNpmDoctorData = ActionCreator('UPDATE_NPM_DOCTOR_DATA');
 
 // reporting data
 const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
