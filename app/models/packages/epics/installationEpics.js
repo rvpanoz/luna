@@ -31,7 +31,7 @@ const showInstallLoaderEpic = action$ =>
   );
 
 /**
- * Install single package
+ * Send ipc event to main process to handle npm-install for a single package
  * supports global and local mode
  */
 const installPackageEpic = (action$, state$) =>
@@ -54,8 +54,8 @@ const installPackageEpic = (action$, state$) =>
   );
 
 /**
- *  Install multiple packages
- *  supports global and local mode
+ * Send ipc event to main process to handle npm-install for multiple packages
+ * supports global and local mode
  */
 const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(

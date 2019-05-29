@@ -227,11 +227,8 @@ const AppSidebar = ({
                     handler: () =>
                       dispatch(
                         runAudit({
-                          channel: 'ipc-event',
-                          ipcEvent: 'audit',
-                          cmd: ['audit'],
-                          mode,
-                          directory: fullDirectory
+                          ipcEvent: 'npm-audit',
+                          cmd: ['audit']
                         })
                       )
                   }

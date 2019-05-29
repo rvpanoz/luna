@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
 
-import onNpmTools$ from './npmTools';
+import onNpmAudit$ from './npmAudit';
 
-export { onNpmTools$ };
+export { onNpmAudit$ };

@@ -20,7 +20,8 @@ import {
   onNpmSearch,
   onNpmInstall,
   onNpmUpdate,
-  onNpmUninstall
+  onNpmUninstall,
+  onNpmAudit
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
 
@@ -142,6 +143,14 @@ ipcMain.on('npm-install', (event, options) =>
 ipcMain.on('npm-update', (event, options) =>
   onNpmUpdate(event, options, Store)
 );
+
+/**
+ * Channel: npm-audit
+ * Supports: npm audit [--json|--parseable]
+ * https://docs.npmjs.com/cli/audit
+ *
+ */
+ipcMain.on('npm-audit', (event, options) => onNpmAudit(event, options, Store));
 
 /**
  * Channel: app

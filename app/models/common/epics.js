@@ -15,7 +15,11 @@ import {
   uninstallPackagesListener
 } from 'models/packages/actions';
 import { clearSelected } from 'models/ui/actions';
-import { setRunningCommand, npmToolsListener } from 'models/npm/actions';
+import {
+  setRunningCommand,
+  npmAuditListener,
+  runAudit
+} from 'models/npm/actions';
 import { initActions } from 'models/common/actions';
 
 const updateCommand = ({
@@ -36,7 +40,8 @@ const updateCommandEpic = pipe(
     installPackage.type,
     installMultiplePackages.type,
     updatePackages.type,
-    uninstallPackages.type
+    uninstallPackages.type,
+    runAudit.type
   ),
   mergeMap(({ payload }) => {
     const { packages, cmd } = payload || {};
@@ -54,7 +59,8 @@ const updateCommandEpic = pipe(
 );
 
 /**
- * Register listeners - actions
+ * Register listeners for npm operations
+ * This has to be done for every listener. In a future release we have to find a better way.
  */
 
 const onInitActionsEpic = pipe(
@@ -66,7 +72,7 @@ const onInitActionsEpic = pipe(
     installPackageListener(),
     updatePackagesListener(),
     uninstallPackagesListener(),
-    npmToolsListener()
+    npmAuditListener()
   ])
 );
 
