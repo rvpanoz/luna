@@ -12,7 +12,8 @@ import {
   npmCommand,
   setRunningCommand,
   clearRunningCommand,
-  updateNpmAuditData
+  updateNpmAuditData,
+  updateNpmDoctorData
 } from 'models/npm/actions';
 
 import initialState from './initialState';
@@ -25,7 +26,8 @@ const createReducer = (npmState, handlers) => (state = npmState, action) =>
 const handlers = {
   [updateNpmAuditData.type]: (state, { payload: { data } }) =>
     assoc('auditData', data, state),
-
+  [updateNpmDoctorData.type]: (state, { payload: { data } }) =>
+    assoc('doctorData', data, state),
   [addActionError.type]: (state, { payload: { error } }) => {
     const {
       operations: { commandsErrors }

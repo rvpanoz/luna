@@ -19,7 +19,7 @@ const showAuditingLoaderEpic = action$ =>
     map(() =>
       updateLoader({
         loading: true,
-        message: 'Please wait. Auditing directory..'
+        message: 'Please wait. npm audit is running..'
       })
     )
   );

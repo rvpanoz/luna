@@ -20,7 +20,8 @@ const initialState = {
     operationStatus: 'idle',
     operationPackages: [],
     operationCommand: null,
-    auditData: null
+    auditData: null,
+    doctorData: null
   },
   ui: {
     paused: false,

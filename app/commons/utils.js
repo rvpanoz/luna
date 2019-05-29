@@ -195,6 +195,9 @@ export const shrinkDirectory = directory => {
   return null;
 };
 
+// TODO: implementation
+export const parseNpmDoctor = data => data;
+
 export const parseNpmAudit = data => {
   try {
     const dataToJson = JSON.parse(data);

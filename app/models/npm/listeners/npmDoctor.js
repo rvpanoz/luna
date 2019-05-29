@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { parseNpmDoctor } from 'commons/utils';
 import { setRunningCommand, updateNpmDoctorData } from 'models/npm/actions';
-import { setDialog, setActivePage } from 'models/ui/actions';
+import { toggleLoader } from 'models/ui/actions';
 
 const updateCommand = ({
   operationStatus,
@@ -17,7 +17,7 @@ const updateCommand = ({
   }
 });
 
-const onNpmAudit$ = new Observable(observer => {
+const onNpmDoctor$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-doctor-completed']);
 
   ipcRenderer.on('npm-doctor-completed', (event, data, errors) => {
@@ -38,8 +38,8 @@ const onNpmAudit$ = new Observable(observer => {
     );
 
     observer.next(
-      setActivePage({
-        page: 'doctor'
+      toggleLoader({
+        loading: false
       })
     );
   });

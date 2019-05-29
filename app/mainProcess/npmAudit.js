@@ -8,7 +8,7 @@ const { config } = mk;
 const { defaultSettings } = config || {};
 const { defaultManager } = defaultSettings;
 
-const onNpmView = (event, options, store) => {
+const onNpmAudit = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
@@ -40,4 +40,4 @@ const onNpmView = (event, options, store) => {
   }
 };
 
-export default onNpmView;
+export default onNpmAudit;

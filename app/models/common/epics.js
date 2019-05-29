@@ -18,6 +18,8 @@ import { clearSelected } from 'models/ui/actions';
 import {
   setRunningCommand,
   npmAuditListener,
+  npmDoctorListener,
+  runDoctor,
   runAudit
 } from 'models/npm/actions';
 import { initActions } from 'models/common/actions';
@@ -41,7 +43,8 @@ const updateCommandEpic = pipe(
     installMultiplePackages.type,
     updatePackages.type,
     uninstallPackages.type,
-    runAudit.type
+    runAudit.type,
+    runDoctor.type
   ),
   mergeMap(({ payload }) => {
     const { packages, cmd } = payload || {};
@@ -72,7 +75,8 @@ const onInitActionsEpic = pipe(
     installPackageListener(),
     updatePackagesListener(),
     uninstallPackagesListener(),
-    npmAuditListener()
+    npmAuditListener(),
+    npmDoctorListener()
   ])
 );
 

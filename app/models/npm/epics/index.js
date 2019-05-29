@@ -13,6 +13,9 @@ import {
 } from './doctorEpics';
 
 export default combineEpics(
+  npmRunAuditEpic,
+  npmRunAuditListenerEpic,
+  showAuditingLoaderEpic,
   npmRunDoctorEpic,
   npmRunDoctorListenerEpic,
   showDoctorLoaderEpic

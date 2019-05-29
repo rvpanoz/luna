@@ -31,7 +31,7 @@ import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';
 import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
-import { runAudit } from 'models/npm/actions';
+import { runAudit, runDoctor } from 'models/npm/actions';
 
 import styles from './styles/appSidebar';
 

@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { parseNpmAudit } from 'commons/utils';
 import { setRunningCommand, updateNpmAuditData } from 'models/npm/actions';
-import { setDialog, setActivePage } from 'models/ui/actions';
+import { toggleLoader } from 'models/ui/actions';
 
 const updateCommand = ({
   operationStatus,
@@ -38,8 +38,8 @@ const onNpmAudit$ = new Observable(observer => {
     );
 
     observer.next(
-      setActivePage({
-        page: 'audit'
+      toggleLoader({
+        loading: false
       })
     );
   });

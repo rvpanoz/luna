@@ -15,11 +15,11 @@ const updateLoader = payload => ({
 
 const showDoctorLoaderEpic = action$ =>
   action$.pipe(
-    ofType(runAudit.type),
+    ofType(runDoctor.type),
     map(() =>
       updateLoader({
         loading: true,
-        message: 'Please wait. running npm doctor..'
+        message: 'Please wait. npm doctor is running..'
       })
     )
   );

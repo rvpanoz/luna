@@ -21,7 +21,8 @@ import {
   onNpmInstall,
   onNpmUpdate,
   onNpmUninstall,
-  onNpmAudit
+  onNpmAudit,
+  onNpmDoctor
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
 
@@ -151,6 +152,15 @@ ipcMain.on('npm-update', (event, options) =>
  *
  */
 ipcMain.on('npm-audit', (event, options) => onNpmAudit(event, options, Store));
+
+
+/**
+ * Channel: npm-doctor
+ * Supports: npm doctor
+ * https://docs.npmjs.com/cli/doctor
+ *
+ */
+ipcMain.on('npm-doctor', (event, options) => onNpmDoctor(event, options, Store));
 
 /**
  * Channel: app
