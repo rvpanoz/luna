@@ -83,7 +83,8 @@ const NotificationsItem = ({
                 channel: 'npm-search',
                 options: {
                   cmd: ['search'],
-                  pkgName: packageName
+                  pkgName: packageName,
+                  fromSearch: true
                 }
               })
             );
