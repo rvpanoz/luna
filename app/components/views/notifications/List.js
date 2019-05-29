@@ -19,10 +19,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 
-import AddIcon from '@material-ui/icons/Add';
+import SearchIcon from '@material-ui/icons/Search';
 import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 
-import { installPackage } from 'models/packages/actions';
+import { setActivePage, clearFilters } from 'models/ui/actions';
+import { setPackagesStart } from 'models/packages/actions';
 import styles from './styles/list';
 
 const mapState = ({
@@ -55,31 +56,38 @@ const NotificationsItem = ({
     version = versionCoerced || version;
   }
 
-  const handleInstall = useCallback(
+  const handleMissingPackages = useCallback(
     () =>
       remote.dialog.showMessageBox(
         remote.getCurrentWindow(),
         {
           title: 'Confirmation',
           type: 'question',
-          message: `\nWould you like to install ${
-            version ? `${packageName}@${version}` : packageName
-          }?`,
-          buttons: ['Cancel', 'Install']
+          message: `\nWould you like to search for ${packageName}?`,
+          buttons: ['Cancel', 'Search']
         },
         btnIdx => {
           if (Boolean(btnIdx) === true) {
-            const parameters = {
-              ipcEvent: 'install',
-              cmd: ['install'],
-              single: true,
-              name: version ? `${packageName}@${version}` : packageName,
-              pkgOptions: [],
-              mode,
-              directory
-            };
+            dispatch(clearFilters());
 
-            dispatch(installPackage(parameters));
+            dispatch({
+              type: setActivePage.type,
+              payload: {
+                page: 'packages',
+                paused: false
+              }
+            });
+
+            dispatch(
+              setPackagesStart({
+                channel: 'npm-search',
+                options: {
+                  cmd: ['search'],
+                  pkgName: packageName,
+                  fromSearch: true
+                }
+              })
+            );
           }
         }
       ),
@@ -99,14 +107,14 @@ const NotificationsItem = ({
         <ListItemText primary={required} secondary={requiredBy} />
         <ListItemSecondaryAction>
           <Tooltip
-            title={`Install ${packageName}`}
+            title={`Search for ${packageName}`}
             key={`${packageName}-${packageVersion}`}
           >
             <IconButton
-              aria-label="install-notification"
-              onClick={() => handleInstall(packageName, true)}
+              aria-label="search-for-package"
+              onClick={() => handleMissingPackages()}
             >
-              <AddIcon color="primary" />
+              <SearchIcon color="primary" />
             </IconButton>
           </Tooltip>
         </ListItemSecondaryAction>
