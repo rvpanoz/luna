@@ -30,8 +30,10 @@ const initEpic = (action$, state$) =>
         common: { mode, directory }
       } = state$.value;
 
+      const { fromSearch } = options;
+
       return [
-        paused ? OFF : ON,
+        paused && !fromSearch ? OFF : ON,
         {
           payload: {
             channel,
@@ -47,17 +49,25 @@ const initEpic = (action$, state$) =>
     tap(({ payload: { channel, options } }) =>
       ipcRenderer.send(channel, options)
     ),
-    concatMap(() => [
-      updateLoader({
-        loading: true,
-        message: MESSAGES.loading
-      }),
-      clearSelected(),
-      clearCommands(),
-      clearNotifications(),
-      clearInstallOptions(),
-      clearPackages()
-    ])
+    concatMap(() => {
+      const {
+        packages: {
+          metadata: { fromSearch }
+        }
+      } = state$.value;
+
+      return [
+        updateLoader({
+          loading: true,
+          message: fromSearch ? MESSAGES.searching : MESSAGES.loading
+        }),
+        clearSelected(),
+        clearCommands(),
+        clearNotifications(),
+        clearInstallOptions(),
+        clearPackages()
+      ];
+    })
   );
 
 export { initEpic };
