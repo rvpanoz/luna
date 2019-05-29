@@ -4,41 +4,39 @@ import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 
 import { toggleLoader } from 'models/ui/actions';
-import { runAudit, npmAuditListener } from 'models/npm/actions';
+import { runDoctor, npmDoctorListener } from 'models/npm/actions';
 
-import { onNpmAudit$ } from '../listeners';
+import { onNpmDoctor$ } from '../listeners';
 
 const updateLoader = payload => ({
   type: toggleLoader.type,
   payload
 });
 
-const showAuditingLoaderEpic = action$ =>
+const showDoctorLoaderEpic = action$ =>
   action$.pipe(
     ofType(runAudit.type),
     map(() =>
       updateLoader({
         loading: true,
-        message: 'Please wait. Auditing directory..'
+        message: 'Please wait. running npm doctor..'
       })
     )
   );
 
 /**
- * Send ipc event to main process to handle npm-audit
+ * Send ipc event to main process to handle npm-doctor
  * supports local mode
  */
-const npmRunAuditEpic = (action$, state$) =>
+const npmRunDoctorEpic = (action$, state$) =>
   action$.pipe(
-    ofType(runAudit.type),
+    ofType(runDoctor.type),
     tap(({ payload }) => {
       const {
         common: { mode, directory }
       } = state$.value;
 
-      // const { fix } = payload;
-
-      ipcRenderer.send('npm-audit', {
+      ipcRenderer.send('npm-doctor', {
         ...payload,
         mode,
         directory
@@ -48,9 +46,9 @@ const npmRunAuditEpic = (action$, state$) =>
   );
 
 // listener epics
-const npmRunAuditListenerEpic = pipe(
-  ofType(npmAuditListener.type),
-  switchMap(() => onNpmAudit$)
+const npmRunDoctorListenerEpic = pipe(
+  ofType(npmDoctorListener.type),
+  switchMap(() => onNpmDoctor$)
 );
 
-export { npmRunAuditEpic, npmRunAuditListenerEpic, showAuditingLoaderEpic };
+export { npmRunDoctorEpic, npmRunDoctorListenerEpic, showDoctorLoaderEpic };
