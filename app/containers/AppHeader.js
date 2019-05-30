@@ -162,7 +162,7 @@ const Header = ({ classes, onDrawerToggle }) => {
           <Tab
             textColor="inherit"
             label="Reports"
-            value="audit"
+            value="reports"
             disabled={loading}
             icon={<ListIcon color="inherit" />}
             classes={{
