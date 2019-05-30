@@ -6,7 +6,6 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import semver from 'semver';
 
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -36,25 +35,10 @@ const mapState = ({
   packagesInstallOptions
 });
 
-const NotificationsItem = ({
-  classes,
-  type,
-  mode,
-  directory,
-  required,
-  requiredBy
-}) => {
+const NotificationsItem = ({ classes, type, required, requiredBy }) => {
   const packageParts = required && required.split('@');
   const [packageName, packageVersion] = packageParts;
   const dispatch = useDispatch();
-
-  let version = null;
-
-  if (packageVersion) {
-    const versionCoerced = semver.valid(semver.coerce(packageVersion));
-
-    version = versionCoerced || version;
-  }
 
   const handleMissingPackages = useCallback(
     () =>
@@ -91,7 +75,7 @@ const NotificationsItem = ({
           }
         }
       ),
-    [mode, directory, packageName, dispatch, version]
+    [packageName, dispatch]
   );
 
   return (
@@ -125,8 +109,6 @@ const NotificationsItem = ({
 
 NotificationsItem.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  mode: PropTypes.string,
-  directory: PropTypes.string,
   required: PropTypes.string,
   requiredBy: PropTypes.string,
   type: PropTypes.string
@@ -134,7 +116,7 @@ NotificationsItem.propTypes = {
 
 const WithStylesNotificationItem = withStyles({})(NotificationsItem);
 
-const NotificationsList = ({ classes, mode, directory }) => {
+const NotificationsList = ({ classes }) => {
   const { notifications, packagesInstallOptions } = useMappedState(mapState);
 
   return (
@@ -156,8 +138,6 @@ const NotificationsList = ({ classes, mode, directory }) => {
             notifications.map((notification, idx) => (
               <WithStylesNotificationItem
                 key={`notification-${idx}`}
-                mode={mode}
-                directory={directory}
                 installationOptions={packagesInstallOptions}
                 {...notification}
               />
@@ -170,9 +150,7 @@ const NotificationsList = ({ classes, mode, directory }) => {
 };
 
 NotificationsList.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  mode: PropTypes.string,
-  directory: PropTypes.string
+  classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
 export default withStyles(styles)(NotificationsList);

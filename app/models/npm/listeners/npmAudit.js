@@ -20,7 +20,7 @@ const updateCommand = ({
 const onNpmAudit$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-audit-completed']);
 
-  ipcRenderer.on('npm-audit-completed', (event, data, errors) => {
+  ipcRenderer.on('npm-audit-completed', (event, data) => {
     const content = parseNpmAudit(data);
 
     observer.next(

@@ -20,7 +20,7 @@ const updateCommand = ({
 const onNpmDoctor$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-doctor-completed']);
 
-  ipcRenderer.on('npm-doctor-completed', (event, data, errors) => {
+  ipcRenderer.on('npm-doctor-completed', (event, data) => {
     const content = parseNpmDoctor(data);
 
     observer.next(

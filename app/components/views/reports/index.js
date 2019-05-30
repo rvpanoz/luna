@@ -1,3 +1,5 @@
-import Audit from './Audit';
+/* eslint-disable import/prefer-default-export */
 
-export { Audit };
+import ReportPage from './ReportPage';
+
+export { ReportPage };

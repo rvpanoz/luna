@@ -10,21 +10,15 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Snackbar from '@material-ui/core/Snackbar';
 import theme from 'styles/theme';
 
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-
 import AppSidebar from 'containers/AppSidebar';
 import AppHeader from 'containers/AppHeader';
 import SnackbarContent from 'components/common/SnackbarContent';
 
 import { Packages } from 'components/views/packages';
 import { Notifications } from 'components/views/notifications';
-import { Audit } from 'components/views/reports';
+import { ReportPage } from 'components/views/reports';
 
-import { runAudit } from 'models/npm/actions';
-import { setDialog, setSnackbar } from 'models/ui/actions';
+import { setSnackbar } from 'models/ui/actions';
 
 import { switchcase, shrinkDirectory } from 'commons/utils';
 import { drawerWidth } from 'styles/variables';
@@ -105,7 +99,7 @@ const AppLayout = ({ classes }) => {
               problems: () => (
                 <Notifications mode={mode} directory={directory} />
               ),
-              audit: () => <Audit />
+              reports: () => <ReportPage />
             })(<Packages />)(activePage)}
           </main>
         </div>
