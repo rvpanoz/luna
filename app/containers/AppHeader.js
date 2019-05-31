@@ -161,20 +161,20 @@ const Header = ({ classes, onDrawerToggle }) => {
           />
           <Tab
             textColor="inherit"
-            label="Reports"
-            value="reports"
+            label="Problems"
+            value="problems"
             disabled={loading}
-            icon={<ListIcon color="inherit" />}
+            icon={<ErrorIcon color="inherit" />}
             classes={{
               label: classes.tabLabel
             }}
           />
           <Tab
             textColor="inherit"
-            label="Problems"
-            value="problems"
+            label="Reports"
+            value="reports"
             disabled={loading}
-            icon={<ErrorIcon color="inherit" />}
+            icon={<ListIcon color="inherit" />}
             classes={{
               label: classes.tabLabel
             }}

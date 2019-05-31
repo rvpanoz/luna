@@ -3,16 +3,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
-import styles from './styles/audit';
+import styles from './styles/doctor';
 
-const DoctorReport = ({ classes, data }) => {
-  if (!data) {
-    return 'No doctor data';
-  }
+const DoctorReport = ({ classes, data }) => <div className={classes.root}>
+  {!data && <React.Fragment><div className={classes.text}>No doctor data</div> <Button>Run npm doctor</Button></React.Fragment>}
+</div>
 
-  return <div className={classes.root} />;
-};
 
 DoctorReport.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
