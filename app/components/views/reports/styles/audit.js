@@ -1,7 +1,18 @@
+import { defaultFont, grayColor, flexContainer } from 'styles/variables';
+
 const styles = theme => ({
   root: {
+    ...flexContainer,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
     width: '100%',
-    padding: theme.spacing.unit
+    margin: theme.spacing.unit,
+    padding: theme.spacing.unit,
+  },
+  text: {
+    ...defaultFont,
+    color: grayColor
   }
 });
 
