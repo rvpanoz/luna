@@ -8,21 +8,22 @@ import Doctor from './Doctor';
 
 import styles from './styles/reportPage';
 
-const mapState = ({ npm: { auditData, doctorData } }) => ({
+const mapState = ({ npm: { auditData, doctorData }, common: { mode } }) => ({
   auditData,
-  doctorData
+  doctorData,
+  mode
 });
 
 const ReportPage = ({ classes }) => {
-  const { auditData, doctorData } = useMappedState(mapState);
+  const { auditData, doctorData, mode } = useMappedState(mapState);
 
   return (
     <section className={classes.root}>
       <div className={classes.topSection}>
-        <Audit data={auditData} />
+        <Audit data={auditData} mode={mode} />
       </div>
       <div className={classes.bottomSection}>
-        <Doctor data={doctorData} />
+        <Doctor data={doctorData} mode={mode} />
       </div>
     </section>
   );

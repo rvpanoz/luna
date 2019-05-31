@@ -6,11 +6,14 @@ const styles = theme => ({
     height: '100%',
     flexDirection: 'column',
     justifyContent: 'space-around',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flexBasis: '100%',
-    padding: theme.spacing.unit,
+    padding: theme.spacing.unit
   },
   topSection: {
+    ...flexContainer,
+    justifyContent: 'space-evenly',
+    flex: 1,
     width: '100%',
     padding: theme.spacing.unit,
     overflow: 'hidden'

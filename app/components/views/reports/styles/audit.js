@@ -5,14 +5,23 @@ const styles = theme => ({
     ...flexContainer,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
     width: '100%',
     margin: theme.spacing.unit,
-    padding: theme.spacing.unit,
+    padding: theme.spacing.unit
   },
-  text: {
+  containerHolder: {
+    ...flexContainer,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-around'
+  },
+  textHolder: {
     ...defaultFont,
+    paddingBottom: theme.spacing.unit,
     color: grayColor
+  },
+  buttonHolder: {
+    ...defaultFont
   }
 });
 
