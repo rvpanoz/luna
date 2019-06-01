@@ -15,7 +15,7 @@ const npmCommand = ActionCreator('NPM_COMMAND');
 // reporting data
 const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
 const updateNpmDoctorData = ActionCreator('UPDATE_NPM_DOCTOR_DATA');
-const clearReportData = ActionCreator('CLEAR_REPORT_DATA');
+const clearAuditData = ActionCreator('CLEAR_AUDIT_DATA');
 
 // reporting data
 const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
@@ -39,7 +39,6 @@ const runDoctor = ActionCreator('RUN_DOCTOR');
 export {
   addActionError,
   clearCommands,
-  clearReportData,
   commandError,
   commandMessage,
   setEnv,
