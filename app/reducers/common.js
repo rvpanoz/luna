@@ -57,17 +57,17 @@ const handlers = {
         ...state,
         operations: {
           ...state.operations,
-          packagesInstallOptions: packagesInstallOptions.map(o => {
-            const optionName = o.name;
+          packagesInstallOptions: packagesInstallOptions.map(option => {
+            const optionName = option.name;
 
             if (optionName === name) {
               return {
-                name: o.name,
+                name: option.name,
                 options: remove(hasExactPackageIndex, 1, packageOptions.options)
               };
             }
 
-            return o;
+            return option;
           })
         }
       });
@@ -78,17 +78,17 @@ const handlers = {
         ...state,
         operations: {
           ...state.operations,
-          packagesInstallOptions: packagesInstallOptions.map(o => {
-            const optionName = o.name;
+          packagesInstallOptions: packagesInstallOptions.map(option => {
+            const optionName = option.name;
 
             if (optionName === name) {
               return {
-                name: o.name,
-                options: o.options.concat(options)
+                name: option.name,
+                options: option.options.concat(options)
               };
             }
 
-            return o;
+            return option;
           })
         }
       });
@@ -98,12 +98,12 @@ const handlers = {
       ...state,
       operations: {
         ...state.operations,
-        packagesInstallOptions: packagesInstallOptions.map(o => {
-          const optionName = o.name;
+        packagesInstallOptions: packagesInstallOptions.map(option => {
+          const optionName = option.name;
 
           if (optionName === name) {
             return {
-              name: o.name,
+              name: option.name,
               options:
                 hasExactPackageIndex > -1
                   ? options.concat(['save-exact'])
@@ -111,7 +111,7 @@ const handlers = {
             };
           }
 
-          return o;
+          return option;
         })
       }
     });

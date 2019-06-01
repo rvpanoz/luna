@@ -31,7 +31,7 @@ import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';
 import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
-import { runAudit } from 'models/npm/actions';
+import { runAudit, runDoctor } from 'models/npm/actions';
 
 import styles from './styles/appSidebar';
 
@@ -227,11 +227,22 @@ const AppSidebar = ({
                     handler: () =>
                       dispatch(
                         runAudit({
-                          channel: 'ipc-event',
-                          ipcEvent: 'audit',
-                          cmd: ['audit'],
-                          mode,
-                          directory: fullDirectory
+                          ipcEvent: 'npm-audit',
+                          cmd: ['audit']
+                        })
+                      )
+                  },
+                  {
+                    name: 'doctor',
+                    mode,
+                    primaryText: 'npm doctor',
+                    secondaryText:
+                      'Run a set of checks to ensure your npm installation',
+                    handler: () =>
+                      dispatch(
+                        runDoctor({
+                          ipcEvent: 'npm-doctor',
+                          cmd: ['doctor']
                         })
                       )
                   }

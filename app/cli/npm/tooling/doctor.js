@@ -1,8 +1,8 @@
-const doctor = () => {
-  const command = ['doctor'];
-  const defaults = ['--json'];
+/**
+* Run a set of checks to ensure your npm installation
+* https://docs.npmjs.com/cli/doctor
+*/
 
-  return command.concat(defaults);
-};
+const doctor = () => ['doctor']
 
 export default doctor;

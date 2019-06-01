@@ -38,9 +38,6 @@ const styles = theme => ({
   divider: {
     marginBottom: theme.spacing.unit
   },
-  avatar: {
-    backgroundColor: '#fff'
-  },
   withPadding: {
     padding: theme.spacing.unit + 4
   },

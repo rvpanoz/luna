@@ -2,9 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { pick, merge } from 'ramda';
 import mk from '../mk';
-import { PACKAGE_GROUPS } from '../constants/AppConstants';
 
 const SEPARATOR = path.sep;
 
@@ -49,7 +47,7 @@ export const isUrl = url => {
  */
 export const firstToUpper = str => {
   return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
       return index !== 0 ? letter.toLowerCase() : letter.toUpperCase();
     })
     .replace(/\s+/g, '');
@@ -186,7 +184,7 @@ export const shrinkDirectory = directory => {
 
       return `${dirParts[dirParts.length - 2]}${SEPARATOR}${
         dirParts[dirParts.length - 1]
-        }${SEPARATOR}package.json`;
+      }${SEPARATOR}package.json`;
     } catch (error) {
       throw new Error(error);
     }
@@ -194,6 +192,9 @@ export const shrinkDirectory = directory => {
 
   return null;
 };
+
+// TODO: implementation
+export const parseNpmDoctor = data => data;
 
 export const parseNpmAudit = data => {
   try {
