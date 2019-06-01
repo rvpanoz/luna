@@ -40,6 +40,7 @@ import {
   clearInstallOptions,
   addInstallOption
 } from 'models/common/actions';
+import { clearAuditData } from 'models/npm/actions';
 
 import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
@@ -125,6 +126,7 @@ const Packages = ({ classes }) => {
 
   const reload = () => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
+    dispatch(clearAuditData());
     dispatch(
       setPackagesStart({
         channel: 'npm-list-outdated',
@@ -138,6 +140,7 @@ const Packages = ({ classes }) => {
   const switchMode = (appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
     dispatch(setActivePage({ page: 'packages', paused: false }));
+    dispatch(clearAuditData());
 
     if (fromSearch) {
       dispatch(

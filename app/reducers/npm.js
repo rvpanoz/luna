@@ -12,6 +12,7 @@ import {
   npmCommand,
   setRunningCommand,
   clearRunningCommand,
+  clearAuditData,
   updateNpmAuditData,
   updateNpmDoctorData
 } from 'models/npm/actions';
@@ -70,6 +71,10 @@ const handlers = {
   [clearCommands.type]: state =>
     merge(state, {
       commands: []
+    }),
+  [clearAuditData.type]: state =>
+    merge(state, {
+      auditData: null
     })
 };
 

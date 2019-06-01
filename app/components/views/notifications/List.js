@@ -79,7 +79,7 @@ const NotificationsItem = ({ classes, type, required, requiredBy }) => {
   );
 
   return (
-    <section className={classes.item}>
+    <div className={classes.item}>
       <ListItem>
         <ListItemAvatar>
           <Avatar style={{ backgroundColor: '#fff' }}>
@@ -103,7 +103,7 @@ const NotificationsItem = ({ classes, type, required, requiredBy }) => {
           </Tooltip>
         </ListItemSecondaryAction>
       </ListItem>
-    </section>
+    </div>
   );
 };
 

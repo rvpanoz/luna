@@ -16,7 +16,7 @@ import SnackbarContent from 'components/common/SnackbarContent';
 
 import { Packages } from 'components/views/packages';
 import { Notifications } from 'components/views/notifications';
-import { ReportPage } from 'components/views/reports';
+import { Audit } from 'components/views/audit';
 
 import { setSnackbar } from 'models/ui/actions';
 
@@ -59,7 +59,6 @@ const mapState = ({
 
 const AppLayout = ({ classes }) => {
   const [drawerOpen, toggleDrawer] = useState(false);
-
   const {
     activePage,
     snackbar,
@@ -99,7 +98,9 @@ const AppLayout = ({ classes }) => {
               problems: () => (
                 <Notifications mode={mode} directory={directory} />
               ),
-              reports: () => <ReportPage />
+              audit: () => (
+                <Audit mode={mode} directory={directory} data={auditData} />
+              )
             })(<Packages />)(activePage)}
           </main>
         </div>

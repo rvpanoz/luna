@@ -57,7 +57,7 @@ const handlers = {
         ...state,
         operations: {
           ...state.operations,
-          packagesInstallOptions: packagesInstallOptions.map(o => {
+          packagesInstallOptions: packagesInstallOptions.map(option => {
             const optionName = option.name;
 
             if (optionName === name) {

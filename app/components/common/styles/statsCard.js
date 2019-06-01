@@ -1,8 +1,11 @@
+import { grayColor } from 'styles/variables';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
+
 export default theme => ({
   root: {
     padding: theme.spacing.unit * 2,
-    width: 250,
-    height: 150
+    width: 220,
+    height: 115
   },
   content: {
     alignItems: 'center',
@@ -14,6 +17,7 @@ export default theme => ({
     fontWeight: 700
   },
   value: {
+    color: lighten(grayColor, 0.1),
     marginTop: theme.spacing.unit
   },
   iconWrapper: {
@@ -32,19 +36,5 @@ export default theme => ({
     fontSize: 16,
     height: 32,
     width: 32
-  },
-  footer: {
-    marginTop: theme.spacing.unit * 2,
-    display: 'flex',
-    alignItems: 'center'
-  },
-  difference: {
-    alignItems: 'center',
-    color: theme.palette.error.dark,
-    display: 'inline-flex',
-    fontWeight: 700
-  },
-  caption: {
-    marginLeft: theme.spacing.unit
   }
 });
