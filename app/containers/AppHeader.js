@@ -23,6 +23,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
+import ListIcon from '@material-ui/icons/ListOutlined';
 
 import NpmInit from 'components/common/NpmInit';
 import System from 'components/common/System';
@@ -164,6 +165,16 @@ const Header = ({ classes, onDrawerToggle }) => {
             value="problems"
             disabled={loading}
             icon={<ErrorIcon color="inherit" />}
+            classes={{
+              label: classes.tabLabel
+            }}
+          />
+          <Tab
+            textColor="inherit"
+            label="Audit"
+            value="audit"
+            disabled={loading}
+            icon={<ListIcon color="inherit" />}
             classes={{
               label: classes.tabLabel
             }}

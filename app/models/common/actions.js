@@ -8,7 +8,6 @@ const clearInstallOptions = ActionCreator('CLEAR_INSTALL_OPTIONS');
 const setManager = ActionCreator('SET_MANAGER');
 const setMode = ActionCreator('SET_MODE');
 const updateStatus = ActionCreator('UPDATE_STATUS');
-const runNpmAudit = ActionCreator('RUN_NPM_AUDIT');
 
 export {
   initActions,
@@ -16,6 +15,5 @@ export {
   clearInstallOptions,
   setManager,
   setMode,
-  updateStatus,
-  runNpmAudit
+  updateStatus
 };
