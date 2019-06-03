@@ -2,8 +2,6 @@
 /* eslint-disable import/prefer-default-export */
 
 import log from 'electron-log';
-import { from, merge } from 'rxjs';
-import { concatMap, concat, mergeMap } from 'rxjs/operators';
 import { apiManager as manager } from './cli';
 
 /**
@@ -15,23 +13,26 @@ import { apiManager as manager } from './cli';
 const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
-  // construct an array of observables
+  // construct an array of promises. Each promise is an npm command
   const combine = () =>
     cmd.map((command, idx) => {
       try {
         const runner = manager[command];
         const result = runner(rest, callback, idx);
 
-        return from(result);
+        return result;
       } catch (error) {
         log.error(error);
         throw new Error(error);
       }
     });
 
-  const results$ = merge(...combine())
-    .pipe(mergeMap(result => callback(result)))
-    .subscribe();
+  Promise.all(combine())
+    .then(results => results.forEach(result => callback(result)))
+    .catch(error => {
+      log.error(error);
+      return Promise.reject(error);
+    });
 };
 
 export { runCommand };
