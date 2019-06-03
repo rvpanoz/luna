@@ -2,7 +2,6 @@
 /* eslint-disable import/prefer-default-export */
 
 import log from 'electron-log';
-import { from, merge } from 'rxjs';
 import { apiManager as manager } from './cli';
 
 /**
@@ -21,21 +20,19 @@ const runCommand = (options, callback) => {
         const runner = manager[command];
         const result = runner(rest, callback, idx);
 
-        return from(result);
+        return result;
       } catch (error) {
         log.error(error);
         throw new Error(error);
       }
     });
 
-  // merge observables and run callback with the result
-  merge(...combine()).subscribe(result => {
-    try {
-      callback(result);
-    } catch (error) {
+  Promise.all(combine())
+    .then(results => results.forEach(result => callback(result)))
+    .catch(error => {
       log.error(error);
-    }
-  });
+      return Promise.reject(error);
+    });
 };
 
 export { runCommand };

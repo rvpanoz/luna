@@ -23,9 +23,7 @@ const viewPackageEpic = pipe(
 
 const viewPackageLoaderEpic = pipe(
   ofType(viewPackageStart.type),
-  tap(({ payload: { options } }) => {
-    ipcRenderer.send('npm-view', options);
-  }),
+  tap(({ payload: { options } }) => ipcRenderer.send('npm-view', options)),
   ignoreElements()
 );
 

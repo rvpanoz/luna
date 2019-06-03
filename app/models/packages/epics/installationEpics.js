@@ -25,7 +25,7 @@ const showInstallLoaderEpic = action$ =>
     map(() =>
       updateLoader({
         loading: true,
-        message: `Installing packages..`
+        message: 'Installing packages...'
       })
     )
   );
@@ -91,7 +91,6 @@ const installMultiplePackagesEpic = (action$, state$) =>
     ignoreElements()
   );
 
-// listener epics
 const installPackageListenerEpic = pipe(
   ofType(installPackageListener.type),
   switchMap(() => onNpmInstall$)
