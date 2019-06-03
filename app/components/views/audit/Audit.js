@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -26,14 +26,13 @@ const capitalize = text => {
 };
 
 const renderTotals = data => {
-  // exclude vulnerabilities
+
   const totals = data.filter(
     dataItem =>
       dataItem.name !== 'vulnerabilities' &&
       dataItem.name !== 'totalDependencies'
   );
 
-  // get total dependencies
   const totalDependencies = data
     ? data.filter(dataItem => dataItem.name === 'totalDependencies')[0].value
     : 0;
@@ -94,10 +93,34 @@ const renderVulnerabilites = (
 };
 
 const Audit = ({ classes, data }) => {
+  const [fix, setFix] = useState(false);
+
+  useEffect(() => {
+    const needFix = data && data.reduce((total, dataItem) => {
+      const { name, value } = dataItem;
+
+      if (name === 'vulnerabilities' && Array.isArray(value)) {
+        return value.reduce((itemValue = 0, item) => {
+          const { value } = item;
+
+          return total + value;
+        }, 0)
+      }
+
+      return 0;
+    }, 0)
+
+    console.log(needFix)
+    if (needFix) {
+      setFix(true)
+    }
+  }, data);
+
+  console.log(fix);
+
   if (!data || !data.length) {
     return (
       <Typography variant="subtitle1" className={classes.withPadding}>
-        {' '}
         No audit data
       </Typography>
     );
