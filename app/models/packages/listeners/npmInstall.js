@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 
+import { setActivePage } from 'models/ui/actions';
 import { setRunningCommand } from 'models/npm/actions';
 import { setPackagesStart } from '../actions';
 
@@ -31,6 +32,13 @@ const onNpmInstall$ = new Observable(observer => {
       );
 
       observer.next(
+        setActivePage({
+          page: 'packages',
+          paused: false
+        })
+      );
+
+      observer.next(
         setPackagesStart({
           channel: 'npm-list-outdated',
           options: {
@@ -41,10 +49,6 @@ const onNpmInstall$ = new Observable(observer => {
     } catch (error) {
       observer.error(error);
     }
-  });
-
-  ipcRenderer.on('npm-install-error', (event, error) => {
-    observer.error(error);
   });
 });
 

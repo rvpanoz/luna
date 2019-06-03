@@ -50,7 +50,6 @@ const updatePackagesEpic = (action$, state$) =>
     ignoreElements()
   );
 
-// listener epics
 const updatePackagesListenerEpic = pipe(
   ofType(updatePackagesListener.type),
   switchMap(() => onNpmUpdate$)
