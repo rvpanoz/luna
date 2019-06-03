@@ -1,5 +1,5 @@
 import { pipe } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, tap, map, ignoreElements } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
 
 import {
@@ -16,6 +16,7 @@ import {
 } from 'models/packages/actions';
 import { clearSelected } from 'models/ui/actions';
 import {
+  addActionError,
   setRunningCommand,
   npmAuditListener,
   npmDoctorListener,
@@ -36,6 +37,25 @@ const updateCommand = ({
     operationCommand
   }
 });
+
+const addActionErrorEpic = pipe(
+  ofType(addActionError.type),
+  tap(({ payload }) => {
+    const { error } = payload;
+
+    return error.split('npm ERR!');
+  }),
+  tap(console.log),
+  map(errorsArr =>
+    errorsArr.map(errorLine => {
+      const notEmptyLine = errorLine.trim().length > 1;
+
+      return notEmptyLine && errorLine.indexOf('fatal') > 0 ? errorLine : '';
+    })
+  ),
+  tap(console.log),
+  ignoreElements()
+);
 
 const updateCommandEpic = pipe(
   ofType(
@@ -63,7 +83,7 @@ const updateCommandEpic = pipe(
 
 /**
  * Register listeners for npm operations
- * This has to be done for every listener. In a future release we have to find a better way.
+ * This has to be done for every listener.
  */
 
 const onInitActionsEpic = pipe(
@@ -80,4 +100,8 @@ const onInitActionsEpic = pipe(
   ])
 );
 
-export default combineEpics(onInitActionsEpic, updateCommandEpic);
+export default combineEpics(
+  addActionErrorEpic,
+  onInitActionsEpic,
+  updateCommandEpic
+);

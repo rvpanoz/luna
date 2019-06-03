@@ -10,30 +10,20 @@ import { useDispatch } from 'redux-react-hook';
 
 import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
-import Toolbar from '@material-ui/core/Toolbar';
 import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputBase from '@material-ui/core/InputBase';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
 
 import SearchIcon from '@material-ui/icons/Search';
-import ClearIcon from '@material-ui/icons/ClearAll';
 
 import { updateFilters } from 'models/ui/actions';
 import styles from './styles/tableFilters';
 
-const TableFilters = ({
-  classes,
-  mode,
-  close,
-  clearAllFilters,
-  listFilters
-}) => {
+const TableFilters = ({ classes, mode, close, listFilters }) => {
   const searchInputEl = useRef(null);
   const [filters, setFilters] = useState([{ filterType: 'name' }]);
   const dispatch = useDispatch();
@@ -141,27 +131,6 @@ const TableFilters = ({
               </FormGroup>
             </FormControl>
           </div>
-          <Toolbar
-            disableGutters
-            classes={{
-              root: classes.toolbar
-            }}
-          >
-            <Tooltip title="Clear all">
-              <div>
-                <IconButton
-                  disableRipple
-                  color="secondary"
-                  onClick={() => {
-                    clearAllFilters();
-                    close();
-                  }}
-                >
-                  <ClearIcon />
-                </IconButton>
-              </div>
-            </Tooltip>
-          </Toolbar>
         </div>
 
         <FormControl component="fieldset">
@@ -255,9 +224,11 @@ const TableFilters = ({
             color="primary"
             onClick={() => handleFilters(filters)}
           >
-            Filter
+            Filter packages
           </Button>
-          <Button onClick={close}>Close</Button>
+          <Button color="secondary" variant="outlined" onClick={close}>
+            Close
+          </Button>
         </div>
       </div>
     </div>
@@ -267,7 +238,6 @@ const TableFilters = ({
 TableFilters.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   close: PropTypes.func.isRequired,
-  clearAllFilters: PropTypes.func.isRequired,
   mode: PropTypes.string,
   listFilters: PropTypes.arrayOf(PropTypes.object)
 };
