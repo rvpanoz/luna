@@ -123,7 +123,7 @@ const mapPackagesEpic = (action$, state$) =>
               !dependency.__invalid &&
               !dependency.__hasError &&
               !dependency.__peerMissing &&
-              !dependency.__peerMissing
+              !dependency.__missing
           ),
           projectName,
           projectDescription,

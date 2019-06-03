@@ -19,6 +19,8 @@ const updateCommand = ({
 });
 
 const onNpmInstall$ = new Observable(observer => {
+  ipcRenderer.removeAllListeners(['npm-install-completed']);
+
   ipcRenderer.on('npm-install-completed', () => {
     try {
       observer.next(
@@ -48,8 +50,6 @@ const onNpmInstall$ = new Observable(observer => {
       observer.error(error);
     }
   });
-
-  ipcRenderer.removeAllListeners(['npm-install-completed']);
 });
 
 export default onNpmInstall$;

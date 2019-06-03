@@ -91,7 +91,6 @@ const installMultiplePackagesEpic = (action$, state$) =>
     ignoreElements()
   );
 
-// listener epics
 const installPackageListenerEpic = pipe(
   ofType(installPackageListener.type),
   switchMap(() => onNpmInstall$)

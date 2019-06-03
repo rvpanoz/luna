@@ -33,7 +33,6 @@ const uninstallPackagesEpic = (action$, state$) =>
     ignoreElements()
   );
 
-// listener epics
 const uninstallPackagesListenerEpic = pipe(
   ofType(uninstallPackagesListener.type),
   switchMap(() => onNpmUninstall$)
