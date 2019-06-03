@@ -179,16 +179,6 @@ const Header = ({ classes, onDrawerToggle }) => {
               label: classes.tabLabel
             }}
           />
-          <Tab
-            textColor="inherit"
-            label="Audit"
-            value="audit"
-            disabled={loading}
-            icon={<ListIcon color="inherit" />}
-            classes={{
-              label: classes.tabLabel
-            }}
-          />
         </Tabs>
       </AppBar>
       <Popover
