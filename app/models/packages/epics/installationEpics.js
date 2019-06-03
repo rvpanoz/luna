@@ -25,7 +25,7 @@ const showInstallLoaderEpic = action$ =>
     map(() =>
       updateLoader({
         loading: true,
-        message: `Installing packages..`
+        message: 'Installing packages...'
       })
     )
   );

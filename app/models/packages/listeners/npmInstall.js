@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 
+import { setActivePage } from 'models/ui/actions';
 import { setRunningCommand } from 'models/npm/actions';
 import { setPackagesStart } from '../actions';
 
@@ -18,8 +19,6 @@ const updateCommand = ({
 });
 
 const onNpmInstall$ = new Observable(observer => {
-  ipcRenderer.removeAllListeners(['npm-install-completed']);
-
   ipcRenderer.on('npm-install-completed', () => {
     try {
       observer.next(
@@ -27,6 +26,13 @@ const onNpmInstall$ = new Observable(observer => {
           operationStatus: 'idle',
           operationCommand: null,
           operationPackages: []
+        })
+      );
+
+      observer.next(
+        setActivePage({
+          page: 'packages',
+          paused: false
         })
       );
 
@@ -43,9 +49,7 @@ const onNpmInstall$ = new Observable(observer => {
     }
   });
 
-  ipcRenderer.on('npm-install-error', (event, error) => {
-    observer.error(error);
-  });
+  ipcRenderer.removeAllListeners(['npm-install-completed']);
 });
 
 export default onNpmInstall$;

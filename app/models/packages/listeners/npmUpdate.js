@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 
+import { setActivePage } from 'models/ui/actions';
 import { setRunningCommand } from 'models/npm/actions';
 import { setPackagesStart } from '../actions';
 
@@ -27,6 +28,13 @@ const onNpmUpdate$ = new Observable(observer => {
           operationStatus: 'idle',
           operationCommand: null,
           operationPackages: []
+        })
+      );
+
+      observer.next(
+        setActivePage({
+          page: 'packages',
+          paused: false
         })
       );
 

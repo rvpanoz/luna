@@ -54,7 +54,6 @@ const install = (options, idx) => {
     packagesToInstallMultiple = [name];
   }
 
-  console.log(pkgOptions, idx);
   if (Array.isArray(commandFlags)) {
     commandOptsMultiple = pkgOptions[idx].map(option => `--${option}`);
   }

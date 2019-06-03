@@ -5,8 +5,12 @@ import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
 
-import { toggleLoader } from 'models/ui/actions';
-import { setPackagesSearch, updateSearchFlag } from '../actions';
+import { clearSelected, toggleLoader } from 'models/ui/actions';
+import { clearInstallOptions } from 'models/common/actions';
+import { clearNotifications } from 'models/notifications/actions';
+import { clearCommands, clearAuditData } from 'models/npm/actions';
+
+import { setPackagesSearch, updateSearchFlag, clearPackages } from '../actions';
 
 const updateLoader = payload => ({
   type: toggleLoader.type,
@@ -42,7 +46,13 @@ const searchEpic = (action$, state$) =>
       updateLoader({
         loading: true,
         message: 'Searching...'
-      })
+      }),
+      clearAuditData(),
+      clearSelected(),
+      clearCommands(),
+      clearNotifications(),
+      clearInstallOptions(),
+      clearPackages()
     ])
   );
 
