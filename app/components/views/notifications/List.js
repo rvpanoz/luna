@@ -22,7 +22,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 
 import { setActivePage, clearFilters } from 'models/ui/actions';
-import { setPackagesStart } from 'models/packages/actions';
+import { setPackagesSearch } from 'models/packages/actions';
 import styles from './styles/list';
 
 const mapState = ({
@@ -58,12 +58,12 @@ const NotificationsItem = ({ classes, type, required, requiredBy }) => {
               type: setActivePage.type,
               payload: {
                 page: 'packages',
-                paused: false
+                paused: true
               }
             });
 
             dispatch(
-              setPackagesStart({
+              setPackagesSearch({
                 channel: 'npm-search',
                 options: {
                   cmd: ['search'],

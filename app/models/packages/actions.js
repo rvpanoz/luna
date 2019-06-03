@@ -8,11 +8,13 @@ const setPackagesStart = ActionCreator('SET_PACKAGES_START');
 const setPackagesSuccess = ActionCreator('SET_PACKAGES_SUCCESS');
 const setOutdatedSuccess = ActionCreator('SET_OUTDATED_SUCCESS');
 const setPackagesError = ActionCreator('SET_PACKAGES_ERROR');
+const viewPackageStart = ActionCreator('VIEW_PACKAGE_START');
+const setPackagesSearch = ActionCreator('SEARCH_PACKAGES');
+const updateSearchFlag = ActionCreator('UPDATE_SEARCH');
 
 const mapPackages = ActionCreator('MAP_PACKAGES');
 const mapOutdatedPackages = ActionCreator('MAP_OUTDATED_PACKAGES');
 const mergePackages = ActionCreator('MERGE_PACKAGES');
-const viewPackageStart = ActionCreator('VIEW_PACKAGE_START');
 const setActive = ActionCreator('SET_ACTIVE');
 const installPackage = ActionCreator('INSTALL_PACKAGE');
 const installMultiplePackages = ActionCreator('INSTALL_MULTIPLE_PACKAGES');
@@ -62,6 +64,7 @@ export {
   updatePackages,
   clearAll,
   clearPackages,
+  setPackagesSearch,
   setActive,
   setPackagesStart,
   setPackagesSuccess,
@@ -74,5 +77,6 @@ export {
   listOutdatedPackagesListener,
   searchPackagesListener,
   viewPackageListener,
-  updatePackagesListener
+  updatePackagesListener,
+  updateSearchFlag
 };
