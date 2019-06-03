@@ -23,7 +23,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
-import ListIcon from '@material-ui/icons/ListOutlined';
+import SecurityIcon from '@material-ui/icons/SecurityOutlined';
 
 import NpmInit from 'components/common/NpmInit';
 import System from 'components/common/System';
@@ -174,7 +174,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             label="Audit"
             value="audit"
             disabled={loading}
-            icon={<ListIcon color="inherit" />}
+            icon={<SecurityIcon color="inherit" />}
             classes={{
               label: classes.tabLabel
             }}

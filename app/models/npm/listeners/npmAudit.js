@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { parseNpmAudit } from 'commons/utils';
 import { setRunningCommand, updateNpmAuditData } from 'models/npm/actions';
-import { toggleLoader } from 'models/ui/actions';
+import { toggleLoader, setActivePage, setSnackbar } from 'models/ui/actions';
 
 const updateCommand = ({
   operationStatus,
@@ -34,6 +34,16 @@ const onNpmAudit$ = new Observable(observer => {
     observer.next(
       updateNpmAuditData({
         data: content
+      })
+    );
+
+    observer.next(setActivePage({ page: 'audit' }));
+
+    observer.next(
+      setSnackbar({
+        open: true,
+        type: 'info',
+        message: 'npm audit completed'
       })
     );
 

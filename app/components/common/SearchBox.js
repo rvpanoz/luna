@@ -13,7 +13,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 
 import { setActivePage, clearFilters } from 'models/ui/actions';
-import { setPackagesStart } from 'models/packages/actions';
+import { setPackagesSearch } from 'models/packages/actions';
 
 import styles from './styles/searchBox';
 
@@ -47,12 +47,12 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
       type: setActivePage.type,
       payload: {
         page: 'packages',
-        paused: false
+        paused: true
       }
     });
 
     dispatch(
-      setPackagesStart({
+      setPackagesSearch({
         channel: 'npm-search',
         options: {
           cmd: ['search'],
@@ -83,37 +83,35 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
     const { current } = searchInputEl;
 
     if (current) {
-      current.addEventListener('keyup', onKeyUp, () => { });
+      current.addEventListener('keyup', onKeyUp, () => {});
 
       return () => current.removeEventListener('keyup', onKeyUp);
     }
   });
 
   return (
-    <React.Fragment>
-      <div className={classes.search}>
-        {packageName && packageName.length ? (
-          <a href="#" className={classes.searchIcon} onClick={handleClear}>
-            <ClearIcon />
-          </a>
-        ) : (
-            <a href="#" className={classes.searchIcon} onClick={handleSearch}>
-              <SearchIcon />
-            </a>
-          )}
+    <div className={classes.search}>
+      {packageName && packageName.length ? (
+        <a href="#" className={classes.searchIcon} onClick={handleClear}>
+          <ClearIcon />
+        </a>
+      ) : (
+        <a href="#" className={classes.searchIcon} onClick={handleSearch}>
+          <SearchIcon />
+        </a>
+      )}
 
-        <InputBase
-          disabled={disabled || onlineStatus === 'offline'}
-          placeholder="Search npm registry"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput
-          }}
-          inputProps={{
-            ref: searchInputEl
-          }}
-        />
-      </div>
+      <InputBase
+        disabled={disabled || onlineStatus === 'offline'}
+        placeholder="Search npm registry"
+        classes={{
+          root: classes.inputRoot,
+          input: classes.inputInput
+        }}
+        inputProps={{
+          ref: searchInputEl
+        }}
+      />
       <Snackbar
         anchorOrigin={{
           vertical: 'top',
@@ -129,7 +127,7 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
           message="Package name is missing or value is invalid"
         />
       </Snackbar>
-    </React.Fragment>
+    </div>
   );
 };
 

@@ -7,6 +7,9 @@ import { switchcase, objectEntries } from 'commons/utils';
 import { mapPackages, mapOutdatedPackages } from '../actions';
 
 const onListOutdatedPackages$ = new Observable(observer => {
+  // clean up listeners
+  ipcRenderer.removeAllListeners(['npm-list-outdated-completed']);
+
   const onComplete = (event, ...rest) => {
     const [data, , options] = rest;
     const [command] = options;
@@ -65,9 +68,6 @@ const onListOutdatedPackages$ = new Observable(observer => {
       observer.error(error);
     }
   };
-
-  // clean up listeners
-  ipcRenderer.removeListener('npm-list-outdated-completed', onComplete);
 
   // register listener
   ipcRenderer.on('npm-list-outdated-completed', onComplete);

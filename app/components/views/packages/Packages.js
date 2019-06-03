@@ -172,7 +172,8 @@ const Packages = ({ classes }) => {
         channel: 'npm-list-outdated',
         options: {
           cmd: ['outdated', 'list'],
-          mode
+          mode,
+          directory
         }
       })
     );

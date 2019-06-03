@@ -10,7 +10,9 @@ import {
   setPackagesSuccess,
   setOutdatedSuccess,
   removePackages,
-  setActive
+  setActive,
+  setPackagesSearch,
+  updateSearchFlag
 } from 'models/packages/actions';
 import format from 'date-fns/format';
 import initialState from './initialState';
@@ -25,6 +27,21 @@ const createReducer = (packagesState, handlers) => (
 
 const handlers = {
   [setPackagesStart.type]: (state, { payload: { fromSearch, fromSort } }) =>
+    merge(state, {
+      metadata: {
+        ...state.metadata,
+        fromSearch,
+        fromSort
+      }
+    }),
+  [updateSearchFlag.type]: (state, { payload: { fromSearch } }) =>
+    merge(state, {
+      metadata: {
+        ...state.metadata,
+        fromSearch
+      }
+    }),
+  [setPackagesSearch.type]: (state, { payload: { fromSearch, fromSort } }) =>
     merge(state, {
       metadata: {
         ...state.metadata,
