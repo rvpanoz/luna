@@ -65,6 +65,7 @@ const initialState = {
   },
   packages: {
     active: null,
+    packagesFromSearch: [],
     packagesData: [],
     packagesOutdated: [],
     project: {

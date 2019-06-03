@@ -37,6 +37,9 @@ import {
   showUpdateLoaderEpic
 } from './updateEpics';
 
+// search related epics
+import { searchEpic, updateSearchFlagEpic } from './searchEpics';
+
 // transformation related epics
 import { mapPackagesEpic, mapOutdatedPackagesEpic } from './transformEpics';
 
@@ -57,5 +60,7 @@ export default combineEpics(
   showInstallLoaderEpic,
   showUpdateLoaderEpic,
   mapPackagesEpic,
-  mapOutdatedPackagesEpic
+  mapOutdatedPackagesEpic,
+  searchEpic,
+  updateSearchFlagEpic
 );
