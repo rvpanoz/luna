@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
+import { useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button';
 
 import StatsCard from 'components/common/StatsCard';
 
+import { runAudit } from 'models/npm/actions';
 import styles from './styles/audit';
 
 const capitalize = text => {
@@ -25,8 +26,9 @@ const capitalize = text => {
   return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 };
 
-const renderTotals = data => {
+const runAuditFix = () => {};
 
+const renderTotals = data => {
   const totals = data.filter(
     dataItem =>
       dataItem.name !== 'vulnerabilities' &&
@@ -94,29 +96,32 @@ const renderVulnerabilites = (
 
 const Audit = ({ classes, data }) => {
   const [fix, setFix] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const needFix = data && data.reduce((total, dataItem) => {
-      const { name, value } = dataItem;
-
-      if (name === 'vulnerabilities' && Array.isArray(value)) {
-        return value.reduce((itemValue = 0, item) => {
-          const { value } = item;
-
-          return total + value;
-        }, 0)
-      }
-
-      return 0;
-    }, 0)
-
-    console.log(needFix)
-    if (needFix) {
-      setFix(true)
+    if (!Array.isArray(data)) {
+      return;
     }
-  }, data);
 
-  console.log(fix);
+    const [vulnerabilities] =
+      data &&
+      data.length &&
+      data.filter(dataItem => dataItem.name === 'vulnerabilities');
+
+    const { value } = vulnerabilities;
+
+    const needFix =
+      value &&
+      value.reduce((total, dataItem) => {
+        const { name, value } = dataItem;
+
+        return total + value;
+      }, 0);
+
+    if (needFix) {
+      setFix(true);
+    }
+  }, [data]);
 
   if (!data || !data.length) {
     return (
@@ -136,7 +141,19 @@ const Audit = ({ classes, data }) => {
             </Typography>
           </div>
           <Toolbar>
-            <Button color="primary" variant="outlined">
+            <Button
+              disabled={!fix}
+              onClick={() =>
+                dispatch(
+                  runAudit({
+                    ipcEvent: 'npm-audit',
+                    cmd: ['audit']
+                  })
+                )
+              }
+              color="primary"
+              variant="outlined"
+            >
               Fix
             </Button>
           </Toolbar>
