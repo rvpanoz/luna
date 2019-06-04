@@ -224,13 +224,20 @@ const AppSidebar = ({
                     mode,
                     primaryText: 'npm audit',
                     secondaryText: 'Scan project for vulnerabilities',
-                    handler: () =>
+                    handler: () => {
+                      dispatch(
+                        setActivePage({
+                          page: 'packages',
+                          paused: true
+                        })
+                      );
                       dispatch(
                         runAudit({
                           ipcEvent: 'npm-audit',
                           cmd: ['audit']
                         })
-                      )
+                      );
+                    }
                   },
                   {
                     name: 'doctor',
