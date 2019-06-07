@@ -19,14 +19,14 @@ import Button from '@material-ui/core/Button';
 
 import AppLogo from 'components/common/AppLogo';
 import AppTabs from 'components/common/AppTabs';
+import InfoCard from 'components/common/InfoCard';
+
 import {
-  ProjectTab,
   PackagesTab,
   ActionsTab
 } from 'components/views/sidebar/tabs';
 
 import { navigatorParameters } from 'commons/parameters';
-import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';
 
 import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
@@ -46,6 +46,11 @@ const mapState = ({
     loaders: {
       loader: { loading }
     }
+  },
+  npm: {
+    env: {
+      userAgent
+    }
   }
 }) => ({
   loading,
@@ -54,16 +59,6 @@ const mapState = ({
   packagesData,
   packagesOutdated
 });
-
-const ModeLabel = (mode, directory, name, version) => {
-  if (directory && mode === 'local') {
-    return 'Working directory';
-  } else if (!directory && mode === 'local') {
-    return `${name} v${version || DEFAULT_VERSION}`;
-  }
-
-  return 'Global mode';
-};
 
 const AppSidebar = ({
   classes,
@@ -173,32 +168,9 @@ const AppSidebar = ({
         <ListItem key="app-tabs-content" disableGutters>
           <ListItemText style={{ height: 250 }}>
             <AppTabs>
-              <ProjectTab
-                items={[
-                  {
-                    name: 'mode',
-                    primaryText: (
-                      <ModeLabel
-                        mode={mode}
-                        directory={directory}
-                        name={name}
-                        version={version}
-                      />
-                    ),
-                    secondaryText: `Last updated: ${lastUpdatedAt}`,
-                    caption: true
-                  },
-                  {
-                    name: 'directory',
-                    caption: true,
-                    primaryText: <ModeLabel />,
-                    secondaryText:
-                      mode === 'local' && directory ? directory : null
-                  }
-                ]}
-                metadata={lastUpdatedAt}
-                loading={loading}
-              />
+              <InfoCard title={mode === 'local' && directory
+                ? 'Working directory'
+                : 'Global packages'} subtitle={directory || userAgent} />
               <PackagesTab
                 items={[
                   {

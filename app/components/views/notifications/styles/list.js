@@ -41,9 +41,18 @@ const styles = theme => ({
   withPadding: {
     padding: theme.spacing.unit + 4
   },
+  noData: {
+    ...defaultFont
+  },
   item: {
     ...defaultFont
-  }
+  },
+  containerHolder: {
+    ...flexContainer,
+    paddingTop: theme.spacing.unit * 2,
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
 });
 
 export default styles;

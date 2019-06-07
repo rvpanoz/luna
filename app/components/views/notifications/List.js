@@ -4,6 +4,7 @@
 import { remote } from 'electron';
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames'
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
@@ -119,34 +120,37 @@ const WithStylesNotificationItem = withStyles({})(NotificationsItem);
 const NotificationsList = ({ classes }) => {
   const { notifications, packagesInstallOptions } = useMappedState(mapState);
 
-  return (
-    <Paper className={classes.paper}>
-      <div className={classes.container}>
-        <div className={classes.flexContainer}>
-          <div className={classes.header}>
-            <Typography variant="h6" className={classes.title}>
-              {`Problems ${notifications ? notifications.length : 0}`}
-            </Typography>
-          </div>
+  if (!notifications || !notifications.length) {
+    return <div className={classes.containerHolder}>
+      <Typography
+        variant="subtitle1"
+        className={cn(classes.noData, classes.withPadding)}
+      >
+        No problems
+    </Typography>
+    </div>
+  }
+
+  return <Paper className={classes.paper}>
+    <div className={classes.container}>
+      <div className={classes.flexContainer}>
+        <div className={classes.header}>
+          <Typography variant="h6" className={classes.title}>
+            {`Problems ${notifications ? notifications.length : 0}`}
+          </Typography>
         </div>
-        <List className={classes.list}>
-          {!notifications || notifications.length === 0 ? (
-            <Typography variant="subtitle1" className={classes.withPadding}>
-              No problems found
-            </Typography>
-          ) : (
-            notifications.map((notification, idx) => (
-              <WithStylesNotificationItem
-                key={`notification-${idx}`}
-                installationOptions={packagesInstallOptions}
-                {...notification}
-              />
-            ))
-          )}
-        </List>
       </div>
-    </Paper>
-  );
+      <List className={classes.list}>
+        {notifications.map((notification, idx) => (
+          <WithStylesNotificationItem
+            key={`notification-${idx}`}
+            installationOptions={packagesInstallOptions}
+            {...notification}
+          />
+        ))}
+      </List>
+    </div>
+  </Paper>
 };
 
 NotificationsList.propTypes = {
