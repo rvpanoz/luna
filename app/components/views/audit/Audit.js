@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
@@ -12,10 +13,17 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 
+import FixIcon from '@material-ui/icons/Build';
 import StatsCard from 'components/common/StatsCard';
 
 import { runAudit } from 'models/npm/actions';
+
+import FixOptions from './FixOptions';
 import styles from './styles/audit';
 
 const capitalize = text => {
@@ -96,6 +104,8 @@ const renderVulnerabilites = (
 
 const Audit = ({ classes, data }) => {
   const [fix, setFix] = useState(false);
+  const [optionsOpen, toggleOptions] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -113,7 +123,7 @@ const Audit = ({ classes, data }) => {
     const needFix =
       value &&
       value.reduce((total, dataItem) => {
-        const { name, value } = dataItem;
+        const { value } = dataItem;
 
         return total + value;
       }, 0);
@@ -125,54 +135,78 @@ const Audit = ({ classes, data }) => {
 
   if (!data || !data.length) {
     return (
-      <Typography variant="subtitle1" className={classes.withPadding}>
-        No audit data
-      </Typography>
+      <div className={classes.containerHolder}>
+        <Typography
+          variant="subtitle1"
+          className={cn(classes.noData, classes.withPadding)}
+        >
+          No audit data
+        </Typography>
+      </div>
     );
   }
 
   return (
-    <Paper className={classes.paper}>
-      <div className={classes.container}>
-        <div className={classes.flexContainer}>
-          <div className={classes.header}>
-            <Typography variant="h6" className={classes.title}>
-              Audit report
-            </Typography>
+    <React.Fragment>
+      <Paper className={classes.paper}>
+        <div className={classes.container}>
+          <div className={classes.flexContainer}>
+            <div className={classes.header}>
+              <Typography variant="h6" className={classes.title}>
+                Audit report
+              </Typography>
+            </div>
+            <Toolbar>
+              <Tooltip title="Fix vulnerabilities">
+                <div>
+                  <Button
+                    aria-label="audit_fix"
+                    disabled={!fix}
+                    onClick={() => toggleOptions(!optionsOpen)}
+                    color="primary"
+                    variant="contained"
+                  >
+                    <FixIcon className={classes.icon} />
+                    Fix all
+                  </Button>
+                </div>
+              </Tooltip>
+            </Toolbar>
           </div>
-          <Toolbar>
-            <Button
-              disabled={!fix}
-              onClick={() =>
-                dispatch(
-                  runAudit({
-                    ipcEvent: 'npm-audit',
-                    cmd: ['audit']
-                  })
-                )
-              }
-              color="primary"
-              variant="outlined"
-            >
-              Fix
-            </Button>
-          </Toolbar>
-        </div>
-        <Divider className={classes.divider} light />
-        <div className={classes.topSection}>{renderTotals(data)}</div>
-        <div className={classes.bottomSection}>
-          <div className={classes.bottomLeft}>
-            {renderVulnerabilites(
-              data,
-              classes.table,
-              classes.tableHead,
-              classes.vulnerabilityType,
-              classes.vulnerabilityValue
-            )}
+          <Divider className={classes.divider} light />
+          <div className={classes.topSection}>{renderTotals(data)}</div>
+          <div className={classes.bottomSection}>
+            <div className={classes.bottomLeft}>
+              {renderVulnerabilites(
+                data,
+                classes.table,
+                classes.tableHead,
+                classes.vulnerabilityType,
+                classes.vulnerabilityValue
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </Paper>
+      </Paper>
+      <Dialog
+        open={optionsOpen}
+        fullWidth
+        onClose={() => {}}
+        aria-labelledby="fix-options"
+      >
+        <DialogContent>
+          <FixOptions />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => {}} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={() => {}} color="primary" autoFocus>
+            Fix
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
   );
 };
 

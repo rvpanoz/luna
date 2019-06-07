@@ -88,8 +88,15 @@ const styles = theme => ({
     color: darken(grayColor, 0.5),
     fontSize: 20
   },
+  noData: {
+    ...defaultFont
+  },
   withPadding: {
     padding: theme.spacing.unit + 4
+  },
+  icon: {
+    marginRight: theme.spacing.unit,
+    padding: 0
   }
 });
 

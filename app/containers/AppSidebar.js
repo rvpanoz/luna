@@ -55,6 +55,16 @@ const mapState = ({
   packagesOutdated
 });
 
+const ModeLabel = (mode, directory, name, version) => {
+  if (directory && mode === 'local') {
+    return 'Working directory';
+  } else if (!directory && mode === 'local') {
+    return `${name} v${version || DEFAULT_VERSION}`;
+  }
+
+  return 'Global mode';
+};
+
 const AppSidebar = ({
   classes,
   mode,
@@ -167,20 +177,21 @@ const AppSidebar = ({
                 items={[
                   {
                     name: 'mode',
-                    primaryText:
-                      mode === 'local'
-                        ? `${name} v${version || DEFAULT_VERSION}`
-                        : DEFAULT_MODE,
+                    primaryText: (
+                      <ModeLabel
+                        mode={mode}
+                        directory={directory}
+                        name={name}
+                        version={version}
+                      />
+                    ),
                     secondaryText: `Last updated: ${lastUpdatedAt}`,
                     caption: true
                   },
                   {
                     name: 'directory',
                     caption: true,
-                    primaryText:
-                      mode === 'local' && directory
-                        ? 'Working directory'
-                        : null,
+                    primaryText: <ModeLabel />,
                     secondaryText:
                       mode === 'local' && directory ? directory : null
                   }

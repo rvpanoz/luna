@@ -4,6 +4,7 @@ const ActionCreator = createActionCreator('@@LUNA/NPM');
 
 // general actions
 const addActionError = ActionCreator('ACTION_ERROR');
+const addAuditFixOption = ActionCreator('ADD_AUDIT_FIX_OPTION');
 const clearCommands = ActionCreator('CLEAR_COMMANDS');
 const commandError = ActionCreator('COMMAND_ERROR');
 const commandMessage = ActionCreator('COMMAND_MESSAGE');
@@ -32,6 +33,7 @@ const runInit = ActionCreator('RUN_INIT');
 const runDoctor = ActionCreator('RUN_DOCTOR');
 
 export {
+  addAuditFixOption,
   addActionError,
   clearCommands,
   commandError,
