@@ -197,6 +197,9 @@ export const shrinkDirectory = directory => {
 export const parseNpmDoctor = data => data;
 
 export const parseNpmAudit = data => {
+  console.log(data);
+  return []
+  
   try {
     const dataToJson = JSON.parse(data);
     const { error } = dataToJson;
@@ -244,7 +247,7 @@ export const parseNpmAudit = data => {
 
     return result;
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error);
   }
 };
 

@@ -34,7 +34,7 @@ const capitalize = text => {
   return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 };
 
-const runAuditFix = () => {};
+const runAuditFix = () => { };
 
 const renderTotals = data => {
   const totals = data.filter(
@@ -109,7 +109,7 @@ const Audit = ({ classes, data }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!Array.isArray(data)) {
+    if (!Array.isArray(data) || !data.length) {
       return;
     }
 
@@ -191,17 +191,17 @@ const Audit = ({ classes, data }) => {
       <Dialog
         open={optionsOpen}
         fullWidth
-        onClose={() => {}}
+        onClose={() => { }}
         aria-labelledby="fix-options"
       >
         <DialogContent>
           <FixOptions />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => {}} color="secondary">
+          <Button onClick={() => { }} color="secondary">
             Cancel
           </Button>
-          <Button onClick={() => {}} color="primary" autoFocus>
+          <Button onClick={() => { }} color="primary" autoFocus>
             Fix
           </Button>
         </DialogActions>
