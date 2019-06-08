@@ -52,7 +52,7 @@ const App = () => {
       dispatch({ type: setUIException.type, payload: { message: args[0] } });
     });
 
-    ipcRenderer.once('yarn-env-close', () => {
+    ipcRenderer.once('yarn-lock-close', () => {
       dispatch(
         setSnackbar({
           open: true,

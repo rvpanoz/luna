@@ -50,7 +50,7 @@ const initEpic = (action$, state$) =>
     concatMap(() => [
       updateLoader({
         loading: true,
-        message: MESSAGES.loading
+        message: 'Loading packages...'
       }),
       clearAuditData(),
       clearSelected(),

@@ -114,7 +114,7 @@ const Audit = ({ classes, data }) => {
       return;
     }
 
-    const { error, message } = data || {};
+    const { error, code, summary, detail } = data || {};
 
     if (error && typeof message === 'string') {
       dispatch(setSnackbar({

@@ -3,6 +3,7 @@ import { combineEpics } from 'redux-observable';
 import {
   npmRunAuditEpic,
   npmRunAuditListenerEpic,
+  npmAuditParseEpic,
   showAuditingLoaderEpic
 } from './auditEpics';
 
@@ -16,6 +17,7 @@ export default combineEpics(
   npmRunAuditEpic,
   npmRunAuditListenerEpic,
   showAuditingLoaderEpic,
+  npmAuditParseEpic,
   npmRunDoctorEpic,
   npmRunDoctorListenerEpic,
   showDoctorLoaderEpic

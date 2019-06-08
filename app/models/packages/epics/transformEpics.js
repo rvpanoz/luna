@@ -51,12 +51,12 @@ const mapPackagesEpic = (action$, state$) =>
           (alldependencies, dependency) => {
             const [pkgName, details] = fromSearch
               ? [
-                  dependency.name,
-                  {
-                    version: dependency.version,
-                    description: dependency.description
-                  }
-                ]
+                dependency.name,
+                {
+                  version: dependency.version,
+                  description: dependency.description
+                }
+              ]
               : dependency;
 
             // eslint-disable-next-line
@@ -71,9 +71,9 @@ const mapPackagesEpic = (action$, state$) =>
             const group =
               mode === 'local'
                 ? Object.keys(PACKAGE_GROUPS).find(
-                    groupName =>
-                      packageJSON[groupName] && packageJSON[groupName][pkgName]
-                  )
+                  groupName =>
+                    packageJSON[groupName] && packageJSON[groupName][pkgName]
+                )
                 : null;
 
             return [
@@ -98,39 +98,21 @@ const mapPackagesEpic = (action$, state$) =>
           []
         );
 
-        return {
-          alldependencies: enhancedDependencies,
-          projectName: fromSearch ? name : projectName,
-          projectDescription: fromSearch ? description : projectDescription,
-          projectVersion: fromSearch ? version : projectVersion,
-          fromSearch,
-          fromSort
-        };
-      }
-    ),
-    map(
-      ({
-        alldependencies,
-        projectName,
-        projectDescription,
-        projectVersion,
-        fromSearch,
-        fromSort
-      }) =>
-        setPackages({
-          dependencies: alldependencies.filter(
+        return setPackages({
+          dependencies: enhancedDependencies.filter(
             dependency =>
               !dependency.__invalid &&
               !dependency.__hasError &&
               !dependency.__peerMissing &&
               !dependency.__missing
           ),
-          projectName,
-          projectDescription,
-          projectVersion,
+          projectName: fromSearch ? name : projectName,
+          projectDescription: fromSearch ? description : projectDescription,
+          projectVersion: fromSearch ? description : projectVersion,
           fromSearch,
           fromSort
         })
+      }
     )
   );
 

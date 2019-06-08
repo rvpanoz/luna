@@ -3,8 +3,9 @@ import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 
+import { parseNpmAudit } from 'commons/utils';
 import { toggleLoader } from 'models/ui/actions';
-import { runAudit, npmAuditListener } from 'models/npm/actions';
+import { runAudit, npmAuditListener, parseNpmAuditData, updateNpmAuditData } from 'models/npm/actions';
 
 import { onNpmAudit$ } from '../listeners';
 
@@ -24,10 +25,7 @@ const showAuditingLoaderEpic = action$ =>
     )
   );
 
-/**
- * Send ipc event to main process to handle npm-audit
- * supports local mode
- */
+// TODO: use fix options
 const npmRunAuditEpic = (action$, state$) =>
   action$.pipe(
     ofType(runAudit.type),
@@ -47,10 +45,38 @@ const npmRunAuditEpic = (action$, state$) =>
     ignoreElements()
   );
 
-// listener epics
+const npmAuditParseEpic = action$ => action$.pipe(
+  ofType(parseNpmAuditData.type),
+  map(({ payload: data }) => {
+    try {
+      const dataToJson = JSON.parse(data);
+      const { error } = dataToJson;
+      console.log(dataToJson)
+      if (error) {
+        return updateNpmAuditData({
+          data: {
+            error: true,
+            content: [],
+            ...error
+          }
+        });
+      }
+
+      return updateNpmAuditData({
+        data: {
+          error: false,
+          content: []
+        }
+      })
+    } catch (error) {
+      throw new Error(error)
+    }
+  }),
+)
+
 const npmRunAuditListenerEpic = pipe(
   ofType(npmAuditListener.type),
   switchMap(() => onNpmAudit$)
 );
 
-export { npmRunAuditEpic, npmRunAuditListenerEpic, showAuditingLoaderEpic };
+export { npmRunAuditEpic, npmRunAuditListenerEpic, npmAuditParseEpic, showAuditingLoaderEpic };
