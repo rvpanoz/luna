@@ -21,6 +21,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import FixIcon from '@material-ui/icons/Build';
 import StatsCard from 'components/common/StatsCard';
 
+import { setSnackbar } from 'models/ui/actions'
 import { runAudit } from 'models/npm/actions';
 
 import FixOptions from './FixOptions';
@@ -109,16 +110,25 @@ const Audit = ({ classes, data }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!Array.isArray(data) || !data.length) {
+    if (!data) {
       return;
     }
 
-    const [vulnerabilities] =
-      data &&
-      data.length &&
-      data.filter(dataItem => dataItem.name === 'vulnerabilities');
+    const { error, message } = data || {};
 
-    const { value } = vulnerabilities;
+    if (error && typeof message === 'string') {
+      dispatch(setSnackbar({
+        open: true,
+        type: 'error',
+        message: message.split('\n')[0]
+      }))
+
+      return
+    }
+
+    const { content } = data || {};
+    const [vulnerabilities] = content && content.filter(dataItem => dataItem.name === 'vulnerabilities');
+    const { value } = vulnerabilities || {};
 
     const needFix =
       value &&
@@ -131,7 +141,7 @@ const Audit = ({ classes, data }) => {
     if (needFix) {
       setFix(true);
     }
-  }, [data]);
+  }, [data, dispatch]);
 
   if (!data || !data.length) {
     return (
@@ -211,12 +221,12 @@ const Audit = ({ classes, data }) => {
 };
 
 Audit.defaultProps = {
-  data: []
+  data: null
 };
 
 Audit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  data: PropTypes.arrayOf(PropTypes.object)
+  data: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.array, PropTypes.bool, PropTypes.string]))
 };
 
 export default withStyles(styles)(Audit);
