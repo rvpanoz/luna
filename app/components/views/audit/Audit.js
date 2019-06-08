@@ -37,50 +37,40 @@ const capitalize = text => {
 
 const runAuditFix = () => { };
 
-const renderTotals = data => {
-  const totals = data.filter(
-    dataItem =>
-      dataItem.name !== 'vulnerabilities' &&
-      dataItem.name !== 'totalDependencies'
-  );
+const renderTotals = content => {
 
-  const totalDependencies = data
-    ? data.filter(dataItem => dataItem.name === 'totalDependencies')[0].value
-    : 0;
+  const { totalDependencies } = content || {}
 
-  return totals.map(dataItem => {
-    const [title] = dataItem.name.split('Dependencies');
+  console.log(content)
+  return null;
 
-    return (
-      <StatsCard
-        title={title}
-        key={dataItem.name}
-        total={totalDependencies}
-        count={dataItem.value}
-      />
-    );
-  });
+  // return totals.map(dataItem => {
+  //   const [title] = dataItem.name.split('Dependencies');
+
+  //   return (
+  //     <StatsCard
+  //       title={title}
+  //       key={dataItem.name}
+  //       total={totalDependencies}
+  //       count={dataItem.value}
+  //     />
+  //   );
+  // });
 };
 
 const renderVulnerabilites = (
-  data,
-  tableStyles,
-  tableHead,
-  vulnerabilityType,
-  vulnerabilityValue
+  classes,
+  content
 ) => {
-  const [vulnerabilities] = data.filter(
-    dataItem => dataItem.name === 'vulnerabilities'
-  );
-
+  const { vulnerabilities } = content || {}
   const { value } = vulnerabilities || [];
 
   return (
-    <Table className={tableStyles}>
+    <Table className={classes.tableStyles}>
       <TableHead>
         <TableRow>
-          <TableCell className={tableHead}>Type</TableCell>
-          <TableCell className={tableHead} align="right">
+          <TableCell className={classes.tableHead}>Type</TableCell>
+          <TableCell className={classes.tableHead} align="right">
             Total
           </TableCell>
         </TableRow>
@@ -89,12 +79,12 @@ const renderVulnerabilites = (
         {value.map(dataItem => (
           <TableRow key={dataItem.name}>
             <TableCell>
-              <span className={vulnerabilityType}>
+              <span className={classes.vulnerabilityType}>
                 {capitalize(dataItem.name)}
               </span>
             </TableCell>
             <TableCell align="right">
-              <span className={vulnerabilityValue}>{dataItem.value}</span>
+              <span className={classes.vulnerabilityValue}>{dataItem.value}</span>
             </TableCell>
           </TableRow>
         ))}
@@ -102,6 +92,20 @@ const renderVulnerabilites = (
     </Table>
   );
 };
+
+const renderError = (classes, code, summary, details) => <div className={classes.container}>
+  <div className={classes.flexContainer}>
+    <div className={classes.header}>
+      <Typography className={classes.title}>
+        {code}
+      </Typography>
+      <Divider className={classes.divider} light />
+      <Typography variant="subtitle1">
+        {summary}
+      </Typography>
+    </div>
+  </div>
+</div>
 
 const Audit = ({ classes, data }) => {
   const [fix, setFix] = useState(false);
@@ -114,20 +118,20 @@ const Audit = ({ classes, data }) => {
       return;
     }
 
-    const { error, code, summary, detail } = data || {};
+    const { error, summary } = data || {};
 
     if (error && typeof message === 'string') {
       dispatch(setSnackbar({
         open: true,
         type: 'error',
-        message: message.split('\n')[0]
+        message: summary
       }))
 
-      return
+      return;
     }
 
     const { content } = data || {};
-    const [vulnerabilities] = content && content.filter(dataItem => dataItem.name === 'vulnerabilities');
+    const { vulnerabilities } = content || {}
     const { value } = vulnerabilities || {};
 
     const needFix =
@@ -143,7 +147,7 @@ const Audit = ({ classes, data }) => {
     }
   }, [data, dispatch]);
 
-  if (!data || !data.length) {
+  if (!data) {
     return (
       <div className={classes.containerHolder}>
         <Typography
@@ -155,6 +159,16 @@ const Audit = ({ classes, data }) => {
       </div>
     );
   }
+
+  const { error } = data;
+
+  if (error) {
+    const { code, summary, detail } = data;
+
+    return renderError(classes, code, summary, detail)
+  }
+
+  const { content } = data || {};
 
   return (
     <React.Fragment>
@@ -184,15 +198,12 @@ const Audit = ({ classes, data }) => {
             </Toolbar>
           </div>
           <Divider className={classes.divider} light />
-          <div className={classes.topSection}>{renderTotals(data)}</div>
+          <div className={classes.topSection}>{renderTotals(content)}</div>
           <div className={classes.bottomSection}>
             <div className={classes.bottomLeft}>
               {renderVulnerabilites(
-                data,
-                classes.table,
-                classes.tableHead,
-                classes.vulnerabilityType,
-                classes.vulnerabilityValue
+                classes,
+                content
               )}
             </div>
           </div>
@@ -226,7 +237,7 @@ Audit.defaultProps = {
 
 Audit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  data: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.array, PropTypes.bool, PropTypes.string]))
+  data: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.bool, PropTypes.string]))
 };
 
 export default withStyles(styles)(Audit);

@@ -50,14 +50,18 @@ const npmAuditParseEpic = action$ => action$.pipe(
   map(({ payload: data }) => {
     try {
       const dataToJson = JSON.parse(data);
-      const { error } = dataToJson;
-      console.log(dataToJson)
+      const { error, code, detail, summary } = dataToJson;
+
+      const summaryParts = summary && summary.split('\n');
+
       if (error) {
         return updateNpmAuditData({
           data: {
             error: true,
             content: [],
-            ...error
+            summary: summaryParts && summaryParts[0],
+            detail,
+            code
           }
         });
       }
@@ -65,7 +69,7 @@ const npmAuditParseEpic = action$ => action$.pipe(
       return updateNpmAuditData({
         data: {
           error: false,
-          content: []
+          content: dataToJson ? dataToJson.metadata : []
         }
       })
     } catch (error) {
