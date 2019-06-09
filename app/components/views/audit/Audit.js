@@ -35,27 +35,28 @@ const capitalize = text => {
   return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
 };
 
+// TODO: fix
 const runAuditFix = () => { };
 
 const renderTotals = content => {
 
   const { totalDependencies } = content || {}
 
-  console.log(content)
-  return null;
+  // get total values (exclude vulnerabiltities)
+  const values = Object.keys(content).filter(key => key !== 'totalDependencies' && key !== 'vulnerabilities')
 
-  // return totals.map(dataItem => {
-  //   const [title] = dataItem.name.split('Dependencies');
+  return values.map(keyValue => {
+    const title = keyValue.split('Dependencies');
 
-  //   return (
-  //     <StatsCard
-  //       title={title}
-  //       key={dataItem.name}
-  //       total={totalDependencies}
-  //       count={dataItem.value}
-  //     />
-  //   );
-  // });
+    return (
+      <StatsCard
+        title={title}
+        key={keyValue}
+        total={totalDependencies}
+        count={content[keyValue]}
+      />
+    );
+  });
 };
 
 const renderVulnerabilites = (
@@ -63,7 +64,6 @@ const renderVulnerabilites = (
   content
 ) => {
   const { vulnerabilities } = content || {}
-  const { value } = vulnerabilities || [];
 
   return (
     <Table className={classes.tableStyles}>
@@ -76,15 +76,15 @@ const renderVulnerabilites = (
         </TableRow>
       </TableHead>
       <TableBody>
-        {value.map(dataItem => (
-          <TableRow key={dataItem.name}>
+        {Object.keys(vulnerabilities).map(key => (
+          <TableRow key={key}>
             <TableCell>
               <span className={classes.vulnerabilityType}>
-                {capitalize(dataItem.name)}
+                {capitalize(key)}
               </span>
             </TableCell>
             <TableCell align="right">
-              <span className={classes.vulnerabilityValue}>{dataItem.value}</span>
+              <span className={classes.vulnerabilityValue}>{vulnerabilities[key]}</span>
             </TableCell>
           </TableRow>
         ))}
@@ -93,7 +93,7 @@ const renderVulnerabilites = (
   );
 };
 
-const renderError = (classes, code, summary, details) => <div className={classes.container}>
+const renderError = (classes, code, summary) => <div className={classes.container}>
   <div className={classes.flexContainer}>
     <div className={classes.header}>
       <Typography className={classes.title}>
@@ -120,7 +120,7 @@ const Audit = ({ classes, data }) => {
 
     const { error, summary } = data || {};
 
-    if (error && typeof message === 'string') {
+    if (error) {
       dispatch(setSnackbar({
         open: true,
         type: 'error',
