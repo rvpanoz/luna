@@ -18,6 +18,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import Divider from '@material-ui/core/Divider';
 
 import SearchIcon from '@material-ui/icons/Search';
 import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
@@ -140,6 +141,7 @@ const NotificationsList = ({ classes }) => {
           </Typography>
         </div>
       </div>
+      <Divider light />
       <List className={classes.list}>
         {notifications.map((notification, idx) => (
           <WithStylesNotificationItem

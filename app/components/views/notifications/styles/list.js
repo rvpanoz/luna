@@ -16,6 +16,10 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'flex-start'
   },
+  divider: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
+  },
   list: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',

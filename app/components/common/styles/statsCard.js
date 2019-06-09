@@ -22,7 +22,7 @@ export default theme => ({
   },
   iconWrapper: {
     alignItems: 'center',
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: theme.palette.primary.main,
     color: theme.palette.common.white,
     borderRadius: '50%',
     display: 'inline-flex',

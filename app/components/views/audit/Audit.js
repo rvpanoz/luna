@@ -21,19 +21,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import FixIcon from '@material-ui/icons/Build';
 import StatsCard from 'components/common/StatsCard';
 
-import { setSnackbar } from 'models/ui/actions'
 import { runAudit } from 'models/npm/actions';
+import { firstToUpper } from 'commons/utils';
 
 import FixOptions from './FixOptions';
 import styles from './styles/audit';
-
-const capitalize = text => {
-  if (typeof text !== 'string') {
-    return '';
-  }
-
-  return `${text.charAt(0).toUpperCase()}${text.slice(1)}`;
-};
 
 // TODO: fix
 const runAuditFix = () => { };
@@ -46,7 +38,7 @@ const renderTotals = content => {
   const values = Object.keys(content).filter(key => key !== 'totalDependencies' && key !== 'vulnerabilities')
 
   return values.map(keyValue => {
-    const title = keyValue.split('Dependencies');
+    const [title] = keyValue.split('Dependencies');
 
     return (
       <StatsCard
@@ -80,7 +72,7 @@ const renderVulnerabilites = (
           <TableRow key={key}>
             <TableCell>
               <span className={classes.vulnerabilityType}>
-                {capitalize(key)}
+                {firstToUpper(key)}
               </span>
             </TableCell>
             <TableCell align="right">
@@ -118,15 +110,9 @@ const Audit = ({ classes, data }) => {
       return;
     }
 
-    const { error, summary } = data || {};
+    const { error } = data || {};
 
     if (error) {
-      dispatch(setSnackbar({
-        open: true,
-        type: 'error',
-        message: summary
-      }))
-
       return;
     }
 
@@ -197,7 +183,7 @@ const Audit = ({ classes, data }) => {
               </Tooltip>
             </Toolbar>
           </div>
-          <Divider className={classes.divider} light />
+          <Divider light />
           <div className={classes.topSection}>{renderTotals(content)}</div>
           <div className={classes.bottomSection}>
             <div className={classes.bottomLeft}>

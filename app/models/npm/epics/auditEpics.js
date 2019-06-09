@@ -50,11 +50,16 @@ const npmAuditParseEpic = action$ => action$.pipe(
   map(({ payload: data }) => {
     try {
       const dataToJson = JSON.parse(data);
-      const { error, code, detail, summary } = dataToJson;
+      const { error } = dataToJson || {}
 
-      const summaryParts = summary && summary.split('\n');
-
-      if (error) {
+      if (error && typeof error === 'object') {
+        const {
+          code,
+          summary,
+          detail
+        } = error || {};
+        const summaryParts = summary && summary.split('\n');
+        
         return updateNpmAuditData({
           data: {
             error: true,
