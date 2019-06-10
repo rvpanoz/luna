@@ -28,7 +28,8 @@ import {
 
 import { navigatorParameters } from 'commons/parameters';
 
-import { installPackage } from 'models/packages/actions';
+import { clearAuditData } from 'models/npm/actions';
+import { installPackage, setPackagesStart } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runAudit, runDoctor } from 'models/npm/actions';
@@ -103,6 +104,19 @@ const AppSidebar = ({
       }
     );
 
+  const reload = () => {
+    dispatch(setActivePage({ page: 'packages', paused: false }));
+    dispatch(clearAuditData());
+    dispatch(
+      setPackagesStart({
+        channel: 'npm-list-outdated',
+        options: {
+          cmd: ['outdated', 'list']
+        }
+      })
+    );
+  };
+
   const installPackagesJson = () => {
     const parameters = {
       ipcEvent: 'install',
@@ -170,7 +184,7 @@ const AppSidebar = ({
             <AppTabs>
               <InfoCard title={mode === 'local' && directory
                 ? 'Working directory'
-                : 'Global packages'} subtitle={directory || userAgent} />
+                : 'Global packages'} subtitle={directory || ""} metadata={`Updated: ${lastUpdatedAt}`} onAction={reload} actionText="Reload" />
               <PackagesTab
                 items={[
                   {

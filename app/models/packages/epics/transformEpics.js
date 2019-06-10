@@ -101,9 +101,9 @@ const mapPackagesEpic = (action$, state$) =>
         return setPackages({
           dependencies: enhancedDependencies.filter(
             dependency =>
-              !dependency.__invalid &&
-              !dependency.__hasError &&
-              !dependency.__peerMissing &&
+              !dependency.__invalid ||
+              !dependency.__hasError ||
+              !dependency.__peerMissing ||
               !dependency.__missing
           ),
           projectName: fromSearch ? name : projectName,
