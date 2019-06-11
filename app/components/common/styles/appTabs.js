@@ -11,7 +11,7 @@ const styles = theme => ({
   },
   tabLabel: {
     ...defaultFont,
-    fontSize: 14,
+    fontSize: 16,
     paddingBottom: theme.spacing.unit
   },
   noMargin: {
