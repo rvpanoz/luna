@@ -15,14 +15,15 @@ const checkNpm = () => {
     return {
       userAgent: env['user-agent'],
       metricsRegistry: env['metrics-registry'],
-      cache: env.cache,
       auditLevel: env['audit-level'],
-      globalConfig: env['global-config']
+      nodeVersion: env['node-version'],
+      cache: env.cache,
+      prefix: env.prefix,
+      shrinkWrap: env.shrinkWrap,
+      logLevel: env.lockLevel
     };
   } catch (error) {
-    return {
-      error
-    };
+    throw new Error(error)
   }
 };
 

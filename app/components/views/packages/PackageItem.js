@@ -11,7 +11,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import ErrorIcon from '@material-ui/icons/ErrorTwoTone';
 import WarningIcon from '@material-ui/icons/WarningTwoTone';
 import CheckIcon from '@material-ui/icons/CheckTwoTone';
 import UpdateIcon from '@material-ui/icons/UpdateTwoTone';

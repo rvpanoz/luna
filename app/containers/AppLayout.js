@@ -25,7 +25,7 @@ import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
 
 const mapState = ({
-  npm: { env, auditData },
+  npm: { auditData },
   notifications: { notifications },
   common: { mode, directory, onlineStatus },
   ui: {
@@ -52,7 +52,6 @@ const mapState = ({
   version,
   loading,
   description,
-  env,
   notifications,
   snackbar
 });
@@ -64,14 +63,8 @@ const AppLayout = ({ classes }) => {
     snackbar,
     mode,
     auditData,
-    dialog,
     directory,
-    notifications,
-    packagesData,
-    packagesOutdated,
-    env,
-    onlineStatus,
-    ...restProps
+    onlineStatus
   } = useMappedState(mapState);
 
   const dispatch = useDispatch();
@@ -86,8 +79,6 @@ const AppLayout = ({ classes }) => {
             fullDirectory={directory}
             directory={directory && shrinkDirectory(directory)}
             PaperProps={{ style: { width: drawerWidth } }}
-            userAgent={env && env.userAgent}
-            {...restProps}
           />
         </nav>
         <div className={classes.appContent}>

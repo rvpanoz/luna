@@ -18,7 +18,8 @@ const styles = theme => ({
   },
   divider: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing.unit,
+    marginBottom: theme.spacing.unit
   },
   list: {
     whiteSpace: 'nowrap',
@@ -38,9 +39,6 @@ const styles = theme => ({
   header: {
     flex: '0 0 auto',
     padding: theme.spacing.unit * 2 + 4
-  },
-  divider: {
-    marginBottom: theme.spacing.unit
   },
   withPadding: {
     padding: theme.spacing.unit + 4

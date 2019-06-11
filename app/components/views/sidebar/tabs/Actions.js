@@ -14,7 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ArrowRightIcon from '@material-ui/icons/ArrowRightAlt';
 import Typography from '@material-ui/core/Typography';
 
-import styles from './styles/tools';
+import styles from './styles/actions';
 
 const renderAction = (classes, nodata, mode, installPackages) => (
   <ListItem key="install_packagejson_all" className={classes.listItem}>
@@ -78,7 +78,7 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
                 <div>
                   <IconButton
                     aria-label="action"
-                    disabled={nodata || mode === 'global'}
+                    disabled={Boolean(nodata) || mode === 'global'}
                     onClick={() =>
                       remote.dialog.showMessageBox(
                         remote.getCurrentWindow(),

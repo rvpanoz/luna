@@ -14,22 +14,25 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import FolderIcon from '@material-ui/icons/FolderOpen';
+
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Typography from '@material-ui/core/Typography';
 
 import AppLogo from 'components/common/AppLogo';
 import AppTabs from 'components/common/AppTabs';
-import InfoCard from 'components/common/InfoCard';
 
-import {
-  PackagesTab,
-  ActionsTab
-} from 'components/views/sidebar/tabs';
+import FolderIcon from '@material-ui/icons/FolderOpen';
+import UpdateIcon from '@material-ui/icons/Update';
+
+import { PackagesTab, ActionsTab } from 'components/views/sidebar/tabs';
 
 import { navigatorParameters } from 'commons/parameters';
 
-import { clearAuditData } from 'models/npm/actions';
-import { installPackage, setPackagesStart } from 'models/packages/actions';
+import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runAudit, runDoctor } from 'models/npm/actions';
@@ -49,14 +52,13 @@ const mapState = ({
     }
   },
   npm: {
-    env: {
-      userAgent
-    }
+    env: { prefix }
   }
 }) => ({
   loading,
   lastUpdatedAt,
   notifications,
+  prefix,
   packagesData,
   packagesOutdated
 });
@@ -66,17 +68,17 @@ const AppSidebar = ({
   mode,
   directory,
   fullDirectory,
-  lastUpdatedAt,
-  name,
-  version,
-  loading,
-  userAgent,
   ...restProps
 }) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
-  const { notifications, packagesData, packagesOutdated } = useMappedState(
-    mapState
-  );
+  const {
+    notifications,
+    packagesData,
+    packagesOutdated,
+    prefix,
+    lastUpdatedAt,
+    loading
+  } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -103,19 +105,6 @@ const AppSidebar = ({
         }
       }
     );
-
-  const reload = () => {
-    dispatch(setActivePage({ page: 'packages', paused: false }));
-    dispatch(clearAuditData());
-    dispatch(
-      setPackagesStart({
-        channel: 'npm-list-outdated',
-        options: {
-          cmd: ['outdated', 'list']
-        }
-      })
-    );
-  };
 
   const installPackagesJson = () => {
     const parameters = {
@@ -180,38 +169,66 @@ const AppSidebar = ({
           </ListItemText>
         </ListItem>
         <ListItem key="app-tabs-content" disableGutters>
-          <ListItemText style={{ height: 250 }}>
+          <ListItemText>
             <AppTabs>
-              <InfoCard title={mode === 'local' && directory
-                ? 'Working directory'
-                : 'Global packages'} subtitle={directory || ""} metadata={`Updated: ${lastUpdatedAt}`} onAction={reload} actionText="Reload" />
-              <PackagesTab
-                items={[
-                  {
-                    name: 'total-packages',
-                    primaryText: 'Total',
-                    secondaryText: (packagesData && packagesData.length) || 0,
-                    color: 'secondary',
-                    primary: true
-                  },
-                  {
-                    name: 'outdated-packages',
-                    primaryText: 'Outdated',
-                    secondaryText:
-                      (packagesOutdated && packagesOutdated.length) || 0,
-                    color: 'warning',
-                    warning: true
-                  },
-                  {
-                    name: 'problems-packages',
-                    primaryText: 'Problems',
-                    secondaryText: (notifications && notifications.length) || 0,
-                    color: 'error',
-                    error: true
-                  }
-                ]}
-                loading={loading}
-              />
+              <Card className={classes.card}>
+                <CardContent>
+                  <Typography
+                    className={classes.cardTitle}
+                    color="textSecondary"
+                  >
+                    {mode === 'local' ? 'Working directory' : 'Global packages'}
+                  </Typography>
+                  <Typography variant="caption" color="textSecondary">
+                    {mode === 'local' ? directory : prefix}
+                  </Typography>
+                  <Divider light />
+                  <PackagesTab
+                    items={[
+                      {
+                        name: 'total-packages',
+                        primaryText: 'Total',
+                        secondaryText: packagesData && packagesData.length,
+                        color: 'secondary',
+                        primary: true
+                      },
+                      {
+                        name: 'outdated-packages',
+                        primaryText: 'Outdated',
+                        secondaryText:
+                          packagesOutdated && packagesOutdated.length,
+                        color: 'warning',
+                        warning: true
+                      },
+                      {
+                        name: 'problems-packages',
+                        primaryText: 'Problems',
+                        secondaryText: notifications && notifications.length,
+                        color: 'error',
+                        error: true
+                      }
+                    ]}
+                    loading={loading}
+                  />
+                </CardContent>
+                <Divider light />
+                <CardActions>
+                  <div className={classes.cardFlexContainer}>
+                    <div className={classes.cardFlexContainerInner}>
+                      <UpdateIcon
+                        color="primary"
+                        className={classes.updateIcon}
+                      />
+                      <Typography className={classes.cardLabel}>
+                        Updated
+                      </Typography>
+                    </div>
+                    <Typography className={classes.cardLabel}>
+                      {lastUpdatedAt}
+                    </Typography>
+                  </div>
+                </CardActions>
+              </Card>
               <ActionsTab
                 installPackages={installPackagesJson}
                 mode={mode}
@@ -251,7 +268,7 @@ const AppSidebar = ({
                       )
                   }
                 ]}
-                nodata={packagesData && packagesData.length === 0}
+                nodata={packagesData && packagesData.length}
                 loading={loading}
               />
             </AppTabs>
@@ -317,8 +334,7 @@ AppSidebar.propTypes = {
   description: PropTypes.string,
   directory: PropTypes.string,
   lastUpdatedAt: PropTypes.string,
-  fullDirectory: PropTypes.string,
-  userAgent: PropTypes.string
+  fullDirectory: PropTypes.string
 };
 
 export default withStyles(styles)(AppSidebar);
