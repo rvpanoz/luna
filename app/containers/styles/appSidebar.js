@@ -1,4 +1,5 @@
 import { grayColor, flexContainer, defaultFont } from 'styles/variables';
+import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   flexContainer: {
@@ -25,6 +26,9 @@ const styles = theme => ({
     height: 35,
     marginLeft: theme.spacing.unit * 2,
     fill: '#fff'
+  },
+  updateIcon: {
+    marginRight: theme.spacing.unit / 2
   },
   title: {
     ...defaultFont,
@@ -104,7 +108,37 @@ const styles = theme => ({
   listItemHalfPadding: {
     ...defaultFont,
     padding: theme.spacing.unit / 2
-  }
+  },
+  card: {
+    width: 268,
+    minHeight: 150
+  },
+  cardTitle: {
+    fontSize: 18,
+    margin: 0,
+    padding: 0,
+    fontWeight: 400,
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+    overflow: "hidden",
+  },
+  cardFlexContainer: {
+    ...flexContainer,
+    width: '100%',
+    justifyContent: 'space-between',
+    padding: theme.spacing.unit,
+    alignItems: 'center'
+  },
+  cardFlexContainerInner: {
+    ...flexContainer,
+    alignItems: 'center',
+  },
+  cardLabel: {
+    ...defaultFont,
+    fontSize: 12,
+    color: darken(grayColor, 0.5),
+  },
+
 });
 
 export default styles;

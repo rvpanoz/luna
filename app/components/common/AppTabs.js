@@ -53,13 +53,13 @@ const AppTabs = ({ classes, children }) => {
             classes={{
               label: classes.tabLabel
             }}
-            label="Packages"
+            label="Actions"
           />
           <Tab
             classes={{
               label: classes.tabLabel
             }}
-            label="Actions"
+            label="Settings"
           />
         </Tabs>
       </AppBar>
