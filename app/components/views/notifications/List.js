@@ -4,6 +4,7 @@
 import { remote } from 'electron';
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames'
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
@@ -17,6 +18,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
+import Divider from '@material-ui/core/Divider';
 
 import SearchIcon from '@material-ui/icons/Search';
 import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
@@ -119,34 +121,38 @@ const WithStylesNotificationItem = withStyles({})(NotificationsItem);
 const NotificationsList = ({ classes }) => {
   const { notifications, packagesInstallOptions } = useMappedState(mapState);
 
-  return (
-    <Paper className={classes.paper}>
-      <div className={classes.container}>
-        <div className={classes.flexContainer}>
-          <div className={classes.header}>
-            <Typography variant="h6" className={classes.title}>
-              {`Problems ${notifications ? notifications.length : 0}`}
-            </Typography>
-          </div>
+  if (!notifications || !notifications.length) {
+    return <div className={classes.containerHolder}>
+      <Typography
+        variant="subtitle1"
+        className={cn(classes.noData, classes.withPadding)}
+      >
+        No problems
+    </Typography>
+    </div>
+  }
+
+  return <Paper className={classes.paper}>
+    <div className={classes.container}>
+      <div className={classes.flexContainer}>
+        <div className={classes.header}>
+          <Typography variant="h6" className={classes.title}>
+            {`Problems ${notifications ? notifications.length : 0}`}
+          </Typography>
         </div>
-        <List className={classes.list}>
-          {!notifications || notifications.length === 0 ? (
-            <Typography variant="subtitle1" className={classes.withPadding}>
-              No problems found
-            </Typography>
-          ) : (
-            notifications.map((notification, idx) => (
-              <WithStylesNotificationItem
-                key={`notification-${idx}`}
-                installationOptions={packagesInstallOptions}
-                {...notification}
-              />
-            ))
-          )}
-        </List>
       </div>
-    </Paper>
-  );
+      <Divider light />
+      <List className={classes.list}>
+        {notifications.map((notification, idx) => (
+          <WithStylesNotificationItem
+            key={`notification-${idx}`}
+            installationOptions={packagesInstallOptions}
+            {...notification}
+          />
+        ))}
+      </List>
+    </div>
+  </Paper>
 };
 
 NotificationsList.propTypes = {

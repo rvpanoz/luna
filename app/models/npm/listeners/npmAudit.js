@@ -1,7 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
-import { parseNpmAudit } from 'commons/utils';
-import { setRunningCommand, updateNpmAuditData } from 'models/npm/actions';
+import { setRunningCommand, parseNpmAuditData } from 'models/npm/actions';
 import { toggleLoader, setActivePage, setSnackbar } from 'models/ui/actions';
 
 const updateCommand = ({
@@ -21,7 +20,6 @@ const onNpmAudit$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-audit-completed']);
 
   ipcRenderer.on('npm-audit-completed', (event, data) => {
-    const content = parseNpmAudit(data);
 
     observer.next(
       updateCommand({
@@ -32,9 +30,7 @@ const onNpmAudit$ = new Observable(observer => {
     );
 
     observer.next(
-      updateNpmAuditData({
-        data: content
-      })
+      parseNpmAuditData(data)
     );
 
     observer.next(setActivePage({ page: 'audit' }));
@@ -49,7 +45,8 @@ const onNpmAudit$ = new Observable(observer => {
 
     observer.next(
       toggleLoader({
-        loading: false
+        loading: false,
+        message: null
       })
     );
   });

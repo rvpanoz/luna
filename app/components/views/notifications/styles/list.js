@@ -16,6 +16,10 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'flex-start'
   },
+  divider: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit
+  },
   list: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
@@ -41,9 +45,18 @@ const styles = theme => ({
   withPadding: {
     padding: theme.spacing.unit + 4
   },
+  noData: {
+    ...defaultFont
+  },
   item: {
     ...defaultFont
-  }
+  },
+  containerHolder: {
+    ...flexContainer,
+    paddingTop: theme.spacing.unit * 2,
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
 });
 
 export default styles;

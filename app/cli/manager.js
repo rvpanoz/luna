@@ -62,7 +62,7 @@ const execute = (
 
     command.stderr.on('data', error => {
       const errorString = String(error);
-
+      // log.error(errorString);
       errors += errorString;
     });
 
@@ -112,15 +112,19 @@ const list = (options, callback) => {
     );
   }
 
-  const run =
-    mode === 'global' && !directory
-      ? linked
-        ? command.concat(defaultsArgs.list, ['--link', '-g'])
-        : command.concat(defaultsArgs.list, ['-g'])
-      : command.concat(defaultsArgs.list);
+  try {
+    const run =
+      mode === 'global' && !directory
+        ? linked
+          ? command.concat(defaultsArgs.list, ['--link', '-g'])
+          : command.concat(defaultsArgs.list, ['-g'])
+        : command.concat(defaultsArgs.list);
 
-  // returns a Promise
-  return execute('npm', run, mode, directory, callback);
+    // returns a Promise
+    return execute('npm', run, mode, directory, callback);
+  } catch (error) {
+    Promise.reject(error)
+  }
 };
 
 /**
@@ -144,13 +148,17 @@ const outdated = (options, callback) => {
     );
   }
 
-  const run =
-    mode === 'global' && !directory
-      ? command.concat(defaultsArgs.list, ['-g'])
-      : command.concat(defaultsArgs.list);
+  try {
+    const run =
+      mode === 'global' && !directory
+        ? command.concat(defaultsArgs.list, ['-g'])
+        : command.concat(defaultsArgs.list);
 
-  // returns a Promise
-  return execute('npm', run, mode, directory, callback);
+    // returns a Promise
+    return execute('npm', run, mode, directory, callback);
+  } catch (error) {
+    Promise.reject(error)
+  }
 };
 
 /**
@@ -167,9 +175,14 @@ const search = (opts, callback) => {
     return Promise.reject('npm[search] package name parameter must be given');
   }
 
-  const run = command.concat(defaults, pkgName);
+  try {
+    const run = command.concat(defaults, pkgName);
 
-  return execute('npm', run, mode, directory, callback);
+    return execute('npm', run, mode, directory, callback);
+  } catch (error) {
+    Promise.reject(error);
+  }
+
 };
 
 /**
@@ -183,14 +196,9 @@ const install = (opts, callback, idx) => {
 
   try {
     const runInstall = require('./npm/install').default;
+    const run = runInstall(opts, idx);
 
-    if (typeof runInstall === 'function') {
-      const run = runInstall(opts, idx);
-
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:install is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
     Promise.reject(error);
   }
@@ -206,14 +214,9 @@ const update = (opts, callback) => {
 
   try {
     const runUpdate = require('./npm/update').default;
+    const run = runUpdate(opts);
 
-    if (typeof runUpdate === 'function') {
-      const run = runUpdate(opts);
-
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:update is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
     Promise.reject(error);
   }
@@ -229,14 +232,10 @@ const uninstall = (opts, callback) => {
 
   try {
     const runUninstall = require('./npm/uninstall').default;
+    const run = runUninstall(opts);
 
-    if (typeof runUninstall === 'function') {
-      const run = runUninstall(opts);
 
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:uninstall is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
     Promise.reject(error);
   }
@@ -252,14 +251,9 @@ const view = (opts, callback) => {
 
   try {
     const runView = require('./npm/view').default;
+    const run = runView(opts);
 
-    if (typeof runView === 'function') {
-      const run = runView(opts);
-
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:view is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
     Promise.reject(error);
   }
@@ -275,16 +269,11 @@ const runAudit = (opts, callback) => {
 
   try {
     const audit = require('./npm/tooling/audit').default;
+    const run = audit(opts);
 
-    if (typeof audit === 'function') {
-      const run = audit(opts);
-
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:audit is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -298,16 +287,11 @@ const runDoctor = (opts, callback) => {
 
   try {
     const doctor = require('./npm/tooling/doctor').default;
+    const run = doctor(opts);
 
-    if (typeof doctor === 'function') {
-      const run = doctor(opts);
-
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:doctor is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -321,16 +305,11 @@ const runPrune = (opts, callback) => {
 
   try {
     const prune = require('./npm/tooling/prune').default;
+    const run = prune(opts);
 
-    if (typeof prune === 'function') {
-      const run = prune(opts);
-
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:prune is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -344,16 +323,11 @@ const runDedupe = (opts, callback) => {
 
   try {
     const dedupe = require('./npm/tooling/dedupe').default;
+    const run = dedupe(opts);
 
-    if (typeof dedupe === 'function') {
-      const run = dedupe(opts);
-
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:dedupe is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -367,16 +341,11 @@ const runVerify = (opts, callback) => {
 
   try {
     const verify = require('./npm/tooling/verify').default;
+    const run = verify(opts);
 
-    if (typeof verify === 'function') {
-      const run = verify(opts);
-
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:verify is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -390,16 +359,11 @@ const runClean = (opts, callback) => {
 
   try {
     const clean = require('./npm/tooling/clean').default;
+    const run = clean(opts);
 
-    if (typeof clean === 'function') {
-      const run = clean(opts);
-
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:clean is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 
@@ -413,16 +377,11 @@ const runInit = (opts, callback) => {
 
   try {
     const init = require('./npm/tooling/init').default;
+    const run = init(opts);
 
-    if (typeof init === 'function') {
-      const run = init(opts);
-
-      return execute(activeManager, run, mode, directory, callback);
-    }
-
-    Promise.reject('cli:init is not defined');
+    return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
-    throw new Error(error);
+    Promise.reject(error);
   }
 };
 

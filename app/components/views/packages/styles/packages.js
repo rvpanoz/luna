@@ -5,7 +5,13 @@ const styles = theme => ({
   root: {
     width: '100%',
     borderTopLeftRadius: 0,
-    borderTopRightRadius: 0
+    borderTopRightRadius: 0,
+    [theme.breakpoints.up('md')]: {
+      maxWidth: '100%'
+    },
+    [theme.breakpoints.up('lg')]: {
+      maxWidth: 1024
+    }
   },
   typo: {
     ...defaultFont,

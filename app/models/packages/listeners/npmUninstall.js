@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 
 import { setRunningCommand } from 'models/npm/actions';
 import { setSnackbar } from 'models/ui/actions';
+import { clearNotifications } from 'models/notifications/actions';
+
 import { removePackages, setActive } from '../actions';
 
 const updateCommand = ({
@@ -38,6 +40,7 @@ const onNpmUninstall$ = new Observable(observer => {
         })
       );
 
+      observer.next(clearNotifications())
       observer.next(removePackages({ removedPackages: packages }));
 
       observer.next(

@@ -47,7 +47,7 @@ export const isUrl = url => {
  */
 export const firstToUpper = str => {
   return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
       return index !== 0 ? letter.toLowerCase() : letter.toUpperCase();
     })
     .replace(/\s+/g, '');
@@ -184,7 +184,7 @@ export const shrinkDirectory = directory => {
 
       return `${dirParts[dirParts.length - 2]}${SEPARATOR}${
         dirParts[dirParts.length - 1]
-      }${SEPARATOR}package.json`;
+        }${SEPARATOR}package.json`;
     } catch (error) {
       throw new Error(error);
     }
@@ -197,6 +197,7 @@ export const shrinkDirectory = directory => {
 export const parseNpmDoctor = data => data;
 
 export const parseNpmAudit = data => {
+
   try {
     const dataToJson = JSON.parse(data);
     const { error } = dataToJson;
@@ -206,21 +207,15 @@ export const parseNpmAudit = data => {
 
       return {
         error: true,
-        message: `${code}: ${summary}`
+        message: `${code}: ${summary}`,
+        content: []
       };
     }
 
     const { metadata } = dataToJson || {};
-
-    if (!metadata) {
-      return {
-        fix: true
-      }; // run with fix option
-    }
-
     const dataKeys = metadata ? Object.keys(metadata) : dataToJson;
 
-    const result = dataKeys.map(dataKey => {
+    const content = dataKeys.map(dataKey => {
       const valueObject = typeof metadata[dataKey] === 'object';
 
       if (valueObject) {
@@ -242,9 +237,12 @@ export const parseNpmAudit = data => {
       }
     });
 
-    return result;
+    return {
+      error: false,
+      content
+    };
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error);
   }
 };
 
