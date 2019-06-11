@@ -4,6 +4,7 @@
 
 import { assoc, prepend, identity, merge, prop, propOr } from 'ramda';
 import {
+  addAuditFixOption,
   addActionError,
   clearCommands,
   commandError,
@@ -29,6 +30,7 @@ const handlers = {
     assoc('auditData', data, state),
   [updateNpmDoctorData.type]: (state, { payload: { data } }) =>
     assoc('doctorData', data, state),
+  [addAuditFixOption.type]: (state, { payload: { option } }) => state,
   [addActionError.type]: (state, { payload: { error } }) => {
     const {
       operations: { commandsErrors }

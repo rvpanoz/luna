@@ -24,7 +24,7 @@ const onNpmListOutdated = (event, options, store) => {
     const { name } = parsedDirectory || {};
 
     if (yarnLock) {
-      event.sender.send('yarn-warning-close');
+      event.sender.send('yarn-lock-close');
     }
 
     const inDirectories = openedPackages.some(
@@ -40,6 +40,8 @@ const onNpmListOutdated = (event, options, store) => {
         }
       ]);
     }
+
+    event.sender.send('loaded-packages-close', store.get('openedPackages'));
   };
 
   const onFlow = chunk => event.sender.send('npm-list-outdated-flow', chunk);
@@ -52,7 +54,6 @@ const onNpmListOutdated = (event, options, store) => {
       handleLocalEvents(directory);
     }
 
-    event.sender.send('loaded-packages-close', store.get('openedPackages'));
     event.sender.send('npm-list-outdated-completed', data, errors, cmd);
   };
 

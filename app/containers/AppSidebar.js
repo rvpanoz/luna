@@ -19,16 +19,17 @@ import Button from '@material-ui/core/Button';
 
 import AppLogo from 'components/common/AppLogo';
 import AppTabs from 'components/common/AppTabs';
+import InfoCard from 'components/common/InfoCard';
+
 import {
-  ProjectTab,
   PackagesTab,
   ActionsTab
 } from 'components/views/sidebar/tabs';
 
 import { navigatorParameters } from 'commons/parameters';
-import { DEFAULT_MODE, DEFAULT_VERSION } from 'constants/AppConstants';
 
-import { installPackage } from 'models/packages/actions';
+import { clearAuditData } from 'models/npm/actions';
+import { installPackage, setPackagesStart } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runAudit, runDoctor } from 'models/npm/actions';
@@ -45,6 +46,11 @@ const mapState = ({
   ui: {
     loaders: {
       loader: { loading }
+    }
+  },
+  npm: {
+    env: {
+      userAgent
     }
   }
 }) => ({
@@ -97,6 +103,19 @@ const AppSidebar = ({
         }
       }
     );
+
+  const reload = () => {
+    dispatch(setActivePage({ page: 'packages', paused: false }));
+    dispatch(clearAuditData());
+    dispatch(
+      setPackagesStart({
+        channel: 'npm-list-outdated',
+        options: {
+          cmd: ['outdated', 'list']
+        }
+      })
+    );
+  };
 
   const installPackagesJson = () => {
     const parameters = {
@@ -163,31 +182,9 @@ const AppSidebar = ({
         <ListItem key="app-tabs-content" disableGutters>
           <ListItemText style={{ height: 250 }}>
             <AppTabs>
-              <ProjectTab
-                items={[
-                  {
-                    name: 'mode',
-                    primaryText:
-                      mode === 'local'
-                        ? `${name} v${version || DEFAULT_VERSION}`
-                        : DEFAULT_MODE,
-                    secondaryText: `Last updated: ${lastUpdatedAt}`,
-                    caption: true
-                  },
-                  {
-                    name: 'directory',
-                    caption: true,
-                    primaryText:
-                      mode === 'local' && directory
-                        ? 'Working directory'
-                        : null,
-                    secondaryText:
-                      mode === 'local' && directory ? directory : null
-                  }
-                ]}
-                metadata={lastUpdatedAt}
-                loading={loading}
-              />
+              <InfoCard title={mode === 'local' && directory
+                ? 'Working directory'
+                : 'Global packages'} subtitle={directory || ""} metadata={`Updated: ${lastUpdatedAt}`} onAction={reload} actionText="Reload" />
               <PackagesTab
                 items={[
                   {
@@ -224,13 +221,20 @@ const AppSidebar = ({
                     mode,
                     primaryText: 'npm audit',
                     secondaryText: 'Scan project for vulnerabilities',
-                    handler: () =>
+                    handler: () => {
+                      dispatch(
+                        setActivePage({
+                          page: 'packages',
+                          paused: true
+                        })
+                      );
                       dispatch(
                         runAudit({
                           ipcEvent: 'npm-audit',
                           cmd: ['audit']
                         })
-                      )
+                      );
+                    }
                   },
                   {
                     name: 'doctor',

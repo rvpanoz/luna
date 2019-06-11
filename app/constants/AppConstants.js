@@ -56,6 +56,7 @@ export const INFO_MESSAGES = {
   loaded: 'Package loaded.',
   updating: 'Please wait. Updating packages',
   installing: 'Please choose installation options',
+  fixOptions: 'Please choose fix options',
   extraneous:
     'Found extraneous packages. Run npm prune from the Tools tab to fix them.'
 };

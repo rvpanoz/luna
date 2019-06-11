@@ -4,6 +4,7 @@ const ActionCreator = createActionCreator('@@LUNA/NPM');
 
 // general actions
 const addActionError = ActionCreator('ACTION_ERROR');
+const addAuditFixOption = ActionCreator('ADD_AUDIT_FIX_OPTION');
 const clearCommands = ActionCreator('CLEAR_COMMANDS');
 const commandError = ActionCreator('COMMAND_ERROR');
 const commandMessage = ActionCreator('COMMAND_MESSAGE');
@@ -13,6 +14,7 @@ const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const npmCommand = ActionCreator('NPM_COMMAND');
 
 // reporting data
+const parseNpmAuditData = ActionCreator('PARSE_NPM_AUDIT_DATA');
 const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
 const updateNpmDoctorData = ActionCreator('UPDATE_NPM_DOCTOR_DATA');
 const clearAuditData = ActionCreator('CLEAR_AUDIT_DATA');
@@ -32,6 +34,7 @@ const runInit = ActionCreator('RUN_INIT');
 const runDoctor = ActionCreator('RUN_DOCTOR');
 
 export {
+  addAuditFixOption,
   addActionError,
   clearCommands,
   commandError,
@@ -49,6 +52,7 @@ export {
   npmDoctorListener,
   npmAuditListener,
   clearAuditData,
+  parseNpmAuditData,
   updateNpmDoctorData,
   updateNpmAuditData
 };

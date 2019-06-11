@@ -115,21 +115,13 @@ const PackageItem = ({
         </Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        {missing && (
-          <Tooltip title="Package is missing">
+        {missing ? (
+          <Tooltip title="Package is missing. Run npm install to fix it">
             <Typography className={classes.typo}>
               <WarningIcon className={classes.statusMissing} />
             </Typography>
           </Tooltip>
-        )}
-
-        {peerMissing && (
-          <Tooltip title="Package has peer missing">
-            <Typography className={classes.typo}>
-              <WarningIcon className={classes.statusPeerMissing} />
-            </Typography>
-          </Tooltip>
-        )}
+        ) : null}
 
         {isOutdated && !hasError && (
           <Tooltip title="Package has an updated version">
@@ -143,14 +135,6 @@ const PackageItem = ({
           <Tooltip title="Package is up to date">
             <Typography className={classes.typo}>
               <CheckIcon className={classes.statusOK} />
-            </Typography>
-          </Tooltip>
-        )}
-
-        {missing && (
-          <Tooltip title="Package is missing">
-            <Typography className={classes.typo}>
-              <ErrorIcon className={classes.statusError} />
             </Typography>
           </Tooltip>
         )}

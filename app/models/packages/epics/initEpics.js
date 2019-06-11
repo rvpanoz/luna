@@ -11,7 +11,6 @@ import { clearCommands, clearAuditData } from 'models/npm/actions';
 
 import { onOffOperator } from '../operators';
 import { clearPackages, setPackagesStart } from '../actions';
-import MESSAGES from '../messages';
 
 const ON = 'ON';
 const OFF = 'OFF';
@@ -50,7 +49,7 @@ const initEpic = (action$, state$) =>
     concatMap(() => [
       updateLoader({
         loading: true,
-        message: MESSAGES.loading
+        message: 'Loading packages...'
       }),
       clearAuditData(),
       clearSelected(),

@@ -21,7 +21,8 @@ const install = (options, idx) => {
   } = options || {};
 
   // '--unsafe-perm use root'
-  const defaults = ['--ignore-scripts', '--verbose'];
+  // '--ignore-scripts
+  const defaults = ['--verbose'];
 
   if (!packages && !multiple && !name && !packageJson) {
     return Promise.reject(
@@ -54,8 +55,8 @@ const install = (options, idx) => {
     packagesToInstallMultiple = [name];
   }
 
-  if (Array.isArray(commandFlags)) {
-    commandOptsMultiple = pkgOptions[idx].map(option => `--${option}`);
+  if (commandFlags && commandFlags.length) {
+    commandOptsMultiple = commandFlags[idx].map(option => `--${option}`);
   }
 
   const runningCommandsOptions = single
