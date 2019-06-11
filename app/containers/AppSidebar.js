@@ -268,7 +268,7 @@ const AppSidebar = ({
                       )
                   }
                 ]}
-                nodata={packagesData && packagesData.length}
+                nodata={packagesData.length}
                 loading={loading}
               />
             </AppTabs>

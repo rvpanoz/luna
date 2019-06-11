@@ -27,6 +27,7 @@ import { scrollWrapper } from 'commons/utils';
 import {
   setPackagesStart,
   viewPackageStart,
+  installPackage,
   installMultiplePackages
 } from 'models/packages/actions';
 import {
@@ -46,7 +47,7 @@ import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
-import Options from './Options';
+import DialogOptions from './Options';
 
 import styles from './styles/packages';
 
@@ -119,7 +120,11 @@ const Packages = ({ classes }) => {
 
   /* eslint-disable-next-line */
   const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
-  const [optionsOpen, toggleOptions] = useState(false);
+  const [options, toggleOptions] = useState({
+    open: false,
+    single: false,
+    name: null
+  });
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
@@ -235,7 +240,7 @@ const Packages = ({ classes }) => {
                     variant="subtitle1"
                     className={classes.withPadding}
                   >
-                    {fromSearch ? 'No packages found' : 'No dependencies found'}
+                    No packages found
                   </Typography>
                 ) : (
                     <Table
@@ -300,11 +305,6 @@ const Packages = ({ classes }) => {
                                   addSelected={() =>
                                     dispatch(addSelected({ name }))
                                   }
-                                  addInstallOption={(pkgName, options) =>
-                                    dispatch(
-                                      addInstallOption({ name: pkgName, options })
-                                    )
-                                  }
                                   name={name}
                                   peerDependencies={peerDependencies}
                                   latest={latest}
@@ -359,16 +359,19 @@ const Packages = ({ classes }) => {
       </AppLoader>
 
       <Dialog
-        open={optionsOpen}
+        open={options.open}
         fullWidth
         onClose={() => {
           dispatch(clearInstallOptions());
-          toggleOptions(!optionsOpen);
+          toggleOptions({
+            open: false,
+            single: false,
+          });
         }}
         aria-labelledby="install-options"
       >
         <DialogContent>
-          <Options
+          <DialogOptions
             selected={selected.length ? selected : active ? [active.name] : []}
             packagesInstallOptions={packagesInstallOptions}
           />
@@ -377,7 +380,10 @@ const Packages = ({ classes }) => {
           <Button
             onClick={() => {
               dispatch(clearInstallOptions());
-              toggleOptions(false);
+              toggleOptions({
+                open: false,
+                single: false
+              });
             }}
             color="secondary"
           >
@@ -385,21 +391,30 @@ const Packages = ({ classes }) => {
           </Button>
           <Button
             onClick={() => {
-              dispatch(
-                installMultiplePackages({
-                  ipcEvent: 'npm-install',
-                  cmd: selected.length
-                    ? selected.map(() => 'install')
-                    : ['install'],
-                  multiple: true,
-                  packages: selected.length
-                    ? selected
-                    : active
-                      ? [active.name]
-                      : []
-                })
-              );
-              toggleOptions(false);
+              if (options.single) {
+                dispatch(
+                  installPackage({
+                    ipcEvent: 'npm-install',
+                    cmd: ['install'],
+                    name: active.name,
+                    single: true
+                  })
+                );
+              } else {
+                dispatch(
+                  installMultiplePackages({
+                    ipcEvent: 'npm-install',
+                    cmd: selected.map(() => 'install'),
+                    multiple: true,
+                    packages: selected
+                  })
+                );
+              }
+
+              toggleOptions({
+                open: false,
+                single: false
+              });
             }}
             color="primary"
             autoFocus

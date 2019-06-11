@@ -37,18 +37,22 @@ const showInstallLoaderEpic = action$ =>
 const installPackageEpic = (action$, state$) =>
   action$.pipe(
     ofType(installPackage.type),
+    tap(console.log('install single')),
     tap(({ payload }) => {
       const {
-        common: { mode, directory }
+        common: { mode, directory, operations: { packagesInstallOptions } }
       } = state$.value;
 
-      ipcRenderer.send(
-        'npm-install',
-        Object.assign({}, payload, {
-          mode,
-          directory
-        })
-      );
+      const options = packagesInstallOptions.length ? packagesInstallOptions.map(opt => opt.options) : []
+      const parameters = {
+        ...payload,
+        pkgOptions: options,
+        mode,
+        directory
+      };
+
+      console.log(parameters);
+      ipcRenderer.send('npm-install', parameters);
     }),
     ignoreElements()
   );
@@ -60,6 +64,7 @@ const installPackageEpic = (action$, state$) =>
 const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(installMultiplePackages.type),
+    tap(console.log('install multiple')),
     tap(({ payload }) => {
       const {
         common: {
@@ -69,23 +74,16 @@ const installMultiplePackagesEpic = (action$, state$) =>
         }
       } = state$.value;
 
-      const { cmd, multiple, packages, ipcEvent, pkgOptions } = payload;
-      const options = Array.isArray(pkgOptions)
-        ? pkgOptions
-        : packagesInstallOptions
-        ? packagesInstallOptions.map(opt => opt.options)
-        : [];
+      const options = packagesInstallOptions.length ? packagesInstallOptions.map(opt => opt.options) : []
 
       const parameters = {
-        ipcEvent,
-        cmd,
-        multiple,
-        packages,
+        ...payload,
         pkgOptions: options,
         mode,
         directory
       };
 
+      console.log(parameters)
       ipcRenderer.send('npm-install', parameters);
     }),
     ignoreElements()

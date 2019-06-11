@@ -56,7 +56,8 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
         channel: 'npm-search',
         options: {
           cmd: ['search'],
-          pkgName: packageName
+          pkgName: packageName,
+          fromSearch: true
         }
       })
     );
@@ -83,7 +84,7 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
     const { current } = searchInputEl;
 
     if (current) {
-      current.addEventListener('keyup', onKeyUp, () => {});
+      current.addEventListener('keyup', onKeyUp, () => { });
 
       return () => current.removeEventListener('keyup', onKeyUp);
     }
@@ -96,10 +97,10 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
           <ClearIcon />
         </a>
       ) : (
-        <a href="#" className={classes.searchIcon} onClick={handleSearch}>
-          <SearchIcon />
-        </a>
-      )}
+          <a href="#" className={classes.searchIcon} onClick={handleSearch}>
+            <SearchIcon />
+          </a>
+        )}
 
       <InputBase
         disabled={disabled || onlineStatus === 'offline'}
