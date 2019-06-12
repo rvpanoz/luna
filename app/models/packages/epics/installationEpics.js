@@ -40,10 +40,16 @@ const installPackageEpic = (action$, state$) =>
     tap(console.log('install single')),
     tap(({ payload }) => {
       const {
-        common: { mode, directory, operations: { packagesInstallOptions } }
+        common: {
+          mode,
+          directory,
+          operations: { packagesInstallOptions }
+        }
       } = state$.value;
 
-      const options = packagesInstallOptions.length ? packagesInstallOptions.map(opt => opt.options) : []
+      const options = packagesInstallOptions.length
+        ? packagesInstallOptions.map(opt => opt.options)
+        : [];
       const parameters = {
         ...payload,
         pkgOptions: options,
@@ -74,8 +80,10 @@ const installMultiplePackagesEpic = (action$, state$) =>
         }
       } = state$.value;
 
-      const options = packagesInstallOptions.length ? packagesInstallOptions.map(opt => opt.options) : []
-
+      console.log(packagesInstallOptions);
+      const options = packagesInstallOptions.length
+        ? packagesInstallOptions.map(opt => opt.options)
+        : [];
       const parameters = {
         ...payload,
         pkgOptions: options,
@@ -83,7 +91,7 @@ const installMultiplePackagesEpic = (action$, state$) =>
         directory
       };
 
-      console.log(parameters)
+      console.log(parameters);
       ipcRenderer.send('npm-install', parameters);
     }),
     ignoreElements()

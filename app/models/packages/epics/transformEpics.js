@@ -51,12 +51,12 @@ const mapPackagesEpic = (action$, state$) =>
           (alldependencies, dependency) => {
             const [pkgName, details] = fromSearch
               ? [
-                dependency.name,
-                {
-                  version: dependency.version,
-                  description: dependency.description
-                }
-              ]
+                  dependency.name,
+                  {
+                    version: dependency.version,
+                    description: dependency.description
+                  }
+                ]
               : dependency;
 
             // eslint-disable-next-line
@@ -66,14 +66,15 @@ const mapPackagesEpic = (action$, state$) =>
             const isOutdated = packagesOutdated.some(o => o.name === pkgName);
             const outdatedPkg = packagesOutdated.find(o => o.name === pkgName);
 
-            const packageJSON = readPackageJson(directory); // side effect
+            // side effect
+            const packageJSON = readPackageJson(directory);
 
             const group =
               mode === 'local'
                 ? Object.keys(PACKAGE_GROUPS).find(
-                  groupName =>
-                    packageJSON[groupName] && packageJSON[groupName][pkgName]
-                )
+                    groupName =>
+                      packageJSON[groupName] && packageJSON[groupName][pkgName]
+                  )
                 : null;
 
             return [
@@ -101,9 +102,9 @@ const mapPackagesEpic = (action$, state$) =>
         return setPackages({
           dependencies: enhancedDependencies.filter(
             dependency =>
-              !dependency.__invalid ||
-              !dependency.__hasError ||
-              !dependency.__peerMissing ||
+              !dependency.__invalid &&
+              !dependency.__hasError &&
+              !dependency.__peerMissing &&
               !dependency.__missing
           ),
           projectName: fromSearch ? name : projectName,
@@ -111,7 +112,7 @@ const mapPackagesEpic = (action$, state$) =>
           projectVersion: fromSearch ? description : projectVersion,
           fromSearch,
           fromSort
-        })
+        });
       }
     )
   );

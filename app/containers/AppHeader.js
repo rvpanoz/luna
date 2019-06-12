@@ -55,7 +55,6 @@ const Header = ({ classes, onDrawerToggle }) => {
     open: false
   });
   const { activePage, loading, env, status } = useMappedState(mapState);
-
   const dispatch = useDispatch();
 
   return (

@@ -114,7 +114,7 @@ const PackageItem = ({
         </Typography>
       </TableCell>
       <TableCell padding="none" className={classes.tableCell}>
-        {missing ? (
+        {peerMissing ? (
           <Tooltip title="Package is missing. Run npm install to fix it">
             <Typography className={classes.typo}>
               <WarningIcon className={classes.statusMissing} />
