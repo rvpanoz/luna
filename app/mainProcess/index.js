@@ -6,6 +6,7 @@ import onNpmUpdate from './npmUpdate';
 import onNpmUninstall from './npmUninstall';
 import onNpmAudit from './npmAudit';
 import onNpmDoctor from './npmDoctor';
+import onNpmInit from './npmInit';
 
 export {
   onNpmView,
@@ -15,5 +16,6 @@ export {
   onNpmUninstall,
   onNpmUpdate,
   onNpmAudit,
-  onNpmDoctor
+  onNpmDoctor,
+  onNpmInit
 };

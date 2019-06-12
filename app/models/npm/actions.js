@@ -22,6 +22,7 @@ const clearAuditData = ActionCreator('CLEAR_AUDIT_DATA');
 // listeners
 const npmAuditListener = ActionCreator('REGISTER_LISTENER_AUDIT');
 const npmDoctorListener = ActionCreator('REGISTER_LISTENER_DOCTOR');
+const npmInitListener = ActionCreator('REGISTER_LISTENER_INIT');
 
 // operations
 const runInstall = ActionCreator('RUN_INSTALL');
@@ -51,6 +52,7 @@ export {
   runDoctor,
   npmDoctorListener,
   npmAuditListener,
+  npmInitListener,
   clearAuditData,
   parseNpmAuditData,
   updateNpmDoctorData,
