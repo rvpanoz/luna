@@ -37,8 +37,8 @@ const showInstallLoaderEpic = action$ =>
 const installPackageEpic = (action$, state$) =>
   action$.pipe(
     ofType(installPackage.type),
-    tap(console.log('install single')),
     tap(({ payload }) => {
+      const { name, ...rest } = payload;
       const {
         common: {
           mode,
@@ -47,17 +47,18 @@ const installPackageEpic = (action$, state$) =>
         }
       } = state$.value;
 
-      const options = packagesInstallOptions.length
-        ? packagesInstallOptions.map(opt => opt.options)
-        : [];
+      const options = packagesInstallOptions.find(
+        option => option.name === name
+      );
+
       const parameters = {
         ...payload,
-        pkgOptions: options,
+        name,
+        pkgOptions: options ? options.options : ['--save-prod'],
         mode,
         directory
       };
 
-      console.log(parameters);
       ipcRenderer.send('npm-install', parameters);
     }),
     ignoreElements()
@@ -65,25 +66,29 @@ const installPackageEpic = (action$, state$) =>
 
 /**
  * Send ipc event to main process to handle npm-install for multiple packages
- * supports global and local mode
+ * supports global and lopopppp[-cal mode
  */
 const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(installMultiplePackages.type),
-    tap(console.log('install multiple')),
     tap(({ payload }) => {
       const {
         common: {
           mode,
           directory,
           operations: { packagesInstallOptions }
-        }
+        },
+        ui: { selected }
       } = state$.value;
 
-      console.log(packagesInstallOptions);
-      const options = packagesInstallOptions.length
-        ? packagesInstallOptions.map(opt => opt.options)
-        : [];
+      const options = selected.map(selected => {
+        const pkg = packagesInstallOptions.find(
+          option => option.name === selected
+        );
+
+        return pkg && pkg.options ? pkg.options : ['save-prod'];
+      });
+
       const parameters = {
         ...payload,
         pkgOptions: options,
@@ -91,7 +96,6 @@ const installMultiplePackagesEpic = (action$, state$) =>
         directory
       };
 
-      console.log(parameters);
       ipcRenderer.send('npm-install', parameters);
     }),
     ignoreElements()

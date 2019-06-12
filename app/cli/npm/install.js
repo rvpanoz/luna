@@ -52,7 +52,9 @@ const install = (options, idx) => {
   const hasOptions = Array.isArray(pkgOptions) && pkgOptions.length;
   const commandOptions =
     mode === 'local' && hasOptions
-      ? pkgOptions[idx].map(option => `--${option}`)
+      ? multiple
+        ? pkgOptions[idx].map(option => `--${option}`)
+        : pkgOptions.map(option => `--${option}`)
       : ['--save-prod'];
 
   // build running command
@@ -62,7 +64,6 @@ const install = (options, idx) => {
     .concat(commandOptions)
     .concat(commandArgs);
 
-  console.log(run);
   return run;
 };
 

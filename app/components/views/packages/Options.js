@@ -21,14 +21,14 @@ import styles from './styles/options';
 const Options = ({ classes, packagesInstallOptions, selected }) => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    selected.map(packageSelected => dispatch(
-      addInstallOption({
-        name: packageSelected,
-        options: ['save-prod']
-      })
-    ))
-  }, [dispatch, selected])
+  // useEffect(() => {
+  //   selected.map(packageSelected => dispatch(
+  //     addInstallOption({
+  //       name: packageSelected,
+  //       options: ['save-prod']
+  //     })
+  //   ))
+  // }, [dispatch, selected])
 
   return (
     <div>
