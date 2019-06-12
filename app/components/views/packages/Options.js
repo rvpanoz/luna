@@ -1,10 +1,11 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable react/require-default-props */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
+
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -14,7 +15,6 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
 import { addInstallOption } from 'models/common/actions';
-import { INFO_MESSAGES } from 'constants/AppConstants';
 
 import styles from './styles/options';
 
@@ -24,7 +24,7 @@ const Options = ({ classes, packagesInstallOptions, selected }) => {
   return (
     <div>
       <Typography variant="subtitle1" className={classes.title}>
-        {INFO_MESSAGES.installing}
+        Select installation options
       </Typography>
       <Divider light />
       <List dense className={classes.list}>

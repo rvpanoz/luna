@@ -30,10 +30,8 @@ const InitView = ({ classes, onClose }) => {
   const npmInit = () => {
     dispatch(
       runInit({
-        channel: 'ipc-event',
-        ipcEvent: 'init',
+        ipcEvent: 'npm-init',
         cmd: ['init'],
-        mode: 'local',
         directory: initOptions.directory
       })
     );

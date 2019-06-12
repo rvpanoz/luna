@@ -39,7 +39,7 @@ const styles = () => ({
   },
   message: {
     ...defaultFont,
-    fontSize: 16,
+    fontSize: 14,
     padding: 0,
     margin: 0
   }

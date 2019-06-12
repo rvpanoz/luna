@@ -88,20 +88,23 @@ const TableListToolbar = ({
     }
 
     if (mode === 'local' && action === 'install' && !force) {
-      return toggleOptions(true);
+      return toggleOptions({
+        open: true,
+        single: false
+      });
     }
 
     if (action === 'install') {
       const pkgOptions =
         mode === 'local'
           ? selected.map(packageName => {
-              const packageDetails = packagesData.find(
-                packageDataDetails => packageDataDetails.name === packageName
-              );
-              const { __group } = packageDetails;
+            const packageDetails = packagesData.find(
+              packageDataDetails => packageDataDetails.name === packageName
+            );
+            const { __group } = packageDetails;
 
-              return [PACKAGE_GROUPS[__group]];
-            })
+            return [PACKAGE_GROUPS[__group]];
+          })
           : [];
 
       return dispatch(
@@ -193,7 +196,7 @@ const TableListToolbar = ({
       latest: () => (
         <Tooltip title="Install latest">
           <IconButton
-            color="primary"
+            color="secondary"
             aria-label="install_latest"
             onClick={() =>
               remote.dialog.showMessageBox(
@@ -345,9 +348,9 @@ const TableListToolbar = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-      selected.some(
-        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-      ),
+    selected.some(
+      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+    ),
     [selected]
   );
 

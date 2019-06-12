@@ -59,7 +59,7 @@ const AppTabs = ({ classes, children }) => {
             classes={{
               label: classes.tabLabel
             }}
-            label="Settings"
+            label="History"
           />
         </Tabs>
       </AppBar>

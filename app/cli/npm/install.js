@@ -24,54 +24,45 @@ const install = (options, idx) => {
   // '--ignore-scripts
   const defaults = ['--verbose'];
 
-  if (!packages && !multiple && !name && !packageJson) {
-    return Promise.reject(
-      'npm[install] package name or packages parameters must be given'
-    );
-  }
-
+  // install from package.json file
   if (packageJson) {
     return command.concat(['--ignore-scripts']);
   }
 
+  // attach -g option if mode is global
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
-  const commandOptsSingle =
-    pkgOptions && Array.isArray(pkgOptions)
-      ? pkgOptions.map(option => `--${option}`)
-      : null;
-  const packagesToInstallSingle = version ? [`${name}@${version}`] : [name];
-  const [commandFlags] = pkgOptions;
 
-  let packagesToInstallMultiple = [];
-  let commandOptsMultiple = ['--save-prod'];
+  let packagesToInstall;
 
-  if (Array.isArray(packages) && !name) {
+  // handle installation of a single package
+  if (single) {
+    packagesToInstall = version ? [`${name}@${version}`] : [name];
+  }
+
+  // handle installation of multiple packages
+  if (multiple && packages) {
     if (idx > -1 && packages.length > 1) {
-      packagesToInstallMultiple = packages[idx];
+      packagesToInstall = packages[idx];
     } else {
-      packagesToInstallMultiple = packages;
+      packagesToInstall = packages;
     }
-  } else {
-    packagesToInstallMultiple = [name];
   }
 
-  if (commandFlags && commandFlags.length) {
-    commandOptsMultiple = commandFlags[idx].map(option => `--${option}`);
-  }
+  // get installation options
+  const hasOptions = Array.isArray(pkgOptions) && pkgOptions.length;
+  const commandOptions =
+    mode === 'local' && hasOptions
+      ? multiple
+        ? pkgOptions[idx].map(option => `--${option}`)
+        : pkgOptions.map(option => `--${option}`)
+      : ['--save-prod'];
 
-  const runningCommandsOptions = single
-    ? commandOptsSingle
-    : commandOptsMultiple;
-
-  const packagesToInstall = single
-    ? packagesToInstallSingle
-    : packagesToInstallMultiple;
-
+  // build running command
   const run = []
     .concat(command)
-    .concat(commandArgs)
     .concat(packagesToInstall)
-    .concat(runningCommandsOptions);
+    .concat(commandOptions)
+    .concat(commandArgs);
 
   return run;
 };

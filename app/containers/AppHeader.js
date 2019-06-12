@@ -25,7 +25,7 @@ import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
 import SecurityIcon from '@material-ui/icons/SecurityOutlined';
 
-import NpmInit from 'components/common/NpmInit';
+import Init from 'components/common/Init';
 import System from 'components/common/System';
 import SearchBox from 'components/common/SearchBox';
 
@@ -55,7 +55,6 @@ const Header = ({ classes, onDrawerToggle }) => {
     open: false
   });
   const { activePage, loading, env, status } = useMappedState(mapState);
-
   const dispatch = useDispatch();
 
   return (
@@ -221,10 +220,7 @@ const Header = ({ classes, onDrawerToggle }) => {
       >
         <DialogTitle>Create a package.json file</DialogTitle>
         <DialogContent>
-          <NpmInit
-            directory={initFlowDialog.directory}
-            onClose={() => setInitFlowDialog({ open: false })}
-          />
+          <Init onClose={() => setInitFlowDialog({ open: false })} />
         </DialogContent>
       </Dialog>
     </section>

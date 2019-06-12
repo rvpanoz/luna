@@ -45,7 +45,7 @@ const searchEpic = (action$, state$) =>
     concatMap(() => [
       updateLoader({
         loading: true,
-        message: 'Searching...'
+        message: 'Searching npm registry...'
       }),
       clearAuditData(),
       clearSelected(),
