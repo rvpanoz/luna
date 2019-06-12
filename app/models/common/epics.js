@@ -67,7 +67,8 @@ const updateCommandEpic = pipe(
     updatePackages.type,
     uninstallPackages.type,
     runAudit.type,
-    runDoctor.type
+    runDoctor.type,
+    runInit.type
   ),
   mergeMap(({ payload }) => {
     const { packages, cmd } = payload || {};

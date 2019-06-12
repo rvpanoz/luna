@@ -173,16 +173,6 @@ ipcMain.on('npm-doctor', (event, options) =>
 );
 
 /**
- * Channel: npm-doctor
- * Supports: npm doctor
- * https://docs.npmjs.com/cli/doctor
- *
- */
-ipcMain.on('npm-doctor', (event, options) =>
-  onNpmDoctor(event, options, Store)
-);
-
-/**
  * Channel: app
  *
  * */

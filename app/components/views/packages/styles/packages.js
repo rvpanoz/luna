@@ -28,6 +28,12 @@ const styles = theme => ({
     justifyContent: 'flex-start',
     alignItems: 'flex-start'
   },
+  containerHolder: {
+    ...flexContainer,
+    paddingTop: theme.spacing.unit * 2,
+    flexDirection: 'column',
+    alignItems: 'center'
+  },
   flexRow: {
     ...flexContainer,
     justifyContent: 'flex-start',
@@ -92,11 +98,14 @@ const styles = theme => ({
       duration: theme.transitions.duration.shortest
     })
   },
+  noData: {
+    ...defaultFont
+  },
   withPadding: {
     padding: theme.spacing.unit + 4
   },
   nodata: {
-    padding: theme.spacing.unit + 4
+    ...defaultFont
   },
   icon: {
     width: '0.85em'

@@ -27,26 +27,23 @@ const runCommand = (options, callback) => {
       }
     });
 
-  // promises
+  // array of promises
   const tasks = combine();
 
   // run in serial
-  tasks.reduce((promiseChain, currentTask) => {
-    return promiseChain.then(chainResults =>
-      currentTask.then(currentResult =>
-        [...chainResults, currentResult]
-      )
-    );
-  }, Promise.resolve([])).then(results => results.map(result => {
-
-
-    return callback(result)
-  }))
+  tasks
+    .reduce(
+      (promiseChain, currentTask) =>
+        promiseChain.then(chainResults =>
+          currentTask.then(currentResult => [...chainResults, currentResult])
+        ),
+      Promise.resolve([])
+    )
+    .then(results => results.map(result => callback(result)))
     .catch(error => {
       log.error(error);
       return Promise.reject(error);
     });
-
 };
 
 export { runCommand };

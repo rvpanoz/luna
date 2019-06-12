@@ -38,7 +38,7 @@ const installPackageEpic = (action$, state$) =>
   action$.pipe(
     ofType(installPackage.type),
     tap(({ payload }) => {
-      const { name, ...rest } = payload;
+      const { name } = payload;
       const {
         common: {
           mode,
@@ -81,9 +81,9 @@ const installMultiplePackagesEpic = (action$, state$) =>
         ui: { selected }
       } = state$.value;
 
-      const options = selected.map(selected => {
+      const options = selected.map(selectedPackage => {
         const pkg = packagesInstallOptions.find(
-          option => option.name === selected
+          option => option.name === selectedPackage
         );
 
         return pkg && pkg.options ? pkg.options : ['save-prod'];

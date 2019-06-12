@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -36,11 +37,7 @@ import {
   setPageRows,
   setActivePage
 } from 'models/ui/actions';
-import {
-  setMode,
-  clearInstallOptions,
-  addInstallOption
-} from 'models/common/actions';
+import { setMode, clearInstallOptions } from 'models/common/actions';
 import { clearAuditData } from 'models/npm/actions';
 
 import TableToolbar from './TableToolbar';
@@ -123,7 +120,8 @@ const Packages = ({ classes }) => {
   const [options, toggleOptions] = useState({
     open: false,
     single: false,
-    name: null
+    name: null,
+    version: null
   });
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
@@ -215,7 +213,7 @@ const Packages = ({ classes }) => {
               <div className={classes.toolbar}>
                 <TableToolbar
                   title="Packages"
-                  total={(packagesData && packagesData.length) || 0}
+                  total={packagesData.length}
                   mode={mode}
                   directory={directory}
                   selected={selected}
@@ -234,14 +232,17 @@ const Packages = ({ classes }) => {
                   setFilteredByNamePackages={setFilteredByNamePackages}
                 />
               </div>
+              <Divider light />
               <div className={classes.tableWrapper} ref={wrapperRef}>
-                {!packagesData || packagesData.length === 0 ? (
-                  <Typography
-                    variant="subtitle1"
-                    className={classes.withPadding}
-                  >
-                    No packages found
-                  </Typography>
+                {packagesData.length === 0 ? (
+                  <div className={classes.containerHolder}>
+                    <Typography
+                      variant="subtitle1"
+                      className={cn(classes.noData, classes.withPadding)}
+                    >
+                      No packages found
+                    </Typography>
+                  </div>
                 ) : (
                   <Table
                     padding="dense"
@@ -367,7 +368,9 @@ const Packages = ({ classes }) => {
           dispatch(clearInstallOptions());
           toggleOptions({
             open: false,
-            single: false
+            single: false,
+            name: null,
+            version: null
           });
         }}
         aria-labelledby="install-options"
@@ -384,7 +387,9 @@ const Packages = ({ classes }) => {
               dispatch(clearInstallOptions());
               toggleOptions({
                 open: false,
-                single: false
+                single: false,
+                name: null,
+                version: null
               });
             }}
             color="secondary"
@@ -399,6 +404,7 @@ const Packages = ({ classes }) => {
                     ipcEvent: 'npm-install',
                     cmd: ['install'],
                     name: active.name,
+                    version: options.version,
                     single: true
                   })
                 );
@@ -415,7 +421,9 @@ const Packages = ({ classes }) => {
 
               toggleOptions({
                 open: false,
-                single: false
+                single: false,
+                name: null,
+                version: null
               });
             }}
             color="primary"

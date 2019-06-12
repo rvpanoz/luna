@@ -359,22 +359,28 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                             },
                             btnIdx => {
                               if (Boolean(btnIdx) === true) {
+                                if (mode === 'local') {
+                                  return toggleOptions({
+                                    open: true,
+                                    single: true,
+                                    name,
+                                    version: item
+                                  });
+                                }
+
                                 const pkgOptions = group
                                   ? [PACKAGE_GROUPS[group]]
                                   : ['save-prod'];
 
-                                const parameters = {
-                                  ipcEvent: 'install',
-                                  cmd: ['install'],
-                                  name,
-                                  version: item,
-                                  pkgOptions,
-                                  single: true,
-                                  mode,
-                                  directory
-                                };
-
-                                dispatch(installPackage(parameters));
+                                dispatch(
+                                  installPackage({
+                                    cmd: ['install'],
+                                    name,
+                                    pkgOptions,
+                                    version: item,
+                                    single: true
+                                  })
+                                );
                               }
                             }
                           );

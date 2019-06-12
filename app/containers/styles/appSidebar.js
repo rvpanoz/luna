@@ -114,13 +114,8 @@ const styles = theme => ({
     minHeight: 150
   },
   cardTitle: {
-    fontSize: 18,
-    margin: 0,
-    padding: 0,
-    fontWeight: 400,
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
-    overflow: "hidden",
+    ...defaultFont,
+    fontSize: 18
   },
   cardFlexContainer: {
     ...flexContainer,
@@ -131,14 +126,13 @@ const styles = theme => ({
   },
   cardFlexContainerInner: {
     ...flexContainer,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   cardLabel: {
     ...defaultFont,
-    fontSize: 12,
-    color: darken(grayColor, 0.5),
-  },
-
+    fontSize: 14,
+    color: darken(grayColor, 0.5)
+  }
 });
 
 export default styles;
