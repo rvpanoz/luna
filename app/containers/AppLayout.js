@@ -17,6 +17,7 @@ import SnackbarContent from 'components/common/SnackbarContent';
 import { Packages } from 'components/views/packages';
 import { Notifications } from 'components/views/notifications';
 import { Audit } from 'components/views/audit';
+import { Doctor } from 'components/views/doctor';
 
 import { setSnackbar } from 'models/ui/actions';
 
@@ -25,7 +26,7 @@ import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
 
 const mapState = ({
-  npm: { auditData },
+  npm: { auditData, doctorData },
   notifications: { notifications },
   common: { mode, directory, onlineStatus },
   ui: {
@@ -42,6 +43,7 @@ const mapState = ({
   }
 }) => ({
   auditData,
+  doctorData,
   dialog,
   onlineStatus,
   lastUpdatedAt,
@@ -63,6 +65,7 @@ const AppLayout = ({ classes }) => {
     snackbar,
     mode,
     auditData,
+    doctorData,
     directory,
     onlineStatus
   } = useMappedState(mapState);
@@ -91,6 +94,9 @@ const AppLayout = ({ classes }) => {
               ),
               audit: () => (
                 <Audit mode={mode} directory={directory} data={auditData} />
+              ),
+              doctor: () => (
+                <Doctor mode={mode} directory={directory} data={doctorData} />
               )
             })(<Packages />)(activePage)}
           </main>

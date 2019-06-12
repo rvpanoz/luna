@@ -21,21 +21,20 @@ import DialogContent from '@material-ui/core/DialogContent';
 import FixIcon from '@material-ui/icons/Build';
 import StatsCard from 'components/common/StatsCard';
 
-import { runAudit } from 'models/npm/actions';
 import { firstToUpper } from 'commons/utils';
-
 import FixOptions from './FixOptions';
 import styles from './styles/audit';
 
 // TODO: fix
-const runAuditFix = () => { };
+// const runAuditFix = () => { };
 
 const renderTotals = content => {
-
-  const { totalDependencies } = content || {}
+  const { totalDependencies } = content || {};
 
   // get total values (exclude vulnerabiltities)
-  const values = Object.keys(content).filter(key => key !== 'totalDependencies' && key !== 'vulnerabilities')
+  const values = Object.keys(content).filter(
+    key => key !== 'totalDependencies' && key !== 'vulnerabilities'
+  );
 
   return values.map(keyValue => {
     const [title] = keyValue.split('Dependencies');
@@ -51,11 +50,8 @@ const renderTotals = content => {
   });
 };
 
-const renderVulnerabilites = (
-  classes,
-  content
-) => {
-  const { vulnerabilities } = content || {}
+const renderVulnerabilites = (classes, content) => {
+  const { vulnerabilities } = content || {};
 
   return (
     <Table className={classes.tableStyles}>
@@ -76,7 +72,9 @@ const renderVulnerabilites = (
               </span>
             </TableCell>
             <TableCell align="right">
-              <span className={classes.vulnerabilityValue}>{vulnerabilities[key]}</span>
+              <span className={classes.vulnerabilityValue}>
+                {vulnerabilities[key]}
+              </span>
             </TableCell>
           </TableRow>
         ))}
@@ -85,19 +83,17 @@ const renderVulnerabilites = (
   );
 };
 
-const renderError = (classes, code, summary) => <div className={classes.container}>
-  <div className={classes.flexContainer}>
-    <div className={classes.header}>
-      <Typography className={classes.title}>
-        {code}
-      </Typography>
-      <Divider className={classes.divider} light />
-      <Typography variant="subtitle1">
-        {summary}
-      </Typography>
+const renderError = (classes, code, summary) => (
+  <div className={classes.container}>
+    <div className={classes.flexContainer}>
+      <div className={classes.header}>
+        <Typography className={classes.title}>{code}</Typography>
+        <Divider className={classes.divider} light />
+        <Typography variant="subtitle1">{summary}</Typography>
+      </div>
     </div>
   </div>
-</div>
+);
 
 const Audit = ({ classes, data }) => {
   const [fix, setFix] = useState(false);
@@ -117,15 +113,15 @@ const Audit = ({ classes, data }) => {
     }
 
     const { content } = data || {};
-    const { vulnerabilities } = content || {}
+    const { vulnerabilities } = content || {};
     const { value } = vulnerabilities || {};
 
     const needFix =
       value &&
       value.reduce((total, dataItem) => {
-        const { value } = dataItem;
+        const dataItemValue = dataItem.value;
 
-        return total + value;
+        return total + dataItemValue;
       }, 0);
 
     if (needFix) {
@@ -151,7 +147,7 @@ const Audit = ({ classes, data }) => {
   if (error) {
     const { code, summary, detail } = data;
 
-    return renderError(classes, code, summary, detail)
+    return renderError(classes, code, summary, detail);
   }
 
   const { content } = data || {};
@@ -187,10 +183,7 @@ const Audit = ({ classes, data }) => {
           <div className={classes.topSection}>{renderTotals(content)}</div>
           <div className={classes.bottomSection}>
             <div className={classes.bottomLeft}>
-              {renderVulnerabilites(
-                classes,
-                content
-              )}
+              {renderVulnerabilites(classes, content)}
             </div>
           </div>
         </div>
@@ -198,17 +191,17 @@ const Audit = ({ classes, data }) => {
       <Dialog
         open={optionsOpen}
         fullWidth
-        onClose={() => { }}
+        onClose={() => {}}
         aria-labelledby="fix-options"
       >
         <DialogContent>
           <FixOptions />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { }} color="secondary">
+          <Button onClick={() => {}} color="secondary">
             Cancel
           </Button>
-          <Button onClick={() => { }} color="primary" autoFocus>
+          <Button onClick={() => {}} color="primary" autoFocus>
             Fix
           </Button>
         </DialogActions>
@@ -223,7 +216,14 @@ Audit.defaultProps = {
 
 Audit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  data: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.object, PropTypes.array, PropTypes.bool, PropTypes.string]))
+  data: PropTypes.objectOf(
+    PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.array,
+      PropTypes.bool,
+      PropTypes.string
+    ])
+  )
 };
 
 export default withStyles(styles)(Audit);

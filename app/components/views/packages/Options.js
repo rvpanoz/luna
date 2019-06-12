@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 /* eslint-disable react/require-default-props */
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';

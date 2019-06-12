@@ -1,3 +1,5 @@
+/* eslint-disable react/require-default-props */
+
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -16,7 +18,7 @@ import FolderIcon from '@material-ui/icons/FolderOpen';
 
 import styles from './styles/history';
 
-const HistoryTab = ({ classes, directories, loading, onClick }) => (
+const HistoryTab = ({ classes, directories, onClick }) => (
   <div className={classes.tab}>
     <List>
       {!directories || !directories.length ? (
@@ -28,7 +30,7 @@ const HistoryTab = ({ classes, directories, loading, onClick }) => (
           />
         </ListItem>
       ) : null}
-      {directories.map((dir, idx) => (
+      {directories.map(dir => (
         <Tooltip title={`Load ${dir.name}`} key={dir.name}>
           <ListItem dense className={classes.listItem}>
             <ListItemIcon>
@@ -66,8 +68,7 @@ const HistoryTab = ({ classes, directories, loading, onClick }) => (
 HistoryTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   directories: PropTypes.arrayOf(PropTypes.object),
-  onClick: PropTypes.func.isRequired,
-  loading: PropTypes.bool
+  onClick: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(HistoryTab);

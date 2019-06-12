@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
-import { setRunningCommand, parseNpmAuditData } from 'models/npm/actions';
+import { setRunningCommand } from 'models/npm/actions';
 import { toggleLoader, setActivePage, setSnackbar } from 'models/ui/actions';
 
 const updateCommand = ({
@@ -19,7 +19,7 @@ const updateCommand = ({
 const onNpmAudit$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-init-completed']);
 
-  ipcRenderer.on('npm-init-completed', (event, data) => {
+  ipcRenderer.on('npm-init-completed', () => {
     observer.next(
       updateCommand({
         operationStatus: 'idle',

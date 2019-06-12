@@ -24,12 +24,10 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import UpdateIcon from '@material-ui/icons/Update';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
-import LoadIcon from '@material-ui/icons/ArchiveOutlined';
 import SwitchIcon from '@material-ui/icons/LoopOutlined';
 
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import { switchcase } from 'commons/utils';
-import { navigatorParameters } from 'commons/parameters';
 import {
   uninstallPackages,
   updatePackages,
@@ -98,13 +96,13 @@ const TableListToolbar = ({
       const pkgOptions =
         mode === 'local'
           ? selected.map(packageName => {
-            const packageDetails = packagesData.find(
-              packageDataDetails => packageDataDetails.name === packageName
-            );
-            const { __group } = packageDetails;
+              const packageDetails = packagesData.find(
+                packageDataDetails => packageDataDetails.name === packageName
+              );
+              const { __group } = packageDetails;
 
-            return [PACKAGE_GROUPS[__group]];
-          })
+              return [PACKAGE_GROUPS[__group]];
+            })
           : [];
 
       return dispatch(
@@ -144,13 +142,6 @@ const TableListToolbar = ({
 
     return false;
   };
-
-  const openPackage = () =>
-    remote.dialog.showOpenDialog(
-      remote.getCurrentWindow(),
-      navigatorParameters,
-      filePath => (filePath ? switchMode('local', filePath.join('')) : null)
-    );
 
   const renderAction = action => {
     const hasNpmSelected = selected && selected.indexOf('npm') > -1;
@@ -296,16 +287,6 @@ const TableListToolbar = ({
 
   const renderToolbarActions = () => (
     <React.Fragment>
-      <Tooltip title="Open package.json">
-        <IconButton
-          color="primary"
-          disableRipple
-          aria-label="open_package"
-          onClick={openPackage}
-        >
-          <LoadIcon />
-        </IconButton>
-      </Tooltip>
       <Tooltip title="Switch to global packages">
         <div>
           <IconButton
@@ -318,7 +299,7 @@ const TableListToolbar = ({
           </IconButton>
         </div>
       </Tooltip>
-      {!fromSearch && (
+      {!fromSearch && total ? (
         <Tooltip title="Show filters">
           <div>
             <IconButton
@@ -331,26 +312,28 @@ const TableListToolbar = ({
             </IconButton>
           </div>
         </Tooltip>
-      )}
-      <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
-        <div>
-          <IconButton
-            disableRipple
-            aria-label="back_reload"
-            onClick={() => reload()}
-          >
-            <RefreshIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
+      ) : null}
+      {total ? (
+        <Tooltip title={fromSearch ? 'Back to list' : 'Reload list'}>
+          <div>
+            <IconButton
+              disableRipple
+              aria-label="back_reload"
+              onClick={() => reload()}
+            >
+              <RefreshIcon />
+            </IconButton>
+          </div>
+        </Tooltip>
+      ) : null}
     </React.Fragment>
   );
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-    selected.some(
-      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-    ),
+      selected.some(
+        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+      ),
     [selected]
   );
 
