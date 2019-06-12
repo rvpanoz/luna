@@ -220,12 +220,9 @@ const AppSidebar = ({
                         color="primary"
                         className={classes.updateIcon}
                       />
-                      <Typography className={classes.cardLabel}>
-                        Updated at
-                      </Typography>
                     </div>
                     <Typography className={classes.cardLabel}>
-                      {lastUpdatedAt}
+                      {`Updated at ${lastUpdatedAt}`}
                     </Typography>
                   </div>
                 </CardActions>

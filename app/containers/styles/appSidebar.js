@@ -130,7 +130,7 @@ const styles = theme => ({
   },
   cardLabel: {
     ...defaultFont,
-    fontSize: 14,
+    fontSize: 12,
     color: darken(grayColor, 0.5)
   }
 });

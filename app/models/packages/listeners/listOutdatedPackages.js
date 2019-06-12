@@ -56,12 +56,13 @@ const onListOutdatedPackages$ = new Observable(observer => {
             })
           );
         },
-        outdated: () =>
+        outdated: () => {
           observer.next(
             mapOutdatedPackages({
               data: noDependencies ? [] : dataArray
             })
-          )
+          );
+        }
       })('list')(command);
     } catch (error) {
       observer.error(error);

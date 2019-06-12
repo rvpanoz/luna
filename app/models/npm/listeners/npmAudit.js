@@ -20,7 +20,6 @@ const onNpmAudit$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-audit-completed']);
 
   ipcRenderer.on('npm-audit-completed', (event, data) => {
-
     observer.next(
       updateCommand({
         operationStatus: 'idle',
@@ -29,11 +28,9 @@ const onNpmAudit$ = new Observable(observer => {
       })
     );
 
-    observer.next(
-      parseNpmAuditData(data)
-    );
+    observer.next(parseNpmAuditData(data));
 
-    observer.next(setActivePage({ page: 'audit' }));
+    observer.next(setActivePage({ page: 'audit', paused: true }));
 
     observer.next(
       setSnackbar({

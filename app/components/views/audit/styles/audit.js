@@ -88,6 +88,11 @@ const styles = theme => ({
     color: darken(grayColor, 0.5),
     fontSize: 20
   },
+  helperText: {
+    ...defaultFont,
+    color: lighten(grayColor, 0.1),
+    fontSize: 16
+  },
   noData: {
     ...defaultFont
   },

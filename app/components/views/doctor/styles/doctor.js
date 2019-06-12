@@ -63,10 +63,6 @@ const styles = theme => ({
     paddingBottom: theme.spacing.unit,
     color: grayColor
   },
-  auditDescription: {
-    ...defaultFont,
-    padding: theme.spacing.unit * 4
-  },
   table: {
     width: '100%'
   },
@@ -78,15 +74,10 @@ const styles = theme => ({
   avatar: {
     backgroundColor: theme.palette.common.white
   },
-  vulnerabilityValue: {
+  helperText: {
     ...defaultFont,
-    color: darken(grayColor, 0.5),
-    fontSize: 20
-  },
-  vulnerabilityType: {
-    ...defaultFont,
-    color: darken(grayColor, 0.5),
-    fontSize: 20
+    color: lighten(grayColor, 0.1),
+    fontSize: 16
   },
   noData: {
     ...defaultFont

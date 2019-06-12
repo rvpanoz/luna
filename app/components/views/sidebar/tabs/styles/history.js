@@ -12,7 +12,7 @@ const styles = theme => ({
   label: {
     ...defaultFont,
     width: '100%',
-    fontSize: 18,
+    fontSize: 16,
     color: lighten(grayColor, 0.2)
   },
   secondaryText: {
