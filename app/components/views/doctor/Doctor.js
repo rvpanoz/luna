@@ -7,17 +7,33 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
+import Avatar from '@material-ui/core/Avatar';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemText from '@material-ui/core/ListItemText';
+
+import CheckIcon from '@material-ui/icons/CheckOutlined';
 import styles from './styles/doctor';
 
-const renderData = data => {
-  return null;
-};
+const renderData = data => (
+  <List disablePadding>
+    {data &&
+      data
+        .filter(value => value.length)
+        .map(dataValue => (
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar style={{ backgroundColor: '#fff' }}>
+                <CheckIcon color="secondary" />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={dataValue} />
+          </ListItem>
+        ))}
+  </List>
+);
 
 const Doctor = ({ classes, data }) => {
   if (!data) {
@@ -29,11 +45,12 @@ const Doctor = ({ classes, data }) => {
         >
           No doctor data
         </Typography>
+        <Typography variant="caption" className={cn(classes.helperText)}>
+          navigate to Actions tab and run npm doctor
+        </Typography>
       </div>
     );
   }
-
-  const { content } = data || {};
 
   return (
     <React.Fragment>
@@ -47,7 +64,7 @@ const Doctor = ({ classes, data }) => {
             </div>
           </div>
           <Divider light />
-          <div className={classes.topSection}>{renderData(content)}</div>
+          <div className={classes.topSection}>{renderData(data)}</div>
         </div>
       </Paper>
     </React.Fragment>
@@ -60,14 +77,7 @@ Doctor.defaultProps = {
 
 Doctor.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  data: PropTypes.objectOf(
-    PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.array,
-      PropTypes.bool,
-      PropTypes.string
-    ])
-  )
+  data: PropTypes.array
 };
 
 export default withStyles(styles)(Doctor);

@@ -138,6 +138,9 @@ const Audit = ({ classes, data }) => {
         >
           No audit data
         </Typography>
+        <Typography variant="caption" className={cn(classes.helperText)}>
+          navigate to Actions tab and run npm audit
+        </Typography>
       </div>
     );
   }

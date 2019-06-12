@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { parseNpmDoctor } from 'commons/utils';
 import { setRunningCommand, updateNpmDoctorData } from 'models/npm/actions';
-import { toggleLoader } from 'models/ui/actions';
+import { toggleLoader, setActivePage, setSnackbar } from 'models/ui/actions';
 
 const updateCommand = ({
   operationStatus,
@@ -34,6 +34,16 @@ const onNpmDoctor$ = new Observable(observer => {
     observer.next(
       updateNpmDoctorData({
         data: content
+      })
+    );
+
+    observer.next(setActivePage({ page: 'doctor', paused: true }));
+
+    observer.next(
+      setSnackbar({
+        open: true,
+        type: 'info',
+        message: 'npm doctor completed'
       })
     );
 

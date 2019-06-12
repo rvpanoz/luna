@@ -1,6 +1,5 @@
 /* eslint-disable react/require-default-props */
 
-import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -25,41 +24,38 @@ const HistoryTab = ({ classes, directories, onClick }) => (
         <ListItem dense className={classes.listItem}>
           <ListItemText
             primary={
-              <Typography className={classes.label}>No directories</Typography>
+              <Typography className={classes.label}>No history</Typography>
             }
           />
         </ListItem>
       ) : null}
       {directories.map(dir => (
-        <Tooltip title={`Load ${dir.name}`} key={dir.name}>
-          <ListItem dense className={classes.listItem}>
-            <ListItemIcon>
-              <FolderIcon color="secondary" />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Typography className={classes.label}>{dir.name}</Typography>
-              }
-              secondary={
-                <Typography className={classes.secondaryText}>
-                  {path.dirname(dir.directory)}
-                </Typography>
-              }
-            />
-            <ListItemSecondaryAction>
-              <Tooltip title="Load directory">
-                <div>
-                  <IconButton
-                    aria-label="action"
-                    onClick={() => onClick(dir.directory)}
-                  >
-                    <ArrowRightIcon />
-                  </IconButton>
-                </div>
+        <ListItem dense className={classes.listItem} key={dir.name}>
+          <ListItemIcon>
+            <div>
+              <Tooltip title={dir.directory}>
+                <FolderIcon color="primary" />
               </Tooltip>
-            </ListItemSecondaryAction>
-          </ListItem>
-        </Tooltip>
+            </div>
+          </ListItemIcon>
+          <ListItemText
+            primary={
+              <Typography className={classes.label}>{dir.name}</Typography>
+            }
+          />
+          <ListItemSecondaryAction>
+            <Tooltip title="Load directory">
+              <div>
+                <IconButton
+                  aria-label="action"
+                  onClick={() => onClick(dir.directory)}
+                >
+                  <ArrowRightIcon />
+                </IconButton>
+              </div>
+            </Tooltip>
+          </ListItemSecondaryAction>
+        </ListItem>
       ))}
     </List>
   </div>

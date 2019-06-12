@@ -196,7 +196,7 @@ export const parseNpmDoctor = data => {
   }
 
   try {
-    const dataParts = data.split('\n').map(line.replace(/  +/g, ' '));
+    const dataParts = data.split('\n').map(line => line.replace(/  +/g, ' '));
 
     return dataParts;
   } catch (error) {
