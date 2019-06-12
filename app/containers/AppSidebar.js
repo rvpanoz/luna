@@ -253,6 +253,8 @@ const AppSidebar = ({
                           cmd: ['audit']
                         })
                       );
+
+                      return;
                     }
                   },
                   {
@@ -261,13 +263,23 @@ const AppSidebar = ({
                     primaryText: 'npm doctor',
                     secondaryText:
                       'Run a set of checks to ensure your npm installation',
-                    handler: () =>
+                    handler: () => {
+                      dispatch(
+                        setActivePage({
+                          page: 'packages',
+                          paused: true
+                        })
+                      );
+
                       dispatch(
                         runDoctor({
                           ipcEvent: 'npm-doctor',
                           cmd: ['doctor']
                         })
-                      )
+                      );
+
+                      return;
+                    }
                   }
                 ]}
                 nodata={packagesData.length}

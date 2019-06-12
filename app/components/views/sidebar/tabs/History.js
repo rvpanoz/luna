@@ -1,3 +1,4 @@
+import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -5,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowRightIcon from '@material-ui/icons/ArrowRightAlt';
 import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -20,11 +22,9 @@ const HistoryTab = ({ classes, directories, loading, onClick }) => (
       {!directories || !directories.length ? (
         <ListItem dense className={classes.listItem}>
           <ListItemText
-            classes={{
-              primary: classes.itemPrimary,
-              textDense: classes.textDense
-            }}
-            primary="No history found"
+            primary={
+              <Typography className={classes.label}>No directories</Typography>
+            }
           />
         </ListItem>
       ) : null}
@@ -35,11 +35,14 @@ const HistoryTab = ({ classes, directories, loading, onClick }) => (
               <FolderIcon color="secondary" />
             </ListItemIcon>
             <ListItemText
-              classes={{
-                primary: classes.itemPrimary,
-                textDense: classes.textDense
-              }}
-              primary={dir.name}
+              primary={
+                <Typography className={classes.label}>{dir.name}</Typography>
+              }
+              secondary={
+                <Typography className={classes.secondaryText}>
+                  {path.dirname(dir.directory)}
+                </Typography>
+              }
             />
             <ListItemSecondaryAction>
               <Tooltip title="Load directory">

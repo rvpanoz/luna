@@ -17,7 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import styles from './styles/actions';
 
 const renderAction = (classes, nodata, mode, installPackages) => (
-  <ListItem key="install_packagejson_all" className={classes.listItem}>
+  <ListItem key="install-packagejson-all" className={classes.listItem}>
     <ListItemText
       primary={<Typography className={classes.label}>npm install</Typography>}
       secondary={
@@ -36,7 +36,7 @@ const renderAction = (classes, nodata, mode, installPackages) => (
       >
         <div>
           <IconButton
-            aria-label="action_install"
+            aria-label="action-install"
             disabled={nodata === 0 || mode === 'global'}
             onClick={installPackages}
           >
@@ -87,7 +87,7 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
                           type: 'question',
                           message: `\nWould you like to run ${
                             item.primaryText
-                            }? \n\nNote: This process will take some time `,
+                          }? \n\nNote: This process will take some time `,
                           buttons: ['Cancel', 'Run']
                         },
                         btnIdx => {
