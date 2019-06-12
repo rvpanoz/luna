@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
+import IconButton from '@material-ui/core/IconButton';
+import ArrowRightIcon from '@material-ui/icons/ArrowRightAlt';
 import Tooltip from '@material-ui/core/Tooltip';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -28,13 +30,7 @@ const HistoryTab = ({ classes, directories, loading, onClick }) => (
       ) : null}
       {directories.map((dir, idx) => (
         <Tooltip title={`Load ${dir.name}`} key={dir.name}>
-          <ListItem
-            dense
-            disabled={loading}
-            button
-            onClick={() => onClick(dir.directory)}
-            className={classes.listItem}
-          >
+          <ListItem dense className={classes.listItem}>
             <ListItemIcon>
               <FolderIcon color="secondary" />
             </ListItemIcon>
@@ -45,6 +41,18 @@ const HistoryTab = ({ classes, directories, loading, onClick }) => (
               }}
               primary={dir.name}
             />
+            <ListItemSecondaryAction>
+              <Tooltip title="Load directory">
+                <div>
+                  <IconButton
+                    aria-label="action"
+                    onClick={() => onClick(dir.directory)}
+                  >
+                    <ArrowRightIcon />
+                  </IconButton>
+                </div>
+              </Tooltip>
+            </ListItemSecondaryAction>
           </ListItem>
         </Tooltip>
       ))}
