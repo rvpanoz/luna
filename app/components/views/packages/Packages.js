@@ -27,6 +27,7 @@ import { scrollWrapper } from 'commons/utils';
 import {
   setPackagesStart,
   viewPackageStart,
+  installPackage,
   installMultiplePackages
 } from 'models/packages/actions';
 import {
@@ -46,7 +47,7 @@ import TableToolbar from './TableToolbar';
 import TableHeader from './TableHeader';
 import TableFooter from './TableFooter';
 import PackageItem from './PackageItem';
-import Options from './Options';
+import DialogOptions from './Options';
 
 import styles from './styles/packages';
 
@@ -119,7 +120,11 @@ const Packages = ({ classes }) => {
 
   /* eslint-disable-next-line */
   const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
-  const [optionsOpen, toggleOptions] = useState(false);
+  const [options, toggleOptions] = useState({
+    open: false,
+    single: false,
+    name: null
+  });
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
@@ -235,110 +240,107 @@ const Packages = ({ classes }) => {
                     variant="subtitle1"
                     className={classes.withPadding}
                   >
-                    {fromSearch ? 'No packages found' : 'No dependencies found'}
+                    No packages found
                   </Typography>
                 ) : (
-                    <Table
-                      padding="dense"
-                      aria-labelledby="packages-list"
-                      className={cn(classes.table, {
-                        [classes.hasFilterBlur]: loading
-                      })}
-                    >
-                      <TableHeader
-                        packages={dataSlices.map(d => d.name)}
-                        numSelected={selected.length}
-                        rowCount={listDataPackages && listDataPackages.length}
-                        sortBy={sortBy}
-                        sortDir={sortDir}
-                      />
-                      <TableBody>
-                        {listDataPackages &&
-                          listDataPackages.map(
-                            ({
-                              name,
-                              version,
-                              latest,
-                              isOutdated,
-                              peerDependencies,
-                              extraneous,
-                              problems,
-                              missing,
-                              __hasError,
-                              __group
-                            }) => {
-                              const isPackageSelected =
-                                selected.indexOf(name) > -1;
-                              const installOptions = Array.isArray(
-                                packagesInstallOptions
-                              )
-                                ? packagesInstallOptions.find(
+                  <Table
+                    padding="dense"
+                    aria-labelledby="packages-list"
+                    className={cn(classes.table, {
+                      [classes.hasFilterBlur]: loading
+                    })}
+                  >
+                    <TableHeader
+                      packages={dataSlices.map(d => d.name)}
+                      numSelected={selected.length}
+                      rowCount={listDataPackages && listDataPackages.length}
+                      sortBy={sortBy}
+                      sortDir={sortDir}
+                    />
+                    <TableBody>
+                      {listDataPackages &&
+                        listDataPackages.map(
+                          ({
+                            name,
+                            version,
+                            latest,
+                            isOutdated,
+                            peerDependencies,
+                            extraneous,
+                            problems,
+                            missing,
+                            peerMissing,
+                            __hasError,
+                            __group
+                          }) => {
+                            const isPackageSelected =
+                              selected.indexOf(name) > -1;
+                            const installOptions = Array.isArray(
+                              packagesInstallOptions
+                            )
+                              ? packagesInstallOptions.find(
                                   installOption => installOption.name === name
                                 )
-                                : {};
+                              : {};
 
-                              const inOperation =
-                                operationStatus !== 'idle' &&
-                                operationCommand !== 'install' &&
-                                operationPackages.indexOf(name) > -1;
+                            const inOperation =
+                              operationStatus !== 'idle' &&
+                              operationCommand !== 'install' &&
+                              operationPackages.indexOf(name) > -1;
 
-                              const inPackageJson = packagesFromPackageJson.some(
-                                pkg => {
-                                  /* eslint-disable-next-line */
-                                  const [pkgGroup, pkgDetails] = pkg;
-                                  const [pkgName] = Object.keys(pkgDetails);
+                            const inPackageJson = packagesFromPackageJson.some(
+                              pkg => {
+                                /* eslint-disable-next-line */
+                                const [pkgGroup, pkgDetails] = pkg;
+                                const [pkgName] = Object.keys(pkgDetails);
 
-                                  return pkgName === name;
+                                return pkgName === name;
+                              }
+                            );
+
+                            return (
+                              <PackageItem
+                                key={`pkg-${name}`}
+                                isSelected={isPackageSelected}
+                                installOptions={installOptions}
+                                addSelected={() =>
+                                  dispatch(addSelected({ name }))
                                 }
-                              );
-
-                              return (
-                                <PackageItem
-                                  key={`pkg-${name}`}
-                                  isSelected={isPackageSelected}
-                                  installOptions={installOptions}
-                                  addSelected={() =>
-                                    dispatch(addSelected({ name }))
-                                  }
-                                  addInstallOption={(pkgName, options) =>
-                                    dispatch(
-                                      addInstallOption({ name: pkgName, options })
-                                    )
-                                  }
-                                  name={name}
-                                  peerDependencies={peerDependencies}
-                                  latest={latest}
-                                  version={version}
-                                  mode={mode}
-                                  missing={missing}
-                                  isOutdated={isOutdated}
-                                  fromSearch={fromSearch}
-                                  extraneous={extraneous}
-                                  problems={problems}
-                                  viewPackage={viewPackageHandler}
-                                  inOperation={inOperation}
-                                  inPackageJson={inPackageJson}
-                                  hasError={__hasError}
-                                  group={__group}
-                                />
-                              );
-                            }
-                          )}
-                      </TableBody>
-                      <TableFooter
-                        rowCount={data && data.length}
-                        page={page}
-                        rowsPerPage={rowsPerPage}
-                        handleChangePage={(e, pageNo) => {
-                          scrollWrapper(wrapperRef && wrapperRef.current, 0);
-                          dispatch(setPage({ page: pageNo }));
-                        }}
-                        handleChangePageRows={e =>
-                          dispatch(setPageRows({ rowsPerPage: e.target.value }))
-                        }
-                      />
-                    </Table>
-                  )}
+                                name={name}
+                                peerDependencies={peerDependencies}
+                                latest={latest}
+                                version={version}
+                                mode={mode}
+                                missing={missing}
+                                isOutdated={isOutdated}
+                                fromSearch={fromSearch}
+                                extraneous={extraneous}
+                                problems={problems}
+                                viewPackage={viewPackageHandler}
+                                inOperation={inOperation}
+                                inPackageJson={inPackageJson}
+                                peerMissing={peerMissing}
+                                hasError={__hasError}
+                                group={__group}
+                              />
+                            );
+                          }
+                        )}
+                    </TableBody>
+                    <TableFooter
+                      rowCount={data && data.length}
+                      page={page}
+                      rowsPerPage={rowsPerPage}
+                      handleChangePage={(e, pageNo) => {
+                        scrollWrapper(wrapperRef && wrapperRef.current, 0);
+                        dispatch(setPage({ page: pageNo }));
+                      }}
+                      handleChangePageRows={e =>
+                        dispatch(setPageRows({ rowsPerPage: e.target.value }))
+                      }
+                    />
+                  </Table>
+                )}
               </div>
             </Paper>
           </Grid>
@@ -359,16 +361,19 @@ const Packages = ({ classes }) => {
       </AppLoader>
 
       <Dialog
-        open={optionsOpen}
+        open={options.open}
         fullWidth
         onClose={() => {
           dispatch(clearInstallOptions());
-          toggleOptions(!optionsOpen);
+          toggleOptions({
+            open: false,
+            single: false
+          });
         }}
         aria-labelledby="install-options"
       >
         <DialogContent>
-          <Options
+          <DialogOptions
             selected={selected.length ? selected : active ? [active.name] : []}
             packagesInstallOptions={packagesInstallOptions}
           />
@@ -377,7 +382,10 @@ const Packages = ({ classes }) => {
           <Button
             onClick={() => {
               dispatch(clearInstallOptions());
-              toggleOptions(false);
+              toggleOptions({
+                open: false,
+                single: false
+              });
             }}
             color="secondary"
           >
@@ -385,21 +393,30 @@ const Packages = ({ classes }) => {
           </Button>
           <Button
             onClick={() => {
-              dispatch(
-                installMultiplePackages({
-                  ipcEvent: 'npm-install',
-                  cmd: selected.length
-                    ? selected.map(() => 'install')
-                    : ['install'],
-                  multiple: true,
-                  packages: selected.length
-                    ? selected
-                    : active
-                      ? [active.name]
-                      : []
-                })
-              );
-              toggleOptions(false);
+              if (options.single) {
+                dispatch(
+                  installPackage({
+                    ipcEvent: 'npm-install',
+                    cmd: ['install'],
+                    name: active.name,
+                    single: true
+                  })
+                );
+              } else {
+                dispatch(
+                  installMultiplePackages({
+                    ipcEvent: 'npm-install',
+                    cmd: selected.map(() => 'install'),
+                    multiple: true,
+                    packages: selected
+                  })
+                );
+              }
+
+              toggleOptions({
+                open: false,
+                single: false
+              });
             }}
             color="primary"
             autoFocus

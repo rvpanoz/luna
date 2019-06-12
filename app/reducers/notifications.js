@@ -20,7 +20,9 @@ const createReducer = (notificationsState, handlers) => (
 
 const handlers = {
   [updateNotifications.type]: (state, { payload: { data } }) =>
-    assoc('notifications', data, state),
+    merge(state, {
+      notifications: data
+    }),
   [addNotification.type]: (
     state,
     { payload: { type, body, required, requiredBy } }

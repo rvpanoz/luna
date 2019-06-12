@@ -22,7 +22,8 @@ import {
   onNpmUpdate,
   onNpmUninstall,
   onNpmAudit,
-  onNpmDoctor
+  onNpmDoctor,
+  onNpmInit
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
 
@@ -153,6 +154,13 @@ ipcMain.on('npm-update', (event, options) =>
  */
 ipcMain.on('npm-audit', (event, options) => onNpmAudit(event, options, Store));
 
+/**
+ * Channel: npm-init
+ * Supports: npm init
+ * https://docs.npmjs.com/cli/init
+ *
+ */
+ipcMain.on('npm-init', (event, options) => onNpmInit(event, options, Store));
 
 /**
  * Channel: npm-doctor
@@ -160,7 +168,9 @@ ipcMain.on('npm-audit', (event, options) => onNpmAudit(event, options, Store));
  * https://docs.npmjs.com/cli/doctor
  *
  */
-ipcMain.on('npm-doctor', (event, options) => onNpmDoctor(event, options, Store));
+ipcMain.on('npm-doctor', (event, options) =>
+  onNpmDoctor(event, options, Store)
+);
 
 /**
  * Channel: npm-doctor

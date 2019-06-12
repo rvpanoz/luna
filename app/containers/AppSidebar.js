@@ -25,10 +25,13 @@ import Typography from '@material-ui/core/Typography';
 import AppLogo from 'components/common/AppLogo';
 import AppTabs from 'components/common/AppTabs';
 
-import FolderIcon from '@material-ui/icons/FolderOpen';
 import UpdateIcon from '@material-ui/icons/Update';
 
-import { PackagesTab, ActionsTab } from 'components/views/sidebar/tabs';
+import {
+  PackagesTab,
+  ActionsTab,
+  HistoryTab
+} from 'components/views/sidebar/tabs';
 
 import { navigatorParameters } from 'commons/parameters';
 
@@ -188,22 +191,21 @@ const AppSidebar = ({
                       {
                         name: 'total-packages',
                         primaryText: 'Total',
-                        secondaryText: packagesData && packagesData.length,
+                        secondaryText: packagesData.length,
                         color: 'secondary',
                         primary: true
                       },
                       {
                         name: 'outdated-packages',
                         primaryText: 'Outdated',
-                        secondaryText:
-                          packagesOutdated && packagesOutdated.length,
+                        secondaryText: packagesOutdated.length,
                         color: 'warning',
                         warning: true
                       },
                       {
                         name: 'problems-packages',
                         primaryText: 'Problems',
-                        secondaryText: notifications && notifications.length,
+                        secondaryText: notifications ? notifications.length : 0,
                         color: 'error',
                         error: true
                       }
@@ -220,7 +222,7 @@ const AppSidebar = ({
                         className={classes.updateIcon}
                       />
                       <Typography className={classes.cardLabel}>
-                        Updated
+                        Last updated:
                       </Typography>
                     </div>
                     <Typography className={classes.cardLabel}>
@@ -268,59 +270,26 @@ const AppSidebar = ({
                       )
                   }
                 ]}
-                nodata={packagesData && packagesData.length}
+                nodata={packagesData.length}
+                loading={loading}
+              />
+              <HistoryTab
+                directories={openedDirectories || []}
+                onClick={directory => {
+                  dispatch(setActivePage({ page: 'packages', paused: false }));
+                  dispatch(
+                    setMode({
+                      mode: 'local',
+                      directory
+                    })
+                  );
+                }}
                 loading={loading}
               />
             </AppTabs>
           </ListItemText>
         </ListItem>
-        <ListItem
-          className={cn(classes.categoryHeader, classes.listItem)}
-          key="history"
-        >
-          <ListItemText
-            classes={{
-              primary: classes.categoryHeaderPrimary
-            }}
-          >
-            History
-          </ListItemText>
-        </ListItem>
       </List>
-      <div className={classes.listWrapper}>
-        <List disablePadding>
-          {openedDirectories &&
-            openedDirectories.map((dir, idx) => (
-              <Tooltip title={`Load ${dir.name}`} key={`directory-${idx + 1}`}>
-                <ListItem
-                  dense
-                  disabled={loading}
-                  button
-                  onClick={() => {
-                    dispatch(
-                      setActivePage({ page: 'packages', paused: false })
-                    );
-                    dispatch(
-                      setMode({ mode: 'local', directory: dir.directory })
-                    );
-                  }}
-                  className={classes.listItem}
-                >
-                  <ListItemIcon>
-                    <FolderIcon color="secondary" />
-                  </ListItemIcon>
-                  <ListItemText
-                    classes={{
-                      primary: classes.itemPrimary,
-                      textDense: classes.textDense
-                    }}
-                    primary={dir.name}
-                  />
-                </ListItem>
-              </Tooltip>
-            ))}
-        </List>
-      </div>
     </Drawer>
   );
 };

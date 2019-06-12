@@ -38,24 +38,35 @@ const installPackageEpic = (action$, state$) =>
   action$.pipe(
     ofType(installPackage.type),
     tap(({ payload }) => {
+      const { name, ...rest } = payload;
       const {
-        common: { mode, directory }
+        common: {
+          mode,
+          directory,
+          operations: { packagesInstallOptions }
+        }
       } = state$.value;
 
-      ipcRenderer.send(
-        'npm-install',
-        Object.assign({}, payload, {
-          mode,
-          directory
-        })
+      const options = packagesInstallOptions.find(
+        option => option.name === name
       );
+
+      const parameters = {
+        ...payload,
+        name,
+        pkgOptions: options ? options.options : ['--save-prod'],
+        mode,
+        directory
+      };
+
+      ipcRenderer.send('npm-install', parameters);
     }),
     ignoreElements()
   );
 
 /**
  * Send ipc event to main process to handle npm-install for multiple packages
- * supports global and local mode
+ * supports global and lopopppp[-cal mode
  */
 const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
@@ -66,21 +77,20 @@ const installMultiplePackagesEpic = (action$, state$) =>
           mode,
           directory,
           operations: { packagesInstallOptions }
-        }
+        },
+        ui: { selected }
       } = state$.value;
 
-      const { cmd, multiple, packages, ipcEvent, pkgOptions } = payload;
-      const options = Array.isArray(pkgOptions)
-        ? pkgOptions
-        : packagesInstallOptions
-        ? packagesInstallOptions.map(opt => opt.options)
-        : [];
+      const options = selected.map(selected => {
+        const pkg = packagesInstallOptions.find(
+          option => option.name === selected
+        );
+
+        return pkg && pkg.options ? pkg.options : ['save-prod'];
+      });
 
       const parameters = {
-        ipcEvent,
-        cmd,
-        multiple,
-        packages,
+        ...payload,
         pkgOptions: options,
         mode,
         directory

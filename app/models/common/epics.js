@@ -20,8 +20,10 @@ import {
   setRunningCommand,
   npmAuditListener,
   npmDoctorListener,
+  npmInitListener,
   runDoctor,
-  runAudit
+  runAudit,
+  runInit
 } from 'models/npm/actions';
 import { initActions } from 'models/common/actions';
 
@@ -97,7 +99,8 @@ const onInitActionsEpic = pipe(
     updatePackagesListener(),
     uninstallPackagesListener(),
     npmAuditListener(),
-    npmDoctorListener()
+    npmDoctorListener(),
+    npmInitListener()
   ])
 );
 

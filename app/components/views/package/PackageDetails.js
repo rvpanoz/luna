@@ -135,7 +135,11 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                 btnIdx => {
                   if (Boolean(btnIdx) === true) {
                     if (mode === 'local') {
-                      return toggleOptions(true);
+                      return toggleOptions({
+                        open: true,
+                        single: true,
+                        name
+                      });
                     }
 
                     const pkgOptions = group
@@ -162,7 +166,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     );
 
     const renderOperationActions = () => {
-      const isOutdated = false; // TODO: fixme
+      const isOutdated = active ? active.isOutdated : false;
 
       return (
         <React.Fragment>
@@ -396,17 +400,16 @@ const PackageDetails = ({ classes, toggleOptions }) => {
           <Card className={classes.card}>
             <CardHeader
               title={
-                <Typography variant="h6">{`${name} v${version ||
-                  '0.0.0'}`}</Typography>
+                <Typography variant="h6">{`${name} v${version}`}</Typography>
               }
               className={classes.cardHeader}
               subheader={
                 <React.Fragment>
                   <Typography variant="caption">{`License: ${active.license ||
-                    'N/A'}`}</Typography>
+                    '-'}`}</Typography>
                   {mode === 'local' && !fromSearch && (
                     <Typography variant="caption">{`Group: ${group ||
-                      'N/A'}`}</Typography>
+                      '-'}`}</Typography>
                   )}
                 </React.Fragment>
               }

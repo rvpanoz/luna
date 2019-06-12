@@ -2,5 +2,6 @@
 
 import onNpmAudit$ from './npmAudit';
 import onNpmDoctor$ from './npmDoctor';
+import onNpmInit$ from './npmInit';
 
-export { onNpmAudit$, onNpmDoctor$ };
+export { onNpmAudit$, onNpmDoctor$, onNpmInit$ };

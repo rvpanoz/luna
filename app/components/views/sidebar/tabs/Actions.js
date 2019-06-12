@@ -37,7 +37,7 @@ const renderAction = (classes, nodata, mode, installPackages) => (
         <div>
           <IconButton
             aria-label="action_install"
-            disabled={nodata || mode === 'global'}
+            disabled={nodata === 0 || mode === 'global'}
             onClick={installPackages}
           >
             <ArrowRightIcon />
@@ -54,7 +54,7 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
       {renderAction(classes, nodata, mode, installPackages)}
       {items &&
         items.map(item => (
-          <ListItem key={`action-${item.name}`} className={classes.listItem}>
+          <ListItem key={item.name} className={classes.listItem}>
             <ListItemText
               primary={
                 <Typography className={classes.label}>
@@ -78,7 +78,7 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
                 <div>
                   <IconButton
                     aria-label="action"
-                    disabled={Boolean(nodata) || mode === 'global'}
+                    disabled={nodata === 0 || mode === 'global'}
                     onClick={() =>
                       remote.dialog.showMessageBox(
                         remote.getCurrentWindow(),
@@ -87,7 +87,7 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
                           type: 'question',
                           message: `\nWould you like to run ${
                             item.primaryText
-                          }? \n\nNote: This process will take some time `,
+                            }? \n\nNote: This process will take some time `,
                           buttons: ['Cancel', 'Run']
                         },
                         btnIdx => {
@@ -113,7 +113,7 @@ ActionsTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   items: PropTypes.arrayOf(PropTypes.object),
   mode: PropTypes.string,
-  nodata: PropTypes.bool,
+  nodata: PropTypes.number,
   installPackages: PropTypes.func.isRequired
 };
 
