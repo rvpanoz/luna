@@ -68,6 +68,7 @@ const App = () => {
 
     return () =>
       ipcRenderer.removeAllListeners([
+        'finish-loaded',
         'uncaught-exception',
         'npm-env-close',
         'yarn-env-close'
