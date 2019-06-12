@@ -12,7 +12,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import Button from '@material-ui/core/Button';
@@ -222,7 +221,7 @@ const AppSidebar = ({
                         className={classes.updateIcon}
                       />
                       <Typography className={classes.cardLabel}>
-                        Last updated:
+                        Updated at
                       </Typography>
                     </div>
                     <Typography className={classes.cardLabel}>
@@ -261,13 +260,21 @@ const AppSidebar = ({
                     primaryText: 'npm doctor',
                     secondaryText:
                       'Run a set of checks to ensure your npm installation',
-                    handler: () =>
+                    handler: () => {
+                      dispatch(
+                        setActivePage({
+                          page: 'packages',
+                          paused: true
+                        })
+                      );
+
                       dispatch(
                         runDoctor({
                           ipcEvent: 'npm-doctor',
                           cmd: ['doctor']
                         })
-                      )
+                      );
+                    }
                   }
                 ]}
                 nodata={packagesData.length}
@@ -275,12 +282,12 @@ const AppSidebar = ({
               />
               <HistoryTab
                 directories={openedDirectories || []}
-                onClick={directory => {
+                onClick={projectDirectory => {
                   dispatch(setActivePage({ page: 'packages', paused: false }));
                   dispatch(
                     setMode({
                       mode: 'local',
-                      directory
+                      directory: projectDirectory
                     })
                   );
                 }}

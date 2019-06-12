@@ -109,7 +109,7 @@ const mapPackagesEpic = (action$, state$) =>
           ),
           projectName: fromSearch ? name : projectName,
           projectDescription: fromSearch ? description : projectDescription,
-          projectVersion: fromSearch ? description : projectVersion,
+          projectVersion: fromSearch ? version : projectVersion,
           fromSearch,
           fromSort
         });

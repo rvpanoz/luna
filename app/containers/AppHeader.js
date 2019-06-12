@@ -24,6 +24,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
 import SecurityIcon from '@material-ui/icons/SecurityOutlined';
+import DoctorIcon from '@material-ui/icons/BuildOutlined';
 
 import Init from 'components/common/Init';
 import System from 'components/common/System';
@@ -174,6 +175,16 @@ const Header = ({ classes, onDrawerToggle }) => {
             value="audit"
             disabled={loading}
             icon={<SecurityIcon color="inherit" />}
+            classes={{
+              label: classes.tabLabel
+            }}
+          />
+          <Tab
+            textColor="inherit"
+            label="Doctor"
+            value="doctor"
+            disabled={loading}
+            icon={<DoctorIcon color="inherit" />}
             classes={{
               label: classes.tabLabel
             }}

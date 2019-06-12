@@ -1,5 +1,5 @@
 import { defaultFont, grayColor } from 'styles/variables';
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   root: {
@@ -11,8 +11,9 @@ const styles = theme => ({
   },
   label: {
     ...defaultFont,
+    width: '100%',
     fontSize: 18,
-    color: darken(grayColor, 0.5)
+    color: lighten(grayColor, 0.2)
   },
   secondaryText: {
     ...defaultFont,

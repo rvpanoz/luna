@@ -47,7 +47,7 @@ export const isUrl = url => {
  */
 export const firstToUpper = str => {
   return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
       return index !== 0 ? letter.toLowerCase() : letter.toUpperCase();
     })
     .replace(/\s+/g, '');
@@ -173,18 +173,15 @@ export const parseMessage = error => {
 };
 
 export const shrinkDirectory = directory => {
-  let newPath;
-
   if (directory) {
     try {
-      newPath = path.parse(directory);
-
+      const newPath = path.parse(directory);
       const { dir } = newPath || {};
       const dirParts = dir.split(SEPARATOR);
 
       return `${dirParts[dirParts.length - 2]}${SEPARATOR}${
         dirParts[dirParts.length - 1]
-        }${SEPARATOR}package.json`;
+      }${SEPARATOR}package.json`;
     } catch (error) {
       throw new Error(error);
     }
@@ -193,11 +190,21 @@ export const shrinkDirectory = directory => {
   return null;
 };
 
-// TODO: implementation
-export const parseNpmDoctor = data => data;
+export const parseNpmDoctor = data => {
+  if (!data) {
+    return null;
+  }
+
+  try {
+    const dataParts = data.split('\n').map(line.replace(/  +/g, ' '));
+
+    return dataParts;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 export const parseNpmAudit = data => {
-
   try {
     const dataToJson = JSON.parse(data);
     const { error } = dataToJson;

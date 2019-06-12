@@ -2,7 +2,7 @@
  * Notifications reducer: Handles state management for notifications operations
  */
 
-import { assoc, prepend, identity, merge, prop, propOr } from 'ramda';
+import { prepend, identity, merge, prop, propOr } from 'ramda';
 import {
   addNotification,
   clearNotifications,
