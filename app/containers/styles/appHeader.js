@@ -36,6 +36,12 @@ const styles = theme => ({
     ...defaultFont,
     fontSize: 16,
     paddingBottom: theme.spacing.unit
+  },
+  workingDir: {
+    color: '#fff'
+  },
+  directory: {
+    color: '#fff'
   }
 });
 

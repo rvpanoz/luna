@@ -24,6 +24,8 @@ import Typography from '@material-ui/core/Typography';
 import AppLogo from 'components/common/AppLogo';
 import AppTabs from 'components/common/AppTabs';
 
+import UpdateIcon from '@material-ui/icons/Update';
+
 import {
   PackagesTab,
   ActionsTab,
@@ -50,13 +52,11 @@ const mapState = ({
     loaders: {
       loader: { loading }
     }
-  },
-  npm: { prefix }
+  }
 }) => ({
   loading,
   lastUpdatedAt,
   notifications,
-  prefix,
   packagesData,
   packagesOutdated
 });
@@ -73,7 +73,6 @@ const AppSidebar = ({
     notifications,
     packagesData,
     packagesOutdated,
-    prefix,
     lastUpdatedAt,
     loading
   } = useMappedState(mapState);
@@ -129,6 +128,74 @@ const AppSidebar = ({
     );
   };
 
+  const packagesItems = [
+    {
+      name: 'total-packages',
+      primaryText: 'Total',
+      secondaryText: packagesData.length,
+      color: 'secondary',
+      primary: true
+    },
+    {
+      name: 'outdated-packages',
+      primaryText: 'Outdated',
+      secondaryText: packagesOutdated.length,
+      color: 'warning',
+      warning: true
+    },
+    {
+      name: 'problems-packages',
+      primaryText: 'Problems',
+      secondaryText: notifications ? notifications.length : 0,
+      color: 'error',
+      error: true
+    }
+  ];
+
+  const actionItems = [
+    {
+      name: 'audit',
+      mode,
+      primaryText: 'npm audit',
+      secondaryText: 'Scan project for vulnerabilities',
+      handler: () => {
+        dispatch(
+          setActivePage({
+            page: 'packages',
+            paused: true
+          })
+        );
+        dispatch(
+          runAudit({
+            ipcEvent: 'npm-audit',
+            cmd: ['audit']
+          })
+        );
+      }
+    },
+    {
+      name: 'doctor',
+      mode,
+      primaryText: 'npm doctor',
+      secondaryText: 'Run a set of checks to ensure your npm installation',
+      handler: () => {
+        dispatch(
+          setActivePage({
+            page: 'packages',
+            paused: true
+          })
+        );
+
+        dispatch(
+          runDoctor({
+            ipcEvent: 'npm-doctor',
+            cmd: ['doctor']
+          })
+        );
+      }
+    }
+  ];
+
   return (
     <Drawer variant="permanent" {...restProps}>
       <List disablePadding>
@@ -175,47 +242,16 @@ const AppSidebar = ({
                     className={classes.cardTitle}
                     color="textSecondary"
                   >
-                    {mode === 'local' ? 'Working directory' : 'Global packages'}
-                  </Typography>
-                  <Typography variant="caption" color="textSecondary">
-                    {mode === 'local' ? directory : prefix}
+                    Overview
                   </Typography>
                   <Divider light />
-                  <PackagesTab
-                    items={[
-                      {
-                        name: 'total-packages',
-                        primaryText: 'Total',
-                        secondaryText: packagesData.length,
-                        color: 'secondary',
-                        primary: true
-                      },
-                      {
-                        name: 'outdated-packages',
-                        primaryText: 'Outdated',
-                        secondaryText: packagesOutdated.length,
-                        color: 'warning',
-                        warning: true
-                      },
-                      {
-                        name: 'problems-packages',
-                        primaryText: 'Problems',
-                        secondaryText: notifications ? notifications.length : 0,
-                        color: 'error',
-                        error: true
-                      }
-                    ]}
-                    loading={loading}
-                  />
+                  <PackagesTab items={packagesItems} loading={loading} />
                 </CardContent>
                 <Divider light />
                 <CardActions>
                   <div className={classes.cardFlexContainer}>
-                    <Typography
-                      variant="caption"
-                      className={classes.cardLabel}
-                      component="div"
-                    >
+                    <UpdateIcon className={classes.updateIcon} />
+                    <Typography variant="caption" className={classes.cardLabel}>
                       Updated at{' '}
                       {lastUpdatedAt !== null ? lastUpdatedAt : '...'}
                     </Typography>
@@ -225,50 +261,7 @@ const AppSidebar = ({
               <ActionsTab
                 installPackages={installPackagesJson}
                 mode={mode}
-                items={[
-                  {
-                    name: 'audit',
-                    mode,
-                    primaryText: 'npm audit',
-                    secondaryText: 'Scan project for vulnerabilities',
-                    handler: () => {
-                      dispatch(
-                        setActivePage({
-                          page: 'packages',
-                          paused: true
-                        })
-                      );
-                      dispatch(
-                        runAudit({
-                          ipcEvent: 'npm-audit',
-                          cmd: ['audit']
-                        })
-                      );
-                    }
-                  },
-                  {
-                    name: 'doctor',
-                    mode,
-                    primaryText: 'npm doctor',
-                    secondaryText:
-                      'Run a set of checks to ensure your npm installation',
-                    handler: () => {
-                      dispatch(
-                        setActivePage({
-                          page: 'packages',
-                          paused: true
-                        })
-                      );
-
-                      dispatch(
-                        runDoctor({
-                          ipcEvent: 'npm-doctor',
-                          cmd: ['doctor']
-                        })
-                      );
-                    }
-                  }
-                ]}
+                items={actionItems}
                 nodata={packagesData.length}
                 loading={loading}
               />
