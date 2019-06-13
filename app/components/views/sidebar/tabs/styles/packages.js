@@ -39,6 +39,9 @@ const styles = theme => ({
   },
   errorColor: {
     color: darken(theme.palette.secondary.main, 0.1)
+  },
+  withPadding: {
+    padding: theme.spacing.unit / 2
   }
 });
 

@@ -1,5 +1,5 @@
 import { grayColor, flexContainer, defaultFont } from 'styles/variables';
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   flexContainer: {
@@ -28,6 +28,7 @@ const styles = theme => ({
     fill: '#fff'
   },
   updateIcon: {
+    color: lighten(grayColor, 0.2),
     marginRight: theme.spacing.unit / 2
   },
   title: {

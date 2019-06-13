@@ -1,3 +1,4 @@
+import { shell } from 'electron';
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -36,7 +37,7 @@ import styles from './styles/appHeader';
 
 const mapState = ({
   npm: { env },
-  common: { onlineStatus },
+  common: { onlineStatus, mode, directory },
   ui: {
     activePage,
     loaders: {
@@ -44,18 +45,24 @@ const mapState = ({
     }
   }
 }) => ({
+  mode,
+  directory,
   onlineStatus,
   activePage,
   loading,
   env
 });
 
+const openUrl = url => shell.openExternal(url);
+
 const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [initFlowDialog, setInitFlowDialog] = useState({
     open: false
   });
-  const { activePage, loading, env, status } = useMappedState(mapState);
+  const { activePage, loading, env, status, mode, directory } = useMappedState(
+    mapState
+  );
   const dispatch = useDispatch();
 
   return (
@@ -80,7 +87,11 @@ const Header = ({ classes, onDrawerToggle }) => {
               <SearchBox onlineStatus={status} disabled={loading} />
             </Grid>
             <Grid item>
-              <Typography className={classes.link} component="a" href="#">
+              <Typography
+                className={classes.link}
+                component="a"
+                onClick={() => openUrl('https://github.com/rvpanoz/luna')}
+              >
                 Github
               </Typography>
             </Grid>
@@ -110,6 +121,12 @@ const Header = ({ classes, onDrawerToggle }) => {
             <Grid item xs>
               <Typography color="inherit" variant="h5">
                 Dashboard
+              </Typography>
+              <Typography className={classes.workingDir}>
+                {mode === 'local' ? 'Working directory' : 'Showing globals'}
+              </Typography>
+              <Typography className={classes.directory} variant="subtitle2">
+                {mode === 'local' ? directory : env.prefix}
               </Typography>
             </Grid>
             <Grid item>
