@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 
 import Tooltip from '@material-ui/core/Tooltip';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -221,9 +222,13 @@ const AppSidebar = ({
                         className={classes.updateIcon}
                       />
                     </div>
-                    <Typography className={classes.cardLabel}>
-                      {`Updated at ${lastUpdatedAt}`}
-                    </Typography>
+                    {lastUpdatedAt ? (
+                      <Typography className={classes.cardLabel}>
+                        {`Updated at ${lastUpdatedAt}`}
+                      </Typography>
+                    ) : (
+                      <CircularProgress size="20" />
+                    )}
                   </div>
                 </CardActions>
               </Card>
