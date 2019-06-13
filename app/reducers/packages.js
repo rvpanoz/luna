@@ -14,11 +14,9 @@ import {
   setPackagesSearch,
   updateSearchFlag
 } from 'models/packages/actions';
-import format from 'date-fns/format';
 import initialState from './initialState';
 
 const { packages } = initialState;
-const newDateFormatted = format(new Date(), 'DD/MM/YYYY h:mm');
 
 const createReducer = (packagesState, handlers) => (
   state = packagesState,
@@ -73,7 +71,8 @@ const handlers = {
         projectLicense,
         projectAuthor,
         fromSort,
-        fromSearch
+        fromSearch,
+        lastUpdatedAt
       }
     }
   ) =>
@@ -91,7 +90,7 @@ const handlers = {
         ...state.metadata,
         fromSearch,
         fromSort,
-        lastUpdatedAt: newDateFormatted
+        lastUpdatedAt
       }
     }),
   [addOutdatedPackage.type]: (state, { payload: { dependency } }) => {

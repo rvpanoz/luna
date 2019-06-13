@@ -66,16 +66,16 @@ const styles = theme => ({
     strokeWidth: 40
   },
   primaryColor: {
-    stroke: lighten(theme.palette.primary.light, 0.5)
+    stroke: lighten(theme.palette.primary.main, 0.2)
   },
   secondaryColor: {
-    stroke: theme.palette.secondary.light
+    stroke: lighten(theme.palette.secondary.main, 0.2)
   },
   warningColor: {
-    stroke: lighten(theme.palette.warning.light, 0.1)
+    stroke: lighten(theme.palette.warning.main, 0.2)
   },
   errorColor: {
-    stroke: lighten(theme.palette.error.light, 0.25)
+    stroke: lighten(theme.palette.error.main, 0.2)
   }
 });
 

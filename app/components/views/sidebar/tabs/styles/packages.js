@@ -1,7 +1,13 @@
-import { defaultFont, grayColor } from 'styles/variables';
+import { defaultFont, grayColor, flexContainer } from 'styles/variables';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
+  containerHolder: {
+    ...flexContainer
+  },
+  icon: {
+    marginRight: theme.spacing.unit / 2
+  },
   avatar: {
     padding: theme.spacing.unit
   },
@@ -22,17 +28,17 @@ const styles = theme => ({
     padding: theme.spacing.unit,
     margin: 0
   },
+  primaryColor: {
+    color: darken(theme.palette.primary.main, 0.1)
+  },
   secondaryColor: {
-    color: theme.palette.common.white,
-    backgroundColor: theme.palette.primary.light
+    color: theme.palette.secondary.main
   },
   warningColor: {
-    color: theme.palette.common.white,
-    backgroundColor: theme.palette.warning.light
+    color: theme.palette.warning.light
   },
   errorColor: {
-    color: theme.palette.common.white,
-    backgroundColor: theme.palette.error.light
+    color: darken(theme.palette.secondary.main, 0.1)
   }
 });
 

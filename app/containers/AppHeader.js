@@ -216,6 +216,10 @@ const Header = ({ classes, onDrawerToggle }) => {
               secondaryText: env.metricsRegistry
             },
             {
+              primaryText: 'Audit level',
+              secondaryText: env.auditLevel
+            },
+            {
               primaryText: 'Cache',
               secondaryText: env.cache
             }

@@ -9,7 +9,6 @@ import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 
 import Tooltip from '@material-ui/core/Tooltip';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -24,8 +23,6 @@ import Typography from '@material-ui/core/Typography';
 
 import AppLogo from 'components/common/AppLogo';
 import AppTabs from 'components/common/AppTabs';
-
-import UpdateIcon from '@material-ui/icons/Update';
 
 import {
   PackagesTab,
@@ -54,9 +51,7 @@ const mapState = ({
       loader: { loading }
     }
   },
-  npm: {
-    env: { prefix }
-  }
+  npm: { prefix }
 }) => ({
   loading,
   lastUpdatedAt,
@@ -127,7 +122,7 @@ const AppSidebar = ({
         buttons: ['Cancel', 'Install']
       },
       btnIdx => {
-        if (Boolean(btnIdx) === true) {
+        if (btnIdx) {
           dispatch(installPackage(parameters));
         }
       }
@@ -216,19 +211,14 @@ const AppSidebar = ({
                 <Divider light />
                 <CardActions>
                   <div className={classes.cardFlexContainer}>
-                    <div className={classes.cardFlexContainerInner}>
-                      <UpdateIcon
-                        color="primary"
-                        className={classes.updateIcon}
-                      />
-                    </div>
-                    {lastUpdatedAt ? (
-                      <Typography className={classes.cardLabel}>
-                        {`Updated at ${lastUpdatedAt}`}
-                      </Typography>
-                    ) : (
-                      <CircularProgress size="20" />
-                    )}
+                    <Typography
+                      variant="caption"
+                      className={classes.cardLabel}
+                      component="div"
+                    >
+                      Updated at{' '}
+                      {lastUpdatedAt !== null ? lastUpdatedAt : '...'}
+                    </Typography>
                   </div>
                 </CardActions>
               </Card>

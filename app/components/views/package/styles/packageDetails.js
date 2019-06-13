@@ -6,7 +6,6 @@ const styles = theme => ({
   actions: {
     display: 'flex'
   },
-  card: {},
   cardHeader: {
     padding: theme.spacing.unit
   },

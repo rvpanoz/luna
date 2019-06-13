@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 
+import format from 'date-fns/format';
 import { map } from 'rxjs/operators';
-
 import { pipe } from 'rxjs';
 import { ofType } from 'redux-observable';
 
@@ -111,7 +111,8 @@ const mapPackagesEpic = (action$, state$) =>
           projectDescription: fromSearch ? description : projectDescription,
           projectVersion: fromSearch ? version : projectVersion,
           fromSearch,
-          fromSort
+          fromSort,
+          lastUpdatedAt: format(new Date(), 'DD/MM/YYYY h:mm')
         });
       }
     )
