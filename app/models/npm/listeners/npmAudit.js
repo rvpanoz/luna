@@ -20,6 +20,9 @@ const onNpmAudit$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-audit-completed']);
 
   ipcRenderer.on('npm-audit-completed', (event, data) => {
+    const dataJson = JSON.parse(data);
+    console.log(dataJson);
+
     observer.next(
       updateCommand({
         operationStatus: 'idle',

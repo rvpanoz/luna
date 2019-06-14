@@ -207,6 +207,7 @@ export const parseNpmDoctor = data => {
 export const parseNpmAudit = data => {
   try {
     const dataToJson = JSON.parse(data);
+    console.log(dataToJson);
     const { error } = dataToJson;
 
     if (error) {
@@ -219,7 +220,7 @@ export const parseNpmAudit = data => {
       };
     }
 
-    const { metadata } = dataToJson || {};
+    const { metadata, actions, advisories } = dataToJson || {};
     const dataKeys = metadata ? Object.keys(metadata) : dataToJson;
 
     const content = dataKeys.map(dataKey => {

@@ -2,6 +2,9 @@ import { defaultFont, flexContainer, grayColor } from 'styles/variables';
 import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
+  item: {
+    height: '100%'
+  },
   paper: {
     width: '100%',
     borderTopLeftRadius: 0,
@@ -15,12 +18,8 @@ const styles = theme => ({
     justifyContent: 'space-between'
   },
   topSection: {
-    ...flexContainer,
-    justifyContent: 'space-between',
-    flex: 1,
     width: '100%',
-    padding: theme.spacing.unit * 2,
-    overflow: 'hidden'
+    padding: theme.spacing.unit * 4
   },
   bottomSection: {
     ...flexContainer,

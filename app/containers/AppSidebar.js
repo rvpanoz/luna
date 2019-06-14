@@ -160,12 +160,6 @@ const AppSidebar = ({
       secondaryText: 'Scan project for vulnerabilities',
       handler: () => {
         dispatch(
-          setActivePage({
-            page: 'packages',
-            paused: true
-          })
-        );
-        dispatch(
           runAudit({
             ipcEvent: 'npm-audit',
             cmd: ['audit']
@@ -179,13 +173,6 @@ const AppSidebar = ({
       primaryText: 'npm doctor',
       secondaryText: 'Run a set of checks to ensure your npm installation',
       handler: () => {
-        dispatch(
-          setActivePage({
-            page: 'packages',
-            paused: true
-          })
-        );
-
         dispatch(
           runDoctor({
             ipcEvent: 'npm-doctor',

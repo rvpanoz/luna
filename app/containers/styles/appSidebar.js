@@ -116,7 +116,7 @@ const styles = theme => ({
   },
   cardTitle: {
     ...defaultFont,
-    fontSize: 18
+    fontSize: 20
   },
   cardFlexContainer: {
     ...flexContainer,
