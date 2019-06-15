@@ -52,7 +52,8 @@ const npmAuditParseEpic = action$ =>
     ofType(parseNpmAuditData.type),
     map(({ payload: data }) => {
       try {
-        const { error } = data || {};
+        const dataToJson = JSON.parse(data);
+        const { error } = dataToJson || {};
 
         if (error && typeof error === 'object') {
           const { code, summary, detail } = error || {};
@@ -72,7 +73,7 @@ const npmAuditParseEpic = action$ =>
         return updateNpmAuditData({
           data: {
             error: false,
-            content: data
+            content: dataToJson
           }
         });
       } catch (error) {
