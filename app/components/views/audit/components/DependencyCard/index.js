@@ -15,7 +15,7 @@ import TotalIcon from '@material-ui/icons/CheckOutlined';
 
 import styles from './styles';
 
-const Dependencies = ({
+const DependencyCard = ({
   classes,
   className,
   label,
@@ -33,18 +33,11 @@ const Dependencies = ({
           <Typography className={classes.title} variant="body2">
             {label}
           </Typography>
-          <Typography className={classes.value} variant="h3">
+          <Typography className={classes.value} variant="h4">
             {total}
           </Typography>
         </div>
-        <div
-          className={cn(classes.iconWrapper, {
-            [`${classes.errorColor}`]: name === 'dependencies',
-            [`${classes.secondaryColor}`]: name === 'devDependencies',
-            [`${classes.warningColor}`]: name === 'optionalDependencies',
-            [`${classes.primaryColor}`]: name === 'totalDependencies'
-          })}
-        >
+        <div className={cn(classes.iconWrapper, classes.secondaryColor)}>
           {name === 'dependencies' && <DependenciesIcon />}
           {name === 'devDependencies' && <DevDependenciesIcon />}
           {name === 'optionalDependencies' && <OptionalDependenciesIcon />}
@@ -53,28 +46,11 @@ const Dependencies = ({
       </div>
       {percentage ? (
         <div className={classes.footer}>
-          <Typography
-            className={cn(classes.difference, {
-              [`${classes.errorTextColor}`]: name === 'dependencies',
-              [`${classes.secondaryTextColor}`]: name === 'devDependencies',
-              [`${classes.warningTextColor}`]: name === 'optionalDependencies',
-              [`${classes.primaryTextColor}`]: name === 'totalDependencies'
-            })}
-            variant="body2"
-          >
-            <TotalIcon
-              className={cn({
-                [`${classes.errorTextColor}`]: name === 'dependencies',
-                [`${classes.secondaryTextColor}`]: name === 'devDependencies',
-                [`${classes.warningTextColor}`]:
-                  name === 'optionalDependencies',
-                [`${classes.primaryTextColor}`]: name === 'totalDependencies'
-              })}
-            />
-            {`${percentage}%`}
-          </Typography>
-          <Typography className={classes.caption} variant="caption">
-            of total dependencies
+          <Typography className={cn(classes.difference)} variant="body2">
+            <TotalIcon color="primary" />
+            <Typography className={classes.caption}>
+              {`${percentage}%`} of total dependencies
+            </Typography>
           </Typography>
         </div>
       ) : null}
@@ -82,7 +58,7 @@ const Dependencies = ({
   );
 };
 
-Dependencies.propTypes = {
+DependencyCard.propTypes = {
   className: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   name: PropTypes.string.isRequired,
@@ -91,4 +67,4 @@ Dependencies.propTypes = {
   percentage: PropTypes.string
 };
 
-export default withStyles(styles)(Dependencies);
+export default withStyles(styles)(DependencyCard);

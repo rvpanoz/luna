@@ -162,7 +162,7 @@ const TableListToolbar = ({
         <Tooltip title="Install selected">
           <IconButton
             color="primary"
-            aria-label="install_selected"
+            aria-label="install-selected"
             onClick={() =>
               remote.dialog.showMessageBox(
                 remote.getCurrentWindow(),
@@ -187,8 +187,8 @@ const TableListToolbar = ({
       latest: () => (
         <Tooltip title="Install latest">
           <IconButton
-            color="secondary"
-            aria-label="install_latest"
+            color="primary"
+            aria-label="install-latest"
             onClick={() =>
               remote.dialog.showMessageBox(
                 remote.getCurrentWindow(),
@@ -214,7 +214,7 @@ const TableListToolbar = ({
         <Tooltip title="Update selected">
           <IconButton
             color="primary"
-            aria-label="update_selected"
+            aria-label="update-selected"
             onClick={() =>
               remote.dialog.showMessageBox(
                 remote.getCurrentWindow(),
@@ -243,7 +243,7 @@ const TableListToolbar = ({
           <Tooltip title="Uninstall selected">
             <IconButton
               color="secondary"
-              aria-label="uninstall_selected"
+              aria-label="uninstall-selected"
               onClick={() =>
                 remote.dialog.showMessageBox(
                   remote.getCurrentWindow(),
@@ -272,7 +272,7 @@ const TableListToolbar = ({
             <IconButton
               disableRipple
               disabled={nodata || fromSearch}
-              aria-label="show_filters"
+              aria-label="show-filters"
               onClick={openFilters}
             >
               <FilterListIcon />

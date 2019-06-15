@@ -20,7 +20,8 @@ const styles = theme => ({
     textDecoration: 'none',
     color: theme.palette.common.white,
     '&:hover': {
-      color: lighten(grayColor, 0.7)
+      color: lighten(grayColor, 0.7),
+      cursor: 'pointer'
     }
   },
   button: {

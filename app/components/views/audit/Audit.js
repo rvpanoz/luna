@@ -5,17 +5,12 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tooltip from '@material-ui/core/Tooltip';
-import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 
-// icons
-import FixIcon from '@material-ui/icons/Build';
-
-// card component
+// components
 import DependencyCard from './components/DependencyCard';
+import VulnerabilitiesList from './components/Vulnerabilities';
 
 // styles
 import styles from './styles/audit';
@@ -59,10 +54,14 @@ const Audit = ({ classes, data }) => {
 
   const {
     content: {
-      dependencies,
-      devDependencies,
-      optionalDependencies,
-      totalDependencies
+      metadata: {
+        dependencies,
+        devDependencies,
+        optionalDependencies,
+        totalDependencies,
+        vulnerabilities
+      },
+      advisories
     }
   } = data;
 
@@ -80,27 +79,11 @@ const Audit = ({ classes, data }) => {
               Audit report
             </Typography>
           </div>
-          <Toolbar>
-            <Tooltip title="Fix vulnerabilities">
-              <div>
-                <Button
-                  aria-label="audit-fix"
-                  disabled
-                  onClick={() => {}}
-                  color="primary"
-                  variant="contained"
-                >
-                  <FixIcon className={classes.icon} />
-                  Fix all
-                </Button>
-              </div>
-            </Tooltip>
-          </Toolbar>
         </div>
         <Divider light />
         <div className={classes.topSection}>
           <Grid container spacing={8}>
-            <Grid item lg={3} sm={4} xl={2} xs={12}>
+            <Grid item lg={3} sm={4} xl={3} xs={12}>
               <DependencyCard
                 className={classes.item}
                 name="dependencies"
@@ -109,7 +92,7 @@ const Audit = ({ classes, data }) => {
                 percentage={dependenciesPercentage.toFixed(2)}
               />
             </Grid>
-            <Grid item lg={3} sm={4} xl={2} xs={12}>
+            <Grid item lg={3} sm={4} xl={3} xs={12}>
               <DependencyCard
                 className={classes.item}
                 name="devDependencies"
@@ -118,7 +101,7 @@ const Audit = ({ classes, data }) => {
                 percentage={devDependenciesPercentage.toFixed(2)}
               />
             </Grid>
-            <Grid item lg={3} sm={4} xl={2} xs={12}>
+            <Grid item lg={3} sm={4} xl={3} xs={12}>
               <DependencyCard
                 className={classes.item}
                 name="optionalDependencies"
@@ -127,7 +110,7 @@ const Audit = ({ classes, data }) => {
                 percentage={optionalDependenciesPercentage.toFixed(2)}
               />
             </Grid>
-            <Grid item lg={3} sm={4} xl={2} xs={12}>
+            <Grid item lg={3} sm={4} xl={3} xs={12}>
               <DependencyCard
                 className={classes.item}
                 name="totalDependencies"
@@ -137,7 +120,12 @@ const Audit = ({ classes, data }) => {
             </Grid>
           </Grid>
         </div>
-        <div className={classes.bottomSection}>todo..</div>
+        <div className={classes.bottomSection}>
+          <VulnerabilitiesList
+            values={vulnerabilities}
+            advisories={advisories}
+          />
+        </div>
       </div>
     </Paper>
   );
