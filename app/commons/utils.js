@@ -215,38 +215,19 @@ export const parseNpmAudit = data => {
       return {
         error: true,
         message: `${code}: ${summary}`,
-        content: []
+        content: null
       };
     }
 
-    const { metadata } = dataToJson || {};
-    const dataKeys = metadata ? Object.keys(metadata) : dataToJson;
-
-    const content = dataKeys.map(dataKey => {
-      const valueObject = typeof metadata[dataKey] === 'object';
-
-      if (valueObject) {
-        const valueKeys = Object.keys(metadata[dataKey]);
-        const valueResult = valueKeys.map(valueKey => ({
-          name: valueKey,
-          value: metadata[dataKey][valueKey]
-        }));
-
-        return {
-          name: dataKey,
-          value: valueResult
-        };
-      } else {
-        return {
-          name: dataKey,
-          value: metadata[dataKey]
-        };
-      }
-    });
+    const { metadata, actions, advisories } = dataToJson || {};
 
     return {
       error: false,
-      content
+      content: {
+        metadata,
+        actions,
+        advisories
+      }
     };
   } catch (error) {
     throw new Error(error);

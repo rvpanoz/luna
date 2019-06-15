@@ -28,7 +28,7 @@ const styles = theme => ({
     fill: '#fff'
   },
   updateIcon: {
-    color: lighten(grayColor, 0.2),
+    color: lighten(theme.palette.primary.main, 0.2),
     marginRight: theme.spacing.unit / 2
   },
   title: {
@@ -116,7 +116,7 @@ const styles = theme => ({
   },
   cardTitle: {
     ...defaultFont,
-    fontSize: 18
+    fontSize: 20
   },
   cardFlexContainer: {
     ...flexContainer,

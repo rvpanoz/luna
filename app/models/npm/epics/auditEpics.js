@@ -38,8 +38,6 @@ const npmRunAuditEpic = (action$, state$) =>
         common: { mode, directory }
       } = state$.value;
 
-      // const { fix } = payload;
-
       ipcRenderer.send('npm-audit', {
         ...payload,
         mode,
@@ -54,8 +52,7 @@ const npmAuditParseEpic = action$ =>
     ofType(parseNpmAuditData.type),
     map(({ payload: data }) => {
       try {
-        const dataToJson = JSON.parse(data);
-        const { error } = dataToJson || {};
+        const { error } = data || {};
 
         if (error && typeof error === 'object') {
           const { code, summary, detail } = error || {};
@@ -75,7 +72,7 @@ const npmAuditParseEpic = action$ =>
         return updateNpmAuditData({
           data: {
             error: false,
-            content: dataToJson ? dataToJson.metadata : []
+            content: data
           }
         });
       } catch (error) {

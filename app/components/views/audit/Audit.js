@@ -1,87 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import cn from 'classnames';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { useDispatch } from 'redux-react-hook';
-import Paper from '@material-ui/core/Paper';
+
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+import Paper from '@material-ui/core/Paper';
 
-import FixIcon from '@material-ui/icons/Build';
-import StatsCard from 'components/common/StatsCard';
+// components
+import DependencyCard from './components/DependencyCard';
+import VulnerabilitiesList from './components/Vulnerabilities';
 
-import { firstToUpper } from 'commons/utils';
-import FixOptions from './FixOptions';
+// styles
 import styles from './styles/audit';
-
-// TODO: fix
-// const runAuditFix = () => { };
-
-const renderTotals = content => {
-  const { totalDependencies } = content || {};
-
-  // get total values (exclude vulnerabiltities)
-  const values = Object.keys(content).filter(
-    key => key !== 'totalDependencies' && key !== 'vulnerabilities'
-  );
-
-  return values.map(keyValue => {
-    const [title] = keyValue.split('Dependencies');
-
-    return (
-      <StatsCard
-        title={title}
-        key={keyValue}
-        total={totalDependencies}
-        count={content[keyValue]}
-      />
-    );
-  });
-};
-
-const renderVulnerabilites = (classes, content) => {
-  const { vulnerabilities } = content || {};
-
-  return (
-    <Table className={classes.tableStyles}>
-      <TableHead>
-        <TableRow>
-          <TableCell className={classes.tableHead}>Type</TableCell>
-          <TableCell className={classes.tableHead} align="right">
-            Total
-          </TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {Object.keys(vulnerabilities).map(key => (
-          <TableRow key={key}>
-            <TableCell>
-              <span className={classes.vulnerabilityType}>
-                {firstToUpper(key)}
-              </span>
-            </TableCell>
-            <TableCell align="right">
-              <span className={classes.vulnerabilityValue}>
-                {vulnerabilities[key]}
-              </span>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  );
-};
 
 const renderError = (classes, code, summary) => (
   <div className={classes.container}>
@@ -96,39 +28,6 @@ const renderError = (classes, code, summary) => (
 );
 
 const Audit = ({ classes, data }) => {
-  const [fix, setFix] = useState(false);
-  const [optionsOpen, toggleOptions] = useState(false);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (!data) {
-      return;
-    }
-
-    const { error } = data || {};
-
-    if (error) {
-      return;
-    }
-
-    const { content } = data || {};
-    const { vulnerabilities } = content || {};
-    const { value } = vulnerabilities || {};
-
-    const needFix =
-      value &&
-      value.reduce((total, dataItem) => {
-        const dataItemValue = dataItem.value;
-
-        return total + dataItemValue;
-      }, 0);
-
-    if (needFix) {
-      setFix(true);
-    }
-  }, [data, dispatch]);
-
   if (!data) {
     return (
       <div className={classes.containerHolder}>
@@ -153,63 +52,82 @@ const Audit = ({ classes, data }) => {
     return renderError(classes, code, summary, detail);
   }
 
-  const { content } = data || {};
+  const {
+    content: {
+      metadata: {
+        dependencies,
+        devDependencies,
+        optionalDependencies,
+        totalDependencies,
+        vulnerabilities
+      },
+      advisories
+    }
+  } = data;
+
+  const dependenciesPercentage = (dependencies / totalDependencies) * 100;
+  const devDependenciesPercentage = (devDependencies / totalDependencies) * 100;
+  const optionalDependenciesPercentage =
+    (optionalDependencies / totalDependencies) * 100;
 
   return (
-    <React.Fragment>
-      <Paper className={classes.paper}>
-        <div className={classes.container}>
-          <div className={classes.flexContainer}>
-            <div className={classes.header}>
-              <Typography variant="h6" className={classes.title}>
-                Audit report
-              </Typography>
-            </div>
-            <Toolbar>
-              <Tooltip title="Fix vulnerabilities">
-                <div>
-                  <Button
-                    aria-label="audit_fix"
-                    disabled={!fix}
-                    onClick={() => toggleOptions(!optionsOpen)}
-                    color="primary"
-                    variant="contained"
-                  >
-                    <FixIcon className={classes.icon} />
-                    Fix all
-                  </Button>
-                </div>
-              </Tooltip>
-            </Toolbar>
-          </div>
-          <Divider light />
-          <div className={classes.topSection}>{renderTotals(content)}</div>
-          <div className={classes.bottomSection}>
-            <div className={classes.bottomLeft}>
-              {renderVulnerabilites(classes, content)}
-            </div>
+    <Paper className={classes.paper}>
+      <div className={classes.container}>
+        <div className={classes.flexContainer}>
+          <div className={classes.header}>
+            <Typography variant="h6" className={classes.title}>
+              Audit report
+            </Typography>
           </div>
         </div>
-      </Paper>
-      <Dialog
-        open={optionsOpen}
-        fullWidth
-        onClose={() => {}}
-        aria-labelledby="fix-options"
-      >
-        <DialogContent>
-          <FixOptions />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => {}} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={() => {}} color="primary" autoFocus>
-            Fix
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </React.Fragment>
+        <Divider light />
+        <div className={classes.topSection}>
+          <Grid container spacing={8}>
+            <Grid item lg={3} sm={4} xl={3} xs={12}>
+              <DependencyCard
+                className={classes.item}
+                name="dependencies"
+                label="Dependencies"
+                total={dependencies}
+                percentage={dependenciesPercentage.toFixed(2)}
+              />
+            </Grid>
+            <Grid item lg={3} sm={4} xl={3} xs={12}>
+              <DependencyCard
+                className={classes.item}
+                name="devDependencies"
+                label="Dev dependencies"
+                total={devDependencies}
+                percentage={devDependenciesPercentage.toFixed(2)}
+              />
+            </Grid>
+            <Grid item lg={3} sm={4} xl={3} xs={12}>
+              <DependencyCard
+                className={classes.item}
+                name="optionalDependencies"
+                label="Opt dependencies"
+                total={optionalDependencies}
+                percentage={optionalDependenciesPercentage.toFixed(2)}
+              />
+            </Grid>
+            <Grid item lg={3} sm={4} xl={3} xs={12}>
+              <DependencyCard
+                className={classes.item}
+                name="totalDependencies"
+                label="Total dependencies"
+                total={totalDependencies}
+              />
+            </Grid>
+          </Grid>
+        </div>
+        <div className={classes.bottomSection}>
+          <VulnerabilitiesList
+            values={vulnerabilities}
+            advisories={advisories}
+          />
+        </div>
+      </div>
+    </Paper>
   );
 };
 

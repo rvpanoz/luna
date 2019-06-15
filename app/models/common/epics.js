@@ -40,7 +40,6 @@ const updateCommand = ({
   }
 });
 
-// TODO: fixme
 const addActionErrorEpic = pipe(
   ofType(addActionError.type),
   tap(({ payload }) => {
@@ -48,7 +47,6 @@ const addActionErrorEpic = pipe(
 
     return error.split('npm ERR!');
   }),
-  tap(console.log),
   map(errorsArr =>
     errorsArr.map(errorLine => {
       const notEmptyLine = errorLine.trim().length > 1;
@@ -56,7 +54,6 @@ const addActionErrorEpic = pipe(
       return notEmptyLine && errorLine.indexOf('fatal') > 0 ? errorLine : '';
     })
   ),
-  tap(console.log),
   ignoreElements()
 );
 

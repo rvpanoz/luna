@@ -71,7 +71,7 @@ const mapState = ({
 });
 
 const PackageDetails = ({ classes, toggleOptions }) => {
-  const [expanded, expand] = useState(false);
+  const [expanded, expand] = useState(true);
   const [dependencies, setDependencies] = useState([]);
   const [activePopper, setActivePopper] = useState({
     index: 0,
@@ -497,7 +497,12 @@ const PackageDetails = ({ classes, toggleOptions }) => {
 
   return (
     <div className={classes.wrapper}>
-      <AppLoader loading={packageLoader.loading} relative mini>
+      <AppLoader
+        loading={packageLoader.loading}
+        message="Loading.."
+        relative
+        mini
+      >
         {active ? renderCard() : null}
       </AppLoader>
       <Popper

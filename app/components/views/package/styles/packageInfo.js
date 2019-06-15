@@ -33,7 +33,14 @@ const styles = theme => ({
     backgroundColor: theme.palette.error.light
   },
   label: {
-    ...defaultFont
+    ...defaultFont,
+    fontSize: 20,
+    color: grayColor
+  },
+  labelMini: {
+    ...defaultFont,
+    fontSize: 16,
+    color: grayColor
   },
   link: {
     ...defaultFont,

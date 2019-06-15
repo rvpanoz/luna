@@ -139,7 +139,7 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
                 </Typography>
               }
               secondary={
-                <Typography variant="subtitle1">
+                <Typography variant="subtitle1" className={classes.labelMini}>
                   {engines
                     ? Object.keys(engines).map(
                         engineKey => `${engineKey}${engines[engineKey]} `
