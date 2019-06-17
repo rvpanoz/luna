@@ -20,6 +20,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 
+import AddIcon from '@material-ui/icons/AddOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
@@ -133,12 +134,14 @@ const Header = ({ classes, onDrawerToggle }) => {
               <Tooltip title="Create package.json">
                 <div>
                   <Button
+                    disabled={loading}
                     className={classes.button}
                     color="inherit"
                     variant="outlined"
                     size="small"
                     onClick={() => setInitFlowDialog({ open: true })}
                   >
+                    <AddIcon className={classes.leftIcon} />
                     Create
                   </Button>
                 </div>

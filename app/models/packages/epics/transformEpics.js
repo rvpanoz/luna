@@ -85,7 +85,7 @@ const mapPackagesEpic = (action$, state$) =>
                 latest:
                   isOutdated && outdatedPkg
                     ? outdatedPkg.latest
-                    : dependency.version,
+                    : details.version,
                 __invalid: invalid,
                 __hasError: extraneous,
                 __missing: missing,

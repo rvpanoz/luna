@@ -8,7 +8,7 @@ import { ipcRenderer } from 'electron';
 import React, { useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { withErrorBoundary } from 'commons/hocs';
-import { WARNING_MESSAGES } from 'constants/AppConstants';
+import { WARNING_MESSAGES } from 'constants/AppMessages';
 
 import { setEnv } from 'models/npm/actions';
 import { initActions, updateStatus } from 'models/common/actions';
@@ -29,7 +29,7 @@ const App = () => {
   useEffect(() => {
     const updateOnlineStatus = () => {
       ipcRenderer.send(
-        'online-status-changed',
+        'app-online-status',
         navigator.onLine ? 'online' : 'offline'
       );
 
@@ -43,6 +43,8 @@ const App = () => {
     // stopping propagation means that the event never reaches the listeners that are listening for it.
     window.addEventListener('online', updateOnlineStatus, true);
     window.addEventListener('offline', updateOnlineStatus, true);
+
+    updateOnlineStatus();
   }, [dispatch]);
 
   useEffect(() => {

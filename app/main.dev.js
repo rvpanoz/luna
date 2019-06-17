@@ -173,17 +173,8 @@ ipcMain.on('npm-doctor', (event, options) =>
 );
 
 /**
- * Channel: app
- *
- * */
-
-/* eslint-disable-next-line */
-ipcMain.on('app-online-status-changed', (event, status) => {
-  // TODO: handle this
-});
-
-/**
  * app listeners
+ * Supports: general app events
  */
 
 app.on('window-all-closed', () => {

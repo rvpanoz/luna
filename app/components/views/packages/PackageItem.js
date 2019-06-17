@@ -1,4 +1,5 @@
 /* eslint-disable react/require-default-props */
+/* eslint-disable no-nested-ternary */
 
 import React, { useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
@@ -69,7 +70,7 @@ const PackageItem = ({
         />
       </TableCell>
 
-      <TableCell padding="none" className={classes.tableCell}>
+      <TableCell padding="none" name="name" className={classes.tableCell}>
         <div
           className={cn(classes.flexContainerCell, {
             [classes.flexRow]: extraneous
@@ -93,28 +94,41 @@ const PackageItem = ({
           )}
         </div>
       </TableCell>
-      <TableCell padding="none" className={classes.tableCell}>
-        <Typography className={classes.typo}>
-          {fromSearch || !version ? 'N/A' : version}
-        </Typography>
+      <TableCell padding="none" name="installed" className={classes.tableCell}>
+        {
+          <Typography className={classes.typo}>
+            {fromSearch ? 'No' : version}
+          </Typography>
+        }
       </TableCell>
-      <TableCell padding="none" className={classes.tableCell}>
+      <TableCell padding="none" name="latest" className={classes.tableCell}>
         <Typography
           className={cn(classes.typo, {
             [classes.outdated]: isOutdated
           })}
         >
-          {!isOutdated && !hasError && !fromSearch && 'Yes'}
-          {isOutdated && !hasError && !fromSearch && latest}
-          {hasError && 'N/A'}
-        </Typography>
-
-        <Typography className={classes.typo}>
-          {fromSearch && !hasError && version}
+          {latest}
         </Typography>
       </TableCell>
-      <TableCell padding="none" className={classes.tableCell}>
-        {peerMissing ? (
+      <TableCell
+        padding="none"
+        name="peer-missing"
+        className={classes.tableCell}
+      >
+        <Typography className={classes.typo}>
+          {!peerMissing && fromSearch ? (
+            'N/A'
+          ) : peerMissing && !fromSearch ? (
+            <Tooltip title="Package has missing dependencies. Run npm install to fix it">
+              <WarningIcon className={classes.statusMissing} />
+            </Tooltip>
+          ) : (
+            <CheckIcon className={classes.statusOK} />
+          )}
+        </Typography>
+      </TableCell>
+      <TableCell padding="none" name="status" className={classes.tableCell}>
+        {missing ? (
           <Tooltip title="Package is missing. Run npm install to fix it">
             <Typography className={classes.typo}>
               <WarningIcon className={classes.statusMissing} />
