@@ -20,7 +20,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
-import useFilters from 'commons/hooks/useFilters';
+import { useFilters } from 'commons/hooks';
 import AppLoader from 'components/common/AppLoader';
 import { PackageDetails } from 'components/views/package';
 import { scrollWrapper } from 'commons/utils';
@@ -271,6 +271,7 @@ const Packages = ({ classes }) => {
                             problems,
                             missing,
                             peerMissing,
+                            __fromSearch,
                             __hasError,
                             __group
                           }) => {
@@ -314,13 +315,13 @@ const Packages = ({ classes }) => {
                                 mode={mode}
                                 missing={missing}
                                 isOutdated={isOutdated}
-                                fromSearch={fromSearch}
                                 extraneous={extraneous}
                                 problems={problems}
                                 viewPackage={viewPackageHandler}
                                 inOperation={inOperation}
                                 inPackageJson={inPackageJson}
                                 peerMissing={peerMissing}
+                                fromSearch={__fromSearch}
                                 hasError={__hasError}
                                 group={__group}
                               />

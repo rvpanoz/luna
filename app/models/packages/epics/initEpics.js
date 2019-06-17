@@ -34,10 +34,11 @@ const initEpic = (action$, state$) =>
         {
           payload: {
             channel,
-            options: Object.assign({}, options, {
+            options: {
+              ...options,
               mode,
               directory
-            })
+            }
           }
         }
       ];

@@ -1,5 +1,5 @@
 import { defaultFont, grayColor } from 'styles/variables';
-import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
+import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   root: {
@@ -13,12 +13,14 @@ const styles = theme => ({
     ...defaultFont,
     width: '100%',
     fontSize: 16,
-    color: lighten(grayColor, 0.2)
+    color: darken(grayColor, 0.5)
   },
-  secondaryText: {
+  directory: {
     ...defaultFont,
     color: darken(grayColor, 0.2),
-    fontSize: 12
+    fontSize: 14,
+    wordWrap: 'break-word',
+    maxWidth: 150
   },
   listItem: {
     padding: theme.spacing.unit,

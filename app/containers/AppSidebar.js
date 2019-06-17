@@ -49,11 +49,13 @@ const mapState = ({
     metadata: { lastUpdatedAt }
   },
   ui: {
+    activePage,
     loaders: {
       loader: { loading }
     }
   }
 }) => ({
+  activePage,
   loading,
   lastUpdatedAt,
   notifications,
@@ -70,6 +72,7 @@ const AppSidebar = ({
 }) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
   const {
+    activePage,
     notifications,
     packagesData,
     packagesOutdated,
@@ -195,7 +198,7 @@ const AppSidebar = ({
           <ListItemText className={classes.actionButton}>
             <Tooltip title="Load local directory from a package.json file">
               <Button
-                disabled={loading}
+                disabled={loading || activePage !== 'packages'} // to prevent bug with multiple fetching
                 className={cn(classes.label, classes.margin)}
                 color="secondary"
                 variant="outlined"
