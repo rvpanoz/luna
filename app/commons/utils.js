@@ -4,7 +4,26 @@ import fs from 'fs';
 import path from 'path';
 import mk from '../mk';
 
+import {
+  INFO_MESSAGES,
+  WARNING_MESSAGES,
+  ERROR_MESSAGES
+} from '../constants/AppMessages';
+
 const SEPARATOR = path.sep;
+
+// WIP
+export const iMessage = (type, key, replacements) => {
+  const messageType = switchcase({
+    info: () => INFO_MESSAGES,
+    warning: () => WARNING_MESSAGES,
+    error: () => ERROR_MESSAGES
+  })(INFO_MESSAGES)(type);
+
+  return messageType[key].replace(/%\w+%/g, function(all) {
+    return replacements[all] || all;
+  });
+};
 
 export const createActionCreator = namespace => actionType => {
   const type = `${namespace}/${actionType}`;
