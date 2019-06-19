@@ -24,7 +24,7 @@ const onNpmListOutdated = (event, options, store) => {
     const { name } = parsedDirectory || {};
 
     if (yarnLock) {
-      event.sender.send('yarn-lock-close');
+      event.sender.send('yarn-lock-detected');
     }
 
     const inDirectories = openedPackages.some(
