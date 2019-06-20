@@ -4,7 +4,7 @@
 import { remote } from 'electron';
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames'
+import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
@@ -25,6 +25,7 @@ import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 
 import { setActivePage, clearFilters } from 'models/ui/actions';
 import { setPackagesSearch } from 'models/packages/actions';
+import { iMessage } from 'commons/utils';
 import styles from './styles/list';
 
 const mapState = ({
@@ -49,7 +50,9 @@ const NotificationsItem = ({ classes, type, required, requiredBy }) => {
         {
           title: 'Confirmation',
           type: 'question',
-          message: `\nWould you like to search for ${packageName}?`,
+          message: iMessage('info', 'confirmNpmSearch', {
+            '%packageName%': packageName
+          }),
           buttons: ['Cancel', 'Search']
         },
         btnIdx => {
@@ -122,37 +125,41 @@ const NotificationsList = ({ classes }) => {
   const { notifications, packagesInstallOptions } = useMappedState(mapState);
 
   if (!notifications || !notifications.length) {
-    return <div className={classes.containerHolder}>
-      <Typography
-        variant="subtitle1"
-        className={cn(classes.noData, classes.withPadding)}
-      >
-        No problems
-    </Typography>
-    </div>
+    return (
+      <div className={classes.containerHolder}>
+        <Typography
+          variant="subtitle1"
+          className={cn(classes.noData, classes.withPadding)}
+        >
+          {iMessage('info', 'noNotifications')}
+        </Typography>
+      </div>
+    );
   }
 
-  return <Paper className={classes.paper}>
-    <div className={classes.container}>
-      <div className={classes.flexContainer}>
-        <div className={classes.header}>
-          <Typography variant="h6" className={classes.title}>
-            {`Problems ${notifications ? notifications.length : 0}`}
-          </Typography>
+  return (
+    <Paper className={classes.paper}>
+      <div className={classes.container}>
+        <div className={classes.flexContainer}>
+          <div className={classes.header}>
+            <Typography variant="h6" className={classes.title}>
+              {`Problems ${notifications ? notifications.length : 0}`}
+            </Typography>
+          </div>
         </div>
+        <Divider light />
+        <List className={classes.list}>
+          {notifications.map((notification, idx) => (
+            <WithStylesNotificationItem
+              key={`notification-${idx}`}
+              installationOptions={packagesInstallOptions}
+              {...notification}
+            />
+          ))}
+        </List>
       </div>
-      <Divider light />
-      <List className={classes.list}>
-        {notifications.map((notification, idx) => (
-          <WithStylesNotificationItem
-            key={`notification-${idx}`}
-            installationOptions={packagesInstallOptions}
-            {...notification}
-          />
-        ))}
-      </List>
-    </div>
-  </Paper>
+    </Paper>
+  );
 };
 
 NotificationsList.propTypes = {

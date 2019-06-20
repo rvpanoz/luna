@@ -23,7 +23,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { useFilters } from 'commons/hooks';
 import AppLoader from 'components/common/AppLoader';
 import { PackageDetails } from 'components/views/package';
-import { scrollWrapper } from 'commons/utils';
+import { scrollWrapper, iMessage } from 'commons/utils';
 
 import {
   setPackagesStart,
@@ -240,7 +240,7 @@ const Packages = ({ classes }) => {
                       variant="subtitle1"
                       className={cn(classes.noData, classes.withPadding)}
                     >
-                      No packages found
+                      {iMessage('info', 'noPackages')}
                     </Typography>
                   </div>
                 ) : (

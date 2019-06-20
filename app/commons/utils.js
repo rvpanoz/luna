@@ -12,7 +12,6 @@ import {
 
 const SEPARATOR = path.sep;
 
-// WIP
 export const iMessage = (type, key, replacements) => {
   const messageType = switchcase({
     info: () => INFO_MESSAGES,
@@ -20,9 +19,7 @@ export const iMessage = (type, key, replacements) => {
     error: () => ERROR_MESSAGES
   })(INFO_MESSAGES)(type);
 
-  return messageType[key].replace(/%\w+%/g, function(all) {
-    return replacements[all] || all;
-  });
+  return messageType[key].replace(/%\w+%/g, all => replacements[all] || all);
 };
 
 export const createActionCreator = namespace => actionType => {
