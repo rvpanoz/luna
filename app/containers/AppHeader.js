@@ -75,7 +75,7 @@ const Header = ({ classes, onDrawerToggle }) => {
               <Grid item>
                 <IconButton
                   color="inherit"
-                  aria-label="Open drawer"
+                  aria-label="open-drawer"
                   onClick={onDrawerToggle}
                   className={classes.menuButton}
                 >

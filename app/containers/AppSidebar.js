@@ -33,7 +33,7 @@ import {
 } from 'components/views/sidebar/tabs';
 
 import { navigatorParameters } from 'commons/parameters';
-
+import { iMessage } from 'commons/utils';
 import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
@@ -120,7 +120,9 @@ const AppSidebar = ({
       {
         title: 'Confirmation',
         type: 'question',
-        message: `\nWould you like to install all the packages from \n${directory}? \n\nNote: This process will take some time `,
+        message: iMessage('info', 'confirmNpmInstall', {
+          '%directory%': directory
+        }),
         buttons: ['Cancel', 'Install']
       },
       btnIdx => {
@@ -160,7 +162,7 @@ const AppSidebar = ({
       name: 'audit',
       mode,
       primaryText: 'npm audit',
-      secondaryText: 'Scan project for vulnerabilities',
+      secondaryText: iMessage('info', 'npmAuditInfo'),
       handler: () => {
         dispatch(
           runAudit({
@@ -174,7 +176,7 @@ const AppSidebar = ({
       name: 'doctor',
       mode,
       primaryText: 'npm doctor',
-      secondaryText: 'Run a set of checks to ensure your npm installation',
+      secondaryText: iMessage('info', 'npmDoctorInfo'),
       handler: () => {
         dispatch(
           runDoctor({
@@ -196,7 +198,7 @@ const AppSidebar = ({
         </ListItem>
         <ListItem className={classes.listItemHalfPadding} key="big-button">
           <ListItemText className={classes.actionButton}>
-            <Tooltip title="Load local directory from a package.json file">
+            <Tooltip title={iMessage('info', 'loadDirectory')}>
               <Button
                 disabled={loading || activePage !== 'packages'} // to prevent bug with multiple fetching
                 className={cn(classes.label, classes.margin)}
