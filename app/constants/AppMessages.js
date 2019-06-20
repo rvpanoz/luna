@@ -97,6 +97,7 @@ export const LABEL_MESSAGE = {
 };
 
 export const WARNING_MESSAGES = {
+  notGlobalModeAvailable: 'Not available in global mode',
   peerMissing:
     'You have %packages% with peer missing. Check your notifications to fix it.',
   errorPackages:
