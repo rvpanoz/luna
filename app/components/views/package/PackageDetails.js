@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { objectOf, string, func } from 'prop-types';
+import semver from 'semver';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -45,12 +46,13 @@ import {
 } from 'models/packages/actions';
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
+import { iMessage } from 'commons/utils';
 
 import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
 const mapState = ({
-  common: { mode, directory },
+  common: { mode },
   ui: {
     loaders: { packageLoader }
   },
@@ -63,7 +65,6 @@ const mapState = ({
 }) => ({
   active,
   mode,
-  directory,
   packagesData,
   packageLoader,
   packagesOutdated,
@@ -84,7 +85,6 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     active,
     packageLoader,
     mode,
-    directory,
     fromSearch,
     packagesData
   } = useMappedState(mapState);
@@ -129,7 +129,9 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                 {
                   title: 'Confirmation',
                   type: 'question',
-                  message: `\nDo you want to install ${active.name}?`,
+                  message: iMessage('info', 'confirmNpmInstallPackage', {
+                    '%name%': active.name
+                  }),
                   buttons: ['Cancel', 'Install']
                 },
                 btnIdx => {
@@ -142,15 +144,11 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                       });
                     }
 
-                    const pkgOptions = group
-                      ? [PACKAGE_GROUPS[group]]
-                      : ['save-prod'];
-
                     dispatch(
                       installPackage({
+                        ipcEvent: 'npm-install',
                         cmd: ['install'],
-                        name,
-                        pkgOptions,
+                        name: active.name,
                         single: true
                       })
                     );
@@ -166,13 +164,14 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     );
 
     const renderOperationActions = () => {
-      const isOutdated = active ? active.isOutdated : false;
+      const latestVersion = active && active['dist-tags'].latest;
+      const isOutdated = semver.gt(latestVersion, version);
 
       return (
         <React.Fragment>
           {isOutdated && (
             <React.Fragment>
-              <Tooltip title="Update to latest">
+              <Tooltip title="Update to latest version">
                 <div>
                   <IconButton
                     disableRipple
@@ -183,20 +182,22 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: `\nDo you want to install ${
-                            active.name
-                          } latest version?`,
+                          message: iMessage(
+                            'info',
+                            'confirmNpmInstallPackageLatest',
+                            { '%name%': active.name }
+                          ),
                           buttons: ['Cancel', 'Install']
                         },
                         btnIdx => {
                           if (Boolean(btnIdx) === true) {
                             dispatch(
                               installPackage({
+                                ipcEvent: 'npm-install',
                                 cmd: ['install'],
-                                name,
+                                name: active.name,
                                 version: 'latest',
-                                single: true,
-                                pkgOptions: []
+                                single: true
                               })
                             );
                           }
@@ -219,20 +220,19 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: `\nDo you want to update ${active.name}?`,
+                          message: iMessage('info', 'confirmNpmUpdatePackage', {
+                            '%name%': active.name
+                          }),
                           buttons: ['Cancel', 'Update']
                         },
                         btnIdx => {
                           if (Boolean(btnIdx) === true) {
-                            dispatch(
-                              updatePackages({
-                                ipcEvent: 'update',
-                                cmd: ['update'],
-                                name: active.name,
-                                mode,
-                                directory
-                              })
-                            );
+                            updatePackages({
+                              ipcEvent: 'npm-update',
+                              cmd: ['update'],
+                              multiple: true,
+                              packages: [active.name]
+                            });
                           }
                         }
                       )
@@ -256,7 +256,9 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                     {
                       title: 'Confirmation',
                       type: 'question',
-                      message: `\nDo you want to uninstall ${active.name}?`,
+                      message: iMessage('info', 'confirmNpmUninstallPackage', {
+                        '%name%': active.name
+                      }),
                       buttons: ['Cancel', 'Uninstall']
                     },
                     btnIdx => {
@@ -352,9 +354,11 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                             {
                               title: 'Confirmation',
                               type: 'question',
-                              message: `\nWould you like to install ${
-                                active.name
-                              }@${item}?`,
+                              message: iMessage(
+                                'info',
+                                'confirmNpmInstallPackageVersion',
+                                { '%version%': item, '%name%': active.name }
+                              ),
                               buttons: ['Cancel', 'Install']
                             },
                             btnIdx => {

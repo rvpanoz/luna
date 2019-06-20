@@ -17,6 +17,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import { iMessage } from 'commons/utils';
 import styles from './styles';
 
 const Vulnerabilities = ({ classes, values, advisories }) => {
@@ -31,7 +32,7 @@ const Vulnerabilities = ({ classes, values, advisories }) => {
           variant="h6"
         >{`Vulnerabilities ${total}`}</Typography>
         <Typography color="textSecondary" variant="body2">
-          {`The audit command found ${total} known vulnerabilities in your project`}
+          {iMessage('info', 'npmAuditVulnerabiliesFound', { '%total%': total })}
         </Typography>
       </div>
       <Divider light />

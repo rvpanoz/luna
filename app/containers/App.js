@@ -8,12 +8,12 @@ import { ipcRenderer } from 'electron';
 import React, { useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { withErrorBoundary } from 'commons/hocs';
-import { WARNING_MESSAGES } from 'constants/AppMessages';
 
 import { setEnv } from 'models/npm/actions';
 import { initActions, updateStatus } from 'models/common/actions';
 import { setUIException, setSnackbar } from 'models/ui/actions';
 
+import { iMessage } from 'commons/utils';
 import AppLayout from './AppLayout';
 
 import '../app.global.css';
@@ -54,12 +54,12 @@ const App = () => {
       dispatch({ type: setUIException.type, payload: { message: args[0] } });
     });
 
-    ipcRenderer.once('yarn-lock-close', () => {
+    ipcRenderer.once('yarn-lock-detected', () => {
       dispatch(
         setSnackbar({
           open: true,
           type: 'error',
-          message: WARNING_MESSAGES.yarnlock
+          message: iMessage('warning', 'yarnlock')
         })
       );
     });
