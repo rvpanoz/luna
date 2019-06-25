@@ -19,7 +19,7 @@ Luna was created with main purpose to handle and install npm dependencies in a e
 ### Presentation
 
 My presentation on GreeceJS meetup
-https://docs.google.com/presentation/d/e/2PACX-1vTaTCZai5k7C2p1TvTLxKvzmSlGzEJScGtGLjayWcdIsZ7yvszUqpW_ZwhMzmiTNEBCgpHw3a169eWK/pub?start=false&loop=false&delayms=3000&slide=id.g35f391192_04
+http://bit.ly/2NdW7tl
 
 ### Features
 
