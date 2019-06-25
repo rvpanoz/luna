@@ -1,4 +1,4 @@
-## Luna - npm management through a modern UI. Build with Electron :hibiscus:
+## Luna - npm management through a modern UI. Built with Electron :hibiscus:
 
 <p align="center">
   <img alt="Luna" src="./resources/luna-small.jpeg">
