@@ -16,6 +16,11 @@
 
 Luna was created with main purpose to handle and install npm dependencies in a ease way. It provides a useful and modern UI in order to enhance the user experience. In addition I wanted to create a project with the latest web technologies combined in one application.
 
+### Presentation
+
+My presentation on GreeceJS meetup
+https://docs.google.com/presentation/d/e/2PACX-1vTaTCZai5k7C2p1TvTLxKvzmSlGzEJScGtGLjayWcdIsZ7yvszUqpW_ZwhMzmiTNEBCgpHw3a169eWK/pub?start=false&loop=false&delayms=3000&slide=id.g35f391192_04
+
 ### Features
 
 - Manage global and local packages
