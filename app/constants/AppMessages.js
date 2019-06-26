@@ -96,6 +96,44 @@ export const LABEL_MESSAGE = {
   outdatedPackages: 'Select outdated packages'
 };
 
+export const CONFIRMATION_MESSAGES = {
+  installAll: `Would you like to install all the packages from \n%directory% \n\nNote: This process will take some time `,
+  installPackage: 'Do you want to install %name%?',
+  installLatest: 'Do you want to install %name% latest version?',
+  installVersion: 'Do you want to install %name% version %version%?',
+  updatePackage: 'Do you want to update %name%?',
+  uninstallPackage: 'Do you want to uninstall %name%?',
+  searchPackage: 'Would you like to search for %packageName%?',
+  installLatestSelected:
+    'Do you want to install the latest version of the selected packages?',
+  updateSelected: 'Do you want to update the selected packages?',
+  uninstallSelected: 'Do you want to uninstall the selected packages?'
+};
+
+export const LABEL_MESSAGE = {
+  packageName: 'Package name',
+  packageNameInput: 'Fill package name',
+  groupType: 'Select packages based on group',
+  outdatedPackages: 'Select outdated packages'
+};
+
+export const TITLE_MESSAGES = {
+  switchGlobals: 'Switch to global packages',
+  showFilters: 'Show filters',
+  installSelected: 'Install selected',
+  clearFilters: 'Clear filters',
+  searchPackage: `Search for %name%`,
+  clearActive: 'Clear active package',
+  packageDependencies: 'Package dependencies',
+  packageVersions: 'Package versions',
+  packageInstall: 'Install package',
+  packageUninstall: 'Uninstall package',
+  packageUpdate: 'Update package',
+  packageUpdateLatest: 'Update to latest version',
+  installLatest: 'Install latest version',
+  updateSelected: 'Update selected packages'
+};
+
 export const WARNING_MESSAGES = {
   notGlobalModeAvailable: 'Not available in global mode',
   peerMissing:
