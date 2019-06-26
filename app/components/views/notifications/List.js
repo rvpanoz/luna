@@ -50,7 +50,7 @@ const NotificationsItem = ({ classes, type, required, requiredBy }) => {
         {
           title: 'Confirmation',
           type: 'question',
-          message: iMessage('info', 'confirmNpmSearch', {
+          message: iMessage('confirmation', 'packageSearch', {
             '%packageName%': packageName
           }),
           buttons: ['Cancel', 'Search']
@@ -96,7 +96,9 @@ const NotificationsItem = ({ classes, type, required, requiredBy }) => {
         <ListItemText primary={required} secondary={requiredBy} />
         <ListItemSecondaryAction>
           <Tooltip
-            title={`Search for ${packageName}`}
+            title={iMessage('title', 'searchPackage', {
+              name: packageName
+            })}
             key={`${packageName}-${packageVersion}`}
           >
             <IconButton

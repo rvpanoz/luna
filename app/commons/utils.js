@@ -7,19 +7,25 @@ import mk from '../mk';
 import {
   INFO_MESSAGES,
   WARNING_MESSAGES,
-  ERROR_MESSAGES
+  ERROR_MESSAGES,
+  CONFIRMATION_MESSAGES,
+  TITLE_MESSAGES
 } from '../constants/AppMessages';
 
 const SEPARATOR = path.sep;
 
 export const iMessage = (type, key, replacements) => {
   const messageType = switchcase({
+    confirmation: () => CONFIRMATION_MESSAGES,
     info: () => INFO_MESSAGES,
+    title: () => TITLE_MESSAGES,
     warning: () => WARNING_MESSAGES,
     error: () => ERROR_MESSAGES
   })(INFO_MESSAGES)(type);
 
-  return messageType[key].replace(/%\w+%/g, all => replacements[all] || all);
+  return messageType[key]
+    ? messageType[key].replace(/%\w+%/g, all => replacements[all] || all)
+    : key;
 };
 
 export const createActionCreator = namespace => actionType => {

@@ -106,32 +106,31 @@ const AppSidebar = ({
       }
     );
 
-  const installPackagesJson = () => {
-    const parameters = {
-      ipcEvent: 'install',
-      cmd: ['install'],
-      packageJson: true,
-      mode,
-      directory: fullDirectory
-    };
-
+  const installPackagesJson = () =>
     remote.dialog.showMessageBox(
       remote.getCurrentWindow(),
       {
         title: 'Confirmation',
         type: 'question',
-        message: iMessage('info', 'confirmNpmInstall', {
+        message: iMessage('confirmation', 'installAll', {
           '%directory%': directory
         }),
         buttons: ['Cancel', 'Install']
       },
       btnIdx => {
         if (btnIdx) {
-          dispatch(installPackage(parameters));
+          dispatch(
+            installPackage({
+              ipcEvent: 'install',
+              cmd: ['install'],
+              packageJson: true,
+              mode,
+              directory: fullDirectory
+            })
+          );
         }
       }
     );
-  };
 
   const packagesItems = [
     {

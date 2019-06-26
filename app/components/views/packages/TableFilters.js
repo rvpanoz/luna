@@ -20,6 +20,7 @@ import Button from '@material-ui/core/Button';
 
 import SearchIcon from '@material-ui/icons/Search';
 
+import { iMessage } from 'commons/utils';
 import { updateFilters } from 'models/ui/actions';
 import styles from './styles/tableFilters';
 
@@ -103,9 +104,13 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
         <div className={classes.flexContainer}>
           <div style={{ flex: 1 }}>
             <FormControl component="fieldset" style={{ width: '100%' }}>
-              <FormLabel component="legend">Package name</FormLabel>
+              <FormLabel component="legend">
+                {iMessage('label', 'packageName')}
+              </FormLabel>
               <FormGroup>
-                <FormHelperText>Fill package name</FormHelperText>
+                <FormHelperText>
+                  {iMessage('label', 'packageNameInput')}
+                </FormHelperText>
                 <div className={classes.search}>
                   <SearchIcon className={classes.searchIcon} />
                   <InputBase
@@ -147,7 +152,7 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
               [classes.hidden]: mode === 'global'
             })}
           >
-            <FormHelperText>Select packages based on group</FormHelperText>
+            <FormHelperText>{iMessage('label', 'groupType')}</FormHelperText>
             <FormControlLabel
               control={
                 <Checkbox
@@ -199,7 +204,9 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
         <FormControl component="fieldset">
           <FormLabel component="legend">Status</FormLabel>
           <FormGroup>
-            <FormHelperText> Select outdated packages</FormHelperText>
+            <FormHelperText>
+              {iMessage('label', 'outdatedPackages')}
+            </FormHelperText>
             <FormControlLabel
               control={
                 <Checkbox
