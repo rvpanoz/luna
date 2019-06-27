@@ -32,7 +32,7 @@ const renderAction = (classes, nodata, mode, installPackages) => (
         title={
           mode === 'global'
             ? iMessage('warning', 'notGlobalModeAvailable')
-            : iMessage('info', 'selectPackageJson')
+            : iMessage('title', 'selectPackageJson')
         }
       >
         <div>
@@ -86,7 +86,7 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: iMessage('info', 'actionRun', {
+                          message: iMessage('title', 'actionRun', {
                             '%actionName%': item.primaryText
                           }),
                           buttons: ['Cancel', 'Run']

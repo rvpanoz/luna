@@ -5,35 +5,26 @@ export const INFO_MESSAGES = {
   loaded: 'Package loaded.',
   updating: 'Please wait. Updating packages..',
   installing: 'Please choose installation options',
-  fixOptions: 'Please choose fix options',
   npmInstallInfo: 'Install all packages from package.json',
   npmAuditInfo: 'Scan project for vulnerabilities',
   npmAuditVulnerabiliesFound:
     'The audit command found %total% known vulnerabilities in your project',
   npmDoctorInfo: 'Run a set of checks to ensure your npm installation',
+  npmAuditHelperText: 'Navigate to actions tab and run npm audit',
+  npmDoctorHelperText: 'Navigate to actions tab and run npm doctor',
   loadDirectory: 'Load a directory from a package.json file',
   extraneous:
     'Found extraneous packages. Run npm prune from the Tools tab to fix them.',
-  confirmNpmInstall: `Would you like to install all the packages from \n%directory% \n\nNote: This process will take some time `,
-  confirmNpmSearch: 'Would you like to search for %packageName%?',
-  confirmNpmInstallPackage: 'Do you want to install %name%?',
-  confirmNpmUninstallPackage: 'Do you want to uninstall %name%?',
-  confirmNpmUpdatePackage: 'Do you want to update %name%?',
-  confirmNpmInstallPackageLatest:
-    'Do you want to install %name% latest version?',
-  confirmNpmInstallPackageVersion:
-    'Do you want to install %name% version %version%?',
   noNotifications: 'No problems',
+  notificationsHelperText: 'Woohoo! There are not any problems found.',
   noPackages: 'No packages found',
   noAuditData: 'No audit data',
-  noDoctorData: 'No doctor data',
-  installationOptionsTitle: 'Please select installation options',
-  actionRun:
-    'Would you like to run %actionName% \n\nNote: This process will take some time',
-  selectPackageJson: 'Select package.json file'
+  noDoctorData: 'No doctor data'
 };
 
 export const CONFIRMATION_MESSAGES = {
+  actionRun:
+    'Would you like to run %actionName% \n\nNote: This process will take some time',
   installAll: `Would you like to install all the packages from \n%directory% \n\nNote: This process will take some time `,
   installPackage: 'Do you want to install %name%?',
   installLatest: 'Do you want to install %name% latest version?',
@@ -55,6 +46,8 @@ export const LABEL_MESSAGE = {
 };
 
 export const TITLE_MESSAGES = {
+  selectPackageJson: 'Select package.json file',
+  installationOptions: 'Please select installation options',
   system: 'Preview system',
   switchGlobals: 'Switch to global packages',
   showFilters: 'Show filters',

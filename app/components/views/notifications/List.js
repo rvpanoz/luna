@@ -136,6 +136,9 @@ const NotificationsList = ({ classes }) => {
         >
           {iMessage('info', 'noNotifications')}
         </Typography>
+        <Typography variant="caption" className={cn(classes.helperText)}>
+          {iMessage('info', 'notificationsHelperText')}
+        </Typography>
       </div>
     );
   }

@@ -8,11 +8,10 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 
-// components
+import { iMessage } from 'commons/utils';
 import DependencyCard from './components/DependencyCard';
 import VulnerabilitiesList from './components/Vulnerabilities';
 
-// styles
 import styles from './styles/audit';
 
 const renderError = (classes, code, summary) => (
@@ -35,10 +34,10 @@ const Audit = ({ classes, data }) => {
           variant="subtitle1"
           className={cn(classes.noData, classes.withPadding)}
         >
-          No audit data
+          {iMessage('info', 'noAuditData')}
         </Typography>
         <Typography variant="caption" className={cn(classes.helperText)}>
-          navigate to Actions tab and run npm audit
+          {iMessage('info', 'npmAuditHelperText')}
         </Typography>
       </div>
     );

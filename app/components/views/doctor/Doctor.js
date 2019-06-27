@@ -15,6 +15,8 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import CheckIcon from '@material-ui/icons/CheckOutlined';
+
+import { iMessage } from 'commons/utils';
 import styles from './styles/doctor';
 
 const renderData = data => (
@@ -43,10 +45,10 @@ const Doctor = ({ classes, data }) => {
           variant="subtitle1"
           className={cn(classes.noData, classes.withPadding)}
         >
-          No doctor data
+          {iMessage('info', 'noDoctorData')}
         </Typography>
         <Typography variant="caption" className={cn(classes.helperText)}>
-          navigate to Actions tab and run npm doctor
+          {iMessage('info', 'npmDoctorHelperText')}
         </Typography>
       </div>
     );
