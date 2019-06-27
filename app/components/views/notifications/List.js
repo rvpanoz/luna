@@ -1,10 +1,11 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/no-array-index-key */
 
-import { remote } from 'electron';
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import { remote } from 'electron';
+import { useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 

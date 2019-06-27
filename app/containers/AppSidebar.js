@@ -1,12 +1,10 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable no-nested-ternary */
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
+import { useState, useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
-import cn from 'classnames';
 
 import Tooltip from '@material-ui/core/Tooltip';
 import Drawer from '@material-ui/core/Drawer';

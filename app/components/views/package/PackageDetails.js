@@ -1,12 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 
+import React from 'react';
+import semver from 'semver';
+import cn from 'classnames';
 import { remote } from 'electron';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { objectOf, string, func } from 'prop-types';
-import semver from 'semver';
-import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';

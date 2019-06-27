@@ -10,7 +10,7 @@ module.exports = {
   },
   extends: ['airbnb', 'prettier', 'prettier/react'],
   env: {
-    browser: true,
+    browser: true, // access window, document, navigator objects
     node: true
   },
   rules: {
@@ -18,16 +18,22 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'linebreak-style': 0,
     'arrow-parens': ['off'],
-    'compat/compat': 'error',
+    'compat/compat': 'warn',
     'consistent-return': 'off',
     'comma-dangle': 'off',
+    'no-underscore-dangle': 'off',
     'generator-star-spacing': 'off',
     'import/no-unresolved': 'error',
+    'import/no-duplicates': 'off',
     'import/no-extraneous-dependencies': 'off',
+    'no-nested-ternary': 'off',
     'jsx-a11y/anchor-is-valid': 'off',
     'no-console': 'off',
     'no-use-before-define': 'off',
     'no-multi-assign': 'off',
+    'no-restricted-globals': 'off',
+    'no-unused-expressions': 'off',
+    'no-case-declarations': 'off',
     'promise/param-names': 'error',
     'promise/always-return': 'error',
     'promise/catch-or-return': 'error',
@@ -44,6 +50,7 @@ module.exports = {
         ]
       }
     ],
+    'react/require-default-props': 'off',
     'react/jsx-no-bind': 'off',
     'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx'] }],
     'react/prefer-stateless-function': 'off'

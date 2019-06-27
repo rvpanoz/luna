@@ -1,10 +1,6 @@
-/* eslint-disable no-restricted-globals */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-nested-ternary */
-
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import cn from 'classnames';
+import { useEffect, useState, useRef } from 'react';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';

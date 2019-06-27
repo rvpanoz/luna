@@ -1,10 +1,8 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable  no-case-declarations */
-
-import { withStyles } from '@material-ui/core/styles';
-import React, { useRef, useCallback, useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import { useRef, useCallback, useState, useEffect } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import { remove, prepend } from 'ramda';
 import { useDispatch } from 'redux-react-hook';
 

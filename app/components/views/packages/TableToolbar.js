@@ -1,17 +1,11 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable compat/compat */
-/* eslint-disable object-shorthand */
-/* eslint-disable array-callback-return */
-/* eslint-disable no-underscore-dangle */
-
-import { remote } from 'electron';
-import React, { useState, useCallback } from 'react';
-import { useDispatch } from 'redux-react-hook';
+import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
-
+import { remote } from 'electron';
+import { useState, useCallback } from 'react';
+import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
+
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';

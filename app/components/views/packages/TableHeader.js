@@ -1,6 +1,5 @@
-/* eslint-disable react/require-default-props */
-
-import React, { useRef } from 'react';
+import React from 'react';
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { and } from 'ramda';
 import { useDispatch } from 'redux-react-hook';
