@@ -11,7 +11,7 @@ import {
   installMultiplePackages,
   installPackageListener
 } from 'models/packages/actions';
-
+import { iMessage } from 'commons/utils';
 import { onNpmInstall$ } from '../listeners';
 
 const updateLoader = payload => ({
@@ -25,7 +25,7 @@ const showInstallLoaderEpic = action$ =>
     map(() =>
       updateLoader({
         loading: true,
-        message: 'Installing packages...'
+        message: iMessage('info', 'installingPackages')
       })
     )
   );
@@ -66,7 +66,7 @@ const installPackageEpic = (action$, state$) =>
 
 /**
  * Send ipc event to main process to handle npm-install for multiple packages
- * supports global and lopopppp[-cal mode
+ * supports global and local mode
  */
 const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(

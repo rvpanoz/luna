@@ -125,14 +125,16 @@ const Header = ({ classes, onDrawerToggle }) => {
                 Dashboard
               </Typography>
               <Typography className={classes.workingDir}>
-                {mode === 'local' ? 'Working directory' : 'Showing globals'}
+                {mode === 'local'
+                  ? iMessage('info', 'workingDirectory')
+                  : iMessage('info', 'showingGlobals')}
               </Typography>
               <Typography className={classes.directory} variant="subtitle2">
                 {mode === 'local' ? directory : env.prefix}
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title="Create package.json">
+              <Tooltip title={iMessage('title', 'create')}>
                 <div>
                   <Button
                     disabled={loading}

@@ -48,7 +48,7 @@ const DependencyCard = ({
         <div className={classes.footer}>
           <Typography className={cn(classes.difference)} variant="body2">
             <TotalIcon color="primary" />
-            <Typography className={classes.caption}>
+            <Typography className={classes.caption} component="span">
               {`${percentage}%`} of total dependencies
             </Typography>
           </Typography>

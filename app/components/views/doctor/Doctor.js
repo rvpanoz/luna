@@ -24,8 +24,8 @@ const renderData = data => (
     {data &&
       data
         .filter(value => value.length)
-        .map(dataValue => (
-          <ListItem>
+        .map((dataValue, idx) => (
+          <ListItem key={`docV-${idx}`}>
             <ListItemAvatar>
               <Avatar style={{ backgroundColor: '#fff' }}>
                 <CheckIcon color="secondary" />
@@ -61,7 +61,7 @@ const Doctor = ({ classes, data }) => {
           <div className={classes.flexContainer}>
             <div className={classes.header}>
               <Typography variant="h6" className={classes.title}>
-                Doctor report
+                {iMessage('title', 'doctor')}
               </Typography>
             </div>
           </div>

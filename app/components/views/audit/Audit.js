@@ -75,7 +75,7 @@ const Audit = ({ classes, data }) => {
         <div className={classes.flexContainer}>
           <div className={classes.header}>
             <Typography variant="h6" className={classes.title}>
-              Audit report
+              {iMessage('title', 'audit')}
             </Typography>
           </div>
         </div>

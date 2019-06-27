@@ -32,7 +32,7 @@ const Vulnerabilities = ({ classes, values, advisories }) => {
           variant="h6"
         >{`Vulnerabilities ${total}`}</Typography>
         <Typography color="textSecondary" variant="body2">
-          {iMessage('info', 'npmAuditVulnerabiliesFound', { '%total%': total })}
+          {iMessage('info', 'npmAuditVulnerabiliesHelperText')}
         </Typography>
       </div>
       <Divider light />

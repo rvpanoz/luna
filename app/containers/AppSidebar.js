@@ -195,9 +195,9 @@ const AppSidebar = ({
         </ListItem>
         <ListItem className={classes.listItemHalfPadding} key="big-button">
           <ListItemText className={classes.actionButton}>
-            <Tooltip title={iMessage('info', 'loadDirectory')}>
+            <Tooltip title={iMessage('title', 'loadDirectory')}>
               <Button
-                disabled={loading || activePage !== 'packages'} // to prevent bug with multiple fetching
+                disabled={loading || activePage !== 'packages'}
                 className={cn(classes.label, classes.margin)}
                 color="secondary"
                 variant="outlined"
