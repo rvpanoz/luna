@@ -3,15 +3,21 @@ export const INFO_MESSAGES = {
   loadingPackage: 'Loading package..',
   noData: 'No dependencies found.',
   loaded: 'Package loaded.',
+<<<<<<< HEAD
   showingGlobals: 'Showing globals',
   workingDirectory: 'Working directory',
   installingPackages: 'Please wait. Installing packages...',
   updating: 'Please wait. Updating packages...',
+=======
+  updating: 'Please wait. Updating packages..',
+  installing: 'Please choose installation options',
+>>>>>>> chore: add more messages
   npmInstallInfo: 'Install all packages from package.json',
   npmAuditInfo: 'Scan project for vulnerabilities',
   npmDoctorInfo: 'Run a set of checks to ensure your npm installation',
   npmAuditHelperText: 'Navigate to actions tab and run npm audit',
   npmDoctorHelperText: 'Navigate to actions tab and run npm doctor',
+<<<<<<< HEAD
   noNotifications: 'No problems',
   notGlobalModeAvailable: 'Not available in global mode',
   notificationsHelperText: 'Woohoo! There are not any problems found.',
@@ -67,9 +73,21 @@ export const TITLE_MESSAGES = {
   packageUpdateLatest: 'Update to latest version',
   installLatest: 'Install latest version',
   updateSelected: 'Update selected packages'
+=======
+  loadDirectory: 'Load a directory from a package.json file',
+  extraneous:
+    'Found extraneous packages. Run npm prune from the Tools tab to fix them.',
+  noNotifications: 'No problems',
+  notificationsHelperText: 'Woohoo! There are not any problems found.',
+  noPackages: 'No packages found',
+  noAuditData: 'No audit data',
+  noDoctorData: 'No doctor data'
+>>>>>>> chore: add more messages
 };
 
 export const CONFIRMATION_MESSAGES = {
+  actionRun:
+    'Would you like to run %actionName% \n\nNote: This process will take some time',
   installAll: `Would you like to install all the packages from \n%directory% \n\nNote: This process will take some time `,
   installPackage: 'Do you want to install %name%?',
   installLatest: 'Do you want to install %name% latest version?',
@@ -91,6 +109,8 @@ export const LABEL_MESSAGE = {
 };
 
 export const TITLE_MESSAGES = {
+  selectPackageJson: 'Select package.json file',
+  installationOptions: 'Please select installation options',
   system: 'Preview system',
   switchGlobals: 'Switch to global packages',
   showFilters: 'Show filters',
