@@ -15,35 +15,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Typography } from '@material-ui/core';
 
-import { defaultFont } from 'styles/variables'
-
-const styles = () => ({
-  loader: {
-    display: 'flex',
-    flexDirection: 'column',
-    position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    left: '50%',
-    top: '50%',
-    padding: 0,
-    margin: 0
-  },
-  relative: {
-    left: '0%',
-    position: 'relative'
-  },
-  progress: {
-    padding: 0,
-    margin: 0
-  },
-  message: {
-    ...defaultFont,
-    fontSize: 14,
-    padding: 0,
-    margin: 0
-  }
-});
+import styles from './styles/appLoader';
 
 const AppLoader = ({ loading, classes, children, message, relative, mini }) =>
   loading ? (
@@ -64,8 +36,8 @@ const AppLoader = ({ loading, classes, children, message, relative, mini }) =>
       )}
     </div>
   ) : (
-      children
-    );
+    children
+  );
 
 AppLoader.propTypes = {
   classes: objectOf(string).isRequired,

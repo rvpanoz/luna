@@ -1,8 +1,10 @@
-import { remote } from 'electron';
-import React, { useState } from 'react';
-import { useDispatch } from 'redux-react-hook';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { remote } from 'electron';
+import { useState } from 'react';
+import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
+
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';

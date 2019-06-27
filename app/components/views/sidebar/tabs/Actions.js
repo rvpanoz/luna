@@ -31,8 +31,8 @@ const renderAction = (classes, nodata, mode, installPackages) => (
       <Tooltip
         title={
           mode === 'global'
-            ? iMessage('warning', 'notGlobalModeAvailable')
-            : iMessage('info', 'selectPackageJson')
+            ? iMessage('info', 'notGlobalModeAvailable')
+            : iMessage('title', 'selectPackageJson')
         }
       >
         <div>
@@ -72,7 +72,7 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
               <Tooltip
                 title={
                   mode === 'global'
-                    ? 'Not available in global mode'
+                    ? iMessage('info', 'notGlobal')
                     : `Execute ${item.primaryText}`
                 }
               >
@@ -86,8 +86,8 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: iMessage('info', 'actionRun', {
-                            '%actionName%': item.primaryText
+                          message: iMessage('confirmation', 'actionRun', {
+                            '%name%': item.primaryText
                           }),
                           buttons: ['Cancel', 'Run']
                         },

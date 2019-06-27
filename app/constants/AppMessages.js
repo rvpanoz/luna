@@ -3,38 +3,73 @@ export const INFO_MESSAGES = {
   loadingPackage: 'Loading package..',
   noData: 'No dependencies found.',
   loaded: 'Package loaded.',
-  updating: 'Please wait. Updating packages..',
-  installing: 'Please choose installation options',
-  fixOptions: 'Please choose fix options',
+  showingGlobals: 'Showing globals',
+  workingDirectory: 'Working directory',
+  installingPackages: 'Please wait. Installing packages...',
+  updating: 'Please wait. Updating packages...',
   npmInstallInfo: 'Install all packages from package.json',
   npmAuditInfo: 'Scan project for vulnerabilities',
-  npmAuditVulnerabiliesFound:
-    'The audit command found %total% known vulnerabilities in your project',
   npmDoctorInfo: 'Run a set of checks to ensure your npm installation',
-  loadDirectory: 'Load a directory from a package.json file',
-  extraneous:
-    'Found extraneous packages. Run npm prune from the Tools tab to fix them.',
-  confirmNpmInstall: `Would you like to install all the packages from \n%directory% \n\nNote: This process will take some time `,
-  confirmNpmSearch: 'Would you like to search for %packageName%?',
-  confirmNpmInstallPackage: 'Do you want to install %name%?',
-  confirmNpmUninstallPackage: 'Do you want to uninstall %name%?',
-  confirmNpmUpdatePackage: 'Do you want to update %name%?',
-  confirmNpmInstallPackageLatest:
-    'Do you want to install %name% latest version?',
-  confirmNpmInstallPackageVersion:
-    'Do you want to install %name% version %version%?',
+  npmAuditHelperText: 'Navigate to actions tab and run npm audit',
+  npmDoctorHelperText: 'Navigate to actions tab and run npm doctor',
   noNotifications: 'No problems',
+  notGlobalModeAvailable: 'Not available in global mode',
+  notificationsHelperText: 'Woohoo! There are not any problems found.',
+  npmAuditVulnerabiliesHelperText: 'Known valnerabilties in your project',
   noPackages: 'No packages found',
   noAuditData: 'No audit data',
   noDoctorData: 'No doctor data',
-  installationOptionsTitle: 'Please select installation options',
+  searching: 'Searching npm registry...'
+};
+
+export const CONFIRMATION_MESSAGES = {
   actionRun:
-    'Would you like to run %actionName% \n\nNote: This process will take some time',
-  selectPackageJson: 'Select package.json file'
+    'Would you like to run %name% \n\nNote: This process will take some time',
+  installAll: `Would you like to install all the packages from \n%directory% \n\nNote: This process will take some time `,
+  installPackage: 'Do you want to install %name%?',
+  installLatest: 'Do you want to install %name% latest version?',
+  installVersion: 'Do you want to install %name% version %version%?',
+  updatePackage: 'Do you want to update %name%?',
+  uninstallPackage: 'Do you want to uninstall %name%?',
+  searchPackage: 'Would you like to search for %packageName%?',
+  installLatestSelected:
+    'Do you want to install the latest version of the selected packages?',
+  updateSelected: 'Do you want to update the selected packages?',
+  uninstallSelected: 'Do you want to uninstall the selected packages?'
+};
+
+export const LABEL_MESSAGE = {
+  packageName: 'Package name',
+  packageNameInput: 'Fill package name',
+  groupType: 'Select packages based on group',
+  outdatedPackages: 'Select outdated packages'
+};
+
+export const TITLE_MESSAGES = {
+  audit: 'Audit report',
+  doctor: 'Doctor results',
+  loadDirectory: 'Load a directory from a package.json file',
+  selectPackageJson: 'Select package.json file',
+  installationOptions: 'Please select installation options',
+  system: 'Preview system',
+  create: 'Create a package.json file',
+  switchGlobals: 'Switch to global packages',
+  showFilters: 'Show filters',
+  installSelected: 'Install selected',
+  clearFilters: 'Clear filters',
+  searchPackage: `Search for %name%`,
+  clearActive: 'Clear active package',
+  packageDependencies: 'Package dependencies',
+  packageVersions: 'Package versions',
+  packageInstall: 'Install package',
+  packageUninstall: 'Uninstall package',
+  packageUpdate: 'Update package',
+  packageUpdateLatest: 'Update to latest version',
+  installLatest: 'Install latest version',
+  updateSelected: 'Update selected packages'
 };
 
 export const WARNING_MESSAGES = {
-  notGlobalModeAvailable: 'Not available in global mode',
   peerMissing:
     'You have %packages% with peer missing. Check your notifications to fix it.',
   errorPackages:

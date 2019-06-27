@@ -1,12 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 
+import React from 'react';
+import semver from 'semver';
+import cn from 'classnames';
 import { remote } from 'electron';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { objectOf, string, func } from 'prop-types';
-import semver from 'semver';
-import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
@@ -72,6 +73,7 @@ const mapState = ({
 });
 
 const PackageDetails = ({ classes, toggleOptions }) => {
+  const dispatch = useDispatch();
   const [expanded, expand] = useState(true);
   const [dependencies, setDependencies] = useState([]);
   const [activePopper, setActivePopper] = useState({
@@ -80,7 +82,6 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     open: false
   });
 
-  const dispatch = useDispatch();
   const {
     active,
     packageLoader,
@@ -118,7 +119,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
 
   const renderActions = () => {
     const renderSearchActions = () => (
-      <Tooltip title="Install package">
+      <Tooltip title={iMessage('title', 'packageInstall')}>
         <div>
           <IconButton
             disableRipple
@@ -129,7 +130,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                 {
                   title: 'Confirmation',
                   type: 'question',
-                  message: iMessage('info', 'confirmNpmInstallPackage', {
+                  message: iMessage('confirmation', 'installPackage', {
                     '%name%': active.name
                   }),
                   buttons: ['Cancel', 'Install']
@@ -171,7 +172,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         <React.Fragment>
           {isOutdated && (
             <React.Fragment>
-              <Tooltip title="Update to latest version">
+              <Tooltip title={iMessage('title', 'packageUpdateLatest')}>
                 <div>
                   <IconButton
                     disableRipple
@@ -182,11 +183,9 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: iMessage(
-                            'info',
-                            'confirmNpmInstallPackageLatest',
-                            { '%name%': active.name }
-                          ),
+                          message: iMessage('confirmation', 'installLatest', {
+                            '%name%': active.name
+                          }),
                           buttons: ['Cancel', 'Install']
                         },
                         btnIdx => {
@@ -209,7 +208,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                   </IconButton>
                 </div>
               </Tooltip>
-              <Tooltip title="Update package">
+              <Tooltip title={iMessage('title', 'packageUpdate')}>
                 <div>
                   <IconButton
                     disableRipple
@@ -220,7 +219,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: iMessage('info', 'confirmNpmUpdatePackage', {
+                          message: iMessage('confirmation', 'updatePackage', {
                             '%name%': active.name
                           }),
                           buttons: ['Cancel', 'Update']
@@ -244,7 +243,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
               </Tooltip>
             </React.Fragment>
           )}
-          <Tooltip title="Remove package">
+          <Tooltip title={iMessage('title', 'packageUninstall')}>
             <div>
               <IconButton
                 disabled={Boolean(active && active.name === 'npm')}
@@ -256,7 +255,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                     {
                       title: 'Confirmation',
                       type: 'question',
-                      message: iMessage('info', 'confirmNpmUninstallPackage', {
+                      message: iMessage('confirmation', 'uninstallPackage', {
                         '%name%': active.name
                       }),
                       buttons: ['Cancel', 'Uninstall']
@@ -355,8 +354,8 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                               title: 'Confirmation',
                               type: 'question',
                               message: iMessage(
-                                'info',
-                                'confirmNpmInstallPackageVersion',
+                                'confirmation',
+                                'installVersion',
                                 { '%version%': item, '%name%': active.name }
                               ),
                               buttons: ['Cancel', 'Install']
@@ -448,7 +447,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
             root: classes.toolbar
           }}
         >
-          <Tooltip title="Clear active package">
+          <Tooltip title={iMessage('title', 'clearActive')}>
             <IconButton
               color="secondary"
               disableRipple
@@ -464,7 +463,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
               <CloseIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Package versions">
+          <Tooltip title={iMessage('title', 'packageVersions')}>
             <IconButton
               color="primary"
               disableRipple
@@ -479,7 +478,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
               <VersionsIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Package dependencies">
+          <Tooltip title={iMessage('title', 'packageDependencies')}>
             <IconButton
               color="primary"
               disableRipple
@@ -503,7 +502,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     <div className={classes.wrapper}>
       <AppLoader
         loading={packageLoader.loading}
-        message="Loading.."
+        message={iMessage('info', 'loadingPackage')}
         relative
         mini
       >

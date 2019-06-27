@@ -15,6 +15,8 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import CheckIcon from '@material-ui/icons/CheckOutlined';
+
+import { iMessage } from 'commons/utils';
 import styles from './styles/doctor';
 
 const renderData = data => (
@@ -22,8 +24,8 @@ const renderData = data => (
     {data &&
       data
         .filter(value => value.length)
-        .map(dataValue => (
-          <ListItem>
+        .map((dataValue, idx) => (
+          <ListItem key={`docV-${idx}`}>
             <ListItemAvatar>
               <Avatar style={{ backgroundColor: '#fff' }}>
                 <CheckIcon color="secondary" />
@@ -43,10 +45,10 @@ const Doctor = ({ classes, data }) => {
           variant="subtitle1"
           className={cn(classes.noData, classes.withPadding)}
         >
-          No doctor data
+          {iMessage('info', 'noDoctorData')}
         </Typography>
         <Typography variant="caption" className={cn(classes.helperText)}>
-          navigate to Actions tab and run npm doctor
+          {iMessage('info', 'npmDoctorHelperText')}
         </Typography>
       </div>
     );
@@ -59,7 +61,7 @@ const Doctor = ({ classes, data }) => {
           <div className={classes.flexContainer}>
             <div className={classes.header}>
               <Typography variant="h6" className={classes.title}>
-                Doctor report
+                {iMessage('title', 'doctor')}
               </Typography>
             </div>
           </div>

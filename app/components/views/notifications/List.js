@@ -1,10 +1,11 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/no-array-index-key */
 
-import { remote } from 'electron';
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
+import { remote } from 'electron';
+import { useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
@@ -50,7 +51,7 @@ const NotificationsItem = ({ classes, type, required, requiredBy }) => {
         {
           title: 'Confirmation',
           type: 'question',
-          message: iMessage('info', 'confirmNpmSearch', {
+          message: iMessage('confirmation', 'packageSearch', {
             '%packageName%': packageName
           }),
           buttons: ['Cancel', 'Search']
@@ -96,7 +97,9 @@ const NotificationsItem = ({ classes, type, required, requiredBy }) => {
         <ListItemText primary={required} secondary={requiredBy} />
         <ListItemSecondaryAction>
           <Tooltip
-            title={`Search for ${packageName}`}
+            title={iMessage('title', 'searchPackage', {
+              name: packageName
+            })}
             key={`${packageName}-${packageVersion}`}
           >
             <IconButton
@@ -132,6 +135,9 @@ const NotificationsList = ({ classes }) => {
           className={cn(classes.noData, classes.withPadding)}
         >
           {iMessage('info', 'noNotifications')}
+        </Typography>
+        <Typography variant="caption" className={cn(classes.helperText)}>
+          {iMessage('info', 'notificationsHelperText')}
         </Typography>
       </div>
     );

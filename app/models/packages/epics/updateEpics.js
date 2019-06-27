@@ -8,7 +8,7 @@ import {
   updatePackages,
   updatePackagesListener
 } from 'models/packages/actions';
-
+import { iMessage } from 'commons/utils';
 import { onNpmUpdate$ } from '../listeners';
 
 const updateLoader = payload => ({
@@ -22,7 +22,7 @@ const showUpdateLoaderEpic = action$ =>
     map(() =>
       updateLoader({
         loading: true,
-        message: `Updating packages..`
+        message: iMessage('info', 'updating')
       })
     )
   );
