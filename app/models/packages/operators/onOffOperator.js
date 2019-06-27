@@ -1,9 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
-/**
- * RX custom operators
- * */
-
 import { map, withLatestFrom, filter } from 'rxjs/operators';
 
 const onOffOperator = (on, off) => src$ => {
@@ -17,4 +11,4 @@ const onOffOperator = (on, off) => src$ => {
   );
 };
 
-export { onOffOperator };
+export default onOffOperator;
