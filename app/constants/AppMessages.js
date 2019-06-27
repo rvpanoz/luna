@@ -91,6 +91,7 @@ export const LABEL_MESSAGE = {
 };
 
 export const TITLE_MESSAGES = {
+  system: 'Preview system',
   switchGlobals: 'Switch to global packages',
   showFilters: 'Show filters',
   installSelected: 'Install selected',
