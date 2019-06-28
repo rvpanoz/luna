@@ -9,7 +9,9 @@ import {
   WARNING_MESSAGES,
   ERROR_MESSAGES,
   CONFIRMATION_MESSAGES,
-  TITLE_MESSAGES
+  TITLE_MESSAGES,
+  ACTION_MESSAGES,
+  LABEL_MESSAGES
 } from '../constants/AppMessages';
 
 const SEPARATOR = path.sep;
@@ -19,8 +21,10 @@ export const iMessage = (type, key, replacements) => {
     confirmation: () => CONFIRMATION_MESSAGES,
     info: () => INFO_MESSAGES,
     title: () => TITLE_MESSAGES,
+    action: () => ACTION_MESSAGES,
     warning: () => WARNING_MESSAGES,
-    error: () => ERROR_MESSAGES
+    error: () => ERROR_MESSAGES,
+    label: () => LABEL_MESSAGES
   })(INFO_MESSAGES)(type);
 
   return messageType[key]

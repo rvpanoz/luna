@@ -5,8 +5,8 @@ export const INFO_MESSAGES = {
   loaded: 'Package loaded.',
   showingGlobals: 'Showing globals',
   workingDirectory: 'Working directory',
-  installingPackages: 'Please wait. Installing packages...',
-  updating: 'Please wait. Updating packages...',
+  installingPackages: 'Please wait. Installing packages..',
+  updating: 'Please wait. Updating packages..',
   npmInstallInfo: 'Install all packages from package.json',
   npmAuditInfo: 'Scan project for vulnerabilities',
   npmDoctorInfo: 'Run a set of checks to ensure your npm installation',
@@ -15,11 +15,62 @@ export const INFO_MESSAGES = {
   noNotifications: 'No problems',
   notGlobalModeAvailable: 'Not available in global mode',
   notificationsHelperText: 'Woohoo! There are not any problems found.',
-  npmAuditVulnerabiliesHelperText: 'Known valnerabilties in your project',
+  npmAuditVulnerabiliesHelperText: 'Known valnerabilities in your project',
+  createPackageJsonHelperText:
+    'Create a new package.json file in directory and start working.',
   noPackages: 'No packages found',
   noAuditData: 'No audit data',
   noDoctorData: 'No doctor data',
-  searching: 'Searching npm registry...'
+  searching: 'Searching npm registry..',
+  directorySelection: 'Select directory',
+  directory: 'Directory',
+  createPackageJsonNote: 'Note: npm init will run with the default parameters.'
+};
+
+export const ACTION_MESSAGES = {
+  create: 'Create',
+  cancel: 'Cancel',
+  filter: 'Filter',
+  close: 'Close'
+};
+
+export const LABEL_MESSAGES = {
+  packageName: 'Package name',
+  packageNameInput: 'Fill package name',
+  groupType: 'Select packages based on group',
+  byOutdated: 'Select outdated packages',
+  status: 'Status'
+};
+
+export const TITLE_MESSAGES = {
+  audit: 'Audit report',
+  doctor: 'Doctor results',
+  loadDirectory: 'Load a directory from a package.json file',
+  selectPackageJson: 'Select package.json file',
+  installationOptionsTitle: 'Please select installation options',
+  system: 'Preview system',
+  create: 'Create a package.json file',
+  switchGlobals: 'Switch to global packages',
+  showFilters: 'Show filters',
+  installSelected: 'Install selected',
+  clearFilters: 'Clear filters',
+  searchPackage: 'Search for package',
+  clearActive: 'Clear active package',
+  packageDependencies: 'Package dependencies',
+  packageVersions: 'Package versions',
+  packageInstall: 'Install package',
+  packageUninstall: 'Uninstall package',
+  packageUpdate: 'Update package',
+  packageUpdateLatest: 'Update to latest version',
+  installLatest: 'Install latest version',
+  updateSelected: 'Update selected packages',
+  noNotifications: 'No problems',
+  notGlobalModeAvailable: 'Not available in global mode',
+  notificationsHelperText: 'Woohoo! There are not any problems found.',
+  npmAuditVulnerabiliesHelperText: 'Known valnerabilties in your project',
+  noPackages: 'No packages found',
+  noAuditData: 'No audit data',
+  searching: 'Searching npm registry..'
 };
 
 export const CONFIRMATION_MESSAGES = {
@@ -43,30 +94,6 @@ export const LABEL_MESSAGE = {
   packageNameInput: 'Fill package name',
   groupType: 'Select packages based on group',
   outdatedPackages: 'Select outdated packages'
-};
-
-export const TITLE_MESSAGES = {
-  audit: 'Audit report',
-  doctor: 'Doctor results',
-  loadDirectory: 'Load a directory from a package.json file',
-  selectPackageJson: 'Select package.json file',
-  installationOptions: 'Please select installation options',
-  system: 'Preview system',
-  create: 'Create a package.json file',
-  switchGlobals: 'Switch to global packages',
-  showFilters: 'Show filters',
-  installSelected: 'Install selected',
-  clearFilters: 'Clear filters',
-  searchPackage: 'Search for package',
-  clearActive: 'Clear active package',
-  packageDependencies: 'Package dependencies',
-  packageVersions: 'Package versions',
-  packageInstall: 'Install package',
-  packageUninstall: 'Uninstall package',
-  packageUpdate: 'Update package',
-  packageUpdateLatest: 'Update to latest version',
-  installLatest: 'Install latest version',
-  updateSelected: 'Update selected packages'
 };
 
 export const WARNING_MESSAGES = {
