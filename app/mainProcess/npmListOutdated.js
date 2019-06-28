@@ -3,9 +3,10 @@ import path from 'path';
 import log from 'electron-log';
 import { merge } from 'ramda';
 import { switchcase } from '../commons/utils';
-import { runCommand } from '../shell';
+import { runCommand } from '../cli';
 import mk from '../mk';
 
+console.log(runCommand);
 const { config } = mk;
 const { defaultSettings } = config || {};
 const { defaultManager } = defaultSettings;
@@ -13,18 +14,25 @@ const { defaultManager } = defaultSettings;
 const onNpmListOutdated = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
+  const openedPackages = store.get('openedPackages') || [];
 
-  const handleLocalEvents = directory => {
-    const openedPackages = store.get('openedPackages') || [];
-    const yarnLock = fs.existsSync(
-      path.join(path.dirname(directory), 'yarn.lock')
-    );
+  const onFlow = chunk => event.sender.send('npm-list-outdated-flow', chunk);
+  const onError = error => event.sender.send('npm-list-outdated-error', error);
+
+  const onComplete = (errors, data, cmd) => {
+    const { directory, mode } = rest;
     const dirName = path.dirname(path.resolve(directory));
     const parsedDirectory = path.parse(dirName);
     const { name } = parsedDirectory || {};
 
-    if (yarnLock) {
-      event.sender.send('yarn-lock-detected');
+    if (directory && mode === 'local') {
+      const yarnLock = fs.existsSync(
+        path.join(path.dirname(directory), 'yarn.lock')
+      );
+
+      if (yarnLock) {
+        event.sender.send('yarn-lock-detected');
+      }
     }
 
     const inDirectories = openedPackages.some(
@@ -42,17 +50,6 @@ const onNpmListOutdated = (event, options, store) => {
     }
 
     event.sender.send('loaded-packages-close', store.get('openedPackages'));
-  };
-
-  const onFlow = chunk => event.sender.send('npm-list-outdated-flow', chunk);
-  const onError = error => event.sender.send('npm-list-outdated-error', error);
-
-  const onComplete = (errors, data, cmd) => {
-    const { directory, mode } = rest;
-
-    if (directory && mode === 'local') {
-      handleLocalEvents(directory);
-    }
 
     event.sender.send('npm-list-outdated-completed', data, errors, cmd);
   };

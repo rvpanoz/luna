@@ -2,7 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 
 import log from 'electron-log';
-import { apiManager as manager } from './cli';
+import manager from './manager';
 
 /**
  * Run shell commands
@@ -46,4 +46,4 @@ const runCommand = (options, callback) => {
     });
 };
 
-export { runCommand };
+export default runCommand;

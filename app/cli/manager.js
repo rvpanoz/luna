@@ -1,8 +1,7 @@
-/* eslint-disable compat/compat */
 /* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable global-require */
-/* eslint-disable  no-nested-ternary */
 /* eslint-disable  promise/catch-or-return */
+/* eslint-disable compat/compat */
 
 import cp from 'child_process';
 import path from 'path';
@@ -62,7 +61,7 @@ const execute = (
 
     command.stderr.on('data', error => {
       const errorString = String(error);
-      // log.error(errorString);
+
       errors += errorString;
     });
 
@@ -123,7 +122,7 @@ const list = (options, callback) => {
     // returns a Promise
     return execute('npm', run, mode, directory, callback);
   } catch (error) {
-    Promise.reject(error)
+    Promise.reject(error);
   }
 };
 
@@ -157,7 +156,7 @@ const outdated = (options, callback) => {
     // returns a Promise
     return execute('npm', run, mode, directory, callback);
   } catch (error) {
-    Promise.reject(error)
+    Promise.reject(error);
   }
 };
 
@@ -182,7 +181,6 @@ const search = (opts, callback) => {
   } catch (error) {
     Promise.reject(error);
   }
-
 };
 
 /**
@@ -233,7 +231,6 @@ const uninstall = (opts, callback) => {
   try {
     const runUninstall = require('./npm/uninstall').default;
     const run = runUninstall(opts);
-
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
