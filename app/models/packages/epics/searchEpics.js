@@ -9,7 +9,7 @@ import { clearSelected, toggleLoader } from 'models/ui/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { clearNotifications } from 'models/notifications/actions';
 import { clearCommands, clearAuditData } from 'models/npm/actions';
-
+import { iMessage } from 'commons/utils';
 import { setPackagesSearch, updateSearchFlag, clearPackages } from '../actions';
 
 const updateLoader = payload => ({
@@ -45,7 +45,7 @@ const searchEpic = (action$, state$) =>
     concatMap(() => [
       updateLoader({
         loading: true,
-        message: 'Searching npm registry...'
+        message: iMessage('info', 'searching')
       }),
       clearAuditData(),
       clearSelected(),

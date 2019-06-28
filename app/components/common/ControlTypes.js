@@ -1,9 +1,11 @@
 /* eslint-disable compat/compat */
 /* eslint-disable react/require-default-props */
 
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';

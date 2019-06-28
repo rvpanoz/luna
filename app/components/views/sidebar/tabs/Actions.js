@@ -14,6 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ArrowRightIcon from '@material-ui/icons/ArrowRightAlt';
 import Typography from '@material-ui/core/Typography';
 
+import { iMessage } from 'commons/utils';
 import styles from './styles/actions';
 
 const renderAction = (classes, nodata, mode, installPackages) => (
@@ -30,8 +31,8 @@ const renderAction = (classes, nodata, mode, installPackages) => (
       <Tooltip
         title={
           mode === 'global'
-            ? 'Not available in global mode'
-            : 'Select package.json'
+            ? iMessage('info', 'notGlobalModeAvailable')
+            : iMessage('title', 'selectPackageJson')
         }
       >
         <div>
@@ -71,7 +72,7 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
               <Tooltip
                 title={
                   mode === 'global'
-                    ? 'Not available in global mode'
+                    ? iMessage('info', 'notGlobal')
                     : `Execute ${item.primaryText}`
                 }
               >
@@ -85,9 +86,9 @@ const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: `\nWould you like to run ${
-                            item.primaryText
-                          }? \n\nNote: This process will take some time `,
+                          message: iMessage('confirmation', 'actionRun', {
+                            '%name%': item.primaryText
+                          }),
                           buttons: ['Cancel', 'Run']
                         },
                         btnIdx => {

@@ -1,12 +1,10 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable no-nested-ternary */
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames';
+import { useState, useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer, remote } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
-import cn from 'classnames';
 
 import Tooltip from '@material-ui/core/Tooltip';
 import Drawer from '@material-ui/core/Drawer';
@@ -33,7 +31,7 @@ import {
 } from 'components/views/sidebar/tabs';
 
 import { navigatorParameters } from 'commons/parameters';
-
+import { iMessage } from 'commons/utils';
 import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
@@ -106,30 +104,31 @@ const AppSidebar = ({
       }
     );
 
-  const installPackagesJson = () => {
-    const parameters = {
-      ipcEvent: 'install',
-      cmd: ['install'],
-      packageJson: true,
-      mode,
-      directory: fullDirectory
-    };
-
+  const installPackagesJson = () =>
     remote.dialog.showMessageBox(
       remote.getCurrentWindow(),
       {
         title: 'Confirmation',
         type: 'question',
-        message: `\nWould you like to install all the packages from \n${directory}? \n\nNote: This process will take some time `,
+        message: iMessage('confirmation', 'installAll', {
+          '%directory%': directory
+        }),
         buttons: ['Cancel', 'Install']
       },
       btnIdx => {
         if (btnIdx) {
-          dispatch(installPackage(parameters));
+          dispatch(
+            installPackage({
+              ipcEvent: 'install',
+              cmd: ['install'],
+              packageJson: true,
+              mode,
+              directory: fullDirectory
+            })
+          );
         }
       }
     );
-  };
 
   const packagesItems = [
     {
@@ -160,7 +159,7 @@ const AppSidebar = ({
       name: 'audit',
       mode,
       primaryText: 'npm audit',
-      secondaryText: 'Scan project for vulnerabilities',
+      secondaryText: iMessage('info', 'npmAuditInfo'),
       handler: () => {
         dispatch(
           runAudit({
@@ -174,7 +173,7 @@ const AppSidebar = ({
       name: 'doctor',
       mode,
       primaryText: 'npm doctor',
-      secondaryText: 'Run a set of checks to ensure your npm installation',
+      secondaryText: iMessage('info', 'npmDoctorInfo'),
       handler: () => {
         dispatch(
           runDoctor({
@@ -196,9 +195,9 @@ const AppSidebar = ({
         </ListItem>
         <ListItem className={classes.listItemHalfPadding} key="big-button">
           <ListItemText className={classes.actionButton}>
-            <Tooltip title="Load local directory from a package.json file">
+            <Tooltip title={iMessage('title', 'loadDirectory')}>
               <Button
-                disabled={loading || activePage !== 'packages'} // to prevent bug with multiple fetching
+                disabled={loading || activePage !== 'packages'}
                 className={cn(classes.label, classes.margin)}
                 color="secondary"
                 variant="outlined"

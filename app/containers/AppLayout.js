@@ -2,8 +2,9 @@
  * AppLayout
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,11 +19,10 @@ import { Packages } from 'components/views/packages';
 import { Notifications } from 'components/views/notifications';
 import { Audit } from 'components/views/audit';
 import { Doctor } from 'components/views/doctor';
-
 import { setSnackbar } from 'models/ui/actions';
-
 import { switchcase, shrinkDirectory } from 'commons/utils';
 import { drawerWidth } from 'styles/variables';
+
 import styles from './styles/appLayout';
 
 const mapState = ({

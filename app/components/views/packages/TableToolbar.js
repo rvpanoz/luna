@@ -1,17 +1,11 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable compat/compat */
-/* eslint-disable object-shorthand */
-/* eslint-disable array-callback-return */
-/* eslint-disable no-underscore-dangle */
-
-import { remote } from 'electron';
-import React, { useState, useCallback } from 'react';
-import { useDispatch } from 'redux-react-hook';
+import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
-
+import { remote } from 'electron';
+import { useState, useCallback } from 'react';
+import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
+
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -27,7 +21,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import SwitchIcon from '@material-ui/icons/LoopOutlined';
 
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
-import { switchcase } from 'commons/utils';
+import { switchcase, iMessage } from 'commons/utils';
 import {
   uninstallPackages,
   updatePackages,
@@ -148,7 +142,7 @@ const TableListToolbar = ({
 
     const actionEl = switchcase({
       clearFilters: () => (
-        <Tooltip title="Clear filters">
+        <Tooltip title={iMessage('title', 'clearFilters')}>
           <IconButton
             color="secondary"
             aria-label="clear_filters"
@@ -159,7 +153,7 @@ const TableListToolbar = ({
         </Tooltip>
       ),
       install: () => (
-        <Tooltip title="Install selected">
+        <Tooltip title={iMessage('title', 'installSelected')}>
           <IconButton
             color="primary"
             aria-label="install-selected"
@@ -185,7 +179,7 @@ const TableListToolbar = ({
         </Tooltip>
       ),
       latest: () => (
-        <Tooltip title="Install latest">
+        <Tooltip title={iMessage('title', 'installLatest')}>
           <IconButton
             color="primary"
             aria-label="install-latest"
@@ -193,9 +187,9 @@ const TableListToolbar = ({
               remote.dialog.showMessageBox(
                 remote.getCurrentWindow(),
                 {
-                  title: 'Install latest version',
+                  title: iMessage('title', 'installLatest'),
                   type: 'question',
-                  message: `\nDo you want to install the latest version of the selected packages?`,
+                  message: iMessage('confirmation', 'installLatestSelected'),
                   buttons: ['Cancel', 'Install']
                 },
                 btnIdx => {
@@ -211,7 +205,7 @@ const TableListToolbar = ({
         </Tooltip>
       ),
       update: () => (
-        <Tooltip title="Update selected">
+        <Tooltip title={iMessage('title', 'updateSelected')}>
           <IconButton
             color="primary"
             aria-label="update-selected"
@@ -219,9 +213,9 @@ const TableListToolbar = ({
               remote.dialog.showMessageBox(
                 remote.getCurrentWindow(),
                 {
-                  title: 'Update packages',
+                  title: iMessage('title', 'updateSelected'),
                   type: 'question',
-                  message: `\nDo you want to update the selected packages?`,
+                  message: iMessage('confirmation', 'updateSelected'),
                   buttons: ['Cancel', 'Update']
                 },
                 btnIdx => {
@@ -240,7 +234,7 @@ const TableListToolbar = ({
         const hasOneSelected = selected && selected.length === 1;
 
         return hasOneSelected && hasNpmSelected ? null : (
-          <Tooltip title="Uninstall selected">
+          <Tooltip title={iMessage('title', 'uninstallSelected')}>
             <IconButton
               color="secondary"
               aria-label="uninstall-selected"
@@ -248,9 +242,9 @@ const TableListToolbar = ({
                 remote.dialog.showMessageBox(
                   remote.getCurrentWindow(),
                   {
-                    title: 'Uninstall packages',
+                    title: iMessage('title', 'uninstallSelected'),
                     type: 'question',
-                    message: `\nDo you want to uninstall the selected packages?`,
+                    message: iMessage('confirmation', 'uninstallSelected'),
                     buttons: ['Cancel', 'Uninstall']
                   },
                   btnIdx => {
@@ -267,7 +261,7 @@ const TableListToolbar = ({
         );
       },
       filters: () => (
-        <Tooltip title="Show filters">
+        <Tooltip title={iMessage('title', 'showFilters')}>
           <div>
             <IconButton
               disableRipple
@@ -287,12 +281,12 @@ const TableListToolbar = ({
 
   const renderToolbarActions = () => (
     <React.Fragment>
-      <Tooltip title="Switch to global packages">
+      <Tooltip title={iMessage('title', 'switchGlobals')}>
         <div>
           <IconButton
             disableRipple
             disabled={mode === 'global'}
-            aria-label="show_globals"
+            aria-label="show-globals"
             onClick={() => switchMode('global', null)}
           >
             <SwitchIcon />
@@ -300,7 +294,7 @@ const TableListToolbar = ({
         </div>
       </Tooltip>
       {!fromSearch && total ? (
-        <Tooltip title="Show filters">
+        <Tooltip title={iMessage('title', 'showFilters')}>
           <div>
             <IconButton
               disableRipple

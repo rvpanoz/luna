@@ -1,5 +1,5 @@
 import { defaultFont, flexContainer, grayColor } from 'styles/variables';
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   paper: {
@@ -40,12 +40,6 @@ const styles = theme => ({
     flex: '0 0 auto',
     padding: theme.spacing.unit * 2 + 4
   },
-  withPadding: {
-    padding: theme.spacing.unit + 4
-  },
-  noData: {
-    ...defaultFont
-  },
   item: {
     ...defaultFont
   },
@@ -55,6 +49,17 @@ const styles = theme => ({
     flexDirection: 'column',
     alignItems: 'center'
   },
+  helperText: {
+    ...defaultFont,
+    color: lighten(grayColor, 0.1),
+    fontSize: 16
+  },
+  noData: {
+    ...defaultFont
+  },
+  withPadding: {
+    padding: theme.spacing.unit + 4
+  }
 });
 
 export default styles;

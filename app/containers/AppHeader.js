@@ -1,6 +1,8 @@
-import { shell } from 'electron';
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+
+import { shell } from 'electron';
+import { useState } from 'react';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -15,7 +17,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 import Button from '@material-ui/core/Button';
-
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -31,7 +32,7 @@ import DoctorIcon from '@material-ui/icons/BuildOutlined';
 import Init from 'components/common/Init';
 import System from 'components/common/System';
 import SearchBox from 'components/common/SearchBox';
-
+import { iMessage } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
 
 import styles from './styles/appHeader';
@@ -75,7 +76,7 @@ const Header = ({ classes, onDrawerToggle }) => {
               <Grid item>
                 <IconButton
                   color="inherit"
-                  aria-label="Open drawer"
+                  aria-label="open-drawer"
                   onClick={onDrawerToggle}
                   className={classes.menuButton}
                 >
@@ -97,7 +98,7 @@ const Header = ({ classes, onDrawerToggle }) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title="Preview system">
+              <Tooltip title={iMessage('title', 'system')}>
                 <IconButton
                   disableRipple
                   color="inherit"
@@ -124,14 +125,16 @@ const Header = ({ classes, onDrawerToggle }) => {
                 Dashboard
               </Typography>
               <Typography className={classes.workingDir}>
-                {mode === 'local' ? 'Working directory' : 'Showing globals'}
+                {mode === 'local'
+                  ? iMessage('info', 'workingDirectory')
+                  : iMessage('info', 'showingGlobals')}
               </Typography>
               <Typography className={classes.directory} variant="subtitle2">
                 {mode === 'local' ? directory : env.prefix}
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title="Create package.json">
+              <Tooltip title={iMessage('title', 'create')}>
                 <div>
                   <Button
                     disabled={loading}

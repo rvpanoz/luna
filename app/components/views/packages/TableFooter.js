@@ -1,5 +1,3 @@
-/* eslint-disable react/require-default-props */
-
 import React from 'react';
 import { number, func } from 'prop-types';
 import TableFooter from '@material-ui/core/TableFooter';

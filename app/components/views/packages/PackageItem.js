@@ -1,9 +1,7 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable no-nested-ternary */
-
-import React, { useRef } from 'react';
-import { withStyles } from '@material-ui/core/styles';
+import React from 'react';
 import cn from 'classnames';
+import { useRef } from 'react';
+import { withStyles } from '@material-ui/core/styles';
 import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';

@@ -8,6 +8,7 @@ import { clearSelected, toggleLoader } from 'models/ui/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { clearNotifications } from 'models/notifications/actions';
 import { clearCommands, clearAuditData } from 'models/npm/actions';
+import { iMessage } from 'commons/utils';
 
 import { onOffOperator } from '../operators';
 import { clearPackages, setPackagesStart } from '../actions';
@@ -50,7 +51,7 @@ const initEpic = (action$, state$) =>
     concatMap(() => [
       updateLoader({
         loading: true,
-        message: 'Loading packages...'
+        message: iMessage('info', 'loading')
       }),
       clearAuditData(),
       clearSelected(),

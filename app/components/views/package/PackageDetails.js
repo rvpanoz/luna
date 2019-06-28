@@ -1,11 +1,13 @@
 /* eslint-disable no-underscore-dangle */
 
+import React from 'react';
+import semver from 'semver';
+import cn from 'classnames';
 import { remote } from 'electron';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { objectOf, string, func } from 'prop-types';
-import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 
 import Paper from '@material-ui/core/Paper';
@@ -45,12 +47,13 @@ import {
 } from 'models/packages/actions';
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
+import { iMessage } from 'commons/utils';
 
 import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
 const mapState = ({
-  common: { mode, directory },
+  common: { mode },
   ui: {
     loaders: { packageLoader }
   },
@@ -63,7 +66,6 @@ const mapState = ({
 }) => ({
   active,
   mode,
-  directory,
   packagesData,
   packageLoader,
   packagesOutdated,
@@ -71,6 +73,7 @@ const mapState = ({
 });
 
 const PackageDetails = ({ classes, toggleOptions }) => {
+  const dispatch = useDispatch();
   const [expanded, expand] = useState(true);
   const [dependencies, setDependencies] = useState([]);
   const [activePopper, setActivePopper] = useState({
@@ -79,12 +82,10 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     open: false
   });
 
-  const dispatch = useDispatch();
   const {
     active,
     packageLoader,
     mode,
-    directory,
     fromSearch,
     packagesData
   } = useMappedState(mapState);
@@ -118,7 +119,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
 
   const renderActions = () => {
     const renderSearchActions = () => (
-      <Tooltip title="Install package">
+      <Tooltip title={iMessage('title', 'packageInstall')}>
         <div>
           <IconButton
             disableRipple
@@ -129,7 +130,9 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                 {
                   title: 'Confirmation',
                   type: 'question',
-                  message: `\nDo you want to install ${active.name}?`,
+                  message: iMessage('confirmation', 'installPackage', {
+                    '%name%': active.name
+                  }),
                   buttons: ['Cancel', 'Install']
                 },
                 btnIdx => {
@@ -142,15 +145,11 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                       });
                     }
 
-                    const pkgOptions = group
-                      ? [PACKAGE_GROUPS[group]]
-                      : ['save-prod'];
-
                     dispatch(
                       installPackage({
+                        ipcEvent: 'npm-install',
                         cmd: ['install'],
-                        name,
-                        pkgOptions,
+                        name: active.name,
                         single: true
                       })
                     );
@@ -166,13 +165,14 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     );
 
     const renderOperationActions = () => {
-      const isOutdated = active ? active.isOutdated : false;
+      const latestVersion = active && active['dist-tags'].latest;
+      const isOutdated = semver.gt(latestVersion, version);
 
       return (
         <React.Fragment>
           {isOutdated && (
             <React.Fragment>
-              <Tooltip title="Update to latest">
+              <Tooltip title={iMessage('title', 'packageUpdateLatest')}>
                 <div>
                   <IconButton
                     disableRipple
@@ -183,20 +183,20 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: `\nDo you want to install ${
-                            active.name
-                          } latest version?`,
+                          message: iMessage('confirmation', 'installLatest', {
+                            '%name%': active.name
+                          }),
                           buttons: ['Cancel', 'Install']
                         },
                         btnIdx => {
                           if (Boolean(btnIdx) === true) {
                             dispatch(
                               installPackage({
+                                ipcEvent: 'npm-install',
                                 cmd: ['install'],
-                                name,
+                                name: active.name,
                                 version: 'latest',
-                                single: true,
-                                pkgOptions: []
+                                single: true
                               })
                             );
                           }
@@ -208,7 +208,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                   </IconButton>
                 </div>
               </Tooltip>
-              <Tooltip title="Update package">
+              <Tooltip title={iMessage('title', 'packageUpdate')}>
                 <div>
                   <IconButton
                     disableRipple
@@ -219,20 +219,19 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                         {
                           title: 'Confirmation',
                           type: 'question',
-                          message: `\nDo you want to update ${active.name}?`,
+                          message: iMessage('confirmation', 'updatePackage', {
+                            '%name%': active.name
+                          }),
                           buttons: ['Cancel', 'Update']
                         },
                         btnIdx => {
                           if (Boolean(btnIdx) === true) {
-                            dispatch(
-                              updatePackages({
-                                ipcEvent: 'update',
-                                cmd: ['update'],
-                                name: active.name,
-                                mode,
-                                directory
-                              })
-                            );
+                            updatePackages({
+                              ipcEvent: 'npm-update',
+                              cmd: ['update'],
+                              multiple: true,
+                              packages: [active.name]
+                            });
                           }
                         }
                       )
@@ -244,7 +243,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
               </Tooltip>
             </React.Fragment>
           )}
-          <Tooltip title="Remove package">
+          <Tooltip title={iMessage('title', 'packageUninstall')}>
             <div>
               <IconButton
                 disabled={Boolean(active && active.name === 'npm')}
@@ -256,7 +255,9 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                     {
                       title: 'Confirmation',
                       type: 'question',
-                      message: `\nDo you want to uninstall ${active.name}?`,
+                      message: iMessage('confirmation', 'uninstallPackage', {
+                        '%name%': active.name
+                      }),
                       buttons: ['Cancel', 'Uninstall']
                     },
                     btnIdx => {
@@ -352,9 +353,11 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                             {
                               title: 'Confirmation',
                               type: 'question',
-                              message: `\nWould you like to install ${
-                                active.name
-                              }@${item}?`,
+                              message: iMessage(
+                                'confirmation',
+                                'installVersion',
+                                { '%version%': item, '%name%': active.name }
+                              ),
                               buttons: ['Cancel', 'Install']
                             },
                             btnIdx => {
@@ -444,7 +447,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
             root: classes.toolbar
           }}
         >
-          <Tooltip title="Clear active package">
+          <Tooltip title={iMessage('title', 'clearActive')}>
             <IconButton
               color="secondary"
               disableRipple
@@ -460,7 +463,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
               <CloseIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Package versions">
+          <Tooltip title={iMessage('title', 'packageVersions')}>
             <IconButton
               color="primary"
               disableRipple
@@ -475,7 +478,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
               <VersionsIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Package dependencies">
+          <Tooltip title={iMessage('title', 'packageDependencies')}>
             <IconButton
               color="primary"
               disableRipple
@@ -499,7 +502,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     <div className={classes.wrapper}>
       <AppLoader
         loading={packageLoader.loading}
-        message="Loading.."
+        message={iMessage('info', 'loadingPackage')}
         relative
         mini
       >

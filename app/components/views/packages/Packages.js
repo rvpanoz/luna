@@ -1,10 +1,6 @@
-/* eslint-disable no-restricted-globals */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-nested-ternary */
-
-import React, { useEffect, useState, useRef } from 'react';
+import React from 'react';
 import cn from 'classnames';
+import { useEffect, useState, useRef } from 'react';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -23,7 +19,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import { useFilters } from 'commons/hooks';
 import AppLoader from 'components/common/AppLoader';
 import { PackageDetails } from 'components/views/package';
-import { scrollWrapper } from 'commons/utils';
+import { scrollWrapper, iMessage } from 'commons/utils';
 
 import {
   setPackagesStart,
@@ -240,7 +236,7 @@ const Packages = ({ classes }) => {
                       variant="subtitle1"
                       className={cn(classes.noData, classes.withPadding)}
                     >
-                      No packages found
+                      {iMessage('info', 'noPackages')}
                     </Typography>
                   </div>
                 ) : (
