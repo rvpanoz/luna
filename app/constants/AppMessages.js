@@ -57,7 +57,7 @@ export const TITLE_MESSAGES = {
   showFilters: 'Show filters',
   installSelected: 'Install selected',
   clearFilters: 'Clear filters',
-  searchPackage: `Search for %name%`,
+  searchPackage: 'Search for package',
   clearActive: 'Clear active package',
   packageDependencies: 'Package dependencies',
   packageVersions: 'Package versions',
