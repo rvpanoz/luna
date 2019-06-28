@@ -200,11 +200,11 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
           <FormHelperText />
         </FormControl>
         <FormControl component="fieldset">
-          <FormLabel component="legend">Status</FormLabel>
+          <FormLabel component="legend">
+            {iMessage('label', 'status')}
+          </FormLabel>
           <FormGroup>
-            <FormHelperText>
-              {iMessage('label', 'outdatedPackages')}
-            </FormHelperText>
+            <FormHelperText>{iMessage('label', 'byOutdated')}</FormHelperText>
             <FormControlLabel
               control={
                 <Checkbox
@@ -224,15 +224,15 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
         </FormControl>
         <Divider className={classes.bottomDivider} light />
         <div className={classes.actions}>
+          <Button color="secondary" variant="outlined" onClick={close}>
+            {iMessage('action', 'close')}
+          </Button>
           <Button
             variant="outlined"
             color="primary"
             onClick={() => handleFilters(filters)}
           >
-            Filter packages
-          </Button>
-          <Button color="secondary" variant="outlined" onClick={close}>
-            Close
+            {iMessage('action', 'filter')}
           </Button>
         </div>
       </div>
