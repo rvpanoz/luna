@@ -5,8 +5,8 @@ export const INFO_MESSAGES = {
   loaded: 'Package loaded.',
   showingGlobals: 'Showing globals',
   workingDirectory: 'Working directory',
-  installingPackages: 'Please wait. Installing packages...',
-  updating: 'Please wait. Updating packages...',
+  installingPackages: 'Please wait. Installing packages..',
+  updating: 'Please wait. Updating packages..',
   npmInstallInfo: 'Install all packages from package.json',
   npmAuditInfo: 'Scan project for vulnerabilities',
   npmDoctorInfo: 'Run a set of checks to ensure your npm installation',
@@ -15,11 +15,16 @@ export const INFO_MESSAGES = {
   noNotifications: 'No problems',
   notGlobalModeAvailable: 'Not available in global mode',
   notificationsHelperText: 'Woohoo! There are not any problems found.',
-  npmAuditVulnerabiliesHelperText: 'Known valnerabilties in your project',
+  npmAuditVulnerabiliesHelperText: 'Known valnerabilities in your project',
+  createPackageJsonHelperText:
+    'Create a new package.json file in directory and start working.',
   noPackages: 'No packages found',
   noAuditData: 'No audit data',
   noDoctorData: 'No doctor data',
-  searching: 'Searching npm registry...'
+  searching: 'Searching npm registry..',
+  directorySelection: 'Select directory',
+  directory: 'Directory',
+  createPackageJsonNote: 'Note: npm init will run with the default parameters.'
 };
 
 export const CONFIRMATION_MESSAGES = {
@@ -38,11 +43,19 @@ export const CONFIRMATION_MESSAGES = {
   uninstallSelected: 'Do you want to uninstall the selected packages?'
 };
 
-export const LABEL_MESSAGE = {
+export const ACTION_MESSAGES = {
+  create: 'Create',
+  cancel: 'Cancel',
+  filter: 'Filter',
+  close: 'Close'
+};
+
+export const LABEL_MESSAGES = {
   packageName: 'Package name',
   packageNameInput: 'Fill package name',
   groupType: 'Select packages based on group',
-  outdatedPackages: 'Select outdated packages'
+  byOutdated: 'Select outdated packages',
+  status: 'Status'
 };
 
 export const TITLE_MESSAGES = {
@@ -50,7 +63,7 @@ export const TITLE_MESSAGES = {
   doctor: 'Doctor results',
   loadDirectory: 'Load a directory from a package.json file',
   selectPackageJson: 'Select package.json file',
-  installationOptions: 'Please select installation options',
+  installationOptionsTitle: 'Please select installation options',
   system: 'Preview system',
   create: 'Create a package.json file',
   switchGlobals: 'Switch to global packages',

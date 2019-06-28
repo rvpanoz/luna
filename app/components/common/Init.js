@@ -10,7 +10,9 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 
 import { directoryParameters } from 'commons/parameters';
+import { iMessage } from 'commons/utils';
 import { runInit } from 'models/npm/actions';
+
 import styles from './styles/initForm';
 
 const InitView = ({ classes, onClose }) => {
@@ -43,29 +45,28 @@ const InitView = ({ classes, onClose }) => {
 
   return (
     <section className={classes.root}>
-      <Typography>
-        You can add a package.json file to your package to make it easy for
-        others to manage and install.
+      <Typography variant="body2">
+        {iMessage('info', 'createPackageJsonHelperText')}
       </Typography>
       {initOptions.directory ? (
         <div className={classes.options}>
-          <Typography>Directory</Typography>
+          <Typography>{iMessage('info', 'directory')}</Typography>
           <Typography>{initOptions.directory}</Typography>
         </div>
       ) : (
         <div className={classes.options}>
           <Button color="default" onClick={startInitFlow} variant="outlined">
-            Select directory
+            {iMessage('info', 'directorySelection')}
           </Button>
           <Typography variant="caption" className={classes.caption}>
-            Note: npm init will run with the default parameters.
+            {iMessage('info', 'createPackageJsonNote')}
           </Typography>
         </div>
       )}
       <Divider light />
       <div className={classes.actions}>
         <Button onClick={() => onClose()} color="secondary">
-          Cancel
+          {iMessage('action', 'cancel')}
         </Button>
         <Button
           disabled={!initOptions.directory}
@@ -73,7 +74,7 @@ const InitView = ({ classes, onClose }) => {
           color="primary"
           autoFocus
         >
-          Create
+          {iMessage('action', 'create')}
         </Button>
       </div>
     </section>
