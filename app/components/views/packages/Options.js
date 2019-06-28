@@ -21,7 +21,7 @@ const Options = ({ classes, packagesInstallOptions, selected }) => {
   return (
     <div>
       <Typography variant="subtitle1" className={classes.title}>
-        {iMessage('info', 'installationOptionsTitle')}
+        {iMessage('title', 'installationOptionsTitle')}
       </Typography>
       <Divider light />
       <List dense className={classes.list}>
