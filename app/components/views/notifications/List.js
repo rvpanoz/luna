@@ -51,7 +51,7 @@ const NotificationsItem = ({ classes, type, required, requiredBy }) => {
         {
           title: 'Confirmation',
           type: 'question',
-          message: iMessage('confirmation', 'packageSearch', {
+          message: iMessage('confirmation', 'searchPackage', {
             '%packageName%': packageName
           }),
           buttons: ['Cancel', 'Search']
