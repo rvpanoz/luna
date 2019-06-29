@@ -81,8 +81,6 @@ For issues and feature requests please create an [issue](https://github.com/rvpa
 > NOTE: Be sure to merge the latest from "upstream" before making a pull request.
 > 🙏
 
-### In memory of my friend luna - rest in peace my love 😻
+---
 
-<div style="display:block;border-radius:5px; border: 2px solid #ef4e7b;position:relative;width:135px">
-<img title="this-is-luna" src="./media/images/luna.jpg">
-</div>
+In memory of my friend luna :heart:
