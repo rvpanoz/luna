@@ -14,7 +14,7 @@
 
 ## Motivation
 
-Luna was created with main purpose to provide a flexible and modern UI for npm dependencies management. Furthermoe I wanted to create a project with the latest web technologies combined in one application.
+Luna was created with main purpose to provide a flexible and modern UI for npm dependencies management. Furthermore I wanted to create a project with the latest web technologies combined in one application.
 
 ## Features
 
@@ -26,7 +26,7 @@ Luna was created with main purpose to provide a flexible and modern UI for npm d
 - Filter packages by type or outdated
 - Preview package details (versions, statistics, dependencies and more)
 - Get notifications for missing dependencies or extraneous dependencies
-- Reporting
+- Reporting (audit/doctor)
 
 ### Screenshots
 
@@ -74,7 +74,7 @@ All binaries of the latest version are uploaded to the releases section.
 
 ## Contrinuting and Issues
 
-Pull requests are always welcome. 💪💪💪
+Pull requests are always welcome. 💪
 
 For issues and feature requests please create an [issue](https://github.com/rvpanoz/luna/issues)
 
