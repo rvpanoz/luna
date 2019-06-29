@@ -74,15 +74,15 @@ All binaries of the latest version are uploaded to the releases section.
 
 ## Contrinuting and Issues
 
-Pull requests are always welcome. :folder_hands:
+Pull requests are always welcome. 💪💪💪
 
 For issues and feature requests create an Issue [Issues](https://github.com/rvpanoz/luna/issues)
 
 > NOTE: Be sure to merge the latest from "upstream" before making a pull request.
-> 💪:
+> 🙏🙏🙏
 
 ### In memory of my friend luna - rest in peace my love :heart:
 
 <div style="display:block;border-radius:5px; border: 2px solid #ef4e7b;position:relative;width:135px">
-<img align="center" title="this is luna" src="./media/images/luna.jpg">
+<img title="this-is-luna" src="./media/images/luna.jpg">
 </div>
