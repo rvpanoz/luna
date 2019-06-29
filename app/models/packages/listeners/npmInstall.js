@@ -21,9 +21,7 @@ const updateCommand = ({
 const onNpmInstall$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-install-completed']);
 
-  ipcRenderer.on('npm-install-completed', (event, data, errors) => {
-    console.log(data, errors);
-
+  ipcRenderer.on('npm-install-completed', () => {
     try {
       observer.next(
         updateCommand({
