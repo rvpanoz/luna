@@ -6,11 +6,10 @@ const mk = {
   logToFile: true,
   logToConsole: false,
   syslog: true,
-  config: {
-    defaultSettings: {
-      defaultManager: 'npm',
-      registry: 'https://registry.npmjs.org/'
-    }
+  defaultSettings: {
+    defaultManager: 'npm',
+    registry: 'https://registry.npmjs.org/',
+    startMinized: true
   },
   cnc(...args) {
     let txt = '';
