@@ -15,12 +15,12 @@ const onNpmListOutdated = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
   const openedPackages = store.get('openedPackages') || [];
+  const { directory, mode } = rest;
 
   const onFlow = chunk => event.sender.send('npm-list-outdated-flow', chunk);
   const onError = error => event.sender.send('npm-list-outdated-error', error);
 
   const onComplete = (errors, data, cmd) => {
-    const { directory, mode } = rest;
     const dirName = path.dirname(path.resolve(directory));
     const parsedDirectory = path.parse(dirName);
     const { name } = parsedDirectory || {};
@@ -50,7 +50,6 @@ const onNpmListOutdated = (event, options, store) => {
     }
 
     event.sender.send('loaded-packages-close', store.get('openedPackages'));
-
     event.sender.send('npm-list-outdated-completed', data, errors, cmd);
   };
 
