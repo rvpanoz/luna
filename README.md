@@ -74,13 +74,12 @@ All binaries of the latest version are uploaded to the releases section.
 
 ## Contrinuting and Issues
 
-Pull requests are always welcome. :smile:
-For issues and feature requests create an issue [Issues](https://github.com/rvpanoz/luna/issues)
+Pull requests are always welcome. :folder_hands:
+
+For issues and feature requests create an Issue [Issues](https://github.com/rvpanoz/luna/issues)
 
 > NOTE: Be sure to merge the latest from "upstream" before making a pull request.
-> :funny_smile:
-
----
+> 💪:
 
 ### In memory of my friend luna - rest in peace my love :heart:
 
