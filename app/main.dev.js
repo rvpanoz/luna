@@ -27,9 +27,9 @@ import {
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
 
-const { config } = mk;
-const { defaultSettings } = config || {};
-const { startMinimized } = defaultSettings;
+const {
+  defaultSettings: { startMinimized }
+} = mk || {};
 
 const {
   DEBUG_PROD = 0,
@@ -269,7 +269,7 @@ app.on('ready', async () => {
     event.sender.send('npm-env-close', npmEnvError, npmEnv);
 
     // user settings
-    const userSettings = Store.get('user_settings') || defaultSettings;
+    const userSettings = Store.get('user_settings') || {};
     event.sender.send('settings-loaded-close', userSettings);
 
     // directories history

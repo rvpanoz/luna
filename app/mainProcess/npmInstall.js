@@ -1,12 +1,12 @@
 import log from 'electron-log';
 import { merge } from 'ramda';
 import { switchcase } from '../commons/utils';
-import { runCommand } from '../shell';
+import { runCommand } from '../cli';
 import mk from '../mk';
 
-const { config } = mk;
-const { defaultSettings } = config || {};
-const { defaultManager } = defaultSettings;
+const {
+  defaultSettings: { defaultManager }
+} = mk || {};
 
 const onNpmInstall = (event, options, store) => {
   const settings = store.get('user_settings');

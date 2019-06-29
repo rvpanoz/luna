@@ -162,7 +162,7 @@ const Packages = ({ classes }) => {
         options: {
           cmd: ['view'],
           name,
-          version
+          version: name === 'npm' ? null : version
         }
       })
     );
