@@ -72,7 +72,7 @@ All binaries of the latest version are uploaded to the releases section.
 - [Rxjs](https://rxjs-dev.firebaseapp.com/) - [🛠️](https://stackshare.io/rxjs) - [🐙](https://github.com/Reactive-Extensions/RxJS) - Reactive extensions library for Javascript
 - [Material-UI](https://material-ui.com//) - [🛠️](https://stackshare.io/material-ui) - [🐙](https://github.com/mui-org/material-ui) - React components that implement Google's Material Design.
 
-## Contrinuting and Issues
+## Contributing and Issues
 
 Pull requests are always welcome. 💪
 
