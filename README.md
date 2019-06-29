@@ -60,7 +60,7 @@ Start the development server and run the app in development mode:
 
 ## Binaries
 
-All binaries of the latest version are uploaded to the releases section.
+All binaries of the latest version are uploaded to the [releases](https://github.com/rvpanoz/luna/releases)
 
 ## Tech Stack
 
