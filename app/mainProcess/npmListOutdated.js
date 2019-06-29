@@ -6,47 +6,51 @@ import { switchcase } from '../commons/utils';
 import { runCommand } from '../cli';
 import mk from '../mk';
 
-console.log(runCommand);
-const { config } = mk;
-const { defaultSettings } = config || {};
-const { defaultManager } = defaultSettings;
+const {
+  defaultSettings: { defaultManager }
+} = mk || {};
 
 const onNpmListOutdated = (event, options, store) => {
   const settings = store.get('user_settings');
-  const { activeManager = defaultManager, ...rest } = options || {};
+  const { activeManager = defaultManager, directory, mode } = options || {};
   const openedPackages = store.get('openedPackages') || [];
-  const { directory, mode } = rest;
 
   const onFlow = chunk => event.sender.send('npm-list-outdated-flow', chunk);
   const onError = error => event.sender.send('npm-list-outdated-error', error);
 
-  const onComplete = (errors, data, cmd) => {
-    const dirName = path.dirname(path.resolve(directory));
-    const parsedDirectory = path.parse(dirName);
-    const { name } = parsedDirectory || {};
+  let yarnLock;
 
+  const onComplete = (errors, data, cmd) => {
     if (directory && mode === 'local') {
-      const yarnLock = fs.existsSync(
-        path.join(path.dirname(directory), 'yarn.lock')
-      );
+      try {
+        const dirName = path.dirname(path.resolve(directory));
+        const parsedDirectory = path.parse(dirName);
+        const { name } = parsedDirectory || {};
+
+        const inDirectories = openedPackages.some(
+          pkg => pkg.directory && pkg.directory.includes(dirName)
+        );
+
+        if (!inDirectories) {
+          store.set('openedPackages', [
+            ...openedPackages,
+            {
+              name,
+              directory: path.join(dirName, 'package.json')
+            }
+          ]);
+        }
+
+        yarnLock = fs.existsSync(
+          path.join(path.dirname(directory), 'yarn.lock')
+        );
+      } catch (error) {
+        throw new Error(error);
+      }
 
       if (yarnLock) {
         event.sender.send('yarn-lock-detected');
       }
-    }
-
-    const inDirectories = openedPackages.some(
-      pkg => pkg.directory && pkg.directory.includes(dirName)
-    );
-
-    if (!inDirectories) {
-      store.set('openedPackages', [
-        ...openedPackages,
-        {
-          name,
-          directory: path.join(dirName, 'package.json')
-        }
-      ]);
     }
 
     event.sender.send('loaded-packages-close', store.get('openedPackages'));
@@ -66,7 +70,7 @@ const onNpmListOutdated = (event, options, store) => {
   try {
     const params = merge(settings, {
       activeManager,
-      ...rest
+      ...options
     });
 
     runCommand(params, callback);

@@ -11,10 +11,9 @@ import lockVerify from 'lock-verify';
 import mk from '../mk';
 
 const { spawn } = cp;
-const { config } = mk;
 const {
   defaultSettings: { defaultManager }
-} = config;
+} = mk || {};
 
 const defaultsArgs = {
   list: ['--json', '--depth=0']

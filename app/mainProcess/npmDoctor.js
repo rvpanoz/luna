@@ -4,9 +4,9 @@ import { switchcase } from '../commons/utils';
 import { runCommand } from '../cli';
 import mk from '../mk';
 
-const { config } = mk;
-const { defaultSettings } = config || {};
-const { defaultManager } = defaultSettings;
+const {
+  defaultSettings: { defaultManager }
+} = mk || {};
 
 const onNpmDoctor = (event, options, store) => {
   const settings = store.get('user_settings');
