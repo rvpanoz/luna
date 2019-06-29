@@ -11,8 +11,7 @@
 [![Build Status](https://travis-ci.com/rvpanoz/luna.svg?branch=master)](https://travis-ci.com/rvpanoz/luna)
 [![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![NODE Version](https://img.shields.io/node/v/node.svg?style=flat)]()
-[![NPM Version](https://img.shields.io/npm/v/npm.svg?style=flat)]()
+[![NPM Version](https://img.shields.io/npm/v/npm-6.0.1.svg?style=flat)]()
 
 ## Motivation
 
