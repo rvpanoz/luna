@@ -12,6 +12,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![NPM Version](https://img.shields.io/npm/v/npm.svg?style=flat)]()
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Frvpanoz%2Fluna.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Frvpanoz%2Fluna?ref=badge_shield)
 
 ## Motivation
 
