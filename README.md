@@ -12,7 +12,7 @@
 [![CodeFactor](https://www.codefactor.io/repository/github/rvpanoz/luna/badge)](https://www.codefactor.io/repository/github/rvpanoz/luna)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![NPM Version](https://img.shields.io/npm/v/npm.svg?style=flat)
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frvpanoz%2Fluna.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Frvpanoz%2Fluna?ref=badge_shield)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frvpanoz%2Fluna.svg?type=shield)
 
 
 ## Motivation
@@ -88,10 +88,10 @@ For issues and feature requests please create an [issue](https://github.com/rvpa
 > NOTE: Be sure to merge the latest from "upstream" before making a pull request.
 > 🙏
 
----
-
-In memory of my friend luna :heart:
-
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frvpanoz%2Fluna.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frvpanoz%2Fluna?ref=badge_large)
+
+---
+
+In memory of my friend luna :heart:
