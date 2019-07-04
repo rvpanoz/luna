@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
 
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
-import { switchcase, iMessage } from 'commons/utils';
+import { switchcase } from 'commons/utils';
 import {
   uninstallPackages,
   updatePackages,
