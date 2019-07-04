@@ -52,7 +52,6 @@ export const TITLE_MESSAGES = {
   create: 'Create a package.json file',
   switchGlobals: 'Switch to global packages',
   showFilters: 'Show filters',
-  installSelected: 'Install selected',
   clearFilters: 'Clear filters',
   searchPackage: 'Search for package',
   clearActive: 'Clear active package',
@@ -63,6 +62,7 @@ export const TITLE_MESSAGES = {
   packageUpdate: 'Update package',
   packageUpdateLatest: 'Update to latest version',
   installLatest: 'Install latest version',
+  installSelected: 'Install selected packages',
   updateSelected: 'Update selected packages',
   noNotifications: 'No problems',
   notGlobalModeAvailable: 'Not available in global mode',
@@ -70,7 +70,9 @@ export const TITLE_MESSAGES = {
   npmAuditVulnerabiliesHelperText: 'Known valnerabilties in your project',
   noPackages: 'No packages found',
   noAuditData: 'No audit data',
-  searching: 'Searching npm registry..'
+  searching: 'Searching npm registry..',
+  backList: 'Back to list',
+  listReload: 'Reload'
 };
 
 export const CONFIRMATION_MESSAGES = {
