@@ -49,6 +49,8 @@ import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
 import { iMessage } from 'commons/utils';
 
+import { InstallAction, UpdateAction, UninstallAction } from './PackageActions';
+
 import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
@@ -118,167 +120,14 @@ const PackageDetails = ({ classes, toggleOptions }) => {
   }, [active]);
 
   const renderActions = () => {
-    const renderSearchActions = () => (
-      <Tooltip title={iMessage('title', 'packageInstall')}>
-        <div>
-          <IconButton
-            disableRipple
-            color="primary"
-            onClick={() =>
-              remote.dialog.showMessageBox(
-                remote.getCurrentWindow(),
-                {
-                  title: 'Confirmation',
-                  type: 'question',
-                  message: iMessage('confirmation', 'installPackage', {
-                    '%name%': active.name
-                  }),
-                  buttons: ['Cancel', 'Install']
-                },
-                btnIdx => {
-                  if (Boolean(btnIdx) === true) {
-                    if (mode === 'local') {
-                      return toggleOptions({
-                        open: true,
-                        single: true,
-                        name
-                      });
-                    }
-
-                    dispatch(
-                      installPackage({
-                        ipcEvent: 'npm-install',
-                        cmd: ['install'],
-                        name: active.name,
-                        single: true
-                      })
-                    );
-                  }
-                }
-              )
-            }
-          >
-            <AddIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
-    );
-
     const renderOperationActions = () => {
       const latestVersion = active && active['dist-tags'].latest;
       const isOutdated = semver.gt(latestVersion, version);
 
       return (
         <React.Fragment>
-          {isOutdated && (
-            <React.Fragment>
-              <Tooltip title={iMessage('title', 'packageUpdateLatest')}>
-                <div>
-                  <IconButton
-                    disableRipple
-                    color="primary"
-                    onClick={() =>
-                      remote.dialog.showMessageBox(
-                        remote.getCurrentWindow(),
-                        {
-                          title: 'Confirmation',
-                          type: 'question',
-                          message: iMessage('confirmation', 'installLatest', {
-                            '%name%': active.name
-                          }),
-                          buttons: ['Cancel', 'Install']
-                        },
-                        btnIdx => {
-                          if (Boolean(btnIdx) === true) {
-                            dispatch(
-                              installPackage({
-                                ipcEvent: 'npm-install',
-                                cmd: ['install'],
-                                name: active.name,
-                                version: 'latest',
-                                single: true
-                              })
-                            );
-                          }
-                        }
-                      )
-                    }
-                  >
-                    <AddIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
-              <Tooltip title={iMessage('title', 'packageUpdate')}>
-                <div>
-                  <IconButton
-                    disableRipple
-                    color="primary"
-                    onClick={() =>
-                      remote.dialog.showMessageBox(
-                        remote.getCurrentWindow(),
-                        {
-                          title: 'Confirmation',
-                          type: 'question',
-                          message: iMessage('confirmation', 'updatePackage', {
-                            '%name%': active.name
-                          }),
-                          buttons: ['Cancel', 'Update']
-                        },
-                        btnIdx => {
-                          if (Boolean(btnIdx) === true) {
-                            updatePackages({
-                              ipcEvent: 'npm-update',
-                              cmd: ['update'],
-                              multiple: true,
-                              packages: [active.name]
-                            });
-                          }
-                        }
-                      )
-                    }
-                  >
-                    <UpdateIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
-            </React.Fragment>
-          )}
-          <Tooltip title={iMessage('title', 'packageUninstall')}>
-            <div>
-              <IconButton
-                disabled={Boolean(active && active.name === 'npm')}
-                disableRipple
-                color="secondary"
-                onClick={() =>
-                  remote.dialog.showMessageBox(
-                    remote.getCurrentWindow(),
-                    {
-                      title: 'Confirmation',
-                      type: 'question',
-                      message: iMessage('confirmation', 'uninstallPackage', {
-                        '%name%': active.name
-                      }),
-                      buttons: ['Cancel', 'Uninstall']
-                    },
-                    btnIdx => {
-                      if (Boolean(btnIdx) === true) {
-                        dispatch(
-                          uninstallPackages({
-                            ipcEvent: 'npm-uninstall',
-                            cmd: ['uninstall'],
-                            multiple: true,
-                            packages: [active.name]
-                          })
-                        );
-                      }
-                    }
-                  )
-                }
-              >
-                <RemoveIcon />
-              </IconButton>
-            </div>
-          </Tooltip>
+          {isOutdated && <UpdateAction packageName={active.name} />}
+          <UninstallAction packageName={active.name} />
         </React.Fragment>
       );
     };
@@ -287,7 +136,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       <CardActions className={classes.actions} disableActionSpacing>
         {cond([
           [equals(false), always(renderOperationActions())],
-          [equals(true), always(renderSearchActions())]
+          [equals(true), always(<InstallAction packageName={active.name} />)]
         ])(Boolean(fromSearch))}
         <Hidden mdDown>
           <IconButton
