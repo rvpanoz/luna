@@ -13,6 +13,9 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
 [![NPM Version](https://img.shields.io/npm/v/npm.svg?style=flat)]()
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Frvpanoz%2Fluna.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Frvpanoz%2Fluna?ref=badge_shield)
+<a href="https://github.com/rvpanoz/luna/blob/master/LICENSE">
+<img alt="License: GPL3.0" src="https://img.shields.io/badge/License-GPL3.0-yellow.svg" target="_blank" />
+</a>
 
 ## Motivation
 
@@ -50,7 +53,7 @@ You can view my presentation in the GreeceJS meetup at http://bit.ly/2RES3AN
   </div>
 </div>
 
-## Running the application
+## Usage
 
 Install application's dependencies:
 
@@ -80,15 +83,15 @@ All binaries of the latest version are uploaded to the [releases](https://github
 
 ## Contributing and Issues
 
-Pull requests are always welcome. 💪
-
-For issues and feature requests please create an [issue](https://github.com/rvpanoz/luna/issues)
+Contributions, issues and feature requests are welcome. 💪<br />Feel free to check [issues page](https://github.com/rvpanoz/luna/issues).
 
 > NOTE: Be sure to merge the latest from "upstream" before making a pull request.
 > 🙏
 
-
 ## License
+
+Copyright © 2019 [rvpanoz](https://github.com/rvpanoz). This project is [GPL-3.0](https://github.com/rvpanoz/luna/blob/master/LICENSE) licensed.
+
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frvpanoz%2Fluna.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frvpanoz%2Fluna?ref=badge_large)
 
 ---
