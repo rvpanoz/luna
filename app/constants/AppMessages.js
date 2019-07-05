@@ -77,14 +77,15 @@ export const TITLE_MESSAGES = {
 
 export const CONFIRMATION_MESSAGES = {
   actionRun:
-    'Would you like to run %name% \n\nNote: This process will take some time',
-  installAll: `Would you like to install all the packages from \n%directory% \n\nNote: This process will take some time `,
+    'Do you want to run %name% \n\nNote: This process will take some time',
+  installAll: `Do you want to install all the packages from \n%directory% \n\nNote: This process will take some time `,
   installPackage: 'Do you want to install %name%?',
+  installSelected: 'Do you want to install the selected packages?',
   installLatest: 'Do you want to install %name% latest version?',
   installVersion: 'Do you want to install %name% version %version%?',
   updatePackage: 'Do you want to update %name%?',
   uninstallPackage: 'Do you want to uninstall %name%?',
-  searchPackage: 'Would you like to search for %packageName%?',
+  searchPackage: 'Do you want to search for %packageName%?',
   installLatestSelected:
     'Do you want to install the latest version of the selected packages?',
   updateSelected: 'Do you want to update the selected packages?',
