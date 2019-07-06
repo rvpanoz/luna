@@ -83,10 +83,10 @@ All binaries of the latest version are uploaded to the [releases](https://github
 
 ## Contributing and Issues
 
-Contributions, issues and feature requests are welcome. 💪<br />Feel free to check [issues page](https://github.com/rvpanoz/luna/issues).
+Contributions, issues and feature requests are welcome. <br />Feel free to check [issues page](https://github.com/rvpanoz/luna/issues).
 
-> NOTE: Be sure to merge the latest from "upstream" before making a pull request.
-> 🙏
+Pull requests are always welcome. 💪 <br />
+Be sure to merge the latest from "upstream" before making a pull request. 🙏
 
 ## License
 
