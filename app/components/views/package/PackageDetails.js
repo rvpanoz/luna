@@ -155,13 +155,13 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       })
     );
 
-  const handleInstallVersion = (version) => {
+  const handleInstallVersion = (packageVersion) => {
     if (fromSearch && mode === 'local') {
       return toggleOptions({
         open: true,
         single: true,
         name: active.name,
-        version
+        version: packageVersion
       })
     }
 

@@ -1,18 +1,11 @@
 import React from 'react';
-
+import { string, func} from 'prop-types'
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
 import AddIcon from '@material-ui/icons/Add';
-import CloseIcon from '@material-ui/icons/Close';
 import RemoveIcon from '@material-ui/icons/Delete';
 import UpdateIcon from '@material-ui/icons/Update';
-
-import {
-  updatePackages,
-  installPackage,
-  uninstallPackages
-} from 'models/packages/actions';
 
 import { iMessage, showDialog } from 'commons/utils';
 
@@ -39,6 +32,11 @@ export const InstallAction = ({ packageName, handler }) => {
   );
 };
 
+InstallAction.propTypes = {
+  packageName: string.isRequired,
+  handler: func.isRequired
+}
+
 export const UpdateAction = ({ packageName, handler }) => {
   const dialogOptions = {
     title: 'Confirmation',
@@ -61,6 +59,11 @@ export const UpdateAction = ({ packageName, handler }) => {
     </Tooltip>
   );
 };
+
+UpdateAction.propTypes = {
+  packageName: string.isRequired,
+  handler: func.isRequired
+}
 
 export const UninstallAction = ({ packageName, handler }) => {
   const dialogOptions = {
@@ -89,3 +92,9 @@ export const UninstallAction = ({ packageName, handler }) => {
     </Tooltip>
   );
 };
+
+UninstallAction.propTypes = {
+  packageName: string.isRequired,
+  handler: func.isRequired
+}
+
