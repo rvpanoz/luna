@@ -64,6 +64,7 @@ export const TITLE_MESSAGES = {
   installVersion: 'Install version',
   installLatest: 'Install latest version',
   installSelected: 'Install selected packages',
+  updatePackage: 'Update package',
   updateSelected: 'Update selected packages',
   noNotifications: 'No problems',
   notGlobalModeAvailable: 'Not available in global mode',
