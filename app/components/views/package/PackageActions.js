@@ -16,7 +16,7 @@ import {
 
 import { iMessage, showDialog } from 'commons/utils';
 
-export const InstallAction = ({ packageName }) => {
+export const InstallAction = ({ packageName, handler }) => {
   const dialogOptions = {
     title: 'Confirmation',
     type: 'question',
@@ -26,31 +26,20 @@ export const InstallAction = ({ packageName }) => {
     buttons: ['Cancel', 'Install']
   };
 
-  const dialogHandler = () =>
-    dispatch(
-      installPackage({
-        ipcEvent: 'npm-install',
-        cmd: ['install'],
-        name: packageName,
-        version: 'latest',
-        single: true
-      })
-    );
-
-  const onClickHandler = () => showDialog(dialogHandler, dialogOptions);
+  const onClickHandler = () => showDialog(handler, dialogOptions);
 
   return (
-    <div>
-      <Tooltip title={iMessage('title', 'installLatest')}>
+    <Tooltip title={iMessage('title', 'installLatest')}>
+      <div>
         <IconButton disableRipple color="primary" onClick={onClickHandler}>
           <AddIcon />
         </IconButton>
-      </Tooltip>
-    </div>
+      </div>
+    </Tooltip>
   );
 };
 
-export const UpdateAction = ({ packageName }) => {
+export const UpdateAction = ({ packageName, handler }) => {
   const dialogOptions = {
     title: 'Confirmation',
     type: 'question',
@@ -59,30 +48,21 @@ export const UpdateAction = ({ packageName }) => {
     }),
     buttons: ['Cancel', 'Update']
   };
-  const dialogHandler = () =>
-    dispatch(
-      updatePackages({
-        ipcEvent: 'npm-update',
-        cmd: ['update'],
-        multiple: true,
-        packages: [packageName]
-      })
-    );
 
-  const onClickHandler = () => showDialog(dialogHandler, dialogOptions);
+  const onClickHandler = () => showDialog(handler, dialogOptions);
 
   return (
-    <div>
-      <Tooltip title={iMessage('title', 'updatePackage')}>
+    <Tooltip title={iMessage('title', 'updatePackage')}>
+      <div>
         <IconButton disableRipple color="primary" onClick={onClickHandler}>
           <UpdateIcon />
         </IconButton>
-      </Tooltip>
-    </div>
+      </div>
+    </Tooltip>
   );
 };
 
-export const UninstallAction = ({ packageName }) => {
+export const UninstallAction = ({ packageName, handler }) => {
   const dialogOptions = {
     title: 'Confirmation',
     type: 'question',
@@ -92,21 +72,11 @@ export const UninstallAction = ({ packageName }) => {
     buttons: ['Cancel', 'Uninstall']
   };
 
-  const dialogHandler = () =>
-    dispatch(
-      installPackage({
-        ipcEvent: 'npm-update',
-        cmd: ['update'],
-        name: packageName,
-        single: true
-      })
-    );
-
-  const onClickHandler = () => showDialog(dialogHandler, dialogOptions);
+  const onClickHandler = () => showDialog(handler, dialogOptions);
 
   return (
-    <div>
-      <Tooltip title={iMessage('title', 'packageUninstall')}>
+    <Tooltip title={iMessage('title', 'packageUninstall')}>
+      <div>
         <IconButton
           disabled={packageName === 'npm'}
           disableRipple
@@ -115,7 +85,7 @@ export const UninstallAction = ({ packageName }) => {
         >
           <RemoveIcon />
         </IconButton>
-      </Tooltip>
-    </div>
+      </div>
+    </Tooltip>
   );
 };

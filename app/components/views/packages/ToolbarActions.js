@@ -43,20 +43,18 @@ export const FilterAction = ({ handler, options }) => {
   const { nodata, fromSearch } = options;
 
   return (
-    <div>
-      <Tooltip title={iMessage('title', 'showFilters')}>
-        <div>
-          <IconButton
-            disableRipple
-            disabled={nodata || fromSearch}
-            aria-label="show-filters"
-            onClick={handler}
-          >
-            <FilterListIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
-    </div>
+    <Tooltip title={iMessage('title', 'showFilters')}>
+      <div>
+        <IconButton
+          disableRipple
+          disabled={nodata || fromSearch}
+          aria-label="show-filters"
+          onClick={handler}
+        >
+          <FilterListIcon />
+        </IconButton>
+      </div>
+    </Tooltip >
   );
 };
 
