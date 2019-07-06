@@ -171,7 +171,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       message: iMessage(
         'confirmation',
         'installVersion',
-        { '%version%': version, '%name%': active.name }
+        { '%version%': packageVersion, '%name%': active.name }
       ),
       buttons: ['Cancel', 'Install']
     };
@@ -187,7 +187,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         cmd: ['install'],
         name: active.name,
         pkgOptions: options,
-        version,
+        version: packageVersion,
         single: true
       })
     );
