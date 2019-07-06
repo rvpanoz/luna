@@ -70,6 +70,8 @@ const TableListToolbar = ({
   };
 
   const handleAction = (action, force, latest) => {
+    let pkgOptions;
+
     if (action === 'clearFilters') {
       return clearAllFilters();
     }
@@ -85,22 +87,24 @@ const TableListToolbar = ({
       });
     }
 
-    if (action === 'install' && mode === 'local') {
-      const pkgOptions = selected.map(packageName => {
-        const packageDetails = packagesData.find(
-          packageDataDetails => packageDataDetails.name === packageName
-        );
-        const { __group } = packageDetails;
+    if (action === 'install') {
+      if (mode === 'local') {
+        pkgOptions = selected.map(packageName => {
+          const packageDetails = packagesData.find(
+            packageDataDetails => packageDataDetails.name === packageName
+          );
+          const { __group } = packageDetails;
 
-        return [PACKAGE_GROUPS[__group]];
-      });
+          return [PACKAGE_GROUPS[__group]];
+        });
+      }
 
       return dispatch(
         installMultiplePackages({
           ipcEvent: 'npm-install',
           cmd: selected.map(() => 'install'),
           multiple: true,
-          pkgOptions: pkgOptions || [],
+          pkgOptions: mode === 'local' ? pkgOptions : null,
           packages: latest
             ? selected.map(selectedPackage => `${selectedPackage}@latest`)
             : selected

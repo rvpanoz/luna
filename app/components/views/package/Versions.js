@@ -29,9 +29,7 @@ const Versions = ({ classes, data, handleInstall }) => <Paper className={classes
                     primary={<Typography variant="subtitle2">{version}</Typography>}
                 />
                 <ListItemSecondaryAction>
-                    <Tooltip title={iMessage('title', 'installVersion', {
-                        version
-                    })}>
+                    <Tooltip title={iMessage('title', 'installVersion')}>
                         <div>
                             <IconButton
                                 aria-label="install-version"
