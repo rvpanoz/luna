@@ -3,6 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import mk from '../mk';
+import { remote } from 'electron';
 
 import {
   INFO_MESSAGES,
@@ -15,6 +16,22 @@ import {
 } from '../constants/AppMessages';
 
 const SEPARATOR = path.sep;
+
+export const showDialog = (handler, options) => {
+  if (!options || typeof options !== 'object') {
+    return;
+  }
+
+  return remote.dialog.showMessageBox(
+    remote.getCurrentWindow(),
+    options,
+    btnIdx => {
+      if (btnIdx) {
+        handler();
+      }
+    }
+  );
+};
 
 export const iMessage = (type, key, replacements) => {
   const messageType = switchcase({
