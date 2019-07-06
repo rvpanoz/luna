@@ -3,14 +3,13 @@
 import React from 'react';
 import semver from 'semver';
 import cn from 'classnames';
-import { remote } from 'electron';
+
 import { useEffect, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { objectOf, string, func } from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -25,20 +24,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import Fade from '@material-ui/core/Fade';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
-import AddIcon from '@material-ui/icons/Add';
 import CloseIcon from '@material-ui/icons/Close';
-import RemoveIcon from '@material-ui/icons/Delete';
-import UpdateIcon from '@material-ui/icons/Update';
+
 import VersionsIcon from '@material-ui/icons/LabelOutlined';
 import DependenciesIcon from '@material-ui/icons/ListOutlined';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import {
   updatePackages,
   installPackage,
@@ -47,8 +39,12 @@ import {
 } from 'models/packages/actions';
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
-import { iMessage } from 'commons/utils';
+import { iMessage, showDialog, switchcase } from 'commons/utils';
 
+import { InstallAction, UpdateAction, UninstallAction } from './PackageActions';
+
+import Dependencies from './Dependencies'
+import Versions from './Versions'
 import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
@@ -117,168 +113,97 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     }
   }, [active]);
 
-  const renderActions = () => {
-    const renderSearchActions = () => (
-      <Tooltip title={iMessage('title', 'packageInstall')}>
-        <div>
-          <IconButton
-            disableRipple
-            color="primary"
-            onClick={() =>
-              remote.dialog.showMessageBox(
-                remote.getCurrentWindow(),
-                {
-                  title: 'Confirmation',
-                  type: 'question',
-                  message: iMessage('confirmation', 'installPackage', {
-                    '%name%': active.name
-                  }),
-                  buttons: ['Cancel', 'Install']
-                },
-                btnIdx => {
-                  if (Boolean(btnIdx) === true) {
-                    if (mode === 'local') {
-                      return toggleOptions({
-                        open: true,
-                        single: true,
-                        name
-                      });
-                    }
+  const handleInstall = () => {
+    if (fromSearch && mode === 'local') {
+      return toggleOptions({
+        open: true,
+        single: true,
+        name: active.name,
+        version
+      })
+    }
 
-                    dispatch(
-                      installPackage({
-                        ipcEvent: 'npm-install',
-                        cmd: ['install'],
-                        name: active.name,
-                        single: true
-                      })
-                    );
-                  }
-                }
-              )
-            }
-          >
-            <AddIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
+
+    return dispatch(
+      installPackage({
+        ipcEvent: 'npm-install',
+        cmd: ['install'],
+        name: active.name,
+        version: 'latest',
+        single: true
+      })
+    );
+  }
+
+  const handleUpdate = () =>
+    dispatch(
+      updatePackages({
+        ipcEvent: 'npm-update',
+        cmd: ['update'],
+        multiple: true,
+        packages: [active.name]
+      })
     );
 
+  const handleUninstall = () =>
+    dispatch(
+      uninstallPackages({
+        ipcEvent: 'npm-uninstall',
+        cmd: ['uninstall'],
+        multiple: true,
+        packages: [active.name]
+      })
+    );
+
+  const handleInstallVersion = (packageVersion) => {
+    if (fromSearch && mode === 'local') {
+      return toggleOptions({
+        open: true,
+        single: true,
+        name: active.name,
+        version: packageVersion
+      })
+    }
+
+    const dialogOptions = {
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage(
+        'confirmation',
+        'installVersion',
+        { '%version%': version, '%name%': active.name }
+      ),
+      buttons: ['Cancel', 'Install']
+    };
+
+    const options = switchcase({
+      dependencies: () => ['save-prod'],
+      devDependencies: () => ['save-dev'],
+      optionalDependencies: () => ['save-optional']
+    })('')(group);
+
+    const dialogHandler = () => dispatch(
+      installPackage({
+        cmd: ['install'],
+        name: active.name,
+        pkgOptions: options,
+        version,
+        single: true
+      })
+    );
+
+    return showDialog(dialogHandler, dialogOptions)
+  }
+
+  const renderActions = () => {
     const renderOperationActions = () => {
       const latestVersion = active && active['dist-tags'].latest;
-      const isOutdated = semver.gt(latestVersion, version);
+      const isOutdated = latestVersion ? semver.gt(latestVersion, version) : false;
 
       return (
         <React.Fragment>
-          {isOutdated && (
-            <React.Fragment>
-              <Tooltip title={iMessage('title', 'packageUpdateLatest')}>
-                <div>
-                  <IconButton
-                    disableRipple
-                    color="primary"
-                    onClick={() =>
-                      remote.dialog.showMessageBox(
-                        remote.getCurrentWindow(),
-                        {
-                          title: 'Confirmation',
-                          type: 'question',
-                          message: iMessage('confirmation', 'installLatest', {
-                            '%name%': active.name
-                          }),
-                          buttons: ['Cancel', 'Install']
-                        },
-                        btnIdx => {
-                          if (Boolean(btnIdx) === true) {
-                            dispatch(
-                              installPackage({
-                                ipcEvent: 'npm-install',
-                                cmd: ['install'],
-                                name: active.name,
-                                version: 'latest',
-                                single: true
-                              })
-                            );
-                          }
-                        }
-                      )
-                    }
-                  >
-                    <AddIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
-              <Tooltip title={iMessage('title', 'packageUpdate')}>
-                <div>
-                  <IconButton
-                    disableRipple
-                    color="primary"
-                    onClick={() =>
-                      remote.dialog.showMessageBox(
-                        remote.getCurrentWindow(),
-                        {
-                          title: 'Confirmation',
-                          type: 'question',
-                          message: iMessage('confirmation', 'updatePackage', {
-                            '%name%': active.name
-                          }),
-                          buttons: ['Cancel', 'Update']
-                        },
-                        btnIdx => {
-                          if (Boolean(btnIdx) === true) {
-                            updatePackages({
-                              ipcEvent: 'npm-update',
-                              cmd: ['update'],
-                              multiple: true,
-                              packages: [active.name]
-                            });
-                          }
-                        }
-                      )
-                    }
-                  >
-                    <UpdateIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
-            </React.Fragment>
-          )}
-          <Tooltip title={iMessage('title', 'packageUninstall')}>
-            <div>
-              <IconButton
-                disabled={Boolean(active && active.name === 'npm')}
-                disableRipple
-                color="secondary"
-                onClick={() =>
-                  remote.dialog.showMessageBox(
-                    remote.getCurrentWindow(),
-                    {
-                      title: 'Confirmation',
-                      type: 'question',
-                      message: iMessage('confirmation', 'uninstallPackage', {
-                        '%name%': active.name
-                      }),
-                      buttons: ['Cancel', 'Uninstall']
-                    },
-                    btnIdx => {
-                      if (Boolean(btnIdx) === true) {
-                        dispatch(
-                          uninstallPackages({
-                            ipcEvent: 'npm-uninstall',
-                            cmd: ['uninstall'],
-                            multiple: true,
-                            packages: [active.name]
-                          })
-                        );
-                      }
-                    }
-                  )
-                }
-              >
-                <RemoveIcon />
-              </IconButton>
-            </div>
-          </Tooltip>
+          {isOutdated && <UpdateAction packageName={active.name} handler={handleUpdate} />}
+          <UninstallAction packageName={active.name} handler={handleUninstall} />
         </React.Fragment>
       );
     };
@@ -287,7 +212,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       <CardActions className={classes.actions} disableActionSpacing>
         {cond([
           [equals(false), always(renderOperationActions())],
-          [equals(true), always(renderSearchActions())]
+          [equals(true), always(<InstallAction packageName={active.name} handler={handleInstall} />)]
         ])(Boolean(fromSearch))}
         <Hidden mdDown>
           <IconButton
@@ -305,102 +230,6 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       </CardActions>
     );
   };
-
-  const renderList = (type, data) => (
-    <Paper className={classes.paper}>
-      <div className={classes.header}>
-        {type === 'version' && (
-          <Typography>{`Versions (${data.length})`}</Typography>
-        )}
-        {type === 'dependency' && (
-          <Typography>{`Dependencies (${data.length})`}</Typography>
-        )}
-      </div>
-      <Divider light />
-      {data.length === 0 ? (
-        <Typography className={classes.withPadding}>No data found</Typography>
-      ) : (
-        <List
-          dense
-          style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 425 }}
-        >
-          {data.map((item, idx) => (
-            <ListItem
-              key={`${type}-item-${idx + 1}`}
-              className={classes.listItem}
-            >
-              <ListItemText
-                primary={
-                  <Typography variant="subtitle2">
-                    {type === 'version' ? item : item.name}
-                  </Typography>
-                }
-                secondary={
-                  type === 'dependency' && (
-                    <Typography variant="subtitle2">{item.version}</Typography>
-                  )
-                }
-              />
-              {type === 'version' && (
-                <Tooltip title={`Install version ${item}`}>
-                  <div>
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        aria-label="install_version"
-                        onClick={() => {
-                          remote.dialog.showMessageBox(
-                            remote.getCurrentWindow(),
-                            {
-                              title: 'Confirmation',
-                              type: 'question',
-                              message: iMessage(
-                                'confirmation',
-                                'installVersion',
-                                { '%version%': item, '%name%': active.name }
-                              ),
-                              buttons: ['Cancel', 'Install']
-                            },
-                            btnIdx => {
-                              if (Boolean(btnIdx) === true) {
-                                if (mode === 'local') {
-                                  return toggleOptions({
-                                    open: true,
-                                    single: true,
-                                    name,
-                                    version: item
-                                  });
-                                }
-
-                                const pkgOptions = group
-                                  ? [PACKAGE_GROUPS[group]]
-                                  : ['save-prod'];
-
-                                dispatch(
-                                  installPackage({
-                                    cmd: ['install'],
-                                    name,
-                                    pkgOptions,
-                                    version: item,
-                                    single: true
-                                  })
-                                );
-                              }
-                            }
-                          );
-                        }}
-                      >
-                        <AddIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </div>
-                </Tooltip>
-              )}
-            </ListItem>
-          ))}
-        </List>
-      )}
-    </Paper>
-  );
 
   const renderCard = () => (
     <Grid container justify="space-around">
@@ -448,55 +277,63 @@ const PackageDetails = ({ classes, toggleOptions }) => {
           }}
         >
           <Tooltip title={iMessage('title', 'clearActive')}>
-            <IconButton
-              color="secondary"
-              disableRipple
-              onClick={() => {
-                setActivePopper({
-                  index: 0,
-                  anchorEl: null,
-                  open: false
-                });
-                dispatch(setActive({ active: null }));
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
+            <div>
+              <IconButton
+                color="secondary"
+                disableRipple
+                onClick={() => {
+                  setActivePopper({
+                    index: 0,
+                    anchorEl: null,
+                    open: false
+                  });
+                  dispatch(setActive({ active: null }));
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
+            </div>
           </Tooltip>
           <Tooltip title={iMessage('title', 'packageVersions')}>
-            <IconButton
-              color="primary"
-              disableRipple
-              onClick={e =>
-                setActivePopper({
-                  index: activePopper.index === 1 ? 0 : 1,
-                  anchorEl: e.currentTarget,
-                  open: activePopper.index !== 1
-                })
-              }
-            >
-              <VersionsIcon />
-            </IconButton>
+            <div>
+              <IconButton
+                color="primary"
+                disableRipple
+                onClick={e =>
+                  setActivePopper({
+                    index: activePopper.index === 1 ? 0 : 1,
+                    anchorEl: e.currentTarget,
+                    open: activePopper.index !== 1
+                  })
+                }
+              >
+                <VersionsIcon />
+              </IconButton>
+            </div>
           </Tooltip>
           <Tooltip title={iMessage('title', 'packageDependencies')}>
-            <IconButton
-              color="primary"
-              disableRipple
-              onClick={e =>
-                setActivePopper({
-                  index: activePopper.index === 2 ? 0 : 2,
-                  anchorEl: e.currentTarget,
-                  open: activePopper.index !== 2
-                })
-              }
-            >
-              <DependenciesIcon />
-            </IconButton>
+            <div>
+              <IconButton
+                color="primary"
+                disableRipple
+                onClick={e =>
+                  setActivePopper({
+                    index: activePopper.index === 2 ? 0 : 2,
+                    anchorEl: e.currentTarget,
+                    open: activePopper.index !== 2
+                  })
+                }
+              >
+                <DependenciesIcon />
+              </IconButton>
+            </div>
           </Tooltip>
         </Toolbar>
-      </Grid>
-    </Grid>
+      </Grid >
+    </Grid >
   );
+
+  const versions = active && active.versions ? active.versions : [];
 
   return (
     <div className={classes.wrapper}>
@@ -516,7 +353,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            {renderList('version', (active && active.versions) || [])}
+            <Versions data={versions} handleInstall={handleInstallVersion} />
           </Fade>
         )}
       </Popper>
@@ -528,7 +365,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            {renderList('dependency', dependencies)}
+            <Dependencies data={dependencies} />
           </Fade>
         )}
       </Popper>
