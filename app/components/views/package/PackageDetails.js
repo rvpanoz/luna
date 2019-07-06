@@ -39,7 +39,7 @@ import {
 } from 'models/packages/actions';
 import AppLoader from 'components/common/AppLoader';
 import Transition from 'components/common/Transition';
-import { iMessage } from 'commons/utils';
+import { iMessage, showDialog, switchcase } from 'commons/utils';
 
 import { InstallAction, UpdateAction, UninstallAction } from './PackageActions';
 
@@ -113,8 +113,18 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     }
   }, [active]);
 
-  const handleInstall = () =>
-    dispatch(
+  const handleInstall = () => {
+    if (fromSearch && mode === 'local') {
+      return toggleOptions({
+        open: true,
+        single: true,
+        name: active.name,
+        version
+      })
+    }
+
+
+    return dispatch(
       installPackage({
         ipcEvent: 'npm-install',
         cmd: ['install'],
@@ -123,6 +133,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         single: true
       })
     );
+  }
 
   const handleUpdate = () =>
     dispatch(
@@ -143,6 +154,46 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         packages: [active.name]
       })
     );
+
+  const handleInstallVersion = (version) => {
+    if (fromSearch && mode === 'local') {
+      return toggleOptions({
+        open: true,
+        single: true,
+        name: active.name,
+        version
+      })
+    }
+
+    const dialogOptions = {
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage(
+        'confirmation',
+        'installVersion',
+        { '%version%': version, '%name%': active.name }
+      ),
+      buttons: ['Cancel', 'Install']
+    };
+
+    const options = switchcase({
+      dependencies: () => ['save-prod'],
+      devDependencies: () => ['save-dev'],
+      optionalDependencies: () => ['save-optional']
+    })('')(group);
+
+    const dialogHandler = () => dispatch(
+      installPackage({
+        cmd: ['install'],
+        name: active.name,
+        pkgOptions: options,
+        version,
+        single: true
+      })
+    );
+
+    return showDialog(dialogHandler, dialogOptions)
+  }
 
   const renderActions = () => {
     const renderOperationActions = () => {
@@ -302,7 +353,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            <Versions data={versions} />
+            <Versions data={versions} handleInstall={handleInstallVersion} />
           </Fade>
         )}
       </Popper>

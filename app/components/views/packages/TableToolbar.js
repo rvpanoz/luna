@@ -85,25 +85,22 @@ const TableListToolbar = ({
       });
     }
 
-    if (action === 'install') {
-      const pkgOptions =
-        mode === 'local'
-          ? selected.map(packageName => {
-            const packageDetails = packagesData.find(
-              packageDataDetails => packageDataDetails.name === packageName
-            );
-            const { __group } = packageDetails;
+    if (action === 'install' && mode === 'local') {
+      const pkgOptions = selected.map(packageName => {
+        const packageDetails = packagesData.find(
+          packageDataDetails => packageDataDetails.name === packageName
+        );
+        const { __group } = packageDetails;
 
-            return [PACKAGE_GROUPS[__group]];
-          })
-          : [];
+        return [PACKAGE_GROUPS[__group]];
+      });
 
       return dispatch(
         installMultiplePackages({
           ipcEvent: 'npm-install',
           cmd: selected.map(() => 'install'),
           multiple: true,
-          pkgOptions,
+          pkgOptions: pkgOptions || [],
           packages: latest
             ? selected.map(selectedPackage => `${selectedPackage}@latest`)
             : selected
@@ -138,10 +135,10 @@ const TableListToolbar = ({
 
   const renderAction = action => switchcase({
     clearFilters: () => <ClearFiltersAction handler={clearAllFilters} />,
-    install: () => <InstallAction handler={handleAction} />,
-    latest: () => <LatestAction handler={handleAction} />,
-    update: () => <UpdateAction handler={handleAction} />,
-    uninstall: () => <UninstallAction options={{ selected }} handler={handleAction} />,
+    install: () => <InstallAction handler={() => handleAction('install', false)} />,
+    latest: () => <LatestAction handler={() => handleAction('install', true, true)} />,
+    update: () => <UpdateAction handler={() => handleAction('update')} />,
+    uninstall: () => <UninstallAction options={{ selected }} handler={() => handleAction('uninstall')} />,
     filters: () => <FilterAction handler={openFilters} />
   })('none')(action);
 

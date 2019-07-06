@@ -1,7 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
+import { objectOf, arrayOf, string, func } from 'prop-types'
 import { withStyles } from '@material-ui/core';
-import { remote } from 'electron';
 
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
@@ -15,66 +14,28 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import AddIcon from '@material-ui/icons/Add';
 
-import { PACKAGE_GROUPS } from 'constants/AppConstants';
+import { iMessage } from 'commons/utils'
 import styles from './styles/dependencies'
 
-const Dependencies = ({ classes, data }) => <Paper className={classes.paper}>
+const Versions = ({ classes, data, handleInstall }) => <Paper className={classes.paper}>
     <div className={classes.header}>
         <Typography>{`Versions (${data.length})`}</Typography>
     </div>
     <Divider light />
-    <List dense style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 425 }}>
-        {data.map((item, idx) => (
-            <ListItem key={`item-${idx}`} className={classes.listItem}>
+    <List dense style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 500 }}>
+        {data.map(version => (
+            <ListItem key={version} className={classes.listItem}>
                 <ListItemText
-                    primary={<Typography variant="subtitle2">{item}</Typography>}
+                    primary={<Typography variant="subtitle2">{version}</Typography>}
                 />
                 <ListItemSecondaryAction>
-                    <Tooltip title={`Install version ${item}`}>
+                    <Tooltip title={iMessage('title', 'installVersion', {
+                        version
+                    })}>
                         <div>
                             <IconButton
                                 aria-label="install-version"
-                                onClick={() => {
-                                    remote.dialog.showMessageBox(
-                                        remote.getCurrentWindow(),
-                                        {
-                                            title: 'Confirmation',
-                                            type: 'question',
-                                            message: iMessage(
-                                                'confirmation',
-                                                'installVersion',
-                                                { '%version%': item, '%name%': active.name }
-                                            ),
-                                            buttons: ['Cancel', 'Install']
-                                        },
-                                        btnIdx => {
-                                            if (Boolean(btnIdx) === true) {
-                                                if (mode === 'local') {
-                                                    return toggleOptions({
-                                                        open: true,
-                                                        single: true,
-                                                        name,
-                                                        version: item
-                                                    });
-                                                }
-
-                                                const pkgOptions = group
-                                                    ? [PACKAGE_GROUPS[group]]
-                                                    : ['save-prod'];
-
-                                                dispatch(
-                                                    installPackage({
-                                                        cmd: ['install'],
-                                                        name,
-                                                        pkgOptions,
-                                                        version: item,
-                                                        single: true
-                                                    })
-                                                );
-                                            }
-                                        }
-                                    );
-                                }}
+                                onClick={() => handleInstall(version)}
                             >
                                 <AddIcon />
                             </IconButton>
@@ -83,10 +44,12 @@ const Dependencies = ({ classes, data }) => <Paper className={classes.paper}>
                 </ListItemSecondaryAction>
             </ListItem>))}
     </List>
-</Paper>
+</Paper >
 
-Dependencies.propTypes = {
-    classes: PropTypes.objectOf(PropTypes.string).isRequired
+Versions.propTypes = {
+    classes: objectOf(string).isRequired,
+    handleInstall: func.isRequired,
+    data: arrayOf(string).isRequired
 };
 
-export default withStyles(styles)(Dependencies)
+export default withStyles(styles)(Versions)

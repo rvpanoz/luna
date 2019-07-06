@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 import { setActivePage } from 'models/ui/actions';
 import { setRunningCommand } from 'models/npm/actions';
+import { clearInstallOptions } from 'models/common/actions';
 import { setPackagesStart } from '../actions';
 
 const updateCommand = ({
@@ -30,6 +31,8 @@ const onNpmInstall$ = new Observable(observer => {
           operationPackages: []
         })
       );
+
+      observer.next(clearInstallOptions());
 
       observer.next(
         setActivePage({

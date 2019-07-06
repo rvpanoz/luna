@@ -15,6 +15,7 @@ const styles = theme => ({
     paper: {
         width: '100%'
     },
+    list: { overflowY: 'scroll', minWidth: 225, maxHeight: 425 },
     listItem: {
         padding: theme.spacing.unit,
         margin: 0
