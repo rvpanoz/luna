@@ -2,6 +2,30 @@ import { defaultFont, flexContainer, grayColor } from 'styles/variables';
 import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
+  card: {
+    minHeight: "100%",
+    display: "flex",
+    flexDirection: "column"
+  },
+  fullHeightBody: {
+    display: "flex",
+    flexGrow: 1,
+    flexDirection: "column",
+    justifyContent: "space-between"
+  },
+  overviewContainer: {
+    display: "flex",
+    alignItems: "center",
+    flexGrow: 1,
+    paddingBottom: theme.spacing.unit
+  },
+  elementChartWrapper: {
+    width: "100%"
+  },
+  vulnerabilitiesOverviewElementText: {
+    minWidth: 145,
+    paddingRight: theme.spacing.unit * 2
+  },
   item: {
     height: '100%'
   },
