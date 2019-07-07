@@ -66,6 +66,7 @@ export const TITLE_MESSAGES = {
   installSelected: 'Install selected packages',
   updatePackage: 'Update package',
   updateSelected: 'Update selected packages',
+  uninstallSelected: 'Uninstall selected packages',
   noNotifications: 'No problems',
   notGlobalModeAvailable: 'Not available in global mode',
   notificationsHelperText: 'Woohoo! There are not any problems found.',
