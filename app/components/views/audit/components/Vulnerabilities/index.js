@@ -1,6 +1,3 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable compat/compat */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';

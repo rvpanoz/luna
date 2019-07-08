@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
@@ -24,8 +22,8 @@ const renderData = data => (
     {data &&
       data
         .filter(value => value.length)
-        .map((dataValue, idx) => (
-          <ListItem key={`docV-${idx}`}>
+        .map(dataValue => (
+          <ListItem key={dataValue}>
             <ListItemAvatar>
               <Avatar style={{ backgroundColor: '#fff' }}>
                 <CheckIcon color="secondary" />
@@ -79,7 +77,7 @@ Doctor.defaultProps = {
 
 Doctor.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  data: PropTypes.array
+  data: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default withStyles(styles)(Doctor);
