@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 import React from 'react';
 import semver from 'semver';
 import cn from 'classnames';
@@ -43,8 +41,8 @@ import { iMessage, showDialog, switchcase } from 'commons/utils';
 
 import { InstallAction, UpdateAction, UninstallAction } from './PackageActions';
 
-import Dependencies from './Dependencies'
-import Versions from './Versions'
+import Dependencies from './Dependencies';
+import Versions from './Versions';
 import PackageInfo from './PackageInfo';
 import styles from './styles/packageDetails';
 
@@ -120,9 +118,8 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         single: true,
         name: active.name,
         version
-      })
+      });
     }
-
 
     return dispatch(
       installPackage({
@@ -133,7 +130,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         single: true
       })
     );
-  }
+  };
 
   const handleUpdate = () =>
     dispatch(
@@ -155,24 +152,23 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       })
     );
 
-  const handleInstallVersion = (packageVersion) => {
+  const handleInstallVersion = packageVersion => {
     if (fromSearch && mode === 'local') {
       return toggleOptions({
         open: true,
         single: true,
         name: active.name,
         version: packageVersion
-      })
+      });
     }
 
     const dialogOptions = {
       title: 'Confirmation',
       type: 'question',
-      message: iMessage(
-        'confirmation',
-        'installVersion',
-        { '%version%': packageVersion, '%name%': active.name }
-      ),
+      message: iMessage('confirmation', 'installVersion', {
+        '%version%': packageVersion,
+        '%name%': active.name
+      }),
       buttons: ['Cancel', 'Install']
     };
 
@@ -182,28 +178,36 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       optionalDependencies: () => ['save-optional']
     })('')(group);
 
-    const dialogHandler = () => dispatch(
-      installPackage({
-        cmd: ['install'],
-        name: active.name,
-        pkgOptions: options,
-        version: packageVersion,
-        single: true
-      })
-    );
+    const dialogHandler = () =>
+      dispatch(
+        installPackage({
+          cmd: ['install'],
+          name: active.name,
+          pkgOptions: options,
+          version: packageVersion,
+          single: true
+        })
+      );
 
-    return showDialog(dialogHandler, dialogOptions)
-  }
+    return showDialog(dialogHandler, dialogOptions);
+  };
 
   const renderActions = () => {
     const renderOperationActions = () => {
       const latestVersion = active && active['dist-tags'].latest;
-      const isOutdated = latestVersion ? semver.gt(latestVersion, version) : false;
+      const isOutdated = latestVersion
+        ? semver.gt(latestVersion, version)
+        : false;
 
       return (
         <React.Fragment>
-          {isOutdated && <UpdateAction packageName={active.name} handler={handleUpdate} />}
-          <UninstallAction packageName={active.name} handler={handleUninstall} />
+          {isOutdated && (
+            <UpdateAction packageName={active.name} handler={handleUpdate} />
+          )}
+          <UninstallAction
+            packageName={active.name}
+            handler={handleUninstall}
+          />
         </React.Fragment>
       );
     };
@@ -212,7 +216,15 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       <CardActions className={classes.actions} disableActionSpacing>
         {cond([
           [equals(false), always(renderOperationActions())],
-          [equals(true), always(<InstallAction packageName={active.name} handler={handleInstall} />)]
+          [
+            equals(true),
+            always(
+              <InstallAction
+                packageName={active.name}
+                handler={handleInstall}
+              />
+            )
+          ]
         ])(Boolean(fromSearch))}
         <Hidden mdDown>
           <IconButton
@@ -329,8 +341,8 @@ const PackageDetails = ({ classes, toggleOptions }) => {
             </div>
           </Tooltip>
         </Toolbar>
-      </Grid >
-    </Grid >
+      </Grid>
+    </Grid>
   );
 
   const versions = active && active.versions ? active.versions : [];

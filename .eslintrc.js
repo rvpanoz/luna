@@ -27,6 +27,7 @@ module.exports = {
     'import/no-duplicates': 'off',
     'import/no-extraneous-dependencies': 'off',
     'no-nested-ternary': 'off',
+    'no-underscore-dangle': 'off',
     'jsx-a11y/anchor-is-valid': 'off',
     'no-console': 'off',
     'no-use-before-define': 'off',

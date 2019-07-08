@@ -1,5 +1,3 @@
-/* eslint-disable react/require-default-props */
-
 import { remote } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
