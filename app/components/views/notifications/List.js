@@ -1,6 +1,3 @@
-/* eslint-disable react/require-default-props */
-/* eslint-disable react/no-array-index-key */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
@@ -155,9 +152,9 @@ const NotificationsList = ({ classes }) => {
         </div>
         <Divider light />
         <List className={classes.list}>
-          {notifications.map((notification, idx) => (
+          {notifications.map(notification => (
             <WithStylesNotificationItem
-              key={`notification-${idx}`}
+              key={notification}
               installationOptions={packagesInstallOptions}
               {...notification}
             />

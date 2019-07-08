@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import { shell } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -29,12 +27,12 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
     distTags
   } = enchancedActive;
 
-  const openUrl = url => shell.openExternal(url);
+  const openUrl = link => shell.openExternal(link);
 
   return (
     <React.Fragment>
       {short ? null : (
-        <List dense={true}>
+        <List dense>
           <ListItem key="active-versions" className={classes.listItem}>
             <ListItemText
               primary={

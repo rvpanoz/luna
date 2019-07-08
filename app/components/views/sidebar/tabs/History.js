@@ -1,5 +1,3 @@
-/* eslint-disable react/require-default-props */
-
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
