@@ -98,7 +98,7 @@ const AppLayout = ({ classes }) => {
               doctor: () => (
                 <Doctor mode={mode} directory={directory} data={doctorData} />
               )
-            })(<Packages />)(activePage)}
+            })(<Audit />)(activePage)}
           </main>
         </div>
         {snackbar && snackbar.open && (

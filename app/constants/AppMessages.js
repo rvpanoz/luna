@@ -36,7 +36,7 @@ export const ACTION_MESSAGES = {
 
 export const LABEL_MESSAGES = {
   dependencies: 'Dependencies',
-  devDependencies: 'Development',
+  devDependencies: 'Dev',
   optionalDependencies: 'Optional',
   packageName: 'Package name',
   packageNameInput: 'Fill package name',

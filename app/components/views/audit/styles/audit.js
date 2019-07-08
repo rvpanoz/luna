@@ -3,24 +3,37 @@ import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   card: {
-    minHeight: "100%",
-    display: "flex",
-    flexDirection: "column"
+    minHeight: '100%',
+    display: 'flex',
+    flexDirection: 'column'
   },
   fullHeightBody: {
-    display: "flex",
+    display: 'flex',
     flexGrow: 1,
-    flexDirection: "column",
-    justifyContent: "space-between"
+    flexDirection: 'column',
+    justifyContent: 'space-between'
+  },
+  flexWrapper: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginRight: theme.spacing.unit
+  },
+  legendItemContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    marginBottom: theme.spacing.unit
   },
   overviewContainer: {
-    display: "flex",
-    alignItems: "center",
+    display: 'flex',
+    alignItems: 'center',
     flexGrow: 1,
     paddingBottom: theme.spacing.unit
   },
   elementChartWrapper: {
-    width: "100%"
+    width: '100%'
   },
   vulnerabilitiesOverviewElementText: {
     minWidth: 145,
