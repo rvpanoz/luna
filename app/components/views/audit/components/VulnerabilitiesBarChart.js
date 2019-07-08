@@ -30,7 +30,7 @@ const styles = theme => ({
 });
 
 const VulnerabilitiesBarChart = ({ classes, data, theme }) => (
-  <ResponsiveContainer width="100%" height={300} className={classes.container}>
+  <ResponsiveContainer width="100%" height={200} className={classes.container}>
     <BarChart
       width={500}
       height={300}
@@ -47,8 +47,7 @@ const VulnerabilitiesBarChart = ({ classes, data, theme }) => (
       <YAxis />
       <Tooltip />
       <Legend />
-      <Bar dataKey="value" fill="#8884d8" />
-      {/* <Bar dataKey="uv" fill="#82ca9d" /> */}
+      <Bar dataKey="vulnerabilities" fill={theme.palette['primary'].main} />
     </BarChart>
   </ResponsiveContainer>
 );

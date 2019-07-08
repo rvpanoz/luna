@@ -15,6 +15,9 @@ import DATA from '../../../npm-audit.json';
 
 import Widget from 'components/common/Widget';
 import Dot from 'components/common/Dot';
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+} from 'recharts';
 
 import {
   DependenciesStats,
@@ -24,6 +27,30 @@ import {
 } from './components/';
 
 import styles from './styles/audit';
+
+const lineData = [
+  {
+    name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
+  },
+  {
+    name: 'Page B', uv: 3000, pv: 1398, amt: 2210,
+  },
+  {
+    name: 'Page C', uv: 2000, pv: 9800, amt: 2290,
+  },
+  {
+    name: 'Page D', uv: 2780, pv: 3908, amt: 2000,
+  },
+  {
+    name: 'Page E', uv: 1890, pv: 4800, amt: 2181,
+  },
+  {
+    name: 'Page F', uv: 2390, pv: 3800, amt: 2500,
+  },
+  {
+    name: 'Page G', uv: 3490, pv: 4300, amt: 2100,
+  },
+];
 
 const renderError = (classes, code, summary) => (
   <div className={classes.container}>
@@ -109,11 +136,11 @@ const AuditReport = ({ classes, data, theme }) => {
   ];
 
   const pieChartVulnerabilitiesData = [
-    { name: 'Info', value: info, color: 'info' },
-    { name: 'High', value: high, color: 'warning' },
-    { name: 'Moderate', value: moderate, color: 'secondary' },
-    { name: 'Critical', value: critical, color: 'error' },
-    { name: 'Low', value: low, color: 'primary' }
+    { name: 'Info', vulnerabilities: info, color: 'info' },
+    { name: 'High', vulnerabilities: high, color: 'warning' },
+    { name: 'Moderate', vulnerabilities: moderate, color: 'secondary' },
+    { name: 'Critical', vulnerabilities: critical, color: 'error' },
+    { name: 'Low', vulnerabilities: low, color: 'primary' }
   ];
 
   return (
@@ -129,31 +156,57 @@ const AuditReport = ({ classes, data, theme }) => {
         <Divider light />
         <div className={classes.topSection}>
           <Grid container direction="row" spacing={8} justify="space-between">
-            <Grid item sm={12} md={6} lg={6} xl={4}>
+            <Grid item sm={12} md={6} lg={6} xl={6}>
               <Widget
-                title={`Total dependencies: ${totalDependencies}`}
+                title="Overview"
                 upperTitle
+                bodyClass={classes.fullHeightBody}
                 className={classes.card}
               >
                 <Divider light />
-                <Grid
+                <div>
+                  <LineChart
+                    width={500}
+                    height={300}
+                    data={lineData}
+                    margin={{
+                      top: 5, right: 30, left: 20, bottom: 5,
+                    }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="pv" strokeOpacity={1} stroke="#8884d8" activeDot={{ r: 8 }} />
+                    <Line type="monotone" dataKey="uv" strokeOpacity={1} stroke="#82ca9d" />
+                  </LineChart>
+                  <p className="notes">Tips: Hover the legend !</p>
+                </div>
+                {/* <Grid
                   container
-                  spacing={8}
                   direction="row"
-                  justify="space-around"
+                  justify="space-between"
+                  alignItems="center"
                 >
-                  <Grid item lg={6} md={6} sm={6} xs={12}>
-                    <DependenciesPieChart data={pieChartDependenciesData} />
+                  <Grid item>
+                    <Typography variant="h6" color="textSecondary">Dependencies</Typography>
+                    <Typography variant="h5">{dependencies}</Typography>
                   </Grid>
-                  <Grid item lg={6} md={6} sm={6} xs={12}>
-                    <DependenciesStats data={pieChartDependenciesData} />
+                  <Grid item>
+                    <Typography variant="h6" color="textSecondary">Development</Typography>
+                    <Typography variant="h5">{devDependencies}</Typography>
                   </Grid>
-                </Grid>
+                  <Grid item>
+                    <Typography variant="h6" color="textSecondary">Optional</Typography>
+                    <Typography variant="h5">{optionalDependencies}</Typography>
+                  </Grid>
+                </Grid> */}
               </Widget>
             </Grid>
-            <Grid item sm={12} md={6} lg={6} xl={4}>
+            <Grid item sm={12} md={6} lg={6} xl={6}>
               <Widget
-                title={`Vulnerabilities: ${totalVulnerabilities}`}
+                title={iMessage('title', 'vulnerabilities')}
                 upperTitle
                 className={classes.card}
               >

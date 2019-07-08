@@ -32,6 +32,12 @@ const styles = theme => ({
     flexGrow: 1,
     paddingBottom: theme.spacing.unit
   },
+  titleContainer: {
+    display: "flex",
+    alignItems: "center",
+    flexGrow: 1,
+    paddingBottom: theme.spacing.unit
+  },
   elementChartWrapper: {
     width: '100%'
   },
