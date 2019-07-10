@@ -34,9 +34,9 @@ const theme = createMuiTheme({
       dark: darken('#ffae42', 0.1)
     },
     info: {
-      light: lighten('#eee', 0.1),
-      main: '#eee',
-      dark: darken('#eee', 0.1)
+      light: lighten('#88ffdd', 0.1),
+      main: '#88ffdd',
+      dark: darken('#88ffdd', 0.1)
     }
   },
   shape: {

@@ -11690,11 +11690,11 @@
     "muted": [],
     "metadata": {
       "vulnerabilities": {
-        "info": 0,
+        "info": 56,
         "low": 659,
         "moderate": 47,
         "high": 593,
-        "critical": 2
+        "critical": 27
       },
       "dependencies": 819,
       "devDependencies": 22117,

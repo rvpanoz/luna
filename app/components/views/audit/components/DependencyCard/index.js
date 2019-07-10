@@ -35,12 +35,12 @@ const DependencyCard = ({
             {total}
           </Typography>
         </div>
-        {/* <div className={cn(classes.iconWrapper, classes.secondaryColor)}>
+        <div className={cn(classes.iconWrapper, classes.secondaryColor)}>
           {name === 'dependencies' && <DependenciesIcon />}
           {name === 'devDependencies' && <DevDependenciesIcon />}
           {name === 'optionalDependencies' && <OptionalDependenciesIcon />}
           {name === 'totalDependencies' && <TotalIcon />}
-        </div> */}
+        </div>
       </div>
       {percentage ? (
         <div className={classes.footer}>

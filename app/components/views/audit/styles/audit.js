@@ -2,151 +2,111 @@ import { defaultFont, flexContainer, grayColor } from 'styles/variables';
 import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
+  root: {},
+  container: {},
+  marginTop: {
+    marginTop: theme.spacing.unit * 2
+  },
   card: {
-    minHeight: '100%',
-    display: 'flex',
-    flexDirection: 'column'
+    minHeight: "100%",
+    display: "flex",
+    flexDirection: "column"
   },
-  fullHeightBody: {
-    display: 'flex',
-    flexGrow: 1,
-    flexDirection: 'column',
-    justifyContent: 'space-between'
-  },
-  flexWrapper: {
+  innerContainer: {
     height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    marginRight: theme.spacing.unit
-  },
-  legendItemContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    marginBottom: theme.spacing.unit
-  },
-  overviewContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    flexGrow: 1,
-    paddingBottom: theme.spacing.unit
-  },
-  titleContainer: {
     display: "flex",
     alignItems: "center",
     flexGrow: 1,
-    paddingBottom: theme.spacing.unit
+    padding: theme.spacing.unit
   },
   subtitle: {
     paddingTop: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit * 2,
   },
-  elementChartWrapper: {
-    width: '100%'
+  progressSection: {
+    marginBottom: theme.spacing.unit
   },
-  vulnerabilitiesOverviewElementText: {
-    minWidth: 145,
-    paddingRight: theme.spacing.unit * 2
+  progressTitle: {
+    marginBottom: theme.spacing.unit * 2
   },
-  item: {
-    height: '100%'
+  progress: {
+    marginBottom: theme.spacing.unit,
+    backgroundColor: theme.palette.primary.main
   },
-  paper: {
-    width: '100%',
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0
-  },
-  container: {
-    width: '100%'
-  },
-  flexContainer: {
-    ...flexContainer,
-    justifyContent: 'space-between'
-  },
-  topSection: {
-    width: '100%',
-    padding: theme.spacing.unit * 4
-  },
-  bottomSection: {
-    ...flexContainer,
-    justifyContent: 'space-between',
-    width: '100%',
-    padding: theme.spacing.unit * 2
-  },
-  bottomLeft: {
-    width: '50%',
-    borderRadius: theme.shape.borderRadius,
-    border: `1px solid ${lighten(grayColor, 0.5)}`
-  },
-  bottomRight: {
-    width: '50%',
-    borderRadius: theme.shape.borderRadius,
-    border: `1px solid ${lighten(grayColor, 0.5)}`
-  },
-  header: {
-    flex: '0 0 auto',
-    padding: theme.spacing.unit * 2 + 4
-  },
-  title: {
+  horizontalFlex: {
     display: 'flex',
-    color: darken(grayColor, 0.2),
-    flexDirection: 'column',
-    justifyContent: 'flex-start'
+    flexContainer: 'row',
+    justifyContent: 'space-around',
+    marginTop: theme.spacing.unit * 2
   },
-  divider: {
+  padLeft: {
+    paddingLeft: theme.spacing.unit * 12
+  },
+  legendItemContainer: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: theme.spacing.unit
+  },
+  halfWidth: {
+    width: '50%'
+  },
+  fullHeightBody: {
+    display: "flex",
+    flexGrow: 1,
+    flexDirection: "column"
+  },
+  tableWidget: {
+    overflowX: "auto"
+  },
+  progressBar: {
+    backgroundColor: theme.palette.warning.main
+  },
+  findingsWrapper: {
+    display: "flex",
+    flexGrow: 1,
+    alignItems: "center",
+    marginBottom: theme.spacing.unit
+  },
+  legendElement: {
+    display: "flex",
+    alignItems: "center",
+    flexGrow: 0,
+    marginRight: theme.spacing.unit * 2,
+  },
+  legendElementText: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
   },
-  containerHolder: {
-    ...flexContainer,
-    paddingTop: theme.spacing.unit * 2,
-    flexDirection: 'column',
-    alignItems: 'center'
+  mainChartBody: {
+    overflowX: 'auto',
   },
-  textHolder: {
-    ...defaultFont,
-    paddingBottom: theme.spacing.unit,
-    color: grayColor
+  mainChartHeader: {
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    [theme.breakpoints.only("xs")]: {
+      flexWrap: 'wrap',
+    }
   },
-  auditDescription: {
-    ...defaultFont,
-    padding: theme.spacing.unit * 4
+  mainChartHeaderLabels: {
+    display: "flex",
+    alignItems: "center",
+    [theme.breakpoints.only("xs")]: {
+      order: 3,
+      width: '100%',
+      justifyContent: 'center',
+      marginTop: theme.spacing.unit * 3,
+      marginBottom: theme.spacing.unit * 2,
+    }
   },
-  table: {
-    width: '100%'
+  mainChartHeaderLabel: {
+    display: "flex",
+    alignItems: "center",
+    marginLeft: theme.spacing.unit * 3,
   },
-  tableHead: {
-    ...defaultFont,
-    color: darken(grayColor, 0.25),
-    fontSize: 20
-  },
-  avatar: {
-    backgroundColor: theme.palette.common.white
-  },
-  vulnerabilityValue: {
-    ...defaultFont,
-    color: darken(grayColor, 0.5),
-    fontSize: 20
-  },
-  vulnerabilityType: {
-    ...defaultFont,
-    color: darken(grayColor, 0.5),
-    fontSize: 20
-  },
-  helperText: {
-    ...defaultFont,
-    color: lighten(grayColor, 0.1),
-    fontSize: 16
-  },
-  noData: {
-    ...defaultFont
-  },
-  withPadding: {
-    padding: theme.spacing.unit + 4
-  },
-  icon: {
-    marginRight: theme.spacing.unit,
-    padding: 0
+  mainChartLegentElement: {
+    fontSize: '18px !important',
+    marginLeft: theme.spacing.unit,
   }
 });
 
