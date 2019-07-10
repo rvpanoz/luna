@@ -25,7 +25,7 @@ const DependencyCard = ({
   const rootClassName = cn(classes.root, className);
 
   return (
-    <Paper {...rest} className={rootClassName}>
+    <Paper elevenation={2} {...rest} className={rootClassName}>
       <div className={classes.content}>
         <div className={classes.details}>
           <Typography className={classes.title} variant="body2">
@@ -35,12 +35,12 @@ const DependencyCard = ({
             {total}
           </Typography>
         </div>
-        <div className={cn(classes.iconWrapper, classes.secondaryColor)}>
+        {/* <div className={cn(classes.iconWrapper, classes.secondaryColor)}>
           {name === 'dependencies' && <DependenciesIcon />}
           {name === 'devDependencies' && <DevDependenciesIcon />}
           {name === 'optionalDependencies' && <OptionalDependenciesIcon />}
           {name === 'totalDependencies' && <TotalIcon />}
-        </div>
+        </div> */}
       </div>
       {percentage ? (
         <div className={classes.footer}>

@@ -1,251 +1,367 @@
-import React from 'react';
-import cn from 'classnames';
+import React from "react";
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 
-import Grid from '@material-ui/core/Grid';
+import {
+    Grid,
+    LinearProgress,
+    withStyles,
+    Divider,
+} from "@material-ui/core";
+import {
+    ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell
+} from "recharts";
+import Widget from "components/common/Widget";
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-
-import { iMessage, switchcase } from 'commons/utils';
+import Dot from "components/common/Dot";
+import { iMessage } from 'commons/utils';
 
 // dev
 import DATA from '../../../npm-audit.json';
 
-import Widget from 'components/common/Widget';
-import Dot from 'components/common/Dot';
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-} from 'recharts';
-
-import {
-  DependenciesStats,
-  DependenciesPieChart,
-  VulnerabilitiesStats,
-  VulnerabilitiesBarChart
-} from './components/';
-
-import styles from './styles/audit';
-
-const lineData = [
-  {
-    name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
-  },
-  {
-    name: 'Page B', uv: 3000, pv: 1398, amt: 2210,
-  },
-  {
-    name: 'Page C', uv: 2000, pv: 9800, amt: 2290,
-  },
-  {
-    name: 'Page D', uv: 2780, pv: 3908, amt: 2000,
-  },
-  {
-    name: 'Page E', uv: 1890, pv: 4800, amt: 2181,
-  },
-  {
-    name: 'Page F', uv: 2390, pv: 3800, amt: 2500,
-  },
-  {
-    name: 'Page G', uv: 3490, pv: 4300, amt: 2100,
-  },
-];
-
 const renderError = (classes, code, summary) => (
-  <div className={classes.container}>
-    <div className={classes.flexContainer}>
-      <div className={classes.header}>
-        <Typography className={classes.title}>{code}</Typography>
-        <Divider className={classes.divider} light />
-        <Typography variant="subtitle1">{summary}</Typography>
-      </div>
+    <div className={classes.container}>
+        <div className={classes.flexContainer}>
+            <div className={classes.header}>
+                <Typography className={classes.title}>{code}</Typography>
+                <Divider className={classes.divider} light />
+                <Typography variant="subtitle1">{summary}</Typography>
+            </div>
+        </div>
     </div>
-  </div>
 );
 
-const AuditReport = ({ classes, data, theme }) => {
-  if (!DATA) {
-    return (
-      <div className={classes.containerHolder}>
-        <Typography
-          variant="subtitle1"
-          className={cn(classes.noData, classes.withPadding)}
-        >
-          {iMessage('info', 'noAuditData')}
-        </Typography>
-        <Typography variant="caption" className={cn(classes.helperText)}>
-          {iMessage('info', 'npmAuditHelperText')}
-        </Typography>
-      </div>
-    );
-  }
+const PieChartData = [
+    { name: "Low", value: 400, color: "primary" },
+    { name: "Moderate", value: 300, color: "secondary" },
+    { name: "High", value: 300, color: "warning" },
+    { name: "Critical", value: 200, color: "error" }
+];
 
-  const { error } = DATA;
+const Audit = ({ classes, theme, data }) => {
+    const {
+        content: {
+            metadata: {
+                dependencies,
+                devDependencies,
+                optionalDependencies,
+                totalDependencies,
+                vulnerabilities
+            },
+            advisories,
+            actions
+        },
+        error
+    } = DATA;
 
-  if (error) {
-    const { code, summary, detail } = DATA;
+    if (error) {
+        const { code, summary, detail } = data;
 
-    return renderError(classes, code, summary, detail);
-  }
-
-  const {
-    metadata: {
-      dependencies,
-      devDependencies,
-      optionalDependencies,
-      totalDependencies,
-      vulnerabilities
-    },
-    advisories
-  } = DATA;
-
-  const dependenciesPercentage = (dependencies / totalDependencies) * 100;
-  const devDependenciesPercentage = (devDependencies / totalDependencies) * 100;
-  const optionalDependenciesPercentage =
-    (optionalDependencies / totalDependencies) * 100;
-
-  const totalVulnerabilities = Object.values(vulnerabilities).reduce(
-    (acc, item) => {
-      return acc + item;
-    },
-    0
-  );
-
-  const { info, critical, high, moderate, low } = vulnerabilities;
-
-  const pieChartDependenciesData = [
-    {
-      name: 'Dependencies',
-      value: dependencies,
-      color: 'primary',
-      percentage: dependenciesPercentage
-    },
-    {
-      name: 'Dev',
-      value: devDependencies,
-      color: 'secondary',
-      percentage: devDependenciesPercentage
-    },
-    {
-      name: 'Optional',
-      value: optionalDependencies,
-      color: 'warning',
-      percentage: optionalDependenciesPercentage
+        return renderError(classes, code, summary, detail);
     }
-  ];
 
-  const pieChartVulnerabilitiesData = [
-    { name: 'Info', vulnerabilities: info, color: 'info' },
-    { name: 'High', vulnerabilities: high, color: 'warning' },
-    { name: 'Moderate', vulnerabilities: moderate, color: 'secondary' },
-    { name: 'Critical', vulnerabilities: critical, color: 'error' },
-    { name: 'Low', vulnerabilities: low, color: 'primary' }
-  ];
+    const dependenciesPercentage = (dependencies / totalDependencies) * 100;
+    const devDependenciesPercentage = (devDependencies / totalDependencies) * 100;
+    const optionalDependenciesPercentage =
+        (optionalDependencies / totalDependencies) * 100;
 
-  return (
-    <Paper className={classes.paper}>
-      <div className={classes.container}>
-        <div className={classes.flexContainer}>
-          <div className={classes.header}>
-            <Typography variant="h6" className={classes.title}>
-              {iMessage('title', 'audit')}
-            </Typography>
-          </div>
-        </div>
-        <Divider light />
-        <div className={classes.topSection}>
-          <Grid container direction="row" spacing={8} justify="space-between">
-            <Grid item sm={12} md={6} lg={6} xl={6}>
-              <Widget
-                title="Overview"
-                upperTitle
-                bodyClass={classes.fullHeightBody}
-                className={classes.card}
-              >
-                <Divider light />
-                <div>
-                  <LineChart
-                    width={500}
-                    height={300}
-                    data={lineData}
-                    margin={{
-                      top: 5, right: 30, left: 20, bottom: 5,
-                    }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="pv" strokeOpacity={1} stroke="#8884d8" activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="uv" strokeOpacity={1} stroke="#82ca9d" />
-                  </LineChart>
-                  <p className="notes">Tips: Hover the legend !</p>
-                </div>
-                {/* <Grid
-                  container
-                  direction="row"
-                  justify="space-between"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <Typography variant="h6" color="textSecondary">Dependencies</Typography>
-                    <Typography variant="h5">{dependencies}</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h6" color="textSecondary">Development</Typography>
-                    <Typography variant="h5">{devDependencies}</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography variant="h6" color="textSecondary">Optional</Typography>
-                    <Typography variant="h5">{optionalDependencies}</Typography>
-                  </Grid>
-                </Grid> */}
-              </Widget>
-            </Grid>
-            <Grid item sm={12} md={6} lg={6} xl={6}>
-              <Widget
-                title={iMessage('title', 'vulnerabilities')}
-                upperTitle
-                className={classes.card}
-              >
-                <Divider light />
-                <Grid
-                  container
-                  spacing={8}
-                  direction="column"
-                  justify="space-around"
-                >
-                  <Grid item lg={12} md={12} sm={12} xs={12}>
-                    <VulnerabilitiesBarChart
-                      data={pieChartVulnerabilitiesData}
-                    />
-                  </Grid>
+    const findings = Object.values(advisories).map(({ findings }) => findings);
+    console.log(actions, findings)
+
+    return (
+        <div className={classes.root}>
+            <Grid container spacing={8}>
+                <Grid item lg={3} md={12} sm={12} xs={12}>
+                    <Widget
+                        title="Overview"
+                        upperTitle
+                        bodyClass={classes.fullHeightBody}
+                        className={classes.card}
+                    >
+                        <Divider light />
+                        <Typography variant="h6" color="textSecondary" className={classes.subtitle}>
+                            {totalDependencies}&nbsp;total
+                                </Typography>
+                        <Grid
+                            container
+                            direction="row"
+                            justify="space-between"
+                            alignItems="center"
+                        >
+                            <Grid item>
+                                <div className={classes.legendElement}>
+                                    <Dot color="primary" />
+                                    <Typography className={classes.legendElementText} variant="subtitle1" color="textSecondary">
+                                        dependencies
+                                    </Typography>
+                                    <Typography className={classes.legendElementText} variant="subtitle1" color="textSecondary">({dependenciesPercentage.toFixed(2)})%</Typography>
+                                </div>
+                                <Typography variant="h5" color="textSecondary">{dependencies}</Typography>
+                            </Grid>
+                            <Grid item>
+                                <div className={classes.legendElement}>
+                                    <Dot color="secondary" />
+                                    <Typography className={classes.legendElementText} variant="subtitle1" color="textSecondary">
+                                        dev
+                                    </Typography>
+                                    <Typography className={classes.legendElementText} variant="subtitle1" color="textSecondary">({devDependenciesPercentage.toFixed(2)})%</Typography>
+                                </div>
+                                <Typography variant="h5" color="textSecondary">{devDependencies}</Typography>
+                            </Grid>
+                            <Grid item>
+                                <div className={classes.legendElement}>
+                                    <Dot color="error" />
+                                    <Typography className={classes.legendElementText} variant="subtitle1" color="textSecondary">optional</Typography>
+                                    <Typography className={classes.legendElementText} variant="subtitle1" color="textSecondary">({optionalDependenciesPercentage.toFixed(2)})%</Typography>
+                                </div>
+                                <Typography variant="h5" color="textSecondary">{optionalDependencies}</Typography>
+                            </Grid>
+                        </Grid>
+                    </Widget>
                 </Grid>
-              </Widget>
+                <Grid item lg={3} md={12} sm={12} xs={12}>
+                    <Widget
+                        title="Findings"
+                        upperTitle
+                        className={classes.card}
+                        bodyClass={classes.fullHeightBody}
+                    >
+                        <Divider light />
+                        <div className={classes.findingsWrapper}>
+                            <div className={classes.legendElement}>
+                                <Dot color="warning" />
+                                <Typography
+                                    color="textSecondary"
+                                    className={classes.legendElementText}
+                                >
+                                    Findings
+                </Typography>
+                            </div>
+                            <div className={classes.legendElement}>
+                                <Dot color="primary" />
+                                <Typography
+                                    color="textSecondary"
+                                    className={classes.legendElementText}
+                                >
+                                    Actions
+                </Typography>
+                            </div>
+                        </div>
+                        <div className={classes.progressSection}>
+                            <Typography
+                                size="md"
+                                color="textSecondary"
+                                className={classes.progressSectionTitle}
+                            >
+                                Findings
+              </Typography>
+                            <LinearProgress
+                                variant="determinate"
+                                value={findings.length}
+                                classes={{ barColorPrimary: classes.progressBar }}
+                                className={classes.progress}
+                            />
+                        </div>
+                        <div>
+                            <Typography
+                                size="md"
+                                color="textSecondary"
+                                className={classes.progressSectionTitle}
+                            >
+                                Actions
+                            </Typography>
+                            <LinearProgress
+                                variant="determinate"
+                                value={actions.length}
+                                classes={{ barColorPrimary: classes.progressBar }}
+                                className={classes.progress}
+                            />
+                        </div>
+                    </Widget>
+                </Grid>
+                <Grid item lg={6} md={12} sm={12} xs={12}>
+                    <Widget title="Vulnerabilities" upperTitle className={classes.card}>
+                        <Divider light />
+                        <Grid container spacing={16}>
+                            <Grid item xs={6}>
+                                <ResponsiveContainer width="100%" height={144}>
+                                    <PieChart
+                                        margin={{ left: theme.spacing.unit * 2 }}
+                                    >
+                                        <Pie
+                                            data={PieChartData}
+                                            innerRadius={45}
+                                            outerRadius={60}
+                                            dataKey="value"
+                                        >
+                                            {PieChartData.map((entry, index) => (
+                                                <Cell
+                                                    key={`cell-${index}`}
+                                                    fill={theme.palette[entry.color].main}
+                                                />
+                                            ))}
+                                        </Pie>
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <div className={classes.pieChartLegendWrapper}>
+                                    {PieChartData.map(({ name, value, color }, index) => (
+                                        <div key={color} className={classes.legendItemContainer}>
+                                            <Dot color={color} />
+                                            <Typography style={{ whiteSpace: 'nowrap' }}>&nbsp;{name}&nbsp;</Typography>
+                                            <Typography color="textSecondary">
+                                                &nbsp;{value}
+                                            </Typography>
+                                        </div>
+                                    ))}
+                                </div>
+                            </Grid>
+                        </Grid>
+                    </Widget>
+                </Grid>
+                <Grid item xs={12}>
+                    <Widget
+                        bodyClass={classes.mainChartBody}
+                        header={
+                            <div className={classes.mainChartHeader}>
+                                <Typography variant="h6" color="textSecondary">
+                                    Results
+                                    </Typography>
+                                <div className={classes.mainChartHeaderLabels}>
+                                    <div className={classes.mainChartHeaderLabel}>
+                                        <Dot color="warning" />
+                                        <Typography className={classes.mainChartLegentElement}>Actions</Typography>
+                                    </div>
+                                    <div className={classes.mainChartHeaderLabel}>
+                                        <Dot color="primary" />
+                                        <Typography className={classes.mainChartLegentElement}>Findings</Typography>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    >
+                    </Widget>
+                </Grid>
             </Grid>
-          </Grid>
-          <div style={{ height: '50px' }} />
         </div>
-      </div>
-    </Paper>
-  );
+    );
 };
 
-AuditReport.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  data: PropTypes.objectOf(
-    PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.array,
-      PropTypes.bool,
-      PropTypes.string
-    ])
-  ),
-  theme: PropTypes.objectOf(PropTypes.string).isRequired
+const styles = theme => ({
+    root: {},
+    container: {},
+    card: {
+        minHeight: "100%",
+        display: "flex",
+        flexDirection: "column"
+    },
+    innerContainer: {
+        display: "flex",
+        alignItems: "center",
+        flexGrow: 1,
+        padding: theme.spacing.unit
+    },
+    subtitle: {
+        paddingTop: theme.spacing.unit,
+        paddingBottom: theme.spacing.unit * 2,
+    },
+    progressSection: {
+        marginBottom: theme.spacing.unit
+    },
+    progressTitle: {
+        marginBottom: theme.spacing.unit * 2
+    },
+    progress: {
+        marginBottom: theme.spacing.unit,
+        backgroundColor: theme.palette.primary.main
+    },
+    pieChartLegendWrapper: {
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "flex-end",
+        marginRight: theme.spacing.unit
+    },
+    legendItemContainer: {
+        display: "flex",
+        alignItems: "center",
+        marginBottom: theme.spacing.unit
+    },
+    fullHeightBody: {
+        display: "flex",
+        flexGrow: 1,
+        flexDirection: "column",
+        justifyContent: "space-between"
+    },
+    tableWidget: {
+        overflowX: "auto"
+    },
+    progressBar: {
+        backgroundColor: theme.palette.warning.main
+    },
+    findingsWrapper: {
+        display: "flex",
+        flexGrow: 1,
+        alignItems: "center",
+        marginBottom: theme.spacing.unit
+    },
+    legendElement: {
+        display: "flex",
+        justifyContent: 'space-around',
+        alignItems: "center",
+        marginRight: theme.spacing.unit * 2,
+    },
+    legendElementText: {
+        marginLeft: theme.spacing.unit
+    },
+    mainChartBody: {
+        overflowX: 'auto',
+    },
+    mainChartHeader: {
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        [theme.breakpoints.only("xs")]: {
+            flexWrap: 'wrap',
+        }
+    },
+    mainChartHeaderLabels: {
+        display: "flex",
+        alignItems: "center",
+        [theme.breakpoints.only("xs")]: {
+            order: 3,
+            width: '100%',
+            justifyContent: 'center',
+            marginTop: theme.spacing.unit * 3,
+            marginBottom: theme.spacing.unit * 2,
+        }
+    },
+    mainChartHeaderLabel: {
+        display: "flex",
+        alignItems: "center",
+        marginLeft: theme.spacing.unit * 3,
+    },
+    mainChartLegentElement: {
+        fontSize: '18px !important',
+        marginLeft: theme.spacing.unit,
+    }
+});
+
+Audit.propTypes = {
+    classes: PropTypes.objectOf(PropTypes.string).isRequired,
+    data: PropTypes.objectOf(
+        PropTypes.oneOfType([
+            PropTypes.object,
+            PropTypes.array,
+            PropTypes.bool,
+            PropTypes.string
+        ])
+    )
 };
 
-export default withStyles(styles, {
-  withTheme: true
-})(AuditReport);
+export default withStyles(styles, { withTheme: true })(Audit);

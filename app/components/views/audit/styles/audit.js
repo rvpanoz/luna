@@ -38,6 +38,9 @@ const styles = theme => ({
     flexGrow: 1,
     paddingBottom: theme.spacing.unit
   },
+  subtitle: {
+    paddingTop: theme.spacing.unit,
+  },
   elementChartWrapper: {
     width: '100%'
   },
