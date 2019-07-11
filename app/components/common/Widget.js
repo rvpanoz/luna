@@ -2,6 +2,7 @@ import React from 'react';
 import classnames from 'classnames';
 import { Paper, withStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
 const Widget = ({
   classes,
@@ -24,6 +25,7 @@ const Widget = ({
           </Typography>
         )}
       </div>
+      <Divider light />
       <div
         className={classnames(classes.widgetBody, {
           [classes.noPadding]: noBodyPadding,
