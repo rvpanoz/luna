@@ -13,8 +13,8 @@ import theme from 'styles/theme';
 
 import AppSidebar from 'containers/AppSidebar';
 import AppHeader from 'containers/AppHeader';
-import SnackbarContent from 'components/common/SnackbarContent';
 
+import { SnackbarContent } from 'components/common';
 import { Packages } from 'components/views/packages';
 import { Notifications } from 'components/views/notifications';
 import { Audit } from 'components/views/audit';
@@ -98,7 +98,7 @@ const AppLayout = ({ classes }) => {
               doctor: () => (
                 <Doctor mode={mode} directory={directory} data={doctorData} />
               )
-            })(<Packages />)(activePage)}
+            })(<Audit />)(activePage)}
           </main>
         </div>
         {snackbar && snackbar.open && (

@@ -35,12 +35,11 @@ import {
   uninstallPackages,
   setActive
 } from 'models/packages/actions';
-import AppLoader from 'components/common/AppLoader';
-import Transition from 'components/common/Transition';
+
+import { AppLoader, Transition } from 'components/common';
 import { iMessage, showDialog, switchcase } from 'commons/utils';
 
 import { InstallAction, UpdateAction, UninstallAction } from './PackageActions';
-
 import Dependencies from './Dependencies';
 import Versions from './Versions';
 import PackageInfo from './PackageInfo';

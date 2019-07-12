@@ -228,6 +228,7 @@
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.12.4",
     "react-redux": "^7.1.0",
+    "recharts": "^1.6.2",
     "redux": "^4.0.1",
     "redux-observable": "^1.1.0",
     "redux-react-hook": "^3.3.2",
