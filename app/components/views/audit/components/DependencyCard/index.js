@@ -25,7 +25,7 @@ const DependencyCard = ({
   const rootClassName = cn(classes.root, className);
 
   return (
-    <Paper {...rest} className={rootClassName}>
+    <Paper elevenation={2} {...rest} className={rootClassName}>
       <div className={classes.content}>
         <div className={classes.details}>
           <Typography className={classes.title} variant="body2">

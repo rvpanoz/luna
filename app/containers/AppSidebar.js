@@ -19,8 +19,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import AppLogo from 'components/common/AppLogo';
-import AppTabs from 'components/common/AppTabs';
+import {AppTabs, AppLogo} from 'components/common/';
 
 import UpdateIcon from '@material-ui/icons/Update';
 
