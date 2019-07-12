@@ -1,5 +1,4 @@
-import { defaultFont, flexContainer, grayColor } from 'styles/variables';
-import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
+import { defaultFont } from 'styles/variables';
 
 const styles = theme => ({
   root: {
@@ -7,22 +6,28 @@ const styles = theme => ({
   },
   container: {
     width: '100%',
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 4
   },
   types: {
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-around',
-    flexDirection: 'row'
+    [theme.breakpoints.only('xs')]: {
+      flexWrap: 'wrap'
+    }
   },
-  half: {
-    // flexGrow: 0,
-    // flexShrink: 0,
-    // flexBasis: '50%'
+  typeItem: {
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: theme.spacing.unit * 3
   },
-  chart: {
-
+  typeItemText: {
+    ...defaultFont,
+    fontSize: '18px !important',
+    marginLeft: theme.spacing.unit
   },
+  chart: {}
 });
 
 export default styles;

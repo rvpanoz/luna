@@ -5,11 +5,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './styles/audit';
 import { Grid, withStyles, Divider, Typography } from '@material-ui/core';
-import { Dot } from 'components/common'
+import { Dot } from 'components/common';
 import { DependencyStat } from './components';
 
 const Audit = ({ classes, theme, data }) => {
-  console.log(DATA)
+  console.log(DATA);
   const {
     content: {
       metadata: {
@@ -78,11 +78,11 @@ const Audit = ({ classes, theme, data }) => {
   );
 
   const typesData = [
-    { value: critical, label: 'critical', secondary: true, color: 'error' },
-    { value: high, label: 'high', secondary: true, color: 'warning' },
-    { value: moderate, label: 'moderate', secondary: true, color: 'secondary' },
-    { value: low, label: 'low', secondary: true, color: 'primary' },
-    { value: info, label: 'info', secondary: true, color: 'default' }
+    { value: critical, label: 'Critical', secondary: true, color: 'error' },
+    { value: high, label: 'High', secondary: true, color: 'warning' },
+    { value: moderate, label: 'Moderate', secondary: true, color: 'secondary' },
+    { value: low, label: 'Low', secondary: true, color: 'primary' },
+    { value: info, label: 'Info', secondary: true, color: 'default' }
   ];
 
   return (
@@ -124,14 +124,18 @@ const Audit = ({ classes, theme, data }) => {
         <Grid item xs={12}>
           <div className={classes.container}>
             <div className={classes.types}>
-              {typesData.map(({ value, label, color }) =>
-                <><div className={classes.half}><Dot color={color} /></div>
-                  <Typography variant="h6" color="textSecondary">
-                    {label}&nbsp;{value}
-                  </Typography></>
-              )}
+              {typesData.map(({ value, label, color }) => (
+                <div key={label} className={classes.typeItem}>
+                  <Dot size="large" color={color} />
+                  <Typography
+                    color="textSecondary"
+                    className={classes.typeItemText}
+                  >
+                    {label}
+                  </Typography>
+                </div>
+              ))}
             </div>
-            <div className={classes.chart}></div>
           </div>
         </Grid>
       </Grid>
