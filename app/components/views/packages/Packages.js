@@ -17,7 +17,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
 import { useFilters } from 'commons/hooks';
-import AppLoader from 'components/common/AppLoader';
+import { AppLoader } from 'components/common';
 import { PackageDetails } from 'components/views/package';
 import { scrollWrapper, iMessage } from 'commons/utils';
 

@@ -3,16 +3,13 @@ import DATA from '../../../npm-audit.json';
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import styles from './styles/audit';
-
-import Typography from '@material-ui/core/Typography';
-import Dot from 'components/common/Dot';
-import { Grid, withStyles, Divider } from '@material-ui/core';
-import { iMessage } from 'commons/utils';
-import { StatsWidget } from './components';
+import { Grid, withStyles, Divider, Typography } from '@material-ui/core';
+import { Dot } from 'components/common'
+import { DependencyStat } from './components';
 
 const Audit = ({ classes, theme, data }) => {
+  console.log(DATA)
   const {
     content: {
       metadata: {
@@ -26,7 +23,7 @@ const Audit = ({ classes, theme, data }) => {
       actions
     },
     error
-  } = DATA;
+  } = DATA || {};
 
   if (error) {
     console.error(error);
@@ -80,27 +77,63 @@ const Audit = ({ classes, theme, data }) => {
     0
   );
 
-  const statsListData = [
+  const typesData = [
     { value: critical, label: 'critical', secondary: true, color: 'error' },
-    { value: high, label: 'high', secondary: true, color: 'error' },
-    { value: moderate, label: 'moderate', secondary: true, color: 'error' },
-    { value: low, label: 'low', secondary: true, color: 'error' },
-    { value: info, label: 'info', secondary: true, color: 'error' }
+    { value: high, label: 'high', secondary: true, color: 'warning' },
+    { value: moderate, label: 'moderate', secondary: true, color: 'secondary' },
+    { value: low, label: 'low', secondary: true, color: 'primary' },
+    { value: info, label: 'info', secondary: true, color: 'default' }
   ];
 
   return (
     <div className={classes.root}>
       <Grid container spacing={8}>
         <Grid item lg={3} md={3} sm={12} xl={3}>
-          <StatsWidget
+          <DependencyStat
             title="Dependencies"
             percent={dependenciesPercentage.toFixed(2)}
             value={dependencies}
+            color="primary"
+          />
+        </Grid>
+        <Grid item lg={3} md={3} sm={12} xl={3}>
+          <DependencyStat
+            title="Development"
+            percent={devDependenciesPercentage.toFixed(2)}
+            value={devDependencies}
             color="secondary"
           />
         </Grid>
-        <Grid item lg={3} md={3} sm={12} xl={3}></Grid>
-        <Grid item lg={3} md={3} sm={12} xl={3}></Grid>
+        <Grid item lg={3} md={3} sm={12} xl={3}>
+          <DependencyStat
+            title="Optional"
+            percent={optionalDependenciesPercentage.toFixed(2)}
+            value={optionalDependencies}
+            color="warning"
+          />
+        </Grid>
+        <Grid item lg={3} md={3} sm={12} xl={3}>
+          <DependencyStat
+            title="Total"
+            value={totalDependencies}
+            color="warning"
+          />
+        </Grid>
+      </Grid>
+      <Grid container alignContent="center">
+        <Grid item xs={12}>
+          <div className={classes.container}>
+            <div className={classes.types}>
+              {typesData.map(({ value, label, color }) =>
+                <><div className={classes.half}><Dot color={color} /></div>
+                  <Typography variant="h6" color="textSecondary">
+                    {label}&nbsp;{value}
+                  </Typography></>
+              )}
+            </div>
+            <div className={classes.chart}></div>
+          </div>
+        </Grid>
       </Grid>
     </div>
   );

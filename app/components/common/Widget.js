@@ -14,29 +14,29 @@ const Widget = ({
   disableWidgetMenu,
   ...props
 }) => (
-  <div className={classes.widgetWrapper}>
-    <Paper className={classes.paper}>
-      <div className={classes.widgetHeader}>
-        {props.header ? (
-          props.header
-        ) : (
-          <Typography variant="h6" color="textSecondary">
-            {title}
-          </Typography>
-        )}
-      </div>
-      <Divider light />
-      <div
-        className={classnames(classes.widgetBody, {
-          [classes.noPadding]: noBodyPadding,
-          [bodyClass]: bodyClass
-        })}
-      >
-        {children}
-      </div>
-    </Paper>
-  </div>
-);
+    <div className={classes.widgetWrapper}>
+      <Paper className={classes.paper}>
+        <div className={classes.widgetHeader}>
+          {props.header ? (
+            props.header
+          ) : (
+              <Typography variant="h6" color="textSecondary">
+                {title}
+              </Typography>
+            )}
+        </div>
+        {title && <Divider light />}
+        <div
+          className={classnames(classes.widgetBody, {
+            [classes.noPadding]: noBodyPadding,
+            [bodyClass]: bodyClass
+          })}
+        >
+          {children}
+        </div>
+      </Paper>
+    </div>
+  );
 
 const styles = theme => ({
   widgetWrapper: {

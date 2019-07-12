@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
 
-import StatsWidget from './StatsWidget';
+import DependencyStat from './DependencyStats';
 
-export { StatsWidget };
+export { DependencyStat };
