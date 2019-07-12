@@ -1,0 +1,757 @@
+{
+  "content": {
+    "actions": [
+      {
+        "action": "install",
+        "module": "react-scripts",
+        "target": "3.0.1",
+        "isMajor": true,
+        "resolves": [
+          {
+            "id": 786,
+            "path": "react-scripts>babel-jest>babel-plugin-istanbul>test-exclude>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-config>babel-jest>babel-plugin-istanbul>test-exclude>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-config>jest-environment-jsdom>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-config>jest-environment-node>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-config>jest-jasmine2>expect>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-config>jest-jasmine2>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-config>jest-jasmine2>jest-snapshot>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-config>jest-jasmine2>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-config>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-config>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-environment-jsdom>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-haste-map>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-resolve-dependencies>jest-snapshot>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-config>babel-jest>babel-plugin-istanbul>test-exclude>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-environment-jsdom>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-environment-node>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-jasmine2>expect>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-jasmine2>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-jasmine2>jest-snapshot>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-jasmine2>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-config>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-haste-map>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-jasmine2>expect>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-jasmine2>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-jasmine2>jest-snapshot>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-jasmine2>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>babel-plugin-istanbul>test-exclude>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>babel-jest>babel-plugin-istanbul>test-exclude>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-environment-jsdom>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-environment-node>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-jasmine2>expect>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-jasmine2>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-jasmine2>jest-snapshot>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-jasmine2>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-haste-map>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-snapshot>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>babel-plugin-istanbul>test-exclude>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-config>babel-jest>babel-plugin-istanbul>test-exclude>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-environment-jsdom>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-environment-node>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-jasmine2>expect>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-jasmine2>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-jasmine2>jest-snapshot>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-jasmine2>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-config>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-haste-map>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-snapshot>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-snapshot>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>jest-util>jest-message-util>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 786,
+            "path": "react-scripts>jest>jest-cli>micromatch>braces",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 803,
+            "path": "react-scripts>fsevents>node-pre-gyp>tar",
+            "dev": false,
+            "optional": true,
+            "bundled": true
+          },
+          {
+            "id": 725,
+            "path": "react-scripts>webpack-dev-server",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 803,
+            "path": "react-scripts>jest>jest-cli>jest-haste-map>sane>fsevents>node-pre-gyp>tar",
+            "dev": false,
+            "optional": true,
+            "bundled": true
+          },
+          {
+            "id": 803,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-haste-map>sane>fsevents>node-pre-gyp>tar",
+            "dev": false,
+            "optional": true,
+            "bundled": true
+          },
+          {
+            "id": 803,
+            "path": "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-haste-map>sane>fsevents>node-pre-gyp>tar",
+            "dev": false,
+            "optional": true,
+            "bundled": true
+          },
+          {
+            "id": 803,
+            "path": "react-scripts>jest>jest-cli>jest-runtime>jest-haste-map>sane>fsevents>node-pre-gyp>tar",
+            "dev": false,
+            "optional": true,
+            "bundled": true
+          }
+        ]
+      },
+      {
+        "action": "review",
+        "module": "bootstrap",
+        "resolves": [
+          {
+            "id": 891,
+            "path": "shards-react>shards-ui>bootstrap",
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          }
+        ]
+      }
+    ],
+    "advisories": {
+      "725": {
+        "findings": [
+          {
+            "version": "3.1.9",
+            "paths": ["react-scripts>webpack-dev-server"],
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          }
+        ],
+        "id": 725,
+        "created": "2018-11-07T17:10:22.191Z",
+        "updated": "2019-04-12T20:15:22.334Z",
+        "deleted": null,
+        "title": "Missing Origin Validation",
+        "found_by": {
+          "link": "https://blog.cal1.cn/link",
+          "name": "Jiantao Li"
+        },
+        "reported_by": {
+          "link": "https://blog.cal1.cn/link",
+          "name": "Jiantao Li"
+        },
+        "module_name": "webpack-dev-server",
+        "cves": ["CVE-2018-14732"],
+        "vulnerable_versions": "<2.11.4 || >=3.0.0 <=3.1.10",
+        "patched_versions": ">=2.11.4 <3.0.0 || >=3.1.11",
+        "overview": "Versions of `webpack-dev-server` before 3.1.10 are missing origin validation on the websocket server. This vulnerability allows a remote attacker to steal a developer's source code because the origin of requests to the websocket server that is used for Hot Module Replacement (HMR) are not validated.",
+        "recommendation": "For `webpack-dev-server` 2.x update to version 2.11.4 or later.\nFor `webpack-dev-server` 3.x update to version 3.1.11 or later.",
+        "references": "- [Sniffing Codes in Hot Module Reloading Messages](https://blog.cal1.cn/post/Sniffing%20Codes%20in%20Hot%20Module%20Reloading%20Messages)\n- [GitHub commit](https://github.com/webpack/webpack-dev-server/commit/f18e5adf123221a1015be63e1ca2491ca45b8d10)",
+        "access": "public",
+        "severity": "high",
+        "cwe": "CWE-346",
+        "metadata": {
+          "module_type": "",
+          "exploitability": 5,
+          "affected_components": ""
+        },
+        "url": "https://npmjs.com/advisories/725"
+      },
+      "786": {
+        "findings": [
+          {
+            "version": "1.8.5",
+            "paths": [
+              "react-scripts>babel-jest>babel-plugin-istanbul>test-exclude>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-config>babel-jest>babel-plugin-istanbul>test-exclude>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-config>jest-environment-jsdom>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-config>jest-environment-node>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-config>jest-jasmine2>expect>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-config>jest-jasmine2>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-config>jest-jasmine2>jest-snapshot>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-config>jest-jasmine2>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-config>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-config>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-environment-jsdom>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-haste-map>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-resolve-dependencies>jest-snapshot>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-config>babel-jest>babel-plugin-istanbul>test-exclude>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-environment-jsdom>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-environment-node>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-jasmine2>expect>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-jasmine2>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-jasmine2>jest-snapshot>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-jasmine2>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-config>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-config>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-haste-map>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-jasmine2>expect>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-jasmine2>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-jasmine2>jest-snapshot>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-jasmine2>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>babel-plugin-istanbul>test-exclude>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>babel-jest>babel-plugin-istanbul>test-exclude>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-environment-jsdom>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-environment-node>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-jasmine2>expect>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-jasmine2>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-jasmine2>jest-snapshot>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-jasmine2>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-config>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-haste-map>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-snapshot>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runner>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>babel-plugin-istanbul>test-exclude>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-config>babel-jest>babel-plugin-istanbul>test-exclude>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-environment-jsdom>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-environment-node>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-jasmine2>expect>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-jasmine2>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-jasmine2>jest-snapshot>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-jasmine2>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-config>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-config>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-haste-map>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-snapshot>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-runtime>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-snapshot>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>jest-util>jest-message-util>micromatch>braces",
+              "react-scripts>jest>jest-cli>micromatch>braces"
+            ],
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          }
+        ],
+        "id": 786,
+        "created": "2019-02-15T21:44:30.680Z",
+        "updated": "2019-04-02T18:18:29.356Z",
+        "deleted": null,
+        "title": "Regular Expression Denial of Service",
+        "found_by": {
+          "link": "",
+          "name": "Santosh Rao"
+        },
+        "reported_by": {
+          "link": "",
+          "name": "Santosh Rao"
+        },
+        "module_name": "braces",
+        "cves": [],
+        "vulnerable_versions": "<2.3.1",
+        "patched_versions": ">=2.3.1",
+        "overview": "Versions of `braces` prior to 2.3.1 are vulnerable to Regular Expression Denial of Service (ReDoS). Untrusted input may cause catastrophic backtracking while matching regular expressions. This can cause the application to be unresponsive leading to Denial of Service.",
+        "recommendation": "Upgrade to version 2.3.1 or higher.",
+        "references": "- [GitHub Commit](https://github.com/micromatch/braces/commit/abdafb0cae1e0c00f184abbadc692f4eaa98f451)",
+        "access": "public",
+        "severity": "low",
+        "cwe": "CWE-185",
+        "metadata": {
+          "module_type": "",
+          "exploitability": 4,
+          "affected_components": ""
+        },
+        "url": "https://npmjs.com/advisories/786"
+      },
+      "803": {
+        "findings": [
+          {
+            "version": "4.4.1",
+            "paths": [
+              "react-scripts>fsevents>node-pre-gyp>tar",
+              "react-scripts>jest>jest-cli>jest-haste-map>sane>fsevents>node-pre-gyp>tar",
+              "react-scripts>jest>jest-cli>jest-runner>jest-haste-map>sane>fsevents>node-pre-gyp>tar",
+              "react-scripts>jest>jest-cli>jest-runner>jest-runtime>jest-haste-map>sane>fsevents>node-pre-gyp>tar",
+              "react-scripts>jest>jest-cli>jest-runtime>jest-haste-map>sane>fsevents>node-pre-gyp>tar"
+            ],
+            "dev": false,
+            "optional": true,
+            "bundled": true
+          }
+        ],
+        "id": 803,
+        "created": "2019-04-04T03:31:56.572Z",
+        "updated": "2019-05-15T14:13:58.612Z",
+        "deleted": null,
+        "title": "Arbitrary File Overwrite",
+        "found_by": {
+          "link": "",
+          "name": "Max Justicz"
+        },
+        "reported_by": {
+          "link": "",
+          "name": "Max Justicz"
+        },
+        "module_name": "tar",
+        "cves": [],
+        "vulnerable_versions": "<2.2.2 || >=3.0.0 <4.4.2",
+        "patched_versions": ">=2.2.2 <3.0.0 || >=4.4.2",
+        "overview": "Versions of `tar` prior to 4.4.2 for 4.x and 2.2.2 for 2.x are vulnerable to Arbitrary File Overwrite. Extracting tarballs containing a hardlink to a file that already exists in the system, and a file that matches the hardlink will overwrite the system's file with the contents of the extracted file.",
+        "recommendation": "For tar 4.x, upgrade to version 4.4.2 or later.\nFor tar 2.x, upgrade to version 2.2.2 or later.",
+        "references": "- [HackerOne Report](https://hackerone.com/reports/344595)",
+        "access": "public",
+        "severity": "high",
+        "cwe": "CWE-59",
+        "metadata": {
+          "module_type": "",
+          "exploitability": 5,
+          "affected_components": ""
+        },
+        "url": "https://npmjs.com/advisories/803"
+      },
+      "891": {
+        "findings": [
+          {
+            "version": "4.1.3",
+            "paths": ["shards-react>shards-ui>bootstrap"],
+            "dev": false,
+            "optional": false,
+            "bundled": false
+          }
+        ],
+        "id": 891,
+        "created": "2019-05-22T18:03:13.125Z",
+        "updated": "2019-05-22T18:30:21.846Z",
+        "deleted": null,
+        "title": "Cross-Site Scripting",
+        "found_by": {
+          "link": "https://www.drupal.org/u/poiu",
+          "name": "poiu"
+        },
+        "reported_by": {
+          "link": "https://www.drupal.org/u/markcarver",
+          "name": "Mark Carver"
+        },
+        "module_name": "bootstrap",
+        "cves": ["CVE-2019-8331"],
+        "vulnerable_versions": "<3.4.1 || >=4.0.0 <4.3.1",
+        "patched_versions": ">=3.4.1 <4.0.0 || >=4.3.1",
+        "overview": "Versions of `bootstrap` prior to 3.4.1 for 3.x and 4.3.1 for 4.x are vulnerable to Cross-Site Scripting (XSS). The  `data-template` attribute of the tooltip and popover plugins lacks input sanitization and may allow attacker to execute arbitrary JavaScript.",
+        "recommendation": "For `bootstrap` 4.x upgrade to 4.3.1 or later.\nFor `bootstrap` 3.x upgrade to 3.4.1 or later.",
+        "references": "- [Bootstrap release](https://blog.getbootstrap.com/2019/02/13/bootstrap-4-3-1-and-3-4-1/)\n- [MITRE CVE report](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-8331)",
+        "access": "public",
+        "severity": "moderate",
+        "cwe": "CWE-116",
+        "metadata": {
+          "module_type": "",
+          "exploitability": 5,
+          "affected_components": ""
+        },
+        "url": "https://npmjs.com/advisories/891"
+      }
+    },
+    "muted": [],
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 63,
+        "moderate": 1,
+        "high": 6,
+        "critical": 0
+      },
+      "dependencies": 35899,
+      "devDependencies": 0,
+      "optionalDependencies": 782,
+      "totalDependencies": 36681
+    },
+    "runId": "800eb7ce-c334-4ed0-bc8b-64a35d4f0967"
+  }
+}

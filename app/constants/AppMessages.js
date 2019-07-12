@@ -35,14 +35,24 @@ export const ACTION_MESSAGES = {
 };
 
 export const LABEL_MESSAGES = {
+  dependencies: 'Dependencies',
+  devDependencies: 'Dev',
+  optionalDependencies: 'Optional',
   packageName: 'Package name',
   packageNameInput: 'Fill package name',
   groupType: 'Select packages based on group',
   byOutdated: 'Select outdated packages',
-  status: 'Status'
+  status: 'Status',
+  critical: 'Critical',
+  info: 'Info',
+  high: 'High',
+  moderate: 'Moderate'
 };
 
 export const TITLE_MESSAGES = {
+  total: 'Total',
+  vulnerabilities: 'Vulnerabilities',
+  overview: 'Overview',
   audit: 'Audit report',
   doctor: 'Doctor results',
   loadDirectory: 'Load a directory from a package.json file',
@@ -80,7 +90,7 @@ export const TITLE_MESSAGES = {
 
 export const CONFIRMATION_MESSAGES = {
   actionRun:
-    '\nDo you want to run %name% \n\nNote: This process will take some time',
+    '\nDo you want to run %name%?\n\nNote: This process will take some time',
   installAll: `\nDo you want to install all the packages from \n%directory% \n\nNote: This process will take some time `,
   installPackage: '\nDo you want to install %name%?',
   installSelected: '\nDo you want to install the selected packages?',
