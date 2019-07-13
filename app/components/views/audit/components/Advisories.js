@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import CloseIcon from '@material-ui/icons/Close';
 import GavelIcon from '@material-ui/icons/GavelRounded';
 import LockIcon from '@material-ui/icons/LockRounded';
 import BuildIcon from '@material-ui/icons/BuildRounded';
@@ -97,8 +98,8 @@ const Advisories = ({ classes, data, handleClick }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.values(data).map(({ title, module_name, severity, deleted, patched_versions, ...rest }, idx) => (
-              <TableRow onClick={() => handleClick({
+            {Object.values(data).map(({ title, module_name, severity, patched_versions, ...rest }, idx) => (
+              <TableRow hover onClick={() => handleClick({
                 ...rest,
                 name: module_name
               })} key={keys[idx]} className={classes.tableRow}>
@@ -116,12 +117,15 @@ const Advisories = ({ classes, data, handleClick }) => {
                   </TableCell>
                 </Hidden>
                 <TableCell align="center" className={cn(classes.tableCell)}>
-                  {switchcase({
-                    critical: () => <Dot className={classes.marLeft} size="large" color="error" />,
-                    high: () => <Dot className={classes.marLeft} size="large" color="secondary" />,
-                    moderate: () => <Dot className={classes.marLeft} size="large" color="warning" />,
-                    low: () => <Dot className={classes.marLeft} size="large" color="primary" />
-                  })(<Dot className={classes.marLeft} size="large" color="primary" />)(severity)}
+                  <div className={classes.flexContainer}>
+                    {switchcase({
+                      critical: () => <Dot size="large" color="error" />,
+                      high: () => <Dot size="large" color="secondary" />,
+                      moderate: () => <Dot size="large" color="warning" />,
+                      low: () => <Dot size="large" color="primary" />
+                    })(<Dot size="large" color="primary" />)(severity)}
+                    {rest.deleted && <CloseIcon color="error" />}
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -164,6 +168,10 @@ const styles = theme => ({
     '& p': {
       overflowWrap: 'break-word'
     }
+  },
+  flexContainer: {
+    ...flexContainer,
+    alignItems: 'center'
   },
   cellCenter: {
     textAlign: 'center'
