@@ -1,4 +1,5 @@
 import React from 'react';
+import { Fragment } from 'react';
 import cn from 'classnames';
 import { useEffect, useState, useRef } from 'react';
 import { objectOf, string } from 'prop-types';
@@ -195,7 +196,7 @@ const Packages = ({ classes }) => {
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
   return (
-    <React.Fragment>
+    <Fragment>
       <AppLoader loading={loading} message={message}>
         <Grid container>
           <Grid
@@ -430,7 +431,7 @@ const Packages = ({ classes }) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+    </Fragment>
   );
 };
 
