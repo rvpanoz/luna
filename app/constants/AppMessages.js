@@ -46,7 +46,11 @@ export const LABEL_MESSAGES = {
   critical: 'Critical',
   info: 'Info',
   high: 'High',
-  moderate: 'Moderate'
+  moderate: 'Moderate',
+  module_name: 'Module',
+  title: 'Title',
+  patched_versions: 'Patched versions',
+  severity: 'Severity'
 };
 
 export const TITLE_MESSAGES = {
