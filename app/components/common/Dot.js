@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core';
 
-const Dot = ({ classes, size, color, theme }) => (
+const Dot = ({ classes, size, color, theme, className }) => (
   <div
     className={cn(classes.dotBase, {
+      [className]: Boolean(className),
       [classes.dotLarge]: size === 'large',
       [classes.dotSmall]: size === 'small'
     })}
@@ -20,6 +21,7 @@ Dot.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   size: PropTypes.string,
   color: PropTypes.string,
+  className: PropTypes.string,
   theme: PropTypes.objectOf(PropTypes.string).isRequired,
 }
 const styles = theme => ({

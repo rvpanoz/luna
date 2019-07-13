@@ -5,35 +5,27 @@ import { Widget } from 'components/common';
 import Typography from '@material-ui/core/Typography';
 
 const StatsWidget = ({ classes, title, value, percent }) => (
-  <Widget>
-    <div className={classes.topContainer}>
+  <Widget title={title}>
+    <div className={classes.container}>
       <div className={classes.horizontal}>
-        <Typography color="textSecondary" variant="subtitle1">
-          {title}
+        <Typography variant="h4" color="textSecondary">
+          {value}
         </Typography>
-      </div>
-      <Typography variant="h4" color="textSecondary">
-        {value}
-      </Typography>
-      {percent && <Typography variant="subtitle2" color="primary">
-        &nbsp;{percent}%
+        {percent && <Typography variant="subtitle2" color="primary">
+          &nbsp;{percent}%
         </Typography>}
+      </div>
     </div>
-
   </Widget>
 );
 
-const styles = () => ({
-  topContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+const styles = theme => ({
+  container: {
+    width: '100%',
+    padding: theme.spacing.unit
   },
   horizontal: {
     display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
   }
 });
 

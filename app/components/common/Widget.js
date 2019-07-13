@@ -19,10 +19,10 @@ const Widget = ({
 }) => {
   const { header } = props;
 
-  <div className={classes.widgetWrapper}>
-    <Paper className={classes.paper}>
+  return <div className={classes.widgetWrapper}>
+    <Paper className={classes.paper} elevation={0}>
       <div className={classes.widgetHeader}>
-        {!header ? <Typography variant="h6" color="textSecondary">
+        {!header && title ? <Typography variant="h6" color="textSecondary">
           {title}
         </Typography> : header}
       </div>
@@ -46,7 +46,8 @@ Widget.propTypes = {
   className: PropTypes.string,
   noBodyPadding: PropTypes.string,
   bodyClass: PropTypes.string,
-  disableWidgetMenu: PropTypes.bool
+  disableWidgetMenu: PropTypes.bool,
+  header: PropTypes.node
 }
 
 const styles = theme => ({
@@ -64,7 +65,7 @@ const styles = theme => ({
   widgetBody: {
     paddingBottom: theme.spacing.unit * 3,
     paddingRight: theme.spacing.unit * 3,
-    paddingLeft: theme.spacing.unit * 3
+    paddingLeft: theme.spacing.unit * 3,
   },
   noPadding: {
     padding: 0

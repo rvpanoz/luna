@@ -1,10 +1,8 @@
 import React from 'react';
-import { useState } from 'react'
 import PropTypes from 'prop-types'
 import cn from 'classnames';
 
 import Hidden from '@material-ui/core/Hidden';
-import Grid from '@material-ui/core/Grid'
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
@@ -13,91 +11,124 @@ import TableCell from '@material-ui/core/TableCell';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
-import { defaultFont } from 'styles/variables'
+import GavelIcon from '@material-ui/icons/GavelRounded';
+import LockIcon from '@material-ui/icons/LockRounded';
+import BuildIcon from '@material-ui/icons/BuildRounded';
+
+import { defaultFont, flexContainer } from 'styles/variables'
 import { withStyles } from '@material-ui/core';
 import { iMessage, switchcase } from "commons/utils";
 
 import { Dot } from 'components/common';
 
-const Advisories = ({ classes, data }) => {
-  const [active, setActive] = useState(null)
+const Advisories = ({ classes, data, handleClick }) => {
   const keys = Object.keys(data).map(key => key);
 
   return (
-    <Grid container>
-      <Grid item md={active ? 8 : 12}
-        lg={active ? 8 : 12}
-        xl={active ? 8 : 12}>
-        <Paper className={classes.root}>
-          <div className={classes.toolbar}>
-            <Toolbar
-              disableGutters
-            >
-              <div className={classes.header}>
-                <Typography variant="h5" color="textSecondary" className={classes.title}>
-                  {iMessage('title', 'issues')}({keys.length})
+    <Paper className={classes.root}>
+      <Toolbar
+        disableGutters
+      >
+        <div className={classes.header}>
+          <Typography variant="h5" color="textSecondary" className={classes.title}>
+            {iMessage('title', 'issues')}({keys.length})
                 </Typography>
-              </div>
-              <div className={classes.spacer} />
-              <div className={classes.actions}>
-                <Hidden mdDown>
-                  <Button>Run fix</Button>
+        </div>
+        <div className={classes.spacer} />
+        <div className={classes.actions}>
+          <Tooltip title={iMessage('title', 'Run audit fix')}>
+            <div>
+              <IconButton
+                disableRipple
+                aria-label="audit-fix"
+                onClick={() => { }}
+              >
+                <BuildIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+          <Tooltip title={iMessage('title', 'Run audit fix')}>
+            <div>
+              <IconButton
+                disableRipple
+                aria-label="audit-fix-package-lock-only"
+                onClick={() => { }}
+              >
+                <LockIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+          <Tooltip title={iMessage('title', 'Run audit fix')}>
+            <div>
+              <IconButton
+                disableRipple
+                aria-label="audit-fix-only-prod"
+                onClick={() => { }}
+              >
+                <GavelIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </div>
+      </Toolbar>
+      <div className={classes.tableWrapper}>
+        <Table className={classes.table} padding="dense">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'module_name')}</Typography>
+              </TableCell>
+              <Hidden smDown>
+                <TableCell>
+                  <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'title')}</Typography>
+                </TableCell>
+              </Hidden>
+              <Hidden mdDown>
+                <TableCell>
+                  <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'patched_versions')}</Typography>
+                </TableCell>
+              </Hidden>
+              <TableCell>
+                <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'severity')}</Typography>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Object.values(data).map(({ title, module_name, severity, deleted, patched_versions, ...rest }, idx) => (
+              <TableRow onClick={() => handleClick({
+                ...rest,
+                name: module_name
+              })} key={keys[idx]} className={classes.tableRow}>
+                <TableCell className={classes.tableCell}>
+                  <Typography color="textSecondary">{module_name}</Typography>
+                </TableCell>
+                <Hidden smDown>
+                  <TableCell className={classes.tableCell}>
+                    <Typography color="textSecondary">{title}</Typography>
+                  </TableCell>
                 </Hidden>
-              </div>
-            </Toolbar>
-          </div>
-          <div className={classes.tableWrapper}>
-            <Table className={classes.table} padding="dense">
-              <TableHead>
-                <TableRow>
+                <Hidden mdDown>
                   <TableCell>
-                    <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'module_name')}</Typography>
+                    <Typography color="textSecondary">{patched_versions}</Typography>
                   </TableCell>
-                  <TableCell>
-                    <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'title')}</Typography>
-                  </TableCell>
-                  <Hidden mdDown>
-                    <TableCell>
-                      <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'patched_versions')}</Typography>
-                    </TableCell>
-                  </Hidden>
-                  <TableCell>
-                    <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'severity')}</Typography>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {Object.values(data).map(({ title, module_name, severity, deleted, patched_versions, ...rest }, idx) => (
-                  <TableRow onClick={() => setActive(rest)} key={keys[idx]} className={classes.tableRow}>
-                    <TableCell className={classes.tableCell}>
-                      <Typography color="textSecondary">{module_name}</Typography>
-                    </TableCell>
-                    <TableCell className={classes.tableCell}>
-                      <Typography color="textSecondary">{title}</Typography>
-                    </TableCell>
-                    <Hidden mdDown>
-                      <TableCell>
-                        <Typography color="textSecondary">{patched_versions}</Typography>
-                      </TableCell>
-                    </Hidden>
-                    <TableCell align="center" className={cn(classes.tableCell)}>
-                      {switchcase({
-                        critical: () => <Dot large color="error" />,
-                        high: () => <Dot large color="secondary" />,
-                        moderate: () => <Dot large color="warning" />,
-                        low: () => <Dot large color="primary" />
-                      })(<Dot large textCenter />)(severity)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </Paper>
-      </Grid>
-    </Grid>
+                </Hidden>
+                <TableCell align="center" className={cn(classes.tableCell)}>
+                  {switchcase({
+                    critical: () => <Dot className={classes.marLeft} size="large" color="error" />,
+                    high: () => <Dot className={classes.marLeft} size="large" color="secondary" />,
+                    moderate: () => <Dot className={classes.marLeft} size="large" color="warning" />,
+                    low: () => <Dot className={classes.marLeft} size="large" color="primary" />
+                  })(<Dot className={classes.marLeft} size="large" color="primary" />)(severity)}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </Paper >
   );
 };
 
@@ -109,7 +140,9 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       maxHeight: 450,
     },
-
+    [theme.breakpoints.down('md')]: {
+      maxWidth: '100%'
+    },
   },
   tableRow: {
     border: 'none',
@@ -117,11 +150,11 @@ const styles = theme => ({
     lineHeight: '1.1',
     verticalAlign: 'middle',
     '&:hover': {
-      cursor: 'pointer'
+      cursor: 'pointer',
+      backgroundColor: theme.palette.secondary.ligth
     }
   },
   table: {
-    width: '100%',
     backgroundColor: 'transparent',
     borderSpacing: 0,
     borderCollapse: 'collapse'
@@ -134,9 +167,6 @@ const styles = theme => ({
   },
   cellCenter: {
     textAlign: 'center'
-  },
-  toolbar: {
-    width: '100%'
   },
   spacer: {
     flex: '1 1 100%'
@@ -162,9 +192,13 @@ const styles = theme => ({
     textOverflow: 'ellipsis'
   },
   actions: {
-    display: 'flex',
-    flex: '0 0 auto',
-    padding: theme.spacing.unit,
+    ...flexContainer,
+    width: '100%',
+    justifyContent: 'flex-end',
+    padding: theme.spacing.unit * 2
+  },
+  marLeft: {
+    marginLeft: theme.spacing.unit * 2.5
   }
 });
 
@@ -178,6 +212,9 @@ Advisories.propTypes = {
       PropTypes.string
     ])
   ),
+  handleClick: PropTypes.func
 }
 
-export default withStyles(styles)(Advisories);
+export default withStyles(styles, {
+  withTheme: true
+})(Advisories);

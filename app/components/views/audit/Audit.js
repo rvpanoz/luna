@@ -1,19 +1,23 @@
 import React from 'react';
+import { useState } from 'react'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+
 import { Dot } from 'components/common';
 import { defaultFont } from 'styles/variables';
 
-import { Advisories, DependencyStat } from './components';
+import { iMessage } from 'commons/utils'
+import { Advisories, AdvisoryDetails, DependencyStat } from './components';
 
 // dev
 // import DATA from '../../../npm-audit.json';
 
 const Audit = ({ classes, data }) => {
-
+  const [active, setActive] = useState(null)
+  console.log(active)
   if (!data) {
     return null
   }
@@ -56,15 +60,22 @@ const Audit = ({ classes, data }) => {
       <Grid container spacing={8}>
         <Grid item lg={3} md={3} sm={12} xl={3}>
           <DependencyStat
-            title="Dependencies"
-            percent={dependenciesPercentage.toFixed(2)}
-            value={dependencies}
-            color="primary"
+            title={iMessage('title', 'overview')}
+            value={totalDependencies}
+            color="warning"
           />
         </Grid>
         <Grid item lg={3} md={3} sm={12} xl={3}>
           <DependencyStat
-            title="Development"
+            title="dependencies"
+            percent={dependenciesPercentage.toFixed(2)}
+            value={dependencies}
+            color="secondary"
+          />
+        </Grid>
+        <Grid item lg={3} md={3} sm={12} xl={3}>
+          <DependencyStat
+          title="development"
             percent={devDependenciesPercentage.toFixed(2)}
             value={devDependencies}
             color="secondary"
@@ -72,22 +83,15 @@ const Audit = ({ classes, data }) => {
         </Grid>
         <Grid item lg={3} md={3} sm={12} xl={3}>
           <DependencyStat
-            title="Optional"
+            title="optional"
             percent={optionalDependenciesPercentage.toFixed(2)}
             value={optionalDependencies}
             color="warning"
           />
         </Grid>
-        <Grid item lg={3} md={3} sm={12} xl={3}>
-          <DependencyStat
-            title="Total"
-            value={totalDependencies}
-            color="warning"
-          />
-        </Grid>
       </Grid>
-      <Grid container alignContent="center">
-        <Grid item xs={12}>
+      <Grid container spacing={32} alignContent="center">
+        <Grid item xs={6}>
           <div className={classes.container}>
             <div className={classes.types}>
               {typesData.map(({ value, label, color }) => (
@@ -97,7 +101,7 @@ const Audit = ({ classes, data }) => {
                     color="textSecondary"
                     className={classes.typeItemText}
                   >
-                    {label}({value})
+                    {label}&nbsp;({value})
                   </Typography>
                 </div>
               ))}
@@ -105,7 +109,22 @@ const Audit = ({ classes, data }) => {
           </div>
         </Grid>
         <Grid item xs={12} className={classes.transition}>
-          <Advisories data={advisories} />
+          <Grid container spacing={8}>
+            <Grid item
+              sm={active ? 8 : 12}
+              md={active ? 8 : 12}
+              lg={active ? 8 : 12}
+              xl={active ? 8 : 12}>
+              <Advisories data={advisories} handleClick={setActive} />
+            </Grid>
+            {active && <Grid item
+              sm={active ? 4 : 1}
+              md={active ? 4 : 1}
+              lg={active ? 4 : 1}
+              xl={active ? 4 : 1}>
+              <AdvisoryDetails data={active} handleClose={() => setActive(null)} />
+            </Grid>}
+          </Grid>
         </Grid>
       </Grid>
     </div>
@@ -130,16 +149,13 @@ const styles = theme => ({
   },
   container: {
     width: '100%',
-    padding: theme.spacing.unit * 4
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingTop: theme.spacing.unit * 4,
   },
   types: {
     width: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    [theme.breakpoints.only('xs')]: {
-      flexWrap: 'wrap'
-    }
+    display: 'flex'
   },
   typeItem: {
     display: 'flex',

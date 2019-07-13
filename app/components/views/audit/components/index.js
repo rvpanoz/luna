@@ -2,5 +2,6 @@
 
 import DependencyStat from './DependencyStats';
 import Advisories from './Advisories'
+import AdvisoryDetails from './AdvisoryDetails'
 
-export { Advisories, DependencyStat };
+export { Advisories, AdvisoryDetails, DependencyStat };
