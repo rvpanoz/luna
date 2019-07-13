@@ -68,7 +68,7 @@ export const TITLE_MESSAGES = {
   showFilters: 'Show filters',
   clearFilters: 'Clear filters',
   searchPackage: 'Search for package',
-  clearActive: 'Clear active package',
+  clearActive: 'Close',
   packageDependencies: 'Package dependencies',
   packageVersions: 'Package versions',
   packageInstall: 'Install package',

@@ -49,3 +49,18 @@ export const NPM_CONFIG_VALUES = {
   PROXY: 'proxy',
   HTTPS_PROXY: 'https-proxy'
 };
+
+export const AUDIT_TYPES = {
+  REDOS: 'Regular Expression Denial of Service',
+  DOS: 'Denial of Service',
+  PP: 'Prototype Pollution',
+  AFO: 'Arbitrary File Overwrite',
+  CI: 'Code Injection',
+  UAF: 'Use-After-Free',
+  RMD: 'Remote Memory Disclosure',
+  DOSWS: 'DoS due to excessively large websocket message',
+  CINJ: 'Command Injection',
+  CRWP: 'Cryptographically Weak PRNG',
+  OFBR: 'Out-of-bounds Read',
+  NA: 'Not Available'
+}

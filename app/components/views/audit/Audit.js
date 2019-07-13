@@ -1,26 +1,24 @@
-// dev
-import DATA from '../../../npm-audit.json';
-
 import React from 'react';
 import { useState } from 'react'
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
+import { groupBy } from 'ramda';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden'
 
 import { Dot } from 'components/common';
 import { defaultFont } from 'styles/variables';
+import { AUDIT_TYPES } from 'constants/AppConstants'
+import { iMessage, switchcase } from 'commons/utils'
 
-import { iMessage } from 'commons/utils'
-import { Advisories, AdvisoryDetails, DependencyStat } from './components';
+import { Advisories, AdvisoryDetails, DependencyStat, ListTypes } from './components';
 
-// dev
-// import DATA from '../../../npm-audit.json';
 
 const Audit = ({ classes, data }) => {
   const [active, setActive] = useState(null)
-  console.log(active)
+
   if (!data) {
     return null
   }
@@ -58,19 +56,35 @@ const Audit = ({ classes, data }) => {
     { value: info, label: 'Info', secondary: true, color: 'default' }
   ];
 
+  const groupByTitle = groupBy((dataItem) => {
+    const { title } = dataItem;
+    const parsedTitle = title && title.trim();
+
+    return switchcase({
+      [AUDIT_TYPES.PP.trim()]: () => 'PP',
+      [AUDIT_TYPES.AFO.trim()]: () => 'AFO',
+      [AUDIT_TYPES.UAF.trim()]: () => 'UAF',
+      [AUDIT_TYPES.CI.trim()]: () => 'CI',
+      [AUDIT_TYPES.REDOS.trim()]: () => 'REDOS',
+      [AUDIT_TYPES.DOS.trim()]: () => 'DOS',
+
+    })('NA')(parsedTitle);
+  });
+
+  const types = groupByTitle(Object.values(advisories));
+
   return (
     <div className={classes.root}>
-      <Grid container spacing={8}>
+      <Grid container spacing={16}>
         <Grid item lg={3} md={3} sm={12} xl={3}>
           <DependencyStat
-            title={iMessage('title', 'overview')}
+            title={iMessage('title', 'total')}
             value={totalDependencies}
             color="warning"
           />
         </Grid>
         <Grid item lg={3} md={3} sm={12} xl={3}>
           <DependencyStat
-            title="dependencies"
             percent={dependenciesPercentage.toFixed(2)}
             value={dependencies}
             color="secondary"
@@ -78,7 +92,6 @@ const Audit = ({ classes, data }) => {
         </Grid>
         <Grid item lg={3} md={3} sm={12} xl={3}>
           <DependencyStat
-            title="development"
             percent={devDependenciesPercentage.toFixed(2)}
             value={devDependencies}
             color="secondary"
@@ -86,7 +99,6 @@ const Audit = ({ classes, data }) => {
         </Grid>
         <Grid item lg={3} md={3} sm={12} xl={3}>
           <DependencyStat
-            title="optional"
             percent={optionalDependenciesPercentage.toFixed(2)}
             value={optionalDependencies}
             color="warning"
@@ -114,19 +126,26 @@ const Audit = ({ classes, data }) => {
         <Grid item xs={12} className={classes.transition}>
           <Grid container spacing={8}>
             <Grid item
-              sm={active ? 8 : 12}
-              md={active ? 8 : 12}
-              lg={active ? 8 : 12}
-              xl={active ? 8 : 12}>
+              sm={active ? 8 : 10}
+              md={active ? 8 : 10}
+              lg={active ? 8 : 10}
+              xl={active ? 8 : 10}>
               <Advisories data={advisories} handleClick={setActive} />
             </Grid>
             {active && <Grid item
-              sm={active ? 4 : 1}
-              md={active ? 4 : 1}
-              lg={active ? 4 : 1}
-              xl={active ? 4 : 1}>
+              sm={active ? 4 : 2}
+              md={active ? 4 : 2}
+              lg={active ? 4 : 2}
+              xl={active ? 4 : 2}>
               <AdvisoryDetails data={active} handleClose={() => setActive(null)} />
             </Grid>}
+            {!active && <Hidden mdDown><Grid item
+              sm={active ? 4 : 2}
+              md={active ? 4 : 2}
+              lg={active ? 4 : 2}
+              xl={active ? 4 : 2}>
+              <ListTypes types={types} />
+            </Grid></Hidden>}
           </Grid>
         </Grid>
       </Grid>

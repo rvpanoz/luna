@@ -1,7 +1,8 @@
 /* eslint-disable import/prefer-default-export */
 
-import DependencyStat from './DependencyStats';
 import Advisories from './Advisories'
 import AdvisoryDetails from './AdvisoryDetails'
+import DependencyStat from './DependencyStats';
+import ListTypes from './ListTypes';
 
-export { Advisories, AdvisoryDetails, DependencyStat };
+export { Advisories, AdvisoryDetails, DependencyStat, ListTypes };

@@ -1,14 +1,5 @@
-const cache = {};
-const req = require.context('./', false, /\.js$/);
+import { Chip } from './Chip'
 
-req
-  .keys()
-  .forEach(
-    filename => {
-      const moduleCached = cache[filename.replace(/\.\/|\.js/g, '')]
-
-      return moduleCached.req(filename).default
-    }
-  );
-
-export default cache;
+export {
+  Chip
+}

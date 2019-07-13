@@ -80,20 +80,20 @@ const Advisories = ({ classes, data, handleClick }) => {
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'module_name')}</Typography>
+                <Typography color="textSecondary" className={classes.text} variant="subtitle1">{iMessage('label', 'module_name')}</Typography>
               </TableCell>
               <Hidden smDown>
                 <TableCell>
-                  <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'title')}</Typography>
+                  <Typography color="textSecondary" variant="subtitle1" className={classes.text}>{iMessage('label', 'title')}</Typography>
                 </TableCell>
               </Hidden>
               <Hidden mdDown>
                 <TableCell>
-                  <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'patched_versions')}</Typography>
+                  <Typography color="textSecondary" variant="subtitle1" className={classes.text}>{iMessage('label', 'patched_versions')}</Typography>
                 </TableCell>
               </Hidden>
               <TableCell>
-                <Typography color="textSecondary" variant="subtitle1">{iMessage('label', 'severity')}</Typography>
+                <Typography color="textSecondary" variant="subtitle1" className={classes.text}>{iMessage('label', 'severity')}</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -101,9 +101,10 @@ const Advisories = ({ classes, data, handleClick }) => {
             {Object.values(data).map(({ title, module_name, severity, patched_versions, ...rest }, idx) => (
               <TableRow hover onClick={() => handleClick({
                 ...rest,
-                name: module_name
+                name: module_name,
+                title: title
               })} key={keys[idx]} className={classes.tableRow}>
-                <TableCell className={classes.tableCell}>
+                <TableCell className={cn(classes.tableCell, classes.text)}>
                   <Typography color="textSecondary">{module_name}</Typography>
                 </TableCell>
                 <Hidden smDown>
