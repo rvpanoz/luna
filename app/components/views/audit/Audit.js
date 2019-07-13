@@ -1,15 +1,23 @@
-// dev
-import DATA from '../../../npm-audit.json';
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './styles/audit';
-import { Grid, withStyles, Divider, Typography } from '@material-ui/core';
-import { Dot } from 'components/common';
-import { DependencyStat } from './components';
+import { withStyles } from '@material-ui/core';
 
-const Audit = ({ classes, theme, data }) => {
-  console.log(DATA);
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { Dot } from 'components/common';
+import { defaultFont } from 'styles/variables';
+
+import { Advisories, DependencyStat } from './components';
+
+// dev
+// import DATA from '../../../npm-audit.json';
+
+const Audit = ({ classes, data }) => {
+
+  if (!data) {
+    return null
+  }
+
   const {
     content: {
       metadata: {
@@ -19,11 +27,10 @@ const Audit = ({ classes, theme, data }) => {
         totalDependencies,
         vulnerabilities
       },
-      advisories,
-      actions
+      advisories
     },
     error
-  } = DATA || {};
+  } = data || {};
 
   if (error) {
     console.error(error);
@@ -35,47 +42,6 @@ const Audit = ({ classes, theme, data }) => {
   const devDependenciesPercentage = (devDependencies / totalDependencies) * 100;
   const optionalDependenciesPercentage =
     (optionalDependencies / totalDependencies) * 100;
-
-  const totalAdvisories = Object.values(advisories).length;
-  const totalActions = Object.values(actions).length;
-
-  const vulnerabilitiesData = [
-    {
-      name: 'Critical',
-      color: 'error',
-      value: critical,
-      fill: theme.palette.error.main
-    },
-    {
-      name: 'Moderate',
-      color: 'secondary',
-      value: moderate,
-      fill: theme.palette.primary.main
-    },
-    {
-      name: 'Info',
-      color: 'primary',
-      value: info,
-      fill: theme.palette.secondary.main
-    },
-    {
-      name: 'High',
-      color: 'warning',
-      value: high,
-      fill: theme.palette.warning.main
-    },
-    { name: 'Low', color: 'primary', value: low, fill: theme.palette.info.main }
-  ];
-
-  const legendStyle = {
-    lineHeight: '24px',
-    left: 0
-  };
-
-  const totalVulnerabilities = vulnerabilitiesData.reduce(
-    (total, { value }) => total + value,
-    0
-  );
 
   const typesData = [
     { value: critical, label: 'Critical', secondary: true, color: 'error' },
@@ -131,16 +97,19 @@ const Audit = ({ classes, theme, data }) => {
                     color="textSecondary"
                     className={classes.typeItemText}
                   >
-                    {label}
+                    {label}({value})
                   </Typography>
                 </div>
               ))}
             </div>
           </div>
         </Grid>
+        <Grid item xs={12} className={classes.transition}>
+          <Advisories data={advisories} />
+        </Grid>
       </Grid>
     </div>
-  );
+  )
 };
 
 Audit.propTypes = {
@@ -154,5 +123,39 @@ Audit.propTypes = {
     ])
   )
 };
+
+const styles = theme => ({
+  root: {
+    width: '100%'
+  },
+  container: {
+    width: '100%',
+    padding: theme.spacing.unit * 4
+  },
+  types: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    [theme.breakpoints.only('xs')]: {
+      flexWrap: 'wrap'
+    }
+  },
+  typeItem: {
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: theme.spacing.unit * 3
+  },
+  typeItemText: {
+    ...defaultFont,
+    fontSize: '18px !important',
+    marginLeft: theme.spacing.unit
+  },
+  transition: {
+    transition: theme.transitions.create('width', {
+      duration: theme.transitions.duration.shortest
+    })
+  },
+});
 
 export default withStyles(styles, { withTheme: true })(Audit);

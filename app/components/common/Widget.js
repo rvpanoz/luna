@@ -1,6 +1,9 @@
 import React from 'react';
-import classnames from 'classnames';
-import { Paper, withStyles } from '@material-ui/core';
+import PropTypes from 'prop-types'
+import cn from 'classnames';
+import { withStyles } from '@material-ui/core';
+
+import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
@@ -13,30 +16,38 @@ const Widget = ({
   className,
   disableWidgetMenu,
   ...props
-}) => (
-    <div className={classes.widgetWrapper}>
-      <Paper className={classes.paper}>
-        <div className={classes.widgetHeader}>
-          {props.header ? (
-            props.header
-          ) : (
-              <Typography variant="h6" color="textSecondary">
-                {title}
-              </Typography>
-            )}
-        </div>
-        {title && <Divider light />}
-        <div
-          className={classnames(classes.widgetBody, {
-            [classes.noPadding]: noBodyPadding,
-            [bodyClass]: bodyClass
-          })}
-        >
-          {children}
-        </div>
-      </Paper>
-    </div>
-  );
+}) => {
+  const { header } = props;
+
+  <div className={classes.widgetWrapper}>
+    <Paper className={classes.paper}>
+      <div className={classes.widgetHeader}>
+        {!header ? <Typography variant="h6" color="textSecondary">
+          {title}
+        </Typography> : header}
+      </div>
+      {title && <Divider light />}
+      <div
+        className={cn(classes.widgetBody, {
+          [classes.noPadding]: noBodyPadding,
+          [bodyClass]: bodyClass
+        })}
+      >
+        {children}
+      </div>
+    </Paper>
+  </div>
+};
+
+Widget.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  className: PropTypes.string,
+  noBodyPadding: PropTypes.string,
+  bodyClass: PropTypes.string,
+  disableWidgetMenu: PropTypes.bool
+}
 
 const styles = theme => ({
   widgetWrapper: {

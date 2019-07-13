@@ -4,8 +4,11 @@ const req = require.context('./', false, /\.js$/);
 req
   .keys()
   .forEach(
-    filename =>
-      (cache[filename.replace(/\.\/|\.js/g, '')] = req(filename).default)
+    filename => {
+      const moduleCached = cache[filename.replace(/\.\/|\.js/g, '')]
+
+      return moduleCached.req(filename).default
+    }
   );
 
 export default cache;

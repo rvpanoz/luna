@@ -108,23 +108,6 @@ const PackageItem = ({
           {latest}
         </Typography>
       </TableCell>
-      <TableCell
-        padding="none"
-        name="peer-missing"
-        className={classes.tableCell}
-      >
-        <Typography className={classes.typo}>
-          {!peerMissing && fromSearch ? (
-            'N/A'
-          ) : peerMissing && !fromSearch ? (
-            <Tooltip title="Package has missing dependencies. Run npm install to fix it">
-              <WarningIcon className={classes.statusMissing} />
-            </Tooltip>
-          ) : (
-            <CheckIcon className={classes.statusOK} />
-          )}
-        </Typography>
-      </TableCell>
       <TableCell padding="none" name="status" className={classes.tableCell}>
         {missing ? (
           <Tooltip title="Package is missing. Run npm install to fix it">

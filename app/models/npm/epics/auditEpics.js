@@ -13,9 +13,6 @@ import {
 
 import { onNpmAudit$ } from '../listeners';
 
-import fs from 'fs';
-import path from 'path';
-
 const updateLoader = payload => ({
   type: toggleLoader.type,
   payload
@@ -55,10 +52,6 @@ const npmAuditParseEpic = action$ =>
     ofType(parseNpmAuditData.type),
     map(({ payload: data }) => {
       try {
-
-        const _path = path.resolve(__dirname, 'npm-audit.json');
-        fs.writeFileSync(_path, data);
-
         const dataToJson = JSON.parse(data);
         const { error } = dataToJson || {};
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core';
-import { Widget, Dot } from 'components/common';
+import { Widget } from 'components/common';
 import Typography from '@material-ui/core/Typography';
 
-const StatsWidget = ({ classes, title, value, theme, percent, color }) => (
+const StatsWidget = ({ classes, title, value, percent }) => (
   <Widget>
     <div className={classes.topContainer}>
       <div className={classes.horizontal}>
@@ -23,7 +23,7 @@ const StatsWidget = ({ classes, title, value, theme, percent, color }) => (
   </Widget>
 );
 
-const styles = theme => ({
+const styles = () => ({
   topContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -39,9 +39,7 @@ const styles = theme => ({
 
 StatsWidget.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  theme: PropTypes.objectOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
   percent: PropTypes.string
 };

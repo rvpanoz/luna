@@ -1,10 +1,11 @@
 import React from 'react';
-import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import cn from 'classnames';
 import { withStyles } from '@material-ui/core';
 
 const Dot = ({ classes, size, color, theme }) => (
   <div
-    className={classnames(classes.dotBase, {
+    className={cn(classes.dotBase, {
       [classes.dotLarge]: size === 'large',
       [classes.dotSmall]: size === 'small'
     })}
@@ -15,6 +16,12 @@ const Dot = ({ classes, size, color, theme }) => (
   />
 );
 
+Dot.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  size: PropTypes.string,
+  color: PropTypes.string,
+  theme: PropTypes.objectOf(PropTypes.string).isRequired,
+}
 const styles = theme => ({
   dotBase: {
     width: 5,
