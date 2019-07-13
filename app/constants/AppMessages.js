@@ -46,11 +46,15 @@ export const LABEL_MESSAGES = {
   critical: 'Critical',
   info: 'Info',
   high: 'High',
+<<<<<<< HEAD
   moderate: 'Moderate',
   module_name: 'Module',
   title: 'Title',
   patched_versions: 'Patched versions',
   severity: 'Severity'
+=======
+  moderate: 'Moderate'
+>>>>>>> develop
 };
 
 export const TITLE_MESSAGES = {

@@ -1,3 +1,6 @@
+// dev
+import DATA from '../../../npm-audit.json';
+
 import React from 'react';
 import { useState } from 'react'
 import PropTypes from 'prop-types';
@@ -75,7 +78,7 @@ const Audit = ({ classes, data }) => {
         </Grid>
         <Grid item lg={3} md={3} sm={12} xl={3}>
           <DependencyStat
-          title="development"
+            title="development"
             percent={devDependenciesPercentage.toFixed(2)}
             value={devDependencies}
             color="secondary"
