@@ -28,21 +28,16 @@ import styles from './styles/list';
 
 const mapState = ({
   notifications: { notifications },
-  common: {
-    operations: { packagesInstallOptions }
-  }
 }) => ({
   notifications,
-  packagesInstallOptions
 });
 
-const NotificationsItem = ({ classes, type, required, requiredBy }) => {
-  const packageParts = required && required.split('@');
-  const [packageName, packageVersion] = packageParts;
+const NotificationsList = ({ classes }) => {
+  const { notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   const handleMissingPackages = useCallback(
-    () =>
+    (packageName) =>
       remote.dialog.showMessageBox(
         remote.getCurrentWindow(),
         {
@@ -78,53 +73,10 @@ const NotificationsItem = ({ classes, type, required, requiredBy }) => {
           }
         }
       ),
-    [packageName, dispatch]
+    [dispatch]
   );
 
-  return (
-    <div className={classes.item}>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar style={{ backgroundColor: '#fff' }}>
-            <NotificationsIcon
-              color={type === 'ERROR' ? 'secondary' : 'default'}
-            />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary={required} secondary={requiredBy} />
-        <ListItemSecondaryAction>
-          <Tooltip
-            title={iMessage('title', 'searchPackage', {
-              name: packageName
-            })}
-            key={`${packageName}-${packageVersion}`}
-          >
-            <IconButton
-              aria-label="search-for-package"
-              onClick={() => handleMissingPackages()}
-            >
-              <SearchIcon color="primary" />
-            </IconButton>
-          </Tooltip>
-        </ListItemSecondaryAction>
-      </ListItem>
-    </div>
-  );
-};
-
-NotificationsItem.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  required: PropTypes.string,
-  requiredBy: PropTypes.string,
-  type: PropTypes.string
-};
-
-const WithStylesNotificationItem = withStyles({})(NotificationsItem);
-
-const NotificationsList = ({ classes }) => {
-  const { notifications, packagesInstallOptions } = useMappedState(mapState);
-
-  if (!notifications || !notifications.length) {
+  if (!notifications) {
     return (
       <div className={classes.containerHolder}>
         <Typography
@@ -152,13 +104,38 @@ const NotificationsList = ({ classes }) => {
         </div>
         <Divider light />
         <List className={classes.list}>
-          {notifications.map(notification => (
-            <WithStylesNotificationItem
-              key={notification}
-              installationOptions={packagesInstallOptions}
-              {...notification}
-            />
-          ))}
+          {notifications.map(({ required, requiredBy, type }) => {
+
+            const packageParts = required && required.split('@');
+            const [packageName] = packageParts;
+
+            return <ListItem key={packageName} className={classes.listItem}>
+              <ListItemAvatar>
+                <Avatar style={{ backgroundColor: '#fff' }}>
+                  <NotificationsIcon
+                    color={type === 'ERROR' ? 'secondary' : 'default'}
+                  />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={required} secondary={requiredBy} />
+              <ListItemSecondaryAction>
+                <Tooltip
+                  title={iMessage('title', 'searchPackage', {
+                    name: packageName
+                  })}
+                >
+                  <div>
+                    <IconButton
+                      aria-label="search-for-package"
+                      onClick={() => handleMissingPackages(packageName)}
+                    >
+                      <SearchIcon color="primary" />
+                    </IconButton>
+                  </div>
+                </Tooltip>
+              </ListItemSecondaryAction>
+            </ListItem>
+          })}
         </List>
       </div>
     </Paper>

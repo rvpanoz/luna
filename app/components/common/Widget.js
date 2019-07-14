@@ -20,7 +20,7 @@ const Widget = ({
   const { header } = props;
 
   return <div className={classes.widgetWrapper}>
-    <Paper className={classes.paper} elevation={0}>
+    <Paper className={classes.paper} elevation={2}>
       <div className={classes.widgetHeader}>
         {!header && title ? <Typography variant="h6" color="textSecondary">
           {title}

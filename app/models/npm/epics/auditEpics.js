@@ -2,7 +2,6 @@ import { pipe } from 'rxjs';
 import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
-
 import { toggleLoader } from 'models/ui/actions';
 import {
   runAudit,
@@ -11,10 +10,11 @@ import {
   updateNpmAuditData
 } from 'models/npm/actions';
 
-import { onNpmAudit$ } from '../listeners';
-
+// dev
 import fs from 'fs';
 import path from 'path';
+
+import { onNpmAudit$ } from '../listeners';
 
 const updateLoader = payload => ({
   type: toggleLoader.type,
@@ -32,7 +32,6 @@ const showAuditingLoaderEpic = action$ =>
     )
   );
 
-// TODO: use fix options
 const npmRunAuditEpic = (action$, state$) =>
   action$.pipe(
     ofType(runAudit.type),
@@ -56,6 +55,7 @@ const npmAuditParseEpic = action$ =>
     map(({ payload: data }) => {
       try {
 
+        // dev
         const _path = path.resolve(__dirname, 'npm-audit.json');
         fs.writeFileSync(_path, data);
 
@@ -68,18 +68,19 @@ const npmAuditParseEpic = action$ =>
 
           return updateNpmAuditData({
             data: {
-              error: true,
-              content: [],
-              summary: summaryParts && summaryParts[0],
-              detail,
-              code
+              error: {
+                summary: summaryParts && summaryParts[0],
+                detail,
+                code
+              },
+              content: null,
             }
           });
         }
 
         return updateNpmAuditData({
           data: {
-            error: false,
+            error: null,
             content: dataToJson
           }
         });
