@@ -1,11 +1,14 @@
+/* eslint-disable no-unused-vars */
+
 import React from 'react';
 
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont } from 'styles/variables';
 import red from '@material-ui/core/colors/red';
 
-import { objectOf, string, func, oneOfType, bool, array, object } from 'prop-types';
+import { objectOf, number, string, func, oneOfType, bool, array, object } from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import format from 'date-fns/format';
 
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -26,8 +29,25 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Transition } from 'components/common';
 import { iMessage, } from 'commons/utils';
 
+const ListItemDetail = ({ text, value }) => <ListItem>
+    <ListItemText
+        primary={
+            <Typography color="textSecondary" variant="body1">{text}</Typography>
+        }
+    />
+    <ListItemSecondaryAction>
+        <Typography color="textSecondary" variant="body1">{value}</Typography>
+    </ListItemSecondaryAction>
+</ListItem>
+
+ListItemDetail.propTypes = {
+    text: string,
+    value: string
+}
+
 const AdvisoryDetails = ({ classes, data, handleClose }) => {
-    const { name, findings, recommendation } = data
+    const { name, findings, title, vulnerable_versions, recommendation, found_by, updated, created, overview, deleted } = data
+    const founder = found_by.name || "N/A";
 
     return (
         <div className={classes.wrapper}>
@@ -41,21 +61,21 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
                                 }
                                 className={classes.cardHeader}
                                 subheader={
-                                    <Typography color="textSecondary" variant="caption">{recommendation}</Typography>
+                                    <Typography color="textSecondary" variant="caption">
+                                        {title}
+                                    </Typography>
                                 }
                             />
                             <CardContent className={classes.cardContent}>
+                                <Typography color="textSecondary" variant="body1">{recommendation}</Typography>
+                                <Typography color="textSecondary" variant="body2" className={classes.overview}>{overview}</Typography>
                                 <Divider className={classes.divider} light />
-                                <List>
-                                    <ListItem>
-                                        <ListItemText
-                                            primary="Findings"
-                                            secondary='Secondary text'
-                                        />
-                                        <ListItemSecondaryAction>
-                                            {findings.length}
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
+                                <List dense>
+                                    <ListItemDetail text={iMessage('label', 'findings')} value={findings.length} />
+                                    <ListItemDetail text={iMessage('label', 'vulnerable_versions')} value={vulnerable_versions} />
+                                    <ListItemDetail text={iMessage('label', 'found_by')} value={founder} />
+                                    <ListItemDetail text={iMessage('label', 'created')} value={format(new Date(created), 'DD/MM/YYYY h:mm')} />
+                                    <ListItemDetail text={iMessage('label', 'updated')} value={format(new Date(updated), 'DD/MM/YYYY h:mm')} />
                                 </List>
                             </CardContent>
                         </Card>
@@ -144,6 +164,9 @@ const styles = theme => ({
     },
     withPadding: {
         padding: theme.spacing.unit
+    },
+    overview: {
+        paddingTop: theme.spacing.unit * 2
     }
 });
 
@@ -153,7 +176,8 @@ AdvisoryDetails.propTypes = {
         object,
         array,
         bool,
-        string
+        string,
+        number
     ])
     ),
     handleClose: func.isRequired

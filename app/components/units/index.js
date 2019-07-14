@@ -1,14 +1,7 @@
-const cache = {};
-const req = require.context('./', false, /\.js$/);
+/* eslint-disable import/prefer-default-export */
 
-req
-  .keys()
-  .forEach(
-    filename => {
-      const moduleCached = cache[filename.replace(/\.\/|\.js/g, '')]
+import Chip from './Chip'
 
-      return moduleCached.req(filename).default
-    }
-  );
-
-export default cache;
+export {
+  Chip
+}

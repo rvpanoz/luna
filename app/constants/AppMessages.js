@@ -24,7 +24,9 @@ export const INFO_MESSAGES = {
   searching: 'Searching npm registry..',
   directorySelection: 'Select directory',
   directory: 'Directory',
-  createPackageJsonNote: 'Note: npm init will run with the default parameters.'
+  createPackageJsonNote: 'Note: npm init will run with the default parameters.',
+  run_audit_fix: 'Automatically install any compatible updates to vulnerable dependencies',
+  run_with_force: 'Have audit fix install semver-major updates to toplevel dependencies, not just semver-compatible ones'
 };
 
 export const ACTION_MESSAGES = {
@@ -68,7 +70,7 @@ export const TITLE_MESSAGES = {
   showFilters: 'Show filters',
   clearFilters: 'Clear filters',
   searchPackage: 'Search for package',
-  clearActive: 'Clear active package',
+  clearActive: 'Close',
   packageDependencies: 'Package dependencies',
   packageVersions: 'Package versions',
   packageInstall: 'Install package',
@@ -94,8 +96,8 @@ export const TITLE_MESSAGES = {
 
 export const CONFIRMATION_MESSAGES = {
   actionRun:
-    '\nDo you want to run %name%?\n\nNote: This process will take some time',
-  installAll: `\nDo you want to install all the packages from \n%directory% \n\nNote: This process will take some time `,
+    '\nDo you want to run %name%?\nNote: This process will take some time',
+  installAll: `\nDo you want to install all the packages from \n%directory% \nNote: This process will take some time `,
   installPackage: '\nDo you want to install %name%?',
   installSelected: '\nDo you want to install the selected packages?',
   installLatest: '\nDo you want to install %name% latest version?',

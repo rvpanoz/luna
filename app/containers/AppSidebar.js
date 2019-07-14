@@ -196,6 +196,7 @@ const AppSidebar = ({
           <ListItemText className={classes.actionButton}>
             <Tooltip title={iMessage('title', 'loadDirectory')}>
               <Button
+                disableRipple
                 disabled={loading || activePage !== 'packages'}
                 className={cn(classes.label, classes.margin)}
                 color="secondary"

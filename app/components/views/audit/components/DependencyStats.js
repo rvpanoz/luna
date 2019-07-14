@@ -31,8 +31,8 @@ const styles = theme => ({
 
 StatsWidget.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  title: PropTypes.string.isRequired,
   value: PropTypes.number.isRequired,
+  title: PropTypes.string,
   percent: PropTypes.string
 };
 
