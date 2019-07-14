@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import cn from 'classnames';
+import { useState } from 'react';
 
 import Hidden from '@material-ui/core/Hidden';
 import Table from '@material-ui/core/Table';
@@ -14,12 +15,16 @@ import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import Popper from '@material-ui/core/Popper';
+import Fade from '@material-ui/core/Fade';
 
-import CloseIcon from '@material-ui/icons/Close';
-import GavelIcon from '@material-ui/icons/GavelRounded';
-import LockIcon from '@material-ui/icons/LockRounded';
-import BuildIcon from '@material-ui/icons/BuildRounded';
+import CloseIcon from '@material-ui/icons/CloseOutlined';
+import GavelIcon from '@material-ui/icons/GavelTwoTone';
+import BuildIcon from '@material-ui/icons/BuildTwoTone';
+
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 import { defaultFont, flexContainer } from 'styles/variables'
 import { withStyles } from '@material-ui/core';
@@ -27,8 +32,69 @@ import { iMessage, switchcase } from "commons/utils";
 
 import { Dot } from 'components/common';
 
+const options = ['Fix only prod', 'Fix only dev'];
+const ITEM_HEIGHT = 48
+
+const ActionsMenu = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+
+  return (
+    <div>
+      <IconButton
+        aria-label="More"
+        aria-controls="long-menu"
+        aria-haspopup="true"
+        onClick={handleClick}
+      >
+        <MoreVertIcon />
+      </IconButton>
+      <Menu
+        id="long-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxHeight: ITEM_HEIGHT * 4.5,
+            width: 200,
+          },
+        }}
+      >
+        {options.map(option => (
+          <MenuItem key={option} onClick={handleClose}>
+            {option}
+          </MenuItem>
+        ))}
+      </Menu>
+    </div>
+  );
+}
+
 const Advisories = ({ classes, data, handleClick }) => {
   const keys = Object.keys(data).map(key => key);
+  const zeroKeys = !keys.length;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [popperText, setPopperText] = useState('');
+
+  if (zeroKeys) {
+    return <div className={classes.container}>
+      <Typography
+        variant="subtitle1"
+        className={cn(classes.noData, classes.withPadding)}
+        color="textSecondary"
+      >
+        {iMessage('info', 'no_audit_issues')}
+      </Typography>
+    </div>
+  }
+
+  // const handleClickAction = (event) => setAnchorEl(anchorEl ? null : event.currentTarget);
+  const open = Boolean(anchorEl);
 
   return (
     <Paper className={classes.root}>
@@ -38,47 +104,44 @@ const Advisories = ({ classes, data, handleClick }) => {
         <div className={classes.header}>
           <Typography variant="h5" color="textSecondary" className={classes.title}>
             {iMessage('title', 'issues')}({keys.length})
-                </Typography>
+          </Typography>
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
-          <Tooltip title={iMessage('title', 'Run audit fix')}>
-            <div>
-              <IconButton
-                disableRipple
-                aria-label="audit-fix"
-                onClick={() => { }}
-              >
-                <BuildIcon />
-              </IconButton>
-            </div>
-          </Tooltip>
-          <Tooltip title={iMessage('title', 'Run audit fix')}>
-            <div>
-              <IconButton
-                disableRipple
-                aria-label="audit-fix-package-lock-only"
-                onClick={() => { }}
-              >
-                <LockIcon />
-              </IconButton>
-            </div>
-          </Tooltip>
-          <Tooltip title={iMessage('title', 'Run audit fix')}>
-            <div>
-              <IconButton
-                disableRipple
-                aria-label="audit-fix-only-prod"
-                onClick={() => { }}
-              >
-                <GavelIcon />
-              </IconButton>
-            </div>
-          </Tooltip>
+          <IconButton
+            disableRipple
+            aria-label="audit-fix"
+            onClick={(e) => {
+              setPopperText(iMessage('label', 'run_audit_fix'))
+              setAnchorEl(e.currentTarget);
+            }}
+          >
+            <BuildIcon />
+          </IconButton>
+          <IconButton
+            disableRipple
+            aria-label="audit-fix-force"
+            onClick={(e) => {
+              setPopperText(iMessage('label', 'run_with_force'))
+              setAnchorEl(e.currentTarget);
+            }}
+          >
+            <GavelIcon />
+          </IconButton>
+          <Popper id='pop-audit' open={open} anchorEl={anchorEl} transition>
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350}>
+                <Paper className={classes.container}>
+                  <Typography variant="body1">{popperText}</Typography>
+                </Paper>
+              </Fade>
+            )}
+          </Popper>
+          <ActionsMenu />
         </div>
       </Toolbar>
       <div className={classes.tableWrapper}>
-        <Table className={classes.table} padding="dense">
+        <Table className={classes.table}>
           <TableHead>
             <TableRow>
               <TableCell>
@@ -150,6 +213,12 @@ const Advisories = ({ classes, data, handleClick }) => {
 };
 
 const styles = theme => ({
+  container: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingTop: theme.spacing.unit * 4,
+  },
   tableWrapper: {
     whiteSpace: 'nowrap',
     padding: theme.spacing.unit,
@@ -215,6 +284,7 @@ const styles = theme => ({
   actions: {
     ...flexContainer,
     width: '100%',
+    alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing.unit * 2
   },

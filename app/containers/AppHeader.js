@@ -36,6 +36,7 @@ import { setActivePage } from 'models/ui/actions';
 import styles from './styles/appHeader';
 
 const GIT_URL = 'https://github.com/rvpanoz/luna';
+const openUrl = url => shell.openExternal(url);
 
 const mapState = ({
   npm: { env },
@@ -54,8 +55,6 @@ const mapState = ({
   loading,
   env
 });
-
-const openUrl = url => shell.openExternal(url);
 
 const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);

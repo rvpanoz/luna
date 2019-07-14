@@ -77,6 +77,8 @@ const Audit = ({ classes, data }) => {
     { value: info, label: 'Info', secondary: true, color: 'default' }
   ];
 
+  const totalIssues = typesData.reduce((acc, type) => acc + type.value, 0)
+
   const groupByTitle = groupBy((dataItem) => {
     const { title } = dataItem;
     const parsedTitle = title && title.trim();
@@ -93,7 +95,8 @@ const Audit = ({ classes, data }) => {
   });
 
   const types = groupByTitle(Object.values(advisories));
-
+  console.log(active);
+  
   return (
     <div className={classes.root}>
       <Grid container spacing={16}>
@@ -126,7 +129,7 @@ const Audit = ({ classes, data }) => {
           />
         </Grid>
       </Grid>
-      <Grid container spacing={32} alignContent="center">
+      <Grid container spacing={0}>
         <Grid item xs={6}>
           <div className={classes.container}>
             <div className={classes.types}>
@@ -160,13 +163,13 @@ const Audit = ({ classes, data }) => {
               xl={active ? 4 : 2}>
               <AdvisoryDetails data={active} handleClose={() => setActive(null)} />
             </Grid>}
-            {!active && <Hidden mdDown><Grid item
+            {!active && totalIssues ? <Hidden mdDown><Grid item
               sm={active ? 4 : 2}
               md={active ? 4 : 2}
               lg={active ? 4 : 2}
               xl={active ? 4 : 2}>
               <ListTypes types={types} />
-            </Grid></Hidden>}
+            </Grid></Hidden> : null}
           </Grid>
         </Grid>
       </Grid>
@@ -195,6 +198,7 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     paddingTop: theme.spacing.unit * 4,
+    paddingBottom: theme.spacing.unit * 4,
   },
   containerColumn: {
     display: 'flex',
@@ -209,7 +213,7 @@ const styles = theme => ({
   typeItem: {
     display: 'flex',
     alignItems: 'center',
-    marginLeft: theme.spacing.unit * 3
+    marginLeft: theme.spacing.unit
   },
   typeItemText: {
     ...defaultFont,

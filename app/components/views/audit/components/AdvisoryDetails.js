@@ -29,7 +29,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Transition } from 'components/common';
 import { iMessage, } from 'commons/utils';
 
-const ListItemDetail = ({ classes, text, value }) => <ListItem>
+const ListItemDetail = ({ text, value }) => <ListItem>
     <ListItemText
         primary={
             <Typography color="textSecondary" variant="body1">{text}</Typography>
@@ -41,7 +41,6 @@ const ListItemDetail = ({ classes, text, value }) => <ListItem>
 </ListItem>
 
 ListItemDetail.propTypes = {
-    classes: objectOf(string).isRequired,
     text: string,
     value: string
 }
