@@ -1,46 +1,67 @@
+/* eslint-disable react/prop-types */
+
 import React from 'react';
-import { useState } from 'react'
 import PropTypes from 'prop-types';
+import cn from 'classnames';
+
+import { useState } from 'react'
 import { withStyles } from '@material-ui/core';
 import { groupBy } from 'ramda';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Hidden from '@material-ui/core/Hidden'
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 import { Dot } from 'components/common';
-import { defaultFont } from 'styles/variables';
+import { defaultFont, grayColor } from 'styles/variables';
 import { AUDIT_TYPES } from 'constants/AppConstants'
 import { iMessage, switchcase } from 'commons/utils'
 
 import { Advisories, AdvisoryDetails, DependencyStat, ListTypes } from './components';
 
-
 const Audit = ({ classes, data }) => {
   const [active, setActive] = useState(null)
+  const { content, error } = data || {};
 
-  if (!data) {
-    return null
+  const renderText = ({ summary, detail, isError }) => <div className={classes.containerColumn}>
+    <Typography
+      variant="subtitle1"
+      className={cn(classes.noData, classes.withPadding)}
+      color={isError ? 'error' : 'inherit'}
+    >
+      {summary}
+    </Typography>
+    {detail && <Typography variant="caption" className={cn(classes.helperText)}>
+      {detail}
+    </Typography>}
+  </div>
+
+  if (error) {
+    return renderText(Object.assign({}, error, {
+      isError: true
+    }))
+  }
+
+  if (!content) {
+    const options = {
+      summary: iMessage('info', 'npmAuditInfo'),
+      detail: iMessage('info', 'npmAuditHelperText')
+    }
+
+    return renderText(options)
   }
 
   const {
-    content: {
-      metadata: {
-        dependencies,
-        devDependencies,
-        optionalDependencies,
-        totalDependencies,
-        vulnerabilities
-      },
-      advisories
+    metadata: {
+      dependencies,
+      devDependencies,
+      optionalDependencies,
+      totalDependencies,
+      vulnerabilities
     },
-    error
-  } = data || {};
-
-  if (error) {
-    console.error(error);
-    return null;
-  }
+    advisories,
+  } = content || {};
 
   const { info, high, critical, moderate, low } = vulnerabilities;
   const dependenciesPercentage = (dependencies / totalDependencies) * 100;
@@ -175,6 +196,12 @@ const styles = theme => ({
     justifyContent: 'space-between',
     paddingTop: theme.spacing.unit * 4,
   },
+  containerColumn: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingTop: theme.spacing.unit * 2,
+  },
   types: {
     width: '100%',
     display: 'flex'
@@ -193,6 +220,17 @@ const styles = theme => ({
     transition: theme.transitions.create('width', {
       duration: theme.transitions.duration.shortest
     })
+  },
+  noData: {
+    ...defaultFont
+  },
+  withPadding: {
+    padding: theme.spacing.unit + 4
+  },
+  helperText: {
+    ...defaultFont,
+    color: lighten(grayColor, 0.1),
+    fontSize: 16
   },
 });
 

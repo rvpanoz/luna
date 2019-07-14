@@ -94,19 +94,19 @@ export const TITLE_MESSAGES = {
 
 export const CONFIRMATION_MESSAGES = {
   actionRun:
-    '\nDo you want to run %name%?\n\nNote: This process will take some time',
-  installAll: `\nDo you want to install all the packages from \n%directory% \n\nNote: This process will take some time `,
-  installPackage: '\nDo you want to install %name%?',
-  installSelected: '\nDo you want to install the selected packages?',
-  installLatest: '\nDo you want to install %name% latest version?',
-  installVersion: '\nDo you want to install %name% version %version%?',
-  updatePackage: '\nDo you want to update %name%?',
-  uninstallPackage: '\nDo you want to uninstall %name%?',
-  searchPackage: '\nDo you want to search for %packageName%?',
+    'Do you want to run %name%?\n\nNote: This process will take some time',
+  installAll: `Do you want to install all the packages from \n%directory% \n\nNote: This process will take some time `,
+  installPackage: 'Do you want to install %name%?',
+  installSelected: 'Do you want to install the selected packages?',
+  installLatest: 'Do you want to install %name% latest version?',
+  installVersion: 'Do you want to install %name% version %version%?',
+  updatePackage: 'Do you want to update %name%?',
+  uninstallPackage: 'Do you want to uninstall %name%?',
+  searchPackage: 'Do you want to search for %packageName%?',
   installLatestSelected:
-    '\nDo you want to install the latest version of the selected packages?',
-  updateSelected: '\nDo you want to update the selected packages?',
-  uninstallSelected: '\nDo you want to uninstall the selected packages?'
+    'Do you want to install the latest version of the selected packages?',
+  updateSelected: 'Do you want to update the selected packages?',
+  uninstallSelected: 'Do you want to uninstall the selected packages?'
 };
 
 export const LABEL_MESSAGE = {

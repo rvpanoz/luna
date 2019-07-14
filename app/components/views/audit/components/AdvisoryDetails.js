@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import React from 'react';
 
 import { lighten } from '@material-ui/core/styles/colorManipulator';
@@ -37,6 +39,12 @@ const ListItemDetail = ({ classes, text, value }) => <ListItem>
         <Typography color="textSecondary" variant="body1">{value}</Typography>
     </ListItemSecondaryAction>
 </ListItem>
+
+ListItemDetail.propTypes = {
+    classes: objectOf(string).isRequired,
+    text: string,
+    value: string
+}
 
 const AdvisoryDetails = ({ classes, data, handleClose }) => {
     const { name, findings, title, vulnerable_versions, recommendation, found_by, updated, created, overview, deleted } = data

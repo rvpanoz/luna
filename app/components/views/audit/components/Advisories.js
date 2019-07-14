@@ -1,3 +1,5 @@
+/* eslint-disable object-shorthand */
+
 import React from 'react';
 import PropTypes from 'prop-types'
 import cn from 'classnames';
@@ -80,25 +82,30 @@ const Advisories = ({ classes, data, handleClick }) => {
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography color="textSecondary" className={classes.text} variant="subtitle1">{iMessage('label', 'module_name')}</Typography>
+                <Typography color="textPrimary" variant="subtitle1">{iMessage('label', 'module_name')}</Typography>
               </TableCell>
               <Hidden smDown>
                 <TableCell>
-                  <Typography color="textSecondary" variant="subtitle1" className={classes.text}>{iMessage('label', 'title')}</Typography>
+                  <Typography color="textPrimary" variant="subtitle1">{iMessage('label', 'title')}</Typography>
                 </TableCell>
               </Hidden>
               <Hidden mdDown>
                 <TableCell>
-                  <Typography color="textSecondary" variant="subtitle1" className={classes.text}>{iMessage('label', 'patched_versions')}</Typography>
+                  <Typography color="textPrimary" variant="subtitle1">{iMessage('label', 'patched_versions')}</Typography>
+                </TableCell>
+              </Hidden>
+              <Hidden mdDown>
+                <TableCell>
+                  <Typography color="textPrimary" variant="subtitle1">{iMessage('label', 'vulnerable_versions')}</Typography>
                 </TableCell>
               </Hidden>
               <TableCell>
-                <Typography color="textSecondary" variant="subtitle1" className={classes.text}>{iMessage('label', 'severity')}</Typography>
+                <Typography color="textPrimary" variant="subtitle1">{iMessage('label', 'severity')}</Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Object.values(data).map(({ title, module_name, severity, patched_versions, ...rest }, idx) => (
+            {Object.values(data).map(({ title, module_name, severity, patched_versions, vulnerable_versions, ...rest }, idx) => (
               <TableRow hover onClick={() => handleClick({
                 ...rest,
                 name: module_name,
@@ -115,6 +122,11 @@ const Advisories = ({ classes, data, handleClick }) => {
                 <Hidden mdDown>
                   <TableCell>
                     <Typography color="textSecondary">{patched_versions}</Typography>
+                  </TableCell>
+                </Hidden>
+                <Hidden mdDown>
+                  <TableCell>
+                    <Typography color="textSecondary">{vulnerable_versions}</Typography>
                   </TableCell>
                 </Hidden>
                 <TableCell align="center" className={cn(classes.tableCell)}>

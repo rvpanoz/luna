@@ -18,12 +18,13 @@ const Dot = ({ classes, size, color, theme, className }) => (
 );
 
 Dot.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object])).isRequired,
   size: PropTypes.string,
   color: PropTypes.string,
   className: PropTypes.string,
-  theme: PropTypes.objectOf(PropTypes.string).isRequired,
+  theme: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array])).isRequired,
 }
+
 const styles = theme => ({
   dotBase: {
     width: 5,
