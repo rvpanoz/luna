@@ -62,5 +62,11 @@ export const AUDIT_TYPES = {
   CINJ: 'Command Injection',
   CRWP: 'Cryptographically Weak PRNG',
   OFBR: 'Out-of-bounds Read',
+  MEXP: 'Memory Exposure',
+  ORED: 'Open Redirect',
+  INENT: 'Insufficient Entropy',
+  MOV: 'Missing Origin Validation',
+  RCEXC: 'Remote Code Execution',
+  CSS: 'Cross-Site Scripting',
   NA: 'Not Available'
 }

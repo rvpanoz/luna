@@ -218,9 +218,7 @@ const AppSidebar = ({
             classes={{
               primary: classes.categoryHeaderPrimary
             }}
-          >
-
-          </ListItemText>
+          />
         </ListItem>
         <ListItem key="app-tabs-content" disableGutters>
           <ListItemText>

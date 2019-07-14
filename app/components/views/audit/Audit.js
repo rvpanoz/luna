@@ -13,12 +13,11 @@ import Typography from '@material-ui/core/Typography';
 import Hidden from '@material-ui/core/Hidden'
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 
-import { Dot } from 'components/common';
 import { defaultFont, grayColor } from 'styles/variables';
 import { AUDIT_TYPES } from 'constants/AppConstants'
 import { iMessage, switchcase } from 'commons/utils'
 
-import { Advisories, AdvisoryDetails, DependencyStat, ListTypes } from './components';
+import { Advisories, AdvisoryDetails, DependencyStat, ListTypes, ListDotTypes } from './components';
 
 const Audit = ({ classes, data }) => {
   const [active, setActive] = useState(null)
@@ -81,7 +80,7 @@ const Audit = ({ classes, data }) => {
 
   const groupByTitle = groupBy((dataItem) => {
     const { title } = dataItem;
-    const parsedTitle = title && title.trim();
+    const newTitle = title && title.trim();
 
     return switchcase({
       [AUDIT_TYPES.PP.trim()]: () => 'PP',
@@ -90,13 +89,22 @@ const Audit = ({ classes, data }) => {
       [AUDIT_TYPES.CI.trim()]: () => 'CI',
       [AUDIT_TYPES.REDOS.trim()]: () => 'REDOS',
       [AUDIT_TYPES.DOS.trim()]: () => 'DOS',
-
-    })('NA')(parsedTitle);
+      [AUDIT_TYPES.RMD.trim()]: () => 'RMD',
+      [AUDIT_TYPES.DOSWS.trim()]: () => 'DOSWS',
+      [AUDIT_TYPES.CINJ.trim()]: () => 'CINJ',
+      [AUDIT_TYPES.CRWP.trim()]: () => 'CRWP',
+      [AUDIT_TYPES.OFBR.trim()]: () => 'OFBR',
+      [AUDIT_TYPES.MEXP.trim()]: () => 'MEXP',
+      [AUDIT_TYPES.ORED.trim()]: () => 'ORED',
+      [AUDIT_TYPES.INENT.trim()]: () => 'INENT',
+      [AUDIT_TYPES.MOV.trim()]: () => 'MOV',
+      [AUDIT_TYPES.RCEXC.trim()]: () => 'RCEXC',
+      [AUDIT_TYPES.CSS.trim()]: () => 'CSS'
+    })('NA')(newTitle);
   });
 
   const types = groupByTitle(Object.values(advisories));
-  console.log(active);
-  
+
   return (
     <div className={classes.root}>
       <Grid container spacing={16}>
@@ -130,23 +138,6 @@ const Audit = ({ classes, data }) => {
         </Grid>
       </Grid>
       <Grid container spacing={0}>
-        <Grid item xs={6}>
-          <div className={classes.container}>
-            <div className={classes.types}>
-              {typesData.map(({ value, label, color }) => (
-                <div key={label} className={classes.typeItem}>
-                  <Dot size="large" color={color} />
-                  <Typography
-                    color="textSecondary"
-                    className={classes.typeItemText}
-                  >
-                    {label}&nbsp;({value})
-                  </Typography>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Grid>
         <Grid item xs={12} className={classes.transition}>
           <Grid container spacing={8}>
             <Grid item
@@ -163,6 +154,11 @@ const Audit = ({ classes, data }) => {
               xl={active ? 4 : 2}>
               <AdvisoryDetails data={active} handleClose={() => setActive(null)} />
             </Grid>}
+            <Grid item>
+              <div className={classes.container}>
+                <ListDotTypes types={typesData} />
+              </div>
+            </Grid>
             {!active && totalIssues ? <Hidden mdDown><Grid item
               sm={active ? 4 : 2}
               md={active ? 4 : 2}

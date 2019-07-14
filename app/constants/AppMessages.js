@@ -108,7 +108,11 @@ export const CONFIRMATION_MESSAGES = {
   installLatestSelected:
     '\nDo you want to install the latest version of the selected packages?',
   updateSelected: '\nDo you want to update the selected packages?',
-  uninstallSelected: '\nDo you want to uninstall the selected packages?'
+  uninstallSelected: '\nDo you want to uninstall the selected packages?',
+  auditFix: '\nDo you want to run npm audit fix? \n\nIt will automatically install any compatible updates to vulnerable dependencies.',
+  auditFixForce: '\nDo you want to run npm audit fix --force? \n\nInstall semver-major updates to toplevel dependencies, not just semver-compatible ones.',
+  auditFixOnlyProd: '\nDo you want to run npm audit fix --only=prod?\n\nIt will skip updating devDependencies.',
+  auditFixOnlyDev: '\nDo you want to run npm audit fix --only=dev? \n\nIt will skip updating dependencies.',
 };
 
 export const LABEL_MESSAGE = {

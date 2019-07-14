@@ -16,27 +16,21 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button'
-import Popper from '@material-ui/core/Popper';
-import Fade from '@material-ui/core/Fade';
-
-import CloseIcon from '@material-ui/icons/CloseOutlined';
-import GavelIcon from '@material-ui/icons/GavelTwoTone';
-import BuildIcon from '@material-ui/icons/BuildTwoTone';
-
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+import CloseIcon from '@material-ui/icons/CloseOutlined';
+
 import { defaultFont, flexContainer } from 'styles/variables'
 import { withStyles } from '@material-ui/core';
-import { iMessage, switchcase } from "commons/utils";
+import { iMessage, switchcase, showDialog } from "commons/utils";
 
 import { Dot } from 'components/common';
 
-const options = ['Fix only prod', 'Fix only dev'];
-const ITEM_HEIGHT = 48
-
-const ActionsMenu = () => {
+const ActionsMenu = ({ handler }) => {
+  const ITEM_HEIGHT = 48
+  const moreActions = [{ label: 'Fix only prod', value: 'onlyProd' }, { label: 'Fix only dev', value: 'onlyDev' }];
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -47,14 +41,14 @@ const ActionsMenu = () => {
     <div>
       <IconButton
         aria-label="More"
-        aria-controls="long-menu"
+        aria-controls="audit-actions"
         aria-haspopup="true"
         onClick={handleClick}
       >
         <MoreVertIcon />
       </IconButton>
       <Menu
-        id="long-menu"
+        id="audit-actions"
         anchorEl={anchorEl}
         keepMounted
         open={open}
@@ -66,9 +60,9 @@ const ActionsMenu = () => {
           },
         }}
       >
-        {options.map(option => (
-          <MenuItem key={option} onClick={handleClose}>
-            {option}
+        {moreActions.map(action => (
+          <MenuItem key={action.value} onClick={() => handler(action.value)}>
+            {action.label}
           </MenuItem>
         ))}
       </Menu>
@@ -76,11 +70,34 @@ const ActionsMenu = () => {
   );
 }
 
+ActionsMenu.propTypes = {
+  handler: PropTypes.func.isRequired
+}
+
 const Advisories = ({ classes, data, handleClick }) => {
   const keys = Object.keys(data).map(key => key);
   const zeroKeys = !keys.length;
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [popperText, setPopperText] = useState('');
+
+  const handleFix = option => {
+
+    const auditText = switchcase({
+      fix: () => 'auditFix',
+      force: () => 'auditFixForce',
+      onlyProd: () => 'auditFixOnlyProd',
+      onlyDev: () => 'auditFixOnlyDev'
+    })('auditFix')(option);
+
+    const dialogOptions = {
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage('confirmation', auditText),
+      buttons: ['Cancel', 'Fix']
+    };
+
+    const dialogHandler = () => { }
+
+    return showDialog(dialogHandler, dialogOptions);
+  };
 
   if (zeroKeys) {
     return <div className={classes.container}>
@@ -94,9 +111,6 @@ const Advisories = ({ classes, data, handleClick }) => {
     </div>
   }
 
-  // const handleClickAction = (event) => setAnchorEl(anchorEl ? null : event.currentTarget);
-  const open = Boolean(anchorEl);
-
   return (
     <Paper className={classes.root}>
       <Toolbar
@@ -109,13 +123,13 @@ const Advisories = ({ classes, data, handleClick }) => {
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
-          <Button variant="outlined" size="small" color="primary">
+          <Button variant="outlined" size="small" color="primary" onClick={() => handleFix('fix')}>
             Fix
         </Button>
-          <Button variant="outlined" size="small" color="secondary" className={classes.marLeft}>
+          <Button variant="outlined" size="small" color="secondary" onClick={() => handleFix('force')} className={classes.marLeft}>
             Fix with force
         </Button>
-          <ActionsMenu />
+          <ActionsMenu handler={handleFix} />
         </div>
       </Toolbar>
       <div className={classes.tableWrapper}>
@@ -137,12 +151,9 @@ const Advisories = ({ classes, data, handleClick }) => {
               </Hidden>
               <Hidden mdDown>
                 <TableCell>
-                  <Typography color="textPrimary" variant="subtitle1">{iMessage('label', 'vulnerable_versions')}</Typography>
+                  <Typography color="textPrimary" variant="subtitle1">{iMessage('label', 'severity')}</Typography>
                 </TableCell>
               </Hidden>
-              <TableCell>
-                <Typography color="textPrimary" variant="subtitle1">{iMessage('label', 'severity')}</Typography>
-              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -166,21 +177,18 @@ const Advisories = ({ classes, data, handleClick }) => {
                   </TableCell>
                 </Hidden>
                 <Hidden mdDown>
-                  <TableCell>
-                    <Typography color="textSecondary">{vulnerable_versions}</Typography>
+                  <TableCell align="center" className={cn(classes.tableCell)}>
+                    <div className={classes.flexContainer}>
+                      {switchcase({
+                        critical: () => <Dot size="large" color="error" />,
+                        high: () => <Dot size="large" color="secondary" />,
+                        moderate: () => <Dot size="large" color="warning" />,
+                        low: () => <Dot size="large" color="primary" />
+                      })(<Dot size="large" color="primary" />)(severity)}
+                      {rest.deleted && <CloseIcon color="error" />}
+                    </div>
                   </TableCell>
                 </Hidden>
-                <TableCell align="center" className={cn(classes.tableCell)}>
-                  <div className={classes.flexContainer}>
-                    {switchcase({
-                      critical: () => <Dot size="large" color="error" />,
-                      high: () => <Dot size="large" color="secondary" />,
-                      moderate: () => <Dot size="large" color="warning" />,
-                      low: () => <Dot size="large" color="primary" />
-                    })(<Dot size="large" color="primary" />)(severity)}
-                    {rest.deleted && <CloseIcon color="error" />}
-                  </div>
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>
