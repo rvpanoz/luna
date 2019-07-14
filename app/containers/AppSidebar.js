@@ -19,7 +19,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import {AppTabs, AppLogo} from 'components/common/';
+import { AppTabs, AppLogo } from 'components/common/';
 
 import UpdateIcon from '@material-ui/icons/Update';
 
@@ -219,7 +219,7 @@ const AppSidebar = ({
               primary: classes.categoryHeaderPrimary
             }}
           >
-            Details
+
           </ListItemText>
         </ListItem>
         <ListItem key="app-tabs-content" disableGutters>

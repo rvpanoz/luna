@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
-import { remote } from 'electron';
-import { useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
@@ -24,6 +22,7 @@ import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 import { setActivePage, clearFilters } from 'models/ui/actions';
 import { setPackagesSearch } from 'models/packages/actions';
 import { iMessage } from 'commons/utils';
+
 import styles from './styles/list';
 
 const mapState = ({
@@ -36,45 +35,28 @@ const NotificationsList = ({ classes }) => {
   const { notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
-  const handleMissingPackages = useCallback(
-    (packageName) =>
-      remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          title: 'Confirmation',
-          type: 'question',
-          message: iMessage('confirmation', 'searchPackage', {
-            '%packageName%': packageName
-          }),
-          buttons: ['Cancel', 'Search']
-        },
-        btnIdx => {
-          if (Boolean(btnIdx) === true) {
-            dispatch(clearFilters());
+  const onSearchHandler = (packageName) => {
+    dispatch(clearFilters());
 
-            dispatch({
-              type: setActivePage.type,
-              payload: {
-                page: 'packages',
-                paused: true
-              }
-            });
+    dispatch({
+      type: setActivePage.type,
+      payload: {
+        page: 'packages',
+        paused: true
+      }
+    });
 
-            dispatch(
-              setPackagesSearch({
-                channel: 'npm-search',
-                options: {
-                  cmd: ['search'],
-                  pkgName: packageName,
-                  fromSearch: true
-                }
-              })
-            );
-          }
+    dispatch(
+      setPackagesSearch({
+        channel: 'npm-search',
+        options: {
+          cmd: ['search'],
+          pkgName: packageName,
+          fromSearch: true
         }
-      ),
-    [dispatch]
-  );
+      })
+    );
+  }
 
   if (!notifications) {
     return (
@@ -127,7 +109,7 @@ const NotificationsList = ({ classes }) => {
                   <div>
                     <IconButton
                       aria-label="search-for-package"
-                      onClick={() => handleMissingPackages(packageName)}
+                      onClick={() => onSearchHandler(packageName)}
                     >
                       <SearchIcon color="primary" />
                     </IconButton>

@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button'
 import Popper from '@material-ui/core/Popper';
 import Fade from '@material-ui/core/Fade';
 
@@ -108,35 +109,12 @@ const Advisories = ({ classes, data, handleClick }) => {
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
-          <IconButton
-            disableRipple
-            aria-label="audit-fix"
-            onClick={(e) => {
-              setPopperText(iMessage('label', 'run_audit_fix'))
-              setAnchorEl(e.currentTarget);
-            }}
-          >
-            <BuildIcon />
-          </IconButton>
-          <IconButton
-            disableRipple
-            aria-label="audit-fix-force"
-            onClick={(e) => {
-              setPopperText(iMessage('label', 'run_with_force'))
-              setAnchorEl(e.currentTarget);
-            }}
-          >
-            <GavelIcon />
-          </IconButton>
-          <Popper id='pop-audit' open={open} anchorEl={anchorEl} transition>
-            {({ TransitionProps }) => (
-              <Fade {...TransitionProps} timeout={350}>
-                <Paper className={classes.container}>
-                  <Typography variant="body1">{popperText}</Typography>
-                </Paper>
-              </Fade>
-            )}
-          </Popper>
+          <Button variant="outlined" size="small" color="primary">
+            Fix
+        </Button>
+          <Button variant="outlined" size="small" color="secondary" className={classes.marLeft}>
+            Fix with force
+        </Button>
           <ActionsMenu />
         </div>
       </Toolbar>
@@ -288,8 +266,11 @@ const styles = theme => ({
     justifyContent: 'flex-end',
     padding: theme.spacing.unit * 2
   },
+  padRight: {
+    paddingRight: theme.spacing.unit * 2.5
+  },
   marLeft: {
-    marginLeft: theme.spacing.unit * 2.5
+    marginLeft: theme.spacing.unit * 2
   }
 });
 
