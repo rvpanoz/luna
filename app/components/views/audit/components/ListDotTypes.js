@@ -14,27 +14,61 @@ import { iMessage } from 'commons/utils';
 import { Widget, Dot } from 'components/common';
 import styles from '../styles/listDotTypes';
 
-const ListDotTypes = ({ classes, types }) => (
-  <Widget title={iMessage('title', 'vulnerabilities')}>
-    <List className={classes.container}>
-      {types.map(({ value, name, color }) => (
-        <ListItem key={name}>
-          <ListItemText
-            primary={
-              <Typography variant="subtitle1" color="textSecondary">
-                {name}&nbsp;({value})
-              </Typography>
-            }
-          />
-        </ListItem>
-      ))}
-    </List>
-  </Widget>
-);
+const ListDotTypes = ({ classes, data, theme }) => {
+  const { info, high, critical, moderate, low } = data;
+  const typesData = [
+    {
+      value: critical,
+      name: iMessage('label', 'critical'),
+      fill: theme.palette.error.main
+    },
+    {
+      value: high,
+      name: iMessage('label', 'high'),
+      fill: theme.palette.warning.main
+    },
+    {
+      value: moderate,
+      name: iMessage('label', 'moderate'),
+      fill: theme.palette.secondary.main
+    },
+    {
+      value: low,
+      name: iMessage('label', 'low'),
+      fill: theme.palette.primary.main
+    },
+    {
+      value: info,
+      name: iMessage('label', 'info'),
+      fill: theme.palette.info.main
+    }
+  ];
+
+  return (
+    <Widget title={iMessage('title', 'vulnerabilities')}>
+      <List className={classes.container}>
+        {typesData.map(({ value, name, color }) => (
+          <ListItem key={name}>
+            <ListItemText
+              primary={
+                <Typography variant="subtitle1" color="textSecondary">
+                  {name}&nbsp;({value})
+                </Typography>
+              }
+            />
+          </ListItem>
+        ))}
+      </List>
+    </Widget>
+  );
+};
 
 ListDotTypes.propTypes = {
   classes: objectOf(string).isRequired,
-  types: oneOfType([array, object]).isRequired
+  data: oneOfType([array, object]).isRequired,
+  theme: objectOf(oneOfType([string, object, array])).isRequired
 };
 
-export default withStyles(styles)(ListDotTypes);
+export default withStyles(styles, {
+  withTheme: true
+})(ListDotTypes);

@@ -172,11 +172,20 @@ const Advisories = ({ classes, data, handleClick }) => {
                   </Typography>
                 </TableCell>
               </Hidden>
-              <TableCell>
-                <Typography color="textPrimary" variant="subtitle1">
-                  {iMessage('label', 'severity')}
-                </Typography>
-              </TableCell>
+              <Hidden lgDown>
+                <TableCell>
+                  <Typography color="textPrimary" variant="subtitle1">
+                    {iMessage('label', 'vulnerable_versions')}
+                  </Typography>
+                </TableCell>
+              </Hidden>
+              <Hidden lgDown>
+                <TableCell>
+                  <Typography color="textPrimary" variant="subtitle1">
+                    {iMessage('label', 'severity')}
+                  </Typography>
+                </TableCell>
+              </Hidden>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -219,17 +228,26 @@ const Advisories = ({ classes, data, handleClick }) => {
                       </Typography>
                     </TableCell>
                   </Hidden>
-                  <TableCell align="center" className={cn(classes.tableCell)}>
-                    <div className={classes.flexContainer}>
-                      {switchcase({
-                        critical: () => <Dot size="large" color="error" />,
-                        high: () => <Dot size="large" color="secondary" />,
-                        moderate: () => <Dot size="large" color="warning" />,
-                        low: () => <Dot size="large" color="primary" />
-                      })(<Dot size="large" color="primary" />)(severity)}
-                      {rest.deleted && <CloseIcon color="error" />}
-                    </div>
-                  </TableCell>
+                  <Hidden lgDown>
+                    <TableCell>
+                      <Typography color="textSecondary">
+                        {vulnerable_versions}
+                      </Typography>
+                    </TableCell>
+                  </Hidden>
+                  <Hidden lgDown>
+                    <TableCell align="center" className={cn(classes.tableCell)}>
+                      <div className={classes.flexContainer}>
+                        {switchcase({
+                          critical: () => <Dot size="large" color="error" />,
+                          high: () => <Dot size="large" color="secondary" />,
+                          moderate: () => <Dot size="large" color="warning" />,
+                          low: () => <Dot size="large" color="primary" />
+                        })(<Dot size="large" color="primary" />)(severity)}
+                        {rest.deleted && <CloseIcon color="error" />}
+                      </div>
+                    </TableCell>
+                  </Hidden>
                 </TableRow>
               )
             )}

@@ -52,7 +52,7 @@ const ListItemDetail = ({ text, value }) => (
 
 ListItemDetail.propTypes = {
   text: string,
-  value: number
+  value: string
 };
 
 const AdvisoryDetails = ({ classes, data, handleClose }) => {

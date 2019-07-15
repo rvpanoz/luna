@@ -43,7 +43,7 @@ const OverviewCard = ({ classes, title, values }) => {
             {iMessage('label', 'devDependencies')}
           </Typography>
           <Typography variant="h6" color="textSecondary">
-            {dependencies}&nbsp;({devDependenciesPercentage.toFixed(2)})%
+            {devDependencies}&nbsp;({devDependenciesPercentage.toFixed(2)})%
           </Typography>
         </Grid>
         <Grid item>
@@ -51,7 +51,8 @@ const OverviewCard = ({ classes, title, values }) => {
             {iMessage('label', 'optionalDependencies')}
           </Typography>
           <Typography variant="h6" color="textSecondary">
-            {dependencies}&nbsp;({optionalDependenciesPercentage.toFixed(2)})%
+            {optionalDependencies}&nbsp;(
+            {optionalDependenciesPercentage.toFixed(2)})%
           </Typography>
         </Grid>
       </Grid>
