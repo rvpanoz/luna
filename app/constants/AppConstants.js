@@ -69,4 +69,9 @@ export const AUDIT_TYPES = {
   RCEXC: 'Remote Code Execution',
   CSS: 'Cross-Site Scripting',
   NA: 'Not Available'
-}
+};
+
+export const AUDIT_ERRORS = {
+  EAUDITNOLOCK: 'install --package-lock-only',
+  ELOCKVERIFY: 'install'
+};
