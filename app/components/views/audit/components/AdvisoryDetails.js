@@ -52,11 +52,12 @@ const ListItemDetail = ({ text, value }) => (
 
 ListItemDetail.propTypes = {
   text: string,
-  value: string
+  value: oneOfType([string, number])
 };
 
 const AdvisoryDetails = ({ classes, data, handleClose }) => {
   const {
+    access,
     name,
     findings,
     title,
@@ -66,7 +67,8 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
     updated,
     created,
     overview,
-    deleted
+    deleted,
+    severity
   } = data;
   const founder = found_by.name || 'N/A';
 
@@ -87,24 +89,32 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
               />
               <CardContent className={classes.cardContent}>
                 <Typography color="textSecondary" variant="body1">
+                  Recommendation:
+                  <br />
                   {recommendation}
                 </Typography>
                 <Typography
                   color="textSecondary"
-                  variant="body2"
-                  className={classes.overview}
+                  variant="body1"
+                  className={classes.padTop}
                 >
-                  {overview}
+                  Vulnerable versions:
+                  <br />
+                  {vulnerable_versions}
                 </Typography>
                 <Divider className={classes.divider} light />
                 <List dense>
+                  <ListItemDetail
+                    text={iMessage('label', 'severity')}
+                    value={severity}
+                  />
                   <ListItemDetail
                     text={iMessage('label', 'findings')}
                     value={findings.length}
                   />
                   <ListItemDetail
-                    text={iMessage('label', 'vulnerable_versions')}
-                    value={vulnerable_versions}
+                    text={iMessage('label', 'access')}
+                    value={access}
                   />
                   <ListItemDetail
                     text={iMessage('label', 'found_by')}

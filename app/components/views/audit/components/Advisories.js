@@ -207,7 +207,9 @@ const Advisories = ({ classes, data, handleClick }) => {
                     handleClick({
                       ...rest,
                       name: module_name,
-                      title: title
+                      title: title,
+                      severity,
+                      vulnerable_versions
                     })
                   }
                   key={keys[idx]}

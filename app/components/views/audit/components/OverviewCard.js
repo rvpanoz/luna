@@ -10,9 +10,9 @@ import { iMessage } from 'commons/utils';
 
 import styles from '../styles/advisoryDetails';
 
-const OverviewCard = ({ classes, title, values }) => {
-  const { dependencies, devDependencies, optionalDependencies } = values;
-  const totalDependencies = Object.values(values).reduce(
+const OverviewCard = ({ classes, title, data }) => {
+  const { dependencies, devDependencies, optionalDependencies } = data;
+  const totalDependencies = Object.values(data).reduce(
     (acc, value) => acc + value,
     0
   );
@@ -31,7 +31,7 @@ const OverviewCard = ({ classes, title, values }) => {
         alignItems="center"
       >
         <Grid item>
-          <Typography variant="subtitle" color="textSecondary">
+          <Typography variant="subtitle1" color="textSecondary">
             {iMessage('label', 'dependencies')}
           </Typography>
           <Typography variant="h6" color="textSecondary">
@@ -39,7 +39,7 @@ const OverviewCard = ({ classes, title, values }) => {
           </Typography>
         </Grid>
         <Grid item>
-          <Typography variant="subtitle" color="textSecondary">
+          <Typography variant="subtitle1" color="textSecondary">
             {iMessage('label', 'devDependencies')}
           </Typography>
           <Typography variant="h6" color="textSecondary">
@@ -47,7 +47,7 @@ const OverviewCard = ({ classes, title, values }) => {
           </Typography>
         </Grid>
         <Grid item>
-          <Typography variant="subtitle" color="textSecondary">
+          <Typography variant="subtitle1" color="textSecondary">
             {iMessage('label', 'optionalDependencies')}
           </Typography>
           <Typography variant="h6" color="textSecondary">
@@ -62,7 +62,7 @@ const OverviewCard = ({ classes, title, values }) => {
 
 OverviewCard.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  values: PropTypes.oneOfType([PropTypes.array]),
+  data: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
   title: PropTypes.string
 };
 

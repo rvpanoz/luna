@@ -62,6 +62,9 @@ const styles = theme => ({
   },
   overview: {
     paddingTop: theme.spacing.unit * 2
+  },
+  padTop: {
+    paddingTop: theme.spacing.unit
   }
 });
 

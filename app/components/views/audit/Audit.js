@@ -1,3 +1,4 @@
+/* eslint-disable */
 /* eslint-disable react/prop-types */
 
 import React from 'react';
@@ -14,6 +15,9 @@ import Button from '@material-ui/core/Button';
 
 import { AUDIT_ERRORS } from 'constants/AppConstants';
 import { iMessage } from 'commons/utils';
+
+// mock data
+import DATA from './npm-audit.json';
 
 import {
   Advisories,
@@ -70,7 +74,7 @@ const WithStylesHelperText = withStyles(styles)(HelperText);
 
 const Audit = ({ classes, data }) => {
   const [active, setActive] = useState(null);
-  const { content, error } = data || {};
+  const { content, error } = DATA || {};
 
   if (error) {
     const props = Object.assign({}, error, {
@@ -109,7 +113,7 @@ const Audit = ({ classes, data }) => {
         <Grid item lg={6} md={6} sm={12} xl={6}>
           <OverviewCard
             title={iMessage('title', 'overview')}
-            values={overviewData}
+            data={overviewData}
           />
         </Grid>
         <Grid item xs={6} sm={12} md={6} lg={6} xl={6}>
