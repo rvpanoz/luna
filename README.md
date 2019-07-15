@@ -16,6 +16,7 @@
 <a href="https://github.com/rvpanoz/luna/blob/master/LICENSE">
 <img alt="License: GPL3.0" src="https://img.shields.io/badge/License-GPL3.0-yellow.svg" target="_blank" />
 </a>
+[![Active Development](https://img.shields.io/badge/Maintenance%20Level-Actively%20Developed-brightgreen.svg)](https://gist.github.com/cheerfulstoic/d107229326a01ff0f333a1d3476e068d)
 
 ## Motivation
 
