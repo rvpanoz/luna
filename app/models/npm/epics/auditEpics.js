@@ -2,7 +2,7 @@ import { pipe } from 'rxjs';
 import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
-import { toggleLoader } from 'models/ui/actions';
+import { toggleAuditLoader } from 'models/ui/actions';
 import {
   runAudit,
   npmAuditListener,
@@ -10,14 +10,10 @@ import {
   updateNpmAuditData
 } from 'models/npm/actions';
 
-// dev
-import fs from 'fs';
-import path from 'path';
-
 import { onNpmAudit$ } from '../listeners';
 
 const updateLoader = payload => ({
-  type: toggleLoader.type,
+  type: toggleAuditLoader.type,
   payload
 });
 
@@ -54,11 +50,6 @@ const npmAuditParseEpic = action$ =>
     ofType(parseNpmAuditData.type),
     map(({ payload: data }) => {
       try {
-
-        // dev
-        const _path = path.resolve(__dirname, 'npm-audit.json');
-        fs.writeFileSync(_path, data);
-
         const dataToJson = JSON.parse(data);
         const { error } = dataToJson || {};
 
@@ -85,6 +76,7 @@ const npmAuditParseEpic = action$ =>
           }
         });
       } catch (error) {
+
         throw new Error(error);
       }
     })

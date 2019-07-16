@@ -1,7 +1,3 @@
-/**
- * AppLayout
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -26,35 +22,18 @@ import { drawerWidth } from 'styles/variables';
 import styles from './styles/appLayout';
 
 const mapState = ({
-  npm: { auditData, doctorData },
-  notifications: { notifications },
+  npm: { doctorData },
   common: { mode, directory, onlineStatus },
   ui: {
     activePage,
-    loaders: {
-      loader: { loading }
-    },
-    dialog,
     snackbar
   },
-  packages: {
-    project: { name, version, description },
-    metadata: { lastUpdatedAt }
-  }
 }) => ({
-  auditData,
   doctorData,
-  dialog,
   onlineStatus,
-  lastUpdatedAt,
   activePage,
   mode,
   directory,
-  name,
-  version,
-  loading,
-  description,
-  notifications,
   snackbar
 });
 
@@ -64,7 +43,6 @@ const AppLayout = ({ classes }) => {
     activePage,
     snackbar,
     mode,
-    auditData,
     doctorData,
     directory,
     onlineStatus
@@ -93,12 +71,12 @@ const AppLayout = ({ classes }) => {
                 <Notifications mode={mode} directory={directory} />
               ),
               audit: () => (
-                <Audit mode={mode} directory={directory} data={auditData} />
+                <Audit />
               ),
               doctor: () => (
                 <Doctor mode={mode} directory={directory} data={doctorData} />
               )
-            })(<Audit />)(activePage)}
+            })(<Packages />)(activePage)}
           </main>
         </div>
         {snackbar && snackbar.open && (

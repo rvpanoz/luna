@@ -47,7 +47,15 @@ const initialState = {
       packageLoader: {
         loading: false,
         message: null
-      }
+      },
+      auditLoader: {
+        loading: false,
+        message: null
+      },
+      doctorLoader: {
+        loading: false,
+        message: null
+      },
     },
     pagination: {
       page: 0,
