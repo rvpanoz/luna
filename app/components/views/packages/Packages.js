@@ -1,14 +1,13 @@
 import React from 'react';
 import { Fragment } from 'react';
 import { useEffect, useState, useRef } from 'react';
-import { objectOf, string, func } from 'prop-types';
+import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
 
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
@@ -18,7 +17,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
 import { useFilters } from 'commons/hooks';
-import { AppLoader } from 'components/common';
+import { AppLoader, HelperText } from 'components/common';
 import { PackageDetails } from 'components/views/package';
 import { scrollWrapper, iMessage } from 'commons/utils';
 
@@ -43,7 +42,6 @@ import PackageItem from './PackageItem';
 import DialogOptions from './Options';
 
 import styles from './styles/packages';
-import helperTextStyles from './styles/helperText';
 
 const mapState = ({
   common: {
@@ -91,31 +89,6 @@ const mapState = ({
   operationCommand,
   auditData
 });
-
-const HelperText = ({ classes, text, actionHandler, actionText }) => (
-  <div className={classes.containerColumn}>
-    <Typography
-      variant="subtitle1"
-      className={cn(classes.noData, classes.withPadding)}
-    >
-      {text}
-    </Typography>
-    {actionText && actionHandler && (
-      <Button color="primary" className={classes.buttonFix} variant="outlined">
-        Fix
-      </Button>
-    )}
-  </div>
-);
-
-HelperText.propTypes = {
-  classes: objectOf(string).isRequired,
-  text: string,
-  actionText: string,
-  actionHandler: func
-};
-
-const WithStylesHelperText = withStyles(helperTextStyles)(HelperText);
 
 const Packages = ({ classes }) => {
   const {
@@ -251,7 +224,11 @@ const Packages = ({ classes }) => {
             className={classes.transition}
           >
             {noPackages && (
-              <WithStylesHelperText text={iMessage('info', 'noPackages')} />
+              <HelperText
+                text={iMessage('info', 'noPackages')}
+                actionText="Switch to globals"
+                actionHandler={() => switchMode('global')}
+              />
             )}
             {!noPackages && (
               <Paper className={classes.root}>
