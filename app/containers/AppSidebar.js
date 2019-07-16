@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { useState, useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 
 import Tooltip from '@material-ui/core/Tooltip';

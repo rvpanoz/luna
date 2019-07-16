@@ -1,7 +1,7 @@
 {
   "error": {
-    "code": "EAUDITNOLOCK",
-    "summary": "Neither npm-shrinkwrap.json nor package-lock.json found: Cannot audit a project without a lockfile",
-    "detail": "Try creating one first with: npm i --package-lock-only"
+    "code": "EACCES",
+    "summary": "Error: EACCES: permission denied, open '/Users/cjuser/.npm/_cacache/index-v5/2b/b7/5605911c6e8a323c274c5905a25a7425d38df8289efa2b50cc0e37b1dd4e'",
+    "detail": "\nThe operation was rejected by your operating system.\nIt is likely you do not have the permissions to access this file as the current user\n\nIf you believe this might be a permissions issue, please double-check the\npermissions of the file and its containing directories, or try running\nthe command again as root/Administrator (though this is not recommended)."
   }
 }

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Fragment } from 'react';
-import cn from 'classnames';
 import { useEffect, useState, useRef } from 'react';
-import { objectOf, string } from 'prop-types';
+import { objectOf, string, func } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
+import cn from 'classnames';
 
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
@@ -43,6 +43,7 @@ import PackageItem from './PackageItem';
 import DialogOptions from './Options';
 
 import styles from './styles/packages';
+import helperTextStyles from './styles/helperText';
 
 const mapState = ({
   common: {
@@ -90,6 +91,31 @@ const mapState = ({
   operationCommand,
   auditData
 });
+
+const HelperText = ({ classes, text, actionHandler, actionText }) => (
+  <div className={classes.containerColumn}>
+    <Typography
+      variant="subtitle1"
+      className={cn(classes.noData, classes.withPadding)}
+    >
+      {text}
+    </Typography>
+    {actionText && actionHandler && (
+      <Button color="primary" className={classes.buttonFix} variant="outlined">
+        Fix
+      </Button>
+    )}
+  </div>
+);
+
+HelperText.propTypes = {
+  classes: objectOf(string).isRequired,
+  text: string,
+  actionText: string,
+  actionHandler: func
+};
+
+const WithStylesHelperText = withStyles(helperTextStyles)(HelperText);
 
 const Packages = ({ classes }) => {
   const {
@@ -210,6 +236,8 @@ const Packages = ({ classes }) => {
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
+  const noPackages = !packagesData.length;
+
   return (
     <Fragment>
       <AppLoader loading={loading} message={message}>
@@ -222,41 +250,35 @@ const Packages = ({ classes }) => {
             xl={active ? 9 : 12}
             className={classes.transition}
           >
-            <Paper className={classes.root}>
-              <div className={classes.toolbar}>
-                <ToolbarView
-                  title={iMessage('title', 'packages')}
-                  total={packagesData.length}
-                  mode={mode}
-                  directory={directory}
-                  selected={selected}
-                  outdated={packagesOutdated}
-                  packagesData={packagesData}
-                  packagesInstallOptions={packagesInstallOptions}
-                  fromSearch={fromSearch}
-                  filters={filters}
-                  scrollWrapper={() =>
-                    scrollWrapper(wrapperRef && wrapperRef.current, 0)
-                  }
-                  toggleOptions={toggleOptions}
-                  switchMode={switchMode}
-                  reload={reload}
-                  filteredByNamePackages={filteredByNamePackages}
-                  setFilteredByNamePackages={setFilteredByNamePackages}
-                />
-              </div>
-              <Divider light />
-              <div className={classes.tableWrapper} ref={wrapperRef}>
-                {packagesData.length === 0 ? (
-                  <div className={classes.containerHolder}>
-                    <Typography
-                      variant="subtitle1"
-                      className={cn(classes.noData, classes.withPadding)}
-                    >
-                      {iMessage('info', 'noPackages')}
-                    </Typography>
-                  </div>
-                ) : (
+            {noPackages && (
+              <WithStylesHelperText text={iMessage('info', 'noPackages')} />
+            )}
+            {!noPackages && (
+              <Paper className={classes.root}>
+                <div className={classes.toolbar}>
+                  <ToolbarView
+                    title={iMessage('title', 'packages')}
+                    total={packagesData.length}
+                    mode={mode}
+                    directory={directory}
+                    selected={selected}
+                    outdated={packagesOutdated}
+                    packagesData={packagesData}
+                    packagesInstallOptions={packagesInstallOptions}
+                    fromSearch={fromSearch}
+                    filters={filters}
+                    scrollWrapper={() =>
+                      scrollWrapper(wrapperRef && wrapperRef.current, 0)
+                    }
+                    toggleOptions={toggleOptions}
+                    switchMode={switchMode}
+                    reload={reload}
+                    filteredByNamePackages={filteredByNamePackages}
+                    setFilteredByNamePackages={setFilteredByNamePackages}
+                  />
+                </div>
+                <Divider light />
+                <div className={classes.tableWrapper} ref={wrapperRef}>
                   <Table
                     padding="dense"
                     aria-labelledby="packages-list"
@@ -356,9 +378,9 @@ const Packages = ({ classes }) => {
                       }
                     />
                   </Table>
-                )}
-              </div>
-            </Paper>
+                </div>
+              </Paper>
+            )}
           </Grid>
           {active && (
             <Grid item sm={12} md={3} lg={3} xl={3}>

@@ -83,7 +83,6 @@ const Filters = ({ classes, mode, close, listFilters }) => {
   );
 
   const handleFilters = allFilters => {
-    debugger;
     const hasFilters =
       allFilters.length === 1
         ? allFilters.every(({ filterValue }) => filterValue !== undefined)

@@ -17,8 +17,7 @@ const install = (options, idx) => {
     multiple,
     packages,
     single,
-    packageJson,
-    packageLock
+    packageJson
   } = options || {};
 
   // '--unsafe-perm'
