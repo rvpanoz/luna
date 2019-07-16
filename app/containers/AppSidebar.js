@@ -205,16 +205,6 @@ const AppSidebar = ({
             </Tooltip>
           </ListItemText>
         </ListItem>
-        <ListItem
-          className={cn(classes.categoryHeader, classes.listItem)}
-          key="app-tabs"
-        >
-          <ListItemText
-            classes={{
-              primary: classes.categoryHeaderPrimary
-            }}
-          />
-        </ListItem>
         <ListItem key="app-tabs-content" disableGutters>
           <ListItemText>
             <AppTabs>

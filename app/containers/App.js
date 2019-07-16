@@ -1,5 +1,3 @@
-/* eslint-disable  no-nested-ternary */
-
 /**
  * App with error boundary
  */
@@ -40,7 +38,6 @@ const App = () => {
     };
 
     // passing in true for the third parameter causes the event to be captured on the way down.
-    // stopping propagation means that the event never reaches the listeners that are listening for it.
     window.addEventListener('online', updateOnlineStatus, true);
     window.addEventListener('offline', updateOnlineStatus, true);
 
@@ -50,11 +47,11 @@ const App = () => {
   useEffect(() => {
     ipcRenderer.once('finish-loaded', () => dispatch(initActions()));
 
-    ipcRenderer.once('uncaught-exception', (event, ...args) => {
-      dispatch({ type: setUIException.type, payload: { message: args[0] } });
+    ipcRenderer.once('npm-env-close', (event, error, env) => {
+      dispatch({ type: setEnv.type, payload: env });
     });
 
-    ipcRenderer.once('yarn-lock-detected', () => {
+    ipcRenderer.on('yarn-lock-detected', () => {
       dispatch(
         setSnackbar({
           open: true,
@@ -64,8 +61,8 @@ const App = () => {
       );
     });
 
-    ipcRenderer.once('npm-env-close', (event, error, env) => {
-      dispatch({ type: setEnv.type, payload: env });
+    ipcRenderer.on('uncaught-exception', (event, ...args) => {
+      dispatch({ type: setUIException.type, payload: { message: args[0] } });
     });
 
     return () =>

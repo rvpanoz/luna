@@ -139,7 +139,7 @@ export const WARNING_MESSAGES = {
   errorPackages:
     'Some packages have errors. Check your notifications to fix it.',
   yarnlock:
-    'yarn-lock file detected. Please remove it before running any action operation',
+    'It is advised not to mix package managers in order to avoid resolution inconsistencies caused by unsynchronized lock files. \nTo clear this warning, remove yarn-lock.json.',
   newerSelected:
     'A package with the same name and newer version is already selected',
   oldorEqualSelected:
