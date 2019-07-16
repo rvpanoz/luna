@@ -20,7 +20,7 @@ const install = (options, idx) => {
     packageJson
   } = options || {};
 
-  // '--unsafe-perm use root'
+  // '--unsafe-perm'
   // '--ignore-scripts
   const defaults = ['--verbose'];
 

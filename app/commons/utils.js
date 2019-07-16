@@ -21,16 +21,16 @@ export const showDialog = (handler, options) => {
   if (!options || typeof options !== 'object') {
     return;
   }
+  const { dialog } = remote;
+  const { mode } = options || {};
+  const modeHandler =
+    mode === 'file' ? dialog.showOpenDialog : dialog.showMessageBox;
 
-  return remote.dialog.showMessageBox(
-    remote.getCurrentWindow(),
-    options,
-    btnIdx => {
-      if (btnIdx) {
-        handler();
-      }
+  return modeHandler(remote.getCurrentWindow(), options, response => {
+    if (response) {
+      handler && handler(response);
     }
-  );
+  });
 };
 
 export const iMessage = (type, key, replacements) => {

@@ -104,6 +104,11 @@ const styles = theme => ({
   withPadding: {
     padding: theme.spacing.unit + 4
   },
+  smallIcon: {
+    width: 15,
+    height: 15,
+    marginRight: theme.spacing.unit / 2
+  },
   nodata: {
     ...defaultFont
   },

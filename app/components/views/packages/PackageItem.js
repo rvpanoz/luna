@@ -13,7 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import WarningIcon from '@material-ui/icons/WarningTwoTone';
 import CheckIcon from '@material-ui/icons/CheckTwoTone';
 import UpdateIcon from '@material-ui/icons/UpdateTwoTone';
-import Tooltip from '@material-ui/core/Tooltip';
+import SecurityIcon from '@material-ui/icons/SecurityTwoTone';
 
 import styles from './styles/packages';
 
@@ -32,6 +32,7 @@ const PackageItem = ({
   peerMissing,
   viewPackage,
   inOperation,
+  inAudit,
   inPackageJson,
   hasError
 }) => {
@@ -93,11 +94,9 @@ const PackageItem = ({
         </div>
       </TableCell>
       <TableCell padding="none" name="installed" className={classes.tableCell}>
-        {
-          <Typography className={classes.typo}>
-            {fromSearch ? 'No' : version}
-          </Typography>
-        }
+        <Typography className={classes.typo}>
+          {fromSearch ? 'No' : version}
+        </Typography>
       </TableCell>
       <TableCell padding="none" name="latest" className={classes.tableCell}>
         <Typography
@@ -108,30 +107,21 @@ const PackageItem = ({
           {latest}
         </Typography>
       </TableCell>
+      <TableCell padding="none" name="audit" className={classes.tableCell}>
+        {inAudit ? (
+          <SecurityIcon color="error" />
+        ) : (
+          <CheckIcon className={classes.statusOK} />
+        )}
+      </TableCell>
       <TableCell padding="none" name="status" className={classes.tableCell}>
-        {missing ? (
-          <Tooltip title="Package is missing. Run npm install to fix it">
-            <Typography className={classes.typo}>
-              <WarningIcon className={classes.statusMissing} />
-            </Typography>
-          </Tooltip>
+        {missing && <WarningIcon className={classes.statusMissing} />}
+        {isOutdated && !hasError ? (
+          <UpdateIcon className={classes.statusOutdated} />
         ) : null}
-
-        {isOutdated && !hasError && (
-          <Tooltip title="Package has an updated version">
-            <Typography className={classes.typo}>
-              <UpdateIcon className={classes.statusOutdated} />
-            </Typography>
-          </Tooltip>
-        )}
-
-        {!isOutdated && !peerMissing && !missing && version && (
-          <Tooltip title="Package is up to date">
-            <Typography className={classes.typo}>
-              <CheckIcon className={classes.statusOK} />
-            </Typography>
-          </Tooltip>
-        )}
+        {!isOutdated && !peerMissing && !missing && version ? (
+          <CheckIcon className={classes.statusOK} />
+        ) : null}
       </TableCell>
     </TableRow>
   );
@@ -153,7 +143,8 @@ PackageItem.propTypes = {
   isOutdated: bool,
   inOperation: bool,
   hasError: bool,
-  inPackageJson: bool
+  inPackageJson: bool,
+  inAudit: bool
 };
 
 export default withStyles(styles)(PackageItem);

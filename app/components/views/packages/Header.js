@@ -16,6 +16,7 @@ const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
   { id: 'version', disablePadding: true, label: 'Installed' },
   { id: 'latest', disablePadding: true, label: 'Latest' },
+  { id: 'audit', disablePadding: true, label: 'Audit' },
   { id: 'Status', disablePadding: true, label: 'Status' }
 ];
 
@@ -80,8 +81,8 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
                   {column.label}
                 </TableSortLabel>
               ) : (
-                column.label
-              )}
+                  column.label
+                )}
             </TableCell>
           );
         })}

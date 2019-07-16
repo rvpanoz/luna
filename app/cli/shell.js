@@ -30,7 +30,7 @@ const runCommand = (options, callback) => {
   // array of promises
   const tasks = combine();
 
-  // run in serial
+  // run tasks
   tasks
     .reduce(
       (promiseChain, currentTask) =>

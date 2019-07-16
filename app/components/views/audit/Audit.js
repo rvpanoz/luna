@@ -1,55 +1,100 @@
+/* eslint-disable */
 /* eslint-disable react/prop-types */
 
 import React from 'react';
+import { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 
-import { useState } from 'react'
+import { useState } from 'react';
 import { withStyles } from '@material-ui/core';
-import { groupBy } from 'ramda';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Hidden from '@material-ui/core/Hidden'
-import { lighten } from '@material-ui/core/styles/colorManipulator';
+import Hidden from '@material-ui/core/Hidden';
+import Button from '@material-ui/core/Button';
 
-import { Dot } from 'components/common';
-import { defaultFont, grayColor } from 'styles/variables';
-import { AUDIT_TYPES } from 'constants/AppConstants'
-import { iMessage, switchcase } from 'commons/utils'
+import { AUDIT_ERRORS } from 'constants/AppConstants';
+import { iMessage } from 'commons/utils';
 
-import { Advisories, AdvisoryDetails, DependencyStat, ListTypes } from './components';
+// mock data
+// import DATA from './npm-audit.json';
+
+import {
+  Actions,
+  Advisories,
+  AdvisoryDetails,
+  OverviewCard,
+  ListTypes,
+  ListDotTypes
+} from './components';
+
+import styles from './styles/audit';
+
+const HelperText = ({ classes, summary, detail, isError, code }) => {
+  const auditErrors = Object.keys(AUDIT_ERRORS);
+  const needAction = auditErrors.includes(code);
+
+  return (
+    <div className={classes.containerColumn}>
+      <Typography
+        variant="subtitle1"
+        className={cn(classes.noData, classes.withPadding)}
+        color={isError ? 'error' : 'inherit'}
+      >
+        {summary}
+      </Typography>
+      {detail && (
+        <Fragment>
+          <Typography variant="caption" className={classes.helperText}>
+            {detail}
+          </Typography>
+          {needAction && (
+            <Button
+              color="primary"
+              className={classes.buttonFix}
+              variant="outlined"
+            >
+              Fix
+            </Button>
+          )}
+        </Fragment>
+      )}
+    </div>
+  );
+};
+
+HelperText.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  summary: PropTypes.string,
+  detail: PropTypes.string,
+  isError: PropTypes.bool,
+  code: PropTypes.string
+};
+
+const WithStylesHelperText = withStyles(styles)(HelperText);
 
 const Audit = ({ classes, data }) => {
-  const [active, setActive] = useState(null)
+  const [active, setActive] = useState(null);
   const { content, error } = data || {};
 
-  const renderText = ({ summary, detail, isError }) => <div className={classes.containerColumn}>
-    <Typography
-      variant="subtitle1"
-      className={cn(classes.noData, classes.withPadding)}
-      color={isError ? 'error' : 'inherit'}
-    >
-      {summary}
-    </Typography>
-    {detail && <Typography variant="caption" className={cn(classes.helperText)}>
-      {detail}
-    </Typography>}
-  </div>
-
   if (error) {
-    return renderText(Object.assign({}, error, {
+    const props = Object.assign({}, error, {
       isError: true
-    }))
+    });
+
+    return <WithStylesHelperText {...props} />;
   }
 
   if (!content) {
     const options = {
       summary: iMessage('info', 'npmAuditInfo'),
-      detail: iMessage('info', 'npmAuditHelperText')
-    }
+      detail: iMessage('info', 'npmAuditHelperText'),
+      code: null,
+      isError: false
+    };
 
-    return renderText(options)
+    return <WithStylesHelperText {...options} />;
   }
 
   const {
@@ -57,124 +102,49 @@ const Audit = ({ classes, data }) => {
       dependencies,
       devDependencies,
       optionalDependencies,
-      totalDependencies,
       vulnerabilities
     },
-    advisories,
+    actions,
+    advisories
   } = content || {};
 
-  const { info, high, critical, moderate, low } = vulnerabilities;
-  const dependenciesPercentage = (dependencies / totalDependencies) * 100;
-  const devDependenciesPercentage = (devDependencies / totalDependencies) * 100;
-  const optionalDependenciesPercentage =
-    (optionalDependencies / totalDependencies) * 100;
+  const overviewData = { dependencies, devDependencies, optionalDependencies };
 
-  const typesData = [
-    { value: critical, label: 'Critical', secondary: true, color: 'error' },
-    { value: high, label: 'High', secondary: true, color: 'warning' },
-    { value: moderate, label: 'Moderate', secondary: true, color: 'secondary' },
-    { value: low, label: 'Low', secondary: true, color: 'primary' },
-    { value: info, label: 'Info', secondary: true, color: 'default' }
-  ];
-
-  const totalIssues = typesData.reduce((acc, type) => acc + type.value, 0)
-
-  const groupByTitle = groupBy((dataItem) => {
-    const { title } = dataItem;
-    const parsedTitle = title && title.trim();
-
-    return switchcase({
-      [AUDIT_TYPES.PP.trim()]: () => 'PP',
-      [AUDIT_TYPES.AFO.trim()]: () => 'AFO',
-      [AUDIT_TYPES.UAF.trim()]: () => 'UAF',
-      [AUDIT_TYPES.CI.trim()]: () => 'CI',
-      [AUDIT_TYPES.REDOS.trim()]: () => 'REDOS',
-      [AUDIT_TYPES.DOS.trim()]: () => 'DOS',
-
-    })('NA')(parsedTitle);
-  });
-
-  const types = groupByTitle(Object.values(advisories));
-  console.log(active);
-  
   return (
     <div className={classes.root}>
-      <Grid container spacing={16}>
-        <Grid item lg={3} md={3} sm={12} xl={3}>
-          <DependencyStat
-            title={iMessage('title', 'total')}
-            value={totalDependencies}
-            color="warning"
-          />
-        </Grid>
-        <Grid item lg={3} md={3} sm={12} xl={3}>
-          <DependencyStat
-            percent={dependenciesPercentage.toFixed(2)}
-            value={dependencies}
-            color="secondary"
-          />
-        </Grid>
-        <Grid item lg={3} md={3} sm={12} xl={3}>
-          <DependencyStat
-            percent={devDependenciesPercentage.toFixed(2)}
-            value={devDependencies}
-            color="secondary"
-          />
-        </Grid>
-        <Grid item lg={3} md={3} sm={12} xl={3}>
-          <DependencyStat
-            percent={optionalDependenciesPercentage.toFixed(2)}
-            value={optionalDependencies}
-            color="warning"
-          />
-        </Grid>
-      </Grid>
-      <Grid container spacing={0}>
-        <Grid item xs={6}>
-          <div className={classes.container}>
-            <div className={classes.types}>
-              {typesData.map(({ value, label, color }) => (
-                <div key={label} className={classes.typeItem}>
-                  <Dot size="large" color={color} />
-                  <Typography
-                    color="textSecondary"
-                    className={classes.typeItemText}
-                  >
-                    {label}&nbsp;({value})
-                  </Typography>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Grid>
-        <Grid item xs={12} className={classes.transition}>
-          <Grid container spacing={8}>
-            <Grid item
-              sm={active ? 8 : 10}
-              md={active ? 8 : 10}
-              lg={active ? 8 : 10}
-              xl={active ? 8 : 10}>
-              <Advisories data={advisories} handleClick={setActive} />
-            </Grid>
-            {active && <Grid item
-              sm={active ? 4 : 2}
-              md={active ? 4 : 2}
-              lg={active ? 4 : 2}
-              xl={active ? 4 : 2}>
-              <AdvisoryDetails data={active} handleClose={() => setActive(null)} />
-            </Grid>}
-            {!active && totalIssues ? <Hidden mdDown><Grid item
-              sm={active ? 4 : 2}
-              md={active ? 4 : 2}
-              lg={active ? 4 : 2}
-              xl={active ? 4 : 2}>
-              <ListTypes types={types} />
-            </Grid></Hidden> : null}
+      <Hidden mdDown>
+        <Grid container spacing={8} className={classes.gridContainer}>
+          <Grid item lg={6} md={6} sm={12} xl={6}>
+            <OverviewCard
+              title={iMessage('title', 'overview')}
+              data={overviewData}
+            />
+          </Grid>
+          <Grid item xs={6} sm={12} md={6} lg={6} xl={6}>
+            <ListDotTypes data={vulnerabilities} />
           </Grid>
         </Grid>
+      </Hidden>
+      <Grid container spacing={8} className={classes.gridContainer}>
+        <Grid item sm={12} md={9} lg={9} xl={9} className={classes.transition}>
+          <Advisories data={advisories} handleClick={setActive} />
+        </Grid>
+        {active && (
+          <Grid item sm={12} md={3} lg={3} xl={3}>
+            <AdvisoryDetails
+              data={active}
+              handleClose={() => setActive(null)}
+            />
+          </Grid>
+        )}
+        {!active ? (
+          <Grid item sm={12} md={3} lg={3} xl={3}>
+            <Actions data={actions} />
+          </Grid>
+        ) : null}
       </Grid>
     </div>
-  )
+  );
 };
 
 Audit.propTypes = {
@@ -189,53 +159,4 @@ Audit.propTypes = {
   )
 };
 
-const styles = theme => ({
-  root: {
-    width: '100%'
-  },
-  container: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    paddingTop: theme.spacing.unit * 4,
-    paddingBottom: theme.spacing.unit * 4,
-  },
-  containerColumn: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingTop: theme.spacing.unit * 2,
-  },
-  types: {
-    width: '100%',
-    display: 'flex'
-  },
-  typeItem: {
-    display: 'flex',
-    alignItems: 'center',
-    marginLeft: theme.spacing.unit
-  },
-  typeItemText: {
-    ...defaultFont,
-    fontSize: '18px !important',
-    marginLeft: theme.spacing.unit
-  },
-  transition: {
-    transition: theme.transitions.create('width', {
-      duration: theme.transitions.duration.shortest
-    })
-  },
-  noData: {
-    ...defaultFont
-  },
-  withPadding: {
-    padding: theme.spacing.unit + 4
-  },
-  helperText: {
-    ...defaultFont,
-    color: lighten(grayColor, 0.1),
-    fontSize: 16
-  },
-});
-
-export default withStyles(styles, { withTheme: true })(Audit);
+export default withStyles(styles, { withTheme: false })(Audit);
