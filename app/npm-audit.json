@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "EAUDITNOLOCK",
+    "summary": "Neither npm-shrinkwrap.json nor package-lock.json found: Cannot audit a project without a lockfile",
+    "detail": "Try creating one first with: npm i --package-lock-only"
+  }
+}

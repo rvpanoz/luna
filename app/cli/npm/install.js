@@ -17,10 +17,11 @@ const install = (options, idx) => {
     multiple,
     packages,
     single,
-    packageJson
+    packageJson,
+    packageLock
   } = options || {};
 
-  // '--unsafe-perm use root'
+  // '--unsafe-perm'
   // '--ignore-scripts
   const defaults = ['--verbose'];
 

@@ -96,7 +96,7 @@ const Advisories = ({ classes, data, handleClick }) => {
       buttons: ['Cancel', 'Fix']
     };
 
-    const dialogHandler = () => {};
+    const dialogHandler = () => { };
 
     return showDialog(dialogHandler, dialogOptions);
   };
@@ -120,11 +120,10 @@ const Advisories = ({ classes, data, handleClick }) => {
       <Toolbar disableGutters>
         <div className={classes.header}>
           <Typography
-            variant="h5"
+            variant="h6"
             color="textSecondary"
-            className={classes.title}
           >
-            {iMessage('title', 'issues')}({keys.length})
+            {iMessage('title', 'issues')}&nbsp;({keys.length})
           </Typography>
         </div>
         <div className={classes.spacer} />
@@ -167,21 +166,7 @@ const Advisories = ({ classes, data, handleClick }) => {
               </Hidden>
               <Hidden mdDown>
                 <TableCell>
-                  <Typography color="textPrimary" variant="subtitle1">
-                    {iMessage('label', 'patched_versions')}
-                  </Typography>
-                </TableCell>
-              </Hidden>
-              <Hidden lgDown>
-                <TableCell>
-                  <Typography color="textPrimary" variant="subtitle1">
-                    {iMessage('label', 'vulnerable_versions')}
-                  </Typography>
-                </TableCell>
-              </Hidden>
-              <Hidden lgDown>
-                <TableCell>
-                  <Typography color="textPrimary" variant="subtitle1">
+                  <Typography color="textPrimary" variant="subtitle1" align="center">
                     {iMessage('label', 'severity')}
                   </Typography>
                 </TableCell>
@@ -201,57 +186,45 @@ const Advisories = ({ classes, data, handleClick }) => {
                 },
                 idx
               ) => (
-                <TableRow
-                  hover
-                  onClick={() =>
-                    handleClick({
-                      ...rest,
-                      name: module_name,
-                      title: title,
-                      severity,
-                      vulnerable_versions
-                    })
-                  }
-                  key={keys[idx]}
-                  className={classes.tableRow}
-                >
-                  <TableCell className={cn(classes.tableCell, classes.text)}>
-                    <Typography color="textSecondary">{module_name}</Typography>
-                  </TableCell>
-                  <Hidden smDown>
-                    <TableCell className={classes.tableCell}>
-                      <Typography color="textSecondary">{title}</Typography>
-                    </TableCell>
-                  </Hidden>
-                  <Hidden mdDown>
-                    <TableCell>
-                      <Typography color="textSecondary">
-                        {patched_versions}
-                      </Typography>
-                    </TableCell>
-                  </Hidden>
-                  <Hidden lgDown>
-                    <TableCell>
-                      <Typography color="textSecondary">
-                        {vulnerable_versions}
-                      </Typography>
-                    </TableCell>
-                  </Hidden>
-                  <Hidden lgDown>
-                    <TableCell align="center" className={cn(classes.tableCell)}>
+                  <TableRow
+                    hover
+                    onClick={() =>
+                      handleClick({
+                        ...rest,
+                        name: module_name,
+                        title: title,
+                        severity,
+                        vulnerable_versions
+                      })
+                    }
+                    key={keys[idx]}
+                    className={classes.tableRow}
+                  >
+                    <TableCell className={cn(classes.tableCell, classes.text)}>
                       <div className={classes.flexContainer}>
-                        {switchcase({
-                          critical: () => <Dot size="large" color="error" />,
-                          high: () => <Dot size="large" color="secondary" />,
-                          moderate: () => <Dot size="large" color="warning" />,
-                          low: () => <Dot size="large" color="primary" />
-                        })(<Dot size="large" color="primary" />)(severity)}
                         {rest.deleted && <CloseIcon color="error" />}
+                        <Typography color="textSecondary">{module_name}</Typography>
                       </div>
                     </TableCell>
-                  </Hidden>
-                </TableRow>
-              )
+                    <Hidden smDown>
+                      <TableCell className={classes.tableCell}>
+                        <Typography color="textSecondary">{title}</Typography>
+                      </TableCell>
+                    </Hidden>
+                    <Hidden mdDown>
+                      <TableCell className={classes.tableCell}>
+                        <div className={cn(classes.flexContainer, classes.center)}>
+                          {switchcase({
+                            critical: () => <Dot size="large" color="error" />,
+                            high: () => <Dot size="large" color="secondary" />,
+                            moderate: () => <Dot size="large" color="warning" />,
+                            low: () => <Dot size="large" color="primary" />
+                          })(<Dot size="large" color="primary" />)(severity)}
+                        </div>
+                      </TableCell>
+                    </Hidden>
+                  </TableRow>
+                )
             )}
           </TableBody>
         </Table>

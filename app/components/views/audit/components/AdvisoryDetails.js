@@ -89,7 +89,7 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
               />
               <CardContent className={classes.cardContent}>
                 <Typography color="textSecondary" variant="body1">
-                  Recommendation:
+                  {iMessage('label', 'recommendation')}
                   <br />
                   {recommendation}
                 </Typography>
@@ -98,7 +98,7 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
                   variant="body1"
                   className={classes.padTop}
                 >
-                  Vulnerable versions:
+                  {iMessage('label', 'vulnerableVersions')}
                   <br />
                   {vulnerable_versions}
                 </Typography>

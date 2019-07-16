@@ -35,11 +35,10 @@ import {
   setActivePage
 } from 'models/ui/actions';
 import { setMode, clearInstallOptions } from 'models/common/actions';
-import { clearAuditData } from 'models/npm/actions';
 
-import TableToolbar from './TableToolbar';
-import TableHeader from './TableHeader';
-import TableFooter from './TableFooter';
+import ToolbarView from './Toolbar';
+import HeaderView from './Header';
+import Pagination from './Pagination';
 import PackageItem from './PackageItem';
 import DialogOptions from './Options';
 
@@ -58,7 +57,7 @@ const mapState = ({
     packagesOutdated,
     metadata: { fromSearch }
   },
-  npm: { operationStatus, operationPackages, operationCommand },
+  npm: { operationStatus, operationPackages, operationCommand, auditData },
   ui: {
     paused,
     loaders: { loader, packageLoader },
@@ -88,7 +87,8 @@ const mapState = ({
   sortBy,
   operationStatus,
   operationPackages,
-  operationCommand
+  operationCommand,
+  auditData
 });
 
 const Packages = ({ classes }) => {
@@ -109,11 +109,13 @@ const Packages = ({ classes }) => {
     active,
     operationStatus,
     operationPackages,
-    operationCommand
+    operationCommand,
+    auditData
   } = useMappedState(mapState);
 
   /* eslint-disable-next-line */
   const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
+  const [auditPackages, setAuditPackages] = useState([]);
   const [options, toggleOptions] = useState({
     open: false,
     single: false,
@@ -126,8 +128,6 @@ const Packages = ({ classes }) => {
 
   const reload = () => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
-    dispatch(clearAuditData());
-    dispatch(clearInstallOptions());
     dispatch(
       setPackagesStart({
         channel: 'npm-list-outdated',
@@ -141,8 +141,6 @@ const Packages = ({ classes }) => {
   const switchMode = (appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
     dispatch(setActivePage({ page: 'packages', paused: false }));
-    dispatch(clearAuditData());
-    dispatch(clearInstallOptions());
 
     if (fromSearch) {
       dispatch(
@@ -181,6 +179,23 @@ const Packages = ({ classes }) => {
     );
   }, [mode, directory, dispatch]);
 
+  useEffect(() => {
+    const { error, content } = auditData || {};
+
+    if (error || !content) return;
+
+    const { actions } = content;
+
+    // use only depth=1 modules
+    const packagesDepthOne =
+      actions &&
+      actions
+        .filter(({ depth, action }) => !depth || action === 'install')
+        .map(({ module }) => module);
+
+    setAuditPackages(packagesDepthOne);
+  }, [auditData]);
+
   const [filteredPackages] = useFilters(packagesData, filters);
 
   const data = filteredByNamePackages.length
@@ -201,16 +216,16 @@ const Packages = ({ classes }) => {
         <Grid container>
           <Grid
             item
-            sm={active ? 8 : 12}
-            md={active ? 8 : 12}
-            lg={active ? 8 : 12}
-            xl={active ? 8 : 12}
+            sm={12}
+            md={active ? 9 : 12}
+            lg={active ? 9 : 12}
+            xl={active ? 9 : 12}
             className={classes.transition}
           >
             <Paper className={classes.root}>
               <div className={classes.toolbar}>
-                <TableToolbar
-                  title="Packages"
+                <ToolbarView
+                  title={iMessage('title', 'packages')}
                   total={packagesData.length}
                   mode={mode}
                   directory={directory}
@@ -249,7 +264,7 @@ const Packages = ({ classes }) => {
                       [classes.hasFilterBlur]: loading
                     })}
                   >
-                    <TableHeader
+                    <HeaderView
                       packages={dataSlices.map(d => d.name)}
                       numSelected={selected.length}
                       rowCount={listDataPackages && listDataPackages.length}
@@ -317,6 +332,7 @@ const Packages = ({ classes }) => {
                                 problems={problems}
                                 viewPackage={viewPackageHandler}
                                 inOperation={inOperation}
+                                inAudit={auditPackages.includes(name)}
                                 inPackageJson={inPackageJson}
                                 peerMissing={peerMissing}
                                 fromSearch={__fromSearch}
@@ -327,7 +343,7 @@ const Packages = ({ classes }) => {
                           }
                         )}
                     </TableBody>
-                    <TableFooter
+                    <Pagination
                       rowCount={data && data.length}
                       page={page}
                       rowsPerPage={rowsPerPage}
@@ -345,7 +361,7 @@ const Packages = ({ classes }) => {
             </Paper>
           </Grid>
           {active && (
-            <Grid item sm={4} md={4} lg={4} xl={4}>
+            <Grid item sm={12} md={3} lg={3} xl={3}>
               <PackageDetails
                 toggleOptions={toggleOptions}
                 addSelected={() =>

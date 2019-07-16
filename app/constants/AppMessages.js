@@ -55,15 +55,19 @@ export const LABEL_MESSAGES = {
   module_name: 'Module',
   title: 'Title',
   patched_versions: 'Patched versions',
-  severity: 'Severity'
+  severity: 'Severity',
+  vulnerableVersions: 'Vulnerable versions',
+  recommendation: 'Recommendation'
 };
 
 export const TITLE_MESSAGES = {
+  issues: 'Issues',
+  actions: 'Actions',
   total: 'Total',
   vulnerabilities: 'Vulnerabilities',
   overview: 'Overview',
-  audit: 'Audit report',
-  doctor: 'Doctor results',
+  audit: 'Audit',
+  doctor: 'Doctor',
   loadDirectory: 'Load a directory from a package.json file',
   selectPackageJson: 'Select package.json file',
   installationOptions: 'Please select installation options',

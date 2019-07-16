@@ -22,7 +22,7 @@ import { iMessage } from 'commons/utils';
 import { updateFilters } from 'models/ui/actions';
 import styles from './styles/tableFilters';
 
-const TableFilters = ({ classes, mode, close, listFilters }) => {
+const Filters = ({ classes, mode, close, listFilters }) => {
   const searchInputEl = useRef(null);
   const [filters, setFilters] = useState([{ filterType: 'name' }]);
   const dispatch = useDispatch();
@@ -32,13 +32,14 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
 
     if (listFilters.length) {
       const inputName = searchInputEl && searchInputEl.current;
-      const filter =
-        listFilters &&
-        listFilters.find(({ filterType }) => filterType === 'name');
+      const filter = listFilters.find(
+        ({ filterType }) => filterType === 'name'
+      );
+
       if (inputName && filter) {
         const { filterValue } = filter || {};
 
-        inputName.value = filterValue || '';
+        inputName.value = filterValue || ''; // hack: update name filter
       }
 
       setFilters(listFilters);
@@ -82,6 +83,7 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
   );
 
   const handleFilters = allFilters => {
+    debugger;
     const hasFilters =
       allFilters.length === 1
         ? allFilters.every(({ filterValue }) => filterValue !== undefined)
@@ -240,11 +242,11 @@ const TableFilters = ({ classes, mode, close, listFilters }) => {
   );
 };
 
-TableFilters.propTypes = {
+Filters.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   close: PropTypes.func.isRequired,
   mode: PropTypes.string,
   listFilters: PropTypes.arrayOf(PropTypes.object)
 };
 
-export default withStyles(styles)(TableFilters);
+export default withStyles(styles)(Filters);

@@ -11,15 +11,17 @@ import { withStyles } from '@material-ui/core';
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden';
 import Button from '@material-ui/core/Button';
 
 import { AUDIT_ERRORS } from 'constants/AppConstants';
 import { iMessage } from 'commons/utils';
 
 // mock data
-import DATA from './npm-audit.json';
+// import DATA from './npm-audit.json';
 
 import {
+  Actions,
   Advisories,
   AdvisoryDetails,
   OverviewCard,
@@ -74,7 +76,7 @@ const WithStylesHelperText = withStyles(styles)(HelperText);
 
 const Audit = ({ classes, data }) => {
   const [active, setActive] = useState(null);
-  const { content, error } = DATA || {};
+  const { content, error } = data || {};
 
   if (error) {
     const props = Object.assign({}, error, {
@@ -102,6 +104,7 @@ const Audit = ({ classes, data }) => {
       optionalDependencies,
       vulnerabilities
     },
+    actions,
     advisories
   } = content || {};
 
@@ -109,17 +112,19 @@ const Audit = ({ classes, data }) => {
 
   return (
     <div className={classes.root}>
-      <Grid container spacing={8} className={classes.gridContainer}>
-        <Grid item lg={6} md={6} sm={12} xl={6}>
-          <OverviewCard
-            title={iMessage('title', 'overview')}
-            data={overviewData}
-          />
+      <Hidden mdDown>
+        <Grid container spacing={8} className={classes.gridContainer}>
+          <Grid item lg={6} md={6} sm={12} xl={6}>
+            <OverviewCard
+              title={iMessage('title', 'overview')}
+              data={overviewData}
+            />
+          </Grid>
+          <Grid item xs={6} sm={12} md={6} lg={6} xl={6}>
+            <ListDotTypes data={vulnerabilities} />
+          </Grid>
         </Grid>
-        <Grid item xs={6} sm={12} md={6} lg={6} xl={6}>
-          <ListDotTypes data={vulnerabilities} />
-        </Grid>
-      </Grid>
+      </Hidden>
       <Grid container spacing={8} className={classes.gridContainer}>
         <Grid item sm={12} md={9} lg={9} xl={9} className={classes.transition}>
           <Advisories data={advisories} handleClick={setActive} />
@@ -134,7 +139,7 @@ const Audit = ({ classes, data }) => {
         )}
         {!active ? (
           <Grid item sm={12} md={3} lg={3} xl={3}>
-            <ListTypes data={advisories} />
+            <Actions data={actions} />
           </Grid>
         ) : null}
       </Grid>

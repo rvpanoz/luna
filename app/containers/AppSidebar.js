@@ -30,7 +30,7 @@ import {
 } from 'components/views/sidebar/tabs';
 
 import { navigatorParameters } from 'commons/parameters';
-import { iMessage } from 'commons/utils';
+import { iMessage, showDialog } from 'commons/utils';
 import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
@@ -86,48 +86,43 @@ const AppSidebar = ({
     return () => ipcRenderer.removeAllListeners(['loaded-packages-close']);
   }, []);
 
-  const loadDirectory = () =>
-    remote.dialog.showOpenDialog(
-      remote.getCurrentWindow(),
-      navigatorParameters,
-      filePath => {
-        if (filePath) {
-          dispatch(
-            setActivePage({
-              page: 'packages',
-              paused: false
-            })
-          );
-          dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
-        }
-      }
-    );
+  const loadDirectory = () => {
+    const dialogHandler = filePath => {
+      dispatch(
+        setActivePage({
+          page: 'packages',
+          paused: false
+        })
+      );
+      dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
+    };
 
-  const installPackagesJson = () =>
-    remote.dialog.showMessageBox(
-      remote.getCurrentWindow(),
-      {
-        title: 'Confirmation',
-        type: 'question',
-        message: iMessage('confirmation', 'installAll', {
-          '%directory%': directory
-        }),
-        buttons: ['Cancel', 'Install']
-      },
-      btnIdx => {
-        if (btnIdx) {
-          dispatch(
-            installPackage({
-              ipcEvent: 'install',
-              cmd: ['install'],
-              packageJson: true,
-              mode,
-              directory: fullDirectory
-            })
-          );
-        }
-      }
-    );
+    return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
+  };
+
+  const installPackagesJson = () => {
+    const dialogOptions = {
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage('confirmation', 'installAll', {
+        '%directory%': directory
+      }),
+      buttons: ['Cancel', 'Install']
+    };
+
+    const dialogHandler = () =>
+      dispatch(
+        installPackage({
+          ipcEvent: 'install',
+          cmd: ['install'],
+          packageJson: true,
+          mode,
+          directory: fullDirectory
+        })
+      );
+
+    return showDialog(dialogHandler, dialogOptions);
+  };
 
   const packagesItems = [
     {

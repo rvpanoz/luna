@@ -27,11 +27,12 @@ import {
   InstallAction,
   UpdateAction,
   UninstallAction
-} from './ToolbarActions'
-import TableFilters from './TableFilters';
+} from './Actions';
+
+import Filters from './Filters';
 import styles from './styles/tableToolbar';
 
-const TableListToolbar = ({
+const ToolbarView = ({
   classes,
   selected,
   title,
@@ -51,12 +52,13 @@ const TableListToolbar = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
-
   const dispatch = useDispatch();
-  const packagesOutdatedNames = outdated && outdated.map(pkg => pkg.name);
+  const packagesOutdatedNames = outdated.map(pkg => pkg.name);
 
   const openFilters = (e, close) => {
-    setAnchorEl(close ? null : e.target);
+    const { target } = e;
+
+    setAnchorEl(close ? null : target);
     toggleFilters(!filtersOn);
     scrollWrapper(0);
   };
@@ -137,29 +139,40 @@ const TableListToolbar = ({
     return false;
   };
 
-  const renderAction = action => switchcase({
-    clearFilters: () => <ClearFiltersAction handler={clearAllFilters} />,
-    install: () => <InstallAction handler={() => handleAction('install', false)} />,
-    latest: () => <LatestAction handler={() => handleAction('install', true, true)} />,
-    update: () => <UpdateAction handler={() => handleAction('update')} />,
-    uninstall: () => <UninstallAction options={{ selected }} handler={() => handleAction('uninstall')} />,
-    filters: () => <FilterAction handler={openFilters} />
-  })('none')(action);
-
+  const renderAction = action =>
+    switchcase({
+      clearFilters: () => <ClearFiltersAction handler={clearAllFilters} />,
+      install: () => (
+        <InstallAction handler={() => handleAction('install', false)} />
+      ),
+      latest: () => (
+        <LatestAction handler={() => handleAction('install', true, true)} />
+      ),
+      update: () => <UpdateAction handler={() => handleAction('update')} />,
+      uninstall: () => (
+        <UninstallAction
+          options={{ selected }}
+          handler={() => handleAction('uninstall')}
+        />
+      ),
+      filters: () => <FilterAction handler={openFilters} />
+    })('none')(action);
 
   const renderToolbarActions = () => (
     <React.Fragment>
       <SwitchAction handler={switchMode} options={{ mode }} />
-      {!fromSearch && total ? <FilterAction options={{ nodata, fromSearch }} handler={openFilters} /> : null}
+      {!fromSearch && total ? (
+        <FilterAction options={{ nodata, fromSearch }} handler={openFilters} />
+      ) : null}
       <RefreshAction handler={reload} options={{ fromSearch }} />
     </React.Fragment>
   );
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-    selected.some(
-      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-    ),
+      selected.some(
+        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+      ),
     [selected]
   );
 
@@ -208,7 +221,7 @@ const TableListToolbar = ({
           horizontal: 'right'
         }}
       >
-        <TableFilters
+        <Filters
           mode={mode}
           close={() => openFilters(null, true)}
           listFilters={filters}
@@ -219,7 +232,7 @@ const TableListToolbar = ({
   );
 };
 
-TableListToolbar.propTypes = {
+ToolbarView.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   reload: PropTypes.func.isRequired,
   nodata: PropTypes.bool,
@@ -238,4 +251,4 @@ TableListToolbar.propTypes = {
   toggleOptions: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(TableListToolbar);
+export default withStyles(styles)(ToolbarView);

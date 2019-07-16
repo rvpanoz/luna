@@ -4,7 +4,7 @@ import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { mergeMap, concatMap, tap } from 'rxjs/operators';
 
-import { clearSelected, toggleLoader } from 'models/ui/actions';
+import { clearSelected, toggleLoader, clearFilters } from 'models/ui/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { clearNotifications } from 'models/notifications/actions';
 import { clearCommands, clearAuditData } from 'models/npm/actions';
@@ -58,6 +58,7 @@ const initEpic = (action$, state$) =>
       clearCommands(),
       clearNotifications(),
       clearInstallOptions(),
+      clearFilters(),
       clearPackages()
     ])
   );
