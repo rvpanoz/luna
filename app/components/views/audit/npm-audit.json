@@ -1,0 +1,162 @@
+{
+  "content": {
+    "actions": [
+      {
+        "action": "install",
+        "module": "http-server",
+        "target": "0.11.1",
+        "isMajor": false,
+        "resolves": [
+          {
+            "id": 830,
+            "path": "http-server>ecstatic",
+            "dev": true,
+            "optional": false,
+            "bundled": false
+          },
+          {
+            "id": 553,
+            "path": "http-server>ecstatic",
+            "dev": true,
+            "optional": false,
+            "bundled": false
+          }
+        ]
+      }
+    ],
+    "advisories": {
+      "553": {
+        "findings": [
+          {
+            "version": "1.4.1",
+            "paths": ["http-server>ecstatic"],
+            "dev": true,
+            "optional": false,
+            "bundled": false
+          }
+        ],
+        "id": 553,
+        "created": "2017-12-13T21:56:08.162Z",
+        "updated": "2018-05-08T15:21:27.361Z",
+        "deleted": null,
+        "title": "Denial of Service",
+        "found_by": {
+          "name": "Checkmarx"
+        },
+        "reported_by": {
+          "name": "Checkmarx"
+        },
+        "module_name": "ecstatic",
+        "cves": ["CVE-2016-10703"],
+        "vulnerable_versions": "< 2.0.0",
+        "patched_versions": ">=2.0.0",
+        "overview": "`ecstatic`, a simple static file server middleware, is vulnerable to denial of service. If a payload with a large number of null bytes (`%00`) is provided by an attacker it can crash ecstatic by running it out of memory.\n\n\n[Results from the original advisory](https://www.checkmarx.com/advisories/denial-of-service-dos-vulnerability-in-ecstatic-npm-package/)\n\n```\nA payload of 22kB caused a lag of 1 second,\nA payload of 35kB caused a lag of 3 seconds,\nA payload of 86kB caused the server to crash\n```",
+        "recommendation": "Update to version 2.0.0 or later.",
+        "references": "- [Commit #71ce939](https://github.com/jfhbrook/node-ecstatic/commit/71ce93988ead4b561a8592168c72143907189f01#diff-b2b5a88fb51675f1aa1065c093dce1ee)\n- https://www.checkmarx.com/advisories/denial-of-service-dos-vulnerability-in-ecstatic-npm-package/",
+        "access": "public",
+        "severity": "moderate",
+        "cwe": "CWE-400",
+        "metadata": {
+          "module_type": "",
+          "exploitability": 5,
+          "affected_components": ""
+        },
+        "url": "https://npmjs.com/advisories/553"
+      },
+      "830": {
+        "findings": [
+          {
+            "version": "1.4.1",
+            "paths": ["http-server>ecstatic"],
+            "dev": true,
+            "optional": false,
+            "bundled": false
+          }
+        ],
+        "id": 830,
+        "created": "2019-04-23T14:56:48.369Z",
+        "updated": "2019-05-03T14:28:33.676Z",
+        "deleted": null,
+        "title": "Open Redirect",
+        "found_by": {
+          "link": "",
+          "name": "Mario Casola"
+        },
+        "reported_by": {
+          "link": "",
+          "name": "Mario Casola"
+        },
+        "module_name": "ecstatic",
+        "cves": [],
+        "vulnerable_versions": "<2.2.2 || >=3.0.0 <3.3.2 || >=4.0.0 <4.1.2",
+        "patched_versions": ">=2.2.2 <3.0.0 || >=3.3.2 <4.0.0 || >=4.1.2",
+        "overview": "Versions of `ecstatic` prior to 4.1.2, 3.3.2 or 2.2.2 are vulnerable to Open Redirect. The package fails to validate redirects, allowing attackers to craft requests that result in an `HTTP 301` redirect to any other domains.",
+        "recommendation": "If using `ecstatic` 4.x, upgrade to 4.1.2 or later.\nIf using `ecstatic` 3.x, upgrade to 3.3.2 or later.\nIf using `ecstatic` 2.x, upgrade to 2.2.2 or later.",
+        "references": "",
+        "access": "public",
+        "severity": "high",
+        "cwe": "CWE-601",
+        "metadata": {
+          "module_type": "",
+          "exploitability": 5,
+          "affected_components": ""
+        },
+        "url": "https://npmjs.com/advisories/830"
+      },
+      "556": {
+        "findings": [
+          {
+            "version": "1.4.1",
+            "paths": ["http-server>ecstatic"],
+            "dev": true,
+            "optional": false,
+            "bundled": false
+          }
+        ],
+        "id": 556,
+        "created": "2017-12-13T21:56:08.162Z",
+        "updated": "2018-05-08T15:21:27.361Z",
+        "deleted": null,
+        "title": "Denial of Service",
+        "found_by": {
+          "name": "Checkmarx"
+        },
+        "reported_by": {
+          "name": "Checkmarx"
+        },
+        "module_name": "ecstatic",
+        "cves": ["CVE-2016-10703"],
+        "vulnerable_versions": "< 2.0.0",
+        "patched_versions": ">=2.0.0",
+        "overview": "`ecstatic`, a simple static file server middleware, is vulnerable to denial of service. If a payload with a large number of null bytes (`%00`) is provided by an attacker it can crash ecstatic by running it out of memory.\n\n\n[Results from the original advisory](https://www.checkmarx.com/advisories/denial-of-service-dos-vulnerability-in-ecstatic-npm-package/)\n\n```\nA payload of 22kB caused a lag of 1 second,\nA payload of 35kB caused a lag of 3 seconds,\nA payload of 86kB caused the server to crash\n```",
+        "recommendation": "Update to version 2.0.0 or later.",
+        "references": "- [Commit #71ce939](https://github.com/jfhbrook/node-ecstatic/commit/71ce93988ead4b561a8592168c72143907189f01#diff-b2b5a88fb51675f1aa1065c093dce1ee)\n- https://www.checkmarx.com/advisories/denial-of-service-dos-vulnerability-in-ecstatic-npm-package/",
+        "access": "public",
+        "severity": "moderate",
+        "cwe": "CWE-400",
+        "metadata": {
+          "module_type": "",
+          "exploitability": 5,
+          "affected_components": ""
+        },
+        "url": "https://npmjs.com/advisories/553"
+      }
+    },
+    "muted": [],
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 1,
+        "high": 1,
+        "critical": 0
+      },
+      "dependencies": 115,
+      "devDependencies": 2679,
+      "optionalDependencies": 0,
+      "totalDependencies": 2794
+    },
+    "runId": "0cc590cd-a3d1-4e59-8e23-cf85b34b0a0c"
+  },
+  "error": null
+}

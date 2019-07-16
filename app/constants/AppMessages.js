@@ -25,8 +25,10 @@ export const INFO_MESSAGES = {
   directorySelection: 'Select directory',
   directory: 'Directory',
   createPackageJsonNote: 'Note: npm init will run with the default parameters.',
-  run_audit_fix: 'Automatically install any compatible updates to vulnerable dependencies',
-  run_with_force: 'Have audit fix install semver-major updates to toplevel dependencies, not just semver-compatible ones'
+  run_audit_fix:
+    'Automatically install any compatible updates to vulnerable dependencies',
+  run_with_force:
+    'Have audit fix install semver-major updates to toplevel dependencies, not just semver-compatible ones'
 };
 
 export const ACTION_MESSAGES = {
@@ -38,8 +40,9 @@ export const ACTION_MESSAGES = {
 
 export const LABEL_MESSAGES = {
   dependencies: 'Dependencies',
-  devDependencies: 'Dev',
+  devDependencies: 'Development',
   optionalDependencies: 'Optional',
+  bundleDependencies: 'Bundle',
   packageName: 'Package name',
   packageNameInput: 'Fill package name',
   groupType: 'Select packages based on group',
@@ -52,15 +55,19 @@ export const LABEL_MESSAGES = {
   module_name: 'Module',
   title: 'Title',
   patched_versions: 'Patched versions',
-  severity: 'Severity'
+  severity: 'Severity',
+  vulnerableVersions: 'Vulnerable versions',
+  recommendation: 'Recommendation'
 };
 
 export const TITLE_MESSAGES = {
+  issues: 'Issues',
+  actions: 'Actions',
   total: 'Total',
   vulnerabilities: 'Vulnerabilities',
   overview: 'Overview',
-  audit: 'Audit report',
-  doctor: 'Doctor results',
+  audit: 'Audit',
+  doctor: 'Doctor',
   loadDirectory: 'Load a directory from a package.json file',
   selectPackageJson: 'Select package.json file',
   installationOptions: 'Please select installation options',
@@ -108,7 +115,15 @@ export const CONFIRMATION_MESSAGES = {
   installLatestSelected:
     '\nDo you want to install the latest version of the selected packages?',
   updateSelected: '\nDo you want to update the selected packages?',
-  uninstallSelected: '\nDo you want to uninstall the selected packages?'
+  uninstallSelected: '\nDo you want to uninstall the selected packages?',
+  auditFix:
+    '\nDo you want to run npm audit fix? \n\nIt will automatically install any compatible updates to vulnerable dependencies.',
+  auditFixForce:
+    '\nDo you want to run npm audit fix --force? \n\nInstall semver-major updates to toplevel dependencies, not just semver-compatible ones.',
+  auditFixOnlyProd:
+    '\nDo you want to run npm audit fix --only=prod?\n\nIt will skip updating devDependencies.',
+  auditFixOnlyDev:
+    '\nDo you want to run npm audit fix --only=dev? \n\nIt will skip updating dependencies.'
 };
 
 export const LABEL_MESSAGE = {
@@ -124,7 +139,7 @@ export const WARNING_MESSAGES = {
   errorPackages:
     'Some packages have errors. Check your notifications to fix it.',
   yarnlock:
-    'yarn-lock file detected. Please remove it before running any action operation',
+    'It is advised not to mix package managers in order to avoid resolution inconsistencies caused by unsynchronized lock files. \nTo clear this warning, remove yarn-lock.json.',
   newerSelected:
     'A package with the same name and newer version is already selected',
   oldorEqualSelected:
