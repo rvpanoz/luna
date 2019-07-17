@@ -134,7 +134,7 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
             color="primary"
             onClick={() => runAudit()}
           >
-            Run
+            Run audit
           </Button>
           <Button
             variant="outlined"
@@ -143,12 +143,11 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
             onClick={() => handleFix('fix')}
             className={classes.marLeft}
           >
-            Fix
+            Fix all
           </Button>
           <Button
             variant="outlined"
             size="small"
-            color="secondary"
             onClick={() => handleFix('force')}
             className={classes.marLeft}
           >
@@ -222,7 +221,8 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
                     </Hidden>
                     <Hidden mdDown>
                       <TableCell className={classes.tableCell}>
-                        <div className={cn(classes.flexContainer, classes.center)}>
+                        <div />
+                        <div className={cn(classes.flexContainer, classes.flexCenter)}>
                           {switchcase({
                             critical: () => <Dot size="large" color="error" />,
                             high: () => <Dot size="large" color="secondary" />,

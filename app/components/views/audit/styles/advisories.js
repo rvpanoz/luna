@@ -43,6 +43,9 @@ const styles = theme => ({
     ...flexContainer,
     alignItems: 'center'
   },
+  flexCenter: {
+    justifyContent: 'center'
+  },
   cellCenter: {
     textAlign: 'center'
   },

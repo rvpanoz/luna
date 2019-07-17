@@ -120,7 +120,7 @@ const Audit = ({ classes }) => {
             xl={9}
             className={classes.transition}
           >
-            {/* <Advisories
+            <Advisories
               data={advisories}
               handleClick={setActive}
               runAudit={() =>
@@ -131,7 +131,7 @@ const Audit = ({ classes }) => {
                   })
                 )
               }
-            /> */}
+            />
           </Grid>
           {active && (
             <Grid item sm={12} md={3} lg={3} xl={3}>
