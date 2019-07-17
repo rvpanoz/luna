@@ -76,7 +76,6 @@ const npmAuditParseEpic = action$ =>
           }
         });
       } catch (error) {
-
         throw new Error(error);
       }
     })

@@ -263,7 +263,7 @@ const runAudit = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
-    const audit = require('./npm/tooling/audit').default;
+    const audit = require('./npm/audit').default;
     const run = audit(opts);
 
     return execute(activeManager, run, mode, directory, callback);
@@ -281,7 +281,7 @@ const runDoctor = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
-    const doctor = require('./npm/tooling/doctor').default;
+    const doctor = require('./npm/doctor').default;
     const run = doctor(opts);
 
     return execute(activeManager, run, mode, directory, callback);

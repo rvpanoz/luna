@@ -32,7 +32,8 @@ const ActionsMenu = ({ handler }) => {
   const ITEM_HEIGHT = 48;
   const moreActions = [
     { label: 'Fix only prod', value: 'onlyProd' },
-    { label: 'Fix only dev', value: 'onlyDev' }
+    { label: 'Fix only dev', value: 'onlyDev' },
+    { label: 'Package lock only', value: 'lockOnly' }
   ];
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -96,7 +97,7 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
       buttons: ['Cancel', 'Fix']
     };
 
-    const dialogHandler = () => { };
+    const dialogHandler = () => runAudit(option);
 
     return showDialog(dialogHandler, dialogOptions);
   };
@@ -109,7 +110,7 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
           className={cn(classes.noData, classes.withPadding)}
           color="textSecondary"
         >
-          {iMessage('info', 'no_audit_issues')}
+          {iMessage('info', 'noAuditIssues')}
         </Typography>
       </div>
     );
@@ -134,7 +135,7 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
             color="primary"
             onClick={() => runAudit()}
           >
-            Run audit
+            Run
           </Button>
           <Button
             variant="outlined"
@@ -151,7 +152,7 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
             onClick={() => handleFix('force')}
             className={classes.marLeft}
           >
-            Fix with force
+            Force fix
           </Button>
           <ActionsMenu handler={handleFix} />
         </div>
@@ -211,12 +212,12 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
                     <TableCell className={cn(classes.tableCell, classes.text)}>
                       <div className={classes.flexContainer}>
                         {rest.deleted && <CloseIcon color="error" />}
-                        <Typography color="textSecondary">{module_name}</Typography>
+                        <Typography color="textSecondary" variant="body1">{module_name}</Typography>
                       </div>
                     </TableCell>
                     <Hidden smDown>
                       <TableCell className={classes.tableCell}>
-                        <Typography color="textSecondary">{title}</Typography>
+                        <Typography color="textSecondary" variant="body1">{title}</Typography>
                       </TableCell>
                     </Hidden>
                     <Hidden mdDown>

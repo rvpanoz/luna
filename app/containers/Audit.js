@@ -123,11 +123,12 @@ const Audit = ({ classes }) => {
             <Advisories
               data={advisories}
               handleClick={setActive}
-              runAudit={() =>
+              runAudit={option =>
                 dispatch(
                   runAudit({
                     ipcEvent: 'npm-audit',
-                    cmd: ['audit']
+                    cmd: ['audit'],
+                    flag: option
                   })
                 )
               }
