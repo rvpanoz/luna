@@ -1,7 +1,3 @@
-/**
- * AppLayout
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -15,46 +11,26 @@ import AppSidebar from 'containers/AppSidebar';
 import AppHeader from 'containers/AppHeader';
 
 import { SnackbarContent } from 'components/common';
-import { Packages } from 'components/views/packages';
 import { Notifications } from 'components/views/notifications';
-import { Audit } from 'components/views/audit';
 import { Doctor } from 'components/views/doctor';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 import { drawerWidth } from 'styles/variables';
 
+import Packages from './Packages';
+import Audit from './Audit';
 import styles from './styles/appLayout';
 
 const mapState = ({
-  npm: { auditData, doctorData },
-  notifications: { notifications },
+  npm: { doctorData },
   common: { mode, directory, onlineStatus },
-  ui: {
-    activePage,
-    loaders: {
-      loader: { loading }
-    },
-    dialog,
-    snackbar
-  },
-  packages: {
-    project: { name, version, description },
-    metadata: { lastUpdatedAt }
-  }
+  ui: { activePage, snackbar }
 }) => ({
-  auditData,
   doctorData,
-  dialog,
   onlineStatus,
-  lastUpdatedAt,
   activePage,
   mode,
   directory,
-  name,
-  version,
-  loading,
-  description,
-  notifications,
   snackbar
 });
 
@@ -64,7 +40,6 @@ const AppLayout = ({ classes }) => {
     activePage,
     snackbar,
     mode,
-    auditData,
     doctorData,
     directory,
     onlineStatus
@@ -92,13 +67,11 @@ const AppLayout = ({ classes }) => {
               problems: () => (
                 <Notifications mode={mode} directory={directory} />
               ),
-              audit: () => (
-                <Audit mode={mode} directory={directory} data={auditData} />
-              ),
+              audit: () => <Audit />,
               doctor: () => (
                 <Doctor mode={mode} directory={directory} data={doctorData} />
               )
-            })(<Audit />)(activePage)}
+            })(<Packages />)(activePage)}
           </main>
         </div>
         {snackbar && snackbar.open && (

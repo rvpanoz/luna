@@ -1,6 +1,17 @@
 /* eslint-disable import/prefer-default-export */
 
-import Packages from './Packages';
-import Options from './Options';
+import PackageItemView from './PackageItem';
+import ToolbarView from './Toolbar';
+import DialogOptionsView from './Options';
+import HeaderView from './Header';
+import PaginationView from './Pagination';
+import ActionsView from './Actions';
 
-export { Packages, Options };
+export {
+  PaginationView,
+  PackageItemView,
+  DialogOptionsView,
+  ToolbarView,
+  HeaderView,
+  ActionsView
+};

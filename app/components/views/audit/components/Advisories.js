@@ -77,7 +77,7 @@ ActionsMenu.propTypes = {
   handler: PropTypes.func.isRequired
 };
 
-const Advisories = ({ classes, data, handleClick }) => {
+const Advisories = ({ classes, data, handleClick, runAudit }) => {
   const keys = Object.keys(data).map(key => key);
   const zeroKeys = !keys.length;
 
@@ -132,7 +132,16 @@ const Advisories = ({ classes, data, handleClick }) => {
             variant="outlined"
             size="small"
             color="primary"
+            onClick={() => runAudit()}
+          >
+            Run
+          </Button>
+          <Button
+            variant="outlined"
+            size="small"
+            color="secondary"
             onClick={() => handleFix('fix')}
+            className={classes.marLeft}
           >
             Fix
           </Button>
@@ -243,7 +252,8 @@ Advisories.propTypes = {
       PropTypes.string
     ])
   ),
-  handleClick: PropTypes.func
+  handleClick: PropTypes.func,
+  runAudit: PropTypes.func.isRequired
 };
 
 export default withStyles(styles, {

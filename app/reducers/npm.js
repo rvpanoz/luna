@@ -14,7 +14,7 @@ import {
   clearRunningCommand,
   clearAuditData,
   updateNpmAuditData,
-  updateNpmDoctorData
+  updateNpmDoctorData,
 } from 'models/npm/actions';
 
 import initialState from './initialState';

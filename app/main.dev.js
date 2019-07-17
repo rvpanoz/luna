@@ -190,22 +190,16 @@ app.on('window-all-closed', () => {
 
 /* eslint-disable-next-line */
 app.once('browser-window-created', (event, webContents) => {
-  log.info(
-    chalk.white.bgBlue.bold('[EVENT]'),
-    'browser-window-created event fired'
-  );
+  chalk.white.bgBlue.bold('[EVENT]: browser-window-created event fired');
 });
 
 /* eslint-disable-next-line */
 app.once('web-contents-created', (event, webContents) => {
-  log.info(
-    chalk.white.bgBlue.bold('[EVENT]'),
-    'web-contents-created event fired'
-  );
+  chalk.white.bgBlue.bold('[EVENT]:web-contents-created event fired');
 });
 
 app.on('ready', async () => {
-  log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready event fired');
+  chalk.white.bgBlue.bold('[EVENT]: ready event fired');
 
   if (NODE_ENV === 'development') {
     INSTALL_EXTENSIONS && (await installExtensions());
@@ -241,11 +235,11 @@ app.on('ready', async () => {
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', () => {
-    log.info(chalk.white.bgBlue.bold('[EVENT]'), 'ready-to-show event fired');
+    chalk.white.bgBlue.bold('[EVENT]: ready-to-show event fired');
   });
 
   mainWindow.webContents.on('did-finish-load', async event => {
-    log.info(chalk.white.bgBlue.bold('[EVENT]'), 'did-finish-load event fired');
+    chalk.white.bgBlue.bold('[EVENT]: did-finish-load event fired');
 
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');
