@@ -17,7 +17,7 @@ const CardHeader = ({ ...props }) => {
   } = props;
   const cardHeaderClasses = cn({
     [classes.cardHeader]: true,
-    [classes[`${color} + CardHeader`]]: color,
+    [classes[`${color}CardHeader`]]: color,
     [classes.cardHeaderPlain]: plain,
     [classes.cardHeaderStats]: stats,
     [classes.cardHeaderIcon]: icon,

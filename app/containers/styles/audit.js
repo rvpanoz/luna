@@ -12,12 +12,12 @@ const styles = theme => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
-    paddingTop: theme.spacing.unit * 4,
-    paddingBottom: theme.spacing.unit * 4
+    paddingTop: theme.spacing.unit * 3,
+    paddingBottom: theme.spacing.unit
   },
   gridContainer: {
     width: '100%',
-    paddingTop: theme.spacing.unit * 4
+    paddingTop: theme.spacing.unit * 3
   },
   containerColumn: {
     display: 'flex',

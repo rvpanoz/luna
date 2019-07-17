@@ -90,18 +90,21 @@ const Audit = ({ classes }) => {
             <StatsCard
               title={iMessage('title', 'dependencies')}
               value={dependencies}
+              color="primary"
             />
           </Grid>
           <Grid item lg={4} md={4} sm={12} xl={4}>
             <StatsCard
               title={iMessage('title', 'devDependencies')}
               value={devDependencies}
+              color="warning"
             />
           </Grid>
           <Grid item lg={4} md={4} sm={12} xl={4}>
             <StatsCard
               title={iMessage('title', 'optionalDependencies')}
               value={optionalDependencies}
+              color="danger"
             />
           </Grid>
           {/* <Grid item xs={6} sm={12} md={6} lg={6} xl={6}>
@@ -138,11 +141,11 @@ const Audit = ({ classes }) => {
               /> */}
             </Grid>
           )}
-          {!active ? (
+          {/* {!active ? (
             <Grid item sm={12} md={3} lg={3} xl={3}>
               <Actions data={actions} />
             </Grid>
-          ) : null}
+          ) : null} */}
         </Grid>
       </div>
     </AppLoader>

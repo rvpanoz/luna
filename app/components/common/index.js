@@ -9,7 +9,7 @@ import SnackbarContent from './SnackbarContent';
 import Transition from './Transition';
 import Widget from './Widget';
 import HelperText from './HelperText';
-import { Card } from './card';
+import { Card, CardHeader, CardIcon, CardBody, CardFooter, CardAvatar } from './card';
 
 export {
   AppError,
@@ -18,6 +18,11 @@ export {
   AppTabs,
   ControlTypes,
   Card,
+  CardAvatar,
+  CardIcon,
+  CardHeader,
+  CardBody,
+  CardFooter,
   Dot,
   Paper,
   Transition,

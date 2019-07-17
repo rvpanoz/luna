@@ -62,6 +62,10 @@ export const LABEL_MESSAGES = {
 };
 
 export const TITLE_MESSAGES = {
+  dependencies: 'Dependencies',
+  devDependencies: 'Development',
+  optionalDependencies: 'Optional',
+  bundleDependencies: 'Bundle',
   issues: 'Issues',
   actions: 'Actions',
   total: 'Total',
