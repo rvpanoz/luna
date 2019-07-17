@@ -34,7 +34,6 @@ import { iMessage, showDialog } from 'commons/utils';
 import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
-import { runAudit, runDoctor } from 'models/npm/actions';
 
 import styles from './styles/appSidebar';
 

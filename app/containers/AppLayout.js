@@ -9,7 +9,6 @@ import theme from 'styles/theme';
 
 import AppSidebar from 'containers/AppSidebar';
 import AppHeader from 'containers/AppHeader';
-import Audit from './Audit';
 
 import { SnackbarContent } from 'components/common';
 import { Packages } from 'components/views/packages';
@@ -19,6 +18,7 @@ import { setSnackbar } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 import { drawerWidth } from 'styles/variables';
 
+import Audit from './Audit';
 import styles from './styles/appLayout';
 
 const mapState = ({

@@ -15,7 +15,6 @@ import {
   clearAuditData,
   updateNpmAuditData,
   updateNpmDoctorData,
-  toggleAuditLoader
 } from 'models/npm/actions';
 
 import initialState from './initialState';
