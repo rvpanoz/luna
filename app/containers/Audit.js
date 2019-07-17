@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -21,6 +23,9 @@ import {
 
 import styles from './styles/audit';
 
+/** Dev */
+import DATA from '../npm-audit.json';
+
 const mapState = ({
   common: { mode, directory },
   ui: {
@@ -42,31 +47,27 @@ const Audit = ({ classes }) => {
   const { loading, message, mode, auditData } = useMappedState(mapState);
 
   const [active, setActive] = useState(null);
-  const { content, error } = auditData || {};
+  const { content, error } = DATA || {}; // auditData is default
+
+  const options = {
+    text: iMessage('info', 'npmAuditInfo'),
+    detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
+    actionText: iMessage('action', 'runAudit'),
+    actionHandler: () =>
+      dispatch(
+        runAudit({
+          ipcEvent: 'npm-audit',
+          cmd: ['audit']
+        })
+      ),
+    actionDisabled: mode === 'global'
+  };
 
   if (error) {
-    const props = Object.assign({}, error, {
-      isError: true
-    });
-
-    return <HelperText {...props} />;
+    return <HelperText {...options} isError={true} />;
   }
 
   if (!content && !loading) {
-    const options = {
-      text: iMessage('info', 'npmAuditInfo'),
-      detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
-      actionText: iMessage('action', 'runAudit'),
-      actionHandler: () =>
-        dispatch(
-          runAudit({
-            ipcEvent: 'npm-audit',
-            cmd: ['audit']
-          })
-        ),
-      actionDisabled: mode === 'global'
-    };
-
     return <HelperText {...options} />;
   }
 
@@ -84,31 +85,29 @@ const Audit = ({ classes }) => {
   return (
     <AppLoader loading={loading} message={message}>
       <div className={classes.root}>
-        <Hidden mdDown>
-          <Grid container spacing={8} className={classes.gridContainer}>
-            <Grid item lg={6} md={6} sm={12} xl={6}>
-              <StatsCard
-                title={iMessage('title', 'dependencies')}
-                value={dependencies}
-              />
-            </Grid>
-            <Grid item lg={6} md={6} sm={12} xl={6}>
-              <StatsCard
-                title={iMessage('title', 'devDependencies')}
-                value={devDependencies}
-              />
-            </Grid>
-            <Grid item lg={6} md={6} sm={12} xl={6}>
-              <StatsCard
-                title={iMessage('title', 'optionalDependencies')}
-                value={optionalDependencies}
-              />
-            </Grid>
-            <Grid item xs={6} sm={12} md={6} lg={6} xl={6}>
-              <ListDotTypes data={vulnerabilities} />
-            </Grid>
+        <Grid container spacing={8} className={classes.gridContainer}>
+          <Grid item lg={4} md={4} sm={12} xl={4}>
+            <StatsCard
+              title={iMessage('title', 'dependencies')}
+              value={dependencies}
+            />
           </Grid>
-        </Hidden>
+          <Grid item lg={4} md={4} sm={12} xl={4}>
+            <StatsCard
+              title={iMessage('title', 'devDependencies')}
+              value={devDependencies}
+            />
+          </Grid>
+          <Grid item lg={4} md={4} sm={12} xl={4}>
+            <StatsCard
+              title={iMessage('title', 'optionalDependencies')}
+              value={optionalDependencies}
+            />
+          </Grid>
+          {/* <Grid item xs={6} sm={12} md={6} lg={6} xl={6}>
+            <ListDotTypes data={vulnerabilities} />
+          </Grid> */}
+        </Grid>
         <Grid container spacing={8} className={classes.gridContainer}>
           <Grid
             item
@@ -118,7 +117,7 @@ const Audit = ({ classes }) => {
             xl={9}
             className={classes.transition}
           >
-            <Advisories
+            {/* <Advisories
               data={advisories}
               handleClick={setActive}
               runAudit={() =>
@@ -129,14 +128,14 @@ const Audit = ({ classes }) => {
                   })
                 )
               }
-            />
+            /> */}
           </Grid>
           {active && (
             <Grid item sm={12} md={3} lg={3} xl={3}>
-              <AdvisoryDetails
+              {/* <AdvisoryDetails
                 data={active}
                 handleClose={() => setActive(null)}
-              />
+              /> */}
             </Grid>
           )}
           {!active ? (

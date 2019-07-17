@@ -8,7 +8,14 @@ import Button from '@material-ui/core/Button';
 
 import styles from './styles/helperText';
 
-const HelperText = ({ classes, text, detail, actionText, actionHandler, actionDisabled }) => (
+const HelperText = ({
+  classes,
+  text,
+  detail,
+  actionText,
+  actionHandler,
+  actionDisabled
+}) => (
   <div className={classes.containerColumn}>
     <Typography
       color="textSecondary"
@@ -17,13 +24,15 @@ const HelperText = ({ classes, text, detail, actionText, actionHandler, actionDi
     >
       {text}
     </Typography>
-    {detail && <Typography
-      color="textSecondary"
-      variant="caption"
-      className={classes.withPadding}
-    >
-      {detail}
-    </Typography>}
+    {detail && (
+      <Typography
+        color="textSecondary"
+        variant="body2"
+        className={classes.withPadding}
+      >
+        {detail}
+      </Typography>
+    )}
     {actionText && actionHandler && (
       <Button
         disabled={actionDisabled}

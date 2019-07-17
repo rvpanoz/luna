@@ -26,6 +26,8 @@ const defaultFont = {
 const successColor = '#4caf50';
 const infoColor = '#00acc1';
 const grayColor = '#999999';
+const blackColor = '#000';
+const whiteColor = '#fff';
 
 /* flexbox */
 const flexContainer = {
@@ -89,6 +91,8 @@ export {
   successColor,
   infoColor,
   grayColor,
+  whiteColor,
+  blackColor,
   primaryBoxShadow,
   infoBoxShadow,
   successBoxShadow,
