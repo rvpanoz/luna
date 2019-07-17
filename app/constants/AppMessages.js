@@ -35,7 +35,8 @@ export const ACTION_MESSAGES = {
   create: 'Create',
   cancel: 'Cancel',
   filter: 'Filter',
-  close: 'Close'
+  close: 'Close',
+  runAudit: 'Run npm audit'
 };
 
 export const LABEL_MESSAGES = {
@@ -134,6 +135,7 @@ export const LABEL_MESSAGE = {
 };
 
 export const WARNING_MESSAGES = {
+  noGlobalAudit: 'You can not run npm audit on global packages',
   peerMissing:
     'You have %packages% with peer missing. Check your notifications to fix it.',
   errorPackages:

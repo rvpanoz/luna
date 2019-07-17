@@ -1,4 +1,4 @@
-import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({
@@ -21,12 +21,6 @@ const styles = theme => ({
     ...flexContainer,
     alignItems: 'center',
     justifyContent: 'space-between'
-  },
-  flexContainerCell: {
-    ...flexContainer,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
   },
   containerHolder: {
     ...flexContainer,
@@ -56,15 +50,6 @@ const styles = theme => ({
       maxHeight: 650
     }
   },
-  tableRow: {
-    border: 'none',
-    padding: 10,
-    lineHeight: '1.1',
-    verticalAlign: 'middle',
-    '&:hover': {
-      cursor: 'pointer'
-    }
-  },
   table: {
     width: '100%',
     backgroundColor: 'transparent',
@@ -78,17 +63,6 @@ const styles = theme => ({
     width: '100%',
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto'
-  },
-  tableCell: {
-    ...defaultFont,
-    fontSize: '1rem',
-    textAlign: 'center',
-    '& p': {
-      overflowWrap: 'break-word'
-    }
-  },
-  loader: {
-    marginLeft: theme.spacing.unit
   },
   outdated: {
     color: lighten(theme.palette.error.main, 0.1)
@@ -118,42 +92,8 @@ const styles = theme => ({
   hidden: {
     display: 'none'
   },
-  statusMissing: {
-    color: darken(theme.palette.secondary.main, 0.1)
-  },
-  statusOK: {
-    color: lighten('#00b300', 0.3)
-  },
-  statusPeerMissing: {
-    color: darken(theme.palette.secondary.main, 0.1)
-  },
-  statusOutdated: {
-    color: lighten(theme.palette.warning.main, 0.3)
-  },
-  statusExtraneous: {
-    color: darken(theme.palette.secondary.main, 0.1)
-  },
-  statusError: {
-    color: darken(theme.palette.secondary.main, 0.1)
-  },
   chip: {
     margin: theme.spacing.unit
-  },
-  group: {
-    color: darken(theme.palette.secondary.light, 0.3)
-  },
-  name: {
-    ...defaultFont,
-    fontSize: '1rem',
-    [theme.breakpoints.up('md')]: {
-      maxWidth: '100%'
-    },
-    [theme.breakpoints.up('lg')]: {
-      width: 'auto'
-    },
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis'
   }
 });
 

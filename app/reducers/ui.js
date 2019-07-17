@@ -13,13 +13,15 @@ import {
   setSnackbar,
   toggleLoader,
   togglePackageLoader,
+  toggleAuditLoader,
+  toggleDoctorLoader,
   setActivePage,
   setUIException,
   setSortOptions,
   setPage,
   setDialog,
   setPageRows,
-  updateFilters
+  updateFilters,
 } from 'models/ui/actions';
 
 import initialState from './initialState';
@@ -74,6 +76,26 @@ const handlers = {
       loaders: {
         ...state.loaders,
         packageLoader: {
+          loading,
+          message
+        }
+      }
+    }),
+  [toggleAuditLoader.type]: (state, { payload: { loading, message } }) =>
+    merge(state, {
+      loaders: {
+        ...state.loaders,
+        auditLoader: {
+          loading,
+          message
+        }
+      }
+    }),
+  [toggleDoctorLoader.type]: (state, { payload: { loading, message } }) =>
+    merge(state, {
+      loaders: {
+        ...state.loaders,
+        doctorLoader: {
           loading,
           message
         }

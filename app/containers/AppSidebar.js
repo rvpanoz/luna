@@ -34,7 +34,6 @@ import { iMessage, showDialog } from 'commons/utils';
 import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
-import { runAudit, runDoctor } from 'models/npm/actions';
 
 import styles from './styles/appSidebar';
 
@@ -148,37 +147,6 @@ const AppSidebar = ({
     }
   ];
 
-  const actionItems = [
-    {
-      name: 'audit',
-      mode,
-      primaryText: 'npm audit',
-      secondaryText: iMessage('info', 'npmAuditInfo'),
-      handler: () => {
-        dispatch(
-          runAudit({
-            ipcEvent: 'npm-audit',
-            cmd: ['audit']
-          })
-        );
-      }
-    },
-    {
-      name: 'doctor',
-      mode,
-      primaryText: 'npm doctor',
-      secondaryText: iMessage('info', 'npmDoctorInfo'),
-      handler: () => {
-        dispatch(
-          runDoctor({
-            ipcEvent: 'npm-doctor',
-            cmd: ['doctor']
-          })
-        );
-      }
-    }
-  ];
-
   return (
     <Drawer variant="permanent" {...restProps}>
       <List disablePadding>
@@ -233,7 +201,6 @@ const AppSidebar = ({
               <ActionsTab
                 installPackages={installPackagesJson}
                 mode={mode}
-                items={actionItems}
                 nodata={packagesData.length}
                 loading={loading}
               />

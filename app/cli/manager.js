@@ -6,7 +6,7 @@
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-import log from 'electron-log';
+// import log from 'electron-log';
 import lockVerify from 'lock-verify';
 import mk from '../mk';
 
@@ -33,8 +33,8 @@ const execute = (
     const result = [];
     let errors = '';
 
-    log.info(
-      chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
+    console.log(
+      chalk.blueBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
     );
 
     // on windows use npm.cmd
@@ -65,16 +65,15 @@ const execute = (
     });
 
     command.on('exit', code => {
-      log.info(chalk.yellow.bold(`child exited with code ${code}`));
+      console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
     });
 
     command.on('close', () => {
-      log.info(
+      console.log(
         chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
       );
 
       const resultString = result.join('');
-
       const commandResult = {
         status: 'close',
         errors,

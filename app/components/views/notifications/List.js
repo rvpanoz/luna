@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
@@ -22,6 +21,7 @@ import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 import { setActivePage, clearFilters } from 'models/ui/actions';
 import { setPackagesSearch } from 'models/packages/actions';
 import { iMessage } from 'commons/utils';
+import { HelperText } from 'components/common';
 
 import styles from './styles/list';
 
@@ -58,20 +58,10 @@ const NotificationsList = ({ classes }) => {
     );
   }
 
-  if (!notifications) {
-    return (
-      <div className={classes.containerHolder}>
-        <Typography
-          variant="subtitle1"
-          className={cn(classes.noData, classes.withPadding)}
-        >
-          {iMessage('info', 'noNotifications')}
-        </Typography>
-        <Typography variant="caption" className={cn(classes.helperText)}>
-          {iMessage('info', 'notificationsHelperText')}
-        </Typography>
-      </div>
-    );
+  if (!notifications.length) {
+    return <HelperText
+      text={iMessage('info', 'noNotifications')}
+    />
   }
 
   return (
