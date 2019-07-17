@@ -234,7 +234,7 @@
     "rxjs": "^6.4.0",
     "semver": "^6.2.0",
     "source-map-support": "^0.5.12",
-    "typeface-roboto": "0.0.54"
+    "typeface-roboto": "0.0.75"
   },
   "devEngines": {
     "node": ">=8.x",
