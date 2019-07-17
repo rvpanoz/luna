@@ -9,6 +9,7 @@ import theme from 'styles/theme';
 
 import AppSidebar from 'containers/AppSidebar';
 import AppHeader from 'containers/AppHeader';
+import Audit from './Audit';
 
 import { SnackbarContent } from 'components/common';
 import { Notifications } from 'components/views/notifications';
