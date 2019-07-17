@@ -73,11 +73,11 @@ const styles = theme => ({
     textOverflow: 'ellipsis'
   },
   actions: {
-    ...flexContainer,
+    display: 'flex',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    padding: theme.spacing.unit * 2
+
   },
   padRight: {
     paddingRight: theme.spacing.unit * 2.5

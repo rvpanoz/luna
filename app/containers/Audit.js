@@ -47,7 +47,7 @@ const Audit = ({ classes }) => {
   const { loading, message, mode, auditData } = useMappedState(mapState);
 
   const [active, setActive] = useState(null);
-  const { content, error } = DATA || {}; // auditData is default
+  const { content, error } = auditData || {}; // auditData is default
 
   const options = {
     text: iMessage('info', 'npmAuditInfo'),
@@ -115,9 +115,9 @@ const Audit = ({ classes }) => {
           <Grid
             item
             sm={12}
-            md={9}
-            lg={9}
-            xl={9}
+            md={8}
+            lg={8}
+            xl={8}
             className={classes.transition}
           >
             <Advisories
@@ -134,18 +134,18 @@ const Audit = ({ classes }) => {
             />
           </Grid>
           {active && (
-            <Grid item sm={12} md={3} lg={3} xl={3}>
-              {/* <AdvisoryDetails
+            <Grid item sm={12} md={4} lg={4} xl={4}>
+              <AdvisoryDetails
                 data={active}
                 handleClose={() => setActive(null)}
-              /> */}
+              />
             </Grid>
           )}
-          {/* {!active ? (
-            <Grid item sm={12} md={3} lg={3} xl={3}>
-              <Actions data={actions} />
+          {!active ? (
+            <Grid item sm={12} md={4} lg={4} xl={4}>
+              <Actions data={actions.filter(action => !action.depth)} />
             </Grid>
-          ) : null} */}
+          ) : null}
         </Grid>
       </div>
     </AppLoader>

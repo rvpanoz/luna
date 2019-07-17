@@ -88,18 +88,19 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
                 }
               />
               <CardContent className={classes.cardContent}>
-                <Typography color="textSecondary" variant="body1">
+                <Typography component="p">
                   {iMessage('label', 'recommendation')}
-                  <br />
+                </Typography>
+                <br />
+                <Typography component="p" color="textSecondary">
                   {recommendation}
                 </Typography>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                  className={classes.padTop}
-                >
+                <br />
+                <Typography component="p">
                   {iMessage('label', 'vulnerableVersions')}
-                  <br />
+                </Typography>
+                <br />
+                <Typography component="p" color="textSecondary">
                   {vulnerable_versions}
                 </Typography>
                 <Divider className={classes.divider} light />
