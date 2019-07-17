@@ -15,12 +15,11 @@ import {
   Actions,
   Advisories,
   AdvisoryDetails,
-  ListDotTypes
+  ListDotTypes,
+  StatsCard
 } from 'components/views/audit/components';
 
 import styles from './styles/audit';
-
-const WithStylesHelperText = withStyles(styles)(HelperText);
 
 const mapState = ({
   common: { mode, directory },
@@ -50,7 +49,7 @@ const Audit = ({ classes }) => {
       isError: true
     });
 
-    return <WithStylesHelperText {...props} />;
+    return <HelperText {...props} />;
   }
 
   if (!content && !loading) {
@@ -73,7 +72,7 @@ const Audit = ({ classes }) => {
 
   const {
     metadata: {
-      // dependencies,
+      dependencies,
       // devDependencies,
       // optionalDependencies,
       vulnerabilities
@@ -90,7 +89,10 @@ const Audit = ({ classes }) => {
         <Hidden mdDown>
           <Grid container spacing={8} className={classes.gridContainer}>
             <Grid item lg={6} md={6} sm={12} xl={6}>
-              _statsCard_
+              <StatsCard
+                title={iMessage('title', 'dependencies')}
+                value={dependencies}
+              />
             </Grid>
             <Grid item xs={6} sm={12} md={6} lg={6} xl={6}>
               <ListDotTypes data={vulnerabilities} />

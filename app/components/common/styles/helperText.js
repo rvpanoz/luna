@@ -18,6 +18,9 @@ const styles = theme => ({
     ...defaultFont,
     color: lighten(grayColor, 0.1),
     fontSize: 16
+  },
+  buttonFix: {
+    margin: theme.spacing.unit
   }
 });
 
