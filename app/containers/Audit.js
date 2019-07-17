@@ -1,9 +1,6 @@
-/* eslint-disable */
-/* eslint-disable react/prop-types */
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { withStyles } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 
@@ -12,14 +9,12 @@ import Hidden from '@material-ui/core/Hidden';
 
 import { runAudit } from 'models/npm/actions';
 import { iMessage } from 'commons/utils';
-import { AppLoader, HelperText } from 'components/common'
-import { AUDIT_ERRORS } from 'constants/AppConstants';
+import { AppLoader, HelperText } from 'components/common';
 
 import {
   Actions,
   Advisories,
   AdvisoryDetails,
-  OverviewCard,
   ListDotTypes
 } from 'components/views/audit/components';
 
@@ -28,29 +23,24 @@ import styles from './styles/audit';
 const WithStylesHelperText = withStyles(styles)(HelperText);
 
 const mapState = ({
-  common: {
-    mode, directory
-  },
+  common: { mode, directory },
   ui: {
     loaders: {
       auditLoader: { loading, message }
     }
   },
-  npm: {
-    auditData
-  }
+  npm: { auditData }
 }) => ({
-  loading, message, mode, directory, auditData
-})
+  loading,
+  message,
+  mode,
+  directory,
+  auditData
+});
 
-const Audit = ({ classes, data }) => {
+const Audit = ({ classes }) => {
   const dispatch = useDispatch();
-  const {
-    loading,
-    message,
-    mode,
-    auditData
-  } = useMappedState(mapState);
+  const { loading, message, mode, auditData } = useMappedState(mapState);
 
   const [active, setActive] = useState(null);
   const { content, error } = auditData || {};
@@ -68,12 +58,13 @@ const Audit = ({ classes, data }) => {
       text: iMessage('info', 'npmAuditInfo'),
       detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
       actionText: iMessage('action', 'runAudit'),
-      actionHandler: () => dispatch(
-        runAudit({
-          ipcEvent: 'npm-audit',
-          cmd: ['audit']
-        })
-      ),
+      actionHandler: () =>
+        dispatch(
+          runAudit({
+            ipcEvent: 'npm-audit',
+            cmd: ['audit']
+          })
+        ),
       actionDisabled: mode === 'global'
     };
 
@@ -82,16 +73,16 @@ const Audit = ({ classes, data }) => {
 
   const {
     metadata: {
-      dependencies,
-      devDependencies,
-      optionalDependencies,
+      // dependencies,
+      // devDependencies,
+      // optionalDependencies,
       vulnerabilities
     },
     actions,
     advisories
   } = content || { metadata: {}, actions: [], advisories: {} };
 
-  const overviewData = { dependencies, devDependencies, optionalDependencies };
+  // const overviewData = { dependencies, devDependencies, optionalDependencies };
 
   return (
     <AppLoader loading={loading} message={message}>
@@ -99,10 +90,7 @@ const Audit = ({ classes, data }) => {
         <Hidden mdDown>
           <Grid container spacing={8} className={classes.gridContainer}>
             <Grid item lg={6} md={6} sm={12} xl={6}>
-              <OverviewCard
-                title={iMessage('title', 'overview')}
-                data={overviewData}
-              />
+              _statsCard_
             </Grid>
             <Grid item xs={6} sm={12} md={6} lg={6} xl={6}>
               <ListDotTypes data={vulnerabilities} />
@@ -110,13 +98,26 @@ const Audit = ({ classes, data }) => {
           </Grid>
         </Hidden>
         <Grid container spacing={8} className={classes.gridContainer}>
-          <Grid item sm={12} md={9} lg={9} xl={9} className={classes.transition}>
-            <Advisories data={advisories} handleClick={setActive} runAudit={() => dispatch(
-              runAudit({
-                ipcEvent: 'npm-audit',
-                cmd: ['audit']
-              })
-            )} />
+          <Grid
+            item
+            sm={12}
+            md={9}
+            lg={9}
+            xl={9}
+            className={classes.transition}
+          >
+            <Advisories
+              data={advisories}
+              handleClick={setActive}
+              runAudit={() =>
+                dispatch(
+                  runAudit({
+                    ipcEvent: 'npm-audit',
+                    cmd: ['audit']
+                  })
+                )
+              }
+            />
           </Grid>
           {active && (
             <Grid item sm={12} md={3} lg={3} xl={3}>
@@ -138,17 +139,7 @@ const Audit = ({ classes, data }) => {
 };
 
 Audit.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  data: PropTypes.objectOf(
-    PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.array,
-      PropTypes.bool,
-      PropTypes.string
-    ])
-  ),
-  loading: PropTypes.bool,
-  message: PropTypes.string
+  classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
 export default withStyles(styles, { withTheme: false })(Audit);

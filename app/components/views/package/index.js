@@ -1,5 +1,15 @@
 /* eslint-disable import/prefer-default-export */
 
-import PackageDetails from './PackageDetails';
+import DependenciesView from './Dependencies';
+import { InstallAction, UpdateAction, UninstallAction } from './PackageActions';
+import PackageInfoView from './PackageInfo';
+import VersionsView from './Versions';
 
-export { PackageDetails };
+export {
+  DependenciesView,
+  PackageInfoView,
+  VersionsView,
+  InstallAction,
+  UpdateAction,
+  UninstallAction
+};

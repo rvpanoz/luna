@@ -11,23 +11,20 @@ import AppSidebar from 'containers/AppSidebar';
 import AppHeader from 'containers/AppHeader';
 
 import { SnackbarContent } from 'components/common';
-import { Packages } from 'components/views/packages';
 import { Notifications } from 'components/views/notifications';
 import { Doctor } from 'components/views/doctor';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 import { drawerWidth } from 'styles/variables';
 
+import Packages from './Packages';
 import Audit from './Audit';
 import styles from './styles/appLayout';
 
 const mapState = ({
   npm: { doctorData },
   common: { mode, directory, onlineStatus },
-  ui: {
-    activePage,
-    snackbar
-  },
+  ui: { activePage, snackbar }
 }) => ({
   doctorData,
   onlineStatus,
@@ -70,9 +67,7 @@ const AppLayout = ({ classes }) => {
               problems: () => (
                 <Notifications mode={mode} directory={directory} />
               ),
-              audit: () => (
-                <Audit />
-              ),
+              audit: () => <Audit />,
               doctor: () => (
                 <Doctor mode={mode} directory={directory} data={doctorData} />
               )

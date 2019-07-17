@@ -15,7 +15,7 @@ import CheckIcon from '@material-ui/icons/CheckTwoTone';
 import UpdateIcon from '@material-ui/icons/UpdateTwoTone';
 import SecurityIcon from '@material-ui/icons/SecurityTwoTone';
 
-import styles from './styles/packages';
+import styles from './styles/packageItem';
 
 const PackageItem = ({
   classes,

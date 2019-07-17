@@ -39,10 +39,14 @@ import {
 import { AppLoader, Transition } from 'components/common';
 import { iMessage, showDialog, switchcase } from 'commons/utils';
 
-import { InstallAction, UpdateAction, UninstallAction } from './PackageActions';
-import Dependencies from './Dependencies';
-import Versions from './Versions';
-import PackageInfo from './PackageInfo';
+import {
+  DependenciesView,
+  VersionsView,
+  PackageInfoView,
+  InstallAction,
+  UpdateAction,
+  UninstallAction
+} from 'components/views/package';
 import styles from './styles/packageDetails';
 
 const mapState = ({
@@ -268,11 +272,11 @@ const PackageDetails = ({ classes, toggleOptions }) => {
               <Divider className={classes.divider} light />
               <Hidden mdDown>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <PackageInfo active={active} dependencies={dependencies} />
+                  <PackageInfoView
+                    active={active}
+                    dependencies={dependencies}
+                  />
                 </Collapse>
-              </Hidden>
-              <Hidden lgUp>
-                <PackageInfo active={active} short />
               </Hidden>
             </CardContent>
             {renderActions(name, fromSearch)}
@@ -364,7 +368,10 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            <Versions data={versions} handleInstall={handleInstallVersion} />
+            <VersionsView
+              data={versions}
+              handleInstall={handleInstallVersion}
+            />
           </Fade>
         )}
       </Popper>
@@ -376,7 +383,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            <Dependencies data={dependencies} />
+            <DependenciesView data={dependencies} />
           </Fade>
         )}
       </Popper>

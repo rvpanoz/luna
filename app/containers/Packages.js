@@ -18,7 +18,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import { useFilters } from 'commons/hooks';
 import { AppLoader, HelperText } from 'components/common';
-import { PackageDetails } from 'components/views/package';
 import { scrollWrapper, iMessage } from 'commons/utils';
 
 import {
@@ -35,12 +34,15 @@ import {
 } from 'models/ui/actions';
 import { setMode, clearInstallOptions } from 'models/common/actions';
 
-import ToolbarView from './Toolbar';
-import HeaderView from './Header';
-import Pagination from './Pagination';
-import PackageItem from './PackageItem';
-import DialogOptions from './Options';
+import {
+  ToolbarView,
+  HeaderView,
+  PaginationView,
+  PackageItemView,
+  DialogOptionsView
+} from 'components/views/packages';
 
+import PackageDetails from './PackageDetails';
 import styles from './styles/packages';
 
 const mapState = ({
@@ -313,7 +315,7 @@ const Packages = ({ classes }) => {
                             );
 
                             return (
-                              <PackageItem
+                              <PackageItemView
                                 key={`pkg-${name}`}
                                 isSelected={isPackageSelected}
                                 installOptions={installOptions}
@@ -342,7 +344,7 @@ const Packages = ({ classes }) => {
                           }
                         )}
                     </TableBody>
-                    <Pagination
+                    <PaginationView
                       rowCount={data && data.length}
                       page={page}
                       rowsPerPage={rowsPerPage}
@@ -387,7 +389,7 @@ const Packages = ({ classes }) => {
         aria-labelledby="install-options"
       >
         <DialogContent>
-          <DialogOptions
+          <DialogOptionsView
             selected={selected.length ? selected : active ? [active.name] : []}
             packagesInstallOptions={packagesInstallOptions}
           />
