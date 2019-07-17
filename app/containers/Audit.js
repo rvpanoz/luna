@@ -73,15 +73,13 @@ const Audit = ({ classes }) => {
   const {
     metadata: {
       dependencies,
-      // devDependencies,
-      // optionalDependencies,
+      devDependencies,
+      optionalDependencies,
       vulnerabilities
     },
     actions,
     advisories
   } = content || { metadata: {}, actions: [], advisories: {} };
-
-  // const overviewData = { dependencies, devDependencies, optionalDependencies };
 
   return (
     <AppLoader loading={loading} message={message}>
@@ -92,6 +90,18 @@ const Audit = ({ classes }) => {
               <StatsCard
                 title={iMessage('title', 'dependencies')}
                 value={dependencies}
+              />
+            </Grid>
+            <Grid item lg={6} md={6} sm={12} xl={6}>
+              <StatsCard
+                title={iMessage('title', 'devDependencies')}
+                value={devDependencies}
+              />
+            </Grid>
+            <Grid item lg={6} md={6} sm={12} xl={6}>
+              <StatsCard
+                title={iMessage('title', 'optionalDependencies')}
+                value={optionalDependencies}
               />
             </Grid>
             <Grid item xs={6} sm={12} md={6} lg={6} xl={6}>
