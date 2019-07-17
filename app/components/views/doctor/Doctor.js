@@ -14,6 +14,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import CheckIcon from '@material-ui/icons/CheckOutlined';
 
+import { HelperText } from 'components/common'
 import { iMessage } from 'commons/utils';
 import styles from './styles/doctor';
 
@@ -38,17 +39,7 @@ const renderData = data => (
 const Doctor = ({ classes, data }) => {
   if (!data) {
     return (
-      <div className={classes.containerHolder}>
-        <Typography
-          variant="subtitle1"
-          className={cn(classes.noData, classes.withPadding)}
-        >
-          {iMessage('info', 'noDoctorData')}
-        </Typography>
-        <Typography variant="caption" className={cn(classes.helperText)}>
-          {iMessage('info', 'npmDoctorHelperText')}
-        </Typography>
-      </div>
+      <HelperText text={iMessage('info', 'noDoctorData')} />
     );
   }
 

@@ -21,7 +21,7 @@ import {
   AdvisoryDetails,
   OverviewCard,
   ListDotTypes
-} from './components';
+} from 'components/views/audit/components';
 
 import styles from './styles/audit';
 
@@ -62,8 +62,8 @@ const Audit = ({ classes, data }) => {
 
     return <WithStylesHelperText {...props} />;
   }
-  console.log(loading, message)
-  if (!content) {
+
+  if (!content && !loading) {
     const options = {
       text: iMessage('info', 'npmAuditInfo'),
       detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
@@ -89,7 +89,7 @@ const Audit = ({ classes, data }) => {
     },
     actions,
     advisories
-  } = content || {};
+  } = content || { metadata: {}, actions: [], advisories: {} };
 
   const overviewData = { dependencies, devDependencies, optionalDependencies };
 
@@ -111,7 +111,12 @@ const Audit = ({ classes, data }) => {
         </Hidden>
         <Grid container spacing={8} className={classes.gridContainer}>
           <Grid item sm={12} md={9} lg={9} xl={9} className={classes.transition}>
-            <Advisories data={advisories} handleClick={setActive} />
+            <Advisories data={advisories} handleClick={setActive} runAudit={() => dispatch(
+              runAudit({
+                ipcEvent: 'npm-audit',
+                cmd: ['audit']
+              })
+            )} />
           </Grid>
           {active && (
             <Grid item sm={12} md={3} lg={3} xl={3}>
