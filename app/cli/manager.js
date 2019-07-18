@@ -21,6 +21,13 @@ const defaultsArgs = {
 
 const cwd = process.cwd();
 
+/**
+ * 
+ * @param {*} manager 
+ * @param {*} commandArgs 
+ * @param {*} mode 
+ * @param {*} directory 
+ */
 const execute = (
   manager = defaultManager,
   commandArgs = [],
@@ -30,6 +37,7 @@ const execute = (
   const [operation] = commandArgs;
 
   const resultP = new Promise(resolve => {
+    const isLocal = mode === 'local' && directory;
     const result = [];
     let errors = '';
 
@@ -43,12 +51,10 @@ const execute = (
       commandArgs,
       {
         env: process.env,
-        cwd:
-          mode === 'local' && directory
-            ? operation === 'init'
-              ? path.resolve(directory)
-              : path.dirname(directory)
-            : cwd
+        cwd: isLocal ? operation === 'init'
+          ? path.resolve(directory)
+          : path.dirname(directory)
+          : cwd
       }
     );
 
@@ -260,11 +266,11 @@ const view = (opts, callback) => {
  * @param {*} callback
  */
 const runAudit = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts || {};
+  const { activeManager = 'npm', mode, directory, ...options } = opts || {};
 
   try {
     const audit = require('./npm/audit').default;
-    const run = audit(opts);
+    const run = audit(options);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {

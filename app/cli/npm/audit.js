@@ -11,7 +11,6 @@ const audit = options => {
 
   if (flag) {
     const argv = flag === 'fix' ? flag : `--${flag}`;
-
     commandOptions.push(argv);
   }
 

@@ -1244,15 +1244,15 @@
     "muted": [],
     "metadata": {
       "vulnerabilities": {
-        "info": 0,
-        "low": 0,
+        "info": 11,
+        "low": 55,
         "moderate": 1,
         "high": 137,
-        "critical": 0
+        "critical": 22
       },
       "dependencies": 115,
       "devDependencies": 2679,
-      "optionalDependencies": 0,
+      "optionalDependencies": 33,
       "totalDependencies": 2794
     },
     "runId": "3ecf0b7d-f65d-4562-be07-d9f42c6909ae"

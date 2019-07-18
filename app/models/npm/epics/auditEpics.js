@@ -51,6 +51,7 @@ const npmAuditParseEpic = action$ =>
     map(({ payload: data }) => {
       try {
         const dataToJson = JSON.parse(data);
+        console.log(dataToJson)
         const { error } = dataToJson || {};
 
         if (error && typeof error === 'object') {

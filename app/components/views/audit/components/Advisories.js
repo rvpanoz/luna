@@ -102,20 +102,6 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
     return showDialog(dialogHandler, dialogOptions);
   };
 
-  if (zeroKeys) {
-    return (
-      <div className={classes.container}>
-        <Typography
-          variant="subtitle1"
-          className={cn(classes.noData, classes.withPadding)}
-          color="textSecondary"
-        >
-          {iMessage('info', 'noAuditIssues')}
-        </Typography>
-      </div>
-    );
-  }
-
   return (
     <Paper className={classes.root}>
       <Toolbar disableGutters>
@@ -142,6 +128,7 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
             size="small"
             color="secondary"
             onClick={() => handleFix('fix')}
+            disabled={Boolean(zeroKeys)}
             className={classes.marLeft}
           >
             Fix all
@@ -150,6 +137,7 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
             variant="outlined"
             size="small"
             onClick={() => handleFix('force')}
+            disabled={Boolean(zeroKeys)}
             className={classes.marLeft}
           >
             Force fix
@@ -158,7 +146,7 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
         </div>
       </Toolbar>
       <div className={classes.tableWrapper}>
-        <Table className={classes.table}>
+        <Table className={classes.table} style={{ display: 'none' }}>
           <TableHead>
             <TableRow>
               <TableCell>
