@@ -3,33 +3,29 @@
 import React from 'react';
 import { objectOf, string, number } from 'prop-types';
 import { withStyles } from '@material-ui/core';
-import Icon from '@material-ui/core/Icon'
-import Typography from '@material-ui/core/Typography'
+import Icon from '@material-ui/core/Icon';
+import Typography from '@material-ui/core/Typography';
 
 import { Card, CardHeader, CardIcon } from 'components/common';
 import styles from '../styles/statsCard';
 
 const StatsCard = ({ classes, title, value, color, icon }) => {
-
-  return <Card>
-    <CardHeader color={color}>
-      <CardIcon color={color}>
-        <Icon>{icon}</Icon>
-      </CardIcon>
-      <Typography className={classes.title}>
-        {value}
-      </Typography>
-      <Typography className={classes.cardCategory}>
-        {title}
-      </Typography>
-    </CardHeader>
-  </Card>
+  return (
+    <Card>
+      <CardHeader color={color}>
+        <CardIcon color={color}>
+          <Icon>{icon}</Icon>
+        </CardIcon>
+        <Typography className={classes.title}>{value}</Typography>
+        <Typography className={classes.cardCategory}>{title}</Typography>
+      </CardHeader>
+    </Card>
+  );
 };
 
 StatsCard.defaultProps = {
-  icon: 'list',
-  color: 'primary'
-}
+  icon: 'list'
+};
 
 StatsCard.propTypes = {
   classes: objectOf(string).isRequired,

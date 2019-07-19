@@ -1,11 +1,11 @@
 /**
-* Run a security audit
-* https://docs.npmjs.com/cli/audit
-*/
+ * Run a security audit
+ * https://docs.npmjs.com/cli/audit
+ */
 
 const audit = options => {
   const command = ['audit'];
-  const defaults = ['--json'];
+  const defaults = ['--json', '--verbose'];
   const { flag } = options || {};
   const commandOptions = [];
 

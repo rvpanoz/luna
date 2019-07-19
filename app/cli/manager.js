@@ -22,11 +22,11 @@ const defaultsArgs = {
 const cwd = process.cwd();
 
 /**
- * 
- * @param {*} manager 
- * @param {*} commandArgs 
- * @param {*} mode 
- * @param {*} directory 
+ *
+ * @param {*} manager
+ * @param {*} commandArgs
+ * @param {*} mode
+ * @param {*} directory
  */
 const execute = (
   manager = defaultManager,
@@ -51,9 +51,10 @@ const execute = (
       commandArgs,
       {
         env: process.env,
-        cwd: isLocal ? operation === 'init'
-          ? path.resolve(directory)
-          : path.dirname(directory)
+        cwd: isLocal
+          ? operation === 'init'
+            ? path.resolve(directory)
+            : path.dirname(directory)
           : cwd
       }
     );

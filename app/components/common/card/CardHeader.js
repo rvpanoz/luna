@@ -33,14 +33,7 @@ const CardHeader = ({ ...props }) => {
 CardHeader.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   className: PropTypes.string,
-  color: PropTypes.oneOf([
-    'warning',
-    'success',
-    'danger',
-    'info',
-    'primary',
-    'rose'
-  ]),
+  color: PropTypes.oneOf(['warning', 'success', 'danger', 'info', 'primary']),
   plain: PropTypes.bool,
   stats: PropTypes.bool,
   icon: PropTypes.bool,

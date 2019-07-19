@@ -15,7 +15,7 @@ import {
   clearAuditData,
   updateNpmAuditData,
   updateNpmAuditFixData,
-  updateNpmDoctorData,
+  updateNpmDoctorData
 } from 'models/npm/actions';
 
 import initialState from './initialState';
@@ -30,7 +30,7 @@ const handlers = {
     merge(state, {
       audit: {
         ...state.audit,
-        result: data,
+        result: data
       }
     }),
   [updateNpmAuditFixData.type]: (state, { payload: { data } }) =>
@@ -88,7 +88,10 @@ const handlers = {
     }),
   [clearAuditData.type]: state =>
     merge(state, {
-      auditData: null
+      audit: {
+        result: null,
+        fix: false
+      }
     })
 };
 
