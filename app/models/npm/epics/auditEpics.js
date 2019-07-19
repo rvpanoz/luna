@@ -7,7 +7,9 @@ import {
   runAudit,
   npmAuditListener,
   parseNpmAuditData,
-  updateNpmAuditData
+  parseNpmAuditFixData,
+  updateNpmAuditData,
+  updateNpmAuditFixData
 } from 'models/npm/actions';
 
 import { onNpmAudit$ } from '../listeners';
@@ -45,13 +47,16 @@ const npmRunAuditEpic = (action$, state$) =>
     ignoreElements()
   );
 
+/**
+* Parse npm audit output
+* @param {*} action$ 
+*/
 const npmAuditParseEpic = action$ =>
   action$.pipe(
     ofType(parseNpmAuditData.type),
     map(({ payload: data }) => {
       try {
         const dataToJson = JSON.parse(data);
-        console.log(dataToJson)
         const { error } = dataToJson || {};
 
         if (error && typeof error === 'object') {
@@ -82,6 +87,29 @@ const npmAuditParseEpic = action$ =>
     })
   );
 
+/**
+ * Parse npm audit fix output
+ * @param {*} action$ 
+ */
+const npmAuditParseFixEpic = action$ =>
+  action$.pipe(
+    ofType(parseNpmAuditFixData.type),
+    map(({ payload: data }) => {
+      try {
+        const dataToJson = JSON.parse(data);
+        console.log(dataToJson)
+        return updateNpmAuditFixData({
+          data: {
+            error: null,
+            content: dataToJson
+          }
+        });
+      } catch (error) {
+        throw new Error(error);
+      }
+    })
+  );
+
 const npmRunAuditListenerEpic = pipe(
   ofType(npmAuditListener.type),
   switchMap(() => onNpmAudit$)
@@ -91,5 +119,6 @@ export {
   npmRunAuditEpic,
   npmRunAuditListenerEpic,
   npmAuditParseEpic,
+  npmAuditParseFixEpic,
   showAuditingLoaderEpic
 };

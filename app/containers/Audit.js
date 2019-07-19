@@ -33,21 +33,25 @@ const mapState = ({
       auditLoader: { loading, message }
     }
   },
-  npm: { auditData }
+  npm: { audit: {
+    result,
+    fix
+  } }
 }) => ({
   loading,
   message,
   mode,
   directory,
-  auditData
+  result,
+  fix
 });
 
 const Audit = ({ classes }) => {
   const dispatch = useDispatch();
-  const { loading, message, mode, auditData } = useMappedState(mapState);
+  const { loading, message, mode, result, fix } = useMappedState(mapState);
 
   const [active, setActive] = useState(null);
-  const { content, error } = auditData || {}; // auditData is default
+  const { content, error } = result || {}; // auditData is default
 
   const options = {
     text: iMessage('info', 'npmAuditInfo'),
@@ -62,6 +66,11 @@ const Audit = ({ classes }) => {
       ),
     actionDisabled: mode === 'global'
   };
+
+  if (fix) {
+    console.log(result);
+    return null
+  }
 
   if (error) {
     return <HelperText {...options} isError={true} />;

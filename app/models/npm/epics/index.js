@@ -10,6 +10,7 @@ import {
   npmRunAuditEpic,
   npmRunAuditListenerEpic,
   npmAuditParseEpic,
+  npmAuditParseFixEpic,
   showAuditingLoaderEpic
 } from './auditEpics';
 
@@ -27,6 +28,7 @@ export default combineEpics(
   npmRunAuditListenerEpic,
   showAuditingLoaderEpic,
   npmAuditParseEpic,
+  npmAuditParseFixEpic,
   npmRunDoctorEpic,
   npmRunDoctorListenerEpic,
   showDoctorLoaderEpic

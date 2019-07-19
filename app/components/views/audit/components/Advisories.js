@@ -146,7 +146,7 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
         </div>
       </Toolbar>
       <div className={classes.tableWrapper}>
-        <Table className={classes.table} style={{ display: 'none' }}>
+        <Table className={classes.table}>
           <TableHead>
             <TableRow>
               <TableCell>

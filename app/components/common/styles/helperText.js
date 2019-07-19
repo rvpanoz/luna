@@ -20,7 +20,9 @@ const styles = theme => ({
     fontSize: 16
   },
   buttonFix: {
-    margin: theme.spacing.unit
+    ...defaultFont,
+    lineHeight: 1.75,
+    margin: theme.spacing.unit * 1.5
   }
 });
 

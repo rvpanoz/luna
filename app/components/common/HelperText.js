@@ -10,45 +10,51 @@ import styles from './styles/helperText';
 
 const HelperText = ({
   classes,
+  color,
   text,
   detail,
   actionText,
   actionHandler,
   actionDisabled
 }) => (
-  <div className={classes.containerColumn}>
-    <Typography
-      color="textSecondary"
-      variant="subtitle1"
-      className={cn(classes.noData, classes.withPadding)}
-    >
-      {text}
-    </Typography>
-    {detail && (
+    <div className={classes.containerColumn}>
       <Typography
         color="textSecondary"
-        variant="body2"
-        className={classes.withPadding}
+        variant="subtitle1"
+        className={cn(classes.noData, classes.withPadding)}
       >
-        {detail}
+        {text}
       </Typography>
-    )}
-    {actionText && actionHandler && (
-      <Button
-        disabled={actionDisabled}
-        color="primary"
-        className={classes.buttonFix}
-        variant="outlined"
-        onClick={actionHandler}
-      >
-        {actionText}
-      </Button>
-    )}
-  </div>
-);
+      {detail && (
+        <Typography
+          color="textSecondary"
+          variant="body2"
+          className={classes.withPadding}
+        >
+          {detail}
+        </Typography>
+      )}
+      {actionText && actionHandler && (
+        <Button
+          disabled={actionDisabled}
+          color={color}
+          className={classes.buttonFix}
+          variant="contained"
+          onClick={actionHandler}
+        >
+          {actionText}
+        </Button>
+      )}
+    </div>
+  );
+
+HelperText.defaultProps = {
+  color: 'default'
+}
 
 HelperText.propTypes = {
   classes: objectOf(string).isRequired,
+  color: string,
   text: string,
   detail: string,
   actionText: string,

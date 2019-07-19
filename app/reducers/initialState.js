@@ -22,7 +22,10 @@ const initialState = {
     operationStatus: 'idle',
     operationPackages: [],
     operationCommand: null,
-    auditData: null,
+    audit: {
+      result: null,
+      fix: false
+    },
     doctorData: null
   },
   ui: {

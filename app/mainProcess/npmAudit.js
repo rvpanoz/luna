@@ -14,8 +14,13 @@ const onNpmAudit = (event, options, store) => {
 
   const onFlow = chunk => event.sender.send('npm-audit-flow', chunk);
   const onError = error => event.sender.send('npm-audit-error', error);
-  const onComplete = (errors, data) =>
-    event.sender.send('npm-audit-completed', data, errors);
+  const onComplete = (error, data) => {
+    const { flag } = options || {};
+    const evtName = flag ? 'npm-audit-fix-completed' : 'npm-audit-completed';
+
+    return event.sender.send(evtName, error, data);
+  }
+
 
   const callback = result => {
     const { status, errors, data } = result;
