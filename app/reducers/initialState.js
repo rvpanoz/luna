@@ -26,7 +26,10 @@ const initialState = {
       result: null,
       fix: false
     },
-    doctorData: null
+    doctor: {
+      data: null,
+      error: false
+    }
   },
   ui: {
     paused: false,
@@ -58,7 +61,7 @@ const initialState = {
       doctorLoader: {
         loading: false,
         message: null
-      },
+      }
     },
     pagination: {
       page: 0,

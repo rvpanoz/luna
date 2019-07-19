@@ -48,9 +48,9 @@ const npmRunAuditEpic = (action$, state$) =>
   );
 
 /**
-* Parse npm audit output
-* @param {*} action$ 
-*/
+ * Parse npm audit output
+ * @param {*} action$
+ */
 const npmAuditParseEpic = action$ =>
   action$.pipe(
     ofType(parseNpmAuditData.type),
@@ -70,7 +70,7 @@ const npmAuditParseEpic = action$ =>
                 detail,
                 code
               },
-              content: null,
+              content: null
             }
           });
         }
@@ -89,7 +89,7 @@ const npmAuditParseEpic = action$ =>
 
 /**
  * Parse npm audit fix output
- * @param {*} action$ 
+ * @param {*} action$
  */
 const npmAuditParseFixEpic = action$ =>
   action$.pipe(
@@ -97,7 +97,8 @@ const npmAuditParseFixEpic = action$ =>
     map(({ payload: data }) => {
       try {
         const dataToJson = JSON.parse(data);
-        console.log(dataToJson)
+        console.log(dataToJson);
+
         return updateNpmAuditFixData({
           data: {
             error: null,

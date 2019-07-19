@@ -33,10 +33,9 @@ const mapState = ({
       auditLoader: { loading, message }
     }
   },
-  npm: { audit: {
-    result,
-    fix
-  } }
+  npm: {
+    audit: { result, fix }
+  }
 }) => ({
   loading,
   message,
@@ -51,7 +50,7 @@ const Audit = ({ classes }) => {
   const { loading, message, mode, result, fix } = useMappedState(mapState);
 
   const [active, setActive] = useState(null);
-  const { content, error } = result || {}; // auditData is default
+  const { content, error } = result || {};
 
   const options = {
     text: iMessage('info', 'npmAuditInfo'),
@@ -69,7 +68,7 @@ const Audit = ({ classes }) => {
 
   if (fix) {
     console.log(result);
-    return null
+    return null;
   }
 
   if (error) {
@@ -132,12 +131,12 @@ const Audit = ({ classes }) => {
             <Advisories
               data={advisories}
               handleClick={setActive}
-              runAudit={(option) =>
+              runAudit={option =>
                 dispatch(
                   runAudit({
                     ipcEvent: 'npm-audit',
                     cmd: ['audit'],
-                    flag: option,
+                    flag: option
                   })
                 )
               }

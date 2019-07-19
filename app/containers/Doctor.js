@@ -1,7 +1,9 @@
+/* eslint-disable */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { useDispatch } from 'redux-react-hook';
+import { useDispatch, useMappedState } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -19,6 +21,25 @@ import { iMessage } from 'commons/utils';
 import { runDoctor } from 'models/npm/actions';
 
 import styles from './styles/doctor';
+
+const mapState = ({
+  common: { mode, directory },
+  ui: {
+    loaders: {
+      doctorLoader: { loading, message }
+    }
+  },
+  npm: {
+    doctor: { error, data }
+  }
+}) => ({
+  mode,
+  directory,
+  loading,
+  message,
+  data,
+  error
+});
 
 const renderData = data => (
   <List disablePadding>
@@ -38,12 +59,13 @@ const renderData = data => (
   </List>
 );
 
-const Doctor = ({ classes, data }) => {
+const Doctor = ({ classes }) => {
+  const { loading, message, mode, directory, data } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   if (!data) {
     const options = {
-      text: iMessage('info', 'npmAuditInfo'),
+      text: iMessage('info', 'npmDoctorInfo'),
       actionText: iMessage('action', 'runDoctor'),
       actionHandler: () =>
         dispatch(
@@ -76,13 +98,8 @@ const Doctor = ({ classes, data }) => {
   );
 };
 
-Doctor.defaultProps = {
-  data: null
-};
-
 Doctor.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  data: PropTypes.arrayOf(PropTypes.string)
+  classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
 export default withStyles(styles)(Doctor);
