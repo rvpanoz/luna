@@ -97,7 +97,6 @@ const npmAuditParseFixEpic = action$ =>
     map(({ payload: data }) => {
       try {
         const dataToJson = JSON.parse(data);
-        console.log(dataToJson);
 
         return updateNpmAuditFixData({
           data: {

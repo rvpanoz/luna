@@ -25,21 +25,38 @@ export const INFO_MESSAGES = {
   directorySelection: 'Select directory',
   directory: 'Directory',
   createPackageJsonNote: 'Note: npm init will run with the default parameters.',
-  run_audit_fix:
+  auditFix:
     'Automatically install any compatible updates to vulnerable dependencies',
-  run_with_force:
+  auditForce:
     'Have audit fix install semver-major updates to toplevel dependencies, not just semver-compatible ones'
 };
 
 export const ACTION_MESSAGES = {
+  install: 'Install',
+  update: 'Update',
+  view: 'View',
+  uninstall: 'Uninstall',
   create: 'Create',
   cancel: 'Cancel',
   filter: 'Filter',
   close: 'Close',
-  runAudit: 'Run npm audit'
+  runDoctor: 'Run doctor',
+  runAudit: 'Run audit',
+  runAuditFix: 'Fix all',
+  runAuditFixForce: 'Fix force',
+  runAuditFixProd: 'Fix only prod',
+  runAuditFixDev: 'Fix only dev',
+  runAuditFixLock: 'Fix only lock'
 };
 
 export const LABEL_MESSAGES = {
+  versions: 'Versions',
+  latest: 'Latest',
+  next: 'Next',
+  homepage: 'Homepage',
+  repository: 'Repository',
+  tarball: 'Tarball',
+  engines: 'Engines',
   dependencies: 'Dependencies',
   devDependencies: 'Development',
   optionalDependencies: 'Optional',
@@ -53,7 +70,7 @@ export const LABEL_MESSAGES = {
   info: 'Info',
   high: 'High',
   moderate: 'Moderate',
-  module_name: 'Module',
+  moduleName: 'Module',
   title: 'Title',
   patched_versions: 'Patched versions',
   severity: 'Severity',

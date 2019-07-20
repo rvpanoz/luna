@@ -22,7 +22,7 @@ const styles = theme => ({
   },
   secondaryColor: {
     color: theme.palette.common.white,
-    backgroundColor: theme.palette.primary.light
+    backgroundColor: theme.palette.secondary.light
   },
   warningColor: {
     color: theme.palette.common.white,

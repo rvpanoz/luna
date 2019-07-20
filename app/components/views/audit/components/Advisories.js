@@ -4,8 +4,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { useState } from 'react';
-
 import { withStyles } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -20,21 +20,23 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
 import CloseIcon from '@material-ui/icons/CloseOutlined';
 
 import { iMessage, switchcase, showDialog } from 'commons/utils';
 import { Dot } from 'components/common';
-
+import AdvisoryDetails from './AdvisoryDetails';
 import styles from '../styles/advisories';
 
+const ITEM_HEIGHT = 48;
+const moreActions = [
+  { label: iMessage('action', 'runAuditFixProd'), value: 'onlyProd' },
+  { label: iMessage('action', 'runAuditFixDev'), value: 'onlyDev' },
+  { label: iMessage('action', 'runAuditFixLock'), value: 'onlyLock' },
+  { label: iMessage('action', 'runAuditFix'), value: 'fix' },
+  { label: iMessage('action', 'runAuditFixForce'), value: 'force' },
+];
+
 const ActionsMenu = ({ handler }) => {
-  const ITEM_HEIGHT = 48;
-  const moreActions = [
-    { label: 'Fix only prod', value: 'onlyProd' },
-    { label: 'Fix only dev', value: 'onlyDev' },
-    { label: 'Package lock only', value: 'lockOnly' }
-  ];
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -64,11 +66,13 @@ const ActionsMenu = ({ handler }) => {
           }
         }}
       >
-        {moreActions.map(action => (
-          <MenuItem key={action.value} onClick={() => handler(action.value)}>
-            {action.label}
+        {moreActions.map(action => {
+          const { value, label } = action;
+
+          return <MenuItem key={value} onClick={() => handler(value)}>
+            {label}
           </MenuItem>
-        ))}
+        })}
       </Menu>
     </div>
   );
@@ -78,16 +82,18 @@ ActionsMenu.propTypes = {
   handler: PropTypes.func.isRequired
 };
 
-const Advisories = ({ classes, data, handleClick, runAudit }) => {
+const Advisories = ({ classes, data, handleAudit }) => {
+  const [active, setActive] = useState(null)
   const keys = Object.keys(data).map(key => key);
-  const zeroKeys = !keys.length;
+  const zeroKeys = keys.length === 0;
 
   const handleFix = option => {
     const auditText = switchcase({
       fix: () => 'auditFix',
       force: () => 'auditFixForce',
       onlyProd: () => 'auditFixOnlyProd',
-      onlyDev: () => 'auditFixOnlyDev'
+      onlyDev: () => 'auditFixOnlyDev',
+      onlyLock: () => 'auditFixOnlyLock'
     })('auditFix')(option);
 
     const dialogOptions = {
@@ -97,137 +103,149 @@ const Advisories = ({ classes, data, handleClick, runAudit }) => {
       buttons: ['Cancel', 'Fix']
     };
 
-    const dialogHandler = () => runAudit(option);
+    const dialogHandler = () => handleAudit(option);
 
     return showDialog(dialogHandler, dialogOptions);
   };
 
   return (
-    <Paper className={classes.root}>
-      <Toolbar disableGutters>
-        <div className={classes.header}>
-          <Typography
-            variant="h6"
-            color="textSecondary"
-          >
-            {iMessage('title', 'issues')}&nbsp;({keys.length})
-          </Typography>
-        </div>
-        <div className={classes.spacer} />
-        <div className={classes.actions}>
-          <Button
-            variant="outlined"
-            size="small"
-            color="primary"
-            onClick={() => runAudit()}
-          >
-            Run
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            color="secondary"
-            onClick={() => handleFix('fix')}
-            disabled={Boolean(zeroKeys)}
-            className={classes.marLeft}
-          >
-            Fix all
-          </Button>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => handleFix('force')}
-            disabled={Boolean(zeroKeys)}
-            className={classes.marLeft}
-          >
-            Force fix
-          </Button>
-          <ActionsMenu handler={handleFix} />
-        </div>
-      </Toolbar>
-      <div className={classes.tableWrapper}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography color="textPrimary" variant="subtitle1">
-                  {iMessage('label', 'module_name')}
-                </Typography>
-              </TableCell>
-              <Hidden smDown>
-                <TableCell>
-                  <Typography color="textPrimary" variant="subtitle1">
-                    {iMessage('label', 'title')}
-                  </Typography>
-                </TableCell>
-              </Hidden>
+    <Grid container spacing={8} className={classes.gridContainer}>
+      <Grid
+        item
+        sm={12}
+        md={active ? 6 : 12}
+        lg={active ? 6 : 12}
+        xl={active ? 6 : 12}
+        className={classes.transition}
+      >
+        <Paper className={classes.root}>
+          <Toolbar disableGutters>
+            <div className={classes.header}>
+              <Typography variant="h6" color="textSecondary">
+                {iMessage('title', 'issues')}&nbsp;({keys.length})
+              </Typography>
+            </div>
+            <div className={classes.spacer} />
+            <div className={classes.actions}>
+              <Button
+                variant="outlined"
+                size="small"
+                color="primary"
+                onClick={() => handleAudit()}
+              >
+                {iMessage('action', 'runAudit')}
+              </Button>
               <Hidden mdDown>
-                <TableCell>
-                  <Typography color="textPrimary" variant="subtitle1" align="center">
-                    {iMessage('label', 'severity')}
-                  </Typography>
-                </TableCell>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  color="secondary"
+                  onClick={() => handleFix('fix')}
+                  disabled={Boolean(zeroKeys)}
+                  className={classes.marLeft}
+                >
+                  {iMessage('action', 'runAuditFixAll')}
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => handleFix('force')}
+                  disabled={Boolean(zeroKeys)}
+                  className={classes.marLeft}
+                >
+                  {iMessage('action', 'runAuditFixForce')}
+                </Button>
               </Hidden>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {Object.values(data).map(
-              (
-                {
-                  title,
-                  module_name,
-                  severity,
-                  patched_versions,
-                  vulnerable_versions,
-                  ...rest
-                },
-                idx
-              ) => (
-                  <TableRow
-                    hover
-                    onClick={() =>
-                      handleClick({
-                        ...rest,
-                        name: module_name,
-                        title: title,
-                        severity,
-                        vulnerable_versions
-                      })
-                    }
-                    key={keys[idx]}
-                    className={classes.tableRow}
-                  >
-                    <TableCell className={cn(classes.tableCell, classes.text)}>
-                      <div className={classes.flexContainer}>
-                        {rest.deleted && <CloseIcon color="error" />}
-                        <Typography color="textSecondary" variant="body1">{module_name}</Typography>
-                      </div>
+              <ActionsMenu handler={handleFix} />
+            </div>
+          </Toolbar>
+          <div className={classes.tableWrapper}>
+            <Table className={classes.table}>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <Typography color="textPrimary" variant="subtitle1">
+                      {iMessage('label', 'moduleName')}
+                    </Typography>
+                  </TableCell>
+                  <Hidden mdDown>
+                    <TableCell>
+                      <Typography color="textPrimary" variant="subtitle1">
+                        {iMessage('label', 'title')}
+                      </Typography>
                     </TableCell>
-                    <Hidden smDown>
-                      <TableCell className={classes.tableCell}>
-                        <Typography color="textSecondary" variant="body1">{title}</Typography>
-                      </TableCell>
-                    </Hidden>
-                    <Hidden mdDown>
-                      <TableCell className={classes.tableCell}>
-                        <div />
-                        <div className={cn(classes.flexContainer, classes.flexCenter)}>
-                          {switchcase({
-                            critical: () => <Dot size="large" color="error" />,
-                            high: () => <Dot size="large" color="secondary" />,
-                            moderate: () => <Dot size="large" color="warning" />,
-                            low: () => <Dot size="large" color="primary" />
-                          })(<Dot size="large" color="primary" />)(severity)}
-                        </div>
-                      </TableCell>
-                    </Hidden>
-                  </TableRow>
-                )
-            )}
-          </TableBody>
-        </Table>
-      </div>
-    </Paper>
+                  </Hidden>
+                  <TableCell>
+                    <Typography color="textPrimary" variant="subtitle1" align="center">
+                      {iMessage('label', 'severity')}
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Object.values(data).map(
+                  (
+                    {
+                      title,
+                      module_name,
+                      severity,
+                      patched_versions,
+                      vulnerable_versions,
+                      ...rest
+                    },
+                    idx
+                  ) => (
+                      <TableRow
+                        hover
+                        onClick={() =>
+                          setActive({
+                            ...rest,
+                            name: module_name,
+                            title: title,
+                            severity,
+                            vulnerable_versions
+                          })
+                        }
+                        key={keys[idx]}
+                        className={classes.tableRow}
+                      >
+                        <TableCell className={cn(classes.tableCell, classes.text)}>
+                          <div className={classes.flexContainer}>
+                            {rest.deleted && <CloseIcon color="error" />}
+                            <Typography color="textSecondary" variant="body1">{module_name}</Typography>
+                          </div>
+                        </TableCell>
+                        <Hidden mdDown>
+                          <TableCell className={classes.tableCell}>
+                            <Typography color="textSecondary" variant="body1">{title}</Typography>
+                          </TableCell>
+                        </Hidden>
+                        <TableCell className={classes.tableCell}>
+                          <div />
+                          <div className={cn(classes.flexContainer, classes.flexCenter)}>
+                            {switchcase({
+                              critical: () => <Dot size="large" color="error" />,
+                              high: () => <Dot size="large" color="secondary" />,
+                              moderate: () => <Dot size="large" color="warning" />,
+                              low: () => <Dot size="large" color="primary" />
+                            })(<Dot size="large" color="primary" />)(severity)}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    )
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </Paper>
+      </Grid>
+      <Grid item sm={12}
+        md={6}
+        lg={6}
+        xl={6}>
+        {active && <AdvisoryDetails data={active} onClose={() => setActive(null)} />}
+      </Grid>
+    </Grid>
   );
 };
 
@@ -241,8 +259,7 @@ Advisories.propTypes = {
       PropTypes.string
     ])
   ),
-  handleClick: PropTypes.func,
-  runAudit: PropTypes.func.isRequired
+  handleAudit: PropTypes.func.isRequired
 };
 
 export default withStyles(styles, {

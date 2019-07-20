@@ -23,6 +23,7 @@ import {
   Advisories,
   AdvisoryDetails,
   ListDotTypes,
+  Summary,
   StatsCard
 } from 'components/views/audit/components';
 
@@ -52,10 +53,18 @@ const Audit = ({ classes }) => {
   const { loading, message, mode, result, fix } = useMappedState(mapState);
   const [errorDetails, setError] = useState(null);
   const [active, setActive] = useState(null);
-
+  const [reportType, setReportType] = useState('report')
   const { content, error } = result || {};
   const options = { text: iMessage('info', 'npmAuditInfo') };
 
+  const auditRun = () => dispatch(
+    runAudit({
+      ipcEvent: 'npm-audit',
+      cmd: ['audit']
+    })
+  );
+
+  // set error
   useEffect(() => {
     if (error) {
       const { detail, code } = error || {};
@@ -70,22 +79,20 @@ const Audit = ({ classes }) => {
     }
   }, [error]);
 
-  if (fix) {
-    return null;
-  }
-  console.log(content);
+  // set report type
+  useEffect(() => {
+    const type = fix ? 'summary' : 'report'
+
+    setReportType(type)
+  }, [fix]);
+
+
   if (!content && !loading) {
     const contentOptions = {
       ...options,
       detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
       actionText: iMessage('action', 'runAudit'),
-      actionHandler: () =>
-        dispatch(
-          runAudit({
-            ipcEvent: 'npm-audit',
-            cmd: ['audit']
-          })
-        ),
+      actionHandler: auditRun,
       actionDisabled: mode === 'global'
     };
 
@@ -110,93 +117,56 @@ const Audit = ({ classes }) => {
         <div className={classes.root}>
           <Grid container spacing={8} className={classes.gridContainer}>
             <Grid item lg={4} md={4} sm={12} xl={4}>
-              <Hidden smUp>
+              <Hidden mdDown>
                 <StatsCard
                   title={iMessage('title', 'dependencies')}
                   value={dependencies}
+                  color="primary"
                 />
               </Hidden>
-              <Hidden smDown>
+              <Hidden smUp>
                 <Typography variant="h6" color="textSecondary">
                   {iMessage('title', 'dependencies')}&nbsp;{dependencies}
                 </Typography>
               </Hidden>
             </Grid>
             <Grid item lg={4} md={4} sm={12} xl={4}>
-              <Hidden smUp>
+              <Hidden mdDown>
                 <StatsCard
                   title={iMessage('title', 'devDependencies')}
                   value={devDependencies}
+                  color="danger"
                 />
               </Hidden>
-              <Hidden smDown>
+              <Hidden smUp>
                 <Typography variant="h6" color="textSecondary">
                   {iMessage('title', 'devDependencies')}&nbsp;{devDependencies}
                 </Typography>
               </Hidden>
             </Grid>
             <Grid item lg={4} md={4} sm={12} xl={4}>
-              <Hidden smUp>
+              <Hidden mdDown>
                 <StatsCard
                   title={iMessage('title', 'optionalDependencies')}
                   value={optionalDependencies}
+                  color="warning"
                 />
               </Hidden>
-              <Hidden smDown>
+              <Hidden smUp>
                 <Typography variant="h6" color="textSecondary">
-                  {iMessage('title', 'optionalDependencies')}:&nbsp;
+                  {iMessage('title', 'optionalDependencies')}&nbsp;
                   {optionalDependencies}
                 </Typography>
               </Hidden>
             </Grid>
           </Grid>
-          <Grid container spacing={8} className={classes.gridContainer}>
-            <Grid
-              item
-              sm={12}
-              md={8}
-              lg={8}
-              xl={8}
-              className={classes.transition}
-            >
-              {advisoriesValues ? (
-                <Advisories
-                  data={advisories}
-                  handleClick={setActive}
-                  runAudit={option =>
-                    dispatch(
-                      runAudit({
-                        ipcEvent: 'npm-audit',
-                        cmd: ['audit'],
-                        flag: option
-                      })
-                    )
-                  }
-                />
-              ) : (
-                <HelperText text={iMessage('info', 'noAdvisories')} />
-              )}
-            </Grid>
-            {active && advisoriesValues ? (
-              <Grid item sm={12} md={4} lg={4} xl={4}>
-                <AdvisoryDetails
-                  data={active}
-                  handleClose={() => setActive(null)}
-                />
-              </Grid>
-            ) : (
-              advisoriesValues && (
-                <Grid item sm={12} md={4} lg={4} xl={4}>
-                  <Actions data={actions.filter(action => !action.depth)} />
-                </Grid>
-              )
-            )}
-          </Grid>
+          {reportType === 'report' && <Advisories data={advisories} handleAudit={auditRun} />}
+          {reportType === 'summary' && <Summary />}
         </div>
       </AppLoader>
       <Dialog
         open={Boolean(error)}
-        onClose={() => {}}
+        onClose={() => { }}
         aria-labelledby="audit-error"
       >
         <DialogContent>
