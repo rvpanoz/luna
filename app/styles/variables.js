@@ -1,3 +1,5 @@
+/* eslint-disable prefer-template */
+
 /**
  * Styles that are used on more than one component
  */
@@ -23,9 +25,14 @@ const defaultFont = {
 };
 
 /* colors */
-const successColor = '#4caf50';
-const infoColor = '#00acc1';
 const grayColor = '#999999';
+const blackColor = '#000';
+const whiteColor = '#fff';
+const primaryColor = ["#006db3", "#006dc1", "#006db3", "#63ccfa"];
+const warningColor = ["#ff9800", "#ffa726", "#fb8c00", "#ffa21a"];
+const dangerColor = ["#f44336", "#ef5350", "#e53935", "#f55a4e"];
+const successColor = ["#4caf50", "#66bb6a", "#43a047", "#5cb860"];
+const infoColor = ["#00acc1", "#26c6da", "#00acc1", "#00d3ee"];
 
 /* flexbox */
 const flexContainer = {
@@ -33,19 +40,6 @@ const flexContainer = {
   margin: 0,
   padding: 0,
   flexFlow: 'row wrap'
-};
-
-const flexItem = {
-  flexGrow: 1
-};
-
-const flexItemInner = {
-  display: '-webkit-flex',
-  flexDirection: 'column',
-  justifyContent: 'flex-start',
-  margin: 0,
-  padding: 0,
-  width: '100%'
 };
 
 /* box shadows */
@@ -56,7 +50,7 @@ const boxShadow = {
 
 const primaryBoxShadow = {
   boxShadow:
-    '0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2)'
+    '0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2)'
 };
 const infoBoxShadow = {
   boxShadow:
@@ -80,7 +74,38 @@ const defaultBoxShadow = {
     '0 10px 20px -12px rgba(0, 0, 0, 0.42), 0 3px 20px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2)'
 };
 
+const warningCardHeader = {
+  background:
+    "linear-gradient(60deg, " + warningColor[1] + ", " + warningColor[2] + ")",
+  ...warningBoxShadow
+};
+const successCardHeader = {
+  background:
+    "linear-gradient(60deg, " + successColor[1] + ", " + successColor[2] + ")",
+  ...successBoxShadow
+};
+const dangerCardHeader = {
+  background:
+    "linear-gradient(60deg, " + dangerColor[1] + ", " + dangerColor[2] + ")",
+  ...dangerBoxShadow
+};
+const infoCardHeader = {
+  background:
+    "linear-gradient(60deg, " + infoColor[1] + ", " + infoColor[2] + ")",
+  ...infoBoxShadow
+};
+const primaryCardHeader = {
+  background:
+    "linear-gradient(60deg, " + primaryColor[1] + ", " + primaryColor[2] + ")",
+  ...primaryBoxShadow
+};
+
 export {
+  warningCardHeader,
+  successCardHeader,
+  dangerCardHeader,
+  infoCardHeader,
+  primaryCardHeader,
   drawerWidth,
   transition,
   container,
@@ -89,13 +114,13 @@ export {
   successColor,
   infoColor,
   grayColor,
+  whiteColor,
+  blackColor,
   primaryBoxShadow,
   infoBoxShadow,
   successBoxShadow,
   warningBoxShadow,
   dangerBoxShadow,
   defaultBoxShadow,
-  flexContainer,
-  flexItem,
-  flexItemInner
+  flexContainer
 };

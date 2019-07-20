@@ -6,6 +6,7 @@ import AdvisoryDetails from './AdvisoryDetails';
 import ListTypes from './ListTypes';
 import ListDotTypes from './ListDotTypes';
 import StatsCard from './StatsCard';
+import Summary from './Summary';
 
 export {
   Actions,
@@ -13,5 +14,6 @@ export {
   AdvisoryDetails,
   StatsCard,
   ListTypes,
-  ListDotTypes
+  ListDotTypes,
+  Summary
 };

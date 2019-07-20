@@ -26,7 +26,7 @@ const styles = theme => ({
     overflowY: 'scroll',
     padding: theme.spacing.unit,
     [theme.breakpoints.up('md')]: {
-      maxHeight: 500
+      maxHeight: 450
     },
     [theme.breakpoints.up('lg')]: {
       maxHeight: 750

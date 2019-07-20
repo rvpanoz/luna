@@ -55,7 +55,7 @@ ListItemDetail.propTypes = {
   value: oneOfType([string, number])
 };
 
-const AdvisoryDetails = ({ classes, data, handleClose }) => {
+const AdvisoryDetails = ({ classes, data, onClose }) => {
   const {
     access,
     name,
@@ -75,7 +75,7 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
   return (
     <div className={classes.wrapper}>
       <Grid container justify="space-between">
-        <Grid item sm={10} md={10} lg={10} xl={10}>
+        <Grid item sm={11} md={11} lg={11} xl={11}>
           <Transition>
             <Card className={classes.card}>
               <CardHeader
@@ -88,18 +88,19 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
                 }
               />
               <CardContent className={classes.cardContent}>
-                <Typography color="textSecondary" variant="body1">
+                <Typography component="p">
                   {iMessage('label', 'recommendation')}
-                  <br />
+                </Typography>
+                <br />
+                <Typography component="p" color="textSecondary">
                   {recommendation}
                 </Typography>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                  className={classes.padTop}
-                >
+                <br />
+                <Typography component="p">
                   {iMessage('label', 'vulnerableVersions')}
-                  <br />
+                </Typography>
+                <br />
+                <Typography component="p" color="textSecondary">
                   {vulnerable_versions}
                 </Typography>
                 <Divider className={classes.divider} light />
@@ -133,7 +134,7 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
             </Card>
           </Transition>
         </Grid>
-        <Grid sm={2} item md={2} lg={2} xl={2}>
+        <Grid item sm={1} md={1} lg={1} xl={1}>
           <Toolbar
             disableGutters
             variant="dense"
@@ -146,7 +147,7 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
                 <IconButton
                   color="secondary"
                   disableRipple
-                  onClick={handleClose}
+                  onClick={onClose}
                 >
                   <CloseIcon />
                 </IconButton>
@@ -162,7 +163,7 @@ const AdvisoryDetails = ({ classes, data, handleClose }) => {
 AdvisoryDetails.propTypes = {
   classes: objectOf(string).isRequired,
   data: objectOf(oneOfType([object, array, bool, string, number])),
-  handleClose: func.isRequired
+  onClose: func.isRequired
 };
 
 export default withStyles(styles)(AdvisoryDetails);

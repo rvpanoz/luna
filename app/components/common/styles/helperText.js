@@ -12,7 +12,7 @@ const styles = theme => ({
     ...defaultFont
   },
   withPadding: {
-    padding: theme.spacing.unit + 4
+    padding: theme.spacing.unit
   },
   helperText: {
     ...defaultFont,
@@ -20,6 +20,8 @@ const styles = theme => ({
     fontSize: 16
   },
   buttonFix: {
+    ...defaultFont,
+    lineHeight: 1.75,
     margin: theme.spacing.unit
   }
 });

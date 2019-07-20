@@ -15,12 +15,11 @@ import Typography from '@material-ui/core/Typography';
 import Add from '@material-ui/icons/Add';
 import Update from '@material-ui/icons/Update';
 
-import { iMessage, switchcase } from 'commons/utils';
-import { AUDIT_TYPES } from 'constants/AppConstants';
+import { iMessage } from 'commons/utils';
 import { Widget } from 'components/common';
 import styles from '../styles/listTypes';
 
-const Actions = ({ classes, theme, data }) => <Widget noBodyPadding title={iMessage('title', 'actions')}>
+const Actions = ({ classes, theme, data }) => <Widget noBodyPadding title={`${iMessage('title', 'actions')} (${data.length})`}>
     <List className={classes.body}>
         {data.map(({ action, target, isMajor, ...rest }, idx) => {
             return (

@@ -22,8 +22,14 @@ const initialState = {
     operationStatus: 'idle',
     operationPackages: [],
     operationCommand: null,
-    auditData: null,
-    doctorData: null
+    audit: {
+      result: null,
+      fix: false
+    },
+    doctor: {
+      data: null,
+      error: false
+    }
   },
   ui: {
     paused: false,
@@ -55,7 +61,7 @@ const initialState = {
       doctorLoader: {
         loading: false,
         message: null
-      },
+      }
     },
     pagination: {
       page: 0,

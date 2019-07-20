@@ -56,7 +56,7 @@ const ToolbarView = ({
   const packagesOutdatedNames = outdated.map(pkg => pkg.name);
 
   const openFilters = (e, close) => {
-    const { target } = e;
+    const { target } = e || {};
 
     setAnchorEl(close ? null : target);
     toggleFilters(!filtersOn);
@@ -170,9 +170,9 @@ const ToolbarView = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-      selected.some(
-        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-      ),
+    selected.some(
+      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+    ),
     [selected]
   );
 

@@ -1,25 +1,38 @@
+/* eslint-disable */
+
 import React from 'react';
 import { objectOf, string, number } from 'prop-types';
 import { withStyles } from '@material-ui/core';
-
-import Paper from '@material-ui/core/Paper';
+import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
 
+import { Card, CardHeader, CardIcon } from 'components/common';
 import styles from '../styles/statsCard';
 
-const StatsCard = ({ classes, title, value }) => (
-  <Paper className={classes.root}>
-    <div className={classes.content}>
-      <Typography component="p">{title}</Typography>
-      <Typography component="h4">{value}</Typography>
-    </div>
-  </Paper>
-);
+const StatsCard = ({ classes, title, value, color, icon }) => {
+  return (
+    <Card>
+      <CardHeader color={color}>
+        <CardIcon color={color}>
+          <Icon>{icon}</Icon>
+        </CardIcon>
+        <Typography className={classes.title}>{value}</Typography>
+        <Typography className={classes.cardCategory}>{title}</Typography>
+      </CardHeader>
+    </Card>
+  );
+};
+
+StatsCard.defaultProps = {
+  icon: 'list'
+};
 
 StatsCard.propTypes = {
   classes: objectOf(string).isRequired,
   title: string.isRequired,
-  value: number
+  value: number.isRequired,
+  color: string,
+  icon: string
 };
 
 export default withStyles(styles)(StatsCard);

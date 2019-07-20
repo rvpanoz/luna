@@ -220,9 +220,9 @@ const Packages = ({ classes }) => {
           <Grid
             item
             sm={12}
-            md={active ? 9 : 12}
-            lg={active ? 9 : 12}
-            xl={active ? 9 : 12}
+            md={active ? 8 : 10}
+            lg={active ? 8 : 10}
+            xl={active ? 8 : 10}
             className={classes.transition}
           >
             {noPackages && (
@@ -295,8 +295,8 @@ const Packages = ({ classes }) => {
                               packagesInstallOptions
                             )
                               ? packagesInstallOptions.find(
-                                  installOption => installOption.name === name
-                                )
+                                installOption => installOption.name === name
+                              )
                               : {};
 
                             const inOperation =
@@ -361,16 +361,17 @@ const Packages = ({ classes }) => {
               </Paper>
             )}
           </Grid>
-          {active && (
-            <Grid item sm={12} md={3} lg={3} xl={3}>
-              <PackageDetails
-                toggleOptions={toggleOptions}
-                addSelected={() =>
-                  dispatch(addSelected({ name: active ? active.name : null }))
-                }
-              />
-            </Grid>
-          )}
+          <Grid item sm={12}
+            md={active ? 4 : 2}
+            lg={active ? 4 : 2}
+            xl={active ? 4 : 2} className={classes.transition}>
+            <PackageDetails
+              toggleOptions={toggleOptions}
+              addSelected={() =>
+                dispatch(addSelected({ name: active ? active.name : null }))
+              }
+            />
+          </Grid>
         </Grid>
       </AppLoader>
 
