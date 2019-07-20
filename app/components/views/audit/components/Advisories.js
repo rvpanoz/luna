@@ -6,6 +6,7 @@ import cn from 'classnames';
 import { useState } from 'react';
 import { withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
+import Icon from '@material-ui/core/Icon';
 import Hidden from '@material-ui/core/Hidden';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
@@ -25,6 +26,8 @@ import CloseIcon from '@material-ui/icons/CloseOutlined';
 import { iMessage, switchcase, showDialog } from 'commons/utils';
 import { Dot } from 'components/common';
 import AdvisoryDetails from './AdvisoryDetails';
+import ListDotTypes from './ListDotTypes';
+import ListTypes from './ListTypes';
 import styles from '../styles/advisories';
 
 const ITEM_HEIGHT = 48;
@@ -82,7 +85,7 @@ ActionsMenu.propTypes = {
   handler: PropTypes.func.isRequired
 };
 
-const Advisories = ({ classes, data, handleAudit }) => {
+const Advisories = ({ classes, data, handleAudit, vulnerabilities }) => {
   const [active, setActive] = useState(null)
   const keys = Object.keys(data).map(key => key);
   const zeroKeys = keys.length === 0;
@@ -110,12 +113,15 @@ const Advisories = ({ classes, data, handleAudit }) => {
 
   return (
     <Grid container spacing={8} className={classes.gridContainer}>
+      <Grid item sm={8}>
+        <ListDotTypes data={vulnerabilities} />
+      </Grid>
       <Grid
         item
         sm={12}
-        md={active ? 6 : 12}
-        lg={active ? 6 : 12}
-        xl={active ? 6 : 12}
+        md={6}
+        lg={6}
+        xl={6}
         className={classes.transition}
       >
         <Paper className={classes.root}>
@@ -133,18 +139,20 @@ const Advisories = ({ classes, data, handleAudit }) => {
                 color="primary"
                 onClick={() => handleAudit()}
               >
+                <Icon>send</Icon>&nbsp;
                 {iMessage('action', 'runAudit')}
               </Button>
               <Hidden mdDown>
                 <Button
                   variant="outlined"
                   size="small"
-                  color="secondary"
+                  color="primary"
                   onClick={() => handleFix('fix')}
                   disabled={Boolean(zeroKeys)}
                   className={classes.marLeft}
                 >
-                  {iMessage('action', 'runAuditFixAll')}
+                  <Icon>update</Icon>&nbsp;
+                  {iMessage('action', 'runAuditFix')}
                 </Button>
                 <Button
                   variant="outlined"
@@ -152,7 +160,9 @@ const Advisories = ({ classes, data, handleAudit }) => {
                   onClick={() => handleFix('force')}
                   disabled={Boolean(zeroKeys)}
                   className={classes.marLeft}
+                  color="primary"
                 >
+                  <Icon>low_priority</Icon>&nbsp;
                   {iMessage('action', 'runAuditFixForce')}
                 </Button>
               </Hidden>
@@ -243,7 +253,7 @@ const Advisories = ({ classes, data, handleAudit }) => {
         md={6}
         lg={6}
         xl={6}>
-        {active && <AdvisoryDetails data={active} onClose={() => setActive(null)} />}
+        {active ? <AdvisoryDetails data={active} onClose={() => setActive(null)} /> : <ListTypes data={data} />}
       </Grid>
     </Grid>
   );
@@ -259,6 +269,7 @@ Advisories.propTypes = {
       PropTypes.string
     ])
   ),
+  vulnerabilities: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string])),
   handleAudit: PropTypes.func.isRequired
 };
 

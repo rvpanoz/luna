@@ -160,7 +160,7 @@ const Audit = ({ classes }) => {
               </Hidden>
             </Grid>
           </Grid>
-          {reportType === 'report' && <Advisories data={advisories} handleAudit={auditRun} />}
+          {reportType === 'report' && <Advisories data={advisories} handleAudit={auditRun} vulnerabilities={vulnerabilities} />}
           {reportType === 'summary' && <Summary />}
         </div>
       </AppLoader>

@@ -75,7 +75,7 @@ const ListTypes = ({ classes, theme, data }) => {
 ListTypes.propTypes = {
   classes: objectOf(string).isRequired,
   theme: objectOf(oneOfType([string, object, array])).isRequired,
-  data: oneOfType([array, object]).isRequired
+  data: objectOf(oneOfType([string, array, object])).isRequired
 };
 
 export default withStyles(styles, {

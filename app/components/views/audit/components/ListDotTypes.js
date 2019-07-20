@@ -14,7 +14,7 @@ import { iMessage } from 'commons/utils';
 import { Widget, Dot } from 'components/common';
 import styles from '../styles/listDotTypes';
 
-const ListDotTypes = ({ classes, data, theme }) => {
+const ListTypes = ({ classes, data, theme }) => {
   const { info, high, critical, moderate, low } = data;
   const typesData = [
     {
@@ -44,15 +44,17 @@ const ListDotTypes = ({ classes, data, theme }) => {
     }
   ];
 
+  const totalVulnerabilities = typesData.reduce((acc, type) => acc + type.value, 0);
+
   return (
-    <Widget title={iMessage('title', 'vulnerabilities')}>
+    <Widget title={`${iMessage('title', 'vulnerabilities')} (${totalVulnerabilities})`}>
       <List className={classes.container}>
         {typesData.map(({ value, name, color }) => (
           <ListItem key={name}>
             <ListItemText
               primary={
                 <Typography variant="subtitle1" color="textSecondary">
-                  {name}&nbsp;({value})
+                  {name}&nbsp;({<span className={classes[`dot${color}`]}>{value}</span>})
                 </Typography>
               }
             />
@@ -63,7 +65,7 @@ const ListDotTypes = ({ classes, data, theme }) => {
   );
 };
 
-ListDotTypes.propTypes = {
+ListTypes.propTypes = {
   classes: objectOf(string).isRequired,
   data: oneOfType([array, object]).isRequired,
   theme: objectOf(oneOfType([string, object, array])).isRequired
@@ -71,4 +73,4 @@ ListDotTypes.propTypes = {
 
 export default withStyles(styles, {
   withTheme: true
-})(ListDotTypes);
+})(ListTypes);

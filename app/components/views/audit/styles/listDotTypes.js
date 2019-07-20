@@ -1,9 +1,12 @@
 import { flexContainer } from 'styles/variables';
 
-const styles = () => ({
+const styles = theme => ({
   container: {
     ...flexContainer,
     flexFlow: 1
+  },
+  dotPrimary: {
+    color: theme.palette.primary.main
   }
 });
 

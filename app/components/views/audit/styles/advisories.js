@@ -12,10 +12,11 @@ const styles = theme => ({
     padding: theme.spacing.unit,
     overflowY: 'scroll',
     [theme.breakpoints.up('md')]: {
-      maxHeight: 450
+      maxHeight: 400
     },
     [theme.breakpoints.down('md')]: {
-      maxWidth: '100%'
+      maxWidth: '100%',
+      maxHeight: 260
     }
   },
   tableRow: {

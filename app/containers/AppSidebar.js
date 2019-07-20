@@ -191,7 +191,7 @@ const AppSidebar = ({
                 <CardActions>
                   <div className={classes.cardFlexContainer}>
                     <UpdateIcon className={classes.updateIcon} />
-                    <Typography variant="caption" className={classes.cardLabel}>
+                    <Typography variant="body2" color="textSecondary">
                       Updated at{' '}
                       {lastUpdatedAt !== null ? lastUpdatedAt : '...'}
                     </Typography>
