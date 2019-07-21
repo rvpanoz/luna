@@ -258,7 +258,7 @@ Advisories.propTypes = {
       PropTypes.string
     ])
   ),
-  vulnerabilities: PropTypes.objectOf(PropTypes.string),
+  vulnerabilities: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
   handleAudit: PropTypes.func.isRequired
 };
 
