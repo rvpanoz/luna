@@ -13,6 +13,7 @@ import {
   setRunningCommand,
   clearRunningCommand,
   clearAuditData,
+  clearDoctorData,
   updateNpmAuditData,
   updateNpmAuditFixData,
   updateNpmDoctorData
@@ -42,7 +43,12 @@ const handlers = {
       }
     }),
   [updateNpmDoctorData.type]: (state, { payload: { data } }) =>
-    assoc('doctorData', data, state),
+    merge(state, {
+      doctor: {
+        ...state.doctor,
+        result: data
+      }
+    }),
   [addActionError.type]: (state, { payload: { error } }) => {
     const {
       operations: { commandsErrors }
@@ -89,6 +95,13 @@ const handlers = {
   [clearAuditData.type]: state =>
     merge(state, {
       audit: {
+        result: null,
+        fix: false
+      }
+    }),
+  [clearDoctorData.type]: state =>
+    merge(state, {
+      doctor: {
         result: null,
         fix: false
       }

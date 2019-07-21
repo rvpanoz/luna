@@ -20,6 +20,7 @@ const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
 const updateNpmAuditFixData = ActionCreator('UPDATE_NPM_AUDIT_FIX_DATA');
 const updateNpmDoctorData = ActionCreator('UPDATE_NPM_DOCTOR_DATA');
 const clearAuditData = ActionCreator('CLEAR_AUDIT_DATA');
+const clearDoctorData = ActionCreator('CLEAR_DOCTOR_DATA');
 
 // listeners
 const npmAuditListener = ActionCreator('REGISTER_LISTENER_AUDIT');
@@ -58,6 +59,7 @@ export {
   npmAuditListener,
   npmInitListener,
   clearAuditData,
+  clearDoctorData,
   parseNpmAuditData,
   parseNpmAuditFixData,
   updateNpmAuditFixData,

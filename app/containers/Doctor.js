@@ -1,7 +1,6 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames'
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
@@ -16,54 +15,50 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import CheckIcon from '@material-ui/icons/CheckOutlined';
 
-import { HelperText } from 'components/common';
+import { AppLoader, HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import { runDoctor } from 'models/npm/actions';
 
 import styles from './styles/doctor';
 
 const mapState = ({
-  common: { mode, directory },
   ui: {
     loaders: {
       doctorLoader: { loading, message }
     }
   },
   npm: {
-    doctor: { error, data }
+    doctor: { error, result }
   }
 }) => ({
-  mode,
-  directory,
   loading,
   message,
-  data,
+  result,
   error
 });
 
 const renderData = data => (
   <List disablePadding>
-    {data &&
-      data
-        .filter(value => value.length)
-        .map(dataValue => (
-          <ListItem key={dataValue}>
-            <ListItemAvatar>
-              <Avatar style={{ backgroundColor: '#fff' }}>
-                <CheckIcon color="secondary" />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={dataValue} />
-          </ListItem>
-        ))}
+    {data && data
+      .filter(value => value.length)
+      .map(dataValue => (
+        <ListItem key={dataValue}>
+          <ListItemAvatar>
+            <Avatar style={{ backgroundColor: '#fff' }}>
+              <CheckIcon color="secondary" />
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={dataValue} />
+        </ListItem>
+      ))}
   </List>
 );
 
 const Doctor = ({ classes }) => {
-  const { loading, message, mode, directory, data } = useMappedState(mapState);
+  const { loading, message, result } = useMappedState(mapState);
   const dispatch = useDispatch();
 
-  if (!data) {
+  if (!result && !loading) {
     const options = {
       text: iMessage('info', 'npmDoctorInfo'),
       actionText: iMessage('action', 'runDoctor'),
@@ -80,7 +75,7 @@ const Doctor = ({ classes }) => {
   }
 
   return (
-    <React.Fragment>
+    <AppLoader loading={loading} message={message}>
       <Paper className={classes.paper}>
         <div className={classes.container}>
           <div className={classes.flexContainer}>
@@ -91,10 +86,12 @@ const Doctor = ({ classes }) => {
             </div>
           </div>
           <Divider light />
-          <div className={classes.topSection}>{renderData(data)}</div>
+          <div className={cn(classes.topSection, classes.wrapper)}>
+            {renderData(result)}
+          </div>
         </div>
       </Paper>
-    </React.Fragment>
+    </AppLoader>
   );
 };
 

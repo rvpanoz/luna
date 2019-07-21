@@ -3,13 +3,13 @@ import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 
-import { toggleLoader } from 'models/ui/actions';
+import { toggleDoctorLoader } from 'models/ui/actions';
 import { runDoctor, npmDoctorListener } from 'models/npm/actions';
 
 import { onNpmDoctor$ } from '../listeners';
 
 const updateLoader = payload => ({
-  type: toggleLoader.type,
+  type: toggleDoctorLoader.type,
   payload
 });
 
