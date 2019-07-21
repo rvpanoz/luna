@@ -21,6 +21,7 @@ const Card = ({ ...props }) => {
     [classes.cardChart]: chart,
     [className]: className !== undefined
   });
+
   return (
     <div className={cardClasses} {...rest}>
       {children}

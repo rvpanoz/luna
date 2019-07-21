@@ -1,5 +1,5 @@
-import { lighten } from '@material-ui/core/styles/colorManipulator';
-import { defaultFont } from 'styles/variables';
+import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
+import { defaultFont, grayColor } from 'styles/variables';
 import red from '@material-ui/core/colors/red';
 
 const styles = theme => ({
@@ -29,6 +29,15 @@ const styles = theme => ({
   group: {
     padding: 0,
     margin: 0
+  },
+  link: {
+    ...defaultFont,
+    fontSize: 16,
+    color: grayColor,
+    textDecoration: 'none',
+    '&:hover': {
+      color: darken(grayColor, 0.4)
+    }
   },
   header: {
     ...defaultFont,

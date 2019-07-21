@@ -47,7 +47,7 @@ const App = () => {
   useEffect(() => {
     ipcRenderer.once('finish-loaded', () => dispatch(initActions()));
 
-    ipcRenderer.once('npm-env-close', (event, error, env) => {
+    ipcRenderer.on('npm-env-close', (event, error, env) => {
       dispatch({ type: setEnv.type, payload: env });
     });
 

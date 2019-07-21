@@ -37,7 +37,6 @@ const npmRunAuditEpic = (action$, state$) =>
       const {
         common: { mode, directory }
       } = state$.value;
-
       ipcRenderer.send('npm-audit', {
         ...payload,
         mode,

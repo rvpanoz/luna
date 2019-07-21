@@ -8,19 +8,14 @@ const {
   defaultSettings: { defaultManager }
 } = mk || {};
 
-const onNpmAudit = (event, parameters, store) => {
+const onNpmInitLock = (event, options, store) => {
   const settings = store.get('user_settings');
-  const { activeManager = defaultManager, ...rest } = parameters || {};
+  const { activeManager = defaultManager, ...rest } = options || {};
 
-  const onFlow = chunk => event.sender.send('npm-audit-flow', chunk);
-  const onError = error => event.sender.send('npm-audit-error', error);
-  const onComplete = (error, data) => {
-    const { options: { flag } } = parameters || {};
-    const evtName = flag ? 'npm-audit-fix-completed' : 'npm-audit-completed';
-
-    return event.sender.send(evtName, error, data);
-  }
-
+  const onFlow = chunk => event.sender.send('npm-init-lock-flow', chunk);
+  const onError = error => event.sender.send('npm-init-lock-error', error);
+  const onComplete = (errors, data) =>
+    event.sender.send('npm-init-lock-completed', data, errors);
 
   const callback = result => {
     const { status, errors, data } = result;
@@ -41,8 +36,8 @@ const onNpmAudit = (event, parameters, store) => {
     runCommand(params, callback);
   } catch (error) {
     log.error(error);
-    event.sender.send('npm-audit-error', error && error.message);
+    event.sender.send('npm-init-lock-error', error && error.message);
   }
 };
 
-export default onNpmAudit;
+export default onNpmInitLock;

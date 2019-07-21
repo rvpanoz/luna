@@ -25,13 +25,14 @@ import CloseIcon from '@material-ui/icons/CloseOutlined';
 import { iMessage, switchcase, showDialog } from 'commons/utils';
 import { Dot } from 'components/common';
 import AdvisoryDetails from './AdvisoryDetails';
+import ListTypes from './ListTypes';
 import styles from '../styles/advisories';
 
 const ITEM_HEIGHT = 48;
 const moreActions = [
-  { label: iMessage('action', 'runAuditFixProd'), value: 'onlyProd' },
-  { label: iMessage('action', 'runAuditFixDev'), value: 'onlyDev' },
-  { label: iMessage('action', 'runAuditFixLock'), value: 'onlyLock' },
+  { label: iMessage('action', 'runAuditFixProd'), value: 'only=prod' },
+  { label: iMessage('action', 'runAuditFixDev'), value: 'only=dev' },
+  { label: iMessage('action', 'runAuditFixLock'), value: 'package-lock-only' },
   { label: iMessage('action', 'runAuditFix'), value: 'fix' },
   { label: iMessage('action', 'runAuditFixForce'), value: 'force' },
 ];
@@ -82,10 +83,10 @@ ActionsMenu.propTypes = {
   handler: PropTypes.func.isRequired
 };
 
-const Advisories = ({ classes, data, handleAudit }) => {
+const Advisories = ({ classes, data, handleAudit, vulnerabilities }) => {
   const [active, setActive] = useState(null)
   const keys = Object.keys(data).map(key => key);
-  const zeroKeys = keys.length === 0;
+  // const zeroKeys = keys.length === 0;
 
   const handleFix = option => {
     const auditText = switchcase({
@@ -109,13 +110,13 @@ const Advisories = ({ classes, data, handleAudit }) => {
   };
 
   return (
-    <Grid container spacing={8} className={classes.gridContainer}>
+    <Grid container spacing={8}>
       <Grid
         item
         sm={12}
-        md={active ? 6 : 12}
-        lg={active ? 6 : 12}
-        xl={active ? 6 : 12}
+        md={8}
+        lg={8}
+        xl={8}
         className={classes.transition}
       >
         <Paper className={classes.root}>
@@ -130,33 +131,31 @@ const Advisories = ({ classes, data, handleAudit }) => {
               <Button
                 variant="outlined"
                 size="small"
-                color="primary"
                 onClick={() => handleAudit()}
               >
                 {iMessage('action', 'runAudit')}
               </Button>
               <Hidden mdDown>
                 <Button
-                  variant="outlined"
                   size="small"
-                  color="secondary"
+                  variant="outlined"
                   onClick={() => handleFix('fix')}
-                  disabled={Boolean(zeroKeys)}
+                  disabled // todo: Boolean(zeroKeys)
                   className={classes.marLeft}
                 >
-                  {iMessage('action', 'runAuditFixAll')}
+                  {iMessage('action', 'runAuditFix')}
                 </Button>
                 <Button
-                  variant="outlined"
                   size="small"
+                  variant="outlined"
                   onClick={() => handleFix('force')}
-                  disabled={Boolean(zeroKeys)}
+                  disabled // todo: Boolean(zeroKeys)
                   className={classes.marLeft}
                 >
                   {iMessage('action', 'runAuditFixForce')}
                 </Button>
               </Hidden>
-              <ActionsMenu handler={handleFix} />
+              {/* <ActionsMenu handler={handleFix} /> */}
             </div>
           </Toolbar>
           <div className={classes.tableWrapper}>
@@ -240,10 +239,10 @@ const Advisories = ({ classes, data, handleAudit }) => {
         </Paper>
       </Grid>
       <Grid item sm={12}
-        md={6}
-        lg={6}
-        xl={6}>
-        {active && <AdvisoryDetails data={active} onClose={() => setActive(null)} />}
+        md={4}
+        lg={4}
+        xl={4}>
+        {active ? <AdvisoryDetails data={active} onClose={() => setActive(null)} /> : <ListTypes data={data} vulnerabilities={vulnerabilities} />}
       </Grid>
     </Grid>
   );
@@ -259,6 +258,7 @@ Advisories.propTypes = {
       PropTypes.string
     ])
   ),
+  vulnerabilities: PropTypes.objectOf(PropTypes.string),
   handleAudit: PropTypes.func.isRequired
 };
 

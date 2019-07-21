@@ -24,6 +24,7 @@ export const INFO_MESSAGES = {
   searching: 'Searching npm registry..',
   directorySelection: 'Select directory',
   directory: 'Directory',
+  auditCompleted: 'npm audit completed',
   createPackageJsonNote: 'Note: npm init will run with the default parameters.',
   auditFix:
     'Automatically install any compatible updates to vulnerable dependencies',
@@ -41,9 +42,9 @@ export const ACTION_MESSAGES = {
   filter: 'Filter',
   close: 'Close',
   runDoctor: 'Run doctor',
-  runAudit: 'Run audit',
-  runAuditFix: 'Fix all',
-  runAuditFixForce: 'Fix force',
+  runAudit: 'Run',
+  runAuditFix: 'Fix',
+  runAuditFixForce: 'Force',
   runAuditFixProd: 'Fix only prod',
   runAuditFixDev: 'Fix only dev',
   runAuditFixLock: 'Fix only lock'
@@ -69,13 +70,19 @@ export const LABEL_MESSAGES = {
   critical: 'Critical',
   info: 'Info',
   high: 'High',
+  low: 'Low',
   moderate: 'Moderate',
   moduleName: 'Module',
   title: 'Title',
   patched_versions: 'Patched versions',
   severity: 'Severity',
   vulnerableVersions: 'Vulnerable versions',
-  recommendation: 'Recommendation'
+  recommendation: 'Recommendation',
+  visitAdvisory: 'Security advisory page',
+  findings: 'Findings',
+  access: 'Access',
+  created: 'Created at',
+  updated: 'Updated at'
 };
 
 export const TITLE_MESSAGES = {
@@ -100,6 +107,7 @@ export const TITLE_MESSAGES = {
   clearFilters: 'Clear filters',
   searchPackage: 'Search for package',
   clearActive: 'Close',
+  packages: 'Packages',
   packageDependencies: 'Package dependencies',
   packageVersions: 'Package versions',
   packageInstall: 'Install package',
@@ -146,13 +154,6 @@ export const CONFIRMATION_MESSAGES = {
     '\nDo you want to run npm audit fix --only=prod?\n\nIt will skip updating devDependencies.',
   auditFixOnlyDev:
     '\nDo you want to run npm audit fix --only=dev? \n\nIt will skip updating dependencies.'
-};
-
-export const LABEL_MESSAGE = {
-  packageName: 'Package name',
-  packageNameInput: 'Fill package name',
-  groupType: 'Select packages based on group',
-  outdatedPackages: 'Select outdated packages'
 };
 
 export const WARNING_MESSAGES = {
