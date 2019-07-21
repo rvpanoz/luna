@@ -22,6 +22,8 @@ const InitView = ({ classes, onClose }) => {
   const [initOptions, setInitOptions] = useState({ directory: null });
   const dispatch = useDispatch();
 
+  const { directory } = initOptions || {};
+
   const startInitFlow = () =>
     remote.dialog.showOpenDialog(
       remote.getCurrentWindow(),
@@ -39,8 +41,8 @@ const InitView = ({ classes, onClose }) => {
       runLock({
         ipcEvent: 'npm-init-lock',
         cmd: ['install'],
-        options: ['--package-lock-only'],
-        directory: initOptions.directory
+        packageLock: true,
+        directory
       })
     );
 
@@ -52,14 +54,12 @@ const InitView = ({ classes, onClose }) => {
       runInit({
         ipcEvent: 'npm-init',
         cmd: ['init'],
-        directory: initOptions.directory
+        directory
       })
     );
 
     onClose();
   };
-
-  const { directory } = initOptions || {};
 
   return (
     <section className={classes.root}>

@@ -24,6 +24,7 @@ export const INFO_MESSAGES = {
   searching: 'Searching npm registry..',
   directorySelection: 'Select directory',
   directory: 'Directory',
+  auditCompleted: 'npm audit completed',
   createPackageJsonNote: 'Note: npm init will run with the default parameters.',
   auditFix:
     'Automatically install any compatible updates to vulnerable dependencies',
@@ -41,9 +42,9 @@ export const ACTION_MESSAGES = {
   filter: 'Filter',
   close: 'Close',
   runDoctor: 'Run doctor',
-  runAudit: 'Run audit',
-  runAuditFix: 'Fix all',
-  runAuditFixForce: 'Fix force',
+  runAudit: 'Run',
+  runAuditFix: 'Fix',
+  runAuditFixForce: 'Force',
   runAuditFixProd: 'Fix only prod',
   runAuditFixDev: 'Fix only dev',
   runAuditFixLock: 'Fix only lock'
@@ -69,6 +70,7 @@ export const LABEL_MESSAGES = {
   critical: 'Critical',
   info: 'Info',
   high: 'High',
+  low: 'Low',
   moderate: 'Moderate',
   moduleName: 'Module',
   title: 'Title',

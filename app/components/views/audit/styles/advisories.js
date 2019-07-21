@@ -78,7 +78,7 @@ const styles = theme => ({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-
+    paddingRight: theme.spacing.unit
   },
   padRight: {
     paddingRight: theme.spacing.unit * 2.5

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React from 'react';
-import { objectOf, oneOfType, string, array, object } from 'prop-types';
+import { objectOf, oneOfType, string, array, object, number } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import { groupBy } from 'ramda';
 
@@ -10,6 +10,11 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
+import Chip from '@material-ui/core/Chip';
+
+import {
+  PieChart, Pie, Cell, ResponsiveContainer
+} from 'recharts';
 
 import { iMessage, switchcase } from 'commons/utils';
 import { AUDIT_TYPES } from 'constants/AppConstants';
@@ -44,6 +49,7 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
   const types = groupByTitle(Object.values(data));
   const keys = Object.keys(types);
   const values = Object.values(types);
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#f44336'];
 
   const { info = 0, high = 0, critical = 0, moderate = 0, low = 0 } = vulnerabilities || {};
   const typesData = [
@@ -70,7 +76,7 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
     {
       value: info,
       name: iMessage('label', 'info'),
-      color: 'info'
+      color: 'success'
     }
   ];
   const totalVulnerabilities = typesData.reduce((acc, type) => acc + type.value, 0);
@@ -84,21 +90,30 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
               <ListItemText
                 primary={
                   <div className={classes.container}>
-                    <Typography variant="subtitle1" color="textSecondary">
+                    <Typography variant="body1" color="textSecondary">
                       {name}
                     </Typography>
-                    <Dot color={color} className={classes.dot} />
+                    <Dot color={color} className={classes.dot} size="large" />
                   </div>
                 }
               />
               <ListItemSecondaryAction>
-                <Typography color="textSecondary" variant="h6">
-                  {value}
-                </Typography>
+                <Chip label={value} className={classes.chip} />
               </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>
+        <div style={{ width: '100%', height: 140, display: 'flex', justifyContent: "space-around" }}>
+          <ResponsiveContainer>
+            <PieChart>
+              <Pie cy="85%" startAngle={180} endAngle={0} data={typesData} outerRadius={80} label>
+                {
+                  typesData.map((entry, index) => <Cell key={entry.name} fill={theme.palette[entry.color].main} />)
+                }
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </Widget>
   );
@@ -108,7 +123,7 @@ ListTypes.propTypes = {
   classes: objectOf(string).isRequired,
   theme: objectOf(oneOfType([string, object, array])).isRequired,
   data: objectOf(oneOfType([string, array, object])).isRequired,
-  vulnerabilities: objectOf(string).isRequired
+  vulnerabilities: objectOf(number).isRequired
 };
 
 export default withStyles(styles, {

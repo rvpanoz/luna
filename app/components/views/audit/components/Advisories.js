@@ -86,7 +86,7 @@ ActionsMenu.propTypes = {
 const Advisories = ({ classes, data, handleAudit, vulnerabilities }) => {
   const [active, setActive] = useState(null)
   const keys = Object.keys(data).map(key => key);
-  const zeroKeys = keys.length === 0;
+  // const zeroKeys = keys.length === 0;
 
   const handleFix = option => {
     const auditText = switchcase({
@@ -114,9 +114,9 @@ const Advisories = ({ classes, data, handleAudit, vulnerabilities }) => {
       <Grid
         item
         sm={12}
-        md={9}
-        lg={9}
-        xl={9}
+        md={8}
+        lg={8}
+        xl={8}
         className={classes.transition}
       >
         <Paper className={classes.root}>
@@ -130,29 +130,32 @@ const Advisories = ({ classes, data, handleAudit, vulnerabilities }) => {
             <div className={classes.actions}>
               <Button
                 variant="outlined"
+                size="small"
                 onClick={() => handleAudit()}
               >
                 {iMessage('action', 'runAudit')}
               </Button>
               <Hidden mdDown>
                 <Button
+                  size="small"
                   variant="outlined"
                   onClick={() => handleFix('fix')}
-                  disabled={Boolean(zeroKeys)}
+                  disabled // todo: Boolean(zeroKeys)
                   className={classes.marLeft}
                 >
                   {iMessage('action', 'runAuditFix')}
                 </Button>
                 <Button
+                  size="small"
                   variant="outlined"
                   onClick={() => handleFix('force')}
-                  disabled={Boolean(zeroKeys)}
+                  disabled // todo: Boolean(zeroKeys)
                   className={classes.marLeft}
                 >
                   {iMessage('action', 'runAuditFixForce')}
                 </Button>
               </Hidden>
-              <ActionsMenu handler={handleFix} />
+              {/* <ActionsMenu handler={handleFix} /> */}
             </div>
           </Toolbar>
           <div className={classes.tableWrapper}>
@@ -236,9 +239,9 @@ const Advisories = ({ classes, data, handleAudit, vulnerabilities }) => {
         </Paper>
       </Grid>
       <Grid item sm={12}
-        md={3}
-        lg={3}
-        xl={3}>
+        md={4}
+        lg={4}
+        xl={4}>
         {active ? <AdvisoryDetails data={active} onClose={() => setActive(null)} /> : <ListTypes data={data} vulnerabilities={vulnerabilities} />}
       </Grid>
     </Grid>

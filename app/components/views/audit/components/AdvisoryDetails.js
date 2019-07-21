@@ -60,7 +60,6 @@ ListItemDetail.propTypes = {
 };
 
 const AdvisoryDetails = ({ classes, data, onClose }) => {
-  console.log(data)
   const {
     access,
     name,

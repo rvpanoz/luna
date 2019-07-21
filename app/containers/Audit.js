@@ -166,14 +166,12 @@ const Audit = ({ classes }) => {
           {type === 'audit' && <>
             <Grid container spacing={8} className={classes.gridContainer}>
               <Grid item lg={4} md={4} sm={12} xl={4}>
-                <Hidden mdDown>
-                  <StatsCard
-                    title={iMessage('title', 'dependencies')}
-                    value={dependencies}
-                    color="primary"
-                    icon={<ListIcon />}
-                  />
-                </Hidden>
+                <StatsCard
+                  title={iMessage('title', 'dependencies')}
+                  value={dependencies}
+                  color="primary"
+                  icon={<ListIcon />}
+                />
                 <Hidden smUp>
                   <Typography variant="h6" color="textSecondary">
                     {iMessage('title', 'dependencies')}&nbsp;{dependencies}
@@ -181,14 +179,12 @@ const Audit = ({ classes }) => {
                 </Hidden>
               </Grid>
               <Grid item lg={4} md={4} sm={12} xl={4}>
-                <Hidden mdDown>
-                  <StatsCard
-                    title={iMessage('title', 'devDependencies')}
-                    value={devDependencies}
-                    color="danger"
-                    icon={<BuildIcon />}
-                  />
-                </Hidden>
+                <StatsCard
+                  title={iMessage('title', 'devDependencies')}
+                  value={devDependencies}
+                  color="danger"
+                  icon={<BuildIcon />}
+                />
                 <Hidden smUp>
                   <Typography variant="h6" color="textSecondary">
                     {iMessage('title', 'devDependencies')}&nbsp;{devDependencies}
@@ -196,14 +192,12 @@ const Audit = ({ classes }) => {
                 </Hidden>
               </Grid>
               <Grid item lg={4} md={4} sm={12} xl={4}>
-                <Hidden mdDown>
-                  <StatsCard
-                    title={iMessage('title', 'optionalDependencies')}
-                    value={optionalDependencies}
-                    color="warning"
-                    icon={<AddIcon />}
-                  />
-                </Hidden>
+                <StatsCard
+                  title={iMessage('title', 'optionalDependencies')}
+                  value={optionalDependencies}
+                  color="warning"
+                  icon={<AddIcon />}
+                />
                 <Hidden smUp>
                   <Typography variant="h6" color="textSecondary">
                     {iMessage('title', 'optionalDependencies')}&nbsp;
