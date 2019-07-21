@@ -21,7 +21,7 @@ const styles = theme => ({
   },
   buttonFix: {
     ...defaultFont,
-    lineHeight: 1.75,
+    // lineHeight: 1.75,
     margin: theme.spacing.unit
   }
 });

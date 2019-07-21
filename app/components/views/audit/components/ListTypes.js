@@ -51,66 +51,56 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
     {
       value: critical,
       name: iMessage('label', 'critical'),
-      fill: theme.palette.error.main
+      color: 'error'
     },
     {
       value: high,
       name: iMessage('label', 'high'),
-      fill: theme.palette.warning.main
+      color: 'warning'
     },
     {
       value: moderate,
       name: iMessage('label', 'moderate'),
-      fill: theme.palette.secondary.main
+      color: 'secondary'
     },
     {
       value: low,
       name: iMessage('label', 'low'),
-      fill: theme.palette.primary.main
+      color: 'primary'
     },
     {
       value: info,
       name: iMessage('label', 'info'),
-      fill: theme.palette.info.main
+      color: 'info'
     }
   ];
   const totalVulnerabilities = typesData.reduce((acc, type) => acc + type.value, 0);
 
   return (
-    <Widget noBodyPadding title={iMessage('title', 'vulnerabilities')}>
-      <List>
-        {typesData.map(({ value, name, fill }) => (
-          <ListItem key={name}>
-            <ListItemText
-              primary={
-                <Typography variant="subtitle1" color="textSecondary">
-                  {name}&nbsp;({<span className={classes[`dot${fill}`]}>{value}</span>})
-                </Typography>
-              }
-            />
-          </ListItem>
-        ))}
-      </List>
-      <List style={{ display: 'none' }} className={classes.list}>
-        {values.map((type, idx) => {
-          return (
-            <ListItem key={AUDIT_TYPES[keys[idx]]}>
+    <Widget noBodyPadding title={`${iMessage('title', 'vulnerabilities')} (${totalVulnerabilities})`}>
+      <div className={classes.list}>
+        <List>
+          {typesData.map(({ value, name, color }) => (
+            <ListItem key={name}>
               <ListItemText
                 primary={
-                  <Typography color="textSecondary" variant="body1">
-                    {AUDIT_TYPES[keys[idx]]}
-                  </Typography>
+                  <div className={classes.container}>
+                    <Typography variant="subtitle1" color="textSecondary">
+                      {name}
+                    </Typography>
+                    <Dot color={color} className={classes.dot} />
+                  </div>
                 }
               />
               <ListItemSecondaryAction>
                 <Typography color="textSecondary" variant="h6">
-                  {type.length}
+                  {value}
                 </Typography>
               </ListItemSecondaryAction>
             </ListItem>
-          );
-        })}
-      </List>
+          ))}
+        </List>
+      </div>
     </Widget>
   );
 };

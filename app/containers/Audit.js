@@ -54,7 +54,6 @@ const Audit = ({ classes }) => {
   const dispatch = useDispatch();
   const { loading, message, mode, result, fix } = useMappedState(mapState);
   const [errorDetails, setError] = useState(null);
-  const [active, setActive] = useState(null);
   const [reportType, setReportType] = useState('report')
   const { content, error } = result || {};
   const options = { text: iMessage('info', 'npmAuditInfo') };
@@ -123,7 +122,7 @@ const Audit = ({ classes }) => {
                 <StatsCard
                   title={iMessage('title', 'dependencies')}
                   value={dependencies}
-                  color="primary"
+                  color="info"
                 />
               </Hidden>
               <Hidden smUp>
@@ -151,7 +150,7 @@ const Audit = ({ classes }) => {
                 <StatsCard
                   title={iMessage('title', 'optionalDependencies')}
                   value={optionalDependencies}
-                  color="danger"
+                  color="warning"
                   plain
                   stats
                   icon={<UpdateIcon />}

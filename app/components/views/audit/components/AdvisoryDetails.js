@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React from 'react';
+import { shell } from 'electron'
 import {
   objectOf,
   number,
@@ -22,6 +23,7 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
+import Icon from '@material-ui/core/Icon';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -32,6 +34,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Transition } from 'components/common';
 import { iMessage } from 'commons/utils';
 import styles from '../styles/advisoryDetails';
+
+const openUrl = url => shell.openExternal(url);
 
 const ListItemDetail = ({ text, value }) => (
   <ListItem>
@@ -56,12 +60,14 @@ ListItemDetail.propTypes = {
 };
 
 const AdvisoryDetails = ({ classes, data, onClose }) => {
+  console.log(data)
   const {
     access,
     name,
     findings,
     title,
     vulnerable_versions,
+    url,
     recommendation,
     found_by,
     updated,
@@ -102,6 +108,10 @@ const AdvisoryDetails = ({ classes, data, onClose }) => {
               <Typography component="p" color="textSecondary">
                 {vulnerable_versions}
               </Typography>
+              <br />
+              <Typography component="p" color="textSecondary">
+                <a href="#" className={classes.link} onClick={() => openUrl(url)}>{iMessage('label', 'visitAdvisory')}</a>
+              </Typography>
               <Divider className={classes.divider} light />
               <List dense>
                 <ListItemDetail
@@ -117,16 +127,12 @@ const AdvisoryDetails = ({ classes, data, onClose }) => {
                   value={access}
                 />
                 <ListItemDetail
-                  text={iMessage('label', 'found_by')}
-                  value={founder}
-                />
-                <ListItemDetail
                   text={iMessage('label', 'created')}
-                  value={format(new Date(created), 'DD/MM/YYYY h:mm')}
+                  value={format(new Date(created), 'DD/MM/YYYY')}
                 />
                 <ListItemDetail
                   text={iMessage('label', 'updated')}
-                  value={format(new Date(updated), 'DD/MM/YYYY h:mm')}
+                  value={format(new Date(updated), 'DD/MM/YYYY')}
                 />
               </List>
             </CardContent>

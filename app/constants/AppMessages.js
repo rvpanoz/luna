@@ -75,7 +75,12 @@ export const LABEL_MESSAGES = {
   patched_versions: 'Patched versions',
   severity: 'Severity',
   vulnerableVersions: 'Vulnerable versions',
-  recommendation: 'Recommendation'
+  recommendation: 'Recommendation',
+  visitAdvisory: 'Security advisory page',
+  findings: 'Findings',
+  access: 'Access',
+  created: 'Created at',
+  updated: 'Updated at'
 };
 
 export const TITLE_MESSAGES = {
@@ -100,6 +105,7 @@ export const TITLE_MESSAGES = {
   clearFilters: 'Clear filters',
   searchPackage: 'Search for package',
   clearActive: 'Close',
+  packages: 'Packages',
   packageDependencies: 'Package dependencies',
   packageVersions: 'Package versions',
   packageInstall: 'Install package',
@@ -146,13 +152,6 @@ export const CONFIRMATION_MESSAGES = {
     '\nDo you want to run npm audit fix --only=prod?\n\nIt will skip updating devDependencies.',
   auditFixOnlyDev:
     '\nDo you want to run npm audit fix --only=dev? \n\nIt will skip updating dependencies.'
-};
-
-export const LABEL_MESSAGE = {
-  packageName: 'Package name',
-  packageNameInput: 'Fill package name',
-  groupType: 'Select packages based on group',
-  outdatedPackages: 'Select outdated packages'
 };
 
 export const WARNING_MESSAGES = {

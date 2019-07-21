@@ -32,11 +32,11 @@ const styles = theme => ({
   info: {
     backgroundColor: theme.palette.primary.dark
   },
+  secondary: {
+    backgroundColor: theme.palette.secondary.dark
+  },
   warning: {
     backgroundColor: theme.palette.warning.light
-  },
-  primary: {
-    backgroundColor: 'transparent'
   },
   icon: {
     fontSize: 20

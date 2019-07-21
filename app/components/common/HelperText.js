@@ -38,7 +38,7 @@ const HelperText = ({
         <Button
           disabled={actionDisabled}
           color={color}
-          className={classes.buttonFix}
+          className={classes.button}
           variant="contained"
           onClick={actionHandler}
         >
@@ -49,7 +49,7 @@ const HelperText = ({
   );
 
 HelperText.defaultProps = {
-  color: 'default'
+  color: 'primary'
 }
 
 HelperText.propTypes = {

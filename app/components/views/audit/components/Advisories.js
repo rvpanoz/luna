@@ -26,7 +26,6 @@ import CloseIcon from '@material-ui/icons/CloseOutlined';
 import { iMessage, switchcase, showDialog } from 'commons/utils';
 import { Dot } from 'components/common';
 import AdvisoryDetails from './AdvisoryDetails';
-import ListDotTypes from './ListDotTypes';
 import ListTypes from './ListTypes';
 import styles from '../styles/advisories';
 
@@ -257,7 +256,7 @@ Advisories.propTypes = {
       PropTypes.string
     ])
   ),
-  vulnerabilities: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string])),
+  vulnerabilities: PropTypes.objectOf(PropTypes.string),
   handleAudit: PropTypes.func.isRequired
 };
 
