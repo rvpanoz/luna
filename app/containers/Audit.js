@@ -18,13 +18,12 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
-import UpdateIcon from '@material-ui/icons/Update';
+import ListIcon from '@material-ui/icons/List';
+import AddIcon from '@material-ui/icons/Add';
+import BuildIcon from '@material-ui/icons/Build';
 
 import {
-  Actions,
   Advisories,
-  AdvisoryDetails,
-  ListDotTypes,
   Summary,
   StatsCard
 } from 'components/views/audit/components';
@@ -53,128 +52,185 @@ const mapState = ({
 const Audit = ({ classes }) => {
   const dispatch = useDispatch();
   const { loading, message, mode, result, fix } = useMappedState(mapState);
-  const [errorDetails, setError] = useState(null);
-  const [reportType, setReportType] = useState('report')
+  const [status, setStatus] = useState({
+    type: 'init',
+    options: {}
+  });
+  const [dialog, setDialog] = useState({
+    open: false,
+    error: false
+  });
+  const [metadataValues, setMetadata] = useState({
+    dependencies: 0,
+    devDependencies: 0,
+    optionalDependencies: 0,
+    vulnerabilities: null,
+    advisories: null
+  });
   const { content, error } = result || {};
-  const options = { text: iMessage('info', 'npmAuditInfo') };
+  const defaultOptions = { text: iMessage('info', 'npmAuditInfo') };
 
-  const auditRun = () => dispatch(
+  const auditRun = (option) => dispatch(
     runAudit({
       ipcEvent: 'npm-audit',
-      cmd: ['audit']
+      cmd: ['audit'],
+      options: {
+        flag: option || false
+      }
     })
   );
 
-  // set error
+  const initOptions = {
+    ...defaultOptions,
+    detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
+    actionText: iMessage('action', 'runAudit'),
+    actionHandler: () => auditRun(),
+    actionDisabled: mode === 'global'
+  };
+
+  const noIssuesOptions = {
+    ...defaultOptions,
+    text: iMessage('info', 'noAuditIssues'),
+    actionText: iMessage('action', 'runAudit'),
+    actionHandler: () => auditRun(),
+  };
+
+  // set data
   useEffect(() => {
-    if (error) {
-      const { detail, code } = error || {};
+    const { metadata, advisories } = content || {};
 
-      const errorOptions = {
-        ...options,
-        text: detail,
-        code
-      };
+    if (!content && !loading) {
+      setStatus({
+        type: 'init',
+        options: initOptions
+      })
 
-      setError(errorOptions);
+      return;
     }
-  }, [error]);
 
-  // set report type
-  useEffect(() => {
-    const type = fix ? 'summary' : 'report'
+    if (!metadata && !advisories) {
+      setStatus({
+        type: 'dialog'
+      })
 
-    setReportType(type)
-  }, [fix]);
+      return;
+    }
 
-
-  if (!content && !loading) {
-    const contentOptions = {
-      ...options,
-      detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
-      actionText: iMessage('action', 'runAudit'),
-      actionHandler: auditRun,
-      actionDisabled: mode === 'global'
-    };
-
-    return <HelperText {...contentOptions} />;
-  }
-
-  const {
-    metadata: {
+    const {
       dependencies,
       devDependencies,
       optionalDependencies,
       vulnerabilities
-    },
-    actions,
-    advisories
-  } = content || { metadata: {}, actions: [], advisories: {} };
-  const advisoriesValues = Object.values(advisories);
+    } = metadata;
+
+    setMetadata({
+      dependencies,
+      devDependencies,
+      optionalDependencies,
+      vulnerabilities,
+      advisories
+    })
+
+    setStatus({
+      type: 'audit'
+    })
+  }, [content]);
+
+  // set error
+  useEffect(() => {
+    if (error) {
+      const { summary, code } = error || {};
+
+      const errorOptions = {
+        ...options,
+        text: summary,
+        code
+      };
+
+      setStatus({
+        type: 'error',
+        options: errorOptions
+      })
+    }
+  }, [error]);
+
+  const { type, options } = status;
+  const { dependencies, devDependencies, optionalDependencies, vulnerabilities, advisories } = metadataValues || {}
 
   return (
     <>
       <AppLoader loading={loading} message={message}>
         <div className={classes.root}>
-          <Grid container spacing={8} className={classes.gridContainer}>
-            <Grid item lg={4} md={4} sm={12} xl={4}>
-              <Hidden mdDown>
-                <StatsCard
-                  title={iMessage('title', 'dependencies')}
-                  value={dependencies}
-                  color="info"
-                />
-              </Hidden>
-              <Hidden smUp>
-                <Typography variant="h6" color="textSecondary">
-                  {iMessage('title', 'dependencies')}&nbsp;{dependencies}
-                </Typography>
-              </Hidden>
-            </Grid>
-            <Grid item lg={4} md={4} sm={12} xl={4}>
-              <Hidden mdDown>
-                <StatsCard
-                  title={iMessage('title', 'devDependencies')}
-                  value={devDependencies}
-                  color="danger"
-                />
-              </Hidden>
-              <Hidden smUp>
-                <Typography variant="h6" color="textSecondary">
-                  {iMessage('title', 'devDependencies')}&nbsp;{devDependencies}
-                </Typography>
-              </Hidden>
-            </Grid>
-            <Grid item lg={4} md={4} sm={12} xl={4}>
-              <Hidden mdDown>
-                <StatsCard
-                  title={iMessage('title', 'optionalDependencies')}
-                  value={optionalDependencies}
-                  color="warning"
-                  plain
-                  stats
-                  icon={<UpdateIcon />}
-                />
-              </Hidden>
-              <Hidden smUp>
-                <Typography variant="h6" color="textSecondary">
-                  {iMessage('title', 'optionalDependencies')}&nbsp;
+          {type === 'error' && <HelperText {...options} />}
+          {type === 'init' && <HelperText {...options} />}
+          {type === 'audit' && <>
+            <Grid container spacing={8} className={classes.gridContainer}>
+              <Grid item lg={4} md={4} sm={12} xl={4}>
+                <Hidden mdDown>
+                  <StatsCard
+                    title={iMessage('title', 'dependencies')}
+                    value={dependencies}
+                    color="primary"
+                    icon={<ListIcon />}
+                  />
+                </Hidden>
+                <Hidden smUp>
+                  <Typography variant="h6" color="textSecondary">
+                    {iMessage('title', 'dependencies')}&nbsp;{dependencies}
+                  </Typography>
+                </Hidden>
+              </Grid>
+              <Grid item lg={4} md={4} sm={12} xl={4}>
+                <Hidden mdDown>
+                  <StatsCard
+                    title={iMessage('title', 'devDependencies')}
+                    value={devDependencies}
+                    color="danger"
+                    icon={<BuildIcon />}
+                  />
+                </Hidden>
+                <Hidden smUp>
+                  <Typography variant="h6" color="textSecondary">
+                    {iMessage('title', 'devDependencies')}&nbsp;{devDependencies}
+                  </Typography>
+                </Hidden>
+              </Grid>
+              <Grid item lg={4} md={4} sm={12} xl={4}>
+                <Hidden mdDown>
+                  <StatsCard
+                    title={iMessage('title', 'optionalDependencies')}
+                    value={optionalDependencies}
+                    color="warning"
+                    icon={<AddIcon />}
+                  />
+                </Hidden>
+                <Hidden smUp>
+                  <Typography variant="h6" color="textSecondary">
+                    {iMessage('title', 'optionalDependencies')}&nbsp;
                   {optionalDependencies}
-                </Typography>
-              </Hidden>
+                  </Typography>
+                </Hidden>
+              </Grid>
             </Grid>
-          </Grid>
-          {reportType === 'report' && <Advisories data={advisories} handleAudit={auditRun} vulnerabilities={vulnerabilities} />}
-          {reportType === 'summary' && <Summary />}
+            <Advisories data={advisories} handleAudit={auditRun} vulnerabilities={vulnerabilities} />
+          </>
+          }
         </div>
       </AppLoader>
       <Dialog
-        open={Boolean(error)}
-        onClose={() => { }}
-        aria-labelledby="audit-error"
+        open={type === 'dialog'}
+        onClose={() => setStatus({
+          type: 'init',
+          options: initOptions
+        })}
+        aria-labelledby="audit"
+        fullWidth
       >
         <DialogContent>
-          <HelperText {...error} />
+          {error ? <HelperText {...dialog} /> : <Summary data={content} onClose={() => setStatus({
+            type: 'init',
+            options: initOptions
+          })} />}
         </DialogContent>
       </Dialog>
     </>

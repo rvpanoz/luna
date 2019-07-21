@@ -3,14 +3,16 @@
  * https://docs.npmjs.com/cli/audit
  */
 
-const audit = options => {
+const audit = params => {
   const command = ['audit'];
   const defaults = ['--json', '--verbose'];
-  const { flag } = options || {};
+  const { options: {
+    flag
+  } } = params || {}
   const commandOptions = [];
 
   if (flag) {
-    const argv = flag === 'fix' ? flag : `--${flag}`;
+    const argv = flag === 'fix' ? flag : `fix --${flag}`;
     commandOptions.push(argv);
   }
 

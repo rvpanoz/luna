@@ -6,7 +6,6 @@ import cn from 'classnames';
 import { useState } from 'react';
 import { withStyles } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import Icon from '@material-ui/core/Icon';
 import Hidden from '@material-ui/core/Hidden';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';

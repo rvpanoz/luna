@@ -8,14 +8,14 @@ const {
   defaultSettings: { defaultManager }
 } = mk || {};
 
-const onNpmAudit = (event, options, store) => {
+const onNpmAudit = (event, parameters, store) => {
   const settings = store.get('user_settings');
-  const { activeManager = defaultManager, ...rest } = options || {};
+  const { activeManager = defaultManager, ...rest } = parameters || {};
 
   const onFlow = chunk => event.sender.send('npm-audit-flow', chunk);
   const onError = error => event.sender.send('npm-audit-error', error);
   const onComplete = (error, data) => {
-    const { flag } = options || {};
+    const { options: { flag } } = parameters || {};
     const evtName = flag ? 'npm-audit-fix-completed' : 'npm-audit-completed';
 
     return event.sender.send(evtName, error, data);

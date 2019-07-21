@@ -34,7 +34,7 @@ const HelperText = ({
           {detail}
         </Typography>
       )}
-      {actionText && actionHandler && (
+      {actionText && actionHandler ? (
         <Button
           disabled={actionDisabled}
           color={color}
@@ -44,12 +44,12 @@ const HelperText = ({
         >
           {actionText}
         </Button>
-      )}
+      ) : null}
     </div>
   );
 
 HelperText.defaultProps = {
-  color: 'primary'
+  color: 'secondary'
 }
 
 HelperText.propTypes = {

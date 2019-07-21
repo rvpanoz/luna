@@ -33,11 +33,11 @@ const showAuditingLoaderEpic = action$ =>
 const npmRunAuditEpic = (action$, state$) =>
   action$.pipe(
     ofType(runAudit.type),
+    tap(console.log),
     tap(({ payload }) => {
       const {
         common: { mode, directory }
       } = state$.value;
-
       ipcRenderer.send('npm-audit', {
         ...payload,
         mode,

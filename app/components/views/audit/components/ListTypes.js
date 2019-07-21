@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 
 import React from 'react';
-import { useState } from 'react';
 import { objectOf, oneOfType, string, array, object } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import { groupBy } from 'ramda';
@@ -108,7 +107,8 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
 ListTypes.propTypes = {
   classes: objectOf(string).isRequired,
   theme: objectOf(oneOfType([string, object, array])).isRequired,
-  data: objectOf(oneOfType([string, array, object])).isRequired
+  data: objectOf(oneOfType([string, array, object])).isRequired,
+  vulnerabilities: objectOf(string).isRequired
 };
 
 export default withStyles(styles, {

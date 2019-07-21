@@ -28,9 +28,9 @@ const defaultFont = {
 const grayColor = '#999999';
 const blackColor = '#000';
 const whiteColor = '#fff';
-const primaryColor = ["#006db3", "#006dc1", "#006db3", "#63ccfa"];
-const warningColor = ["#ff9800", "#ffa726", "#fb8c00", "#ffa21a"];
-const dangerColor = ["#f44336", "#ef5350", "#e53935", "#f55a4e"];
+const primaryColor = ["#009be5", "#009be5", "#009be5", "#009be5"];
+const warningColor = ["#ffa726", "#ffa726", "#ffa726", "#ffa726"];
+const dangerColor = ["#f44336", "#f44336", "#f44336", "#f44336"];
 const successColor = ["#4caf50", "#66bb6a", "#43a047", "#5cb860"];
 const infoColor = ["#00acc1", "#26c6da", "#00acc1", "#00d3ee"];
 
