@@ -24,27 +24,79 @@ export const INFO_MESSAGES = {
   searching: 'Searching npm registry..',
   directorySelection: 'Select directory',
   directory: 'Directory',
-  createPackageJsonNote: 'Note: npm init will run with the default parameters.'
+  auditCompleted: 'npm audit completed',
+  createPackageJsonNote: 'Note: npm init will run with the default parameters.',
+  auditFix:
+    'Automatically install any compatible updates to vulnerable dependencies',
+  auditForce:
+    'Have audit fix install semver-major updates to toplevel dependencies, not just semver-compatible ones'
 };
 
 export const ACTION_MESSAGES = {
+  install: 'Install',
+  update: 'Update',
+  view: 'View',
+  uninstall: 'Uninstall',
   create: 'Create',
   cancel: 'Cancel',
   filter: 'Filter',
-  close: 'Close'
+  close: 'Close',
+  runDoctor: 'Run doctor',
+  runAudit: 'Run',
+  runAuditFix: 'Fix',
+  runAuditFixForce: 'Force',
+  runAuditFixProd: 'Fix only prod',
+  runAuditFixDev: 'Fix only dev',
+  runAuditFixLock: 'Fix only lock'
 };
 
 export const LABEL_MESSAGES = {
+  versions: 'Versions',
+  latest: 'Latest',
+  next: 'Next',
+  homepage: 'Homepage',
+  repository: 'Repository',
+  tarball: 'Tarball',
+  engines: 'Engines',
+  dependencies: 'Dependencies',
+  devDependencies: 'Development',
+  optionalDependencies: 'Optional',
+  bundleDependencies: 'Bundle',
   packageName: 'Package name',
   packageNameInput: 'Fill package name',
   groupType: 'Select packages based on group',
   byOutdated: 'Select outdated packages',
-  status: 'Status'
+  status: 'Status',
+  critical: 'Critical',
+  info: 'Info',
+  high: 'High',
+  low: 'Low',
+  moderate: 'Moderate',
+  moduleName: 'Module',
+  title: 'Title',
+  patched_versions: 'Patched versions',
+  severity: 'Severity',
+  vulnerableVersions: 'Vulnerable versions',
+  recommendation: 'Recommendation',
+  visitAdvisory: 'Security advisory page',
+  findings: 'Findings',
+  access: 'Access',
+  created: 'Created at',
+  updated: 'Updated at'
 };
 
 export const TITLE_MESSAGES = {
-  audit: 'Audit report',
-  doctor: 'Doctor results',
+  dependencies: 'Dependencies',
+  devDependencies: 'Development',
+  optionalDependencies: 'Optional',
+  bundleDependencies: 'Bundle',
+  issues: 'Issues',
+  actions: 'Actions',
+  total: 'Total',
+  vulnerabilities: 'Vulnerabilities',
+  overview: 'Overview',
+  audit: 'Audit',
+  doctor: 'Doctor',
   loadDirectory: 'Load a directory from a package.json file',
   selectPackageJson: 'Select package.json file',
   installationOptions: 'Please select installation options',
@@ -54,7 +106,8 @@ export const TITLE_MESSAGES = {
   showFilters: 'Show filters',
   clearFilters: 'Clear filters',
   searchPackage: 'Search for package',
-  clearActive: 'Clear active package',
+  clearActive: 'Close',
+  packages: 'Packages',
   packageDependencies: 'Package dependencies',
   packageVersions: 'Package versions',
   packageInstall: 'Install package',
@@ -80,8 +133,8 @@ export const TITLE_MESSAGES = {
 
 export const CONFIRMATION_MESSAGES = {
   actionRun:
-    '\nDo you want to run %name% \n\nNote: This process will take some time',
-  installAll: `\nDo you want to install all the packages from \n%directory% \n\nNote: This process will take some time `,
+    '\nDo you want to run %name%?\nNote: This process will take some time',
+  installAll: `\nDo you want to install all the packages from \n%directory% \nNote: This process will take some time `,
   installPackage: '\nDo you want to install %name%?',
   installSelected: '\nDo you want to install the selected packages?',
   installLatest: '\nDo you want to install %name% latest version?',
@@ -92,23 +145,25 @@ export const CONFIRMATION_MESSAGES = {
   installLatestSelected:
     '\nDo you want to install the latest version of the selected packages?',
   updateSelected: '\nDo you want to update the selected packages?',
-  uninstallSelected: '\nDo you want to uninstall the selected packages?'
-};
-
-export const LABEL_MESSAGE = {
-  packageName: 'Package name',
-  packageNameInput: 'Fill package name',
-  groupType: 'Select packages based on group',
-  outdatedPackages: 'Select outdated packages'
+  uninstallSelected: '\nDo you want to uninstall the selected packages?',
+  auditFix:
+    '\nDo you want to run npm audit fix? \n\nIt will automatically install any compatible updates to vulnerable dependencies.',
+  auditFixForce:
+    '\nDo you want to run npm audit fix --force? \n\nInstall semver-major updates to toplevel dependencies, not just semver-compatible ones.',
+  auditFixOnlyProd:
+    '\nDo you want to run npm audit fix --only=prod?\n\nIt will skip updating devDependencies.',
+  auditFixOnlyDev:
+    '\nDo you want to run npm audit fix --only=dev? \n\nIt will skip updating dependencies.'
 };
 
 export const WARNING_MESSAGES = {
+  noGlobalAudit: 'You can not run npm audit on global packages',
   peerMissing:
     'You have %packages% with peer missing. Check your notifications to fix it.',
   errorPackages:
     'Some packages have errors. Check your notifications to fix it.',
   yarnlock:
-    'yarn-lock file detected. Please remove it before running any action operation',
+    'It is advised not to mix package managers in order to avoid resolution inconsistencies caused by unsynchronized lock files. \nTo clear this warning, remove yarn-lock.json.',
   newerSelected:
     'A package with the same name and newer version is already selected',
   oldorEqualSelected:

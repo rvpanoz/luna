@@ -1,5 +1,3 @@
-/* eslint-disable react/require-default-props */
-
 import React from 'react';
 import {
   array,
@@ -30,14 +28,14 @@ const AppLoader = ({ loading, classes, children, message, relative, mini }) =>
         size={mini ? 20 : 30}
       />
       {message && (
-        <Typography className={classes.message} variant="caption">
+        <Typography className={classes.message} color="textSecondary">
           {message}
         </Typography>
       )}
     </div>
   ) : (
-    children
-  );
+      children
+    );
 
 AppLoader.propTypes = {
   classes: objectOf(string).isRequired,

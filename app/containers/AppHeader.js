@@ -29,13 +29,14 @@ import ErrorIcon from '@material-ui/icons/WarningOutlined';
 import SecurityIcon from '@material-ui/icons/SecurityOutlined';
 import DoctorIcon from '@material-ui/icons/BuildOutlined';
 
-import Init from 'components/common/Init';
-import System from 'components/common/System';
-import SearchBox from 'components/common/SearchBox';
+import { Init, SearchBox, System } from 'components/views/common';
 import { iMessage } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
 
 import styles from './styles/appHeader';
+
+const GIT_URL = 'https://github.com/rvpanoz/luna';
+const openUrl = url => shell.openExternal(url);
 
 const mapState = ({
   npm: { env },
@@ -54,8 +55,6 @@ const mapState = ({
   loading,
   env
 });
-
-const openUrl = url => shell.openExternal(url);
 
 const Header = ({ classes, onDrawerToggle }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -92,7 +91,7 @@ const Header = ({ classes, onDrawerToggle }) => {
               <Typography
                 className={classes.link}
                 component="a"
-                onClick={() => openUrl('https://github.com/rvpanoz/luna')}
+                onClick={() => openUrl(GIT_URL)}
               >
                 Github
               </Typography>

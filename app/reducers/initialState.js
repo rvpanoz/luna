@@ -22,8 +22,14 @@ const initialState = {
     operationStatus: 'idle',
     operationPackages: [],
     operationCommand: null,
-    auditData: null,
-    doctorData: null
+    audit: {
+      result: null,
+      fix: false
+    },
+    doctor: {
+      data: null,
+      error: false
+    }
   },
   ui: {
     paused: false,
@@ -45,6 +51,14 @@ const initialState = {
         message: null
       },
       packageLoader: {
+        loading: false,
+        message: null
+      },
+      auditLoader: {
+        loading: false,
+        message: null
+      },
+      doctorLoader: {
         loading: false,
         message: null
       }

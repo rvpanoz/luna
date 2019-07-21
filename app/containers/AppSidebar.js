@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { useState, useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import { ipcRenderer, remote } from 'electron';
+import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 
 import Tooltip from '@material-ui/core/Tooltip';
@@ -19,8 +19,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 
-import AppLogo from 'components/common/AppLogo';
-import AppTabs from 'components/common/AppTabs';
+import { AppTabs, AppLogo } from 'components/common/';
 
 import UpdateIcon from '@material-ui/icons/Update';
 
@@ -31,11 +30,10 @@ import {
 } from 'components/views/sidebar/tabs';
 
 import { navigatorParameters } from 'commons/parameters';
-import { iMessage } from 'commons/utils';
+import { iMessage, showDialog } from 'commons/utils';
 import { installPackage } from 'models/packages/actions';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
-import { runAudit, runDoctor } from 'models/npm/actions';
 
 import styles from './styles/appSidebar';
 
@@ -87,48 +85,43 @@ const AppSidebar = ({
     return () => ipcRenderer.removeAllListeners(['loaded-packages-close']);
   }, []);
 
-  const loadDirectory = () =>
-    remote.dialog.showOpenDialog(
-      remote.getCurrentWindow(),
-      navigatorParameters,
-      filePath => {
-        if (filePath) {
-          dispatch(
-            setActivePage({
-              page: 'packages',
-              paused: false
-            })
-          );
-          dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
-        }
-      }
-    );
+  const loadDirectory = () => {
+    const dialogHandler = filePath => {
+      dispatch(
+        setActivePage({
+          page: 'packages',
+          paused: false
+        })
+      );
+      dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
+    };
 
-  const installPackagesJson = () =>
-    remote.dialog.showMessageBox(
-      remote.getCurrentWindow(),
-      {
-        title: 'Confirmation',
-        type: 'question',
-        message: iMessage('confirmation', 'installAll', {
-          '%directory%': directory
-        }),
-        buttons: ['Cancel', 'Install']
-      },
-      btnIdx => {
-        if (btnIdx) {
-          dispatch(
-            installPackage({
-              ipcEvent: 'install',
-              cmd: ['install'],
-              packageJson: true,
-              mode,
-              directory: fullDirectory
-            })
-          );
-        }
-      }
-    );
+    return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
+  };
+
+  const installPackagesJson = () => {
+    const dialogOptions = {
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage('confirmation', 'installAll', {
+        '%directory%': directory
+      }),
+      buttons: ['Cancel', 'Install']
+    };
+
+    const dialogHandler = () =>
+      dispatch(
+        installPackage({
+          ipcEvent: 'install',
+          cmd: ['install'],
+          packageJson: true,
+          mode,
+          directory: fullDirectory
+        })
+      );
+
+    return showDialog(dialogHandler, dialogOptions);
+  };
 
   const packagesItems = [
     {
@@ -154,37 +147,6 @@ const AppSidebar = ({
     }
   ];
 
-  const actionItems = [
-    {
-      name: 'audit',
-      mode,
-      primaryText: 'npm audit',
-      secondaryText: iMessage('info', 'npmAuditInfo'),
-      handler: () => {
-        dispatch(
-          runAudit({
-            ipcEvent: 'npm-audit',
-            cmd: ['audit']
-          })
-        );
-      }
-    },
-    {
-      name: 'doctor',
-      mode,
-      primaryText: 'npm doctor',
-      secondaryText: iMessage('info', 'npmDoctorInfo'),
-      handler: () => {
-        dispatch(
-          runDoctor({
-            ipcEvent: 'npm-doctor',
-            cmd: ['doctor']
-          })
-        );
-      }
-    }
-  ];
-
   return (
     <Drawer variant="permanent" {...restProps}>
       <List disablePadding>
@@ -197,6 +159,7 @@ const AppSidebar = ({
           <ListItemText className={classes.actionButton}>
             <Tooltip title={iMessage('title', 'loadDirectory')}>
               <Button
+                disableRipple
                 disabled={loading || activePage !== 'packages'}
                 className={cn(classes.label, classes.margin)}
                 color="secondary"
@@ -208,18 +171,6 @@ const AppSidebar = ({
                 Analyze
               </Button>
             </Tooltip>
-          </ListItemText>
-        </ListItem>
-        <ListItem
-          className={cn(classes.categoryHeader, classes.listItem)}
-          key="app-tabs"
-        >
-          <ListItemText
-            classes={{
-              primary: classes.categoryHeaderPrimary
-            }}
-          >
-            Details
           </ListItemText>
         </ListItem>
         <ListItem key="app-tabs-content" disableGutters>
@@ -240,7 +191,7 @@ const AppSidebar = ({
                 <CardActions>
                   <div className={classes.cardFlexContainer}>
                     <UpdateIcon className={classes.updateIcon} />
-                    <Typography variant="caption" className={classes.cardLabel}>
+                    <Typography variant="body2" color="textSecondary">
                       Updated at{' '}
                       {lastUpdatedAt !== null ? lastUpdatedAt : '...'}
                     </Typography>
@@ -250,7 +201,6 @@ const AppSidebar = ({
               <ActionsTab
                 installPackages={installPackagesJson}
                 mode={mode}
-                items={actionItems}
                 nodata={packagesData.length}
                 loading={loading}
               />

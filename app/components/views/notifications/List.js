@@ -1,8 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
-import { remote } from 'electron';
-import { useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
@@ -24,120 +21,47 @@ import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
 import { setActivePage, clearFilters } from 'models/ui/actions';
 import { setPackagesSearch } from 'models/packages/actions';
 import { iMessage } from 'commons/utils';
+import { HelperText } from 'components/common';
+
 import styles from './styles/list';
 
 const mapState = ({
   notifications: { notifications },
-  common: {
-    operations: { packagesInstallOptions }
-  }
 }) => ({
   notifications,
-  packagesInstallOptions
 });
 
-const NotificationsItem = ({ classes, type, required, requiredBy }) => {
-  const packageParts = required && required.split('@');
-  const [packageName, packageVersion] = packageParts;
+const NotificationsList = ({ classes }) => {
+  const { notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
-  const handleMissingPackages = useCallback(
-    () =>
-      remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          title: 'Confirmation',
-          type: 'question',
-          message: iMessage('confirmation', 'searchPackage', {
-            '%packageName%': packageName
-          }),
-          buttons: ['Cancel', 'Search']
-        },
-        btnIdx => {
-          if (Boolean(btnIdx) === true) {
-            dispatch(clearFilters());
+  const onSearchHandler = (packageName) => {
+    dispatch(clearFilters());
 
-            dispatch({
-              type: setActivePage.type,
-              payload: {
-                page: 'packages',
-                paused: true
-              }
-            });
+    dispatch({
+      type: setActivePage.type,
+      payload: {
+        page: 'packages',
+        paused: true
+      }
+    });
 
-            dispatch(
-              setPackagesSearch({
-                channel: 'npm-search',
-                options: {
-                  cmd: ['search'],
-                  pkgName: packageName,
-                  fromSearch: true
-                }
-              })
-            );
-          }
+    dispatch(
+      setPackagesSearch({
+        channel: 'npm-search',
+        options: {
+          cmd: ['search'],
+          pkgName: packageName,
+          fromSearch: true
         }
-      ),
-    [packageName, dispatch]
-  );
-
-  return (
-    <div className={classes.item}>
-      <ListItem>
-        <ListItemAvatar>
-          <Avatar style={{ backgroundColor: '#fff' }}>
-            <NotificationsIcon
-              color={type === 'ERROR' ? 'secondary' : 'default'}
-            />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary={required} secondary={requiredBy} />
-        <ListItemSecondaryAction>
-          <Tooltip
-            title={iMessage('title', 'searchPackage', {
-              name: packageName
-            })}
-            key={`${packageName}-${packageVersion}`}
-          >
-            <IconButton
-              aria-label="search-for-package"
-              onClick={() => handleMissingPackages()}
-            >
-              <SearchIcon color="primary" />
-            </IconButton>
-          </Tooltip>
-        </ListItemSecondaryAction>
-      </ListItem>
-    </div>
-  );
-};
-
-NotificationsItem.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  required: PropTypes.string,
-  requiredBy: PropTypes.string,
-  type: PropTypes.string
-};
-
-const WithStylesNotificationItem = withStyles({})(NotificationsItem);
-
-const NotificationsList = ({ classes }) => {
-  const { notifications, packagesInstallOptions } = useMappedState(mapState);
-
-  if (!notifications || !notifications.length) {
-    return (
-      <div className={classes.containerHolder}>
-        <Typography
-          variant="subtitle1"
-          className={cn(classes.noData, classes.withPadding)}
-        >
-          {iMessage('info', 'noNotifications')}
-        </Typography>
-        <Typography variant="caption" className={cn(classes.helperText)}>
-          {iMessage('info', 'notificationsHelperText')}
-        </Typography>
-      </div>
+      })
     );
+  }
+
+  if (!notifications.length) {
+    return <HelperText
+      text={iMessage('info', 'noNotifications')}
+    />
   }
 
   return (
@@ -152,13 +76,38 @@ const NotificationsList = ({ classes }) => {
         </div>
         <Divider light />
         <List className={classes.list}>
-          {notifications.map(notification => (
-            <WithStylesNotificationItem
-              key={notification}
-              installationOptions={packagesInstallOptions}
-              {...notification}
-            />
-          ))}
+          {notifications.map(({ required, requiredBy, type }) => {
+
+            const packageParts = required && required.split('@');
+            const [packageName] = packageParts;
+
+            return <ListItem key={packageName} className={classes.listItem}>
+              <ListItemAvatar>
+                <Avatar style={{ backgroundColor: '#fff' }}>
+                  <NotificationsIcon
+                    color={type === 'ERROR' ? 'secondary' : 'default'}
+                  />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={required} secondary={requiredBy} />
+              <ListItemSecondaryAction>
+                <Tooltip
+                  title={iMessage('title', 'searchPackage', {
+                    name: packageName
+                  })}
+                >
+                  <div>
+                    <IconButton
+                      aria-label="search-for-package"
+                      onClick={() => onSearchHandler(packageName)}
+                    >
+                      <SearchIcon color="primary" />
+                    </IconButton>
+                  </div>
+                </Tooltip>
+              </ListItemSecondaryAction>
+            </ListItem>
+          })}
         </List>
       </div>
     </Paper>

@@ -13,11 +13,14 @@ const setEnv = ActionCreator('SET_ENV');
 const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const npmCommand = ActionCreator('NPM_COMMAND');
 
-// reporting data
+// reporting
 const parseNpmAuditData = ActionCreator('PARSE_NPM_AUDIT_DATA');
+const parseNpmAuditFixData = ActionCreator('PARSE_NPM_AUDIT_FIX_DATA');
 const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
+const updateNpmAuditFixData = ActionCreator('UPDATE_NPM_AUDIT_FIX_DATA');
 const updateNpmDoctorData = ActionCreator('UPDATE_NPM_DOCTOR_DATA');
 const clearAuditData = ActionCreator('CLEAR_AUDIT_DATA');
+const clearDoctorData = ActionCreator('CLEAR_DOCTOR_DATA');
 
 // listeners
 const npmAuditListener = ActionCreator('REGISTER_LISTENER_AUDIT');
@@ -32,6 +35,7 @@ const runUninstall = ActionCreator('RUN_UNINSTALL');
 // utilities
 const runAudit = ActionCreator('RUN_AUDIT');
 const runInit = ActionCreator('RUN_INIT');
+const runLock = ActionCreator('RUN_INIT_LOCK');
 const runDoctor = ActionCreator('RUN_DOCTOR');
 
 export {
@@ -49,12 +53,16 @@ export {
   runUninstall,
   runAudit,
   runInit,
+  runLock,
   runDoctor,
   npmDoctorListener,
   npmAuditListener,
   npmInitListener,
   clearAuditData,
+  clearDoctorData,
   parseNpmAuditData,
+  parseNpmAuditFixData,
+  updateNpmAuditFixData,
   updateNpmDoctorData,
   updateNpmAuditData
 };

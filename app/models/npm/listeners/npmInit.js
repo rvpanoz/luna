@@ -16,7 +16,7 @@ const updateCommand = ({
   }
 });
 
-const onNpmAudit$ = new Observable(observer => {
+const onNpmInit$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-init-completed']);
 
   ipcRenderer.on('npm-init-completed', () => {
@@ -51,4 +51,4 @@ const onNpmAudit$ = new Observable(observer => {
   });
 });
 
-export default onNpmAudit$;
+export default onNpmInit$;

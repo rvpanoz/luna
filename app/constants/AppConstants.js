@@ -49,3 +49,29 @@ export const NPM_CONFIG_VALUES = {
   PROXY: 'proxy',
   HTTPS_PROXY: 'https-proxy'
 };
+
+export const AUDIT_TYPES = {
+  REDOS: 'Regular Expression Denial of Service',
+  DOS: 'Denial of Service',
+  PP: 'Prototype Pollution',
+  AFO: 'Arbitrary File Overwrite',
+  CI: 'Code Injection',
+  UAF: 'Use-After-Free',
+  RMD: 'Remote Memory Disclosure',
+  DOSWS: 'DoS due to excessively large websocket message',
+  CINJ: 'Command Injection',
+  CRWP: 'Cryptographically Weak PRNG',
+  OFBR: 'Out-of-bounds Read',
+  MEXP: 'Memory Exposure',
+  ORED: 'Open Redirect',
+  INENT: 'Insufficient Entropy',
+  MOV: 'Missing Origin Validation',
+  RCEXC: 'Remote Code Execution',
+  CSS: 'Cross-Site Scripting',
+  NA: 'Not Available'
+};
+
+export const AUDIT_ERRORS = {
+  EAUDITNOLOCK: 'install --package-lock-only',
+  ELOCKVERIFY: 'install'
+};

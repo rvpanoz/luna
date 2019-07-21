@@ -17,16 +17,22 @@ const install = (options, idx) => {
     multiple,
     packages,
     single,
-    packageJson
+    packageJson,
+    packageLock
   } = options || {};
 
-  // '--unsafe-perm use root'
+  // '--unsafe-perm'
   // '--ignore-scripts
-  const defaults = ['--verbose'];
+  const defaults = ['--verbose', '--no-audit'];
 
   // install from package.json file
   if (packageJson) {
     return command.concat(['--ignore-scripts']);
+  }
+
+  // create package-lock.json file
+  if (packageLock) {
+    return command.concat(['--package-lock-only']);
   }
 
   // attach -g option if mode is global

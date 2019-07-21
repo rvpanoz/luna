@@ -9,6 +9,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Typography from '@material-ui/core/Typography';
 
+import { iMessage } from 'commons/utils'
 import styles from './styles/packageInfo';
 
 const PackageInfo = ({ classes, active, dependencies, short }) => {
@@ -36,13 +37,13 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
           <ListItem key="active-versions" className={classes.listItem}>
             <ListItemText
               primary={
-                <Typography variant="subtitle1" color="primary">
-                  Versions
+                <Typography variant="subtitle1" color="textSecondary">
+                  {iMessage('label', 'versions')}
                 </Typography>
               }
             />
             <ListItemSecondaryAction>
-              <Typography className={classes.label} component="p">
+              <Typography color="textSecondary" variant="h6">
                 {versions ? versions.length : 'N/A'}
               </Typography>
             </ListItemSecondaryAction>
@@ -50,13 +51,13 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
           <ListItem key="active-latest-tags" className={classes.listItem}>
             <ListItemText
               primary={
-                <Typography variant="subtitle1" color="primary">
-                  Latest
+                <Typography variant="subtitle1" color="textSecondary">
+                  {iMessage('label', 'latest')}
                 </Typography>
               }
             />
             <ListItemSecondaryAction>
-              <Typography className={classes.label} component="p">
+              <Typography color="textSecondary" variant="h6">
                 {distTags && distTags.latest ? distTags.latest : 'N/A'}
               </Typography>
             </ListItemSecondaryAction>
@@ -64,13 +65,13 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
           <ListItem key="active-next-tags" className={classes.listItem}>
             <ListItemText
               primary={
-                <Typography variant="subtitle1" color="primary">
-                  Next
+                <Typography variant="subtitle1" color="textSecondary">
+                  {iMessage('label', 'next')}
                 </Typography>
               }
             />
             <ListItemSecondaryAction>
-              <Typography className={classes.label} component="p">
+              <Typography variant="h6" color="textSecondary">
                 {distTags && distTags.next ? distTags.next : 'N/A'}
               </Typography>
             </ListItemSecondaryAction>
@@ -78,13 +79,13 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
           <ListItem key="active-dependencies" className={classes.listItem}>
             <ListItemText
               primary={
-                <Typography variant="subtitle1" color="primary">
-                  Dependencies
+                <Typography variant="subtitle1" color="textSecondary">
+                  {iMessage('label', 'dependencies')}
                 </Typography>
               }
             />
             <ListItemSecondaryAction>
-              <Typography className={classes.label} component="p">
+              <Typography variant="h6" color="textSecondary">
                 {dependencies ? dependencies.length : 'N/A'}
               </Typography>
             </ListItemSecondaryAction>
@@ -92,8 +93,8 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
           <ListItem key="active-homepage" className={classes.listItem}>
             <ListItemText
               primary={
-                <Typography variant="subtitle1" color="primary">
-                  Homepage
+                <Typography variant="subtitle1" color="textSecondary">
+                  {iMessage('label', 'homepage')}
                 </Typography>
               }
               secondary={
@@ -103,7 +104,7 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
                     onClick={() => openUrl(homepage)}
                     className={classes.link}
                   >
-                    Visit homepage
+                    {iMessage('label', 'visitHomepage')}
                   </a>
                 )
               }
@@ -112,8 +113,8 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
           <ListItem key="active-git" className={classes.listItem}>
             <ListItemText
               primary={
-                <Typography variant="subtitle1" color="primary">
-                  Repository
+                <Typography variant="subtitle1" color="textSecondary">
+                  {iMessage('label', 'repository')}
                 </Typography>
               }
               secondary={
@@ -123,7 +124,7 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
                     onClick={() => openUrl(url)}
                     className={classes.link}
                   >
-                    Visit github
+                    {iMessage('label', 'visitGithub')}
                   </a>
                 )
               }
@@ -132,16 +133,16 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
           <ListItem key="active-engines" className={classes.listItem}>
             <ListItemText
               primary={
-                <Typography variant="subtitle1" color="primary">
-                  Engines
+                <Typography variant="subtitle1" color="textSecondary">
+                  {iMessage('label', 'engines')}
                 </Typography>
               }
               secondary={
-                <Typography variant="subtitle1" className={classes.labelMini}>
+                <Typography variant="subtitle1" color="textSecondary" className={classes.labelMini}>
                   {engines
                     ? Object.keys(engines).map(
-                        engineKey => `${engineKey}${engines[engineKey]} `
-                      )
+                      engineKey => `${engineKey}${engines[engineKey]} `
+                    )
                     : 'N/A'}
                 </Typography>
               }
@@ -150,14 +151,14 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
           <ListItem key="active-dist" className={classes.listItem}>
             <ListItemText
               primary={
-                <Typography variant="subtitle1" color="primary">
-                  Tarball
+                <Typography variant="subtitle1" color="textSecondary">
+                  {iMessage('label', 'tarball')}
                 </Typography>
               }
               secondary={
                 tarball && (
                   <a href={tarball} className={classes.link}>
-                    Download
+                    {iMessage('label', 'download')}
                   </a>
                 )
               }

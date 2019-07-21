@@ -6,7 +6,7 @@
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-import log from 'electron-log';
+// import log from 'electron-log';
 import lockVerify from 'lock-verify';
 import mk from '../mk';
 
@@ -21,6 +21,13 @@ const defaultsArgs = {
 
 const cwd = process.cwd();
 
+/**
+ *
+ * @param {*} manager
+ * @param {*} commandArgs
+ * @param {*} mode
+ * @param {*} directory
+ */
 const execute = (
   manager = defaultManager,
   commandArgs = [],
@@ -30,11 +37,12 @@ const execute = (
   const [operation] = commandArgs;
 
   const resultP = new Promise(resolve => {
+    const isLocal = mode === 'local' && directory;
     const result = [];
     let errors = '';
 
-    log.info(
-      chalk.whiteBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
+    console.log(
+      chalk.blueBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
     );
 
     // on windows use npm.cmd
@@ -43,12 +51,11 @@ const execute = (
       commandArgs,
       {
         env: process.env,
-        cwd:
-          mode === 'local' && directory
-            ? operation === 'init'
-              ? path.resolve(directory)
-              : path.dirname(directory)
-            : cwd
+        cwd: isLocal
+          ? operation === 'init'
+            ? path.resolve(directory)
+            : path.dirname(directory)
+          : cwd
       }
     );
 
@@ -65,16 +72,15 @@ const execute = (
     });
 
     command.on('exit', code => {
-      log.info(chalk.yellow.bold(`child exited with code ${code}`));
+      console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
     });
 
     command.on('close', () => {
-      log.info(
+      console.log(
         chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
       );
 
       const resultString = result.join('');
-
       const commandResult = {
         status: 'close',
         errors,
@@ -261,11 +267,11 @@ const view = (opts, callback) => {
  * @param {*} callback
  */
 const runAudit = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts || {};
+  const { activeManager = 'npm', mode, directory, ...options } = opts || {};
 
   try {
-    const audit = require('./npm/tooling/audit').default;
-    const run = audit(opts);
+    const audit = require('./npm/audit').default;
+    const run = audit(options);
 
     return execute(activeManager, run, mode, directory, callback);
   } catch (error) {
@@ -282,7 +288,7 @@ const runDoctor = (opts, callback) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
-    const doctor = require('./npm/tooling/doctor').default;
+    const doctor = require('./npm/doctor').default;
     const run = doctor(opts);
 
     return execute(activeManager, run, mode, directory, callback);

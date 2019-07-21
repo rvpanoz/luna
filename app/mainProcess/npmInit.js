@@ -8,7 +8,7 @@ const {
   defaultSettings: { defaultManager }
 } = mk || {};
 
-const onNpmAudit = (event, options, store) => {
+const onNpmInit = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
@@ -40,4 +40,4 @@ const onNpmAudit = (event, options, store) => {
   }
 };
 
-export default onNpmAudit;
+export default onNpmInit;

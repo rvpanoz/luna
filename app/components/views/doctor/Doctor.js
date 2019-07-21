@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+import { useDispatch } from 'redux-react-hook';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
@@ -14,7 +14,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import CheckIcon from '@material-ui/icons/CheckOutlined';
 
+import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
+import { runDoctor } from 'models/npm/actions';
+
 import styles from './styles/doctor';
 
 const renderData = data => (
@@ -36,20 +39,22 @@ const renderData = data => (
 );
 
 const Doctor = ({ classes, data }) => {
+  const dispatch = useDispatch();
+
   if (!data) {
-    return (
-      <div className={classes.containerHolder}>
-        <Typography
-          variant="subtitle1"
-          className={cn(classes.noData, classes.withPadding)}
-        >
-          {iMessage('info', 'noDoctorData')}
-        </Typography>
-        <Typography variant="caption" className={cn(classes.helperText)}>
-          {iMessage('info', 'npmDoctorHelperText')}
-        </Typography>
-      </div>
-    );
+    const options = {
+      text: iMessage('info', 'npmAuditInfo'),
+      actionText: iMessage('action', 'runDoctor'),
+      actionHandler: () =>
+        dispatch(
+          runDoctor({
+            ipcEvent: 'npm-doctor',
+            cmd: ['doctor']
+          })
+        )
+    };
+
+    return <HelperText {...options} />;
   }
 
   return (

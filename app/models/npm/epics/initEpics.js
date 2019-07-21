@@ -4,7 +4,7 @@ import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 
 import { toggleLoader } from 'models/ui/actions';
-import { runInit, npmInitListener } from 'models/npm/actions';
+import { runInit, runLock, npmInitListener } from 'models/npm/actions';
 
 import { onNpmInit$ } from '../listeners';
 
@@ -30,9 +30,20 @@ const npmRunInitEpic = pipe(
   ignoreElements()
 );
 
+const npmRunLockEpic = pipe(
+  ofType(runLock.type),
+  tap(({ payload }) =>
+    ipcRenderer.send('npm-init-lock', {
+      ...payload,
+      mode: 'local'
+    })
+  ),
+  ignoreElements()
+);
+
 const npmRunInitListenerEpic = pipe(
   ofType(npmInitListener.type),
   switchMap(() => onNpmInit$)
 );
 
-export { npmRunInitEpic, npmRunInitListenerEpic, showInitLoaderEpic };
+export { npmRunInitEpic, npmRunLockEpic, npmRunInitListenerEpic, showInitLoaderEpic };

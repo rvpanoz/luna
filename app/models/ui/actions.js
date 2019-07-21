@@ -12,6 +12,8 @@ const showError = ActionCreator('SHOW_ERROR');
 const showWarning = ActionCreator('SHOW_WARNING');
 const toggleLoader = ActionCreator('TOGGLE_LOADER');
 const togglePackageLoader = ActionCreator('TOGGLE_PACKAGE_LOADER');
+const toggleDoctorLoader = ActionCreator('TOGGLE_DOCTOR_LOADER');
+const toggleAuditLoader = ActionCreator('TOGGLE_AUDIT_LOADER');
 const setActivePage = ActionCreator('SET_ACTIVE_PAGE');
 const setPage = ActionCreator('SET_PAGE');
 const setPageRows = ActionCreator('SET_PAGE_ROWS');
@@ -37,5 +39,7 @@ export {
   setPageRows,
   updateFilters,
   toggleLoader,
-  togglePackageLoader
+  togglePackageLoader,
+  toggleAuditLoader,
+  toggleDoctorLoader
 };

@@ -2,19 +2,20 @@ import { pipe } from 'rxjs';
 import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
-
-import { toggleLoader } from 'models/ui/actions';
+import { toggleAuditLoader } from 'models/ui/actions';
 import {
   runAudit,
   npmAuditListener,
   parseNpmAuditData,
-  updateNpmAuditData
+  parseNpmAuditFixData,
+  updateNpmAuditData,
+  updateNpmAuditFixData
 } from 'models/npm/actions';
 
 import { onNpmAudit$ } from '../listeners';
 
 const updateLoader = payload => ({
-  type: toggleLoader.type,
+  type: toggleAuditLoader.type,
   payload
 });
 
@@ -29,7 +30,6 @@ const showAuditingLoaderEpic = action$ =>
     )
   );
 
-// TODO: use fix options
 const npmRunAuditEpic = (action$, state$) =>
   action$.pipe(
     ofType(runAudit.type),
@@ -37,7 +37,6 @@ const npmRunAuditEpic = (action$, state$) =>
       const {
         common: { mode, directory }
       } = state$.value;
-
       ipcRenderer.send('npm-audit', {
         ...payload,
         mode,
@@ -47,6 +46,10 @@ const npmRunAuditEpic = (action$, state$) =>
     ignoreElements()
   );
 
+/**
+ * Parse npm audit output
+ * @param {*} action$
+ */
 const npmAuditParseEpic = action$ =>
   action$.pipe(
     ofType(parseNpmAuditData.type),
@@ -61,18 +64,42 @@ const npmAuditParseEpic = action$ =>
 
           return updateNpmAuditData({
             data: {
-              error: true,
-              content: [],
-              summary: summaryParts && summaryParts[0],
-              detail,
-              code
+              error: {
+                summary: summaryParts && summaryParts[0],
+                detail,
+                code
+              },
+              content: null
             }
           });
         }
 
         return updateNpmAuditData({
           data: {
-            error: false,
+            error: null,
+            content: dataToJson
+          }
+        });
+      } catch (error) {
+        throw new Error(error);
+      }
+    })
+  );
+
+/**
+ * Parse npm audit fix output
+ * @param {*} action$
+ */
+const npmAuditParseFixEpic = action$ =>
+  action$.pipe(
+    ofType(parseNpmAuditFixData.type),
+    map(({ payload: data }) => {
+      try {
+        const dataToJson = JSON.parse(data);
+
+        return updateNpmAuditFixData({
+          data: {
+            error: null,
             content: dataToJson
           }
         });
@@ -91,5 +118,6 @@ export {
   npmRunAuditEpic,
   npmRunAuditListenerEpic,
   npmAuditParseEpic,
+  npmAuditParseFixEpic,
   showAuditingLoaderEpic
 };

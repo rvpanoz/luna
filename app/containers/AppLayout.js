@@ -1,7 +1,3 @@
-/**
- * AppLayout
- */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
@@ -13,48 +9,26 @@ import theme from 'styles/theme';
 
 import AppSidebar from 'containers/AppSidebar';
 import AppHeader from 'containers/AppHeader';
-import SnackbarContent from 'components/common/SnackbarContent';
 
-import { Packages } from 'components/views/packages';
+import { SnackbarContent } from 'components/common';
 import { Notifications } from 'components/views/notifications';
-import { Audit } from 'components/views/audit';
-import { Doctor } from 'components/views/doctor';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase, shrinkDirectory } from 'commons/utils';
 import { drawerWidth } from 'styles/variables';
 
+import Packages from './Packages';
+import Audit from './Audit';
+import Doctor from './Doctor';
 import styles from './styles/appLayout';
 
 const mapState = ({
-  npm: { auditData, doctorData },
-  notifications: { notifications },
   common: { mode, directory, onlineStatus },
-  ui: {
-    activePage,
-    loaders: {
-      loader: { loading }
-    },
-    dialog,
-    snackbar
-  },
-  packages: {
-    project: { name, version, description },
-    metadata: { lastUpdatedAt }
-  }
+  ui: { activePage, snackbar }
 }) => ({
-  auditData,
-  doctorData,
-  dialog,
   onlineStatus,
-  lastUpdatedAt,
   activePage,
   mode,
   directory,
-  name,
-  version,
-  loading,
-  description,
-  notifications,
   snackbar
 });
 
@@ -64,8 +38,6 @@ const AppLayout = ({ classes }) => {
     activePage,
     snackbar,
     mode,
-    auditData,
-    doctorData,
     directory,
     onlineStatus
   } = useMappedState(mapState);
@@ -92,12 +64,8 @@ const AppLayout = ({ classes }) => {
               problems: () => (
                 <Notifications mode={mode} directory={directory} />
               ),
-              audit: () => (
-                <Audit mode={mode} directory={directory} data={auditData} />
-              ),
-              doctor: () => (
-                <Doctor mode={mode} directory={directory} data={doctorData} />
-              )
+              audit: () => <Audit />,
+              doctor: () => <Doctor />
             })(<Packages />)(activePage)}
           </main>
         </div>

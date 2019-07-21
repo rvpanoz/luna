@@ -10,7 +10,7 @@ const onlineStatusEpic = pipe(
   map(({ payload: { status } }) => ({
     type: setSnackbar.type,
     payload: {
-      type: status === 'online' ? 'info' : 'error',
+      type: status === 'online' ? 'success' : 'error',
       open: true,
       message: `App is now ${status}`
     }
