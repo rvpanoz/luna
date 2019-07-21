@@ -5,6 +5,7 @@ import { objectOf, oneOfType, string, array, object, number } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import { groupBy } from 'ramda';
 
+import Hidden from '@material-ui/core/Hidden';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -103,17 +104,19 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
             </ListItem>
           ))}
         </List>
-        <div style={{ width: '100%', height: 140, display: 'flex', justifyContent: "space-around" }}>
-          <ResponsiveContainer>
-            <PieChart>
-              <Pie cy="85%" startAngle={180} endAngle={0} data={typesData} outerRadius={80} label>
-                {
-                  typesData.map((entry, index) => <Cell key={entry.name} fill={theme.palette[entry.color].main} />)
-                }
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+        <Hidden mdDown>
+          <div style={{ width: '100%', height: 140, display: 'flex', justifyContent: "space-around" }}>
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie cy="85%" startAngle={180} endAngle={0} data={typesData} dataKey="value" outerRadius={80} label>
+                  {
+                    typesData.map((entry, index) => <Cell key={entry.name} fill={theme.palette[entry.color].main} />)
+                  }
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </Hidden>
       </div>
     </Widget>
   );

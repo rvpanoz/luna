@@ -8,11 +8,11 @@ const styles = theme => ({
   list: {
     padding: theme.spacing.unit,
     overflowY: 'scroll',
-    [theme.breakpoints.down('md')]: {
-      maxHeight: 325
+    [theme.breakpoints.down('sm')]: {
+      maxHeight: 375
     },
     [theme.breakpoints.up('md')]: {
-      maxHeight: 500
+      maxHeight: 400
     }
   },
   dot: {

@@ -7,7 +7,7 @@ import { mergeMap, concatMap, tap } from 'rxjs/operators';
 import { clearSelected, toggleLoader, clearFilters } from 'models/ui/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { clearNotifications } from 'models/notifications/actions';
-import { clearCommands, clearAuditData } from 'models/npm/actions';
+import { clearCommands, clearAuditData, clearDoctorData } from 'models/npm/actions';
 import { iMessage } from 'commons/utils';
 
 import { onOffOperator } from '../operators';
@@ -53,6 +53,7 @@ const initEpic = (action$, state$) =>
         loading: true,
         message: iMessage('info', 'loading')
       }),
+      clearDoctorData(),
       clearAuditData(),
       clearSelected(),
       clearCommands(),

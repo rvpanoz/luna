@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 import React from 'react';
-import { objectOf, string, number } from 'prop-types';
+import { objectOf, string, number, node } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
@@ -32,7 +32,7 @@ StatsCard.propTypes = {
   title: string.isRequired,
   value: number.isRequired,
   color: string,
-  icon: string
+  icon: node
 };
 
 export default withStyles(styles)(StatsCard);

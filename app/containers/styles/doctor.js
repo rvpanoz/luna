@@ -2,6 +2,16 @@ import { defaultFont, flexContainer, grayColor } from 'styles/variables';
 import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
+  wrapper: {
+    padding: theme.spacing.unit,
+    overflowY: 'scroll',
+    [theme.breakpoints.down('sm')]: {
+      maxHeight: 375
+    },
+    [theme.breakpoints.up('md')]: {
+      maxHeight: 450
+    }
+  },
   paper: {
     width: '100%',
     borderTopLeftRadius: 0,
@@ -20,7 +30,6 @@ const styles = theme => ({
     flex: 1,
     width: '100%',
     padding: theme.spacing.unit * 2,
-    overflow: 'hidden'
   },
   bottomSection: {
     ...flexContainer,
