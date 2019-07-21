@@ -2,6 +2,7 @@ import { combineEpics } from 'redux-observable';
 
 import {
   npmRunInitEpic,
+  npmRunLockEpic,
   npmRunInitListenerEpic,
   showInitLoaderEpic
 } from './initEpics';
@@ -21,6 +22,7 @@ import {
 } from './doctorEpics';
 
 export default combineEpics(
+  npmRunLockEpic,
   npmRunInitEpic,
   npmRunInitListenerEpic,
   showInitLoaderEpic,

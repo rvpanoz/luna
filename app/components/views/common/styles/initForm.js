@@ -16,6 +16,12 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit / 2,
     padding: theme.spacing.unit
+  },
+  formControl: {
+    marginLeft: theme.spacing.unit
+  },
+  directory: {
+    paddingTop: theme.spacing.unit
   }
 });
 

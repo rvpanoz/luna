@@ -9,7 +9,7 @@
 const update = options => {
   const command = ['update'];
   const { name, mode, pkgOptions, multiple, packages } = options || {};
-  const defaults = ['--verbose'];
+  const defaults = ['--verbose', '--no-audit'];
 
   if (!name && !multiple) {
     return Promise.reject('npm[update] package name parameter must be given');

@@ -34,6 +34,7 @@ const runUninstall = ActionCreator('RUN_UNINSTALL');
 // utilities
 const runAudit = ActionCreator('RUN_AUDIT');
 const runInit = ActionCreator('RUN_INIT');
+const runLock = ActionCreator('RUN_INIT_LOCK');
 const runDoctor = ActionCreator('RUN_DOCTOR');
 
 export {
@@ -51,6 +52,7 @@ export {
   runUninstall,
   runAudit,
   runInit,
+  runLock,
   runDoctor,
   npmDoctorListener,
   npmAuditListener,

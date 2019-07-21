@@ -8,14 +8,14 @@ const {
   defaultSettings: { defaultManager }
 } = mk || {};
 
-const onNpmInit = (event, options, store) => {
+const onNpmInitLock = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
-  const onFlow = chunk => event.sender.send('npm-init-flow', chunk);
-  const onError = error => event.sender.send('npm-init-error', error);
+  const onFlow = chunk => event.sender.send('npm-init-lock-flow', chunk);
+  const onError = error => event.sender.send('npm-init-lock-error', error);
   const onComplete = (errors, data) =>
-    event.sender.send('npm-init-completed', data, errors);
+    event.sender.send('npm-init-lock-completed', data, errors);
 
   const callback = result => {
     const { status, errors, data } = result;
@@ -36,8 +36,8 @@ const onNpmInit = (event, options, store) => {
     runCommand(params, callback);
   } catch (error) {
     log.error(error);
-    event.sender.send('npm-init-error', error && error.message);
+    event.sender.send('npm-init-lock-error', error && error.message);
   }
 };
 
-export default onNpmInit;
+export default onNpmInitLock;

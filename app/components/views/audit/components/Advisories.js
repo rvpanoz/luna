@@ -30,9 +30,9 @@ import styles from '../styles/advisories';
 
 const ITEM_HEIGHT = 48;
 const moreActions = [
-  { label: iMessage('action', 'runAuditFixProd'), value: 'onlyProd' },
-  { label: iMessage('action', 'runAuditFixDev'), value: 'onlyDev' },
-  { label: iMessage('action', 'runAuditFixLock'), value: 'onlyLock' },
+  { label: iMessage('action', 'runAuditFixProd'), value: 'only=prod' },
+  { label: iMessage('action', 'runAuditFixDev'), value: 'only=dev' },
+  { label: iMessage('action', 'runAuditFixLock'), value: 'package-lock-only' },
   { label: iMessage('action', 'runAuditFix'), value: 'fix' },
   { label: iMessage('action', 'runAuditFixForce'), value: 'force' },
 ];

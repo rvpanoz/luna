@@ -16,10 +16,10 @@ const updateCommand = ({
   }
 });
 
-const onNpmInit$ = new Observable(observer => {
-  ipcRenderer.removeAllListeners(['npm-init-completed']);
+const onNpmInitLock$ = new Observable(observer => {
+  ipcRenderer.removeAllListeners(['npm-init-lock-completed']);
 
-  ipcRenderer.on('npm-init-completed', () => {
+  ipcRenderer.on('npm-init-lock-completed', () => {
     observer.next(
       updateCommand({
         operationStatus: 'idle',
@@ -46,9 +46,9 @@ const onNpmInit$ = new Observable(observer => {
     );
   });
 
-  ipcRenderer.on('npm-init-error', (event, error) => {
+  ipcRenderer.on('npm-init-lock-error', (event, error) => {
     observer.error(error);
   });
 });
 
-export default onNpmInit$;
+export default onNpmInitLock$;

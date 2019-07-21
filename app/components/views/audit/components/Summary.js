@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { withStyles } from '@material-ui/core';
-import { objectOf, oneOfType, string, array, object, func } from 'prop-types';
+import { objectOf, oneOfType, string, array, object, func, number } from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
@@ -20,6 +20,7 @@ import { iMessage } from 'commons/utils';
 import styles from '../styles/summary';
 
 const Summary = ({ classes, data, onClose }) => {
+    console.log(data)
     const dataKeys = Object.keys(data);
     const dataValues = Object.values(data);
 
@@ -58,7 +59,7 @@ const Summary = ({ classes, data, onClose }) => {
 
 Summary.propTypes = {
     classes: objectOf(string).isRequired,
-    data: objectOf(oneOfType([string, array, object])).isRequired,
+    data: objectOf(oneOfType([string, array, object, number])).isRequired,
     onClick: func.isRequired
 };
 

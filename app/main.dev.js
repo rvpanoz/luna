@@ -23,7 +23,8 @@ import {
   onNpmUninstall,
   onNpmAudit,
   onNpmDoctor,
-  onNpmInit
+  onNpmInit,
+  onNpmInitLock
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
 
@@ -161,6 +162,13 @@ ipcMain.on('npm-audit', (event, options) => onNpmAudit(event, options, Store));
  *
  */
 ipcMain.on('npm-init', (event, options) => onNpmInit(event, options, Store));
+
+/**
+ * Channel: npm-init-lock
+ * Supports: npm i --package-lock-only
+ *
+ */
+ipcMain.on('npm-init-lock', (event, options) => onNpmInitLock(event, options, Store));
 
 /**
  * Channel: npm-doctor
