@@ -49,12 +49,12 @@ const ListTypes = ({ classes, data, theme }) => {
   return (
     <Widget title={`${iMessage('title', 'vulnerabilities')} (${totalVulnerabilities})`}>
       <List className={classes.container}>
-        {typesData.map(({ value, name, color }) => (
+        {typesData.map(({ value, name, fill }) => (
           <ListItem key={name}>
             <ListItemText
               primary={
                 <Typography variant="subtitle1" color="textSecondary">
-                  {name}&nbsp;({<span className={classes[`dot${color}`]}>{value}</span>})
+                  {name}&nbsp;({<span className={classes[`dot${fill}`]}>{value}</span>})
                 </Typography>
               }
             />

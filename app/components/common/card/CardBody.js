@@ -13,6 +13,7 @@ const CardBody = ({ ...props }) => {
         [classes.cardBodyProfile]: profile,
         [className]: className !== undefined
     });
+
     return (
         <div className={cardBodyClasses} {...rest}>
             {children}

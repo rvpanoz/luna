@@ -112,16 +112,13 @@ const Advisories = ({ classes, data, handleAudit, vulnerabilities }) => {
   };
 
   return (
-    <Grid container spacing={8} className={classes.gridContainer}>
-      <Grid item sm={8}>
-        <ListDotTypes data={vulnerabilities} />
-      </Grid>
+    <Grid container spacing={8}>
       <Grid
         item
         sm={12}
-        md={6}
-        lg={6}
-        xl={6}
+        md={9}
+        lg={9}
+        xl={9}
         className={classes.transition}
       >
         <Paper className={classes.root}>
@@ -135,34 +132,25 @@ const Advisories = ({ classes, data, handleAudit, vulnerabilities }) => {
             <div className={classes.actions}>
               <Button
                 variant="outlined"
-                size="small"
-                color="primary"
                 onClick={() => handleAudit()}
               >
-                <Icon>send</Icon>&nbsp;
                 {iMessage('action', 'runAudit')}
               </Button>
               <Hidden mdDown>
                 <Button
                   variant="outlined"
-                  size="small"
-                  color="primary"
                   onClick={() => handleFix('fix')}
                   disabled={Boolean(zeroKeys)}
                   className={classes.marLeft}
                 >
-                  <Icon>update</Icon>&nbsp;
                   {iMessage('action', 'runAuditFix')}
                 </Button>
                 <Button
                   variant="outlined"
-                  size="small"
                   onClick={() => handleFix('force')}
                   disabled={Boolean(zeroKeys)}
                   className={classes.marLeft}
-                  color="primary"
                 >
-                  <Icon>low_priority</Icon>&nbsp;
                   {iMessage('action', 'runAuditFixForce')}
                 </Button>
               </Hidden>
@@ -250,10 +238,10 @@ const Advisories = ({ classes, data, handleAudit, vulnerabilities }) => {
         </Paper>
       </Grid>
       <Grid item sm={12}
-        md={6}
-        lg={6}
-        xl={6}>
-        {active ? <AdvisoryDetails data={active} onClose={() => setActive(null)} /> : <ListTypes data={data} />}
+        md={3}
+        lg={3}
+        xl={3}>
+        {active ? <AdvisoryDetails data={active} onClose={() => setActive(null)} /> : <ListTypes data={data} vulnerabilities={vulnerabilities} />}
       </Grid>
     </Grid>
   );

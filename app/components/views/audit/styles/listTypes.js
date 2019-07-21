@@ -1,8 +1,10 @@
+import { flexContainer } from 'styles/variables';
+
 const styles = theme => ({
-  body: {
+  list: {
     overflowY: 'scroll',
     [theme.breakpoints.up('md')]: {
-      maxHeight: 450
+      maxHeight: 400
     }
   }
 });

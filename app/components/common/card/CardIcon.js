@@ -11,6 +11,7 @@ const CardIcon = ({ ...props }) => {
         [classes[`${color}CardHeader`]]: color,
         [className]: className !== undefined
     });
+
     return (
         <div className={cardIconClasses} {...rest}>
             {children}

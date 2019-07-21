@@ -73,90 +73,88 @@ const AdvisoryDetails = ({ classes, data, onClose }) => {
   const founder = found_by.name || 'N/A';
 
   return (
-    <div className={classes.wrapper}>
-      <Grid container justify="space-between">
-        <Grid item sm={11} md={11} lg={11} xl={11}>
-          <Transition>
-            <Card className={classes.card}>
-              <CardHeader
-                title={<Typography variant="h6">{name}</Typography>}
-                className={classes.cardHeader}
-                subheader={
-                  <Typography color="textSecondary" variant="caption">
-                    {title}
-                  </Typography>
-                }
-              />
-              <CardContent className={classes.cardContent}>
-                <Typography component="p">
-                  {iMessage('label', 'recommendation')}
+    <Grid container justify="space-between">
+      <Grid item sm={11} md={11} lg={11} xl={11}>
+        <Transition>
+          <Card className={classes.card}>
+            <CardHeader
+              title={<Typography variant="h6">{name}</Typography>}
+              className={classes.cardHeader}
+              subheader={
+                <Typography color="textSecondary" variant="caption">
+                  {title}
                 </Typography>
-                <br />
-                <Typography component="p" color="textSecondary">
-                  {recommendation}
-                </Typography>
-                <br />
-                <Typography component="p">
-                  {iMessage('label', 'vulnerableVersions')}
-                </Typography>
-                <br />
-                <Typography component="p" color="textSecondary">
-                  {vulnerable_versions}
-                </Typography>
-                <Divider className={classes.divider} light />
-                <List dense>
-                  <ListItemDetail
-                    text={iMessage('label', 'severity')}
-                    value={severity}
-                  />
-                  <ListItemDetail
-                    text={iMessage('label', 'findings')}
-                    value={findings.length}
-                  />
-                  <ListItemDetail
-                    text={iMessage('label', 'access')}
-                    value={access}
-                  />
-                  <ListItemDetail
-                    text={iMessage('label', 'found_by')}
-                    value={founder}
-                  />
-                  <ListItemDetail
-                    text={iMessage('label', 'created')}
-                    value={format(new Date(created), 'DD/MM/YYYY h:mm')}
-                  />
-                  <ListItemDetail
-                    text={iMessage('label', 'updated')}
-                    value={format(new Date(updated), 'DD/MM/YYYY h:mm')}
-                  />
-                </List>
-              </CardContent>
-            </Card>
-          </Transition>
-        </Grid>
-        <Grid item sm={1} md={1} lg={1} xl={1}>
-          <Toolbar
-            disableGutters
-            variant="dense"
-            classes={{
-              root: classes.toolbar
-            }}
-          >
-            <Tooltip title={iMessage('title', 'clearActive')}>
-              <div>
-                <IconButton
-                  color="secondary"
-                  disableRipple
-                  onClick={onClose}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </div>
-            </Tooltip>
-          </Toolbar>
-        </Grid>
+              }
+            />
+            <CardContent className={classes.cardContent}>
+              <Typography component="p">
+                {iMessage('label', 'recommendation')}
+              </Typography>
+              <br />
+              <Typography component="p" color="textSecondary">
+                {recommendation}
+              </Typography>
+              <br />
+              <Typography component="p">
+                {iMessage('label', 'vulnerableVersions')}
+              </Typography>
+              <br />
+              <Typography component="p" color="textSecondary">
+                {vulnerable_versions}
+              </Typography>
+              <Divider className={classes.divider} light />
+              <List dense>
+                <ListItemDetail
+                  text={iMessage('label', 'severity')}
+                  value={severity}
+                />
+                <ListItemDetail
+                  text={iMessage('label', 'findings')}
+                  value={findings.length}
+                />
+                <ListItemDetail
+                  text={iMessage('label', 'access')}
+                  value={access}
+                />
+                <ListItemDetail
+                  text={iMessage('label', 'found_by')}
+                  value={founder}
+                />
+                <ListItemDetail
+                  text={iMessage('label', 'created')}
+                  value={format(new Date(created), 'DD/MM/YYYY h:mm')}
+                />
+                <ListItemDetail
+                  text={iMessage('label', 'updated')}
+                  value={format(new Date(updated), 'DD/MM/YYYY h:mm')}
+                />
+              </List>
+            </CardContent>
+          </Card>
+        </Transition>
       </Grid>
-    </div>
+      <Grid item sm={1} md={1} lg={1} xl={1}>
+        <Toolbar
+          disableGutters
+          variant="dense"
+          classes={{
+            root: classes.toolbar
+          }}
+        >
+          <Tooltip title={iMessage('title', 'clearActive')}>
+            <div>
+              <IconButton
+                color="secondary"
+                disableRipple
+                onClick={onClose}
+              >
+                <CloseIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </Toolbar>
+      </Grid>
+    </Grid>
   );
 };
 

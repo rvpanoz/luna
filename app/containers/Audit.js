@@ -18,6 +18,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
+import UpdateIcon from '@material-ui/icons/Update';
+
 import {
   Actions,
   Advisories,
@@ -149,7 +151,10 @@ const Audit = ({ classes }) => {
                 <StatsCard
                   title={iMessage('title', 'optionalDependencies')}
                   value={optionalDependencies}
-                  color="warning"
+                  color="danger"
+                  plain
+                  stats
+                  icon={<UpdateIcon />}
                 />
               </Hidden>
               <Hidden smUp>
