@@ -295,8 +295,8 @@ const Packages = ({ classes }) => {
                               packagesInstallOptions
                             )
                               ? packagesInstallOptions.find(
-                                installOption => installOption.name === name
-                              )
+                                  installOption => installOption.name === name
+                                )
                               : {};
 
                             const inOperation =
@@ -361,10 +361,14 @@ const Packages = ({ classes }) => {
               </Paper>
             )}
           </Grid>
-          <Grid item sm={12}
+          <Grid
+            item
+            sm={12}
             md={active ? 4 : 2}
             lg={active ? 4 : 2}
-            xl={active ? 4 : 2} className={classes.transition}>
+            xl={active ? 4 : 2}
+            className={classes.transition}
+          >
             <PackageDetails
               toggleOptions={toggleOptions}
               addSelected={() =>

@@ -24,6 +24,7 @@ export const INFO_MESSAGES = {
   searching: 'Searching npm registry..',
   directorySelection: 'Select directory',
   directory: 'Directory',
+  updatedAt: 'Updated at',
   auditCompleted: 'npm audit completed',
   createPackageJsonNote: 'Note: npm init will run with the default parameters.',
   auditFix:
@@ -33,6 +34,9 @@ export const INFO_MESSAGES = {
 };
 
 export const ACTION_MESSAGES = {
+  analyze: 'Analyze',
+  npmInstall: 'npm install',
+  npmDoctor: 'npm doctor',
   install: 'Install',
   update: 'Update',
   view: 'View',
@@ -128,7 +132,8 @@ export const TITLE_MESSAGES = {
   searching: 'Searching npm registry..',
   backList: 'Back to list',
   listReload: 'Reload',
-  createPackageJson: 'Create a package.json file'
+  createPackageJson: 'Create a package.json file',
+  doctorReport: 'Doctor report'
 };
 
 export const CONFIRMATION_MESSAGES = {

@@ -133,6 +133,9 @@ const styles = theme => ({
     ...defaultFont,
     fontSize: 12,
     color: darken(grayColor, 0.5)
+  },
+  dialog: {
+    minHeight: 200
   }
 });
 
