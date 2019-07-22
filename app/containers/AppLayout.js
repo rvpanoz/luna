@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { useMappedState, useDispatch } from "redux-react-hook";
 import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
 import Snackbar from "@material-ui/core/Snackbar";
 import theme from "styles/theme";
 
@@ -46,7 +45,6 @@ const AppLayout = ({ classes }) => {
   return (
     <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
-        <CssBaseline />
         <nav className={classes.drawer}>
           <AppSidebar
             mode={mode}

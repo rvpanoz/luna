@@ -153,26 +153,28 @@ const AppSidebar = ({
     <>
       <Drawer variant="permanent" {...restProps}>
         <List disablePadding>
-          <ListItem className={classes.listItem} key="app-logo">
+          <ListItem key="app-logo">
             <ListItemText>
               <AppLogo />
             </ListItemText>
           </ListItem>
-          <ListItem className={classes.listItemHalfPadding} key="big-button">
-            <ListItemText className={classes.actionButton}>
+          <ListItem key="big-button">
+            <ListItemText>
               <Tooltip title={iMessage("title", "loadDirectory")}>
-                <Button
-                  disableRipple
-                  disabled={loading || activePage !== "packages"}
-                  className={cn(classes.label, classes.margin)}
-                  color="secondary"
-                  variant="outlined"
-                  fullWidth
-                  size="large"
-                  onClick={() => loadDirectory()}
-                >
-                  {iMessage("action", "analyze")}
-                </Button>
+                <div>
+                  <Button
+                    disableRipple
+                    disabled={loading || activePage !== "packages"}
+                    color="secondary"
+                    variant="outlined"
+                    size="large"
+                    fullWidth
+                    className={classes.label}
+                    onClick={() => loadDirectory()}
+                  >
+                    {iMessage("action", "analyze")}
+                  </Button>
+                </div>
               </Tooltip>
             </ListItemText>
           </ListItem>

@@ -202,7 +202,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     };
 
     return (
-      <CardActions className={classes.actions} disableActionSpacing>
+      <CardActions className={classes.actions}>
         {cond([
           [equals(false), always(renderOperationActions())],
           [

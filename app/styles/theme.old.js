@@ -3,15 +3,9 @@ import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont } from './variables';
 
 const theme = createMuiTheme({
+  spacing: 8,
   typography: {
-    ...defaultFont,
-    spacing: 8,
-    useNextVariants: true,
-    h6: {
-      fontWeight: 500,
-      fontSize: 26,
-      letterSpacing: 0.5
-    }
+    useNextVariants: true
   },
   palette: {
     primary: {
@@ -47,7 +41,7 @@ const theme = createMuiTheme({
   },
   shape: {
     borderRadius: 8
-  }
+  },
 });
 
 const appTheme = {
@@ -63,31 +57,41 @@ const appTheme = {
         textTransform: 'initial'
       },
       contained: {
+        backgroundColor: theme.palette.common.white,
+        '&:hover': {
+          backgroundColor: theme.palette.common.neutral
+        },
         boxShadow: 'none',
         '&:active': {
           boxShadow: 'none'
         }
-      }
+      },
+      outlined: {},
     },
     MuiTabs: {
-      root: {
-        marginLeft: theme.spacing(1)
-      },
       indicator: {
         height: 3,
-        borderTopLeftRadius: 3,
-        borderTopRightRadius: 3,
-        backgroundColor: theme.palette.common.white
       }
     },
     MuiTab: {
       root: {
         textTransform: 'initial',
-        margin: '0 16px',
         minWidth: 0,
+        height: '50px',
+        fontWeight: 400,
+        textTransform: 'none',
+        fontSize: '14px',
+        '@media (min-width: 960px)': {
+          minWidth: '100px'
+        },
+        '&$selected': {
+          fontWeight: 500
+        }
       },
-      labelIcon: {
-        margin: theme.spacing(2)
+      label: {},
+      labelContainer: {},
+      textColorPrimary: {
+        color: theme.palette.text.secondary
       }
     },
     MuiIconButton: {
@@ -103,20 +107,6 @@ const appTheme = {
     MuiDivider: {
       root: {
         backgroundColor: '#404854'
-      }
-    },
-    MuiListItemText: {
-      primary: {
-        fontWeight: theme.typography.fontWeightMedium
-      }
-    },
-    MuiListItemIcon: {
-      root: {
-        color: 'inherit',
-        marginRight: 0,
-        '& svg': {
-          fontSize: 20
-        }
       }
     },
     MuiAvatar: {

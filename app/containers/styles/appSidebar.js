@@ -64,9 +64,6 @@ const styles = theme => ({
   extendedIcon: {
     marginRight: theme.spacing(1)
   },
-  actionButton: {
-    paddingTop: 0
-  },
   button: {
     margin: theme.spacing(1)
   },

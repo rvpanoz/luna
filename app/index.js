@@ -12,7 +12,7 @@ ReactDom.render(
   <StoreContext.Provider value={store}>
     <App />
   </StoreContext.Provider>,
-  document.getElementById('root')
+  document.getElementById('app')
 );
 
 if (module.hot) {
@@ -23,7 +23,7 @@ if (module.hot) {
       <StoreContext.Provider value={store}>
         <NextApp />
       </StoreContext.Provider>,
-      document.getElementById('root')
+      document.getElementById('app')
     );
   });
 }

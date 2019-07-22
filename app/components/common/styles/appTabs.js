@@ -2,7 +2,6 @@ import { defaultFont } from 'styles/variables';
 
 const styles = theme => ({
   root: {
-    position: 'relative',
     width: '100%',
     backgroundColor: theme.palette.background.paper
   },
@@ -18,7 +17,7 @@ const styles = theme => ({
     margin: 0
   },
   appBar: {
-    marginLeft: theme.spacing(1),
+    marginLeft: theme.spacing(0.5),
     marginRight: theme.spacing(0.5)
   }
 });

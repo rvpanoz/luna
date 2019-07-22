@@ -27,13 +27,13 @@ const Widget = ({
         <div className={classes.widgetHeader}>
           {!header && title ? (
             <React.Fragment>
-              <Typography variant="h6" color="textSecondary">
+              <Typography variant="h4" color="textSecondary">
                 {title}
               </Typography>
             </React.Fragment>
           ) : (
-            header
-          )}
+              header
+            )}
         </div>
         {title && <Divider light />}
         <div

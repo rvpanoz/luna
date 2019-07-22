@@ -19,13 +19,12 @@ const styles = theme => ({
     flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'auto'
+    overflow: 'hidden'
   },
   mainContent: {
     flex: 1,
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
     background: lighten('#fff', 0.1),
-    overflow: 'hidden'
   },
   label: {
     ...defaultFont,

@@ -36,7 +36,7 @@ const styles = theme => ({
   tabLabel: {
     ...defaultFont,
     fontSize: 16,
-    paddingBottom: theme.spacing(1)
+    marginRight: theme.spacing(1)
   },
   workingDir: {
     color: '#fff'

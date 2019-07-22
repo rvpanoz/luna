@@ -30,18 +30,10 @@ const AppTabs = ({ classes, children }) => {
       <AppBar
         position="static"
         color="inherit"
-        classes={{
-          root: classes.appBar
-        }}
       >
         <Tabs
           value={value}
           onChange={(e, tabValue) => setValue(tabValue)}
-          classes={{
-            root: classes.noMargin,
-            indicator: classes.indicator
-          }}
-          variant="fullWidth"
         >
           <Tab
             classes={{

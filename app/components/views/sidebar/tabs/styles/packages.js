@@ -25,7 +25,6 @@ const styles = theme => ({
     color: darken(grayColor, 0.2)
   },
   listItem: {
-    padding: theme.spacing(1),
     margin: 0
   },
   primaryColor: {
