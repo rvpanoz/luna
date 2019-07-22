@@ -18,7 +18,7 @@ import { drawerWidth } from 'styles/variables';
 
 import Packages from './Packages';
 import Audit from './Audit';
-import Doctor from './Doctor';
+
 import styles from './styles/appLayout';
 
 const mapState = ({
@@ -64,8 +64,7 @@ const AppLayout = ({ classes }) => {
               problems: () => (
                 <Notifications mode={mode} directory={directory} />
               ),
-              audit: () => <Audit />,
-              doctor: () => <Doctor />
+              audit: () => <Audit />
             })(<Packages />)(activePage)}
           </main>
         </div>

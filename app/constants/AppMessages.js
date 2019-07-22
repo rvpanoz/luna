@@ -100,8 +100,7 @@ export const TITLE_MESSAGES = {
   loadDirectory: 'Load a directory from a package.json file',
   selectPackageJson: 'Select package.json file',
   installationOptions: 'Please select installation options',
-  system: 'Preview system',
-  create: 'Create a package.json file',
+  system: 'Settings',
   switchGlobals: 'Switch to global packages',
   showFilters: 'Show filters',
   clearFilters: 'Clear filters',
@@ -128,7 +127,8 @@ export const TITLE_MESSAGES = {
   noAuditData: 'No audit data',
   searching: 'Searching npm registry..',
   backList: 'Back to list',
-  listReload: 'Reload'
+  listReload: 'Reload',
+  createPackageJson: 'Create a package.json file'
 };
 
 export const CONFIRMATION_MESSAGES = {

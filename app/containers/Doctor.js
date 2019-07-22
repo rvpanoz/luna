@@ -1,12 +1,13 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import cn from 'classnames'
+import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import Paper from '@material-ui/core/Paper';
+
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -39,58 +40,92 @@ const mapState = ({
 
 const renderData = data => (
   <List disablePadding>
-    {data && data
-      .filter(value => value.length)
-      .map(dataValue => (
-        <ListItem key={dataValue}>
-          <ListItemAvatar>
-            <Avatar style={{ backgroundColor: '#fff' }}>
-              <CheckIcon color="secondary" />
-            </Avatar>
-          </ListItemAvatar>
-          <ListItemText primary={dataValue} />
-        </ListItem>
-      ))}
+    {data &&
+      data
+        .filter(value => value.length)
+        .map(dataValue => (
+          <ListItem key={dataValue}>
+            <ListItemAvatar>
+              <Avatar style={{ backgroundColor: '#fff' }}>
+                <CheckIcon color="secondary" />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText primary={dataValue} />
+          </ListItem>
+        ))}
   </List>
 );
 
 const Doctor = ({ classes }) => {
-  const { loading, message, result } = useMappedState(mapState);
+  const { loading, message, result, error } = useMappedState(mapState);
+  const [status, setStatus] = useState({
+    type: 'init',
+    options: null
+  });
   const dispatch = useDispatch();
+  const { type, options } = status;
 
-  if (!result && !loading) {
-    const options = {
-      text: iMessage('info', 'npmDoctorInfo'),
-      actionText: iMessage('action', 'runDoctor'),
-      actionHandler: () =>
-        dispatch(
-          runDoctor({
-            ipcEvent: 'npm-doctor',
-            cmd: ['doctor']
-          })
-        )
-    };
+  const handleDoctor = () =>
+    dispatch(
+      runDoctor({
+        ipcEvent: 'npm-doctor',
+        cmd: ['doctor']
+      })
+    );
 
-    return <HelperText {...options} />;
-  }
+  const initOptions = {
+    text: iMessage('info', 'npmDoctorInfo'),
+    actionText: iMessage('action', 'runDoctor'),
+    actionHandler: handleDoctor
+  };
+
+  useEffect(() => {
+    setStatus({
+      type: result ? 'doctor' : 'init',
+      options: result ? null : initOptions
+    });
+  }, [result, loading, initOptions]);
+
+  // set error
+  useEffect(() => {
+    if (error) {
+      const { summary, code } = error || {};
+
+      const errorOptions = {
+        ...initOptions,
+        text: summary,
+        code
+      };
+
+      setStatus({
+        type: 'error',
+        options: errorOptions
+      });
+    }
+  }, [error, initOptions]);
 
   return (
     <AppLoader loading={loading} message={message}>
-      <Paper className={classes.paper}>
-        <div className={classes.container}>
-          <div className={classes.flexContainer}>
-            <div className={classes.header}>
-              <Typography variant="h6" className={classes.title}>
-                {iMessage('title', 'doctor')}
-              </Typography>
-            </div>
-          </div>
-          <Divider light />
-          <div className={cn(classes.topSection, classes.wrapper)}>
-            {renderData(result)}
-          </div>
-        </div>
-      </Paper>
+      <div className={classes.root}>
+        {type === 'init' && <HelperText {...options} />}
+        {type === 'doctor' && (
+          <Grid className={classes.container} container>
+            <Grid item sm={12}>
+              <div className={classes.flexContainer}>
+                <div className={classes.header}>
+                  <Typography variant="h6" className={classes.title}>
+                    {iMessage('title', 'doctorReport')}
+                  </Typography>
+                </div>
+              </div>
+              <Divider light />
+              <div className={cn(classes.topSection, classes.wrapper)}>
+                {renderData(result)}
+              </div>
+            </Grid>
+          </Grid>
+        )}
+      </div>
     </AppLoader>
   );
 };

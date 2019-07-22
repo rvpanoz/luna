@@ -86,6 +86,8 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     fromSearch,
     packagesData
   } = useMappedState(mapState);
+
+  const versions = active && active.versions ? active.versions : [];
   const { name, version, description } = active || {};
   let group = null;
 
@@ -97,22 +99,6 @@ const PackageDetails = ({ classes, toggleOptions }) => {
   if (activeGroup && activeGroup.__group) {
     group = activeGroup.__group;
   }
-
-  useEffect(() => {
-    if (!active) {
-      return;
-    }
-
-    if (active.dependencies) {
-      const dependenciesNames = Object.keys(active.dependencies);
-      const dependenciesToArray = dependenciesNames.map(dep => ({
-        name: dep,
-        version: active.dependencies[dep]
-      }));
-
-      setDependencies(dependenciesToArray);
-    }
-  }, [active]);
 
   const handleInstall = () => {
     if (fromSearch && mode === 'local') {
@@ -348,7 +334,21 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     </Grid>
   );
 
-  const versions = active && active.versions ? active.versions : [];
+  useEffect(() => {
+    if (!active) {
+      return;
+    }
+
+    if (active.dependencies) {
+      const dependenciesNames = Object.keys(active.dependencies);
+      const dependenciesToArray = dependenciesNames.map(dep => ({
+        name: dep,
+        version: active.dependencies[dep]
+      }));
+
+      setDependencies(dependenciesToArray);
+    }
+  }, [active]);
 
   return (
     <div className={classes.wrapper}>
