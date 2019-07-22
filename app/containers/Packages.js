@@ -1,38 +1,38 @@
-import React from 'react';
-import { Fragment } from 'react';
-import { useEffect, useState, useRef } from 'react';
-import { objectOf, string } from 'prop-types';
-import { useMappedState, useDispatch } from 'redux-react-hook';
-import { withStyles } from '@material-ui/core/styles';
-import cn from 'classnames';
+import React from "react";
+import { Fragment } from "react";
+import { useEffect, useState, useRef } from "react";
+import { objectOf, string } from "prop-types";
+import { useMappedState, useDispatch } from "redux-react-hook";
+import { withStyles } from "@material-ui/core/styles";
+import cn from "classnames";
 
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import Grid from '@material-ui/core/Grid';
-import Divider from '@material-ui/core/Divider';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import Grid from "@material-ui/core/Grid";
+import Divider from "@material-ui/core/Divider";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
 
-import { useFilters } from 'commons/hooks';
-import { AppLoader, HelperText } from 'components/common';
-import { scrollWrapper, iMessage } from 'commons/utils';
+import { useFilters } from "commons/hooks";
+import { AppLoader, HelperText } from "components/common";
+import { scrollWrapper, iMessage } from "commons/utils";
 
 import {
   setPackagesStart,
   viewPackageStart,
   installPackage,
   installMultiplePackages
-} from 'models/packages/actions';
+} from "models/packages/actions";
 import {
   addSelected,
   setPage,
   setPageRows,
   setActivePage
-} from 'models/ui/actions';
-import { setMode, clearInstallOptions } from 'models/common/actions';
+} from "models/ui/actions";
+import { setMode, clearInstallOptions } from "models/common/actions";
 
 import {
   ToolbarView,
@@ -40,10 +40,10 @@ import {
   PaginationView,
   PackageItemView,
   DialogOptionsView
-} from 'components/views/packages';
+} from "components/views/packages";
 
-import PackageDetails from './PackageDetails';
-import styles from './styles/packages';
+import PackageDetails from "./PackageDetails";
+import styles from "./styles/packages";
 
 const mapState = ({
   common: {
@@ -128,12 +128,12 @@ const Packages = ({ classes }) => {
   const dispatch = useDispatch();
 
   const reload = () => {
-    dispatch(setActivePage({ page: 'packages', paused: false }));
+    dispatch(setActivePage({ page: "packages", paused: false }));
     dispatch(
       setPackagesStart({
-        channel: 'npm-list-outdated',
+        channel: "npm-list-outdated",
         options: {
-          cmd: ['outdated', 'list']
+          cmd: ["outdated", "list"]
         }
       })
     );
@@ -141,14 +141,14 @@ const Packages = ({ classes }) => {
 
   const switchMode = (appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
-    dispatch(setActivePage({ page: 'packages', paused: false }));
+    dispatch(setActivePage({ page: "packages", paused: false }));
 
     if (fromSearch) {
       dispatch(
         setPackagesStart({
-          channel: 'npm-list-outdated',
+          channel: "npm-list-outdated",
           options: {
-            cmd: ['outdated', 'list']
+            cmd: ["outdated", "list"]
           }
         })
       );
@@ -158,11 +158,11 @@ const Packages = ({ classes }) => {
   const viewPackageHandler = (name, version) =>
     dispatch(
       viewPackageStart({
-        channel: 'npm-view',
+        channel: "npm-view",
         options: {
-          cmd: ['view'],
+          cmd: ["view"],
           name,
-          version: name === 'npm' ? null : version
+          version: name === "npm" ? null : version
         }
       })
     );
@@ -170,9 +170,9 @@ const Packages = ({ classes }) => {
   useEffect(() => {
     dispatch(
       setPackagesStart({
-        channel: 'npm-list-outdated',
+        channel: "npm-list-outdated",
         options: {
-          cmd: ['outdated', 'list'],
+          cmd: ["outdated", "list"],
           mode,
           directory
         }
@@ -191,7 +191,7 @@ const Packages = ({ classes }) => {
     const packagesDepthOne =
       actions &&
       actions
-        .filter(({ depth, action }) => !depth || action === 'install')
+        .filter(({ depth, action }) => !depth || action === "install")
         .map(({ module }) => module);
 
     setAuditPackages(packagesDepthOne);
@@ -207,7 +207,7 @@ const Packages = ({ classes }) => {
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const listDataPackages =
-    sortDir === 'asc'
+    sortDir === "asc"
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
@@ -227,16 +227,16 @@ const Packages = ({ classes }) => {
           >
             {noPackages && (
               <HelperText
-                text={iMessage('info', 'noPackages')}
+                text={iMessage("info", "noPackages")}
                 actionText="Switch to globals"
-                actionHandler={() => switchMode('global')}
+                actionHandler={() => switchMode("global")}
               />
             )}
             {!noPackages && (
               <Paper className={classes.root}>
                 <div className={classes.toolbar}>
                   <ToolbarView
-                    title={iMessage('title', 'packages')}
+                    title={iMessage("title", "packages")}
                     total={packagesData.length}
                     mode={mode}
                     directory={directory}
@@ -300,8 +300,8 @@ const Packages = ({ classes }) => {
                               : {};
 
                             const inOperation =
-                              operationStatus !== 'idle' &&
-                              operationCommand !== 'install' &&
+                              operationStatus !== "idle" &&
+                              operationCommand !== "install" &&
                               operationPackages.indexOf(name) > -1;
 
                             const inPackageJson = packagesFromPackageJson.some(
@@ -419,8 +419,8 @@ const Packages = ({ classes }) => {
               if (options.single) {
                 dispatch(
                   installPackage({
-                    ipcEvent: 'npm-install',
-                    cmd: ['install'],
+                    ipcEvent: "npm-install",
+                    cmd: ["install"],
                     name: active.name,
                     version: options.version,
                     single: true
@@ -429,8 +429,8 @@ const Packages = ({ classes }) => {
               } else {
                 dispatch(
                   installMultiplePackages({
-                    ipcEvent: 'npm-install',
-                    cmd: selected.map(() => 'install'),
+                    ipcEvent: "npm-install",
+                    cmd: selected.map(() => "install"),
                     multiple: true,
                     packages: selected
                   })

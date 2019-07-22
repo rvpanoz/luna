@@ -1,20 +1,20 @@
-import React from 'react';
-import cn from 'classnames';
-import { useRef } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
+import React from "react";
+import cn from "classnames";
+import { useRef } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import { bool, objectOf, object, string, func, oneOfType } from "prop-types";
 
-import Typography from '@material-ui/core/Typography';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from "@material-ui/core/Typography";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
+import Checkbox from "@material-ui/core/Checkbox";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
-import WarningIcon from '@material-ui/icons/WarningTwoTone';
-import CheckIcon from '@material-ui/icons/CheckTwoTone';
-import UpdateIcon from '@material-ui/icons/UpdateTwoTone';
+import WarningIcon from "@material-ui/icons/WarningTwoTone";
+import CheckIcon from "@material-ui/icons/CheckTwoTone";
+import UpdateIcon from "@material-ui/icons/UpdateTwoTone";
 
-import styles from './styles/packageItem';
+import styles from "./styles/packageItem";
 
 const PackageItem = ({
   classes,
@@ -31,6 +31,7 @@ const PackageItem = ({
   peerMissing,
   viewPackage,
   inOperation,
+  inAudit,
   inPackageJson,
   hasError
 }) => {
@@ -50,7 +51,7 @@ const PackageItem = ({
       }}
       onClick={() => (inOperation ? {} : viewPackage(name, version))}
     >
-      <TableCell padding="checkbox" style={{ width: '85px' }}>
+      <TableCell padding="checkbox" style={{ width: "85px" }}>
         <Checkbox
           disabled={inOperation || (inPackageJson && fromSearch)}
           checked={isSelected}
@@ -93,7 +94,7 @@ const PackageItem = ({
       </TableCell>
       <TableCell padding="none" name="installed" className={classes.tableCell}>
         <Typography className={classes.typo}>
-          {fromSearch ? 'No' : version}
+          {fromSearch ? "No" : version}
         </Typography>
       </TableCell>
       <TableCell padding="none" name="latest" className={classes.tableCell}>
@@ -134,7 +135,8 @@ PackageItem.propTypes = {
   isOutdated: bool,
   inOperation: bool,
   hasError: bool,
-  inPackageJson: bool
+  inPackageJson: bool,
+  inAudit: bool
 };
 
 export default withStyles(styles)(PackageItem);

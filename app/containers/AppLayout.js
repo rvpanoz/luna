@@ -1,25 +1,24 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { useMappedState, useDispatch } from 'redux-react-hook';
-import { MuiThemeProvider, withStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Snackbar from '@material-ui/core/Snackbar';
-import theme from 'styles/theme';
+import React from "react";
+import PropTypes from "prop-types";
+import { useState } from "react";
+import { useMappedState, useDispatch } from "redux-react-hook";
+import { MuiThemeProvider, withStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Snackbar from "@material-ui/core/Snackbar";
+import theme from "styles/theme";
 
-import AppSidebar from 'containers/AppSidebar';
-import AppHeader from 'containers/AppHeader';
+import AppSidebar from "containers/AppSidebar";
+import AppHeader from "containers/AppHeader";
 
-import { SnackbarContent } from 'components/common';
-import { Notifications } from 'components/views/notifications';
-import { setSnackbar } from 'models/ui/actions';
-import { switchcase, shrinkDirectory } from 'commons/utils';
-import { drawerWidth } from 'styles/variables';
+import { SnackbarContent } from "components/common";
+import { Notifications } from "components/views/notifications";
+import { setSnackbar } from "models/ui/actions";
+import { switchcase, shrinkDirectory } from "commons/utils";
+import { drawerWidth } from "styles/variables";
 
-import Packages from './Packages';
-import Audit from './Audit';
-
-import styles from './styles/appLayout';
+import Packages from "./Packages";
+import Audit from "./Audit";
+import styles from "./styles/appLayout";
 
 const mapState = ({
   common: { mode, directory, onlineStatus },
@@ -71,17 +70,17 @@ const AppLayout = ({ classes }) => {
         {snackbar && snackbar.open && (
           <Snackbar
             anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right'
+              vertical: "bottom",
+              horizontal: "right"
             }}
             open={snackbar.open}
-            autoHideDuration={onlineStatus === 'online' ? 55000 : 999999}
+            autoHideDuration={onlineStatus === "online" ? 55000 : 999999}
             onClose={() =>
               dispatch(
                 setSnackbar({
                   open: false,
                   message: null,
-                  type: 'info'
+                  type: "info"
                 })
               )
             }
@@ -91,7 +90,7 @@ const AppLayout = ({ classes }) => {
                   setSnackbar({
                     open: false,
                     message: null,
-                    type: 'info'
+                    type: "info"
                   })
                 )
             }}
@@ -104,7 +103,7 @@ const AppLayout = ({ classes }) => {
                   setSnackbar({
                     open: false,
                     message: null,
-                    type: 'info'
+                    type: "info"
                   })
                 )
               }
