@@ -35,16 +35,16 @@ const styles = theme => ({
   },
   name: {
     ...defaultFont,
-    fontSize: '1rem',
-    [theme.breakpoints.up('md')]: {
-      maxWidth: '100%'
-    },
     [theme.breakpoints.up('lg')]: {
       width: 'auto'
     },
+    [theme.breakpoints.down('md')]: {
+      width: 200
+    },
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    textAlign: 'left'
   },
   group: {
     color: darken(theme.palette.secondary.light, 0.3)

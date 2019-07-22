@@ -105,7 +105,7 @@ const Doctor = ({ classes }) => {
   }, [error, initOptions]);
 
   return (
-    <AppLoader loading={loading} message={message}>
+    <AppLoader loading={loading} message={message} relative>
       <div className={classes.root}>
         {type === 'init' && <HelperText {...options} />}
         {type === 'doctor' && (
