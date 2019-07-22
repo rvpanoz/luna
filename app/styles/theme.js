@@ -5,8 +5,9 @@ import { defaultFont } from './variables';
 const theme = createMuiTheme({
   typography: {
     ...defaultFont,
+    spacing: 8,
     useNextVariants: true,
-    h5: {
+    h6: {
       fontWeight: 500,
       fontSize: 26,
       letterSpacing: 0.5
@@ -70,7 +71,7 @@ const appTheme = {
     },
     MuiTabs: {
       root: {
-        marginLeft: theme.spacing.unit
+        marginLeft: theme.spacing(1)
       },
       indicator: {
         height: 3,
@@ -84,20 +85,14 @@ const appTheme = {
         textTransform: 'initial',
         margin: '0 16px',
         minWidth: 0,
-        [theme.breakpoints.up('md')]: {
-          minWidth: 0
-        }
       },
-      labelContainer: {
-        padding: 0,
-        [theme.breakpoints.up('md')]: {
-          padding: 0
-        }
+      labelIcon: {
+        margin: theme.spacing(2)
       }
     },
     MuiIconButton: {
       root: {
-        padding: theme.spacing.unit
+        padding: theme.spacing(1)
       }
     },
     MuiTooltip: {

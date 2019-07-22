@@ -4,14 +4,14 @@ const styles = theme => ({
     minHeight: '100%'
   },
   widgetHeader: {
-    padding: theme.spacing.unit * 3,
-    paddingBottom: theme.spacing.unit,
+    padding: theme.spacing(3),
+    paddingBottom: theme.spacing(1),
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center'
   },
   widgetBody: {
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing(2)
   },
   noPadding: {
     padding: 0
@@ -23,7 +23,7 @@ const styles = theme => ({
     overflow: 'hidden'
   },
   moreButton: {
-    margin: -theme.spacing.unit,
+    margin: -theme.spacing(1),
     padding: 0,
     width: 40,
     height: 40,

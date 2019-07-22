@@ -259,7 +259,7 @@ const Packages = ({ classes }) => {
                 <Divider light />
                 <div className={classes.tableWrapper} ref={wrapperRef}>
                   <Table
-                    padding="dense"
+                    padding="checkbox"
                     aria-labelledby="packages-list"
                     className={cn(classes.table, {
                       [classes.hasFilterBlur]: loading

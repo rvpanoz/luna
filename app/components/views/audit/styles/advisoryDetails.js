@@ -7,13 +7,13 @@ const styles = theme => ({
     display: 'flex'
   },
   cardHeader: {
-    padding: theme.spacing.unit
+    padding: theme.spacing(1)
   },
   cardContent: {
     maxHeight: 375,
     overflowY: 'scroll',
     overflowX: 'hidden',
-    padding: theme.spacing.unit
+    padding: theme.spacing(1)
   },
   avatar: {
     width: 50,
@@ -21,10 +21,10 @@ const styles = theme => ({
     backgroundColor: red[500]
   },
   badge: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   divider: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   group: {
     padding: 0,
@@ -44,7 +44,7 @@ const styles = theme => ({
     backgroundColor: lighten(theme.palette.secondary.light, 0.9),
     fontSize: 20,
     fontWeight: 400,
-    padding: theme.spacing.unit
+    padding: theme.spacing(1)
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -67,13 +67,13 @@ const styles = theme => ({
     width: '100%'
   },
   withPadding: {
-    padding: theme.spacing.unit
+    padding: theme.spacing(1)
   },
   overview: {
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing(2)
   },
   padTop: {
-    paddingTop: theme.spacing.unit
+    paddingTop: theme.spacing(1)
   }
 });
 

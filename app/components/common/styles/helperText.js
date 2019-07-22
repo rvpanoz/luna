@@ -6,13 +6,13 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing(2)
   },
   noData: {
     ...defaultFont
   },
   withPadding: {
-    padding: theme.spacing.unit
+    padding: theme.spacing(1)
   },
   helperText: {
     ...defaultFont,
@@ -22,7 +22,7 @@ const styles = theme => ({
   buttonFix: {
     ...defaultFont,
     fontWeight: 300,
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   }
 });
 

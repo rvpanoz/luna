@@ -5,11 +5,11 @@ const styles = theme => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
-    paddingTop: theme.spacing.unit * 4
+    paddingTop: theme.spacing(1) * 4
   },
   tableWrapper: {
     whiteSpace: 'nowrap',
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     overflowY: 'scroll',
     [theme.breakpoints.up('md')]: {
       maxHeight: 400
@@ -55,7 +55,7 @@ const styles = theme => ({
   },
   header: {
     flex: '0 0 auto',
-    padding: theme.spacing.unit * 2 + 4
+    padding: theme.spacing(2) + 4
   },
   title: {
     ...defaultFont
@@ -78,13 +78,13 @@ const styles = theme => ({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingRight: theme.spacing.unit
+    paddingRight: theme.spacing(1)
   },
   padRight: {
-    paddingRight: theme.spacing.unit * 2.5
+    paddingRight: theme.spacing(2)
   },
   marLeft: {
-    marginLeft: theme.spacing.unit * 2
+    marginLeft: theme.spacing(2)
   }
 });
 

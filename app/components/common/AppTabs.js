@@ -45,19 +45,19 @@ const AppTabs = ({ classes, children }) => {
         >
           <Tab
             classes={{
-              label: classes.tabLabel
+              root: classes.tabLabel
             }}
             label="Project"
           />
           <Tab
             classes={{
-              label: classes.tabLabel
+              root: classes.tabLabel
             }}
             label="Actions"
           />
           <Tab
             classes={{
-              label: classes.tabLabel
+              root: classes.tabLabel
             }}
             label="History"
           />

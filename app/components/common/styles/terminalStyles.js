@@ -45,7 +45,7 @@ const styles = theme => ({
   terminal: {
     display: 'flex',
     flexDirection: 'column',
-    padding: theme.spacing.unit / 2,
+    padding: theme.spacing(0.5),
     backgroundColor: 'black',
     opacity: '0.7',
     minHeight: 150,
@@ -60,7 +60,7 @@ const styles = theme => ({
     borderBottomRightRadius: 5,
     '& > span': {
       width: '100%',
-      padding: theme.spacing.unit
+      padding: theme.spacing(1)
     }
   }
 });

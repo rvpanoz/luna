@@ -23,7 +23,7 @@ const styles = theme => ({
   },
   mainContent: {
     flex: 1,
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     background: lighten('#fff', 0.1),
     overflow: 'hidden'
   },
@@ -41,7 +41,7 @@ const styles = theme => ({
     color: theme.palette.secondary.light
   },
   list: {
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing(2)
   }
 });
 

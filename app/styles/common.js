@@ -159,7 +159,7 @@ export const TABS = {
 
 export const TAB = {
   root: 'tab__root',
-  label: 'tab__label',
+  // label: 'tab__label',
   selected: 'tab--selected',
   wrapper: 'tab__wrapper',
   onlyIcon: 'tab--only-icon'

@@ -24,7 +24,7 @@ const styles = theme => ({
   },
   containerHolder: {
     ...flexContainer,
-    paddingTop: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
     flexDirection: 'column',
     alignItems: 'center'
   },
@@ -34,7 +34,7 @@ const styles = theme => ({
     alignItems: 'center'
   },
   flexItem: {
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing(1)
   },
   toolbar: {
     width: '100%'
@@ -42,7 +42,7 @@ const styles = theme => ({
   tableWrapper: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     [theme.breakpoints.up('md')]: {
       maxHeight: 450
     },
@@ -61,7 +61,7 @@ const styles = theme => ({
   },
   tableResponsive: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     overflowX: 'auto'
   },
   outdated: {
@@ -76,12 +76,12 @@ const styles = theme => ({
     ...defaultFont
   },
   withPadding: {
-    padding: theme.spacing.unit + 4
+    padding: theme.spacing(1) + 4
   },
   smallIcon: {
     width: 15,
     height: 15,
-    marginRight: theme.spacing.unit / 2
+    marginRight: theme.spacing(0.5)
   },
   nodata: {
     ...defaultFont
@@ -93,7 +93,7 @@ const styles = theme => ({
     display: 'none'
   },
   chip: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   }
 });
 

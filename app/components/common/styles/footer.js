@@ -7,8 +7,8 @@ const styles = theme => ({
     maxWidth: 600,
     position: 'absolute',
     bottom: 0,
-    margin: theme.spacing.unit,
-    padding: theme.spacing.unit
+    margin: theme.spacing(1),
+    padding: theme.spacing(1)
   }
 });
 

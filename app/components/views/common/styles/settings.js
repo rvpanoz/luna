@@ -3,7 +3,7 @@ import { grayColor } from 'styles/variables';
 const styles = theme => ({
   root: {
     margin: 0,
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing(2)
   },
   tab: {
     backgroundColor: theme.palette.background.paper
@@ -14,7 +14,7 @@ const styles = theme => ({
   },
   secondaryText: {
     color: grayColor,
-    paddingBottom: theme.spacing.unit * 2
+    paddingBottom: theme.spacing(2)
   }
 });
 

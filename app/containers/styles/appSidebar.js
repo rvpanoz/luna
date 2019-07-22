@@ -7,11 +7,11 @@ const styles = theme => ({
     alignItems: 'center'
   },
   flexItem: {
-    padding: theme.spacing.unit
+    padding: theme.spacing(1)
   },
   categoryHeader: {
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(1),
     borderBottom: '1px solid #eee'
   },
   categoryHeaderPrimary: {
@@ -19,23 +19,23 @@ const styles = theme => ({
   },
   itemCategory: {
     borderBottom: '1px solid #eee',
-    padding: theme.spacing.unit / 2
+    padding: theme.spacing(0.5)
   },
   homeIcon: {
     width: 35,
     height: 35,
-    marginLeft: theme.spacing.unit * 2,
+    marginLeft: theme.spacing(2),
     fill: '#fff'
   },
   updateIcon: {
     color: lighten(theme.palette.primary.main, 0.2),
-    marginRight: theme.spacing.unit / 2
+    marginRight: theme.spacing(0.5)
   },
   title: {
     ...defaultFont,
     color: grayColor,
     fontSize: 32,
-    paddingLeft: theme.spacing.unit * 3
+    paddingLeft: theme.spacing(3)
   },
   itemActionable: {
     '&:hover': {
@@ -53,28 +53,28 @@ const styles = theme => ({
     }
   },
   textDense: {
-    paddingTop: theme.spacing.unit / 2
+    paddingTop: theme.spacing(0.5)
   },
   divider: {
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing(2)
   },
   margin: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   extendedIcon: {
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing(1)
   },
   actionButton: {
     paddingTop: 0
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   leftIcon: {
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing(1)
   },
   rightIcon: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing(1)
   },
   iconSmall: {
     fontSize: 20
@@ -92,7 +92,7 @@ const styles = theme => ({
   },
   listWrapper: {
     whiteSpace: 'nowrap',
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     overflow: 'hidden',
     [theme.breakpoints.up('md')]: {
       maxHeight: 500,
@@ -108,7 +108,7 @@ const styles = theme => ({
   },
   listItemHalfPadding: {
     ...defaultFont,
-    padding: theme.spacing.unit / 2
+    padding: theme.spacing(0.5)
   },
   card: {
     width: 268,
@@ -122,7 +122,7 @@ const styles = theme => ({
     ...flexContainer,
     width: '100%',
     justifyContent: 'space-between',
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     alignItems: 'center'
   },
   cardFlexContainerInner: {

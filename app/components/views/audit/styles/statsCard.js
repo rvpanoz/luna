@@ -3,7 +3,7 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   root: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     width: 220,
     height: 115
   },
@@ -18,7 +18,7 @@ const styles = theme => ({
   },
   value: {
     color: lighten(grayColor, 0.1),
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing(1)
   },
   iconWrapper: {
     alignItems: 'center',
@@ -77,7 +77,7 @@ const styles = theme => ({
     color: whiteColor,
     marginTop: 0,
     minHeight: "auto",
-    marginBottom: theme.spacing.unit,
+    marginBottom: theme.spacing(1),
     textDecoration: "none",
     "& small": {
       fontWeight: "400",

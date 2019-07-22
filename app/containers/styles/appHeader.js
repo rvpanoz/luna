@@ -11,7 +11,7 @@ const styles = theme => ({
     zIndex: 0
   },
   menuButton: {
-    marginLeft: -theme.spacing.unit
+    marginLeft: -theme.spacing(1)
   },
   iconButtonAvatar: {
     padding: 4
@@ -28,15 +28,15 @@ const styles = theme => ({
     borderColor: lightColor
   },
   dialogTitle: {
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing(2)
   },
   settings: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   },
   tabLabel: {
     ...defaultFont,
     fontSize: 16,
-    paddingBottom: theme.spacing.unit
+    paddingBottom: theme.spacing(1)
   },
   workingDir: {
     color: '#fff'

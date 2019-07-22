@@ -6,22 +6,22 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginTop: theme.spacing.unit
+    marginTop: theme.spacing(1)
   },
   caption: {
     color: darken(grayColor, 0.6),
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing(2)
   },
   options: {
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit / 2,
-    padding: theme.spacing.unit
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(0.5),
+    padding: theme.spacing(1)
   },
   formControl: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing(1)
   },
   directory: {
-    paddingTop: theme.spacing.unit
+    paddingTop: theme.spacing(1)
   }
 });
 

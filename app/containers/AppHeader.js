@@ -194,7 +194,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             label="Packages"
             value="packages"
             classes={{
-              label: classes.tabLabel
+              root: classes.tabLabel
             }}
             icon={<PackagesIcon />}
           />
@@ -205,7 +205,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             disabled={loading}
             icon={<ErrorIcon color="inherit" />}
             classes={{
-              label: classes.tabLabel
+              root: classes.tabLabel
             }}
           />
           <Tab
@@ -215,7 +215,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             disabled={loading}
             icon={<SecurityIcon color="inherit" />}
             classes={{
-              label: classes.tabLabel
+              root: classes.tabLabel
             }}
           />
         </Tabs>
