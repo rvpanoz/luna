@@ -13,7 +13,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import WarningIcon from '@material-ui/icons/WarningTwoTone';
 import CheckIcon from '@material-ui/icons/CheckTwoTone';
 import UpdateIcon from '@material-ui/icons/UpdateTwoTone';
-import SecurityIcon from '@material-ui/icons/SecurityTwoTone';
 
 import styles from './styles/packageItem';
 
@@ -32,7 +31,6 @@ const PackageItem = ({
   peerMissing,
   viewPackage,
   inOperation,
-  inAudit,
   inPackageJson,
   hasError
 }) => {
@@ -107,13 +105,6 @@ const PackageItem = ({
           {latest}
         </Typography>
       </TableCell>
-      <TableCell padding="none" name="audit" className={classes.tableCell}>
-        {inAudit ? (
-          <SecurityIcon color="error" />
-        ) : (
-          <CheckIcon className={classes.statusOK} />
-        )}
-      </TableCell>
       <TableCell padding="none" name="status" className={classes.tableCell}>
         {missing && <WarningIcon className={classes.statusMissing} />}
         {isOutdated && !hasError ? (
@@ -143,8 +134,7 @@ PackageItem.propTypes = {
   isOutdated: bool,
   inOperation: bool,
   hasError: bool,
-  inPackageJson: bool,
-  inAudit: bool
+  inPackageJson: bool
 };
 
 export default withStyles(styles)(PackageItem);

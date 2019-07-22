@@ -21,7 +21,7 @@ const renderAction = (classes, nodata, mode, installPackages) => (
       primary={<Typography className={classes.label}>npm install</Typography>}
       secondary={
         <Typography className={classes.secondaryText}>
-          Install from package.json
+          {iMessage('info', 'installFromPackageJson')}
         </Typography>
       }
     />
