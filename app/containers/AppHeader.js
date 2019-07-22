@@ -27,9 +27,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
 import SecurityIcon from '@material-ui/icons/SecurityOutlined';
-import DoctorIcon from '@material-ui/icons/BuildOutlined';
 
-import { Init, SearchBox, System } from 'components/views/common';
+import { Init, SearchBox, Settings } from 'components/views/common';
 import { iMessage } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
 
@@ -65,9 +64,27 @@ const Header = ({ classes, onDrawerToggle }) => {
     mapState
   );
   const dispatch = useDispatch();
+  const settings = [
+    {
+      primaryText: 'Environment',
+      secondaryText: env.userAgent
+    },
+    {
+      primaryText: 'Registry',
+      secondaryText: env.metricsRegistry
+    },
+    {
+      primaryText: 'Audit level',
+      secondaryText: env.auditLevel
+    },
+    {
+      primaryText: 'Cache',
+      secondaryText: env.cache
+    }
+  ];
 
   return (
-    <section className={classes.root}>
+    <div className={classes.root}>
       <AppBar color="primary" position="sticky" elevation={0}>
         <Toolbar>
           <Grid container spacing={8} alignItems="center">
@@ -201,20 +218,10 @@ const Header = ({ classes, onDrawerToggle }) => {
               label: classes.tabLabel
             }}
           />
-          <Tab
-            textColor="inherit"
-            label="Doctor"
-            value="doctor"
-            disabled={loading}
-            icon={<DoctorIcon color="inherit" />}
-            classes={{
-              label: classes.tabLabel
-            }}
-          />
         </Tabs>
       </AppBar>
       <Popover
-        id="system-pop"
+        id="settings-pop"
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
@@ -227,27 +234,7 @@ const Header = ({ classes, onDrawerToggle }) => {
           horizontal: 'center'
         }}
       >
-        <System
-          items={[
-            {
-              primaryText: 'Environment',
-              secondaryText: env.userAgent
-            },
-            {
-              primaryText: 'Registry',
-              secondaryText: env.metricsRegistry
-            },
-            {
-              primaryText: 'Audit level',
-              secondaryText: env.auditLevel
-            },
-            {
-              primaryText: 'Cache',
-              secondaryText: env.cache
-            }
-          ]}
-          loading={loading}
-        />
+        <Settings items={settings} loading={loading} />
       </Popover>
       <Dialog
         open={initFlowDialog.open}
@@ -255,12 +242,12 @@ const Header = ({ classes, onDrawerToggle }) => {
         onClose={() => setInitFlowDialog({ open: false })}
         aria-labelledby="npm-init"
       >
-        <DialogTitle>Create a package.json file</DialogTitle>
+        <DialogTitle>{iMessage('title', 'createPackageJson')}</DialogTitle>
         <DialogContent>
           <Init onClose={() => setInitFlowDialog({ open: false })} />
         </DialogContent>
       </Dialog>
-    </section>
+    </div>
   );
 };
 

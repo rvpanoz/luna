@@ -182,7 +182,7 @@ const AppSidebar = ({
                     className={classes.cardTitle}
                     color="textSecondary"
                   >
-                    Overview
+                    {iMessage('title', 'overview')}
                   </Typography>
                   <Divider light />
                   <PackagesTab items={packagesItems} loading={loading} />
