@@ -1,4 +1,3 @@
-import { remote } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -15,105 +14,82 @@ import Typography from '@material-ui/core/Typography';
 import { iMessage } from 'commons/utils';
 import styles from './styles/actions';
 
-const renderAction = (classes, nodata, mode, installPackages) => (
-  <ListItem key="install-packagejson-all" className={classes.listItem}>
-    <ListItemText
-      primary={<Typography className={classes.label}>npm install</Typography>}
-      secondary={
-        <Typography className={classes.secondaryText}>
-          Install from package.json
-        </Typography>
-      }
-    />
-    <ListItemSecondaryAction>
-      <Tooltip
-        title={
-          mode === 'global'
-            ? iMessage('info', 'notGlobalModeAvailable')
-            : iMessage('title', 'selectPackageJson')
-        }
-      >
-        <div>
-          <IconButton
-            aria-label="action-install"
-            disabled={nodata === 0 || mode === 'global'}
-            onClick={installPackages}
-          >
-            <ArrowRightIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
-    </ListItemSecondaryAction>
-  </ListItem>
-);
-
-const ActionsTab = ({ classes, items, nodata, mode, installPackages }) => (
+const ActionsTab = ({
+  classes,
+  mode,
+  installPackagesFromJson,
+  toggleDialog
+}) => (
   <div className={classes.tab}>
     <List dense>
-      {renderAction(classes, nodata, mode, installPackages)}
-      {items &&
-        items.map(item => (
-          <ListItem key={item.name} className={classes.listItem}>
-            <ListItemText
-              primary={
-                <Typography className={classes.label}>
-                  {item.primaryText}
-                </Typography>
-              }
-              secondary={
-                <Typography className={classes.secondaryText}>
-                  {item.secondaryText}
-                </Typography>
-              }
-            />
-            <ListItemSecondaryAction>
-              <Tooltip
-                title={
-                  mode === 'global'
-                    ? iMessage('info', 'notGlobal')
-                    : `Execute ${item.primaryText}`
-                }
+      <ListItem key="install-from-packagejson" className={classes.listItem}>
+        <ListItemText
+          primary={
+            <Typography className={classes.label}>
+              {iMessage('action', 'npmInstall')}
+            </Typography>
+          }
+          secondary={
+            <Typography className={classes.secondaryText}>
+              {iMessage('info', 'npmInstallInfo')}
+            </Typography>
+          }
+        />
+        <ListItemSecondaryAction>
+          <Tooltip
+            title={
+              mode === 'global'
+                ? iMessage('info', 'notGlobalModeAvailable')
+                : iMessage('title', 'selectPackageJson')
+            }
+          >
+            <div>
+              <IconButton
+                aria-label="action-install"
+                disabled={mode === 'global'}
+                onClick={installPackagesFromJson}
               >
-                <div>
-                  <IconButton
-                    aria-label="action"
-                    disabled={nodata === 0 || mode === 'global'}
-                    onClick={() =>
-                      remote.dialog.showMessageBox(
-                        remote.getCurrentWindow(),
-                        {
-                          title: 'Confirmation',
-                          type: 'question',
-                          message: iMessage('confirmation', 'actionRun', {
-                            '%name%': item.primaryText
-                          }),
-                          buttons: ['Cancel', 'Run']
-                        },
-                        btnIdx => {
-                          if (Boolean(btnIdx) === true) {
-                            item.handler();
-                          }
-                        }
-                      )
-                    }
-                  >
-                    <ArrowRightIcon />
-                  </IconButton>
-                </div>
-              </Tooltip>
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
+                <ArrowRightIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </ListItemSecondaryAction>
+      </ListItem>
+      <ListItem key="npm-doctor" className={classes.listItem}>
+        <ListItemText
+          primary={
+            <Typography className={classes.label}>
+              {iMessage('action', 'npmDoctor')}
+            </Typography>
+          }
+          secondary={
+            <Typography className={classes.secondaryText}>
+              {iMessage('info', 'npmDoctorInfo')}
+            </Typography>
+          }
+        />
+        <ListItemSecondaryAction>
+          <Tooltip title={iMessage('info', 'npmDoctorInfo')}>
+            <div>
+              <IconButton
+                aria-label="action-install"
+                onClick={() => toggleDialog(true)}
+              >
+                <ArrowRightIcon />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </ListItemSecondaryAction>
+      </ListItem>
     </List>
   </div>
 );
 
 ActionsTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  items: PropTypes.arrayOf(PropTypes.object),
-  mode: PropTypes.string,
-  nodata: PropTypes.number,
-  installPackages: PropTypes.func.isRequired
+  installPackagesFromJson: PropTypes.func.isRequired,
+  toggleDialog: PropTypes.func,
+  mode: PropTypes.string
 };
 
 export default withStyles(styles)(ActionsTab);

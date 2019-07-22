@@ -1,23 +1,22 @@
-import React from 'react';
-import { useRef } from 'react';
-import PropTypes from 'prop-types';
-import { and } from 'ramda';
-import { useDispatch } from 'redux-react-hook';
+import React from "react";
+import { useRef } from "react";
+import PropTypes from "prop-types";
+import { and } from "ramda";
+import { useDispatch } from "redux-react-hook";
 
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Checkbox from "@material-ui/core/Checkbox";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
 
-import { addSelected, clearSelected, setSortOptions } from 'models/ui/actions';
+import { addSelected, clearSelected, setSortOptions } from "models/ui/actions";
 
 const columnData = [
-  { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-  { id: 'version', disablePadding: true, label: 'Installed' },
-  { id: 'latest', disablePadding: true, label: 'Latest' },
-  { id: 'audit', disablePadding: true, label: 'Audit' },
-  { id: 'Status', disablePadding: true, label: 'Status' }
+  { id: "name", numeric: false, disablePadding: true, label: "Name" },
+  { id: "version", disablePadding: true, label: "Installed" },
+  { id: "latest", disablePadding: true, label: "Latest" },
+  { id: "Status", disablePadding: true, label: "Status" }
 ];
 
 const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
@@ -27,7 +26,7 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
   const toggleSort = prop =>
     dispatch(
       setSortOptions({
-        sortDir: sortDir === 'desc' ? 'asc' : 'desc',
+        sortDir: sortDir === "desc" ? "asc" : "desc",
         sortBy: prop
       })
     );
@@ -68,9 +67,9 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
           return (
             <TableCell
               key={column.id}
-              padding={column.disablePadding ? 'none' : 'default'}
+              padding={column.disablePadding ? "none" : "default"}
               sortDirection={sortBy === column.id ? sortDir : false}
-              style={column.id !== 'name' ? { textAlign: 'center' } : {}}
+              style={column.id !== "name" ? { textAlign: "center" } : {}}
             >
               {needSort ? (
                 <TableSortLabel
@@ -81,8 +80,8 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
                   {column.label}
                 </TableSortLabel>
               ) : (
-                  column.label
-                )}
+                column.label
+              )}
             </TableCell>
           );
         })}
