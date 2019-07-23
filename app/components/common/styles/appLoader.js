@@ -1,5 +1,3 @@
-import { defaultFont } from 'styles/variables';
-
 const styles = () => ({
   loader: {
     display: 'flex',
@@ -21,8 +19,6 @@ const styles = () => ({
     margin: 0
   },
   message: {
-    ...defaultFont,
-    fontSize: 12,
     padding: 0,
     margin: 0
   }

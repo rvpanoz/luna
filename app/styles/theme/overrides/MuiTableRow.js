@@ -1,5 +1,5 @@
 import palette from '../palette';
-console.log(palette)
+
 export default {
   root: {
     height: '46px',
@@ -8,7 +8,7 @@ export default {
     },
     '&$hover': {
       '&:hover': {
-        backgroundColor: palette.warning.light,
+        backgroundColor: palette.warning.light
       }
     }
   }
