@@ -1,7 +1,7 @@
 const styles = theme => ({
   container: {
     width: '100%',
-    padding: theme.spacing.unit
+    padding: theme.spacing(1)
   },
   horizontal: {
     display: 'flex'

@@ -57,7 +57,7 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
     {
       value: critical,
       name: iMessage('label', 'critical'),
-      color: 'error'
+      color: 'danger'
     },
     {
       value: high,
@@ -81,7 +81,7 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
     }
   ];
   const totalVulnerabilities = typesData.reduce((acc, type) => acc + type.value, 0);
-
+  console.log(theme.palette)
   return (
     <Widget noBodyPadding title={`${iMessage('title', 'vulnerabilities')} (${totalVulnerabilities})`}>
       <div className={classes.list}>

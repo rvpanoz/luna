@@ -6,24 +6,24 @@ const styles = theme => ({
     width: '100%'
   },
   buttonFix: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   container: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
-    paddingTop: theme.spacing.unit * 3,
-    paddingBottom: theme.spacing.unit
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(1)
   },
   gridContainer: {
     width: '100%',
-    paddingTop: theme.spacing.unit * 3
+    paddingTop: theme.spacing(3)
   },
   containerColumn: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    paddingTop: theme.spacing.unit * 2
+    paddingTop: theme.spacing(2)
   },
   types: {
     width: '100%',
@@ -34,12 +34,12 @@ const styles = theme => ({
   typeItem: {
     display: 'flex',
     alignItems: 'center',
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing(1)
   },
   typeItemText: {
     ...defaultFont,
     fontSize: '18px !important',
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing(1)
   },
   transition: {
     transition: theme.transitions.create('width', {
@@ -50,7 +50,7 @@ const styles = theme => ({
     ...defaultFont
   },
   withPadding: {
-    padding: theme.spacing.unit + 4
+    padding: theme.spacing(1) + 4
   },
   helperText: {
     ...defaultFont,

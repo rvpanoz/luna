@@ -23,7 +23,7 @@ const styles = theme => ({
     maxWidth: 150
   },
   listItem: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     margin: 0
   },
   secondaryColor: {

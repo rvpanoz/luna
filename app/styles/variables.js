@@ -19,7 +19,7 @@ const container = {
 
 /** fonts */
 const defaultFont = {
-  fontFamily: '"Regular", "Roboto", Arial, sans-serif',
+  fontFamily: '"Regular", "Roboto", cursive, sans-serif',
   fontWeight: 200,
   lineHeight: '1.25em'
 };
@@ -28,11 +28,11 @@ const defaultFont = {
 const grayColor = '#999999';
 const blackColor = '#000';
 const whiteColor = '#fff';
-const primaryColor = ["#009be5", "#009be5", "#009be5", "#009be5"];
-const warningColor = ["#ffa726", "#ffa726", "#ffa726", "#ffa726"];
-const dangerColor = ["#f44336", "#f44336", "#f44336", "#f44336"];
-const successColor = ["#4caf50", "#66bb6a", "#43a047", "#5cb860"];
-const infoColor = ["#00acc1", "#26c6da", "#00acc1", "#00d3ee"];
+const primaryColor = ['#009be5', '#009be5', '#009be5', '#009be5'];
+const warningColor = ['#ffa726', '#ffa726', '#ffa726', '#ffa726'];
+const dangerColor = ['#f44336', '#f44336', '#f44336', '#f44336'];
+const successColor = ['#4caf50', '#66bb6a', '#43a047', '#5cb860'];
+const infoColor = ['#00acc1', '#26c6da', '#00acc1', '#00d3ee'];
 
 /* flexbox */
 const flexContainer = {
@@ -76,27 +76,27 @@ const defaultBoxShadow = {
 
 const warningCardHeader = {
   background:
-    "linear-gradient(60deg, " + warningColor[1] + ", " + warningColor[2] + ")",
+    'linear-gradient(60deg, ' + warningColor[1] + ', ' + warningColor[2] + ')',
   ...warningBoxShadow
 };
 const successCardHeader = {
   background:
-    "linear-gradient(60deg, " + successColor[1] + ", " + successColor[2] + ")",
+    'linear-gradient(60deg, ' + successColor[1] + ', ' + successColor[2] + ')',
   ...successBoxShadow
 };
 const dangerCardHeader = {
   background:
-    "linear-gradient(60deg, " + dangerColor[1] + ", " + dangerColor[2] + ")",
+    'linear-gradient(60deg, ' + dangerColor[1] + ', ' + dangerColor[2] + ')',
   ...dangerBoxShadow
 };
 const infoCardHeader = {
   background:
-    "linear-gradient(60deg, " + infoColor[1] + ", " + infoColor[2] + ")",
+    'linear-gradient(60deg, ' + infoColor[1] + ', ' + infoColor[2] + ')',
   ...infoBoxShadow
 };
 const primaryCardHeader = {
   background:
-    "linear-gradient(60deg, " + primaryColor[1] + ", " + primaryColor[2] + ")",
+    'linear-gradient(60deg, ' + primaryColor[1] + ', ' + primaryColor[2] + ')',
   ...primaryBoxShadow
 };
 

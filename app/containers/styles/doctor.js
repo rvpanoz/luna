@@ -3,7 +3,7 @@ import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   wrapper: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     overflowY: 'scroll',
     [theme.breakpoints.down('sm')]: {
       maxHeight: 375
@@ -29,13 +29,13 @@ const styles = theme => ({
     justifyContent: 'space-between',
     flex: 1,
     width: '100%',
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
   bottomSection: {
     ...flexContainer,
     justifyContent: 'space-between',
     width: '100%',
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing(2)
   },
   bottomLeft: {
     width: '50%',
@@ -49,7 +49,7 @@ const styles = theme => ({
   },
   header: {
     flex: '0 0 auto',
-    padding: theme.spacing.unit * 2 + 4
+    padding: theme.spacing(2) + 4
   },
   title: {
     display: 'flex',
@@ -58,18 +58,18 @@ const styles = theme => ({
     justifyContent: 'flex-start'
   },
   divider: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
   containerHolder: {
     ...flexContainer,
-    paddingTop: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
     flexDirection: 'column',
     alignItems: 'center'
   },
   textHolder: {
     ...defaultFont,
-    paddingBottom: theme.spacing.unit,
+    paddingBottom: theme.spacing(1),
     color: grayColor
   },
   table: {
@@ -92,10 +92,10 @@ const styles = theme => ({
     ...defaultFont
   },
   withPadding: {
-    padding: theme.spacing.unit + 4
+    padding: theme.spacing(1) + 4
   },
   icon: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing(1),
     padding: 0
   }
 });

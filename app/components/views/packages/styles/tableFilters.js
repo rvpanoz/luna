@@ -4,7 +4,7 @@ import { defaultFont } from 'styles/variables';
 const styles = theme => ({
   root: {
     minWidth: 400,
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     '& > h2': {
       color: theme.palette.primary.dark,
       fontSize: 18
@@ -20,10 +20,10 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    padding: theme.spacing.unit
+    padding: theme.spacing(1)
   },
   bottomDivider: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   hidden: {
     display: 'none'
@@ -38,7 +38,7 @@ const styles = theme => ({
     border: '1px solid'
   },
   searchIcon: {
-    width: theme.spacing.unit * 6,
+    width: theme.spacing(1) * 6,
     height: '100%',
     position: 'absolute',
     display: 'flex',
@@ -56,10 +56,10 @@ const styles = theme => ({
   inputInput: {
     ...defaultFont,
     color: '#001',
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 5
+    paddingTop: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    paddingLeft: theme.spacing(1) * 5
   },
   toolbar: {
     height: 10

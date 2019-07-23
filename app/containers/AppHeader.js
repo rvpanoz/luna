@@ -1,40 +1,40 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { shell } from "electron";
-import { useState } from "react";
-import { useMappedState, useDispatch } from "redux-react-hook";
-import { withStyles } from "@material-ui/core/styles";
+import { shell } from 'electron';
+import { useState } from 'react';
+import { useMappedState, useDispatch } from 'redux-react-hook';
+import { withStyles } from '@material-ui/core/styles';
 
-import AppBar from "@material-ui/core/AppBar";
-import Grid from "@material-ui/core/Grid";
-import Hidden from "@material-ui/core/Hidden";
-import IconButton from "@material-ui/core/IconButton";
-import Tab from "@material-ui/core/Tab";
-import Tabs from "@material-ui/core/Tabs";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
-import Popover from "@material-ui/core/Popover";
-import Button from "@material-ui/core/Button";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
+import AppBar from '@material-ui/core/AppBar';
+import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
+import IconButton from '@material-ui/core/IconButton';
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
+import Toolbar from '@material-ui/core/Toolbar';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import Popover from '@material-ui/core/Popover';
+import Button from '@material-ui/core/Button';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
 
-import AddIcon from "@material-ui/icons/AddOutlined";
-import MenuIcon from "@material-ui/icons/Menu";
-import SettingsIcon from "@material-ui/icons/Settings";
-import PackagesIcon from "@material-ui/icons/ViewModuleRounded";
-import ErrorIcon from "@material-ui/icons/WarningOutlined";
-import SecurityIcon from "@material-ui/icons/SecurityOutlined";
+import AddIcon from '@material-ui/icons/AddOutlined';
+import MenuIcon from '@material-ui/icons/Menu';
+import SettingsIcon from '@material-ui/icons/Settings';
+import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
+import ErrorIcon from '@material-ui/icons/WarningOutlined';
+import SecurityIcon from '@material-ui/icons/SecurityOutlined';
 
-import { Init, SearchBox, Settings } from "components/views/common";
-import { iMessage } from "commons/utils";
-import { setActivePage } from "models/ui/actions";
+import { Init, SearchBox, Settings } from 'components/views/common';
+import { iMessage } from 'commons/utils';
+import { setActivePage } from 'models/ui/actions';
 
-import styles from "./styles/appHeader";
+import styles from './styles/appHeader';
 
-const GIT_URL = "https://github.com/rvpanoz/luna";
+const GIT_URL = 'https://github.com/rvpanoz/luna';
 const openUrl = url => shell.openExternal(url);
 
 const mapState = ({
@@ -66,19 +66,19 @@ const Header = ({ classes, onDrawerToggle }) => {
   const dispatch = useDispatch();
   const settings = [
     {
-      primaryText: "Environment",
+      primaryText: 'Environment',
       secondaryText: env.userAgent
     },
     {
-      primaryText: "Registry",
+      primaryText: 'Registry',
       secondaryText: env.metricsRegistry
     },
     {
-      primaryText: "Audit level",
+      primaryText: 'Audit level',
       secondaryText: env.auditLevel
     },
     {
-      primaryText: "Cache",
+      primaryText: 'Cache',
       secondaryText: env.cache
     }
   ];
@@ -87,7 +87,7 @@ const Header = ({ classes, onDrawerToggle }) => {
     <div className={classes.root}>
       <AppBar color="primary" position="sticky" elevation={0}>
         <Toolbar>
-          <Grid container spacing={8} alignItems="center">
+          <Grid container alignItems="center">
             <Hidden smUp>
               <Grid item>
                 <IconButton
@@ -114,7 +114,7 @@ const Header = ({ classes, onDrawerToggle }) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title={iMessage("title", "system")}>
+              <Tooltip title={iMessage('title', 'system')}>
                 <IconButton
                   disableRipple
                   color="inherit"
@@ -135,22 +135,22 @@ const Header = ({ classes, onDrawerToggle }) => {
         elevation={0}
       >
         <Toolbar>
-          <Grid container alignItems="center" spacing={8}>
-            <Grid item xs>
-              <Typography color="inherit" variant="h5">
-                Dashboard
+          <Grid container alignItems="center" justify="space-between">
+            <Grid item>
+              <Typography color="inherit" variant="h1">
+                {iMessage('title', 'dashboard')}
               </Typography>
               <Typography className={classes.workingDir}>
-                {mode === "local"
-                  ? iMessage("info", "workingDirectory")
-                  : iMessage("info", "showingGlobals")}
+                {mode === 'local'
+                  ? iMessage('info', 'workingDirectory')
+                  : iMessage('info', 'showingGlobals')}
               </Typography>
               <Typography className={classes.directory} variant="subtitle2">
-                {mode === "local" ? directory : env.prefix}
+                {mode === 'local' ? directory : env.prefix}
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title={iMessage("title", "create")}>
+              <Tooltip title={iMessage('title', 'create')}>
                 <div>
                   <Button
                     disabled={loading}
@@ -161,7 +161,7 @@ const Header = ({ classes, onDrawerToggle }) => {
                     onClick={() => setInitFlowDialog({ open: true })}
                   >
                     <AddIcon className={classes.leftIcon} />
-                    Create
+                    {iMessage('action', 'create')}
                   </Button>
                 </div>
               </Tooltip>
@@ -194,7 +194,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             label="Packages"
             value="packages"
             classes={{
-              label: classes.tabLabel
+              root: classes.tabLabel
             }}
             icon={<PackagesIcon />}
           />
@@ -205,7 +205,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             disabled={loading}
             icon={<ErrorIcon color="inherit" />}
             classes={{
-              label: classes.tabLabel
+              root: classes.tabLabel
             }}
           />
           <Tab
@@ -215,7 +215,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             disabled={loading}
             icon={<SecurityIcon color="inherit" />}
             classes={{
-              label: classes.tabLabel
+              root: classes.tabLabel
             }}
           />
         </Tabs>
@@ -226,12 +226,12 @@ const Header = ({ classes, onDrawerToggle }) => {
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center"
+          vertical: 'bottom',
+          horizontal: 'center'
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "center"
+          vertical: 'top',
+          horizontal: 'center'
         }}
       >
         <Settings items={settings} loading={loading} />
@@ -242,7 +242,7 @@ const Header = ({ classes, onDrawerToggle }) => {
         onClose={() => setInitFlowDialog({ open: false })}
         aria-labelledby="npm-init"
       >
-        <DialogTitle>{iMessage("title", "createPackageJson")}</DialogTitle>
+        <DialogTitle>{iMessage('title', 'createPackageJson')}</DialogTitle>
         <DialogContent>
           <Init onClose={() => setInitFlowDialog({ open: false })} />
         </DialogContent>

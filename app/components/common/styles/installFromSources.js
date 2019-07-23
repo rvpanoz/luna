@@ -13,13 +13,13 @@ const styles = theme => ({
     ...defaultFont,
     color: darken(grayColor, 0.7),
     fontSize: 18,
-    marginBottom: theme.spacing.unit
+    marginBottom: theme.spacing(1)
   },
   description: {
     ...defaultFont
   },
   listItem: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     margin: 0
   },
   secondaryColor: {

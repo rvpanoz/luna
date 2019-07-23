@@ -3,9 +3,9 @@ import { whiteColor } from 'styles/variables';
 const style = theme => ({
   card: {
     border: 0,
-    marginBottom: theme.spacing.unit * 3,
-    marginTop: theme.spacing.unit * 3,
-    borderRadius: theme.spacing.unit,
+    marginBottom: theme.spacing(3),
+    marginTop: theme.spacing(3),
+    borderRadius: theme.spacing(1),
     background: whiteColor,
     width: '100%',
     position: 'relative',
@@ -20,7 +20,7 @@ const style = theme => ({
     boxShadow: 'none'
   },
   cardProfile: {
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     textAlign: 'center'
   },
   cardChart: {

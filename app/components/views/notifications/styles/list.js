@@ -17,14 +17,14 @@ const styles = theme => ({
     justifyContent: 'flex-start'
   },
   divider: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    marginBottom: theme.spacing.unit
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1)
   },
   list: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     [theme.breakpoints.up('md')]: {
       maxHeight: 450
     },
@@ -38,14 +38,14 @@ const styles = theme => ({
   },
   header: {
     flex: '0 0 auto',
-    padding: theme.spacing.unit * 2 + 4
+    padding: theme.spacing(2) + 4
   },
   item: {
     ...defaultFont
   },
   containerHolder: {
     ...flexContainer,
-    paddingTop: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
     flexDirection: 'column',
     alignItems: 'center'
   },
@@ -58,7 +58,7 @@ const styles = theme => ({
     ...defaultFont
   },
   withPadding: {
-    padding: theme.spacing.unit + 4
+    padding: theme.spacing(1) + 4
   }
 });
 

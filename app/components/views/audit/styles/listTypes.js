@@ -6,7 +6,7 @@ const styles = theme => ({
     alignItems: 'center'
   },
   list: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     overflowY: 'scroll',
     [theme.breakpoints.down('sm')]: {
       maxHeight: 375
@@ -16,7 +16,7 @@ const styles = theme => ({
     }
   },
   dot: {
-    marginLeft: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
   },
   chip: {
     fontSize: 20

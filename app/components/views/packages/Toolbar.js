@@ -187,7 +187,7 @@ const ToolbarView = ({
         })}
       >
         <div className={classes.header}>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h4" className={classes.title}>
             {!hasPackagesSelected
               ? `${title} ${total}`
               : `${selected.length} package(s) selected`}

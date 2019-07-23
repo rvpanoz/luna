@@ -8,7 +8,7 @@ const buttonStyle = theme => ({
     border: 'none',
     borderRadius: 5,
     position: 'relative',
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     margin: 0,
     fontSize: 14,
     fontWeight: 400,
