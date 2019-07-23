@@ -27,7 +27,7 @@ const Widget = ({
         <div className={classes.widgetHeader}>
           {!header && title ? (
             <React.Fragment>
-              <Typography variant="h6" color="textSecondary">
+              <Typography variant="h4" color="textSecondary">
                 {title}
               </Typography>
             </React.Fragment>
@@ -35,7 +35,7 @@ const Widget = ({
             header
           )}
         </div>
-        {title && <Divider light />}
+        {title && <Divider />}
         <div
           className={cn(classes.widgetBody, {
             [classes.noPadding]: noBodyPadding,

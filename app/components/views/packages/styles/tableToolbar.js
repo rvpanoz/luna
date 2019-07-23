@@ -13,7 +13,7 @@ const styles = theme => ({
   },
   header: {
     flex: '0 0 auto',
-    padding: theme.spacing.unit * 2 + 4
+    padding: theme.spacing(2) + 4
   },
   title: {
     display: 'flex',
@@ -32,7 +32,7 @@ const styles = theme => ({
   actions: {
     ...flexContainer,
     flex: '0 0 auto',
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
   }
 });
 

@@ -1,41 +1,40 @@
-import React from "react";
-import PropTypes from "prop-types";
-import cn from "classnames";
-import { useState, useEffect } from "react";
-import { useDispatch, useMappedState } from "redux-react-hook";
-import { ipcRenderer } from "electron";
-import { withStyles } from "@material-ui/core/styles";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
+import { useDispatch, useMappedState } from 'redux-react-hook';
+import { ipcRenderer } from 'electron';
+import { withStyles } from '@material-ui/core/styles';
 
-import Tooltip from "@material-ui/core/Tooltip";
-import Drawer from "@material-ui/core/Drawer";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import Typography from "@material-ui/core/Typography";
-import UpdateIcon from "@material-ui/icons/Update";
+import Tooltip from '@material-ui/core/Tooltip';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
+import Typography from '@material-ui/core/Typography';
+import UpdateIcon from '@material-ui/icons/Update';
 
-import { AppTabs, AppLogo } from "components/common/";
+import { AppTabs, AppLogo } from 'components/common/';
 import {
   PackagesTab,
   ActionsTab,
   HistoryTab
-} from "components/views/sidebar/tabs";
-import { navigatorParameters } from "commons/parameters";
-import { iMessage, showDialog } from "commons/utils";
-import { installPackage } from "models/packages/actions";
-import { setActivePage } from "models/ui/actions";
-import { setMode } from "models/common/actions";
+} from 'components/views/sidebar/tabs';
+import { navigatorParameters } from 'commons/parameters';
+import { iMessage, showDialog } from 'commons/utils';
+import { installPackage } from 'models/packages/actions';
+import { setActivePage } from 'models/ui/actions';
+import { setMode } from 'models/common/actions';
 
-import Doctor from "./Doctor";
-import styles from "./styles/appSidebar";
+import Doctor from './Doctor';
+import styles from './styles/appSidebar';
 
 const mapState = ({
   notifications: { notifications },
@@ -80,42 +79,42 @@ const AppSidebar = ({
   const dispatch = useDispatch();
 
   useEffect(() => {
-    ipcRenderer.on("loaded-packages-close", (event, directories) =>
+    ipcRenderer.on('loaded-packages-close', (event, directories) =>
       setOpenedDirectories(directories)
     );
 
-    return () => ipcRenderer.removeAllListeners(["loaded-packages-close"]);
+    return () => ipcRenderer.removeAllListeners(['loaded-packages-close']);
   }, []);
 
   const loadDirectory = () => {
     const dialogHandler = filePath => {
       dispatch(
         setActivePage({
-          page: "packages",
+          page: 'packages',
           paused: false
         })
       );
-      dispatch(setMode({ mode: "local", directory: filePath.join("") }));
+      dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
     };
 
-    return showDialog(dialogHandler, { mode: "file", ...navigatorParameters });
+    return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
   };
 
   const installPackagesFromJson = () => {
     const dialogOptions = {
-      title: "Confirmation",
-      type: "question",
-      message: iMessage("confirmation", "installAll", {
-        "%directory%": directory
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage('confirmation', 'installAll', {
+        '%directory%': directory
       }),
-      buttons: ["Cancel", "Install"]
+      buttons: ['Cancel', 'Install']
     };
 
     const dialogHandler = () =>
       dispatch(
         installPackage({
-          ipcEvent: "install",
-          cmd: ["install"],
+          ipcEvent: 'install',
+          cmd: ['install'],
           packageJson: true,
           mode,
           directory: fullDirectory
@@ -127,24 +126,24 @@ const AppSidebar = ({
 
   const packagesItems = [
     {
-      name: "total-packages",
-      primaryText: "Total",
+      name: 'total-packages',
+      primaryText: 'Total',
       secondaryText: packagesData.length,
-      color: "secondary",
+      color: 'secondary',
       primary: true
     },
     {
-      name: "outdated-packages",
-      primaryText: "Outdated",
+      name: 'outdated-packages',
+      primaryText: 'Outdated',
       secondaryText: packagesOutdated.length,
-      color: "warning",
+      color: 'warning',
       warning: true
     },
     {
-      name: "problems-packages",
-      primaryText: "Problems",
+      name: 'problems-packages',
+      primaryText: 'Problems',
       secondaryText: notifications ? notifications.length : 0,
-      color: "error",
+      color: 'error',
       error: true
     }
   ];
@@ -153,26 +152,28 @@ const AppSidebar = ({
     <>
       <Drawer variant="permanent" {...restProps}>
         <List disablePadding>
-          <ListItem className={classes.listItem} key="app-logo">
+          <ListItem key="app-logo">
             <ListItemText>
               <AppLogo />
             </ListItemText>
           </ListItem>
-          <ListItem className={classes.listItemHalfPadding} key="big-button">
-            <ListItemText className={classes.actionButton}>
-              <Tooltip title={iMessage("title", "loadDirectory")}>
-                <Button
-                  disableRipple
-                  disabled={loading || activePage !== "packages"}
-                  className={cn(classes.label, classes.margin)}
-                  color="secondary"
-                  variant="outlined"
-                  fullWidth
-                  size="large"
-                  onClick={() => loadDirectory()}
-                >
-                  {iMessage("action", "analyze")}
-                </Button>
+          <ListItem key="big-button">
+            <ListItemText>
+              <Tooltip title={iMessage('title', 'loadDirectory')}>
+                <div>
+                  <Button
+                    disableRipple
+                    disabled={loading || activePage !== 'packages'}
+                    color="secondary"
+                    variant="outlined"
+                    size="large"
+                    fullWidth
+                    className={classes.label}
+                    onClick={() => loadDirectory()}
+                  >
+                    {iMessage('action', 'analyze')}
+                  </Button>
+                </div>
               </Tooltip>
             </ListItemText>
           </ListItem>
@@ -185,18 +186,18 @@ const AppSidebar = ({
                       className={classes.cardTitle}
                       color="textSecondary"
                     >
-                      {iMessage("title", "overview")}
+                      {iMessage('title', 'overview')}
                     </Typography>
-                    <Divider light />
+                    <Divider />
                     <PackagesTab items={packagesItems} loading={loading} />
                   </CardContent>
-                  <Divider light />
+                  <Divider />
                   <CardActions>
                     <div className={classes.cardFlexContainer}>
                       <UpdateIcon className={classes.updateIcon} />
                       <Typography variant="body2" color="textSecondary">
-                        {iMessage("info", "updatedAt")}&nbsp;
-                        {lastUpdatedAt !== null ? lastUpdatedAt : "..."}
+                        {iMessage('info', 'updatedAt')}&nbsp;
+                        {lastUpdatedAt !== null ? lastUpdatedAt : '...'}
                       </Typography>
                     </div>
                   </CardActions>
@@ -211,11 +212,11 @@ const AppSidebar = ({
                   directories={openedDirectories || []}
                   onClick={projectDirectory => {
                     dispatch(
-                      setActivePage({ page: "packages", paused: false })
+                      setActivePage({ page: 'packages', paused: false })
                     );
                     dispatch(
                       setMode({
-                        mode: "local",
+                        mode: 'local',
                         directory: projectDirectory
                       })
                     );
@@ -240,7 +241,7 @@ const AppSidebar = ({
         </DialogContent>
         <DialogActions>
           <Button color="secondary" onClick={() => toggleDialog(false)}>
-            {iMessage("action", "close")}
+            {iMessage('action', 'close')}
           </Button>
         </DialogActions>
       </Dialog>

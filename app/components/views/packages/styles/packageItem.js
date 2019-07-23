@@ -31,7 +31,7 @@ const styles = theme => ({
     }
   },
   loader: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing(1)
   },
   name: {
     ...defaultFont,

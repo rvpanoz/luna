@@ -1,5 +1,3 @@
-/* eslint-disable react/require-default-props */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -16,7 +14,6 @@ import CloseIcon from '@material-ui/icons/Close';
 import InfoIcon from '@material-ui/icons/Info';
 
 import { withStyles } from '@material-ui/core/styles';
-import { defaultFont } from 'styles/variables';
 
 const styles = theme => ({
   root: {
@@ -39,18 +36,18 @@ const styles = theme => ({
     backgroundColor: theme.palette.warning.light
   },
   icon: {
-    fontSize: 20
+    fontSize: 25
   },
   iconVariant: {
     opacity: 0.9,
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing(1)
   },
   message: {
     display: 'flex'
   },
   text: {
-    ...defaultFont,
-    color: theme.palette.common.white,
+    fontSize: 14,
+    color: theme.palette.common.white
   }
 });
 
@@ -61,48 +58,48 @@ const AppSnackbarContent = ({
   variant,
   ...other
 }) => (
-    <SnackbarContent
-      className={classNames(classes[variant], classes.root)}
-      aria-describedby="cli-snackbar"
-      message={
-        <div id="cli-snackbar" className={classes.message}>
-          {variant === 'info' && (
-            <InfoIcon className={classNames(classes.icon, classes.iconVariant)} />
-          )}
-          {variant === 'error' && (
-            <ErrorIcon
-              className={classNames(classes.icon, classes.iconVariant)}
-            />
-          )}
-          {variant === 'warning' && (
-            <WarningIcon
-              className={classNames(classes.icon, classes.iconVariant)}
-            />
-          )}
-          {variant === 'success' && (
-            <CheckCircleIcon
-              className={classNames(classes.icon, classes.iconVariant)}
-            />
-          )}
-          <Typography className={classes.text}>{message}</Typography>
-        </div>
-      }
-      action={[
-        typeof onClose === 'function' && (
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            className={classes.close}
-            onClick={onClose}
-          >
-            <CloseIcon className={classes.icon} />
-          </IconButton>
-        )
-      ]}
-      {...other}
-    />
-  );
+  <SnackbarContent
+    className={classNames(classes[variant], classes.root)}
+    aria-describedby="cli-snackbar"
+    message={
+      <div id="cli-snackbar" className={classes.message}>
+        {variant === 'info' && (
+          <InfoIcon className={classNames(classes.icon, classes.iconVariant)} />
+        )}
+        {variant === 'error' && (
+          <ErrorIcon
+            className={classNames(classes.icon, classes.iconVariant)}
+          />
+        )}
+        {variant === 'warning' && (
+          <WarningIcon
+            className={classNames(classes.icon, classes.iconVariant)}
+          />
+        )}
+        {variant === 'success' && (
+          <CheckCircleIcon
+            className={classNames(classes.icon, classes.iconVariant)}
+          />
+        )}
+        <Typography className={classes.text}>{message}</Typography>
+      </div>
+    }
+    action={[
+      typeof onClose === 'function' && (
+        <IconButton
+          key="close"
+          aria-label="Close"
+          color="inherit"
+          className={classes.close}
+          onClick={onClose}
+        >
+          <CloseIcon className={classes.icon} />
+        </IconButton>
+      )
+    ]}
+    {...other}
+  />
+);
 
 AppSnackbarContent.defaultProps = {
   variant: 'info'

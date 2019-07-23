@@ -6,10 +6,10 @@ const styles = theme => ({
     ...flexContainer
   },
   icon: {
-    marginRight: theme.spacing.unit / 2
+    marginRight: theme.spacing(0.5)
   },
   avatar: {
-    padding: theme.spacing.unit
+    padding: theme.spacing(1)
   },
   tab: {
     backgroundColor: theme.palette.background.paper
@@ -25,7 +25,6 @@ const styles = theme => ({
     color: darken(grayColor, 0.2)
   },
   listItem: {
-    padding: theme.spacing.unit,
     margin: 0
   },
   primaryColor: {
@@ -41,7 +40,7 @@ const styles = theme => ({
     color: darken(theme.palette.secondary.main, 0.1)
   },
   withPadding: {
-    padding: theme.spacing.unit / 2
+    padding: theme.spacing(0.5)
   }
 });
 

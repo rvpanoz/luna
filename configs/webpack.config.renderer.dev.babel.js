@@ -66,7 +66,7 @@ export default merge.smart(baseConfig, {
       components: path.resolve(path.join(__dirname, '..', 'app', 'components')),
       containers: path.resolve(path.join(__dirname, '..', 'app', 'containers')),
       models: path.resolve(path.join(__dirname, '..', 'app', 'models')),
-      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles'))
+      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles')),
     }
   },
   module: {
@@ -187,10 +187,10 @@ export default merge.smart(baseConfig, {
     requiredByDLLConfig
       ? null
       : new webpack.DllReferencePlugin({
-          context: path.join(__dirname, '..', 'dll'),
-          manifest: require(manifest),
-          sourceType: 'var'
-        }),
+        context: path.join(__dirname, '..', 'dll'),
+        manifest: require(manifest),
+        sourceType: 'var'
+      }),
 
     new webpack.HotModuleReplacementPlugin({
       multiStep: true

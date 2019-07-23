@@ -1,6 +1,6 @@
 const styles = theme => ({
   formControl: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
     minWidth: 120
   }
 });

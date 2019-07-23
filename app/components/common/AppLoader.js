@@ -34,8 +34,8 @@ const AppLoader = ({ loading, classes, children, message, relative, mini }) =>
       )}
     </div>
   ) : (
-      children
-    );
+    children
+  );
 
 AppLoader.propTypes = {
   classes: objectOf(string).isRequired,
