@@ -1,7 +1,3 @@
-/**
- * App with error boundary
- */
-
 import { ipcRenderer } from 'electron';
 import React, { useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';

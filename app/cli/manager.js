@@ -6,7 +6,6 @@
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-// import log from 'electron-log';
 import lockVerify from 'lock-verify';
 import mk from '../mk';
 
