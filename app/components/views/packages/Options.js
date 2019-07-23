@@ -24,7 +24,7 @@ const Options = ({ classes, packagesInstallOptions, selected }) => {
       <Typography variant="subtitle1" className={classes.title}>
         {iMessage('title', 'installationOptions')}
       </Typography>
-      <Divider light />
+      <Divider />
       <List dense className={classes.list}>
         {selected.map(packageName => {
           const option =

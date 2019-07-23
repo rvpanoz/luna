@@ -47,7 +47,7 @@ const InitView = ({ classes, onClose }) => {
     );
 
     onClose();
-  }
+  };
 
   const npmInit = () => {
     dispatch(
@@ -67,7 +67,12 @@ const InitView = ({ classes, onClose }) => {
         {iMessage('info', 'createPackageJsonHelperText')}
       </Typography>
       <div className={classes.options}>
-        <Button color="default" onClick={startInitFlow} variant="outlined" disabled={Boolean(directory)}>
+        <Button
+          color="default"
+          onClick={startInitFlow}
+          variant="outlined"
+          disabled={Boolean(directory)}
+        >
           {iMessage('info', 'directorySelection')}
         </Button>
         <FormControlLabel
@@ -81,9 +86,17 @@ const InitView = ({ classes, onClose }) => {
           className={classes.formControl}
           label="package-lock only"
         />
-        {directory && <Typography className={classes.directory} variant="body2" color="textSecondary">{directory}</Typography>}
+        {directory && (
+          <Typography
+            className={classes.directory}
+            variant="body2"
+            color="textSecondary"
+          >
+            {directory}
+          </Typography>
+        )}
       </div>
-      <Divider light />
+      <Divider />
       <Typography variant="caption" className={classes.caption}>
         {iMessage('info', 'createPackageJsonNote')}
       </Typography>

@@ -239,15 +239,18 @@ const PackageDetails = ({ classes, toggleOptions }) => {
           <Card className={classes.card}>
             <CardHeader
               title={
-                <Typography variant="h6">{`${name} v${version}`}</Typography>
+                <Typography
+                  color="textPrimary"
+                  variant="h4"
+                >{`${name} v${version}`}</Typography>
               }
               className={classes.cardHeader}
               subheader={
                 <React.Fragment>
-                  <Typography variant="caption">{`License: ${active.license ||
+                  <Typography variant="subtitle1">{`License: ${active.license ||
                     '-'}`}</Typography>
                   {mode === 'local' && !fromSearch && (
-                    <Typography variant="caption">{`Group: ${group ||
+                    <Typography variant="subtitle1">{`Group: ${group ||
                       '-'}`}</Typography>
                   )}
                 </React.Fragment>
@@ -255,7 +258,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
             />
             <CardContent className={classes.cardContent}>
               <Typography variant="body1">{description}</Typography>
-              <Divider className={classes.divider} light />
+              <Divider className={classes.divider} />
               <Hidden mdDown>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                   <PackageInfoView

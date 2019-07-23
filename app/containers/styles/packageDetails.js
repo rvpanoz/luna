@@ -24,7 +24,7 @@ const styles = theme => ({
     margin: theme.spacing(1)
   },
   divider: {
-    margin: theme.spacing(1)
+    marginTop: theme.spacing(1)
   },
   group: {
     padding: 0,

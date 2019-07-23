@@ -113,7 +113,8 @@ const styles = theme => ({
   },
   cardTitle: {
     ...defaultFont,
-    fontSize: 20
+    fontSize: 20,
+    paddingBottom: theme.spacing(1)
   },
   cardFlexContainer: {
     ...flexContainer,

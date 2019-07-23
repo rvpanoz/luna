@@ -25,17 +25,15 @@ import { HelperText } from 'components/common';
 
 import styles from './styles/list';
 
-const mapState = ({
-  notifications: { notifications },
-}) => ({
-  notifications,
+const mapState = ({ notifications: { notifications } }) => ({
+  notifications
 });
 
 const NotificationsList = ({ classes }) => {
   const { notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
-  const onSearchHandler = (packageName) => {
+  const onSearchHandler = packageName => {
     dispatch(clearFilters());
 
     dispatch({
@@ -56,12 +54,10 @@ const NotificationsList = ({ classes }) => {
         }
       })
     );
-  }
+  };
 
   if (!notifications.length) {
-    return <HelperText
-      text={iMessage('info', 'noNotifications')}
-    />
+    return <HelperText text={iMessage('info', 'noNotifications')} />;
   }
 
   return (
@@ -74,39 +70,40 @@ const NotificationsList = ({ classes }) => {
             </Typography>
           </div>
         </div>
-        <Divider light />
+        <Divider />
         <List className={classes.list}>
           {notifications.map(({ required, requiredBy, type }) => {
-
             const packageParts = required && required.split('@');
             const [packageName] = packageParts;
 
-            return <ListItem key={packageName} className={classes.listItem}>
-              <ListItemAvatar>
-                <Avatar style={{ backgroundColor: '#fff' }}>
-                  <NotificationsIcon
-                    color={type === 'ERROR' ? 'secondary' : 'default'}
-                  />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={required} secondary={requiredBy} />
-              <ListItemSecondaryAction>
-                <Tooltip
-                  title={iMessage('title', 'searchPackage', {
-                    name: packageName
-                  })}
-                >
-                  <div>
-                    <IconButton
-                      aria-label="search-for-package"
-                      onClick={() => onSearchHandler(packageName)}
-                    >
-                      <SearchIcon color="primary" />
-                    </IconButton>
-                  </div>
-                </Tooltip>
-              </ListItemSecondaryAction>
-            </ListItem>
+            return (
+              <ListItem key={packageName} className={classes.listItem}>
+                <ListItemAvatar>
+                  <Avatar style={{ backgroundColor: '#fff' }}>
+                    <NotificationsIcon
+                      color={type === 'ERROR' ? 'secondary' : 'default'}
+                    />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={required} secondary={requiredBy} />
+                <ListItemSecondaryAction>
+                  <Tooltip
+                    title={iMessage('title', 'searchPackage', {
+                      name: packageName
+                    })}
+                  >
+                    <div>
+                      <IconButton
+                        aria-label="search-for-package"
+                        onClick={() => onSearchHandler(packageName)}
+                      >
+                        <SearchIcon color="primary" />
+                      </IconButton>
+                    </div>
+                  </Tooltip>
+                </ListItemSecondaryAction>
+              </ListItem>
+            );
           })}
         </List>
       </div>

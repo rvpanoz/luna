@@ -1,5 +1,5 @@
-import React from 'react'
-import { objectOf, arrayOf, string, func } from 'prop-types'
+import React from 'react';
+import { objectOf, arrayOf, string, func } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 
 import Divider from '@material-ui/core/Divider';
@@ -14,40 +14,43 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import AddIcon from '@material-ui/icons/Add';
 
-import { iMessage } from 'commons/utils'
-import styles from './styles/dependencies'
+import { iMessage } from 'commons/utils';
+import styles from './styles/dependencies';
 
-const Versions = ({ classes, data, handleInstall }) => <Paper className={classes.paper}>
+const Versions = ({ classes, data, handleInstall }) => (
+  <Paper className={classes.paper}>
     <div className={classes.header}>
-        <Typography>{`Versions (${data.length})`}</Typography>
+      <Typography>{`Versions (${data.length})`}</Typography>
     </div>
-    <Divider light />
+    <Divider />
     <List dense style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 500 }}>
-        {data.map(version => (
-            <ListItem key={version} className={classes.listItem}>
-                <ListItemText
-                    primary={<Typography variant="subtitle2">{version}</Typography>}
-                />
-                <ListItemSecondaryAction>
-                    <Tooltip title={iMessage('title', 'installVersion')}>
-                        <div>
-                            <IconButton
-                                aria-label="install-version"
-                                onClick={() => handleInstall(version)}
-                            >
-                                <AddIcon />
-                            </IconButton>
-                        </div>
-                    </Tooltip>
-                </ListItemSecondaryAction>
-            </ListItem>))}
+      {data.map(version => (
+        <ListItem key={version} className={classes.listItem}>
+          <ListItemText
+            primary={<Typography variant="subtitle2">{version}</Typography>}
+          />
+          <ListItemSecondaryAction>
+            <Tooltip title={iMessage('title', 'installVersion')}>
+              <div>
+                <IconButton
+                  aria-label="install-version"
+                  onClick={() => handleInstall(version)}
+                >
+                  <AddIcon />
+                </IconButton>
+              </div>
+            </Tooltip>
+          </ListItemSecondaryAction>
+        </ListItem>
+      ))}
     </List>
-</Paper >
+  </Paper>
+);
 
 Versions.propTypes = {
-    classes: objectOf(string).isRequired,
-    handleInstall: func.isRequired,
-    data: arrayOf(string).isRequired
+  classes: objectOf(string).isRequired,
+  handleInstall: func.isRequired,
+  data: arrayOf(string).isRequired
 };
 
-export default withStyles(styles)(Versions)
+export default withStyles(styles)(Versions);

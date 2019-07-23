@@ -32,10 +32,10 @@ const Widget = ({
               </Typography>
             </React.Fragment>
           ) : (
-              header
-            )}
+            header
+          )}
         </div>
-        {title && <Divider light />}
+        {title && <Divider />}
         <div
           className={cn(classes.widgetBody, {
             [classes.noPadding]: noBodyPadding,

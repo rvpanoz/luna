@@ -1,7 +1,7 @@
 export default {
   root: {
-    height: '22px',
-    width: '22px',
-    fontSize: '22px'
+    height: '25px',
+    width: '25px',
+    fontSize: '25px'
   }
 };
