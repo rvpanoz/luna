@@ -6,6 +6,7 @@
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
+import lockVerify from 'lock-verify';
 import mk from '../mk';
 
 const { spawn } = cp;

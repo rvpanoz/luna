@@ -55,23 +55,27 @@ export default {
   },
   subtitle1: {
     color: palette.text.primary,
-    fontSize: 16,
-    letterSpacing: '-0.05px'
+    fontSize: '12px',
+    letterSpacing: '-0.05px',
+    lineHeight: '25px'
   },
   subtitle2: {
     color: palette.text.primary,
-    fontSize: 14,
-    letterSpacing: 0
+    fontSize: '10px',
+    letterSpacing: 0,
+    lineHeight: '16px'
   },
   body1: {
     color: palette.text.primary,
-    fontSize: 16,
-    letterSpacing: '-0.05px'
+    fontSize: '16px',
+    letterSpacing: '-0.05px',
+    lineHeight: '21px'
   },
   body2: {
     color: palette.text.primary,
-    fontSize: 14,
-    letterSpacing: '-0.04px'
+    fontSize: '14px',
+    letterSpacing: '-0.04px',
+    lineHeight: '14px'
   },
   button: {
     color: palette.text.primary,

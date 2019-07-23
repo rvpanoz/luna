@@ -1,3 +1,4 @@
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({
@@ -14,7 +15,7 @@ const styles = theme => ({
   },
   tableRow: {
     border: 'none',
-    padding: theme.spacing(1),
+    padding: 10,
     lineHeight: '1.1',
     verticalAlign: 'middle',
     '&:hover': {
@@ -23,6 +24,7 @@ const styles = theme => ({
   },
   tableCell: {
     ...defaultFont,
+    fontSize: '1rem',
     textAlign: 'center',
     '& p': {
       overflowWrap: 'break-word'
@@ -50,7 +52,7 @@ const styles = theme => ({
     color: theme.palette.secondary.main
   },
   statusOK: {
-    color: '#00b300'
+    color: lighten('#00b300', 0.3)
   },
   statusPeerMissing: {
     color: theme.palette.secondary.main

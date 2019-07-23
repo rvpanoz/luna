@@ -73,7 +73,9 @@ const PackageItem = ({
           })}
         >
           <div className={classes.flexContainer}>
-            <Typography className={classes.name}>{name}</Typography>
+            <Typography className={classes.name} variant="body1">
+              {name}
+            </Typography>
             {inOperation && (
               <CircularProgress
                 size={15}
@@ -91,12 +93,13 @@ const PackageItem = ({
         </div>
       </TableCell>
       <TableCell padding="none" name="installed" className={classes.tableCell}>
-        <Typography className={classes.typo}>
+        <Typography variant="body1" className={classes.typo}>
           {fromSearch ? 'No' : version}
         </Typography>
       </TableCell>
       <TableCell padding="none" name="latest" className={classes.tableCell}>
         <Typography
+          variant="body1"
           className={cn(classes.typo, {
             [classes.outdated]: isOutdated
           })}
