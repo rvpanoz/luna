@@ -110,11 +110,11 @@ const Header = ({ classes, onDrawerToggle }) => {
                 component="a"
                 onClick={() => openUrl(GIT_URL)}
               >
-                Github
+                {iMessage('label', 'github')}
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title={iMessage('title', 'system')}>
+              <Tooltip title={iMessage('title', 'settings')}>
                 <IconButton
                   disableRipple
                   color="inherit"
@@ -137,7 +137,7 @@ const Header = ({ classes, onDrawerToggle }) => {
         <Toolbar>
           <Grid container alignItems="center" justify="space-between">
             <Grid item>
-              <Typography color="inherit" variant="h1">
+              <Typography color="inherit" variant="h2">
                 {iMessage('title', 'dashboard')}
               </Typography>
               <Typography className={classes.workingDir}>
@@ -145,7 +145,7 @@ const Header = ({ classes, onDrawerToggle }) => {
                   ? iMessage('info', 'workingDirectory')
                   : iMessage('info', 'showingGlobals')}
               </Typography>
-              <Typography className={classes.directory} variant="subtitle2">
+              <Typography className={classes.directory}>
                 {mode === 'local' ? directory : env.prefix}
               </Typography>
             </Grid>
