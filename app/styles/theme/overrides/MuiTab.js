@@ -3,11 +3,11 @@ export default {
     textTransform: 'initial',
     margin: 0,
     minWidth: 0,
-    height: '50px',
+    height: 50,
     fontWeight: 400,
-    fontSize: '14px',
+    fontSize: 14,
     '@media (min-width: 960px)': {
-      minWidth: '90px'
+      minWidth: 90
     },
     '&$selected': {
       fontWeight: 500

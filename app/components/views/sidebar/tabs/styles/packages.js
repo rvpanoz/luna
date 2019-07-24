@@ -5,24 +5,15 @@ const styles = theme => ({
   containerHolder: {
     ...flexContainer
   },
-  icon: {
-    marginRight: theme.spacing(0.5)
-  },
-  avatar: {
-    padding: theme.spacing(1)
-  },
   tab: {
-    backgroundColor: theme.palette.background.paper
+    width: '100%'
   },
   title: {
     ...defaultFont,
-    fontSize: 18,
-    color: darken(grayColor, 0.2)
   },
   stats: {
     ...defaultFont,
     fontSize: 24,
-    color: darken(grayColor, 0.2)
   },
   listItem: {
     margin: 0
@@ -38,9 +29,6 @@ const styles = theme => ({
   },
   errorColor: {
     color: darken(theme.palette.secondary.main, 0.1)
-  },
-  withPadding: {
-    padding: theme.spacing(0.5)
   }
 });
 

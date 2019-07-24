@@ -1,5 +1,5 @@
 export default {
   indicator: {
-    height: '3px'
+    height: 3
   }
 };

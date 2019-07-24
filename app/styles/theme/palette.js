@@ -6,8 +6,8 @@ export default {
   common: {
     black,
     white,
-    neutral: '#e4e7eb',
-    muted: '#9ea0a4'
+    neutral: '#e4e5ff',
+    muted: '#e4e7eb'
   },
   primary: {
     contrastText: white,
