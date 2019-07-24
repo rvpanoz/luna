@@ -211,7 +211,7 @@ const Header = ({ classes, onDrawerToggle }) => {
           </Grid>
         </Toolbar>
       </AppBar>
-      <AppBar
+      {/* <AppBar
         component="div"
         className={classes.secondaryBar}
         color="primary"
@@ -261,7 +261,7 @@ const Header = ({ classes, onDrawerToggle }) => {
             }}
           />
         </Tabs>
-      </AppBar>
+      </AppBar> */}
       <Popover
         id="settings-pop"
         open={Boolean(anchorEl)}

@@ -1,4 +1,3 @@
-import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont, drawerWidth } from 'styles/variables';
 
 const styles = theme => ({
@@ -23,8 +22,7 @@ const styles = theme => ({
   },
   mainContent: {
     flex: 1,
-    padding: theme.spacing(1),
-    background: lighten('#fff', 0.1),
+    padding: theme.spacing(2),
   },
   label: {
     ...defaultFont,
