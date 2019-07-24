@@ -5,7 +5,6 @@ import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 
-import Tooltip from '@material-ui/core/Tooltip';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -27,11 +26,10 @@ import {
   ActionsTab,
   HistoryTab
 } from 'components/views/sidebar/tabs';
-import { navigatorParameters } from 'commons/parameters';
 import { iMessage, showDialog } from 'commons/utils';
 import { installPackage } from 'models/packages/actions';
-import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
+import { setActivePage } from 'models/ui/actions';
 
 import Doctor from './Doctor';
 import styles from './styles/appSidebar';
@@ -44,13 +42,11 @@ const mapState = ({
     metadata: { lastUpdatedAt }
   },
   ui: {
-    activePage,
     loaders: {
       loader: { loading }
     }
   }
 }) => ({
-  activePage,
   loading,
   lastUpdatedAt,
   notifications,
@@ -69,7 +65,6 @@ const AppSidebar = ({
   const [open, toggleDialog] = useState(false);
 
   const {
-    activePage,
     notifications,
     packagesData,
     packagesOutdated,
@@ -85,20 +80,6 @@ const AppSidebar = ({
 
     return () => ipcRenderer.removeAllListeners(['loaded-packages-close']);
   }, []);
-
-  const loadDirectory = () => {
-    const dialogHandler = filePath => {
-      dispatch(
-        setActivePage({
-          page: 'packages',
-          paused: false
-        })
-      );
-      dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
-    };
-
-    return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
-  };
 
   const installPackagesFromJson = () => {
     const dialogOptions = {
@@ -155,26 +136,6 @@ const AppSidebar = ({
           <ListItem key="app-logo">
             <ListItemText>
               <AppLogo />
-            </ListItemText>
-          </ListItem>
-          <ListItem key="big-button">
-            <ListItemText>
-              <Tooltip title={iMessage('title', 'loadDirectory')}>
-                <div>
-                  <Button
-                    disableRipple
-                    disabled={loading || activePage !== 'packages'}
-                    color="secondary"
-                    variant="outlined"
-                    size="large"
-                    fullWidth
-                    className={classes.label}
-                    onClick={() => loadDirectory()}
-                  >
-                    {iMessage('action', 'analyze')}
-                  </Button>
-                </div>
-              </Tooltip>
             </ListItemText>
           </ListItem>
           <ListItem key="app-tabs-content" disableGutters>

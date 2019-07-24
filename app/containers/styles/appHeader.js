@@ -13,9 +13,6 @@ const styles = theme => ({
   menuButton: {
     marginLeft: -theme.spacing(1)
   },
-  iconButtonAvatar: {
-    padding: 4
-  },
   link: {
     textDecoration: 'none',
     color: theme.palette.common.white,
@@ -26,6 +23,9 @@ const styles = theme => ({
   },
   button: {
     borderColor: lightColor
+  },
+  leftIcon: {
+    marginRight: theme.spacing(1)
   },
   dialogTitle: {
     padding: theme.spacing(2)
@@ -43,6 +43,9 @@ const styles = theme => ({
   },
   directory: {
     color: '#fff'
+  },
+  marRight: {
+    marginRight: theme.spacing(4)
   }
 });
 

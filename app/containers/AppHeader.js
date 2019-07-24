@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { shell } from 'electron';
+// import { shell } from 'electron';
 import { useState } from 'react';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
+import cn from 'classnames';
 
 import AppBar from '@material-ui/core/AppBar';
 import Grid from '@material-ui/core/Grid';
@@ -22,20 +23,24 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 
 import AddIcon from '@material-ui/icons/AddOutlined';
+import AnalyzeIcon from '@material-ui/icons/ArchiveOutlined';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import MenuIcon from '@material-ui/icons/Menu';
 import SettingsIcon from '@material-ui/icons/Settings';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
 import SecurityIcon from '@material-ui/icons/SecurityOutlined';
 
+import { navigatorParameters } from 'commons/parameters';
 import { Init, SearchBox, Settings } from 'components/views/common';
-import { iMessage } from 'commons/utils';
+import { iMessage, showDialog } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
+import { setMode } from 'models/common/actions';
 
 import styles from './styles/appHeader';
 
-const GIT_URL = 'https://github.com/rvpanoz/luna';
-const openUrl = url => shell.openExternal(url);
+// const GIT_URL = 'https://github.com/rvpanoz/luna';
+// const openUrl = url => shell.openExternal(url);
 
 const mapState = ({
   npm: { env },
@@ -66,22 +71,36 @@ const Header = ({ classes, onDrawerToggle }) => {
   const dispatch = useDispatch();
   const settings = [
     {
-      primaryText: 'Environment',
+      primaryText: iMessage('label', 'environment'),
       secondaryText: env.userAgent
     },
     {
-      primaryText: 'Registry',
+      primaryText: iMessage('label', 'registry'),
       secondaryText: env.metricsRegistry
     },
     {
-      primaryText: 'Audit level',
+      primaryText: iMessage('label', 'auditLevel'),
       secondaryText: env.auditLevel
     },
     {
-      primaryText: 'Cache',
+      primaryText: iMessage('label', 'cache'),
       secondaryText: env.cache
     }
   ];
+
+  const loadDirectory = () => {
+    const dialogHandler = filePath => {
+      dispatch(
+        setActivePage({
+          page: 'packages',
+          paused: false
+        })
+      );
+      dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
+    };
+
+    return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
+  };
 
   return (
     <div className={classes.root}>
@@ -105,23 +124,29 @@ const Header = ({ classes, onDrawerToggle }) => {
               <SearchBox onlineStatus={status} disabled={loading} />
             </Grid>
             <Grid item>
-              <Typography
-                className={classes.link}
-                component="a"
-                onClick={() => openUrl(GIT_URL)}
-              >
-                {iMessage('label', 'github')}
-              </Typography>
+              <Tooltip title={iMessage('title', 'settings')}>
+                <div>
+                  <IconButton
+                    disableRipple
+                    color="inherit"
+                    onClick={e => setAnchorEl(e.currentTarget)}
+                  >
+                    <NotificationsIcon />
+                  </IconButton>
+                </div>
+              </Tooltip>
             </Grid>
             <Grid item>
               <Tooltip title={iMessage('title', 'settings')}>
-                <IconButton
-                  disableRipple
-                  color="inherit"
-                  onClick={e => setAnchorEl(e.currentTarget)}
-                >
-                  <SettingsIcon />
-                </IconButton>
+                <div>
+                  <IconButton
+                    disableRipple
+                    color="inherit"
+                    onClick={e => setAnchorEl(e.currentTarget)}
+                  >
+                    <SettingsIcon />
+                  </IconButton>
+                </div>
               </Tooltip>
             </Grid>
           </Grid>
@@ -150,21 +175,38 @@ const Header = ({ classes, onDrawerToggle }) => {
               </Typography>
             </Grid>
             <Grid item>
-              <Tooltip title={iMessage('title', 'create')}>
-                <div>
-                  <Button
-                    disabled={loading}
-                    className={classes.button}
-                    color="inherit"
-                    variant="outlined"
-                    size="small"
-                    onClick={() => setInitFlowDialog({ open: true })}
-                  >
-                    <AddIcon className={classes.leftIcon} />
-                    {iMessage('action', 'create')}
-                  </Button>
-                </div>
-              </Tooltip>
+              <Toolbar disableGutters>
+                <Tooltip title={iMessage('title', 'analyze')}>
+                  <div>
+                    <Button
+                      disabled={loading}
+                      className={cn(classes.button, classes.marRight)}
+                      color="inherit"
+                      variant="outlined"
+                      size="small"
+                      onClick={() => loadDirectory()}
+                    >
+                      <AnalyzeIcon className={classes.leftIcon} />
+                      {iMessage('action', 'analyze')}
+                    </Button>
+                  </div>
+                </Tooltip>
+                <Tooltip title={iMessage('title', 'create')}>
+                  <div>
+                    <Button
+                      disabled={loading}
+                      className={classes.button}
+                      color="inherit"
+                      variant="outlined"
+                      size="small"
+                      onClick={() => setInitFlowDialog({ open: true })}
+                    >
+                      <AddIcon className={classes.leftIcon} />
+                      {iMessage('action', 'create')}
+                    </Button>
+                  </div>
+                </Tooltip>
+              </Toolbar>
             </Grid>
           </Grid>
         </Toolbar>

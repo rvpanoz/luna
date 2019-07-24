@@ -22,6 +22,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingLeft: theme.spacing(2),
     color: theme.palette.common.white
   },
   inputRoot: {
@@ -32,11 +33,10 @@ const styles = theme => ({
     lineHeight: '1em'
   },
   inputInput: {
-    color: '#fff',
-    paddingTop: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1) * 10,
+    color: theme.palette.common.white,
+    padding: theme.spacing(2),
+    paddingLeft: theme.spacing(10),
+    paddingRight: theme.spacing(10),
     transition: theme.transitions.create('width'),
     width: 145,
     '&:focus': {

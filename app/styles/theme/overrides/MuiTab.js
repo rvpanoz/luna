@@ -1,6 +1,7 @@
 export default {
   root: {
     textTransform: 'initial',
+    margin: 0,
     minWidth: 0,
     height: '50px',
     fontWeight: 400,
