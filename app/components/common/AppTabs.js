@@ -27,14 +27,8 @@ const AppTabs = ({ classes, children }) => {
 
   return (
     <div className={classes.root}>
-      <AppBar
-        position="static"
-        color="inherit"
-      >
-        <Tabs
-          value={value}
-          onChange={(e, tabValue) => setValue(tabValue)}
-        >
+      <AppBar position="static" color="inherit">
+        <Tabs value={value} onChange={(e, tabValue) => setValue(tabValue)}>
           <Tab
             classes={{
               root: classes.tabLabel
@@ -57,10 +51,6 @@ const AppTabs = ({ classes, children }) => {
       </AppBar>
 
       {React.Children.map(children, (child, idx) => {
-        if (child.props.loading) {
-          return null;
-        }
-
         if (value === idx) {
           return (
             <TabContainer>
@@ -71,6 +61,8 @@ const AppTabs = ({ classes, children }) => {
             </TabContainer>
           );
         }
+
+        return null;
       })}
     </div>
   );

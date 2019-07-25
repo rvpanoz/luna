@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// import { shell } from 'electron';
+import { shell } from 'electron';
 import { useState } from 'react';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -30,6 +30,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import PackagesIcon from '@material-ui/icons/ViewModuleRounded';
 import ErrorIcon from '@material-ui/icons/WarningOutlined';
 import SecurityIcon from '@material-ui/icons/SecurityOutlined';
+import GithubIcon from '@material-ui/icons/Link';
 
 import { navigatorParameters } from 'commons/parameters';
 import { Init, SearchBox, Settings } from 'components/views/common';
@@ -39,8 +40,8 @@ import { setMode } from 'models/common/actions';
 
 import styles from './styles/appHeader';
 
-// const GIT_URL = 'https://github.com/rvpanoz/luna';
-// const openUrl = url => shell.openExternal(url);
+const GIT_URL = 'https://github.com/rvpanoz/luna';
+const openUrl = url => shell.openExternal(GIT_URL);
 
 const mapState = ({
   npm: { env },
@@ -124,6 +125,19 @@ const Header = ({ classes, onDrawerToggle }) => {
               <SearchBox onlineStatus={status} disabled={loading} />
             </Grid>
             <Grid item>
+              <Tooltip title={iMessage('title', 'github')}>
+                <div>
+                  <IconButton
+                    disableRipple
+                    color="inherit"
+                    onClick={e => openUrl()}
+                  >
+                    <GithubIcon />
+                  </IconButton>
+                </div>
+              </Tooltip>
+            </Grid>
+            <Grid item>
               <Tooltip title={iMessage('title', 'settings')}>
                 <div>
                   <IconButton
@@ -154,114 +168,63 @@ const Header = ({ classes, onDrawerToggle }) => {
       </AppBar>
       <AppBar
         component="div"
-        className={classes.secondaryBar}
         color="primary"
         position="static"
         elevation={0}
+        classes={{
+          root: classes.appBar
+        }}
       >
-        <Toolbar>
-          <Grid container alignItems="center" justify="space-between">
-            <Grid item>
-              <Typography color="inherit" variant="h2">
-                {iMessage('title', 'dashboard')}
-              </Typography>
-              <Typography className={classes.workingDir}>
-                {mode === 'local'
-                  ? iMessage('info', 'workingDirectory')
-                  : iMessage('info', 'showingGlobals')}
-              </Typography>
-              <Typography className={classes.directory}>
-                {mode === 'local' ? directory : env.prefix}
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Toolbar disableGutters>
-                <Tooltip title={iMessage('title', 'analyze')}>
-                  <div>
-                    <Button
-                      disabled={loading}
-                      className={cn(classes.button, classes.marRight)}
-                      color="inherit"
-                      variant="outlined"
-                      size="small"
-                      onClick={() => loadDirectory()}
-                    >
-                      <AnalyzeIcon className={classes.leftIcon} />
-                      {iMessage('action', 'analyze')}
-                    </Button>
-                  </div>
-                </Tooltip>
-                <Tooltip title={iMessage('title', 'create')}>
-                  <div>
-                    <Button
-                      disabled={loading}
-                      className={classes.button}
-                      color="inherit"
-                      variant="outlined"
-                      size="small"
-                      onClick={() => setInitFlowDialog({ open: true })}
-                    >
-                      <AddIcon className={classes.leftIcon} />
-                      {iMessage('action', 'create')}
-                    </Button>
-                  </div>
-                </Tooltip>
-              </Toolbar>
-            </Grid>
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
+            <Typography color="inherit" variant="h2">
+              {iMessage('title', 'dashboard')}
+            </Typography>
+            <Typography className={classes.workingDir}>
+              {mode === 'local'
+                ? iMessage('info', 'workingDirectory')
+                : iMessage('info', 'showingGlobals')}
+            </Typography>
+            <Typography className={classes.directory}>
+              {mode === 'local' ? directory : env.prefix}
+            </Typography>
           </Grid>
-        </Toolbar>
+          <Grid item>
+            <Toolbar disableGutters>
+              <Tooltip title={iMessage('title', 'analyze')}>
+                <div>
+                  <Button
+                    disabled={loading}
+                    className={cn(classes.button, classes.marRight)}
+                    color="inherit"
+                    variant="outlined"
+                    size="small"
+                    onClick={() => loadDirectory()}
+                  >
+                    <AnalyzeIcon className={classes.leftIcon} />
+                    {iMessage('action', 'analyze')}
+                  </Button>
+                </div>
+              </Tooltip>
+              <Tooltip title={iMessage('title', 'create')}>
+                <div>
+                  <Button
+                    disabled={loading}
+                    className={classes.button}
+                    color="inherit"
+                    variant="outlined"
+                    size="small"
+                    onClick={() => setInitFlowDialog({ open: true })}
+                  >
+                    <AddIcon className={classes.leftIcon} />
+                    {iMessage('action', 'create')}
+                  </Button>
+                </div>
+              </Tooltip>
+            </Toolbar>
+          </Grid>
+        </Grid>
       </AppBar>
-      {/* <AppBar
-        component="div"
-        className={classes.secondaryBar}
-        color="primary"
-        position="static"
-        elevation={0}
-      >
-        <Tabs
-          value={activePage}
-          indicatorColor="secondary"
-          textColor="inherit"
-          onChange={(e, value) =>
-            dispatch(
-              setActivePage({
-                page: value,
-                paused: true
-              })
-            )
-          }
-        >
-          <Tab
-            textColor="inherit"
-            label="Packages"
-            value="packages"
-            classes={{
-              root: classes.tabLabel
-            }}
-            icon={<PackagesIcon />}
-          />
-          <Tab
-            textColor="inherit"
-            label="Problems"
-            value="problems"
-            disabled={loading}
-            icon={<ErrorIcon color="inherit" />}
-            classes={{
-              root: classes.tabLabel
-            }}
-          />
-          <Tab
-            textColor="inherit"
-            label="Audit"
-            value="audit"
-            disabled={loading}
-            icon={<SecurityIcon color="inherit" />}
-            classes={{
-              root: classes.tabLabel
-            }}
-          />
-        </Tabs>
-      </AppBar> */}
       <Popover
         id="settings-pop"
         open={Boolean(anchorEl)}

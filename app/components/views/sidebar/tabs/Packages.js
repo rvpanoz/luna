@@ -12,21 +12,29 @@ import styles from './styles/packages';
 
 const PackagesTab = ({ classes, items }) => (
   <div className={classes.tab}>
-    <List>
+    <List dense>
       {items &&
         items.map(item => (
           <ListItem key={`packages-${item.name}`} className={classes.listItem}>
             <ListItemText
               primary={
                 <div className={classes.containerHolder}>
-                  <Typography className={classes.title} color="textSecondary">
+                  <Typography
+                    className={classes.title}
+                    color="textSecondary"
+                    variant="subtitle1"
+                  >
                     {item.primaryText}
                   </Typography>
                 </div>
               }
             />
             <ListItemSecondaryAction>
-              <Typography className={classes.stats} color="textSecondary">
+              <Typography
+                className={classes.stats}
+                color="textSecondary"
+                variant="subtitle1"
+              >
                 {item.secondaryText}
               </Typography>
             </ListItemSecondaryAction>

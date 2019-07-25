@@ -59,7 +59,60 @@ const AppLayout = ({ classes }) => {
             PaperProps={{ style: { width: drawerWidth } }}
           />
         </nav>
-        <main className={classes.appContent}></main>
+        <div className={classes.appContent}>
+          <AppHeader onDrawerToggle={() => toggleDrawer(!drawerOpen)} />
+          <main className={classes.mainContent}>
+            {switchcase({
+              packages: () => <Packages />,
+              problems: () => <Notifications />,
+              audit: () => <Audit />,
+              doctor: () => <Doctor />
+            })(<Packages />)(activePage)}
+          </main>
+        </div>
+        {snackbar && snackbar.open && (
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right'
+            }}
+            open={snackbar.open}
+            autoHideDuration={onlineStatus === 'online' ? 55000 : 999999}
+            onClose={() =>
+              dispatch(
+                setSnackbar({
+                  open: false,
+                  message: null,
+                  type: 'info'
+                })
+              )
+            }
+            ClickAwayListenerProps={{
+              onClickAway: () =>
+                dispatch(
+                  setSnackbar({
+                    open: false,
+                    message: null,
+                    type: 'info'
+                  })
+                )
+            }}
+          >
+            <SnackbarContent
+              variant={snackbar.type}
+              message={snackbar.message}
+              onClose={() =>
+                dispatch(
+                  setSnackbar({
+                    open: false,
+                    message: null,
+                    type: 'info'
+                  })
+                )
+              }
+            />
+          </Snackbar>
+        )}
       </div>
     </MuiThemeProvider>
   );

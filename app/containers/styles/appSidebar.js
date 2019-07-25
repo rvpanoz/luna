@@ -25,7 +25,7 @@ const styles = theme => ({
     width: 35,
     height: 35,
     marginLeft: theme.spacing(2),
-    fill: '#fff'
+    fill: theme.palette.common.white
   },
   updateIcon: {
     color: lighten(theme.palette.primary.main, 0.2),

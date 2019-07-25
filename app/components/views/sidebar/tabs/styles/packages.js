@@ -9,17 +9,16 @@ const styles = theme => ({
     width: '100%'
   },
   title: {
-    ...defaultFont,
+    ...defaultFont
   },
   stats: {
-    ...defaultFont,
-    fontSize: 24,
+    ...defaultFont
   },
   listItem: {
     margin: 0
   },
   primaryColor: {
-    color: darken(theme.palette.primary.main, 0.1)
+    color: theme.palette.primary.main
   },
   secondaryColor: {
     color: theme.palette.secondary.main
@@ -28,7 +27,7 @@ const styles = theme => ({
     color: theme.palette.warning.light
   },
   errorColor: {
-    color: darken(theme.palette.secondary.main, 0.1)
+    color: theme.palette.error.light
   }
 });
 

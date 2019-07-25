@@ -6,32 +6,10 @@ import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 
 import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
-import UpdateIcon from '@material-ui/icons/Update';
 
-import { AppTabs, AppLogo } from 'components/common/';
-import {
-  PackagesTab,
-  ActionsTab,
-  HistoryTab
-} from 'components/views/sidebar/tabs';
-import { iMessage, showDialog } from 'commons/utils';
-import { installPackage } from 'models/packages/actions';
-import { setMode } from 'models/common/actions';
-import { setActivePage } from 'models/ui/actions';
+import { AppLogo } from 'components/common/';
+import { iMessage } from 'commons/utils';
 
-import Doctor from './Doctor';
 import styles from './styles/appSidebar';
 
 const mapState = ({
@@ -62,7 +40,6 @@ const AppSidebar = ({
   ...restProps
 }) => {
   const [openedDirectories, setOpenedDirectories] = useState([]);
-  const [open, toggleDialog] = useState(false);
 
   const {
     notifications,
@@ -131,81 +108,7 @@ const AppSidebar = ({
 
   return (
     <>
-      <Drawer variant="permanent" {...restProps}>
-        <List disablePadding>
-          <ListItem key="app-logo">
-            <ListItemText>
-              <AppLogo />
-            </ListItemText>
-          </ListItem>
-          <ListItem key="app-tabs-content" disableGutters>
-            <ListItemText>
-              <AppTabs>
-                <Card className={classes.card}>
-                  <CardContent>
-                    <Typography
-                      className={classes.cardTitle}
-                      color="textSecondary"
-                    >
-                      {iMessage('title', 'overview')}
-                    </Typography>
-                    <Divider />
-                    <PackagesTab items={packagesItems} loading={loading} />
-                  </CardContent>
-                  <Divider />
-                  <CardActions>
-                    <div className={classes.cardFlexContainer}>
-                      <UpdateIcon className={classes.updateIcon} />
-                      <Typography variant="body2" color="textSecondary">
-                        {iMessage('info', 'updatedAt')}&nbsp;
-                        {lastUpdatedAt !== null ? lastUpdatedAt : '...'}
-                      </Typography>
-                    </div>
-                  </CardActions>
-                </Card>
-                <ActionsTab
-                  installPackagesFromJson={installPackagesFromJson}
-                  mode={mode}
-                  loading={loading}
-                  toggleDialog={toggleDialog}
-                />
-                <HistoryTab
-                  directories={openedDirectories || []}
-                  onClick={projectDirectory => {
-                    dispatch(
-                      setActivePage({ page: 'packages', paused: false })
-                    );
-                    dispatch(
-                      setMode({
-                        mode: 'local',
-                        directory: projectDirectory
-                      })
-                    );
-                  }}
-                  loading={loading}
-                />
-              </AppTabs>
-            </ListItemText>
-          </ListItem>
-        </List>
-      </Drawer>
-      <Dialog
-        open={open}
-        fullWidth
-        className={classes.dialog}
-        classes={{
-          paper: classes.dialog
-        }}
-      >
-        <DialogContent>
-          <Doctor />
-        </DialogContent>
-        <DialogActions>
-          <Button color="secondary" onClick={() => toggleDialog(false)}>
-            {iMessage('action', 'close')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Drawer variant="permanent" {...restProps}></Drawer>
     </>
   );
 };
