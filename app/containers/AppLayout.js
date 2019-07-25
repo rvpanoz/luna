@@ -8,6 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Snackbar from '@material-ui/core/Snackbar';
 import theme from 'styles/theme';
 
+import AppTopBar from 'containers/AppTopBar';
 import AppSidebar from 'containers/AppSidebar';
 import AppHeader from 'containers/AppHeader';
 
@@ -52,6 +53,7 @@ const AppLayout = ({ classes }) => {
     <MuiThemeProvider theme={theme}>
       <div className={classes.root}>
         <nav className={classes.drawer}>
+          <AppTopBar />
           <AppSidebar
             mode={mode}
             fullDirectory={directory}
