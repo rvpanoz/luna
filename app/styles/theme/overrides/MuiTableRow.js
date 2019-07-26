@@ -8,7 +8,7 @@ export default {
     },
     '&$hover': {
       '&:hover': {
-        backgroundColor: palette.warning.light
+        backgroundColor: palette.common.muted
       }
     }
   }

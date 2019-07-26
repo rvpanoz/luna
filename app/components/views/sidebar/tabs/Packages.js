@@ -6,39 +6,77 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
+import UpdateIcon from '@material-ui/icons/Update';
 
+import { AppLoader } from 'components/common';
+
+import { iMessage } from "commons/utils";
 import styles from './styles/packages';
 
-const PackagesTab = ({ classes, items }) => (
-  <div className={classes.tab}>
-    <List dense>
-      {items &&
-        items.map(item => (
-          <ListItem key={`packages-${item.name}`} className={classes.listItem}>
-            <ListItemText
-              primary={
-                <div className={classes.containerHolder}>
-                  <Typography className={classes.title} component="span">
-                    {item.primaryText}
-                  </Typography>
-                </div>
-              }
-            />
-            <ListItemSecondaryAction>
-              <Typography className={classes.stats} component="span">
-                {item.secondaryText}
-              </Typography>
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
-    </List>
-  </div>
+const PackagesTab = ({ classes, items, loading, updatedAt }) => (
+  <Card className={classes.card}>
+    <CardContent>
+      <Typography
+        className={classes.cardTitle}
+        color="textSecondary"
+      >
+        {iMessage('title', 'overview')}
+      </Typography>
+      <Divider />
+      <div className={classes.tab}>
+        <AppLoader relative mini loading={loading} className={classes.loader}>
+          <List dense>
+            {items &&
+              items.map(item => (
+                <ListItem key={`packages-${item.name}`} className={classes.listItem}>
+                  <ListItemText
+                    primary={
+                      <div className={classes.flexContainer}>
+                        <Typography
+                          color="textSecondary"
+                          variant="subtitle1"
+                        >
+                          {item.primaryText}
+                        </Typography>
+                      </div>
+                    }
+                  />
+                  <ListItemSecondaryAction>
+                    <Typography
+                      color="textSecondary"
+                      variant="subtitle1"
+                    >
+                      {item.secondaryText}
+                    </Typography>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+          </List>
+        </AppLoader>
+      </div>
+    </CardContent>
+    <Divider />
+    <CardActions>
+      <div className={classes.cardFlexContainer}>
+        <UpdateIcon className={classes.updateIcon} />
+        <Typography variant="body2" color="textSecondary">
+          {iMessage('info', 'updatedAt')}&nbsp;{updatedAt !== null ? updatedAt : '...'}
+        </Typography>
+      </div>
+    </CardActions>
+  </Card>
 );
 
 PackagesTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  items: PropTypes.arrayOf(PropTypes.object).isRequired
+  items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  loading: PropTypes.bool,
+  updatedAt: PropTypes.string
 };
 
 export default withStyles(styles)(PackagesTab);

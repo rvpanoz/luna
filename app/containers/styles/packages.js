@@ -6,6 +6,7 @@ const styles = theme => ({
     width: '100%',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
+    padding: theme.spacing(1),
     [theme.breakpoints.up('md')]: {
       maxWidth: '100%'
     },

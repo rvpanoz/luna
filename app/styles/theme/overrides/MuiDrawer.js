@@ -1,7 +1,7 @@
 import palette from '../palette';
 
 export default {
-  root: {
-    color: palette.text.secondary
+  paper: {
+    backgroundColor: palette.common.white
   }
 };

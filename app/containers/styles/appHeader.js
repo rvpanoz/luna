@@ -7,14 +7,12 @@ const styles = theme => ({
   root: {
     width: '100%'
   },
-  secondaryBar: {
-    zIndex: 0
+  appBar: {
+    zIndex: 0,
+    padding: theme.spacing(2)
   },
   menuButton: {
     marginLeft: -theme.spacing(1)
-  },
-  iconButtonAvatar: {
-    padding: 4
   },
   link: {
     textDecoration: 'none',
@@ -26,6 +24,9 @@ const styles = theme => ({
   },
   button: {
     borderColor: lightColor
+  },
+  leftIcon: {
+    marginRight: theme.spacing(1)
   },
   dialogTitle: {
     padding: theme.spacing(2)
@@ -39,10 +40,13 @@ const styles = theme => ({
     marginRight: theme.spacing(1)
   },
   workingDir: {
-    color: '#fff'
+    color: theme.palette.common.white
   },
   directory: {
-    color: '#fff'
+    color: theme.palette.common.white
+  },
+  marRight: {
+    marginRight: theme.spacing(4)
   }
 });
 

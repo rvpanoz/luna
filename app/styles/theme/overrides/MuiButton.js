@@ -14,5 +14,5 @@ export default {
     '&:active': {
       boxShadow: 'none'
     }
-  },
+  }
 };
