@@ -6,37 +6,38 @@ const styles = theme => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    overflow: 'auto'
+    paddingTop: 56,
+    height: '100%',
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: 64
+    }
   },
   shiftContent: {
-    paddingLeft: 225
+    paddingLeft: 240
   },
   main: {
-    minHeight: '100vh',
     display: 'flex',
-    flexDirection: 'column',
-    flex: 1,
     paddingLeft: theme.spacing(6),
-    paddingTop: theme.spacing(1)
-  },
-  topBar: {
-    width: '100%'
-  },
-  navigationBar: {
-    width: '100%'
+    paddingTop: theme.spacing(2)
   },
   sidebar: {
-    flex: 0
+    flex: 0,
   },
   content: {
-    padding: theme.spacing(1)
+    flex: 1,
+    padding: theme.spacing(1),
+    height: '100%',
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
       flexShrink: 0
     }
-  }
+  },
+  mainContent: {
+    flex: 1,
+    padding: theme.spacing(1)
+  },
 });
 
 export default styles;

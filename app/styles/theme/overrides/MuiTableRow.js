@@ -7,7 +7,7 @@ export default {
     },
     '&$hover': {
       '&:hover': {
-        backgroundColor: palette.secondary.light
+        backgroundColor: palette.common.muted
       }
     }
   }

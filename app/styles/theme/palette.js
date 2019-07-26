@@ -2,11 +2,12 @@ import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import { whiteColor as white, blackColor as black } from '../variables';
 
 export default {
+  type: 'dark',
   common: {
     black,
     white,
     neutral: '#e4e5ff',
-    muted: '#ccceee'
+    muted: '#e4e7eb'
   },
   primary: {
     contrastText: white,
@@ -16,7 +17,7 @@ export default {
   },
   secondary: {
     contrastText: white,
-    light: lighten('#f7cac9', 0.8),
+    light: lighten('#e51a90', 0.1),
     main: '#e51a90',
     dark: darken('#e51a90', 0.1)
   },
@@ -50,10 +51,10 @@ export default {
     disabled: '#a6B1bb'
   },
   background: {
-    default: white,
+    default: '#f8fafc',
     dark: '#172b4d',
     paper: white
   },
   border: '#dfe3e8',
-  divider: '#ccc'
+  divider: '#dfe3e8'
 };

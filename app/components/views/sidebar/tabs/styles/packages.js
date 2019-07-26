@@ -6,7 +6,7 @@ const styles = theme => ({
     ...flexContainer
   },
   card: {
-    width: 260,
+    width: 268,
   },
   cardTitle: {
     ...defaultFont,
@@ -36,6 +36,13 @@ const styles = theme => ({
   listItem: {
     margin: 0,
     padding: theme.spacing(1) / 2
+  },
+  loader: {
+    paddingTop: theme.spacing(1)
+  },
+  updateIcon: {
+    color: lighten(theme.palette.primary.main, 0.2),
+    marginRight: theme.spacing(1)
   },
   loader: {
     paddingTop: theme.spacing(1)

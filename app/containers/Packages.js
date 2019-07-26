@@ -229,7 +229,7 @@ const Packages = ({ classes }) => {
               />
             )}
             {!noPackages && (
-              <Paper elevation={2}>
+              <Paper className={classes.root} elevation={2}>
                 <div className={classes.toolbar}>
                   <ToolbarView
                     title={iMessage('title', 'packages')}

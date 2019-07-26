@@ -10,7 +10,7 @@ const styles = theme => ({
   },
   tabLabel: {
     ...defaultFont,
-    fontSize: 16
+    fontSize: 16,
   },
   noMargin: {
     margin: 0

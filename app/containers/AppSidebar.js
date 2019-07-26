@@ -1,18 +1,14 @@
 import React from 'react';
-import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import { Sidebar } from 'components/views/sidebar';
-import { setActivePage } from 'models/ui/actions';
-import { installPackageJson } from 'models/packages/actions'
-import { setMode } from 'models/common/actions';
-import { runDedupe } from 'models/npm/actions';
-import { iMessage, shrinkDirectory, showDialog } from 'commons/utils'
-
+import { Sidebar } from 'components/views/common';
+import { drawerWidth } from "styles/variables";
+import { setActivePage } from 'models/ui/actions'
+import { setMode } from 'models/common/actions'
 import styles from './styles/appSidebar';
 
 const mapState = ({
@@ -40,18 +36,17 @@ const mapState = ({
   notifications
 });
 
-const AppSidebar = ({ classes, className }) => {
+const AppSidebar = ({
+  classes
+}) => {
   const [history, updateHistory] = useState([]);
-  const dispatch = useDispatch();
 
   const {
     mode,
-    directory,
     lastUpdatedAt,
     loading,
     packagesData,
-    packagesOutdated,
-    notifications
+    packagesOutdated
   } = useMappedState(mapState);
 
   const packagesItems = [
@@ -68,73 +63,22 @@ const AppSidebar = ({ classes, className }) => {
       secondaryText: packagesOutdated.length,
       color: 'warning',
       warning: true
-    },
-    {
-      name: 'notifications',
-      primaryText: 'Problems',
-      secondaryText: notifications.length,
-      color: 'error',
-      error: true
     }
   ];
 
-  const loadDirectory = useCallback(directoryPath => {
-    dispatch(setActivePage({ page: 'packages', paused: false }));
+
+  const dispatch = useDispatch();
+  const loadDirectory = directory => {
+    dispatch(
+      setActivePage({ page: 'packages', paused: false })
+    );
     dispatch(
       setMode({
         mode: 'local',
-        directory: directoryPath
+        directory
       })
     );
-  }, [dispatch]);
-
-  const installPackagesFromJson = useCallback(() => {
-    const shrinkedDirectory = directory && shrinkDirectory(directory);
-
-    const dialogOptions = {
-      title: 'Confirmation',
-      type: 'question',
-      message: iMessage('confirmation', 'installAll', {
-        '%directory%': directory
-      }),
-      buttons: ['Cancel', 'Install']
-    };
-
-    const dialogHandler = () =>
-      dispatch(
-        installPackageJson({
-          ipcEvent: 'install',
-          cmd: ['install'],
-          packageJson: true,
-          multiple: false,
-          mode,
-          directory: shrinkedDirectory
-        })
-      );
-
-    return showDialog(dialogHandler, dialogOptions);
-  }, [mode, directory, dispatch]);
-
-  const dedupe = useCallback(() => {
-    const dialogOptions = {
-      title: 'Confirmation',
-      type: 'question',
-      message: iMessage('confirmation', 'actionRun', {
-        '%name%': 'npm dedupe'
-      }),
-      buttons: ['Cancel', 'Run']
-    };
-
-    const dialogHandler = () =>
-      dispatch(
-        runDedupe({
-          ipcEvent: 'dedupe',
-          cmd: ['dedupe']
-        })
-      );
-
-    return showDialog(dialogHandler, dialogOptions);
-  }, [dispatch]);
+  }
 
   useEffect(() => {
     ipcRenderer.on('loaded-packages-close', (event, directories) =>
@@ -145,16 +89,8 @@ const AppSidebar = ({ classes, className }) => {
   }, []);
 
   return (
-    <div
-      className={cn(classes.root, {
-        [className]: className !== undefined
-      })}
-    >
-      <Drawer
-        variant="permanent"
-        anchor="left"
-        classes={{ paper: classes.drawer }}
-      >
+    <Drawer PaperProps={{ style: { width: drawerWidth } }} variant="permanent" anchor="left" classes={{ paper: classes.drawer }}>
+      <div className={classes.flexContainer}>
         <Sidebar
           mode={mode}
           loadDirectory={loadDirectory}
@@ -162,17 +98,14 @@ const AppSidebar = ({ classes, className }) => {
           loading={loading}
           updatedAt={lastUpdatedAt}
           tabPackagesData={packagesItems}
-          installPackagesFromJson={installPackagesFromJson}
-          dedupe={dedupe}
         />
-      </Drawer>
-    </div>
+      </div>
+    </Drawer>
   );
 };
 
 AppSidebar.propTypes = {
-  classes: objectOf(string).isRequired,
-  className: string
+  classes: objectOf(string).isRequired
 };
 
 export default withStyles(styles)(AppSidebar);

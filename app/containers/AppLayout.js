@@ -1,20 +1,20 @@
 import React from 'react';
-import { objectOf, string } from 'prop-types';
-import cn from 'classnames';
+import { oneOfType, objectOf, func, array, object, string } from 'prop-types';
+import cn from 'classnames'
 
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import { useMediaQuery } from '@material-ui/core';
 
 import AppTopBar from 'containers/AppTopBar';
 import AppSidebar from 'containers/AppSidebar';
-import AppNavigationBar from 'containers/AppNavigationBar';
-import AppNotifications from 'containers/AppNotifications';
+
 import AppSnackbar from 'components/common/AppSnackbar';
 import { Notifications } from 'components/views/notifications';
+
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
-import appTheme from 'styles/theme';
 
 import Packages from './Packages';
 import Audit from './Audit';
@@ -33,40 +33,44 @@ const mapState = ({
   snackbar
 });
 
-const AppLayout = ({ classes }) => {
-  const { activePage, snackbar } = useMappedState(mapState);
+const AppLayout = ({ classes, theme }) => {
+  const {
+    activePage,
+    snackbar,
+  } = useMappedState(mapState);
 
   const dispatch = useDispatch();
-  const onClose = () =>
-    dispatch(
-      setSnackbar({
-        open: false,
-        message: null,
-        type: 'info'
-      })
-    );
+  const onClose = () => dispatch(
+    setSnackbar({
+      open: false,
+      message: null,
+      type: "info"
+    })
+  )
+
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
+    defaultMatches: true
+  });
 
   return (
-    <MuiThemeProvider theme={appTheme}>
+    <MuiThemeProvider theme={theme}>
       <div
         className={cn({
           [classes.root]: true,
-          [classes.shiftContent]: true
+          [classes.shiftContent]: isDesktop
         })}
       >
         <section className={classes.sidebar}>
-          <AppSidebar />
+          <AppSidebar open={isDesktop} />
         </section>
         <section className={classes.main}>
-          <AppTopBar className={classes.topBar} />
-          <AppNavigationBar className={classes.navigationBar} />
+          <AppTopBar />
           <main className={classes.content}>
             {switchcase({
               packages: () => <Packages />,
               problems: () => <Notifications />,
               audit: () => <Audit />,
-              doctor: () => <Doctor />,
-              notifications: () => <AppNotifications />
+              doctor: () => <Doctor />
             })(<Packages />)(activePage)}
           </main>
         </section>
@@ -78,7 +82,8 @@ const AppLayout = ({ classes }) => {
 };
 
 AppLayout.propTypes = {
-  classes: objectOf(string).isRequired
+  classes: objectOf(string).isRequired,
+  theme: objectOf(oneOfType([string, object, array, func])).isRequired,
 };
 
 export default withStyles(styles, {
