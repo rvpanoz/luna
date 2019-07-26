@@ -76,9 +76,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <div id="app">
-        {!uiException ? <AppLayout app="Luna" /> : uiException}
-      </div>
+      {!uiException ? <AppLayout app="Luna" /> : uiException}
     </ThemeProvider>
   );
 };

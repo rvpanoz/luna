@@ -6,7 +6,8 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    maxWidth: 290
+    maxWidth: 290,
+    padding: theme.spacing(2)
   },
   logo_animation_wrapper: {
     position: 'relative',

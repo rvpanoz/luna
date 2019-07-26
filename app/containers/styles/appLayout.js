@@ -1,9 +1,21 @@
-import { defaultFont, drawerWidth } from 'styles/variables';
+import { drawerWidth } from 'styles/variables';
 
 const styles = theme => ({
   root: {
     display: 'flex',
-    minHeight: '100vh'
+    paddingTop: 56,
+    height: '100%',
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: 64
+    }
+  },
+  shiftContent: {
+    paddingLeft: 240
+  },
+  content: {
+    flex: 1,
+    padding: theme.spacing(1),
+    height: '100%',
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
@@ -11,35 +23,10 @@ const styles = theme => ({
       flexShrink: 0
     }
   },
-  paperDialog: {
-    minHeight: 475
-  },
-  appContent: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden'
-  },
   mainContent: {
     flex: 1,
-    padding: theme.spacing(2),
+    padding: theme.spacing(1)
   },
-  label: {
-    ...defaultFont,
-    fontSize: 20
-  },
-  subheader: {
-    ...defaultFont,
-    fontSize: 16
-  },
-  value: {
-    ...defaultFont,
-    fontSize: 22,
-    color: theme.palette.secondary.light
-  },
-  list: {
-    paddingTop: theme.spacing(2)
-  }
 });
 
 export default styles;

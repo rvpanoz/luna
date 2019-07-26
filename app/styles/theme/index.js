@@ -30,9 +30,6 @@ const theme = createMuiTheme({
   },
   shape: {
     borderRadius: 8
-  },
-  body: {
-    background: '#FF4466'
   }
 });
 
