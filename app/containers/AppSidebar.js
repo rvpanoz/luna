@@ -7,14 +7,13 @@ import { withStyles } from '@material-ui/core/styles';
 
 import Drawer from '@material-ui/core/Drawer';
 
-import { AppLogo } from 'components/common/';
-import { iMessage } from 'commons/utils';
+import { Sidebar } from 'components/views/common';
+import { drawerWidth } from "styles/variables";
 
 import styles from './styles/appSidebar';
-import { Sidebar } from '../components/views/common';
 
 const mapState = ({
-  notifications: { notifications },
+  common: { mode, directory },
   packages: {
     packagesData,
     packagesOutdated,
@@ -26,44 +25,53 @@ const mapState = ({
     }
   }
 }) => ({
+  mode,
+  directory,
   loading,
   lastUpdatedAt,
-  notifications,
   packagesData,
   packagesOutdated
 });
 
 const AppSidebar = ({
-  classes,
-  mode,
-  directory,
-  fullDirectory,
-  ...restProps
+  classes
 }) => {
-  const [openedDirectories, setOpenedDirectories] = useState([]);
+  const [history, updateHistory] = useState([]);
 
   const {
-    notifications,
+    mode,
+    directory,
     packagesData,
     packagesOutdated,
     lastUpdatedAt,
     loading
   } = useMappedState(mapState);
+
   const dispatch = useDispatch();
+  const loadDirectory = directory => {
+    dispatch(
+      setActivePage({ page: 'packages', paused: false })
+    );
+    dispatch(
+      setMode({
+        mode: 'local',
+        directory
+      })
+    );
+  }
 
   useEffect(() => {
     ipcRenderer.on('loaded-packages-close', (event, directories) =>
-      setOpenedDirectories(directories)
+      updateHistory(directories)
     );
 
     return () => ipcRenderer.removeAllListeners(['loaded-packages-close']);
   }, []);
 
   return (
-    <Drawer variant="permanent" anchor="left" classes={{ paper: classes.drawer }}>
+    <Drawer PaperProps={{ style: { width: drawerWidth } }} variant="permanent" anchor="left" classes={{ paper: classes.drawer }}>
       <div className={classes.flexContainer}>
-        <AppLogo />
-        <Sidebar />
+        <Sidebar mode={mode} loadDirectory={loadDirectory} history={history} loading={loading} updateAt={lastUpdatedAt} />
       </div>
     </Drawer>
   );

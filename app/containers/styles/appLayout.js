@@ -3,6 +3,7 @@ import { drawerWidth } from 'styles/variables';
 const styles = theme => ({
   root: {
     display: 'flex',
+    flexDirection: 'column',
     paddingTop: 56,
     height: '100%',
     [theme.breakpoints.up('sm')]: {
@@ -11,6 +12,14 @@ const styles = theme => ({
   },
   shiftContent: {
     paddingLeft: 240
+  },
+  main: {
+    display: 'flex',
+    paddingLeft: theme.spacing(6),
+    paddingTop: theme.spacing(2)
+  },
+  sidebar: {
+    flex: 0,
   },
   content: {
     flex: 1,

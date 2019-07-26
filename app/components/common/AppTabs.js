@@ -1,5 +1,3 @@
-/* eslint-disable react/require-default-props */
-
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';

@@ -7,6 +7,9 @@ const styles = theme => ({
     },
     flexGrow: {
         flexGrow: 1
+    },
+    logo: {
+        borderRight: '1px solid #dfe3e8'
     }
 });
 

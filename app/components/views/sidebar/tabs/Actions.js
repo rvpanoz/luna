@@ -15,7 +15,7 @@ import { setActivePage } from 'models/ui/actions';
 import { iMessage } from 'commons/utils';
 import styles from './styles/actions';
 
-const ActionsTab = ({ classes, mode, installPackagesFromJson }) => {
+const ActionsTab = ({ classes, mode, onClick }) => {
   const dispatch = useDispatch();
 
   return (
@@ -46,7 +46,7 @@ const ActionsTab = ({ classes, mode, installPackagesFromJson }) => {
                 <IconButton
                   aria-label="action-doctor"
                   disabled={mode === 'global'}
-                  onClick={installPackagesFromJson}
+                  onClick={onClick}
                 >
                   <ArrowRightIcon />
                 </IconButton>
@@ -127,7 +127,7 @@ const ActionsTab = ({ classes, mode, installPackagesFromJson }) => {
 
 ActionsTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  installPackagesFromJson: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
   toggleDialog: PropTypes.func,
   mode: PropTypes.string
 };

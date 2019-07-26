@@ -13,7 +13,7 @@ const theme = createMuiTheme({
     appBar: 1200,
     drawer: 1100
   },
-  spacing: 4,
+  spacing: 8,
   breakpoints: {
     values: {
       xs: 0,
