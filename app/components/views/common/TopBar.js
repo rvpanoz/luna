@@ -5,12 +5,12 @@ import { AppBar, Toolbar, Badge, Hidden, IconButton } from '@material-ui/core';
 
 import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
 import SettingsIcon from '@material-ui/icons/SettingsOutlined';
-import { SearchBox } from 'components/views/common';
-import { AppLogo } from 'components/common'
+import { AppLogo, SearchBox } from 'components/common'
 
 import styles from './styles/topBar';
 
-const Topbar = ({ classes, notifications }) => {
+const Topbar = ({ classes, notifications, mode, directory, env }) => {
+  console.log(mode, directory, env)
 
   return (
     <AppBar className={classes.root} position="fixed" elevation={0} color="inherit">
@@ -42,6 +42,9 @@ const Topbar = ({ classes, notifications }) => {
 
 Topbar.propTypes = {
   classes: objectOf(string).isRequired,
+  mode: string.isRequired,
+  directory: string,
+  env: objectOf(string),
   notifications: arrayOf(object)
 };
 

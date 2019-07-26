@@ -28,7 +28,6 @@ const AppSnackbar = ({ snackbar, onClose }) => {
 }
 
 AppSnackbar.propTypes = {
-    classes: objectOf(string).isRequired,
     onClose: func.isRequired,
     snackbar: objectOf(oneOfType([string, bool])),
 }

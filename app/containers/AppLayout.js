@@ -14,7 +14,7 @@ import AppSnackbar from 'components/common/AppSnackbar';
 import { Notifications } from 'components/views/notifications';
 
 import { setSnackbar } from 'models/ui/actions';
-import { switchcase, shrinkDirectory } from 'commons/utils';
+import { switchcase } from 'commons/utils';
 
 import Packages from './Packages';
 import Audit from './Audit';
@@ -37,9 +37,6 @@ const AppLayout = ({ classes, theme }) => {
   const {
     activePage,
     snackbar,
-    mode,
-    directory,
-    onlineStatus
   } = useMappedState(mapState);
 
   const dispatch = useDispatch();

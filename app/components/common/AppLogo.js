@@ -114,7 +114,8 @@ const AppLogo = ({ classes, className }) => {
 };
 
 AppLogo.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  className: PropTypes.string
 };
 
 export default withStyles(styles)(AppLogo);

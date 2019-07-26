@@ -15,11 +15,12 @@ import { Typography } from '@material-ui/core';
 
 import styles from './styles/appLoader';
 
-const AppLoader = ({ loading, classes, children, message, relative, mini }) =>
+const AppLoader = ({ loading, classes, className, children, message, relative, mini }) =>
   loading ? (
     <div
       className={cn(classes.loader, {
-        [classes.relative]: relative
+        [classes.relative]: relative,
+        [className]: className
       })}
     >
       <CircularProgress
@@ -43,7 +44,8 @@ AppLoader.propTypes = {
   children: oneOfType([node, array, symbol]),
   message: string,
   relative: bool,
-  mini: bool
+  mini: bool,
+  className: string,
 };
 
 export default withStyles(styles)(AppLoader);

@@ -1,5 +1,4 @@
-import { grayColor, flexContainer, defaultFont } from 'styles/variables';
-import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
+import { flexContainer } from 'styles/variables';
 
 const styles = theme => ({
   wrapper: {

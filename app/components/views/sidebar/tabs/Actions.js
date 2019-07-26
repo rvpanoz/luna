@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'redux-react-hook';
+
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -128,7 +129,6 @@ const ActionsTab = ({ classes, mode, onClick }) => {
 ActionsTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   onClick: PropTypes.func.isRequired,
-  toggleDialog: PropTypes.func,
   mode: PropTypes.string
 };
 

@@ -1,19 +1,26 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
 import { TopBar } from 'components/views/common/';
 import { useMappedState } from 'redux-react-hook';
 
-const mapState = ({ notifications: { notifications } }) => ({
-  notifications
-});
+const mapState = ({
+  common: { mode, directory },
+  notifications: { notifications },
+  npm: { env } }) => ({
+    notifications,
+    mode,
+    directory,
+    env
+  });
 
-const AppTopBar = ({ classes, ...props }) => {
+const AppTopBar = () => {
   const {
+    env,
+    mode,
+    directory,
     notifications
   } = useMappedState(mapState)
 
-  return <TopBar notifications={notifications}></TopBar>
+  return <TopBar mode={mode} directory={directory} notifications={notifications} env={env} />
 };
 
 export default AppTopBar;

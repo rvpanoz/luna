@@ -10,8 +10,6 @@ import { initActions, updateStatus } from 'models/common/actions';
 import { setUIException, setSnackbar } from 'models/ui/actions';
 import { iMessage } from 'commons/utils';
 
-import { SnackbarContent } from 'components/common';
-
 import theme from 'styles/theme';
 import AppLayout from './AppLayout';
 
