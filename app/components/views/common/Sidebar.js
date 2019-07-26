@@ -1,5 +1,5 @@
 import React from 'react';
-import { string, oneOfType, objectOf, array, func, bool, number, object, arrayOf } from 'prop-types';
+import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
 import { AppTabs } from 'components/common/';
@@ -34,7 +34,7 @@ Sidebar.propTypes = {
   history: arrayOf(object),
   loadDirectory: func,
   updatedAt: string,
-  tabPackagesData: arrayOf(objectOf(oneOfType([string, number, array, object])))
+  tabPackagesData: arrayOf(object)
 };
 
 export default withStyles(styles)(Sidebar);

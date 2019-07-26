@@ -7,13 +7,13 @@ export default {
     black,
     white,
     neutral: '#e4e5ff',
-    muted: '#e4e7eb'
+    muted: '#ccceee'
   },
   primary: {
     contrastText: white,
     light: lighten('#006db3', 0.1),
     main: '#006db3',
-    dark: darken('#006db3', 0.1)
+    dark: darken('#006db3', 0.1),
   },
   secondary: {
     contrastText: white,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -17,6 +17,8 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import { useFilters } from 'commons/hooks';
 import { AppLoader, HelperText } from 'components/common';
+import { DirectoryInfo } from 'components/views/common';
+
 import { scrollWrapper, iMessage } from 'commons/utils';
 
 import {
@@ -57,7 +59,7 @@ const mapState = ({
     packagesOutdated,
     metadata: { fromSearch }
   },
-  npm: { operationStatus, operationPackages, operationCommand, auditData },
+  npm: { env, operationStatus, operationPackages, operationCommand, auditData },
   ui: {
     paused,
     loaders: { loader, packageLoader },
@@ -67,6 +69,7 @@ const mapState = ({
     selected
   }
 }) => ({
+  env,
   paused,
   active,
   directory,
@@ -110,7 +113,8 @@ const Packages = ({ classes }) => {
     operationStatus,
     operationPackages,
     operationCommand,
-    auditData
+    auditData,
+    env
   } = useMappedState(mapState);
 
   const [auditPackages, setAuditPackages] = useState([]);
@@ -212,6 +216,7 @@ const Packages = ({ classes }) => {
 
   return (
     <>
+      <DirectoryInfo mode={mode} directory={directory} env={env} />
       <AppLoader loading={loading} message={message}>
         <Grid container>
           <Grid

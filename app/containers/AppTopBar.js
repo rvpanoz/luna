@@ -5,11 +5,17 @@ import { useMappedState } from 'redux-react-hook';
 const mapState = ({
   common: { mode, directory },
   notifications: { notifications },
+  ui: {
+    loaders: {
+      loader: { loading }
+    }
+  },
   npm: { env } }) => ({
     notifications,
     mode,
     directory,
-    env
+    env,
+    loading
   });
 
 const AppTopBar = () => {
@@ -17,10 +23,11 @@ const AppTopBar = () => {
     env,
     mode,
     directory,
-    notifications
+    notifications,
+    loading
   } = useMappedState(mapState)
 
-  return <TopBar mode={mode} directory={directory} notifications={notifications} env={env} />
+  return <TopBar mode={mode} directory={directory} notifications={notifications} env={env} loading={loading} />
 };
 
 export default AppTopBar;
