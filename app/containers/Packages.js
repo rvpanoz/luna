@@ -48,6 +48,7 @@ import styles from './styles/packages';
 
 const mapState = ({
   common: {
+    activePage,
     directory,
     manager,
     mode,
@@ -69,6 +70,7 @@ const mapState = ({
     selected
   }
 }) => ({
+  activePage,
   env,
   paused,
   active,
@@ -96,6 +98,7 @@ const mapState = ({
 
 const Packages = ({ classes }) => {
   const {
+    activePage,
     loader: { loading, message },
     packagesData,
     packagesOutdated,
@@ -218,7 +221,7 @@ const Packages = ({ classes }) => {
 
   return (
     <>
-      <DirectoryInfo mode={mode} directory={directory} env={env} />
+      <DirectoryInfo mode={mode} directory={directory} env={env} activePage={activePage} />
       <AppLoader loading={loading} message={message}>
         <Grid container>
           <Grid

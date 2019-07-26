@@ -1,6 +1,11 @@
 import React from 'react';
 import { TopBar } from 'components/views/common/';
-import { useMappedState } from 'redux-react-hook';
+import { useMappedState, useDispatch } from 'redux-react-hook';
+
+import { showDialog } from 'commons/utils';
+import { setActivePage } from 'models/ui/actions'
+import { setMode } from 'models/common/actions'
+import { navigatorParameters } from 'commons/parameters';
 
 const mapState = ({
   common: { mode, directory },
@@ -27,7 +32,28 @@ const AppTopBar = () => {
     loading
   } = useMappedState(mapState)
 
-  return <TopBar mode={mode} directory={directory} notifications={notifications} env={env} loading={loading} />
+  const dispatch = useDispatch();
+
+  const loadDirectory = () => {
+    const dialogHandler = filePath => {
+      dispatch(
+        setActivePage({
+          page: 'packages',
+          paused: false
+        })
+      );
+      dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
+    };
+
+    return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
+  };
+
+  const setActivePageHandler = () => dispatch(setActivePage({
+    page: 'audit',
+    paused: true
+  }))
+
+  return <TopBar mode={mode} directory={directory} notifications={notifications} env={env} loading={loading} onLoadDirectory={loadDirectory} setActivePageHandler={setActivePageHandler} />
 };
 
 export default AppTopBar;

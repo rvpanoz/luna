@@ -2,8 +2,10 @@ import { flexContainer } from 'styles/variables';
 
 const styles = theme => ({
     root: {
+        display: 'flex',
+    },
+    flexContainer: {
         ...flexContainer,
-        alignItems: 'center',
         flexDirection: 'column',
         justifyContent: 'space-between',
         paddingBottom: theme.spacing(3)
