@@ -14,6 +14,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import ArrowRightIcon from '@material-ui/icons/ArchiveOutlined';
 import FolderIcon from '@material-ui/icons/FolderOpen';
+import { iMessage } from 'commons/utils'
 
 import styles from './styles/history';
 
@@ -24,7 +25,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
         <ListItem dense className={classes.listItem}>
           <ListItemText
             primary={
-              <Typography className={classes.label}>No history</Typography>
+              <Typography className={classes.label}>{iMessage('info', 'noHistory')}</Typography>
             }
           />
         </ListItem>
@@ -37,13 +38,11 @@ const HistoryTab = ({ classes, directories, onClick }) => (
           .join('/');
 
         return (
-          <ListItem dense className={classes.listItem} key={dir.name}>
+          <ListItem className={classes.listItem} key={dir.name}>
             <ListItemIcon style={{ marginTop: 3 }}>
-              <div>
-                <Tooltip title={dir.directory}>
-                  <FolderIcon color="secondary" />
-                </Tooltip>
-              </div>
+              <Tooltip title={dir.directory}>
+                <FolderIcon />
+              </Tooltip>
             </ListItemIcon>
             <ListItemText
               primary={
@@ -57,14 +56,12 @@ const HistoryTab = ({ classes, directories, onClick }) => (
             />
             <ListItemSecondaryAction>
               <Tooltip title="Load directory">
-                <div>
-                  <IconButton
-                    aria-label="action"
-                    onClick={() => onClick(dir.directory)}
-                  >
-                    <ArrowRightIcon color="primary" />
-                  </IconButton>
-                </div>
+                <IconButton
+                  aria-label="action"
+                  onClick={() => onClick(dir.directory)}
+                >
+                  <ArrowRightIcon />
+                </IconButton>
               </Tooltip>
             </ListItemSecondaryAction>
           </ListItem>

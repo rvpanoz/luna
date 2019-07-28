@@ -1,7 +1,6 @@
 import palette from '../palette';
 
 export default {
-  outlined: {},
   label: {
     textTransform: 'initial'
   },
@@ -15,4 +14,5 @@ export default {
       boxShadow: 'none'
     }
   }
+
 };

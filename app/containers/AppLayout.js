@@ -9,6 +9,7 @@ import { useMediaQuery } from '@material-ui/core';
 
 import AppTopBar from 'containers/AppTopBar';
 import AppSidebar from 'containers/AppSidebar';
+import AppNavigationBar from 'containers/AppNavigationBar'
 
 import AppSnackbar from 'components/common/AppSnackbar';
 import { Notifications } from 'components/views/notifications';
@@ -65,6 +66,7 @@ const AppLayout = ({ classes, theme }) => {
         </section>
         <section className={classes.main}>
           <AppTopBar />
+          <AppNavigationBar />
           <main className={classes.content}>
             {switchcase({
               packages: () => <Packages />,

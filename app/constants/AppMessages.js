@@ -17,7 +17,7 @@ export const INFO_MESSAGES = {
   notificationsHelperText: 'Woohoo! There are not any problems found.',
   npmAuditVulnerabiliesHelperText: 'Known valnerabilities in your project',
   createPackageJsonHelperText:
-    'Create a new package.json file in directory and start working.',
+    'Create a new package.json file',
   noPackages: 'No packages found',
   noAuditData: 'No audit data',
   noDoctorData: 'No doctor data',

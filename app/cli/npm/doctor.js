@@ -5,7 +5,7 @@
 
 const doctor = () => {
   const command = ['doctor'];
-  const defaults = ['--json', '--verbose'];
+  const defaults = ['--json']; // '--verbose'
 
   return command.concat(defaults);
 };
