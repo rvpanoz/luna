@@ -24,7 +24,8 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: theme.spacing(2),
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
+    zIndex: 9999
   },
   inputRoot: {
     color: 'inherit',
@@ -39,9 +40,9 @@ const styles = theme => ({
     paddingLeft: theme.spacing(10),
     paddingRight: theme.spacing(10),
     transition: theme.transitions.create('width'),
-    width: 175,
+    width: 190,
     '&:focus': {
-      width: 220
+      width: 290
     }
   }
 });

@@ -1,4 +1,6 @@
-import React, { useCallback } from 'react';
+/* eslint-disable  react/jsx-boolean-value */
+
+import React from 'react';
 import PropTypes from 'prop-types';
 import { useCallback } from 'react'
 import { remote } from 'electron';
@@ -83,11 +85,16 @@ const Init = ({ classes, onClose }) => {
   }, [dispatch, onClose, directory]);
 
   return <Dialog
-    open="true"
+    open={true}
     onClose={onClose}
     aria-labelledby="init-dialog"
     classes={{
       root: classes.dialog
+    }}
+    PaperProps={{
+      classes: {
+        root: classes.paper
+      }
     }}
   >
     <Typography className={classes.title} color="textSecondary" variant="h4">{iMessage('info', 'createPackageJsonHelperText')}</Typography>
@@ -125,15 +132,15 @@ const Init = ({ classes, onClose }) => {
       </div>
     </DialogContent>
     <DialogActions>
-      <Button onClick={onClose} color="secondary" variant="outlined">
-        {iMessage('action', 'cancel')}
-      </Button>
       <Button
         disabled={!initOptions.directory}
         onClick={type === 'lock' ? npmLock : npmInit}
         color="primary"
       >
         {iMessage('action', 'create')}
+      </Button>
+      <Button onClick={onClose} color="secondary" variant="outlined">
+        {iMessage('action', 'cancel')}
       </Button>
     </DialogActions>
   </Dialog>

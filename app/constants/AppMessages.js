@@ -1,5 +1,4 @@
 export const INFO_MESSAGES = {
-  noVulnerabilities: 'No issues found',
   noHistory: 'History is empty',
   loading: 'Loading packages..',
   loadingPackage: 'Loading package..',
