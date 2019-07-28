@@ -23,7 +23,7 @@ const Topbar = ({ classes, notifications, mode, loading, onLoadDirectory, onInit
           <Toolbar disableGutters classes={{
             root: classes.toolbar
           }}>
-            <Tooltip title={iMessage('info', 'loadDirectory')}>
+            <Tooltip title={iMessage('title', 'loadDirectory')}>
               <div>
                 <IconButton
                   classes={{
@@ -37,7 +37,7 @@ const Topbar = ({ classes, notifications, mode, loading, onLoadDirectory, onInit
                 </IconButton>
               </div>
             </Tooltip>
-            <Tooltip title={iMessage('info', 'loadDirectory')}>
+            <Tooltip title={iMessage('title', 'createPackageJson')}>
               <div>
                 <IconButton
                   classes={{
@@ -51,7 +51,7 @@ const Topbar = ({ classes, notifications, mode, loading, onLoadDirectory, onInit
                 </IconButton>
               </div>
             </Tooltip>
-            <Tooltip title={iMessage('info', 'loadDirectory')}>
+            <Tooltip title={iMessage('action', 'runAudit')}>
               <div>
                 <IconButton
                   classes={{
@@ -65,7 +65,7 @@ const Topbar = ({ classes, notifications, mode, loading, onLoadDirectory, onInit
                 </IconButton>
               </div>
             </Tooltip>
-            <Tooltip title={iMessage('info', 'loadDirectory')}>
+            <Tooltip title={iMessage('action', 'runDoctor')}>
               <div>
                 <IconButton
                   classes={{

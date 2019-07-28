@@ -76,7 +76,8 @@ const Doctor = ({ classes }) => {
   const initOptions = {
     text: iMessage('info', 'npmDoctorInfo'),
     actionText: iMessage('action', 'runDoctor'),
-    actionHandler: handleDoctor
+    actionHandler: handleDoctor,
+    color: 'primary'
   };
 
   useEffect(() => {

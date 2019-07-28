@@ -1,4 +1,5 @@
 export const INFO_MESSAGES = {
+  noHistory: 'History is empty',
   loading: 'Loading packages..',
   loadingPackage: 'Loading package..',
   noData: 'No dependencies found.',
@@ -46,7 +47,7 @@ export const ACTION_MESSAGES = {
   filter: 'Filter',
   close: 'Close',
   runDoctor: 'Run doctor',
-  runAudit: 'Run',
+  runAudit: 'Run audit',
   runAuditFix: 'Fix',
   runAuditFixForce: 'Force',
   runAuditFixProd: 'Fix only prod',
