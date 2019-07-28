@@ -28,101 +28,92 @@ const actionBarStyles = () => ({
   }
 })
 
-const ActionBar = ({ classes, loading, mode, onLoadDirectory, setActivePageHandler }) => <Toolbar disableGutters classes={{
-  root: classes.toolbar
-}}>
-  <Tooltip title={iMessage('info', 'loadDirectory')}>
-    <div>
-      <IconButton
-        classes={{
-          root: classes.button
-        }}
-        disableRipple
-        disabled={loading}
-        onClick={onLoadDirectory}
-      >
-        <ArchiveIcon className={classes.icon} />
-      </IconButton>
-    </div>
-  </Tooltip>
-  <Tooltip title={iMessage('info', 'loadDirectory')}>
-    <div>
-      <IconButton
-        classes={{
-          root: classes.button
-        }}
-        disableRipple
-        disabled={loading}
-      >
-        <AddIcon className={classes.icon} />
-      </IconButton>
-    </div>
-  </Tooltip>
-  <Tooltip title={iMessage('info', 'loadDirectory')}>
-    <div>
-      <IconButton
-        classes={{
-          root: classes.button
-        }}
-        disableRipple
-        onClick={() => setActivePageHandler('audit')}
-        disabled={loading || mode === 'global'}
-      >
-        <SecurityIcon className={classes.icon} />
-      </IconButton>
-    </div>
-  </Tooltip>
-  <Tooltip title={iMessage('info', 'loadDirectory')}>
-    <div>
-      <IconButton
-        classes={{
-          root: classes.button
-        }}
-        disableRipple
-        disabled={loading}
-        onClick={() => { }}
-      >
-        <LocalHospitalIcon className={classes.icon} />
-      </IconButton>
-    </div>
-  </Tooltip>
-</Toolbar>
-
-ActionBar.propTypes = {
-  classes: objectOf(string).isRequired,
-  mode: string.isRequired,
-  loading: bool,
-  setActivePageHandler: func,
-  onLoadDirectory: func
-}
-
-const WithStylesActionBar = withStyles(actionBarStyles)(ActionBar)
-
-const Topbar = ({ classes, notifications, mode, loading, onLoadDirectory, setActivePageHandler }) => <AppBar className={classes.root} position="fixed" elevation={0} color="inherit">
-  <Toolbar disableGutters>
-    <AppLogo className={classes.logo} />
-    <WithStylesActionBar loading={loading} mode={mode} onLoadDirectory={onLoadDirectory} setActivePageHandler={setActivePageHandler} />
-    <div className={classes.flexGrow} />
-    <SearchBox />
-    <Hidden mdDown>
-      <IconButton color="inherit">
-        <Badge
-          badgeContent={notifications ? notifications.length : 0}
-          showZero
-          color="secondary"
+const Topbar = ({ classes, notifications, mode, loading, onLoadDirectory, onInitFlow, setActivePage }) => (
+  <AppBar className={classes.root} position="fixed" elevation={0} color="inherit">
+    <Toolbar disableGutters>
+      <AppLogo className={classes.logo} />
+      <div>
+        <Toolbar disableGutters classes={{
+          root: classes.toolbar
+        }}>
+          <Tooltip title={iMessage('info', 'loadDirectory')}>
+            <div>
+              <IconButton
+                classes={{
+                  root: classes.button
+                }}
+                disableRipple
+                disabled={loading}
+                onClick={onLoadDirectory}
+              >
+                <ArchiveIcon className={classes.icon} />
+              </IconButton>
+            </div>
+          </Tooltip>
+          <Tooltip title={iMessage('info', 'loadDirectory')}>
+            <div>
+              <IconButton
+                classes={{
+                  root: classes.button
+                }}
+                disableRipple
+                disabled={loading}
+                onClick={onInitFlow}
+              >
+                <AddIcon className={classes.icon} />
+              </IconButton>
+            </div>
+          </Tooltip>
+          <Tooltip title={iMessage('info', 'loadDirectory')}>
+            <div>
+              <IconButton
+                classes={{
+                  root: classes.button
+                }}
+                disableRipple
+                onClick={() => setActivePage('audit')}
+                disabled={loading || mode === 'global'}
+              >
+                <SecurityIcon className={classes.icon} />
+              </IconButton>
+            </div>
+          </Tooltip>
+          <Tooltip title={iMessage('info', 'loadDirectory')}>
+            <div>
+              <IconButton
+                classes={{
+                  root: classes.button
+                }}
+                disableRipple
+                disabled={loading}
+              >
+                <LocalHospitalIcon className={classes.icon} />
+              </IconButton>
+            </div>
+          </Tooltip>
+        </Toolbar>
+      </div>
+      <div className={classes.flexGrow} />
+      <SearchBox />
+      <Hidden mdDown>
+        <IconButton color="inherit">
+          <Badge
+            badgeContent={notifications ? notifications.length : 0}
+            showZero
+            color="secondary"
+          >
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
+        <IconButton
+          className={classes.button}
+          color="inherit"
         >
-          <NotificationsIcon />
-        </Badge>
-      </IconButton>
-      <IconButton
-        className={classes.button}
-        color="inherit"
-      >
-        <SettingsIcon />
-      </IconButton>
-    </Hidden>
-  </Toolbar>
-</AppBar>
+          <SettingsIcon />
+        </IconButton>
+      </Hidden>
+    </Toolbar>
+  </AppBar>)
 
 Topbar.propTypes = {
   classes: objectOf(string).isRequired,
@@ -130,7 +121,8 @@ Topbar.propTypes = {
   loading: bool,
   notifications: arrayOf(object),
   onLoadDirectory: func,
-  setActivePageHandler: func
+  setActivePage: func,
+  onInitFlow: func
 };
 
 export default withStyles(styles)(Topbar);

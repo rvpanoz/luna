@@ -29,7 +29,7 @@ const AppLoader = ({ loading, classes, className, children, message, relative, m
         size={mini ? 20 : 30}
       />
       {message && (
-        <Typography variant="body1" color="textSecondary">
+        <Typography variant="body2" color="textSecondary" className={classes.message}>
           {message}
         </Typography>
       )}

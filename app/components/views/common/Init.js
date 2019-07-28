@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useCallback } from 'react'
 import { remote } from 'electron';
 import { useState } from 'react';
 import { useDispatch } from 'redux-react-hook';
@@ -8,8 +9,12 @@ import { withStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
 
 import { directoryParameters } from 'commons/parameters';
 import { iMessage } from 'commons/utils';
@@ -17,7 +22,20 @@ import { runInit, runLock } from 'models/npm/actions';
 
 import styles from './styles/initForm';
 
-const InitView = ({ classes, onClose }) => {
+const DialogContent = withStyles(theme => ({
+  root: {
+    padding: theme.spacing(2),
+  },
+}))(MuiDialogContent);
+
+const DialogActions = withStyles(theme => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(1),
+  },
+}))(MuiDialogActions);
+
+const Init = ({ classes, onClose }) => {
   const [type, setType] = useState('init');
   const [initOptions, setInitOptions] = useState({ directory: null });
   const dispatch = useDispatch();
@@ -36,7 +54,12 @@ const InitView = ({ classes, onClose }) => {
         })
     );
 
-  const npmLock = () => {
+  const onChangeType = () => {
+    const newType = type === 'init' ? 'lock' : 'init';
+    setType(newType)
+  };
+
+  const npmLock = useCallback(() => {
     dispatch(
       runLock({
         ipcEvent: 'npm-init-lock',
@@ -47,9 +70,9 @@ const InitView = ({ classes, onClose }) => {
     );
 
     onClose();
-  };
+  }, [directory]);
 
-  const npmInit = () => {
+  const npmInit = useCallback(() => {
     dispatch(
       runInit({
         ipcEvent: 'npm-init',
@@ -59,67 +82,68 @@ const InitView = ({ classes, onClose }) => {
     );
 
     onClose();
-  };
+  }, [directory]);
 
-  return (
-    <section className={classes.root}>
-      <Typography variant="body2">
-        {iMessage('info', 'createPackageJsonHelperText')}
-      </Typography>
+  return <Dialog
+    open={true}
+    onClose={onClose}
+    aria-labelledby="init-dialog"
+    classes={{
+      root: classes.dialog
+    }}
+  >
+    <Typography className={classes.title} color="textSecondary" variant="h4">{iMessage('info', 'createPackageJsonHelperText')}</Typography>
+    <DialogContent dividers>
+      <div className={classes.content}>
+        <div className={classes.directory}>
+          <Typography
+            variant="h5"
+          >
+            {directory ? directory : 'No directory selected'}
+          </Typography>
+        </div>
+        <div className={classes.actions}>
+          <Button
+            color="primary"
+            onClick={startInitFlow}
+            variant="outlined"
+          >
+            {iMessage('info', 'directorySelection')}
+          </Button>
+        </div>
+      </div>
       <div className={classes.options}>
-        <Button
-          color="default"
-          onClick={startInitFlow}
-          variant="outlined"
-          disabled={Boolean(directory)}
-        >
-          {iMessage('info', 'directorySelection')}
-        </Button>
         <FormControlLabel
           control={
             <Checkbox
               checked={type === 'lock'}
               disableRipple
-              onClick={() => setType(type === 'init' ? 'lock' : 'package')}
+              onClick={onChangeType}
             />
           }
           className={classes.formControl}
           label="package-lock only"
         />
-        {directory && (
-          <Typography
-            className={classes.directory}
-            variant="body2"
-            color="textSecondary"
-          >
-            {directory}
-          </Typography>
-        )}
       </div>
-      <Divider />
-      <Typography variant="caption" className={classes.caption}>
-        {iMessage('info', 'createPackageJsonNote')}
-      </Typography>
-      <div className={classes.actions}>
-        <Button onClick={() => onClose()} color="secondary">
-          {iMessage('action', 'cancel')}
-        </Button>
-        <Button
-          disabled={!initOptions.directory}
-          onClick={type === 'lock' ? npmLock : npmInit}
-          color="primary"
-          autoFocus
-        >
-          {iMessage('action', 'create')}
-        </Button>
-      </div>
-    </section>
-  );
-};
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={onClose} color="secondary" variant="outlined">
+        {iMessage('action', 'cancel')}
+      </Button>
+      <Button
+        disabled={!initOptions.directory}
+        onClick={type === 'lock' ? npmLock : npmInit}
+        color="primary"
+      >
+        {iMessage('action', 'create')}
+      </Button>
+    </DialogActions>
+  </Dialog>
+}
 
-InitView.propTypes = {
+Init.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   onClose: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(InitView);
+export default withStyles(styles)(Init);

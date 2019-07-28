@@ -1,11 +1,15 @@
 import React from 'react';
-import { TopBar } from 'components/views/common/';
+import { useState, useCallback } from 'react';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import { TopBar, Init } from 'components/views/common/';
 import { useMappedState, useDispatch } from 'redux-react-hook';
-
 import { showDialog } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions'
 import { setMode } from 'models/common/actions'
 import { navigatorParameters } from 'commons/parameters';
+import { iMessage } from 'commons/utils'
 
 const mapState = ({
   common: { mode, directory },
@@ -31,7 +35,7 @@ const AppTopBar = () => {
     notifications,
     loading
   } = useMappedState(mapState)
-
+  const [initFlow, toggleInitFlow] = useState(false);
   const dispatch = useDispatch();
 
   const loadDirectory = () => {
@@ -48,12 +52,33 @@ const AppTopBar = () => {
     return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
   };
 
-  const setActivePageHandler = () => dispatch(setActivePage({
+  const setActivePageHandler = useCallback(() => dispatch(setActivePage({
     page: 'audit',
     paused: true
-  }))
+  })))
 
-  return <TopBar mode={mode} directory={directory} notifications={notifications} env={env} loading={loading} onLoadDirectory={loadDirectory} setActivePageHandler={setActivePageHandler} />
+  return (<>
+    <TopBar
+      mode={mode}
+      directory={directory}
+      notifications={notifications}
+      env={env}
+      loading={loading}
+      onLoadDirectory={loadDirectory}
+      setActivePage={setActivePageHandler}
+      onInitFlow={() => toggleInitFlow(true)} />
+    <Dialog
+      open={initFlow}
+      maxWidth="sm"
+      onClose={() => toggleInitFlow(false)}
+      aria-labelledby="npm-init"
+    >
+      <DialogTitle>{iMessage('title', 'createPackageJson')}</DialogTitle>
+      <DialogContent>
+        <Init onClose={() => toggleInitFlow(false)} />
+      </DialogContent>
+    </Dialog>
+  </>)
 };
 
 export default AppTopBar;

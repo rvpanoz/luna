@@ -56,5 +56,5 @@ export default {
     paper: white
   },
   border: '#dfe3e8',
-  divider: '#dfe3e8'
+  divider: '#ccc'
 };
