@@ -1,6 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import cn from 'classnames'
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -10,7 +11,7 @@ import { iMessage } from "commons/utils";
 
 import styles from './styles/directory';
 
-const Directory = ({ classes, mode, directory, env, activePage }) => (
+const Directory = ({ classes, mode, directory, env, activePage, setActivePage }) => (
     <div className={classes.root}>
         <Tooltip title={iMessage('info', 'loadDirectory')}>
             <div>
@@ -20,19 +21,18 @@ const Directory = ({ classes, mode, directory, env, activePage }) => (
                     }}
                     disableRipple
                     disabled={activePage === 'packages'}
-                    onClick={() => { }}
+                    onClick={() => setActivePage('packages')}
                 >
                     <ArrowBackIcon className={classes.icon} />
                 </IconButton>
             </div>
         </Tooltip>
-        <div className={classes.flexContainer}>
+        <div className={cn(classes.flexContainer, classes.padTop)}>
             <Typography variant="subtitle1" component="div" color="textSecondary">
                 {mode === 'local'
                     ? iMessage('info', 'workingDirectory')
                     : iMessage('info', 'showingGlobals')}
             </Typography>
-            <div className={classes.flexGrow} />
             <Typography variant="subtitle2" component="div" color="textSecondary">
                 {mode === 'local' ? directory : env.prefix}
             </Typography>
@@ -45,6 +45,7 @@ Directory.propTypes = {
     mode: PropTypes.string.isRequired,
     directory: PropTypes.string,
     activePage: PropTypes.string,
+    setActivePage: PropTypes.func,
     env: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.string)]),
 };
 

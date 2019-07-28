@@ -1,10 +1,11 @@
 import React from 'react';
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import { TopBar, Init } from 'components/views/common/';
 import { useMappedState, useDispatch } from 'redux-react-hook';
+
 import { showDialog } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions'
 import { setMode } from 'models/common/actions'
@@ -12,7 +13,7 @@ import { navigatorParameters } from 'commons/parameters';
 import { iMessage } from 'commons/utils'
 
 const mapState = ({
-  common: { mode, directory },
+  common: { mode, directory, activePage },
   notifications: { notifications },
   ui: {
     loaders: {
@@ -20,6 +21,7 @@ const mapState = ({
     }
   },
   npm: { env } }) => ({
+    activePage,
     notifications,
     mode,
     directory,
@@ -33,7 +35,8 @@ const AppTopBar = () => {
     mode,
     directory,
     notifications,
-    loading
+    loading,
+    activePage
   } = useMappedState(mapState)
   const [initFlow, toggleInitFlow] = useState(false);
   const dispatch = useDispatch();
@@ -52,10 +55,10 @@ const AppTopBar = () => {
     return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
   };
 
-  const setActivePageHandler = useCallback(() => dispatch(setActivePage({
-    page: 'audit',
+  const setActivePageHandler = (page) => dispatch(setActivePage({
+    page,
     paused: true
-  })))
+  }))
 
   return (<>
     <TopBar
@@ -66,6 +69,7 @@ const AppTopBar = () => {
       loading={loading}
       onLoadDirectory={loadDirectory}
       setActivePage={setActivePageHandler}
+      activePage={activePage}
       onInitFlow={() => toggleInitFlow(true)} />
     <Dialog
       open={initFlow}

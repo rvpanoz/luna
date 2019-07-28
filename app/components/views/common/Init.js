@@ -12,7 +12,6 @@ import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import Dialog from '@material-ui/core/Dialog';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 
@@ -70,7 +69,7 @@ const Init = ({ classes, onClose }) => {
     );
 
     onClose();
-  }, [directory]);
+  }, [dispatch, onClose, directory]);
 
   const npmInit = useCallback(() => {
     dispatch(
@@ -82,10 +81,10 @@ const Init = ({ classes, onClose }) => {
     );
 
     onClose();
-  }, [directory]);
+  }, [dispatch, onClose, directory]);
 
   return <Dialog
-    open={true}
+    open="true"
     onClose={onClose}
     aria-labelledby="init-dialog"
     classes={{
@@ -99,7 +98,7 @@ const Init = ({ classes, onClose }) => {
           <Typography
             variant="h5"
           >
-            {directory ? directory : 'No directory selected'}
+            {directory || 'No directory selected'}
           </Typography>
         </div>
         <div className={classes.actions}>

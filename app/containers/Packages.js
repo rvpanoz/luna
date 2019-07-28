@@ -17,7 +17,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import { useFilters } from 'commons/hooks';
 import { AppLoader, HelperText } from 'components/common';
-import { DirectoryInfo } from 'components/views/common';
 
 import { scrollWrapper, iMessage } from 'commons/utils';
 
@@ -48,7 +47,6 @@ import styles from './styles/packages';
 
 const mapState = ({
   common: {
-    activePage,
     directory,
     manager,
     mode,
@@ -60,7 +58,7 @@ const mapState = ({
     packagesOutdated,
     metadata: { fromSearch }
   },
-  npm: { env, operationStatus, operationPackages, operationCommand, auditData },
+  npm: { operationStatus, operationPackages, operationCommand, auditData },
   ui: {
     paused,
     loaders: { loader, packageLoader },
@@ -70,8 +68,6 @@ const mapState = ({
     selected
   }
 }) => ({
-  activePage,
-  env,
   paused,
   active,
   directory,
@@ -98,7 +94,6 @@ const mapState = ({
 
 const Packages = ({ classes }) => {
   const {
-    activePage,
     loader: { loading, message },
     packagesData,
     packagesOutdated,
@@ -117,7 +112,6 @@ const Packages = ({ classes }) => {
     operationPackages,
     operationCommand,
     auditData,
-    env
   } = useMappedState(mapState);
 
   /* eslint-disable-next-line */
@@ -221,7 +215,6 @@ const Packages = ({ classes }) => {
 
   return (
     <>
-      <DirectoryInfo mode={mode} directory={directory} env={env} activePage={activePage} />
       <AppLoader loading={loading} message={message}>
         <Grid container>
           <Grid
