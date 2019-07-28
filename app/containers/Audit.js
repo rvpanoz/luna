@@ -75,7 +75,8 @@ const Audit = ({ classes }) => {
     detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
     actionText: iMessage('action', 'runAudit'),
     actionHandler: () => auditRun(),
-    actionDisabled: mode === 'global'
+    actionDisabled: mode === 'global',
+    color: 'primary'
   };
 
   // set data

@@ -16,6 +16,7 @@ const styles = theme => ({
     border: '1px solid'
   },
   searchIcon: {
+    cursor: 'pointer',
     width: theme.spacing(1) * 6,
     height: '100%',
     position: 'absolute',
@@ -23,14 +24,15 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'center',
     paddingLeft: theme.spacing(2),
-    color: theme.palette.common.white
+    color: theme.palette.common.white,
+    zIndex: 9999
   },
   inputRoot: {
     color: 'inherit',
     width: '100%',
     fontFamily: 'inherit',
-    fontSize: 14,
-    lineHeight: '1em'
+    fontSize: 20,
+    lineHeight: '0.75em'
   },
   inputInput: {
     color: theme.palette.common.white,
@@ -38,9 +40,9 @@ const styles = theme => ({
     paddingLeft: theme.spacing(10),
     paddingRight: theme.spacing(10),
     transition: theme.transitions.create('width'),
-    width: 145,
+    width: 190,
     '&:focus': {
-      width: 275
+      width: 290
     }
   }
 });

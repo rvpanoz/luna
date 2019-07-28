@@ -34,6 +34,9 @@ const styles = theme => ({
   },
   directory: {
     padding: theme.spacing(1),
+  },
+  paper: {
+    padding: theme.spacing(1)
   }
 });
 
