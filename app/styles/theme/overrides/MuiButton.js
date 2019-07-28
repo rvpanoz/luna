@@ -17,4 +17,5 @@ export default {
       boxShadow: 'none'
     }
   }
+
 };

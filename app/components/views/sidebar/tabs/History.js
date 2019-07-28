@@ -12,6 +12,7 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 
 import ArrowRightIcon from '@material-ui/icons/ArchiveOutlined';
+import FolderIcon from '@material-ui/icons/FolderOpen';
 import { iMessage } from 'commons/utils'
 
 import styles from './styles/history';
@@ -23,7 +24,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
         <ListItem dense className={classes.listItem}>
           <ListItemText
             primary={
-              <Typography color="textSecondary" className={classes.label}>{iMessage('info', 'noHistory')}</Typography>
+              <Typography className={classes.label}>{iMessage('info', 'noHistory')}</Typography>
             }
           />
         </ListItem>
@@ -36,9 +37,12 @@ const HistoryTab = ({ classes, directories, onClick }) => (
           .join('/');
 
         return (
-          <ListItem classes={{
-            root: classes.listItem
-          }} key={dir.name}>
+          <ListItem className={classes.listItem} key={dir.name}>
+            <ListItemIcon style={{ marginTop: 3 }}>
+              <Tooltip title={dir.directory}>
+                <FolderIcon />
+              </Tooltip>
+            </ListItemIcon>
             <ListItemText
               primary={
                 <Typography className={classes.label}>{dir.name}</Typography>
@@ -50,11 +54,10 @@ const HistoryTab = ({ classes, directories, onClick }) => (
               }
             />
             <ListItemSecondaryAction>
-              <Tooltip title={iMessage('info', 'loadDirectory')}>
+              <Tooltip title="Load directory">
                 <IconButton
-                  aria-label="load-directory"
+                  aria-label="action"
                   onClick={() => onClick(dir.directory)}
-                  disableRipple
                 >
                   <ArrowRightIcon />
                 </IconButton>
