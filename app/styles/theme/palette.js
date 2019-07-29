@@ -2,7 +2,6 @@ import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import { whiteColor as white, blackColor as black } from '../variables';
 
 export default {
-  type: 'dark',
   common: {
     black,
     white,
@@ -13,7 +12,7 @@ export default {
     contrastText: white,
     light: lighten('#006db3', 0.1),
     main: '#006db3',
-    dark: darken('#006db3', 0.1),
+    dark: darken('#006db3', 0.1)
   },
   secondary: {
     contrastText: white,

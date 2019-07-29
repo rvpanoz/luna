@@ -1,10 +1,16 @@
-import { flexContainer } from 'styles/variables';
+import { defaultFont, flexContainer } from 'styles/variables';
 
 const styles = theme => ({
   flexContainer: {
     ...flexContainer,
     alignItems: 'center',
     justifyContent: 'space-between'
+  },
+  flexContainerCell: {
+    ...flexContainer,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
   },
   transition: {
     transition: theme.transitions.create('width', {
@@ -14,10 +20,34 @@ const styles = theme => ({
   paper: {
     width: '100%',
     borderTopLeftRadius: 0,
-    borderTopRightRadius: 0
+    borderTopRightRadius: 0,
+    [theme.breakpoints.up('md')]: {
+      maxWidth: '100%'
+    },
+    [theme.breakpoints.up('lg')]: {
+      maxWidth: 1024
+    }
   },
   toolbar: {
     width: '100%'
+  },
+  tableCell: {
+    '& p': {
+      overflowWrap: 'break-word'
+    }
+  },
+  cellText: {
+    ...defaultFont,
+    fontSize: 16,
+    [theme.breakpoints.up('lg')]: {
+      width: 'auto'
+    },
+    [theme.breakpoints.down('md')]: {
+      width: 200
+    },
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
   },
   tableWrapper: {
     whiteSpace: 'nowrap',
@@ -29,11 +59,6 @@ const styles = theme => ({
       maxHeight: 650
     }
   },
-  tableResponsive: {
-    width: '100%',
-    marginTop: theme.spacing(3),
-    overflowX: 'auto'
-  },
   table: {
     width: '100%',
     backgroundColor: 'transparent',
@@ -42,6 +67,11 @@ const styles = theme => ({
   },
   hasFilterBlur: {
     filter: 'blur(15px)'
+  },
+  tableResponsive: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+    overflowX: 'auto'
   }
 });
 

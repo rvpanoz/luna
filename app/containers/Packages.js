@@ -111,7 +111,7 @@ const Packages = ({ classes }) => {
     operationStatus,
     operationPackages,
     operationCommand,
-    auditData,
+    auditData
   } = useMappedState(mapState);
 
   const [auditPackages, setAuditPackages] = useState([]);
@@ -230,7 +230,7 @@ const Packages = ({ classes }) => {
               />
             )}
             {!noPackages && (
-              <Paper className={classes.root} elevation={2}>
+              <Paper className={classes.paper} elevation={2}>
                 <div className={classes.toolbar}>
                   <ToolbarView
                     title={iMessage('title', 'packages')}
@@ -291,8 +291,8 @@ const Packages = ({ classes }) => {
                               packagesInstallOptions
                             )
                               ? packagesInstallOptions.find(
-                                installOption => installOption.name === name
-                              )
+                                  installOption => installOption.name === name
+                                )
                               : {};
 
                             const inOperation =

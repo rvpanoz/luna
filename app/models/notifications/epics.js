@@ -1,9 +1,5 @@
-import { pipe, from, of } from 'rxjs';
-import {
-  concatMap,
-  mergeMap,
-  catchError,
-} from 'rxjs/operators';
+import { pipe, from } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import uuid from 'uuid/v1';
 import { combineEpics, ofType } from 'redux-observable';
 
@@ -15,31 +11,33 @@ import {
 const notificationsEpic = pipe(
   ofType(updateNotifications.type),
   mergeMap(({ payload: { notifications } }) => from(notifications)),
-  concatMap(notification => {
+  map(notification => {
+    const { messageType = 'ERR', payload } = parseNpmMessage(notification);
     const id = uuid();
-    const [reason, details] = notification.split(':');
-    const isExtraneous = reason === 'extraneous';
-
-    let detailsWithTrim = details.trim();
-    const isNameSpace = detailsWithTrim.startsWith('@')
-
-    // check for namespace
-    if (isNameSpace) {
-      detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1)
-    }
-
-    const [requiredDetails, requiredByName] = isExtraneous ? detailsWithTrim.split('@') : detailsWithTrim.split(',');
-    const [requiredName, requiredVersion] = requiredDetails.split('@');
 
     return [
       {
         type: addNotification.type,
         payload: {
           id,
-          reason,
-          requiredName: isNameSpace ? `@${requiredName}` : requiredName,
-          requiredByName: isExtraneous ? '' : requiredByName.replace('required by', ''),
-          requiredVersion: isExtraneous ? '' : requiredVersion,
+          type: 'ERROR',
+          ...payload
+        }
+      }),
+      INFO: () => ({
+        type: addNotification.type,
+        payload: {
+          type: 'INFO',
+          id,
+          ...payload
+        }
+      }),
+      WARNING: () => ({
+        type: addNotification.type,
+        payload: {
+          type: 'WARNING',
+          id,
+          ...payload
         }
       }
     ];

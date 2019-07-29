@@ -22,26 +22,16 @@ const handlers = {
     assoc('active', active, state),
   [addNotification.type]: (
     state,
-    {
-      payload: {
-        id,
-        reason,
-        requiredName,
-        requiredVersion,
-        requiredByName,
-        requiredByVersion,
-      }
-    }
+    { payload: { type, body, required, requiredBy, id } }
   ) =>
     merge(state, {
       notifications: prepend(
         {
           id,
-          reason,
-          requiredName,
-          requiredVersion,
-          requiredByName,
-          requiredByVersion
+          type,
+          body,
+          required: required.charAt(0) === '@' ? required.slice(1) : required,
+          requiredBy
         },
         state.notifications
       )

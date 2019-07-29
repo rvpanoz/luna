@@ -24,7 +24,6 @@ const styles = theme => ({
   },
   tableCell: {
     ...defaultFont,
-    fontSize: '1rem',
     textAlign: 'center',
     '& p': {
       overflowWrap: 'break-word'
