@@ -55,7 +55,7 @@ const AppTopBar = () => {
     return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
   };
 
-  const setActivePageHandler = (page) => dispatch(setActivePage({
+  const setActivePageHandler = page => dispatch(setActivePage({
     page,
     paused: true
   }))

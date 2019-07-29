@@ -137,6 +137,7 @@ const Init = ({ classes, onClose }) => {
         disabled={!initOptions.directory}
         onClick={type === 'lock' ? npmLock : npmInit}
         color="primary"
+        variant="outlined"
       >
         {iMessage('action', 'create')}
       </Button>

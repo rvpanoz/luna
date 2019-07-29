@@ -1,6 +1,17 @@
-import { defaultFont } from 'styles/variables';
+import { defaultFont, flexContainer } from 'styles/variables';
 
 const styles = theme => ({
+  flexContainer: {
+    ...flexContainer,
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  flexContainerCell: {
+    ...flexContainer,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
+  },
   transition: {
     transition: theme.transitions.create('width', {
       duration: theme.transitions.duration.shortest

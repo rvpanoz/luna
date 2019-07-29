@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
+import cn from 'classnames'
 import { withStyles } from '@material-ui/styles';
 import {
   Checkbox,
@@ -11,7 +11,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Typography,
   Grid,
   Paper,
   Divider
@@ -19,13 +18,16 @@ import {
 
 import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
+import TableHeader from './Header';
+
+import NotificationItem from './NotificationItem'
 import ToolbarView from './Toolbar';
 
 import styles from './styles/list';
 
-const noop = () => {};
+const noop = () => { };
 
-const NotificationsList = ({ classes, notifications }) => {
+const NotificationsList = ({ classes, notifications, loading }) => {
   const [selected, setSelected] = useState([]);
 
   const handleSelectAll = event => {
@@ -82,70 +84,12 @@ const NotificationsList = ({ classes, notifications }) => {
             </div>
             <Divider />
             <div className={classes.tableWrapper}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={selected.length === notifications.length}
-                        color="primary"
-                        indeterminate={
-                          selected.length > 0 &&
-                          selected.length < notifications.length
-                        }
-                        onChange={noop}
-                      />
-                    </TableCell>
-                    <TableCell>Message</TableCell>
-                    <TableCell>Required</TableCell>
-                    <TableCell>Required by</TableCell>
-                  </TableRow>
-                </TableHead>
+              <Table className={cn(classes.table, {
+                [classes.hasFilterBlur]: loading
+              })}>
+                <TableHeader />
                 <TableBody>
-                  {notifications.slice(0, 10).map(notification => (
-                    <TableRow
-                      className={classes.tableRow}
-                      hover
-                      key={notification.id}
-                      selected={selected.indexOf(notification.id) !== -1}
-                    >
-                      <TableCell
-                        padding="checkbox"
-                        className={classes.tableCell}
-                      >
-                        <Checkbox
-                          checked={selected.indexOf(notification.id) !== -1}
-                          color="primary"
-                          onChange={noop}
-                          value="true"
-                        />
-                      </TableCell>
-                      <TableCell className={classes.tableCell}>
-                        <Typography
-                          variant="inherit"
-                          className={classes.cellText}
-                        >
-                          {notification.body}
-                        </Typography>
-                      </TableCell>
-                      <TableCell className={classes.tableCell}>
-                        <Typography
-                          variant="inherit"
-                          className={classes.cellText}
-                        >
-                          {notification.required}
-                        </Typography>
-                      </TableCell>
-                      <TableCell className={classes.tableCell}>
-                        <Typography
-                          variant="inherit"
-                          className={classes.cellText}
-                        >
-                          {notification.requiredBy}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {notifications.slice(0, 10).map(notification => <NotificationItem {...notification} selected={selected} />)}
                 </TableBody>
               </Table>
             </div>
@@ -158,7 +102,8 @@ const NotificationsList = ({ classes, notifications }) => {
 
 NotificationsList.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  notifications: PropTypes.arrayOf(PropTypes.object).isRequired
+  notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
+  loading: PropTypes.bool
 };
 
 export default withStyles(styles)(NotificationsList);
