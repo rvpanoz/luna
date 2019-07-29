@@ -1,13 +1,10 @@
+/* eslint-disable */
+
 import React, { useState } from 'react';
-import cn from 'classnames';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/styles';
 import {
-  Card,
-  CardActions,
-  CardContent,
-  Avatar,
   Checkbox,
   Table,
   TableBody,
@@ -15,7 +12,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  TablePagination,
   Grid,
   Paper,
   Divider
@@ -29,18 +25,16 @@ import styles from './styles/list';
 
 const noop = () => {};
 
-const NotificationsList = ({ classes, className, notifications, ...rest }) => {
+const NotificationsList = ({ classes, notifications }) => {
   const [selected, setSelected] = useState([]);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [page, setPage] = useState(0);
 
   const handleSelectAll = event => {
-    const { users } = props;
-
     let selectedNotifications;
 
     if (event.target.checked) {
-      selectedNotifications = notifications.map(user => user.id);
+      selectedNotifications = notifications.map(
+        notification => notification.id
+      );
     } else {
       selectedNotifications = [];
     }
@@ -66,14 +60,6 @@ const NotificationsList = ({ classes, className, notifications, ...rest }) => {
     }
 
     setSelected(newSelected);
-  };
-
-  const handlePageChange = (event, page) => {
-    setPage(page);
-  };
-
-  const handleRowsPerPageChange = event => {
-    setRowsPerPage(event.target.value);
   };
 
   const noNotifications = !notifications || notifications.length === 0;
@@ -116,14 +102,17 @@ const NotificationsList = ({ classes, className, notifications, ...rest }) => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {notifications.slice(0, rowsPerPage).map(notification => (
+                  {notifications.slice(0, 10).map(notification => (
                     <TableRow
                       className={classes.tableRow}
                       hover
                       key={notification.id}
                       selected={selected.indexOf(notification.id) !== -1}
                     >
-                      <TableCell padding="checkbox">
+                      <TableCell
+                        padding="checkbox"
+                        className={classes.tableCell}
+                      >
                         <Checkbox
                           checked={selected.indexOf(notification.id) !== -1}
                           color="primary"
@@ -133,19 +122,25 @@ const NotificationsList = ({ classes, className, notifications, ...rest }) => {
                       </TableCell>
                       <TableCell className={classes.tableCell}>
                         <Typography
+                          variant="inherit"
                           className={classes.cellText}
-                          variant="body1"
                         >
                           {notification.body}
                         </Typography>
                       </TableCell>
                       <TableCell className={classes.tableCell}>
-                        <Typography className={classes.cellText}>
+                        <Typography
+                          variant="inherit"
+                          className={classes.cellText}
+                        >
                           {notification.required}
                         </Typography>
                       </TableCell>
                       <TableCell className={classes.tableCell}>
-                        <Typography className={classes.cellText}>
+                        <Typography
+                          variant="inherit"
+                          className={classes.cellText}
+                        >
                           {notification.requiredBy}
                         </Typography>
                       </TableCell>
@@ -163,7 +158,7 @@ const NotificationsList = ({ classes, className, notifications, ...rest }) => {
 
 NotificationsList.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  notifications: PropTypes.array.isRequired
+  notifications: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default withStyles(styles)(NotificationsList);

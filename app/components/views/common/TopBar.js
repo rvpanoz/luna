@@ -23,7 +23,6 @@ import styles from './styles/topBar';
 
 const Topbar = ({
   classes,
-  theme,
   notifications,
   mode,
   loading,

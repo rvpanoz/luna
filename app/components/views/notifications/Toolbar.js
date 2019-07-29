@@ -1,8 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
 import PropTypes from 'prop-types';
-import { useState, useCallback } from 'react';
-import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
 import Toolbar from '@material-ui/core/Toolbar';
@@ -53,7 +51,11 @@ const ToolbarView = ({ classes, notifications, total, title, selected }) => {
 };
 
 ToolbarView.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selected: PropTypes.arrayOf(PropTypes.string).isRequired,
+  title: PropTypes.string.isRequired,
+  total: PropTypes.number
 };
 
 export default withStyles(styles)(ToolbarView);

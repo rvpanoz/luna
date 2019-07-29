@@ -1,5 +1,4 @@
-import { defaultFont, flexContainer, grayColor } from 'styles/variables';
-import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
+import { defaultFont } from 'styles/variables';
 
 const styles = theme => ({
   transition: {
@@ -28,7 +27,7 @@ const styles = theme => ({
   },
   cellText: {
     ...defaultFont,
-    fontSize: 12,
+    fontSize: 16,
     [theme.breakpoints.up('lg')]: {
       width: 'auto'
     },

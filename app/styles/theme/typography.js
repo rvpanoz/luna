@@ -65,12 +65,12 @@ export default {
   },
   body1: {
     color: palette.text.primary,
-    fontSize: 14,
+    fontSize: 16,
     letterSpacing: '-0.05px'
   },
   body2: {
     color: palette.text.primary,
-    fontSize: 12,
+    fontSize: 14,
     letterSpacing: '-0.04px'
   },
   button: {
