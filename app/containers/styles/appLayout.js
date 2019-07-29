@@ -19,7 +19,7 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     paddingLeft: theme.spacing(6),
-    paddingTop: theme.spacing(2)
+    paddingTop: theme.spacing(1)
   },
   sidebar: {
     flex: 0,

@@ -36,7 +36,7 @@ const Topbar = ({
       color="inherit"
     >
       <Toolbar disableGutters>
-        <AppLogo />
+        <div className={classes.flexGrow} />
         <div>
           <Toolbar
             disableGutters

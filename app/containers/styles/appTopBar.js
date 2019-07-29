@@ -1,16 +1,7 @@
-import { grayColor } from 'styles/variables';
+const styles = theme => ({
+    root: {
+        paddingLeft: theme.spacing(4)
+    }
+})
 
-const styles = () => ({
-  root: {
-    width: '100%'
-  },
-  dialogTitle: {
-    fontSize: 22,
-    color: grayColor
-  },
-  closeButton: {
-    textTransform: 'lowercase'
-  }
-});
-
-export default styles;
+export default styles
