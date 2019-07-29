@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import { bool, objectOf, object, string, func, oneOfType } from 'prop-types';
+import { arrayOf, objectOf, string } from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
@@ -71,6 +71,12 @@ const NotificationItem = ({
 
 NotificationItem.propTypes = {
     classes: objectOf(string).isRequired,
+    id: string.isRequired,
+    body: string.isRequired,
+    required: string.isRequired,
+    requiredBy: string.isRequired,
+    type: string.isRequired,
+    selected: arrayOf(string),
 };
 
 export default withStyles(styles)(NotificationItem);

@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { and } from "ramda";
-import { useDispatch } from "redux-react-hook";
 
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
@@ -15,43 +14,43 @@ const columnData = [
     { id: "requiredBy", disablePadding: true, label: "Required by" },
 ];
 
-const TableHeader = ({ body, required, requiredBy, selected, sortBy, sortDir }) => {
-    const dispatch = useDispatch();
+const TableHeader = ({ selected, sortBy, sortDir }) => <TableHead>
+    <TableRow>
+        <TableCell padding="checkbox">
+            <Checkbox
+                indeterminate={selected > 0}
+            />
+        </TableCell>
+        {columnData.map(column => {
+            const needSort =
+                and(!!sortBy, !!column.id) && and(true, sortBy === column.id);
 
-    return (
-        <TableHead>
-            <TableRow>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        indeterminate={selected > 0}
-                    />
-                </TableCell>
-                {columnData.map(column => {
-                    const needSort =
-                        and(!!sortBy, !!column.id) && and(true, sortBy === column.id);
-
-                    return (
-                        <TableCell
-                            key={column.id}
-                            padding={column.disablePadding ? "none" : "default"}
-                            sortDirection={sortBy === column.id ? sortDir : false}
+            return (
+                <TableCell
+                    key={column.id}
+                    padding={column.disablePadding ? "none" : "default"}
+                    sortDirection={sortBy === column.id ? sortDir : false}
+                >
+                    {needSort ? (
+                        <TableSortLabel
+                            active={sortBy === column.id}
+                            direction={sortDir}
                         >
-                            {needSort ? (
-                                <TableSortLabel
-                                    active={sortBy === column.id}
-                                    direction={sortDir}
-                                >
-                                    {column.label}
-                                </TableSortLabel>
-                            ) : (
-                                    column.label
-                                )}
-                        </TableCell>
-                    );
-                })}
-            </TableRow>
-        </TableHead>
-    );
-};
+                            {column.label}
+                        </TableSortLabel>
+                    ) : (
+                            column.label
+                        )}
+                </TableCell>
+            );
+        })}
+    </TableRow>
+</TableHead>
+
+TableHeader.propTypes = {
+    selected: PropTypes.arrayOf(PropTypes.string),
+    sortBy: PropTypes.string,
+    sortDir: PropTypes.string
+}
 
 export default TableHeader;

@@ -6,7 +6,6 @@ import {
   Toolbar,
   Tooltip,
   Badge,
-  Hidden,
   IconButton
 } from '@material-ui/core';
 
