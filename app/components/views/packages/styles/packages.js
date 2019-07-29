@@ -2,7 +2,7 @@ import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({
-  root: {
+  paper: {
     width: '100%',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
@@ -144,7 +144,6 @@ const styles = theme => ({
   },
   name: {
     ...defaultFont,
-    fontSize: '1rem',
     [theme.breakpoints.up('md')]: {
       maxWidth: '100%'
     },

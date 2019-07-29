@@ -2,63 +2,66 @@ import { defaultFont, flexContainer, grayColor } from 'styles/variables';
 import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
+  transition: {
+    transition: theme.transitions.create('width', {
+      duration: theme.transitions.duration.shortest
+    })
+  },
   paper: {
     width: '100%',
     borderTopLeftRadius: 0,
-    borderTopRightRadius: 0
+    borderTopRightRadius: 0,
+    [theme.breakpoints.up('md')]: {
+      maxWidth: '100%'
+    },
+    [theme.breakpoints.up('lg')]: {
+      maxWidth: 1024
+    }
   },
-  container: {
+  toolbar: {
     width: '100%'
   },
-  title: {
-    display: 'flex',
-    color: darken(grayColor, 0.2),
-    flexDirection: 'column',
-    justifyContent: 'flex-start'
+  tableCell: {
+    '& p': {
+      overflowWrap: 'break-word'
+    }
   },
-  divider: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(1)
-  },
-  list: {
+  cellText: {
+    ...defaultFont,
+    fontSize: 12,
+    [theme.breakpoints.up('lg')]: {
+      width: 'auto'
+    },
+    [theme.breakpoints.down('md')]: {
+      width: 200
+    },
     whiteSpace: 'nowrap',
-    overflowY: 'scroll',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+  },
+  tableWrapper: {
+    whiteSpace: 'nowrap',
     padding: theme.spacing(1),
     [theme.breakpoints.up('md')]: {
       maxHeight: 450
     },
     [theme.breakpoints.up('lg')]: {
-      maxHeight: 750
+      maxHeight: 650
     }
   },
-  flexContainer: {
-    ...flexContainer,
-    justifyContent: 'space-between'
+  table: {
+    width: '100%',
+    backgroundColor: 'transparent',
+    borderSpacing: 0,
+    borderCollapse: 'collapse'
   },
-  header: {
-    flex: '0 0 auto',
-    padding: theme.spacing(2) + 4
+  hasFilterBlur: {
+    filter: 'blur(15px)'
   },
-  item: {
-    ...defaultFont
-  },
-  containerHolder: {
-    ...flexContainer,
-    paddingTop: theme.spacing(2),
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  helperText: {
-    ...defaultFont,
-    color: lighten(grayColor, 0.1),
-    fontSize: 16
-  },
-  noData: {
-    ...defaultFont
-  },
-  withPadding: {
-    padding: theme.spacing(1) + 4
+  tableResponsive: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+    overflowX: 'auto'
   }
 });
 

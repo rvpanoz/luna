@@ -17,8 +17,7 @@ export const INFO_MESSAGES = {
   notGlobalModeAvailable: 'Not available in global mode',
   notificationsHelperText: 'Woohoo! There are not any problems found.',
   npmAuditVulnerabiliesHelperText: 'Known valnerabilities in your project',
-  createPackageJsonHelperText:
-    'Create a new package.json file',
+  createPackageJsonHelperText: 'Create a new package.json file',
   noPackages: 'No packages found',
   noAuditData: 'No audit data',
   noDoctorData: 'No doctor data',
@@ -91,6 +90,7 @@ export const LABEL_MESSAGES = {
 };
 
 export const TITLE_MESSAGES = {
+  notifications: 'Notifications',
   dashboard: 'Dashboard',
   dependencies: 'Dependencies',
   devDependencies: 'Development',

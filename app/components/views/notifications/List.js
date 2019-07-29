@@ -1,118 +1,169 @@
-import React from 'react';
+import React, { useState } from 'react';
+import cn from 'classnames';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { useDispatch, useMappedState } from 'redux-react-hook';
 
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Tooltip from '@material-ui/core/Tooltip';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Divider from '@material-ui/core/Divider';
+import { withStyles } from '@material-ui/styles';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Avatar,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  TablePagination,
+  Grid,
+  Paper,
+  Divider
+} from '@material-ui/core';
 
-import SearchIcon from '@material-ui/icons/Search';
-import NotificationsIcon from '@material-ui/icons/NotificationsActiveTwoTone';
-
-import { setActivePage, clearFilters } from 'models/ui/actions';
-import { setPackagesSearch } from 'models/packages/actions';
-import { iMessage } from 'commons/utils';
 import { HelperText } from 'components/common';
+import { iMessage } from 'commons/utils';
+import ToolbarView from './Toolbar';
 
 import styles from './styles/list';
 
-const mapState = ({ notifications: { notifications } }) => ({
-  notifications
-});
+const noop = () => {};
 
-const NotificationsList = ({ classes }) => {
-  const { notifications } = useMappedState(mapState);
-  const dispatch = useDispatch();
+const NotificationsList = ({ classes, className, notifications, ...rest }) => {
+  const [selected, setSelected] = useState([]);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [page, setPage] = useState(0);
 
-  const onSearchHandler = packageName => {
-    dispatch(clearFilters());
+  const handleSelectAll = event => {
+    const { users } = props;
 
-    dispatch({
-      type: setActivePage.type,
-      payload: {
-        page: 'packages',
-        paused: true
-      }
-    });
+    let selectedNotifications;
 
-    dispatch(
-      setPackagesSearch({
-        channel: 'npm-search',
-        options: {
-          cmd: ['search'],
-          pkgName: packageName,
-          fromSearch: true
-        }
-      })
-    );
+    if (event.target.checked) {
+      selectedNotifications = notifications.map(user => user.id);
+    } else {
+      selectedNotifications = [];
+    }
+
+    setSelected(selectedNotifications);
   };
 
-  if (!notifications.length) {
-    return <HelperText text={iMessage('info', 'noNotifications')} />;
-  }
+  const handleSelectOne = (event, id) => {
+    const selectedIndex = notifications.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+
+    setSelected(newSelected);
+  };
+
+  const handlePageChange = (event, page) => {
+    setPage(page);
+  };
+
+  const handleRowsPerPageChange = event => {
+    setRowsPerPage(event.target.value);
+  };
+
+  const noNotifications = !notifications || notifications.length === 0;
 
   return (
-    <Paper className={classes.paper}>
-      <div className={classes.container}>
-        <div className={classes.flexContainer}>
-          <div className={classes.header}>
-            <Typography variant="h4" className={classes.title}>
-              {`Problems ${notifications ? notifications.length : 0}`}
-            </Typography>
-          </div>
-        </div>
-        <Divider />
-        <List className={classes.list}>
-          {notifications.map(({ required, requiredBy, type }) => {
-            const packageParts = required && required.split('@');
-            const [packageName] = packageParts;
-
-            return (
-              <ListItem key={packageName} className={classes.listItem}>
-                <ListItemAvatar>
-                  <Avatar style={{ backgroundColor: '#fff' }}>
-                    <NotificationsIcon
-                      color={type === 'ERROR' ? 'secondary' : 'default'}
-                    />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText primary={required} secondary={requiredBy} />
-                <ListItemSecondaryAction>
-                  <Tooltip
-                    title={iMessage('title', 'searchPackage', {
-                      name: packageName
-                    })}
-                  >
-                    <div>
-                      <IconButton
-                        aria-label="search-for-package"
-                        onClick={() => onSearchHandler(packageName)}
-                      >
-                        <SearchIcon color="primary" />
-                      </IconButton>
-                    </div>
-                  </Tooltip>
-                </ListItemSecondaryAction>
-              </ListItem>
-            );
-          })}
-        </List>
-      </div>
-    </Paper>
+    <Grid container>
+      <Grid item sm={12} className={classes.transition}>
+        {noNotifications && (
+          <HelperText text={iMessage('info', 'noNotifications')} />
+        )}
+        {!noNotifications && (
+          <Paper className={classes.paper} elevation={2}>
+            <div className={classes.toolbar}>
+              <ToolbarView
+                title={iMessage('title', 'notifications')}
+                total={notifications.length}
+                selected={selected}
+                notifications={notifications}
+              />
+            </div>
+            <Divider />
+            <div className={classes.tableWrapper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell padding="checkbox">
+                      <Checkbox
+                        checked={selected.length === notifications.length}
+                        color="primary"
+                        indeterminate={
+                          selected.length > 0 &&
+                          selected.length < notifications.length
+                        }
+                        onChange={noop}
+                      />
+                    </TableCell>
+                    <TableCell>Message</TableCell>
+                    <TableCell>Required</TableCell>
+                    <TableCell>Required by</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {notifications.slice(0, rowsPerPage).map(notification => (
+                    <TableRow
+                      className={classes.tableRow}
+                      hover
+                      key={notification.id}
+                      selected={selected.indexOf(notification.id) !== -1}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={selected.indexOf(notification.id) !== -1}
+                          color="primary"
+                          onChange={noop}
+                          value="true"
+                        />
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        <Typography
+                          className={classes.cellText}
+                          variant="body1"
+                        >
+                          {notification.body}
+                        </Typography>
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        <Typography className={classes.cellText}>
+                          {notification.required}
+                        </Typography>
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        <Typography className={classes.cellText}>
+                          {notification.requiredBy}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </Paper>
+        )}
+      </Grid>
+    </Grid>
   );
 };
 
 NotificationsList.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  notifications: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(NotificationsList);
