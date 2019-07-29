@@ -1,5 +1,6 @@
 import { pipe, from } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
+import uuid from 'uuid/v1';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { ERROR_TYPES } from 'constants/AppConstants';
@@ -42,13 +43,31 @@ const notificationsEpic = pipe(
   mergeMap(({ payload: { notifications } }) => from(notifications)),
   map(notification => {
     const { messageType = 'ERR', payload } = parseNpmMessage(notification);
+    const id = uuid();
 
     return switchcase({
       ERR: () => ({
         type: addNotification.type,
         payload: {
-          ...payload,
-          type: 'ERROR'
+          id,
+          type: 'ERROR',
+          ...payload
+        }
+      }),
+      INFO: () => ({
+        type: addNotification.type,
+        payload: {
+          type: 'INFO',
+          id,
+          ...payload
+        }
+      }),
+      WARNING: () => ({
+        type: addNotification.type,
+        payload: {
+          type: 'WARNING',
+          id,
+          ...payload
         }
       })
     })({ type: addNotification.type, payload: { type: 'ERROR' } })(messageType);

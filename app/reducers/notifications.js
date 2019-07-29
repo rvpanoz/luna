@@ -25,11 +25,12 @@ const handlers = {
     }),
   [addNotification.type]: (
     state,
-    { payload: { type, body, required, requiredBy } }
+    { payload: { type, body, required, requiredBy, id } }
   ) =>
     merge(state, {
       notifications: prepend(
         {
+          id,
           type,
           body,
           required: required.charAt(0) === '@' ? required.slice(1) : required,

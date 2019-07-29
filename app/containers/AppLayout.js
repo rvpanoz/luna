@@ -1,6 +1,6 @@
 import React from 'react';
 import { oneOfType, objectOf, func, array, object, string } from 'prop-types';
-import cn from 'classnames'
+import cn from 'classnames';
 
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -9,7 +9,8 @@ import { useMediaQuery } from '@material-ui/core';
 
 import AppTopBar from 'containers/AppTopBar';
 import AppSidebar from 'containers/AppSidebar';
-import AppNavigationBar from 'containers/AppNavigationBar'
+import AppNavigationBar from 'containers/AppNavigationBar';
+import AppNotifications from 'containers/AppNotifications';
 
 import AppSnackbar from 'components/common/AppSnackbar';
 import { Notifications } from 'components/views/notifications';
@@ -35,19 +36,17 @@ const mapState = ({
 });
 
 const AppLayout = ({ classes, theme }) => {
-  const {
-    activePage,
-    snackbar,
-  } = useMappedState(mapState);
+  const { activePage, snackbar } = useMappedState(mapState);
 
   const dispatch = useDispatch();
-  const onClose = () => dispatch(
-    setSnackbar({
-      open: false,
-      message: null,
-      type: "info"
-    })
-  )
+  const onClose = () =>
+    dispatch(
+      setSnackbar({
+        open: false,
+        message: null,
+        type: 'info'
+      })
+    );
 
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
     defaultMatches: true
@@ -72,7 +71,8 @@ const AppLayout = ({ classes, theme }) => {
               packages: () => <Packages />,
               problems: () => <Notifications />,
               audit: () => <Audit />,
-              doctor: () => <Doctor />
+              doctor: () => <Doctor />,
+              notifications: () => <AppNotifications />
             })(<Packages />)(activePage)}
           </main>
         </section>
@@ -85,7 +85,7 @@ const AppLayout = ({ classes, theme }) => {
 
 AppLayout.propTypes = {
   classes: objectOf(string).isRequired,
-  theme: objectOf(oneOfType([string, object, array, func])).isRequired,
+  theme: objectOf(oneOfType([string, object, array, func])).isRequired
 };
 
 export default withStyles(styles, {
