@@ -89,7 +89,7 @@ const NotificationsList = ({ classes, notifications, loading }) => {
               })}>
                 <TableHeader />
                 <TableBody>
-                  {notifications.slice(0, 10).map(notification => <NotificationItem {...notification} selected={selected} />)}
+                  {notifications.slice(0, 10).map(notification => <NotificationItem key={notification.id} {...notification} selected={selected} />)}
                 </TableBody>
               </Table>
             </div>

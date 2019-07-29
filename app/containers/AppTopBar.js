@@ -1,5 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
+import { withStyles } from '@material-ui/core/styles'
+
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -11,6 +13,8 @@ import { setActivePage } from 'models/ui/actions'
 import { setMode } from 'models/common/actions'
 import { navigatorParameters } from 'commons/parameters';
 import { iMessage } from 'commons/utils'
+
+import styles from './styles/appTopBar';
 
 const mapState = ({
   common: { mode, directory, activePage },
@@ -29,7 +33,8 @@ const mapState = ({
     loading
   });
 
-const AppTopBar = () => {
+
+const AppTopBar = ({ classes }) => {
   const {
     env,
     mode,
@@ -60,7 +65,7 @@ const AppTopBar = () => {
     paused: true
   }))
 
-  return (<>
+  return (<section className={classes.root}>
     <TopBar
       mode={mode}
       directory={directory}
@@ -82,7 +87,7 @@ const AppTopBar = () => {
         <Init onClose={() => toggleInitFlow(false)} />
       </DialogContent>
     </Dialog>
-  </>)
+  </section>)
 };
 
-export default AppTopBar;
+export default withStyles(styles)(AppTopBar);

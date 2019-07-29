@@ -13,7 +13,7 @@ import styles from './styles/directory';
 
 const Directory = ({ classes, mode, directory, env, activePage, setActivePage }) => (
     <div className={classes.root}>
-        <Tooltip title={iMessage('info', 'loadDirectory')}>
+        <Tooltip title={iMessage('info', 'backToPackages')}>
             <div>
                 <IconButton
                     classes={{
