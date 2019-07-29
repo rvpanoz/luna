@@ -30,7 +30,8 @@ export const INFO_MESSAGES = {
   auditFix:
     'Automatically install any compatible updates to vulnerable dependencies',
   auditForce:
-    'Have audit fix install semver-major updates to toplevel dependencies, not just semver-compatible ones'
+    'Have audit fix install semver-major updates to toplevel dependencies, not just semver-compatible ones',
+  backToPackages: 'Back to packages'
 };
 
 export const ACTION_MESSAGES = {
