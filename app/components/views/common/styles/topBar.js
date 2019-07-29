@@ -3,6 +3,7 @@ const styles = theme => ({
     marginLeft: theme.spacing(1)
   },
   root: {
+    zIndex: 'auto',
     boxShadow: 'none'
   },
   flexGrow: {

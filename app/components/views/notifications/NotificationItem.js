@@ -17,7 +17,8 @@ const NotificationItem = ({
     body,
     requiredBy,
     required,
-    selected
+    selected,
+    handleSelectOne
 }) => {
 
     const isSelected = selected.indexOf(id) !== -1
@@ -39,7 +40,7 @@ const NotificationItem = ({
                 <Checkbox
                     checked={isSelected}
                     disableRipple
-                    onClick={null}
+                    onClick={e => handleSelectOne(e, id)}
                 />
             </TableCell>
 

@@ -5,12 +5,8 @@ import PropTypes from 'prop-types';
 import cn from 'classnames'
 import { withStyles } from '@material-ui/styles';
 import {
-  Checkbox,
   Table,
   TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Grid,
   Paper,
   Divider
@@ -19,18 +15,15 @@ import {
 import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
-
 import NotificationItem from './NotificationItem'
 import ToolbarView from './Toolbar';
 
 import styles from './styles/list';
 
-const noop = () => { };
-
 const NotificationsList = ({ classes, notifications, loading }) => {
   const [selected, setSelected] = useState([]);
 
-  const handleSelectAll = event => {
+  const handleSelectAll = e => {
     let selectedNotifications;
 
     if (event.target.checked) {
@@ -44,8 +37,8 @@ const NotificationsList = ({ classes, notifications, loading }) => {
     setSelected(selectedNotifications);
   };
 
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = notifications.indexOf(id);
+  const handleSelectOne = (e, id) => {
+    const selectedIndex = selected.indexOf(id)
     let newSelected = [];
 
     if (selectedIndex === -1) {
@@ -68,7 +61,7 @@ const NotificationsList = ({ classes, notifications, loading }) => {
 
   return (
     <Grid container>
-      <Grid item sm={12} className={classes.transition}>
+      <Grid item sm={10} className={classes.transition}>
         {noNotifications && (
           <HelperText text={iMessage('info', 'noNotifications')} />
         )}
@@ -87,9 +80,16 @@ const NotificationsList = ({ classes, notifications, loading }) => {
               <Table className={cn(classes.table, {
                 [classes.hasFilterBlur]: loading
               })}>
-                <TableHeader />
+                <TableHeader handleSelectAll={handleSelectAll} selected={selected} sortBy='Message' sortDir="desc" />
                 <TableBody>
-                  {notifications.slice(0, 10).map(notification => <NotificationItem key={notification.id} {...notification} selected={selected} />)}
+                  {notifications.slice(0, 10).map(notification =>
+                    <NotificationItem
+                      {...notification}
+                      key={notification.id}
+                      selected={selected}
+                      handleSelectOne={handleSelectOne}
+                      handleSelectAll={handleSelectAll}
+                    />)}
                 </TableBody>
               </Table>
             </div>
