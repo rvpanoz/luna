@@ -1,7 +1,7 @@
-const styles = theme => ({
-    root: {
-        paddingLeft: theme.spacing(4)
-    }
-})
+const styles = () => ({
+  root: {
+    width: '100%'
+  }
+});
 
-export default styles
+export default styles;

@@ -57,15 +57,15 @@ const AppLayout = ({ classes, theme }) => {
       <div
         className={cn({
           [classes.root]: true,
-          [classes.shiftContent]: isDesktop
+          [classes.shiftContent]: true
         })}
       >
         <section className={classes.sidebar}>
           <AppSidebar open={isDesktop} />
         </section>
         <section className={classes.main}>
-          <AppTopBar />
-          <AppNavigationBar />
+          <AppTopBar className={classes.topBar} />
+          <AppNavigationBar className={classes.navigationBar} />
           <main className={classes.content}>
             {switchcase({
               packages: () => <Packages />,
