@@ -15,7 +15,7 @@ const styles = theme => ({
   },
   tableRow: {
     border: 'none',
-    padding: 10,
+    padding: theme.spacing(1),
     lineHeight: '1.1',
     verticalAlign: 'middle',
     '&:hover': {

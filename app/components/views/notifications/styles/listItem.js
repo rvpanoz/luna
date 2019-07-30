@@ -23,32 +23,17 @@ const styles = theme => ({
   },
   cellText: {
     ...defaultFont,
-    textAlign: 'left',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis'
-  },
-  requiredBy: {
     [theme.breakpoints.up('lg')]: {
       width: 'auto'
     },
     [theme.breakpoints.down('md')]: {
       width: 200
     },
+    textAlign: 'left',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    textAlign: 'left'
-  },
-  span: {
-    color: '#fff'
-  },
-  popover: {
-    pointerEvents: 'none',
-  },
-  paper: {
-    padding: theme.spacing(1),
-  },
+    textOverflow: 'ellipsis'
+  }
 });
 
 export default styles;
