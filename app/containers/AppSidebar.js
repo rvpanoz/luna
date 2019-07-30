@@ -35,6 +35,7 @@ const mapState = ({
 
 const AppSidebar = ({ classes, className }) => {
   const [history, updateHistory] = useState([]);
+  const dispatch = useDispatch();
 
   const {
     mode,
