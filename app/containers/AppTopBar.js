@@ -7,7 +7,8 @@ import cn from 'classnames';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import { Init } from 'components/views/common/';
+import DialogActions from '@material-ui/core/DialogActions';
+import { Init, Settings } from 'components/views/common/';
 import { TopBar } from 'components/views/topBar/';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 
@@ -18,6 +19,7 @@ import { navigatorParameters } from 'commons/parameters';
 import { iMessage } from 'commons/utils';
 
 import styles from './styles/appTopBar';
+import { Button } from '@material-ui/core';
 
 const mapState = ({
   common: { mode, directory, activePage },
@@ -27,26 +29,40 @@ const mapState = ({
       loader: { loading }
     }
   },
-  npm: { env }
+  npm: { env: {
+    metricsRegistry,
+    auditLevel,
+    cache
+  } }
 }) => ({
   activePage,
   notifications,
   mode,
   directory,
-  env,
+  metricsRegistry,
+  auditLevel,
+  cache,
   loading
 });
 
 const AppTopBar = ({ classes, className }) => {
   const {
-    env,
+    metricsRegistry,
+    auditLevel,
+    cache,
     mode,
     directory,
     notifications,
     loading,
     activePage
   } = useMappedState(mapState);
-  const [initFlow, toggleInitFlow] = useState(false);
+
+  const [dialog, setDialog] = useState({
+    open: false,
+    title: '',
+    active: null
+  });
+
   const dispatch = useDispatch();
 
   const loadDirectory = () => {
@@ -71,6 +87,8 @@ const AppTopBar = ({ classes, className }) => {
       })
     );
 
+  const closeDialog = () => setDialog({ ...dialog, open: false, active: null, title: '' })
+
   return (
     <div
       className={cn(classes.root, {
@@ -81,23 +99,42 @@ const AppTopBar = ({ classes, className }) => {
         mode={mode}
         directory={directory}
         notifications={notifications}
-        env={env}
         loading={loading}
         onLoadDirectory={loadDirectory}
         setActivePage={setActivePageHandler}
         activePage={activePage}
-        onInitFlow={() => toggleInitFlow(true)}
+        onInitFlow={() => setDialog({ ...dialog, open: true, active: 'Init', title: iMessage('title', 'createPackageJson') })}
+        onShowSettings={() => setDialog({ ...dialog, open: true, active: 'Settings', title: iMessage('title', 'settings') })}
       />
       <Dialog
-        open={initFlow}
+        open={dialog.open}
+        fullWidth
         maxWidth="sm"
-        onClose={() => toggleInitFlow(false)}
+        onClose={closeDialog}
         aria-labelledby="npm-init"
       >
-        <DialogTitle>{iMessage('title', 'createPackageJson')}</DialogTitle>
+        <DialogTitle disableTypography classes={{ root: classes.dialogTitle }}>{dialog.title}</DialogTitle>
         <DialogContent>
-          <Init onClose={() => toggleInitFlow(false)} />
+          {dialog.active === 'Init' && <Init onClose={closeDialog} />}
+          {dialog.active === 'Settings' && <Settings
+            onClose={closeDialog}
+            metricsRegistry={metricsRegistry}
+            cache={cache}
+            auditLevel={auditLevel}
+          />}
         </DialogContent>
+        <DialogActions disableSpacing>
+          {dialog.active === 'Init' && <Button
+            color="primary"
+            variant="outlined"
+          >
+            {iMessage('action', 'create')}
+          </Button>}
+          <Button classes={{
+            root: classes.closeButton
+          }} onClick={closeDialog}>{iMessage('action', 'close')}
+          </Button>
+        </DialogActions>
       </Dialog>
     </div>
   );

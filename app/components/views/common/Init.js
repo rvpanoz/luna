@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 
+import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -85,67 +86,39 @@ const Init = ({ classes, onClose }) => {
     onClose();
   }, [dispatch, onClose, directory]);
 
-  return <Dialog
-    open={true}
-    onClose={onClose}
-    aria-labelledby="init-dialog"
-    classes={{
-      root: classes.dialog
-    }}
-    PaperProps={{
-      classes: {
-        root: classes.paper
-      }
-    }}
-  >
-    <Typography className={classes.title} color="textSecondary" variant="h4">{iMessage('info', 'createPackageJsonHelperText')}</Typography>
-    <DialogContent dividers>
-      <div className={classes.content}>
-        <div className={classes.directory}>
-          <Typography
-            variant="h5"
-          >
-            {directory || 'No directory selected'}
-          </Typography>
-        </div>
-        <div className={classes.actions}>
-          <Button
-            color="primary"
-            onClick={startInitFlow}
-            variant="outlined"
-          >
-            {iMessage('info', 'directorySelection')}
-          </Button>
-        </div>
+  return <Paper elevation={0}>
+    <div className={classes.content}>
+      <div className={classes.directory}>
+        <Typography
+          variant="h5"
+        >
+          {directory || 'No directory selected'}
+        </Typography>
       </div>
-      <div className={classes.options}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={type === 'lock'}
-              disableRipple
-              onClick={onChangeType}
-            />
-          }
-          className={classes.formControl}
-          label="package-lock only"
-        />
+      <div className={classes.actions}>
+        <Button
+          color="primary"
+          onClick={startInitFlow}
+          variant="outlined"
+        >
+          {iMessage('info', 'directorySelection')}
+        </Button>
       </div>
-    </DialogContent>
-    <DialogActions>
-      <Button
-        disabled={!initOptions.directory}
-        onClick={type === 'lock' ? npmLock : npmInit}
-        color="primary"
-        variant="outlined"
-      >
-        {iMessage('action', 'create')}
-      </Button>
-      <Button onClick={onClose} color="secondary" variant="outlined">
-        {iMessage('action', 'cancel')}
-      </Button>
-    </DialogActions>
-  </Dialog>
+    </div>
+    <div className={classes.options}>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={type === 'lock'}
+            disableRipple
+            onClick={onChangeType}
+          />
+        }
+        className={classes.formControl}
+        label="package-lock only"
+      />
+    </div>
+  </Paper>
 }
 
 Init.propTypes = {
