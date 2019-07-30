@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { bool, node, objectOf, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -16,8 +16,8 @@ const TabContainer = ({ children, loading }) => (
 );
 
 TabContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-  loading: PropTypes.bool
+  children: node.isRequired,
+  loading: bool
 };
 
 const AppTabs = ({ classes, children }) => {
@@ -67,8 +67,8 @@ const AppTabs = ({ classes, children }) => {
 };
 
 AppTabs.propTypes = {
-  children: PropTypes.node.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired
+  children: node.isRequired,
+  classes: objectOf(string).isRequired
 };
 
 export default withStyles(styles)(AppTabs);

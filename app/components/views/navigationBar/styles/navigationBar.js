@@ -1,10 +1,9 @@
 import { flexContainer } from 'styles/variables';
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     display: 'flex',
-    alignItems: 'center',
-    paddingTop: theme.spacing(1) + 6
+    alignItems: 'center'
   },
   flexContainer: {
     ...flexContainer,

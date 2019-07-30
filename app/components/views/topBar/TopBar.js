@@ -25,17 +25,16 @@ const Topbar = ({
 }) => (
   <AppBar
     className={classes.root}
-    position="fixed"
+    position="static"
     elevation={0}
     color="inherit"
   >
     <Toolbar disableGutters>
-      <AppLogo />
       <div>
         <Toolbar
           disableGutters
           classes={{
-            root: classes.toolbar
+            root: classes.root
           }}
         >
           <Tooltip title={iMessage('title', 'loadDirectory')}>

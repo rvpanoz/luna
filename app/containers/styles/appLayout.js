@@ -5,13 +5,13 @@ const styles = theme => ({
     width: '100%',
     height: '100%',
     display: 'flex',
-    flexDirection: 'column',
-    paddingTop: theme.spacing(7)
+    flexDirection: 'column'
   },
   shiftContent: {
     paddingLeft: 240
   },
   main: {
+    minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
