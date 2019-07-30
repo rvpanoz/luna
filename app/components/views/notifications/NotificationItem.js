@@ -8,7 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 
-import styles from './styles/list';
+import styles from './styles/listItem';
 
 const NotificationItem = ({
   classes,
@@ -25,7 +25,6 @@ const NotificationItem = ({
   return (
     <TableRow
       key={id}
-      hover
       role="checkbox"
       aria-checked={isSelected}
       tabIndex={-1}
@@ -33,7 +32,6 @@ const NotificationItem = ({
       classes={{
         root: classes.tableRow
       }}
-      onClick={null}
     >
       <TableCell padding="checkbox" style={{ width: '85px' }}>
         <Checkbox
@@ -43,7 +41,11 @@ const NotificationItem = ({
         />
       </TableCell>
 
-      <TableCell padding="none" name="name" className={classes.tableCell}>
+      <TableCell
+        padding="none"
+        name="name"
+        className={cn(classes.tableCell, classes.cellText)}
+      >
         <div
           className={cn(classes.flexContainerCell, {
             [classes.flexRow]: type === 'ERR'

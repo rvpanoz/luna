@@ -91,6 +91,7 @@ export const LABEL_MESSAGES = {
 };
 
 export const TITLE_MESSAGES = {
+  switchToGlobals: 'Switch to globals',
   notifications: 'Notifications',
   dashboard: 'Dashboard',
   dependencies: 'Dependencies',

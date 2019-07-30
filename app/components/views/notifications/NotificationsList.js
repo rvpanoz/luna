@@ -55,16 +55,16 @@ const NotificationsList = ({ classes, notifications, loading }) => {
 
   return (
     <Grid container>
-      <Grid item sm={10} className={classes.transition}>
+      <Grid item md={10} lg={10} xl={10} className={classes.transition}>
         {noNotifications && (
           <HelperText text={iMessage('info', 'noNotifications')} />
         )}
         {!noNotifications && (
           <Paper
+            elevation={2}
             classes={{
               root: classes.paper
             }}
-            elevation={2}
           >
             <div className={classes.toolbar}>
               <ToolbarView
@@ -77,6 +77,7 @@ const NotificationsList = ({ classes, notifications, loading }) => {
             <Divider />
             <div className={classes.tableWrapper}>
               <Table
+                aria-labelledby="notifications-list"
                 className={cn(classes.table, {
                   [classes.hasFilterBlur]: loading
                 })}
