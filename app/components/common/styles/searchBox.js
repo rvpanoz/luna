@@ -39,9 +39,9 @@ const styles = theme => ({
     paddingLeft: theme.spacing(10),
     paddingRight: theme.spacing(10),
     transition: theme.transitions.create('width'),
-    width: 190,
+    width: 175,
     '&:focus': {
-      width: 290
+      width: 220
     }
   }
 });

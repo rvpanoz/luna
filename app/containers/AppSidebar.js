@@ -6,7 +6,7 @@ import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import { Sidebar } from 'components/views/common';
+import { Sidebar } from 'components/views/sidebar';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 
@@ -39,6 +39,7 @@ const mapState = ({
 
 const AppSidebar = ({ classes, className }) => {
   const [history, updateHistory] = useState([]);
+  const dispatch = useDispatch();
 
   const {
     mode,
@@ -65,7 +66,6 @@ const AppSidebar = ({ classes, className }) => {
     }
   ];
 
-  const dispatch = useDispatch();
   const loadDirectory = directory => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
     dispatch(

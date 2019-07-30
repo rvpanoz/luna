@@ -3,9 +3,6 @@ const styles = theme => ({
     zIndex: 'auto',
     boxShadow: 'none'
   },
-  actions: {
-    paddingLeft: theme.spacing(1) / 2
-  },
   flexGrow: {
     flexGrow: 1
   },

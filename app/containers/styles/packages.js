@@ -14,7 +14,6 @@ const styles = theme => ({
       maxWidth: 1024
     }
   },
-  container: {},
   typo: {
     ...defaultFont,
     fontSize: 16
