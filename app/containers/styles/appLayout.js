@@ -6,11 +6,7 @@ const styles = theme => ({
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    paddingTop: 56,
-    height: '100%',
-    [theme.breakpoints.up('sm')]: {
-      paddingTop: 64
-    }
+    paddingTop: theme.spacing(7)
   },
   shiftContent: {
     paddingLeft: 240
@@ -18,27 +14,28 @@ const styles = theme => ({
   main: {
     display: 'flex',
     flexDirection: 'column',
+    flex: 1,
     paddingLeft: theme.spacing(6),
     paddingTop: theme.spacing(1)
   },
+  topBar: {
+    width: '100%'
+  },
+  navigationBar: {
+    width: '100%'
+  },
   sidebar: {
-    flex: 0,
+    flex: 0
   },
   content: {
-    flex: 1,
-    padding: theme.spacing(1),
-    height: '100%',
+    padding: theme.spacing(1)
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
       flexShrink: 0
     }
-  },
-  mainContent: {
-    flex: 1,
-    padding: theme.spacing(1)
-  },
+  }
 });
 
 export default styles;
