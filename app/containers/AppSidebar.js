@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useState, useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
@@ -6,9 +7,9 @@ import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import { Sidebar } from 'components/views/common';
-import { drawerWidth } from "styles/variables";
-import { setActivePage } from 'models/ui/actions'
-import { setMode } from 'models/common/actions'
+import { setActivePage } from 'models/ui/actions';
+import { setMode } from 'models/common/actions';
+
 import styles from './styles/appSidebar';
 
 const mapState = ({
@@ -32,9 +33,7 @@ const mapState = ({
   packagesOutdated
 });
 
-const AppSidebar = ({
-  classes
-}) => {
+const AppSidebar = ({ classes, className }) => {
   const [history, updateHistory] = useState([]);
 
   const {
@@ -62,19 +61,16 @@ const AppSidebar = ({
     }
   ];
 
-
   const dispatch = useDispatch();
   const loadDirectory = directory => {
-    dispatch(
-      setActivePage({ page: 'packages', paused: false })
-    );
+    dispatch(setActivePage({ page: 'packages', paused: false }));
     dispatch(
       setMode({
         mode: 'local',
         directory
       })
     );
-  }
+  };
 
   useEffect(() => {
     ipcRenderer.on('loaded-packages-close', (event, directories) =>
@@ -85,8 +81,16 @@ const AppSidebar = ({
   }, []);
 
   return (
-    <Drawer PaperProps={{ style: { width: drawerWidth } }} variant="permanent" anchor="left" classes={{ paper: classes.drawer }}>
-      <div className={classes.flexContainer}>
+    <div
+      className={cn(classes.root, {
+        [className]: className !== undefined
+      })}
+    >
+      <Drawer
+        variant="permanent"
+        anchor="left"
+        classes={{ paper: classes.drawer }}
+      >
         <Sidebar
           mode={mode}
           loadDirectory={loadDirectory}
@@ -95,13 +99,14 @@ const AppSidebar = ({
           updatedAt={lastUpdatedAt}
           tabPackagesData={packagesItems}
         />
-      </div>
-    </Drawer>
+      </Drawer>
+    </div>
   );
 };
 
 AppSidebar.propTypes = {
-  classes: objectOf(string).isRequired
+  classes: objectOf(string).isRequired,
+  className: string
 };
 
 export default withStyles(styles)(AppSidebar);

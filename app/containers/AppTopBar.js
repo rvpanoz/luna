@@ -1,6 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles';
+import { objectOf, string } from 'prop-types';
+import cn from 'classnames';
 
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
@@ -9,10 +11,10 @@ import { TopBar, Init } from 'components/views/common/';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 
 import { showDialog } from 'commons/utils';
-import { setActivePage } from 'models/ui/actions'
-import { setMode } from 'models/common/actions'
+import { setActivePage } from 'models/ui/actions';
+import { setMode } from 'models/common/actions';
 import { navigatorParameters } from 'commons/parameters';
-import { iMessage } from 'commons/utils'
+import { iMessage } from 'commons/utils';
 
 import styles from './styles/appTopBar';
 
@@ -24,17 +26,17 @@ const mapState = ({
       loader: { loading }
     }
   },
-  npm: { env } }) => ({
-    activePage,
-    notifications,
-    mode,
-    directory,
-    env,
-    loading
-  });
+  npm: { env }
+}) => ({
+  activePage,
+  notifications,
+  mode,
+  directory,
+  env,
+  loading
+});
 
-
-const AppTopBar = ({ classes }) => {
+const AppTopBar = ({ classes, className }) => {
   const {
     env,
     mode,
@@ -42,7 +44,7 @@ const AppTopBar = ({ classes }) => {
     notifications,
     loading,
     activePage
-  } = useMappedState(mapState)
+  } = useMappedState(mapState);
   const [initFlow, toggleInitFlow] = useState(false);
   const dispatch = useDispatch();
 
@@ -60,34 +62,49 @@ const AppTopBar = ({ classes }) => {
     return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
   };
 
-  const setActivePageHandler = page => dispatch(setActivePage({
-    page,
-    paused: true
-  }))
+  const setActivePageHandler = page =>
+    dispatch(
+      setActivePage({
+        page,
+        paused: true
+      })
+    );
 
-  return (<section className={classes.root}>
-    <TopBar
-      mode={mode}
-      directory={directory}
-      notifications={notifications}
-      env={env}
-      loading={loading}
-      onLoadDirectory={loadDirectory}
-      setActivePage={setActivePageHandler}
-      activePage={activePage}
-      onInitFlow={() => toggleInitFlow(true)} />
-    <Dialog
-      open={initFlow}
-      maxWidth="sm"
-      onClose={() => toggleInitFlow(false)}
-      aria-labelledby="npm-init"
+  return (
+    <div
+      className={cn(classes.root, {
+        [className]: className !== undefined
+      })}
     >
-      <DialogTitle>{iMessage('title', 'createPackageJson')}</DialogTitle>
-      <DialogContent>
-        <Init onClose={() => toggleInitFlow(false)} />
-      </DialogContent>
-    </Dialog>
-  </section>)
+      <TopBar
+        mode={mode}
+        directory={directory}
+        notifications={notifications}
+        env={env}
+        loading={loading}
+        onLoadDirectory={loadDirectory}
+        setActivePage={setActivePageHandler}
+        activePage={activePage}
+        onInitFlow={() => toggleInitFlow(true)}
+      />
+      <Dialog
+        open={initFlow}
+        maxWidth="sm"
+        onClose={() => toggleInitFlow(false)}
+        aria-labelledby="npm-init"
+      >
+        <DialogTitle>{iMessage('title', 'createPackageJson')}</DialogTitle>
+        <DialogContent>
+          <Init onClose={() => toggleInitFlow(false)} />
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+AppTopBar.propTypes = {
+  classes: objectOf(string).isRequired,
+  className: string
 };
 
 export default withStyles(styles)(AppTopBar);

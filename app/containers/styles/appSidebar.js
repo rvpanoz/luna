@@ -1,21 +1,12 @@
-import { flexContainer } from 'styles/variables';
+import { drawerWidth } from 'styles/variables';
 
-const styles = theme => ({
-  wrapper: {
-    whiteSpace: 'nowrap',
-    padding: theme.spacing(1),
-    [theme.breakpoints.up('md')]: {
-      maxHeight: 500,
-      overflowY: 'scroll'
-    },
-    [theme.breakpoints.up('lg')]: {
-      overflowY: 'scroll',
-      maxHeight: 650
-    }
+const styles = () => ({
+  root: {
+    width: '100%'
   },
-  flexContainer: {
-    ...flexContainer,
-  },
+  drawer: {
+    width: drawerWidth
+  }
 });
 
 export default styles;
