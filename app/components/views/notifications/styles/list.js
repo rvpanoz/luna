@@ -1,16 +1,10 @@
-import { defaultFont, flexContainer } from 'styles/variables';
+import { flexContainer } from 'styles/variables';
 
 const styles = theme => ({
   flexContainer: {
     ...flexContainer,
     alignItems: 'center',
     justifyContent: 'space-between'
-  },
-  flexContainerCell: {
-    ...flexContainer,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start'
   },
   transition: {
     transition: theme.transitions.create('width', {
@@ -25,24 +19,6 @@ const styles = theme => ({
   toolbar: {
     width: '100%'
   },
-  tableCell: {
-    '& p': {
-      overflowWrap: 'break-word'
-    }
-  },
-  cellText: {
-    ...defaultFont,
-    fontSize: 16,
-    [theme.breakpoints.up('lg')]: {
-      width: 'auto'
-    },
-    [theme.breakpoints.down('md')]: {
-      width: 200
-    },
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis'
-  },
   tableWrapper: {
     whiteSpace: 'nowrap',
     padding: theme.spacing(1),
@@ -53,6 +29,11 @@ const styles = theme => ({
       maxHeight: 650
     }
   },
+  tableResponsive: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+    overflowX: 'auto'
+  },
   table: {
     width: '100%',
     backgroundColor: 'transparent',
@@ -61,11 +42,6 @@ const styles = theme => ({
   },
   hasFilterBlur: {
     filter: 'blur(15px)'
-  },
-  tableResponsive: {
-    width: '100%',
-    marginTop: theme.spacing(3),
-    overflowX: 'auto'
   }
 });
 

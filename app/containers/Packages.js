@@ -219,7 +219,6 @@ const Packages = ({ classes }) => {
         <Grid container>
           <Grid
             item
-            sm={12}
             md={active ? 8 : 10}
             lg={active ? 8 : 10}
             xl={active ? 8 : 10}
@@ -228,7 +227,7 @@ const Packages = ({ classes }) => {
             {noPackages && (
               <HelperText
                 text={iMessage('info', 'noPackages')}
-                actionText="Switch to globals"
+                actionText={iMessage('title', 'switchToGlobals')}
                 actionHandler={() => switchMode('global')}
               />
             )}
@@ -259,7 +258,6 @@ const Packages = ({ classes }) => {
                 <Divider />
                 <div className={classes.tableWrapper} ref={wrapperRef}>
                   <Table
-                    padding="checkbox"
                     aria-labelledby="packages-list"
                     className={cn(classes.table, {
                       [classes.hasFilterBlur]: loading
