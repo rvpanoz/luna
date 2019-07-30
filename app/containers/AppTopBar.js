@@ -7,7 +7,8 @@ import cn from 'classnames';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
-import { TopBar, Init } from 'components/views/common/';
+import { Init } from 'components/views/common/';
+import { TopBar } from 'components/views/topBar/';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 
 import { showDialog } from 'commons/utils';

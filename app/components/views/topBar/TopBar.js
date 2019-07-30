@@ -10,7 +10,7 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 import SecurityIcon from '@material-ui/icons/Security';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 
-import { AppLogo, SearchBox } from 'components/common';
+import { SearchBox } from 'components/common';
 import { iMessage } from 'commons/utils';
 import styles from './styles/topBar';
 
@@ -25,17 +25,16 @@ const Topbar = ({
 }) => (
   <AppBar
     className={classes.root}
-    position="fixed"
+    position="static"
     elevation={0}
     color="inherit"
   >
     <Toolbar disableGutters>
-      <AppLogo />
       <div>
         <Toolbar
           disableGutters
           classes={{
-            root: classes.toolbar
+            root: classes.root
           }}
         >
           <Tooltip title={iMessage('title', 'loadDirectory')}>

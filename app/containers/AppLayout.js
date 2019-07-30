@@ -11,10 +11,8 @@ import AppTopBar from 'containers/AppTopBar';
 import AppSidebar from 'containers/AppSidebar';
 import AppNavigationBar from 'containers/AppNavigationBar';
 import AppNotifications from 'containers/AppNotifications';
-
 import AppSnackbar from 'components/common/AppSnackbar';
 import { Notifications } from 'components/views/notifications';
-
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 

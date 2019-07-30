@@ -14,11 +14,12 @@ const columnData = [
     { id: "requiredBy", disablePadding: true, label: "Required by" },
 ];
 
-const TableHeader = ({ selected, sortBy, sortDir }) => <TableHead>
+const TableHeader = ({ selected, sortBy, sortDir, handleSelectAll }) => <TableHead>
     <TableRow>
         <TableCell padding="checkbox">
             <Checkbox
                 indeterminate={selected > 0}
+                onClick={handleSelectAll}
             />
         </TableCell>
         {columnData.map(column => {
@@ -50,7 +51,8 @@ const TableHeader = ({ selected, sortBy, sortDir }) => <TableHead>
 TableHeader.propTypes = {
     selected: PropTypes.arrayOf(PropTypes.string),
     sortBy: PropTypes.string,
-    sortDir: PropTypes.string
+    sortDir: PropTypes.string,
+    handleSelectAll: PropTypes.func
 }
 
 export default TableHeader;

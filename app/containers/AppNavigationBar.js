@@ -4,7 +4,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { objectOf, string } from 'prop-types';
 import { setActivePage } from 'models/ui/actions';
-import { DirectoryInfo } from 'components/views/common';
+import { NavigationBar } from 'components/views/navigationBar';
+
 import styles from './styles/appNavigationBar';
 
 const mapState = ({
@@ -43,7 +44,7 @@ const AppNavigationBar = ({ classes, className }) => {
         [className]: className !== undefined
       })}
     >
-      <DirectoryInfo
+      <NavigationBar
         mode={mode}
         directory={directory}
         env={env}
