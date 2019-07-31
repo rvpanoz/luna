@@ -6,7 +6,7 @@ const styles = theme => ({
     ...flexContainer
   },
   card: {
-    width: 268,
+    width: 260,
   },
   cardTitle: {
     ...defaultFont,
