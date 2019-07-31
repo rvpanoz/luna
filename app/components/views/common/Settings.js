@@ -13,8 +13,6 @@ import { iMessage } from 'commons/utils';
 import styles from './styles/settings';
 
 const Settings = ({ classes, ...restProps }) => {
-  const { metricsRegistry, auditLevel, cache } = restProps;
-
   const [settings, setSettings] = useState({
     metricsRegistry: '',
     auditLevel: '',
@@ -22,13 +20,15 @@ const Settings = ({ classes, ...restProps }) => {
   });
 
   useEffect(() => {
-    setSettings(settingsItems => ({
-      ...settingsItems,
+    const { metricsRegistry, auditLevel, cache } = restProps;
+
+    setSettings({
+      ...settings,
       metricsRegistry,
       auditLevel,
       cache
-    }))
-  }, [metricsRegistry, auditLevel, cache])
+    })
+  }, [restProps, settings])
 
   return <div className={classes.root}>
     <List>
@@ -45,7 +45,7 @@ const Settings = ({ classes, ...restProps }) => {
             }
           />
           <ListItemSecondaryAction>
-            <Button disabled variant="outlined" color="primary">{iMessage('action', 'change')}</Button>
+            <Button variant="outlined" color="primary">{iMessage('action', 'change')}</Button>
           </ListItemSecondaryAction>
         </ListItem>
       })}

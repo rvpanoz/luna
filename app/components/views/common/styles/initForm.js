@@ -2,8 +2,14 @@ import { darken } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, grayColor } from 'styles/variables';
 
 const styles = theme => ({
-  dialog: {
+  root: {
+    padding: 0,
     margin: 0
+  },
+  content: {
+    ...flexContainer,
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   actions: {
     padding: 0
@@ -14,11 +20,6 @@ const styles = theme => ({
   },
   options: {
     paddingTop: theme.spacing(4)
-  },
-  content: {
-    ...flexContainer,
-    flexDirection: 'column',
-    alignItems: 'center',
   },
   formControl: {
     margin: 0
@@ -34,6 +35,9 @@ const styles = theme => ({
   },
   directory: {
     padding: theme.spacing(1),
+  },
+  button: {
+    marginBottom: theme.spacing(8)
   },
   paper: {
     padding: theme.spacing(1)

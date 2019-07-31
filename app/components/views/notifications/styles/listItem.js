@@ -27,7 +27,7 @@ const styles = theme => ({
       width: 'auto'
     },
     [theme.breakpoints.down('md')]: {
-      width: 200
+      width: 150
     },
     textAlign: 'left',
     whiteSpace: 'nowrap',

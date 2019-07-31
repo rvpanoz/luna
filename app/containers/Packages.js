@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -17,7 +17,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import { useFilters } from 'commons/hooks';
 import { AppLoader, HelperText } from 'components/common';
-
 import { scrollWrapper, iMessage } from 'commons/utils';
 
 import {
@@ -291,8 +290,8 @@ const Packages = ({ classes }) => {
                               packagesInstallOptions
                             )
                               ? packagesInstallOptions.find(
-                                  installOption => installOption.name === name
-                                )
+                                installOption => installOption.name === name
+                              )
                               : {};
 
                             const inOperation =
