@@ -1,6 +1,6 @@
 import React from "react";
-import { useRef } from "react";
 import PropTypes from "prop-types";
+import { useCallback, useRef } from "react";
 import { and } from "ramda";
 import { useDispatch } from "redux-react-hook";
 
@@ -23,15 +23,15 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
   const dispatch = useDispatch();
   const checkboxAll = useRef(null);
 
-  const toggleSort = prop =>
+  const toggleSort = useCallback(propName =>
     dispatch(
       setSortOptions({
         sortDir: sortDir === "desc" ? "asc" : "desc",
-        sortBy: prop
+        sortBy: propName
       })
-    );
+    ), [dispatch, sortDir, sortBy]);
 
-  const handleSelectAll = e => {
+  const handleSelectAll = useCallback(e => {
     if (e.target.checked && packages) {
       packages.forEach(name =>
         dispatch(
@@ -45,7 +45,7 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
     }
 
     dispatch(clearSelected());
-  };
+  }, [dispatch, packages]);
 
   return (
     <TableHead>
@@ -80,8 +80,8 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
                   {column.label}
                 </TableSortLabel>
               ) : (
-                column.label
-              )}
+                  column.label
+                )}
             </TableCell>
           );
         })}
