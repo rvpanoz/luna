@@ -22,9 +22,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import Fade from '@material-ui/core/Fade';
-
 import CloseIcon from '@material-ui/icons/Close';
-
 import VersionsIcon from '@material-ui/icons/LabelOutlined';
 import DependenciesIcon from '@material-ui/icons/ListOutlined';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -338,11 +336,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
   );
 
   useEffect(() => {
-    if (!active) {
-      return;
-    }
-
-    if (active.dependencies) {
+    if (active && active.dependencies) {
       const dependenciesNames = Object.keys(active.dependencies);
       const dependenciesToArray = dependenciesNames.map(dep => ({
         name: dep,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -17,7 +17,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import { useFilters } from 'commons/hooks';
 import { AppLoader, HelperText } from 'components/common';
-
 import { scrollWrapper, iMessage } from 'commons/utils';
 
 import {
@@ -127,7 +126,7 @@ const Packages = ({ classes }) => {
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
-  const reload = () => {
+  const reload = useCallback(() => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
     dispatch(
       setPackagesStart({
@@ -137,9 +136,9 @@ const Packages = ({ classes }) => {
         }
       })
     );
-  };
+  }, [dispatch]);
 
-  const switchMode = (appMode, appDirectory) => {
+  const switchMode = useCallback((appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
     dispatch(setActivePage({ page: 'packages', paused: false }));
 
@@ -153,9 +152,9 @@ const Packages = ({ classes }) => {
         })
       );
     }
-  };
+  }, [dispatch, fromSearch]);
 
-  const viewPackageHandler = (name, version) =>
+  const viewPackageHandler = useCallback((name, version) =>
     dispatch(
       viewPackageStart({
         channel: 'npm-view',
@@ -165,7 +164,7 @@ const Packages = ({ classes }) => {
           version: name === 'npm' ? null : version
         }
       })
-    );
+    ), [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -293,8 +292,8 @@ const Packages = ({ classes }) => {
                               packagesInstallOptions
                             )
                               ? packagesInstallOptions.find(
-                                  installOption => installOption.name === name
-                                )
+                                installOption => installOption.name === name
+                              )
                               : {};
 
                             const inOperation =
