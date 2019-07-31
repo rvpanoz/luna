@@ -1,25 +1,27 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { objectOf, string } from 'prop-types';
+import { useMappedState, useDispatch } from 'redux-react-hook';
 import cn from 'classnames';
 
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@material-ui/core/Button';
+
 import { Init, Settings } from 'components/views/common/';
 import { TopBar } from 'components/views/topBar/';
-import { useMappedState, useDispatch } from 'redux-react-hook';
 
 import { showDialog } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
+import { runInit } from 'models/npm/actions';
 import { navigatorParameters } from 'commons/parameters';
 import { iMessage } from 'commons/utils';
 
 import styles from './styles/appTopBar';
-import { Button } from '@material-ui/core';
 
 const mapState = ({
   common: { mode, directory, activePage },
@@ -65,7 +67,7 @@ const AppTopBar = ({ classes, className }) => {
 
   const dispatch = useDispatch();
 
-  const loadDirectory = () => {
+  const showInitDialog = useCallback(() => {
     const dialogHandler = filePath => {
       dispatch(
         setActivePage({
@@ -77,7 +79,21 @@ const AppTopBar = ({ classes, className }) => {
     };
 
     return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
-  };
+  }, [dispatch]);
+
+  const closeDialog = useCallback(() => setDialog({ ...dialog, open: false, active: null, title: '' }), [dialog])
+
+  const onNpmInit = useCallback(() => {
+    dispatch(
+      runInit({
+        ipcEvent: 'npm-init',
+        cmd: ['init'],
+        directory
+      })
+    );
+
+    closeDialog();
+  }, [dispatch, closeDialog, directory])
 
   const setActivePageHandler = page =>
     dispatch(
@@ -86,8 +102,6 @@ const AppTopBar = ({ classes, className }) => {
         paused: true
       })
     );
-
-  const closeDialog = () => setDialog({ ...dialog, open: false, active: null, title: '' })
 
   return (
     <div
@@ -100,7 +114,7 @@ const AppTopBar = ({ classes, className }) => {
         directory={directory}
         notifications={notifications}
         loading={loading}
-        onLoadDirectory={loadDirectory}
+        onLoadDirectory={showInitDialog}
         setActivePage={setActivePageHandler}
         activePage={activePage}
         onInitFlow={() => setDialog({ ...dialog, open: true, active: 'Init', title: iMessage('title', 'createPackageJson') })}
@@ -127,6 +141,7 @@ const AppTopBar = ({ classes, className }) => {
           {dialog.active === 'Init' && <Button
             color="primary"
             variant="outlined"
+            onClick={() => onNpmInit()}
           >
             {iMessage('action', 'create')}
           </Button>}

@@ -2,16 +2,15 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography';
+import { iMessage } from 'commons/utils';
 
 import styles from './styles/settings';
-import { iMessage } from 'commons/utils';
 
 const Settings = ({ classes, ...restProps }) => {
   const [settings, setSettings] = useState({
@@ -29,11 +28,11 @@ const Settings = ({ classes, ...restProps }) => {
       auditLevel,
       cache
     })
-  }, [])
+  }, [restProps, settings])
 
   return <div className={classes.root}>
     <List>
-      {Object.keys(settings).map((setting, idx) => {
+      {Object.keys(settings).map(setting => {
         return <ListItem key={setting}>
           <ListItemText
             primary={
