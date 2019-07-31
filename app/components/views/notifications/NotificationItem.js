@@ -1,12 +1,12 @@
 import React from 'react';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import { arrayOf, objectOf, string, func } from 'prop-types';
+import { arrayOf, objectOf, string } from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
+// import Checkbox from '@material-ui/core/Checkbox';
 
 import styles from './styles/listItem';
 
@@ -18,7 +18,7 @@ const NotificationItem = ({
   requiredBy,
   required,
   selected,
-  handleSelectOne
+  // handleSelectOne
 }) => {
   const isSelected = selected.indexOf(id) !== -1;
 
@@ -73,7 +73,7 @@ NotificationItem.propTypes = {
   required: string.isRequired,
   requiredBy: string.isRequired,
   type: string.isRequired,
-  handleSelectOne: func.isRequired,
+  // handleSelectOne: func.isRequired,
   selected: arrayOf(string)
 };
 

@@ -5,7 +5,7 @@ import { and } from "ramda";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Checkbox from "@material-ui/core/Checkbox";
+// import Checkbox from "@material-ui/core/Checkbox";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 
 const columnData = [
@@ -14,7 +14,7 @@ const columnData = [
     { id: "requiredBy", disablePadding: true, label: "Required by" },
 ];
 
-const TableHeader = ({ selected, total, sortBy, sortDir, handleSelectAll }) => <TableHead>
+const TableHeader = ({ sortBy, sortDir }) => <TableHead>
     <TableRow>
         {/* <TableCell padding="checkbox">
             <Checkbox
@@ -49,11 +49,11 @@ const TableHeader = ({ selected, total, sortBy, sortDir, handleSelectAll }) => <
 </TableHead>
 
 TableHeader.propTypes = {
-    selected: PropTypes.arrayOf(PropTypes.string),
+    // selected: PropTypes.arrayOf(PropTypes.string),
     sortBy: PropTypes.string,
     sortDir: PropTypes.string,
-    handleSelectAll: PropTypes.func,
-    total: PropTypes.number
+    // handleSelectAll: PropTypes.func,
+    // total: PropTypes.number
 }
 
 export default TableHeader;
