@@ -113,8 +113,6 @@ const Packages = ({ classes }) => {
     auditData
   } = useMappedState(mapState);
 
-  /* eslint-disable-next-line */
-  const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
   const [auditPackages, setAuditPackages] = useState([]);
   const [options, toggleOptions] = useState({
     open: false,
@@ -301,16 +299,6 @@ const Packages = ({ classes }) => {
                               operationCommand !== 'install' &&
                               operationPackages.indexOf(name) > -1;
 
-                            const inPackageJson = packagesFromPackageJson.some(
-                              pkg => {
-                                /* eslint-disable-next-line */
-                                const [pkgGroup, pkgDetails] = pkg;
-                                const [pkgName] = Object.keys(pkgDetails);
-
-                                return pkgName === name;
-                              }
-                            );
-
                             return (
                               <PackageItemView
                                 key={`pkg-${name}`}
@@ -331,7 +319,6 @@ const Packages = ({ classes }) => {
                                 viewPackage={viewPackageHandler}
                                 inOperation={inOperation}
                                 inAudit={auditPackages.includes(name)}
-                                inPackageJson={inPackageJson}
                                 peerMissing={peerMissing}
                                 fromSearch={__fromSearch}
                                 hasError={__hasError}

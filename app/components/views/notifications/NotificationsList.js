@@ -20,7 +20,7 @@ const NotificationsList = ({ classes, notifications, loading }) => {
   const handleSelectAll = e => {
     let selectedNotifications;
 
-    if (event.target.checked) {
+    if (e.target.checked) {
       selectedNotifications = notifications.map(
         notification => notification.id
       );

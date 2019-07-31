@@ -1,16 +1,14 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useCallback, useRef } from "react";
-import { and } from "ramda";
 import { useDispatch } from "redux-react-hook";
 
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Checkbox from "@material-ui/core/Checkbox";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
 
-import { addSelected, clearSelected, setSortOptions } from "models/ui/actions";
+import { addSelected } from "models/ui/actions";
 
 const columnData = [
   { id: "name", numeric: false, disablePadding: true, label: "Name" },
@@ -23,28 +21,18 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
   const dispatch = useDispatch();
   const checkboxAll = useRef(null);
 
-  const toggleSort = useCallback(propName =>
-    dispatch(
-      setSortOptions({
-        sortDir: sortDir === "desc" ? "asc" : "desc",
-        sortBy: propName
-      })
-    ), [dispatch, sortDir, sortBy]);
-
   const handleSelectAll = useCallback(e => {
     if (e.target.checked && packages) {
       packages.forEach(name =>
         dispatch(
           addSelected({
-            name
+            name,
+            force: true
           })
         )
       );
-
-      return;
     }
 
-    dispatch(clearSelected());
   }, [dispatch, packages]);
 
   return (
@@ -54,37 +42,20 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
           <Checkbox
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}
-            onChange={handleSelectAll}
+            onClick={handleSelectAll}
             inputProps={{
               ref: checkboxAll
             }}
           />
         </TableCell>
-        {columnData.map(column => {
-          const needSort =
-            and(!!sortBy, !!column.id) && and(true, sortBy === column.id);
-
-          return (
-            <TableCell
-              key={column.id}
-              padding={column.disablePadding ? "none" : "default"}
-              sortDirection={sortBy === column.id ? sortDir : false}
-              style={column.id !== "name" ? { textAlign: "center" } : {}}
-            >
-              {needSort ? (
-                <TableSortLabel
-                  active={sortBy === column.id}
-                  direction={sortDir}
-                  onClick={() => toggleSort(column.id)}
-                >
-                  {column.label}
-                </TableSortLabel>
-              ) : (
-                  column.label
-                )}
-            </TableCell>
-          );
-        })}
+        {columnData.map(column => <TableCell
+          key={column.id}
+          padding={column.disablePadding ? "none" : "default"}
+          sortDirection={sortBy === column.id ? sortDir : false}
+          style={column.id !== "name" ? { textAlign: "center" } : {}}
+        >
+          {column.label}
+        </TableCell>)}
       </TableRow>
     </TableHead>
   );

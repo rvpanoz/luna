@@ -31,7 +31,6 @@ const PackageItem = ({
   peerMissing,
   viewPackage,
   inOperation,
-  inPackageJson,
   hasError
 }) => {
   const rowRef = useRef();
@@ -52,7 +51,7 @@ const PackageItem = ({
     >
       <TableCell padding="checkbox" style={{ width: '55px' }}>
         <Checkbox
-          disabled={inOperation || (inPackageJson && fromSearch)}
+          disabled={inOperation || fromSearch}
           checked={isSelected}
           disableRipple
           onClick={e => {
@@ -134,7 +133,6 @@ PackageItem.propTypes = {
   isOutdated: bool,
   inOperation: bool,
   hasError: bool,
-  inPackageJson: bool
 };
 
 export default withStyles(styles)(PackageItem);
