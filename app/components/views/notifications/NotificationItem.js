@@ -33,7 +33,7 @@ const NotificationItem = ({
         root: classes.tableRow
       }}
     >
-      <TableCell padding="checkbox" style={{ width: '85px' }}>
+      <TableCell padding="checkbox" style={{ width: '55px' }}>
         <Checkbox
           checked={isSelected}
           disableRipple

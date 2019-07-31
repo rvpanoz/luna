@@ -102,22 +102,10 @@
     "type": "git",
     "url": "git+https://github.com/rvpanoz/luna.git"
   },
-  "author": {
-    "name": "rvpanoz",
-    "email": "rvpanoz@gmail.com",
-    "url": "https://github.com/rvpanoz"
-  },
+  "author": "rvpanoz <rvpanoz@gmail.com> (https://github.com/rvpanoz)",
   "contributors": [
-    {
-      "name": "Arvanitis Panagiotis",
-      "email": "rvpanoz@gmail.com",
-      "url": "https://github.com/rvpanoz"
-    },
-    {
-      "name": "Livas Dimitris",
-      "email": "dlivas@agileactors.com",
-      "url": "https://github.com/dlivas"
-    }
+    "Arvanitis Panagiotis <rvpanoz@gmail.com> (https://github.com/rvpanoz)",
+    "Livas Dimitris <dlivas@agileactors.com> (https://github.com/dlivas)"
   ],
   "license": "GPL-3.0",
   "bugs": {

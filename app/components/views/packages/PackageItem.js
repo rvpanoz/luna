@@ -50,7 +50,7 @@ const PackageItem = ({
       }}
       onClick={() => (inOperation ? {} : viewPackage(name, version))}
     >
-      <TableCell padding="checkbox" style={{ width: '85px' }}>
+      <TableCell padding="checkbox" style={{ width: '55px' }}>
         <Checkbox
           disabled={inOperation || (inPackageJson && fromSearch)}
           checked={isSelected}

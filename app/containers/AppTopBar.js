@@ -59,6 +59,7 @@ const AppTopBar = ({ classes, className }) => {
     activePage
   } = useMappedState(mapState);
 
+  const [initFlow, toggleInitFlow] = useState(false)
   const [dialog, setDialog] = useState({
     open: false,
     title: '',
@@ -81,7 +82,10 @@ const AppTopBar = ({ classes, className }) => {
     return showDialog(dialogHandler, { mode: 'file', ...navigatorParameters });
   }, [dispatch]);
 
-  const closeDialog = useCallback(() => setDialog({ ...dialog, open: false, active: null, title: '' }), [dialog])
+  const closeDialog = useCallback(() => {
+    setDialog({ ...dialog, open: false, active: null, title: '' })
+    toggleInitFlow(false)
+  }, [dialog])
 
   const onNpmInit = useCallback(() => {
     dispatch(
@@ -129,7 +133,7 @@ const AppTopBar = ({ classes, className }) => {
       >
         <DialogTitle disableTypography classes={{ root: classes.dialogTitle }}>{dialog.title}</DialogTitle>
         <DialogContent>
-          {dialog.active === 'Init' && <Init onClose={closeDialog} />}
+          {dialog.active === 'Init' && <Init onClose={closeDialog} enableInit={() => toggleInitFlow(true)} />}
           {dialog.active === 'Settings' && <Settings
             onClose={closeDialog}
             metricsRegistry={metricsRegistry}
@@ -137,17 +141,18 @@ const AppTopBar = ({ classes, className }) => {
             auditLevel={auditLevel}
           />}
         </DialogContent>
-        <DialogActions disableSpacing>
+        <DialogActions>
           {dialog.active === 'Init' && <Button
             color="primary"
             variant="outlined"
             onClick={() => onNpmInit()}
+            disabled={!initFlow}
           >
             {iMessage('action', 'create')}
           </Button>}
           <Button classes={{
             root: classes.closeButton
-          }} onClick={closeDialog}>{iMessage('action', 'close')}
+          }} variant="outlined" color="secondary" onClick={closeDialog}>{iMessage('action', 'close')}
           </Button>
         </DialogActions>
       </Dialog>

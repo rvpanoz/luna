@@ -36,6 +36,9 @@ const styles = theme => ({
   directory: {
     padding: theme.spacing(1),
   },
+  button: {
+    marginBottom: theme.spacing(8)
+  },
   paper: {
     padding: theme.spacing(1)
   }
