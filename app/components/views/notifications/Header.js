@@ -16,13 +16,13 @@ const columnData = [
 
 const TableHeader = ({ selected, total, sortBy, sortDir, handleSelectAll }) => <TableHead>
     <TableRow>
-        <TableCell padding="checkbox">
+        {/* <TableCell padding="checkbox">
             <Checkbox
                 checked={selected.length === total}
                 indeterminate={selected.length > 0 && selected.length < total}
                 onClick={handleSelectAll}
             />
-        </TableCell>
+        </TableCell> */}
         {columnData.map(column => {
             const needSort = and(!!sortBy, !!column.id) && and(true, sortBy === column.id);
 

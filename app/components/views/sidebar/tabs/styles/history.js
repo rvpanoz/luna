@@ -11,7 +11,6 @@ const styles = theme => ({
   },
   label: {
     ...defaultFont,
-    width: '100%',
     fontSize: 16,
     color: darken(grayColor, 0.5)
   },
@@ -23,7 +22,8 @@ const styles = theme => ({
     maxWidth: 150
   },
   listItem: {
-    padding: theme.spacing(1),
+    padding: 0,
+    paddingLeft: theme.spacing(1) + 4,
     margin: 0
   },
   secondaryColor: {
