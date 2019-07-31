@@ -20,7 +20,7 @@ const NotificationsList = ({ classes, notifications, loading }) => {
   const handleSelectAll = e => {
     let selectedNotifications;
 
-    if (event.target.checked) {
+    if (e.target.checked) {
       selectedNotifications = notifications.map(
         notification => notification.id
       );
@@ -60,12 +60,7 @@ const NotificationsList = ({ classes, notifications, loading }) => {
           <HelperText text={iMessage('info', 'noNotifications')} />
         )}
         {!noNotifications && (
-          <Paper
-            elevation={2}
-            classes={{
-              root: classes.paper
-            }}
-          >
+          <Paper elevation={0} >
             <div className={classes.toolbar}>
               <ToolbarView
                 title={iMessage('title', 'notifications')}
@@ -83,10 +78,11 @@ const NotificationsList = ({ classes, notifications, loading }) => {
                 })}
               >
                 <TableHeader
+                  total={notifications.length}
                   handleSelectAll={handleSelectAll}
                   selected={selected}
-                  sortBy="Message"
-                  sortDir="desc"
+                  sortBy="Required"
+                  sortDir="asc"
                 />
                 <TableBody>
                   {notifications.slice(0, 10).map(notification => (

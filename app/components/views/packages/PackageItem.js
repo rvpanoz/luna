@@ -51,7 +51,7 @@ const PackageItem = ({
     >
       <TableCell padding="checkbox" style={{ width: '55px' }}>
         <Checkbox
-          disabled={inOperation}
+          disabled={inOperation || fromSearch}
           checked={isSelected}
           disableRipple
           onClick={e => {

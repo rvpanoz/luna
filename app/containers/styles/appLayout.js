@@ -8,7 +8,7 @@ const styles = theme => ({
     flexDirection: 'column'
   },
   shiftContent: {
-    paddingLeft: 240
+    paddingLeft: 225
   },
   main: {
     minHeight: '100vh',
