@@ -17,7 +17,8 @@ const NotificationItem = ({
   requiredBy,
   required,
   selected,
-  handleSelectOne
+  handleSelectOne,
+  setActive
 }) => {
   const isSelected = selected.indexOf(id) !== -1;
 
@@ -31,6 +32,14 @@ const NotificationItem = ({
       classes={{
         root: classes.tableRow
       }}
+      hover
+      onClick={() =>
+        setActive({
+          body,
+          required,
+          requiredBy
+        })
+      }
     >
       <TableCell padding="checkbox" style={{ width: '55px' }}>
         <Checkbox
@@ -43,6 +52,7 @@ const NotificationItem = ({
       <TableCell
         padding="none"
         className={cn(classes.tableCell, classes.cellText)}
+        align="center"
       >
         <div className={classes.flexContainerCell}>
           <Typography className={classes.name}>{body}</Typography>
@@ -52,9 +62,7 @@ const NotificationItem = ({
         <Typography className={classes.typo}>{required}</Typography>
       </TableCell>
       <TableCell padding="none" name="requiredBy" className={classes.tableCell}>
-        <Typography className={classes.requiredBy}>
-          {requiredBy.replace('required by', '')}
-        </Typography>
+        <Typography className={classes.typo}>{requiredBy.length}</Typography>
       </TableCell>
     </TableRow>
   );
@@ -65,8 +73,9 @@ NotificationItem.propTypes = {
   id: string.isRequired,
   body: string.isRequired,
   required: string.isRequired,
-  requiredBy: string.isRequired,
+  requiredBy: arrayOf(string),
   handleSelectOne: func.isRequired,
+  setActive: func.isRequired,
   selected: arrayOf(string)
 };
 

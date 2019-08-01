@@ -1,6 +1,5 @@
-/* eslint-disable */
-
-import React, { useState } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/styles';
@@ -10,6 +9,7 @@ import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
 import NotificationItem from './NotificationItem';
+import NotificationDetails from './NotificationDetails';
 import ToolbarView from './Toolbar';
 
 import styles from './styles/list';
@@ -23,11 +23,18 @@ const NotificationsList = ({
   handleSelectOne,
   handleInstall
 }) => {
+  const [active, setActive] = useState(null);
   const noNotifications = !notifications || notifications.length === 0;
 
   return (
     <Grid container>
-      <Grid item md={10} lg={10} xl={10} className={classes.transition}>
+      <Grid
+        item
+        md={active ? 8 : 10}
+        lg={active ? 8 : 10}
+        xl={active ? 8 : 10}
+        className={classes.transition}
+      >
         {noNotifications && (
           <HelperText text={iMessage('info', 'noNotifications')} />
         )}
@@ -65,12 +72,25 @@ const NotificationsList = ({
                       selected={selected}
                       handleSelectOne={handleSelectOne}
                       handleSelectAll={handleSelectAll}
+                      setActive={setActive}
                     />
                   ))}
                 </TableBody>
               </Table>
             </div>
           </Paper>
+        )}
+      </Grid>
+      <Grid
+        item
+        sm={12}
+        md={active ? 4 : 2}
+        lg={active ? 4 : 2}
+        xl={active ? 4 : 2}
+        className={classes.transition}
+      >
+        {active && (
+          <NotificationDetails active={active} setActive={setActive} />
         )}
       </Grid>
     </Grid>
