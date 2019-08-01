@@ -10,24 +10,34 @@ import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
 import NotificationItem from './NotificationItem';
+import NotificationDetails from './NotificationDetails';
 import ToolbarView from './Toolbar';
 
 import styles from './styles/list';
 
 const NotificationsList = ({
+  active,
   classes,
   notifications,
   selected,
   loading,
   handleSelectAll,
   handleSelectOne,
-  handleInstall
+  handleInstall,
+  setActive
 }) => {
   const noNotifications = !notifications || notifications.length === 0;
 
   return (
     <Grid container>
-      <Grid item md={10} lg={10} xl={10} className={classes.transition}>
+      <Grid
+        item
+        item
+        md={active ? 6 : 10}
+        lg={active ? 6 : 10}
+        xl={active ? 6 : 10}
+        className={classes.transition}
+      >
         {noNotifications && (
           <HelperText text={iMessage('info', 'noNotifications')} />
         )}
@@ -65,12 +75,25 @@ const NotificationsList = ({
                       selected={selected}
                       handleSelectOne={handleSelectOne}
                       handleSelectAll={handleSelectAll}
+                      setActive={setActive}
                     />
                   ))}
                 </TableBody>
               </Table>
             </div>
           </Paper>
+        )}
+      </Grid>
+      <Grid
+        item
+        sm={12}
+        md={active ? 6 : 2}
+        lg={active ? 6 : 2}
+        xl={active ? 6 : 2}
+        className={classes.transition}
+      >
+        {active && (
+          <NotificationDetails active={active} setActive={setActive} />
         )}
       </Grid>
     </Grid>
@@ -84,6 +107,7 @@ NotificationsList.propTypes = {
   handleSelectAll: PropTypes.func.isRequired,
   handleSelectOne: PropTypes.func.isRequired,
   handleInstall: PropTypes.func.isRequired,
+  setActive: PropTypes.func.isRequired,
   loading: PropTypes.bool
 };
 

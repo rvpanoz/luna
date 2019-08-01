@@ -10,8 +10,7 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 const columnData = [
   { id: 'message', numeric: false, disablePadding: true, label: 'Message' },
-  { id: 'required', disablePadding: true, label: 'Required' },
-  { id: 'requiredBy', disablePadding: true, label: 'Required by' }
+  { id: 'required', disablePadding: true, label: 'Required' }
 ];
 
 const TableHeader = ({ selected, total, sortBy, sortDir, handleSelectAll }) => (
