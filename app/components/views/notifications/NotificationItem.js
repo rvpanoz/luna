@@ -1,14 +1,17 @@
 import React from 'react';
 import cn from 'classnames';
+import semver from 'semver';
+
 import { withStyles } from '@material-ui/core/styles';
-import { arrayOf, objectOf, string, func } from 'prop-types';
+import { arrayOf, objectOf, string, func, oneOfType, array } from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-
 import styles from './styles/listItem';
+
+const { log } = console;
 
 const NotificationItem = ({
   classes,
@@ -18,9 +21,15 @@ const NotificationItem = ({
   required,
   selected,
   handleSelectOne,
-  setActive
+  onSetActive
 }) => {
   const isSelected = selected.indexOf(id) !== -1;
+  const [requiredName, requiredVersion] = required && required.split('@');
+  let version;
+
+  if (body === 'extraneous') {
+    [version] = requiredVersion.split(' ')
+  }
 
   return (
     <TableRow
@@ -33,13 +42,15 @@ const NotificationItem = ({
         root: classes.tableRow
       }}
       hover
-      onClick={() =>
-        setActive({
+      onClick={() => onSetActive({
+        active: {
+          id,
           body,
-          required,
+          required: requiredName,
+          version: version || requiredVersion,
           requiredBy
-        })
-      }
+        }
+      })}
     >
       <TableCell padding="checkbox" style={{ width: '55px' }}>
         <Checkbox
@@ -59,10 +70,10 @@ const NotificationItem = ({
         </div>
       </TableCell>
       <TableCell padding="none" name="required" className={classes.tableCell}>
-        <Typography className={classes.typo}>{required}</Typography>
+        <Typography className={classes.typo}>{requiredName}</Typography>
       </TableCell>
       <TableCell padding="none" name="requiredBy" className={classes.tableCell}>
-        <Typography className={classes.typo}>{requiredBy.length}</Typography>
+        <Typography className={classes.typo}>{version || requiredVersion}</Typography>
       </TableCell>
     </TableRow>
   );
@@ -73,9 +84,10 @@ NotificationItem.propTypes = {
   id: string.isRequired,
   body: string.isRequired,
   required: string.isRequired,
+  active: oneOfType([string, array]),
   requiredBy: arrayOf(string),
   handleSelectOne: func.isRequired,
-  setActive: func.isRequired,
+  onSetActive: func,
   selected: arrayOf(string)
 };
 

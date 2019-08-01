@@ -2,11 +2,12 @@
  * Notifications reducer: Handles state management for notifications operations
  */
 
-import { prepend, identity, merge, prop, propOr } from 'ramda';
+import { assoc, prepend, identity, merge, prop, propOr } from 'ramda';
 import {
   addNotification,
   clearNotifications,
-  updateNotifications
+  updateNotifications,
+  setActive
 } from 'models/notifications/actions';
 
 import initialState from './initialState';
@@ -19,8 +20,11 @@ const createReducer = (notificationsState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [setActive.type]: (state, { payload: { active } }) =>
+    assoc('active', active, state),
   [updateNotifications.type]: (state, { payload: { data } }) =>
     merge(state, {
+      ...state.notifications,
       notifications: data
     }),
   [addNotification.type]: (

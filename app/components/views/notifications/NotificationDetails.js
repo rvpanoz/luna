@@ -11,6 +11,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Toolbar from '@material-ui/core/Toolbar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
 import CloseIcon from '@material-ui/icons/Close';
 
 import { Transition } from 'components/common';
@@ -18,8 +24,8 @@ import { iMessage } from 'commons/utils';
 
 import styles from './styles/details';
 
-const NotificationDetails = ({ classes, active, setActive }) => {
-  const { body, required } = active || {};
+const NotificationDetails = ({ classes, active, clearActive }) => {
+  const { body, required, version, requiredBy } = active || {};
 
   return (
     <div className={classes.wrapper}>
@@ -30,7 +36,7 @@ const NotificationDetails = ({ classes, active, setActive }) => {
               <CardHeader
                 title={
                   <Typography color="textPrimary" variant="h4">
-                    {required}
+                    {required}@{version}
                   </Typography>
                 }
                 classes={{
@@ -39,8 +45,25 @@ const NotificationDetails = ({ classes, active, setActive }) => {
                 }}
               />
               <CardContent classes={{ root: classes.cardContent }}>
-                <Typography variant="body1">{body}</Typography>
                 <Divider className={classes.divider} />
+                <Typography variant="body1">{body}</Typography>
+                {body !== 'extraneous' ? <><Typography variant="h6" className={classes.title}>
+                  {iMessage('title', 'requiredBy')}
+                </Typography>
+                  <List dense>
+                    {requiredBy.map(packageName => {
+                      if (packageName) {
+                        return <ListItem>
+                          <ListItemText
+                            primary={packageName}
+                          //  secondary={secondary ? 'Secondary text' : null}
+                          />
+                        </ListItem>
+                      }
+
+                      return null
+                    })}
+                  </List></> : null}
               </CardContent>
             </Card>
           </Transition>
@@ -58,7 +81,7 @@ const NotificationDetails = ({ classes, active, setActive }) => {
                 <IconButton
                   color="secondary"
                   disableRipple
-                  onClick={() => setActive(null)}
+                  onClick={clearActive}
                 >
                   <CloseIcon />
                 </IconButton>
@@ -74,7 +97,7 @@ const NotificationDetails = ({ classes, active, setActive }) => {
 NotificationDetails.propTypes = {
   classes: objectOf(string).isRequired,
   active: objectOf(oneOfType([string, arrayOf(string)])).isRequired,
-  setActive: func.isRequired
+  clearActive: func.isRequired
 };
 
 export default withStyles(styles)(NotificationDetails);

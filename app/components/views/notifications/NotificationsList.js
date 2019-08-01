@@ -1,5 +1,4 @@
 import React from 'react';
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/styles';
@@ -16,14 +15,16 @@ import styles from './styles/list';
 
 const NotificationsList = ({
   classes,
+  active,
   notifications,
   selected,
   loading,
+  onSetActive,
+  onClearActive,
   handleSelectAll,
   handleSelectOne,
   handleInstall
 }) => {
-  const [active, setActive] = useState(null);
   const noNotifications = !notifications || notifications.length === 0;
 
   return (
@@ -72,7 +73,8 @@ const NotificationsList = ({
                       selected={selected}
                       handleSelectOne={handleSelectOne}
                       handleSelectAll={handleSelectAll}
-                      setActive={setActive}
+                      onSetActive={onSetActive}
+                      onClearActive={onClearActive}
                     />
                   ))}
                 </TableBody>
@@ -90,7 +92,7 @@ const NotificationsList = ({
         className={classes.transition}
       >
         {active && (
-          <NotificationDetails active={active} setActive={setActive} />
+          <NotificationDetails active={active} clearActive={onClearActive} />
         )}
       </Grid>
     </Grid>
@@ -104,6 +106,8 @@ NotificationsList.propTypes = {
   handleSelectAll: PropTypes.func.isRequired,
   handleSelectOne: PropTypes.func.isRequired,
   handleInstall: PropTypes.func.isRequired,
+  onSetActive: PropTypes.func,
+  active: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   loading: PropTypes.bool
 };
 

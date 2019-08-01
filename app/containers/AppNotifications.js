@@ -9,11 +9,13 @@ import Button from '@material-ui/core/Button';
 
 import { Notifications } from 'components/views/notifications';
 import { installMultiplePackages } from 'models/packages/actions';
+import { setActive } from 'models/notifications/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { DialogOptionsView } from 'components/views/packages';
 import { iMessage } from 'commons/utils';
 
-const mapState = ({ notifications: { notifications } }) => ({
+const mapState = ({ notifications: { active, notifications } }) => ({
+  active,
   notifications
 });
 
@@ -27,8 +29,11 @@ const AppNotifications = () => {
     name: null,
     version: null
   });
-  const { notifications } = useMappedState(mapState);
+  const { notifications, active } = useMappedState(mapState)
   const dispatch = useDispatch();
+
+  const onSetActive = useCallback((notification) => dispatch(setActive(notification)), [active])
+  const onClearActive = useCallback(() => dispatch(setActive({ active: null })), [])
 
   const handleSelectAll = useCallback(
     e => {
@@ -96,12 +101,12 @@ const AppNotifications = () => {
   useEffect(() => {
     const packagesNames = selected.length
       ? selected.map(notificationId => {
-          const { required } = notifications.find(
-            notification => notification.id === notificationId
-          );
+        const { required } = notifications.find(
+          notification => notification.id === notificationId
+        );
 
-          return required;
-        })
+        return required;
+      })
       : [];
 
     setSelectedPackagesNames(packagesNames);
@@ -128,7 +133,7 @@ const AppNotifications = () => {
     }, []);
 
     setFormattedNotifications(newNotifications);
-  }, [selected, notifications]);
+  }, [notifications]);
 
   return (
     <>
@@ -143,6 +148,9 @@ const AppNotifications = () => {
         }
         handleSelectAll={handleSelectAll}
         handleSelectOne={handleSelectOne}
+        onSetActive={onSetActive}
+        onClearActive={onClearActive}
+        active={active}
       />
       <Dialog
         open={options.open}
