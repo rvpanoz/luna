@@ -1,6 +1,5 @@
-/* eslint-disable */
-
-import React, { useState } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/styles';
@@ -16,26 +15,24 @@ import ToolbarView from './Toolbar';
 import styles from './styles/list';
 
 const NotificationsList = ({
-  active,
   classes,
   notifications,
   selected,
   loading,
   handleSelectAll,
   handleSelectOne,
-  handleInstall,
-  setActive
+  handleInstall
 }) => {
+  const [active, setActive] = useState(null);
   const noNotifications = !notifications || notifications.length === 0;
 
   return (
     <Grid container>
       <Grid
         item
-        item
-        md={active ? 6 : 10}
-        lg={active ? 6 : 10}
-        xl={active ? 6 : 10}
+        md={active ? 8 : 10}
+        lg={active ? 8 : 10}
+        xl={active ? 8 : 10}
         className={classes.transition}
       >
         {noNotifications && (
@@ -87,9 +84,9 @@ const NotificationsList = ({
       <Grid
         item
         sm={12}
-        md={active ? 6 : 2}
-        lg={active ? 6 : 2}
-        xl={active ? 6 : 2}
+        md={active ? 4 : 2}
+        lg={active ? 4 : 2}
+        xl={active ? 4 : 2}
         className={classes.transition}
       >
         {active && (
@@ -107,7 +104,6 @@ NotificationsList.propTypes = {
   handleSelectAll: PropTypes.func.isRequired,
   handleSelectOne: PropTypes.func.isRequired,
   handleInstall: PropTypes.func.isRequired,
-  setActive: PropTypes.func.isRequired,
   loading: PropTypes.bool
 };
 

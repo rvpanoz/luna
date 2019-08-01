@@ -52,6 +52,7 @@ const NotificationItem = ({
       <TableCell
         padding="none"
         className={cn(classes.tableCell, classes.cellText)}
+        align="center"
       >
         <div className={classes.flexContainerCell}>
           <Typography className={classes.name}>{body}</Typography>
@@ -59,6 +60,9 @@ const NotificationItem = ({
       </TableCell>
       <TableCell padding="none" name="required" className={classes.tableCell}>
         <Typography className={classes.typo}>{required}</Typography>
+      </TableCell>
+      <TableCell padding="none" name="requiredBy" className={classes.tableCell}>
+        <Typography className={classes.typo}>{requiredBy.length}</Typography>
       </TableCell>
     </TableRow>
   );

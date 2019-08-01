@@ -20,7 +20,6 @@ const mapState = ({ notifications: { notifications } }) => ({
 const AppNotifications = () => {
   const [formattedNotifications, setFormattedNotifications] = useState([]);
   const [selected, setSelected] = useState([]);
-  const [active, setActive] = useState(null);
   const [selectedPackagesNames, setSelectedPackagesNames] = useState([]);
   const [options, toggleOptions] = useState({
     open: false,
@@ -135,8 +134,6 @@ const AppNotifications = () => {
     <>
       <Notifications
         selected={selected}
-        setActive={setActive}
-        active={active}
         notifications={formattedNotifications}
         handleInstall={() =>
           toggleOptions({

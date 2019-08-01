@@ -20,7 +20,7 @@ import styles from './styles/details';
 
 const NotificationDetails = ({ classes, active, setActive }) => {
   const { body, required } = active || {};
-  console.log(active);
+
   return (
     <div className={classes.wrapper}>
       <Grid container justify="space-around">
@@ -58,7 +58,7 @@ const NotificationDetails = ({ classes, active, setActive }) => {
                 <IconButton
                   color="secondary"
                   disableRipple
-                  onClick={setActive(null)}
+                  onClick={() => setActive(null)}
                 >
                   <CloseIcon />
                 </IconButton>
