@@ -24,7 +24,7 @@ const matchMessageType = prefix => types =>
  * @param {*} message
  */
 const parseNpmMessage = message => {
-  const prefix = message.slice(0, 8).trim();
+  const [prefix] = message.split(':');
   const messageType = matchMessageType(prefix)(ERROR_TYPES);
   const [body, required, requiredBy] = parseMessage(message);
 
@@ -42,30 +42,31 @@ const notificationsEpic = pipe(
   ofType(updateNotifications.type),
   mergeMap(({ payload: { notifications } }) => from(notifications)),
   map(notification => {
-    const { messageType = 'ERR', payload } = parseNpmMessage(notification);
+    const { messageType = 'missing', payload } = parseNpmMessage(notification);
     const id = uuid();
 
+    // 1 = missing, 2 = peer dep missing, 3 = extraneous
     return switchcase({
-      ERR: () => ({
+      missing: () => ({
         type: addNotification.type,
         payload: {
           id,
-          type: 'ERROR',
+          type: 1,
           ...payload
         }
       }),
-      INFO: () => ({
+      ['peer dep missing']: () => ({
         type: addNotification.type,
         payload: {
-          type: 'INFO',
+          type: 2,
           id,
           ...payload
         }
       }),
-      WARNING: () => ({
+      extraneous: () => ({
         type: addNotification.type,
         payload: {
-          type: 'WARNING',
+          type: 3,
           id,
           ...payload
         }
