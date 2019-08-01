@@ -3,7 +3,7 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
-import { tap, concatMap, switchMap, ignoreElements } from 'rxjs/operators';
+import { tap, mergeMap, switchMap, ignoreElements } from 'rxjs/operators';
 
 import { toggleLoader, setActivePage } from 'models/ui/actions';
 import {
@@ -22,8 +22,8 @@ const updateLoader = payload => ({
 
 const showInstallLoaderEpic = action$ =>
   action$.pipe(
-    ofType(installPackage.type, installPackageJson.type, installMultiplePackages.type),
-    concatMap(() => [
+    ofType(installPackage.type, installMultiplePackages.type),
+    mergeMap(() => [
       setActivePage({
         page: 'packages',
         paused: true
@@ -33,33 +33,6 @@ const showInstallLoaderEpic = action$ =>
         message: iMessage('info', 'installingPackages')
       })
     ])
-  );
-
-/**
-* Send ipc event to main process to handle npm-install for a single package
-* supports global and local mode
-*/
-const installPackageJsonEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(installPackageJson.type),
-    tap(({ payload }) => {
-      const {
-        common: {
-          mode,
-          directory,
-        }
-      } = state$.value;
-
-      const parameters = {
-        ...payload,
-        mode,
-        directory,
-        packageJson: true
-      };
-
-      ipcRenderer.send('npm-install', parameters);
-    }),
-    ignoreElements()
   );
 
 /**
@@ -123,8 +96,8 @@ const installMultiplePackagesEpic = (action$, state$) =>
         return pkg && pkg.options
           ? pkg.options
           : pkgOptions
-            ? pkgOptions[idx]
-            : ['save-prod'];
+          ? pkgOptions[idx]
+          : ['save-prod'];
       });
 
       const parameters = {

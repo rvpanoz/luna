@@ -22,6 +22,7 @@ const styles = () => ({
   },
   message: {
     ...defaultFont,
+    fontSize: 14,
     padding: 0,
     margin: 0
   }

@@ -33,6 +33,18 @@ const styles = theme => ({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis'
+  },
+  requiredBy: {
+    [theme.breakpoints.up('lg')]: {
+      width: 'auto'
+    },
+    [theme.breakpoints.down('md')]: {
+      width: 200
+    },
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    textAlign: 'left'
   }
 });
 

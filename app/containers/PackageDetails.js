@@ -246,7 +246,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
               }
               classes={{ root: classes.cardHeader, subheader: classes.subheader }}
               subheader={
-                <>
+                <React.Fragment>
                   <Typography color="textSecondary" variant="body2">{`License: ${active.license ||
                     '-'}`}</Typography>
                   {mode === 'local' && !fromSearch && (

@@ -16,7 +16,7 @@ export default {
   },
   secondary: {
     contrastText: white,
-    light: lighten('#e51a90', 0.1),
+    light: lighten('#f7cac9', 0.8),
     main: '#e51a90',
     dark: darken('#e51a90', 0.1)
   },

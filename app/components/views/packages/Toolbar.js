@@ -74,6 +74,9 @@ const ToolbarView = ({
     dispatch(clearFilters());
   }, [filteredByNamePackages, setFilteredByNamePackages, dispatch]);
 
+  const handleAction = (action, force, latest) => {
+    let pkgOptions;
+
   const handleAction = useCallback(
     (action, force, latest) => {
       let pkgOptions;
@@ -176,9 +179,9 @@ const ToolbarView = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-    selected.some(
-      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-    ),
+      selected.some(
+        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+      ),
     [selected]
   );
 
