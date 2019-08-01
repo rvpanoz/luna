@@ -9,6 +9,9 @@ const styles = theme => ({
   cardHeader: {
     padding: theme.spacing(1)
   },
+  subheader: {
+    paddingTop: theme.spacing(1)
+  },
   cardContent: {
     maxHeight: 375,
     overflowY: 'scroll',

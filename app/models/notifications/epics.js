@@ -1,10 +1,10 @@
-import { pipe, from } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { pipe } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 import uuid from 'uuid/v1';
 import { combineEpics, ofType } from 'redux-observable';
 
 import { ERROR_TYPES } from 'constants/AppConstants';
-import { parseMessage, switchcase, matchType } from 'commons/utils';
+import { parseMessage, matchType } from 'commons/utils';
 
 import {
   addNotification,
@@ -24,7 +24,7 @@ const matchMessageType = prefix => types =>
  * @param {*} message
  */
 const parseNpmMessage = message => {
-  const prefix = message.slice(0, 8).trim();
+  const [prefix] = message.split(':').slice(1);
   const messageType = matchMessageType(prefix)(ERROR_TYPES);
   const [body, required, requiredBy] = parseMessage(message);
 
@@ -40,38 +40,21 @@ const parseNpmMessage = message => {
 
 const notificationsEpic = pipe(
   ofType(updateNotifications.type),
-  mergeMap(({ payload: { notifications } }) => from(notifications)),
-  map(notification => {
-    const { messageType = 'ERR', payload } = parseNpmMessage(notification);
-    const id = uuid();
+  mergeMap(({ payload: { notifications } }) =>
+    notifications.map(notification => {
+      const id = uuid();
+      const { messageType, payload } = parseNpmMessage(notification);
 
-    return switchcase({
-      ERR: () => ({
+      return {
         type: addNotification.type,
         payload: {
           id,
-          type: 'ERROR',
+          type: messageType,
           ...payload
         }
-      }),
-      INFO: () => ({
-        type: addNotification.type,
-        payload: {
-          type: 'INFO',
-          id,
-          ...payload
-        }
-      }),
-      WARNING: () => ({
-        type: addNotification.type,
-        payload: {
-          type: 'WARNING',
-          id,
-          ...payload
-        }
-      })
-    })({ type: addNotification.type, payload: { type: 'ERROR' } })(messageType);
-  })
+      };
+    })
+  )
 );
 
 export default combineEpics(notificationsEpic);

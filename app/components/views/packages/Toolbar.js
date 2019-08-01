@@ -55,21 +55,24 @@ const ToolbarView = ({
   const dispatch = useDispatch();
   const packagesOutdatedNames = outdated.map(pkg => pkg.name);
 
-  const openFilters = (e, close) => {
-    const { target } = e || {};
+  const openFilters = useCallback(
+    (e, close) => {
+      const { target } = e || {};
 
-    setAnchorEl(close ? null : target);
-    toggleFilters(!filtersOn);
-    scrollWrapper(0);
-  };
+      setAnchorEl(close ? null : target);
+      toggleFilters(!filtersOn);
+      scrollWrapper(0);
+    },
+    [filtersOn, scrollWrapper]
+  );
 
-  const clearAllFilters = () => {
+  const clearAllFilters = useCallback(() => {
     if (filteredByNamePackages.length) {
       setFilteredByNamePackages([]);
     }
 
     dispatch(clearFilters());
-  };
+  }, [filteredByNamePackages, setFilteredByNamePackages, dispatch]);
 
   const handleAction = (action, force, latest) => {
     let pkgOptions;
@@ -170,9 +173,9 @@ const ToolbarView = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-    selected.some(
-      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-    ),
+      selected.some(
+        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+      ),
     [selected]
   );
 

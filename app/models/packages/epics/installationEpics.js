@@ -3,9 +3,9 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
-import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
+import { tap, mergeMap, switchMap, ignoreElements } from 'rxjs/operators';
 
-import { toggleLoader } from 'models/ui/actions';
+import { toggleLoader, setActivePage } from 'models/ui/actions';
 import {
   installPackage,
   installMultiplePackages,
@@ -22,12 +22,16 @@ const updateLoader = payload => ({
 const showInstallLoaderEpic = action$ =>
   action$.pipe(
     ofType(installPackage.type, installMultiplePackages.type),
-    map(() =>
+    mergeMap(() => [
+      setActivePage({
+        page: 'packages',
+        paused: true
+      }),
       updateLoader({
         loading: true,
         message: iMessage('info', 'installingPackages')
       })
-    )
+    ])
   );
 
 /**
@@ -72,7 +76,7 @@ const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(installMultiplePackages.type),
     tap(({ payload }) => {
-      const { pkgOptions } = payload
+      const { pkgOptions } = payload;
 
       const {
         common: {
@@ -88,7 +92,11 @@ const installMultiplePackagesEpic = (action$, state$) =>
           option => option.name === selectedPackage
         );
 
-        return pkg && pkg.options ? pkg.options : pkgOptions ? pkgOptions[idx] : ['save-prod'];
+        return pkg && pkg.options
+          ? pkg.options
+          : pkgOptions
+          ? pkgOptions[idx]
+          : ['save-prod'];
       });
 
       const parameters = {

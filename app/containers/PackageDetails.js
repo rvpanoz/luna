@@ -242,19 +242,19 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                   variant="h4"
                 >{`${name} v${version}`}</Typography>
               }
-              className={classes.cardHeader}
+              classes={{ root: classes.cardHeader, subheader: classes.subheader }}
               subheader={
                 <React.Fragment>
-                  <Typography variant="subtitle1">{`License: ${active.license ||
+                  <Typography color="textSecondary" variant="body2">{`License: ${active.license ||
                     '-'}`}</Typography>
                   {mode === 'local' && !fromSearch && (
-                    <Typography variant="subtitle1">{`Group: ${group ||
+                    <Typography color="textSecondary" variant="body2">{`Group: ${group ||
                       '-'}`}</Typography>
                   )}
                 </React.Fragment>
               }
             />
-            <CardContent className={classes.cardContent}>
+            <CardContent classes={{ root: classes.cardContent }}>
               <Typography variant="body1">{description}</Typography>
               <Divider className={classes.divider} />
               <Hidden mdDown>

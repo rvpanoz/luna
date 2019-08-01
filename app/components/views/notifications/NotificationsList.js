@@ -14,43 +14,15 @@ import ToolbarView from './Toolbar';
 
 import styles from './styles/list';
 
-const NotificationsList = ({ classes, notifications, loading }) => {
-  const [selected, setSelected] = useState([]);
-
-  const handleSelectAll = e => {
-    let selectedNotifications;
-
-    if (e.target.checked) {
-      selectedNotifications = notifications.map(
-        notification => notification.id
-      );
-    } else {
-      selectedNotifications = [];
-    }
-
-    setSelected(selectedNotifications);
-  };
-
-  const handleSelectOne = (e, id) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
-  };
-
+const NotificationsList = ({
+  classes,
+  notifications,
+  selected,
+  loading,
+  handleSelectAll,
+  handleSelectOne,
+  handleInstall
+}) => {
   const noNotifications = !notifications || notifications.length === 0;
 
   return (
@@ -60,13 +32,14 @@ const NotificationsList = ({ classes, notifications, loading }) => {
           <HelperText text={iMessage('info', 'noNotifications')} />
         )}
         {!noNotifications && (
-          <Paper elevation={0} >
+          <Paper elevation={2}>
             <div className={classes.toolbar}>
               <ToolbarView
                 title={iMessage('title', 'notifications')}
                 total={notifications.length}
                 selected={selected}
                 notifications={notifications}
+                handleInstall={handleInstall}
               />
             </div>
             <Divider />
@@ -107,6 +80,10 @@ const NotificationsList = ({ classes, notifications, loading }) => {
 NotificationsList.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
+  selected: PropTypes.arrayOf(PropTypes.string).isRequired,
+  handleSelectAll: PropTypes.func.isRequired,
+  handleSelectOne: PropTypes.func.isRequired,
+  handleInstall: PropTypes.func.isRequired,
   loading: PropTypes.bool
 };
 

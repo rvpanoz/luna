@@ -1,4 +1,4 @@
-import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({
@@ -45,25 +45,25 @@ const styles = theme => ({
     textAlign: 'left'
   },
   group: {
-    color: darken(theme.palette.secondary.light, 0.3)
+    color: lighten(theme.palette.secondary.main, 0.1)
   },
   statusMissing: {
-    color: darken(theme.palette.secondary.main, 0.1)
+    color: theme.palette.secondary.main
   },
   statusOK: {
-    color: lighten('#00b300', 0.3)
+    color: '#00b300'
   },
   statusPeerMissing: {
-    color: darken(theme.palette.secondary.main, 0.1)
+    color: theme.palette.secondary.main
   },
   statusOutdated: {
-    color: lighten(theme.palette.warning.main, 0.3)
+    color: theme.palette.warning.main
   },
   statusExtraneous: {
-    color: darken(theme.palette.secondary.main, 0.1)
+    color: theme.palette.secondary.main
   },
   statusError: {
-    color: darken(theme.palette.secondary.main, 0.1)
+    color: theme.palette.secondary.main
   }
 });
 
