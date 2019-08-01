@@ -12,7 +12,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { iMessage } from 'commons/utils';
 import styles from './styles/toolbar';
 
-const ToolbarView = ({ classes, notifications, total, title, selected }) => {
+const ToolbarView = ({ classes, total, title, selected, handleInstall }) => {
   const hasNotificationsSelected = selected && selected.length > 0;
 
   return (
@@ -30,15 +30,17 @@ const ToolbarView = ({ classes, notifications, total, title, selected }) => {
               ? `${title} ${total}`
               : `${selected.length} notification(s) selected`}
           </Typography>
+          .,
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
-          <Tooltip title={iMessage('title', 'install')}>
+          <Tooltip title={iMessage('title', 'installSelected')}>
             <div>
               <IconButton
-                disabled={Boolean(notifications.length)}
+                disabled={!selected.length}
                 disableRipple
-                aria-label="install-notification"
+                aria-label="install-package"
+                onClick={handleInstall}
               >
                 <AddIcon />
               </IconButton>
@@ -52,9 +54,9 @@ const ToolbarView = ({ classes, notifications, total, title, selected }) => {
 
 ToolbarView.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
+  handleInstall: PropTypes.func.isRequired,
   total: PropTypes.number
 };
 

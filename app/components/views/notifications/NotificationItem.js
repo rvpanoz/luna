@@ -1,24 +1,23 @@
 import React from 'react';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import { arrayOf, objectOf, string } from 'prop-types';
+import { arrayOf, objectOf, string, func } from 'prop-types';
 
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
-// import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import styles from './styles/listItem';
 
 const NotificationItem = ({
   classes,
   id,
-  type,
   body,
   requiredBy,
   required,
   selected,
-  // handleSelectOne
+  handleSelectOne
 }) => {
   const isSelected = selected.indexOf(id) !== -1;
 
@@ -33,34 +32,29 @@ const NotificationItem = ({
         root: classes.tableRow
       }}
     >
-      {/* <TableCell padding="checkbox" style={{ width: '55px' }}>
+      <TableCell padding="checkbox" style={{ width: '55px' }}>
         <Checkbox
           checked={isSelected}
           disableRipple
           onClick={e => handleSelectOne(e, id)}
         />
-      </TableCell> */}
+      </TableCell>
 
       <TableCell
         padding="none"
-        name="name"
         className={cn(classes.tableCell, classes.cellText)}
       >
-        <div
-          className={cn(classes.flexContainerCell, {
-            [classes.flexRow]: type === 'ERR'
-          })}
-        >
-          <div className={classes.flexContainer}>
-            <Typography className={classes.name}>{body}</Typography>
-          </div>
+        <div className={classes.flexContainerCell}>
+          <Typography className={classes.name}>{body}</Typography>
         </div>
       </TableCell>
       <TableCell padding="none" name="required" className={classes.tableCell}>
         <Typography className={classes.typo}>{required}</Typography>
       </TableCell>
       <TableCell padding="none" name="requiredBy" className={classes.tableCell}>
-        <Typography>{requiredBy}</Typography>
+        <Typography className={classes.requiredBy}>
+          {requiredBy.replace('required by', '')}
+        </Typography>
       </TableCell>
     </TableRow>
   );
@@ -72,8 +66,7 @@ NotificationItem.propTypes = {
   body: string.isRequired,
   required: string.isRequired,
   requiredBy: string.isRequired,
-  type: string.isRequired,
-  // handleSelectOne: func.isRequired,
+  handleSelectOne: func.isRequired,
   selected: arrayOf(string)
 };
 
