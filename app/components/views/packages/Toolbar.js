@@ -74,73 +74,76 @@ const ToolbarView = ({
     dispatch(clearFilters());
   }, [filteredByNamePackages, setFilteredByNamePackages, dispatch]);
 
-  const handleAction = (action, force, latest) => {
-    let pkgOptions;
+  const handleAction = useCallback(
+    (action, force, latest) => {
+      let pkgOptions;
 
-    if (action === 'clearFilters') {
-      return clearAllFilters();
-    }
+      if (action === 'clearFilters') {
+        return clearAllFilters();
+      }
 
-    if (!selected.length) {
-      return;
-    }
+      if (!selected.length) {
+        return;
+      }
 
-    if (mode === 'local' && action === 'install' && !force) {
-      return toggleOptions({
-        open: true,
-        single: false
-      });
-    }
-
-    if (action === 'install') {
-      if (mode === 'local') {
-        pkgOptions = selected.map(packageName => {
-          const packageDetails = packagesData.find(
-            packageDataDetails => packageDataDetails.name === packageName
-          );
-          const { __group } = packageDetails;
-
-          return [PACKAGE_GROUPS[__group]];
+      if (mode === 'local' && action === 'install' && !force) {
+        return toggleOptions({
+          open: true,
+          single: false
         });
       }
 
-      return dispatch(
-        installMultiplePackages({
-          ipcEvent: 'npm-install',
-          cmd: selected.map(() => 'install'),
-          multiple: true,
-          pkgOptions: mode === 'local' ? pkgOptions : null,
-          packages: latest
-            ? selected.map(selectedPackage => `${selectedPackage}@latest`)
-            : selected
-        })
-      );
-    }
+      if (action === 'install') {
+        if (mode === 'local') {
+          pkgOptions = selected.map(packageName => {
+            const packageDetails = packagesData.find(
+              packageDataDetails => packageDataDetails.name === packageName
+            );
+            const { __group } = packageDetails;
 
-    if (action === 'uninstall') {
-      return dispatch(
-        uninstallPackages({
-          ipcEvent: 'npm-uninstall',
-          cmd: ['uninstall'],
-          multiple: true,
-          packages: selected
-        })
-      );
-    }
+            return [PACKAGE_GROUPS[__group]];
+          });
+        }
 
-    if (action === 'update') {
-      return dispatch(
-        updatePackages({
-          ipcEvent: 'npm-update',
-          cmd: ['update'],
-          multiple: true,
-          packages: selected
-        })
-      );
-    }
+        return dispatch(
+          installMultiplePackages({
+            ipcEvent: 'npm-install',
+            cmd: selected.map(() => 'install'),
+            multiple: true,
+            pkgOptions: mode === 'local' ? pkgOptions : null,
+            packages: latest
+              ? selected.map(selectedPackage => `${selectedPackage}@latest`)
+              : selected
+          })
+        );
+      }
 
-    return false;
-  };
+      if (action === 'uninstall') {
+        return dispatch(
+          uninstallPackages({
+            ipcEvent: 'npm-uninstall',
+            cmd: ['uninstall'],
+            multiple: true,
+            packages: selected
+          })
+        );
+      }
+
+      if (action === 'update') {
+        return dispatch(
+          updatePackages({
+            ipcEvent: 'npm-update',
+            cmd: ['update'],
+            multiple: true,
+            packages: selected
+          })
+        );
+      }
+
+      return false;
+    },
+    [selected, packagesData, mode, clearAllFilters, toggleOptions, dispatch]
+  );
 
   const renderAction = action =>
     switchcase({

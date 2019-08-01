@@ -1,16 +1,32 @@
 import React from 'react';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useMappedState, useDispatch } from 'redux-react-hook';
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import Button from '@material-ui/core/Button';
 
 import { Notifications } from 'components/views/notifications';
 import { installMultiplePackages } from 'models/packages/actions';
+import { clearInstallOptions } from 'models/common/actions';
+import { DialogOptionsView } from 'components/views/packages';
+import { iMessage } from 'commons/utils';
 
 const mapState = ({ notifications: { notifications } }) => ({
   notifications
 });
 
 const AppNotifications = () => {
+  const [formattedNotifications, setFormattedNotifications] = useState([]);
   const [selected, setSelected] = useState([]);
+  const [selectedPackagesNames, setSelectedPackagesNames] = useState([]);
+  const [options, toggleOptions] = useState({
+    open: false,
+    single: false,
+    name: null,
+    version: null
+  });
   const { notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
@@ -54,33 +70,99 @@ const AppNotifications = () => {
     [selected]
   );
 
-  const handleInstall = useCallback(() => {
-    const packages = selected.map(notificationId => {
-      const { required } = notifications.find(
-        notification => notification.id === notificationId
-      );
-
-      return required;
+  const handleCancel = useCallback(() => {
+    dispatch(clearInstallOptions());
+    toggleOptions({
+      open: false,
+      single: false,
+      name: null,
+      version: null
     });
+  }, [dispatch]);
 
-    return dispatch(
-      installMultiplePackages({
-        ipcEvent: 'npm-install',
-        cmd: packages.map(() => 'install'),
-        multiple: true,
-        packages
-      })
-    );
-  }, [selected, notifications, dispatch]);
+  const handleInstall = useCallback(
+    () =>
+      dispatch(
+        installMultiplePackages({
+          ipcEvent: 'npm-install',
+          cmd: selectedPackagesNames.map(() => 'install'),
+          multiple: true,
+          packages: selectedPackagesNames
+        })
+      ),
+    [selectedPackagesNames, dispatch]
+  );
+
+  useEffect(() => {
+    const packagesNames = selected.length
+      ? selected.map(notificationId => {
+          const { required } = notifications.find(
+            notification => notification.id === notificationId
+          );
+
+          return required;
+        })
+      : [];
+
+    setSelectedPackagesNames(packagesNames);
+
+    const newNotifications = notifications.reduce((acc, notification) => {
+      const { id, body, required, requiredBy } = notification;
+      // const regex = RegExp('([^@]+)$', 'g');
+      // const matches = regex.exec(required);
+      const dependency = acc.find(pkg => pkg.required === required);
+
+      if (!dependency) {
+        acc.push({
+          id,
+          body,
+          required,
+          requiredBy: [requiredBy]
+        });
+      } else {
+        const { requiredBy: newRequiredBy } = dependency;
+        newRequiredBy.push(requiredBy);
+      }
+
+      return acc;
+    }, []);
+
+    setFormattedNotifications(newNotifications);
+  }, [selected, notifications]);
 
   return (
-    <Notifications
-      selected={selected}
-      notifications={notifications}
-      handleInstall={handleInstall}
-      handleSelectAll={handleSelectAll}
-      handleSelectOne={handleSelectOne}
-    />
+    <>
+      <Notifications
+        selected={selected}
+        notifications={formattedNotifications}
+        handleInstall={() =>
+          toggleOptions({
+            ...options,
+            open: true
+          })
+        }
+        handleSelectAll={handleSelectAll}
+        handleSelectOne={handleSelectOne}
+      />
+      <Dialog
+        open={options.open}
+        fullWidth
+        onClose={handleCancel}
+        aria-labelledby="install-options"
+      >
+        <DialogContent>
+          <DialogOptionsView selected={selectedPackagesNames} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancel} color="secondary">
+            {iMessage('action', 'cancel')}
+          </Button>
+          <Button onClick={handleInstall} color="primary" autoFocus>
+            {iMessage('action', 'install')}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

@@ -30,7 +30,6 @@ const ToolbarView = ({ classes, total, title, selected, handleInstall }) => {
               ? `${title} ${total}`
               : `${selected.length} notification(s) selected`}
           </Typography>
-          .,
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
