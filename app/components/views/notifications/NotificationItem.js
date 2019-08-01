@@ -1,17 +1,13 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import cn from 'classnames';
-import semver from 'semver';
-
 import { withStyles } from '@material-ui/core/styles';
-import { arrayOf, objectOf, string, func, oneOfType, array } from 'prop-types';
-
+import { arrayOf, objectOf, string, func } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
+import Tooltip from '@material-ui/core/Tooltip';
 import styles from './styles/listItem';
-
-const { log } = console;
 
 const NotificationItem = ({
   classes,
@@ -21,61 +17,62 @@ const NotificationItem = ({
   required,
   selected,
   handleSelectOne,
-  onSetActive
 }) => {
   const isSelected = selected.indexOf(id) !== -1;
-  const [requiredName, requiredVersion] = required && required.split('@');
-  let version;
+  const nameSpace = required.indexOf('/');
+  let version, newRequired, requiredName, requiredVersion, atIndex;
 
+  if (nameSpace > -1) {
+    atIndex = required.indexOf('@') // todo..not working
+    newRequired = required.slice(atIndex, nameSpace);
+  }
+
+  [requiredName, requiredVersion] = (newRequired && newRequired.split('@')) || (required && required.split('@'));
+  console.log(required, requiredName, requiredVersion)
   if (body === 'extraneous') {
     [version] = requiredVersion.split(' ')
   }
 
-  return (
-    <TableRow
-      key={id}
-      role="checkbox"
-      aria-checked={isSelected}
-      tabIndex={-1}
-      selected={isSelected}
-      classes={{
-        root: classes.tableRow
-      }}
-      hover
-      onClick={() => onSetActive({
-        active: {
-          id,
-          body,
-          required: requiredName,
-          version: version || requiredVersion,
-          requiredBy
-        }
-      })}
-    >
-      <TableCell padding="checkbox" style={{ width: '55px' }}>
-        <Checkbox
-          checked={isSelected}
-          disableRipple
-          onClick={e => handleSelectOne(e, id)}
-        />
-      </TableCell>
+  const renderTitle = useCallback(() => {
+    return <Typography component="span" className={classes.span}>{requiredBy.join('<br />')}</Typography>
+  }, [requiredBy]);
 
-      <TableCell
-        padding="none"
-        className={cn(classes.tableCell, classes.cellText)}
-        align="center"
+  return (
+    <Tooltip title={renderTitle()}>
+      <TableRow
+        key={id}
+        role="checkbox"
+        aria-checked={isSelected}
+        tabIndex={-1}
+        selected={isSelected}
+        classes={{
+          root: classes.tableRow
+        }}
       >
-        <div className={classes.flexContainerCell}>
-          <Typography className={classes.name}>{body}</Typography>
-        </div>
-      </TableCell>
-      <TableCell padding="none" name="required" className={classes.tableCell}>
-        <Typography className={classes.typo}>{requiredName}</Typography>
-      </TableCell>
-      <TableCell padding="none" name="requiredBy" className={classes.tableCell}>
-        <Typography className={classes.typo}>{version || requiredVersion}</Typography>
-      </TableCell>
-    </TableRow>
+        <TableCell padding="checkbox" style={{ width: '55px' }}>
+          <Checkbox
+            checked={isSelected}
+            disableRipple
+            onClick={e => handleSelectOne(e, id)}
+          />
+        </TableCell>
+        <TableCell padding="none" name="required" className={classes.tableCell}>
+          <Typography className={classes.typo}>{requiredName}</Typography>
+        </TableCell>
+        <TableCell padding="none" name="requiredBy" className={classes.tableCell}>
+          <Typography className={classes.typo}>{version || requiredVersion}</Typography>
+        </TableCell>
+        <TableCell
+          padding="none"
+          className={cn(classes.tableCell, classes.cellText)}
+          align="center"
+        >
+          <div className={classes.flexContainerCell}>
+            <Typography className={classes.name}>{body}</Typography>
+          </div>
+        </TableCell>
+      </TableRow>
+    </Tooltip>
   );
 };
 
@@ -84,10 +81,8 @@ NotificationItem.propTypes = {
   id: string.isRequired,
   body: string.isRequired,
   required: string.isRequired,
-  active: oneOfType([string, array]),
   requiredBy: arrayOf(string),
   handleSelectOne: func.isRequired,
-  onSetActive: func,
   selected: arrayOf(string)
 };
 

@@ -8,7 +8,6 @@ import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
 import NotificationItem from './NotificationItem';
-import NotificationDetails from './NotificationDetails';
 import ToolbarView from './Toolbar';
 
 import styles from './styles/list';
@@ -19,8 +18,6 @@ const NotificationsList = ({
   notifications,
   selected,
   loading,
-  onSetActive,
-  onClearActive,
   handleSelectAll,
   handleSelectOne,
   handleInstall
@@ -73,26 +70,12 @@ const NotificationsList = ({
                       selected={selected}
                       handleSelectOne={handleSelectOne}
                       handleSelectAll={handleSelectAll}
-                      onSetActive={onSetActive}
-                      onClearActive={onClearActive}
                     />
                   ))}
                 </TableBody>
               </Table>
             </div>
           </Paper>
-        )}
-      </Grid>
-      <Grid
-        item
-        sm={12}
-        md={active ? 4 : 2}
-        lg={active ? 4 : 2}
-        xl={active ? 4 : 2}
-        className={classes.transition}
-      >
-        {active && (
-          <NotificationDetails active={active} clearActive={onClearActive} />
         )}
       </Grid>
     </Grid>
@@ -106,8 +89,6 @@ NotificationsList.propTypes = {
   handleSelectAll: PropTypes.func.isRequired,
   handleSelectOne: PropTypes.func.isRequired,
   handleInstall: PropTypes.func.isRequired,
-  onSetActive: PropTypes.func,
-  active: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.array])),
   loading: PropTypes.bool
 };
 

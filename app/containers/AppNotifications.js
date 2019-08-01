@@ -9,13 +9,11 @@ import Button from '@material-ui/core/Button';
 
 import { Notifications } from 'components/views/notifications';
 import { installMultiplePackages } from 'models/packages/actions';
-import { setActive } from 'models/notifications/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { DialogOptionsView } from 'components/views/packages';
 import { iMessage } from 'commons/utils';
 
-const mapState = ({ notifications: { active, notifications } }) => ({
-  active,
+const mapState = ({ notifications: { notifications } }) => ({
   notifications
 });
 
@@ -29,11 +27,8 @@ const AppNotifications = () => {
     name: null,
     version: null
   });
-  const { notifications, active } = useMappedState(mapState)
+  const { notifications } = useMappedState(mapState)
   const dispatch = useDispatch();
-
-  const onSetActive = useCallback((notification) => dispatch(setActive(notification)), [active])
-  const onClearActive = useCallback(() => dispatch(setActive({ active: null })), [])
 
   const handleSelectAll = useCallback(
     e => {
@@ -113,8 +108,6 @@ const AppNotifications = () => {
 
     const newNotifications = notifications.reduce((acc, notification) => {
       const { id, body, required, requiredBy } = notification;
-      // const regex = RegExp('([^@]+)$', 'g');
-      // const matches = regex.exec(required);
       const dependency = acc.find(pkg => pkg.required === required);
 
       if (!dependency) {
@@ -148,9 +141,6 @@ const AppNotifications = () => {
         }
         handleSelectAll={handleSelectAll}
         handleSelectOne={handleSelectOne}
-        onSetActive={onSetActive}
-        onClearActive={onClearActive}
-        active={active}
       />
       <Dialog
         open={options.open}

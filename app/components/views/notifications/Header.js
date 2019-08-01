@@ -9,9 +9,9 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 const columnData = [
-  { id: 'message', numeric: false, disablePadding: true, label: 'Message' },
   { id: 'required', disablePadding: true, label: 'Required' },
-  { id: 'version', disablePadding: true, label: 'Version' }
+  { id: 'version', disablePadding: true, label: 'Version' },
+  { id: 'reason', numeric: false, disablePadding: true, label: 'Reason' },
 ];
 
 const TableHeader = ({ selected, total, sortBy, sortDir, handleSelectAll }) => (

@@ -45,6 +45,9 @@ const styles = theme => ({
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     textAlign: 'left'
+  },
+  span: {
+    color: '#fff'
   }
 });
 
