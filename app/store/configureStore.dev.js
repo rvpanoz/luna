@@ -8,6 +8,8 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
+import { BehaviorSubject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 // epics
 import { epics as packagesEpics } from 'models/packages';
@@ -20,6 +22,7 @@ import { epics as notificationsEpics } from 'models/notifications';
 import rootReducer from '../reducers';
 
 const reduxLogger = /--redux-logger/.test(process.argv[3]);
+const { log } = console;
 
 const configureStore = initialState => {
   const epicMiddleware = createEpicMiddleware();
@@ -49,17 +52,28 @@ const configureStore = initialState => {
   // store creation
   const store = createStore(rootReducer, initialState, enhancer);
 
-  if (module.hot) {
-    module.hot.accept('../reducers', () =>
-      store.replaceReducer(require('../reducers'))
-    );
-  }
+  const notificationsEpics$ = new BehaviorSubject(notificationsEpics);
+  const hotRelNotificationsEpics = (...args) =>
+    notificationsEpics$.pipe(switchMap(epic => epic(...args)));
 
   epicMiddleware.run(uiEpics);
   epicMiddleware.run(packagesEpics);
   epicMiddleware.run(npmEpics);
-  epicMiddleware.run(notificationsEpics);
+  epicMiddleware.run(hotRelNotificationsEpics);
   epicMiddleware.run(commonEpics);
+
+  if (module.hot) {
+    module.hot.accept('../reducers', () => {
+      console.log('HMR reducers');
+      store.replaceReducer(require('../reducers/notifications').default);
+    });
+
+    module.hot.accept('../models/notifications/epics', () => {
+      const nextNotificationsRootEpic = require('models/notifications/epics');
+      console.log('HMR notifications epics');
+      notificationsEpics$.next(nextNotificationsRootEpic);
+    });
+  }
 
   return store;
 };

@@ -27,7 +27,7 @@ const AppNotifications = () => {
     name: null,
     version: null
   });
-  const { notifications } = useMappedState(mapState)
+  const { notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   const handleSelectAll = useCallback(
@@ -96,36 +96,15 @@ const AppNotifications = () => {
   useEffect(() => {
     const packagesNames = selected.length
       ? selected.map(notificationId => {
-        const { required } = notifications.find(
-          notification => notification.id === notificationId
-        );
+          const { required } = notifications.find(
+            notification => notification.id === notificationId
+          );
 
-        return required;
-      })
+          return required;
+        })
       : [];
 
     setSelectedPackagesNames(packagesNames);
-
-    const newNotifications = notifications.reduce((acc, notification) => {
-      const { id, body, required, requiredBy } = notification;
-      const dependency = acc.find(pkg => pkg.required === required);
-
-      if (!dependency) {
-        acc.push({
-          id,
-          body,
-          required,
-          requiredBy: [requiredBy]
-        });
-      } else {
-        const { requiredBy: newRequiredBy } = dependency;
-        newRequiredBy.push(requiredBy);
-      }
-
-      return acc;
-    }, []);
-
-    setFormattedNotifications(newNotifications);
   }, [notifications]);
 
   return (

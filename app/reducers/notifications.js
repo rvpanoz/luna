@@ -18,27 +18,36 @@ const createReducer = (notificationsState, handlers) => (
   state = notificationsState,
   action
 ) => propOr(identity, prop('type', action), handlers)(state, action);
-
 const handlers = {
   [setActive.type]: (state, { payload: { active } }) =>
     assoc('active', active, state),
-  [updateNotifications.type]: (state, { payload: { data } }) =>
+  [updateNotifications.type]: (state, { payload: { notifications } }) =>
     merge(state, {
       ...state.notifications,
-      notifications: data
+      notifications
     }),
   [addNotification.type]: (
     state,
-    { payload: { type, body, required, requiredBy, id } }
+    {
+      payload: {
+        reason,
+        requiredName,
+        requiredVersion,
+        requiredByName,
+        requiredByVersion,
+        id
+      }
+    }
   ) =>
     merge(state, {
       notifications: prepend(
         {
           id,
-          type,
-          body,
-          required, // required.charAt(0) === '@' ? required.slice(1) : required,
-          requiredBy
+          reason,
+          requiredName,
+          requiredVersion,
+          requiredByName,
+          requiredByVersion
         },
         state.notifications
       )

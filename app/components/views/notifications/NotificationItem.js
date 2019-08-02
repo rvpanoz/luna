@@ -12,31 +12,14 @@ import styles from './styles/listItem';
 const NotificationItem = ({
   classes,
   id,
-  body,
-  requiredBy,
-  required,
+  reason,
+  requiredByName,
+  requiredByVersion,
+  requiredName,
+  requiredVersion,
   selected,
-  handleSelectOne,
+  handleSelectOne
 }) => {
-  const isSelected = selected.indexOf(id) !== -1;
-  const nameSpace = required.indexOf('/');
-  let version, newRequired, requiredName, requiredVersion, atIndex;
-
-  if (nameSpace > -1) {
-    atIndex = required.indexOf('@') // todo..not working
-    newRequired = required.slice(atIndex, nameSpace);
-  }
-
-  [requiredName, requiredVersion] = (newRequired && newRequired.split('@')) || (required && required.split('@'));
-  console.log(required, requiredName, requiredVersion)
-  if (body === 'extraneous') {
-    [version] = requiredVersion.split(' ')
-  }
-
-  const renderTitle = useCallback(() => {
-    return <Typography component="span" className={classes.span}>{requiredBy.join('<br />')}</Typography>
-  }, [requiredBy]);
-
   return (
     <Tooltip title={renderTitle()}>
       <TableRow
@@ -56,21 +39,6 @@ const NotificationItem = ({
             onClick={e => handleSelectOne(e, id)}
           />
         </TableCell>
-        <TableCell padding="none" name="required" className={classes.tableCell}>
-          <Typography className={classes.typo}>{requiredName}</Typography>
-        </TableCell>
-        <TableCell padding="none" name="requiredBy" className={classes.tableCell}>
-          <Typography className={classes.typo}>{version || requiredVersion}</Typography>
-        </TableCell>
-        <TableCell
-          padding="none"
-          className={cn(classes.tableCell, classes.cellText)}
-          align="center"
-        >
-          <div className={classes.flexContainerCell}>
-            <Typography className={classes.name}>{body}</Typography>
-          </div>
-        </TableCell>
       </TableRow>
     </Tooltip>
   );
@@ -79,8 +47,9 @@ const NotificationItem = ({
 NotificationItem.propTypes = {
   classes: objectOf(string).isRequired,
   id: string.isRequired,
-  body: string.isRequired,
-  required: string.isRequired,
+  reason: string.isRequired,
+  requiredName: string.isRequired,
+  requiredVersion: string.isRequired,
   requiredBy: arrayOf(string),
   handleSelectOne: func.isRequired,
   selected: arrayOf(string)
