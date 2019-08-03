@@ -27,6 +27,7 @@ const onListOutdatedPackages$ = new Observable(observer => {
         ? objectEntries(dependencies)
         : objectEntries(packageData);
 
+
       if (notifications) {
         observer.next(
           updateNotifications({

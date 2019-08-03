@@ -22,7 +22,6 @@ import { epics as notificationsEpics } from 'models/notifications';
 import rootReducer from '../reducers';
 
 const reduxLogger = /--redux-logger/.test(process.argv[3]);
-const { log } = console;
 
 const configureStore = initialState => {
   const epicMiddleware = createEpicMiddleware();

@@ -187,10 +187,10 @@ export default merge.smart(baseConfig, {
     requiredByDLLConfig
       ? null
       : new webpack.DllReferencePlugin({
-          context: path.join(__dirname, '..', 'dll'),
-          manifest: require(manifest),
-          sourceType: 'var'
-        }),
+        context: path.join(__dirname, '..', 'dll'),
+        manifest: require(manifest),
+        sourceType: 'var'
+      }),
 
     new webpack.HotModuleReplacementPlugin(),
 
@@ -231,8 +231,8 @@ export default merge.smart(baseConfig, {
     inline: true,
     lazy: false,
     liveReload: false,
-    hot: true, // if you want to refresh on errors too,
-    hotOnly: false, // don't refresh if hot loading fails.
+    hot: false, // if you want to refresh on errors too,
+    hotOnly: true, // don't refresh if hot loading fails.
     headers: { 'Access-Control-Allow-Origin': '*' },
     contentBase: path.join(__dirname, 'dist'),
     watchContentBase: true,

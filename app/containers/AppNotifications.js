@@ -18,7 +18,6 @@ const mapState = ({ notifications: { notifications } }) => ({
 });
 
 const AppNotifications = () => {
-  const [formattedNotifications, setFormattedNotifications] = useState([]);
   const [selected, setSelected] = useState([]);
   const [selectedPackagesNames, setSelectedPackagesNames] = useState([]);
   const [options, toggleOptions] = useState({
@@ -96,22 +95,22 @@ const AppNotifications = () => {
   useEffect(() => {
     const packagesNames = selected.length
       ? selected.map(notificationId => {
-          const { required } = notifications.find(
-            notification => notification.id === notificationId
-          );
+        const { required } = notifications.find(
+          notification => notification.id === notificationId
+        );
 
-          return required;
-        })
+        return required;
+      })
       : [];
 
     setSelectedPackagesNames(packagesNames);
-  }, [notifications]);
+  }, [selected, notifications]);
 
   return (
     <>
       <Notifications
         selected={selected}
-        notifications={formattedNotifications}
+        notifications={notifications}
         handleInstall={() =>
           toggleOptions({
             ...options,

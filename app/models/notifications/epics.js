@@ -1,11 +1,8 @@
 import { pipe, from, of } from 'rxjs';
 import {
-  tap,
-  map,
   concatMap,
   mergeMap,
   catchError,
-  ignoreElements
 } from 'rxjs/operators';
 import uuid from 'uuid/v1';
 import { combineEpics, ofType } from 'redux-observable';
@@ -17,33 +14,42 @@ import {
 
 const notificationsEpic = pipe(
   ofType(updateNotifications.type),
-  ignoreElements(),
   mergeMap(({ payload: { notifications } }) => from(notifications)),
   concatMap(notification => {
-    const id = uuid();
-    const [p1, p2] = notification.split(',');
-    const [reason, required] = p1.split(':');
-    const requiredBy = p2.replace('required by ', '');
-    const [requiredName, requiredVersion] = required.split('@');
-    const [requiredByName, requiredByVersion] = requiredBy.split('@');
+    const id = uuid(); // produce unique id
+    const [reason, details] = notification.split(':');
+    const isExtraneous = reason === 'extraneous';
+    let detailsWithTrim = details.trim();
 
-    const notificationPayload = {
-      id,
-      reason,
-      requiredName: requiredName.trim(),
-      requiredVersion: requiredVersion.trim(),
-      requiredByName: requiredName.trim(),
-      requiredByVersion: requiredVersion.trim()
-    };
+    // check for namespace
+    if (detailsWithTrim.startsWith('@')) {
+      detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1)
+    }
+
+    const [requiredDetails, requiredByName] = isExtraneous ? detailsWithTrim.split('@') : detailsWithTrim.split(',');
+    const [requiredName, requiredVersion] = requiredDetails.split('@');
 
     return [
       {
         type: addNotification.type,
-        payload: notificationPayload
+        payload: {
+          id,
+          reason,
+          requiredName,
+          requiredByName: isExtraneous ? '' : requiredByName.replace('required by', ''),
+          requiredVersion: isExtraneous ? '' : requiredVersion,
+        }
       }
     ];
   }),
-  catchError(err => console.log(err))
+  catchError(error => {
+    console.error(error);
+
+    return of({
+      type: '@@LUNA/ERROR/FATAL_NOTIFICATIONS',
+      error: error.toString()
+    })
+  })
 );
 
 export default combineEpics(notificationsEpic);

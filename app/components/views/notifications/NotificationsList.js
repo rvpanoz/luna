@@ -14,7 +14,6 @@ import styles from './styles/list';
 
 const NotificationsList = ({
   classes,
-  active,
   notifications,
   selected,
   loading,
@@ -28,9 +27,9 @@ const NotificationsList = ({
     <Grid container>
       <Grid
         item
-        md={active ? 8 : 10}
-        lg={active ? 8 : 10}
-        xl={active ? 8 : 10}
+        md={10}
+        lg={10}
+        xl={10}
         className={classes.transition}
       >
         {noNotifications && (
