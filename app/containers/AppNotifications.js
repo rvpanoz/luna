@@ -18,7 +18,6 @@ const mapState = ({ notifications: { notifications } }) => ({
 });
 
 const AppNotifications = () => {
-  const [formattedNotifications, setFormattedNotifications] = useState([]);
   const [selected, setSelected] = useState([]);
   const [selectedPackagesNames, setSelectedPackagesNames] = useState([]);
   const [options, toggleOptions] = useState({
@@ -96,45 +95,22 @@ const AppNotifications = () => {
   useEffect(() => {
     const packagesNames = selected.length
       ? selected.map(notificationId => {
-          const { required } = notifications.find(
-            notification => notification.id === notificationId
-          );
+        const { requiredName } = notifications.find(
+          notification => notification.id === notificationId
+        );
 
-          return required;
-        })
+        return requiredName;
+      })
       : [];
 
     setSelectedPackagesNames(packagesNames);
-
-    const newNotifications = notifications.reduce((acc, notification) => {
-      const { id, body, required, requiredBy } = notification;
-      // const regex = RegExp('([^@]+)$', 'g');
-      // const matches = regex.exec(required);
-      const dependency = acc.find(pkg => pkg.required === required);
-
-      if (!dependency) {
-        acc.push({
-          id,
-          body,
-          required,
-          requiredBy: [requiredBy]
-        });
-      } else {
-        const { requiredBy: newRequiredBy } = dependency;
-        newRequiredBy.push(requiredBy);
-      }
-
-      return acc;
-    }, []);
-
-    setFormattedNotifications(newNotifications);
   }, [selected, notifications]);
 
   return (
     <>
       <Notifications
         selected={selected}
-        notifications={formattedNotifications}
+        notifications={notifications}
         handleInstall={() =>
           toggleOptions({
             ...options,

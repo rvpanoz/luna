@@ -38,6 +38,7 @@ const ToolbarView = ({ classes, total, title, selected, handleInstall }) => {
               <IconButton
                 disabled={!selected.length}
                 disableRipple
+                color="primary"
                 aria-label="install-package"
                 onClick={handleInstall}
               >

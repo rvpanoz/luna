@@ -12,6 +12,7 @@ const initialState = {
     packagesInstallOptions: []
   },
   notifications: {
+    active: null,
     notifications: []
   },
   npm: {

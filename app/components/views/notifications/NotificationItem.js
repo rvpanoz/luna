@@ -1,26 +1,29 @@
 import React from 'react';
+import { useState } from 'react'
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { arrayOf, objectOf, string, func } from 'prop-types';
-
 import Typography from '@material-ui/core/Typography';
+import Popover from '@material-ui/core/Popover'
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
+import InfoIcon from '@material-ui/icons/InfoTwoTone';
+import { iMessage } from 'commons/utils';
 
 import styles from './styles/listItem';
 
 const NotificationItem = ({
   classes,
   id,
-  body,
-  requiredBy,
-  required,
   selected,
   handleSelectOne,
-  setActive
+  ...restProps
 }) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { requiredName, requiredVersion, reason, requiredByName } = restProps;
   const isSelected = selected.indexOf(id) !== -1;
+  const open = Boolean(anchorEl);
 
   return (
     <TableRow
@@ -32,14 +35,6 @@ const NotificationItem = ({
       classes={{
         root: classes.tableRow
       }}
-      hover
-      onClick={() =>
-        setActive({
-          body,
-          required,
-          requiredBy
-        })
-      }
     >
       <TableCell padding="checkbox" style={{ width: '55px' }}>
         <Checkbox
@@ -48,21 +43,60 @@ const NotificationItem = ({
           onClick={e => handleSelectOne(e, id)}
         />
       </TableCell>
-
       <TableCell
         padding="none"
         className={cn(classes.tableCell, classes.cellText)}
-        align="center"
+        align="left"
       >
         <div className={classes.flexContainerCell}>
-          <Typography className={classes.name}>{body}</Typography>
+          <Typography className={classes.name}>{requiredName}</Typography>
         </div>
       </TableCell>
-      <TableCell padding="none" name="required" className={classes.tableCell}>
-        <Typography className={classes.typo}>{required}</Typography>
+      <TableCell
+        padding="none"
+        className={cn(classes.tableCell, classes.cellText)}
+      >
+        <div className={classes.flexContainerCell}>
+          <Typography className={classes.name}>{requiredVersion}</Typography>
+        </div>
       </TableCell>
-      <TableCell padding="none" name="requiredBy" className={classes.tableCell}>
-        <Typography className={classes.typo}>{requiredBy.length}</Typography>
+      <TableCell
+        padding="none"
+        className={cn(classes.tableCell, classes.cellText)}
+        align="right"
+      >
+        <div className={classes.flexContainerCell}>
+          <Typography
+            aria-owns={open ? 'mouse-over-popover' : undefined}
+            aria-haspopup="true"
+            onMouseEnter={e => setAnchorEl(e.currentTarget)}
+            onMouseLeave={() => setAnchorEl(null)}
+          >
+            <InfoIcon color="primary" />
+          </Typography>
+          <Popover
+            id="mouse-over-popover"
+            className={classes.popover}
+            classes={{
+              paper: classes.paper,
+            }}
+            open={open}
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+            onClose={() => setAnchorEl(null)}
+            disableRestoreFocus
+          >
+            <Typography>{iMessage('label', 'reason')}:&nbsp;{reason}</Typography>
+            <Typography>{iMessage('label', 'requiredByName')}:{requiredByName || ' - '}</Typography>
+          </Popover>
+        </div>
       </TableCell>
     </TableRow>
   );
@@ -71,11 +105,11 @@ const NotificationItem = ({
 NotificationItem.propTypes = {
   classes: objectOf(string).isRequired,
   id: string.isRequired,
-  body: string.isRequired,
-  required: string.isRequired,
-  requiredBy: arrayOf(string),
+  reason: string.isRequired,
+  requiredName: string,
+  requiredVersion: string,
+  requiredByName: string,
   handleSelectOne: func.isRequired,
-  setActive: func.isRequired,
   selected: arrayOf(string)
 };
 
