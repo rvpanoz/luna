@@ -95,11 +95,11 @@ const AppNotifications = () => {
   useEffect(() => {
     const packagesNames = selected.length
       ? selected.map(notificationId => {
-        const { required } = notifications.find(
+        const { requiredName } = notifications.find(
           notification => notification.id === notificationId
         );
 
-        return required;
+        return requiredName;
       })
       : [];
 
