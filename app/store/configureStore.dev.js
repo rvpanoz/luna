@@ -63,11 +63,13 @@ const configureStore = initialState => {
 
   if (module.hot) {
     module.hot.accept('../reducers', () => {
+      console.log('HMR reducers');
       store.replaceReducer(require('../reducers/notifications').default);
     });
 
     module.hot.accept('../models/notifications/epics', () => {
       const nextNotificationsRootEpic = require('models/notifications/epics');
+      console.log('HMR notifications epics');
       notificationsEpics$.next(nextNotificationsRootEpic);
     });
   }

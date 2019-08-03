@@ -1,60 +1,55 @@
-import { pipe } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { pipe, from, of } from 'rxjs';
+import {
+  concatMap,
+  mergeMap,
+  catchError,
+} from 'rxjs/operators';
 import uuid from 'uuid/v1';
 import { combineEpics, ofType } from 'redux-observable';
-
-import { ERROR_TYPES } from 'constants/AppConstants';
-import { parseMessage, matchType } from 'commons/utils';
 
 import {
   addNotification,
   updateNotifications
 } from 'models/notifications/actions';
 
-/**
- *
- * @param {*} prefix
- * npm ERR!, npm WARN, etc ...
- */
-const matchMessageType = prefix => types =>
-  types.find(type => matchType(prefix, type));
-
-/**
- *
- * @param {*} message
- */
-const parseNpmMessage = message => {
-  const [prefix] = message.split(':').slice(1);
-  const messageType = matchMessageType(prefix)(ERROR_TYPES);
-  const [body, required, requiredBy] = parseMessage(message);
-
-  return {
-    messageType,
-    payload: {
-      body,
-      required,
-      requiredBy
-    }
-  };
-};
-
 const notificationsEpic = pipe(
   ofType(updateNotifications.type),
-  mergeMap(({ payload: { notifications } }) =>
-    notifications.map(notification => {
-      const id = uuid();
-      const { messageType, payload } = parseNpmMessage(notification);
+  mergeMap(({ payload: { notifications } }) => from(notifications)),
+  concatMap(notification => {
+    const id = uuid(); // produce unique id
+    const [reason, details] = notification.split(':');
+    const isExtraneous = reason === 'extraneous';
+    let detailsWithTrim = details.trim();
 
-      return {
+    // check for namespace
+    if (detailsWithTrim.startsWith('@')) {
+      detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1)
+    }
+
+    const [requiredDetails, requiredByName] = isExtraneous ? detailsWithTrim.split('@') : detailsWithTrim.split(',');
+    const [requiredName, requiredVersion] = requiredDetails.split('@');
+
+    return [
+      {
         type: addNotification.type,
         payload: {
           id,
-          type: messageType,
-          ...payload
+          reason,
+          requiredName,
+          requiredByName: isExtraneous ? '' : requiredByName.replace('required by', ''),
+          requiredVersion: isExtraneous ? '' : requiredVersion,
         }
-      };
+      }
+    ];
+  }),
+  catchError(error => {
+    console.error(error);
+
+    return of({
+      type: '@@LUNA/ERROR/FATAL_NOTIFICATIONS',
+      error: error.toString()
     })
-  )
+  })
 );
 
 export default combineEpics(notificationsEpic);
