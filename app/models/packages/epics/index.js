@@ -8,7 +8,7 @@ import {
   installPackageListenerEpic,
   installPackageEpic,
   installMultiplePackagesEpic,
-  showInstallLoaderEpic
+  showInstallLoaderEpic,
 } from './installationEpics';
 
 // uninstall related epics
@@ -62,5 +62,5 @@ export default combineEpics(
   mapPackagesEpic,
   mapOutdatedPackagesEpic,
   searchEpic,
-  updateSearchFlagEpic
+  updateSearchFlagEpic,
 );

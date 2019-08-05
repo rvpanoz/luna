@@ -2,14 +2,14 @@
 
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
-import { pipe } from 'rxjs';
-import { tap, mergeMap, switchMap, ignoreElements } from 'rxjs/operators';
+import { pipe, of, from } from 'rxjs';
+import { tap, map, mergeMap, switchMap, ignoreElements } from 'rxjs/operators';
 
 import { toggleLoader, setActivePage } from 'models/ui/actions';
 import {
   installPackage,
   installMultiplePackages,
-  installPackageListener
+  installPackageListener,
 } from 'models/packages/actions';
 import { iMessage } from 'commons/utils';
 import { onNpmInstall$ } from '../listeners';
@@ -95,8 +95,8 @@ const installMultiplePackagesEpic = (action$, state$) =>
         return pkg && pkg.options
           ? pkg.options
           : pkgOptions
-          ? pkgOptions[idx]
-          : ['save-prod'];
+            ? pkgOptions[idx]
+            : ['save-prod'];
       });
 
       const parameters = {
@@ -111,6 +111,7 @@ const installMultiplePackagesEpic = (action$, state$) =>
     ignoreElements()
   );
 
+
 const installPackageListenerEpic = pipe(
   ofType(installPackageListener.type),
   switchMap(() => onNpmInstall$)
@@ -120,5 +121,5 @@ export {
   installPackageListenerEpic,
   installPackageEpic,
   installMultiplePackagesEpic,
-  showInstallLoaderEpic
+  showInstallLoaderEpic,
 };

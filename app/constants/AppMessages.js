@@ -173,10 +173,10 @@ export const WARNING_MESSAGES = {
     'Some packages have errors. Check your notifications to fix it.',
   yarnlock:
     'It is advised not to mix package managers in order to avoid resolution inconsistencies caused by unsynchronized lock files. \nTo clear this warning, remove yarn-lock.json.',
-  newerSelected:
-    'A package with the same name and newer version is already selected',
-  oldorEqualSelected:
-    'A package with the same name and same or lower version is already selected'
 };
 
-export const ERROR_MESSAGES = {};
+export const ERROR_MESSAGES = {
+  installationError: 'Installation error',
+  updateError: 'Update error',
+  uninstallError: 'Uninstall error',
+};

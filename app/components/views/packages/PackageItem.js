@@ -84,7 +84,7 @@ const PackageItem = ({
             )}
           </div>
           {!extraneous && group && !fromSearch && (
-            <Typography variant="caption" className={classes.group}>
+            <Typography variant="caption" color="textSecondary">
               {group}
             </Typography>
           )}

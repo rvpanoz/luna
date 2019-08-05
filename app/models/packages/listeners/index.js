@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import onListOutdatedPackages$ from './listOutdatedPackages';
 import onSearchPackages$ from './npmSearch';
 import onViewPackage$ from './npmView';
