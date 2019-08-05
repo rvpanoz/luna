@@ -1,10 +1,12 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 
-import { setActivePage } from 'models/ui/actions';
+import { setActivePage, setSnackbar, toggleLoader } from 'models/ui/actions';
 import { setRunningCommand } from 'models/npm/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { setPackagesStart } from '../actions';
+
+import { iMessage } from 'commons/utils';
 
 const updateCommand = ({
   operationStatus,
@@ -22,7 +24,7 @@ const updateCommand = ({
 const onNpmInstall$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-install-completed']);
 
-  ipcRenderer.on('npm-install-completed', () => {
+  ipcRenderer.on('npm-install-completed', (event, data, errors) => {
     try {
       observer.next(
         updateCommand({
@@ -41,17 +43,40 @@ const onNpmInstall$ = new Observable(observer => {
         })
       );
 
-      observer.next(
-        setPackagesStart({
-          channel: 'npm-list-outdated',
-          options: {
-            cmd: ['outdated', 'list']
-          }
-        })
-      );
+      const isOk = errors && errors.trim().slice(errors.length - 4)
+
+      if (isOk !== 'ok') {
+        observer.next(
+          setSnackbar({
+            open: true,
+            type: 'error',
+            message: iMessage('info', 'installationError')
+          })
+        );
+
+        observer.next(
+          toggleLoader({
+            loading: false
+          })
+        );
+      } else {
+        observer.next(
+          setPackagesStart({
+            channel: 'npm-list-outdated',
+            options: {
+              cmd: ['outdated', 'list']
+            }
+          })
+        );
+      }
+
     } catch (error) {
       observer.error(error);
     }
+  });
+
+  ipcRenderer.on('npm-install-error', (event, error) => {
+    observer.error(error);
   });
 });
 
