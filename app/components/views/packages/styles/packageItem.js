@@ -45,7 +45,7 @@ const styles = theme => ({
     textAlign: 'left'
   },
   group: {
-    color: lighten(theme.palette.secondary.main, 0.1)
+    color: theme.palette.primary.main
   },
   statusMissing: {
     color: theme.palette.secondary.main

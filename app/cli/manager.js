@@ -15,7 +15,7 @@ const {
 } = mk || {};
 
 const defaultsArgs = {
-  list: ['--json', '--depth=0']
+  list: ['--json', '--depth=0', '--verbose']
 };
 
 const cwd = process.cwd();
