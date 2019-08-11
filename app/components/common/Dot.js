@@ -22,7 +22,7 @@ Dot.propTypes = {
   size: PropTypes.string,
   color: PropTypes.string,
   className: PropTypes.string,
-  theme: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array])).isRequired,
+  theme: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.array, PropTypes.func])).isRequired,
 }
 
 const styles = theme => ({

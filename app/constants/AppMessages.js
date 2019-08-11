@@ -108,7 +108,7 @@ export const TITLE_MESSAGES = {
   loadDirectory: 'Load a directory from a package.json file',
   selectPackageJson: 'Select package.json file',
   installationOptions: 'Please select installation options',
-  system: 'Settings',
+  settings: 'Settings',
   switchGlobals: 'Switch to global packages',
   showFilters: 'Show filters',
   clearFilters: 'Clear filters',

@@ -26,7 +26,7 @@ const styles = theme => ({
   },
   warningColor: {
     color: theme.palette.common.white,
-    backgroundColor: theme.palette.warning.light
+    backgroundColor: theme.palette.error.light
   },
   errorColor: {
     color: theme.palette.common.white,

@@ -46,7 +46,7 @@ const Audit = ({ classes }) => {
   const { loading, message, mode, result } = useMappedState(mapState);
   const [status, setStatus] = useState({
     type: 'init',
-    options: {}
+    options: { text: iMessage('info', 'npmAuditInfo') }
   });
 
   const [metadataValues, setMetadata] = useState({
@@ -57,7 +57,6 @@ const Audit = ({ classes }) => {
     advisories: null
   });
   const { content, error } = result || {};
-  const defaultOptions = { text: iMessage('info', 'npmAuditInfo') };
 
   const auditRun = option =>
     dispatch(
@@ -71,7 +70,6 @@ const Audit = ({ classes }) => {
     );
 
   const initOptions = {
-    ...defaultOptions,
     detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
     actionText: iMessage('action', 'runAudit'),
     actionHandler: () => auditRun(),
@@ -86,7 +84,9 @@ const Audit = ({ classes }) => {
     if (!content && !loading) {
       setStatus({
         type: 'init',
-        options: initOptions
+        options: {
+          ...initOptions
+        }
       });
 
       return;
@@ -118,7 +118,7 @@ const Audit = ({ classes }) => {
     setStatus({
       type: 'audit'
     });
-  }, [content, initOptions, loading]);
+  }, [content, loading]);
 
   // set error
   useEffect(() => {
@@ -208,7 +208,7 @@ const Audit = ({ classes }) => {
         </div>
       </AppLoader>
       <Dialog
-        open={type === 'dialog'}
+        open={false}
         onClose={() =>
           setStatus({
             type: 'init',
@@ -228,4 +228,4 @@ Audit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
-export default withStyles(styles, { withTheme: false })(Audit);
+export default withStyles(styles)(Audit);

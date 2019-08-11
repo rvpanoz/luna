@@ -10,6 +10,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 
 import { Init, Settings } from 'components/views/common/';
 import { TopBar } from 'components/views/topBar/';
@@ -138,6 +139,7 @@ const AppTopBar = ({ classes, className }) => {
         aria-labelledby="npm-init"
       >
         <DialogTitle disableTypography classes={{ root: classes.dialogTitle }}>{dialog.title}</DialogTitle>
+        <Divider light />
         <DialogContent>
           {dialog.active === 'Init' && <Init onClose={closeDialog} enableInit={(directoryPath) => toggleInitFlow({
             ...initFlow,

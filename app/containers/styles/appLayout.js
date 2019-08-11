@@ -5,7 +5,8 @@ const styles = theme => ({
     width: '100%',
     height: '100%',
     display: 'flex',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    overflow: 'auto'
   },
   shiftContent: {
     paddingLeft: 225

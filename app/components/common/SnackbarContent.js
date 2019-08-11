@@ -33,7 +33,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.secondary.dark
   },
   warning: {
-    backgroundColor: theme.palette.warning.light
+    backgroundColor: theme.palette.error.light
   },
   icon: {
     fontSize: 25

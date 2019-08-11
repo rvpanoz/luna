@@ -51,7 +51,7 @@ const styles = theme => ({
     color: theme.palette.secondary.main
   },
   warningColor: {
-    color: theme.palette.warning.light
+    color: theme.palette.error.light
   },
   errorColor: {
     color: theme.palette.error.light

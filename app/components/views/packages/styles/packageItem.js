@@ -56,7 +56,7 @@ const styles = theme => ({
     color: theme.palette.secondary.main
   },
   statusOutdated: {
-    color: theme.palette.warning.main
+    color: theme.palette.error.main
   },
   statusExtraneous: {
     color: theme.palette.secondary.main
