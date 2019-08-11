@@ -114,6 +114,9 @@ const AppSidebar = ({ classes, className }) => {
     return showDialog(dialogHandler, dialogOptions);
   }, [mode, directory, dispatch]);
 
+  // TODO: implementation
+  const dedupe = useCallback(() => { }, []);
+
   useEffect(() => {
     ipcRenderer.on('loaded-packages-close', (event, directories) =>
       updateHistory(directories)
@@ -141,6 +144,7 @@ const AppSidebar = ({ classes, className }) => {
           updatedAt={lastUpdatedAt}
           tabPackagesData={packagesItems}
           installPackagesFromJson={installPackagesFromJson}
+          dedupe={dedupe}
         />
       </Drawer>
     </div>

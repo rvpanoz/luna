@@ -18,7 +18,8 @@ const Sidebar = ({
   loadDirectory,
   updatedAt,
   tabPackagesData,
-  installPackagesFromJson
+  installPackagesFromJson,
+  dedupe
 }) => (
     <div className={classes.root}>
       <AppLogo />
@@ -28,7 +29,7 @@ const Sidebar = ({
           updatedAt={updatedAt}
           loading={loading}
         />
-        <ActionsTab onClick={installPackagesFromJson} mode={mode} loading={loading} />
+        <ActionsTab onInstallPackagesFromJson={installPackagesFromJson} onDedupe={dedupe} mode={mode} loading={loading} />
         <HistoryTab
           directories={history}
           onClick={loadDirectory}
@@ -45,6 +46,7 @@ Sidebar.propTypes = {
   history: arrayOf(object),
   loadDirectory: func.isRequired,
   installPackagesFromJson: func.isRequired,
+  dedupe: func.isRequired,
   updatedAt: string,
   tabPackagesData: arrayOf(object)
 };

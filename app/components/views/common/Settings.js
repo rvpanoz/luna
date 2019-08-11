@@ -13,6 +13,8 @@ import { iMessage } from 'commons/utils';
 import styles from './styles/settings';
 
 const Settings = ({ classes, ...restProps }) => {
+  const { metricsRegistry, auditLevel, cache } = restProps;
+
   const [settings, setSettings] = useState({
     metricsRegistry: '',
     auditLevel: '',
@@ -20,15 +22,13 @@ const Settings = ({ classes, ...restProps }) => {
   });
 
   useEffect(() => {
-    const { metricsRegistry, auditLevel, cache } = restProps;
-
-    setSettings({
-      ...settings,
+    setSettings(settingsItems => ({
+      ...settingsItems,
       metricsRegistry,
       auditLevel,
       cache
-    })
-  }, [restProps, settings])
+    }))
+  }, [metricsRegistry, auditLevel, cache])
 
   return <div className={classes.root}>
     <List>

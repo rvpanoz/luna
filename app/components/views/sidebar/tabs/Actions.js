@@ -13,7 +13,7 @@ import { iMessage } from 'commons/utils';
 
 import styles from './styles/actions';
 
-const ActionsTab = ({ classes, mode, onClick }) => <div className={classes.tab}>
+const ActionsTab = ({ classes, mode, onInstallPackagesFromJson, onDedupe }) => <div className={classes.tab}>
   <List dense>
     <ListItem key="install-from-packagejson" className={classes.listItem}>
       <ListItemText
@@ -38,9 +38,43 @@ const ActionsTab = ({ classes, mode, onClick }) => <div className={classes.tab}>
         >
           <div>
             <IconButton
-              aria-label="action-doctor"
+              aria-label="action-install"
               disabled={mode === 'global'}
-              onClick={onClick}
+              onClick={onInstallPackagesFromJson}
+              disableRipple
+            >
+              <ArrowRightIcon color="primary" />
+            </IconButton>
+          </div>
+        </Tooltip>
+      </ListItemSecondaryAction>
+    </ListItem>
+    <ListItem key="npm-dedupe" className={classes.listItem}>
+      <ListItemText
+        primary={
+          <Typography className={classes.label}>
+            {iMessage('action', 'npmDedupe')}
+          </Typography>
+        }
+        secondary={
+          <Typography className={classes.secondaryText}>
+            {iMessage('info', 'npmDedupeInfo')}
+          </Typography>
+        }
+      />
+      <ListItemSecondaryAction>
+        <Tooltip
+          title={
+            mode === 'global'
+              ? iMessage('info', 'notGlobalModeAvailable')
+              : iMessage('info', 'npmInstallInfo')
+          }
+        >
+          <div>
+            <IconButton
+              aria-label="action-dedupe"
+              disabled={mode === 'global'}
+              onClick={onDedupe}
               disableRipple
             >
               <ArrowRightIcon color="primary" />
@@ -54,7 +88,8 @@ const ActionsTab = ({ classes, mode, onClick }) => <div className={classes.tab}>
 
 ActionsTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  onClick: PropTypes.func.isRequired,
+  onInstallPackagesFromJson: PropTypes.func.isRequired,
+  onDedupe: PropTypes.func.isRequired,
   mode: PropTypes.string
 };
 
