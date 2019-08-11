@@ -19,7 +19,9 @@ const styles = theme => ({
     marginLeft: theme.spacing(1),
   },
   chip: {
-    fontSize: 20
+    fontSize: 20,
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.common.neutral
   }
 });
 

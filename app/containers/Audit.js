@@ -46,7 +46,7 @@ const Audit = ({ classes }) => {
   const { loading, message, mode, result } = useMappedState(mapState);
   const [status, setStatus] = useState({
     type: 'init',
-    options: {}
+    options: { text: iMessage('info', 'npmAuditInfo') }
   });
 
   const [metadataValues, setMetadata] = useState({
@@ -57,7 +57,6 @@ const Audit = ({ classes }) => {
     advisories: null
   });
   const { content, error } = result || {};
-  const defaultOptions = { text: iMessage('info', 'npmAuditInfo') };
 
   const auditRun = option =>
     dispatch(
@@ -71,8 +70,7 @@ const Audit = ({ classes }) => {
     );
 
   const initOptions = {
-    ...defaultOptions,
-    detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
+    text: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : iMessage('info', 'npmAuditInfo'),
     actionText: iMessage('action', 'runAudit'),
     actionHandler: () => auditRun(),
     actionDisabled: mode === 'global',
@@ -115,10 +113,11 @@ const Audit = ({ classes }) => {
       advisories
     });
 
-    setStatus({
-      type: 'audit'
-    });
-  }, [content, initOptions, loading]);
+    setStatus(options => ({
+      type: 'audit',
+      options
+    }));
+  }, [content, loading]);
 
   // set error
   useEffect(() => {
@@ -126,7 +125,6 @@ const Audit = ({ classes }) => {
       const { summary, code } = error || {};
 
       const errorOptions = {
-        ...initOptions,
         text: summary,
         code
       };
@@ -136,7 +134,7 @@ const Audit = ({ classes }) => {
         options: errorOptions
       });
     }
-  }, [error, initOptions]);
+  }, [error]);
 
   const { type, options } = status;
   const {
@@ -147,6 +145,8 @@ const Audit = ({ classes }) => {
     advisories
   } = metadataValues || {};
 
+  const noVulnerabilities = vulnerabilities && Object.values(vulnerabilities).reduce((total, v) => total + v, 0);
+
   return (
     <>
       <AppLoader loading={loading} message={message}>
@@ -155,7 +155,7 @@ const Audit = ({ classes }) => {
           {type === 'init' && <HelperText {...options} />}
           {type === 'audit' && (
             <>
-              <Grid container spacing={8} className={classes.gridContainer}>
+              <Grid container spacing={2} className={classes.gridContainer}>
                 <Grid item lg={4} md={4} sm={12} xl={4}>
                   <StatsCard
                     title={iMessage('title', 'dependencies')}
@@ -198,17 +198,17 @@ const Audit = ({ classes }) => {
                   </Hidden>
                 </Grid>
               </Grid>
-              <Advisories
+              {noVulnerabilities > 0 ? <Advisories
                 data={advisories}
                 handleAudit={auditRun}
                 vulnerabilities={vulnerabilities}
-              />
+              /> : <HelperText detail={iMessage('info', 'noVulnerabilities')} />}
             </>
           )}
         </div>
       </AppLoader>
       <Dialog
-        open={type === 'dialog'}
+        open={false}
         onClose={() =>
           setStatus({
             type: 'init',
@@ -228,4 +228,4 @@ Audit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
-export default withStyles(styles, { withTheme: false })(Audit);
+export default withStyles(styles)(Audit);

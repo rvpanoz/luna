@@ -73,7 +73,7 @@ const styles = theme => ({
     stroke: lighten(theme.palette.secondary.main, 0.2)
   },
   warningColor: {
-    stroke: lighten(theme.palette.warning.main, 0.2)
+    stroke: lighten(theme.palette.error.main, 0.2)
   },
   errorColor: {
     stroke: lighten(theme.palette.error.main, 0.2)

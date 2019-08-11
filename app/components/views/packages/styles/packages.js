@@ -127,7 +127,7 @@ const styles = theme => ({
     color: darken(theme.palette.secondary.main, 0.1)
   },
   statusOutdated: {
-    color: lighten(theme.palette.warning.main, 0.3)
+    color: lighten(theme.palette.error.main, 0.3)
   },
   statusExtraneous: {
     color: darken(theme.palette.secondary.main, 0.1)
