@@ -23,6 +23,7 @@ import { Widget, Dot } from 'components/common';
 import styles from '../styles/listTypes';
 
 const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
+  console.log(theme)
   const groupByTitle = groupBy(dataItem => {
     const { title } = dataItem;
 

@@ -1,11 +1,10 @@
 import React from 'react';
-import { oneOfType, objectOf, func, array, object, string } from 'prop-types';
+import { objectOf, string } from 'prop-types';
 import cn from 'classnames';
 
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import { useMediaQuery } from '@material-ui/core';
 
 import AppTopBar from 'containers/AppTopBar';
 import AppSidebar from 'containers/AppSidebar';
@@ -15,6 +14,7 @@ import AppSnackbar from 'components/common/AppSnackbar';
 import { Notifications } from 'components/views/notifications';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
+import appTheme from 'styles/theme';
 
 import Packages from './Packages';
 import Audit from './Audit';
@@ -33,7 +33,7 @@ const mapState = ({
   snackbar
 });
 
-const AppLayout = ({ classes, theme }) => {
+const AppLayout = ({ classes }) => {
   const { activePage, snackbar } = useMappedState(mapState);
 
   const dispatch = useDispatch();
@@ -46,12 +46,8 @@ const AppLayout = ({ classes, theme }) => {
       })
     );
 
-  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
-    defaultMatches: true
-  });
-
   return (
-    <MuiThemeProvider theme={theme}>
+    <MuiThemeProvider theme={appTheme}>
       <div
         className={cn({
           [classes.root]: true,
@@ -59,7 +55,7 @@ const AppLayout = ({ classes, theme }) => {
         })}
       >
         <section className={classes.sidebar}>
-          <AppSidebar open={isDesktop} />
+          <AppSidebar />
         </section>
         <section className={classes.main}>
           <AppTopBar className={classes.topBar} />
@@ -82,8 +78,7 @@ const AppLayout = ({ classes, theme }) => {
 };
 
 AppLayout.propTypes = {
-  classes: objectOf(string).isRequired,
-  theme: objectOf(oneOfType([string, object, array, func])).isRequired
+  classes: objectOf(string).isRequired
 };
 
 export default withStyles(styles, {
