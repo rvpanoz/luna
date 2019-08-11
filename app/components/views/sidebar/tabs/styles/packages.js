@@ -34,7 +34,8 @@ const styles = theme => ({
     minHeight: 150
   },
   listItem: {
-    margin: 0
+    margin: 0,
+    padding: theme.spacing(1) / 2
   },
   loader: {
     paddingTop: theme.spacing(1)

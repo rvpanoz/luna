@@ -1,12 +1,10 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
-
 import { setActivePage, setSnackbar, toggleLoader } from 'models/ui/actions';
 import { setRunningCommand } from 'models/npm/actions';
 import { clearInstallOptions } from 'models/common/actions';
-import { setPackagesStart } from '../actions';
-
 import { iMessage } from 'commons/utils';
+import { setPackagesStart } from '../actions';
 
 const updateCommand = ({
   operationStatus,
@@ -24,7 +22,7 @@ const updateCommand = ({
 const onNpmInstall$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-install-completed']);
 
-  ipcRenderer.on('npm-install-completed', (event, data, errors) => {
+  ipcRenderer.on('npm-install-completed', (event, data, errors, cmd, fromPackageJson) => {
     try {
       observer.next(
         updateCommand({
@@ -43,9 +41,9 @@ const onNpmInstall$ = new Observable(observer => {
         })
       );
 
-      const isOk = errors && errors.trim().slice(errors.length - 4)
+      const isOk = errors && errors.includes('npm info ok');
 
-      if (isOk !== 'ok') {
+      if (!isOk && !fromPackageJson) {
         observer.next(
           setSnackbar({
             open: true,
@@ -75,9 +73,7 @@ const onNpmInstall$ = new Observable(observer => {
     }
   });
 
-  ipcRenderer.on('npm-install-error', (event, error) => {
-    observer.error(error);
-  });
+  ipcRenderer.on('npm-install-error', (event, error) => observer.error(error));
 });
 
 export default onNpmInstall$;

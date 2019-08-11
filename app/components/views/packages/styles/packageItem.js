@@ -1,4 +1,3 @@
-import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({

@@ -20,9 +20,8 @@ const install = (options, idx) => {
     packageJson,
     packageLock
   } = options || {};
-
+  console.log(packageJson)
   // '--unsafe-perm'
-  // '--ignore-scripts
   const defaults = ['--verbose', '--no-audit'];
 
   // install from package.json file
@@ -56,15 +55,13 @@ const install = (options, idx) => {
 
   // get installation options
   const hasOptions = Array.isArray(pkgOptions) && pkgOptions.length;
-  const commandOptions =
-    mode === 'local' && hasOptions
-      ? multiple
-        ? pkgOptions[idx].map(option => `--${option}`)
-        : pkgOptions.map(option => `--${option}`)
-      : ['--save-prod'];
+  const commandOptions = mode === 'local' && hasOptions ? multiple
+    ? pkgOptions[idx].map(option => `--${option}`)
+    : pkgOptions.map(option => `--${option}`)
+    : ['--save-prod'];
 
   // build running command
-  const run = []
+  const run = packageJson ? [].concat(command).concat(commandArgs) : []
     .concat(command)
     .concat(packagesToInstall)
     .concat(commandOptions)
