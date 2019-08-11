@@ -59,7 +59,10 @@ const AppTopBar = ({ classes, className }) => {
     activePage
   } = useMappedState(mapState);
 
-  const [initFlow, toggleInitFlow] = useState(false)
+  const [initFlow, toggleInitFlow] = useState({
+    show: false,
+    directory: null
+  })
   const [dialog, setDialog] = useState({
     open: false,
     title: '',
@@ -68,7 +71,7 @@ const AppTopBar = ({ classes, className }) => {
 
   const dispatch = useDispatch();
 
-  const showInitDialog = useCallback(() => {
+  const onLoadDirectory = useCallback(() => {
     const dialogHandler = filePath => {
       dispatch(
         setActivePage({
@@ -84,20 +87,23 @@ const AppTopBar = ({ classes, className }) => {
 
   const closeDialog = useCallback(() => {
     setDialog({ ...dialog, open: false, active: null, title: '' })
-    toggleInitFlow(false)
-  }, [dialog])
+    toggleInitFlow({
+      ...initFlow,
+      show: false
+    })
+  }, [dialog, initFlow])
 
   const onNpmInit = useCallback(() => {
     dispatch(
       runInit({
         ipcEvent: 'npm-init',
         cmd: ['init'],
-        directory
+        directory: initFlow.directory || null
       })
     );
 
     closeDialog();
-  }, [dispatch, closeDialog, directory])
+  }, [dispatch, closeDialog, initFlow])
 
   const setActivePageHandler = page =>
     dispatch(
@@ -118,7 +124,7 @@ const AppTopBar = ({ classes, className }) => {
         directory={directory}
         notifications={notifications}
         loading={loading}
-        onLoadDirectory={showInitDialog}
+        onLoadDirectory={onLoadDirectory}
         setActivePage={setActivePageHandler}
         activePage={activePage}
         onInitFlow={() => setDialog({ ...dialog, open: true, active: 'Init', title: iMessage('title', 'createPackageJson') })}
@@ -133,7 +139,10 @@ const AppTopBar = ({ classes, className }) => {
       >
         <DialogTitle disableTypography classes={{ root: classes.dialogTitle }}>{dialog.title}</DialogTitle>
         <DialogContent>
-          {dialog.active === 'Init' && <Init onClose={closeDialog} enableInit={() => toggleInitFlow(true)} />}
+          {dialog.active === 'Init' && <Init onClose={closeDialog} enableInit={(directoryPath) => toggleInitFlow({
+            ...initFlow,
+            directory: directoryPath
+          })} />}
           {dialog.active === 'Settings' && <Settings
             onClose={closeDialog}
             metricsRegistry={metricsRegistry}
@@ -146,7 +155,7 @@ const AppTopBar = ({ classes, className }) => {
             color="primary"
             variant="outlined"
             onClick={() => onNpmInit()}
-            disabled={!initFlow}
+            disabled={!initFlow.directory}
           >
             {iMessage('action', 'create')}
           </Button>}
