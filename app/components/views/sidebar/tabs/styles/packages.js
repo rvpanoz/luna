@@ -44,13 +44,6 @@ const styles = theme => ({
     color: lighten(theme.palette.primary.main, 0.2),
     marginRight: theme.spacing(1)
   },
-  loader: {
-    paddingTop: theme.spacing(1)
-  },
-  updateIcon: {
-    color: lighten(theme.palette.primary.main, 0.2),
-    marginRight: theme.spacing(1)
-  },
   primaryColor: {
     color: theme.palette.primary.main
   },

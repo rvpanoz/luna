@@ -1,14 +1,16 @@
 import React from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import { Sidebar } from 'components/views/sidebar';
 import { setActivePage } from 'models/ui/actions';
+import { installPackageJson } from 'models/packages/actions'
 import { setMode } from 'models/common/actions';
+import { iMessage, shrinkDirectory, showDialog } from 'commons/utils'
 
 import styles from './styles/appSidebar';
 
@@ -43,10 +45,12 @@ const AppSidebar = ({ classes, className }) => {
 
   const {
     mode,
+    directory,
     lastUpdatedAt,
     loading,
     packagesData,
-    packagesOutdated
+    packagesOutdated,
+    notifications
   } = useMappedState(mapState);
 
   const packagesItems = [
@@ -63,18 +67,52 @@ const AppSidebar = ({ classes, className }) => {
       secondaryText: packagesOutdated.length,
       color: 'warning',
       warning: true
+    },
+    {
+      name: 'notifications',
+      primaryText: 'Problems',
+      secondaryText: notifications.length,
+      color: 'error',
+      error: true
     }
   ];
 
-  const loadDirectory = directory => {
+  const loadDirectory = useCallback(directoryPath => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
     dispatch(
       setMode({
         mode: 'local',
-        directory
+        directory: directoryPath
       })
     );
-  };
+  }, [dispatch]);
+
+  const installPackagesFromJson = useCallback(() => {
+    const shrinkedDirectory = directory && shrinkDirectory(directory);
+
+    const dialogOptions = {
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage('confirmation', 'installAll', {
+        '%directory%': directory
+      }),
+      buttons: ['Cancel', 'Install']
+    };
+
+    const dialogHandler = () =>
+      dispatch(
+        installPackageJson({
+          ipcEvent: 'install',
+          cmd: ['install'],
+          packageJson: true,
+          multiple: false,
+          mode,
+          directory: shrinkedDirectory
+        })
+      );
+
+    return showDialog(dialogHandler, dialogOptions);
+  }, [mode, directory, dispatch]);
 
   useEffect(() => {
     ipcRenderer.on('loaded-packages-close', (event, directories) =>
@@ -102,6 +140,7 @@ const AppSidebar = ({ classes, className }) => {
           loading={loading}
           updatedAt={lastUpdatedAt}
           tabPackagesData={packagesItems}
+          installPackagesFromJson={installPackagesFromJson}
         />
       </Drawer>
     </div>

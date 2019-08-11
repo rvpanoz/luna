@@ -6,7 +6,6 @@
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-import lockVerify from 'lock-verify';
 import mk from '../mk';
 
 const { spawn } = cp;
@@ -291,28 +290,10 @@ const runInit = (opts) => {
   }
 };
 
-/**
- * npm dedupe
- * @param {*} opts
- */
-const runDedupe = (opts) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
-
-  try {
-    const dedupe = require('./npm/tooling/dedupe').default;
-    const run = dedupe(opts);
-
-    return execute(activeManager, run, mode, directory);
-  } catch (error) {
-    Promise.reject(error);
-  }
-};
-
 export default {
   init: runInit,
   audit: runAudit,
   doctor: runDoctor,
-  dedupe: runDedupe,
   list,
   outdated,
   search,

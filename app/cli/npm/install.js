@@ -20,10 +20,9 @@ const install = (options, idx) => {
     packageJson,
     packageLock
   } = options || {};
-
+  console.log(packageJson)
   // '--unsafe-perm'
-  // '--verbose'
-  const defaults = ['--no-audit', '--ignore-scripts'];
+  const defaults = ['--verbose', '--no-audit'];
 
   // install from package.json file
   // if (packageJson) {

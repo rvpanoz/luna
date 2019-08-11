@@ -8,7 +8,6 @@ import {
   ActionsTab,
   HistoryTab
 } from 'components/views/sidebar/tabs';
-
 import styles from './styles/sidebar';
 
 const Sidebar = ({
@@ -18,32 +17,34 @@ const Sidebar = ({
   history,
   loadDirectory,
   updatedAt,
-  tabPackagesData
+  tabPackagesData,
+  installPackagesFromJson
 }) => (
-  <div className={classes.root}>
-    <AppLogo />
-    <AppTabs>
-      <PackagesTab
-        items={tabPackagesData}
-        updatedAt={updatedAt}
-        loading={loading}
-      />
-      <ActionsTab onClick={() => {}} mode={mode} loading={loading} />
-      <HistoryTab
-        directories={history}
-        onClick={loadDirectory}
-        loading={loading}
-      />
-    </AppTabs>
-  </div>
-);
+    <div className={classes.root}>
+      <AppLogo />
+      <AppTabs>
+        <PackagesTab
+          items={tabPackagesData}
+          updatedAt={updatedAt}
+          loading={loading}
+        />
+        <ActionsTab onClick={installPackagesFromJson} mode={mode} loading={loading} />
+        <HistoryTab
+          directories={history}
+          onClick={loadDirectory}
+          loading={loading}
+        />
+      </AppTabs>
+    </div>
+  );
 
 Sidebar.propTypes = {
   classes: objectOf(string).isRequired,
   mode: string.isRequired,
   loading: bool,
   history: arrayOf(object),
-  loadDirectory: func,
+  loadDirectory: func.isRequired,
+  installPackagesFromJson: func.isRequired,
   updatedAt: string,
   tabPackagesData: arrayOf(object)
 };

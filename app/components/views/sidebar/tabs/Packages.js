@@ -30,7 +30,7 @@ const PackagesTab = ({ classes, items, loading, updatedAt }) => (
       <Divider />
       <div className={classes.tab}>
         <AppLoader relative mini loading={loading} className={classes.loader}>
-          <List dense>
+          <List disablePadding>
             {items &&
               items.map(item => (
                 <ListItem key={`packages-${item.name}`} className={classes.listItem}>
@@ -39,7 +39,7 @@ const PackagesTab = ({ classes, items, loading, updatedAt }) => (
                       <div className={classes.flexContainer}>
                         <Typography
                           color="textSecondary"
-                          variant="subtitle1"
+                          variant="h5"
                         >
                           {item.primaryText}
                         </Typography>
@@ -49,7 +49,7 @@ const PackagesTab = ({ classes, items, loading, updatedAt }) => (
                   <ListItemSecondaryAction>
                     <Typography
                       color="textSecondary"
-                      variant="subtitle1"
+                      variant="h4"
                     >
                       {item.secondaryText}
                     </Typography>
@@ -64,7 +64,7 @@ const PackagesTab = ({ classes, items, loading, updatedAt }) => (
     <CardActions>
       <div className={classes.cardFlexContainer}>
         <UpdateIcon className={classes.updateIcon} />
-        <Typography variant="body2" color="textSecondary">
+        <Typography variant="caption" color="textSecondary">
           {iMessage('info', 'updatedAt')}&nbsp;{updatedAt !== null ? updatedAt : '...'}
         </Typography>
       </div>

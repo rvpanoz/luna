@@ -2,8 +2,8 @@
 
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
-import { pipe, of, from } from 'rxjs';
-import { tap, map, mergeMap, switchMap, ignoreElements } from 'rxjs/operators';
+import { pipe } from 'rxjs';
+import { tap, concatMap, switchMap, ignoreElements } from 'rxjs/operators';
 
 import { toggleLoader, setActivePage } from 'models/ui/actions';
 import {
@@ -22,8 +22,8 @@ const updateLoader = payload => ({
 
 const showInstallLoaderEpic = action$ =>
   action$.pipe(
-    ofType(installPackage.type, installMultiplePackages.type),
-    mergeMap(() => [
+    ofType(installPackage.type, installPackageJson.type, installMultiplePackages.type),
+    concatMap(() => [
       setActivePage({
         page: 'packages',
         paused: true
@@ -33,6 +33,33 @@ const showInstallLoaderEpic = action$ =>
         message: iMessage('info', 'installingPackages')
       })
     ])
+  );
+
+/**
+* Send ipc event to main process to handle npm-install for a single package
+* supports global and local mode
+*/
+const installPackageJsonEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(installPackageJson.type),
+    tap(({ payload }) => {
+      const {
+        common: {
+          mode,
+          directory,
+        }
+      } = state$.value;
+
+      const parameters = {
+        ...payload,
+        mode,
+        directory,
+        packageJson: true
+      };
+
+      ipcRenderer.send('npm-install', parameters);
+    }),
+    ignoreElements()
   );
 
 /**
