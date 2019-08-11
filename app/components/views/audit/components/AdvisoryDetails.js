@@ -83,10 +83,10 @@ const AdvisoryDetails = ({ classes, data, onClose }) => {
         <Transition>
           <Card className={classes.card}>
             <CardHeader
-              title={<Typography variant="h6">{name}</Typography>}
+              title={<Typography variant="h4">{name}</Typography>}
               className={classes.cardHeader}
               subheader={
-                <Typography color="textSecondary" variant="caption">
+                <Typography color="textSecondary" variant="subtitle1">
                   {title}
                 </Typography>
               }

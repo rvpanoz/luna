@@ -82,12 +82,12 @@ const Audit = ({ classes }) => {
     const { metadata, advisories } = content || {};
 
     if (!content && !loading) {
-      setStatus({
+      setStatus(options => ({
         type: 'init',
         options: {
-          ...initOptions
+          ...options
         }
-      });
+      }));
 
       return;
     }
@@ -115,9 +115,12 @@ const Audit = ({ classes }) => {
       advisories
     });
 
-    setStatus({
-      type: 'audit'
-    });
+    setStatus(options => ({
+      type: 'audit',
+      options: {
+        ...options
+      }
+    }));
   }, [content, loading]);
 
   // set error
@@ -147,6 +150,8 @@ const Audit = ({ classes }) => {
     advisories
   } = metadataValues || {};
 
+  const noVulnerabilities = vulnerabilities && Object.values(vulnerabilities).reduce((total, v) => total + v, 0);
+
   return (
     <>
       <AppLoader loading={loading} message={message}>
@@ -155,7 +160,7 @@ const Audit = ({ classes }) => {
           {type === 'init' && <HelperText {...options} />}
           {type === 'audit' && (
             <>
-              <Grid container spacing={8} className={classes.gridContainer}>
+              <Grid container spacing={2} className={classes.gridContainer}>
                 <Grid item lg={4} md={4} sm={12} xl={4}>
                   <StatsCard
                     title={iMessage('title', 'dependencies')}
@@ -198,11 +203,11 @@ const Audit = ({ classes }) => {
                   </Hidden>
                 </Grid>
               </Grid>
-              <Advisories
+              {noVulnerabilities > 0 ? <Advisories
                 data={advisories}
                 handleAudit={auditRun}
                 vulnerabilities={vulnerabilities}
-              />
+              /> : <HelperText detail={iMessage('info', 'noVulnerabilities')} />}
             </>
           )}
         </div>

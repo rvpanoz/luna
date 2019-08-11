@@ -1,8 +1,9 @@
 export const INFO_MESSAGES = {
+  noVulnerabilities: 'No issues found',
   noHistory: 'History is empty',
   loading: 'Loading packages..',
   loadingPackage: 'Loading package..',
-  noData: 'No dependencies found.',
+  noData: 'No dependencies found',
   loaded: 'Package loaded.',
   showingGlobals: 'Showing globals',
   workingDirectory: 'Working directory',

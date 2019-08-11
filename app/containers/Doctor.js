@@ -81,11 +81,11 @@ const Doctor = ({ classes }) => {
   };
 
   useEffect(() => {
-    setStatus({
+    setStatus(initOptions => ({
       type: result ? 'doctor' : 'init',
       options: result ? null : initOptions
-    });
-  }, [result, loading, initOptions]);
+    }));
+  }, [result, loading]);
 
   // set error
   useEffect(() => {
@@ -103,7 +103,7 @@ const Doctor = ({ classes }) => {
         options: errorOptions
       });
     }
-  }, [error, initOptions]);
+  }, [error]);
 
   return (
     <AppLoader loading={loading} message={message} relative>

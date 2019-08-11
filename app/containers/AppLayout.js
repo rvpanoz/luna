@@ -1,11 +1,10 @@
 import React from 'react';
-import { oneOfType, objectOf, func, array, object, string } from 'prop-types';
+import { objectOf, string } from 'prop-types';
 import cn from 'classnames';
 
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import { useMediaQuery } from '@material-ui/core';
 
 import AppTopBar from 'containers/AppTopBar';
 import AppSidebar from 'containers/AppSidebar';
@@ -79,8 +78,7 @@ const AppLayout = ({ classes }) => {
 };
 
 AppLayout.propTypes = {
-  classes: objectOf(string).isRequired,
-  theme: objectOf(oneOfType([string, object, array, func])).isRequired,
+  classes: objectOf(string).isRequired
 };
 
 export default withStyles(styles, {
