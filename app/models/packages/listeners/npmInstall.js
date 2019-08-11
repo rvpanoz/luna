@@ -47,7 +47,7 @@ const onNpmInstall$ = new Observable(observer => {
           setSnackbar({
             open: true,
             type: 'error',
-            message: iMessage('info', 'installationError')
+            message: iMessage('error', 'installationError')
           })
         );
 

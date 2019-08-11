@@ -14,7 +14,7 @@ import styles from './styles/initForm';
 
 const Init = ({ classes, enableInit }) => {
   const [initOptions, setInitOptions] = useState({ directory: null });
-  const { directory } = initOptions || {};
+  const { directory } = initOptions;
 
   const startInitFlow = useCallback(() =>
     remote.dialog.showOpenDialog(
@@ -26,7 +26,7 @@ const Init = ({ classes, enableInit }) => {
             ...initOptions,
             directory: filePath[0]
           })
-          enableInit()
+          enableInit(filePath[0])
         }
       }
     ), [initOptions, enableInit]);
