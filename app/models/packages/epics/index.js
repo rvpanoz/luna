@@ -7,6 +7,7 @@ import { initEpic } from './initEpics';
 import {
   installPackageListenerEpic,
   installPackageEpic,
+  installPackageJsonEpic,
   installMultiplePackagesEpic,
   showInstallLoaderEpic,
 } from './installationEpics';
@@ -57,6 +58,7 @@ export default combineEpics(
   initEpic,
   installMultiplePackagesEpic,
   installPackageEpic,
+  installPackageJsonEpic,
   showInstallLoaderEpic,
   showUpdateLoaderEpic,
   mapPackagesEpic,

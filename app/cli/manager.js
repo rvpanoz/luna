@@ -6,7 +6,6 @@
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-import lockVerify from 'lock-verify';
 import mk from '../mk';
 
 const { spawn } = cp;
@@ -31,7 +30,8 @@ const execute = (
   manager = defaultManager,
   commandArgs = [],
   mode,
-  directory
+  directory,
+  packageJson,
 ) => {
   const [operation] = commandArgs;
 
@@ -79,15 +79,13 @@ const execute = (
         chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
       );
 
-      const resultString = result.join('');
-      const commandResult = {
+      return resolve({
         status: 'close',
         errors,
-        data: resultString,
-        cmd: commandArgs
-      };
-
-      return resolve(commandResult);
+        data: result.join(''),
+        cmd: commandArgs,
+        packageJson: Boolean(packageJson)
+      });
     });
   });
 
@@ -97,17 +95,10 @@ const execute = (
 /**
  * npm list
  * @param {*} options
- * @param {*} callback
  */
-const list = (options, callback) => {
+const list = (options) => {
   const command = ['list'];
   const { mode, directory, linked } = options || {};
-
-  if (!callback || typeof callback !== 'function') {
-    return Promise.reject(
-      'manager[list]: callback must be given and must be a function'
-    );
-  }
 
   if (!mode || typeof mode !== 'string') {
     return Promise.reject(
@@ -124,7 +115,7 @@ const list = (options, callback) => {
         : command.concat(defaultsArgs.list);
 
     // returns a Promise
-    return execute('npm', run, mode, directory, callback);
+    return execute('npm', run, mode, directory);
   } catch (error) {
     Promise.reject(error);
   }
@@ -133,17 +124,10 @@ const list = (options, callback) => {
 /**
  * npm outdated
  * @param {*} options
- * @param {*} callback
  */
-const outdated = (options, callback) => {
+const outdated = (options) => {
   const command = ['outdated'];
   const { mode, directory } = options || {};
-
-  if (!callback || typeof callback !== 'function') {
-    return Promise.reject(
-      'manager[outdated]: callback must be given and must be a function'
-    );
-  }
 
   if (!mode || typeof mode !== 'string') {
     return Promise.reject(
@@ -158,7 +142,7 @@ const outdated = (options, callback) => {
         : command.concat(defaultsArgs.list);
 
     // returns a Promise
-    return execute('npm', run, mode, directory, callback);
+    return execute('npm', run, mode, directory);
   } catch (error) {
     Promise.reject(error);
   }
@@ -167,9 +151,8 @@ const outdated = (options, callback) => {
 /**
  * npm search
  * @param {*} opts
- * @param {*} callback
  */
-const search = (opts, callback) => {
+const search = (opts) => {
   const command = ['search'];
   const { directory, mode, pkgName } = opts || {};
   const defaults = ['--depth=0', '--json'];
@@ -181,7 +164,7 @@ const search = (opts, callback) => {
   try {
     const run = command.concat(defaults, pkgName);
 
-    return execute('npm', run, mode, directory, callback);
+    return execute('npm', run, mode, directory);
   } catch (error) {
     Promise.reject(error);
   }
@@ -190,17 +173,16 @@ const search = (opts, callback) => {
 /**
  * npm install
  * @param {*} opts
- * @param {*} callback
  * @param {*} idx
  */
-const install = (opts, callback, idx) => {
-  const { mode, directory, activeManager = 'npm' } = opts || {};
+const install = (opts, idx) => {
+  const { mode, directory, packageJson, activeManager = 'npm' } = opts || {};
 
   try {
     const runInstall = require('./npm/install').default;
     const run = runInstall(opts, idx);
 
-    return execute(activeManager, run, mode, directory, callback);
+    return execute(activeManager, run, mode, directory, packageJson);
   } catch (error) {
     Promise.reject(error);
   }
@@ -209,16 +191,15 @@ const install = (opts, callback, idx) => {
 /**
  * npm update
  * @param {*} opts
- * @param {*} callback
  */
-const update = (opts, callback) => {
+const update = (opts) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const runUpdate = require('./npm/update').default;
     const run = runUpdate(opts);
 
-    return execute(activeManager, run, mode, directory, callback);
+    return execute(activeManager, run, mode, directory);
   } catch (error) {
     Promise.reject(error);
   }
@@ -227,16 +208,15 @@ const update = (opts, callback) => {
 /**
  * npm uninstall
  * @param {*} opts
- * @param {*} callback
  */
-const uninstall = (opts, callback) => {
+const uninstall = (opts) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const runUninstall = require('./npm/uninstall').default;
     const run = runUninstall(opts);
 
-    return execute(activeManager, run, mode, directory, callback);
+    return execute(activeManager, run, mode, directory);
   } catch (error) {
     Promise.reject(error);
   }
@@ -245,16 +225,15 @@ const uninstall = (opts, callback) => {
 /**
  * npm view
  * @param {*} opts
- * @param {*} callback
  */
-const view = (opts, callback) => {
+const view = (opts) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const runView = require('./npm/view').default;
     const run = runView(opts);
 
-    return execute(activeManager, run, mode, directory, callback);
+    return execute(activeManager, run, mode, directory);
   } catch (error) {
     Promise.reject(error);
   }
@@ -263,16 +242,15 @@ const view = (opts, callback) => {
 /**
  * npm audit
  * @param {*} opts
- * @param {*} callback
  */
-const runAudit = (opts, callback) => {
+const runAudit = (opts) => {
   const { activeManager = 'npm', mode, directory, ...options } = opts || {};
 
   try {
     const audit = require('./npm/audit').default;
     const run = audit(options);
 
-    return execute(activeManager, run, mode, directory, callback);
+    return execute(activeManager, run, mode, directory);
   } catch (error) {
     Promise.reject(error);
   }
@@ -281,88 +259,15 @@ const runAudit = (opts, callback) => {
 /**
  * npm doctor
  * @param {*} opts
- * @param {*} callback
  */
-const runDoctor = (opts, callback) => {
+const runDoctor = (opts) => {
   const { mode, directory, activeManager = 'npm' } = opts || {};
 
   try {
     const doctor = require('./npm/doctor').default;
     const run = doctor(opts);
 
-    return execute(activeManager, run, mode, directory, callback);
-  } catch (error) {
-    Promise.reject(error);
-  }
-};
-
-/**
- * npm prune
- * @param {*} opts
- * @param {*} callback
- */
-const runPrune = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts || {};
-
-  try {
-    const prune = require('./npm/tooling/prune').default;
-    const run = prune(opts);
-
-    return execute(activeManager, run, mode, directory, callback);
-  } catch (error) {
-    Promise.reject(error);
-  }
-};
-
-/**
- * npm dedupe
- * @param {*} opts
- * @param {*} callback
- */
-const runDedupe = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts || {};
-
-  try {
-    const dedupe = require('./npm/tooling/dedupe').default;
-    const run = dedupe(opts);
-
-    return execute(activeManager, run, mode, directory, callback);
-  } catch (error) {
-    Promise.reject(error);
-  }
-};
-
-/**
- *
- * @param {*} opts
- * @param {*} callback
- */
-const runVerify = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
-
-  try {
-    const verify = require('./npm/tooling/verify').default;
-    const run = verify(opts);
-
-    return execute(activeManager, run, mode, directory, callback);
-  } catch (error) {
-    Promise.reject(error);
-  }
-};
-
-/**
- * npm cache clean
- * @param {*} opts
- * @param {*} callback
- */
-const runClean = (opts, callback) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
-
-  try {
-    const clean = require('./npm/tooling/clean').default;
-    const run = clean(opts);
-
-    return execute(activeManager, run, mode, directory, callback);
+    return execute(activeManager, run, mode, directory);
   } catch (error) {
     Promise.reject(error);
   }
@@ -371,53 +276,24 @@ const runClean = (opts, callback) => {
 /**
  * npm init
  * @param {*} opts
- * @param {*} callback
  */
-const runInit = (opts, callback) => {
+const runInit = (opts) => {
   const { mode, directory, activeManager = 'npm' } = opts;
 
   try {
     const init = require('./npm/tooling/init').default;
     const run = init(opts);
 
-    return execute(activeManager, run, mode, directory, callback);
+    return execute(activeManager, run, mode, directory);
   } catch (error) {
     Promise.reject(error);
   }
-};
-
-/**
- *
- * @param {*} opts
- */
-const runLockVerify = opts => {
-  const { directory } = opts || {};
-
-  lockVerify(directory).then(result => {
-    result.warnings.forEach(warning => console.error('Warning:', warning));
-
-    if (!result.status) {
-      result.errors.forEach(error => console.error(error));
-    }
-
-    return {
-      status: 'close',
-      errors: [],
-      data: result,
-      cmd: ['lockVerify']
-    };
-  });
 };
 
 export default {
   init: runInit,
   audit: runAudit,
   doctor: runDoctor,
-  prune: runPrune,
-  dedupe: runDedupe,
-  verify: runVerify,
-  clean: runClean,
-  lockVerify: runLockVerify,
   list,
   outdated,
   search,

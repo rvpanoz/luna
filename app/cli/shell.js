@@ -13,24 +13,21 @@ import manager from './manager';
 const runCommand = (options, callback) => {
   const { cmd, ...rest } = options || {};
 
-  // construct an array of promises. Each promise is an npm command
   const combine = () =>
     cmd.map((command, idx) => {
       try {
         const runner = manager[command];
-        const result = runner(rest, callback, idx);
+        const result = runner(rest, idx);
 
-        return result;
+        return result; // returns a promise
       } catch (error) {
         log.error(error);
         throw new Error(error);
       }
     });
 
-  // array of promises
   const tasks = combine();
 
-  // run tasks
   tasks
     .reduce(
       (promiseChain, currentTask) =>

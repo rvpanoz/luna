@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import { Sidebar } from 'components/views/sidebar';
 import { setActivePage } from 'models/ui/actions';
-import { installPackage } from 'models/packages/actions'
+import { installPackageJson } from 'models/packages/actions'
 import { setMode } from 'models/common/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils'
 
@@ -77,12 +77,12 @@ const AppSidebar = ({ classes, className }) => {
     }
   ];
 
-  const loadDirectory = useCallback(directory => {
+  const loadDirectory = useCallback(directoryPath => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
     dispatch(
       setMode({
         mode: 'local',
-        directory
+        directory: directoryPath
       })
     );
   }, [dispatch]);
@@ -101,10 +101,11 @@ const AppSidebar = ({ classes, className }) => {
 
     const dialogHandler = () =>
       dispatch(
-        installPackage({
+        installPackageJson({
           ipcEvent: 'install',
           cmd: ['install'],
           packageJson: true,
+          multiple: false,
           mode,
           directory: shrinkedDirectory
         })
