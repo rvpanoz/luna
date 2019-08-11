@@ -5,11 +5,11 @@ const styles = theme => ({
   wrapper: {
     padding: theme.spacing(1),
     overflowY: 'scroll',
-    [theme.breakpoints.down('sm')]: {
-      maxHeight: 375
+    [theme.breakpoints.down('md')]: {
+      maxHeight: 500
     },
     [theme.breakpoints.up('md')]: {
-      maxHeight: 450
+      maxHeight: 600
     }
   },
   paper: {

@@ -6,8 +6,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -59,11 +57,11 @@ const renderData = data => (
 const Doctor = ({ classes }) => {
   const { loading, message, result, error } = useMappedState(mapState);
   const [status, setStatus] = useState({
-    type: 'init',
+    type: result ? 'doctor' : 'init',
     options: null
   });
   const dispatch = useDispatch();
-  const { type, options } = status;
+  const { type } = status;
 
   const handleDoctor = () =>
     dispatch(
@@ -81,9 +79,10 @@ const Doctor = ({ classes }) => {
   };
 
   useEffect(() => {
-    setStatus(initOptions => ({
+    setStatus(options => ({
+      ...options,
       type: result ? 'doctor' : 'init',
-      options: result ? null : initOptions
+      options: result ? null : options
     }));
   }, [result, loading]);
 
@@ -93,7 +92,6 @@ const Doctor = ({ classes }) => {
       const { summary, code } = error || {};
 
       const errorOptions = {
-        ...initOptions,
         text: summary,
         code
       };
@@ -106,20 +104,12 @@ const Doctor = ({ classes }) => {
   }, [error]);
 
   return (
-    <AppLoader loading={loading} message={message} relative>
+    <AppLoader loading={loading} message={message}>
       <div className={classes.root}>
-        {type === 'init' && <HelperText {...options} />}
+        {type === 'init' && <HelperText {...initOptions} />}
         {type === 'doctor' && (
           <Grid className={classes.container} container>
             <Grid item sm={12}>
-              <div className={classes.flexContainer}>
-                <div className={classes.header}>
-                  <Typography variant="h6" className={classes.title}>
-                    {iMessage('title', 'doctorReport')}
-                  </Typography>
-                </div>
-              </div>
-              <Divider />
               <div className={cn(classes.topSection, classes.wrapper)}>
                 {renderData(result)}
               </div>

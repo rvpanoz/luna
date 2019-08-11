@@ -70,7 +70,7 @@ const Audit = ({ classes }) => {
     );
 
   const initOptions = {
-    detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
+    text: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : iMessage('info', 'npmAuditInfo'),
     actionText: iMessage('action', 'runAudit'),
     actionHandler: () => auditRun(),
     actionDisabled: mode === 'global',
@@ -82,12 +82,10 @@ const Audit = ({ classes }) => {
     const { metadata, advisories } = content || {};
 
     if (!content && !loading) {
-      setStatus(options => ({
+      setStatus({
         type: 'init',
-        options: {
-          ...options
-        }
-      }));
+        options: initOptions
+      });
 
       return;
     }
@@ -117,9 +115,7 @@ const Audit = ({ classes }) => {
 
     setStatus(options => ({
       type: 'audit',
-      options: {
-        ...options
-      }
+      options
     }));
   }, [content, loading]);
 
@@ -129,7 +125,6 @@ const Audit = ({ classes }) => {
       const { summary, code } = error || {};
 
       const errorOptions = {
-        ...initOptions,
         text: summary,
         code
       };
@@ -139,7 +134,7 @@ const Audit = ({ classes }) => {
         options: errorOptions
       });
     }
-  }, [error, initOptions]);
+  }, [error]);
 
   const { type, options } = status;
   const {
