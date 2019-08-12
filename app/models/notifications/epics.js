@@ -16,13 +16,15 @@ const notificationsEpic = pipe(
   ofType(updateNotifications.type),
   mergeMap(({ payload: { notifications } }) => from(notifications)),
   concatMap(notification => {
-    const id = uuid(); // produce unique id
+    const id = uuid();
     const [reason, details] = notification.split(':');
     const isExtraneous = reason === 'extraneous';
+
     let detailsWithTrim = details.trim();
+    const isNameSpace = detailsWithTrim.startsWith('@')
 
     // check for namespace
-    if (detailsWithTrim.startsWith('@')) {
+    if (isNameSpace) {
       detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1)
     }
 
@@ -35,7 +37,7 @@ const notificationsEpic = pipe(
         payload: {
           id,
           reason,
-          requiredName,
+          requiredName: isNameSpace ? `@${requiredName}` : requiredName,
           requiredByName: isExtraneous ? '' : requiredByName.replace('required by', ''),
           requiredVersion: isExtraneous ? '' : requiredVersion,
         }

@@ -11,8 +11,6 @@ const styles = theme => ({
   },
   label: {
     ...defaultFont,
-    fontSize: 16,
-    color: darken(grayColor, 0.5)
   },
   directory: {
     ...defaultFont,

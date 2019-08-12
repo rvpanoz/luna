@@ -176,9 +176,9 @@ const ToolbarView = ({
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-      selected.some(
-        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-      ),
+    selected.some(
+      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+    ),
     [selected]
   );
 

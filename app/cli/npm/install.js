@@ -22,7 +22,8 @@ const install = (options, idx) => {
   } = options || {};
 
   // '--unsafe-perm'
-  const defaults = ['--verbose', '--no-audit'];
+  // '--verbose'
+  const defaults = ['--no-audit', '--ignore-scripts'];
 
   // install from package.json file
   // if (packageJson) {

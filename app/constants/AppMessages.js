@@ -93,9 +93,7 @@ export const LABEL_MESSAGES = {
   created: 'Created at',
   updated: 'Updated at',
   reason: 'Reason',
-  requiredByName: 'Required by',
-  visitGithub: 'visit',
-  visitHomepage: 'visit'
+  requiredByName: 'Required by'
 };
 
 export const TITLE_MESSAGES = {
