@@ -44,6 +44,9 @@ You can view my presentation in the GreeceJS meetup at http://bit.ly/2RES3AN
   <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
     <img style="margin-top: 8px; vertical-align: middle;" title="luna-1" src="./media/images/luna-1.png"/>
   </div>
+  <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
+    <img style="margin-top: 8px; vertical-align: middle;" title="luna-2" src="./media/images/luna-2.png"/>
+  </div>
 </div>
 
 ## Usage
