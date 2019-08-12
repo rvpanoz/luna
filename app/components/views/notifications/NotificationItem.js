@@ -72,7 +72,7 @@ const NotificationItem = ({
             onMouseEnter={e => setAnchorEl(e.currentTarget)}
             onMouseLeave={() => setAnchorEl(null)}
           >
-            <InfoIcon color="primary" />
+            <InfoIcon color="secondary" />
           </Typography>
           <Popover
             id="mouse-over-popover"

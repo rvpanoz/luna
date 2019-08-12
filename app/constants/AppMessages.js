@@ -88,7 +88,9 @@ export const LABEL_MESSAGES = {
   findings: 'Findings',
   access: 'Access',
   created: 'Created at',
-  updated: 'Updated at'
+  updated: 'Updated at',
+  reason: 'Reason',
+  requiredByName: 'Required by'
 };
 
 export const TITLE_MESSAGES = {

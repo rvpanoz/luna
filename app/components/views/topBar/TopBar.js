@@ -32,7 +32,7 @@ const Topbar = ({
       color="inherit"
     >
       <Toolbar disableGutters>
-        <div>
+        <div className={classes.actions}>
           <Toolbar
             disableGutters
             classes={{
