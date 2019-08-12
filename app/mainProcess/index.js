@@ -8,6 +8,7 @@ import onNpmAudit from './npmAudit';
 import onNpmDoctor from './npmDoctor';
 import onNpmInit from './npmInit';
 import onNpmInitLock from './npmInitLock';
+import onNpmDedupe from './npmDedupe';
 
 export {
   onNpmView,
@@ -16,6 +17,7 @@ export {
   onNpmInstall,
   onNpmUninstall,
   onNpmUpdate,
+  onNpmDedupe,
   onNpmAudit,
   onNpmDoctor,
   onNpmInit,

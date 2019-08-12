@@ -45,7 +45,7 @@ const Settings = ({ classes, ...restProps }) => {
             }
           />
           <ListItemSecondaryAction>
-            <Button disabled="true" variant="outlined" color="primary">{iMessage('action', 'change')}</Button>
+            <Button disabled={true} variant="outlined" color="primary">{iMessage('action', 'change')}</Button>
           </ListItemSecondaryAction>
         </ListItem>
       })}

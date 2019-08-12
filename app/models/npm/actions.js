@@ -26,6 +26,7 @@ const clearDoctorData = ActionCreator('CLEAR_DOCTOR_DATA');
 const npmAuditListener = ActionCreator('REGISTER_LISTENER_AUDIT');
 const npmDoctorListener = ActionCreator('REGISTER_LISTENER_DOCTOR');
 const npmInitListener = ActionCreator('REGISTER_LISTENER_INIT');
+const npmDedupeListener = ActionCreator('REGISTER_LISTENER_DEDUPE');
 
 // operations
 const runInstall = ActionCreator('RUN_INSTALL');
@@ -37,6 +38,7 @@ const runAudit = ActionCreator('RUN_AUDIT');
 const runInit = ActionCreator('RUN_INIT');
 const runLock = ActionCreator('RUN_INIT_LOCK');
 const runDoctor = ActionCreator('RUN_DOCTOR');
+const runDedupe = ActionCreator('RUN_DEDUPE');
 
 export {
   addAuditFixOption,
@@ -52,12 +54,14 @@ export {
   runUpdate,
   runUninstall,
   runAudit,
+  runDedupe,
   runInit,
   runLock,
   runDoctor,
   npmDoctorListener,
   npmAuditListener,
   npmInitListener,
+  npmDedupeListener,
   clearAuditData,
   clearDoctorData,
   parseNpmAuditData,
