@@ -43,11 +43,6 @@ const mapState = ({
 
 const Audit = ({ classes }) => {
   const { loading, message, mode, result } = useMappedState(mapState);
-  const [status, setStatus] = useState({
-    type: 'init',
-    options: { text: iMessage('info', 'npmAuditInfo') }
-  });
-
   const [metadataValues, setMetadata] = useState({
     dependencies: 0,
     devDependencies: 0,
@@ -73,8 +68,8 @@ const Audit = ({ classes }) => {
   const dialogActionText = iMessage('action', 'runAudit');
 
   const initOptions = {
-    text: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : iMessage('info', 'npmAuditInfo'),
-    actionText: iMessage('action', 'runAudit'),
+    text: dialogText,
+    actionText: dialogActionText,
     actionHandler: () => auditRun(),
     actionDisabled: mode === 'global',
     color: 'primary'
@@ -136,24 +131,7 @@ const Audit = ({ classes }) => {
       type: 'audit',
       options
     }));
-  }, [content, loading]);
-
-  // set error
-  useEffect(() => {
-    if (error) {
-      const { summary, code } = error || {};
-
-      const errorOptions = {
-        text: summary,
-        code
-      };
-
-      setStatus({
-        type: 'error',
-        options: errorOptions
-      });
-    }
-  }, [error]);
+  }, [content, loading, error]);
 
   const { type, options } = status;
   const {
