@@ -1,4 +1,5 @@
 /* eslint-disable object-shorthand */
+/* eslint-disable react/state-in-constructor */
 
 import React, { Component, createFactory } from 'react';
 

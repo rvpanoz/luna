@@ -22,12 +22,13 @@ const install = (options, idx) => {
   } = options || {};
 
   // '--unsafe-perm'
-  const defaults = ['--verbose', '--no-audit'];
+  // '--verbose'
+  const defaults = ['--no-audit', '--ignore-scripts'];
 
   // install from package.json file
-  if (packageJson) {
-    return command.concat(['--ignore-scripts']);
-  }
+  // if (packageJson) {
+  //   return command.concat(['--ignore-scripts']);
+  // }
 
   // create package-lock.json file
   if (packageLock) {

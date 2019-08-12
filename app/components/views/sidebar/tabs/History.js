@@ -23,7 +23,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
         <ListItem dense className={classes.listItem}>
           <ListItemText
             primary={
-              <Typography className={classes.label}>{iMessage('info', 'noHistory')}</Typography>
+              <Typography color="textSecondary" className={classes.label}>{iMessage('info', 'noHistory')}</Typography>
             }
           />
         </ListItem>

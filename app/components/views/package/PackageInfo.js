@@ -1,3 +1,5 @@
+/* eslint-disable prefer-object-spread */
+
 import { shell } from 'electron';
 import React from 'react';
 import PropTypes from 'prop-types';
@@ -31,7 +33,7 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
   const openUrl = link => shell.openExternal(link);
 
   return (
-    <React.Fragment>
+    <>
       {short ? null : (
         <List dense>
           <ListItem key="active-versions" className={classes.listItem}>
@@ -166,7 +168,7 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
           </ListItem>
         </List>
       )}
-    </React.Fragment>
+    </>
   );
 };
 

@@ -165,20 +165,20 @@ const ToolbarView = ({
     })('none')(action);
 
   const renderToolbarActions = () => (
-    <React.Fragment>
+    <>
       <SwitchAction handler={switchMode} options={{ mode }} />
       {!fromSearch && total ? (
         <FilterAction options={{ nodata, fromSearch }} handler={openFilters} />
       ) : null}
       <RefreshAction handler={reload} options={{ fromSearch }} />
-    </React.Fragment>
+    </>
   );
 
   const hasUpdatedPackages = useCallback(
     selected.length &&
-      selected.some(
-        packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-      ),
+    selected.some(
+      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
+    ),
     [selected]
   );
 

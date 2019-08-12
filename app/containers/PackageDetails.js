@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 import React from 'react';
 import semver from 'semver';
 import cn from 'classnames';
@@ -187,7 +189,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         : false;
 
       return (
-        <React.Fragment>
+        <>
           {isOutdated && (
             <UpdateAction packageName={active.name} handler={handleUpdate} />
           )}
@@ -195,7 +197,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
             packageName={active.name}
             handler={handleUninstall}
           />
-        </React.Fragment>
+        </>
       );
     };
 
@@ -244,14 +246,14 @@ const PackageDetails = ({ classes, toggleOptions }) => {
               }
               classes={{ root: classes.cardHeader, subheader: classes.subheader }}
               subheader={
-                <React.Fragment>
+                <>
                   <Typography color="textSecondary" variant="body2">{`License: ${active.license ||
                     '-'}`}</Typography>
                   {mode === 'local' && !fromSearch && (
                     <Typography color="textSecondary" variant="body2">{`Group: ${group ||
                       '-'}`}</Typography>
                   )}
-                </React.Fragment>
+                </>
               }
             />
             <CardContent classes={{ root: classes.cardContent }}>

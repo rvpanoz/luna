@@ -13,9 +13,14 @@ import { clearInstallOptions } from 'models/common/actions';
 import { DialogOptionsView } from 'components/views/packages';
 import { iMessage } from 'commons/utils';
 
-const mapState = ({ notifications: { notifications } }) => ({
-  notifications
-});
+const mapState = ({
+  notifications: { notifications },
+  common: {
+    operations: { packagesInstallOptions }
+  } }) => ({
+    notifications,
+    packagesInstallOptions
+  });
 
 const AppNotifications = () => {
   const [selected, setSelected] = useState([]);
@@ -26,7 +31,7 @@ const AppNotifications = () => {
     name: null,
     version: null
   });
-  const { notifications } = useMappedState(mapState);
+  const { notifications, packagesInstallOptions } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   const handleSelectAll = useCallback(
@@ -86,7 +91,7 @@ const AppNotifications = () => {
           ipcEvent: 'npm-install',
           cmd: selectedPackagesNames.map(() => 'install'),
           multiple: true,
-          packages: selectedPackagesNames
+          packages: selectedPackagesNames.map(pkgName => `${pkgName}@latest`)
         })
       ),
     [selectedPackagesNames, dispatch]
@@ -127,7 +132,7 @@ const AppNotifications = () => {
         aria-labelledby="install-options"
       >
         <DialogContent>
-          <DialogOptionsView selected={selectedPackagesNames} />
+          <DialogOptionsView selected={selectedPackagesNames} packagesInstallOptions={packagesInstallOptions} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel} color="secondary">

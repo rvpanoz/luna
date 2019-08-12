@@ -9,18 +9,12 @@ const Transitions = {
 };
 
 class Transition extends React.Component {
-  static defaultProps = {
-    type: 'Fade',
-    direction: 'right',
-    show: true
-  };
-
   render() {
     const { children, type, direction, show } = this.props;
 
     if (type && !Transitions[type]) {
       console.error(`Transition ${type} is not supported`);
-      return <React.Fragment>{children}</React.Fragment>;
+      return <>{children}</>;
     }
 
     return React.createElement(
@@ -33,6 +27,12 @@ class Transition extends React.Component {
     );
   }
 }
+
+Transition.defaultProps = {
+  type: 'Fade',
+  direction: 'right',
+  show: true
+};
 
 Transition.propTypes = {
   children: PropTypes.node.isRequired,
