@@ -42,13 +42,7 @@ const mapState = ({
 });
 
 const Audit = ({ classes }) => {
-  const dispatch = useDispatch();
   const { loading, message, mode, result } = useMappedState(mapState);
-  const [status, setStatus] = useState({
-    type: 'init',
-    options: { text: iMessage('info', 'npmAuditInfo') }
-  });
-
   const [metadataValues, setMetadata] = useState({
     dependencies: 0,
     devDependencies: 0,
@@ -56,6 +50,7 @@ const Audit = ({ classes }) => {
     vulnerabilities: null,
     advisories: null
   });
+  const dispatch = useDispatch();
   const { content, error } = result || {};
 
   const auditRun = option =>
@@ -69,24 +64,43 @@ const Audit = ({ classes }) => {
       })
     );
 
+  const dialogText = mode === 'global' ? iMessage('warning', 'noGlobalAudit') : iMessage('info', 'npmAuditInfo');
+  const dialogActionText = iMessage('action', 'runAudit');
+
   const initOptions = {
-    text: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : iMessage('info', 'npmAuditInfo'),
-    actionText: iMessage('action', 'runAudit'),
+    text: dialogText,
+    actionText: dialogActionText,
     actionHandler: () => auditRun(),
     actionDisabled: mode === 'global',
     color: 'primary'
   };
 
+  const [status, setStatus] = useState({
+    type: 'init',
+    options: initOptions
+  });
+
   // set data
   useEffect(() => {
     const { metadata, advisories } = content || {};
 
-    if (!content && !loading) {
+    if (error) {
+      const { summary, code } = error || {};
+
+      const errorOptions = {
+        text: summary,
+        code
+      };
+
       setStatus({
-        type: 'init',
-        options: initOptions
+        type: 'error',
+        options: errorOptions
       });
 
+      return;
+    }
+
+    if (!content && !loading) {
       return;
     }
 
@@ -117,24 +131,7 @@ const Audit = ({ classes }) => {
       type: 'audit',
       options
     }));
-  }, [content, loading]);
-
-  // set error
-  useEffect(() => {
-    if (error) {
-      const { summary, code } = error || {};
-
-      const errorOptions = {
-        text: summary,
-        code
-      };
-
-      setStatus({
-        type: 'error',
-        options: errorOptions
-      });
-    }
-  }, [error]);
+  }, [content, loading, error]);
 
   const { type, options } = status;
   const {

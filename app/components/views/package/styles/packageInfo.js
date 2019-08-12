@@ -17,7 +17,7 @@ const styles = theme => ({
     margin: `${theme.spacing(1) * 4}px 0 ${theme.spacing(2)}px`
   },
   listItem: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(1) / 2,
     margin: 0
   },
   secondaryColor: {
