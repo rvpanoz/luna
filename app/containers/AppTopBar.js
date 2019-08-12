@@ -153,6 +153,10 @@ const AppTopBar = ({ classes, className }) => {
           />}
         </DialogContent>
         <DialogActions>
+          <Button classes={{
+            root: classes.closeButton
+          }} variant="outlined" color="secondary" onClick={closeDialog}>{iMessage('action', 'close')}
+          </Button>
           {dialog.active === 'Init' && <Button
             color="primary"
             variant="outlined"
@@ -161,10 +165,6 @@ const AppTopBar = ({ classes, className }) => {
           >
             {iMessage('action', 'create')}
           </Button>}
-          <Button classes={{
-            root: classes.closeButton
-          }} variant="outlined" color="secondary" onClick={closeDialog}>{iMessage('action', 'close')}
-          </Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -10,6 +10,7 @@ import { Sidebar } from 'components/views/sidebar';
 import { setActivePage } from 'models/ui/actions';
 import { installPackageJson } from 'models/packages/actions'
 import { setMode } from 'models/common/actions';
+import { runDedupe } from 'models/npm/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils'
 
 import styles from './styles/appSidebar';
@@ -114,8 +115,26 @@ const AppSidebar = ({ classes, className }) => {
     return showDialog(dialogHandler, dialogOptions);
   }, [mode, directory, dispatch]);
 
-  // TODO: implementation
-  const dedupe = useCallback(() => { }, []);
+  const dedupe = useCallback(() => {
+    const dialogOptions = {
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage('confirmation', 'actionRun', {
+        '%name%': 'npm dedupe'
+      }),
+      buttons: ['Cancel', 'Run']
+    };
+
+    const dialogHandler = () =>
+      dispatch(
+        runDedupe({
+          ipcEvent: 'dedupe',
+          cmd: ['dedupe']
+        })
+      );
+
+    return showDialog(dialogHandler, dialogOptions);
+  }, [dispatch]);
 
   useEffect(() => {
     ipcRenderer.on('loaded-packages-close', (event, directories) =>

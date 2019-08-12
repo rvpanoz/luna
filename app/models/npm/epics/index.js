@@ -21,6 +21,11 @@ import {
   showDoctorLoaderEpic
 } from './doctorEpics';
 
+import {
+  npmRunDedupeEpic,
+  npmRunDedupeListenerEpic,
+} from './dedupeEpics';
+
 export default combineEpics(
   npmRunLockEpic,
   npmRunInitEpic,
@@ -33,5 +38,7 @@ export default combineEpics(
   npmAuditParseFixEpic,
   npmRunDoctorEpic,
   npmRunDoctorListenerEpic,
-  showDoctorLoaderEpic
+  showDoctorLoaderEpic,
+  npmRunDedupeEpic,
+  npmRunDedupeListenerEpic,
 );

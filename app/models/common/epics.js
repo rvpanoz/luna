@@ -21,6 +21,8 @@ import {
   npmAuditListener,
   npmDoctorListener,
   npmInitListener,
+  npmDedupeListener,
+  runDedupe,
   runDoctor,
   runAudit,
   runInit
@@ -65,7 +67,8 @@ const updateCommandEpic = pipe(
     uninstallPackages.type,
     runAudit.type,
     runDoctor.type,
-    runInit.type
+    runInit.type,
+    runDedupe.type
   ),
   mergeMap(({ payload }) => {
     const { packages, cmd } = payload || {};
@@ -98,7 +101,8 @@ const onInitActionsEpic = pipe(
     uninstallPackagesListener(),
     npmAuditListener(),
     npmDoctorListener(),
-    npmInitListener()
+    npmInitListener(),
+    npmDedupeListener()
   ])
 );
 

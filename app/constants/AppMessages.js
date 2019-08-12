@@ -9,9 +9,11 @@ export const INFO_MESSAGES = {
   workingDirectory: 'Working directory',
   installingPackages: 'Please wait. Installing packages..',
   updating: 'Please wait. Updating packages..',
+  deduping: 'Please wait. npm dedupe is running..',
   npmInstallInfo: 'Install all packages from package.json',
   npmAuditInfo: 'Scan project for vulnerabilities',
   npmDoctorInfo: 'Run a set of checks to ensure your npm installation',
+  npmDedupeInfo: 'Simplify the overall structure by moving dependencies further up the tree',
   npmAuditHelperText: 'Navigate to actions tab and run npm audit',
   npmDoctorHelperText: 'Navigate to actions tab and run npm doctor',
   noNotifications: 'No problems',
@@ -39,6 +41,7 @@ export const ACTION_MESSAGES = {
   analyze: 'Analyze',
   npmInstall: 'npm install',
   npmDoctor: 'npm doctor',
+  npmDedupe: 'npm dedupe',
   install: 'Install',
   update: 'Update',
   view: 'View',
@@ -147,27 +150,27 @@ export const TITLE_MESSAGES = {
 
 export const CONFIRMATION_MESSAGES = {
   actionRun:
-    '\nDo you want to run %name%?\nNote: This process will take some time',
-  installAll: `\nDo you want to install all the packages from \n%directory% \nNote: This process will take some time `,
-  installPackage: '\nDo you want to install %name%?',
-  installSelected: '\nDo you want to install the selected packages?',
-  installLatest: '\nDo you want to install %name% latest version?',
-  installVersion: '\nDo you want to install %name% version %version%?',
-  updatePackage: '\nDo you want to update %name%?',
-  uninstallPackage: '\nDo you want to uninstall %name%?',
-  searchPackage: '\nDo you want to search for %packageName%?',
+    'Do you want to run %name%?\nNote: This process will take some time',
+  installAll: `Do you want to install all the packages from \n%directory% \nNote: This process will take some time `,
+  installPackage: 'Do you want to install %name%?',
+  installSelected: 'Do you want to install the selected packages?',
+  installLatest: 'Do you want to install %name% latest version?',
+  installVersion: 'Do you want to install %name% version %version%?',
+  updatePackage: 'Do you want to update %name%?',
+  uninstallPackage: 'Do you want to uninstall %name%?',
+  searchPackage: 'Do you want to search for %packageName%?',
   installLatestSelected:
-    '\nDo you want to install the latest version of the selected packages?',
-  updateSelected: '\nDo you want to update the selected packages?',
-  uninstallSelected: '\nDo you want to uninstall the selected packages?',
+    'Do you want to install the latest version of the selected packages?',
+  updateSelected: 'Do you want to update the selected packages?',
+  uninstallSelected: 'Do you want to uninstall the selected packages?',
   auditFix:
-    '\nDo you want to run npm audit fix? \n\nIt will automatically install any compatible updates to vulnerable dependencies.',
+    'Do you want to run npm audit fix? \n\nIt will automatically install any compatible updates to vulnerable dependencies.',
   auditFixForce:
-    '\nDo you want to run npm audit fix --force? \n\nInstall semver-major updates to toplevel dependencies, not just semver-compatible ones.',
+    'Do you want to run npm audit fix --force? \n\nInstall semver-major updates to toplevel dependencies, not just semver-compatible ones.',
   auditFixOnlyProd:
-    '\nDo you want to run npm audit fix --only=prod?\n\nIt will skip updating devDependencies.',
+    'Do you want to run npm audit fix --only=prod?\n\nIt will skip updating devDependencies.',
   auditFixOnlyDev:
-    '\nDo you want to run npm audit fix --only=dev? \n\nIt will skip updating dependencies.'
+    'Do you want to run npm audit fix --only=dev? \n\nIt will skip updating dependencies.'
 };
 
 export const WARNING_MESSAGES = {
