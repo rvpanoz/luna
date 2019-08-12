@@ -35,7 +35,7 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
   return (
     <>
       {short ? null : (
-        <List dense>
+        <List>
           <ListItem key="active-versions" className={classes.listItem}>
             <ListItemText
               primary={
@@ -45,7 +45,7 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
               }
             />
             <ListItemSecondaryAction>
-              <Typography color="textSecondary" variant="h6">
+              <Typography color="textSecondary" variant="h4">
                 {versions ? versions.length : 'N/A'}
               </Typography>
             </ListItemSecondaryAction>
@@ -59,7 +59,7 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
               }
             />
             <ListItemSecondaryAction>
-              <Typography color="textSecondary" variant="h6">
+              <Typography color="textSecondary" variant="h4">
                 {distTags && distTags.latest ? distTags.latest : 'N/A'}
               </Typography>
             </ListItemSecondaryAction>
@@ -73,7 +73,7 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
               }
             />
             <ListItemSecondaryAction>
-              <Typography variant="h6" color="textSecondary">
+              <Typography variant="h4" color="textSecondary">
                 {distTags && distTags.next ? distTags.next : 'N/A'}
               </Typography>
             </ListItemSecondaryAction>
@@ -87,7 +87,7 @@ const PackageInfo = ({ classes, active, dependencies, short }) => {
               }
             />
             <ListItemSecondaryAction>
-              <Typography variant="h6" color="textSecondary">
+              <Typography variant="h4" color="textSecondary">
                 {dependencies ? dependencies.length : 'N/A'}
               </Typography>
             </ListItemSecondaryAction>
