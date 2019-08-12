@@ -12,27 +12,26 @@ const onNpmInstall = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
   const commands = options.cmd;
-
   let runningTimes = 1;
 
   const onFlow = chunk => event.sender.send('npm-install-flow', chunk);
   const onError = error => event.sender.send('npm-install-error', error);
 
-  const onComplete = (errors, data, cmd) => {
+  const onComplete = (errors, data, cmd, packageJson) => {
     if (commands.length === runningTimes) {
       runningTimes = 1;
-      return event.sender.send('npm-install-completed', data, errors, cmd);
+      return event.sender.send('npm-install-completed', data, errors, cmd, packageJson);
     }
 
     runningTimes += 1;
   };
 
   const callback = result => {
-    const { status, errors, data, cmd } = result;
+    const { status, errors, data, packageJson, cmd } = result;
 
     return switchcase({
       flow: dataChunk => onFlow(dataChunk),
-      close: () => onComplete(errors, data, cmd),
+      close: () => onComplete(errors, data, cmd, packageJson),
       error: error => onError(error)
     })(null)(status);
   };

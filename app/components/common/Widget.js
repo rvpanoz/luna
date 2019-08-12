@@ -26,14 +26,14 @@ const Widget = ({
       <Paper className={classes.paper} elevation={2}>
         <div className={classes.widgetHeader}>
           {!header && title ? (
-            <React.Fragment>
+            <>
               <Typography variant="h4" color="textSecondary">
                 {title}
               </Typography>
-            </React.Fragment>
+            </>
           ) : (
-            header
-          )}
+              header
+            )}
         </div>
         {title && <Divider />}
         <div

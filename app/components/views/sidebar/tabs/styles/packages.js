@@ -1,46 +1,60 @@
 import { defaultFont, grayColor, flexContainer } from 'styles/variables';
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
-  containerHolder: {
+  flexContainer: {
     ...flexContainer
   },
-  icon: {
-    marginRight: theme.spacing(0.5)
+  card: {
+    width: 260,
   },
-  avatar: {
-    padding: theme.spacing(1)
+  cardTitle: {
+    ...defaultFont,
+    fontSize: 20,
+    paddingBottom: theme.spacing(1)
+  },
+  cardFlexContainer: {
+    ...flexContainer,
+    width: '100%',
+    justifyContent: 'space-between',
+    padding: theme.spacing(1),
+    alignItems: 'center'
+  },
+  cardFlexContainerInner: {
+    ...flexContainer,
+    alignItems: 'center'
+  },
+  cardLabel: {
+    ...defaultFont,
+    fontSize: 12,
+    color: darken(grayColor, 0.5)
   },
   tab: {
-    backgroundColor: theme.palette.background.paper
-  },
-  title: {
-    ...defaultFont,
-    fontSize: 18,
-    color: darken(grayColor, 0.2)
-  },
-  stats: {
-    ...defaultFont,
-    fontSize: 24,
-    color: darken(grayColor, 0.2)
+    width: '100%',
+    minHeight: 150
   },
   listItem: {
-    margin: 0
+    margin: 0,
+    padding: theme.spacing(1) / 2
+  },
+  loader: {
+    paddingTop: theme.spacing(1)
+  },
+  updateIcon: {
+    color: lighten(theme.palette.primary.main, 0.2),
+    marginRight: theme.spacing(1)
   },
   primaryColor: {
-    color: darken(theme.palette.primary.main, 0.1)
+    color: theme.palette.primary.main
   },
   secondaryColor: {
     color: theme.palette.secondary.main
   },
   warningColor: {
-    color: theme.palette.warning.light
+    color: theme.palette.error.light
   },
   errorColor: {
-    color: darken(theme.palette.secondary.main, 0.1)
-  },
-  withPadding: {
-    padding: theme.spacing(0.5)
+    color: theme.palette.error.light
   }
 });
 

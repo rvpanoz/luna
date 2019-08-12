@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 
-import Notifications from './List';
+import Notifications from './NotificationsList';
+import ToolbarView from './Toolbar';
 
-export { Notifications };
+export { Notifications, ToolbarView };

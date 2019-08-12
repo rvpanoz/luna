@@ -7,8 +7,9 @@ import { initEpic } from './initEpics';
 import {
   installPackageListenerEpic,
   installPackageEpic,
+  installPackageJsonEpic,
   installMultiplePackagesEpic,
-  showInstallLoaderEpic
+  showInstallLoaderEpic,
 } from './installationEpics';
 
 // uninstall related epics
@@ -57,10 +58,11 @@ export default combineEpics(
   initEpic,
   installMultiplePackagesEpic,
   installPackageEpic,
+  installPackageJsonEpic,
   showInstallLoaderEpic,
   showUpdateLoaderEpic,
   mapPackagesEpic,
   mapOutdatedPackagesEpic,
   searchEpic,
-  updateSearchFlagEpic
+  updateSearchFlagEpic,
 );

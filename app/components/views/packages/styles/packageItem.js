@@ -1,71 +1,68 @@
-import { darken, lighten } from "@material-ui/core/styles/colorManipulator";
-import { flexContainer, defaultFont } from "styles/variables";
+import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = theme => ({
   flexContainer: {
     ...flexContainer,
-    alignItems: "center",
-    justifyContent: "space-between"
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
   flexContainerCell: {
     ...flexContainer,
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-start"
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
   },
   tableRow: {
-    border: "none",
-    padding: 10,
-    lineHeight: "1.1",
-    verticalAlign: "middle",
-    "&:hover": {
-      cursor: "pointer"
+    border: 'none',
+    padding: theme.spacing(1),
+    lineHeight: '1.1',
+    verticalAlign: 'middle',
+    '&:hover': {
+      cursor: 'pointer'
     }
   },
   tableCell: {
     ...defaultFont,
-    fontSize: "1rem",
-    textAlign: "center",
-    "& p": {
-      overflowWrap: "break-word"
+    textAlign: 'center',
+    '& p': {
+      overflowWrap: 'break-word'
     }
   },
   loader: {
     marginLeft: theme.spacing(1)
   },
   name: {
-    ...defaultFont,
-    [theme.breakpoints.up("lg")]: {
-      width: "auto"
+    [theme.breakpoints.up('lg')]: {
+      width: 'auto'
     },
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down('md')]: {
       width: 200
     },
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    textAlign: "left"
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    textAlign: 'left'
   },
   group: {
-    color: darken(theme.palette.secondary.light, 0.3)
+    color: theme.palette.primary.main
   },
   statusMissing: {
-    color: darken(theme.palette.secondary.main, 0.1)
+    color: theme.palette.secondary.main
   },
   statusOK: {
-    color: lighten("#00b300", 0.3)
+    color: '#00b300'
   },
   statusPeerMissing: {
-    color: darken(theme.palette.secondary.main, 0.1)
+    color: theme.palette.secondary.main
   },
   statusOutdated: {
-    color: lighten(theme.palette.warning.main, 0.3)
+    color: theme.palette.error.main
   },
   statusExtraneous: {
-    color: darken(theme.palette.secondary.main, 0.1)
+    color: theme.palette.secondary.main
   },
   statusError: {
-    color: darken(theme.palette.secondary.main, 0.1)
+    color: theme.palette.secondary.main
   }
 });
 

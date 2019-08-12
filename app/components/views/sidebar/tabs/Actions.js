@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
@@ -10,85 +9,87 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ArrowRightIcon from '@material-ui/icons/ArrowRightAlt';
 import Typography from '@material-ui/core/Typography';
-
 import { iMessage } from 'commons/utils';
+
 import styles from './styles/actions';
 
-const ActionsTab = ({
-  classes,
-  mode,
-  installPackagesFromJson,
-  toggleDialog
-}) => (
-  <div className={classes.tab}>
-    <List dense>
-      <ListItem key="install-from-packagejson" className={classes.listItem}>
-        <ListItemText
-          primary={
-            <Typography className={classes.label}>
-              {iMessage('action', 'npmInstall')}
-            </Typography>
+const ActionsTab = ({ classes, mode, onInstallPackagesFromJson, onDedupe }) => <div className={classes.tab}>
+  <List dense>
+    <ListItem key="install-from-packagejson" className={classes.listItem}>
+      <ListItemText
+        primary={
+          <Typography className={classes.label}>
+            {iMessage('action', 'npmInstall')}
+          </Typography>
+        }
+        secondary={
+          <Typography className={classes.secondaryText}>
+            {iMessage('info', 'npmInstallInfo')}
+          </Typography>
+        }
+      />
+      <ListItemSecondaryAction>
+        <Tooltip
+          title={
+            mode === 'global'
+              ? iMessage('info', 'notGlobalModeAvailable')
+              : iMessage('info', 'npmInstallInfo')
           }
-          secondary={
-            <Typography className={classes.secondaryText}>
-              {iMessage('info', 'npmInstallInfo')}
-            </Typography>
+        >
+          <div>
+            <IconButton
+              aria-label="action-install"
+              disabled={mode === 'global'}
+              onClick={onInstallPackagesFromJson}
+              disableRipple
+            >
+              <ArrowRightIcon color="primary" />
+            </IconButton>
+          </div>
+        </Tooltip>
+      </ListItemSecondaryAction>
+    </ListItem>
+    <ListItem key="npm-dedupe" className={classes.listItem}>
+      <ListItemText
+        primary={
+          <Typography className={classes.label}>
+            {iMessage('action', 'npmDedupe')}
+          </Typography>
+        }
+        secondary={
+          <Typography className={classes.secondaryText}>
+            {iMessage('info', 'npmDedupeInfo')}
+          </Typography>
+        }
+      />
+      <ListItemSecondaryAction>
+        <Tooltip
+          title={
+            mode === 'global'
+              ? iMessage('info', 'notGlobalModeAvailable')
+              : iMessage('info', 'npmInstallInfo')
           }
-        />
-        <ListItemSecondaryAction>
-          <Tooltip
-            title={
-              mode === 'global'
-                ? iMessage('info', 'notGlobalModeAvailable')
-                : iMessage('title', 'selectPackageJson')
-            }
-          >
-            <div>
-              <IconButton
-                aria-label="action-install"
-                disabled={mode === 'global'}
-                onClick={installPackagesFromJson}
-              >
-                <ArrowRightIcon />
-              </IconButton>
-            </div>
-          </Tooltip>
-        </ListItemSecondaryAction>
-      </ListItem>
-      <ListItem key="npm-doctor" className={classes.listItem}>
-        <ListItemText
-          primary={
-            <Typography className={classes.label}>
-              {iMessage('action', 'npmDoctor')}
-            </Typography>
-          }
-          secondary={
-            <Typography className={classes.secondaryText}>
-              {iMessage('info', 'npmDoctorInfo')}
-            </Typography>
-          }
-        />
-        <ListItemSecondaryAction>
-          <Tooltip title={iMessage('info', 'npmDoctorInfo')}>
-            <div>
-              <IconButton
-                aria-label="action-install"
-                onClick={() => toggleDialog(true)}
-              >
-                <ArrowRightIcon />
-              </IconButton>
-            </div>
-          </Tooltip>
-        </ListItemSecondaryAction>
-      </ListItem>
-    </List>
-  </div>
-);
+        >
+          <div>
+            <IconButton
+              aria-label="action-dedupe"
+              disabled={mode === 'global'}
+              onClick={onDedupe}
+              disableRipple
+            >
+              <ArrowRightIcon color="primary" />
+            </IconButton>
+          </div>
+        </Tooltip>
+      </ListItemSecondaryAction>
+    </ListItem>
+  </List>
+</div>
 
 ActionsTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  installPackagesFromJson: PropTypes.func.isRequired,
-  toggleDialog: PropTypes.func,
+  onInstallPackagesFromJson: PropTypes.func.isRequired,
+  onDedupe: PropTypes.func.isRequired,
   mode: PropTypes.string
 };
 

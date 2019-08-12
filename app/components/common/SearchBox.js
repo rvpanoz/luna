@@ -12,7 +12,7 @@ import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 
-import { setActivePage, clearFilters } from 'models/ui/actions';
+import { setActivePage, setPage, clearFilters } from 'models/ui/actions';
 import { setPackagesSearch } from 'models/packages/actions';
 
 import styles from './styles/searchBox';
@@ -48,6 +48,13 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
       payload: {
         page: 'packages',
         paused: true
+      }
+    });
+
+    dispatch({
+      type: setPage.type,
+      payload: {
+        page: 0
       }
     });
 

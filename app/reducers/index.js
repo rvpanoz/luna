@@ -1,5 +1,5 @@
 /**
- * Root reducer
+ * Root reducer_
  * use combineReducers to combine reducers into one root reducer
  * */
 

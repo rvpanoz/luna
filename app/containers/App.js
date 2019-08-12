@@ -1,14 +1,11 @@
-/**
- * App with error boundary
- */
-
 import { ipcRenderer } from 'electron';
 import React, { useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/styles';
-import { withErrorBoundary } from 'commons/hocs';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+import { withErrorBoundary } from 'commons/hocs';
 import { setEnv } from 'models/npm/actions';
 import { initActions, updateStatus } from 'models/common/actions';
 import { setUIException, setSnackbar } from 'models/ui/actions';
@@ -78,10 +75,10 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <ThemeProvider theme={theme}>
+    <MuiThemeProvider theme={theme}>
       <CssBaseline />
       {!uiException ? <AppLayout app="Luna" /> : uiException}
-    </ThemeProvider>
+    </MuiThemeProvider>
   );
 };
 

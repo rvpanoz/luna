@@ -19,9 +19,9 @@ export const APP_MODES = {
   local: 'local'
 };
 
-export const DEFAULT_MODE = 'Global mode';
+export const DEFAULT_MODE = 'global';
 export const DEFAULT_VERSION = '1.0.0';
-export const ERROR_TYPES = ['WARN', 'ERR'];
+export const ERROR_TYPES = ['extraneous', 'peer dep missing', 'missing'];
 export const FATAL_ERROR = 'Fatal error. Please try again';
 
 export const APP_INFO = {

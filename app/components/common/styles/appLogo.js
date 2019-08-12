@@ -6,7 +6,8 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     width: '100%',
-    maxWidth: 290
+    maxWidth: 290,
+    padding: theme.spacing(2)
   },
   logo_animation_wrapper: {
     position: 'relative',
@@ -72,7 +73,7 @@ const styles = theme => ({
     stroke: lighten(theme.palette.secondary.main, 0.2)
   },
   warningColor: {
-    stroke: lighten(theme.palette.warning.main, 0.2)
+    stroke: lighten(theme.palette.error.main, 0.2)
   },
   errorColor: {
     stroke: lighten(theme.palette.error.main, 0.2)

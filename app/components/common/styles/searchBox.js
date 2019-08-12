@@ -16,31 +16,32 @@ const styles = theme => ({
     border: '1px solid'
   },
   searchIcon: {
+    cursor: 'pointer',
     width: theme.spacing(1) * 6,
     height: '100%',
     position: 'absolute',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: theme.palette.common.white
+    paddingLeft: theme.spacing(2),
+    color: theme.palette.common.white,
+    zIndex: 9999
   },
   inputRoot: {
     color: 'inherit',
     width: '100%',
     fontFamily: 'inherit',
-    fontSize: 14,
-    lineHeight: '1em'
+    fontSize: 20,
+    lineHeight: '0.75em'
   },
   inputInput: {
-    color: '#fff',
-    paddingTop: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1) * 10,
+    color: theme.palette.common.white,
+    paddingLeft: theme.spacing(10),
+    paddingRight: theme.spacing(10),
     transition: theme.transitions.create('width'),
-    width: 145,
+    width: 175,
     '&:focus': {
-      width: 275
+      width: 220
     }
   }
 });

@@ -66,7 +66,7 @@ export default merge.smart(baseConfig, {
       components: path.resolve(path.join(__dirname, '..', 'app', 'components')),
       containers: path.resolve(path.join(__dirname, '..', 'app', 'containers')),
       models: path.resolve(path.join(__dirname, '..', 'app', 'models')),
-      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles')),
+      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles'))
     }
   },
   module: {
@@ -192,9 +192,7 @@ export default merge.smart(baseConfig, {
         sourceType: 'var'
       }),
 
-    new webpack.HotModuleReplacementPlugin({
-      multiStep: true
-    }),
+    new webpack.HotModuleReplacementPlugin(),
 
     new webpack.NoEmitOnErrorsPlugin(),
 
@@ -232,10 +230,9 @@ export default merge.smart(baseConfig, {
     stats: 'errors-only',
     inline: true,
     lazy: false,
-    // If you want to refresh on errors too
-    // hot: true,
-    // Don't refresh if hot loading fails.
-    hotOnly: true,
+    liveReload: false,
+    hot: false, // if you want to refresh on errors too,
+    hotOnly: true, // don't refresh if hot loading fails.
     headers: { 'Access-Control-Allow-Origin': '*' },
     contentBase: path.join(__dirname, 'dist'),
     watchContentBase: true,

@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+
 import React from 'react';
 import semver from 'semver';
 import cn from 'classnames';
@@ -22,9 +24,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Collapse from '@material-ui/core/Collapse';
 import Grid from '@material-ui/core/Grid';
 import Fade from '@material-ui/core/Fade';
-
 import CloseIcon from '@material-ui/icons/Close';
-
 import VersionsIcon from '@material-ui/icons/LabelOutlined';
 import DependenciesIcon from '@material-ui/icons/ListOutlined';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -189,7 +189,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         : false;
 
       return (
-        <React.Fragment>
+        <>
           {isOutdated && (
             <UpdateAction packageName={active.name} handler={handleUpdate} />
           )}
@@ -197,7 +197,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
             packageName={active.name}
             handler={handleUninstall}
           />
-        </React.Fragment>
+        </>
       );
     };
 
@@ -244,19 +244,19 @@ const PackageDetails = ({ classes, toggleOptions }) => {
                   variant="h4"
                 >{`${name} v${version}`}</Typography>
               }
-              className={classes.cardHeader}
+              classes={{ root: classes.cardHeader, subheader: classes.subheader }}
               subheader={
-                <React.Fragment>
-                  <Typography variant="subtitle1">{`License: ${active.license ||
+                <>
+                  <Typography color="textSecondary" variant="body2">{`License: ${active.license ||
                     '-'}`}</Typography>
                   {mode === 'local' && !fromSearch && (
-                    <Typography variant="subtitle1">{`Group: ${group ||
+                    <Typography color="textSecondary" variant="body2">{`Group: ${group ||
                       '-'}`}</Typography>
                   )}
-                </React.Fragment>
+                </>
               }
             />
-            <CardContent className={classes.cardContent}>
+            <CardContent classes={{ root: classes.cardContent }}>
               <Typography variant="body1">{description}</Typography>
               <Divider className={classes.divider} />
               <Hidden mdDown>
@@ -338,11 +338,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
   );
 
   useEffect(() => {
-    if (!active) {
-      return;
-    }
-
-    if (active.dependencies) {
+    if (active && active.dependencies) {
       const dependenciesNames = Object.keys(active.dependencies);
       const dependenciesToArray = dependenciesNames.map(dep => ({
         name: dep,

@@ -10,15 +10,10 @@ const styles = theme => ({
   },
   tabLabel: {
     ...defaultFont,
-    fontSize: 16,
-    paddingBottom: theme.spacing(1)
+    fontSize: 16
   },
   noMargin: {
     margin: 0
-  },
-  appBar: {
-    marginLeft: theme.spacing(0.5),
-    marginRight: theme.spacing(0.5)
   }
 });
 

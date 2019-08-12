@@ -17,6 +17,11 @@ import {
 
 const SEPARATOR = path.sep;
 
+/**
+ * 
+ * @param {*} handler 
+ * @param {*} options 
+ */
 export const showDialog = (handler, options) => {
   if (!options || typeof options !== 'object') {
     return;
@@ -33,6 +38,12 @@ export const showDialog = (handler, options) => {
   });
 };
 
+/**
+ * 
+ * @param {*} type 
+ * @param {*} key 
+ * @param {*} replacements 
+ */
 export const iMessage = (type, key, replacements) => {
   const messageType = switchcase({
     confirmation: () => CONFIRMATION_MESSAGES,
@@ -49,6 +60,10 @@ export const iMessage = (type, key, replacements) => {
     : key;
 };
 
+/**
+ * 
+ * @param {*} namespace 
+ */
 export const createActionCreator = namespace => actionType => {
   const type = `${namespace}/${actionType}`;
   const actionCreator = payload => ({
@@ -90,7 +105,7 @@ export const isUrl = url => {
  */
 export const firstToUpper = str => {
   return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, function(letter, index) {
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
       return index !== 0 ? letter.toLowerCase() : letter.toUpperCase();
     })
     .replace(/\s+/g, '');
@@ -224,7 +239,7 @@ export const shrinkDirectory = directory => {
 
       return `${dirParts[dirParts.length - 2]}${SEPARATOR}${
         dirParts[dirParts.length - 1]
-      }${SEPARATOR}package.json`;
+        }${SEPARATOR}package.json`;
     } catch (error) {
       throw new Error(error);
     }

@@ -1,8 +1,6 @@
-/* eslint-disable react/require-default-props */
-
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { bool, node, objectOf, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 
 import AppBar from '@material-ui/core/AppBar';
@@ -18,8 +16,8 @@ const TabContainer = ({ children, loading }) => (
 );
 
 TabContainer.propTypes = {
-  children: PropTypes.node.isRequired,
-  loading: PropTypes.bool
+  children: node.isRequired,
+  loading: bool
 };
 
 const AppTabs = ({ classes, children }) => {
@@ -27,14 +25,8 @@ const AppTabs = ({ classes, children }) => {
 
   return (
     <div className={classes.root}>
-      <AppBar
-        position="static"
-        color="inherit"
-      >
-        <Tabs
-          value={value}
-          onChange={(e, tabValue) => setValue(tabValue)}
-        >
+      <AppBar position="static" color="inherit">
+        <Tabs value={value} onChange={(e, tabValue) => setValue(tabValue)}>
           <Tab
             classes={{
               root: classes.tabLabel
@@ -57,10 +49,6 @@ const AppTabs = ({ classes, children }) => {
       </AppBar>
 
       {React.Children.map(children, (child, idx) => {
-        if (child.props.loading) {
-          return null;
-        }
-
         if (value === idx) {
           return (
             <TabContainer>
@@ -71,14 +59,16 @@ const AppTabs = ({ classes, children }) => {
             </TabContainer>
           );
         }
+
+        return null;
       })}
     </div>
   );
 };
 
 AppTabs.propTypes = {
-  children: PropTypes.node.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired
+  children: node.isRequired,
+  classes: objectOf(string).isRequired
 };
 
 export default withStyles(styles)(AppTabs);

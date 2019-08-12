@@ -5,7 +5,7 @@
 
 const audit = params => {
   const command = ['audit'];
-  const defaults = ['--json', '--verbose'];
+  const defaults = ['--json']; // '--verbose'
   const { options: {
     flag
   } } = params || {}

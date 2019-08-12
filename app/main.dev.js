@@ -23,6 +23,7 @@ import {
   onNpmUninstall,
   onNpmAudit,
   onNpmDoctor,
+  onNpmDedupe,
   onNpmInit,
   onNpmInitLock
 } from './mainProcess';
@@ -162,6 +163,14 @@ ipcMain.on('npm-audit', (event, options) => onNpmAudit(event, options, Store));
  *
  */
 ipcMain.on('npm-init', (event, options) => onNpmInit(event, options, Store));
+
+/**
+ * Channel: npm-dedupe
+ * Supports: npm dedupe
+ * https://docs.npmjs.com/cli/dedupe
+ *
+ */
+ipcMain.on('npm-dedupe', (event, options) => onNpmDedupe(event, options, Store));
 
 /**
  * Channel: npm-init-lock

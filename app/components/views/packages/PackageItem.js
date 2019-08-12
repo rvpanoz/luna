@@ -31,7 +31,6 @@ const PackageItem = ({
   peerMissing,
   viewPackage,
   inOperation,
-  inPackageJson,
   hasError
 }) => {
   const rowRef = useRef();
@@ -50,9 +49,9 @@ const PackageItem = ({
       }}
       onClick={() => (inOperation ? {} : viewPackage(name, version))}
     >
-      <TableCell padding="checkbox" style={{ width: '85px' }}>
+      <TableCell padding="checkbox" style={{ width: '55px' }}>
         <Checkbox
-          disabled={inOperation || (inPackageJson && fromSearch)}
+          disabled={inOperation}
           checked={isSelected}
           disableRipple
           onClick={e => {
@@ -85,7 +84,7 @@ const PackageItem = ({
             )}
           </div>
           {!extraneous && group && !fromSearch && (
-            <Typography variant="caption" className={classes.group}>
+            <Typography variant="caption" color="textSecondary">
               {group}
             </Typography>
           )}
@@ -134,7 +133,6 @@ PackageItem.propTypes = {
   isOutdated: bool,
   inOperation: bool,
   hasError: bool,
-  inPackageJson: bool
 };
 
 export default withStyles(styles)(PackageItem);

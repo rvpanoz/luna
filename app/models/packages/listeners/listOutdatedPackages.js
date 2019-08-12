@@ -21,16 +21,17 @@ const onListOutdatedPackages$ = new Observable(observer => {
       const packageData = JSON.parse(data);
       const { name, version, description } = packageData || {};
       const packages = pick(['dependencies', 'problems'], packageData);
-      const { dependencies, problems } = packages || {};
+      const { dependencies, problems: notifications } = packages || {};
 
       const dataArray = dependencies
         ? objectEntries(dependencies)
         : objectEntries(packageData);
 
-      if (problems) {
+
+      if (notifications) {
         observer.next(
           updateNotifications({
-            notifications: problems
+            notifications
           })
         );
       }

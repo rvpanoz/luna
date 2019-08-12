@@ -28,7 +28,6 @@ import { iMessage } from 'commons/utils';
 import styles from '../styles/summary';
 
 const Summary = ({ classes, data, onClose }) => {
-  console.log(data);
   const dataKeys = Object.keys(data);
   const dataValues = Object.values(data);
 

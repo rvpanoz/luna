@@ -2,10 +2,6 @@ import { defaultFont, grayColor } from 'styles/variables';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
-    maxWidth: 752
-  },
   tab: {
     backgroundColor: theme.palette.background.paper
   },
@@ -20,7 +16,6 @@ const styles = theme => ({
     fontSize: 12
   },
   listItem: {
-    padding: theme.spacing(1),
     margin: 0
   },
   secondaryColor: {
@@ -29,7 +24,7 @@ const styles = theme => ({
   },
   warningColor: {
     color: theme.palette.common.white,
-    backgroundColor: theme.palette.warning.light
+    backgroundColor: theme.palette.error.light
   },
   errorColor: {
     color: theme.palette.common.white,

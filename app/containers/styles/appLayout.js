@@ -1,46 +1,41 @@
-import { lighten } from '@material-ui/core/styles/colorManipulator';
-import { defaultFont, drawerWidth } from 'styles/variables';
+import { drawerWidth } from 'styles/variables';
 
 const styles = theme => ({
   root: {
+    width: '100%',
+    height: '100%',
     display: 'flex',
-    minHeight: '100vh'
+    flexDirection: 'column',
+    overflow: 'auto'
+  },
+  shiftContent: {
+    paddingLeft: 225
+  },
+  main: {
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    flex: 1,
+    paddingLeft: theme.spacing(6),
+    paddingTop: theme.spacing(1)
+  },
+  topBar: {
+    width: '100%'
+  },
+  navigationBar: {
+    width: '100%'
+  },
+  sidebar: {
+    flex: 0
+  },
+  content: {
+    padding: theme.spacing(1)
   },
   drawer: {
     [theme.breakpoints.up('sm')]: {
       width: drawerWidth,
       flexShrink: 0
     }
-  },
-  paperDialog: {
-    minHeight: 475
-  },
-  appContent: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    overflow: 'hidden'
-  },
-  mainContent: {
-    flex: 1,
-    padding: theme.spacing(1),
-    background: lighten('#fff', 0.1),
-  },
-  label: {
-    ...defaultFont,
-    fontSize: 20
-  },
-  subheader: {
-    ...defaultFont,
-    fontSize: 16
-  },
-  value: {
-    ...defaultFont,
-    fontSize: 22,
-    color: theme.palette.secondary.light
-  },
-  list: {
-    paddingTop: theme.spacing(2)
   }
 });
 

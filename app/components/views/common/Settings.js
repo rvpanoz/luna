@@ -1,37 +1,60 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography';
+import { iMessage } from 'commons/utils';
 
 import styles from './styles/settings';
 
-const Settings = ({ classes, items }) => (
-  <section className={classes.root}>
-    <List dense>
-      {items.map((item, idx) => (
-        <ListItem key={`settings-item-${idx + 1}`} className={classes.listItem}>
+const Settings = ({ classes, ...restProps }) => {
+  const { metricsRegistry, auditLevel, cache } = restProps;
+
+  const [settings, setSettings] = useState({
+    metricsRegistry: '',
+    auditLevel: '',
+    cache: ''
+  });
+
+  useEffect(() => {
+    setSettings(settingsItems => ({
+      ...settingsItems,
+      metricsRegistry,
+      auditLevel,
+      cache
+    }))
+  }, [metricsRegistry, auditLevel, cache])
+
+  return <div className={classes.root}>
+    <List>
+      {Object.keys(settings).map(setting => {
+        return <ListItem key={setting}>
           <ListItemText
             primary={
-              <Typography variant="subtitle2">{item.primaryText}</Typography>
+              <Typography>{settings[setting]}</Typography>
             }
             secondary={
-              <Typography className={classes.secondaryText} variant="body2">
-                {item.secondaryText}
+              <Typography color="textSecondary">
+                {setting}
               </Typography>
             }
           />
+          <ListItemSecondaryAction>
+            <Button disabled variant="outlined" color="primary">{iMessage('action', 'change')}</Button>
+          </ListItemSecondaryAction>
         </ListItem>
-      ))}
+      })}
     </List>
-  </section>
-);
+  </div>
+}
 
 Settings.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  items: PropTypes.arrayOf(PropTypes.object).isRequired
 };
 
 export default withStyles(styles)(Settings);

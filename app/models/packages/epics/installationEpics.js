@@ -3,13 +3,14 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
-import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
+import { tap, concatMap, switchMap, ignoreElements } from 'rxjs/operators';
 
-import { toggleLoader } from 'models/ui/actions';
+import { toggleLoader, setActivePage } from 'models/ui/actions';
 import {
   installPackage,
+  installPackageJson,
   installMultiplePackages,
-  installPackageListener
+  installPackageListener,
 } from 'models/packages/actions';
 import { iMessage } from 'commons/utils';
 import { onNpmInstall$ } from '../listeners';
@@ -21,13 +22,44 @@ const updateLoader = payload => ({
 
 const showInstallLoaderEpic = action$ =>
   action$.pipe(
-    ofType(installPackage.type, installMultiplePackages.type),
-    map(() =>
+    ofType(installPackage.type, installPackageJson.type, installMultiplePackages.type),
+    concatMap(() => [
+      setActivePage({
+        page: 'packages',
+        paused: true
+      }),
       updateLoader({
         loading: true,
         message: iMessage('info', 'installingPackages')
       })
-    )
+    ])
+  );
+
+/**
+* Send ipc event to main process to handle npm-install for a single package
+* supports global and local mode
+*/
+const installPackageJsonEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(installPackageJson.type),
+    tap(({ payload }) => {
+      const {
+        common: {
+          mode,
+          directory,
+        }
+      } = state$.value;
+
+      const parameters = {
+        ...payload,
+        mode,
+        directory,
+        packageJson: true
+      };
+
+      ipcRenderer.send('npm-install', parameters);
+    }),
+    ignoreElements()
   );
 
 /**
@@ -72,7 +104,7 @@ const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(installMultiplePackages.type),
     tap(({ payload }) => {
-      const { pkgOptions } = payload
+      const { pkgOptions } = payload;
 
       const {
         common: {
@@ -88,7 +120,11 @@ const installMultiplePackagesEpic = (action$, state$) =>
           option => option.name === selectedPackage
         );
 
-        return pkg && pkg.options ? pkg.options : pkgOptions ? pkgOptions[idx] : ['save-prod'];
+        return pkg && pkg.options
+          ? pkg.options
+          : pkgOptions
+            ? pkgOptions[idx]
+            : ['save-prod'];
       });
 
       const parameters = {
@@ -103,6 +139,7 @@ const installMultiplePackagesEpic = (action$, state$) =>
     ignoreElements()
   );
 
+
 const installPackageListenerEpic = pipe(
   ofType(installPackageListener.type),
   switchMap(() => onNpmInstall$)
@@ -110,7 +147,8 @@ const installPackageListenerEpic = pipe(
 
 export {
   installPackageListenerEpic,
+  installPackageJsonEpic,
   installPackageEpic,
   installMultiplePackagesEpic,
-  showInstallLoaderEpic
+  showInstallLoaderEpic,
 };

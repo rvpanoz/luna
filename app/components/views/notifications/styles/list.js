@@ -1,64 +1,47 @@
-import { defaultFont, flexContainer, grayColor } from 'styles/variables';
-import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
+import { flexContainer } from 'styles/variables';
 
 const styles = theme => ({
+  flexContainer: {
+    ...flexContainer,
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  transition: {
+    transition: theme.transitions.create('width', {
+      duration: theme.transitions.duration.shortest
+    })
+  },
   paper: {
     width: '100%',
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0
   },
-  container: {
+  toolbar: {
     width: '100%'
   },
-  title: {
-    display: 'flex',
-    color: darken(grayColor, 0.2),
-    flexDirection: 'column',
-    justifyContent: 'flex-start'
-  },
-  divider: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    marginBottom: theme.spacing(1)
-  },
-  list: {
+  tableWrapper: {
     whiteSpace: 'nowrap',
-    overflowY: 'scroll',
     padding: theme.spacing(1),
     [theme.breakpoints.up('md')]: {
       maxHeight: 450
     },
     [theme.breakpoints.up('lg')]: {
-      maxHeight: 750
+      maxHeight: 650
     }
   },
-  flexContainer: {
-    ...flexContainer,
-    justifyContent: 'space-between'
+  tableResponsive: {
+    width: '100%',
+    marginTop: theme.spacing(3),
+    overflowX: 'auto'
   },
-  header: {
-    flex: '0 0 auto',
-    padding: theme.spacing(2) + 4
+  table: {
+    width: '100%',
+    backgroundColor: 'transparent',
+    borderSpacing: 0,
+    borderCollapse: 'collapse'
   },
-  item: {
-    ...defaultFont
-  },
-  containerHolder: {
-    ...flexContainer,
-    paddingTop: theme.spacing(2),
-    flexDirection: 'column',
-    alignItems: 'center'
-  },
-  helperText: {
-    ...defaultFont,
-    color: lighten(grayColor, 0.1),
-    fontSize: 16
-  },
-  noData: {
-    ...defaultFont
-  },
-  withPadding: {
-    padding: theme.spacing(1) + 4
+  hasFilterBlur: {
+    filter: 'blur(15px)'
   }
 });
 

@@ -5,7 +5,7 @@ import anime from 'animejs';
 import cn from 'classnames';
 import styles from './styles/appLogo';
 
-const AppLogo = ({ classes }) => {
+const AppLogo = ({ classes, className }) => {
   useEffect(() => {
     const logoAnimationTL = anime
       .timeline({
@@ -27,7 +27,9 @@ const AppLogo = ({ classes }) => {
   }, []);
 
   return (
-    <div className={classes.main_logo}>
+    <div className={cn(classes.main_logo, {
+      [className]: className
+    })}>
       <div className={classes.logo_animation_wrapper}>
         <div className={classes.logo_animation}>
           <div className={classes.anime_logo}>
@@ -38,7 +40,7 @@ const AppLogo = ({ classes }) => {
                     classes.logo_animation__logo_letter_svg,
                     classes.logo_animation__bounce,
                     classes.rot,
-                    classes.primaryColor
+                    classes.errorColor
                   )}
                   viewBox="0 0 150 250"
                   width="20"
@@ -56,7 +58,7 @@ const AppLogo = ({ classes }) => {
                   className={cn(
                     classes.logo_animation__bounce,
                     classes.flip,
-                    classes.secondaryColor
+                    classes.primaryColor
                   )}
                   viewBox="0 0 150 250"
                   width="20"
@@ -90,7 +92,7 @@ const AppLogo = ({ classes }) => {
                 <svg
                   className={cn(
                     classes.logo_animation__bounce,
-                    classes.primaryColor
+                    classes.secondaryColor
                   )}
                   viewBox="0 0 150 250"
                   width="20"
@@ -112,7 +114,8 @@ const AppLogo = ({ classes }) => {
 };
 
 AppLogo.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  className: PropTypes.string
 };
 
 export default withStyles(styles)(AppLogo);

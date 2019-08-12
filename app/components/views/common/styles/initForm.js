@@ -1,27 +1,46 @@
 import { darken } from '@material-ui/core/styles/colorManipulator';
-import { grayColor } from 'styles/variables';
+import { flexContainer, grayColor } from 'styles/variables';
 
 const styles = theme => ({
+  root: {
+    padding: 0,
+    margin: 0
+  },
+  content: {
+    ...flexContainer,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   actions: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginTop: theme.spacing(1)
+    padding: 0
   },
   caption: {
     color: darken(grayColor, 0.6),
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(4)
   },
   options: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(0.5),
-    padding: theme.spacing(1)
+    paddingTop: theme.spacing(4)
   },
   formControl: {
-    marginLeft: theme.spacing(1)
+    margin: 0
+  },
+  flexGrow: {
+    flexGrow: 1
+  },
+  title: {
+    padding: theme.spacing(2),
+  },
+  info: {
+    marginTop: theme.spacing(5)
   },
   directory: {
-    paddingTop: theme.spacing(1)
+    padding: theme.spacing(1),
+  },
+  button: {
+    marginBottom: theme.spacing(8)
+  },
+  paper: {
+    padding: theme.spacing(1)
   }
 });
 

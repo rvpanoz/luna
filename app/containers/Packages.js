@@ -1,6 +1,5 @@
 import React from 'react';
-import { Fragment } from 'react';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -114,8 +113,6 @@ const Packages = ({ classes }) => {
     auditData
   } = useMappedState(mapState);
 
-  /* eslint-disable-next-line */
-  const [packagesFromPackageJson, setPackageJsonPackages] = useState([]);
   const [auditPackages, setAuditPackages] = useState([]);
   const [options, toggleOptions] = useState({
     open: false,
@@ -127,7 +124,7 @@ const Packages = ({ classes }) => {
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
-  const reload = () => {
+  const reload = useCallback(() => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
     dispatch(
       setPackagesStart({
@@ -137,9 +134,9 @@ const Packages = ({ classes }) => {
         }
       })
     );
-  };
+  }, [dispatch]);
 
-  const switchMode = (appMode, appDirectory) => {
+  const switchMode = useCallback((appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
     dispatch(setActivePage({ page: 'packages', paused: false }));
 
@@ -153,9 +150,9 @@ const Packages = ({ classes }) => {
         })
       );
     }
-  };
+  }, [dispatch, fromSearch]);
 
-  const viewPackageHandler = (name, version) =>
+  const viewPackageHandler = useCallback((name, version) =>
     dispatch(
       viewPackageStart({
         channel: 'npm-view',
@@ -165,7 +162,7 @@ const Packages = ({ classes }) => {
           version: name === 'npm' ? null : version
         }
       })
-    );
+    ), [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -214,12 +211,11 @@ const Packages = ({ classes }) => {
   const noPackages = !packagesData.length;
 
   return (
-    <Fragment>
+    <>
       <AppLoader loading={loading} message={message}>
         <Grid container>
           <Grid
             item
-            sm={12}
             md={active ? 8 : 10}
             lg={active ? 8 : 10}
             xl={active ? 8 : 10}
@@ -228,12 +224,12 @@ const Packages = ({ classes }) => {
             {noPackages && (
               <HelperText
                 text={iMessage('info', 'noPackages')}
-                actionText="Switch to globals"
+                actionText={iMessage('title', 'switchToGlobals')}
                 actionHandler={() => switchMode('global')}
               />
             )}
             {!noPackages && (
-              <Paper className={classes.root}>
+              <Paper elevation={2}>
                 <div className={classes.toolbar}>
                   <ToolbarView
                     title={iMessage('title', 'packages')}
@@ -259,7 +255,6 @@ const Packages = ({ classes }) => {
                 <Divider />
                 <div className={classes.tableWrapper} ref={wrapperRef}>
                   <Table
-                    padding="checkbox"
                     aria-labelledby="packages-list"
                     className={cn(classes.table, {
                       [classes.hasFilterBlur]: loading
@@ -295,24 +290,14 @@ const Packages = ({ classes }) => {
                               packagesInstallOptions
                             )
                               ? packagesInstallOptions.find(
-                                  installOption => installOption.name === name
-                                )
+                                installOption => installOption.name === name
+                              )
                               : {};
 
                             const inOperation =
                               operationStatus !== 'idle' &&
                               operationCommand !== 'install' &&
                               operationPackages.indexOf(name) > -1;
-
-                            const inPackageJson = packagesFromPackageJson.some(
-                              pkg => {
-                                /* eslint-disable-next-line */
-                                const [pkgGroup, pkgDetails] = pkg;
-                                const [pkgName] = Object.keys(pkgDetails);
-
-                                return pkgName === name;
-                              }
-                            );
 
                             return (
                               <PackageItemView
@@ -334,7 +319,6 @@ const Packages = ({ classes }) => {
                                 viewPackage={viewPackageHandler}
                                 inOperation={inOperation}
                                 inAudit={auditPackages.includes(name)}
-                                inPackageJson={inPackageJson}
                                 peerMissing={peerMissing}
                                 fromSearch={__fromSearch}
                                 hasError={__hasError}
@@ -451,7 +435,7 @@ const Packages = ({ classes }) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Fragment>
+    </>
   );
 };
 

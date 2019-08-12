@@ -10,10 +10,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 
 import ArrowRightIcon from '@material-ui/icons/ArchiveOutlined';
-import FolderIcon from '@material-ui/icons/FolderOpen';
+import { iMessage } from 'commons/utils'
 
 import styles from './styles/history';
 
@@ -24,7 +23,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
         <ListItem dense className={classes.listItem}>
           <ListItemText
             primary={
-              <Typography className={classes.label}>No history</Typography>
+              <Typography color="textSecondary" className={classes.label}>{iMessage('info', 'noHistory')}</Typography>
             }
           />
         </ListItem>
@@ -37,14 +36,9 @@ const HistoryTab = ({ classes, directories, onClick }) => (
           .join('/');
 
         return (
-          <ListItem dense className={classes.listItem} key={dir.name}>
-            <ListItemIcon style={{ marginTop: 3 }}>
-              <div>
-                <Tooltip title={dir.directory}>
-                  <FolderIcon color="secondary" />
-                </Tooltip>
-              </div>
-            </ListItemIcon>
+          <ListItem classes={{
+            root: classes.listItem
+          }} key={dir.name}>
             <ListItemText
               primary={
                 <Typography className={classes.label}>{dir.name}</Typography>
@@ -56,15 +50,14 @@ const HistoryTab = ({ classes, directories, onClick }) => (
               }
             />
             <ListItemSecondaryAction>
-              <Tooltip title="Load directory">
-                <div>
-                  <IconButton
-                    aria-label="action"
-                    onClick={() => onClick(dir.directory)}
-                  >
-                    <ArrowRightIcon color="primary" />
-                  </IconButton>
-                </div>
+              <Tooltip title={iMessage('info', 'loadDirectory')}>
+                <IconButton
+                  aria-label="load-directory"
+                  onClick={() => onClick(dir.directory)}
+                  disableRipple
+                >
+                  <ArrowRightIcon />
+                </IconButton>
               </Tooltip>
             </ListItemSecondaryAction>
           </ListItem>

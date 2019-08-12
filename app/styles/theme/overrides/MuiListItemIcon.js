@@ -1,8 +1,9 @@
-import palette from '../palette';
-
 export default {
   root: {
-    color: palette.text.secondary,
-    minWidth: '32px'
+    color: 'inherit',
+    marginRight: 0,
+    '& svg': {
+      fontSize: 20
+    }
   }
 };

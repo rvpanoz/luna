@@ -42,13 +42,7 @@ const mapState = ({
 });
 
 const Audit = ({ classes }) => {
-  const dispatch = useDispatch();
   const { loading, message, mode, result } = useMappedState(mapState);
-  const [status, setStatus] = useState({
-    type: 'init',
-    options: {}
-  });
-
   const [metadataValues, setMetadata] = useState({
     dependencies: 0,
     devDependencies: 0,
@@ -56,8 +50,8 @@ const Audit = ({ classes }) => {
     vulnerabilities: null,
     advisories: null
   });
+  const dispatch = useDispatch();
   const { content, error } = result || {};
-  const defaultOptions = { text: iMessage('info', 'npmAuditInfo') };
 
   const auditRun = option =>
     dispatch(
@@ -70,24 +64,43 @@ const Audit = ({ classes }) => {
       })
     );
 
+  const dialogText = mode === 'global' ? iMessage('warning', 'noGlobalAudit') : iMessage('info', 'npmAuditInfo');
+  const dialogActionText = iMessage('action', 'runAudit');
+
   const initOptions = {
-    ...defaultOptions,
-    detail: mode === 'global' ? iMessage('warning', 'noGlobalAudit') : null,
-    actionText: iMessage('action', 'runAudit'),
+    text: dialogText,
+    actionText: dialogActionText,
     actionHandler: () => auditRun(),
-    actionDisabled: mode === 'global'
+    actionDisabled: mode === 'global',
+    color: 'primary'
   };
+
+  const [status, setStatus] = useState({
+    type: 'init',
+    options: initOptions
+  });
 
   // set data
   useEffect(() => {
     const { metadata, advisories } = content || {};
 
-    if (!content && !loading) {
+    if (error) {
+      const { summary, code } = error || {};
+
+      const errorOptions = {
+        text: summary,
+        code
+      };
+
       setStatus({
-        type: 'init',
-        options: initOptions
+        type: 'error',
+        options: errorOptions
       });
 
+      return;
+    }
+
+    if (!content && !loading) {
       return;
     }
 
@@ -114,28 +127,11 @@ const Audit = ({ classes }) => {
       advisories
     });
 
-    setStatus({
-      type: 'audit'
-    });
-  }, [content, initOptions, loading]);
-
-  // set error
-  useEffect(() => {
-    if (error) {
-      const { summary, code } = error || {};
-
-      const errorOptions = {
-        ...initOptions,
-        text: summary,
-        code
-      };
-
-      setStatus({
-        type: 'error',
-        options: errorOptions
-      });
-    }
-  }, [error, initOptions]);
+    setStatus(options => ({
+      type: 'audit',
+      options
+    }));
+  }, [content, loading, error]);
 
   const { type, options } = status;
   const {
@@ -146,6 +142,8 @@ const Audit = ({ classes }) => {
     advisories
   } = metadataValues || {};
 
+  const noVulnerabilities = vulnerabilities && Object.values(vulnerabilities).reduce((total, v) => total + v, 0);
+
   return (
     <>
       <AppLoader loading={loading} message={message}>
@@ -154,7 +152,7 @@ const Audit = ({ classes }) => {
           {type === 'init' && <HelperText {...options} />}
           {type === 'audit' && (
             <>
-              <Grid container spacing={8} className={classes.gridContainer}>
+              <Grid container spacing={2} className={classes.gridContainer}>
                 <Grid item lg={4} md={4} sm={12} xl={4}>
                   <StatsCard
                     title={iMessage('title', 'dependencies')}
@@ -197,17 +195,17 @@ const Audit = ({ classes }) => {
                   </Hidden>
                 </Grid>
               </Grid>
-              <Advisories
+              {noVulnerabilities > 0 ? <Advisories
                 data={advisories}
                 handleAudit={auditRun}
                 vulnerabilities={vulnerabilities}
-              />
+              /> : <HelperText detail={iMessage('info', 'noVulnerabilities')} />}
             </>
           )}
         </div>
       </AppLoader>
       <Dialog
-        open={type === 'dialog'}
+        open={false}
         onClose={() =>
           setStatus({
             type: 'init',
@@ -227,4 +225,4 @@ Audit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired
 };
 
-export default withStyles(styles, { withTheme: false })(Audit);
+export default withStyles(styles)(Audit);

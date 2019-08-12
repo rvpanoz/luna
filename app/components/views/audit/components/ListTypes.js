@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React from 'react';
-import { objectOf, oneOfType, string, array, object, number } from 'prop-types';
+import { objectOf, oneOfType, string, array, object, func, number } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import { groupBy } from 'ramda';
 
@@ -57,17 +57,17 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
     {
       value: critical,
       name: iMessage('label', 'critical'),
-      color: 'danger'
+      color: 'error'
     },
     {
       value: high,
       name: iMessage('label', 'high'),
-      color: 'warning'
+      color: 'secondary'
     },
     {
       value: moderate,
       name: iMessage('label', 'moderate'),
-      color: 'secondary'
+      color: 'primary'
     },
     {
       value: low,
@@ -77,11 +77,11 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
     {
       value: info,
       name: iMessage('label', 'info'),
-      color: 'success'
+      color: 'secondary'
     }
   ];
   const totalVulnerabilities = typesData.reduce((acc, type) => acc + type.value, 0);
-  console.log(theme.palette)
+
   return (
     <Widget noBodyPadding title={`${iMessage('title', 'vulnerabilities')} (${totalVulnerabilities})`}>
       <div className={classes.list}>
@@ -124,7 +124,7 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
 
 ListTypes.propTypes = {
   classes: objectOf(string).isRequired,
-  theme: objectOf(oneOfType([string, object, array])).isRequired,
+  theme: objectOf(oneOfType([string, object, array, func])).isRequired,
   data: objectOf(oneOfType([string, array, object])).isRequired,
   vulnerabilities: objectOf(number).isRequired
 };

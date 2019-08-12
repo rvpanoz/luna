@@ -1,5 +1,4 @@
-import Init from "./Init";
-import SearchBox from "./SearchBox";
-import Settings from "./Settings";
+import Init from './Init';
+import Settings from './Settings';
 
-export { Init, SearchBox, Settings };
+export { Init, Settings };

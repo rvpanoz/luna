@@ -1,58 +1,59 @@
+import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
 import { whiteColor as white, blackColor as black } from '../variables';
 
 export default {
   common: {
     black,
     white,
-    neutral: '#E4E7EB',
-    muted: '#9EA0A4'
+    neutral: '#e4e5ff',
+    muted: '#ccceee'
   },
   primary: {
     contrastText: white,
-    light: '#63ccff',
-    main: '#009be5',
-    dark: '#006db3'
+    light: lighten('#006db3', 0.1),
+    main: '#006db3',
+    dark: darken('#006db3', 0.1)
   },
   secondary: {
     contrastText: white,
-    main: '#f11f90',
-    light: '#e51a90',
-    dark: '#c00a70'
+    light: lighten('#f7cac9', 0.8),
+    main: '#e51a90',
+    dark: darken('#e51a90', 0.1)
   },
   success: {
     contrastText: white,
-    main: '#45B880',
-    light: '#F1FAF5',
-    dark: '#00783E'
+    light: lighten('#4caf50', 0.1),
+    main: '#4caf50',
+    dark: darken('#4caf50', 0.1)
   },
   info: {
     contrastText: white,
-    main: '#1070CA',
-    light: '#F1FBFC',
-    dark: '#007489'
+    light: lighten('#88ffdd', 0.1),
+    main: '#88ffdd',
+    dark: darken('#88ffdd', 0.1)
   },
   warning: {
     contrastText: white,
-    main: '#FFB822',
-    light: '#FDF8F3',
-    dark: '#95591E'
+    light: lighten('#ffae42', 0.1),
+    main: '#ffae42',
+    dark: darken('#ffae42', 0.1)
   },
-  danger: {
+  error: {
     contrastText: white,
-    main: '#ED4740',
-    light: '#FEF6F6',
-    dark: '#BF0E08'
+    light: lighten('#d8000c', 0.1),
+    main: '#d8000c',
+    dark: darken('#d8000c', 0.1)
   },
   text: {
-    primary: '#12161B',
-    secondary: '#66788A',
-    disabled: '#A6B1BB'
+    primary: '#12161b',
+    secondary: '#66788a',
+    disabled: '#a6B1bb'
   },
   background: {
-    default: '#f8fafc',
-    dark: '#172B4D',
+    default: white,
+    dark: '#172b4d',
     paper: white
   },
-  border: '#DFE3E8',
-  divider: '#DFE3E8'
+  border: '#dfe3e8',
+  divider: '#ccc'
 };
