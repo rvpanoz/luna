@@ -9,6 +9,7 @@ export const INFO_MESSAGES = {
   workingDirectory: 'Working directory',
   installingPackages: 'Please wait. Installing packages..',
   updating: 'Please wait. Updating packages..',
+  deduping: 'Please wait. npm dedupe is running..',
   npmInstallInfo: 'Install all packages from package.json',
   npmAuditInfo: 'Scan project for vulnerabilities',
   npmDoctorInfo: 'Run a set of checks to ensure your npm installation',

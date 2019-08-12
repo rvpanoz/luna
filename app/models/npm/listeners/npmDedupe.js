@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { setRunningCommand } from 'models/npm/actions';
-import { setSnackbar } from 'models/ui/actions';
+import { setSnackbar, toggleLoader } from 'models/ui/actions';
 
 const updateCommand = ({
     operationStatus,
@@ -20,7 +20,6 @@ const onNpmDedupe$ = new Observable(observer => {
     ipcRenderer.removeAllListeners(['npm-dedupe-completed']);
 
     ipcRenderer.on('npm-dedupe-completed', (event, data) => {
-
         observer.next(
             updateCommand({
                 operationStatus: 'idle',
@@ -30,10 +29,17 @@ const onNpmDedupe$ = new Observable(observer => {
         );
 
         observer.next(
+            toggleLoader({
+                loading: false,
+                message: null
+            })
+        );
+
+        observer.next(
             setSnackbar({
                 open: true,
                 type: 'info',
-                message: 'npm dedupe completed'
+                message: data
             })
         );
     });

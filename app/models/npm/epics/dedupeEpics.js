@@ -1,9 +1,16 @@
 import { pipe } from 'rxjs';
-import { tap, switchMap, ignoreElements } from 'rxjs/operators';
+import { tap, switchMap, mergeMap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
+import { toggleLoader } from 'models/ui/actions';
 import { runDedupe, npmDedupeListener } from 'models/npm/actions';
+import { iMessage } from 'commons/utils'
 import { onNpmDedupe$ } from '../listeners';
+
+const updateLoader = payload => ({
+    type: toggleLoader.type,
+    payload
+});
 
 /**
  * Send ipc event to main process to handle npm-dedupe
@@ -22,7 +29,11 @@ const npmRunDedupeEpic = (action$, state$) =>
                 directory
             });
         }),
-        ignoreElements()
+        mergeMap(() => [
+            updateLoader({
+                loading: true,
+                message: iMessage('info', 'deduping')
+            })]),
     );
 
 // listener epics

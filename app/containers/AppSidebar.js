@@ -134,7 +134,7 @@ const AppSidebar = ({ classes, className }) => {
       );
 
     return showDialog(dialogHandler, dialogOptions);
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     ipcRenderer.on('loaded-packages-close', (event, directories) =>

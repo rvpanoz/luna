@@ -6,7 +6,7 @@
 
 const dedupe = () => {
     const command = ['dedupe'];
-    const defaults = ['--json']; // '--verbose'
+    const defaults = ['--no-audit', '-verbose'];
 
     return command.concat(defaults);
 };
