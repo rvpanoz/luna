@@ -4,6 +4,9 @@
 import log from 'electron-log';
 import manager from './manager';
 
+import { concat, of } from 'rxjs'
+import { catchError, tap } from 'rxjs/operators';
+
 /**
  * Run shell commands
  * @param {*} options
@@ -11,36 +14,19 @@ import manager from './manager';
  */
 
 const runCommand = (options, callback) => {
-  const { cmd, ...rest } = options || {};
+  const { cmd, ...rest } = options;
 
+  // create an array of observables
   const combine = () =>
     cmd.map((command, idx) => {
-      try {
-        const runner = manager[command];
-        const result = runner(rest, idx);
+      const runner = manager[command];
+      const result$ = runner(rest, idx);
 
-        return result; // returns a promise
-      } catch (error) {
-        log.error(error);
-        throw new Error(error);
-      }
+      return result$;
     });
 
-  const tasks = combine();
-
-  tasks
-    .reduce(
-      (promiseChain, currentTask) =>
-        promiseChain.then(chainResults =>
-          currentTask.then(currentResult => [...chainResults, currentResult])
-        ),
-      Promise.resolve([])
-    )
-    .then(results => results.map(result => callback(result)))
-    .catch(error => {
-      log.error(error);
-      return Promise.reject(error);
-    });
-};
+  // subscribe to observables in order as previous completes
+  concat.apply(null, combine()).subscribe(result => callback(result));
+}
 
 export default runCommand;
