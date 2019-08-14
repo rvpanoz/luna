@@ -2,10 +2,9 @@
 /* eslint-disable import/prefer-default-export */
 
 import log from 'electron-log';
+import { concat } from 'rxjs'
+import { catchError } from 'rxjs/operators';
 import manager from './manager';
-
-import { concat, of } from 'rxjs'
-import { catchError, tap } from 'rxjs/operators';
 
 /**
  * Run shell commands
@@ -22,11 +21,13 @@ const runCommand = (options, callback) => {
       const runner = manager[command];
       const result$ = runner(rest, idx);
 
-      return result$;
+      return result$.pipe(
+        catchError(error => log.error(error))
+      );
     });
 
   // subscribe to observables in order as previous completes
-  concat.apply(null, combine()).subscribe(result => callback(result));
+  concat(...combine()).subscribe(result => callback(result));
 }
 
 export default runCommand;

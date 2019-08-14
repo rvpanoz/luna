@@ -1,6 +1,5 @@
 /* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable global-require */
-/* eslint-disable  promise/catch-or-return */
 /* eslint-disable compat/compat */
 
 import cp from 'child_process';
@@ -68,10 +67,7 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
     command.stderr.on('data', error => {
       const errorString = String(error);
 
-      // observer.next({
-      //   status: 'error',
-      //   error: errorString
-      // })
+      errors += errorString
     });
 
     command.on('exit', code => {
@@ -99,9 +95,7 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
 }
 
 // TODO: implementation
-// const dispatcher = (options, idx) => {
-
-// }
+// const dispatcher = (options, idx) => {}
 
 /**
  * npm list
@@ -218,8 +212,7 @@ const update = (options) => {
       activeManager,
       commandArgs: run,
       mode,
-      directory,
-      packageJson
+      directory
     }
 
     return execute(params);
@@ -248,7 +241,6 @@ const uninstall = (options) => {
 
     return execute(params);
   } catch (error) {
-    console.log(error)
     throw new Error(error)
   }
 };
@@ -288,9 +280,16 @@ const runAudit = (opts) => {
     const audit = require('./npm/audit').default;
     const run = audit(options);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
@@ -305,9 +304,16 @@ const runDoctor = (opts) => {
     const doctor = require('./npm/doctor').default;
     const run = doctor(opts);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
@@ -322,9 +328,16 @@ const runInit = (opts) => {
     const init = require('./npm/tooling/init').default;
     const run = init(opts);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
@@ -339,9 +352,16 @@ const runDedupe = (opts) => {
     const dedupe = require('./npm/tooling/dedupe').default;
     const run = dedupe(opts);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
