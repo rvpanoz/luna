@@ -1,4 +1,3 @@
-/* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable compat/compat */
 
 /**
@@ -12,14 +11,9 @@ const uninstall = options => {
 
   function getNames() {
     if (multiple && Array.isArray(packages)) {
+
       // do not uninstall npm
       return packages.filter(pkgName => pkgName !== 'npm');
-    }
-
-    if (!name && !multiple) {
-      return Promise.reject(
-        'npm[uninstall] package name parameter must be given'
-      );
     }
 
     return name;
