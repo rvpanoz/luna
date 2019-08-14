@@ -57,7 +57,7 @@ const APP_PATHS = {
 const Store = new ElectronStore();
 
 // clear opened packages
-Store.set('openedPackages', []);
+Store.set('history', []);
 
 let mainWindow = null;
 
@@ -284,8 +284,8 @@ app.on('ready', async () => {
     event.sender.send('settings-loaded-close', userSettings);
 
     // directories history
-    const openedPackages = Store.get('opened_packages') || [];
-    event.sender.send('history-close', openedPackages);
+    const history = Store.get('history') || [];
+    event.sender.send('history-close', history);
 
     // signal finish
     event.sender.send('finish-loaded');

@@ -11,29 +11,29 @@ const {
 } = mk || {};
 
 const onNpmListOutdated = (event, options, store) => {
-  const settings = store.get('user_settings');
   const { activeManager = defaultManager, directory, mode } = options || {};
-  const openedPackages = store.get('openedPackages') || [];
+  const settings = store.get('user_settings');
+  const history = store.get('history') || [];
+  let yarnLock;
 
+  // define callbacks
   const onFlow = chunk => event.sender.send('npm-list-outdated-flow', chunk);
   const onError = error => event.sender.send('npm-list-outdated-error', error);
-
-  let yarnLock;
 
   const onComplete = (errors, data, cmd) => {
     if (directory && mode === 'local') {
       try {
         const dirName = path.dirname(path.resolve(directory));
-        const parsedDirectory = path.parse(dirName);
-        const { name } = parsedDirectory || {};
+        const { name } = path.parse(dirName) || {};
 
-        const inDirectories = openedPackages.some(
+        const inDirectories = history.some(
           pkg => pkg.directory && pkg.directory.includes(dirName)
         );
 
+        // add directory to history list
         if (!inDirectories) {
-          store.set('openedPackages', [
-            ...openedPackages,
+          store.set('history', [
+            ...history,
             {
               name,
               directory: path.join(dirName, 'package.json')
@@ -41,6 +41,7 @@ const onNpmListOutdated = (event, options, store) => {
           ]);
         }
 
+        // check if yarn.lock exists
         yarnLock = fs.existsSync(
           path.join(path.dirname(directory), 'yarn.lock')
         );
@@ -53,7 +54,7 @@ const onNpmListOutdated = (event, options, store) => {
       }
     }
 
-    event.sender.send('loaded-packages-close', store.get('openedPackages'));
+    event.sender.send('loaded-packages-close', store.get('history'));
     event.sender.send('npm-list-outdated-completed', data, errors, cmd);
   };
 
