@@ -1,6 +1,6 @@
-const styles = theme => ({
+const styles = () => ({
   root: {
-
+    width: '100%'
   },
 });
 
