@@ -63,7 +63,7 @@ The Renderer Process architecture:
 
 <div style="display: flex; flex-wrap: wrap;padding: 0 4px;">
   <div style="flex: 25%;max-width: 100%;padding: 0 4px;">
-    <img style="margin-top: 8px; vertical-align: middle;" title="luna-1" src="./media/images/luna-renderer.png"/>
+    <img style="margin-top: 8px; vertical-align: middle;" title="luna-renderer" src="./media/images/luna-renderer.png"/>
   </div>
 </div>
 
