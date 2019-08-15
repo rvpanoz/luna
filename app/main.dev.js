@@ -57,7 +57,7 @@ const APP_PATHS = {
 const Store = new ElectronStore();
 
 // clear opened packages
-Store.set('openedPackages', []);
+Store.set('history', []);
 
 let mainWindow = null;
 
@@ -207,16 +207,16 @@ app.on('window-all-closed', () => {
 
 /* eslint-disable-next-line */
 app.once('browser-window-created', (event, webContents) => {
-  chalk.white.bgBlue.bold('[EVENT]: browser-window-created event fired');
+  NODE_ENV === 'development' && log.log(chalk.white.bgGreen.bold('[EVENT]: browser-window-created event fired'));
 });
 
 /* eslint-disable-next-line */
 app.once('web-contents-created', (event, webContents) => {
-  chalk.white.bgBlue.bold('[EVENT]:web-contents-created event fired');
+  NODE_ENV === 'development' && log.log(chalk.white.bgGreen.bold('[EVENT]: web-contents-created event fired'));
 });
 
 app.on('ready', async () => {
-  chalk.white.bgBlue.bold('[EVENT]: ready event fired');
+  NODE_ENV === 'development' && log.log(chalk.white.bgGreen.bold('[EVENT]: ready event fired'));
 
   if (NODE_ENV === 'development') {
     INSTALL_EXTENSIONS && (await installExtensions());
@@ -252,11 +252,11 @@ app.on('ready', async () => {
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', () => {
-    chalk.white.bgBlue.bold('[EVENT]: ready-to-show event fired');
+    NODE_ENV === 'development' && log.log(chalk.white.bgGreen.bold('[EVENT]: ready-to-show event fired'));
   });
 
   mainWindow.webContents.on('did-finish-load', async event => {
-    chalk.white.bgBlue.bold('[EVENT]: did-finish-load event fired');
+    NODE_ENV === 'development' && log.log(chalk.white.bgGreen.bold('[EVENT]: did-finish-load event fired'));
 
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');
@@ -284,8 +284,8 @@ app.on('ready', async () => {
     event.sender.send('settings-loaded-close', userSettings);
 
     // directories history
-    const openedPackages = Store.get('opened_packages') || [];
-    event.sender.send('history-close', openedPackages);
+    const history = Store.get('history') || [];
+    event.sender.send('history-close', history);
 
     // signal finish
     event.sender.send('finish-loaded');

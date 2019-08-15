@@ -29,7 +29,7 @@ const onNpmUninstall = (event, options, store) => {
     return switchcase({
       flow: dataChunk => onFlow(dataChunk),
       close: () => onComplete(errors, data, packages),
-      error: error => onError(error)
+      error: () => onError(errors)
     })(null)(status);
   };
 

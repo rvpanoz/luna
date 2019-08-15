@@ -1,11 +1,12 @@
 /* eslint-disable prefer-promise-reject-errors */
 /* eslint-disable global-require */
-/* eslint-disable  promise/catch-or-return */
 /* eslint-disable compat/compat */
 
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
+import { Observable } from 'rxjs'
+
 import mk from '../mk';
 
 const { spawn } = cp;
@@ -26,17 +27,12 @@ const cwd = process.cwd();
  * @param {*} mode
  * @param {*} directory
  */
-const execute = (
-  manager = defaultManager,
-  commandArgs = [],
-  mode,
-  directory,
-  packageJson,
-) => {
-  const [operation] = commandArgs;
 
-  const resultP = new Promise(resolve => {
-    const isLocal = mode === 'local' && directory;
+const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, packageJson }) => {
+  const [operation] = commandArgs;
+  const isLocal = mode === 'local' && directory;
+
+  const result$ = new Observable((observer) => {
     const result = [];
     let errors = '';
 
@@ -44,53 +40,67 @@ const execute = (
       chalk.blueBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
     );
 
-    // on windows use npm.cmd
-    const command = spawn(
-      /^win/.test(process.platform) ? `${manager}.cmd` : manager,
-      commandArgs,
-      {
-        env: process.env,
-        cwd: isLocal
-          ? operation === 'init'
-            ? path.resolve(directory)
-            : path.dirname(directory)
-          : cwd
-      }
-    );
-
-    command.stdout.on('data', data => {
-      const dataString = String(data);
-
-      result.push(dataString);
-    });
-
-    command.stderr.on('data', error => {
-      const errorString = String(error);
-
-      errors += errorString;
-    });
-
-    command.on('exit', code => {
-      console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
-    });
-
-    command.on('close', () => {
-      console.log(
-        chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
+    try {
+      // on windows use npm.cmd
+      const command = spawn(
+        /^win/.test(process.platform) ? `${manager}.cmd` : manager,
+        commandArgs,
+        {
+          env: process.env,
+          cwd: isLocal
+            ? operation === 'init'
+              ? path.resolve(directory)
+              : path.dirname(directory)
+            : cwd
+        }
       );
 
-      return resolve({
-        status: 'close',
-        errors,
-        data: result.join(''),
-        cmd: commandArgs,
-        packageJson: Boolean(packageJson)
-      });
-    });
-  });
+      command.stdout.on('data', data => {
+        const dataString = String(data);
 
-  return resultP;
-};
+        result.push(dataString);
+
+        // emit flow data
+        observer.next({
+          status: 'flow',
+          data: result
+        })
+      });
+
+      command.stderr.on('data', error => {
+        const errorString = String(error);
+
+        errors += errorString
+      });
+
+      command.on('exit', code => {
+        console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
+      });
+
+      command.on('close', () => {
+        console.log(
+          chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
+        );
+
+        // emit result data
+        observer.next({
+          status: 'close',
+          errors,
+          data: result.join(''),
+          cmd: commandArgs,
+          packageJson: Boolean(packageJson)
+        })
+
+        observer.complete()
+      });
+    } catch (error) {
+      observer.error(error)
+    }
+
+  })
+
+  return result$;
+}
 
 /**
  * npm list
@@ -98,28 +108,21 @@ const execute = (
  */
 const list = (options) => {
   const command = ['list'];
-  const { mode, directory, linked } = options || {};
+  const { mode, directory } = options || {};
 
-  if (!mode || typeof mode !== 'string') {
-    return Promise.reject(
-      'manager[list]: mode must be given and must be one of "global" or "local"'
-    );
+  const run = mode === 'global' && !directory
+    ? command.concat(defaultsArgs.list, ['-g'])
+    : command.concat(defaultsArgs.list);
+
+  const params = {
+    activeManager: 'npm',
+    commandArgs: run,
+    mode,
+    directory
   }
 
-  try {
-    const run =
-      mode === 'global' && !directory
-        ? linked
-          ? command.concat(defaultsArgs.list, ['--link', '-g'])
-          : command.concat(defaultsArgs.list, ['-g'])
-        : command.concat(defaultsArgs.list);
-
-    // returns a Promise
-    return execute('npm', run, mode, directory);
-  } catch (error) {
-    Promise.reject(error);
-  }
-};
+  return execute(params);
+}
 
 /**
  * npm outdated
@@ -129,44 +132,47 @@ const outdated = (options) => {
   const command = ['outdated'];
   const { mode, directory } = options || {};
 
-  if (!mode || typeof mode !== 'string') {
-    return Promise.reject(
-      'manager[outdated]: mode must be given and must be one of "global" or "local"'
-    );
+  const run =
+    mode === 'global' && !directory
+      ? command.concat(defaultsArgs.list, ['-g'])
+      : command.concat(defaultsArgs.list);
+
+  const params = {
+    activeManager: 'npm',
+    commandArgs: run,
+    mode,
+    directory
   }
 
-  try {
-    const run =
-      mode === 'global' && !directory
-        ? command.concat(defaultsArgs.list, ['-g'])
-        : command.concat(defaultsArgs.list);
-
-    // returns a Promise
-    return execute('npm', run, mode, directory);
-  } catch (error) {
-    Promise.reject(error);
-  }
+  return execute(params)
 };
 
 /**
  * npm search
- * @param {*} opts
+ * @param {*} options
  */
-const search = (opts) => {
+const search = (options) => {
   const command = ['search'];
-  const { directory, mode, pkgName } = opts || {};
+  const { directory, mode, pkgName } = options || {};
   const defaults = ['--depth=0', '--json'];
 
   if (!pkgName) {
-    return Promise.reject('npm[search] package name parameter must be given');
+    throw new Error('npm[search] package name parameter must be given');
   }
 
   try {
     const run = command.concat(defaults, pkgName);
 
-    return execute('npm', run, mode, directory);
+    const params = {
+      activeManager: 'npm',
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
@@ -175,135 +181,192 @@ const search = (opts) => {
  * @param {*} opts
  * @param {*} idx
  */
-const install = (opts, idx) => {
-  const { mode, directory, packageJson, activeManager = 'npm' } = opts || {};
+const install = (options, idx) => {
+  const { mode, directory, packageJson, activeManager = 'npm' } = options || {};
 
   try {
     const runInstall = require('./npm/install').default;
-    const run = runInstall(opts, idx);
+    const run = runInstall(options, idx);
 
-    return execute(activeManager, run, mode, directory, packageJson);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory,
+      packageJson
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
 /**
  * npm update
- * @param {*} opts
+ * @param {*} options
  */
-const update = (opts) => {
-  const { mode, directory, activeManager = 'npm' } = opts || {};
+const update = (options) => {
+  const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
     const runUpdate = require('./npm/update').default;
-    const run = runUpdate(opts);
+    const run = runUpdate(options);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
 /**
  * npm uninstall
- * @param {*} opts
+ * @param {*} options
  */
-const uninstall = (opts) => {
-  const { mode, directory, activeManager = 'npm' } = opts || {};
+const uninstall = (options) => {
+  const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
     const runUninstall = require('./npm/uninstall').default;
-    const run = runUninstall(opts);
+    const run = runUninstall(options);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
 /**
  * npm view
- * @param {*} opts
+ * @param {*} options
  */
-const view = (opts) => {
-  const { mode, directory, activeManager = 'npm' } = opts || {};
+const view = options => {
+  const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
     const runView = require('./npm/view').default;
-    const run = runView(opts);
+    const run = runView(options);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
 /**
  * npm audit
- * @param {*} opts
+ * @param {*} options
  */
-const runAudit = (opts) => {
-  const { activeManager = 'npm', mode, directory, ...options } = opts || {};
+const runAudit = (options) => {
+  const { activeManager = 'npm', mode, directory } = options || {};
 
   try {
     const audit = require('./npm/audit').default;
     const run = audit(options);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
 /**
  * npm doctor
- * @param {*} opts
+ * @param {*} options
  */
-const runDoctor = (opts) => {
-  const { mode, directory, activeManager = 'npm' } = opts || {};
+const runDoctor = (options) => {
+  const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
     const doctor = require('./npm/doctor').default;
-    const run = doctor(opts);
+    const run = doctor(options);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
 /**
  * npm init
- * @param {*} opts
+ * @param {*} options
  */
-const runInit = (opts) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+const runInit = (options) => {
+  const { mode, directory, activeManager = 'npm' } = options;
 
   try {
     const init = require('./npm/tooling/init').default;
-    const run = init(opts);
+    const run = init(options);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 
 /**
  * npm dedupe
- * @param {*} opts
+ * @param {*} options
  */
-const runDedupe = (opts) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+const runDedupe = (options) => {
+  const { mode, directory, activeManager = 'npm' } = options;
 
   try {
     const dedupe = require('./npm/tooling/dedupe').default;
-    const run = dedupe(opts);
+    const run = dedupe(options);
 
-    return execute(activeManager, run, mode, directory);
+    const params = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(params);
   } catch (error) {
-    Promise.reject(error);
+    throw new Error(error)
   }
 };
 

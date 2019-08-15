@@ -2,6 +2,8 @@
 /* eslint-disable import/prefer-default-export */
 
 import log from 'electron-log';
+import { concat } from 'rxjs'
+import { catchError } from 'rxjs/operators';
 import manager from './manager';
 
 /**
@@ -11,36 +13,21 @@ import manager from './manager';
  */
 
 const runCommand = (options, callback) => {
-  const { cmd, ...rest } = options || {};
+  const { cmd, ...rest } = options;
 
+  // create an array of observables
   const combine = () =>
     cmd.map((command, idx) => {
-      try {
-        const runner = manager[command];
-        const result = runner(rest, idx);
+      const runner = manager[command];
+      const result$ = runner(rest, idx);
 
-        return result; // returns a promise
-      } catch (error) {
-        log.error(error);
-        throw new Error(error);
-      }
+      return result$.pipe(
+        catchError(error => log.error(error))
+      );
     });
 
-  const tasks = combine();
-
-  tasks
-    .reduce(
-      (promiseChain, currentTask) =>
-        promiseChain.then(chainResults =>
-          currentTask.then(currentResult => [...chainResults, currentResult])
-        ),
-      Promise.resolve([])
-    )
-    .then(results => results.map(result => callback(result)))
-    .catch(error => {
-      log.error(error);
-      return Promise.reject(error);
-    });
-};
+  // subscribe to observables in order as previous completes
+  concat(...combine()).subscribe(result => callback(result));
+}
 
 export default runCommand;
