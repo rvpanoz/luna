@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { setRunningCommand } from 'models/npm/actions';
 import { setMode } from 'models/common/actions';
-import { toggleLoader, setActivePage, setSnackbar } from 'models/ui/actions';
+import { setActivePage, setSnackbar } from 'models/ui/actions';
 
 const updateCommand = ({
   operationStatus,
