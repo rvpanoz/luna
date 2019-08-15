@@ -1,8 +1,8 @@
 import { ipcRenderer } from 'electron';
-import { toggleLoader } from 'models/ui/actions';
-import { updateNotifications } from 'models/notifications/actions';
 import { Observable } from 'rxjs';
 import { pick } from 'ramda';
+import { toggleLoader, setPage } from 'models/ui/actions';
+import { updateNotifications } from 'models/notifications/actions';
 import { switchcase, objectEntries } from 'commons/utils';
 import { mapPackages, mapOutdatedPackages } from '../actions';
 
@@ -50,6 +50,10 @@ const onListOutdatedPackages$ = new Observable(observer => {
               projectDescription: description
             })
           );
+
+          observer.next(setPage({
+            page: 0
+          }));
 
           observer.next(
             toggleLoader({

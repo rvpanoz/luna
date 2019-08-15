@@ -40,62 +40,67 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
       chalk.blueBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
     );
 
-    // on windows use npm.cmd
-    const command = spawn(
-      /^win/.test(process.platform) ? `${manager}.cmd` : manager,
-      commandArgs,
-      {
-        env: process.env,
-        cwd: isLocal
-          ? operation === 'init'
-            ? path.resolve(directory)
-            : path.dirname(directory)
-          : cwd
-      }
-    );
-
-    command.stdout.on('data', data => {
-      const dataString = String(data);
-
-      result.push(dataString);
-      observer.next({
-        status: 'flow',
-        data: result
-      })
-    });
-
-    command.stderr.on('data', error => {
-      const errorString = String(error);
-
-      errors += errorString
-    });
-
-    command.on('exit', code => {
-      console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
-    });
-
-    command.on('close', () => {
-      console.log(
-        chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
+    try {
+      // on windows use npm.cmd
+      const command = spawn(
+        /^win/.test(process.platform) ? `${manager}.cmd` : manager,
+        commandArgs,
+        {
+          env: process.env,
+          cwd: isLocal
+            ? operation === 'init'
+              ? path.resolve(directory)
+              : path.dirname(directory)
+            : cwd
+        }
       );
 
-      observer.next({
-        status: 'close',
-        errors,
-        data: result.join(''),
-        cmd: commandArgs,
-        packageJson: Boolean(packageJson)
-      })
+      command.stdout.on('data', data => {
+        const dataString = String(data);
 
-      observer.complete()
-    });
+        result.push(dataString);
+
+        // emit flow data
+        observer.next({
+          status: 'flow',
+          data: result
+        })
+      });
+
+      command.stderr.on('data', error => {
+        const errorString = String(error);
+
+        errors += errorString
+      });
+
+      command.on('exit', code => {
+        console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
+      });
+
+      command.on('close', () => {
+        console.log(
+          chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
+        );
+
+        // emit result data
+        observer.next({
+          status: 'close',
+          errors,
+          data: result.join(''),
+          cmd: commandArgs,
+          packageJson: Boolean(packageJson)
+        })
+
+        observer.complete()
+      });
+    } catch (error) {
+      observer.error(error)
+    }
+
   })
 
   return result$;
 }
-
-// TODO: implementation
-// const dispatcher = (options, idx) => {}
 
 /**
  * npm list
@@ -271,14 +276,14 @@ const view = options => {
 
 /**
  * npm audit
- * @param {*} opts
+ * @param {*} options
  */
 const runAudit = (opts) => {
   const { activeManager = 'npm', mode, directory, ...options } = opts || {};
 
   try {
     const audit = require('./npm/audit').default;
-    const run = audit(options);
+    const run = audit(opts);
 
     const params = {
       activeManager,
@@ -295,14 +300,14 @@ const runAudit = (opts) => {
 
 /**
  * npm doctor
- * @param {*} opts
+ * @param {*} options
  */
-const runDoctor = (opts) => {
-  const { mode, directory, activeManager = 'npm' } = opts || {};
+const runDoctor = (options) => {
+  const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
     const doctor = require('./npm/doctor').default;
-    const run = doctor(opts);
+    const run = doctor(options);
 
     const params = {
       activeManager,
@@ -319,14 +324,14 @@ const runDoctor = (opts) => {
 
 /**
  * npm init
- * @param {*} opts
+ * @param {*} options
  */
-const runInit = (opts) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+const runInit = (options) => {
+  const { mode, directory, activeManager = 'npm' } = options;
 
   try {
     const init = require('./npm/tooling/init').default;
-    const run = init(opts);
+    const run = init(options);
 
     const params = {
       activeManager,
@@ -343,14 +348,14 @@ const runInit = (opts) => {
 
 /**
  * npm dedupe
- * @param {*} opts
+ * @param {*} options
  */
-const runDedupe = (opts) => {
-  const { mode, directory, activeManager = 'npm' } = opts;
+const runDedupe = (options) => {
+  const { mode, directory, activeManager = 'npm' } = options;
 
   try {
     const dedupe = require('./npm/tooling/dedupe').default;
-    const run = dedupe(opts);
+    const run = dedupe(options);
 
     const params = {
       activeManager,

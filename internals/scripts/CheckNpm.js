@@ -1,5 +1,6 @@
 import cp from 'child_process';
 import chalk from 'chalk';
+import log from 'electron-log';
 
 const { NODE_ENV } = process.env;
 
@@ -9,7 +10,7 @@ const checkNpm = () => {
     const env = JSON.parse(result.toString());
 
     if (NODE_ENV === 'development') {
-      console.log(chalk.black.bgYellow.bold(`[INFO] ${env['user-agent']}`));
+      log.log(chalk.whiteBright.bgYellow.bold(`[INFO] ${env['user-agent']}`));
     }
 
     return {
