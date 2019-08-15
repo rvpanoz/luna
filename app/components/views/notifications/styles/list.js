@@ -21,12 +21,13 @@ const styles = theme => ({
   },
   tableWrapper: {
     whiteSpace: 'nowrap',
+    overflowY: 'scroll',
     padding: theme.spacing(1),
-    [theme.breakpoints.up('md')]: {
-      maxHeight: 450
+    [theme.breakpoints.down('md')]: {
+      maxHeight: 535
     },
     [theme.breakpoints.up('lg')]: {
-      maxHeight: 650
+      maxHeight: 700
     }
   },
   tableResponsive: {

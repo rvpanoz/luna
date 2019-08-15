@@ -18,7 +18,8 @@ import {
 import {
   npmRunDoctorEpic,
   npmRunDoctorListenerEpic,
-  showDoctorLoaderEpic
+  showDoctorLoaderEpic,
+  npmDoctorParseEpic
 } from './doctorEpics';
 
 import {
@@ -36,6 +37,7 @@ export default combineEpics(
   showAuditingLoaderEpic,
   npmAuditParseEpic,
   npmAuditParseFixEpic,
+  npmDoctorParseEpic,
   npmRunDoctorEpic,
   npmRunDoctorListenerEpic,
   showDoctorLoaderEpic,

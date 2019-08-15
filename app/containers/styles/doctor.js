@@ -3,6 +3,7 @@ import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = theme => ({
   wrapper: {
+    whiteSpace: 'nowrap',
     padding: theme.spacing(1),
     overflowY: 'scroll',
     [theme.breakpoints.down('md')]: {

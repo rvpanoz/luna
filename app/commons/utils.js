@@ -249,14 +249,23 @@ export const shrinkDirectory = directory => {
 };
 
 export const parseNpmDoctor = data => {
-  if (!data) {
-    return null;
-  }
+  console.log(data);
 
   try {
-    const dataParts = data.split('\n').map(line => line.replace(/  +/g, ' '));
+    const dataToJson = JSON.parse(data);
+    const { error } = dataToJson;
 
-    return dataParts;
+    if (error) {
+      const { code, summary } = error;
+
+      return {
+        error: true,
+        message: `${code}: ${summary}`,
+        content: null
+      };
+    }
+
+    return dataToJson;
   } catch (error) {
     throw new Error(error);
   }
