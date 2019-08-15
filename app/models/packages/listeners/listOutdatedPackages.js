@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { pick } from 'ramda';
-import { toggleLoader, setPage } from 'models/ui/actions';
+import { toggleLoader, setPage, setSnackbar } from 'models/ui/actions';
 import { updateNotifications } from 'models/notifications/actions';
 import { switchcase, objectEntries } from 'commons/utils';
 import { mapPackages, mapOutdatedPackages } from '../actions';
@@ -60,6 +60,12 @@ const onListOutdatedPackages$ = new Observable(observer => {
               loading: false
             })
           );
+
+          observer.next(setSnackbar({
+            open: false,
+            type: 'info',
+            message: null
+          }))
         },
         outdated: () => {
           observer.next(

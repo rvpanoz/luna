@@ -7,16 +7,11 @@ import { SnackbarContent } from 'components/common';
 const AppSnackbar = ({ snackbar, onClose }) => {
     const { open, type, message, position } = snackbar;
 
-    return <Snackbar
-        anchorOrigin={position}
-        open={open}
-    >
-        <SnackbarContent
-            variant={type}
-            message={message}
-            onClose={onClose}
-        />
-    </Snackbar>
+    return (
+        <Snackbar anchorOrigin={position} open={open}>
+            <SnackbarContent variant={type} message={message} onClose={onClose} />
+        </Snackbar>
+    )
 }
 
 AppSnackbar.propTypes = {
