@@ -88,7 +88,8 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
           errors,
           data: result.join(''),
           cmd: commandArgs,
-          packageJson: Boolean(packageJson)
+          packageJson: Boolean(packageJson),
+          initDirectory: isLocal && operation === 'init' ? path.join(directory, 'package.json') : null
         })
 
         observer.complete()
