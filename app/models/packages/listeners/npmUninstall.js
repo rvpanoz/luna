@@ -45,7 +45,7 @@ const onNpmUninstall$ = new Observable(observer => {
       setSnackbar({
         open: true,
         type: 'info',
-        message: resultMessage
+        message: resultMessage,
       })
     );
   }
@@ -53,7 +53,6 @@ const onNpmUninstall$ = new Observable(observer => {
 
   ipcRenderer.on('npm-uninstall-error', (event, error) => {
     console.log(error)
-    // observer.error(error);
   });
 });
 

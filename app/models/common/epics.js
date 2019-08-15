@@ -14,7 +14,7 @@ import {
   updatePackagesListener,
   uninstallPackagesListener
 } from 'models/packages/actions';
-import { clearSelected } from 'models/ui/actions';
+import { clearSelected, setSnackbar } from 'models/ui/actions';
 import {
   addActionError,
   setRunningCommand,
@@ -41,6 +41,17 @@ const updateCommand = ({
     operationCommand
   }
 });
+
+const updateSnackbar = ({ type, position, message, open, hideOnClose }) => ({
+  type: setSnackbar.type,
+  payload: {
+    open,
+    type,
+    position,
+    message,
+    hideOnClose
+  }
+})
 
 const addActionErrorEpic = pipe(
   ofType(addActionError.type),
@@ -75,6 +86,12 @@ const updateCommandEpic = pipe(
     const [runningCommand] = cmd;
 
     return [
+      updateSnackbar({
+        open: true,
+        type: 'warning',
+        message: `running npm ${runningCommand}`,
+        hideOnClose: true
+      }),
       updateCommand({
         operationStatus: 'running',
         operationCommand: runningCommand,

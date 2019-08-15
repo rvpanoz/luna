@@ -60,9 +60,8 @@ const AppSnackbarContent = ({
 }) => (
     <SnackbarContent
       className={classNames(classes[variant], classes.root)}
-      aria-describedby="cli-snackbar"
       message={
-        <div id="cli-snackbar" className={classes.message}>
+        <div id="app-snackbar" className={classes.message}>
           {variant === 'info' && (
             <InfoIcon className={classNames(classes.icon, classes.iconVariant)} />
           )}
@@ -102,7 +101,7 @@ const AppSnackbarContent = ({
   );
 
 AppSnackbarContent.defaultProps = {
-  variant: 'info'
+  variant: 'info',
 };
 
 AppSnackbarContent.propTypes = {
@@ -110,7 +109,7 @@ AppSnackbarContent.propTypes = {
   className: PropTypes.string,
   message: PropTypes.node,
   onClose: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
-  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info', 'primary'])
+  variant: PropTypes.oneOf(['success', 'warning', 'error', 'info', 'primary']),
 };
 
 const AppSnackbarContentWrapper = withStyles(styles)(AppSnackbarContent);

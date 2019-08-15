@@ -14,15 +14,14 @@ const onNpmInit = (event, options, store) => {
 
   const onFlow = chunk => event.sender.send('npm-init-flow', chunk);
   const onError = error => event.sender.send('npm-init-error', error);
-  const onComplete = (errors, data) =>
-    event.sender.send('npm-init-completed', data, errors);
+  const onComplete = (errors, data, initDirectory) => setTimeout(() => event.sender.send('npm-init-completed', errors, data, initDirectory), 2000)
 
   const callback = result => {
-    const { status, errors, data } = result;
+    const { status, errors, data, initDirectory } = result;
 
     return switchcase({
       flow: dataChunk => onFlow(dataChunk),
-      close: () => onComplete(errors, data),
+      close: () => onComplete(errors, data, initDirectory),
       error: error => onError(error)
     })(null)(status);
   };

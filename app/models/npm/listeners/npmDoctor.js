@@ -1,7 +1,12 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { setRunningCommand, parseNpmDoctorData } from 'models/npm/actions';
-import { toggleDoctorLoader, setActivePage, setSnackbar } from 'models/ui/actions';
+import {
+  toggleDoctorLoader,
+  // setActivePage,
+  setSnackbar
+}
+  from 'models/ui/actions';
 
 const updateCommand = ({
   operationStatus,
@@ -29,7 +34,7 @@ const onNpmDoctor$ = new Observable(observer => {
     );
 
     observer.next(parseNpmDoctorData(data));
-    observer.next(setActivePage({ page: 'doctor', paused: true }));
+    // observer.next(setActivePage({ page: 'doctor', paused: true }));
 
     observer.next(
       setSnackbar({
