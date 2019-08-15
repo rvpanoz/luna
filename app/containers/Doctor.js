@@ -6,17 +6,11 @@ import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 
 import Grid from '@material-ui/core/Grid';
-import Avatar from '@material-ui/core/Avatar';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-
-import CheckIcon from '@material-ui/icons/CheckOutlined';
 
 import { AppLoader, HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import { runDoctor } from 'models/npm/actions';
+import { DoctorList } from 'components/views/doctor/components';
 
 import styles from './styles/doctor';
 
@@ -27,41 +21,22 @@ const mapState = ({
     }
   },
   npm: {
-    doctor: { error, result }
+    doctor: { result }
   }
 }) => ({
   loading,
   message,
   result,
-  error
 });
 
-const renderData = data => (
-  <List disablePadding>
-    {data &&
-      data
-        .filter(value => value.length)
-        .map(dataValue => (
-          <ListItem key={dataValue}>
-            <ListItemAvatar>
-              <Avatar style={{ backgroundColor: '#fff' }}>
-                <CheckIcon color="secondary" />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={dataValue} />
-          </ListItem>
-        ))}
-  </List>
-);
-
 const Doctor = ({ classes }) => {
-  const { loading, message, result, error } = useMappedState(mapState);
+  const { loading, message, result } = useMappedState(mapState);
   const [status, setStatus] = useState({
     type: result ? 'doctor' : 'init',
     options: null
   });
+  const { content, error } = result || {};
   const dispatch = useDispatch();
-  const { type } = status;
 
   const handleDoctor = () =>
     dispatch(
@@ -79,39 +54,41 @@ const Doctor = ({ classes }) => {
   };
 
   useEffect(() => {
-    setStatus(options => ({
-      ...options,
-      type: result ? 'doctor' : 'init',
-      options: result ? null : options
-    }));
-  }, [result, loading]);
-
-  // set error
-  useEffect(() => {
     if (error) {
-      const { summary, code } = error || {};
+      const { message, code } = error || {};
 
       const errorOptions = {
-        text: summary,
+        text: message,
         code
       };
 
-      setStatus({
+      setStatus(options => ({
+        ...options,
         type: 'error',
         options: errorOptions
-      });
+      }));
+
+      return;
     }
-  }, [error]);
+
+    setStatus(options => ({
+      ...options,
+      type: content ? 'doctor' : 'init'
+    }));
+  }, [content, error, loading]);
+
+  const { type, options } = status;
 
   return (
     <AppLoader loading={loading} message={message}>
       <div className={classes.root}>
+        {type === 'error' && <HelperText {...options} />}
         {type === 'init' && <HelperText {...initOptions} />}
         {type === 'doctor' && (
           <Grid className={classes.container} container>
-            <Grid item sm={12}>
-              <div className={cn(classes.topSection, classes.wrapper)}>
-                {renderData(result)}
+            <Grid item sm={12} md={12} lg={12} xl={12}>
+              <div className={classes.wrapper}>
+                <DoctorList data={content} />
               </div>
             </Grid>
           </Grid>

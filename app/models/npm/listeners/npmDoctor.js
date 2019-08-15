@@ -1,7 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
-import { parseNpmDoctor } from 'commons/utils';
-import { setRunningCommand, updateNpmDoctorData } from 'models/npm/actions';
+import { setRunningCommand, parseNpmDoctorData } from 'models/npm/actions';
 import { toggleDoctorLoader, setActivePage, setSnackbar } from 'models/ui/actions';
 
 const updateCommand = ({
@@ -21,8 +20,6 @@ const onNpmDoctor$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-doctor-completed']);
 
   ipcRenderer.on('npm-doctor-completed', (event, data) => {
-    const content = parseNpmDoctor(data);
-
     observer.next(
       updateCommand({
         operationStatus: 'idle',
@@ -31,12 +28,7 @@ const onNpmDoctor$ = new Observable(observer => {
       })
     );
 
-    observer.next(
-      updateNpmDoctorData({
-        data: content
-      })
-    );
-
+    observer.next(parseNpmDoctorData(data));
     observer.next(setActivePage({ page: 'doctor', paused: true }));
 
     observer.next(

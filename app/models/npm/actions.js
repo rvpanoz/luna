@@ -15,6 +15,7 @@ const npmCommand = ActionCreator('NPM_COMMAND');
 
 // reporting
 const parseNpmAuditData = ActionCreator('PARSE_NPM_AUDIT_DATA');
+const parseNpmDoctorData = ActionCreator('PARSE_NPM_DOCTOR_DATA');
 const parseNpmAuditFixData = ActionCreator('PARSE_NPM_AUDIT_FIX_DATA');
 const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
 const updateNpmAuditFixData = ActionCreator('UPDATE_NPM_AUDIT_FIX_DATA');
@@ -64,6 +65,7 @@ export {
   npmDedupeListener,
   clearAuditData,
   clearDoctorData,
+  parseNpmDoctorData,
   parseNpmAuditData,
   parseNpmAuditFixData,
   updateNpmAuditFixData,
