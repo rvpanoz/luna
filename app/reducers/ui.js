@@ -10,11 +10,11 @@ import {
   clearSelected,
   clearFilters,
   clearSnackbar,
-  setSnackbar,
   toggleLoader,
   togglePackageLoader,
   toggleAuditLoader,
   toggleDoctorLoader,
+  setSnackbar,
   setActivePage,
   setUIException,
   setSortOptions,
@@ -51,12 +51,14 @@ const handlers = {
         message: null
       }
     }),
-  [setSnackbar.type]: (state, { payload: { type, open, message } }) =>
+  [setSnackbar.type]: (state, { payload: { type, open, message, position, hideOnClose } }) =>
     merge(state, {
       snackbar: {
         type,
         open,
-        message
+        message,
+        position,
+        hideOnClose
       }
     }),
   [setUIException.type]: (state, { payload: message }) =>

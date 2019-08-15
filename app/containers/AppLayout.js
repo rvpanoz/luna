@@ -1,7 +1,7 @@
 import React from 'react';
+import { useCallback } from 'react'
 import { objectOf, string } from 'prop-types';
 import cn from 'classnames';
-
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core/styles';
@@ -19,7 +19,6 @@ import appTheme from 'styles/theme';
 import Packages from './Packages';
 import Audit from './Audit';
 import Doctor from './Doctor';
-
 import styles from './styles/appLayout';
 
 const mapState = ({
@@ -35,16 +34,20 @@ const mapState = ({
 
 const AppLayout = ({ classes }) => {
   const { activePage, snackbar } = useMappedState(mapState);
-
   const dispatch = useDispatch();
-  const onClose = () =>
+
+  const onClose = useCallback(() =>
     dispatch(
       setSnackbar({
+        ...snackbar,
         open: false,
         message: null,
-        type: 'info'
+        type: 'info',
+        hideOnClose: false
       })
-    );
+    ), [dispatch, snackbar]);
+
+  const { hideOnClose } = snackbar;
 
   return (
     <MuiThemeProvider theme={appTheme}>
@@ -71,7 +74,7 @@ const AppLayout = ({ classes }) => {
           </main>
         </section>
 
-        <AppSnackbar snackbar={snackbar} onClose={onClose} />
+        <AppSnackbar snackbar={snackbar} ContentProps={{ 'aria-describedby': 'app-snackbar' }} onClose={hideOnClose ? null : onClose} />
       </div>
     </MuiThemeProvider>
   );

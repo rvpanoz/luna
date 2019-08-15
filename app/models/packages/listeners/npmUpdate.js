@@ -51,9 +51,7 @@ const onNpmUpdate$ = new Observable(observer => {
     }
   });
 
-  ipcRenderer.on('npm-update-error', (event, error) => {
-    observer.error(error);
-  });
+  ipcRenderer.on('npm-update-error', (event, error) => observer.error(error));
 });
 
 export default onNpmUpdate$;

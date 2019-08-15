@@ -71,7 +71,12 @@ const initialState = {
     snackbar: {
       type: 'info',
       open: false,
-      message: null
+      message: null,
+      positiom: {
+        vertical: 'bottom',
+        horizontal: 'right'
+      },
+      hideOnClose: false
     },
     sorting: {
       sortBy: 'name',

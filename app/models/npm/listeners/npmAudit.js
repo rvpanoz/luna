@@ -7,7 +7,7 @@ import {
 } from 'models/npm/actions';
 import {
   toggleAuditLoader,
-  setActivePage,
+  // setActivePage,
   setSnackbar
 } from 'models/ui/actions';
 import { iMessage } from 'commons/utils';
@@ -42,7 +42,7 @@ const onNpmAudit$ = new Observable(observer => {
     );
 
     observer.next(parseNpmAuditData(data));
-    observer.next(setActivePage({ page: 'audit', paused: true }));
+    // observer.next(setActivePage({ page: 'audit', paused: true }));
 
     observer.next(
       toggleAuditLoader({
