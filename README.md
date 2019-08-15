@@ -38,7 +38,7 @@ You can view my presentation in the GreeceJS meetup at http://bit.ly/2RES3AN
 - Get notifications for missing dependencies or extraneous dependencies
 - Reporting (audit/doctor)
 
-### Screenshots
+## Screenshots
 
 <div style="display: flex; flex-wrap: wrap;padding: 0 4px;">
   <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
@@ -46,6 +46,25 @@ You can view my presentation in the GreeceJS meetup at http://bit.ly/2RES3AN
   </div>
   <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
     <img style="margin-top: 8px; vertical-align: middle;" title="luna-2" src="./media/images/luna-2.png"/>
+  </div>
+</div>
+
+## How it works
+
+The Renderer Process architecture:
+
+- Action (Event) driven nature
+- The IO Management, Business Logic Management and Predictable Application State Management processors (middlewares) 
+  are subscribers of the application action stream.
+- The IO Management and Business Logic Management are consumers and producers of actions.
+- The Predictable State Management is just a consumer of actions
+- The views are listeners of the predictable state and they are re rendered whenever the predictable state changes 
+  and they produce actions upon the user interaction (clicks)
+
+
+<div style="display: flex; flex-wrap: wrap;padding: 0 4px;">
+  <div style="flex: 25%;max-width: 100%;padding: 0 4px;">
+    <img style="margin-top: 8px; vertical-align: middle;" title="luna-1" src="./media/images/luna-renderer.png"/>
   </div>
 </div>
 
