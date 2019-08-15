@@ -278,12 +278,12 @@ const view = options => {
  * npm audit
  * @param {*} options
  */
-const runAudit = (opts) => {
-  const { activeManager = 'npm', mode, directory, ...options } = opts || {};
+const runAudit = (options) => {
+  const { activeManager = 'npm', mode, directory } = options || {};
 
   try {
     const audit = require('./npm/audit').default;
-    const run = audit(opts);
+    const run = audit(options);
 
     const params = {
       activeManager,
