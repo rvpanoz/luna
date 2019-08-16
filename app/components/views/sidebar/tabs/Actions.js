@@ -13,7 +13,7 @@ import { iMessage } from 'commons/utils';
 
 import styles from './styles/actions';
 
-const ActionsTab = ({ classes, mode, onInstallPackagesFromJson, onDedupe }) => <div className={classes.tab}>
+const ActionsTab = ({ classes, mode, onInstallPackagesFromJson, onDedupe, onCacheVerify }) => <div className={classes.tab}>
   <List dense>
     <ListItem key="install-from-packagejson" className={classes.listItem}>
       <ListItemText
@@ -47,6 +47,29 @@ const ActionsTab = ({ classes, mode, onInstallPackagesFromJson, onDedupe }) => <
             </IconButton>
           </div>
         </Tooltip>
+      </ListItemSecondaryAction>
+    </ListItem>
+    <ListItem key="npm-cache-verify" className={classes.listItem}>
+      <ListItemText
+        primary={
+          <Typography className={classes.label}>
+            {iMessage('action', 'npmCacheVerify')}
+          </Typography>
+        }
+        secondary={
+          <Typography className={classes.secondaryText}>
+            {iMessage('info', 'npmCacheVerifyInfo')}
+          </Typography>
+        }
+      />
+      <ListItemSecondaryAction>
+        <IconButton
+          aria-label="action-dedupe"
+          onClick={onCacheVerify}
+          disableRipple
+        >
+          <ArrowRightIcon color="primary" />
+        </IconButton>
       </ListItemSecondaryAction>
     </ListItem>
     <ListItem key="npm-dedupe" className={classes.listItem}>
@@ -90,6 +113,7 @@ ActionsTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   onInstallPackagesFromJson: PropTypes.func.isRequired,
   onDedupe: PropTypes.func.isRequired,
+  onCacheVerify: PropTypes.func.isRequired,
   mode: PropTypes.string
 };
 

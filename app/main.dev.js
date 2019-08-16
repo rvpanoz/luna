@@ -22,6 +22,7 @@ import {
   onNpmUpdate,
   onNpmUninstall,
   onNpmAudit,
+  onNpmCache,
   onNpmDoctor,
   onNpmDedupe,
   onNpmInit,
@@ -36,10 +37,10 @@ const {
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 1024,
-  MIN_HEIGHT = 768,
+  MIN_WIDTH = 1280,
+  MIN_HEIGHT = 800,
   INSTALL_EXTENSIONS = 1,
-  UPGRADE_EXTENSIONS,
+  UPGRADE_EXTENSIONS = 1,
   NODE_ENV,
   START_MINIMIZED = startMinimized
 } = process.env;
@@ -178,6 +179,16 @@ ipcMain.on('npm-dedupe', (event, options) => onNpmDedupe(event, options, Store))
  *
  */
 ipcMain.on('npm-init-lock', (event, options) => onNpmInitLock(event, options, Store));
+
+/**
+ * Channel: npm-doctor
+ * Supports: npm doctor
+ * https://docs.npmjs.com/cli/doctor
+ *
+ */
+ipcMain.on('npm-cache', (event, options) =>
+  onNpmCache(event, options, Store)
+);
 
 /**
  * Channel: npm-doctor

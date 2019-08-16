@@ -40,6 +40,7 @@ const runInit = ActionCreator('RUN_INIT');
 const runLock = ActionCreator('RUN_INIT_LOCK');
 const runDoctor = ActionCreator('RUN_DOCTOR');
 const runDedupe = ActionCreator('RUN_DEDUPE');
+const runCache = ActionCreator('RUN_CACHE');
 
 export {
   addAuditFixOption,
@@ -59,6 +60,7 @@ export {
   runInit,
   runLock,
   runDoctor,
+  runCache,
   npmDoctorListener,
   npmAuditListener,
   npmInitListener,
