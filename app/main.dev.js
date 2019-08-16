@@ -34,6 +34,17 @@ const {
   defaultSettings: { startMinimized }
 } = mk || {};
 
+const {
+  DEBUG_PROD = 0,
+  DEBUG_DEV = 1,
+  MIN_WIDTH = 1280,
+  MIN_HEIGHT = 800,
+  INSTALL_EXTENSIONS = 1,
+  UPGRADE_EXTENSIONS = 1,
+  NODE_ENV,
+  START_MINIMIZED = startMinimized
+} = process.env;
+
 /* eslint-disable-next-line */
 const debug = /--debug/.test(process.argv[2]);
 
