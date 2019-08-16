@@ -28,6 +28,7 @@ const npmAuditListener = ActionCreator('REGISTER_LISTENER_AUDIT');
 const npmDoctorListener = ActionCreator('REGISTER_LISTENER_DOCTOR');
 const npmInitListener = ActionCreator('REGISTER_LISTENER_INIT');
 const npmDedupeListener = ActionCreator('REGISTER_LISTENER_DEDUPE');
+const npmCacheListener = ActionCreator('REGISTER_LISTENER_CACHE');
 
 // operations
 const runInstall = ActionCreator('RUN_INSTALL');
@@ -65,6 +66,7 @@ export {
   npmAuditListener,
   npmInitListener,
   npmDedupeListener,
+  npmCacheListener,
   clearAuditData,
   clearDoctorData,
   parseNpmDoctorData,

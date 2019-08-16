@@ -8,14 +8,15 @@ const {
     defaultSettings: { defaultManager }
 } = mk || {};
 
-const onNpmDedupe = (event, options, store) => {
+const onNpmCache = (event, params, store) => {
     const settings = store.get('user_settings');
-    const { activeManager = defaultManager, ...rest } = options || {};
+    const { activeManager = defaultManager, options, ...rest } = params || {};
+    const { action } = options;
 
     const onFlow = chunk => event.sender.send('npm-cache-flow', chunk);
     const onError = error => event.sender.send('npm-cache-error', error);
     const onComplete = (errors, data) =>
-        event.sender.send('npm-cache-completed', data, errors);
+        event.sender.send('npm-cache-completed', errors, data, action);
 
     const callback = result => {
         const { status, errors, data } = result;
@@ -28,16 +29,17 @@ const onNpmDedupe = (event, options, store) => {
     };
 
     try {
-        const params = merge(settings, {
+        const parameters = merge(settings, {
             activeManager,
+            action,
             ...rest
         });
 
-        runCommand(params, callback);
+        runCommand(parameters, callback);
     } catch (error) {
         log.error(error);
         event.sender.send('npm-cache-error', error && error.message);
     }
 };
 
-export default onNpmDedupe;
+export default onNpmCache;
