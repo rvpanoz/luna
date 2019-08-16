@@ -38,7 +38,7 @@ You can view my presentation in the GreeceJS meetup at http://bit.ly/2RES3AN
 - Get notifications for missing dependencies or extraneous dependencies
 - Reporting (audit/doctor)
 
-### Screenshots
+## Screenshots
 
 <div style="display: flex; flex-wrap: wrap;padding: 0 4px;">
   <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
@@ -77,7 +77,7 @@ Start the application
 
 `npm start`
 
-Start the development server and run the app in development mode:
+Start the development server and run the application in development mode:
 
 `npm run dev`
 

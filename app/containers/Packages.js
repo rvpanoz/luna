@@ -4,7 +4,6 @@ import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
-
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
@@ -14,11 +13,9 @@ import Divider from '@material-ui/core/Divider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-
 import { useFilters } from 'commons/hooks';
 import { AppLoader, HelperText } from 'components/common';
 import { scrollWrapper, iMessage } from 'commons/utils';
-
 import {
   setPackagesStart,
   viewPackageStart,
@@ -32,7 +29,6 @@ import {
   setActivePage
 } from 'models/ui/actions';
 import { setMode, clearInstallOptions } from 'models/common/actions';
-
 import {
   ToolbarView,
   HeaderView,
@@ -40,7 +36,6 @@ import {
   PackageItemView,
   DialogOptionsView
 } from 'components/views/packages';
-
 import PackageDetails from './PackageDetails';
 import styles from './styles/packages';
 

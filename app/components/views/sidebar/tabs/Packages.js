@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -12,9 +11,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import UpdateIcon from '@material-ui/icons/Update';
-
 import { AppLoader } from 'components/common';
-
 import { iMessage } from "commons/utils";
 import styles from './styles/packages';
 
@@ -63,9 +60,14 @@ const PackagesTab = ({ classes, items, loading, updatedAt }) => (
     <Divider />
     <CardActions>
       <div className={classes.cardFlexContainer}>
-        <UpdateIcon className={classes.updateIcon} />
+        <div className={classes.cardFlexContainerInner}>
+          <UpdateIcon className={classes.updateIcon} />
+          <Typography variant="caption" color="textSecondary">
+            {iMessage('info', 'updatedAt')}
+          </Typography>
+        </div>
         <Typography variant="caption" color="textSecondary">
-          {iMessage('info', 'updatedAt')}&nbsp;{updatedAt !== null ? updatedAt : '...'}
+          {updatedAt !== null ? updatedAt : '...'}
         </Typography>
       </div>
     </CardActions>

@@ -10,9 +10,8 @@ import { Sidebar } from 'components/views/sidebar';
 import { setActivePage } from 'models/ui/actions';
 import { installPackageJson } from 'models/packages/actions'
 import { setMode } from 'models/common/actions';
-import { runDedupe } from 'models/npm/actions';
+import { runDedupe, runCache } from 'models/npm/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils'
-
 import styles from './styles/appSidebar';
 
 const mapState = ({
@@ -136,6 +135,30 @@ const AppSidebar = ({ classes, className }) => {
     return showDialog(dialogHandler, dialogOptions);
   }, [dispatch]);
 
+  const cache = useCallback(() => {
+    const dialogOptions = {
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage('confirmation', 'actionRun', {
+        '%name%': 'npm cache verify'
+      }),
+      buttons: ['Cancel', 'Run']
+    };
+
+    const dialogHandler = () =>
+      dispatch(
+        runCache({
+          ipcEvent: 'cache',
+          cmd: ['cache'],
+          options: {
+            action: 'verify'
+          }
+        })
+      );
+
+    return showDialog(dialogHandler, dialogOptions);
+  }, [dispatch]);
+
   useEffect(() => {
     ipcRenderer.on('loaded-packages-close', (event, directories) =>
       updateHistory(directories)
@@ -164,6 +187,7 @@ const AppSidebar = ({ classes, className }) => {
           tabPackagesData={packagesItems}
           installPackagesFromJson={installPackagesFromJson}
           dedupe={dedupe}
+          cache={cache}
         />
       </Drawer>
     </div>

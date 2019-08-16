@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/styles';
 import { Table, TableBody, Grid, Paper, Divider } from '@material-ui/core';
-
 import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
 import NotificationItem from './NotificationItem';
 import ToolbarView from './Toolbar';
-
 import styles from './styles/list';
 
 const NotificationsList = ({

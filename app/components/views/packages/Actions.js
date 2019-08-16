@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-
 import ClearIcon from '@material-ui/icons/Clear';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -10,7 +9,6 @@ import UpdateIcon from '@material-ui/icons/Update';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import SwitchIcon from '@material-ui/icons/LoopOutlined';
-
 import { iMessage, showDialog } from 'commons/utils';
 
 export const SwitchAction = ({ handler, options }) => {

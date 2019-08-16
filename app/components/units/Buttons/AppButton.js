@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import PropTypes, { string, bool } from 'prop-types';
 import cx from 'classnames';
-
 import buttonStyle from './styles/buttonStyle';
 
 const AppButton = ({

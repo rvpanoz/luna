@@ -27,6 +27,11 @@ import {
   npmRunDedupeListenerEpic,
 } from './dedupeEpics';
 
+import {
+  npmRunCacheEpic,
+  npmRunCacheListenerEpic,
+} from './cacheEpics';
+
 export default combineEpics(
   npmRunLockEpic,
   npmRunInitEpic,
@@ -43,4 +48,6 @@ export default combineEpics(
   showDoctorLoaderEpic,
   npmRunDedupeEpic,
   npmRunDedupeListenerEpic,
+  npmRunCacheEpic,
+  npmRunCacheListenerEpic
 );

@@ -9,8 +9,10 @@ import onNpmDoctor from './npmDoctor';
 import onNpmInit from './npmInit';
 import onNpmInitLock from './npmInitLock';
 import onNpmDedupe from './npmDedupe';
+import onNpmCache from './npmCache';
 
 export {
+  onNpmCache,
   onNpmView,
   onNpmSearch,
   onNpmListOutdated,

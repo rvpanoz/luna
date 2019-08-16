@@ -371,11 +371,43 @@ const runDedupe = (options) => {
   }
 };
 
+/**
+ * npm cache
+ * @param {*} options
+ */
+const runCache = (params) => {
+  const { mode, directory, action, activeManager = 'npm' } = params;
+  let cacheAction;
+
+  try {
+    switch (action) {
+      case 'verify':
+        cacheAction = require('./npm/tooling/verify').default;
+        break;
+      default:
+        cacheAction = require('./npm/tooling/verify').default;
+    }
+
+    const run = cacheAction(params);
+    const parameters = {
+      activeManager,
+      commandArgs: run,
+      mode,
+      directory
+    }
+
+    return execute(parameters);
+  } catch (error) {
+    throw new Error(error)
+  }
+};
+
 export default {
   init: runInit,
   audit: runAudit,
   doctor: runDoctor,
   dedupe: runDedupe,
+  cache: runCache,
   list,
   outdated,
   search,

@@ -1,11 +1,8 @@
-/* eslint-disable */
-
 import React from 'react';
 import { objectOf, string, number, node } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import Icon from '@material-ui/core/Icon';
 import Typography from '@material-ui/core/Typography';
-
 import { Card, CardHeader, CardIcon } from 'components/common';
 import styles from '../styles/statsCard';
 

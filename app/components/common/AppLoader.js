@@ -12,7 +12,6 @@ import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Typography } from '@material-ui/core';
-
 import styles from './styles/appLoader';
 
 const AppLoader = ({ loading, classes, className, children, message, relative, mini }) =>

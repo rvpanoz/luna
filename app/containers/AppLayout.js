@@ -5,7 +5,6 @@ import cn from 'classnames';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-
 import AppTopBar from 'containers/AppTopBar';
 import AppSidebar from 'containers/AppSidebar';
 import AppNavigationBar from 'containers/AppNavigationBar';
@@ -15,7 +14,6 @@ import { Notifications } from 'components/views/notifications';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 import appTheme from 'styles/theme';
-
 import Packages from './Packages';
 import Audit from './Audit';
 import Doctor from './Doctor';
