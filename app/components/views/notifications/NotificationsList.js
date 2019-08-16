@@ -8,7 +8,6 @@ import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
 import NotificationItem from './NotificationItem';
 import ToolbarView from './Toolbar';
-
 import styles from './styles/list';
 
 const NotificationsList = ({

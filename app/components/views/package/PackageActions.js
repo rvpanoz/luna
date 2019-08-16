@@ -1,12 +1,10 @@
 import React from 'react';
-import { string, func} from 'prop-types'
+import { string, func } from 'prop-types'
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
-
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Delete';
 import UpdateIcon from '@material-ui/icons/Update';
-
 import { iMessage, showDialog } from 'commons/utils';
 
 export const InstallAction = ({ packageName, handler }) => {

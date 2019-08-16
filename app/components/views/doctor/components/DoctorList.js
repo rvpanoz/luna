@@ -10,7 +10,6 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import CheckIcon from '@material-ui/icons/CheckOutlined';
 import { iMessage } from 'commons/utils';
-
 import ToolbarView from './Toolbar';
 import styles from '../styles/doctorList'
 

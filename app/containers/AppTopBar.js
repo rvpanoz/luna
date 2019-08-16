@@ -4,24 +4,20 @@ import { withStyles } from '@material-ui/core/styles';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import cn from 'classnames';
-
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-
 import { Init, Settings } from 'components/views/common/';
 import { TopBar } from 'components/views/topBar/';
-
 import { showDialog } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runInit } from 'models/npm/actions';
 import { navigatorParameters } from 'commons/parameters';
 import { iMessage } from 'commons/utils';
-
 import styles from './styles/appTopBar';
 
 const mapState = ({

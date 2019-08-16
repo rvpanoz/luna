@@ -4,11 +4,9 @@ import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
-
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Popover from '@material-ui/core/Popover';
-
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import { switchcase } from 'commons/utils';
 import {
@@ -17,7 +15,6 @@ import {
   installMultiplePackages
 } from 'models/packages/actions';
 import { clearFilters } from 'models/ui/actions';
-
 import {
   ClearFiltersAction,
   LatestAction,
@@ -28,7 +25,6 @@ import {
   UpdateAction,
   UninstallAction
 } from './Actions';
-
 import Filters from './Filters';
 import styles from './styles/tableToolbar';
 

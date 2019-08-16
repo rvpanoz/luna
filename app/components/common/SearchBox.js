@@ -1,20 +1,17 @@
 /* eslint-disable react/require-default-props */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'redux-react-hook';
-
 import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from 'components/common/SnackbarContent';
 import InputBase from '@material-ui/core/InputBase';
-
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
-
 import { setActivePage, setPage, clearFilters } from 'models/ui/actions';
 import { setPackagesSearch } from 'models/packages/actions';
-
 import styles from './styles/searchBox';
 
 const SearchBox = ({ classes, disabled, onlineStatus }) => {

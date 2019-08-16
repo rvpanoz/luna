@@ -3,13 +3,11 @@
 import React from 'react';
 import semver from 'semver';
 import cn from 'classnames';
-
 import { useEffect, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { objectOf, string, func } from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
 import Popper from '@material-ui/core/Popper';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';

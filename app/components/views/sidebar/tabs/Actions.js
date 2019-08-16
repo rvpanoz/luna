@@ -10,7 +10,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ArrowRightIcon from '@material-ui/icons/ArrowRightAlt';
 import Typography from '@material-ui/core/Typography';
 import { iMessage } from 'commons/utils';
-
 import styles from './styles/actions';
 
 const ActionsTab = ({ classes, mode, onInstallPackagesFromJson, onDedupe, onCacheVerify }) => <div className={classes.tab}>

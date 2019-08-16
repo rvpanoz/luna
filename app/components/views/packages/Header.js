@@ -2,12 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useCallback, useRef } from "react";
 import { useDispatch } from "redux-react-hook";
-
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Checkbox from "@material-ui/core/Checkbox";
-
 import { addSelected } from "models/ui/actions";
 
 const columnData = [

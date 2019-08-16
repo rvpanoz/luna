@@ -1,7 +1,8 @@
 /* eslint-disable object-shorthand */
 /* eslint-disable react/state-in-constructor */
 
-import React, { Component, createFactory } from 'react';
+import React from 'react';
+import { Component, createFactory } from 'react';
 
 const withErrorBoundary = BaseComponent => {
   const factory = createFactory(BaseComponent);

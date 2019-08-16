@@ -4,7 +4,6 @@ import React from 'react';
 import { objectOf, oneOfType, string, array, object, func, number } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import { groupBy } from 'ramda';
-
 import Hidden from '@material-ui/core/Hidden';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -12,11 +11,9 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
-
 import {
   PieChart, Pie, Cell, ResponsiveContainer
 } from 'recharts';
-
 import { iMessage, switchcase } from 'commons/utils';
 import { AUDIT_TYPES } from 'constants/AppConstants';
 import { Widget, Dot } from 'components/common';

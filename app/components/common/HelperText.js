@@ -2,10 +2,8 @@ import React from 'react';
 import cn from 'classnames';
 import { string, func, bool, objectOf } from 'prop-types';
 import { withStyles } from '@material-ui/core';
-
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
 import styles from './styles/helperText';
 
 const HelperText = ({

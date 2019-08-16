@@ -12,7 +12,6 @@ import { installPackageJson } from 'models/packages/actions'
 import { setMode } from 'models/common/actions';
 import { runDedupe, runCache } from 'models/npm/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils'
-
 import styles from './styles/appSidebar';
 
 const mapState = ({

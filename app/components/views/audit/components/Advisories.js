@@ -21,7 +21,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CloseIcon from '@material-ui/icons/CloseOutlined';
-
 import { iMessage, switchcase, showDialog } from 'commons/utils';
 import { Dot } from 'components/common';
 import AdvisoryDetails from './AdvisoryDetails';

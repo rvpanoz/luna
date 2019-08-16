@@ -1,7 +1,6 @@
 import React from 'react';
 import { objectOf, arrayOf, string, func } from 'prop-types';
 import { withStyles } from '@material-ui/core';
-
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -11,9 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-
 import AddIcon from '@material-ui/icons/Add';
-
 import { iMessage } from 'commons/utils';
 import styles from './styles/dependencies';
 

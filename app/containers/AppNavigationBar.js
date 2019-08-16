@@ -5,7 +5,6 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import { objectOf, string } from 'prop-types';
 import { setActivePage } from 'models/ui/actions';
 import { NavigationBar } from 'components/views/navigationBar';
-
 import styles from './styles/appNavigationBar';
 
 const mapState = ({

@@ -1,6 +1,5 @@
 import React from 'react'
 import { objectOf, string, bool, func, oneOfType, object } from 'prop-types'
-
 import Snackbar from '@material-ui/core/Snackbar';
 import { SnackbarContent } from 'components/common';
 
