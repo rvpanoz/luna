@@ -111,7 +111,6 @@ const Packages = ({ classes }) => {
     auditData
   } = useMappedState(mapState);
 
-  const [auditPackages, setAuditPackages] = useState([]);
   const [options, toggleOptions] = useState({
     open: false,
     single: false,
@@ -174,23 +173,6 @@ const Packages = ({ classes }) => {
       })
     );
   }, [mode, directory, dispatch]);
-
-  useEffect(() => {
-    const { error, content } = auditData || {};
-
-    if (error || !content) return;
-
-    const { actions } = content;
-
-    // use only depth=1 modules
-    const packagesDepthOne =
-      actions &&
-      actions
-        .filter(({ depth, action }) => !depth || action === 'install')
-        .map(({ module }) => module);
-
-    setAuditPackages(packagesDepthOne);
-  }, [auditData]);
 
   const activePackages = fromSearch ? packagesFromSearch : packagesData;
   const [filteredPackages] = useFilters(activePackages, filters);
@@ -318,7 +300,6 @@ const Packages = ({ classes }) => {
                                 problems={problems}
                                 viewPackage={viewPackageHandler}
                                 inOperation={inOperation}
-                                inAudit={auditPackages.includes(name)}
                                 peerMissing={peerMissing}
                                 fromSearch={__fromSearch}
                                 hasError={__hasError}
