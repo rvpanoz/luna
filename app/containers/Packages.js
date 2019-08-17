@@ -48,11 +48,12 @@ const mapState = ({
   },
   packages: {
     active,
+    packagesFromSearch,
     packagesData,
     packagesOutdated,
     metadata: { fromSearch }
   },
-  npm: { operationStatus, operationPackages, operationCommand, auditData },
+  npm: { operationStatus, operationPackages, operationCommand },
   ui: {
     paused,
     loaders: { loader, packageLoader },
@@ -73,6 +74,7 @@ const mapState = ({
   packageLoader,
   action,
   filters,
+  packagesFromSearch,
   packagesData,
   packagesOutdated,
   selected,
@@ -82,13 +84,13 @@ const mapState = ({
   sortBy,
   operationStatus,
   operationPackages,
-  operationCommand,
-  auditData
+  operationCommand
 });
 
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
+    packagesFromSearch,
     packagesData,
     packagesOutdated,
     mode,
@@ -105,10 +107,8 @@ const Packages = ({ classes }) => {
     operationStatus,
     operationPackages,
     operationCommand,
-    auditData
   } = useMappedState(mapState);
 
-  const [auditPackages, setAuditPackages] = useState([]);
   const [options, toggleOptions] = useState({
     open: false,
     single: false,
@@ -172,28 +172,13 @@ const Packages = ({ classes }) => {
     );
   }, [mode, directory, dispatch]);
 
-  useEffect(() => {
-    const { error, content } = auditData || {};
-
-    if (error || !content) return;
-
-    const { actions } = content;
-
-    // use only depth=1 modules
-    const packagesDepthOne =
-      actions &&
-      actions
-        .filter(({ depth, action }) => !depth || action === 'install')
-        .map(({ module }) => module);
-
-    setAuditPackages(packagesDepthOne);
-  }, [auditData]);
-
-  const [filteredPackages] = useFilters(packagesData, filters);
+  const activePackages = fromSearch ? packagesFromSearch : packagesData;
+  const [filteredPackages] = useFilters(activePackages, filters);
 
   const data = filteredByNamePackages.length
     ? filteredByNamePackages
     : filteredPackages;
+
 
   const dataSlices =
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -203,7 +188,7 @@ const Packages = ({ classes }) => {
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-  const noPackages = !packagesData.length;
+  const noPackages = Boolean(!packagesData || !packagesData.length)
 
   return (
     <>
@@ -219,8 +204,8 @@ const Packages = ({ classes }) => {
             {noPackages && (
               <HelperText
                 text={iMessage('info', 'noPackages')}
-                actionText={iMessage('title', 'switchToGlobals')}
-                actionHandler={() => switchMode('global')}
+                actionText={mode === 'local' ? iMessage('title', 'switchToGlobals') : null}
+                actionHandler={mode === 'local' ? () => switchMode('global') : null}
               />
             )}
             {!noPackages && (
@@ -228,7 +213,7 @@ const Packages = ({ classes }) => {
                 <div className={classes.toolbar}>
                   <ToolbarView
                     title={iMessage('title', 'packages')}
-                    total={packagesData.length}
+                    total={fromSearch ? packagesFromSearch.length : packagesData.length}
                     mode={mode}
                     directory={directory}
                     selected={selected}
@@ -313,7 +298,6 @@ const Packages = ({ classes }) => {
                                 problems={problems}
                                 viewPackage={viewPackageHandler}
                                 inOperation={inOperation}
-                                inAudit={auditPackages.includes(name)}
                                 peerMissing={peerMissing}
                                 fromSearch={__fromSearch}
                                 hasError={__hasError}

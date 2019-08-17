@@ -190,4 +190,5 @@ export const ERROR_MESSAGES = {
   installationError: 'Installation error',
   updateError: 'Update error',
   uninstallError: 'Uninstall error',
+  searchMissing: 'Package name is missing or value is invalid'
 };

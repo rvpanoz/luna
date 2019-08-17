@@ -19,7 +19,7 @@ const mapState = ({
   packages: {
     packagesData,
     packagesOutdated,
-    metadata: { lastUpdatedAt }
+    metadata: { lastUpdatedAt, fromSearch }
   },
   notifications: {
     notifications
@@ -30,6 +30,7 @@ const mapState = ({
     }
   }
 }) => ({
+  fromSearch,
   mode,
   directory,
   loading,
@@ -50,28 +51,29 @@ const AppSidebar = ({ classes, className }) => {
     loading,
     packagesData,
     packagesOutdated,
-    notifications
+    notifications,
+    fromSearch
   } = useMappedState(mapState);
 
   const packagesItems = [
     {
       name: 'total-packages',
       primaryText: 'Total',
-      secondaryText: packagesData.length,
+      secondaryText: packagesData ? packagesData.length : 0,
       color: 'secondary',
       primary: true
     },
     {
       name: 'outdated-packages',
       primaryText: 'Outdated',
-      secondaryText: packagesOutdated.length,
+      secondaryText: packagesOutdated ? packagesOutdated.length : 0,
       color: 'warning',
       warning: true
     },
     {
       name: 'notifications',
       primaryText: 'Problems',
-      secondaryText: notifications.length,
+      secondaryText: notifications ? notifications.length : 0,
       color: 'error',
       error: true
     }
@@ -185,6 +187,7 @@ const AppSidebar = ({ classes, className }) => {
           loading={loading}
           updatedAt={lastUpdatedAt}
           tabPackagesData={packagesItems}
+          fromSearch={fromSearch}
           installPackagesFromJson={installPackagesFromJson}
           dedupe={dedupe}
           cache={cache}

@@ -11,7 +11,7 @@ import {
   setOutdatedSuccess,
   removePackages,
   setActive,
-  setPackagesSearch,
+  setPackagesSearchSuccess,
   updateSearchFlag
 } from 'models/packages/actions';
 import initialState from './initialState';
@@ -39,12 +39,22 @@ const handlers = {
         fromSearch
       }
     }),
-  [setPackagesSearch.type]: (state, { payload: { fromSearch, fromSort } }) =>
+  [setPackagesSearchSuccess.type]: (
+    state,
+    {
+      payload: {
+        dependencies,
+        fromSearch,
+        lastUpdatedAt
+      }
+    }
+  ) =>
     merge(state, {
+      packagesFromSearch: dependencies,
       metadata: {
         ...state.metadata,
         fromSearch,
-        fromSort
+        lastUpdatedAt
       }
     }),
   [setActive.type]: (state, { payload: { active } }) =>
@@ -52,6 +62,7 @@ const handlers = {
   [clearPackages.type]: state =>
     merge(state, {
       active: null,
+      packagesFromSearch: [],
       packagesData: [],
       packagesOutdated: [],
       metadata: {
@@ -77,6 +88,7 @@ const handlers = {
     }
   ) =>
     merge(state, {
+      packagesFromSearch: [],
       packagesData: dependencies,
       project: {
         ...state.project,

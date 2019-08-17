@@ -42,7 +42,7 @@ import {
 import { searchEpic, updateSearchFlagEpic } from './searchEpics';
 
 // transformation related epics
-import { mapPackagesEpic, mapOutdatedPackagesEpic } from './transformEpics';
+import { mapSearchPackagesEpic, mapPackagesEpic, mapOutdatedPackagesEpic } from './transformEpics';
 
 export default combineEpics(
   listOutdatedPackagesListenerEpic,
@@ -61,6 +61,7 @@ export default combineEpics(
   installPackageJsonEpic,
   showInstallLoaderEpic,
   showUpdateLoaderEpic,
+  mapSearchPackagesEpic,
   mapPackagesEpic,
   mapOutdatedPackagesEpic,
   searchEpic,
