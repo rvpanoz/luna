@@ -10,8 +10,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
 import { setActivePage, setPage, clearFilters, setSnackbar } from 'models/ui/actions';
 import { setPackagesSearchStart } from 'models/packages/actions';
-import styles from './styles/searchBox';
 import { iMessage } from 'commons/utils';
+import styles from './styles/searchBox';
 
 const SearchBox = ({ classes, disabled, onlineStatus }) => {
   const searchInputEl = useRef(null);

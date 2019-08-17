@@ -31,13 +31,9 @@ const setOutdatedPackages = payload => ({
   payload
 });
 
-const mapSearchPackagesEpic = (action$, state$) => action$.pipe(
+const mapSearchPackagesEpic = action$ => action$.pipe(
   ofType(mapSearchPackages.type),
   map(({ payload: { data, fromSearch } }) => {
-    const {
-      common: { mode, directory }
-    } = state$.value;
-
     const enhancedDependencies = data.map(({ name, version }) => ({
       name,
       latest: version,

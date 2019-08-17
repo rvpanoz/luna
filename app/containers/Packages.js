@@ -53,7 +53,7 @@ const mapState = ({
     packagesOutdated,
     metadata: { fromSearch }
   },
-  npm: { operationStatus, operationPackages, operationCommand, auditData },
+  npm: { operationStatus, operationPackages, operationCommand },
   ui: {
     paused,
     loaders: { loader, packageLoader },
@@ -84,8 +84,7 @@ const mapState = ({
   sortBy,
   operationStatus,
   operationPackages,
-  operationCommand,
-  auditData
+  operationCommand
 });
 
 const Packages = ({ classes }) => {
@@ -108,7 +107,6 @@ const Packages = ({ classes }) => {
     operationStatus,
     operationPackages,
     operationCommand,
-    auditData
   } = useMappedState(mapState);
 
   const [options, toggleOptions] = useState({
