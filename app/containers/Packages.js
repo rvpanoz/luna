@@ -48,6 +48,7 @@ const mapState = ({
   },
   packages: {
     active,
+    packagesFromSearch,
     packagesData,
     packagesOutdated,
     metadata: { fromSearch }
@@ -73,6 +74,7 @@ const mapState = ({
   packageLoader,
   action,
   filters,
+  packagesFromSearch,
   packagesData,
   packagesOutdated,
   selected,
@@ -89,6 +91,7 @@ const mapState = ({
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
+    packagesFromSearch,
     packagesData,
     packagesOutdated,
     mode,
@@ -189,11 +192,13 @@ const Packages = ({ classes }) => {
     setAuditPackages(packagesDepthOne);
   }, [auditData]);
 
-  const [filteredPackages] = useFilters(packagesData, filters);
+  const activePackages = fromSearch ? packagesFromSearch : packagesData;
+  const [filteredPackages] = useFilters(activePackages, filters);
 
   const data = filteredByNamePackages.length
     ? filteredByNamePackages
     : filteredPackages;
+
 
   const dataSlices =
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -203,7 +208,7 @@ const Packages = ({ classes }) => {
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-  const noPackages = !packagesData.length;
+  const noPackages = Boolean(!packagesData || !packagesData.length)
 
   return (
     <>
@@ -219,8 +224,8 @@ const Packages = ({ classes }) => {
             {noPackages && (
               <HelperText
                 text={iMessage('info', 'noPackages')}
-                actionText={iMessage('title', 'switchToGlobals')}
-                actionHandler={() => switchMode('global')}
+                actionText={mode === 'local' ? iMessage('title', 'switchToGlobals') : null}
+                actionHandler={mode === 'local' ? () => switchMode('global') : null}
               />
             )}
             {!noPackages && (
@@ -228,7 +233,7 @@ const Packages = ({ classes }) => {
                 <div className={classes.toolbar}>
                   <ToolbarView
                     title={iMessage('title', 'packages')}
-                    total={packagesData.length}
+                    total={fromSearch ? packagesFromSearch.length : packagesData.length}
                     mode={mode}
                     directory={directory}
                     selected={selected}

@@ -15,7 +15,7 @@ import { AppLoader } from 'components/common';
 import { iMessage } from "commons/utils";
 import styles from './styles/packages';
 
-const PackagesTab = ({ classes, items, loading, updatedAt }) => (
+const PackagesTab = ({ classes, items, loading, updatedAt, fromSearch }) => (
   <Card className={classes.card}>
     <CardContent>
       <Typography
@@ -26,7 +26,7 @@ const PackagesTab = ({ classes, items, loading, updatedAt }) => (
       </Typography>
       <Divider />
       <div className={classes.tab}>
-        <AppLoader relative mini loading={loading} className={classes.loader}>
+        <AppLoader relative mini loading={loading && !fromSearch} className={classes.loader}>
           <List disablePadding>
             {items &&
               items.map(item => (
@@ -78,6 +78,7 @@ PackagesTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   loading: PropTypes.bool,
+  fromSearch: PropTypes.bool,
   updatedAt: PropTypes.string
 };
 

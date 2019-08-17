@@ -12,6 +12,7 @@ import styles from './styles/sidebar';
 const Sidebar = ({
   classes,
   loading,
+  fromSearch,
   mode,
   history,
   loadDirectory,
@@ -28,6 +29,7 @@ const Sidebar = ({
           items={tabPackagesData}
           updatedAt={updatedAt}
           loading={loading}
+          fromSearch={fromSearch}
         />
         <ActionsTab onInstallPackagesFromJson={installPackagesFromJson} onDedupe={dedupe} mode={mode} loading={loading} onCacheVerify={cache} />
         <HistoryTab
@@ -49,6 +51,7 @@ Sidebar.propTypes = {
   dedupe: func.isRequired,
   cache: func.isRequired,
   updatedAt: string,
+  fromSearch: bool,
   tabPackagesData: arrayOf(object)
 };
 

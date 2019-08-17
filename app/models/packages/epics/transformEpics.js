@@ -4,7 +4,6 @@ import format from 'date-fns/format';
 import { map } from 'rxjs/operators';
 import { pipe } from 'rxjs';
 import { ofType } from 'redux-observable';
-
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import { readPackageJson } from 'commons/utils';
 
@@ -12,8 +11,15 @@ import {
   mapPackages,
   mapOutdatedPackages,
   setPackagesSuccess,
-  setOutdatedSuccess
+  setPackagesSearchSuccess,
+  setOutdatedSuccess,
+  mapSearchPackages
 } from '../actions';
+
+const setSearchPackages = payload => ({
+  type: setPackagesSearchSuccess.type,
+  payload
+});
 
 const setPackages = payload => ({
   type: setPackagesSuccess.type,
@@ -24,6 +30,27 @@ const setOutdatedPackages = payload => ({
   type: setOutdatedSuccess.type,
   payload
 });
+
+const mapSearchPackagesEpic = (action$, state$) => action$.pipe(
+  ofType(mapSearchPackages.type),
+  map(({ payload: { data, fromSearch } }) => {
+    const {
+      common: { mode, directory }
+    } = state$.value;
+
+    const enhancedDependencies = data.map(({ name, version }) => ({
+      name,
+      latest: version,
+      version: null
+    }))
+
+    return setSearchPackages({
+      dependencies: enhancedDependencies,
+      fromSearch,
+      lastUpdatedAt: format(new Date(), 'DD/MM/YYYY h:mm')
+    });
+  })
+)
 
 const mapPackagesEpic = (action$, state$) =>
   action$.pipe(
@@ -137,4 +164,4 @@ const mapOutdatedPackagesEpic = pipe(
   map(alldependencies => setOutdatedPackages({ outdated: alldependencies }))
 );
 
-export { mapPackagesEpic, mapOutdatedPackagesEpic };
+export { mapPackagesEpic, mapOutdatedPackagesEpic, mapSearchPackagesEpic };

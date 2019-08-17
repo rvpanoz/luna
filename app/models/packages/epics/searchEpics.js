@@ -5,13 +5,11 @@ import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
-
 import { clearSelected, toggleLoader } from 'models/ui/actions';
 import { clearInstallOptions } from 'models/common/actions';
-import { clearNotifications } from 'models/notifications/actions';
-import { clearCommands, clearAuditData } from 'models/npm/actions';
+import { clearCommands } from 'models/npm/actions';
 import { iMessage } from 'commons/utils';
-import { setPackagesSearch, updateSearchFlag, clearPackages } from '../actions';
+import { updateSearchFlag, setPackagesSearchStart } from '../actions';
 
 const updateLoader = payload => ({
   type: toggleLoader.type,
@@ -19,7 +17,7 @@ const updateLoader = payload => ({
 });
 
 const updateSearchFlagEpic = pipe(
-  ofType(setPackagesSearch.type),
+  ofType(setPackagesSearchStart.type),
   map(() =>
     updateSearchFlag({
       fromSearch: true
@@ -29,7 +27,7 @@ const updateSearchFlagEpic = pipe(
 
 const searchEpic = (action$, state$) =>
   action$.pipe(
-    ofType(setPackagesSearch.type),
+    ofType(setPackagesSearchStart.type),
     tap(({ payload: { channel, options } }) => {
       const {
         common: { mode, directory }
@@ -48,12 +46,9 @@ const searchEpic = (action$, state$) =>
         loading: true,
         message: iMessage('info', 'searching')
       }),
-      clearAuditData(),
       clearSelected(),
       clearCommands(),
-      clearNotifications(),
       clearInstallOptions(),
-      clearPackages()
     ])
   );
 

@@ -5,20 +5,18 @@ import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'redux-react-hook';
-import Snackbar from '@material-ui/core/Snackbar';
-import SnackbarContent from 'components/common/SnackbarContent';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
-import { setActivePage, setPage, clearFilters } from 'models/ui/actions';
-import { setPackagesSearch } from 'models/packages/actions';
+import { setActivePage, setPage, clearFilters, setSnackbar } from 'models/ui/actions';
+import { setPackagesSearchStart } from 'models/packages/actions';
 import styles from './styles/searchBox';
+import { iMessage } from 'commons/utils';
 
 const SearchBox = ({ classes, disabled, onlineStatus }) => {
   const searchInputEl = useRef(null);
   const dispatch = useDispatch();
   const [packageName, setPackageName] = useState('');
-  const [snackbarOpen, toggleSnackbar] = useState(false);
 
   const handleClear = () => {
     const { current } = searchInputEl;
@@ -32,10 +30,20 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
   };
 
   const handleSearch = () => {
-    toggleSnackbar(false);
+    dispatch(setSnackbar({
+      open: false,
+      type: 'info',
+      message: null
+    }))
 
-    if (!packageName) {
-      return toggleSnackbar(true);
+    if (!packageName || packageName.length < 2) {
+      dispatch(setSnackbar({
+        open: true,
+        type: 'error',
+        message: iMessage('error', 'searchMissing')
+      }))
+
+      return;
     }
 
     dispatch(clearFilters());
@@ -56,7 +64,7 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
     });
 
     dispatch(
-      setPackagesSearch({
+      setPackagesSearchStart({
         channel: 'npm-search',
         options: {
           cmd: ['search'],
@@ -117,21 +125,6 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
           ref: searchInputEl
         }}
       />
-      <Snackbar
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center'
-        }}
-        open={snackbarOpen}
-        autoHideDuration={5000}
-        onClose={() => toggleSnackbar(false)}
-      >
-        <SnackbarContent
-          onClose={() => toggleSnackbar(false)}
-          variant="error"
-          message="Package name is missing or value is invalid"
-        />
-      </Snackbar>
     </div>
   );
 };
