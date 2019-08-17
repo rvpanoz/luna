@@ -131,7 +131,7 @@ const Packages = ({ classes }) => {
     );
   }, [dispatch]);
 
-  const switchMode = useCallback((appMode, appDirectory) => {
+  const switchModeHandler = useCallback((appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
     dispatch(setActivePage({ page: 'packages', paused: false }));
 
@@ -188,7 +188,7 @@ const Packages = ({ classes }) => {
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-  const noPackages = Boolean(!packagesData || !packagesData.length)
+  const noPackages = Boolean(!packagesData || !packagesData.length) && !fromSearch
 
   return (
     <>
@@ -205,7 +205,7 @@ const Packages = ({ classes }) => {
               <HelperText
                 text={iMessage('info', 'noPackages')}
                 actionText={mode === 'local' ? iMessage('title', 'switchToGlobals') : null}
-                actionHandler={mode === 'local' ? () => switchMode('global') : null}
+                actionHandler={mode === 'local' ? () => switchModeHandler('global') : null}
               />
             )}
             {!noPackages && (
@@ -226,7 +226,7 @@ const Packages = ({ classes }) => {
                       scrollWrapper(wrapperRef && wrapperRef.current, 0)
                     }
                     toggleOptions={toggleOptions}
-                    switchMode={switchMode}
+                    switchMode={switchModeHandler}
                     reload={reload}
                     filteredByNamePackages={filteredByNamePackages}
                     setFilteredByNamePackages={setFilteredByNamePackages}
@@ -341,7 +341,6 @@ const Packages = ({ classes }) => {
           </Grid>
         </Grid>
       </AppLoader>
-
       <Dialog
         open={options.open}
         fullWidth
@@ -359,7 +358,6 @@ const Packages = ({ classes }) => {
         <DialogContent>
           <DialogOptionsView
             selected={selected.length ? selected : active ? [active.name] : []}
-            packagesInstallOptions={packagesInstallOptions}
           />
         </DialogContent>
         <DialogActions>

@@ -7,7 +7,7 @@
 const uninstall = options => {
   const command = ['uninstall'];
   const { name, mode, multiple, packages } = options;
-  const defaults = ['--verbose', '--no-audit'];
+  const defaults = ['--no-audit', '--verbose'];
 
   function getNames() {
     if (multiple && Array.isArray(packages)) {

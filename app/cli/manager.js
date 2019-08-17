@@ -30,7 +30,8 @@ const cwd = process.cwd();
 
 const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, packageJson }) => {
   const [operation] = commandArgs;
-  const isLocal = mode === 'local' && directory;
+  const { NODE_ENV } = process.env;
+  const isLocal = Boolean(mode === 'local' && directory);
 
   const result$ = new Observable((observer) => {
     const result = [];
@@ -60,6 +61,10 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
 
         result.push(dataString);
 
+        if (NODE_ENV === 'development') {
+          console.log(dataString)
+        }
+
         // emit flow data
         observer.next({
           status: 'flow',
@@ -69,6 +74,10 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
 
       command.stderr.on('data', error => {
         const errorString = String(error);
+
+        // if (NODE_ENV === 'development') {
+        //   console.log(errorString)
+        // }
 
         errors += errorString
       });

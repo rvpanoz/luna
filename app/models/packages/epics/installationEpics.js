@@ -104,7 +104,9 @@ const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(installMultiplePackages.type),
     tap(({ payload }) => {
-      const { pkgOptions } = payload;
+
+      // use selectedFromNotifications for installation from notifications
+      const { pkgOptions, selectedFromNotifications } = payload;
 
       const {
         common: {
@@ -115,7 +117,8 @@ const installMultiplePackagesEpic = (action$, state$) =>
         ui: { selected }
       } = state$.value;
 
-      const options = selected.map((selectedPackage, idx) => {
+      const selectedPackages = selectedFromNotifications || selected;
+      const options = selectedPackages.map((selectedPackage, idx) => {
         const pkg = packagesInstallOptions.find(
           option => option.name === selectedPackage
         );

@@ -14,7 +14,7 @@ import Divider from '@material-ui/core/Divider';
 
 import styles from './styles/options';
 
-const Options = ({ classes, packagesInstallOptions, selected }) => {
+const Options = ({ classes, selected }) => {
   const dispatch = useDispatch();
 
   return (
@@ -24,37 +24,26 @@ const Options = ({ classes, packagesInstallOptions, selected }) => {
       </Typography>
       <Divider />
       <List dense className={classes.list}>
-        {selected.map(packageName => {
-          const option =
-            packagesInstallOptions &&
-            packagesInstallOptions.find(
-              installOption => installOption.name === packageName
-            );
-
-          return (
-            <ListItem key={packageName}>
-              <ListItemText
-                primary={
-                  <Typography variant="subtitle1">{packageName}</Typography>
-                }
-              />
-              <ListItemSecondaryAction>
-                <ControlTypes
-                  selectedValue={option && option.options[0]}
-                  packageName={packageName}
-                  onSelect={({ name, options }) =>
-                    dispatch(
-                      addInstallOption({
-                        name,
-                        options
-                      })
-                    )
-                  }
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
-        })}
+        {selected.map(packageName => <ListItem key={packageName}>
+          <ListItemText
+            primary={
+              <Typography variant="subtitle1">{packageName}</Typography>
+            }
+          />
+          <ListItemSecondaryAction>
+            <ControlTypes
+              packageName={packageName}
+              onSelect={({ name, options }) =>
+                dispatch(
+                  addInstallOption({
+                    name,
+                    options
+                  })
+                )
+              }
+            />
+          </ListItemSecondaryAction>
+        </ListItem>)}
       </List>
     </div>
   );
