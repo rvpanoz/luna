@@ -37,7 +37,7 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
     const result = [];
     let errors = '';
 
-    console.log(
+    NODE_ENV === 'development' && console.log(
       chalk.blueBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
     );
 
@@ -73,11 +73,11 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
       });
 
       command.on('exit', code => {
-        console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
+        NODE_ENV === 'development' && console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
       });
 
       command.on('close', () => {
-        console.log(
+        NODE_ENV === 'development' && console.log(
           chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
         );
 

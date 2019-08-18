@@ -52,7 +52,6 @@ const Options = ({ classes, selected }) => {
 Options.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
-  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(Options);
