@@ -30,13 +30,14 @@ const cwd = process.cwd();
 
 const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, packageJson }) => {
   const [operation] = commandArgs;
-  const isLocal = mode === 'local' && directory;
+  const { NODE_ENV } = process.env;
+  const isLocal = Boolean(mode === 'local' && directory);
 
   const result$ = new Observable((observer) => {
     const result = [];
     let errors = '';
 
-    console.log(
+    NODE_ENV === 'development' && console.log(
       chalk.blueBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
     );
 
@@ -57,28 +58,26 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
 
       command.stdout.on('data', data => {
         const dataString = String(data);
-
         result.push(dataString);
 
         // emit flow data
         observer.next({
           status: 'flow',
           data: result
-        })
+        });
       });
 
       command.stderr.on('data', error => {
         const errorString = String(error);
-
-        errors += errorString
+        errors += errorString;
       });
 
       command.on('exit', code => {
-        console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
+        NODE_ENV === 'development' && console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
       });
 
       command.on('close', () => {
-        console.log(
+        NODE_ENV === 'development' && console.log(
           chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
         );
 
@@ -90,14 +89,13 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
           cmd: commandArgs,
           packageJson: Boolean(packageJson),
           initDirectory: isLocal && operation === 'init' ? path.join(directory, 'package.json') : null
-        })
+        });
 
-        observer.complete()
+        observer.complete();
       });
     } catch (error) {
       observer.error(error)
     }
-
   })
 
   return result$;

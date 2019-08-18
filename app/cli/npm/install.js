@@ -21,14 +21,7 @@ const install = (options, idx) => {
     packageLock
   } = options || {};
 
-  // '--unsafe-perm'
-  // '--verbose'
-  const defaults = ['--no-audit', '--ignore-scripts'];
-
-  // install from package.json file
-  // if (packageJson) {
-  //   return command.concat(['--ignore-scripts']);
-  // }
+  const defaults = ['--no-audit', '--ignore-scripts', '--verbose'];
 
   // create package-lock.json file
   if (packageLock) {
