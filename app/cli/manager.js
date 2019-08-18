@@ -58,28 +58,18 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
 
       command.stdout.on('data', data => {
         const dataString = String(data);
-
         result.push(dataString);
-
-        if (NODE_ENV === 'development') {
-          console.log(dataString)
-        }
 
         // emit flow data
         observer.next({
           status: 'flow',
           data: result
-        })
+        });
       });
 
       command.stderr.on('data', error => {
         const errorString = String(error);
-
-        // if (NODE_ENV === 'development') {
-        //   console.log(errorString)
-        // }
-
-        errors += errorString
+        errors += errorString;
       });
 
       command.on('exit', code => {
@@ -99,14 +89,13 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
           cmd: commandArgs,
           packageJson: Boolean(packageJson),
           initDirectory: isLocal && operation === 'init' ? path.join(directory, 'package.json') : null
-        })
+        });
 
-        observer.complete()
+        observer.complete();
       });
     } catch (error) {
       observer.error(error)
     }
-
   })
 
   return result$;
