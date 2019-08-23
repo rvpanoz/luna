@@ -3,18 +3,14 @@
 import React from 'react';
 import { objectOf, oneOfType, string, array, object } from 'prop-types';
 import { withStyles } from '@material-ui/core';
-import { groupBy } from 'ramda';
-
 import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
-
 import Add from '@material-ui/icons/Add';
 import Update from '@material-ui/icons/Update';
-
 import { iMessage } from 'commons/utils';
 import { Widget } from 'components/common';
 import styles from '../styles/listTypes';

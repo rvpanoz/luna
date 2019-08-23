@@ -5,7 +5,6 @@ import { useRef, useCallback, useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { remove, prepend } from 'ramda';
 import { useDispatch } from 'redux-react-hook';
-
 import Divider from '@material-ui/core/Divider';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -15,9 +14,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
-
 import SearchIcon from '@material-ui/icons/Search';
-
 import { iMessage } from 'commons/utils';
 import { updateFilters } from 'models/ui/actions';
 import styles from './styles/tableFilters';

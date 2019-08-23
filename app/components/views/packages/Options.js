@@ -2,11 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
-
 import { ControlTypes } from 'components/common';
 import { addInstallOption } from 'models/common/actions';
 import { iMessage } from 'commons/utils';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -16,7 +14,7 @@ import Divider from '@material-ui/core/Divider';
 
 import styles from './styles/options';
 
-const Options = ({ classes, packagesInstallOptions, selected }) => {
+const Options = ({ classes, selected }) => {
   const dispatch = useDispatch();
 
   return (
@@ -26,37 +24,26 @@ const Options = ({ classes, packagesInstallOptions, selected }) => {
       </Typography>
       <Divider />
       <List dense className={classes.list}>
-        {selected.map(packageName => {
-          const option =
-            packagesInstallOptions &&
-            packagesInstallOptions.find(
-              installOption => installOption.name === packageName
-            );
-
-          return (
-            <ListItem key={packageName}>
-              <ListItemText
-                primary={
-                  <Typography variant="subtitle1">{packageName}</Typography>
-                }
-              />
-              <ListItemSecondaryAction>
-                <ControlTypes
-                  selectedValue={option && option.options[0]}
-                  packageName={packageName}
-                  onSelect={({ name, options }) =>
-                    dispatch(
-                      addInstallOption({
-                        name,
-                        options
-                      })
-                    )
-                  }
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
-        })}
+        {selected.map(packageName => <ListItem key={packageName}>
+          <ListItemText
+            primary={
+              <Typography variant="subtitle1">{packageName}</Typography>
+            }
+          />
+          <ListItemSecondaryAction>
+            <ControlTypes
+              packageName={packageName}
+              onSelect={({ name, options }) =>
+                dispatch(
+                  addInstallOption({
+                    name,
+                    options
+                  })
+                )
+              }
+            />
+          </ListItemSecondaryAction>
+        </ListItem>)}
       </List>
     </div>
   );
@@ -65,7 +52,6 @@ const Options = ({ classes, packagesInstallOptions, selected }) => {
 Options.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
-  packagesInstallOptions: PropTypes.arrayOf(PropTypes.object)
 };
 
 export default withStyles(styles)(Options);

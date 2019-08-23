@@ -22,7 +22,7 @@ const styles = theme => ({
   },
   cardFlexContainerInner: {
     ...flexContainer,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   cardLabel: {
     ...defaultFont,
@@ -42,7 +42,7 @@ const styles = theme => ({
   },
   updateIcon: {
     color: lighten(theme.palette.primary.main, 0.2),
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1) / 2
   },
   primaryColor: {
     color: theme.palette.primary.main

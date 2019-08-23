@@ -39,7 +39,6 @@ const flexContainer = {
   display: 'flex',
   margin: 0,
   padding: 0,
-  flexFlow: 'row wrap'
 };
 
 /* box shadows */

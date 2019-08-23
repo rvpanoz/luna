@@ -10,7 +10,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import InfoIcon from '@material-ui/icons/InfoTwoTone';
 import { iMessage } from 'commons/utils';
-
 import styles from './styles/listItem';
 
 const NotificationItem = ({

@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { toggleLoader } from 'models/ui/actions';
 import { Observable } from 'rxjs';
 import { parseFromSearch } from 'commons/utils';
-import { mapPackages } from '../actions';
+import { mapSearchPackages } from '../actions';
 
 const onSearchPackages$ = new Observable(observer => {
   ipcRenderer.removeAllListeners(['npm-search-completed']);
@@ -12,7 +12,7 @@ const onSearchPackages$ = new Observable(observer => {
       const [packages] = parseFromSearch(data) || [];
 
       observer.next(
-        mapPackages({
+        mapSearchPackages({
           data: packages,
           fromSearch: true
         })

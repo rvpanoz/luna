@@ -5,11 +5,9 @@ import { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { directoryParameters } from 'commons/parameters';
 import { iMessage } from 'commons/utils';
-
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
 import styles from './styles/initForm';
 
 const Init = ({ classes, enableInit }) => {

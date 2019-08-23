@@ -4,7 +4,6 @@ import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
-
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
@@ -14,11 +13,9 @@ import Divider from '@material-ui/core/Divider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-
 import { useFilters } from 'commons/hooks';
 import { AppLoader, HelperText } from 'components/common';
 import { scrollWrapper, iMessage } from 'commons/utils';
-
 import {
   setPackagesStart,
   viewPackageStart,
@@ -32,7 +29,6 @@ import {
   setActivePage
 } from 'models/ui/actions';
 import { setMode, clearInstallOptions } from 'models/common/actions';
-
 import {
   ToolbarView,
   HeaderView,
@@ -40,7 +36,6 @@ import {
   PackageItemView,
   DialogOptionsView
 } from 'components/views/packages';
-
 import PackageDetails from './PackageDetails';
 import styles from './styles/packages';
 
@@ -53,11 +48,12 @@ const mapState = ({
   },
   packages: {
     active,
+    packagesFromSearch,
     packagesData,
     packagesOutdated,
     metadata: { fromSearch }
   },
-  npm: { operationStatus, operationPackages, operationCommand, auditData },
+  npm: { operationStatus, operationPackages, operationCommand },
   ui: {
     paused,
     loaders: { loader, packageLoader },
@@ -78,6 +74,7 @@ const mapState = ({
   packageLoader,
   action,
   filters,
+  packagesFromSearch,
   packagesData,
   packagesOutdated,
   selected,
@@ -87,13 +84,13 @@ const mapState = ({
   sortBy,
   operationStatus,
   operationPackages,
-  operationCommand,
-  auditData
+  operationCommand
 });
 
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
+    packagesFromSearch,
     packagesData,
     packagesOutdated,
     mode,
@@ -110,10 +107,8 @@ const Packages = ({ classes }) => {
     operationStatus,
     operationPackages,
     operationCommand,
-    auditData
   } = useMappedState(mapState);
 
-  const [auditPackages, setAuditPackages] = useState([]);
   const [options, toggleOptions] = useState({
     open: false,
     single: false,
@@ -136,7 +131,7 @@ const Packages = ({ classes }) => {
     );
   }, [dispatch]);
 
-  const switchMode = useCallback((appMode, appDirectory) => {
+  const switchModeHandler = useCallback((appMode, appDirectory) => {
     dispatch(setMode({ mode: appMode, directory: appDirectory }));
     dispatch(setActivePage({ page: 'packages', paused: false }));
 
@@ -177,28 +172,13 @@ const Packages = ({ classes }) => {
     );
   }, [mode, directory, dispatch]);
 
-  useEffect(() => {
-    const { error, content } = auditData || {};
-
-    if (error || !content) return;
-
-    const { actions } = content;
-
-    // use only depth=1 modules
-    const packagesDepthOne =
-      actions &&
-      actions
-        .filter(({ depth, action }) => !depth || action === 'install')
-        .map(({ module }) => module);
-
-    setAuditPackages(packagesDepthOne);
-  }, [auditData]);
-
-  const [filteredPackages] = useFilters(packagesData, filters);
+  const activePackages = fromSearch ? packagesFromSearch : packagesData;
+  const [filteredPackages] = useFilters(activePackages, filters);
 
   const data = filteredByNamePackages.length
     ? filteredByNamePackages
     : filteredPackages;
+
 
   const dataSlices =
     data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -208,7 +188,7 @@ const Packages = ({ classes }) => {
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-  const noPackages = !packagesData.length;
+  const noPackages = Boolean(!packagesData || !packagesData.length) && !fromSearch
 
   return (
     <>
@@ -224,8 +204,8 @@ const Packages = ({ classes }) => {
             {noPackages && (
               <HelperText
                 text={iMessage('info', 'noPackages')}
-                actionText={iMessage('title', 'switchToGlobals')}
-                actionHandler={() => switchMode('global')}
+                actionText={mode === 'local' ? iMessage('title', 'switchToGlobals') : null}
+                actionHandler={mode === 'local' ? () => switchModeHandler('global') : null}
               />
             )}
             {!noPackages && (
@@ -233,7 +213,7 @@ const Packages = ({ classes }) => {
                 <div className={classes.toolbar}>
                   <ToolbarView
                     title={iMessage('title', 'packages')}
-                    total={packagesData.length}
+                    total={fromSearch ? packagesFromSearch.length : packagesData.length}
                     mode={mode}
                     directory={directory}
                     selected={selected}
@@ -246,7 +226,7 @@ const Packages = ({ classes }) => {
                       scrollWrapper(wrapperRef && wrapperRef.current, 0)
                     }
                     toggleOptions={toggleOptions}
-                    switchMode={switchMode}
+                    switchMode={switchModeHandler}
                     reload={reload}
                     filteredByNamePackages={filteredByNamePackages}
                     setFilteredByNamePackages={setFilteredByNamePackages}
@@ -318,7 +298,6 @@ const Packages = ({ classes }) => {
                                 problems={problems}
                                 viewPackage={viewPackageHandler}
                                 inOperation={inOperation}
-                                inAudit={auditPackages.includes(name)}
                                 peerMissing={peerMissing}
                                 fromSearch={__fromSearch}
                                 hasError={__hasError}
@@ -362,7 +341,6 @@ const Packages = ({ classes }) => {
           </Grid>
         </Grid>
       </AppLoader>
-
       <Dialog
         open={options.open}
         fullWidth
@@ -380,7 +358,6 @@ const Packages = ({ classes }) => {
         <DialogContent>
           <DialogOptionsView
             selected={selected.length ? selected : active ? [active.name] : []}
-            packagesInstallOptions={packagesInstallOptions}
           />
         </DialogContent>
         <DialogActions>

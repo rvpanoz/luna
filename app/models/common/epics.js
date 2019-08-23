@@ -22,10 +22,12 @@ import {
   npmDoctorListener,
   npmInitListener,
   npmDedupeListener,
+  npmCacheListener,
   runDedupe,
   runDoctor,
   runAudit,
-  runInit
+  runInit,
+  runCache
 } from 'models/npm/actions';
 import { initActions } from 'models/common/actions';
 
@@ -79,7 +81,8 @@ const updateCommandEpic = pipe(
     runAudit.type,
     runDoctor.type,
     runInit.type,
-    runDedupe.type
+    runDedupe.type,
+    runCache.type
   ),
   mergeMap(({ payload }) => {
     const { packages, cmd } = payload || {};
@@ -119,7 +122,8 @@ const onInitActionsEpic = pipe(
     npmAuditListener(),
     npmDoctorListener(),
     npmInitListener(),
-    npmDedupeListener()
+    npmDedupeListener(),
+    npmCacheListener()
   ])
 );
 

@@ -22,6 +22,7 @@ import {
   onNpmUpdate,
   onNpmUninstall,
   onNpmAudit,
+  onNpmCache,
   onNpmDoctor,
   onNpmDedupe,
   onNpmInit,
@@ -33,17 +34,6 @@ const {
   defaultSettings: { startMinimized }
 } = mk || {};
 
-const {
-  DEBUG_PROD = 0,
-  DEBUG_DEV = 1,
-  MIN_WIDTH = 1024,
-  MIN_HEIGHT = 768,
-  INSTALL_EXTENSIONS = 1,
-  UPGRADE_EXTENSIONS,
-  NODE_ENV,
-  START_MINIMIZED = startMinimized
-} = process.env;
-
 /* eslint-disable-next-line */
 const debug = /--debug/.test(process.argv[2]);
 
@@ -52,6 +42,17 @@ const APP_PATHS = {
   appData: app.getPath('appData'),
   userData: app.getPath('userData')
 };
+
+const {
+  DEBUG_PROD = 0,
+  DEBUG_DEV = 1,
+  MIN_WIDTH = 1024,
+  MIN_HEIGHT = 768,
+  INSTALL_EXTENSIONS = 1,
+  UPGRADE_EXTENSIONS = 1,
+  NODE_ENV,
+  START_MINIMIZED = startMinimized
+} = process.env;
 
 // store initialization
 const Store = new ElectronStore();
@@ -178,6 +179,16 @@ ipcMain.on('npm-dedupe', (event, options) => onNpmDedupe(event, options, Store))
  *
  */
 ipcMain.on('npm-init-lock', (event, options) => onNpmInitLock(event, options, Store));
+
+/**
+ * Channel: npm-doctor
+ * Supports: npm doctor
+ * https://docs.npmjs.com/cli/doctor
+ *
+ */
+ipcMain.on('npm-cache', (event, options) =>
+  onNpmCache(event, options, Store)
+);
 
 /**
  * Channel: npm-doctor

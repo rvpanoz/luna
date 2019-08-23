@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { and } from 'ramda';
-
 import Hidden from '@material-ui/core/Hidden';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
@@ -14,7 +13,6 @@ const columnData = [
   { id: 'version', numeric: false, disablePadding: true, label: 'Version' },
   { id: 'info', numeric: false, disablePadding: true, label: '', align: 'right' },
 ];
-
 
 const TableHeader = ({ selected, total, sortBy, sortDir, handleSelectAll }) => (
   <TableHead>

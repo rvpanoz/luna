@@ -10,9 +10,8 @@ import { Sidebar } from 'components/views/sidebar';
 import { setActivePage } from 'models/ui/actions';
 import { installPackageJson } from 'models/packages/actions'
 import { setMode } from 'models/common/actions';
-import { runDedupe } from 'models/npm/actions';
+import { runDedupe, runCache } from 'models/npm/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils'
-
 import styles from './styles/appSidebar';
 
 const mapState = ({
@@ -20,7 +19,7 @@ const mapState = ({
   packages: {
     packagesData,
     packagesOutdated,
-    metadata: { lastUpdatedAt }
+    metadata: { lastUpdatedAt, fromSearch }
   },
   notifications: {
     notifications
@@ -31,6 +30,7 @@ const mapState = ({
     }
   }
 }) => ({
+  fromSearch,
   mode,
   directory,
   loading,
@@ -51,28 +51,29 @@ const AppSidebar = ({ classes, className }) => {
     loading,
     packagesData,
     packagesOutdated,
-    notifications
+    notifications,
+    fromSearch
   } = useMappedState(mapState);
 
   const packagesItems = [
     {
       name: 'total-packages',
       primaryText: 'Total',
-      secondaryText: packagesData.length,
+      secondaryText: packagesData ? packagesData.length : 0,
       color: 'secondary',
       primary: true
     },
     {
       name: 'outdated-packages',
       primaryText: 'Outdated',
-      secondaryText: packagesOutdated.length,
+      secondaryText: packagesOutdated ? packagesOutdated.length : 0,
       color: 'warning',
       warning: true
     },
     {
       name: 'notifications',
       primaryText: 'Problems',
-      secondaryText: notifications.length,
+      secondaryText: notifications ? notifications.length : 0,
       color: 'error',
       error: true
     }
@@ -136,6 +137,30 @@ const AppSidebar = ({ classes, className }) => {
     return showDialog(dialogHandler, dialogOptions);
   }, [dispatch]);
 
+  const cache = useCallback(() => {
+    const dialogOptions = {
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage('confirmation', 'actionRun', {
+        '%name%': 'npm cache verify'
+      }),
+      buttons: ['Cancel', 'Run']
+    };
+
+    const dialogHandler = () =>
+      dispatch(
+        runCache({
+          ipcEvent: 'cache',
+          cmd: ['cache'],
+          options: {
+            action: 'verify'
+          }
+        })
+      );
+
+    return showDialog(dialogHandler, dialogOptions);
+  }, [dispatch]);
+
   useEffect(() => {
     ipcRenderer.on('loaded-packages-close', (event, directories) =>
       updateHistory(directories)
@@ -162,8 +187,10 @@ const AppSidebar = ({ classes, className }) => {
           loading={loading}
           updatedAt={lastUpdatedAt}
           tabPackagesData={packagesItems}
+          fromSearch={fromSearch}
           installPackagesFromJson={installPackagesFromJson}
           dedupe={dedupe}
+          cache={cache}
         />
       </Drawer>
     </div>

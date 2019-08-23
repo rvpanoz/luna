@@ -1,7 +1,6 @@
 import React from 'react';
 import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-
 import { AppTabs, AppLogo } from 'components/common/';
 import {
   PackagesTab,
@@ -13,13 +12,15 @@ import styles from './styles/sidebar';
 const Sidebar = ({
   classes,
   loading,
+  fromSearch,
   mode,
   history,
   loadDirectory,
   updatedAt,
   tabPackagesData,
   installPackagesFromJson,
-  dedupe
+  dedupe,
+  cache
 }) => (
     <div className={classes.root}>
       <AppLogo />
@@ -28,8 +29,9 @@ const Sidebar = ({
           items={tabPackagesData}
           updatedAt={updatedAt}
           loading={loading}
+          fromSearch={fromSearch}
         />
-        <ActionsTab onInstallPackagesFromJson={installPackagesFromJson} onDedupe={dedupe} mode={mode} loading={loading} />
+        <ActionsTab onInstallPackagesFromJson={installPackagesFromJson} onDedupe={dedupe} mode={mode} loading={loading} onCacheVerify={cache} />
         <HistoryTab
           directories={history}
           onClick={loadDirectory}
@@ -47,7 +49,9 @@ Sidebar.propTypes = {
   loadDirectory: func.isRequired,
   installPackagesFromJson: func.isRequired,
   dedupe: func.isRequired,
+  cache: func.isRequired,
   updatedAt: string,
+  fromSearch: bool,
   tabPackagesData: arrayOf(object)
 };
 

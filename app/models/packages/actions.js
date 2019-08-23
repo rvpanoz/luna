@@ -2,6 +2,7 @@ import { createActionCreator } from 'commons/utils';
 
 const ActionCreator = createActionCreator('@@LUNA/PACKAGES');
 
+// basic actions
 const clearAll = ActionCreator('CLEAR_ALL');
 const clearPackages = ActionCreator('CLEAR_PACKAGES');
 const setPackagesStart = ActionCreator('SET_PACKAGES_START');
@@ -9,9 +10,10 @@ const setPackagesSuccess = ActionCreator('SET_PACKAGES_SUCCESS');
 const setOutdatedSuccess = ActionCreator('SET_OUTDATED_SUCCESS');
 const setPackagesError = ActionCreator('SET_PACKAGES_ERROR');
 const viewPackageStart = ActionCreator('VIEW_PACKAGE_START');
-const setPackagesSearch = ActionCreator('SEARCH_PACKAGES');
+const setPackagesSearchStart = ActionCreator('SET_PACKAGES_SEARCH_START');
+const setPackagesSearchSuccess = ActionCreator('SET_PACKAGES_SEARCH_SUCCESS');
 const updateSearchFlag = ActionCreator('UPDATE_SEARCH');
-
+const mapSearchPackages = ActionCreator('MAP_SEARCH_PACKAGES');
 const mapPackages = ActionCreator('MAP_PACKAGES');
 const mapOutdatedPackages = ActionCreator('MAP_OUTDATED_PACKAGES');
 const mergePackages = ActionCreator('MERGE_PACKAGES');
@@ -25,12 +27,12 @@ const removePackages = ActionCreator('REMOVE_PACKAGES');
 const prepareInstall = ActionCreator('PREPARE_INSTALL');
 const addInstallationOption = ActionCreator('ADD_INSTALLATION_OPTION');
 const addOutdatedPackage = ActionCreator('ADD_UPDATED_PACKAGE');
-
 const transformDependency = ActionCreator('TRANSFORM_DEPENDENCY');
 const transformationCompleted = ActionCreator('TRANSFORMATION_COMPLETED');
 const transformOutdatedPackages = ActionCreator('TRANSFORM_OUTDATED');
 const transformUpdatedPackages = ActionCreator('TRANSFORM_UPDATED');
 
+// listerers actions
 const listOutdatedPackagesListener = ActionCreator(
   'REGISTER_LISTENER_PACKAGES'
 );
@@ -57,6 +59,7 @@ export {
   prepareInstall,
   removePackages,
   mapPackages,
+  mapSearchPackages,
   mapOutdatedPackages,
   mergePackages,
   uninstallPackages,
@@ -66,7 +69,8 @@ export {
   updatePackages,
   clearAll,
   clearPackages,
-  setPackagesSearch,
+  setPackagesSearchStart,
+  setPackagesSearchSuccess,
   setActive,
   setPackagesStart,
   setPackagesSuccess,

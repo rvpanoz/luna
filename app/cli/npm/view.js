@@ -11,7 +11,7 @@ const view = options => {
   const defaults = ['--depth=0', '--json'];
 
   if (!name) {
-    return Promise.reject('npm[view] package name parameter must be given');
+    throw new Error('npm[view] package name parameter must be given');
   }
 
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
