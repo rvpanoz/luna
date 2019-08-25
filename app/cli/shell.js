@@ -14,12 +14,17 @@ import manager from './manager';
 
 const runCommand = (options, callback) => {
   const { cmd, ...rest } = options;
+  const enhancedOptions = {
+    ...rest,
+    mode: 'local',
+    directory: '/home/rvpanoz/projects/luna-lock/package.json'
+  }
 
   // create an array of observables
   const combine = () =>
     cmd.map((command, idx) => {
       const runner = manager[command];
-      const result$ = runner(rest, idx);
+      const result$ = runner(enhancedOptions, idx);
 
       return result$.pipe(
         catchError(error => log.error(error))

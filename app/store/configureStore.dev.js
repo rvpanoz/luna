@@ -44,33 +44,18 @@ const configureStore = initialState => {
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
 
-  // apply middleware & compose Enhancers
+  // apply middleware & compose enhancers
   enhancers.push(applyMiddleware(...middleware));
   const enhancer = composeEnhancers(...enhancers);
 
   // store creation
   const store = createStore(rootReducer, initialState, enhancer);
 
-  const notificationsEpics$ = new BehaviorSubject(notificationsEpics);
-  const hotRelNotificationsEpics = (...args) =>
-    notificationsEpics$.pipe(switchMap(epic => epic(...args)));
-
   epicMiddleware.run(uiEpics);
   epicMiddleware.run(packagesEpics);
   epicMiddleware.run(npmEpics);
-  epicMiddleware.run(hotRelNotificationsEpics);
+  epicMiddleware.run(notificationsEpics);
   epicMiddleware.run(commonEpics);
-
-  if (module.hot) {
-    module.hot.accept('../reducers', () => {
-      store.replaceReducer(require('../reducers/notifications').default);
-    });
-
-    module.hot.accept('../models/notifications/epics', () => {
-      const nextNotificationsRootEpic = require('models/notifications/epics');
-      notificationsEpics$.next(nextNotificationsRootEpic);
-    });
-  }
 
   return store;
 };

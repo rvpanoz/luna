@@ -93,7 +93,7 @@ const NotificationItem = ({
             disableRestoreFocus
           >
             <Typography>{iMessage('label', 'reason')}:&nbsp;{reason}</Typography>
-            <Typography>{iMessage('label', 'requiredByName')}:{requiredByName || ' - '}</Typography>
+            {/* <Typography>{iMessage('label', 'requiredByName')}:{requiredByName || ' - '}</Typography> */}
           </Popover>
         </div>
       </TableCell>

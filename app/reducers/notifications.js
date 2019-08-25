@@ -10,6 +10,7 @@ import {
 } from 'models/notifications/actions';
 
 import initialState from './initialState';
+import { updateNotification } from '../models/notifications/actions';
 
 const { notifications } = initialState;
 
@@ -20,32 +21,39 @@ const createReducer = (notificationsState, handlers) => (
 const handlers = {
   [setActive.type]: (state, { payload: { active } }) =>
     assoc('active', active, state),
-  [addNotification.type]: (
-    state,
-    {
-      payload: {
-        id,
-        reason,
-        requiredName,
-        requiredVersion,
-        requiredByName,
-        requiredByVersion,
-      }
-    }
-  ) =>
-    merge(state, {
-      notifications: prepend(
-        {
-          id,
-          reason,
-          requiredName,
-          requiredVersion,
-          requiredByName,
-          requiredByVersion
-        },
-        state.notifications
-      )
-    }),
+  [updateNotification.type]: (state, { payload }) => {
+    console.log(payload)
+
+    return merge(state, {
+
+    })
+  },
+  // [addNotification.type]: (
+  //   state,
+  //   {
+  //     payload: {
+  //       id,
+  //       reason,
+  //       requiredName,
+  //       requiredVersion,
+  //       requiredByName,
+  //       requiredByVersion,
+  //     }
+  //   }
+  // ) =>
+  //   merge(state, {
+  //     notifications: prepend(
+  //       {
+  //         id,
+  //         reason,
+  //         requiredName,
+  //         requiredVersion,
+  //         requiredByName,
+  //         requiredByVersion
+  //       },
+  //       state.notifications
+  //     )
+  //   }),
   [clearNotifications.type]: state =>
     merge(state, {
       ...state,
