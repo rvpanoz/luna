@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import React from 'react';
-import { shell } from 'electron'
+import { shell } from 'electron';
 import {
   objectOf,
   number,
@@ -107,7 +107,13 @@ const AdvisoryDetails = ({ classes, data, onClose }) => {
               </Typography>
               <br />
               <Typography component="p" color="textSecondary">
-                <a href="#" className={classes.link} onClick={() => openUrl(url)}>{iMessage('label', 'visitAdvisory')}</a>
+                <a
+                  href="#"
+                  className={classes.link}
+                  onClick={() => openUrl(url)}
+                >
+                  {iMessage('label', 'visitAdvisory')}
+                </a>
               </Typography>
               <Divider className={classes.divider} light />
               <List dense>
@@ -125,11 +131,11 @@ const AdvisoryDetails = ({ classes, data, onClose }) => {
                 />
                 <ListItemDetail
                   text={iMessage('label', 'created')}
-                  value={format(new Date(created), 'DD/MM/YYYY')}
+                  value={format(new Date(created), 'dd/MM/yyyy')}
                 />
                 <ListItemDetail
                   text={iMessage('label', 'updated')}
-                  value={format(new Date(updated), 'DD/MM/YYYY')}
+                  value={format(new Date(updated), 'dd/MM/yyyy')}
                 />
               </List>
             </CardContent>
@@ -146,11 +152,7 @@ const AdvisoryDetails = ({ classes, data, onClose }) => {
         >
           <Tooltip title={iMessage('title', 'clearActive')}>
             <div>
-              <IconButton
-                color="secondary"
-                disableRipple
-                onClick={onClose}
-              >
+              <IconButton color="secondary" disableRipple onClick={onClose}>
                 <CloseIcon />
               </IconButton>
             </div>
