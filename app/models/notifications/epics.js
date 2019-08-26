@@ -51,10 +51,11 @@ const addNotificationEpic = (action$, state$) => action$.pipe(
     if (_notification && typeof _notification === 'object') {
       const isGreaterThanMinVersion = semver.gte(_notification.minVersion, minVersion)
 
+      // TODO: wip
       console.log(_notification.minVersion, minVersion, isGreaterThanMinVersion)
-      // if (isGreaterThanMinVersion) {
-      //   return []
-      // }
+      if (isGreaterThanMinVersion) {
+        return []
+      }
     }
 
     return [{
