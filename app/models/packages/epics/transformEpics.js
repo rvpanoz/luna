@@ -31,22 +31,23 @@ const setOutdatedPackages = payload => ({
   payload
 });
 
-const mapSearchPackagesEpic = action$ => action$.pipe(
-  ofType(mapSearchPackages.type),
-  map(({ payload: { data, fromSearch } }) => {
-    const enhancedDependencies = data.map(({ name, version }) => ({
-      name,
-      latest: version,
-      version: null
-    }))
+const mapSearchPackagesEpic = action$ =>
+  action$.pipe(
+    ofType(mapSearchPackages.type),
+    map(({ payload: { data, fromSearch } }) => {
+      const enhancedDependencies = data.map(({ name, version }) => ({
+        name,
+        latest: version,
+        version: null
+      }));
 
-    return setSearchPackages({
-      dependencies: enhancedDependencies,
-      fromSearch,
-      lastUpdatedAt: format(new Date(), 'DD/MM/YYYY h:mm')
-    });
-  })
-)
+      return setSearchPackages({
+        dependencies: enhancedDependencies,
+        fromSearch,
+        lastUpdatedAt: format(new Date(), 'dd/MM/yyyy h:mm')
+      });
+    })
+  );
 
 const mapPackagesEpic = (action$, state$) =>
   action$.pipe(
@@ -74,12 +75,12 @@ const mapPackagesEpic = (action$, state$) =>
           (alldependencies, dependency) => {
             const [pkgName, details] = fromSearch
               ? [
-                dependency.name,
-                {
-                  version: dependency.version,
-                  description: dependency.description
-                }
-              ]
+                  dependency.name,
+                  {
+                    version: dependency.version,
+                    description: dependency.description
+                  }
+                ]
               : dependency;
 
             // eslint-disable-next-line
@@ -95,9 +96,9 @@ const mapPackagesEpic = (action$, state$) =>
             const group =
               mode === 'local'
                 ? Object.keys(PACKAGE_GROUPS).find(
-                  groupName =>
-                    packageJSON[groupName] && packageJSON[groupName][pkgName]
-                )
+                    groupName =>
+                      packageJSON[groupName] && packageJSON[groupName][pkgName]
+                  )
                 : null;
 
             return [
@@ -135,7 +136,7 @@ const mapPackagesEpic = (action$, state$) =>
           projectVersion: fromSearch ? version : projectVersion,
           fromSearch,
           fromSort,
-          lastUpdatedAt: format(new Date(), 'DD/MM/YYYY h:mm')
+          lastUpdatedAt: format(new Date(), 'dd/MM/yyyy h:mm')
         });
       }
     )
