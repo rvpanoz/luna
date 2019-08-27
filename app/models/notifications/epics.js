@@ -58,15 +58,16 @@ const addNotificationEpic = (action$, state$) =>
           minVersion.version
         );
 
-        console.log(
-          minVersion.version,
-          activeNotification.minVersion,
-          isGreaterThanMinVersion
-        );
-        if (isGreaterThanMinVersion) {
-          // TODO: remove notification from state related to requiredName
-
-          return [];
+        if (!isGreaterThanMinVersion) {
+          // remove notification from state
+          return [{
+            type: updateNotification.type,
+            payload: {
+              id: activeNotification.id,
+              _remove: true
+            }
+          }
+          ];
         }
       }
 

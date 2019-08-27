@@ -31,8 +31,13 @@ const handlers = {
       requiredName,
       requiredVersion,
       minVersion,
-      requiredByName
+      requiredByName,
+      _remove
     } } = data || {};
+
+    if (_remove) {
+      return assoc('notifications', state.notifications.filter(notification => notification.id !== id), state)
+    }
 
     return merge(state, {
       notifications: prepend(
