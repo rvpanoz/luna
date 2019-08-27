@@ -1,57 +1,90 @@
-import { pipe, from, of } from 'rxjs';
+import { of } from 'rxjs';
 import {
-  concatMap,
   mergeMap,
   catchError,
+  withLatestFrom,
 } from 'rxjs/operators';
 import uuid from 'uuid/v1';
+import semver from 'semver';
 import { combineEpics, ofType } from 'redux-observable';
 
 import {
   addNotification,
-  updateNotifications
+  updateNotification
 } from 'models/notifications/actions';
 
-const notificationsEpic = pipe(
-  ofType(updateNotifications.type),
-  mergeMap(({ payload: { notifications } }) => from(notifications)),
-  concatMap(notification => {
-    const id = uuid();
-    const [reason, details] = notification.split(':');
-    const isExtraneous = reason === 'extraneous';
+const addNotificationEpic = (action$, state$) =>
+  action$.pipe(
+    ofType(addNotification.type),
+    withLatestFrom(state$),
+    mergeMap(values => {
+      const [notification, state] = values;
+      const {
+        notifications: { notifications: stateNotifications }
+      } = state;
 
-    let detailsWithTrim = details.trim();
-    const isNameSpace = detailsWithTrim.startsWith('@')
+      const id = uuid();
+      const { payload: notificationText } = notification;
 
-    // check for namespace
-    if (isNameSpace) {
-      detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1)
-    }
+      const [reason, details] = notificationText.split(':');
+      const isExtraneous = reason === 'extraneous';
 
-    const [requiredDetails, requiredByName] = isExtraneous ? detailsWithTrim.split('@') : detailsWithTrim.split(',');
-    const [requiredName, requiredVersion] = requiredDetails.split('@');
+      let detailsWithTrim = details.trim();
+      const isNameSpace = detailsWithTrim.startsWith('@');
 
-    return [
-      {
-        type: addNotification.type,
-        payload: {
-          id,
-          reason,
-          requiredName: isNameSpace ? `@${requiredName}` : requiredName,
-          requiredByName: isExtraneous ? '' : requiredByName.replace('required by', ''),
-          requiredVersion: isExtraneous ? '' : requiredVersion,
+      if (isNameSpace) {
+        detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1);
+      }
+
+      const [requiredDetails, requiredByName] = isExtraneous
+        ? detailsWithTrim.split('@')
+        : detailsWithTrim.split(',');
+      const [requiredName, requiredVersion] = requiredDetails.split('@');
+
+      const minVersion = semver.minVersion(requiredVersion);
+      const activeNotification = stateNotifications.find(
+        notificationItem => notificationItem.requiredName === requiredName
+      );
+
+      if (activeNotification && typeof activeNotification === 'object') {
+        const isGreaterThanMinVersion = semver.gte(
+          activeNotification.minVersion,
+          minVersion.version
+        );
+
+        if (!isGreaterThanMinVersion) {
+          // remove notification from state
+          return [{
+            type: updateNotification.type,
+            payload: {
+              id: activeNotification.id,
+              _remove: true
+            }
+          }
+          ];
         }
       }
-    ];
-  }),
-  catchError(error => {
-    console.error(error);
 
-    return of({
-      type: '@@LUNA/ERROR/FATAL_NOTIFICATIONS',
-      error: error.toString()
-    })
-  })
-);
+      return [
+        {
+          type: updateNotification.type,
+          payload: {
+            id,
+            reason,
+            requiredName,
+            requiredVersion,
+            requiredByName,
+            minVersion: minVersion.version
+          }
+        }
+      ];
+    }),
+    catchError(error =>
+      of({
+        type: '@@LUNA/ERROR/ADD_NOTIFICATION',
+        error: error.toString()
+      })
+    )
+  );
 
-export default combineEpics(notificationsEpic);
+export default combineEpics(addNotificationEpic);
