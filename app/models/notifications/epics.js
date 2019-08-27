@@ -1,14 +1,8 @@
-import { pipe, from, of } from 'rxjs';
+import { of } from 'rxjs';
 import {
-  concatMap,
   mergeMap,
-  map,
-  tap,
   catchError,
   withLatestFrom,
-  filter,
-  ignoreElements,
-  mapTo
 } from 'rxjs/operators';
 import uuid from 'uuid/v1';
 import semver from 'semver';
@@ -49,7 +43,7 @@ const addNotificationEpic = (action$, state$) =>
 
       const minVersion = semver.minVersion(requiredVersion);
       const activeNotification = stateNotifications.find(
-        notification => notification.requiredName === requiredName
+        notificationItem => notificationItem.requiredName === requiredName
       );
 
       if (activeNotification && typeof activeNotification === 'object') {

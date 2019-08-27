@@ -4,7 +4,6 @@
 
 import { assoc, prepend, identity, merge, prop, propOr } from 'ramda';
 import {
-  addNotification,
   clearNotifications,
   setActive
 } from 'models/notifications/actions';

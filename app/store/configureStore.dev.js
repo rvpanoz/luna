@@ -8,8 +8,8 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
-import { BehaviorSubject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+// import { BehaviorSubject } from 'rxjs';
+// import { switchMap } from 'rxjs/operators';
 
 // epics
 import { epics as packagesEpics } from 'models/packages';
