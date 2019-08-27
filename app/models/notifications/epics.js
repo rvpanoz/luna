@@ -38,7 +38,6 @@ const addNotificationEpic = (action$, state$) =>
       let detailsWithTrim = details.trim();
       const isNameSpace = detailsWithTrim.startsWith('@');
 
-      // check for namespace
       if (isNameSpace) {
         detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1);
       }
@@ -49,23 +48,24 @@ const addNotificationEpic = (action$, state$) =>
       const [requiredName, requiredVersion] = requiredDetails.split('@');
 
       const minVersion = semver.minVersion(requiredVersion);
-      const _notification = stateNotifications.find(
+      const activeNotification = stateNotifications.find(
         notification => notification.requiredName === requiredName
       );
 
-      if (_notification && typeof _notification === 'object') {
-        const isGreaterThanMinVersion = semver.gt(
-          minVersion.version,
-          _notification.minVersion
+      if (activeNotification && typeof activeNotification === 'object') {
+        const isGreaterThanMinVersion = semver.gte(
+          activeNotification.minVersion,
+          minVersion.version
         );
 
-        // TODO: wip
         console.log(
           minVersion.version,
-          _notification.minVersion,
+          activeNotification.minVersion,
           isGreaterThanMinVersion
         );
-        if (!isGreaterThanMinVersion) {
+        if (isGreaterThanMinVersion) {
+          // TODO: remove notification from state related to requiredName
+
           return [];
         }
       }
