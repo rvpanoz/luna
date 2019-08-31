@@ -28,7 +28,11 @@ const initialState = {
       fix: false
     },
     doctor: {
-      data: null,
+      result: null,
+      error: false
+    },
+    cache: {
+      result: null,
       error: false
     }
   },

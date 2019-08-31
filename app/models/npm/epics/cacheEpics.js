@@ -1,9 +1,9 @@
 import { pipe } from 'rxjs';
-import { tap, switchMap, mergeMap } from 'rxjs/operators';
+import { tap, switchMap, mergeMap, ignoreElements } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { toggleLoader } from 'models/ui/actions';
-import { runCache, npmCacheListener } from 'models/npm/actions';
+import { runCache, npmCacheListener, parseNpmCacheData } from 'models/npm/actions';
 import { iMessage } from 'commons/utils'
 import { onNpmCache$ } from '../listeners';
 
@@ -11,6 +11,15 @@ const updateLoader = payload => ({
     type: toggleLoader.type,
     payload
 });
+
+/**
+ * Parse npm cache verify data
+ */
+const npmCacheParseEpic = pipe(
+    ofType(parseNpmCacheData.type),
+    tap(console.log),
+    ignoreElements()
+)
 
 /**
  * Send ipc event to main process to handle npm-cache
@@ -44,4 +53,4 @@ const npmRunCacheListenerEpic = pipe(
     switchMap(() => onNpmCache$)
 );
 
-export { npmRunCacheEpic, npmRunCacheListenerEpic };
+export { npmRunCacheEpic, npmRunCacheListenerEpic, npmCacheParseEpic };

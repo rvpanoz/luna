@@ -16,7 +16,8 @@ import {
   clearDoctorData,
   updateNpmAuditData,
   updateNpmAuditFixData,
-  updateNpmDoctorData
+  updateNpmDoctorData,
+  updateNpmCacheData
 } from 'models/npm/actions';
 
 import initialState from './initialState';
@@ -27,6 +28,13 @@ const createReducer = (npmState, handlers) => (state = npmState, action) =>
   propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [updateNpmCacheData.type]: (state, { payload: { data } }) =>
+    merge(state, {
+      cache: {
+        ...state.cache,
+        result: data
+      }
+    }),
   [updateNpmAuditData.type]: (state, { payload: { data } }) =>
     merge(state, {
       audit: {
