@@ -13,13 +13,15 @@ const setEnv = ActionCreator('SET_ENV');
 const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const npmCommand = ActionCreator('NPM_COMMAND');
 
-// reporting
+// npm utils
 const parseNpmAuditData = ActionCreator('PARSE_NPM_AUDIT_DATA');
 const parseNpmDoctorData = ActionCreator('PARSE_NPM_DOCTOR_DATA');
 const parseNpmAuditFixData = ActionCreator('PARSE_NPM_AUDIT_FIX_DATA');
+const parseNpmCacheData = ActionCreator('PARSE_NPM_CACHE_DATA');
 const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
 const updateNpmAuditFixData = ActionCreator('UPDATE_NPM_AUDIT_FIX_DATA');
 const updateNpmDoctorData = ActionCreator('UPDATE_NPM_DOCTOR_DATA');
+const updateNpmCacheData = ActionCreator('UPDATE_NPM_CACHE_DATA');
 const clearAuditData = ActionCreator('CLEAR_AUDIT_DATA');
 const clearDoctorData = ActionCreator('CLEAR_DOCTOR_DATA');
 
@@ -72,7 +74,9 @@ export {
   parseNpmDoctorData,
   parseNpmAuditData,
   parseNpmAuditFixData,
+  parseNpmCacheData,
   updateNpmAuditFixData,
   updateNpmDoctorData,
-  updateNpmAuditData
+  updateNpmAuditData,
+  updateNpmCacheData
 };
