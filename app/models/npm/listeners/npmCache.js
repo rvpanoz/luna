@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
-import { setRunningCommand } from 'models/npm/actions';
+import { setRunningCommand, parseNpmCacheData } from 'models/npm/actions';
 import { setSnackbar, toggleLoader } from 'models/ui/actions';
 
 const updateCommand = ({
@@ -20,6 +20,13 @@ const onNpmCache$ = new Observable(observer => {
     ipcRenderer.removeAllListeners(['npm-cache-completed']);
 
     ipcRenderer.on('npm-cache-completed', (event, errors, data, action) => {
+        // TODO: npm cache errors
+        if (errors) {
+            console.error(errors)
+        }
+
+        observer.next(parseNpmCacheData(data));
+
         observer.next(
             updateCommand({
                 operationStatus: 'idle',

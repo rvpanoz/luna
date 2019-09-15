@@ -30,6 +30,7 @@ import {
 import {
   npmRunCacheEpic,
   npmRunCacheListenerEpic,
+  npmCacheParseEpic
 } from './cacheEpics';
 
 export default combineEpics(
@@ -49,5 +50,6 @@ export default combineEpics(
   npmRunDedupeEpic,
   npmRunDedupeListenerEpic,
   npmRunCacheEpic,
-  npmRunCacheListenerEpic
+  npmRunCacheListenerEpic,
+  npmCacheParseEpic
 );
