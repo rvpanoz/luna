@@ -218,7 +218,7 @@
     "redux-observable": "^1.1.0",
     "redux-react-hook": "^3.3.2",
     "rxjs": "^6.4.0",
-    "semver": "^6.3.0",
+    "semver": "^7.0.0",
     "source-map-support": "^0.5.13",
     "typeface-roboto": "0.0.75",
     "uuid": "^3.3.2"
