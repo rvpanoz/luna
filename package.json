@@ -221,7 +221,7 @@
     "semver": "^7.0.0",
     "source-map-support": "^0.5.13",
     "typeface-roboto": "0.0.75",
-    "uuid": "^3.3.2"
+    "uuid": "^8.0.0"
   },
   "devEngines": {
     "node": ">=8.x",
