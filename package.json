@@ -176,7 +176,7 @@
     "identity-obj-proxy": "^3.0.0",
     "lint-staged": "^9.2.1",
     "mini-css-extract-plugin": "^0.8.0",
-    "node-sass": "^4.10.0",
+    "node-sass": "^4.14.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "prettier": "^1.16.4",
     "react-test-renderer": "^16.9.0",
@@ -191,7 +191,7 @@
     "webpack": "^4.39.2",
     "webpack-bundle-analyzer": "^3.4.1",
     "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.8.0",
+    "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
