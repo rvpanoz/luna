@@ -18,6 +18,7 @@
     "package-ci": "npm run postinstall && npm run build && electron-builder --publish never",
     "package-linux": "npm run build && electron-builder build --linux",
     "package-win": "npm run build && electron-builder -c.extraMetadata.main=app/main.prod.js build --win --x64",
+    "package-mac": "npm run build && electron-builder build --mac",
     "postinstall": "npm run build-dll",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{*{js,jsx,json},babelrc,eslintrc,prettierrc,stylelintrc}'",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
