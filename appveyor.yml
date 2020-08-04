@@ -3,31 +3,18 @@ image: Visual Studio 2017
 platform:
   - x64
 
-environment:
-  matrix:
-    - nodejs_version: 10
-
 cache:
-  - '%LOCALAPPDATA%/Yarn'
   - node_modules
   - '%USERPROFILE%\.electron'
 
-matrix:
-  fast_finish: true
-
-build: off
-
-version: '{build}'
-
-shallow_clone: true
-
-clone_depth: 1
+init:
+  - git config --global core.autocrlf input
 
 install:
-  - ps: Install-Product node $env:nodejs_version x64
-  - set CI=true
-  - npm install
+  - ps: Install-Product node 10 x64
+  - yarn
 
-test_script:
-  - npm run package-ci
-  - npm run lint
+build_script:
+  - yarn dist
+
+test: off
