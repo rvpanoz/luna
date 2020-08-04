@@ -29,7 +29,7 @@ cache:
 install:
   - |
     if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
-      brew install yarn;
+      brew install npm;
     fi
 script:
   - |
@@ -40,18 +40,18 @@ script:
         -v ~/.cache/electron:/root/.cache/electron \
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         electronuserland/builder:wine \
-        /bin/bash -c "yarn install --link-duplicates --pure-lockfile && yarn release --win"
+        /bin/bash -c "npm install --link-duplicates --pure-lockfile && npm run release --win"
     elif [ "$TRAVIS_OS_NAME" == "windows" ]; then
       npm install;
-      npm run release;
+      npm run build;
     else
       security create-keychain -p $KEYCHAIN_PASSWORD build.keychain;
       security default-keychain -s build.keychain;
       security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain;
       echo $KEYSTORE | base64 --decode - > keystore.p12;
       security import keystore.p12 -k build.keychain -P $KEYCHAIN_PASSWORD -T /usr/bin/codesign;
-      yarn install;
-      yarn release;
+      npm install;
+      npm run build;
     fi
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
