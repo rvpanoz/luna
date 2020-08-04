@@ -20,7 +20,7 @@ module.exports = {
     'arrow-parens': ['off'],
     'compat/compat': 'off',
     'consistent-return': 'off',
-    'camelcase': 'off',
+    camelcase: 'off',
     'react/jsx-props-no-spreading': 'off',
     'prefer-object-spread': 'off',
     'comma-dangle': 'off',
@@ -43,6 +43,7 @@ module.exports = {
     'promise/always-return': 'error',
     'promise/catch-or-return': 'error',
     'promise/no-native': 'off',
+    'react/forbid-prop-types': 'off',
     'react/sort-comp': [
       'error',
       {
