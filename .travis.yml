@@ -1,16 +1,16 @@
 matrix:
   allow_failures:
-    # - os: windows
-    # - os: osx
-    - os: linux
-  include:
+    - os: windows
     - os: osx
-      language: node_js
-      node_js:
-        - node
-      env:
-        - ELECTRON_CACHE=$HOME/.cache/electron
-        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+  # - os: linux
+  include:
+    # - os: osx
+    #   language: node_js
+    #   node_js:
+    #     - node
+    #   env:
+    #     - ELECTRON_CACHE=$HOME/.cache/electron
+    #     - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
     - os: linux
       language: node_js
@@ -30,13 +30,13 @@ matrix:
             - xorriso
             - rpm
 
-    - os: windows
-      language: node_js
-      node_js:
-        - node
-      env:
-        - ELECTRON_CACHE=$HOME/.cache/electron
-        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+    # - os: windows
+    #   language: node_js
+    #   node_js:
+    #     - node
+    #   env:
+    #     - ELECTRON_CACHE=$HOME/.cache/electron
+    #     - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
@@ -69,11 +69,11 @@ install:
     else
       :
     fi
-
+services:
+  - xvfb
 before_script:
   # On Linux, create a "virtual display". This allows browsers to work properly
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export DISPLAY=:99.0; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sh -e /etc/init.d/xvfb start; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sleep 3; fi
 
 script:
