@@ -5,7 +5,7 @@
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
-import { Observable } from 'rxjs'
+import { Observable } from 'rxjs';
 
 import mk from '../mk';
 
@@ -28,18 +28,25 @@ const cwd = process.cwd();
  * @param {*} directory
  */
 
-const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, packageJson }) => {
+const execute = ({
+  manager = defaultManager,
+  commandArgs = [],
+  mode,
+  directory,
+  packageJson
+}) => {
   const [operation] = commandArgs;
   const { NODE_ENV } = process.env;
   const isLocal = Boolean(mode === 'local' && directory);
 
-  const result$ = new Observable((observer) => {
+  const result$ = new Observable(observer => {
     const result = [];
     let errors = '';
 
-    NODE_ENV === 'development' && console.log(
-      chalk.blueBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
-    );
+    NODE_ENV === 'development' &&
+      console.log(
+        chalk.blueBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
+      );
 
     try {
       // on windows use npm.cmd
@@ -47,6 +54,7 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
         /^win/.test(process.platform) ? `${manager}.cmd` : manager,
         commandArgs,
         {
+          shell: true,
           env: process.env,
           cwd: isLocal
             ? operation === 'init'
@@ -73,13 +81,19 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
       });
 
       command.on('exit', code => {
-        NODE_ENV === 'development' && console.log(chalk.yellowBright.bold(`child exited with code ${code}`));
+        NODE_ENV === 'development' &&
+          console.log(
+            chalk.yellowBright.bold(`child exited with code ${code}`)
+          );
       });
 
       command.on('close', () => {
-        NODE_ENV === 'development' && console.log(
-          chalk.greenBright.bold(`finished: ${manager} ${commandArgs.join(' ')}`)
-        );
+        NODE_ENV === 'development' &&
+          console.log(
+            chalk.greenBright.bold(
+              `finished: ${manager} ${commandArgs.join(' ')}`
+            )
+          );
 
         // emit result data
         observer.next({
@@ -88,46 +102,50 @@ const execute = ({ manager = defaultManager, commandArgs = [], mode, directory, 
           data: result.join(''),
           cmd: commandArgs,
           packageJson: Boolean(packageJson),
-          initDirectory: isLocal && operation === 'init' ? path.join(directory, 'package.json') : null
+          initDirectory:
+            isLocal && operation === 'init'
+              ? path.join(directory, 'package.json')
+              : null
         });
 
         observer.complete();
       });
     } catch (error) {
-      observer.error(error)
+      observer.error(error);
     }
-  })
+  });
 
   return result$;
-}
+};
 
 /**
  * npm list
  * @param {*} options
  */
-const list = (options) => {
+const list = options => {
   const command = ['list'];
   const { mode, directory } = options || {};
 
-  const run = mode === 'global' && !directory
-    ? command.concat(defaultsArgs.list, ['-g'])
-    : command.concat(defaultsArgs.list);
+  const run =
+    mode === 'global' && !directory
+      ? command.concat(defaultsArgs.list, ['-g'])
+      : command.concat(defaultsArgs.list);
 
   const params = {
     activeManager: 'npm',
     commandArgs: run,
     mode,
     directory
-  }
+  };
 
   return execute(params);
-}
+};
 
 /**
  * npm outdated
  * @param {*} options
  */
-const outdated = (options) => {
+const outdated = options => {
   const command = ['outdated'];
   const { mode, directory } = options || {};
 
@@ -141,16 +159,16 @@ const outdated = (options) => {
     commandArgs: run,
     mode,
     directory
-  }
+  };
 
-  return execute(params)
+  return execute(params);
 };
 
 /**
  * npm search
  * @param {*} options
  */
-const search = (options) => {
+const search = options => {
   const command = ['search'];
   const { directory, mode, pkgName } = options || {};
   const defaults = ['--depth=0', '--json'];
@@ -167,11 +185,11 @@ const search = (options) => {
       commandArgs: run,
       mode,
       directory
-    }
+    };
 
     return execute(params);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 
@@ -193,11 +211,11 @@ const install = (options, idx) => {
       mode,
       directory,
       packageJson
-    }
+    };
 
     return execute(params);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 
@@ -205,7 +223,7 @@ const install = (options, idx) => {
  * npm update
  * @param {*} options
  */
-const update = (options) => {
+const update = options => {
   const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
@@ -217,11 +235,11 @@ const update = (options) => {
       commandArgs: run,
       mode,
       directory
-    }
+    };
 
     return execute(params);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 
@@ -229,7 +247,7 @@ const update = (options) => {
  * npm uninstall
  * @param {*} options
  */
-const uninstall = (options) => {
+const uninstall = options => {
   const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
@@ -241,11 +259,11 @@ const uninstall = (options) => {
       commandArgs: run,
       mode,
       directory
-    }
+    };
 
     return execute(params);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 
@@ -265,11 +283,11 @@ const view = options => {
       commandArgs: run,
       mode,
       directory
-    }
+    };
 
     return execute(params);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 
@@ -277,7 +295,7 @@ const view = options => {
  * npm audit
  * @param {*} options
  */
-const runAudit = (options) => {
+const runAudit = options => {
   const { activeManager = 'npm', mode, directory } = options || {};
 
   try {
@@ -289,11 +307,11 @@ const runAudit = (options) => {
       commandArgs: run,
       mode,
       directory
-    }
+    };
 
     return execute(params);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 
@@ -301,7 +319,7 @@ const runAudit = (options) => {
  * npm doctor
  * @param {*} options
  */
-const runDoctor = (options) => {
+const runDoctor = options => {
   const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
@@ -313,11 +331,11 @@ const runDoctor = (options) => {
       commandArgs: run,
       mode,
       directory
-    }
+    };
 
     return execute(params);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 
@@ -325,7 +343,7 @@ const runDoctor = (options) => {
  * npm init
  * @param {*} options
  */
-const runInit = (options) => {
+const runInit = options => {
   const { mode, directory, activeManager = 'npm' } = options;
 
   try {
@@ -337,11 +355,11 @@ const runInit = (options) => {
       commandArgs: run,
       mode,
       directory
-    }
+    };
 
     return execute(params);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 
@@ -349,7 +367,7 @@ const runInit = (options) => {
  * npm dedupe
  * @param {*} options
  */
-const runDedupe = (options) => {
+const runDedupe = options => {
   const { mode, directory, activeManager = 'npm' } = options;
 
   try {
@@ -361,11 +379,11 @@ const runDedupe = (options) => {
       commandArgs: run,
       mode,
       directory
-    }
+    };
 
     return execute(params);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 
@@ -373,7 +391,7 @@ const runDedupe = (options) => {
  * npm cache
  * @param {*} options
  */
-const runCache = (params) => {
+const runCache = params => {
   const { mode, directory, action, activeManager = 'npm' } = params;
   let cacheAction;
 
@@ -392,11 +410,11 @@ const runCache = (params) => {
       commandArgs: run,
       mode,
       directory
-    }
+    };
 
     return execute(parameters);
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 
