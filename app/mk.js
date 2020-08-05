@@ -9,7 +9,7 @@ const mk = {
   defaultSettings: {
     defaultManager: 'npm',
     registry: 'https://registry.npmjs.org/',
-    startMinized: true
+    startMinized: false
   },
   cnc(...args) {
     let txt = '';

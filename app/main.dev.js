@@ -46,8 +46,8 @@ const APP_PATHS = {
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 1024,
-  MIN_HEIGHT = 800,
+  MIN_WIDTH = 1280,
+  MIN_HEIGHT = 960,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS = 1,
   NODE_ENV,
@@ -171,14 +171,18 @@ ipcMain.on('npm-init', (event, options) => onNpmInit(event, options, Store));
  * https://docs.npmjs.com/cli/dedupe
  *
  */
-ipcMain.on('npm-dedupe', (event, options) => onNpmDedupe(event, options, Store));
+ipcMain.on('npm-dedupe', (event, options) =>
+  onNpmDedupe(event, options, Store)
+);
 
 /**
  * Channel: npm-init-lock
  * Supports: npm i --package-lock-only
  *
  */
-ipcMain.on('npm-init-lock', (event, options) => onNpmInitLock(event, options, Store));
+ipcMain.on('npm-init-lock', (event, options) =>
+  onNpmInitLock(event, options, Store)
+);
 
 /**
  * Channel: npm-doctor
@@ -186,9 +190,7 @@ ipcMain.on('npm-init-lock', (event, options) => onNpmInitLock(event, options, St
  * https://docs.npmjs.com/cli/doctor
  *
  */
-ipcMain.on('npm-cache', (event, options) =>
-  onNpmCache(event, options, Store)
-);
+ipcMain.on('npm-cache', (event, options) => onNpmCache(event, options, Store));
 
 /**
  * Channel: npm-doctor
@@ -218,16 +220,23 @@ app.on('window-all-closed', () => {
 
 /* eslint-disable-next-line */
 app.once('browser-window-created', (event, webContents) => {
-  NODE_ENV === 'development' && log.log(chalk.white.bgGreen.bold('[EVENT]: browser-window-created event fired'));
+  NODE_ENV === 'development' &&
+    log.log(
+      chalk.white.bgGreen.bold('[EVENT]: browser-window-created event fired')
+    );
 });
 
 /* eslint-disable-next-line */
 app.once('web-contents-created', (event, webContents) => {
-  NODE_ENV === 'development' && log.log(chalk.white.bgGreen.bold('[EVENT]: web-contents-created event fired'));
+  NODE_ENV === 'development' &&
+    log.log(
+      chalk.white.bgGreen.bold('[EVENT]: web-contents-created event fired')
+    );
 });
 
 app.on('ready', async () => {
-  NODE_ENV === 'development' && log.log(chalk.white.bgGreen.bold('[EVENT]: ready event fired'));
+  NODE_ENV === 'development' &&
+    log.log(chalk.white.bgGreen.bold('[EVENT]: ready event fired'));
 
   if (NODE_ENV === 'development') {
     INSTALL_EXTENSIONS && (await installExtensions());
@@ -263,11 +272,13 @@ app.on('ready', async () => {
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', () => {
-    NODE_ENV === 'development' && log.log(chalk.white.bgGreen.bold('[EVENT]: ready-to-show event fired'));
+    NODE_ENV === 'development' &&
+      log.log(chalk.white.bgGreen.bold('[EVENT]: ready-to-show event fired'));
   });
 
   mainWindow.webContents.on('did-finish-load', async event => {
-    NODE_ENV === 'development' && log.log(chalk.white.bgGreen.bold('[EVENT]: did-finish-load event fired'));
+    NODE_ENV === 'development' &&
+      log.log(chalk.white.bgGreen.bold('[EVENT]: did-finish-load event fired'));
 
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');
