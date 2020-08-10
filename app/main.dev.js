@@ -6,12 +6,12 @@
  * Electron's main process
  */
 
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import ElectronStore from 'electron-store';
 import path from 'path';
 import chalk from 'chalk';
-import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import log from 'electron-log';
-
+import fixPath from 'fix-path';
 import MenuBuilder from './menu';
 import mk from './mk';
 import {
@@ -26,12 +26,12 @@ import {
   onNpmDoctor,
   onNpmDedupe,
   onNpmInit,
-  onNpmInitLock
+  onNpmInitLock,
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
 
 const {
-  defaultSettings: { startMinimized }
+  defaultSettings: { startMinimized },
 } = mk || {};
 
 /* eslint-disable-next-line */
@@ -39,19 +39,20 @@ const debug = /--debug/.test(process.argv[2]);
 
 /* eslint-disable-next-line */
 const APP_PATHS = {
-  appData: app.getPath('appData'),
-  userData: app.getPath('userData')
+  Home: app.getPath('home'),
+  AppData: app.getPath('appData'),
+  UserData: app.getPath('userData'),
 };
 
 const {
-  DEBUG_PROD = 0,
+  DEBUG_PROD = 1,
   DEBUG_DEV = 1,
   MIN_WIDTH = 1280,
   MIN_HEIGHT = 960,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS = 1,
   NODE_ENV,
-  START_MINIMIZED = startMinimized
+  START_MINIMIZED = startMinimized,
 } = process.env;
 
 // store initialization
@@ -65,6 +66,7 @@ let mainWindow = null;
 if (NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
+  fixPath();
 }
 
 if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
@@ -80,7 +82,7 @@ const installExtensions = async () => {
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
   return Promise.all(
-    extensions.map(name => installer.default(installer[name], forceDownload))
+    extensions.map((name) => installer.default(installer[name], forceDownload))
   ).catch(console.log);
 };
 
@@ -221,22 +223,18 @@ app.on('window-all-closed', () => {
 /* eslint-disable-next-line */
 app.once('browser-window-created', (event, webContents) => {
   NODE_ENV === 'development' &&
-    log.log(
-      chalk.white.bgGreen.bold('[EVENT]: browser-window-created event fired')
-    );
+    log.log(chalk.green.bold('[EVENT]: browser-window-created event fired'));
 });
 
 /* eslint-disable-next-line */
 app.once('web-contents-created', (event, webContents) => {
   NODE_ENV === 'development' &&
-    log.log(
-      chalk.white.bgGreen.bold('[EVENT]: web-contents-created event fired')
-    );
+    log.log(chalk.green.bold('[EVENT]: web-contents-created event fired'));
 });
 
 app.on('ready', async () => {
   NODE_ENV === 'development' &&
-    log.log(chalk.white.bgGreen.bold('[EVENT]: ready event fired'));
+    log.log(chalk.green.bold('[EVENT]: ready event fired'));
 
   if (NODE_ENV === 'development') {
     INSTALL_EXTENSIONS && (await installExtensions());
@@ -247,7 +245,7 @@ app.on('ready', async () => {
   const screenSize = screen.getPrimaryDisplay().size;
   const displays = screen.getAllDisplays();
   const externalDisplay = displays.find(
-    display => display.bounds.x !== 0 || display.bounds.y !== 0
+    (display) => display.bounds.x !== 0 || display.bounds.y !== 0
   );
 
   if (externalDisplay) {
@@ -262,23 +260,25 @@ app.on('ready', async () => {
     x,
     y,
     show: false,
-    webPreferences: {
-      nodeIntegration: true
-    },
     resizable: true,
-    icon: path.join(__dirname, 'resources/icon.ico')
+    webPreferences: {
+      worldSafeExecuteJavaScript: true,
+      enableRemoteModule: true,
+      nodeIntegration: true,
+    },
+    icon: path.join(__dirname, '..', 'resources/icon.png'),
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', () => {
     NODE_ENV === 'development' &&
-      log.log(chalk.white.bgGreen.bold('[EVENT]: ready-to-show event fired'));
+      log.log(chalk.green.bold('[EVENT]: ready-to-show event fired'));
   });
 
-  mainWindow.webContents.on('did-finish-load', async event => {
+  mainWindow.webContents.on('did-finish-load', async (event) => {
     NODE_ENV === 'development' &&
-      log.log(chalk.white.bgGreen.bold('[EVENT]: did-finish-load event fired'));
+      log.log(chalk.green.bold('[EVENT]: did-finish-load event fired'));
 
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');
@@ -313,13 +313,13 @@ app.on('ready', async () => {
     event.sender.send('finish-loaded');
   });
 
-  mainWindow.webContents.on('crashed', event => {
-    log.error(chalk.white.bgRed.bold('[CRASHED]'), event);
+  mainWindow.webContents.on('crashed', (event) => {
+    log.error(chalk.redBright.bold('[CRASHED]'), event);
     app.quit();
   });
 
-  mainWindow.on('unresponsive', event => {
-    log.error(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
+  mainWindow.on('unresponsive', (event) => {
+    log.error(chalk.redBright.bold('[UNRESPONSIVE]'), event);
     app.quit();
   });
 
@@ -331,7 +331,7 @@ app.on('ready', async () => {
   menuBuilder.buildMenu();
 });
 
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
   log.error('[ERROR]', error);
   mainWindow.webContents.send('uncaught-exception', error);
 });

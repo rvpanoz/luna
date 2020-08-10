@@ -28,10 +28,10 @@ const PackageItem = ({
   peerMissing,
   viewPackage,
   inOperation,
-  hasError
+  hasError,
 }) => {
   const rowRef = useRef();
-
+  console.log(name);
   return (
     <TableRow
       key={`pkg-${name}`}
@@ -42,7 +42,7 @@ const PackageItem = ({
       tabIndex={-1}
       selected={isSelected}
       classes={{
-        root: classes.tableRow
+        root: classes.tableRow,
       }}
       onClick={() => (inOperation ? {} : viewPackage(name, version))}
     >
@@ -51,7 +51,7 @@ const PackageItem = ({
           disabled={inOperation}
           checked={isSelected}
           disableRipple
-          onClick={e => {
+          onClick={(e) => {
             e.stopPropagation();
 
             if (inOperation) {
@@ -66,7 +66,7 @@ const PackageItem = ({
       <TableCell padding="none" name="name" className={classes.tableCell}>
         <div
           className={cn(classes.flexContainerCell, {
-            [classes.flexRow]: extraneous
+            [classes.flexRow]: extraneous,
           })}
         >
           <div className={classes.flexContainer}>
@@ -95,7 +95,7 @@ const PackageItem = ({
       <TableCell padding="none" name="latest" className={classes.tableCell}>
         <Typography
           className={cn(classes.typo, {
-            [classes.outdated]: isOutdated
+            [classes.outdated]: isOutdated,
           })}
         >
           {latest}

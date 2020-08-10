@@ -12,15 +12,15 @@ import {
   CONFIRMATION_MESSAGES,
   TITLE_MESSAGES,
   ACTION_MESSAGES,
-  LABEL_MESSAGES
+  LABEL_MESSAGES,
 } from '../constants/AppMessages';
 
 const SEPARATOR = path.sep;
 
 /**
- * 
- * @param {*} handler 
- * @param {*} options 
+ *
+ * @param {*} handler
+ * @param {*} options
  */
 export const showDialog = (handler, options) => {
   if (!options || typeof options !== 'object') {
@@ -31,7 +31,7 @@ export const showDialog = (handler, options) => {
   const modeHandler =
     mode === 'file' ? dialog.showOpenDialog : dialog.showMessageBox;
 
-  return modeHandler(remote.getCurrentWindow(), options, response => {
+  return modeHandler(remote.getCurrentWindow(), options, (response) => {
     if (response) {
       handler && handler(response);
     }
@@ -39,10 +39,10 @@ export const showDialog = (handler, options) => {
 };
 
 /**
- * 
- * @param {*} type 
- * @param {*} key 
- * @param {*} replacements 
+ *
+ * @param {*} type
+ * @param {*} key
+ * @param {*} replacements
  */
 export const iMessage = (type, key, replacements) => {
   const messageType = switchcase({
@@ -52,23 +52,23 @@ export const iMessage = (type, key, replacements) => {
     action: () => ACTION_MESSAGES,
     warning: () => WARNING_MESSAGES,
     error: () => ERROR_MESSAGES,
-    label: () => LABEL_MESSAGES
+    label: () => LABEL_MESSAGES,
   })(INFO_MESSAGES)(type);
 
   return messageType[key]
-    ? messageType[key].replace(/%\w+%/g, all => replacements[all] || all)
+    ? messageType[key].replace(/%\w+%/g, (all) => replacements[all] || all)
     : key;
 };
 
 /**
- * 
- * @param {*} namespace 
+ *
+ * @param {*} namespace
  */
-export const createActionCreator = namespace => actionType => {
+export const createActionCreator = (namespace) => (actionType) => {
   const type = `${namespace}/${actionType}`;
-  const actionCreator = payload => ({
+  const actionCreator = (payload) => ({
     type,
-    payload
+    payload,
   });
 
   actionCreator.type = type;
@@ -81,7 +81,7 @@ export const createActionCreator = namespace => actionType => {
  * Object array
  * @param {*} obj
  */
-export const objectEntries = obj => {
+export const objectEntries = (obj) => {
   let ownProps = Object.keys(obj);
   let i = ownProps.length;
   let resArray = new Array(i);
@@ -94,7 +94,7 @@ export const objectEntries = obj => {
  * Validate url
  * @param {*} url
  */
-export const isUrl = url => {
+export const isUrl = (url) => {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
   return matcher.test(url);
 };
@@ -103,7 +103,7 @@ export const isUrl = url => {
  *
  * @param {*} str
  */
-export const firstToUpper = str => {
+export const firstToUpper = (str) => {
   return str
     .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
       return index !== 0 ? letter.toLowerCase() : letter.toUpperCase();
@@ -115,7 +115,7 @@ export const firstToUpper = str => {
  * @param {*} cases
  *
  */
-export const switchcase = cases => defaultCase => key =>
+export const switchcase = (cases) => (defaultCase) => (key) =>
   cases.hasOwnProperty(key) && typeof cases[key] === 'function'
     ? cases[key].apply(undefined)
     : defaultCase;
@@ -124,7 +124,7 @@ export const switchcase = cases => defaultCase => key =>
  *
  * @param {*} str
  */
-export const isJson = str => {
+export const isJson = (str) => {
   try {
     JSON.parse(str);
   } catch (e) {
@@ -137,7 +137,7 @@ export const isJson = str => {
  *
  * @param {*} version
  */
-export const isBeta = version => {
+export const isBeta = (version) => {
   if (!version) {
     return null;
   }
@@ -149,7 +149,7 @@ export const isBeta = version => {
  *
  * @param {*} version
  */
-export const isRC = version => {
+export const isRC = (version) => {
   if (!version) {
     return null;
   }
@@ -161,7 +161,7 @@ export const isRC = version => {
  *
  * @param {*} version
  */
-export const isAlpha = version => {
+export const isAlpha = (version) => {
   if (!version) {
     return null;
   }
@@ -173,15 +173,16 @@ export const isAlpha = version => {
  * Read package.json from a directory
  * @param {*} directory
  */
-export const readPackageJson = directory => {
+export const readPackageJson = (directory) => {
+  console.log(directory);
   try {
     const packageJSON = fs.readFileSync(path.join(directory), {
-      encoding: 'utf8'
+      encoding: 'utf8',
     });
 
     return JSON.parse(packageJSON);
   } catch (error) {
-    mk.log(error);
+    console.log(error);
     return null;
   }
 };
@@ -201,7 +202,7 @@ export const matchType = (subject, needle) => {
  * Parses and maps npm search response
  * @param {*} response
  */
-export const parseFromSearch = response => {
+export const parseFromSearch = (response) => {
   if (!response || typeof response !== 'string') {
     throw new Error(
       'utils[parseFromSearch]: response parameter must be a string'
@@ -217,7 +218,7 @@ export const parseFromSearch = response => {
   }
 };
 
-export const parseMessage = error => {
+export const parseMessage = (error) => {
   const errorParts = typeof error === 'string' && error.split(',');
   const errorMessage = errorParts && errorParts[0].split(':');
 
@@ -230,7 +231,7 @@ export const parseMessage = error => {
     : [errorMessage[0].trim(), errorMessage[1].trim(), errorParts[1]];
 };
 
-export const shrinkDirectory = directory => {
+export const shrinkDirectory = (directory) => {
   if (directory) {
     try {
       const newPath = path.parse(directory);
@@ -239,7 +240,7 @@ export const shrinkDirectory = directory => {
 
       return `${dirParts[dirParts.length - 2]}${SEPARATOR}${
         dirParts[dirParts.length - 1]
-        }${SEPARATOR}package.json`;
+      }${SEPARATOR}package.json`;
     } catch (error) {
       throw new Error(error);
     }
@@ -248,7 +249,7 @@ export const shrinkDirectory = directory => {
   return null;
 };
 
-export const parseNpmDoctor = data => {
+export const parseNpmDoctor = (data) => {
   console.log(data);
 
   try {
@@ -261,7 +262,7 @@ export const parseNpmDoctor = data => {
       return {
         error: true,
         message: `${code}: ${summary}`,
-        content: null
+        content: null,
       };
     }
 
@@ -271,7 +272,7 @@ export const parseNpmDoctor = data => {
   }
 };
 
-export const parseNpmAudit = data => {
+export const parseNpmAudit = (data) => {
   try {
     const dataToJson = JSON.parse(data);
     const { error } = dataToJson;
@@ -282,7 +283,7 @@ export const parseNpmAudit = data => {
       return {
         error: true,
         message: `${code}: ${summary}`,
-        content: null
+        content: null,
       };
     }
 
@@ -293,8 +294,8 @@ export const parseNpmAudit = data => {
       content: {
         metadata,
         actions,
-        advisories
-      }
+        advisories,
+      },
     };
   } catch (error) {
     throw new Error(error);
@@ -306,5 +307,5 @@ export const scrollWrapper = (element, top) =>
   element &&
   element.scroll({
     top,
-    behavior: 'smooth'
+    behavior: 'smooth',
   });

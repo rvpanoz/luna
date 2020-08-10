@@ -8,7 +8,7 @@
     />
     <title>luna - npm desktop manager</title>
     <script>
-      (function() {
+      (function () {
         if (!process.env.HOT) {
           const link = document.createElement('link');
           link.rel = 'stylesheet';
@@ -19,6 +19,7 @@
       })();
     </script>
   </head>
+
   <body>
     <div id="app"></div>
     <script>
@@ -41,7 +42,7 @@
 
         document.write(
           scripts
-            .map(script => `<script defer src="${script}"><\/script>`)
+            .map((script) => `<script defer src="${script}"><\/script>`)
             .join('')
         );
       }
