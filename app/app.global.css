@@ -44,8 +44,8 @@ body {
 @font-face {
   font-family: 'Light';
   src: local('Light'), local('Light'),
-    url('/assets/fonts/Light.woff') format('woff'),
-    url('/assets/fonts/Light.woff2') format('woff2'),
-    url('/assets/fonts/Light.ttf') format('truetype'),
-    url('/assets/fonts/Light.eot') format('eot');
+    url('./assets/fonts/Light.woff') format('woff'),
+    url('./assets/fonts/Light.woff2') format('woff2'),
+    url('./assets/fonts/Light.ttf') format('truetype'),
+    url('./assets/fonts/Light.eot') format('eot');
 }

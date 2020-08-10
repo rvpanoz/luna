@@ -11,7 +11,7 @@ import path from 'path';
 import fs from 'fs';
 import webpack from 'webpack';
 import chalk from 'chalk';
-import merge from 'webpack-merge';
+import { merge } from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
 import { CheckNodeEnv } from '../internals/scripts';
@@ -40,7 +40,7 @@ if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
   execSync('yarn build-dll');
 }
 
-export default merge.smart(baseConfig, {
+export default merge(baseConfig, {
   devtool: 'inline-source-map',
   mode: 'development',
   target: 'electron-renderer',
@@ -52,11 +52,11 @@ export default merge.smart(baseConfig, {
     only- means to only hot reload for successful updates */
     'webpack/hot/only-dev-server',
     /* the entry point */
-    require.resolve('../app/index')
+    require.resolve('../app/index'),
   ],
   output: {
     publicPath: `http://localhost:${port}/dist/`,
-    filename: 'renderer.dev.js'
+    filename: 'renderer.dev.js',
   },
   resolve: {
     alias: {
@@ -66,8 +66,8 @@ export default merge.smart(baseConfig, {
       components: path.resolve(path.join(__dirname, '..', 'app', 'components')),
       containers: path.resolve(path.join(__dirname, '..', 'app', 'containers')),
       models: path.resolve(path.join(__dirname, '..', 'app', 'models')),
-      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles'))
-    }
+      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles')),
+    },
   },
   module: {
     rules: [
@@ -77,29 +77,29 @@ export default merge.smart(baseConfig, {
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true
-          }
-        }
+            cacheDirectory: true,
+          },
+        },
       },
       {
         test: /\.global\.css$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true
-            }
-          }
-        ]
+              sourceMap: true,
+            },
+          },
+        ],
       },
       {
         test: /^((?!\.global).)*\.css$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
@@ -107,35 +107,35 @@ export default merge.smart(baseConfig, {
               modules: true,
               sourceMap: true,
               importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
-            }
-          }
-        ]
+              localIdentName: '[name]__[local]__[hash:base64:5]',
+            },
+          },
+        ],
       },
       // SASS support - compile all .global.scss files and pipe it to style.css
       {
         test: /\.global\.(scss|sass)$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
             options: {
-              sourceMap: true
-            }
+              sourceMap: true,
+            },
           },
           {
-            loader: 'sass-loader'
-          }
-        ]
+            loader: 'sass-loader',
+          },
+        ],
       },
       // SASS support - compile all other .scss files and pipe it to style.css
       {
         test: /^((?!\.global).)*\.(scss|sass)$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
             loader: 'css-loader',
@@ -143,13 +143,13 @@ export default merge.smart(baseConfig, {
               modules: true,
               sourceMap: true,
               importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
-            }
+              localIdentName: '[name]__[local]__[hash:base64:5]',
+            },
           },
           {
-            loader: 'sass-loader'
-          }
-        ]
+            loader: 'sass-loader',
+          },
+        ],
       },
       // WOFF Font
       {
@@ -158,9 +158,9 @@ export default merge.smart(baseConfig, {
           loader: 'file-loader',
           options: {
             limit: 10000,
-            mimetype: 'application/font-woff'
-          }
-        }
+            mimetype: 'application/font-woff',
+          },
+        },
       },
       // WOFF2 Font
       {
@@ -170,17 +170,17 @@ export default merge.smart(baseConfig, {
             loader: 'file-loader',
             options: {
               name: '[name].[ext]',
-              outputPath: 'fonts/'
-            }
-          }
-        ]
+              outputPath: 'fonts/',
+            },
+          },
+        ],
       },
       // Common Image Formats
       {
         test: /\.(?:ico|png|jpg|jpeg)$/,
-        use: 'url-loader'
-      }
-    ]
+        use: 'url-loader',
+      },
+    ],
   },
 
   plugins: [
@@ -189,7 +189,7 @@ export default merge.smart(baseConfig, {
       : new webpack.DllReferencePlugin({
           context: path.join(__dirname, '..', 'dll'),
           manifest: require(manifest),
-          sourceType: 'var'
+          sourceType: 'var',
         }),
 
     new webpack.HotModuleReplacementPlugin(),
@@ -209,17 +209,17 @@ export default merge.smart(baseConfig, {
      * 'staging', for example, by changing the ENV variables in the npm scripts
      */
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development'
+      NODE_ENV: 'development',
     }),
 
     new webpack.LoaderOptionsPlugin({
-      debug: true
-    })
+      debug: true,
+    }),
   ],
 
   node: {
     __dirname: false,
-    __filename: false
+    __filename: false,
   },
 
   devServer: {
@@ -239,11 +239,11 @@ export default merge.smart(baseConfig, {
     watchOptions: {
       aggregateTimeout: 300,
       ignored: /node_modules/,
-      poll: 100
+      poll: 100,
     },
     historyApiFallback: {
       verbose: false,
-      disableDotRule: false
+      disableDotRule: false,
     },
     before() {
       if (process.env.START_HOT) {
@@ -251,11 +251,11 @@ export default merge.smart(baseConfig, {
         spawn('npm', ['run', 'start-main-dev'], {
           shell: true,
           env: process.env,
-          stdio: 'inherit'
+          stdio: 'inherit',
         })
-          .on('close', code => process.exit(code))
-          .on('error', spawnError => console.error(spawnError));
+          .on('close', (code) => process.exit(code))
+          .on('error', (spawnError) => console.error(spawnError));
       }
-    }
-  }
+    },
+  },
 });
