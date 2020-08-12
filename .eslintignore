@@ -1,7 +1,6 @@
 # Logs
 logs
 *.log
-debug.log
 
 # Runtime data
 pids
@@ -31,8 +30,9 @@ node_modules
 # OSX
 .DS_Store
 
-# App dist packaged
+# App packaged
 release
+app/*.main.prod.js
 app/main.prod.js
 app/main.prod.js.map
 app/renderer.prod.js
@@ -51,3 +51,6 @@ __snapshots__
 # Package.json
 package.json
 .travis.yml
+*.css.d.ts
+*.sass.d.ts
+*.scss.d.ts

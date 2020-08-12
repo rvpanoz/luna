@@ -1,9 +1,8 @@
-/* eslint-disable global-require */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable compat/compat */
+/* eslint global-require: off, no-console: off */
 
 /**
- * Electron's main process
+ * When running `npm run build` or `npm run build-main`, this file is compiled to
+ * `./app/main.prod.js` using webpack.
  */
 
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
@@ -45,11 +44,8 @@ const APP_PATHS = {
 };
 
 const {
-  DEBUG_PROD = 1,
-  DEBUG_DEV = 1,
   MIN_WIDTH = 1280,
   MIN_HEIGHT = 960,
-  INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS = 1,
   NODE_ENV,
   START_MINIMIZED = startMinimized,
@@ -69,11 +65,11 @@ if (NODE_ENV === 'production') {
   fixPath();
 }
 
-if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
-  const p = path.join(__dirname, '..', 'app', 'node_modules');
-
-  DEBUG_DEV && require('electron-debug')();
-  require('module').globalPaths.push(p);
+if (
+  process.env.NODE_ENV === 'development' ||
+  process.env.DEBUG_PROD === 'true'
+) {
+  require('electron-debug')();
 }
 
 const installExtensions = async () => {
@@ -232,12 +228,15 @@ app.once('web-contents-created', (event, webContents) => {
     log.log(chalk.green.bold('[EVENT]: web-contents-created event fired'));
 });
 
-app.on('ready', async () => {
+const createMainWindow = async () => {
   NODE_ENV === 'development' &&
     log.log(chalk.green.bold('[EVENT]: ready event fired'));
 
-  if (NODE_ENV === 'development') {
-    INSTALL_EXTENSIONS && (await installExtensions());
+  if (
+    process.env.NODE_ENV === 'development' ||
+    process.env.DEBUG_PROD === 'true'
+  ) {
+    await installExtensions();
   }
 
   let x = 0;
@@ -329,6 +328,17 @@ app.on('ready', async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+};
+
+app
+  .whenReady()
+  .then(createMainWindow)
+  .catch((error) => log.error(error));
+
+app.on('activate', () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) createMainWindow();
 });
 
 process.on('uncaughtException', (error) => {

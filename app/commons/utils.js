@@ -174,7 +174,10 @@ export const isAlpha = (version) => {
  * @param {*} directory
  */
 export const readPackageJson = (directory) => {
-  console.log(directory);
+  if (directory === null) {
+    return;
+  }
+
   try {
     const packageJSON = fs.readFileSync(path.join(directory), {
       encoding: 'utf8',
@@ -182,7 +185,7 @@ export const readPackageJson = (directory) => {
 
     return JSON.parse(packageJSON);
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return null;
   }
 };

@@ -5,7 +5,7 @@ import { AppTabs, AppLogo } from 'components/common/';
 import {
   PackagesTab,
   ActionsTab,
-  HistoryTab
+  HistoryTab,
 } from 'components/views/sidebar/tabs';
 import styles from './styles/sidebar';
 
@@ -20,39 +20,45 @@ const Sidebar = ({
   tabPackagesData,
   installPackagesFromJson,
   dedupe,
-  cache
+  cache,
 }) => (
-    <div className={classes.root}>
-      <AppLogo />
-      <AppTabs>
-        <PackagesTab
-          items={tabPackagesData}
-          updatedAt={updatedAt}
-          loading={loading}
-          fromSearch={fromSearch}
-        />
-        <ActionsTab onInstallPackagesFromJson={installPackagesFromJson} onDedupe={dedupe} mode={mode} loading={loading} onCacheVerify={cache} />
-        <HistoryTab
-          directories={history}
-          onClick={loadDirectory}
-          loading={loading}
-        />
-      </AppTabs>
-    </div>
-  );
+  <div className={classes.root}>
+    <AppLogo />
+    <AppTabs>
+      <PackagesTab
+        items={tabPackagesData}
+        updatedAt={updatedAt}
+        loading={loading}
+        fromSearch={fromSearch}
+      />
+      <ActionsTab
+        onInstallPackagesFromJson={installPackagesFromJson}
+        onDedupe={dedupe}
+        mode={mode}
+        loading={loading}
+        onCacheVerify={cache}
+      />
+      <HistoryTab
+        directories={history}
+        onClick={loadDirectory}
+        loading={loading}
+      />
+    </AppTabs>
+  </div>
+);
 
 Sidebar.propTypes = {
   classes: objectOf(string).isRequired,
   mode: string.isRequired,
-  loading: bool,
-  history: arrayOf(object),
   loadDirectory: func.isRequired,
   installPackagesFromJson: func.isRequired,
   dedupe: func.isRequired,
   cache: func.isRequired,
+  loading: bool,
+  history: arrayOf(object),
   updatedAt: string,
   fromSearch: bool,
-  tabPackagesData: arrayOf(object)
+  tabPackagesData: arrayOf(object),
 };
 
 export default withStyles(styles)(Sidebar);

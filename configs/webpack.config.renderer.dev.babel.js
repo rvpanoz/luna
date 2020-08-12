@@ -1,4 +1,4 @@
-/* eslint global-require: off, import/no-dynamic-require: off */
+/* eslint global-require: off, no-console: off */
 
 /**
  * Build config for development electron renderer process that uses
@@ -16,7 +16,11 @@ import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
 import { CheckNodeEnv } from '../internals/scripts';
 
-CheckNodeEnv('development');
+// When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
+// at the dev webpack config is not accidentally run in a production environment
+if (process.env.NODE_ENV === 'production') {
+  CheckNodeEnv('development');
+}
 
 const port = process.env.PORT || 1211;
 const publicPath = `http://localhost:${port}/dist`;
@@ -45,6 +49,9 @@ export default merge(baseConfig, {
   mode: 'development',
   target: 'electron-renderer',
   entry: [
+    'core-js',
+    'regenerator-runtime/runtime',
+    ...(process.env.PLAIN_HMR ? [] : ['react-hot-loader/patch']),
     /* bundle the client for webpack dev server
     and connect to the provided endpoint */
     `webpack-dev-server/client?http://localhost:${port}/`,
@@ -52,7 +59,7 @@ export default merge(baseConfig, {
     only- means to only hot reload for successful updates */
     'webpack/hot/only-dev-server',
     /* the entry point */
-    require.resolve('../app/index'),
+    require.resolve('../app/index.js'),
   ],
   output: {
     publicPath: `http://localhost:${port}/dist/`,
@@ -60,6 +67,7 @@ export default merge(baseConfig, {
   },
   resolve: {
     alias: {
+      'react-dom': '@hot-loader/react-dom',
       assets: path.resolve(path.join(__dirname, '..', 'app', 'assets')),
       constants: path.resolve(path.join(__dirname, '..', 'app', 'constants')),
       commons: path.resolve(path.join(__dirname, '..', 'app', 'commons')),
@@ -173,7 +181,6 @@ export default merge(baseConfig, {
      */
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development',
-      DEBUG_DEV: true,
     }),
 
     new webpack.LoaderOptionsPlugin({
@@ -190,28 +197,25 @@ export default merge(baseConfig, {
     port,
     publicPath,
     compress: true,
-    noInfo: true,
+    noInfo: false,
     stats: 'errors-only',
     inline: true,
     lazy: false,
-    liveReload: true,
-    hot: false, // refresh on errors
-    hotOnly: true, // refresh if hot loading fails
+    hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
     contentBase: path.join(__dirname, 'dist'),
-    watchContentBase: true,
     watchOptions: {
       aggregateTimeout: 300,
       ignored: /node_modules/,
       poll: 100,
     },
     historyApiFallback: {
-      verbose: false,
+      verbose: true,
       disableDotRule: false,
     },
     before() {
       if (process.env.START_HOT) {
-        log(chalk.whiteBright('Starting Main Process...'));
+        console.log('Starting Main Process...');
         spawn('npm', ['run', 'start-main-dev'], {
           shell: true,
           env: process.env,

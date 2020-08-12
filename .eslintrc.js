@@ -1,72 +1,27 @@
-/* eslintrc  */
-
 const path = require('path');
 
 module.exports = {
   parser: 'babel-eslint',
-  parserOptions: {
-    sourceType: 'module',
-    allowImportExportEverywhere: true
+  extends: ['prettier', 'prettier/react'],
+  rules: {
+    // A temporary hack related to IDE not resolving correct package.json
+    'import/no-extraneous-dependencies': 'off',
   },
-  extends: ['airbnb', 'prettier', 'prettier/react'],
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    allowImportExportEverywhere: true,
+  },
   env: {
     browser: true, // access window, document, navigator objects
-    node: true
-  },
-  rules: {
-    'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
-    'linebreak-style': 0,
-    'arrow-parens': ['off'],
-    'compat/compat': 'off',
-    'consistent-return': 'off',
-    camelcase: 'off',
-    'react/jsx-props-no-spreading': 'off',
-    'prefer-object-spread': 'off',
-    'comma-dangle': 'off',
-    'no-underscore-dangle': 'off',
-    'generator-star-spacing': 'off',
-    'import/no-unresolved': 'error',
-    'import/no-duplicates': 'off',
-    'import/no-extraneous-dependencies': 'off',
-    'import/prefer-default-export': 'warn',
-    'no-nested-ternary': 'off',
-    'no-underscore-dangle': 'off',
-    'jsx-a11y/anchor-is-valid': 'off',
-    'no-console': 'off',
-    'no-use-before-define': 'off',
-    'no-multi-assign': 'off',
-    'no-restricted-globals': 'off',
-    'no-unused-expressions': 'off',
-    'no-case-declarations': 'off',
-    'promise/param-names': 'error',
-    'promise/always-return': 'error',
-    'promise/catch-or-return': 'error',
-    'promise/no-native': 'off',
-    'react/forbid-prop-types': 'off',
-    'react/sort-comp': [
-      'error',
-      {
-        order: [
-          'type-annotations',
-          'static-methods',
-          'lifecycle',
-          'everything-else',
-          'render'
-        ]
-      }
-    ],
-    'react/require-default-props': 'off',
-    'react/jsx-no-bind': 'off',
-    'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx'] }],
-    'react/prefer-stateless-function': 'off'
+    node: true,
   },
   plugins: ['import', 'promise', 'compat', 'react', 'react-hooks'],
   settings: {
     'import/resolver': {
       webpack: {
-        config: path.resolve(__dirname, 'configs/webpack.config.eslint.js')
-      }
-    }
-  }
+        config: path.resolve(__dirname, 'configs/webpack.config.eslint.js'),
+      },
+    },
+  },
 };

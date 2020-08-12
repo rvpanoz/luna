@@ -31,7 +31,7 @@ const PackageItem = ({
   hasError,
 }) => {
   const rowRef = useRef();
-  console.log(name);
+
   return (
     <TableRow
       key={`pkg-${name}`}
