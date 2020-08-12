@@ -206,8 +206,6 @@
     "electron-store": "^6.0.0",
     "eslint": "^6.8.0",
     "fix-path": "^3.0.0",
-    "handlebars": "^4.7.6",
-    "lock-verify": "^2.2.1",
     "material-design-icons": "^3.0.1",
     "prop-types": "^15.7.2",
     "ramda": "^0.27.1",
