@@ -53,7 +53,7 @@ const APP_PATHS = {
 app.allowRendererProcessReuse = true;
 
 const {
-  DEBUG_PROD = 1,
+  DEBUG_PROD = 0,
   MIN_WIDTH = 1280,
   MIN_HEIGHT = 960,
   UPGRADE_EXTENSIONS = 1,
@@ -61,10 +61,7 @@ const {
   START_MINIMIZED = startMinimized,
 } = process.env;
 
-// store initialization
 const Store = new ElectronStore();
-
-// clear opened packages
 Store.set('history', []);
 
 let mainWindow = null;
@@ -257,6 +254,7 @@ const createMainWindow = async () => {
     resizable: true,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
     },
     icon: path.join(__dirname, '..', 'resources/icon.png'),
   });

@@ -7,18 +7,18 @@ import { runCommand } from '../cli';
 import mk from '../mk';
 
 const {
-  defaultSettings: { defaultManager }
+  defaultSettings: { defaultManager },
 } = mk || {};
 
 const onNpmListOutdated = (event, options, store) => {
   const { activeManager = defaultManager, directory, mode } = options || {};
   const settings = store.get('user_settings');
   const history = store.get('history') || [];
-  let yarnLock;
 
   // define callbacks
-  const onFlow = chunk => event.sender.send('npm-list-outdated-flow', chunk);
-  const onError = error => event.sender.send('npm-list-outdated-error', error);
+  const onFlow = (chunk) => event.sender.send('npm-list-outdated-flow', chunk);
+  const onError = (error) =>
+    event.sender.send('npm-list-outdated-error', error);
 
   const onComplete = (errors, data, cmd) => {
     if (directory && mode === 'local') {
@@ -27,7 +27,7 @@ const onNpmListOutdated = (event, options, store) => {
         const { name } = path.parse(dirName) || {};
 
         const inDirectories = history.some(
-          pkg => pkg.directory && pkg.directory.includes(dirName)
+          (pkg) => pkg.directory && pkg.directory.includes(dirName)
         );
 
         // add directory to history list
@@ -36,21 +36,20 @@ const onNpmListOutdated = (event, options, store) => {
             ...history,
             {
               name,
-              directory: path.join(dirName, 'package.json')
-            }
+              directory: path.join(dirName, 'package.json'),
+            },
           ]);
         }
 
-        // check if yarn.lock exists
-        yarnLock = fs.existsSync(
+        const yarnLock = fs.existsSync(
           path.join(path.dirname(directory), 'yarn.lock')
         );
+
+        if (yarnLock) {
+          event.sender.send('yarn-lock-detected');
+        }
       } catch (error) {
         throw new Error(error);
-      }
-
-      if (yarnLock) {
-        event.sender.send('yarn-lock-detected');
       }
     }
 
@@ -58,20 +57,20 @@ const onNpmListOutdated = (event, options, store) => {
     event.sender.send('npm-list-outdated-completed', data, errors, cmd);
   };
 
-  const callback = result => {
+  const callback = (result) => {
     const { status, errors, data, cmd } = result;
 
     return switchcase({
-      flow: dataChunk => onFlow(dataChunk),
+      flow: (dataChunk) => onFlow(dataChunk),
       close: () => onComplete(errors, data, cmd),
-      error: error => onError(error)
+      error: (error) => onError(error),
     })(null)(status);
   };
 
   try {
     const params = merge(settings, {
       activeManager,
-      ...options
+      ...options,
     });
 
     runCommand(params, callback);
