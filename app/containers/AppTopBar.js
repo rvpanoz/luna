@@ -25,14 +25,12 @@ const mapState = ({
   notifications: { notifications },
   ui: {
     loaders: {
-      loader: { loading }
-    }
+      loader: { loading },
+    },
   },
-  npm: { env: {
-    metricsRegistry,
-    auditLevel,
-    cache
-  } }
+  npm: {
+    env: { metricsRegistry, auditLevel, cache },
+  },
 }) => ({
   activePage,
   notifications,
@@ -41,7 +39,7 @@ const mapState = ({
   metricsRegistry,
   auditLevel,
   cache,
-  loading
+  loading,
 });
 
 const AppTopBar = ({ classes, className }) => {
@@ -53,27 +51,27 @@ const AppTopBar = ({ classes, className }) => {
     directory,
     notifications,
     loading,
-    activePage
+    activePage,
   } = useMappedState(mapState);
 
   const [initFlow, toggleInitFlow] = useState({
     show: false,
-    directory: null
-  })
+    directory: null,
+  });
   const [dialog, setDialog] = useState({
     open: false,
     title: '',
-    active: null
+    active: null,
   });
 
   const dispatch = useDispatch();
 
   const onLoadDirectory = useCallback(() => {
-    const dialogHandler = filePath => {
+    const dialogHandler = (filePath) => {
       dispatch(
         setActivePage({
           page: 'packages',
-          paused: false
+          paused: false,
         })
       );
       dispatch(setMode({ mode: 'local', directory: filePath.join('') }));
@@ -83,37 +81,37 @@ const AppTopBar = ({ classes, className }) => {
   }, [dispatch]);
 
   const closeDialog = useCallback(() => {
-    setDialog({ ...dialog, open: false, active: null, title: '' })
+    setDialog({ ...dialog, open: false, active: null, title: '' });
     toggleInitFlow({
       ...initFlow,
-      show: false
-    })
-  }, [dialog, initFlow])
+      show: false,
+    });
+  }, [dialog, initFlow]);
 
   const onNpmInit = useCallback(() => {
     dispatch(
       runInit({
         ipcEvent: 'npm-init',
         cmd: ['init'],
-        directory: initFlow.directory || null
+        directory: initFlow.directory || null,
       })
     );
 
     closeDialog();
-  }, [dispatch, closeDialog, initFlow])
+  }, [dispatch, closeDialog, initFlow]);
 
-  const setActivePageHandler = page =>
+  const setActivePageHandler = (page) =>
     dispatch(
       setActivePage({
         page,
-        paused: true
+        paused: true,
       })
     );
 
   return (
     <div
       className={cn(classes.root, {
-        [className]: className !== undefined
+        [className]: className !== undefined,
       })}
     >
       <TopBar
@@ -124,8 +122,22 @@ const AppTopBar = ({ classes, className }) => {
         onLoadDirectory={onLoadDirectory}
         setActivePage={setActivePageHandler}
         activePage={activePage}
-        onInitFlow={() => setDialog({ ...dialog, open: true, active: 'Init', title: iMessage('title', 'createPackageJson') })}
-        onShowSettings={() => setDialog({ ...dialog, open: true, active: 'Settings', title: iMessage('title', 'settings') })}
+        onInitFlow={() =>
+          setDialog({
+            ...dialog,
+            open: true,
+            active: 'Init',
+            title: iMessage('title', 'createPackageJson'),
+          })
+        }
+        onShowSettings={() =>
+          setDialog({
+            ...dialog,
+            open: true,
+            active: 'Settings',
+            title: iMessage('title', 'settings'),
+          })
+        }
       />
       <Dialog
         open={dialog.open}
@@ -134,33 +146,52 @@ const AppTopBar = ({ classes, className }) => {
         onClose={closeDialog}
         aria-labelledby="npm-init"
       >
-        <DialogTitle disableTypography classes={{ root: classes.dialogTitle }}>{dialog.title}</DialogTitle>
+        <DialogTitle disableTypography classes={{ root: classes.dialogTitle }}>
+          {dialog.title}
+        </DialogTitle>
         <Divider light />
         <DialogContent>
-          {dialog.active === 'Init' && <Init onClose={closeDialog} enableInit={(directoryPath) => toggleInitFlow({
-            ...initFlow,
-            directory: directoryPath
-          })} />}
-          {dialog.active === 'Settings' && <Settings
-            onClose={closeDialog}
-            metricsRegistry={metricsRegistry}
-            cache={cache}
-            auditLevel={auditLevel}
-          />}
+          {dialog.active === 'Init' && (
+            <Init
+              onClose={closeDialog}
+              enableInit={(directoryPath) =>
+                toggleInitFlow({
+                  ...initFlow,
+                  directory: directoryPath,
+                })
+              }
+            />
+          )}
+          {dialog.active === 'Settings' && (
+            <Settings
+              onClose={closeDialog}
+              metricsRegistry={metricsRegistry}
+              cache={cache}
+              auditLevel={auditLevel}
+            />
+          )}
         </DialogContent>
         <DialogActions>
-          <Button classes={{
-            root: classes.closeButton
-          }} variant="outlined" color="secondary" onClick={closeDialog}>{iMessage('action', 'close')}
-          </Button>
-          {dialog.active === 'Init' && <Button
-            color="primary"
+          <Button
+            classes={{
+              root: classes.closeButton,
+            }}
             variant="outlined"
-            onClick={() => onNpmInit()}
-            disabled={!initFlow.directory}
+            color="secondary"
+            onClick={closeDialog}
           >
-            {iMessage('action', 'create')}
-          </Button>}
+            {iMessage('action', 'close')}
+          </Button>
+          {dialog.active === 'Init' && (
+            <Button
+              color="primary"
+              variant="outlined"
+              onClick={() => onNpmInit()}
+              disabled={!initFlow.directory}
+            >
+              {iMessage('action', 'create')}
+            </Button>
+          )}
         </DialogActions>
       </Dialog>
     </div>
@@ -169,7 +200,7 @@ const AppTopBar = ({ classes, className }) => {
 
 AppTopBar.propTypes = {
   classes: objectOf(string).isRequired,
-  className: string
+  className: string,
 };
 
 export default withStyles(styles)(AppTopBar);
