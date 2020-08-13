@@ -4,10 +4,10 @@
 
 import path from 'path';
 import webpack from 'webpack';
-import { dependencies } from '../package.json';
+import { dependencies as externals } from '../package.json';
 
 export default {
-  externals: [...Object.keys(dependencies || {})],
+  externals: [...Object.keys(externals || {})],
 
   module: {
     rules: [
@@ -35,6 +35,7 @@ export default {
    */
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
+    modules: [path.join(__dirname, '..', 'app'), 'node_modules'],
   },
 
   plugins: [

@@ -185,7 +185,6 @@ export const readPackageJson = (directory) => {
 
     return JSON.parse(packageJSON);
   } catch (error) {
-    // console.log(error);
     return null;
   }
 };

@@ -1,11 +1,11 @@
 import { flexContainer, defaultFont } from 'styles/variables';
 
-const styles = theme => ({
+const styles = (theme) => ({
   flexContainerCell: {
     ...flexContainer,
     flexDirection: 'column',
     justifyContent: 'flex-start',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   tableRow: {
     border: 'none',
@@ -13,35 +13,34 @@ const styles = theme => ({
     lineHeight: '1.1',
     verticalAlign: 'middle',
     '&:hover': {
-      cursor: 'pointer'
-    }
+      cursor: 'pointer',
+    },
   },
   tableCell: {
     '& p': {
-      overflowWrap: 'break-word'
-    }
+      overflowWrap: 'break-word',
+    },
   },
   cellText: {
-    ...defaultFont,
     textAlign: 'left',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
   },
   requiredBy: {
     [theme.breakpoints.up('lg')]: {
-      width: 'auto'
+      width: 'auto',
     },
     [theme.breakpoints.down('md')]: {
-      width: 200
+      width: 200,
     },
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    textAlign: 'left'
+    textAlign: 'left',
   },
   span: {
-    color: '#fff'
+    color: '#fff',
   },
   popover: {
     pointerEvents: 'none',

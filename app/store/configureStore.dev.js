@@ -2,14 +2,9 @@
  * Redux store
  */
 
-/* eslint no-underscore-dangle: 0 */
-/* eslint-disable global-require */
-
 import { createStore, compose, applyMiddleware } from 'redux';
 import { createLogger } from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
-// import { BehaviorSubject } from 'rxjs';
-// import { switchMap } from 'rxjs/operators';
 
 // epics
 import { epics as packagesEpics } from 'models/packages';
@@ -23,14 +18,14 @@ import rootReducer from '../reducers';
 
 const reduxLogger = /--redux-logger/.test(process.argv[3]);
 
-const configureStore = initialState => {
+const configureStore = (initialState) => {
   const epicMiddleware = createEpicMiddleware();
   const middleware = [epicMiddleware];
   const enhancers = [];
 
   const logger = createLogger({
     level: 'info',
-    collapsed: true
+    collapsed: true,
   });
 
   if (process.env.NODE_ENV === 'development') {
@@ -43,7 +38,7 @@ const configureStore = initialState => {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
-
+  console.log(composeEnhancers);
   // apply middleware & compose enhancers
   enhancers.push(applyMiddleware(...middleware));
   const enhancer = composeEnhancers(...enhancers);

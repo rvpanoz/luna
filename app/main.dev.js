@@ -5,8 +5,12 @@
  * `./app/main.prod.js` using webpack.
  */
 
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import ElectronStore from 'electron-store';
+import installExtension, { REDUX_DEVTOOLS } from 'electron-devtools-installer';
 import path from 'path';
 import chalk from 'chalk';
 import log from 'electron-log';
@@ -27,7 +31,6 @@ import {
   onNpmInit,
   onNpmInitLock,
 } from './mainProcess';
-import { CheckNpm } from '../internals/scripts';
 
 const {
   defaultSettings: { startMinimized },
@@ -44,6 +47,7 @@ const APP_PATHS = {
 };
 
 const {
+  DEBUG_PROD = 0,
   MIN_WIDTH = 1280,
   MIN_HEIGHT = 960,
   UPGRADE_EXTENSIONS = 1,
@@ -65,21 +69,14 @@ if (NODE_ENV === 'production') {
   fixPath();
 }
 
-if (
-  process.env.NODE_ENV === 'development' ||
-  process.env.DEBUG_PROD === 'true'
-) {
+if (NODE_ENV === 'development' || DEBUG_PROD === 'true') {
   require('electron-debug')();
 }
 
-const installExtensions = async () => {
-  const installer = require('electron-devtools-installer');
-  const forceDownload = !!UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
-
-  return Promise.all(
-    extensions.map((name) => installer.default(installer[name], forceDownload))
-  ).catch(console.log);
+const setupExtensions = async () => {
+  return installExtension(REDUX_DEVTOOLS)
+    .then((name) => console.log(`Added Extension:  ${name}`))
+    .catch((err) => console.log('An error occurred: ', err));
 };
 
 /**
@@ -228,17 +225,10 @@ app.once('web-contents-created', (event, webContents) => {
     log.log(chalk.green.bold('[EVENT]: web-contents-created event fired'));
 });
 
+/**
+ * Create main window
+ */
 const createMainWindow = async () => {
-  NODE_ENV === 'development' &&
-    log.log(chalk.green.bold('[EVENT]: ready event fired'));
-
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
-  ) {
-    await installExtensions();
-  }
-
   let x = 0;
   let y = 0;
   const screenSize = screen.getPrimaryDisplay().size;
@@ -252,7 +242,6 @@ const createMainWindow = async () => {
     y = externalDisplay.bounds.y + 50;
   }
 
-  // create mainWindow
   mainWindow = new BrowserWindow({
     minWidth: MIN_WIDTH || screenSize.width,
     minHeight: MIN_HEIGHT || screenSize.height,
@@ -260,11 +249,14 @@ const createMainWindow = async () => {
     y,
     show: false,
     resizable: true,
-    webPreferences: {
-      worldSafeExecuteJavaScript: true,
-      enableRemoteModule: true,
-      nodeIntegration: true,
-    },
+    webPreferences:
+      process.env.NODE_ENV === 'development'
+        ? {
+            nodeIntegration: true,
+          }
+        : {
+            preload: path.join(__dirname, 'dist/renderer.prod.js'),
+          },
     icon: path.join(__dirname, '..', 'resources/icon.png'),
   });
 
@@ -293,12 +285,6 @@ const createMainWindow = async () => {
     if (NODE_ENV === 'development') {
       mainWindow.openDevTools();
     }
-
-    // npm and node info
-    const npmEnv = await CheckNpm();
-    const npmEnvError = npmEnv && npmEnv.error;
-
-    event.sender.send('npm-env-close', npmEnvError, npmEnv);
 
     // user settings
     const userSettings = Store.get('user_settings') || {};
@@ -332,7 +318,16 @@ const createMainWindow = async () => {
 
 app
   .whenReady()
-  .then(createMainWindow)
+  .then(async () => {
+    NODE_ENV === 'development' &&
+      log.log(chalk.green.bold('[EVENT]: ready event fired'));
+
+    if (NODE_ENV === 'development' || DEBUG_PROD === 'true') {
+      await setupExtensions();
+    }
+
+    createMainWindow();
+  })
   .catch((error) => log.error(error));
 
 app.on('activate', () => {

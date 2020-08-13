@@ -1,23 +1,23 @@
 import { defaultFont, flexContainer } from 'styles/variables';
 
-const styles = theme => ({
+const styles = (theme) => ({
   container: {
     width: '100%',
     display: 'flex',
     justifyContent: 'space-between',
-    paddingTop: theme.spacing(1) * 4
+    paddingTop: theme.spacing(1) * 4,
   },
   tableWrapper: {
     whiteSpace: 'nowrap',
     padding: theme.spacing(1),
     overflowY: 'scroll',
     [theme.breakpoints.up('md')]: {
-      maxHeight: 400
+      maxHeight: 400,
     },
     [theme.breakpoints.down('md')]: {
       maxWidth: '100%',
-      maxHeight: 260
-    }
+      maxHeight: 260,
+    },
   },
   tableRow: {
     border: 'none',
@@ -26,66 +26,65 @@ const styles = theme => ({
     verticalAlign: 'middle',
     '&:hover': {
       cursor: 'pointer',
-      backgroundColor: theme.palette.secondary.ligth
-    }
+      backgroundColor: theme.palette.secondary.ligth,
+    },
   },
   table: {
     backgroundColor: 'transparent',
     borderSpacing: 0,
-    borderCollapse: 'collapse'
+    borderCollapse: 'collapse',
   },
   tableCell: {
     fontSize: 12,
     '& p': {
-      overflowWrap: 'break-word'
-    }
+      overflowWrap: 'break-word',
+    },
   },
   flexContainer: {
     ...flexContainer,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   flexCenter: {
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   cellCenter: {
-    textAlign: 'center'
+    textAlign: 'center',
   },
   spacer: {
-    flex: '1 1 100%'
+    flex: '1 1 100%',
   },
   header: {
     flex: '0 0 auto',
-    padding: theme.spacing(2) + 4
+    padding: theme.spacing(2) + 4,
   },
   title: {
-    ...defaultFont
+    ...defaultFont,
   },
   text: {
-    ...defaultFont,
     fontSize: 12,
     [theme.breakpoints.up('md')]: {
-      maxWidth: '100%'
+      maxWidth: '100%',
     },
     [theme.breakpoints.up('lg')]: {
-      width: 'auto'
+      width: 'auto',
     },
     whiteSpace: 'nowrap',
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
   },
   actions: {
     display: 'flex',
     width: '100%',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingRight: theme.spacing(1)
+    paddingRight: theme.spacing(1),
   },
   padRight: {
-    paddingRight: theme.spacing(2)
+    paddingRight: theme.spacing(2),
   },
   marLeft: {
-    marginLeft: theme.spacing(2)
-  }
+    marginLeft: theme.spacing(2),
+  },
 });
 
 export default styles;

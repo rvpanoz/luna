@@ -2,8 +2,8 @@
  * global styling
  */
 
-@import '~material-design-icons/iconfont/material-icons.css';
-@import '~typeface-roboto';
+/* @import '~material-design-icons/iconfont/material-icons.css';
+@import '~typeface-roboto'; */
 @import './styles/reset.css';
 
 html,
@@ -14,7 +14,7 @@ html,
 }
 
 body {
-  font-family: 'Regular', 'Roboto', cursive, sans-serif;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   overflow-y: hidden;
 }
 
@@ -32,7 +32,7 @@ body {
   border-radius: 10px;
 }
 
-@font-face {
+/* @font-face {
   font-family: 'Regular';
   src: local('Regular'), local('Regular'),
     url('./assets/fonts/Regular.woff') format('woff'),
@@ -48,4 +48,4 @@ body {
     url('./assets/fonts/Light.woff2') format('woff2'),
     url('./assets/fonts/Light.ttf') format('truetype'),
     url('./assets/fonts/Light.eot') format('eot');
-}
+} */

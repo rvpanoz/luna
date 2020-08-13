@@ -1,9 +1,8 @@
 import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont, boxShadow, defaultBoxShadow } from 'styles/variables';
 
-const buttonStyle = theme => ({
+const buttonStyle = (theme) => ({
   button: {
-    ...defaultFont,
     color: theme.palette.common.white,
     border: 'none',
     borderRadius: 5,
@@ -17,35 +16,35 @@ const buttonStyle = theme => ({
     textAlign: 'center',
     whiteSpace: 'nowrap',
     verticalAlign: 'middle',
-    cursor: 'pointer'
+    cursor: 'pointer',
   },
   fullWidth: {
-    width: '100%'
+    width: '100%',
   },
   noShadow: {
-    boxShadow: '0 !important'
+    boxShadow: '0 !important',
   },
   primary: {
     backgroundColor: theme.palette.primary.main,
     ...defaultBoxShadow,
     '&:hover': {
-      backgroundColor: darken(theme.palette.primary.light, 0.1)
-    }
+      backgroundColor: darken(theme.palette.primary.light, 0.1),
+    },
   },
   secondary: {
     backgroundColor: theme.palette.secondary.main,
     ...defaultBoxShadow,
     '&:hover': {
-      backgroundColor: darken(theme.palette.secondary.light, 0.1)
-    }
+      backgroundColor: darken(theme.palette.secondary.light, 0.1),
+    },
   },
   secondaryLarge: {
     color: theme.palette.secondary.main,
     ...boxShadow,
     '&:hover': {
       color: theme.palette.primary.main,
-      backgroundColor: lighten(theme.palette.secondary.light, 0.9)
-    }
+      backgroundColor: lighten(theme.palette.secondary.light, 0.9),
+    },
   },
   error: {
     backgroundColor: theme.palette.error.main,
@@ -53,30 +52,30 @@ const buttonStyle = theme => ({
     '&:hover': {
       backgroundColor: theme.palette.error.light,
       boxShadow:
-        '0 14px 26px -12px rgba(244, 67, 54, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(244, 67, 54, 0.2)'
-    }
+        '0 14px 26px -12px rgba(244, 67, 54, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(244, 67, 54, 0.2)',
+    },
   },
   simple: {
     '&,&:focus,&:hover': {
       color: theme.palette.common.white,
       backgroundColor: theme.palette.secondary.main,
-      boxShadow: 'none'
-    }
+      boxShadow: 'none',
+    },
   },
   transparent: {
     '&,&:focus,&:hover': {
       color: 'inherit',
       background: 'transparent',
-      boxShadow: 'none'
-    }
+      boxShadow: 'none',
+    },
   },
   round: {
-    borderRadius: 50
+    borderRadius: 50,
   },
   disabled: {
     opacity: '0.65',
-    pointerEvents: 'none'
-  }
+    pointerEvents: 'none',
+  },
 });
 
 export default buttonStyle;

@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-
 import styles from './styles/appTabs';
 
 const TabContainer = ({ children, loading }) => (
@@ -16,7 +15,7 @@ const TabContainer = ({ children, loading }) => (
 
 TabContainer.propTypes = {
   children: node.isRequired,
-  loading: bool
+  loading: bool,
 };
 
 const AppTabs = ({ classes, children }) => {
@@ -28,19 +27,19 @@ const AppTabs = ({ classes, children }) => {
         <Tabs value={value} onChange={(e, tabValue) => setValue(tabValue)}>
           <Tab
             classes={{
-              root: classes.tabLabel
+              root: classes.tabLabel,
             }}
             label="Project"
           />
           <Tab
             classes={{
-              root: classes.tabLabel
+              root: classes.tabLabel,
             }}
             label="Actions"
           />
           <Tab
             classes={{
-              root: classes.tabLabel
+              root: classes.tabLabel,
             }}
             label="History"
           />
@@ -53,7 +52,7 @@ const AppTabs = ({ classes, children }) => {
             <TabContainer>
               {React.cloneElement(child, {
                 items: child.props.items,
-                metadata: child.props.metadata
+                metadata: child.props.metadata,
               })}
             </TabContainer>
           );
@@ -67,7 +66,7 @@ const AppTabs = ({ classes, children }) => {
 
 AppTabs.propTypes = {
   children: node.isRequired,
-  classes: objectOf(string).isRequired
+  classes: objectOf(string).isRequired,
 };
 
 export default withStyles(styles)(AppTabs);

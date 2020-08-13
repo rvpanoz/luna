@@ -2,9 +2,8 @@ import { defaultFont } from 'styles/variables';
 
 const styles = () => ({
   tableHeadCell: {
-    ...defaultFont,
     fontSize: 16,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   tableCell: {
     fontSize: 14,
@@ -12,8 +11,8 @@ const styles = () => ({
     padding: '0px 12px',
     verticalAlign: 'middle',
     maxWidth: 100,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 
 export default styles;
