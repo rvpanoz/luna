@@ -49,8 +49,11 @@ const APP_PATHS = {
   UserData: app.getPath('userData'),
 };
 
+// Fix deprecation warning (Electron 8)
+app.allowRendererProcessReuse = true;
+
 const {
-  DEBUG_PROD = 0,
+  DEBUG_PROD = 1,
   MIN_WIDTH = 1280,
   MIN_HEIGHT = 960,
   UPGRADE_EXTENSIONS = 1,
@@ -72,7 +75,7 @@ if (NODE_ENV === 'production') {
   fixPath();
 }
 
-if (NODE_ENV === 'development' || DEBUG_PROD === 'true') {
+if (NODE_ENV === 'development' || DEBUG_PROD) {
   require('electron-debug')();
 }
 
@@ -252,14 +255,9 @@ const createMainWindow = async () => {
     y,
     show: false,
     resizable: true,
-    webPreferences:
-      process.env.NODE_ENV === 'development'
-        ? {
-            nodeIntegration: true,
-          }
-        : {
-            preload: path.join(__dirname, 'dist/renderer.prod.js'),
-          },
+    webPreferences: {
+      nodeIntegration: true,
+    },
     icon: path.join(__dirname, '..', 'resources/icon.png'),
   });
 
@@ -285,7 +283,7 @@ const createMainWindow = async () => {
       mainWindow.focus();
     }
 
-    if (NODE_ENV === 'development') {
+    if (NODE_ENV === 'development' || DEBUG_PROD) {
       mainWindow.openDevTools();
     }
 
@@ -325,9 +323,10 @@ app
     NODE_ENV === 'development' &&
       log.log(chalk.green.bold('[EVENT]: ready event fired'));
 
-    if (NODE_ENV === 'development' || DEBUG_PROD === 'true') {
-      await setupExtensions();
-    }
+    // TODO: fix error when installing extensions
+    // if (NODE_ENV === 'development' || DEBUG_PROD) {
+    //   await setupExtensions();
+    // }
 
     createMainWindow();
   })

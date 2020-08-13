@@ -199,7 +199,7 @@ export default merge(baseConfig, {
     lazy: false,
     hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
-    contentBase: path.join(__dirname, 'dist'),
+    contentBase: path.join(__dirname, '..', 'app', 'dist'),
     watchOptions: {
       aggregateTimeout: 300,
       ignored: /node_modules/,

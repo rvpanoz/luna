@@ -86,9 +86,6 @@ const styles = (theme) => ({
     color: lighten(grayColor, 0.1),
     fontSize: 16,
   },
-  noData: {
-    ...defaultFont,
-  },
   withPadding: {
     padding: theme.spacing(1) + 4,
   },

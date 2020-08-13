@@ -14,9 +14,6 @@ const styles = (theme) => ({
     fontSize: 18,
     marginBottom: theme.spacing(1),
   },
-  description: {
-    ...defaultFont,
-  },
   listItem: {
     padding: theme.spacing(1),
     margin: 0,

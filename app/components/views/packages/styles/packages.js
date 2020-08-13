@@ -95,9 +95,6 @@ const styles = (theme) => ({
       duration: theme.transitions.duration.shortest,
     }),
   },
-  noData: {
-    ...defaultFont,
-  },
   withPadding: {
     padding: theme.spacing(1) + 4,
   },
@@ -105,9 +102,6 @@ const styles = (theme) => ({
     width: 15,
     height: 15,
     marginRight: theme.spacing(0.5),
-  },
-  nodata: {
-    ...defaultFont,
   },
   icon: {
     width: '0.85em',

@@ -8,9 +8,6 @@ const styles = (theme) => ({
     alignItems: 'center',
     paddingTop: theme.spacing(2),
   },
-  noData: {
-    ...defaultFont,
-  },
   withPadding: {
     padding: theme.spacing(1),
   },

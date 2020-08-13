@@ -1,5 +1,3 @@
-/* eslint-disable global-require */
-
 import React from 'react';
 import ReactDom from 'react-dom';
 import { StoreContext } from 'redux-react-hook';

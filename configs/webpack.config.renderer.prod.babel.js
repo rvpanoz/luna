@@ -11,19 +11,30 @@ import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
 import { CheckNodeEnv } from '../internals/scripts';
+import DeleteSourceMaps from '../internals/scripts/DeleteSourceMaps';
 
 CheckNodeEnv('production');
+DeleteSourceMaps();
 
 export default merge(baseConfig, {
-  devtool: 'source-map',
+  devtool: process.env.DEBUG_PROD ? 'source-map' : 'none',
+
   mode: 'production',
+
   target: 'electron-renderer',
-  entry: path.join(__dirname, '..', 'app/index'),
+
+  entry: [
+    'core-js',
+    'regenerator-runtime/runtime',
+    path.join(__dirname, '..', 'app/index.js'),
+  ],
+
   output: {
     path: path.join(__dirname, '..', 'app/dist'),
     publicPath: './dist/',
     filename: 'renderer.prod.js',
   },
+
   resolve: {
     alias: {
       assets: path.resolve(path.join(__dirname, '..', 'app', 'assets')),
@@ -145,6 +156,8 @@ export default merge(baseConfig, {
      */
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'production',
+      DEBUG_PROD: true,
+      E2E_BUILD: false,
     }),
 
     new MiniCssExtractPlugin({

@@ -45,9 +45,6 @@ const styles = (theme) => ({
       duration: theme.transitions.duration.shortest,
     }),
   },
-  noData: {
-    ...defaultFont,
-  },
   withPadding: {
     padding: theme.spacing(1) + 4,
   },

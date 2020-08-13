@@ -57,9 +57,6 @@ const styles = (theme) => ({
     flex: '0 0 auto',
     padding: theme.spacing(2) + 4,
   },
-  title: {
-    ...defaultFont,
-  },
   text: {
     fontSize: 12,
     [theme.breakpoints.up('md')]: {
