@@ -1,5 +1,3 @@
-/* eslint global-require: off, import/no-dynamic-require: off */
-
 /**
  * Builds the DLL for development electron renderer process
  */
@@ -9,7 +7,7 @@ import path from 'path';
 import { merge } from 'webpack-merge';
 import baseConfig from './webpack.config.base';
 import { dependencies } from '../package.json';
-import { CheckNodeEnv } from '../internals/scripts';
+import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 
 CheckNodeEnv('development');
 
@@ -17,9 +15,13 @@ const dist = path.join(__dirname, '..', 'dll');
 
 export default merge(baseConfig, {
   context: path.join(__dirname, '..'),
+
   devtool: 'eval',
+
   mode: 'development',
+
   target: 'electron-renderer',
+
   externals: ['fsevents', 'crypto-browserify'],
 
   /**

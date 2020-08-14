@@ -1,17 +1,19 @@
 {
   "name": "luna",
   "productName": "luna",
-  "version": "3.1.1",
-  "description": "Luna is a management tool for developers to organize npm packages.",
+  "version": "3.5.0",
+  "description": "npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. Build on Electron",
   "main": "./main.prod.js",
   "author": {
-    "name": "rvpanoz",
+    "name": "Luna maintainers",
     "email": "rvpanoz@gmail.com",
-    "url": "https://github.com/rvpanoz"
+    "url": "https://github.com/rvpanoz/luna"
   },
   "scripts": {
+    "build-css": "npx tailwindcss build ./styles.css -o ./app.global.css",
     "electron-rebuild": "node -r ../internals/scripts/BabelRegister.js ../internals/scripts/ElectronRebuild.js",
-    "postinstall": "npm run electron-rebuild"
+    "postinstall": "yarn electron-rebuild"
   },
-  "license": "GPLv3"
+  "license": "GPLv3",
+  "dependencies": {}
 }

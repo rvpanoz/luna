@@ -1,51 +1,5 @@
-/*
- * global styling
- */
-
-/* @import '~material-design-icons/iconfont/material-icons.css';
-@import '~typeface-roboto'; */
-@import './styles/reset.css';
-
-html,
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth;
-}
-
 body {
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  height: 100vh;
+  font-family: Arial, Helvetica, Helvetica Neue, serif;
   overflow-y: hidden;
 }
-
-::-webkit-scrollbar {
-  width: 12px;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background: #ccc;
-}
-
-::-webkit-scrollbar-track {
-  border-radius: 10px;
-}
-
-/* @font-face {
-  font-family: 'Regular';
-  src: local('Regular'), local('Regular'),
-    url('./assets/fonts/Regular.woff') format('woff'),
-    url('./assets/fonts/Regular.woff2') format('woff2'),
-    url('./assets/fonts/Regular.ttf') format('truetype'),
-    url('./assets/fonts/Regular.eot') format('eot');
-}
-
-@font-face {
-  font-family: 'Light';
-  src: local('Light'), local('Light'),
-    url('./assets/fonts/Light.woff') format('woff'),
-    url('./assets/fonts/Light.woff2') format('woff2'),
-    url('./assets/fonts/Light.ttf') format('truetype'),
-    url('./assets/fonts/Light.eot') format('eot');
-} */

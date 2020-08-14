@@ -18,7 +18,7 @@ import { epics as notificationsEpics } from 'models/notifications';
 // reducers
 import rootReducer from '../reducers';
 
-const configureStore = initialState => {
+const configureStore = (initialState) => {
   // create epic middleware
   const epicMiddleware = createEpicMiddleware();
 

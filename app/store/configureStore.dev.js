@@ -38,7 +38,7 @@ const configureStore = (initialState) => {
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : compose;
-  console.log(composeEnhancers);
+
   // apply middleware & compose enhancers
   enhancers.push(applyMiddleware(...middleware));
   const enhancer = composeEnhancers(...enhancers);

@@ -10,23 +10,23 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { merge } from 'webpack-merge';
 import TerserPlugin from 'terser-webpack-plugin';
 import baseConfig from './webpack.config.base';
-import { CheckNodeEnv } from '../internals/scripts';
+import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 import DeleteSourceMaps from '../internals/scripts/DeleteSourceMaps';
 
 CheckNodeEnv('production');
 DeleteSourceMaps();
 
 export default merge(baseConfig, {
-  devtool: process.env.DEBUG_PROD ? 'source-map' : 'none',
+  devtool: process.env.DEBUG_PROD === 'true' ? 'source-map' : 'none',
 
   mode: 'production',
 
-  target: 'electron-renderer',
+  target: process.env.E2E_BUILD ? 'electron-renderer' : 'electron-preload',
 
   entry: [
     'core-js',
     'regenerator-runtime/runtime',
-    path.join(__dirname, '..', 'app/index.js'),
+    path.join(__dirname, '..', 'app/index.tsx'),
   ],
 
   output: {
@@ -35,17 +35,6 @@ export default merge(baseConfig, {
     filename: 'renderer.prod.js',
   },
 
-  resolve: {
-    alias: {
-      assets: path.resolve(path.join(__dirname, '..', 'app', 'assets')),
-      constants: path.resolve(path.join(__dirname, '..', 'app', 'constants')),
-      commons: path.resolve(path.join(__dirname, '..', 'app', 'commons')),
-      components: path.resolve(path.join(__dirname, '..', 'app', 'components')),
-      containers: path.resolve(path.join(__dirname, '..', 'app', 'containers')),
-      models: path.resolve(path.join(__dirname, '..', 'app', 'models')),
-      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles')),
-    },
-  },
   module: {
     rules: [
       // Extract all .global.css to style.css as is
@@ -62,7 +51,71 @@ export default merge(baseConfig, {
             loader: 'css-loader',
             options: {
               sourceMap: true,
-              modules: true,
+            },
+          },
+        ],
+      },
+      // Pipe other styles through css modules and append to style.css
+      {
+        test: /^((?!\.global).)*\.css$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[name]__[local]__[hash:base64:5]',
+              },
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+      // Add SASS support  - compile all .global.scss files and pipe it to style.css
+      {
+        test: /\.global\.(scss|sass)$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+              importLoaders: 1,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+      // Add SASS support  - compile all other .scss files and pipe it to style.css
+      {
+        test: /^((?!\.global).)*\.(scss|sass)$/,
+        use: [
+          {
+            loader: MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[name]__[local]__[hash:base64:5]',
+              },
+              importLoaders: 1,
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
             },
           },
         ],
