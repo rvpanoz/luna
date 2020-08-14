@@ -12,7 +12,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
 import ElectronStore from 'electron-store';
-import { app, BrowserWindow, ipcMain, session } from 'electron';
+import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -35,8 +35,28 @@ import {
 // https://github.com/electron/electron/issues/18397
 app.allowRendererProcessReuse = false;
 
-const Store = new ElectronStore();
-Store.set('history', []);
+const appGlobal: any = global;
+const {
+  DEBUG_PROD = 0,
+  MIN_WIDTH = 1280,
+  MIN_HEIGHT = 960,
+  UPGRADE_EXTENSIONS = 1,
+  NODE_ENV,
+  START_MINIMIZED = false,
+} = process.env;
+
+appGlobal.appProps = {
+  debug: /--debug/.test(process.argv[2]),
+  appPaths: {
+    Home: app.getPath('home'),
+    AppData: app.getPath('appData'),
+    UserData: app.getPath('userData'),
+  },
+  appStore: new ElectronStore()
+}
+
+appGlobal.appProps.appStore.set('history', []);
+
 export default class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -70,6 +90,19 @@ const installExtensions = async () => {
 };
 
 const createWindow = async () => {
+  let x = 0;
+  let y = 0;
+  const screenSize = screen.getPrimaryDisplay().size;
+  const displays = screen.getAllDisplays();
+  const externalDisplay = displays.find(
+    (display) => display.bounds.x !== 0 || display.bounds.y !== 0
+  );
+
+  if (externalDisplay) {
+    x = externalDisplay.bounds.x + 50;
+    y = externalDisplay.bounds.y + 50;
+  }
+
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
@@ -78,9 +111,12 @@ const createWindow = async () => {
   }
 
   mainWindow = new BrowserWindow({
+    width: MIN_WIDTH || screenSize.width,
+    height: MIN_HEIGHT || screenSize.height,
+    x,
+    y,
     show: false,
-    width: 1024,
-    height: 728,
+    resizable: true,
     webPreferences:
       (process.env.NODE_ENV === 'development' ||
         process.env.E2E_BUILD === 'true') &&
@@ -133,7 +169,7 @@ const createWindow = async () => {
  *
  * */
 ipcMain.on('npm-list-outdated', (event, options) =>
-  onNpmListOutdated(event, options, Store)
+  onNpmListOutdated(event, options)
 );
 
 /**
