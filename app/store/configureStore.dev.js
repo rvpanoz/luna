@@ -7,11 +7,11 @@ import { createLogger } from 'redux-logger';
 import { createEpicMiddleware } from 'redux-observable';
 
 // epics
-import { epics as packagesEpics } from 'models/packages';
-import { epics as uiEpics } from 'models/ui';
-import { epics as npmEpics } from 'models/npm';
-import { epics as commonEpics } from 'models/common';
-import { epics as notificationsEpics } from 'models/notifications';
+import { epics as packagesEpics } from '../models/packages';
+import { epics as uiEpics } from '../models/ui';
+import { epics as npmEpics } from '../models/npm';
+import { epics as commonEpics } from '../models/common';
+import { epics as notificationsEpics } from '../models/notifications';
 
 // root reducer
 import rootReducer from '../reducers';

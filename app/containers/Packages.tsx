@@ -13,29 +13,29 @@ import Divider from '@material-ui/core/Divider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import { useFilters } from 'commons/hooks';
-import { AppLoader, HelperText } from 'components/common';
-import { scrollWrapper, iMessage } from 'commons/utils';
+import { useFilters } from '../commons/hooks';
+import { AppLoader, HelperText } from '../components/common';
+import { scrollWrapper, iMessage } from '../commons/utils';
 import {
   setPackagesStart,
   viewPackageStart,
   installPackage,
   installMultiplePackages
-} from 'models/packages/actions';
+} from '../models/packages/actions';
 import {
   addSelected,
   setPage,
   setPageRows,
   setActivePage
-} from 'models/ui/actions';
-import { setMode, clearInstallOptions } from 'models/common/actions';
+} from '../models/ui/actions';
+import { setMode, clearInstallOptions } from '../models/common/actions';
 import {
   ToolbarView,
   HeaderView,
   PaginationView,
   PackageItemView,
   DialogOptionsView
-} from 'components/views/packages';
+} from '../components/views/packages';
 import PackageDetails from './PackageDetails';
 import styles from './styles/packages';
 

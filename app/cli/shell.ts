@@ -3,18 +3,20 @@ import { concat } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import manager from './manager';
 
+import { RunOptions } from '../types';
+
 /**
  * Run shell commands
  * @param {*} options
  * @param {*} callback
  */
 
-const runCommand = (options, callback) => {
+const runCommand = (options: RunOptions, callback: Function) => {
   const { cmd, ...rest } = options;
 
   // create an array of observables
   const combine = () =>
-    cmd.map((command, idx) => {
+    cmd.map((command: string, idx: number) => {
       const runner = manager[command];
       const result$ = runner(rest, idx);
 

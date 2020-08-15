@@ -31,6 +31,7 @@ import {
   onNpmInit,
   onNpmInitLock,
 } from './mainProcess';
+import chalk from 'chalk';
 
 // https://github.com/electron/electron/issues/18397
 app.allowRendererProcessReuse = false;
@@ -38,8 +39,8 @@ app.allowRendererProcessReuse = false;
 const appGlobal: any = global;
 const {
   DEBUG_PROD = 0,
-  MIN_WIDTH = 1280,
-  MIN_HEIGHT = 960,
+  MIN_WIDTH = 0,
+  MIN_HEIGHT = 0,
   UPGRADE_EXTENSIONS = 1,
   NODE_ENV,
   START_MINIMIZED = false,
@@ -131,7 +132,7 @@ const createWindow = async () => {
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.webContents.on('did-finish-load', (event: any) => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
@@ -141,6 +142,19 @@ const createWindow = async () => {
       mainWindow.show();
       mainWindow.focus();
     }
+
+    // signal finish
+    event.sender.send('finish-loaded');
+  });
+
+  mainWindow.webContents.on('crashed', (event: any) => {
+    log.error(chalk.redBright.bold('[CRASHED]'), event);
+    app.quit();
+  });
+
+  mainWindow.on('unresponsive', (event: any) => {
+    log.error(chalk.redBright.bold('[UNRESPONSIVE]'), event);
+    app.quit();
   });
 
   mainWindow.on('closed', () => {
@@ -162,7 +176,7 @@ const createWindow = async () => {
  */
 
 /**
- * Channel: npm-list-outaded
+ * Channel: npm-list-outdated
  * Supports: npm list <@scope>/]<pkg>, npm outdated <@scope>/<pkg>
  * https://docs.npmjs.com/cli/ls.html
  * https://docs.npmjs.com/cli/outdated.html

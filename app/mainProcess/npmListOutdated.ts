@@ -3,6 +3,7 @@ import path from 'path';
 import log from 'electron-log';
 import { switchcase } from '../commons/utils';
 import { runCommand } from '../cli';
+import { Result } from '../types';
 
 const onNpmListOutdated = (event: any, options: any) => {
   const { activeManager = 'npm', directory, mode } = options || {};
@@ -11,9 +12,7 @@ const onNpmListOutdated = (event: any, options: any) => {
   const onError = (error: any) =>
     event.sender.send('npm-list-outdated-error', error);
 
-  const onComplete = (errors: any, data: any, cmd: string) => {
-    debugger;
-
+  const onComplete = (errors: string, data: string, cmd: [string]) => {
     if (directory && mode === 'local') {
       try {
         const yarnLock = fs.existsSync(
@@ -32,7 +31,7 @@ const onNpmListOutdated = (event: any, options: any) => {
     event.sender.send('npm-list-outdated-completed', data, errors, cmd);
   };
 
-  const callback = (result: any) => {
+  const callback = (result: Result) => {
     const { status, errors, data, cmd } = result;
 
     return switchcase({

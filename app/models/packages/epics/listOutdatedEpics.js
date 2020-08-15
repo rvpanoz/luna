@@ -1,4 +1,4 @@
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
 

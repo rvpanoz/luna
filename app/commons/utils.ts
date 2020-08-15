@@ -1,8 +1,5 @@
-/* eslint-disable */
-
 import fs from 'fs';
 import path from 'path';
-import mk from '../cli/mk';
 import { remote } from 'electron';
 
 import {
@@ -44,7 +41,7 @@ export const showDialog = (handler, options) => {
  * @param {*} key
  * @param {*} replacements
  */
-export const iMessage = (type, key, replacements) => {
+export const iMessage = (type: string, key: string, replacements?: any) => {
   const messageType = switchcase({
     confirmation: () => CONFIRMATION_MESSAGES,
     info: () => INFO_MESSAGES,
@@ -56,7 +53,7 @@ export const iMessage = (type, key, replacements) => {
   })(INFO_MESSAGES)(type);
 
   return messageType[key]
-    ? messageType[key].replace(/%\w+%/g, (all) => replacements[all] || all)
+    ? messageType[key].replace(/%\w+%/g, (all: any) => replacements[all] || all)
     : key;
 };
 
@@ -64,9 +61,9 @@ export const iMessage = (type, key, replacements) => {
  *
  * @param {*} namespace
  */
-export const createActionCreator = (namespace) => (actionType) => {
+export const createActionCreator = (namespace: string) => (actionType: string) => {
   const type = `${namespace}/${actionType}`;
-  const actionCreator = (payload) => ({
+  const actionCreator = (payload: any) => ({
     type,
     payload,
   });
@@ -81,7 +78,7 @@ export const createActionCreator = (namespace) => (actionType) => {
  * Object array
  * @param {*} obj
  */
-export const objectEntries = (obj) => {
+export const objectEntries = (obj: any) => {
   let ownProps = Object.keys(obj);
   let i = ownProps.length;
   let resArray = new Array(i);
@@ -94,7 +91,7 @@ export const objectEntries = (obj) => {
  * Validate url
  * @param {*} url
  */
-export const isUrl = (url) => {
+export const isUrl = (url: string) => {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
   return matcher.test(url);
 };
@@ -105,7 +102,7 @@ export const isUrl = (url) => {
  */
 export const firstToUpper = (str) => {
   return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter: string, index: number) {
       return index !== 0 ? letter.toLowerCase() : letter.toUpperCase();
     })
     .replace(/\s+/g, '');
@@ -115,7 +112,7 @@ export const firstToUpper = (str) => {
  * @param {*} cases
  *
  */
-export const switchcase = (cases) => (defaultCase) => (key) =>
+export const switchcase = (cases: any) => (defaultCase: any) => (key: any) =>
   cases.hasOwnProperty(key) && typeof cases[key] === 'function'
     ? cases[key].apply(undefined)
     : defaultCase;
@@ -242,7 +239,7 @@ export const shrinkDirectory = (directory) => {
 
       return `${dirParts[dirParts.length - 2]}${SEPARATOR}${
         dirParts[dirParts.length - 1]
-      }${SEPARATOR}package.json`;
+        }${SEPARATOR}package.json`;
     } catch (error) {
       throw new Error(error);
     }

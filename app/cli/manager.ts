@@ -4,6 +4,7 @@ import chalk from 'chalk';
 import { Observable } from 'rxjs';
 
 import mk from './mk';
+import { CommandOptions } from '../types';
 
 const { spawn } = cp;
 const {
@@ -24,19 +25,20 @@ const cwd = process.cwd();
  * @param {*} directory
  */
 
-const execute = ({
-  manager = defaultManager,
-  commandArgs = [],
-  mode,
-  directory,
-  packageJson,
-}) => {
+const execute = (options: CommandOptions) => {
+  const {
+    manager = defaultManager,
+    commandArgs,
+    mode,
+    directory,
+    packageJson,
+  } = options || {}
   const [operation] = commandArgs;
   const { NODE_ENV } = process.env;
   const isLocal = Boolean(mode === 'local' && directory);
 
   const result$ = new Observable((observer) => {
-    const result = [];
+    let result = [];
     let errors = '';
 
     NODE_ENV === 'development' &&
@@ -118,7 +120,7 @@ const execute = ({
  * npm list
  * @param {*} options
  */
-const list = (options) => {
+const list = (options: CommandOptions) => {
   const command = ['list'];
   const { mode, directory } = options || {};
 
@@ -128,10 +130,10 @@ const list = (options) => {
       : command.concat(defaultsArgs.list);
 
   const params = {
-    activeManager: 'npm',
+    manager: 'npm',
     commandArgs: run,
     mode,
-    directory,
+    directory
   };
 
   return execute(params);
@@ -141,7 +143,7 @@ const list = (options) => {
  * npm outdated
  * @param {*} options
  */
-const outdated = (options) => {
+const outdated = (options: CommandOptions) => {
   const command = ['outdated'];
   const { mode, directory } = options || {};
 
@@ -151,10 +153,10 @@ const outdated = (options) => {
       : command.concat(defaultsArgs.list);
 
   const params = {
-    activeManager: 'npm',
+    manager: 'npm',
     commandArgs: run,
     mode,
-    directory,
+    directory
   };
 
   return execute(params);
@@ -164,7 +166,7 @@ const outdated = (options) => {
  * npm search
  * @param {*} options
  */
-const search = (options) => {
+const search = (options: CommandOptions) => {
   const command = ['search'];
   const { directory, mode, pkgName } = options || {};
   const defaults = ['--depth=0', '--json'];
@@ -177,10 +179,10 @@ const search = (options) => {
     const run = command.concat(defaults, pkgName);
 
     const params = {
-      activeManager: 'npm',
+      manager: 'npm',
       commandArgs: run,
       mode,
-      directory,
+      directory
     };
 
     return execute(params);
@@ -194,15 +196,15 @@ const search = (options) => {
  * @param {*} opts
  * @param {*} idx
  */
-const install = (options, idx) => {
-  const { mode, directory, packageJson, activeManager = 'npm' } = options || {};
+const install = (options: CommandOptions, idx: number) => {
+  const { mode, directory, packageJson, manager = 'npm' } = options || {};
 
   try {
     const runInstall = require('./npm/install').default;
     const run = runInstall(options, idx);
 
     const params = {
-      activeManager,
+      manager,
       commandArgs: run,
       mode,
       directory,
@@ -219,18 +221,18 @@ const install = (options, idx) => {
  * npm update
  * @param {*} options
  */
-const update = (options) => {
-  const { mode, directory, activeManager = 'npm' } = options || {};
+const update = (options: CommandOptions) => {
+  const { mode, directory, manager = 'npm' } = options || {};
 
   try {
     const runUpdate = require('./npm/update').default;
     const run = runUpdate(options);
 
     const params = {
-      activeManager,
+      manager,
       commandArgs: run,
       mode,
-      directory,
+      directory
     };
 
     return execute(params);
@@ -243,18 +245,18 @@ const update = (options) => {
  * npm uninstall
  * @param {*} options
  */
-const uninstall = (options) => {
-  const { mode, directory, activeManager = 'npm' } = options || {};
+const uninstall = (options: CommandOptions) => {
+  const { mode, directory, manager = 'npm' } = options || {};
 
   try {
     const runUninstall = require('./npm/uninstall').default;
     const run = runUninstall(options);
 
     const params = {
-      activeManager,
+      manager,
       commandArgs: run,
       mode,
-      directory,
+      directory
     };
 
     return execute(params);
@@ -267,18 +269,18 @@ const uninstall = (options) => {
  * npm view
  * @param {*} options
  */
-const view = (options) => {
-  const { mode, directory, activeManager = 'npm' } = options || {};
+const view = (options: CommandOptions) => {
+  const { mode, directory, manager = 'npm' } = options || {};
 
   try {
     const runView = require('./npm/view').default;
     const run = runView(options);
 
     const params = {
-      activeManager,
+      manager,
       commandArgs: run,
       mode,
-      directory,
+      directory
     };
 
     return execute(params);
@@ -291,18 +293,19 @@ const view = (options) => {
  * npm audit
  * @param {*} options
  */
-const runAudit = (options) => {
-  const { activeManager = 'npm', mode, directory } = options || {};
+const runAudit = (options: CommandOptions) => {
+  const { manager = 'npm', mode, directory } = options || {};
 
   try {
     const audit = require('./npm/audit').default;
     const run = audit(options);
 
     const params = {
-      activeManager,
+      manager,
       commandArgs: run,
       mode,
       directory,
+      packageJson: false
     };
 
     return execute(params);
@@ -315,15 +318,15 @@ const runAudit = (options) => {
  * npm doctor
  * @param {*} options
  */
-const runDoctor = (options) => {
-  const { mode, directory, activeManager = 'npm' } = options || {};
+const runDoctor = (options: CommandOptions) => {
+  const { mode, directory, manager = 'npm' } = options || {};
 
   try {
     const doctor = require('./npm/doctor').default;
     const run = doctor(options);
 
     const params = {
-      activeManager,
+      manager,
       commandArgs: run,
       mode,
       directory,
@@ -339,15 +342,15 @@ const runDoctor = (options) => {
  * npm init
  * @param {*} options
  */
-const runInit = (options) => {
-  const { mode, directory, activeManager = 'npm' } = options;
+const runInit = (options: CommandOptions) => {
+  const { mode, directory, manager = 'npm' } = options;
 
   try {
     const init = require('./npm/tooling/init').default;
     const run = init(options);
 
     const params = {
-      activeManager,
+      manager,
       commandArgs: run,
       mode,
       directory,
@@ -363,15 +366,15 @@ const runInit = (options) => {
  * npm dedupe
  * @param {*} options
  */
-const runDedupe = (options) => {
-  const { mode, directory, activeManager = 'npm' } = options;
+const runDedupe = (options: CommandOptions) => {
+  const { mode, directory, manager = 'npm' } = options;
 
   try {
     const dedupe = require('./npm/tooling/dedupe').default;
     const run = dedupe(options);
 
     const params = {
-      activeManager,
+      manager,
       commandArgs: run,
       mode,
       directory,
@@ -387,28 +390,21 @@ const runDedupe = (options) => {
  * npm cache
  * @param {*} options
  */
-const runCache = (params) => {
-  const { mode, directory, action, activeManager = 'npm' } = params;
-  let cacheAction;
+const runCache = (options: CommandOptions) => {
+  const { mode, directory, manager = 'npm' } = options;
 
   try {
-    switch (action) {
-      case 'verify':
-        cacheAction = require('./npm/tooling/verify').default;
-        break;
-      default:
-        cacheAction = require('./npm/tooling/verify').default;
-    }
+    const verify = require('./npm/tooling/verify').default;
+    const run = verify(options);
 
-    const run = cacheAction(params);
-    const parameters = {
-      activeManager,
+    const params = {
+      manager,
       commandArgs: run,
       mode,
       directory,
     };
 
-    return execute(parameters);
+    return execute(params);
   } catch (error) {
     throw new Error(error);
   }
