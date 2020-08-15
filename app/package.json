@@ -10,7 +10,6 @@
     "url": "https://github.com/rvpanoz/luna"
   },
   "scripts": {
-    "build-css": "npx tailwindcss build ./styles.css -o ./app.global.css",
     "electron-rebuild": "node -r ../internals/scripts/BabelRegister.js ../internals/scripts/ElectronRebuild.js",
     "postinstall": "yarn electron-rebuild"
   },

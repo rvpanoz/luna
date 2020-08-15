@@ -36,7 +36,6 @@ import chalk from 'chalk';
 // https://github.com/electron/electron/issues/18397
 app.allowRendererProcessReuse = false;
 
-const appGlobal: any = global;
 const {
   DEBUG_PROD = 0,
   MIN_WIDTH = 0,
@@ -46,17 +45,12 @@ const {
   START_MINIMIZED = false,
 } = process.env;
 
-appGlobal.appProps = {
-  debug: /--debug/.test(process.argv[2]),
-  appPaths: {
-    Home: app.getPath('home'),
-    AppData: app.getPath('appData'),
-    UserData: app.getPath('userData'),
-  },
-  appStore: new ElectronStore()
-}
-
-appGlobal.appProps.appStore.set('history', []);
+// const debug = /--debug/.test(process.argv[2]),
+// const systemPaths = {
+//   Home: app.getPath('home'),
+//   AppData: app.getPath('appData'),
+//   UserData: app.getPath('userData'),
+// };
 
 export default class AppUpdater {
   constructor() {
@@ -112,22 +106,16 @@ const createWindow = async () => {
   }
 
   mainWindow = new BrowserWindow({
-    width: MIN_WIDTH || screenSize.width,
-    height: MIN_HEIGHT || screenSize.height,
+    width: screenSize.width,
+    height: screenSize.height,
     x,
     y,
     show: false,
     resizable: true,
-    webPreferences:
-      (process.env.NODE_ENV === 'development' ||
-        process.env.E2E_BUILD === 'true') &&
-        process.env.ERB_SECURE !== 'true'
-        ? {
-          nodeIntegration: true,
-        }
-        : {
-          preload: path.join(__dirname, 'dist/renderer.prod.js'),
-        },
+    webPreferences: {
+      nodeIntegration: NODE_ENV === 'development',
+      preload: NODE_ENV === 'production' ? path.join(__dirname, 'dist/renderer.prod.js') : undefined
+    }
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);

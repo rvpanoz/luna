@@ -71,6 +71,13 @@ export default merge(baseConfig, {
               sourceMap: true,
             },
           },
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: [require('tailwindcss'), require('autoprefixer')],
+            },
+          },
         ],
       },
       // Add SASS support  - compile all .global.scss files and pipe it to style.css
@@ -92,6 +99,9 @@ export default merge(baseConfig, {
             options: {
               sourceMap: true,
             },
+          },
+          {
+            loader: 'postcss-loader',
           },
         ],
       },

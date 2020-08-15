@@ -1,5 +1,13 @@
+/* stylelint-disable */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import '~@fortawesome/fontawesome-free/css/all.css';
+
 body {
   height: 100vh;
   font-family: Arial, Helvetica, Helvetica Neue, serif;
+  background-color: #fff;
   overflow-y: hidden;
 }
