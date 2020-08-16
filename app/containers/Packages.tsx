@@ -2,7 +2,6 @@ import React from 'react';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { useFilters } from '../commons/hooks';
-import { AppLoader, HelperText } from '../components/common';
 import { scrollWrapper, iMessage } from '../commons/utils';
 import {
   setPackagesStart,
@@ -24,7 +23,8 @@ import {
   PackageItemView,
   DialogOptionsView
 } from '../components/views/packages';
-import PackageDetails from './PackageDetails';
+import Toolbar from './Toolbar';
+import Pagination from './Pagination';
 
 const mapState = ({
   common: {
@@ -179,13 +179,14 @@ const Packages = () => {
 
   return (
     <>
-      <table className="table-auto">
+      <Toolbar />
+      <table className="min-w-full divide-y divide-gray-200">
         <thead>
           <tr>
-            <th className="px-4 py-2">Package</th>
-            <th className="px-4 py-2">Installed</th>
-            <th className="px-4 py-2">Latest</th>
-            <th className="px-4 py-2">Status</th>
+            <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Package</th>
+            <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Installed</th>
+            <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Latest</th>
+            <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -220,29 +221,41 @@ const Packages = () => {
                   operationCommand !== 'install' &&
                   operationPackages.indexOf(name) > -1;
 
-                return null;
-
                 return (
                   <tr>
-                    <td className="border px-4 py-2">{name}</td>
-                    <td className="border px-4 py-2">{version}</td>
-                    <td className="border px-4 py-2">{latest}</td>
-                    <td className="border px-4 py-2">
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                      <div className="flex items-center">
+                        <div className="ml-3">
+                          <p className="text-gray-900 whitespace-no-wrap">
+                            {name}
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{version}</td>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{latest}</td>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                       {missing && <i className="fa fa-error" />}
                       {isOutdated && (
                         <i className="fa fa-warn" />
                       )}
                       {!isOutdated && !peerMissing && !missing && version ? (
-                        <i className="fa fa-check" />
+                        <span
+                          className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
+                          <span aria-hidden
+                            className="absolute inset-0 bg-green-200 opacity-50 rounded-full">
+                          </span>
+                          <span className="relative"><i className="fa fa-check" /></span>
+                        </span>
                       ) : null}
                     </td>
                   </tr>
                 );
               }
             )}
-
         </tbody>
       </table>
+      <Pagination />
     </>
   );
 };

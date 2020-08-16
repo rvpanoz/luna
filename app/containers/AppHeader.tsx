@@ -21,8 +21,12 @@ const AppDash = () => {
 
     <div className="h-40 lg:h-20 w-full flex flex-wrap">
       <nav id="header-left" className="w-full lg:max-w-sm flex items-center border-b-1 border-gray-300 order-2 lg:order-1">
-        <div className="px-2 w-full text-pink-600 text-lg font-medium tracking-wide">
-
+        <div className="flex flex-row px-2 w-full text-lg tracking-wide">
+          <div key="load">
+            <button className="text-pink-500 bg-transparent border border-solid border-pink-500 hover:bg-pink-500 hover:text-white active:bg-pink-600 font-bold uppercase px-6 py-2 rounded-lg outline-none focus:outline-none mr-1 mb-1" type="button" style={{ transition: "all .15s ease" }}>
+              <i className="fas fa-download"></i> Load
+</button>
+          </div>
         </div>
       </nav>
       <nav id="header-right" className="bg-gray-100 w-auto flex-1 border-b-1 border-gray-300 order-1 lg:order-2">

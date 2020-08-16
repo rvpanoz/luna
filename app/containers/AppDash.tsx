@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode, ReactElement } from 'react';
 
 type BoxProps = {
   label: string,
@@ -8,7 +8,7 @@ type BoxProps = {
 }
 
 type TabsProps = {
-  children: React.ReactNode
+  children: [React.ReactNode] | null
 }
 
 type TabProps = {
@@ -70,44 +70,46 @@ const Tab = (props: TabProps) => {
 }
 
 const Tabs = (props: TabsProps) => {
-  const [activeTab, setActiveTab] = useState('tab-1');
-
+  const [activeTab, setActiveTab] = useState('Project');
   const { children } = props;
 
-  return <div className="flex flex-col">
+  return <>
     <ul className="flex border-a">
-      {children.map((child: any) => {
-        const { label } = child.props;
+      {children.map(child => {
+        const tabName = child.props['data-tab'];
 
         return (
           <Tab
             activeTab={activeTab}
-            key={label}
-            label={label}
-            onClick={() => setActiveTab(label)}
+            key={tabName}
+            label={tabName}
+            onClick={() => setActiveTab(tabName)}
           />
         );
       })}
     </ul>
     <div className="tab-content">
       {children.map((child) => {
-        if (child.props.label !== activeTab) return undefined;
-        return child.props.children;
+        const tabName = child.props['data-tab'];
+        const { children } = child.props;
+
+        if (tabName !== activeTab) {
+          return undefined;
+        }
+
+        return children;
       })}
     </div>
-  </div>
+  </>
 }
 
 const AppDash = () => {
   return (
     <Tabs>
-      <div label="Project">
+      <div data-tab="Project">
         <Stats />
       </div>
-      <div label="Actions">
-        Actions
-      </div>
-      <div label="History">
+      <div data-tab="History">
         History
       </div>
     </Tabs>
