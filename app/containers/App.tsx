@@ -5,12 +5,11 @@ import { hot } from 'react-hot-loader/root';
 import { initActions, updateStatus } from '../models/common/actions';
 import { setUIException, setSnackbar } from '../models/ui/actions';
 import { switchcase } from '../commons/utils';
-import AppHeader from './AppHeader';
-import AppBar from './AppBar';
 import AppSidebar from './AppSidebar';
+import AppHeader from './AppHeader';
+import AppDash from './AppDash';
 import Packages from './Packages';
 import { AppState } from '../state.d';
-import AppDash from './AppDash';
 
 type Props = {
   children: ReactNode;
@@ -82,7 +81,19 @@ const App = () => {
   return (
     <>
       <AppSidebar />
-      <AppDash />
+      <div className="flex flex-row flex-wrap flex-1 flex-grow content-start pl-16">
+        <AppHeader />
+        <AppDash />
+        <div id="main-content" className="w-full flex-1">
+          <div className="flex flex-1 flex-wrap">
+            <div className="w-full xl:w-2/3 p-6 xl:max-w-6xl">
+              <div className="max-w-full lg:max-w-3xl xl:max-w-5xl">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

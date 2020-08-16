@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 
-const getFiltered = (data, filters) => {
+const getFiltered = (data: any, filters: any) => {
   const groups = Object.keys(PACKAGE_GROUPS);
 
   const withFiltersData =
@@ -45,7 +45,7 @@ const getFiltered = (data, filters) => {
   return withFiltersData;
 };
 
-const useFilters = (allData, filters, force) => {
+const useFilters = (allData: [], filters: any, force?: boolean) => {
   const [filtered, applyFilters] = useState(allData);
 
   useEffect(() => {

@@ -4,10 +4,33 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Luna - manage npm dependencies</title>
-    <link
-      href="https://fonts.googleapis.com/css?family=Nunito:400,700,800"
-      rel="stylesheet"
-    />
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+      .font-family-karla {
+        font-family: karla;
+      }
+      .bg-sidebar {
+        background: #3d68ff;
+      }
+      .cta-btn {
+        color: #3d68ff;
+      }
+      .upgrade-btn {
+        background: #1947ee;
+      }
+      .upgrade-btn:hover {
+        background: #0038fd;
+      }
+      .active-nav-link {
+        background: #1947ee;
+      }
+      .nav-item:hover {
+        background: #1947ee;
+      }
+      .account-link:hover {
+        background: #3d68ff;
+      }
+    </style>
     <script>
       (() => {
         if (
@@ -23,7 +46,7 @@
       })();
     </script>
   </head>
-  <body class="flex h-screen w-screen bg-gray-100 font-serif">
+  <body class="flex h-screen w-screen bg-gray-100 font-family-karla">
     <div id="root" class="w-full"></div>
     <script>
       if (typeof process === 'object') {
