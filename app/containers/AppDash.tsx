@@ -1,118 +1,63 @@
-import React, { useState, ReactNode, ReactElement } from 'react';
+import React, { useState, ReactNode } from 'react';
 
 type BoxProps = {
-  label: string,
+  title: string,
+  subtitle: string,
   total: number,
   colorClass?: string,
-  iconClass?: string
-}
-
-type TabsProps = {
-  children: [React.ReactNode] | null
-}
-
-type TabProps = {
-  activeTab: string,
-  label: string,
-  onClick: () => void
+  faClass?: string,
+  bgColor?: string
 }
 
 const Box = (props: BoxProps) => {
+  const { title, subtitle, total, faClass, bgColor } = props;
+
   return (
-    <div className={`border-2 border-gray-400 border-dashed hover:border-transparent hover:bg-white hover:shadow-xl rounded p-6 m-2 md:mx-10 md:my-6 ${props.colorClass}`}>
-      <div className="flex">
-        <div className="flex-1">
-          <h3 className="font-bold text-2xl">{props.total} <span className="text-green-500"></span></h3>
-          <h5 className="font-bold text-gray-500">{props.label}</h5>
+    <div className="w-full lg:w-6/12 xl:w-3/12 px-4">
+      <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
+        <div className="flex-auto p-4">
+          <div className="flex flex-wrap">
+            <div className="relative w-full pr-4 max-w-full flex-grow flex-1">
+              <h5 className="text-gray-500 uppercase font-bold text-xs">
+                {title}
+              </h5>
+              <span className="font-bold text-xl text-gray-800">
+                {total}
+              </span>
+            </div>
+            <div className="relative w-auto pl-4 flex-initial">
+              <div className={`text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full ${bgColor}`}>
+                <i className={`fa ${faClass}`}></i>
+              </div>
+            </div>
+          </div>
+          <p className="text-sm text-gray-500 mt-4">
+            <span className="whitespace-no-wrap">
+              {subtitle}
+            </span>
+          </p>
         </div>
       </div>
     </div>
   )
 }
 
-const Stats = () => {
-  return (
-    <div className="bg-gray-200 py-6 lg:py-0 w-full lg:max-w-sm flex flex-wrap content-start">
-      <div className="w-1/2 lg:w-full">
-        <Box label="Packages" total={101} iconClass="fa-list" colorClass="text-indigo-500" />
-      </div>
-      <div className="w-1/2 lg:w-full">
-        <Box label="Outdated" total={12} iconClass="fa-chevron-down" colorClass="text-red-500" />
-      </div>
-      <div className="w-1/2 lg:w-full">
-        <Box label="Dependencies" total={67} iconClass="fa-chevron-down" colorClass="text-green-500" />
-      </div>
-      <div className="w-1/2 lg:w-full">
-        <Box label="Dev dependencies" total={34} iconClass="fa-chevron-down" colorClass="text-yellow-500" />
-      </div>
-    </div>
-  )
-}
-
-const Tab = (props: TabProps) => {
-  const {
-    onClick,
-    activeTab,
-    label
-  } = props;
-
-  let className = '-mb-px mr-1 tab-list-item';
-
-  if (activeTab === label) {
-    className += ' tab-list-active';
-  }
-
-  return (
-    <li className="-mb-px mr-1">
-      <a onClick={onClick} className="bg-white inline-block border-l border-t border-r rounded-t py-2 px-4 text-blue-700 font-semibold" href="#">{label}</a>
-    </li>
-  );
-}
-
-const Tabs = (props: TabsProps) => {
-  const [activeTab, setActiveTab] = useState('Project');
-  const { children } = props;
-
-  return <>
-    <ul className="flex border-a">
-      {children.map(child => {
-        const tabName = child.props['data-tab'];
-
-        return (
-          <Tab
-            activeTab={activeTab}
-            key={tabName}
-            label={tabName}
-            onClick={() => setActiveTab(tabName)}
-          />
-        );
-      })}
-    </ul>
-    <div className="tab-content">
-      {children.map((child) => {
-        const tabName = child.props['data-tab'];
-        const { children } = child.props;
-
-        if (tabName !== activeTab) {
-          return undefined;
-        }
-
-        return children;
-      })}
-    </div>
-  </>
-}
-
 const AppDash = () => {
   return (
-    <Tabs>
-      <div data-tab="Project">
-        <Stats />
+    <div className="relative bg-gray-200">
+      <div className="relative md:pt-10 pb-10 pt-12">
+        <div className="px-4 md:px-10 mx-auto w-full">
+          <div>
+            <div className="flex flex-wrap">
+              <Box title="Dependencies" subtitle="project dependencies" total={101} faClass="fa-list" bgColor="bg-red-500" />
+              <Box title="Outdated" subtitle="outdated packages" total={101} faClass="fa-list" bgColor="bg-orange-400" />
+              <Box title="Dev dependencies" subtitle="project dev dependencies" total={101} faClass="fa-list" bgColor="bg-teal-500" />
+              <Box title="Optional" subtitle="project optional dependencies" total={101} faClass="fa-list" bgColor="bg-yellow-500" />
+            </div>
+          </div>
+        </div>
       </div>
-      <div data-tab="History">
-        History
-      </div>
-    </Tabs>
+    </div>
   )
 }
 

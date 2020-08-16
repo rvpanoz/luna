@@ -178,7 +178,7 @@ const Packages = () => {
   const noPackages = Boolean(!packagesData || !packagesData.length) && !fromSearch
 
   return (
-    <>
+    <div className="flex flex-col">
       <Toolbar />
       <table className="min-w-full divide-y divide-gray-200">
         <thead>
@@ -255,8 +255,7 @@ const Packages = () => {
             )}
         </tbody>
       </table>
-      <Pagination />
-    </>
+    </div>
   );
 };
 

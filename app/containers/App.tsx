@@ -81,21 +81,17 @@ const App = () => {
   return (
     <>
       <AppSidebar />
-      <div className="flex flex-row flex-wrap flex-grow pl-16">
-        <AppHeader />
-        <div className="flex flex-col w-auto ml-4 mt-20 invisible">
+      <div className="flex flex-col flex-1 pl-16">
+        <div id="header">
+          <AppHeader />
+        </div>
+        <div id="dash">
           <AppDash />
         </div>
-        <div id="main-content" className="w-full flex-1">
-          <div className="flex flex-1 flex-wrap">
-            <div className="w-full p-6 xl:max-w-6xl">
-              <div className="max-w-full lg:max-w-3xl xl:max-w-5xl">
-                {switchcase({
-                  packages: () => <Packages />,
-                })(<Packages />)(activePage)}
-              </div>
-            </div>
-          </div>
+        <div id="main-content" className="invisible">
+          {switchcase({
+            packages: () => <Packages />,
+          })(<Packages />)(activePage)}
         </div>
       </div>
     </>
