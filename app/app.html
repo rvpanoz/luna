@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Luna - manage npm dependencies</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:400,700,800"
+      rel="stylesheet"
+    />
     <script>
       (() => {
         if (
@@ -19,8 +23,8 @@
       })();
     </script>
   </head>
-  <body>
-    <div id="root"></div>
+  <body class="flex h-screen w-screen bg-gray-100 font-serif">
+    <div id="root" class="w-full"></div>
     <script>
       if (typeof process === 'object') {
         const scripts = [];

@@ -10,6 +10,7 @@ import AppBar from './AppBar';
 import AppSidebar from './AppSidebar';
 import Packages from './Packages';
 import { AppState } from '../state.d';
+import AppDash from './AppDash';
 
 type Props = {
   children: ReactNode;
@@ -79,27 +80,10 @@ const App = () => {
   }
 
   return (
-    <div className="container">
-      <div className="grid grid-cols-12 gap-2">
-        <div className="col-span-3">
-          <div className="app-logo"></div>
-          <AppSidebar />
-        </div>
-        <div className="col-span-8">
-          <div className="header">
-            <AppHeader />
-          </div>
-          <section className="topbar">
-            <AppBar />
-          </section>
-          <section className="space-y-4">
-            {switchcase({
-              packages: () => <Packages />,
-            })(<Packages />)(activePage)}
-          </section>
-        </div>
-      </div>
-    </div>
+    <>
+      <AppSidebar />
+      <AppDash />
+    </>
   );
 }
 

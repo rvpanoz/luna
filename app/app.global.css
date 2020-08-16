@@ -5,9 +5,31 @@
 @tailwind utilities;
 @import '~@fortawesome/fontawesome-free/css/all.css';
 
-body {
-  height: 100vh;
-  font-family: Arial, Helvetica, Helvetica Neue, serif;
-  background-color: #fff;
-  overflow-y: hidden;
+.border-b-1 {
+  border-bottom-width: 1px;
+}
+
+.border-l-1 {
+  border-left-width: 1px;
+}
+
+#sidebar {
+  transition: ease-in-out all 0.3s;
+  z-index: 9999;
+}
+
+#sidebar span {
+  opacity: 0;
+  position: absolute;
+  transition: ease-in-out all 0.1s;
+}
+
+#sidebar:hover {
+  width: 150px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  /*shadow-2xl*/
+}
+
+#sidebar:hover span {
+  opacity: 1;
 }
