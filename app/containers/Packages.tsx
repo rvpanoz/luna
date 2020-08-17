@@ -23,9 +23,9 @@ import {
   PackageItemView,
   DialogOptionsView
 } from '../components/views/packages';
-import Toolbar from './Toolbar';
+import Toolbar from '../components/Toolbar';
 import Pagination from './Pagination';
-import AppLoader from './AppLoader';
+import AppLoader from '../components/AppLoader';
 import { AppState } from '../state';
 import PackageItem from '../components/Package';
 
@@ -121,8 +121,8 @@ const Packages = () => {
     );
   }, [dispatch]);
 
-  const switchModeHandler = useCallback((appMode, appDirectory) => {
-    dispatch(setMode({ mode: appMode, directory: appDirectory }));
+  const switchMode = useCallback((mode, directory) => {
+    dispatch(setMode({ mode, directory }));
     dispatch(setActivePage({ page: 'packages', paused: false }));
 
     if (fromSearch) {
@@ -137,7 +137,7 @@ const Packages = () => {
     }
   }, [dispatch, fromSearch]);
 
-  const viewPackageHandler = useCallback((name, version) => {
+  const viewPackage = useCallback((name, version) => {
     return dispatch(
       viewPackageStart({
         channel: 'npm-view',
@@ -148,6 +148,8 @@ const Packages = () => {
         }
       }));
   }, [dispatch]);
+
+  const setSelected = useCallback((name) => dispatch(addSelected({ name })), [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -179,74 +181,73 @@ const Packages = () => {
 
   const noPackages = Boolean(!packagesData || !packagesData.length) && !fromSearch
 
-  if (noPackages) {
-    return <div>No packages found.</div>
-  }
-
   return (
     <AppLoader loading={loading}>
-      <div className="flex">
-        <div className="w-2/3 flex flex-col">
-          <div className="pb-2">
-            <Toolbar />
+      {noPackages ? <div>No packages found.</div> :
+        <div className="flex">
+          <div className="w-2/3 flex flex-col">
+            <div className="pb-2">
+              <Toolbar reload={reload} switchMode={switchMode} selected={selected} />
+            </div>
+            <table className="min-w-full divide-y divide-gray-200 border-l leading-normal">
+              <thead>
+                <tr>
+                  <th className="px-2 py-2 border-t border-l border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600 tracking-wider">Name</th>
+                  <th className="px-2 py-2 border-t border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600 tracking-wider">Installed</th>
+                  <th className="px-2 py-2 border-t border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600 tracking-wider">Latest</th>
+                  <th className="px-2 py-2 border-t border-r border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600 tracking-wider">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {listDataPackages &&
+                  listDataPackages.map(
+                    ({
+                      name,
+                      version,
+                      latest,
+                      isOutdated,
+                      peerDependencies,
+                      extraneous,
+                      problems,
+                      missing,
+                      peerMissing,
+                      __fromSearch,
+                      __hasError,
+                      __group
+                    }) => {
+                      const isPackageSelected = selected.indexOf(name) > -1;
+                      const installOptions = Array.isArray(packagesInstallOptions)
+                        ? packagesInstallOptions.find(
+                          installOption => installOption.name === name
+                        )
+                        : {};
+
+                      const inOperation =
+                        operationStatus !== 'idle' &&
+                        operationCommand !== 'install' &&
+                        operationPackages.indexOf(name) > -1;
+
+                      return <PackageItem
+                        key={name}
+                        name={name}
+                        version={version}
+                        latest={latest}
+                        peerMissing={peerMissing}
+                        missing={missing}
+                        isOutdated={isOutdated}
+                        inOperation={inOperation}
+                        onClick={() => viewPackage(name, version)}
+                        onSelect={setSelected} />
+                    }
+                  )}
+              </tbody>
+            </table>
           </div>
-          <table className="min-w-full divide-y divide-gray-200 border-l leading-normal">
-            <thead>
-              <tr>
-                <th className="px-2 py-2 border-t border-l border-gray-200 bg-gray-100 text-left text-md font-semibold text-gray-600 tracking-wider">Package</th>
-                <th className="px-2 py-2 border-t border-gray-200 bg-gray-100 text-left text-md font-semibold text-gray-600 tracking-wider">Installed</th>
-                <th className="px-2 py-2 border-t border-gray-200 bg-gray-100 text-left text-md font-semibold text-gray-600 tracking-wider">Latest</th>
-                <th className="px-2 py-2 border-t border-r border-gray-200 bg-gray-100 text-left text-md font-semibold text-gray-600 tracking-wider">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {listDataPackages &&
-                listDataPackages.map(
-                  ({
-                    name,
-                    version,
-                    latest,
-                    isOutdated,
-                    peerDependencies,
-                    extraneous,
-                    problems,
-                    missing,
-                    peerMissing,
-                    __fromSearch,
-                    __hasError,
-                    __group
-                  }) => {
-                    const isPackageSelected = selected.indexOf(name) > -1;
-                    const installOptions = Array.isArray(packagesInstallOptions)
-                      ? packagesInstallOptions.find(
-                        installOption => installOption.name === name
-                      )
-                      : {};
-
-                    const inOperation =
-                      operationStatus !== 'idle' &&
-                      operationCommand !== 'install' &&
-                      operationPackages.indexOf(name) > -1;
-
-                    return <PackageItem
-                      key={name}
-                      name={name}
-                      version={version}
-                      latest={latest}
-                      peerMissing={peerMissing}
-                      missing={missing}
-                      isOutdated={isOutdated}
-                      inOperation={inOperation}
-                      onClick={() => viewPackageHandler(name, version)} />
-                  }
-                )}
-            </tbody>
-          </table>
+          <div className="w-1/3 pt-16 pl-2">
+            details..
+      </div>
         </div>
-        <div className="w-1/3 pt-16 pl-2">
-          details..
-      </div>
-      </div>
+      }
     </AppLoader>
   );
 };

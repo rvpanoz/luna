@@ -3,7 +3,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import '~@fortawesome/fontawesome-free/css/all.css';
 
 #sidebar {
   transition: ease-in-out all 0.3s;
