@@ -17,6 +17,7 @@ export interface AppState {
   notifications: Notifications;
   ui: any;
   common?: any;
+  npm?: any;
   uiException?: string;
 }
 

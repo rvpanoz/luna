@@ -25,6 +25,7 @@ import {
 } from '../components/views/packages';
 import Toolbar from './Toolbar';
 import Pagination from './Pagination';
+import AppLoader from './AppLoader';
 
 const mapState = ({
   common: {
@@ -222,19 +223,23 @@ const Packages = () => {
                   operationPackages.indexOf(name) > -1;
 
                 return (
-                  <tr>
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <tr key={name}>
+                    <td className="px-2 py-2 border-b border-gray-200 bg-white text-md">
                       <div className="flex items-center">
                         <div className="ml-3">
-                          <p className="text-gray-900 whitespace-no-wrap">
-                            {name}
-                          </p>
+                          <label className="inline-flex items-center mt-3">
+                            <input type="checkbox" className="form-checkbox h-5 w-5 text-red-600" />
+                            <span className="ml-2 text-gray-900 whitespace-no-wrap">
+                              {name}
+                            </span>
+                          </label>
+
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{version}</td>
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">{latest}</td>
-                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <td className="px-2 py-2 border-b border-gray-200 bg-white text-md">{version}</td>
+                    <td className="px-2 py-2 border-b border-gray-200 bg-white text-md">{latest}</td>
+                    <td className="px-2 py-2 border-b border-gray-200 bg-white text-md">
                       {missing && <i className="fa fa-error" />}
                       {isOutdated && (
                         <i className="fa fa-warn" />
@@ -258,5 +263,4 @@ const Packages = () => {
     </div>
   );
 };
-
 export default Packages;

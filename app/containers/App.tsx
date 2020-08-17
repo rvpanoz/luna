@@ -6,14 +6,10 @@ import { initActions, updateStatus } from '../models/common/actions';
 import { setUIException, setSnackbar } from '../models/ui/actions';
 import { switchcase } from '../commons/utils';
 import AppSidebar from './AppSidebar';
-import AppHeader from './AppHeader';
-import AppDash from './AppDash';
+import AppHeader from '../components/Header';
+import AppDash from '../components/Dash';
 import Packages from './Packages';
 import { AppState } from '../state.d';
-
-type Props = {
-  children: ReactNode;
-};
 
 const mapState = (state: AppState) => ({
   uiException: state.uiException,
@@ -22,11 +18,12 @@ const mapState = (state: AppState) => ({
   mode: state.mode,
   directory: state.directory,
   snackbar: state.ui.snackbar,
+  env: state.npm.env
 });
 
 const App = () => {
   const dispatch = useDispatch();
-  const { uiException, snackbar, activePage } = useMappedState(mapState);
+  const { uiException, snackbar, activePage, directory, env } = useMappedState(mapState);
 
   const onClose = useCallback(
     () =>
@@ -83,12 +80,12 @@ const App = () => {
       <AppSidebar />
       <div className="flex flex-col flex-1 pl-16">
         <div id="header">
-          <AppHeader />
+          <AppHeader directory={directory} />
         </div>
-        <div id="dash">
+        {/* <div id="dash">
           <AppDash />
-        </div>
-        <div id="main-content" className="invisible">
+        </div> */}
+        <div id="main-content" className="p-4 w-2/3">
           {switchcase({
             packages: () => <Packages />,
           })(<Packages />)(activePage)}

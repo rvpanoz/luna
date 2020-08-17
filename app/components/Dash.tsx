@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react';
+import React from 'react';
 
 type BoxProps = {
   title: string,
@@ -49,10 +49,10 @@ const AppDash = () => {
         <div className="px-4 md:px-10 mx-auto w-full">
           <div>
             <div className="flex flex-wrap">
-              <Box title="Dependencies" subtitle="project dependencies" total={101} faClass="fa-list" bgColor="bg-red-500" />
+              <Box title="Dependencies" subtitle="dependencies" total={101} faClass="fa-list" bgColor="bg-red-500" />
               <Box title="Outdated" subtitle="outdated packages" total={101} faClass="fa-list" bgColor="bg-orange-400" />
-              <Box title="Dev dependencies" subtitle="project dev dependencies" total={101} faClass="fa-list" bgColor="bg-teal-500" />
-              <Box title="Optional" subtitle="project optional dependencies" total={101} faClass="fa-list" bgColor="bg-yellow-500" />
+              <Box title="Dev dependencies" subtitle="dev dependencies" total={101} faClass="fa-list" bgColor="bg-teal-500" />
+              <Box title="Optional" subtitle="optional dependencies" total={101} faClass="fa-list" bgColor="bg-yellow-500" />
             </div>
           </div>
         </div>
