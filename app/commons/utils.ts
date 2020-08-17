@@ -19,20 +19,20 @@ const SEPARATOR = path.sep;
  * @param {*} handler
  * @param {*} options
  */
-export const showDialog = (handler, options) => {
+export const showDialog = async (handler: Function, options: any) => {
   if (!options || typeof options !== 'object') {
     return;
   }
   const { dialog } = remote;
   const { mode } = options || {};
-  const modeHandler =
-    mode === 'file' ? dialog.showOpenDialog : dialog.showMessageBox;
 
-  return modeHandler(remote.getCurrentWindow(), options, (response) => {
-    if (response) {
-      handler && handler(response);
-    }
-  });
+  if (mode === 'file') {
+    const response = await dialog.showOpenDialog(remote.getCurrentWindow(), options);
+    handler.apply(null, [response]);
+  } else {
+    const response = await dialog.showMessageBox(remote.getCurrentWindow(), options);
+    handler.apply(null, [response]);
+  }
 };
 
 /**

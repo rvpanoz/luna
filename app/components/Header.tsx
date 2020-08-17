@@ -13,7 +13,7 @@ const AppHeader = (props: AppHeaderProps) => {
         <div className="flex h-full justify-between items-center">
           <div className="relative w-64 max-w-3xl px-6">
             <span className="text-gray-600">Working directory</span><br />
-            {props.directory || 'app/components/Search.tsx'}
+            {props.directory}
           </div>
           <div className="relative w-2/3 max-w-3xl px-6">
             <Search />

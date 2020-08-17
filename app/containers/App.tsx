@@ -7,8 +7,11 @@ import { setUIException, setSnackbar } from '../models/ui/actions';
 import { switchcase } from '../commons/utils';
 import AppSidebar from './AppSidebar';
 import AppHeader from '../components/Header';
-import AppDash from '../components/Dash';
 import Packages from './Packages';
+import Notifications from './Notifications';
+import Analytics from './Analytics';
+// import AppDash from '../components/Dash';
+
 import { AppState } from '../state.d';
 
 const mapState = (state: AppState) => ({
@@ -17,8 +20,7 @@ const mapState = (state: AppState) => ({
   activePage: state.ui.activePage,
   mode: state.mode,
   directory: state.directory,
-  snackbar: state.ui.snackbar,
-  env: state.npm.env
+  snackbar: state.ui.snackbar
 });
 
 const App = () => {
@@ -85,9 +87,11 @@ const App = () => {
         {/* <div id="dash">
           <AppDash />
         </div> */}
-        <div id="main-content" className="p-4 w-2/3">
+        <div id="main-content" className="w-full p-4">
           {switchcase({
             packages: () => <Packages />,
+            analytics: () => <Analytics />,
+            notifications: () => <Notifications />,
           })(<Packages />)(activePage)}
         </div>
       </div>

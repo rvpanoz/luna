@@ -37,7 +37,6 @@ import chalk from 'chalk';
 app.allowRendererProcessReuse = false;
 
 const {
-  DEBUG_PROD = 0,
   MIN_WIDTH = 0,
   MIN_HEIGHT = 0,
   UPGRADE_EXTENSIONS = 1,
@@ -45,12 +44,12 @@ const {
   START_MINIMIZED = false,
 } = process.env;
 
-// const debug = /--debug/.test(process.argv[2]),
-// const systemPaths = {
-//   Home: app.getPath('home'),
-//   AppData: app.getPath('appData'),
-//   UserData: app.getPath('userData'),
-// };
+const debug = /--debug/.test(process.argv[2]);
+const systemPaths = {
+  Home: app.getPath('home'),
+  AppData: app.getPath('appData'),
+  UserData: app.getPath('userData'),
+};
 
 export default class AppUpdater {
   constructor() {
@@ -173,6 +172,107 @@ const createWindow = async () => {
 ipcMain.on('npm-list-outdated', (event, options) =>
   onNpmListOutdated(event, options)
 );
+
+/**
+ * Channel: npm-uninstall
+ * Supports: npm uninstall <@scope>/]<pkg>
+ * https://docs.npmjs.com/cli/uninstall.html
+ *
+ * */
+ipcMain.on('npm-uninstall', (event, options) =>
+  onNpmUninstall(event, options)
+);
+
+/**
+ * Channel: npm-search
+ * Supports: npm search [search terms ...]
+ * https://docs.npmjs.com/cli/search.html
+ *
+ * */
+ipcMain.on('npm-search', (event, options) =>
+  onNpmSearch(event, options)
+);
+
+/**
+ * Channel: npm-view
+ * Supports: npm view <@scope>/<name>@<version>
+ * https://docs.npmjs.com/cli/view.html
+ *
+ * */
+ipcMain.on('npm-view', (event, options) => onNpmView(event, options));
+
+/**
+ * Channel: npm-install
+ * Supports: npm install <@scope>/<name>@<version>
+ * https://docs.npmjs.com/cli/install.html
+ *
+ * */
+ipcMain.on('npm-install', (event, options) =>
+  onNpmInstall(event, options)
+);
+
+/**
+ * Channel: npm-update
+ * Supports: npm update <@scope>/<name>@<version>
+ * https://docs.npmjs.com/cli/update.html
+ *
+ * */
+ipcMain.on('npm-update', (event, options) =>
+  onNpmUpdate(event, options)
+);
+
+/**
+ * Channel: npm-audit
+ * Supports: npm audit [--json|--parseable]
+ * https://docs.npmjs.com/cli/audit
+ *
+ */
+// ipcMain.on('npm-audit', (event, options) => onNpmAudit(event, options));
+
+/**
+ * Channel: npm-init
+ * Supports: npm init
+ * https://docs.npmjs.com/cli/init
+ *
+ */
+ipcMain.on('npm-init', (event, options) => onNpmInit(event, options));
+
+/**
+ * Channel: npm-dedupe
+ * Supports: npm dedupe
+ * https://docs.npmjs.com/cli/dedupe
+ *
+ */
+// ipcMain.on('npm-dedupe', (event, options) =>
+//   onNpmDedupe(event, options)
+// );
+
+/**
+ * Channel: npm-init-lock
+ * Supports: npm i --package-lock-only
+ *
+ */
+// ipcMain.on('npm-init-lock', (event, options) =>
+//   onNpmInitLock(event, options)
+// );
+
+/**
+ * Channel: npm-doctor
+ * Supports: npm doctor
+ * https://docs.npmjs.com/cli/doctor
+ *
+ */
+// ipcMain.on('npm-cache', (event, options) => onNpmCache(event, options));
+
+/**
+ * Channel: npm-doctor
+ * Supports: npm doctor
+ * https://docs.npmjs.com/cli/doctor
+ *
+ */
+// ipcMain.on('npm-doctor', (event, options) =>
+//   onNpmDoctor(event, options)
+// );
 
 /**
  * Add event listeners

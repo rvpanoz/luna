@@ -102,6 +102,10 @@ export default merge(baseConfig, {
           },
           {
             loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: [require('tailwindcss'), require('autoprefixer')],
+            },
           },
         ],
       },

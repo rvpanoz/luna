@@ -8,16 +8,37 @@ type Notifications = {
   notifications: []
 }
 
+type Common = {
+  directory: string | null,
+  manager: string,
+  mode: string,
+  operations: Operations
+}
+
+type Packages = {
+  active: Object | null,
+  packagesFromSearch: [],
+  packagesData: [],
+  packagesOutdated: [],
+  metadata: any
+}
+
+type Npm = {
+  operationStatus: string,
+  operationCommand: string,
+  operationPackages: [string],
+}
+
 export interface AppState {
   manager: string;
   mode: string;
   onlinestatus: string;
   directory: string;
-  operations: Operations;
+  packages: Packages;
   notifications: Notifications;
   ui: any;
-  common?: any;
-  npm?: any;
+  common: Common;
+  npm: Npm;
   uiException?: string;
 }
 

@@ -14,7 +14,7 @@ export type RunOptions = {
   directory?: string,
 }
 
-export type Result = {
+export type CommandResult = {
   status: string,
   errors: string,
   data: string,
