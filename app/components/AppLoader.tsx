@@ -10,7 +10,7 @@ const AppLoader = (props: AppLoaderProps) => {
   const { children, loading } = props;
 
   return <>
-    {loading ? <div className="w-full text-center">
+    {loading ? <div className="flex w-full h-screen justify-center">
       <div className="loader">
         <span>
           <span></span>

@@ -11,12 +11,11 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import ElectronStore from 'electron-store';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-
+import CheckNpm from '../internals/scripts/CheckNpm'
 import {
   onNpmListOutdated,
   onNpmView,
@@ -83,6 +82,9 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
+/**
+ * Create Main window
+ */
 const createWindow = async () => {
   let x = 0;
   let y = 0;
@@ -119,7 +121,7 @@ const createWindow = async () => {
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  mainWindow.webContents.on('did-finish-load', (event: any) => {
+  mainWindow.webContents.on('did-finish-load', async (event: any) => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
@@ -129,6 +131,10 @@ const createWindow = async () => {
       mainWindow.show();
       mainWindow.focus();
     }
+
+    // npm and node info
+    const { stdout, stderr } = await CheckNpm();
+    event.sender.send('npm-env-close', stderr, stdout);
 
     // signal finish
     event.sender.send('finish-loaded');

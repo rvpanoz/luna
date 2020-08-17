@@ -4,13 +4,13 @@ import { useDispatch, useMappedState } from 'redux-react-hook';
 import { hot } from 'react-hot-loader/root';
 import { initActions, updateStatus } from '../models/common/actions';
 import { setUIException, setSnackbar } from '../models/ui/actions';
+import { setEnv } from '../models/npm/actions';
 import { switchcase } from '../commons/utils';
-import AppSidebar from './AppSidebar';
-import AppHeader from '../components/Header';
+import Sidebar from '../components/Sidebar';
+import Header from '../components/Header';
 import Packages from './Packages';
 import Notifications from './Notifications';
 import Analytics from './Analytics';
-// import AppDash from '../components/Dash';
 
 import { AppState } from '../state.d';
 
@@ -20,7 +20,8 @@ const mapState = (state: AppState) => ({
   activePage: state.ui.activePage,
   mode: state.mode,
   directory: state.directory,
-  snackbar: state.ui.snackbar
+  snackbar: state.ui.snackbar,
+  env: state.npm.env
 });
 
 const App = () => {
@@ -58,7 +59,25 @@ const App = () => {
     window.addEventListener('online', updateOnlineStatus, true);
     window.addEventListener('offline', updateOnlineStatus, true);
 
-    ipcRenderer.on('finish-loaded', () => dispatch(initActions()));
+    ipcRenderer.once('finish-loaded', () => dispatch(initActions()));
+
+    ipcRenderer.on('npm-env-close', (event, error, data) => {
+      try {
+        const env = JSON.parse(data);
+        dispatch({ type: setEnv.type, payload: env });
+      } catch { };
+    });
+
+    ipcRenderer.once('yarn-lock-detected', () => {
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: 'error',
+          message: 'Yarn.lock detected'
+        })
+      );
+    });
+
     ipcRenderer.on('uncaught-exception', (_, ...args) => {
       dispatch({ type: setUIException.type, payload: { message: args[0] } });
     });
@@ -68,6 +87,8 @@ const App = () => {
     return () => {
       ipcRenderer.removeAllListeners('finish-loaded');
       ipcRenderer.removeAllListeners('uncaught-exception');
+      ipcRenderer.removeAllListeners('npm-env-close');
+      ipcRenderer.removeAllListeners('yarn-lock-detected');
       window.removeEventListener('online', updateOnlineStatus);
       window.removeEventListener('offline', updateOnlineStatus);
     }
@@ -79,14 +100,11 @@ const App = () => {
 
   return (
     <>
-      <AppSidebar />
+      <Sidebar />
       <div className="flex flex-col flex-1 pl-16">
         <div id="header">
-          <AppHeader directory={directory} />
+          <Header directory={directory || env.prefix} />
         </div>
-        {/* <div id="dash">
-          <AppDash />
-        </div> */}
         <div id="main-content" className="w-full p-4">
           {switchcase({
             packages: () => <Packages />,

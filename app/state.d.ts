@@ -24,9 +24,12 @@ type Packages = {
 }
 
 type Npm = {
+  env: any,
   operationStatus: string,
   operationCommand: string,
   operationPackages: [string],
+  command_error?: string,
+  command_message?: string
 }
 
 export interface AppState {

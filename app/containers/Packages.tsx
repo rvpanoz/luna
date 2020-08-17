@@ -24,7 +24,7 @@ import {
   DialogOptionsView
 } from '../components/views/packages';
 import Toolbar from '../components/Toolbar';
-import Pagination from './Pagination';
+import Pagination from '../components/Pagination';
 import AppLoader from '../components/AppLoader';
 import { AppState } from '../state';
 import PackageItem from '../components/Package';
@@ -150,6 +150,7 @@ const Packages = () => {
   }, [dispatch]);
 
   const setSelected = useCallback((name) => dispatch(addSelected({ name })), [dispatch]);
+  const updatePage = useCallback((page) => dispatch(setPage({ page })), [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -242,10 +243,13 @@ const Packages = () => {
                   )}
               </tbody>
             </table>
+            <div className="pt-2">
+              <Pagination totalRecords={data.length} currentPage={page} pageLimit={rowsPerPage} handleChangePage={updatePage} />
+            </div>
           </div>
           <div className="w-1/3 pt-16 pl-2">
             details..
-      </div>
+          </div>
         </div>
       }
     </AppLoader>

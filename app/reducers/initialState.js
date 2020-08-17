@@ -69,7 +69,7 @@ const initialState = {
       },
     },
     pagination: {
-      page: 0,
+      page: 1,
       rowsPerPage: 12,
     },
     snackbar: {

@@ -14,13 +14,13 @@ type PackageProps = {
 
 const Package = ({ name, version, latest, missing, isOutdated, peerMissing, onClick, onSelect }: PackageProps) => {
   return (
-    <tr>
-      <td className="px-2 py-2 border-b border-gray-200 bg-white text-md">
+    <tr className="hover:bg-gray-400">
+      <td className="px-2 py-2 border-b border-gray-200 bg-white text-sm">
         <a href="#" onClick={onClick}>
           <div className="flex items-center">
             <div className="ml-3">
               <label className="inline-flex items-center mt-3">
-                <input type="checkbox" onClick={() => onSelect(name)} className="form-checkbox h-5 w-5" />
+                <input type="checkbox" onClick={() => onSelect(name)} className="form-checkbox h-5 w-5 mt-2" />
                 <span className="ml-2 text-gray-700 whitespace-no-wrap">
                   {name}
                 </span>
@@ -29,17 +29,17 @@ const Package = ({ name, version, latest, missing, isOutdated, peerMissing, onCl
           </div>
         </a>
       </td>
-      <td className="px-2 py-2 border-b border-gray-200 bg-white text-md">
+      <td className="px-2 py-2 border-b border-gray-200 bg-white text-sm">
         <a className="inline-block w-full h-full" href="#" onClick={onClick}>
           {version}
         </a>
       </td>
-      <td className="px-2 py-2 border-b border-gray-200 bg-white text-md">
+      <td className="px-2 py-2 border-b border-gray-200 bg-white text-sm">
         <a href="#" onClick={onClick}>
           {latest}
         </a>
       </td>
-      <td className="px-2 py-2 border-b border-gray-200 bg-white text-md">
+      <td className="px-2 py-2 border-b border-gray-200 bg-white text-sm">
         <a href="#" onClick={onClick}>
           {missing && <i className="fa fa-error" />}
           {isOutdated && (
