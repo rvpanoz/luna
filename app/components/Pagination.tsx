@@ -18,7 +18,7 @@ const Link = (props: LinkProps) => {
 
   return (
     <li>
-      <a href="#" onClick={() => onClick()} className={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-gray-500 text-gray ${pageNo === currentPage + 1 ? 'bg-gray-600 text-white' : ''}`}>
+      <a href="#" onClick={() => onClick()} className={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-gray-200 text-gray-600 ${pageNo === currentPage + 1 ? 'bg-gray-200 ' : null}`}>
         {pageNo}
       </a>
     </li>

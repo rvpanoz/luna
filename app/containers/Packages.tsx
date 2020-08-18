@@ -2,18 +2,19 @@ import React from 'react';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { useFilters } from '../commons/hooks';
-import { scrollWrapper, iMessage } from '../commons/utils';
+// import { scrollWrapper, iMessage } from '../commons/utils';
 import {
   setPackagesStart,
   viewPackageStart,
   installPackage,
+  uninstallPackages,
+  updatePackages,
   installMultiplePackages
 } from '../models/packages/actions';
 import {
   addSelected,
   setPage,
-  setPageRows,
-  setActivePage
+  setActivePage,
 } from '../models/ui/actions';
 import { setMode, clearInstallOptions } from '../models/common/actions';
 import Toolbar from '../components/Toolbar';
@@ -21,6 +22,7 @@ import Pagination from '../components/Pagination';
 import AppLoader from '../components/AppLoader';
 import { AppState } from '../state';
 import PackageItem from '../components/Package';
+import PackageDetails from '../components/PackageDetails';
 
 const mapState = ({
   common: {
@@ -91,7 +93,7 @@ const Packages = () => {
     operationPackages,
     operationCommand,
   } = useMappedState(mapState);
-
+  const [activeGroup, setActiveGroup] = useState();
   const [options, toggleOptions] = useState({
     open: false,
     single: false,
@@ -158,6 +160,18 @@ const Packages = () => {
     );
   }, [mode, directory, dispatch]);
 
+  useEffect(() => {
+    if (mode === 'local' && active) {
+      const packageItem = mode === 'local' && active
+        ? packagesData.find((pkg: any) => pkg.name === active.name)
+        : null;
+
+      if (packageItem && packageItem.__group) {
+        setActiveGroup(packageItem.__group);
+      }
+    }
+  }, [active, mode, packagesData]);
+
   const activePackages = fromSearch ? packagesFromSearch : packagesData;
   const [filteredPackages] = useFilters(activePackages, filters);
 
@@ -181,7 +195,7 @@ const Packages = () => {
         <div className="flex">
           <div className="w-2/3 flex flex-col">
             <div className="pb-2">
-              <Toolbar reload={reload} switchMode={switchMode} selected={selected} />
+              <Toolbar reload={reload} switchMode={switchMode} selected={selected} mode={mode} packagesData={packagesData} />
             </div>
             <table className="min-w-full divide-y divide-gray-200 border-l">
               <thead>
@@ -240,8 +254,8 @@ const Packages = () => {
               <Pagination totalRecords={data.length} currentPage={page} pageLimit={rowsPerPage} handleChangePage={updatePage} />
             </div>
           </div>
-          <div className="w-1/3 pt-16 pl-2">
-            details..
+          <div className="w-1/3 pt-24 pl-2">
+            <PackageDetails active={active} activeGroup={activeGroup} />
           </div>
         </div>
       }

@@ -25,6 +25,19 @@
   opacity: 1;
 }
 
+.tooltip .tooltip-text {
+  visibility: hidden;
+  text-align: center;
+  padding: 6px;
+  margin-bottom: 6px;
+  position: absolute;
+  z-index: 100;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
 @keyframes spin {
   100% {
     -webkit-transform: rotate(360deg);
@@ -39,7 +52,7 @@
   background-color: none;
   border-radius: 50%;
   border: 5px solid transparent;
-  border-top: 5px solid #45aaf2;
+  border-top: 5px solid #e2e8f0;
   margin: 2px;
   animation: Loading 2s linear infinite;
 }
@@ -51,7 +64,7 @@
   top: 0px;
   left: 0px;
   border: 5px solid transparent;
-  border-top: 5px solid #45aaf2;
+  border-top: 5px solid #e2e8f0;
   border-radius: 50%;
   margin: 2px;
   animation: Loading 2s linear infinite;

@@ -22,3 +22,49 @@ export type CommandResult = {
   packageJson?: boolean,
   initDirectory?: string
 }
+
+export type Active = {
+  name: string,
+  description: string,
+  ['dist-tags']: {
+    latest: string,
+    bridge: string
+  },
+  versions: [string],
+  maintainers: [string],
+  time: any,
+  homepage: string,
+  keywords: [string],
+  repository: {
+    type: string,
+    url: string
+  },
+  author: string,
+  license: string,
+  readmeFilename: string,
+  users: {
+    sshrike: boolean,
+    severen: boolean,
+    cfleschhut: boolean
+  },
+  bugs: {
+    url: string
+  },
+  version: string,
+  main: string,
+  publishConfig: {
+    access: string
+  },
+  engines: {
+    node: string
+  },
+  browser: any,
+  dependencies: any,
+  devDependencies: any,
+  gitHead: string,
+  dist: {
+    integrity: string,
+    shasum: string
+  },
+  directories: any
+}
