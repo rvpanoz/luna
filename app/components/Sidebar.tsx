@@ -48,32 +48,39 @@ const AppSidebar = () => {
     <>
       <div id="sidebar" className="h-screen w-16 menu bg-white text-white px-2 items-center flex static align-center fixed shadow">
         <ul className="list-reset">
-          {/* <li className="pt-6 my-1 md:my-0">
-            <h3 className="text-xl text-gray-600">Luna</h3>
-          </li> */}
           <li className="my-2 mx-1 md:my-0">
             <a href="#" onClick={() => updateActivePage('projects')} className="block py-1 md:py-3 pl-2 align-middle text-gray-400 no-underline hover:text-gray-600">
-              <HomeIcon />&nbsp;<span className="w-full inline-block pb-2 md:pb-0 text-sm">Packages</span>
+              <div className="flex w-full items-center justify-between">
+                <HomeIcon />&nbsp;<span className="w-full inline-block ml-6 pb-2 md:pb-0 text-sm">Packages</span>
+              </div>
             </a>
           </li>
           <li className="my-2 mx-1 md:my-0">
             <a href="#" onClick={onLoadDirectory} className="block py-1 md:py-3 pl-2 align-middle text-gray-400 no-underline hover:text-gray-600">
-              <ArrowDownIcon />&nbsp;<span className="w-full inline-block pt-0 pb-2 md:pb-0 text-sm">Load</span>
+              <div className="flex w-full items-center justify-between">
+                <ArrowDownIcon />&nbsp;<span className="w-full inline-block ml-6 pb-2 md:pb-0 text-sm">Load</span>
+              </div>
             </a>
           </li>
           <li className="my-2 mx-1 md:my-0">
             <a href="#" className="block py-1 md:py-3 pl-2 align-middle text-gray-400 no-underline hover:text-gray-600">
-              <PlusCircleIcon />&nbsp;<span className="w-full inline-block pb-1 md:pb-0 text-sm">Create</span>
+              <div className="flex w-full items-center justify-between">
+                <PlusCircleIcon />&nbsp;<span className="w-full inline-block ml-6 pb-2 md:pb-0 text-sm">Create</span>
+              </div>
             </a>
           </li>
           <li className="my-2 mx-1 md:my-0">
             <a href="#" onClick={() => updateActivePage('notifications')} className="block py-1 md:py-3 pl-2 align-middle text-gray-400 no-underline hover:text-gray-600">
-              <BellIcon />&nbsp;<span className="w-full inline-block pb-2 md:pb-0 text-sm">Notifications</span>
+              <div className="flex w-full items-center justify-between">
+                <BellIcon />&nbsp;<span className="w-full inline-block ml-6 pb-2 md:pb-0 text-sm">Notifications</span>
+              </div>
             </a>
           </li>
           <li className="my-2 mx-1 md:my-0">
             <a href="#" onClick={() => updateActivePage('analytics')} className="block py-1 md:py-3 pl-2 align-middle text-gray-400 no-underline hover:text-gray-600">
-              <InsightsIcon />&nbsp;<span className="w-full inline-block pb-2 md:pb-0 text-sm">Analytics</span>
+              <div className="flex w-full items-center justify-between">
+                <InsightsIcon />&nbsp;<span className="w-full inline-block ml-6 pb-2 md:pb-0 text-sm">Analytics</span>
+              </div>
             </a>
           </li>
         </ul>

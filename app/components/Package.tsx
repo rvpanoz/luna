@@ -1,4 +1,5 @@
 import React from 'react';
+import { SyncIcon, CheckIcon, XCircleFillIcon } from '@primer/octicons-react';
 
 type PackageProps = {
   name: string,
@@ -41,13 +42,15 @@ const Package = ({ name, version, latest, missing, isOutdated, peerMissing, onCl
       </td>
       <td className="px-2 py-2 border-b border-gray-200 bg-white text-sm">
         <a href="#" onClick={onClick}>
-          {missing && <i className="fa fa-error" />}
-          {isOutdated && (
-            <i className="fa fa-warn" />
-          )}
+          {missing && <span className="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+            <span className="relative"><XCircleFillIcon /></span>
+          </span>}
+          {isOutdated && <span className="relative inline-block px-3 py-1 font-semibold text-pink-900 leading-tight">
+            <span className="relative"><SyncIcon /></span>
+          </span>}
           {!isOutdated && !peerMissing && !missing && version ? (
             <span className="relative inline-block px-3 py-1 font-semibold text-green-900 leading-tight">
-              <span className="relative"><i className="fa fa-check" /></span>
+              <span className="relative"><CheckIcon /></span>
             </span>
           ) : null}
         </a>

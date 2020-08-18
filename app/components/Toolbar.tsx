@@ -45,7 +45,6 @@ const Toolbar = (props: ToolbarProps) => {
     </div>
   }
 
-
   return (
     <nav className="flex justify-between bg-gray-100 p-2">
       <div className="mr-2">

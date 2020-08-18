@@ -16,13 +16,6 @@ import {
   setActivePage
 } from '../models/ui/actions';
 import { setMode, clearInstallOptions } from '../models/common/actions';
-import {
-  ToolbarView,
-  HeaderView,
-  PaginationView,
-  PackageItemView,
-  DialogOptionsView
-} from '../components/views/packages';
 import Toolbar from '../components/Toolbar';
 import Pagination from '../components/Pagination';
 import AppLoader from '../components/AppLoader';
@@ -190,7 +183,7 @@ const Packages = () => {
             <div className="pb-2">
               <Toolbar reload={reload} switchMode={switchMode} selected={selected} />
             </div>
-            <table className="min-w-full divide-y divide-gray-200 border-l leading-normal">
+            <table className="min-w-full divide-y divide-gray-200 border-l">
               <thead>
                 <tr>
                   <th className="px-2 py-2 border-t border-l border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600 tracking-wider">Name</th>

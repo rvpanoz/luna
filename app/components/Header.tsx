@@ -12,8 +12,8 @@ const AppHeader = (props: AppHeaderProps) => {
       <div id="header-right" className="bg-gray-100 w-auto flex-1 border-b-1 border-gray-300 order-1 lg:order-2">
         <div className="flex h-full justify-between items-center">
           <div className="relative w-64 max-w-3xl px-6">
-            <span className="text-gray-600">Working directory</span><br />
-            {props.directory}
+            <span className="text-gray-600 text-sm">Working directory</span><br />
+            <span className="text-gray-800 font-semibold text-sm">{props.directory}</span>
           </div>
           <div className="relative w-2/3 max-w-3xl px-6">
             <Search />

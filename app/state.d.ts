@@ -12,7 +12,8 @@ type Common = {
   directory: string | null,
   manager: string,
   mode: string,
-  operations: Operations
+  operations: Operations,
+  onlinestatus?: string
 }
 
 type Packages = {
@@ -32,14 +33,25 @@ type Npm = {
   command_message?: string
 }
 
+type Ui = {
+  activePage: string,
+  paused?: boolean,
+  commandErrors: [],
+  dialog: any,
+  filtering: any,
+  pagination: any,
+  loaders: any,
+  snackbar: any,
+  sorting: any,
+  selected: [],
+  uiException: string | null
+}
+
 export interface AppState {
   manager: string;
-  mode: string;
-  onlinestatus: string;
-  directory: string;
   packages: Packages;
   notifications: Notifications;
-  ui: any;
+  ui: Ui;
   common: Common;
   npm: Npm;
   uiException?: string;

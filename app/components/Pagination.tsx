@@ -18,7 +18,7 @@ const Link = (props: LinkProps) => {
 
   return (
     <li>
-      <a href="#" onClick={() => onClick()} className={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-gray-500 text-white ${pageNo === currentPage + 1 ? 'bg-gray-600' : 'bg-gray-400'}`}>
+      <a href="#" onClick={() => onClick()} className={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-gray-500 text-gray ${pageNo === currentPage + 1 ? 'bg-gray-600 text-white' : ''}`}>
         {pageNo}
       </a>
     </li>
@@ -35,7 +35,7 @@ const Pagination = (props: PaginationProps) => {
   }, []);
 
   return (
-    <div className="mt-4 py-2">
+    <div className="mt-4">
       <nav className="block">
         <ul className="flex pl-0 rounded list-none flex-wrap">
           {Array.from(Array(totalPages), (_, i) => i).map((pageNo) => <Link key={`page-${pageNo}`} currentPage={currentPage} pageNo={pageNo + 1} onClick={() => handleChangePage(pageNo)} />)}

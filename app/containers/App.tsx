@@ -16,10 +16,10 @@ import { AppState } from '../state.d';
 
 const mapState = (state: AppState) => ({
   uiException: state.uiException,
-  onlineStatus: state.onlinestatus,
+  onlineStatus: state.common.onlinestatus,
   activePage: state.ui.activePage,
-  mode: state.mode,
-  directory: state.directory,
+  mode: state.common.mode,
+  directory: state.common.directory,
   snackbar: state.ui.snackbar,
   env: state.npm.env
 });
