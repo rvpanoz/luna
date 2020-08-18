@@ -106,7 +106,7 @@ const Toolbar = (props: ToolbarProps) => {
   }
 
   return (
-    <nav className="flex justify-between bg-gray-100 p-2">
+    <nav className="flex justify-between bg-gray-100">
       <div className="mr-2">
         <h3 className="text-gray-600 text-bold mt-2">
           Packages&nbsp;{selected.length ? `(${selected.length})` : null}

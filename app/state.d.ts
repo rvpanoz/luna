@@ -1,3 +1,5 @@
+import { Active } from "./types"
+
 type Operations = {
   action: Object | String,
   packagesInstallOptions: []
@@ -17,7 +19,7 @@ type Common = {
 }
 
 type Packages = {
-  active: Object | null,
+  active: Active | null,
   packagesFromSearch: [],
   packagesData: [],
   packagesOutdated: [],
@@ -33,7 +35,7 @@ type Npm = {
   command_message?: string
 }
 
-type Ui = {
+type UserInterface = {
   activePage: string,
   paused?: boolean,
   commandErrors: [],
@@ -51,7 +53,7 @@ export interface AppState {
   manager: string;
   packages: Packages;
   notifications: Notifications;
-  ui: Ui;
+  ui: UserInterface;
   common: Common;
   npm: Npm;
   uiException?: string;

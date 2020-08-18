@@ -116,7 +116,8 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: NODE_ENV === 'development',
       preload: NODE_ENV === 'production' ? path.join(__dirname, 'dist/renderer.prod.js') : undefined
-    }
+    },
+    icon: path.join(__dirname, '..', 'resources/icon.png'),
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -132,11 +133,9 @@ const createWindow = async () => {
       mainWindow.focus();
     }
 
-    // npm and node info
     const { stdout, stderr } = await CheckNpm();
-    event.sender.send('npm-env-close', stderr, stdout);
 
-    // signal finish
+    event.sender.send('npm-env-close', stderr, stdout);
     event.sender.send('finish-loaded');
   });
 

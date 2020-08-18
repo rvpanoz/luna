@@ -75,6 +75,7 @@ const mapState = ({
 const Packages = () => {
   const {
     loader: { loading, message },
+    packageLoader,
     packagesFromSearch,
     packagesData,
     packagesOutdated,
@@ -93,7 +94,7 @@ const Packages = () => {
     operationPackages,
     operationCommand,
   } = useMappedState(mapState);
-  const [activeGroup, setActiveGroup] = useState();
+  const [activeGroup, setActiveGroup] = useState('global');
   const [options, toggleOptions] = useState({
     open: false,
     single: false,
@@ -190,23 +191,23 @@ const Packages = () => {
   const noPackages = Boolean(!packagesData || !packagesData.length) && !fromSearch
 
   return (
-    <AppLoader loading={loading}>
+    <AppLoader loading={loading} message={message}>
       {noPackages ? <div>No packages found.</div> :
         <div className="flex">
           <div className="w-2/3 flex flex-col">
             <div className="pb-2">
               <Toolbar reload={reload} switchMode={switchMode} selected={selected} mode={mode} packagesData={packagesData} />
             </div>
-            <table className="min-w-full divide-y divide-gray-200 border-l">
+            <table className="min-w-full divide-y divide-gray-200 border-l whitespace-no-wrap">
               <thead>
                 <tr>
-                  <th className="px-2 py-2 border-t border-l border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600 tracking-wider">Name</th>
-                  <th className="px-2 py-2 border-t border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600 tracking-wider">Installed</th>
-                  <th className="px-2 py-2 border-t border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600 tracking-wider">Latest</th>
-                  <th className="px-2 py-2 border-t border-r border-gray-200 bg-gray-100 text-left text-sm font-semibold text-gray-600 tracking-wider">Status</th>
+                  <th className="px-2 py-2 border-t border-l border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">Name</th>
+                  <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">Installed</th>
+                  <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">Latest</th>
+                  <th className="py-2 border-t border-r border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">Status</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-white divide-y dark:divide-gray-700">
                 {listDataPackages &&
                   listDataPackages.map(
                     ({
@@ -254,8 +255,8 @@ const Packages = () => {
               <Pagination totalRecords={data.length} currentPage={page} pageLimit={rowsPerPage} handleChangePage={updatePage} />
             </div>
           </div>
-          <div className="w-1/3 pt-24 pl-2">
-            <PackageDetails active={active} activeGroup={activeGroup} />
+          <div className="w-1/3 pt-8 pl-2">
+            <PackageDetails active={active} activeGroup={activeGroup} mode={mode} loading={packageLoader.loading} />
           </div>
         </div>
       }

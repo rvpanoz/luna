@@ -3,19 +3,21 @@ import React from 'react';
 type AppLoaderProps = {
   children: React.ReactNode,
   loading: boolean,
+  half?: boolean,
   message?: string,
 }
 
 const AppLoader = (props: AppLoaderProps) => {
-  const { children, loading } = props;
+  const { children, loading, message, half } = props;
 
   return <>
-    {loading ? <div className="flex w-full h-screen justify-center">
+    {loading ? <div className={`flex flex-col w-full ${!half ? 'h-screen' : ''} justify-center items-center`}>
       <div className="loader">
         <span>
           <span></span>
         </span>
       </div>
+      <div className="text-gray-400 pt-2">{message}</div>
     </div> : children
     }
   </>
