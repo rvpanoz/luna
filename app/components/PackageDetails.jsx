@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
-import { setActive } from '../models/packages/actions';
-import AppLoader from '../components/AppLoader';
 import { XIcon } from '@primer/octicons-react';
 import { string, object, bool } from 'prop-types';
+import { setActive } from '../models/packages/actions';
+import Loader from '../components/Loader';
 
 const PackageDetails = (props) => {
   const { active, activeGroup, loading } = props;
@@ -18,7 +18,7 @@ const PackageDetails = (props) => {
 
   return (
     <div className="max-w-sm w-full pt-2 lg:max-w-full lg:flex">
-      <AppLoader loading={loading} message="Loading package.." half={true}>
+      <Loader loading={loading} message="Loading package.." half={true}>
         <div className="bg-white p-4 flex flex-col justify-between leading-normal">
           <div className="mb-8">
             <p className="text-sm text-gray-600 flex items-center">
@@ -58,7 +58,7 @@ const PackageDetails = (props) => {
             </li>
           </ul>
         </div>
-      </AppLoader>
+      </Loader>
     </div>
   );
 };

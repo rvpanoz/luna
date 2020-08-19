@@ -1,7 +1,7 @@
 import React from 'react';
 import { array, oneOfType, arrayOf, node, bool, string } from 'prop-types';
 
-const AppLoader = (props) => {
+const Loader = (props) => {
   const { children, loading, message, half } = props;
 
   return (
@@ -26,11 +26,11 @@ const AppLoader = (props) => {
   );
 };
 
-AppLoader.propTypes = {
+Loader.propTypes = {
   children: oneOfType([arrayOf(node), node]).isRequired,
   loading: bool,
   half: bool,
   message: string,
 };
 
-export default AppLoader;
+export default Loader;

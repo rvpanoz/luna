@@ -15,7 +15,7 @@ import { addSelected, setPage, setActivePage } from '../models/ui/actions';
 import { setMode, clearInstallOptions } from '../models/common/actions';
 import Toolbar from '../components/Toolbar';
 import Paginator from '../components/Paginator';
-import AppLoader from '../components/AppLoader';
+import Loader from '../components/Loader';
 import PackageItem from '../components/PackageItem';
 import PackageDetails from '../components/PackageDetails';
 
@@ -191,7 +191,7 @@ const Packages = () => {
 
   return (
     <>
-      <AppLoader loading={loading} message={message}>
+      <Loader loading={loading} message={message}>
         {noPackages ? (
           <div>No packages found.</div>
         ) : (
@@ -291,7 +291,7 @@ const Packages = () => {
             </div>
           </div>
         )}
-      </AppLoader>
+      </Loader>
     </>
   );
 };
