@@ -4,31 +4,31 @@ import { runCommand } from '../cli';
 import mk from '../cli/mk';
 
 const {
-  defaultSettings: { defaultManager }
+  defaultSettings: { defaultManager },
 } = mk || {};
 
-const onNpmUpdate = (event: any, options: any) => {
+const onNpmUpdate = (event, options) => {
   const { activeManager = defaultManager, ...rest } = options || {};
 
-  const onFlow = (chunk: string) => event.sender.send('npm-update-flow', chunk);
-  const onError = (error: string) => event.sender.send('npm-update-error', error);
-  const onComplete = (errors: any, data: any) =>
+  const onFlow = (chunk) => event.sender.send('npm-update-flow', chunk);
+  const onError = (error) => event.sender.send('npm-update-error', error);
+  const onComplete = (errors, data) =>
     event.sender.send('npm-update-completed', data);
 
-  const callback = (result: any) => {
+  const callback = (result) => {
     const { status, errors, data } = result;
 
     return switchcase({
-      flow: (dataChunk: string) => onFlow(dataChunk),
+      flow: (dataChunk) => onFlow(dataChunk),
       close: () => onComplete(errors, data),
-      error: (error: string) => onError(error)
+      error: (error) => onError(error),
     })(null)(status);
   };
 
   try {
     const params = {
       activeManager,
-      ...rest
+      ...rest,
     };
 
     runCommand(params, callback);

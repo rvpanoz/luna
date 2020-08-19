@@ -19,7 +19,7 @@ const SEPARATOR = path.sep;
  * @param {*} handler
  * @param {*} options
  */
-export const showDialog = async (handler: Function, options: any) => {
+export const showDialog = async (handler, options) => {
   if (!options || typeof options !== 'object') {
     return;
   }
@@ -27,10 +27,16 @@ export const showDialog = async (handler: Function, options: any) => {
   const { mode } = options || {};
 
   if (mode === 'file') {
-    const response = await dialog.showOpenDialog(remote.getCurrentWindow(), options);
+    const response = await dialog.showOpenDialog(
+      remote.getCurrentWindow(),
+      options
+    );
     handler.apply(null, [response]);
   } else {
-    const response = await dialog.showMessageBox(remote.getCurrentWindow(), options);
+    const response = await dialog.showMessageBox(
+      remote.getCurrentWindow(),
+      options
+    );
     handler.apply(null, [response]);
   }
 };
@@ -41,7 +47,7 @@ export const showDialog = async (handler: Function, options: any) => {
  * @param {*} key
  * @param {*} replacements
  */
-export const iMessage = (type: string, key: string, replacements?: any) => {
+export const iMessage = (type, key, replacements) => {
   const messageType = switchcase({
     confirmation: () => CONFIRMATION_MESSAGES,
     info: () => INFO_MESSAGES,
@@ -53,7 +59,7 @@ export const iMessage = (type: string, key: string, replacements?: any) => {
   })(INFO_MESSAGES)(type);
 
   return messageType[key]
-    ? messageType[key].replace(/%\w+%/g, (all: any) => replacements[all] || all)
+    ? messageType[key].replace(/%\w+%/g, (all) => replacements[all] || all)
     : key;
 };
 
@@ -61,9 +67,9 @@ export const iMessage = (type: string, key: string, replacements?: any) => {
  *
  * @param {*} namespace
  */
-export const createActionCreator = (namespace: string) => (actionType: string) => {
+export const createActionCreator = (namespace) => (actionType) => {
   const type = `${namespace}/${actionType}`;
-  const actionCreator = (payload: any) => ({
+  const actionCreator = (payload) => ({
     type,
     payload,
   });
@@ -78,7 +84,7 @@ export const createActionCreator = (namespace: string) => (actionType: string) =
  * Object array
  * @param {*} obj
  */
-export const objectEntries = (obj: any) => {
+export const objectEntries = (obj) => {
   let ownProps = Object.keys(obj);
   let i = ownProps.length;
   let resArray = new Array(i);
@@ -91,7 +97,7 @@ export const objectEntries = (obj: any) => {
  * Validate url
  * @param {*} url
  */
-export const isUrl = (url: string) => {
+export const isUrl = (url) => {
   const matcher = /^(?:\w+:)?\/\/([^\s\.]+\.\S{2}|localhost[\:?\d]*)\S*$/;
   return matcher.test(url);
 };
@@ -102,7 +108,7 @@ export const isUrl = (url: string) => {
  */
 export const firstToUpper = (str) => {
   return str
-    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter: string, index: number) {
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
       return index !== 0 ? letter.toLowerCase() : letter.toUpperCase();
     })
     .replace(/\s+/g, '');
@@ -112,7 +118,7 @@ export const firstToUpper = (str) => {
  * @param {*} cases
  *
  */
-export const switchcase = (cases: any) => (defaultCase: any) => (key: any) =>
+export const switchcase = (cases) => (defaultCase) => (key) =>
   cases.hasOwnProperty(key) && typeof cases[key] === 'function'
     ? cases[key].apply(undefined)
     : defaultCase;
@@ -239,7 +245,7 @@ export const shrinkDirectory = (directory) => {
 
       return `${dirParts[dirParts.length - 2]}${SEPARATOR}${
         dirParts[dirParts.length - 1]
-        }${SEPARATOR}package.json`;
+      }${SEPARATOR}package.json`;
     } catch (error) {
       throw new Error(error);
     }

@@ -2,28 +2,33 @@ import log from 'electron-log';
 import { switchcase } from '../commons/utils';
 import { runCommand } from '../cli';
 
-const onNpmInit = (event: any, options: any) => {
+const onNpmInit = (event, options) => {
   const { activeManager = 'npm', ...rest } = options || {};
 
-  const onFlow = (chunk: any) => event.sender.send('npm-init-flow', chunk);
-  const onError = (error: any) => event.sender.send('npm-init-error', error);
-  const onComplete = (errors: any, data: any, initDirectory: string) => setTimeout(() => event.sender.send('npm-init-completed', errors, data, initDirectory), 2000)
+  const onFlow = (chunk) => event.sender.send('npm-init-flow', chunk);
+  const onError = (error) => event.sender.send('npm-init-error', error);
+  const onComplete = (errors, data, initDirectory) =>
+    setTimeout(
+      () =>
+        event.sender.send('npm-init-completed', errors, data, initDirectory),
+      2000
+    );
 
-  const callback = (result: any) => {
+  const callback = (result) => {
     const { status, errors, data, initDirectory } = result;
 
     return switchcase({
-      flow: (dataChunk: string) => onFlow(dataChunk),
+      flow: (dataChunk) => onFlow(dataChunk),
       close: () => onComplete(errors, data, initDirectory),
-      error: (error: string) => onError(error)
+      error: (error) => onError(error),
     })(null)(status);
   };
 
   try {
     const params = {
       ...rest,
-      activeManager
-    }
+      activeManager,
+    };
 
     runCommand(params, callback);
   } catch (error) {

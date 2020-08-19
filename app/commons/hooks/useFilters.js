@@ -4,21 +4,21 @@
 import { useState, useEffect } from 'react';
 import { PACKAGE_GROUPS } from '../../constants/AppConstants';
 
-const getFiltered = (data: any, filters: any) => {
+const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);
 
   const withFiltersData =
     data &&
     data.reduce((acc = [], pkg) => {
       const { name } = pkg;
-      const pkgIn = acc.find(pack => pack.name.indexOf(name) > -1);
+      const pkgIn = acc.find((pack) => pack.name.indexOf(name) > -1);
 
       if (pkgIn) {
         return acc;
       }
 
       // for each pkg run filter to match criteria
-      filters.forEach(filterDetails => {
+      filters.forEach((filterDetails) => {
         const { filterType, filterValue } = filterDetails;
 
         if (groups.indexOf(filterValue) > -1 && pkg.__group === filterValue) {
@@ -45,7 +45,7 @@ const getFiltered = (data: any, filters: any) => {
   return withFiltersData;
 };
 
-const useFilters = (allData: [], filters: any, force?: boolean) => {
+const useFilters = (allData, filters, force) => {
   const [filtered, applyFilters] = useState(allData);
 
   useEffect(() => {

@@ -1,24 +1,16 @@
-import React, { useState, useCallback, useEffect, useRef, SyntheticEvent } from 'react';
-
-type PaginatorProps = {
-  totalRecords: number,
-  currentPage: number,
-  pageLimit: number,
-  pageNeighbours: number,
-  setOffset: (value: number) => void,
-  setCurrentPage: (pageNo: number) => void
-};
-
-type LinkProps = {
-  page: number,
-  currentPage: number,
-  onClick: (page: number, evt: SyntheticEvent) => void,
-}
+import React, {
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  SyntheticEvent,
+} from 'react';
+import { number, func } from 'prop-types';
 
 const LEFT_PAGE = 'LEFT';
 const RIGHT_PAGE = 'RIGHT';
 
-const range = (from: number, to: number, step = 1) => {
+const range = (from, to, step = 1) => {
   let i = from;
   const pool = [];
 
@@ -30,19 +22,31 @@ const range = (from: number, to: number, step = 1) => {
   return pool;
 };
 
-const Link = (props: LinkProps) => {
+const Link = (props) => {
   const { page, currentPage, onClick } = props;
 
   return (
     <li>
-      <a href="#" onClick={evt => onClick(page, evt)} className={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-gray-200 text-gray-600 ${page === currentPage + 1 ? 'bg-gray-200 ' : null}`}>
+      <a
+        href="#"
+        onClick={(evt) => onClick(page, evt)}
+        className={`first:ml-0 text-xs font-semibold flex w-8 h-8 mx-1 p-0 rounded-full items-center justify-center leading-tight relative border border-solid border-gray-200 text-gray-600 ${
+          page === currentPage + 1 ? 'bg-gray-200 ' : null
+        }`}
+      >
         {page}
       </a>
     </li>
-  )
-}
+  );
+};
 
-const Paginator = (props: PaginatorProps) => {
+Link.propTypes = {
+  page: number,
+  currentPage: number,
+  onClick: func,
+};
+
+const Paginator = (props) => {
   const init = () => {
     const { totalRecords = null, pageLimit = 12, pageNeighbours = 0 } = props;
 
@@ -93,7 +97,7 @@ const Paginator = (props: PaginatorProps) => {
     setState({ ...state, totalRecords: props.totalRecords, totalPages });
   }, [props.totalRecords]);
 
-  const handleClick = (page: number, evt: SyntheticEvent) => {
+  const handleClick = (page, evt) => {
     evt.preventDefault();
     gotoPage(page);
   };
@@ -161,11 +165,28 @@ const Paginator = (props: PaginatorProps) => {
           {pages.map((page) => {
             console.log(page, typeof page);
 
-            return <Link key={`page-${page}`} page={page} onClick={handleClick} currentPage={currentPage} />;
+            return (
+              <Link
+                key={`page-${page}`}
+                page={page}
+                onClick={handleClick}
+                currentPage={currentPage}
+              />
+            );
           })}
         </ul>
       </nav>
-    </div>);
-}
+    </div>
+  );
+};
+
+Paginator.propTypes = {
+  totalRecords: number,
+  currentPage: number,
+  pageLimit: number,
+  pageNeighbours: number,
+  setOffset: func,
+  setCurrentPage: func,
+};
 
 export default Paginator;

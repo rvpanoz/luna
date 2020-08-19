@@ -2,43 +2,36 @@ import React from 'react';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { useFilters } from '../commons/hooks';
-// import { scrollWrapper, iMessage } from '../commons/utils';
+import { scrollWrapper, iMessage } from '../commons/utils';
 import {
   setPackagesStart,
   viewPackageStart,
   installPackage,
   uninstallPackages,
   updatePackages,
-  installMultiplePackages
+  installMultiplePackages,
 } from '../models/packages/actions';
-import {
-  addSelected,
-  setPage,
-  setActivePage,
-} from '../models/ui/actions';
+import { addSelected, setPage, setActivePage } from '../models/ui/actions';
 import { setMode, clearInstallOptions } from '../models/common/actions';
 import Toolbar from '../components/Toolbar';
 import Paginator from '../components/Paginator';
 import AppLoader from '../components/AppLoader';
-import { AppState } from '../state';
-import PackageItem from '../components/Package';
+import PackageItem from '../components/PackageItem';
 import PackageDetails from '../components/PackageDetails';
-
-import { PackageSchema } from '../types.d';
 
 const mapState = ({
   common: {
     directory,
     manager,
     mode,
-    operations: { packagesInstallOptions, action }
+    operations: { packagesInstallOptions, action },
   },
   packages: {
     active,
     packagesFromSearch,
     packagesData,
     packagesOutdated,
-    metadata: { fromSearch }
+    metadata: { fromSearch },
   },
   npm: { operationStatus, operationPackages, operationCommand },
   ui: {
@@ -47,9 +40,9 @@ const mapState = ({
     pagination: { page, rowsPerPage },
     filtering: { filters },
     sorting: { sortBy, sortDir },
-    selected
-  }
-}: AppState) => ({
+    selected,
+  },
+}) => ({
   paused,
   active,
   directory,
@@ -71,7 +64,7 @@ const mapState = ({
   sortBy,
   operationStatus,
   operationPackages,
-  operationCommand
+  operationCommand,
 });
 
 const Packages = () => {
@@ -107,42 +100,53 @@ const Packages = () => {
       setPackagesStart({
         channel: 'npm-list-outdated',
         options: {
-          cmd: ['outdated', 'list']
-        }
+          cmd: ['outdated', 'list'],
+        },
       })
     );
   }, [dispatch]);
 
-  const switchMode = useCallback((mode, directory) => {
-    dispatch(setMode({ mode, directory }));
-    dispatch(setActivePage({ page: 'packages', paused: false }));
+  const switchMode = useCallback(
+    (mode, directory) => {
+      dispatch(setMode({ mode, directory }));
+      dispatch(setActivePage({ page: 'packages', paused: false }));
 
-    if (fromSearch) {
-      dispatch(
-        setPackagesStart({
-          channel: 'npm-list-outdated',
+      if (fromSearch) {
+        dispatch(
+          setPackagesStart({
+            channel: 'npm-list-outdated',
+            options: {
+              cmd: ['outdated', 'list'],
+            },
+          })
+        );
+      }
+    },
+    [dispatch, fromSearch]
+  );
+
+  const viewPackage = useCallback(
+    (name, version) => {
+      return dispatch(
+        viewPackageStart({
+          channel: 'npm-view',
           options: {
-            cmd: ['outdated', 'list']
-          }
+            cmd: ['view'],
+            name,
+            version: name === 'npm' ? null : version,
+          },
         })
       );
-    }
-  }, [dispatch, fromSearch]);
+    },
+    [dispatch]
+  );
 
-  const viewPackage = useCallback((name, version) => {
-    return dispatch(
-      viewPackageStart({
-        channel: 'npm-view',
-        options: {
-          cmd: ['view'],
-          name,
-          version: name === 'npm' ? null : version
-        }
-      }));
-  }, [dispatch]);
-
-  const setSelected = useCallback((name) => dispatch(addSelected({ name })), [dispatch]);
-  const setCurrentPage = useCallback((page) => dispatch(setPage({ page })), [dispatch]);
+  const setSelected = useCallback((name) => dispatch(addSelected({ name })), [
+    dispatch,
+  ]);
+  const setCurrentPage = useCallback((page) => dispatch(setPage({ page })), [
+    dispatch,
+  ]);
 
   useEffect(() => {
     dispatch(
@@ -151,15 +155,15 @@ const Packages = () => {
         options: {
           cmd: ['outdated', 'list'],
           mode,
-          directory
-        }
+          directory,
+        },
       })
     );
   }, [mode, directory, dispatch]);
 
   useEffect(() => {
     if (mode === 'local' && active) {
-      const packageItem: any = packagesData.find((pkg: PackageSchema) => pkg.name === active.name);
+      const packageItem = packagesData.find((pkg) => pkg.name === active.name);
 
       if (packageItem && packageItem.__group) {
         setActiveGroup(packageItem.__group);
@@ -182,23 +186,40 @@ const Packages = () => {
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-  const noPackages = Boolean(!packagesData || !packagesData.length) && !fromSearch
+  const noPackages =
+    Boolean(!packagesData || !packagesData.length) && !fromSearch;
 
   return (
     <AppLoader loading={loading} message={message}>
-      {noPackages ? <div>No packages found.</div> :
+      {noPackages ? (
+        <div>No packages found.</div>
+      ) : (
         <div className="flex">
           <div className="w-2/3 flex flex-col">
             <div className="pb-2">
-              <Toolbar reload={reload} switchMode={switchMode} selected={selected} mode={mode} packagesData={packagesData} />
+              <Toolbar
+                reload={reload}
+                switchMode={switchMode}
+                selected={selected}
+                mode={mode}
+                packagesData={packagesData}
+              />
             </div>
             <table className="min-w-full divide-y divide-gray-200 border-l whitespace-no-wrap">
               <thead>
                 <tr>
-                  <th className="px-2 py-2 border-t border-l border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">Name</th>
-                  <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">Installed</th>
-                  <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">Latest</th>
-                  <th className="py-2 border-t border-r border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">Status</th>
+                  <th className="px-2 py-2 border-t border-l border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
+                    Name
+                  </th>
+                  <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
+                    Installed
+                  </th>
+                  <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
+                    Latest
+                  </th>
+                  <th className="py-2 border-t border-r border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
+                    Status
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y dark:divide-gray-700">
@@ -216,7 +237,7 @@ const Packages = () => {
                       peerMissing,
                       __fromSearch,
                       __hasError,
-                      __group
+                      __group,
                     }) => {
                       // const isPackageSelected = selected.indexOf(name) > -1;
                       // const installOptions = Array.isArray(packagesInstallOptions)
@@ -230,17 +251,20 @@ const Packages = () => {
                         operationCommand !== 'install' &&
                         operationPackages.indexOf(name) > -1;
 
-                      return <PackageItem
-                        key={name}
-                        name={name}
-                        version={version}
-                        latest={latest}
-                        peerMissing={peerMissing}
-                        missing={missing}
-                        isOutdated={isOutdated}
-                        inOperation={inOperation}
-                        onClick={() => viewPackage(name, version)}
-                        onSelect={setSelected} />
+                      return (
+                        <PackageItem
+                          key={name}
+                          name={name}
+                          version={version}
+                          latest={latest}
+                          peerMissing={peerMissing}
+                          missing={missing}
+                          isOutdated={isOutdated}
+                          inOperation={inOperation}
+                          onClick={() => viewPackage(name, version)}
+                          onSelect={setSelected}
+                        />
+                      );
                     }
                   )}
               </tbody>
@@ -257,10 +281,15 @@ const Packages = () => {
             </div>
           </div>
           <div className="w-1/3 pt-8 pl-2">
-            <PackageDetails active={active} activeGroup={activeGroup} mode={mode} loading={packageLoader.loading} />
+            <PackageDetails
+              active={active}
+              activeGroup={activeGroup}
+              mode={mode}
+              loading={packageLoader.loading}
+            />
           </div>
         </div>
-      }
+      )}
     </AppLoader>
   );
 };

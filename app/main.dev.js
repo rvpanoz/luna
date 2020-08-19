@@ -15,7 +15,7 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-import CheckNpm from '../internals/scripts/CheckNpm'
+import CheckNpm from '../internals/scripts/CheckNpm';
 import {
   onNpmListOutdated,
   onNpmView,
@@ -58,7 +58,7 @@ export default class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | null = null;
+let mainWindow = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -106,8 +106,12 @@ const createWindow = async () => {
     await installExtensions();
   }
 
-  const windowWidth: number = MIN_WIDTH && MIN_WIDTH !== "" ? parseInt(MIN_WIDTH, 10) : screenSize.width;
-  const windowHeight: number = MIN_HEIGHT && MIN_HEIGHT !== "" ? parseInt(MIN_HEIGHT, 10) : screenSize.width;
+  const windowWidth =
+    MIN_WIDTH && MIN_WIDTH !== '' ? parseInt(MIN_WIDTH, 10) : screenSize.width;
+  const windowHeight =
+    MIN_HEIGHT && MIN_HEIGHT !== ''
+      ? parseInt(MIN_HEIGHT, 10)
+      : screenSize.width;
 
   mainWindow = new BrowserWindow({
     width: windowWidth,
@@ -118,14 +122,17 @@ const createWindow = async () => {
     resizable: true,
     webPreferences: {
       nodeIntegration: NODE_ENV === 'development',
-      preload: NODE_ENV === 'production' ? path.join(__dirname, 'dist/renderer.prod.js') : undefined
+      preload:
+        NODE_ENV === 'production'
+          ? path.join(__dirname, 'dist/renderer.prod.js')
+          : undefined,
     },
     icon: path.join(__dirname, '..', 'resources/icon.png'),
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  mainWindow.webContents.on('did-finish-load', async (event: any) => {
+  mainWindow.webContents.on('did-finish-load', async (event) => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
     }
@@ -142,12 +149,12 @@ const createWindow = async () => {
     event.sender.send('finish-loaded');
   });
 
-  mainWindow.webContents.on('crashed', (event: any) => {
+  mainWindow.webContents.on('crashed', (event) => {
     log.error(chalk.redBright.bold('[CRASHED]'), event);
     app.quit();
   });
 
-  mainWindow.on('unresponsive', (event: any) => {
+  mainWindow.on('unresponsive', (event) => {
     log.error(chalk.redBright.bold('[UNRESPONSIVE]'), event);
     app.quit();
   });
@@ -187,9 +194,7 @@ ipcMain.on('npm-list-outdated', (event, options) =>
  * https://docs.npmjs.com/cli/uninstall.html
  *
  * */
-ipcMain.on('npm-uninstall', (event, options) =>
-  onNpmUninstall(event, options)
-);
+ipcMain.on('npm-uninstall', (event, options) => onNpmUninstall(event, options));
 
 /**
  * Channel: npm-search
@@ -197,9 +202,7 @@ ipcMain.on('npm-uninstall', (event, options) =>
  * https://docs.npmjs.com/cli/search.html
  *
  * */
-ipcMain.on('npm-search', (event, options) =>
-  onNpmSearch(event, options)
-);
+ipcMain.on('npm-search', (event, options) => onNpmSearch(event, options));
 
 /**
  * Channel: npm-view
@@ -215,9 +218,7 @@ ipcMain.on('npm-view', (event, options) => onNpmView(event, options));
  * https://docs.npmjs.com/cli/install.html
  *
  * */
-ipcMain.on('npm-install', (event, options) =>
-  onNpmInstall(event, options)
-);
+ipcMain.on('npm-install', (event, options) => onNpmInstall(event, options));
 
 /**
  * Channel: npm-update
@@ -225,9 +226,7 @@ ipcMain.on('npm-install', (event, options) =>
  * https://docs.npmjs.com/cli/update.html
  *
  * */
-ipcMain.on('npm-update', (event, options) =>
-  onNpmUpdate(event, options)
-);
+ipcMain.on('npm-update', (event, options) => onNpmUpdate(event, options));
 
 /**
  * Channel: npm-audit

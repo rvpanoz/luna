@@ -2,12 +2,12 @@ import log from 'electron-log';
 import { switchcase } from '../commons/utils';
 import { runCommand } from '../cli';
 
-const onNpmUninstall = (event: any, options: any) => {
+const onNpmUninstall = (event, options) => {
   const { activeManager = 'npm', ...rest } = options || {};
 
-  const onFlow = (chunk: any) => event.sender.send('npm-uninstall-flow', chunk);
-  const onError = (error: any) => event.sender.send('npm-uninstall-error', error);
-  const onComplete = (errors: any, result: any, removedPackages: any) =>
+  const onFlow = (chunk) => event.sender.send('npm-uninstall-flow', chunk);
+  const onError = (error) => event.sender.send('npm-uninstall-error', error);
+  const onComplete = (errors, result, removedPackages) =>
     event.sender.send(
       'npm-uninstall-completed',
       result,
@@ -15,21 +15,21 @@ const onNpmUninstall = (event: any, options: any) => {
       removedPackages
     );
 
-  const callback = (result: any) => {
+  const callback = (result) => {
     const { status, errors, data } = result;
     const { packages } = options;
 
     return switchcase({
-      flow: (dataChunk: string) => onFlow(dataChunk),
+      flow: (dataChunk) => onFlow(dataChunk),
       close: () => onComplete(errors, data, packages),
-      error: () => onError(errors)
+      error: () => onError(errors),
     })(null)(status);
   };
 
   try {
     const params = {
       ...rest,
-      activeManager
+      activeManager,
     };
 
     runCommand(params, callback);

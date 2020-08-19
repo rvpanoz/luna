@@ -12,21 +12,21 @@ import Packages from './Packages';
 import Notifications from './Notifications';
 import Analytics from './Analytics';
 
-import { AppState } from '../state.d';
-
-const mapState = (state: AppState) => ({
+const mapState = (state) => ({
   uiException: state.uiException,
   onlineStatus: state.common.onlinestatus,
   activePage: state.ui.activePage,
   mode: state.common.mode,
   directory: state.common.directory,
   snackbar: state.ui.snackbar,
-  env: state.npm.env
+  env: state.npm.env,
 });
 
 const App = () => {
   const dispatch = useDispatch();
-  const { uiException, snackbar, activePage, directory, env } = useMappedState(mapState);
+  const { uiException, snackbar, activePage, directory, env } = useMappedState(
+    mapState
+  );
 
   const onClose = useCallback(
     () =>
@@ -51,7 +51,7 @@ const App = () => {
 
       dispatch({
         type: updateStatus.type,
-        payload: { status: navigator.onLine ? 'online' : 'offline' }
+        payload: { status: navigator.onLine ? 'online' : 'offline' },
       });
     };
 
@@ -65,7 +65,7 @@ const App = () => {
       try {
         const env = JSON.parse(data);
         dispatch({ type: setEnv.type, payload: env });
-      } catch { };
+      } catch {}
     });
 
     ipcRenderer.once('yarn-lock-detected', () => {
@@ -73,7 +73,7 @@ const App = () => {
         setSnackbar({
           open: true,
           type: 'error',
-          message: 'Yarn.lock detected'
+          message: 'Yarn.lock detected',
         })
       );
     });
@@ -91,7 +91,7 @@ const App = () => {
       ipcRenderer.removeAllListeners('yarn-lock-detected');
       window.removeEventListener('online', updateOnlineStatus);
       window.removeEventListener('offline', updateOnlineStatus);
-    }
+    };
   }, [dispatch]);
 
   if (uiException) {
@@ -115,7 +115,6 @@ const App = () => {
       </div>
     </>
   );
-}
+};
 
 export default hot(App);
-

@@ -2,26 +2,26 @@ import log from 'electron-log';
 import { switchcase } from '../commons/utils';
 import { runCommand } from '../cli';
 
-const onNpmSearch = (event: any, options: any) => {
+const onNpmSearch = (event, options) => {
   const { activeManager = 'npm', ...rest } = options || {};
 
-  const onError = (error: string) => event.sender.send('npm-search-error', error);
-  const onComplete = (errors: any, data: any) =>
+  const onError = (error) => event.sender.send('npm-search-error', error);
+  const onComplete = (errors, data) =>
     event.sender.send('npm-search-completed', data, errors);
 
-  const callback = (result: any) => {
+  const callback = (result) => {
     const { status, errors, data } = result;
 
     return switchcase({
       close: () => onComplete(errors, data),
-      error: (error: string) => onError(error)
+      error: (error) => onError(error),
     })(null)(status);
   };
 
   try {
     const params = {
       activeManager,
-      ...rest
+      ...rest,
     };
 
     runCommand(params, callback);
