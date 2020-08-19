@@ -3,7 +3,7 @@ import { string } from 'prop-types';
 import Search from './Search';
 import { GearIcon } from '@primer/octicons-react';
 
-const AppHeader = (props) => {
+const Header = (props) => {
   const { directory } = props;
 
   return (
@@ -16,7 +16,9 @@ const AppHeader = (props) => {
           <div className="relative w-64 max-w-3xl px-6">
             <span className="text-gray-500 text-sm">Working directory</span>
             <br />
-            <span className="text-gray-600 text-sm">{directory}</span>
+            <span className="text-gray-600 text-sm inline-block w-full break-all">
+              {directory}
+            </span>
           </div>
           <div className="relative w-2/3 max-w-3xl px-6">
             <Search />
@@ -34,8 +36,8 @@ const AppHeader = (props) => {
   );
 };
 
-AppHeader.propTypes = {
+Header.propTypes = {
   directory: string,
 };
 
-export default AppHeader;
+export default Header;

@@ -190,107 +190,109 @@ const Packages = () => {
     Boolean(!packagesData || !packagesData.length) && !fromSearch;
 
   return (
-    <AppLoader loading={loading} message={message}>
-      {noPackages ? (
-        <div>No packages found.</div>
-      ) : (
-        <div className="flex">
-          <div className="w-2/3 flex flex-col">
-            <div className="pb-2">
-              <Toolbar
-                reload={reload}
-                switchMode={switchMode}
-                selected={selected}
+    <>
+      <AppLoader loading={loading} message={message}>
+        {noPackages ? (
+          <div>No packages found.</div>
+        ) : (
+          <div className="flex">
+            <div className="w-2/3 flex flex-col">
+              <div className="pb-6">
+                <Toolbar
+                  reload={reload}
+                  switchMode={switchMode}
+                  selected={selected}
+                  mode={mode}
+                  packagesData={packagesData}
+                />
+              </div>
+              <table className="min-w-full divide-y divide-gray-200 border-l whitespace-no-wrap">
+                <thead>
+                  <tr className="border-gray-200 border-l">
+                    <th className="px-2 py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
+                      Name
+                    </th>
+                    <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
+                      Installed
+                    </th>
+                    <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
+                      Latest
+                    </th>
+                    <th className="py-2 border-t border-r border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
+                      Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y dark:divide-gray-700">
+                  {listDataPackages &&
+                    listDataPackages.map(
+                      ({
+                        name,
+                        version,
+                        latest,
+                        isOutdated,
+                        peerDependencies,
+                        extraneous,
+                        problems,
+                        missing,
+                        peerMissing,
+                        __fromSearch,
+                        __hasError,
+                        __group,
+                      }) => {
+                        // const isPackageSelected = selected.indexOf(name) > -1;
+                        // const installOptions = Array.isArray(packagesInstallOptions)
+                        //   ? packagesInstallOptions.find(
+                        //     (installOption: any) => installOption.name === name
+                        //   )
+                        //   : {};
+
+                        const inOperation =
+                          operationStatus !== 'idle' &&
+                          operationCommand !== 'install' &&
+                          operationPackages.indexOf(name) > -1;
+
+                        return (
+                          <PackageItem
+                            key={name}
+                            name={name}
+                            version={version}
+                            latest={latest}
+                            peerMissing={peerMissing}
+                            missing={missing}
+                            isOutdated={isOutdated}
+                            inOperation={inOperation}
+                            onClick={() => viewPackage(name, version)}
+                            onSelect={setSelected}
+                          />
+                        );
+                      }
+                    )}
+                </tbody>
+              </table>
+              <div className="pt-2">
+                <Paginator
+                  totalRecords={data.length}
+                  currentPage={page}
+                  pageLimit={rowsPerPage}
+                  pageNeighbours={1}
+                  setOffset={setOffset}
+                  setCurrentPage={setCurrentPage}
+                />
+              </div>
+            </div>
+            <div className="w-1/3 pt-8 pl-2">
+              <PackageDetails
+                active={active}
+                activeGroup={activeGroup}
                 mode={mode}
-                packagesData={packagesData}
-              />
-            </div>
-            <table className="min-w-full divide-y divide-gray-200 border-l whitespace-no-wrap">
-              <thead>
-                <tr className="border-gray-200 border-l">
-                  <th className="px-2 py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
-                    Name
-                  </th>
-                  <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
-                    Installed
-                  </th>
-                  <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
-                    Latest
-                  </th>
-                  <th className="py-2 border-t border-r border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y dark:divide-gray-700">
-                {listDataPackages &&
-                  listDataPackages.map(
-                    ({
-                      name,
-                      version,
-                      latest,
-                      isOutdated,
-                      peerDependencies,
-                      extraneous,
-                      problems,
-                      missing,
-                      peerMissing,
-                      __fromSearch,
-                      __hasError,
-                      __group,
-                    }) => {
-                      // const isPackageSelected = selected.indexOf(name) > -1;
-                      // const installOptions = Array.isArray(packagesInstallOptions)
-                      //   ? packagesInstallOptions.find(
-                      //     (installOption: any) => installOption.name === name
-                      //   )
-                      //   : {};
-
-                      const inOperation =
-                        operationStatus !== 'idle' &&
-                        operationCommand !== 'install' &&
-                        operationPackages.indexOf(name) > -1;
-
-                      return (
-                        <PackageItem
-                          key={name}
-                          name={name}
-                          version={version}
-                          latest={latest}
-                          peerMissing={peerMissing}
-                          missing={missing}
-                          isOutdated={isOutdated}
-                          inOperation={inOperation}
-                          onClick={() => viewPackage(name, version)}
-                          onSelect={setSelected}
-                        />
-                      );
-                    }
-                  )}
-              </tbody>
-            </table>
-            <div className="pt-2">
-              <Paginator
-                totalRecords={data.length}
-                currentPage={page}
-                pageLimit={rowsPerPage}
-                pageNeighbours={1}
-                setOffset={setOffset}
-                setCurrentPage={setCurrentPage}
+                loading={packageLoader.loading}
               />
             </div>
           </div>
-          <div className="w-1/3 pt-8 pl-2">
-            <PackageDetails
-              active={active}
-              activeGroup={activeGroup}
-              mode={mode}
-              loading={packageLoader.loading}
-            />
-          </div>
-        </div>
-      )}
-    </AppLoader>
+        )}
+      </AppLoader>
+    </>
   );
 };
 export default Packages;

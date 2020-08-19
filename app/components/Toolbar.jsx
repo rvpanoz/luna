@@ -120,21 +120,21 @@ const Toolbar = (props) => {
         </div>
         <div className="ml-2">
           <button
+            onClick={() => reload()}
+            className="bg-gray-200 hover:bg-gray-400 py-1 px-4 rounded inline-flex items-center"
+          >
+            <SyncIcon />
+            &nbsp;<span className="ml-1 text-gray-600 text-sm">Reload</span>
+          </button>
+        </div>
+        <div className="ml-2">
+          <button
             onClick={() => switchMode('global', null)}
             className="bg-gray-200 hover:bg-gray-400 py-1 px-4 rounded inline-flex items-center"
           >
             <ListUnorderedIcon />
             &nbsp;
             <span className="ml-1 text-gray-600 text-sm">Load globals</span>
-          </button>
-        </div>
-        <div className="ml-2">
-          <button
-            onClick={() => reload()}
-            className="bg-gray-200 hover:bg-gray-400 py-1 px-4 rounded inline-flex items-center"
-          >
-            <SyncIcon />
-            &nbsp;<span className="ml-1 text-gray-600 text-sm">Reload</span>
           </button>
         </div>
       </div>
