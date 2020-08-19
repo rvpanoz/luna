@@ -2,9 +2,7 @@ import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
 import { Observable } from 'rxjs';
-
 import mk from './mk';
-import { CommandOptions } from '../types';
 
 const { spawn } = cp;
 const {
@@ -25,14 +23,14 @@ const cwd = process.cwd();
  * @param {*} directory
  */
 
-const execute = (options: CommandOptions) => {
+const execute = (options) => {
   const {
     manager = defaultManager,
     commandArgs,
     mode,
     directory,
     packageJson,
-  } = options || {}
+  } = options || {};
   const [operation] = commandArgs;
   const { NODE_ENV } = process.env;
   const isLocal = Boolean(mode === 'local' && directory);
@@ -45,6 +43,11 @@ const execute = (options: CommandOptions) => {
       console.log(
         chalk.redBright.bold(`running: ${manager} ${commandArgs.join(' ')}`)
       );
+
+    observer.next({
+      status: 'running',
+      data: `running: ${manager} ${commandArgs.join(' ')}`,
+    });
 
     try {
       // on windows use npm.cmd
@@ -120,7 +123,7 @@ const execute = (options: CommandOptions) => {
  * npm list
  * @param {*} options
  */
-const list = (options: CommandOptions) => {
+const list = (options) => {
   const command = ['list'];
   const { mode, directory } = options || {};
 
@@ -133,7 +136,7 @@ const list = (options: CommandOptions) => {
     manager: 'npm',
     commandArgs: run,
     mode,
-    directory
+    directory,
   };
 
   return execute(params);
@@ -143,7 +146,7 @@ const list = (options: CommandOptions) => {
  * npm outdated
  * @param {*} options
  */
-const outdated = (options: CommandOptions) => {
+const outdated = (options) => {
   const command = ['outdated'];
   const { mode, directory } = options || {};
 
@@ -156,7 +159,7 @@ const outdated = (options: CommandOptions) => {
     manager: 'npm',
     commandArgs: run,
     mode,
-    directory
+    directory,
   };
 
   return execute(params);
@@ -166,7 +169,7 @@ const outdated = (options: CommandOptions) => {
  * npm search
  * @param {*} options
  */
-const search = (options: CommandOptions) => {
+const search = (options) => {
   const command = ['search'];
   const { directory, mode, pkgName } = options || {};
   const defaults = ['--depth=0', '--json'];
@@ -182,7 +185,7 @@ const search = (options: CommandOptions) => {
       manager: 'npm',
       commandArgs: run,
       mode,
-      directory
+      directory,
     };
 
     return execute(params);
@@ -196,7 +199,7 @@ const search = (options: CommandOptions) => {
  * @param {*} opts
  * @param {*} idx
  */
-const install = (options: CommandOptions, idx: number) => {
+const install = (options, idx) => {
   const { mode, directory, packageJson, manager = 'npm' } = options || {};
 
   try {
@@ -221,7 +224,7 @@ const install = (options: CommandOptions, idx: number) => {
  * npm update
  * @param {*} options
  */
-const update = (options: CommandOptions) => {
+const update = (options) => {
   const { mode, directory, manager = 'npm' } = options || {};
 
   try {
@@ -232,7 +235,7 @@ const update = (options: CommandOptions) => {
       manager,
       commandArgs: run,
       mode,
-      directory
+      directory,
     };
 
     return execute(params);
@@ -245,7 +248,7 @@ const update = (options: CommandOptions) => {
  * npm uninstall
  * @param {*} options
  */
-const uninstall = (options: CommandOptions) => {
+const uninstall = (options) => {
   const { mode, directory, manager = 'npm' } = options || {};
 
   try {
@@ -256,7 +259,7 @@ const uninstall = (options: CommandOptions) => {
       manager,
       commandArgs: run,
       mode,
-      directory
+      directory,
     };
 
     return execute(params);
@@ -269,7 +272,7 @@ const uninstall = (options: CommandOptions) => {
  * npm view
  * @param {*} options
  */
-const view = (options: CommandOptions) => {
+const view = (options) => {
   const { mode, directory, manager = 'npm' } = options || {};
 
   try {
@@ -280,7 +283,7 @@ const view = (options: CommandOptions) => {
       manager,
       commandArgs: run,
       mode,
-      directory
+      directory,
     };
 
     return execute(params);
@@ -293,7 +296,7 @@ const view = (options: CommandOptions) => {
  * npm audit
  * @param {*} options
  */
-const runAudit = (options: CommandOptions) => {
+const runAudit = (options) => {
   const { manager = 'npm', mode, directory } = options || {};
 
   try {
@@ -305,7 +308,7 @@ const runAudit = (options: CommandOptions) => {
       commandArgs: run,
       mode,
       directory,
-      packageJson: false
+      packageJson: false,
     };
 
     return execute(params);
@@ -318,7 +321,7 @@ const runAudit = (options: CommandOptions) => {
  * npm doctor
  * @param {*} options
  */
-const runDoctor = (options: CommandOptions) => {
+const runDoctor = (options) => {
   const { mode, directory, manager = 'npm' } = options || {};
 
   try {
@@ -342,7 +345,7 @@ const runDoctor = (options: CommandOptions) => {
  * npm init
  * @param {*} options
  */
-const runInit = (options: CommandOptions) => {
+const runInit = (options) => {
   const { mode, directory, manager = 'npm' } = options;
 
   try {
@@ -366,7 +369,7 @@ const runInit = (options: CommandOptions) => {
  * npm dedupe
  * @param {*} options
  */
-const runDedupe = (options: CommandOptions) => {
+const runDedupe = (options) => {
   const { mode, directory, manager = 'npm' } = options;
 
   try {
@@ -390,7 +393,7 @@ const runDedupe = (options: CommandOptions) => {
  * npm cache
  * @param {*} options
  */
-const runCache = (options: CommandOptions) => {
+const runCache = (options) => {
   const { mode, directory, manager = 'npm' } = options;
 
   try {
