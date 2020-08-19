@@ -207,8 +207,8 @@ const Packages = () => {
             </div>
             <table className="min-w-full divide-y divide-gray-200 border-l whitespace-no-wrap">
               <thead>
-                <tr>
-                  <th className="px-2 py-2 border-t border-l border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
+                <tr className="border-gray-200 border-l">
+                  <th className="px-2 py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">
                     Name
                   </th>
                   <th className="py-2 border-t border-gray-200 bg-gray-200 text-left text-sm font-semibold text-gray-600 tracking-wider">

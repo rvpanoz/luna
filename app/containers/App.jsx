@@ -105,7 +105,7 @@ const App = () => {
         <div id="header">
           <Header directory={directory || env.prefix} />
         </div>
-        <div id="main-content" className="w-full p-4">
+        <div id="main-content" className="w-full p-6">
           {switchcase({
             packages: () => <Packages />,
             analytics: () => <Analytics />,

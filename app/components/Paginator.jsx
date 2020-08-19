@@ -7,21 +7,6 @@ import React, {
 } from 'react';
 import { number, func } from 'prop-types';
 
-const LEFT_PAGE = 'LEFT';
-const RIGHT_PAGE = 'RIGHT';
-
-const range = (from, to, step = 1) => {
-  let i = from;
-  const pool = [];
-
-  while (i <= to) {
-    pool.push(i);
-    i += step;
-  }
-
-  return pool;
-};
-
 const Link = (props) => {
   const { page, currentPage, onClick } = props;
 
@@ -91,61 +76,17 @@ const Paginator = (props) => {
       firstRun.current = false;
       return;
     }
+
     const totalRecords = props.totalRecords;
     const totalPages = Math.ceil(totalRecords / state.pageLimit);
 
     setState({ ...state, totalRecords: props.totalRecords, totalPages });
-  }, [props.totalRecords]);
+  }, [props.totalRecords, state.pageLimit]);
 
   const handleClick = (page, evt) => {
     evt.preventDefault();
     gotoPage(page);
   };
-
-  const fetchPageNumbers = useCallback(() => {
-    const totalPages = state.totalPages;
-    const currentPage = props.currentPage;
-    const pageNeighbours = state.pageNeighbours; //Pages between first and middle block
-
-    const totalNumbers = state.pageNeighbours * 2 + 3; //Neigbours on both sides including first, middle and last
-    const totalBlocks = totalNumbers + 2; //including left and right buttons
-
-    if (totalPages > totalBlocks) {
-      let pages = [];
-
-      const leftBound = currentPage - pageNeighbours;
-      const rightBound = currentPage + pageNeighbours;
-      const beforeLastPage = totalPages - 1;
-
-      const startPage = leftBound > 2 ? leftBound : 2;
-      const endPage = rightBound < beforeLastPage ? rightBound : beforeLastPage;
-
-      pages = range(startPage, endPage);
-
-      const pagesCount = pages.length;
-      const singleSpillOffset = totalNumbers - pagesCount - 1;
-
-      const leftSpill = startPage > 2;
-      const rightSpill = endPage < beforeLastPage;
-
-      const leftSpillPage = LEFT_PAGE;
-      const rightSpillPage = RIGHT_PAGE;
-
-      if (leftSpill && !rightSpill) {
-        const extraPages = range(startPage - singleSpillOffset, startPage - 1);
-        pages = [leftSpillPage, ...extraPages, ...pages];
-      } else if (!leftSpill && rightSpill) {
-        const extraPages = range(endPage + 1, endPage + singleSpillOffset);
-        pages = [...pages, ...extraPages, rightSpillPage];
-      } else if (leftSpill && rightSpill) {
-        pages = [leftSpillPage, ...pages, rightSpillPage];
-      }
-
-      return [1, ...pages, totalPages];
-    }
-
-    return range(1, totalPages);
-  }, [state.totalPages, props.currentPage, state.pageNeighbours]);
 
   if (!state.totalRecords) {
     return null;
@@ -156,15 +97,12 @@ const Paginator = (props) => {
   }
 
   const { currentPage } = props;
-  const pages = fetchPageNumbers();
 
   return (
     <div className="mt-4">
       <nav className="block">
         <ul className="flex pl-0 rounded list-none flex-wrap">
-          {pages.map((page) => {
-            console.log(page, typeof page);
-
+          {Array.from(Array(state.totalPages), (_, i) => i + 1).map((page) => {
             return (
               <Link
                 key={`page-${page}`}

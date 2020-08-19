@@ -1,11 +1,9 @@
-/* eslint-disable no-underscore-dangle */
-
 import format from 'date-fns/format';
 import { map } from 'rxjs/operators';
 import { pipe } from 'rxjs';
 import { ofType } from 'redux-observable';
-import { PACKAGE_GROUPS } from 'constants/AppConstants';
-import { readPackageJson } from 'commons/utils';
+import { PACKAGE_GROUPS } from '../../../constants/AppConstants';
+import { readPackageJson } from '../../../commons/utils';
 
 import {
   mapPackages,

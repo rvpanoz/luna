@@ -10,6 +10,17 @@ import {
 
 import { onNpmUninstall$ } from '../listeners';
 
+const showUninstallLoaderEpic = (action$) =>
+  action$.pipe(
+    ofType(uninstallPackages.type),
+    map(() =>
+      updateLoader({
+        loading: true,
+        message: iMessage('info', 'uninstalling'),
+      })
+    )
+  );
+
 /**
  * Uninstall packages
  * supports global and local mode

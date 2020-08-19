@@ -51,14 +51,12 @@ const Toolbar = (props) => {
   const onUpdate = useCallback(
     () =>
       dispatch(
-        dispatch(
-          updatePackages({
-            ipcEvent: 'npm-update',
-            cmd: ['update'],
-            multiple: true,
-            packages: selected,
-          })
-        )
+        updatePackages({
+          ipcEvent: 'npm-update',
+          cmd: ['update'],
+          multiple: true,
+          packages: selected,
+        })
       ),
     [selected, dispatch]
   );
