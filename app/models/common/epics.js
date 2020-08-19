@@ -1,7 +1,7 @@
 import { pipe } from 'rxjs';
 import { mergeMap, tap, map, ignoreElements } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
-import { initActions } from './actions';
+
 import {
   installPackage,
   installMultiplePackages,
@@ -12,9 +12,9 @@ import {
   viewPackageListener,
   installPackageListener,
   updatePackagesListener,
-  uninstallPackagesListener
-} from '../../models/packages/actions';
-import { clearSelected, setSnackbar } from '../../models/ui/actions';
+  uninstallPackagesListener,
+} from 'models/packages/actions';
+import { clearSelected, setSnackbar } from 'models/ui/actions';
 import {
   addActionError,
   setRunningCommand,
@@ -27,52 +27,43 @@ import {
   runDoctor,
   runAudit,
   runInit,
-  runCache
-} from '../../models/npm/actions';
+  runCache,
+} from 'models/npm/actions';
+import { initActions } from 'models/common/actions';
 
 const updateCommand = ({
   operationStatus,
   operationPackages,
-  operationCommand
-}: {
-  operationStatus: string,
-  operationCommand: string,
-  operationPackages: [string]
+  operationCommand,
 }) => ({
   type: setRunningCommand.type,
   payload: {
     operationStatus,
     operationPackages,
-    operationCommand
-  }
+    operationCommand,
+  },
 });
 
-const updateSnackbar = ({ type, position, message, open, hideOnClose }: {
-  type: string,
-  position?: string,
-  message: string,
-  open: boolean,
-  hideOnClose: boolean
-}) => ({
+const updateSnackbar = ({ type, position, message, open, hideOnClose }) => ({
   type: setSnackbar.type,
   payload: {
     open,
     type,
     position,
     message,
-    hideOnClose
-  }
-})
+    hideOnClose,
+  },
+});
 
 const addActionErrorEpic = pipe(
   ofType(addActionError.type),
-  tap(({ payload }: { payload: any }) => {
+  tap(({ payload }) => {
     const { error } = payload;
 
     return error.split('npm ERR!');
   }),
-  map((errorsArr: [string]) =>
-    errorsArr.map(errorLine => {
+  map((errorsArr) =>
+    errorsArr.map((errorLine) => {
       const notEmptyLine = errorLine.trim().length > 1;
 
       return notEmptyLine && errorLine.indexOf('fatal') > 0 ? errorLine : '';
@@ -93,7 +84,7 @@ const updateCommandEpic = pipe(
     runDedupe.type,
     runCache.type
   ),
-  mergeMap(({ payload }: { payload: any }) => {
+  mergeMap(({ payload }) => {
     const { packages, cmd } = payload || {};
     const [runningCommand] = cmd;
 
@@ -102,14 +93,14 @@ const updateCommandEpic = pipe(
         open: true,
         type: 'warning',
         message: `running npm ${runningCommand}`,
-        hideOnClose: true
+        hideOnClose: true,
       }),
       updateCommand({
         operationStatus: 'running',
         operationCommand: runningCommand,
-        operationPackages: Array.isArray(packages) ? packages : []
+        operationPackages: Array.isArray(packages) ? packages : [],
       }),
-      clearSelected()
+      clearSelected(),
     ];
   })
 );
@@ -132,7 +123,7 @@ const onInitActionsEpic = pipe(
     npmDoctorListener(),
     npmInitListener(),
     npmDedupeListener(),
-    npmCacheListener()
+    npmCacheListener(),
   ])
 );
 

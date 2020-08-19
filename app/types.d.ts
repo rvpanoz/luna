@@ -23,7 +23,7 @@ export type CommandResult = {
   initDirectory?: string
 }
 
-export type Active = {
+export type ActiveSchema = {
   name: string,
   description: string,
   ['dist-tags']: {
@@ -67,4 +67,18 @@ export type Active = {
     shasum: string
   },
   directories: any
+}
+
+export type PackageSchema = {
+  name: string,
+  isOutdated: boolean,
+  latest: string,
+  version: string,
+  from: string,
+  resolved: string,
+  __invalid?: boolean,
+  __hasError?: boolean,
+  __missing?: boolean,
+  __fromSearch?: boolean,
+  __group?: string
 }

@@ -25,19 +25,6 @@
   opacity: 1;
 }
 
-.tooltip .tooltip-text {
-  visibility: hidden;
-  text-align: center;
-  padding: 6px;
-  margin-bottom: 6px;
-  position: absolute;
-  z-index: 100;
-}
-
-.tooltip:hover .tooltip-text {
-  visibility: visible;
-}
-
 @keyframes spin {
   100% {
     -webkit-transform: rotate(360deg);

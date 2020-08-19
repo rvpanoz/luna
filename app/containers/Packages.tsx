@@ -18,11 +18,13 @@ import {
 } from '../models/ui/actions';
 import { setMode, clearInstallOptions } from '../models/common/actions';
 import Toolbar from '../components/Toolbar';
-import Pagination from '../components/Pagination';
+import Paginator from '../components/Paginator';
 import AppLoader from '../components/AppLoader';
 import { AppState } from '../state';
 import PackageItem from '../components/Package';
 import PackageDetails from '../components/PackageDetails';
+
+import { PackageSchema } from '../types.d';
 
 const mapState = ({
   common: {
@@ -94,16 +96,10 @@ const Packages = () => {
     operationPackages,
     operationCommand,
   } = useMappedState(mapState);
-  const [activeGroup, setActiveGroup] = useState('global');
-  const [options, toggleOptions] = useState({
-    open: false,
-    single: false,
-    name: null,
-    version: null
-  });
-  const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
-  const wrapperRef = useRef(null);
   const dispatch = useDispatch();
+  const [activeGroup, setActiveGroup] = useState('global');
+  const [offset, setOffset] = useState(0);
+  const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
 
   const reload = useCallback(() => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
@@ -146,7 +142,7 @@ const Packages = () => {
   }, [dispatch]);
 
   const setSelected = useCallback((name) => dispatch(addSelected({ name })), [dispatch]);
-  const updatePage = useCallback((page) => dispatch(setPage({ page })), [dispatch]);
+  const setCurrentPage = useCallback((page) => dispatch(setPage({ page })), [dispatch]);
 
   useEffect(() => {
     dispatch(
@@ -163,9 +159,7 @@ const Packages = () => {
 
   useEffect(() => {
     if (mode === 'local' && active) {
-      const packageItem = mode === 'local' && active
-        ? packagesData.find((pkg: any) => pkg.name === active.name)
-        : null;
+      const packageItem: any = packagesData.find((pkg: PackageSchema) => pkg.name === active.name);
 
       if (packageItem && packageItem.__group) {
         setActiveGroup(packageItem.__group);
@@ -224,12 +218,12 @@ const Packages = () => {
                       __hasError,
                       __group
                     }) => {
-                      const isPackageSelected = selected.indexOf(name) > -1;
-                      const installOptions = Array.isArray(packagesInstallOptions)
-                        ? packagesInstallOptions.find(
-                          installOption => installOption.name === name
-                        )
-                        : {};
+                      // const isPackageSelected = selected.indexOf(name) > -1;
+                      // const installOptions = Array.isArray(packagesInstallOptions)
+                      //   ? packagesInstallOptions.find(
+                      //     (installOption: any) => installOption.name === name
+                      //   )
+                      //   : {};
 
                       const inOperation =
                         operationStatus !== 'idle' &&
@@ -252,7 +246,14 @@ const Packages = () => {
               </tbody>
             </table>
             <div className="pt-2">
-              <Pagination totalRecords={data.length} currentPage={page} pageLimit={rowsPerPage} handleChangePage={updatePage} />
+              <Paginator
+                totalRecords={data.length}
+                currentPage={page}
+                pageLimit={rowsPerPage}
+                pageNeighbours={1}
+                setOffset={setOffset}
+                setCurrentPage={setCurrentPage}
+              />
             </div>
           </div>
           <div className="w-1/3 pt-8 pl-2">

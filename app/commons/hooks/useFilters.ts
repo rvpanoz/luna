@@ -2,7 +2,7 @@
 /* eslint-disable no-underscore-dangle */
 
 import { useState, useEffect } from 'react';
-import { PACKAGE_GROUPS } from 'constants/AppConstants';
+import { PACKAGE_GROUPS } from '../../constants/AppConstants';
 
 const getFiltered = (data: any, filters: any) => {
   const groups = Object.keys(PACKAGE_GROUPS);

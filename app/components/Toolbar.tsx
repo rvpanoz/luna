@@ -87,20 +87,20 @@ const Toolbar = (props: ToolbarProps) => {
 
   const renderItems = () => {
     return <div className="flex items-center justify-between flex-wrap">
-      <div className="mr-2">
-        <a href="#" className="tooltip inline-block text-sm px-4 py-2 leading-none text-gray-600">
-          <FilterIcon /><span className='tooltip-text bg-gray-200 p-3 -mt-6 -ml-6 rounded'>Show filters</span>
-        </a>
-      </div>
       <div>
-        <a onClick={() => switchMode('global', null)} href="#" className="tooltip inline-block text-sm px-4 py-2 leading-none text-gray-600">
-          <ListUnorderedIcon /><span className='tooltip-text bg-gray-200 p-3 -mt-6 -ml-6 rounded'>Load globals</span>
-        </a>
+        <button className="bg-gray-200 hover:bg-gray-400 py-2 px-4 rounded inline-flex items-center">
+          <FilterIcon />&nbsp;<span className="ml-1 text-gray-600 text-sm">Show filters</span>
+        </button>
       </div>
-      <div className="mr-2">
-        <a onClick={() => reload()} href="#" className="tooltip inline-block text-sm px-4 py-2 leading-none text-gray-600">
-          <SyncIcon /><span className='tooltip-text bg-gray-200 p-3 -mt-6 -ml-6 rounded'>Refresh</span>
-        </a>
+      <div className="ml-2">
+        <button onClick={() => switchMode('global', null)} className="bg-gray-200 hover:bg-gray-400 py-2 px-4 rounded inline-flex items-center">
+          <ListUnorderedIcon />&nbsp;<span className="ml-1 text-gray-600 text-sm">Load globals</span>
+        </button>
+      </div>
+      <div className="ml-2">
+        <button onClick={() => reload()} className="bg-gray-200 hover:bg-gray-400 py-2 px-4 rounded inline-flex items-center">
+          <SyncIcon />&nbsp;<span className="ml-1 text-gray-600 text-sm">Reload</span>
+        </button>
       </div>
     </div >
   }

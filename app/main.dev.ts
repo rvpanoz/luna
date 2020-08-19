@@ -36,19 +36,19 @@ import chalk from 'chalk';
 app.allowRendererProcessReuse = false;
 
 const {
-  MIN_WIDTH = 0,
-  MIN_HEIGHT = 0,
+  MIN_WIDTH,
+  MIN_HEIGHT,
   UPGRADE_EXTENSIONS = 1,
   NODE_ENV,
   START_MINIMIZED = false,
 } = process.env;
 
-const debug = /--debug/.test(process.argv[2]);
-const systemPaths = {
-  Home: app.getPath('home'),
-  AppData: app.getPath('appData'),
-  UserData: app.getPath('userData'),
-};
+// const debug = /--debug/.test(process.argv[2]);
+// const systemPaths = {
+//   Home: app.getPath('home'),
+//   AppData: app.getPath('appData'),
+//   UserData: app.getPath('userData'),
+// };
 
 export default class AppUpdater {
   constructor() {
@@ -106,9 +106,12 @@ const createWindow = async () => {
     await installExtensions();
   }
 
+  const windowWidth: number = MIN_WIDTH && MIN_WIDTH !== "" ? parseInt(MIN_WIDTH, 10) : screenSize.width;
+  const windowHeight: number = MIN_HEIGHT && MIN_HEIGHT !== "" ? parseInt(MIN_HEIGHT, 10) : screenSize.width;
+
   mainWindow = new BrowserWindow({
-    width: screenSize.width,
-    height: screenSize.height,
+    width: windowWidth,
+    height: windowHeight,
     x,
     y,
     show: false,
