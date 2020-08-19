@@ -1,7 +1,7 @@
 import { pipe } from 'rxjs';
 import { mergeMap, tap, map, ignoreElements } from 'rxjs/operators';
 import { combineEpics, ofType } from 'redux-observable';
-
+import { initActions } from './actions';
 import {
   installPackage,
   installMultiplePackages,
@@ -13,8 +13,8 @@ import {
   installPackageListener,
   updatePackagesListener,
   uninstallPackagesListener
-} from 'models/packages/actions';
-import { clearSelected, setSnackbar } from 'models/ui/actions';
+} from '../../models/packages/actions';
+import { clearSelected, setSnackbar } from '../../models/ui/actions';
 import {
   addActionError,
   setRunningCommand,
@@ -28,13 +28,16 @@ import {
   runAudit,
   runInit,
   runCache
-} from 'models/npm/actions';
-import { initActions } from 'models/common/actions';
+} from '../../models/npm/actions';
 
 const updateCommand = ({
   operationStatus,
   operationPackages,
   operationCommand
+}: {
+  operationStatus: string,
+  operationCommand: string,
+  operationPackages: [string]
 }) => ({
   type: setRunningCommand.type,
   payload: {
@@ -44,7 +47,13 @@ const updateCommand = ({
   }
 });
 
-const updateSnackbar = ({ type, position, message, open, hideOnClose }) => ({
+const updateSnackbar = ({ type, position, message, open, hideOnClose }: {
+  type: string,
+  position?: string,
+  message: string,
+  open: boolean,
+  hideOnClose: boolean
+}) => ({
   type: setSnackbar.type,
   payload: {
     open,
@@ -57,12 +66,12 @@ const updateSnackbar = ({ type, position, message, open, hideOnClose }) => ({
 
 const addActionErrorEpic = pipe(
   ofType(addActionError.type),
-  tap(({ payload }) => {
+  tap(({ payload }: { payload: any }) => {
     const { error } = payload;
 
     return error.split('npm ERR!');
   }),
-  map(errorsArr =>
+  map((errorsArr: [string]) =>
     errorsArr.map(errorLine => {
       const notEmptyLine = errorLine.trim().length > 1;
 
@@ -84,7 +93,7 @@ const updateCommandEpic = pipe(
     runDedupe.type,
     runCache.type
   ),
-  mergeMap(({ payload }) => {
+  mergeMap(({ payload }: { payload: any }) => {
     const { packages, cmd } = payload || {};
     const [runningCommand] = cmd;
 

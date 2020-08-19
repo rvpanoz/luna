@@ -26,24 +26,24 @@ const Package = ({ name, version, latest, missing, isOutdated, peerMissing, onCl
           <div className="ml-3">
             <label className="inline-flex items-center mt-3">
               <input type="checkbox" onClick={onSelectPackage} className="form-checkbox h-5 w-5 mt-2" />
-              <span className="ml-2 text-gray-700 whitespace-no-wrap pointer-events-none">
+              <span className="ml-2 text-gray-600 whitespace-no-wrap pointer-events-none">
                 {name}
               </span>
             </label>
           </div>
         </div>
       </td>
-      <td className="border-b border-gray-200 text-sm">
+      <td className="border-b border-gray-200 text-sm text-gray-600">
         {version}
       </td>
-      <td className="border-b border-gray-200 text-sm">
+      <td className="border-b border-gray-200 text-sm text-gray-600">
         {latest}
       </td>
       <td className="border-b border-gray-200 text-sm">
-        {missing && <span className="relative inline-block px-3 py-1 font-semibold text-red-900 leading-tight">
+        {missing && <span className="relative inline-block px-3 py-1 font-semibold text-red-600 leading-tight">
           <span className="relative"><XCircleFillIcon /></span>
         </span>}
-        {isOutdated && <span className="relative inline-block px-3 py-1 font-semibold text-pink-900 leading-tight">
+        {isOutdated && <span className="relative inline-block px-3 py-1 font-semibold text-pink-600 leading-tight">
           <span className="relative"><SyncIcon /></span>
         </span>}
         {!isOutdated && !peerMissing && !missing && version ? (

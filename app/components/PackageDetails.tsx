@@ -1,7 +1,11 @@
-import React from 'react';
-import { Active } from '../types.d';
+import React, { useCallback } from 'react';
+import { useDispatch } from 'redux-react-hook';
+import {
+  setActive
+} from '../models/packages/actions';
 import AppLoader from '../components/AppLoader';
 import { XIcon } from '@primer/octicons-react';
+import { Active } from '../types.d';
 
 type PackageDetailsProps = {
   active: Active | null,
@@ -12,6 +16,8 @@ type PackageDetailsProps = {
 
 const PackageDetails = (props: PackageDetailsProps) => {
   const { active, activeGroup, loading } = props;
+  const dispatch = useDispatch();
+  const closeActive = useCallback(() => dispatch(setActive({ active: null })), [dispatch]);
 
   if (!active) {
     return null;
@@ -28,22 +34,22 @@ const PackageDetails = (props: PackageDetailsProps) => {
               </svg>
               {activeGroup}
             </p>
-            <div className="text-gray-900 font-bold text-xl mb-2">{active.name}</div>
+            <div className="text-gray-700 font-bold text-xl mb-2">{active.name}</div>
             <p className="text-gray-700 text-base">{active.description}</p>
           </div>
           <div className="flex items-center">
             <div className="text-sm">
               <p className="text-gray-600 leading-none">Author:&nbsp;{active.author || 'N/A'}</p>
-              <p className="text-gray-600 mt-1">Installed:&nbsp;{active.version}</p>
-              <p className="text-gray-600 mt-1">Latest:&nbsp;{active['dist-tags'].latest}</p>
-              <p className="text-gray-600 mt-1">License:&nbsp;{active.license}</p>
+              <p className="text-gray-600">Installed:&nbsp;{active.version}</p>
+              <p className="text-gray-600">Latest:&nbsp;{active['dist-tags'].latest}</p>
+              <p className="text-gray-600">License:&nbsp;{active.license}</p>
             </div>
           </div>
         </div>
         <div className="pt-2">
           <ul className="flex flex-col">
             <li className="mr-3">
-              <a className="py-1 px-3 text-red" href="#">
+              <a onClick={closeActive} className="py-1 px-3 text-red" href="#">
                 <XIcon />
               </a>
             </li>
