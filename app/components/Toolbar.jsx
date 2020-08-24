@@ -35,7 +35,7 @@ const Toolbar = (props) => {
       });
     }
 
-    return dispatch(
+    dispatch(
       installMultiplePackages({
         ipcEvent: 'npm-install',
         cmd: selected.map(() => 'install'),
@@ -48,33 +48,29 @@ const Toolbar = (props) => {
     );
   }, [selected, dispatch]);
 
-  const onUpdate = useCallback(
-    () =>
-      dispatch(
-        updatePackages({
-          ipcEvent: 'npm-update',
-          cmd: ['update'],
-          multiple: true,
-          packages: selected,
-        })
-      ),
-    [selected, dispatch]
-  );
+  const onUpdate = useCallback(() => {
+    dispatch(
+      updatePackages({
+        ipcEvent: 'npm-update',
+        cmd: ['update'],
+        multiple: true,
+        packages: selected,
+      })
+    );
+  }, [selected, dispatch]);
 
-  const onUninstall = useCallback(
-    () =>
-      dispatch(
-        uninstallPackages({
-          ipcEvent: 'npm-uninstall',
-          cmd: ['uninstall'],
-          multiple: true,
-          packages: selected,
-        })
-      ),
-    [selected, dispatch]
-  );
+  const onUninstall = useCallback(() => {
+    dispatch(
+      uninstallPackages({
+        ipcEvent: 'npm-uninstall',
+        cmd: ['uninstall'],
+        multiple: true,
+        packages: selected,
+      })
+    );
+  }, [selected, dispatch]);
 
-  const renderActions = () => {
+  const renderNpmActions = () => {
     return (
       <div className="flex items-center justify-between flex-wrap">
         <div>
@@ -108,7 +104,7 @@ const Toolbar = (props) => {
     );
   };
 
-  const renderItems = () => {
+  const renderListActions = () => {
     return (
       <div className="flex items-center justify-between flex-wrap">
         <div>
@@ -148,7 +144,7 @@ const Toolbar = (props) => {
           Packages&nbsp;{selected.length ? `(${selected.length})` : null}
         </h3>
       </div>
-      {selected.length ? renderActions() : renderItems()}
+      {selected.length ? renderNpmActions() : renderListActions()}
     </nav>
   );
 };

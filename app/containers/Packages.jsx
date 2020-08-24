@@ -197,7 +197,7 @@ const Packages = () => {
         ) : (
           <div className="flex">
             <div className="w-2/3 flex flex-col">
-              <div className="pb-6">
+              <div className="pb-2">
                 <Toolbar
                   reload={reload}
                   switchMode={switchMode}
