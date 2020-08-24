@@ -4,6 +4,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.non-native {
+  -webkit-appearance: none;
+}
 #sidebar {
   transition: ease-in-out all 0.3s;
   z-index: 9999;

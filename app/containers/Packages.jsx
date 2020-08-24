@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import { useFilters } from '../commons/hooks';
-import { scrollWrapper, iMessage } from '../commons/utils';
+import { scrollWrapper, iMessage, switchcase } from '../commons/utils';
 import {
   setPackagesStart,
   viewPackageStart,
@@ -18,6 +18,8 @@ import Paginator from '../components/Paginator';
 import Loader from '../components/Loader';
 import PackageItem from '../components/PackageItem';
 import PackageDetails from '../components/PackageDetails';
+import Modal from '../components/Modal';
+import InstallOptions from '../components/InstallOptions';
 
 const mapState = ({
   common: {
@@ -90,9 +92,16 @@ const Packages = () => {
     operationCommand,
   } = useMappedState(mapState);
   const dispatch = useDispatch();
+
+  // TODO: consider useReducer
   const [activeGroup, setActiveGroup] = useState('global');
   const [offset, setOffset] = useState(0);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
+  const [modalOptions, updateModalOptions] = useState({
+    isVisible: false,
+    title: '',
+    content: '',
+  });
 
   const reload = useCallback(() => {
     dispatch(setActivePage({ page: 'packages', paused: false }));
@@ -144,9 +153,18 @@ const Packages = () => {
   const setSelected = useCallback((name) => dispatch(addSelected({ name })), [
     dispatch,
   ]);
+
   const setCurrentPage = useCallback((page) => dispatch(setPage({ page })), [
     dispatch,
   ]);
+
+  const setModalOptions = (isVisible, title, content) =>
+    updateModalOptions({
+      ...modalOptions,
+      title,
+      isVisible,
+      content,
+    });
 
   useEffect(() => {
     dispatch(
@@ -193,7 +211,21 @@ const Packages = () => {
     <>
       <Loader loading={loading} message={message}>
         {noPackages ? (
-          <div>No packages found.</div>
+          <>
+            <div
+              className={`flex flex-col w-full h-screen justify-center items-center pb-64`}
+            >
+              <div className="text-gray-600">No packages found.</div>
+              <div className="p-2">
+                <button
+                  onClick={() => switchMode('global', null)}
+                  className="bg-gray-200 hover:bg-gray-300 py-1 px-4 text-gray-600 rounded inline-flex items-center"
+                >
+                  Load globals
+                </button>
+              </div>
+            </div>
+          </>
         ) : (
           <div className="flex">
             <div className="w-2/3 flex flex-col">
@@ -203,7 +235,9 @@ const Packages = () => {
                   switchMode={switchMode}
                   selected={selected}
                   mode={mode}
+                  fromSearch={fromSearch}
                   packagesData={packagesData}
+                  setModalOptions={setModalOptions}
                 />
               </div>
               <table className="min-w-full divide-y divide-gray-200 border-l whitespace-no-wrap">
@@ -292,6 +326,12 @@ const Packages = () => {
           </div>
         )}
       </Loader>
+      <Modal isVisible={modalOptions.isVisible} title={modalOptions.title}>
+        {switchcase({
+          filters: () => 'filters content',
+          options: () => <InstallOptions selected={selected} />,
+        })(null)(modalOptions.content)}
+      </Modal>
     </>
   );
 };

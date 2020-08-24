@@ -8,6 +8,7 @@ import { setEnv } from '../models/npm/actions';
 import { switchcase } from '../commons/utils';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
+import TopBar from '../components/TopBar';
 import Packages from './Packages';
 import Notifications from './Notifications';
 import Analytics from './Analytics';
@@ -103,7 +104,10 @@ const App = () => {
       <Sidebar />
       <div className="flex flex-col flex-1 pl-16">
         <div id="header">
-          <Header directory={directory || env.prefix} />
+          <Header />
+        </div>
+        <div id="topbar">
+          <TopBar directory={directory} prefix={env.prefix} />
         </div>
         <div id="main-content" className="w-full p-6">
           {switchcase({
