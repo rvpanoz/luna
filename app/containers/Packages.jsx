@@ -326,7 +326,16 @@ const Packages = () => {
           </div>
         )}
       </Loader>
-      <Modal isVisible={modalOptions.isVisible} title={modalOptions.title}>
+      <Modal
+        isVisible={modalOptions.isVisible}
+        title={modalOptions.title}
+        handleClose={() =>
+          updateModalOptions({
+            ...modalOptions,
+            isVisible: false,
+          })
+        }
+      >
         {switchcase({
           filters: () => 'filters content',
           options: () => <InstallOptions selected={selected} />,
