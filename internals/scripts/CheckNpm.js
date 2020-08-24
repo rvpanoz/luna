@@ -1,31 +1,14 @@
-import cp from 'child_process';
-import chalk from 'chalk';
-import log from 'electron-log';
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
-const { NODE_ENV } = process.env;
+module.exports = () => {
+  if (!/npm-cli\.js$/.test(process.env.npm_execpath || '')) {
+    console.warn(
+      "\u001b[33mYou don't seem to be using npm. This could produce unexpected results.\u001b[39m"
+    );
 
-const checkNpm = () => {
-  try {
-    const result = cp.execSync('npm config list --json');
-    const env = JSON.parse(result.toString());
-
-    if (NODE_ENV === 'development') {
-      log.log(chalk.whiteBright.bgYellow.bold(`[INFO] ${env['user-agent']}`));
-    }
-
-    return {
-      userAgent: env['user-agent'],
-      metricsRegistry: env['metrics-registry'],
-      auditLevel: env['audit-level'],
-      nodeVersion: env['node-version'],
-      cache: env.cache,
-      prefix: env.prefix,
-      shrinkWrap: env.shrinkWrap,
-      logLevel: env.lockLevel
-    };
-  } catch (error) {
-    throw new Error(error)
+    return;
   }
-};
 
-export default checkNpm;
+  return exec('npm config list --json');
+};

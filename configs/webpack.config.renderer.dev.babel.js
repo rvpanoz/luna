@@ -1,5 +1,3 @@
-/* eslint global-require: off, import/no-dynamic-require: off */
-
 /**
  * Build config for development electron renderer process that uses
  * Hot-Module-Replacement
@@ -11,14 +9,18 @@ import path from 'path';
 import fs from 'fs';
 import webpack from 'webpack';
 import chalk from 'chalk';
-import merge from 'webpack-merge';
+import { merge } from 'webpack-merge';
 import { spawn, execSync } from 'child_process';
 import baseConfig from './webpack.config.base';
-import { CheckNodeEnv } from '../internals/scripts';
+import CheckNodeEnv from '../internals/scripts/CheckNodeEnv';
 
-CheckNodeEnv('development');
+// When an ESLint server is running, we can't set the NODE_ENV so we'll check if it's
+// at the dev webpack config is not accidentally run in a production environment
+if (process.env.NODE_ENV === 'production') {
+  CheckNodeEnv('development');
+}
 
-const port = process.env.PORT || 1211;
+const port = process.env.PORT || 1212;
 const publicPath = `http://localhost:${port}/dist`;
 const dll = path.join(__dirname, '..', 'dll');
 const manifest = path.resolve(dll, 'renderer.json');
@@ -26,13 +28,11 @@ const requiredByDLLConfig = module.parent.filename.includes(
   'webpack.config.renderer.dev.dll'
 );
 
-const { log } = console;
-
 /**
  * Warn if the DLL is not built
  */
 if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
-  log(
+  console.log(
     chalk.black.bgYellow.bold(
       'The DLL files are missing. Sit back while we build them for you with "yarn build-dll"'
     )
@@ -40,159 +40,130 @@ if (!requiredByDLLConfig && !(fs.existsSync(dll) && fs.existsSync(manifest))) {
   execSync('yarn build-dll');
 }
 
-export default merge.smart(baseConfig, {
+export default merge(baseConfig, {
   devtool: 'inline-source-map',
+
   mode: 'development',
+
   target: 'electron-renderer',
+
   entry: [
-    /* bundle the client for webpack dev server
-    and connect to the provided endpoint */
+    'core-js',
+    'regenerator-runtime/runtime',
+    ...(process.env.PLAIN_HMR ? [] : ['react-hot-loader/patch']),
     `webpack-dev-server/client?http://localhost:${port}/`,
-    /* bundle the client for hot reloading
-    only- means to only hot reload for successful updates */
     'webpack/hot/only-dev-server',
-    /* the entry point */
-    require.resolve('../app/index')
+    require.resolve('../app/index.jsx'),
   ],
+
   output: {
     publicPath: `http://localhost:${port}/dist/`,
-    filename: 'renderer.dev.js'
+    filename: 'renderer.dev.js',
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.global\.css$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              ident: 'postcss',
+              plugins: [require('tailwindcss'), require('autoprefixer')],
+            },
+          },
+        ],
+      },
+      // WOFF Font
+      {
+        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            mimetype: 'application/font-woff',
+          },
+        },
+      },
+      // WOFF2 Font
+      {
+        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            mimetype: 'application/font-woff',
+          },
+        },
+      },
+      // TTF Font
+      {
+        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            mimetype: 'application/octet-stream',
+          },
+        },
+      },
+      // EOT Font
+      {
+        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        use: 'file-loader',
+      },
+      // SVG Font
+      {
+        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 10000,
+            mimetype: 'image/svg+xml',
+          },
+        },
+      },
+      // Common Image Formats
+      {
+        test: /\.(?:ico|gif|png|jpg|jpeg|webp)$/,
+        use: 'url-loader',
+      },
+    ],
   },
   resolve: {
     alias: {
+      'react-dom': '@hot-loader/react-dom',
       assets: path.resolve(path.join(__dirname, '..', 'app', 'assets')),
       constants: path.resolve(path.join(__dirname, '..', 'app', 'constants')),
       commons: path.resolve(path.join(__dirname, '..', 'app', 'commons')),
       components: path.resolve(path.join(__dirname, '..', 'app', 'components')),
       containers: path.resolve(path.join(__dirname, '..', 'app', 'containers')),
       models: path.resolve(path.join(__dirname, '..', 'app', 'models')),
-      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles'))
-    }
+      styles: path.resolve(path.join(__dirname, '..', 'app', 'styles')),
+    },
   },
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            cacheDirectory: true
-          }
-        }
-      },
-      {
-        test: /\.global\.css$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            }
-          }
-        ]
-      },
-      {
-        test: /^((?!\.global).)*\.css$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              sourceMap: true,
-              importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
-            }
-          }
-        ]
-      },
-      // SASS support - compile all .global.scss files and pipe it to style.css
-      {
-        test: /\.global\.(scss|sass)$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMap: true
-            }
-          },
-          {
-            loader: 'sass-loader'
-          }
-        ]
-      },
-      // SASS support - compile all other .scss files and pipe it to style.css
-      {
-        test: /^((?!\.global).)*\.(scss|sass)$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              modules: true,
-              sourceMap: true,
-              importLoaders: 1,
-              localIdentName: '[name]__[local]__[hash:base64:5]'
-            }
-          },
-          {
-            loader: 'sass-loader'
-          }
-        ]
-      },
-      // WOFF Font
-      {
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        use: {
-          loader: 'file-loader',
-          options: {
-            limit: 10000,
-            mimetype: 'application/font-woff'
-          }
-        }
-      },
-      // WOFF2 Font
-      {
-        test: /\.(woff(2)?|ttf|otf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              name: '[name].[ext]',
-              outputPath: 'fonts/'
-            }
-          }
-        ]
-      },
-      // Common Image Formats
-      {
-        test: /\.(?:ico|png|jpg|jpeg)$/,
-        use: 'url-loader'
-      }
-    ]
-  },
-
   plugins: [
     requiredByDLLConfig
       ? null
       : new webpack.DllReferencePlugin({
           context: path.join(__dirname, '..', 'dll'),
           manifest: require(manifest),
-          sourceType: 'var'
+          sourceType: 'var',
         }),
 
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.HotModuleReplacementPlugin({
+      multiStep: true,
+    }),
 
     new webpack.NoEmitOnErrorsPlugin(),
 
@@ -209,53 +180,50 @@ export default merge.smart(baseConfig, {
      * 'staging', for example, by changing the ENV variables in the npm scripts
      */
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development'
+      NODE_ENV: 'development',
     }),
 
     new webpack.LoaderOptionsPlugin({
-      debug: true
-    })
+      debug: true,
+    }),
   ],
 
   node: {
     __dirname: false,
-    __filename: false
+    __filename: false,
   },
 
   devServer: {
     port,
     publicPath,
     compress: true,
-    noInfo: true,
+    noInfo: false,
     stats: 'errors-only',
     inline: true,
     lazy: false,
-    liveReload: true,
-    hot: false, // if you want to refresh on errors too,
-    hotOnly: true, // don't refresh if hot loading fails.
+    hot: true,
     headers: { 'Access-Control-Allow-Origin': '*' },
     contentBase: path.join(__dirname, 'dist'),
-    watchContentBase: true,
     watchOptions: {
       aggregateTimeout: 300,
       ignored: /node_modules/,
-      poll: 100
+      poll: 100,
     },
     historyApiFallback: {
-      verbose: false,
-      disableDotRule: false
+      verbose: true,
+      disableDotRule: false,
     },
     before() {
       if (process.env.START_HOT) {
-        log(chalk.bgGreen(chalk.red('Starting Main Process...')));
+        console.log('Starting Main Process...');
         spawn('npm', ['run', 'start-main-dev'], {
           shell: true,
           env: process.env,
-          stdio: 'inherit'
+          stdio: 'inherit',
         })
-          .on('close', code => process.exit(code))
-          .on('error', spawnError => console.error(spawnError));
+          .on('close', (code) => process.exit(code))
+          .on('error', (spawnError) => console.error(spawnError));
       }
-    }
-  }
+    },
+  },
 });

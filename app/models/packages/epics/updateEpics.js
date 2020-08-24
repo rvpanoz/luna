@@ -4,28 +4,28 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
-import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
+import { map, switchMap, ignoreElements } from 'rxjs/operators';
 
 import { toggleLoader } from 'models/ui/actions';
 import {
   updatePackages,
-  updatePackagesListener
+  updatePackagesListener,
 } from 'models/packages/actions';
 import { iMessage } from 'commons/utils';
 import { onNpmUpdate$ } from '../listeners';
 
-const updateLoader = payload => ({
+const updateLoader = (payload) => ({
   type: toggleLoader.type,
-  payload
+  payload,
 });
 
-const showUpdateLoaderEpic = action$ =>
+const showUpdateLoaderEpic = (action$) =>
   action$.pipe(
     ofType(updatePackages.type),
     map(() =>
       updateLoader({
         loading: true,
-        message: iMessage('info', 'updating')
+        message: iMessage('info', 'updating'),
       })
     )
   );
@@ -37,16 +37,16 @@ const showUpdateLoaderEpic = action$ =>
 const updatePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(updatePackages.type),
-    tap(({ payload }) => {
+    map(({ payload }) => {
       const {
-        common: { mode, directory }
+        common: { mode, directory },
       } = state$.value;
 
       ipcRenderer.send(
         'npm-update',
         Object.assign({}, payload, {
           mode,
-          directory
+          directory,
         })
       );
     }),

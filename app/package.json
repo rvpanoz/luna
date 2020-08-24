@@ -1,0 +1,18 @@
+{
+  "name": "luna",
+  "productName": "luna",
+  "version": "3.5.0",
+  "description": "npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. Build on Electron",
+  "main": "./main.prod.js",
+  "author": {
+    "name": "Luna maintainers",
+    "email": "rvpanoz@gmail.com",
+    "url": "https://github.com/rvpanoz/luna"
+  },
+  "scripts": {
+    "electron-rebuild": "node -r ../internals/scripts/BabelRegister.js ../internals/scripts/ElectronRebuild.js",
+    "postinstall": "yarn electron-rebuild"
+  },
+  "license": "GPLv3",
+  "dependencies": {}
+}

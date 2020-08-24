@@ -1,4 +1,4 @@
-/** epics and actions for packages logix */
+/** epics and actions for packages logic */
 
 import * as actions from './actions';
 import epics from './epics';

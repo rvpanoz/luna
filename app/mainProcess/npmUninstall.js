@@ -1,19 +1,12 @@
 import log from 'electron-log';
-import { merge } from 'ramda';
 import { switchcase } from '../commons/utils';
 import { runCommand } from '../cli';
-import mk from '../mk';
 
-const {
-  defaultSettings: { defaultManager }
-} = mk || {};
+const onNpmUninstall = (event, options) => {
+  const { activeManager = 'npm', ...rest } = options || {};
 
-const onNpmUninstall = (event, options, store) => {
-  const settings = store.get('user_settings');
-  const { activeManager = defaultManager, ...rest } = options || {};
-
-  const onFlow = chunk => event.sender.send('npm-uninstall-flow', chunk);
-  const onError = error => event.sender.send('npm-uninstall-error', error);
+  const onFlow = (chunk) => event.sender.send('npm-uninstall-flow', chunk);
+  const onError = (error) => event.sender.send('npm-uninstall-error', error);
   const onComplete = (errors, result, removedPackages) =>
     event.sender.send(
       'npm-uninstall-completed',
@@ -22,22 +15,22 @@ const onNpmUninstall = (event, options, store) => {
       removedPackages
     );
 
-  const callback = result => {
+  const callback = (result) => {
     const { status, errors, data } = result;
     const { packages } = options;
 
     return switchcase({
-      flow: dataChunk => onFlow(dataChunk),
+      flow: (dataChunk) => onFlow(dataChunk),
       close: () => onComplete(errors, data, packages),
-      error: () => onError(errors)
+      error: () => onError(errors),
     })(null)(status);
   };
 
   try {
-    const params = merge(settings, {
+    const params = {
+      ...rest,
       activeManager,
-      ...rest
-    });
+    };
 
     runCommand(params, callback);
   } catch (error) {

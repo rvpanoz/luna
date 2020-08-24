@@ -2,7 +2,7 @@ import log from 'electron-log';
 import { merge } from 'ramda';
 import { switchcase } from '../commons/utils';
 import { runCommand } from '../cli';
-import mk from '../mk';
+import mk from '../cli/mk';
 
 const {
   defaultSettings: { defaultManager }

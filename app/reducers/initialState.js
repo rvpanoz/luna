@@ -9,11 +9,11 @@ const initialState = {
   onlineStatus: 'offline',
   operations: {
     action: null,
-    packagesInstallOptions: []
+    packagesInstallOptions: [],
   },
   notifications: {
     active: null,
-    notifications: []
+    notifications: [],
   },
   npm: {
     commands: [],
@@ -25,16 +25,16 @@ const initialState = {
     operationCommand: null,
     audit: {
       result: null,
-      fix: false
+      fix: false,
     },
     doctor: {
       result: null,
-      error: false
+      error: false,
     },
     cache: {
       result: null,
-      error: false
-    }
+      error: false,
+    },
   },
   ui: {
     paused: false,
@@ -44,33 +44,33 @@ const initialState = {
       open: false,
       report: {
         name: null,
-        content: null
-      }
+        content: null,
+      },
     },
     filtering: {
-      filters: []
+      filters: [],
     },
     loaders: {
       loader: {
         loading: false,
-        message: null
+        message: null,
       },
       packageLoader: {
         loading: false,
-        message: null
+        message: null,
       },
       auditLoader: {
         loading: false,
-        message: null
+        message: null,
       },
       doctorLoader: {
         loading: false,
-        message: null
-      }
+        message: null,
+      },
     },
     pagination: {
-      page: 0,
-      rowsPerPage: 10
+      page: 1,
+      rowsPerPage: 12,
     },
     snackbar: {
       type: 'info',
@@ -78,16 +78,16 @@ const initialState = {
       message: null,
       positiom: {
         vertical: 'bottom',
-        horizontal: 'right'
+        horizontal: 'right',
       },
-      hideOnClose: false
+      hideOnClose: false,
     },
     sorting: {
       sortBy: 'name',
-      sortDir: 'asc'
+      sortDir: 'asc',
     },
     selected: [],
-    uiException: null
+    uiException: null,
   },
   packages: {
     active: null,
@@ -99,14 +99,14 @@ const initialState = {
       version: null,
       description: null,
       license: null,
-      author: null
+      author: null,
     },
     metadata: {
       lastUpdatedAt: null,
       fromSearch: false,
-      fromSort: false
-    }
-  }
+      fromSort: false,
+    },
+  },
 };
 
 export default initialState;

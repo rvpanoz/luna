@@ -1,4 +1,4 @@
-import { createActionCreator } from 'commons/utils';
+import { createActionCreator } from '../../commons/utils';
 
 const ActionCreator = createActionCreator('@@LUNA/COMMON');
 

@@ -2,7 +2,7 @@
 /* eslint-disable no-underscore-dangle */
 
 import { useState, useEffect } from 'react';
-import { PACKAGE_GROUPS } from 'constants/AppConstants';
+import { PACKAGE_GROUPS } from '../../constants/AppConstants';
 
 const getFiltered = (data, filters) => {
   const groups = Object.keys(PACKAGE_GROUPS);
@@ -11,14 +11,14 @@ const getFiltered = (data, filters) => {
     data &&
     data.reduce((acc = [], pkg) => {
       const { name } = pkg;
-      const pkgIn = acc.find(pack => pack.name.indexOf(name) > -1);
+      const pkgIn = acc.find((pack) => pack.name.indexOf(name) > -1);
 
       if (pkgIn) {
         return acc;
       }
 
       // for each pkg run filter to match criteria
-      filters.forEach(filterDetails => {
+      filters.forEach((filterDetails) => {
         const { filterType, filterValue } = filterDetails;
 
         if (groups.indexOf(filterValue) > -1 && pkg.__group === filterValue) {

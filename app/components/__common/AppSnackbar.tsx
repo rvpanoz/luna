@@ -1,0 +1,22 @@
+import React from 'react';
+import { objectOf, string, bool, func, oneOfType, object } from 'prop-types';
+import Snackbar from '@material-ui/core/Snackbar';
+import SnackbarContent from './SnackbarContent';
+
+const AppSnackbar = (options: any) => {
+  const { snackbar, onClose } = options;
+  const { open, type, message, position } = snackbar;
+
+  return (
+    <Snackbar anchorOrigin={position} open={open}>
+      <SnackbarContent variant={type} message={message} onClose={onClose} />
+    </Snackbar>
+  );
+};
+
+AppSnackbar.propTypes = {
+  onClose: func,
+  snackbar: objectOf(oneOfType([string, bool, object])),
+};
+
+export default AppSnackbar;

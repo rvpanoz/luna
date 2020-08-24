@@ -1,19 +1,21 @@
-/* eslint-disable global-require */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable compat/compat */
+/* eslint global-require: off, no-console: off */
 
 /**
- * Electron's main process
+ * This module executes inside of electron's main process. You can start
+ * electron renderer process from here and communicate with the other processes
+ * through IPC.
+ *
+ * When running `yarn build` or `yarn build-main`, this file is compiled to
+ * `./app/main.prod.js` using webpack.
  */
-
-import ElectronStore from 'electron-store';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import path from 'path';
-import chalk from 'chalk';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-
 import MenuBuilder from './menu';
-import mk from './mk';
+import CheckNpm from '../internals/scripts/CheckNpm';
 import {
   onNpmListOutdated,
   onNpmView,
@@ -26,228 +28,70 @@ import {
   onNpmDoctor,
   onNpmDedupe,
   onNpmInit,
-  onNpmInitLock
+  onNpmInitLock,
 } from './mainProcess';
-import { CheckNpm } from '../internals/scripts';
+import chalk from 'chalk';
+
+// https://github.com/electron/electron/issues/18397
+app.allowRendererProcessReuse = false;
 
 const {
-  defaultSettings: { startMinimized }
-} = mk || {};
-
-/* eslint-disable-next-line */
-const debug = /--debug/.test(process.argv[2]);
-
-/* eslint-disable-next-line */
-const APP_PATHS = {
-  appData: app.getPath('appData'),
-  userData: app.getPath('userData')
-};
-
-const {
-  DEBUG_PROD = 0,
-  DEBUG_DEV = 1,
-  MIN_WIDTH = 1280,
-  MIN_HEIGHT = 960,
-  INSTALL_EXTENSIONS = 1,
+  MIN_WIDTH,
+  MIN_HEIGHT,
   UPGRADE_EXTENSIONS = 1,
   NODE_ENV,
-  START_MINIMIZED = startMinimized
+  START_MINIMIZED = false,
 } = process.env;
 
-// store initialization
-const Store = new ElectronStore();
+// const debug = /--debug/.test(process.argv[2]);
+// const systemPaths = {
+//   Home: app.getPath('home'),
+//   AppData: app.getPath('appData'),
+//   UserData: app.getPath('userData'),
+// };
 
-// clear opened packages
-Store.set('history', []);
+export default class AppUpdater {
+  constructor() {
+    log.transports.file.level = 'info';
+    autoUpdater.logger = log;
+    autoUpdater.checkForUpdatesAndNotify();
+  }
+}
 
 let mainWindow = null;
 
-if (NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
   sourceMapSupport.install();
 }
 
-if (NODE_ENV === 'development' || Boolean(DEBUG_PROD)) {
-  const p = path.join(__dirname, '..', 'app', 'node_modules');
-
-  DEBUG_DEV && require('electron-debug')();
-  require('module').globalPaths.push(p);
+if (
+  process.env.NODE_ENV === 'development' ||
+  process.env.DEBUG_PROD === 'true'
+) {
+  require('electron-debug')();
 }
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer');
-  const forceDownload = !!UPGRADE_EXTENSIONS;
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
   return Promise.all(
-    extensions.map(name => installer.default(installer[name], forceDownload))
+    extensions.map((name) => installer.default(installer[name], forceDownload))
   ).catch(console.log);
 };
 
 /**
- * Event handling
- * send asynchronous messages between main and renderer process
- * https://electronjs.org/docs/api/ipc-renderer
+ * Create Main window
  */
-
-/**
- * Channel: npm-list-outaded
- * Supports: npm list <@scope>/]<pkg>, npm outdated <@scope>/<pkg>
- * https://docs.npmjs.com/cli/ls.html
- * https://docs.npmjs.com/cli/outdated.html
- *
- * */
-ipcMain.on('npm-list-outdated', (event, options) =>
-  onNpmListOutdated(event, options, Store)
-);
-
-/**
- * Channel: npm-uninstall
- * Supports: npm uninstall <@scope>/]<pkg>
- * https://docs.npmjs.com/cli/uninstall.html
- *
- * */
-ipcMain.on('npm-uninstall', (event, options) =>
-  onNpmUninstall(event, options, Store)
-);
-
-/**
- * Channel: npm-search
- * Supports: npm search [search terms ...]
- * https://docs.npmjs.com/cli/search.html
- *
- * */
-ipcMain.on('npm-search', (event, options) =>
-  onNpmSearch(event, options, Store)
-);
-
-/**
- * Channel: npm-view
- * Supports: npm view <@scope>/<name>@<version>
- * https://docs.npmjs.com/cli/view.html
- *
- * */
-ipcMain.on('npm-view', (event, options) => onNpmView(event, options, Store));
-
-/**
- * Channel: npm-install
- * Supports: npm install <@scope>/<name>@<version>
- * https://docs.npmjs.com/cli/install.html
- *
- * */
-ipcMain.on('npm-install', (event, options) =>
-  onNpmInstall(event, options, Store)
-);
-
-/**
- * Channel: npm-update
- * Supports: npm update <@scope>/<name>@<version>
- * https://docs.npmjs.com/cli/update.html
- *
- * */
-ipcMain.on('npm-update', (event, options) =>
-  onNpmUpdate(event, options, Store)
-);
-
-/**
- * Channel: npm-audit
- * Supports: npm audit [--json|--parseable]
- * https://docs.npmjs.com/cli/audit
- *
- */
-ipcMain.on('npm-audit', (event, options) => onNpmAudit(event, options, Store));
-
-/**
- * Channel: npm-init
- * Supports: npm init
- * https://docs.npmjs.com/cli/init
- *
- */
-ipcMain.on('npm-init', (event, options) => onNpmInit(event, options, Store));
-
-/**
- * Channel: npm-dedupe
- * Supports: npm dedupe
- * https://docs.npmjs.com/cli/dedupe
- *
- */
-ipcMain.on('npm-dedupe', (event, options) =>
-  onNpmDedupe(event, options, Store)
-);
-
-/**
- * Channel: npm-init-lock
- * Supports: npm i --package-lock-only
- *
- */
-ipcMain.on('npm-init-lock', (event, options) =>
-  onNpmInitLock(event, options, Store)
-);
-
-/**
- * Channel: npm-doctor
- * Supports: npm doctor
- * https://docs.npmjs.com/cli/doctor
- *
- */
-ipcMain.on('npm-cache', (event, options) => onNpmCache(event, options, Store));
-
-/**
- * Channel: npm-doctor
- * Supports: npm doctor
- * https://docs.npmjs.com/cli/doctor
- *
- */
-ipcMain.on('npm-doctor', (event, options) =>
-  onNpmDoctor(event, options, Store)
-);
-
-/**
- * app listeners
- * Supports: general app events
- */
-
-app.on('window-all-closed', () => {
-  /**
-   * Respect the OSX convention of having the application
-   * in memory even after all windows have been closed
-   */
-
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
-});
-
-/* eslint-disable-next-line */
-app.once('browser-window-created', (event, webContents) => {
-  NODE_ENV === 'development' &&
-    log.log(
-      chalk.white.bgGreen.bold('[EVENT]: browser-window-created event fired')
-    );
-});
-
-/* eslint-disable-next-line */
-app.once('web-contents-created', (event, webContents) => {
-  NODE_ENV === 'development' &&
-    log.log(
-      chalk.white.bgGreen.bold('[EVENT]: web-contents-created event fired')
-    );
-});
-
-app.on('ready', async () => {
-  NODE_ENV === 'development' &&
-    log.log(chalk.white.bgGreen.bold('[EVENT]: ready event fired'));
-
-  if (NODE_ENV === 'development') {
-    INSTALL_EXTENSIONS && (await installExtensions());
-  }
-
+const createWindow = async () => {
   let x = 0;
   let y = 0;
   const screenSize = screen.getPrimaryDisplay().size;
   const displays = screen.getAllDisplays();
   const externalDisplay = displays.find(
-    display => display.bounds.x !== 0 || display.bounds.y !== 0
+    (display) => display.bounds.x !== 0 || display.bounds.y !== 0
   );
 
   if (externalDisplay) {
@@ -255,71 +99,63 @@ app.on('ready', async () => {
     y = externalDisplay.bounds.y + 50;
   }
 
-  // create mainWindow
+  if (
+    process.env.NODE_ENV === 'development' ||
+    process.env.DEBUG_PROD === 'true'
+  ) {
+    await installExtensions();
+  }
+
+  const windowWidth =
+    MIN_WIDTH && MIN_WIDTH !== '' ? parseInt(MIN_WIDTH, 10) : screenSize.width;
+  const windowHeight =
+    MIN_HEIGHT && MIN_HEIGHT !== ''
+      ? parseInt(MIN_HEIGHT, 10)
+      : screenSize.width;
+
   mainWindow = new BrowserWindow({
-    minWidth: MIN_WIDTH || screenSize.width,
-    minHeight: MIN_HEIGHT || screenSize.height,
+    width: windowWidth,
+    height: windowHeight,
     x,
     y,
     show: false,
-    webPreferences: {
-      nodeIntegration: true
-    },
     resizable: true,
-    icon: path.join(__dirname, 'resources/icon.ico')
+    webPreferences: {
+      nodeIntegration: NODE_ENV === 'development',
+      preload:
+        NODE_ENV === 'production'
+          ? path.join(__dirname, 'dist/renderer.prod.js')
+          : undefined,
+    },
+    icon: path.join(__dirname, '..', 'resources/icon.png'),
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
-  mainWindow.once('ready-to-show', () => {
-    NODE_ENV === 'development' &&
-      log.log(chalk.white.bgGreen.bold('[EVENT]: ready-to-show event fired'));
-  });
-
-  mainWindow.webContents.on('did-finish-load', async event => {
-    NODE_ENV === 'development' &&
-      log.log(chalk.white.bgGreen.bold('[EVENT]: did-finish-load event fired'));
-
+  mainWindow.webContents.on('did-finish-load', async (event) => {
     if (!mainWindow) {
-      throw new Error('mainWindow is not defined');
+      throw new Error('"mainWindow" is not defined');
     }
-
-    if (START_MINIMIZED) {
+    if (process.env.START_MINIMIZED) {
       mainWindow.minimize();
     } else {
       mainWindow.show();
       mainWindow.focus();
     }
 
-    if (NODE_ENV === 'development') {
-      mainWindow.openDevTools();
-    }
+    const { stdout, stderr } = await CheckNpm();
 
-    // npm and node info
-    const npmEnv = await CheckNpm();
-    const npmEnvError = npmEnv && npmEnv.error;
-
-    event.sender.send('npm-env-close', npmEnvError, npmEnv);
-
-    // user settings
-    const userSettings = Store.get('user_settings') || {};
-    event.sender.send('settings-loaded-close', userSettings);
-
-    // directories history
-    const history = Store.get('history') || [];
-    event.sender.send('history-close', history);
-
-    // signal finish
+    event.sender.send('npm-env-close', stderr, stdout);
     event.sender.send('finish-loaded');
   });
 
-  mainWindow.webContents.on('crashed', event => {
-    log.error(chalk.white.bgRed.bold('[CRASHED]'), event);
+  mainWindow.webContents.on('crashed', (event) => {
+    log.error(chalk.redBright.bold('[CRASHED]'), event);
     app.quit();
   });
 
-  mainWindow.on('unresponsive', event => {
-    log.error(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
+  mainWindow.on('unresponsive', (event) => {
+    log.error(chalk.redBright.bold('[UNRESPONSIVE]'), event);
     app.quit();
   });
 
@@ -329,9 +165,143 @@ app.on('ready', async () => {
 
   const menuBuilder = new MenuBuilder(mainWindow);
   menuBuilder.buildMenu();
+
+  // Remove this if your app does not use auto updates
+  // eslint-disable-next-line
+  new AppUpdater();
+};
+
+/**
+ * Event handling
+ * send asynchronous messages between main and renderer process
+ * https://electronjs.org/docs/api/ipc-renderer
+ */
+
+/**
+ * Channel: npm-list-outdated
+ * Supports: npm list <@scope>/]<pkg>, npm outdated <@scope>/<pkg>
+ * https://docs.npmjs.com/cli/ls.html
+ * https://docs.npmjs.com/cli/outdated.html
+ *
+ * */
+ipcMain.on('npm-list-outdated', (event, options) =>
+  onNpmListOutdated(event, options)
+);
+
+/**
+ * Channel: npm-uninstall
+ * Supports: npm uninstall <@scope>/]<pkg>
+ * https://docs.npmjs.com/cli/uninstall.html
+ *
+ * */
+ipcMain.on('npm-uninstall', (event, options) => onNpmUninstall(event, options));
+
+/**
+ * Channel: npm-search
+ * Supports: npm search [search terms ...]
+ * https://docs.npmjs.com/cli/search.html
+ *
+ * */
+ipcMain.on('npm-search', (event, options) => onNpmSearch(event, options));
+
+/**
+ * Channel: npm-view
+ * Supports: npm view <@scope>/<name>@<version>
+ * https://docs.npmjs.com/cli/view.html
+ *
+ * */
+ipcMain.on('npm-view', (event, options) => onNpmView(event, options));
+
+/**
+ * Channel: npm-install
+ * Supports: npm install <@scope>/<name>@<version>
+ * https://docs.npmjs.com/cli/install.html
+ *
+ * */
+ipcMain.on('npm-install', (event, options) => onNpmInstall(event, options));
+
+/**
+ * Channel: npm-update
+ * Supports: npm update <@scope>/<name>@<version>
+ * https://docs.npmjs.com/cli/update.html
+ *
+ * */
+ipcMain.on('npm-update', (event, options) => onNpmUpdate(event, options));
+
+/**
+ * Channel: npm-audit
+ * Supports: npm audit [--json|--parseable]
+ * https://docs.npmjs.com/cli/audit
+ *
+ */
+// ipcMain.on('npm-audit', (event, options) => onNpmAudit(event, options));
+
+/**
+ * Channel: npm-init
+ * Supports: npm init
+ * https://docs.npmjs.com/cli/init
+ *
+ */
+ipcMain.on('npm-init', (event, options) => onNpmInit(event, options));
+
+/**
+ * Channel: npm-dedupe
+ * Supports: npm dedupe
+ * https://docs.npmjs.com/cli/dedupe
+ *
+ */
+// ipcMain.on('npm-dedupe', (event, options) =>
+//   onNpmDedupe(event, options)
+// );
+
+/**
+ * Channel: npm-init-lock
+ * Supports: npm i --package-lock-only
+ *
+ */
+// ipcMain.on('npm-init-lock', (event, options) =>
+//   onNpmInitLock(event, options)
+// );
+
+/**
+ * Channel: npm-doctor
+ * Supports: npm doctor
+ * https://docs.npmjs.com/cli/doctor
+ *
+ */
+// ipcMain.on('npm-cache', (event, options) => onNpmCache(event, options));
+
+/**
+ * Channel: npm-doctor
+ * Supports: npm doctor
+ * https://docs.npmjs.com/cli/doctor
+ *
+ */
+// ipcMain.on('npm-doctor', (event, options) =>
+//   onNpmDoctor(event, options)
+// );
+
+/**
+ * Add event listeners
+ */
+
+app.on('window-all-closed', () => {
+  // Respect the OSX convention of having the application in memory even
+  // after all windows have been closed
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
 
-process.on('uncaughtException', error => {
-  log.error('[ERROR]', error);
-  mainWindow.webContents.send('uncaught-exception', error);
+if (process.env.E2E_BUILD === 'true') {
+  // eslint-disable-next-line promise/catch-or-return
+  app.whenReady().then(createWindow);
+} else {
+  app.on('ready', createWindow);
+}
+
+app.on('activate', () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) createWindow();
 });

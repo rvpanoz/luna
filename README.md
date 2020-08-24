@@ -54,11 +54,11 @@ You can view my presentation in the GreeceJS meetup at http://bit.ly/2RES3AN
 The Renderer Process architecture:
 
 - Action (Event) driven nature
-- The IO Management, Business Logic Management and Predictable Application State Management processors (middlewares) 
+- The IO Management, Business Logic Management and Predictable Application State Management processors (middlewares)
   are subscribers of the application action stream.
 - The IO Management and Business Logic Management are consumers and producers of actions.
 - The Predictable State Management is just a consumer of actions
-- The views are listeners of the predictable state and they are re rendered whenever the predictable state changes 
+- The views are listeners of the predictable state and they are re rendered whenever the predictable state changes
   and they produce actions upon the user interaction (clicks)
 
 <div style="display: flex; flex-wrap: wrap;padding: 0 4px;">
