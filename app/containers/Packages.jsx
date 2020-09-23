@@ -221,7 +221,7 @@ const Packages = () => {
                   onClick={() => switchMode('global', null)}
                   className="bg-gray-200 hover:bg-gray-300 py-1 px-4 text-gray-600 rounded inline-flex items-center"
                 >
-                  Load globals
+                  Switch to globals
                 </button>
               </div>
             </div>

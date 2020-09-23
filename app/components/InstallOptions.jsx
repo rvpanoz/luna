@@ -48,7 +48,7 @@ const ListItem = (props) => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="px-3 mb-6 md:mb-0">
         <label
           className="inline-flex items-center mt-3"
           onClick={(evt) => evt.stopPropagation()}
