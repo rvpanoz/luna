@@ -25,13 +25,16 @@ const PackageItem = ({
       <td className="border-b border-gray-200 text-sm">
         <div className="flex items-center">
           <div className="ml-3">
-            <label className="inline-flex items-center mt-3">
+            <label
+              className="inline-flex items-center mt-3"
+              onClick={(evt) => evt.stopPropagation()}
+            >
               <input
                 type="checkbox"
                 onClick={onSelectPackage}
                 className="form-checkbox h-5 w-5 mt-2"
               />
-              <span className="ml-2 text-gray-600 whitespace-no-wrap pointer-events-none">
+              <span className="ml-2 text-gray-600 whitespace-no-wrap">
                 {name}
               </span>
             </label>
