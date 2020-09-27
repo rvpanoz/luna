@@ -26,12 +26,15 @@ import {
   onNpmDoctor,
   onNpmDedupe,
   onNpmInit,
-  onNpmInitLock
+  onNpmInitLock,
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
 
+// https://github.com/electron/electron/issues/18397
+app.allowRendererProcessReuse = false;
+
 const {
-  defaultSettings: { startMinimized }
+  defaultSettings: { startMinimized },
 } = mk || {};
 
 /* eslint-disable-next-line */
@@ -40,18 +43,18 @@ const debug = /--debug/.test(process.argv[2]);
 /* eslint-disable-next-line */
 const APP_PATHS = {
   appData: app.getPath('appData'),
-  userData: app.getPath('userData')
+  userData: app.getPath('userData'),
 };
 
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 1280,
-  MIN_HEIGHT = 960,
+  MIN_WIDTH = 1024,
+  MIN_HEIGHT = 768,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS = 1,
   NODE_ENV,
-  START_MINIMIZED = startMinimized
+  START_MINIMIZED = startMinimized,
 } = process.env;
 
 // store initialization
@@ -80,8 +83,110 @@ const installExtensions = async () => {
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
   return Promise.all(
-    extensions.map(name => installer.default(installer[name], forceDownload))
+    extensions.map((name) => installer.default(installer[name], forceDownload))
   ).catch(console.log);
+};
+
+const createWindow = async () => {
+  if (NODE_ENV === 'development') {
+    log.log(chalk.white.bgGreen.bold('[EVENT]: ready event fired'));
+  }
+
+  if (NODE_ENV === 'development' && INSTALL_EXTENSIONS === 1) {
+    await installExtensions();
+  }
+
+  let x = 0;
+  let y = 0;
+  const screenSize = screen.getPrimaryDisplay().size;
+  const displays = screen.getAllDisplays();
+  const externalDisplay = displays.find(
+    (display) => display.bounds.x !== 0 || display.bounds.y !== 0
+  );
+
+  if (externalDisplay) {
+    x = externalDisplay.bounds.x + 50;
+    y = externalDisplay.bounds.y + 50;
+  }
+
+  // create mainWindow
+  mainWindow = new BrowserWindow({
+    minWidth: MIN_WIDTH || screenSize.width,
+    minHeight: MIN_HEIGHT || screenSize.height,
+    x,
+    y,
+    show: false,
+    webPreferences: {
+      nodeIntegration: NODE_ENV === 'development',
+      preload:
+        NODE_ENV === 'production'
+          ? path.join(__dirname, 'dist/renderer.prod.js')
+          : undefined,
+    },
+    resizable: true,
+    icon: path.join(__dirname, '..', 'resources/icon.png'),
+  });
+
+  mainWindow.loadURL(`file://${__dirname}/app.html`);
+
+  mainWindow.once('ready-to-show', () => {
+    NODE_ENV === 'development' &&
+      log.log(chalk.white.bgGreen.bold('[EVENT]: ready-to-show event fired'));
+  });
+
+  mainWindow.webContents.on('did-finish-load', async (event) => {
+    NODE_ENV === 'development' &&
+      log.log(chalk.white.bgGreen.bold('[EVENT]: did-finish-load event fired'));
+
+    if (!mainWindow) {
+      throw new Error('mainWindow is not defined');
+    }
+
+    if (START_MINIMIZED) {
+      mainWindow.minimize();
+    } else {
+      mainWindow.show();
+      mainWindow.focus();
+    }
+
+    if (NODE_ENV === 'development') {
+      mainWindow.openDevTools();
+    }
+
+    // npm and node info
+    const npmEnv = await CheckNpm();
+    const npmEnvError = npmEnv && npmEnv.error;
+
+    event.sender.send('npm-env-close', npmEnvError, npmEnv);
+
+    // user settings
+    const userSettings = Store.get('user_settings') || {};
+    event.sender.send('settings-loaded-close', userSettings);
+
+    // directories history
+    const history = Store.get('history') || [];
+    event.sender.send('history-close', history);
+
+    // signal finish
+    event.sender.send('finish-loaded');
+  });
+
+  mainWindow.webContents.on('crashed', (event) => {
+    log.error(chalk.white.bgRed.bold('[CRASHED]'), event);
+    app.quit();
+  });
+
+  mainWindow.on('unresponsive', (event) => {
+    log.error(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
+    app.quit();
+  });
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+
+  const menuBuilder = new MenuBuilder(mainWindow);
+  menuBuilder.buildMenu();
 };
 
 /**
@@ -234,104 +339,20 @@ app.once('web-contents-created', (event, webContents) => {
     );
 });
 
-app.on('ready', async () => {
-  NODE_ENV === 'development' &&
-    log.log(chalk.white.bgGreen.bold('[EVENT]: ready event fired'));
+if (process.env.E2E_BUILD === 'true') {
+  // eslint-disable-next-line promise/catch-or-return
+  app.whenReady().then(createWindow);
+} else {
+  app.on('ready', createWindow);
+}
 
-  if (NODE_ENV === 'development') {
-    INSTALL_EXTENSIONS && (await installExtensions());
-  }
-
-  let x = 0;
-  let y = 0;
-  const screenSize = screen.getPrimaryDisplay().size;
-  const displays = screen.getAllDisplays();
-  const externalDisplay = displays.find(
-    display => display.bounds.x !== 0 || display.bounds.y !== 0
-  );
-
-  if (externalDisplay) {
-    x = externalDisplay.bounds.x + 50;
-    y = externalDisplay.bounds.y + 50;
-  }
-
-  // create mainWindow
-  mainWindow = new BrowserWindow({
-    minWidth: MIN_WIDTH || screenSize.width,
-    minHeight: MIN_HEIGHT || screenSize.height,
-    x,
-    y,
-    show: false,
-    webPreferences: {
-      nodeIntegration: true
-    },
-    resizable: true,
-    icon: path.join(__dirname, 'resources/icon.ico')
-  });
-
-  mainWindow.loadURL(`file://${__dirname}/app.html`);
-
-  mainWindow.once('ready-to-show', () => {
-    NODE_ENV === 'development' &&
-      log.log(chalk.white.bgGreen.bold('[EVENT]: ready-to-show event fired'));
-  });
-
-  mainWindow.webContents.on('did-finish-load', async event => {
-    NODE_ENV === 'development' &&
-      log.log(chalk.white.bgGreen.bold('[EVENT]: did-finish-load event fired'));
-
-    if (!mainWindow) {
-      throw new Error('mainWindow is not defined');
-    }
-
-    if (START_MINIMIZED) {
-      mainWindow.minimize();
-    } else {
-      mainWindow.show();
-      mainWindow.focus();
-    }
-
-    if (NODE_ENV === 'development') {
-      mainWindow.openDevTools();
-    }
-
-    // npm and node info
-    const npmEnv = await CheckNpm();
-    const npmEnvError = npmEnv && npmEnv.error;
-
-    event.sender.send('npm-env-close', npmEnvError, npmEnv);
-
-    // user settings
-    const userSettings = Store.get('user_settings') || {};
-    event.sender.send('settings-loaded-close', userSettings);
-
-    // directories history
-    const history = Store.get('history') || [];
-    event.sender.send('history-close', history);
-
-    // signal finish
-    event.sender.send('finish-loaded');
-  });
-
-  mainWindow.webContents.on('crashed', event => {
-    log.error(chalk.white.bgRed.bold('[CRASHED]'), event);
-    app.quit();
-  });
-
-  mainWindow.on('unresponsive', event => {
-    log.error(chalk.white.bgRed.bold('[UNRESPONSIVE]'), event);
-    app.quit();
-  });
-
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
-
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+app.on('activate', () => {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) createWindow();
 });
 
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
   log.error('[ERROR]', error);
   mainWindow.webContents.send('uncaught-exception', error);
 });
