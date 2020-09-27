@@ -4,7 +4,7 @@ import {
   catchError,
   withLatestFrom,
 } from 'rxjs/operators';
-import uuid from 'uuid/v1';
+import { v1 as uuidv1 } from 'uuid';
 import semver from 'semver';
 import { combineEpics, ofType } from 'redux-observable';
 
@@ -23,7 +23,7 @@ const addNotificationEpic = (action$, state$) =>
         notifications: { notifications: stateNotifications }
       } = state;
 
-      const id = uuid();
+      const id = uuidv1();
       const { payload: notificationText } = notification;
 
       const [reason, details] = notificationText.split(':');
