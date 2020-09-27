@@ -1,9 +1,5 @@
 /* stylelint-disable */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 .non-native {
   -webkit-appearance: none;
 }
@@ -58,13 +54,4 @@
   border-radius: 50%;
   margin: 2px;
   animation: Loading 2s linear infinite;
-}
-
-@keyframes Loading {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }

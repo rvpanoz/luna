@@ -1,5 +1,9 @@
 import { of } from 'rxjs';
-import { mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
+import {
+  mergeMap,
+  catchError,
+  withLatestFrom,
+} from 'rxjs/operators';
 import { v1 as uuidv1 } from 'uuid';
 import semver from 'semver';
 import { combineEpics, ofType } from 'redux-observable';
