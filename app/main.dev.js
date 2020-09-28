@@ -89,7 +89,7 @@ const installExtensions = async () => {
 
 const createWindow = async () => {
   if (NODE_ENV === 'development') {
-    log.log(chalk.white.bgGreen.bold('[EVENT]: ready event fired'));
+    log.log(chalk.white.bold('[EVENT]: ready event fired'));
   }
 
   if (NODE_ENV === 'development' && INSTALL_EXTENSIONS === 1) {
@@ -131,12 +131,12 @@ const createWindow = async () => {
 
   mainWindow.once('ready-to-show', () => {
     NODE_ENV === 'development' &&
-      log.log(chalk.white.bgGreen.bold('[EVENT]: ready-to-show event fired'));
+      log.log(chalk.white.bold('[EVENT]: ready-to-show event fired'));
   });
 
   mainWindow.webContents.on('did-finish-load', async (event) => {
     NODE_ENV === 'development' &&
-      log.log(chalk.white.bgGreen.bold('[EVENT]: did-finish-load event fired'));
+      log.log(chalk.white.bold('[EVENT]: did-finish-load event fired'));
 
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');
@@ -326,17 +326,13 @@ app.on('window-all-closed', () => {
 /* eslint-disable-next-line */
 app.once('browser-window-created', (event, webContents) => {
   NODE_ENV === 'development' &&
-    log.log(
-      chalk.white.bgGreen.bold('[EVENT]: browser-window-created event fired')
-    );
+    log.log(chalk.white.bold('[EVENT]: browser-window-created event fired'));
 });
 
 /* eslint-disable-next-line */
 app.once('web-contents-created', (event, webContents) => {
   NODE_ENV === 'development' &&
-    log.log(
-      chalk.white.bgGreen.bold('[EVENT]: web-contents-created event fired')
-    );
+    log.log(chalk.white.bold('[EVENT]: web-contents-created event fired'));
 });
 
 if (process.env.E2E_BUILD === 'true') {
