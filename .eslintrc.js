@@ -6,12 +6,12 @@ module.exports = {
   parser: 'babel-eslint',
   parserOptions: {
     sourceType: 'module',
-    allowImportExportEverywhere: true
+    allowImportExportEverywhere: true,
   },
   extends: ['airbnb', 'prettier', 'prettier/react'],
   env: {
     browser: true, // access window, document, navigator objects
-    node: true
+    node: true,
   },
   rules: {
     'react-hooks/rules-of-hooks': 'error',
@@ -31,7 +31,6 @@ module.exports = {
     'import/no-extraneous-dependencies': 'off',
     'import/prefer-default-export': 'warn',
     'no-nested-ternary': 'off',
-    'no-underscore-dangle': 'off',
     'jsx-a11y/anchor-is-valid': 'off',
     'no-console': 'off',
     'no-use-before-define': 'off',
@@ -52,21 +51,21 @@ module.exports = {
           'static-methods',
           'lifecycle',
           'everything-else',
-          'render'
-        ]
-      }
+          'render',
+        ],
+      },
     ],
     'react/require-default-props': 'off',
     'react/jsx-no-bind': 'off',
     'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx'] }],
-    'react/prefer-stateless-function': 'off'
+    'react/prefer-stateless-function': 'off',
   },
   plugins: ['import', 'promise', 'compat', 'react', 'react-hooks'],
   settings: {
     'import/resolver': {
       webpack: {
-        config: path.resolve(__dirname, 'configs/webpack.config.eslint.js')
-      }
-    }
-  }
+        config: path.resolve(__dirname, 'configs/webpack.config.eslint.js'),
+      },
+    },
+  },
 };

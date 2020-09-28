@@ -12,7 +12,7 @@ import { switchcase } from 'commons/utils';
 import {
   uninstallPackages,
   updatePackages,
-  installMultiplePackages
+  installMultiplePackages,
 } from 'models/packages/actions';
 import { clearFilters } from 'models/ui/actions';
 import {
@@ -23,7 +23,7 @@ import {
   RefreshAction,
   InstallAction,
   UpdateAction,
-  UninstallAction
+  UninstallAction,
 } from './Actions';
 import Filters from './Filters';
 import styles from './styles/tableToolbar';
@@ -44,12 +44,12 @@ const ToolbarView = ({
   scrollWrapper,
   switchMode,
   total,
-  packagesData
+  packagesData,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [filtersOn, toggleFilters] = useState(false);
   const dispatch = useDispatch();
-  const packagesOutdatedNames = outdated.map(pkg => pkg.name);
+  const packagesOutdatedNames = outdated.map((pkg) => pkg.name);
 
   const openFilters = useCallback(
     (e, close) => {
@@ -85,15 +85,15 @@ const ToolbarView = ({
       if (mode === 'local' && action === 'install' && !force) {
         return toggleOptions({
           open: true,
-          single: false
+          single: false,
         });
       }
 
       if (action === 'install') {
         if (mode === 'local') {
-          pkgOptions = selected.map(packageName => {
+          pkgOptions = selected.map((packageName) => {
             const packageDetails = packagesData.find(
-              packageDataDetails => packageDataDetails.name === packageName
+              (packageDataDetails) => packageDataDetails.name === packageName
             );
             const { __group } = packageDetails;
 
@@ -108,8 +108,8 @@ const ToolbarView = ({
             multiple: true,
             pkgOptions: mode === 'local' ? pkgOptions : null,
             packages: latest
-              ? selected.map(selectedPackage => `${selectedPackage}@latest`)
-              : selected
+              ? selected.map((selectedPackage) => `${selectedPackage}@latest`)
+              : selected,
           })
         );
       }
@@ -120,7 +120,7 @@ const ToolbarView = ({
             ipcEvent: 'npm-uninstall',
             cmd: ['uninstall'],
             multiple: true,
-            packages: selected
+            packages: selected,
           })
         );
       }
@@ -131,7 +131,7 @@ const ToolbarView = ({
             ipcEvent: 'npm-update',
             cmd: ['update'],
             multiple: true,
-            packages: selected
+            packages: selected,
           })
         );
       }
@@ -141,7 +141,7 @@ const ToolbarView = ({
     [selected, packagesData, mode, clearAllFilters, toggleOptions, dispatch]
   );
 
-  const renderAction = action =>
+  const renderAction = (action) =>
     switchcase({
       clearFilters: () => <ClearFiltersAction handler={clearAllFilters} />,
       install: () => (
@@ -157,7 +157,7 @@ const ToolbarView = ({
           handler={() => handleAction('uninstall')}
         />
       ),
-      filters: () => <FilterAction handler={openFilters} />
+      filters: () => <FilterAction handler={openFilters} />,
     })('none')(action);
 
   const renderToolbarActions = () => (
@@ -170,14 +170,11 @@ const ToolbarView = ({
     </>
   );
 
-  const hasUpdatedPackages = useCallback(
+  const hasUpdatedPackages =
     selected.length &&
     selected.some(
-      packageSelected => packagesOutdatedNames.indexOf(packageSelected) !== -1
-    ),
-    [selected]
-  );
-
+      (packageSelected) => packagesOutdatedNames.indexOf(packageSelected) !== -1
+    );
   const hasPackagesSelected = selected && selected.length > 0;
 
   return (
@@ -185,7 +182,7 @@ const ToolbarView = ({
       <Toolbar
         disableGutters
         className={cn({
-          [classes.highlight]: hasPackagesSelected
+          [classes.highlight]: hasPackagesSelected,
         })}
       >
         <div className={classes.header}>
@@ -216,11 +213,11 @@ const ToolbarView = ({
         anchorEl={anchorEl}
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left'
+          horizontal: 'left',
         }}
         transformOrigin={{
           vertical: 'center',
-          horizontal: 'right'
+          horizontal: 'right',
         }}
       >
         <Filters
@@ -250,7 +247,7 @@ ToolbarView.propTypes = {
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   switchMode: PropTypes.func.isRequired,
-  toggleOptions: PropTypes.func.isRequired
+  toggleOptions: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ToolbarView);
