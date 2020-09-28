@@ -109,7 +109,6 @@ const createWindow = async () => {
     y = externalDisplay.bounds.y + 50;
   }
 
-  // create mainWindow
   mainWindow = new BrowserWindow({
     minWidth: MIN_WIDTH || screenSize.width,
     minHeight: MIN_HEIGHT || screenSize.height,
@@ -117,14 +116,14 @@ const createWindow = async () => {
     y,
     show: false,
     webPreferences: {
-      nodeIntegration: NODE_ENV === 'development',
+      nodeIntegration: true,
       preload:
         NODE_ENV === 'production'
           ? path.join(__dirname, 'dist/renderer.prod.js')
           : undefined,
     },
     resizable: true,
-    icon: path.join(__dirname, '..', 'resources/icon.png'),
+    icon: path.join(__dirname, 'resources/icon.ico'),
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -149,9 +148,9 @@ const createWindow = async () => {
       mainWindow.focus();
     }
 
-    if (NODE_ENV === 'development') {
-      mainWindow.openDevTools();
-    }
+    // if (NODE_ENV === 'development') {
+    mainWindow.openDevTools();
+    // }
 
     // npm and node info
     const npmEnv = await CheckNpm();
