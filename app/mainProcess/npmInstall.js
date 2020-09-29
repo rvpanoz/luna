@@ -5,7 +5,7 @@ import { runCommand } from '../cli';
 import mk from '../mk';
 
 const {
-  defaultSettings: { defaultManager }
+  defaultSettings: { defaultManager },
 } = mk || {};
 
 const onNpmInstall = (event, options, store) => {
@@ -14,32 +14,38 @@ const onNpmInstall = (event, options, store) => {
   const commands = options.cmd;
   let runningTimes = 1;
 
-  const onFlow = chunk => event.sender.send('npm-install-flow', chunk);
-  const onError = error => event.sender.send('npm-install-error', error);
+  const onFlow = (message) => event.sender.send('npm-command-flow', message);
+  const onError = (error) => event.sender.send('npm-install-error', error);
 
   const onComplete = (errors, data, cmd, packageJson) => {
     if (commands.length === runningTimes) {
       runningTimes = 1;
-      return event.sender.send('npm-install-completed', data, errors, cmd, packageJson);
+      return event.sender.send(
+        'npm-install-completed',
+        data,
+        errors,
+        cmd,
+        packageJson
+      );
     }
 
     runningTimes += 1;
   };
 
-  const callback = result => {
-    const { status, errors, data, packageJson, cmd } = result;
+  const callback = (result) => {
+    const { status, errors, data, message, packageJson, cmd } = result;
 
     return switchcase({
-      flow: dataChunk => onFlow(dataChunk),
+      flow: () => onFlow(message),
       close: () => onComplete(errors, data, cmd, packageJson),
-      error: error => onError(error)
+      error: (error) => onError(error),
     })(null)(status);
   };
 
   try {
     const params = merge(settings, {
       activeManager,
-      ...rest
+      ...rest,
     });
 
     runCommand(params, callback);

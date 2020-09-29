@@ -17,9 +17,10 @@ const onNpmListOutdated = (event, options, store) => {
   let yarnLock;
 
   // define callbacks
-  const onFlow = (chunk) => event.sender.send('npm-list-outdated-flow', chunk);
+  const onFlow = (message) => event.sender.send('npm-command-flow', message);
   const onError = (error) =>
     event.sender.send('npm-list-outdated-error', error);
+
   const onComplete = (errors, data, cmd) => {
     if (directory && mode === 'local') {
       try {
@@ -59,10 +60,10 @@ const onNpmListOutdated = (event, options, store) => {
   };
 
   const callback = (result) => {
-    const { status, errors, data, cmd } = result;
+    const { status, errors, data, cmd, message } = result;
 
     return switchcase({
-      flow: () => onFlow(data),
+      flow: () => onFlow(message),
       close: () => onComplete(errors, data, cmd),
       error: (error) => onError(error),
     })(null)(status);

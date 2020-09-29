@@ -50,6 +50,11 @@ const execute = ({
       );
     }
 
+    observer.next({
+      status: 'flow',
+      message: `running: ${manager} ${commandArgs.join(' ')}`,
+    });
+
     try {
       // on windows use npm.cmd
       const command = spawn(
@@ -69,11 +74,6 @@ const execute = ({
       command.stdout.on('data', (data) => {
         const dataString = String(data);
         result.push(dataString);
-
-        observer.next({
-          status: 'flow',
-          data: result,
-        });
       });
 
       command.stderr.on('data', (error) => {
@@ -97,6 +97,11 @@ const execute = ({
             )
           );
         }
+
+        observer.next({
+          status: 'flow',
+          message: `finished: ${manager} ${commandArgs.join(' ')}`,
+        });
 
         const initDirectory =
           isLocal && operation === 'init'
