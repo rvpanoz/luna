@@ -64,7 +64,6 @@ export default merge(baseConfig, {
       constants: path.resolve(path.join(__dirname, '..', 'app', 'constants')),
       commons: path.resolve(path.join(__dirname, '..', 'app', 'commons')),
       components: path.resolve(path.join(__dirname, '..', 'app', 'components')),
-      containers: path.resolve(path.join(__dirname, '..', 'app', 'containers')),
       models: path.resolve(path.join(__dirname, '..', 'app', 'models')),
       styles: path.resolve(path.join(__dirname, '..', 'app', 'styles')),
     },
@@ -247,7 +246,7 @@ export default merge(baseConfig, {
     },
     before() {
       if (process.env.START_HOT) {
-        log(chalk.red('Starting Main Process...'));
+        log(chalk.greenBright.bold('Starting Main Process..'));
         spawn('npm', ['run', 'start-main-dev'], {
           shell: true,
           env: process.env,
