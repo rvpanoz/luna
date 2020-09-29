@@ -1,9 +1,9 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import Grid from '@material-ui/core/Grid';
+
 import { AppLoader, HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import { runDoctor } from 'models/npm/actions';

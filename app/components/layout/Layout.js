@@ -8,13 +8,13 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 
 import TopBar from 'components/topbar/TopBarContainer';
 import Sidebar from 'components/sidebar/SidebarContainer';
-// import Navigation from 'components/navigation/Navigation';
-// import Packages from 'components/packages/Packages';
-// import Audit from 'components/audit/Audit';
-// import Doctor from 'components/doctor/Doctor';
-// import Notifications from 'components/notifications/Notifications';
-import AppSnackbar from 'components/common/AppSnackbar';
+import Navigation from 'components/navigation/Navigation';
 
+import Packages from 'components/packages/Packages';
+import Notifications from 'components/notifications/NotificationsContainer';
+import Doctor from 'components/doctor/DoctorContainer';
+import Audit from 'components/audit/Audit';
+import AppSnackbar from 'components/common/AppSnackbar';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 import appTheme from 'styles/theme';
@@ -65,15 +65,15 @@ const AppLayout = ({ classes }) => {
         </section>
         <section className={classes.main}>
           <TopBar className={classes.topBar} />
-          {/* <Navigation className={classes.navigationBar} />
+          <Navigation className={classes.navigationBar} />
           <main className={classes.content}>
             {switchcase({
               packages: () => <Packages />,
               audit: () => <Audit />,
               doctor: () => <Doctor />,
-              notifications: () => <AppNotifications />
+              notifications: () => <Notifications />,
             })(<Packages />)(activePage)}
-          </main> */}
+          </main>
         </section>
 
         <AppSnackbar
