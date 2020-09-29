@@ -148,9 +148,9 @@ const createWindow = async () => {
       mainWindow.focus();
     }
 
-    // if (NODE_ENV === 'development') {
-    mainWindow.openDevTools();
-    // }
+    if (NODE_ENV === 'development') {
+      mainWindow.openDevTools();
+    }
 
     // npm and node info
     const npmEnv = await CheckNpm();

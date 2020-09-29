@@ -3,7 +3,6 @@
 import fs from 'fs';
 import path from 'path';
 import { remote } from 'electron';
-import mk from '../mk';
 import {
   INFO_MESSAGES,
   WARNING_MESSAGES,
@@ -187,7 +186,6 @@ export const readPackageJson = (directory) => {
 
     return JSON.parse(packageJSON);
   } catch (error) {
-    mk.log(error);
     return null;
   }
 };

@@ -8,14 +8,14 @@ module.exports = {
     sourceType: 'module',
     allowImportExportEverywhere: true,
   },
-  extends: ['airbnb', 'prettier', 'prettier/react'],
+  extends: ['prettier', 'prettier/react'],
   env: {
     browser: true, // access window, document, navigator objects
     node: true,
   },
   rules: {
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/exhaustive-deps': 'error',
     'linebreak-style': 0,
     'arrow-parens': ['off'],
     'compat/compat': 'off',

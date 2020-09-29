@@ -23,7 +23,7 @@
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{*{js,jsx,json},babelrc,eslintrc,prettierrc,stylelintrc}'",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
     "prestart": "npm run build",
-    "start": "electron ./app/main.prod.js",
+    "start": "cross-env NODE_ENV=production electron ./app/main.prod.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r @babel/register ./app/main.dev.js",
     "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config configs/webpack.config.renderer.dev.babel.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -159,7 +159,6 @@
     "electron-builder": "^22.8.1",
     "electron-devtools-installer": "^3.1.1",
     "electron-reload": "^1.5.0",
-    "eslint-config-airbnb": "^18.2.0",
     "eslint-config-prettier": "^6.12.0",
     "eslint-formatter-pretty": "^4.0.0",
     "eslint-import-resolver-webpack": "^0.13.0",
