@@ -5,25 +5,26 @@ import { runCommand } from '../cli';
 import mk from '../mk';
 
 const {
-  defaultSettings: { defaultManager }
+  defaultSettings: { defaultManager },
 } = mk || {};
 
 const onNpmUpdate = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
-  const onFlow = chunk => event.sender.send('npm-update-flow', chunk);
-  const onError = error => event.sender.send('npm-update-error', error);
-  const onComplete = result =>
+  const onFlow = (message) => event.sender.send('npm-command-flow', message);
+  const onError = (error) => event.sender.send('npm-update-error', error);
+
+  const onComplete = (result) =>
     event.sender.send('npm-update-completed', result);
 
-  const callback = result => {
-    const { status, errors, data } = result;
+  const callback = (result) => {
+    const { status, errors, data, message } = result;
 
     return switchcase({
-      flow: dataChunk => onFlow(dataChunk),
+      flow: () => onFlow(message),
       close: () => onComplete(errors, data),
-      error: error => onError(error)
+      error: (error) => onError(error),
     })(null)(status);
   };
 
@@ -31,7 +32,7 @@ const onNpmUpdate = (event, options, store) => {
   try {
     const params = merge(settings, {
       activeManager,
-      ...rest
+      ...rest,
     });
 
     runCommand(params, callback);

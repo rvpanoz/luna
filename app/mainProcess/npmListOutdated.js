@@ -7,7 +7,7 @@ import { runCommand } from '../cli';
 import mk from '../mk';
 
 const {
-  defaultSettings: { defaultManager }
+  defaultSettings: { defaultManager },
 } = mk || {};
 
 const onNpmListOutdated = (event, options, store) => {
@@ -17,8 +17,9 @@ const onNpmListOutdated = (event, options, store) => {
   let yarnLock;
 
   // define callbacks
-  const onFlow = chunk => event.sender.send('npm-list-outdated-flow', chunk);
-  const onError = error => event.sender.send('npm-list-outdated-error', error);
+  const onFlow = (message) => event.sender.send('npm-command-flow', message);
+  const onError = (error) =>
+    event.sender.send('npm-list-outdated-error', error);
 
   const onComplete = (errors, data, cmd) => {
     if (directory && mode === 'local') {
@@ -27,7 +28,7 @@ const onNpmListOutdated = (event, options, store) => {
         const { name } = path.parse(dirName) || {};
 
         const inDirectories = history.some(
-          pkg => pkg.directory && pkg.directory.includes(dirName)
+          (pkg) => pkg.directory && pkg.directory.includes(dirName)
         );
 
         // add directory to history list
@@ -36,8 +37,8 @@ const onNpmListOutdated = (event, options, store) => {
             ...history,
             {
               name,
-              directory: path.join(dirName, 'package.json')
-            }
+              directory: path.join(dirName, 'package.json'),
+            },
           ]);
         }
 
@@ -58,20 +59,20 @@ const onNpmListOutdated = (event, options, store) => {
     event.sender.send('npm-list-outdated-completed', data, errors, cmd);
   };
 
-  const callback = result => {
-    const { status, errors, data, cmd } = result;
+  const callback = (result) => {
+    const { status, errors, data, cmd, message } = result;
 
     return switchcase({
-      flow: dataChunk => onFlow(dataChunk),
+      flow: () => onFlow(message),
       close: () => onComplete(errors, data, cmd),
-      error: error => onError(error)
+      error: (error) => onError(error),
     })(null)(status);
   };
 
   try {
     const params = merge(settings, {
       activeManager,
-      ...options
+      ...options,
     });
 
     runCommand(params, callback);
