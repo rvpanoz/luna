@@ -17,7 +17,7 @@ import AppLayout from './AppLayout';
 import '../app.global.css';
 
 const mapState = ({ ui: { uiException } }) => ({
-  uiException
+  uiException,
 });
 
 const App = () => {
@@ -33,7 +33,7 @@ const App = () => {
 
       dispatch({
         type: updateStatus.type,
-        payload: { status: navigator.onLine ? 'online' : 'offline' }
+        payload: { status: navigator.onLine ? 'online' : 'offline' },
       });
     };
 
@@ -51,12 +51,22 @@ const App = () => {
       dispatch({ type: setEnv.type, payload: env });
     });
 
+    ipcRenderer.on('npm-command-flow', (event, message) => {
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: 'primary',
+          message,
+        })
+      );
+    });
+
     ipcRenderer.on('yarn-lock-detected', () => {
       dispatch(
         setSnackbar({
           open: true,
           type: 'error',
-          message: iMessage('warning', 'yarnlock')
+          message: iMessage('warning', 'yarnlock'),
         })
       );
     });
@@ -67,10 +77,11 @@ const App = () => {
 
     return () =>
       ipcRenderer.removeAllListeners([
+        'npm-command-flow',
         'finish-loaded',
         'uncaught-exception',
         'npm-env-close',
-        'yarn-env-close'
+        'yarn-env-close',
       ]);
   }, [dispatch]);
 

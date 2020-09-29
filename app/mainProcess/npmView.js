@@ -5,32 +5,32 @@ import { runCommand } from '../cli';
 import mk from '../mk';
 
 const {
-  defaultSettings: { defaultManager }
+  defaultSettings: { defaultManager },
 } = mk || {};
 
 const onNpmView = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
-  const onFlow = chunk => event.sender.send('npm-view-flow', chunk);
-  const onError = error => event.sender.send('npm-view-error', error);
+  const onFlow = (message) => event.sender.send('npm-command-flow', message);
+  const onError = (error) => event.sender.send('npm-view-error', error);
   const onComplete = (errors, data) =>
     event.sender.send('npm-view-completed', data, errors);
 
-  const callback = result => {
-    const { status, errors, data } = result;
+  const callback = (result) => {
+    const { status, errors, data, message } = result;
 
     return switchcase({
-      flow: dataChunk => onFlow(dataChunk),
+      flow: () => onFlow(message),
       close: () => onComplete(errors, data),
-      error: error => onError(error)
+      error: (error) => onError(error),
     })(null)(status);
   };
 
   try {
     const params = merge(settings, {
       activeManager,
-      ...rest
+      ...rest,
     });
 
     runCommand(params, callback);
