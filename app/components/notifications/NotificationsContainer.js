@@ -10,7 +10,7 @@ import Notifications from './Notifications';
 
 import { installMultiplePackages } from 'models/packages/actions';
 import { clearInstallOptions } from 'models/common/actions';
-import { DialogOptionsView } from 'components/views/packages';
+import CommandOptions from 'components/packages/CommandOptions';
 import { iMessage } from 'commons/utils';
 
 const mapState = ({ notifications: { notifications } }) => ({
@@ -128,7 +128,7 @@ const AppNotifications = () => {
         aria-labelledby="install-options"
       >
         <DialogContent>
-          <DialogOptionsView selected={selectedPackagesNames} />
+          <CommandOptions selected={selectedPackagesNames} />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel} color="secondary">

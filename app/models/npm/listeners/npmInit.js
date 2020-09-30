@@ -7,17 +7,17 @@ import { setActivePage, setSnackbar } from 'models/ui/actions';
 const updateCommand = ({
   operationStatus,
   operationPackages,
-  operationCommand
+  operationCommand,
 }) => ({
   type: setRunningCommand.type,
   payload: {
     operationStatus,
     operationPackages,
-    operationCommand
-  }
+    operationCommand,
+  },
 });
 
-const onNpmInit$ = new Observable(observer => {
+const onNpmInit$ = new Observable((observer) => {
   ipcRenderer.removeAllListeners(['npm-init-completed']);
 
   ipcRenderer.on('npm-init-completed', (event, errors, data, initDirectory) => {
@@ -25,7 +25,7 @@ const onNpmInit$ = new Observable(observer => {
       updateCommand({
         operationStatus: 'idle',
         operationCommand: null,
-        operationPackages: []
+        operationPackages: [],
       })
     );
 
@@ -36,7 +36,7 @@ const onNpmInit$ = new Observable(observer => {
       setSnackbar({
         open: true,
         type: 'info',
-        message: 'npm init completed'
+        message: 'npm init completed',
       })
     );
   });

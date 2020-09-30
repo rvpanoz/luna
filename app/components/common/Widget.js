@@ -30,14 +30,14 @@ const Widget = ({
               </Typography>
             </>
           ) : (
-              header
-            )}
+            header
+          )}
         </div>
         {title && <Divider />}
         <div
           className={cn(classes.widgetBody, {
             [classes.noPadding]: noBodyPadding,
-            [bodyClass]: bodyClass
+            [bodyClass]: bodyClass,
           })}
         >
           {children}
@@ -55,7 +55,7 @@ Widget.propTypes = {
   noBodyPadding: PropTypes.bool,
   bodyClass: PropTypes.string,
   disableWidgetMenu: PropTypes.bool,
-  header: PropTypes.node
+  header: PropTypes.node,
 };
 
 export default withStyles(styles, { withTheme: true })(Widget);

@@ -2,18 +2,15 @@ import { ipcRenderer } from 'electron';
 import React, { useEffect } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
 import { MuiThemeProvider } from '@material-ui/core/styles';
-
 import CssBaseline from '@material-ui/core/CssBaseline';
 
+import Layout from 'components/layout/Layout';
 import { withErrorBoundary } from 'commons/hocs';
 import { setEnv } from 'models/npm/actions';
 import { initActions, updateStatus } from 'models/common/actions';
 import { setUIException, setSnackbar } from 'models/ui/actions';
 import { iMessage } from 'commons/utils';
-
 import theme from 'styles/theme';
-import Layout from 'components/layout/Layout';
-
 import '../app.global.css';
 
 const mapState = ({ ui: { uiException } }) => ({

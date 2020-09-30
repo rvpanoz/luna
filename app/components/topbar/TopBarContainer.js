@@ -10,7 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import { Init, Settings } from 'components/views/common/';
+import { Init, Settings } from 'components/popups';
 
 import TopBar from './TopBar';
 

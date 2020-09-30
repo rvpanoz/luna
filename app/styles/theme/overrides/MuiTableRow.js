@@ -3,12 +3,12 @@ import palette from '../palette';
 export default {
   root: {
     '&$selected': {
-      backgroundColor: palette.background.neutral
+      backgroundColor: palette.background.neutral,
     },
     '&$hover': {
       '&:hover': {
-        backgroundColor: palette.secondary.light
-      }
-    }
-  }
+        backgroundColor: palette.secondary.light,
+      },
+    },
+  },
 };

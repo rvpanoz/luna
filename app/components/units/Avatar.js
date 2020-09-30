@@ -33,7 +33,7 @@ Avatar.propTypes = {
   link: PropTypes.string,
   small: PropTypes.bool,
   medium: PropTypes.bool,
-  ultraLarge: PropTypes.bool
+  ultraLarge: PropTypes.bool,
 };
 
 export default Avatar;

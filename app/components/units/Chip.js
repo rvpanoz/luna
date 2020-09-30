@@ -8,7 +8,7 @@ const Chip = ({ className, inverted, ...props }) => (
   <MuiChip
     className={cx(CHIP.root, className, inverted && CHIP.inverted)}
     classes={{
-      label: CHIP.label
+      label: CHIP.label,
     }}
     {...props}
   />
@@ -16,7 +16,7 @@ const Chip = ({ className, inverted, ...props }) => (
 
 Chip.propTypes = {
   className: PropTypes.string,
-  inverted: PropTypes.bool
+  inverted: PropTypes.bool,
 };
 
 export default Chip;

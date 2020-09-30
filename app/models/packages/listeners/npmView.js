@@ -8,7 +8,7 @@ import { pickBy } from 'ramda';
 
 import { setActive } from '../actions';
 
-const onViewPackage$ = new Observable(observer => {
+const onViewPackage$ = new Observable((observer) => {
   ipcRenderer.removeAllListeners(['npm-view-completed']);
 
   ipcRenderer.on('npm-view-completed', (event, data, errors) => {
@@ -21,14 +21,14 @@ const onViewPackage$ = new Observable(observer => {
         setActive({
           active: {
             ...properties,
-            group: newActive.__group
-          }
+            group: newActive.__group,
+          },
         })
       );
 
       observer.next(
         togglePackageLoader({
-          loading: false
+          loading: false,
         })
       );
     } catch (error) {

@@ -5,7 +5,7 @@ import Slide from '@material-ui/core/Slide';
 
 const Transitions = {
   Fade,
-  Slide
+  Slide,
 };
 
 class Transition extends React.Component {
@@ -21,7 +21,7 @@ class Transition extends React.Component {
       Transitions[type],
       {
         in: show,
-        direction
+        direction,
       },
       children
     );
@@ -31,14 +31,14 @@ class Transition extends React.Component {
 Transition.defaultProps = {
   type: 'Fade',
   direction: 'right',
-  show: true
+  show: true,
 };
 
 Transition.propTypes = {
   children: PropTypes.node.isRequired,
   type: PropTypes.string,
   direction: PropTypes.string,
-  show: PropTypes.bool
+  show: PropTypes.bool,
 };
 
 export default Transition;

@@ -4,7 +4,7 @@ import { pipe } from 'rxjs';
 
 import {
   listOutdatedPackagesListener,
-  searchPackagesListener
+  searchPackagesListener,
 } from '../actions';
 
 import { onListOutdatedPackages$, onSearchPackages$ } from '../listeners';

@@ -13,6 +13,7 @@ import Divider from '@material-ui/core/Divider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+
 import { useFilters } from 'commons/hooks';
 import { AppLoader, HelperText } from 'components/common';
 import { scrollWrapper, iMessage } from 'commons/utils';
@@ -29,13 +30,11 @@ import {
   setActivePage,
 } from 'models/ui/actions';
 import { setMode, clearInstallOptions } from 'models/common/actions';
-import {
-  ToolbarView,
-  HeaderView,
-  PaginationView,
-  PackageItemView,
-  DialogOptionsView,
-} from 'components/views/packages';
+import Toolbar from './Toolbar';
+import TableHeader from './Header';
+import PackageItem from './PackageItem';
+import Pagination from './Pagination';
+import CommandOptions from './CommandOptions';
 import PackageDetails from './PackageDetails';
 import styles from './styles/packages';
 
@@ -221,7 +220,7 @@ const Packages = ({ classes }) => {
             {!noPackages && (
               <Paper elevation={2}>
                 <div className={classes.toolbar}>
-                  <ToolbarView
+                  <Toolbar
                     title={iMessage('title', 'packages')}
                     total={
                       fromSearch
@@ -254,7 +253,7 @@ const Packages = ({ classes }) => {
                       [classes.hasFilterBlur]: loading,
                     })}
                   >
-                    <HeaderView
+                    <TableHeader
                       packages={dataSlices.map((d) => d.name)}
                       numSelected={selected.length}
                       rowCount={listDataPackages && listDataPackages.length}
@@ -294,7 +293,7 @@ const Packages = ({ classes }) => {
                               operationPackages.indexOf(name) > -1;
 
                             return (
-                              <PackageItemView
+                              <PackageItem
                                 key={`pkg-${name}`}
                                 isSelected={isPackageSelected}
                                 installOptions={installOptions}
@@ -321,7 +320,7 @@ const Packages = ({ classes }) => {
                           }
                         )}
                     </TableBody>
-                    <PaginationView
+                    <Pagination
                       rowCount={data && data.length}
                       page={page}
                       rowsPerPage={rowsPerPage}
@@ -370,7 +369,7 @@ const Packages = ({ classes }) => {
         aria-labelledby="install-options"
       >
         <DialogContent>
-          <DialogOptionsView
+          <CommandOptions
             selected={selected.length ? selected : active ? [active.name] : []}
           />
         </DialogContent>

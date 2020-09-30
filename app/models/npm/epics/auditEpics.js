@@ -9,23 +9,23 @@ import {
   parseNpmAuditData,
   parseNpmAuditFixData,
   updateNpmAuditData,
-  updateNpmAuditFixData
+  updateNpmAuditFixData,
 } from 'models/npm/actions';
 
 import { onNpmAudit$ } from '../listeners';
 
-const updateLoader = payload => ({
+const updateLoader = (payload) => ({
   type: toggleAuditLoader.type,
-  payload
+  payload,
 });
 
-const showAuditingLoaderEpic = action$ =>
+const showAuditingLoaderEpic = (action$) =>
   action$.pipe(
     ofType(runAudit.type),
     map(() =>
       updateLoader({
         loading: true,
-        message: 'Please wait. npm audit is running..'
+        message: 'Please wait. npm audit is running..',
       })
     )
   );
@@ -35,13 +35,13 @@ const npmRunAuditEpic = (action$, state$) =>
     ofType(runAudit.type),
     tap(({ payload }) => {
       const {
-        common: { mode, directory }
+        common: { mode, directory },
       } = state$.value;
 
       ipcRenderer.send('npm-audit', {
         ...payload,
         mode,
-        directory
+        directory,
       });
     }),
     ignoreElements()
@@ -51,7 +51,7 @@ const npmRunAuditEpic = (action$, state$) =>
  * Parse npm audit output
  * @param {*} action$
  */
-const npmAuditParseEpic = action$ =>
+const npmAuditParseEpic = (action$) =>
   action$.pipe(
     ofType(parseNpmAuditData.type),
     map(({ payload: data }) => {
@@ -68,18 +68,18 @@ const npmAuditParseEpic = action$ =>
               error: {
                 summary: summaryParts && summaryParts[0],
                 detail,
-                code
+                code,
               },
-              content: null
-            }
+              content: null,
+            },
           });
         }
 
         return updateNpmAuditData({
           data: {
             error: null,
-            content: dataToJson
-          }
+            content: dataToJson,
+          },
         });
       } catch (error) {
         throw new Error(error);
@@ -91,7 +91,7 @@ const npmAuditParseEpic = action$ =>
  * Parse npm audit fix output
  * @param {*} action$
  */
-const npmAuditParseFixEpic = action$ =>
+const npmAuditParseFixEpic = (action$) =>
   action$.pipe(
     ofType(parseNpmAuditFixData.type),
     map(({ payload: data }) => {
@@ -101,8 +101,8 @@ const npmAuditParseFixEpic = action$ =>
         return updateNpmAuditFixData({
           data: {
             error: null,
-            content: dataToJson
-          }
+            content: dataToJson,
+          },
         });
       } catch (error) {
         throw new Error(error);
@@ -120,5 +120,5 @@ export {
   npmRunAuditListenerEpic,
   npmAuditParseEpic,
   npmAuditParseFixEpic,
-  showAuditingLoaderEpic
+  showAuditingLoaderEpic,
 };

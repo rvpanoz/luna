@@ -22,7 +22,7 @@ const AppButton = ({
     [classes.round]: round,
     [classes.border]: border,
     [classes.fullWidth]: fullWidth,
-    [classes.disabled]: disabled
+    [classes.disabled]: disabled,
   });
 
   return (
@@ -33,7 +33,7 @@ const AppButton = ({
 };
 
 AppButton.defaultProps = {
-  color: 'transparent'
+  color: 'transparent',
 };
 
 AppButton.propTypes = {
@@ -48,12 +48,12 @@ AppButton.propTypes = {
     'primary',
     'secondary',
     'secondaryLarge',
-    'simple'
+    'simple',
   ]),
   round: bool,
   border: bool,
   fullWidth: bool,
-  disabled: bool
+  disabled: bool,
 };
 
 export default withStyles(buttonStyle)(AppButton);

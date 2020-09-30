@@ -13,7 +13,7 @@ const Divider = ({ className, vertical, ...props }) => (
 
 Divider.propTypes = {
   className: PropTypes.string,
-  vertical: PropTypes.bool
+  vertical: PropTypes.bool,
 };
 
 export default Divider;

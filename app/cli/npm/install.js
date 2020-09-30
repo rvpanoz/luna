@@ -18,7 +18,7 @@ const install = (options, idx) => {
     packages,
     single,
     packageJson,
-    packageLock
+    packageLock,
   } = options || {};
 
   const defaults = ['--no-audit', '--ignore-scripts', '--verbose'];
@@ -49,17 +49,21 @@ const install = (options, idx) => {
 
   // get installation options
   const hasOptions = Array.isArray(pkgOptions) && pkgOptions.length;
-  const commandOptions = mode === 'local' && hasOptions ? multiple
-    ? pkgOptions[idx].map(option => `--${option}`)
-    : pkgOptions.map(option => `--${option}`)
-    : ['--save-prod'];
+  const commandOptions =
+    mode === 'local' && hasOptions
+      ? multiple
+        ? pkgOptions[idx].map((option) => `--${option}`)
+        : pkgOptions.map((option) => `--${option}`)
+      : ['--save-prod'];
 
   // build running command
-  const run = packageJson ? [].concat(command).concat(commandArgs) : []
-    .concat(command)
-    .concat(packagesToInstall)
-    .concat(commandOptions)
-    .concat(commandArgs);
+  const run = packageJson
+    ? [].concat(command).concat(commandArgs)
+    : []
+        .concat(command)
+        .concat(packagesToInstall)
+        .concat(commandOptions)
+        .concat(commandArgs);
 
   return run;
 };

@@ -4,18 +4,20 @@ import { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core';
 import { useMappedState, useDispatch } from 'redux-react-hook';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import Hidden from '@material-ui/core/Hidden';
-import { runAudit } from 'models/npm/actions';
-import { iMessage } from 'commons/utils';
-import { AppLoader, HelperText } from 'components/common';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import ListIcon from '@material-ui/icons/List';
 import AddIcon from '@material-ui/icons/Add';
 import BuildIcon from '@material-ui/icons/Build';
-import { Advisories, StatsCard } from 'components/views/audit/components';
-import styles from './styles';
+import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden';
+
+import { runAudit } from 'models/npm/actions';
+import { iMessage } from 'commons/utils';
+import { AppLoader, HelperText } from 'components/common';
+import Advisories from './Advisories';
+import StatsCard from './StatsCard';
+import styles from './styles/audit';
 
 const mapState = ({
   common: { mode, directory },

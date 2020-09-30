@@ -2,9 +2,13 @@ import React from 'react';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import { useMappedState, useDispatch } from 'redux-react-hook';
-import { objectOf, string } from 'prop-types';
+import PropTypes, { objectOf, string } from 'prop-types';
+import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
+import { IconButton } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { iMessage } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
-import { NavigationBar } from 'components/views/navigationBar';
 import styles from './styles';
 
 const mapState = ({
@@ -24,7 +28,7 @@ const mapState = ({
   loading,
 });
 
-const AppNavigationBar = ({ classes, className }) => {
+const Navigation = ({ classes, className }) => {
   const { env, mode, directory, activePage } = useMappedState(mapState);
 
   const dispatch = useDispatch();
@@ -43,20 +47,39 @@ const AppNavigationBar = ({ classes, className }) => {
         [className]: className !== undefined,
       })}
     >
-      <NavigationBar
-        mode={mode}
-        directory={directory}
-        env={env}
-        activePage={activePage}
-        setActivePage={setActivePageHandler}
-      />
+      <div className={classes.bar}>
+        <Tooltip title={iMessage('info', 'backToPackages')}>
+          <div>
+            <IconButton
+              classes={{
+                root: classes.button,
+              }}
+              disableRipple
+              disabled={activePage === 'packages'}
+              onClick={() => setActivePageHandler('packages')}
+            >
+              <ArrowBackIcon className={classes.icon} />
+            </IconButton>
+          </div>
+        </Tooltip>
+        <div className={cn(classes.flexContainer, classes.padTop)}>
+          <Typography variant="subtitle1" component="div" color="textSecondary">
+            {mode === 'local'
+              ? iMessage('info', 'workingDirectory')
+              : iMessage('info', 'showingGlobals')}
+          </Typography>
+          <Typography variant="subtitle2" component="div" color="textSecondary">
+            {mode === 'local' ? directory : env.prefix}
+          </Typography>
+        </div>
+      </div>
     </div>
   );
 };
 
-AppNavigationBar.propTypes = {
+Navigation.propTypes = {
   classes: objectOf(string).isRequired,
   className: string,
 };
 
-export default withStyles(styles)(AppNavigationBar);
+export default withStyles(styles)(Navigation);

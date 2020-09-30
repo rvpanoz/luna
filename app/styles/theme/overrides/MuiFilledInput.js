@@ -4,10 +4,10 @@ export default {
   root: {
     backgroundColor: palette.background.default,
     '&:hover': {
-      backgroundColor: palette.primary.light
+      backgroundColor: palette.primary.light,
     },
     '&$focused': {
-      backgroundColor: palette.primary.light
-    }
-  }
+      backgroundColor: palette.primary.light,
+    },
+  },
 };

@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
-
 import React from 'react';
 import semver from 'semver';
 import cn from 'classnames';
@@ -33,18 +31,13 @@ import {
   uninstallPackages,
   setActive,
 } from 'models/packages/actions';
-
 import { AppLoader, Transition } from 'components/common';
 import { iMessage, showDialog, switchcase } from 'commons/utils';
+import Dependencies from './Dependencies';
+import Versions from './Versions';
+import PackageInfo from './PackageInfo';
+import { InstallAction, UpdateAction, UninstallAction } from './Actions';
 
-import {
-  DependenciesView,
-  VersionsView,
-  PackageInfoView,
-  InstallAction,
-  UpdateAction,
-  UninstallAction,
-} from 'components/views/package';
 import styles from './styles/packageDetails';
 
 const mapState = ({
@@ -266,10 +259,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
               <Divider className={classes.divider} />
               <Hidden mdDown>
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <PackageInfoView
-                    active={active}
-                    dependencies={dependencies}
-                  />
+                  <PackageInfo active={active} dependencies={dependencies} />
                 </Collapse>
               </Hidden>
             </CardContent>
@@ -372,10 +362,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            <VersionsView
-              data={versions}
-              handleInstall={handleInstallVersion}
-            />
+            <Versions data={versions} handleInstall={handleInstallVersion} />
           </Fade>
         )}
       </Popper>
@@ -387,7 +374,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            <DependenciesView data={dependencies} />
+            <Dependencies data={dependencies} />
           </Fade>
         )}
       </Popper>

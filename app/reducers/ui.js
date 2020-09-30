@@ -41,25 +41,28 @@ const handlers = {
     merge(state, {
       ...state,
       activePage: page,
-      paused
+      paused,
     }),
-  [clearSnackbar.type]: state =>
+  [clearSnackbar.type]: (state) =>
     merge(state, {
       snackbar: {
         type: 'info',
         open: false,
-        message: null
-      }
+        message: null,
+      },
     }),
-  [setSnackbar.type]: (state, { payload: { type, open, message, position, hideOnClose } }) =>
+  [setSnackbar.type]: (
+    state,
+    { payload: { type, open, message, position, hideOnClose } }
+  ) =>
     merge(state, {
       snackbar: {
         type,
         open,
         message,
         position,
-        hideOnClose
-      }
+        hideOnClose,
+      },
     }),
   [setUIException.type]: (state, { payload: message }) =>
     assoc('uiException', message, state),
@@ -69,9 +72,9 @@ const handlers = {
         ...state.loaders,
         loader: {
           loading,
-          message
-        }
-      }
+          message,
+        },
+      },
     }),
   [togglePackageLoader.type]: (state, { payload: { loading, message } }) =>
     merge(state, {
@@ -79,9 +82,9 @@ const handlers = {
         ...state.loaders,
         packageLoader: {
           loading,
-          message
-        }
-      }
+          message,
+        },
+      },
     }),
   [toggleAuditLoader.type]: (state, { payload: { loading, message } }) =>
     merge(state, {
@@ -89,9 +92,9 @@ const handlers = {
         ...state.loaders,
         auditLoader: {
           loading,
-          message
-        }
-      }
+          message,
+        },
+      },
     }),
   [toggleDoctorLoader.type]: (state, { payload: { loading, message } }) =>
     merge(state, {
@@ -99,21 +102,21 @@ const handlers = {
         ...state.loaders,
         doctorLoader: {
           loading,
-          message
-        }
-      }
+          message,
+        },
+      },
     }),
   [updateFilters.type]: (state, { payload: { allFilters } }) =>
     merge(state, {
       ...state,
       filtering: {
         ...state.filtering,
-        filters: allFilters
-      }
+        filters: allFilters,
+      },
     }),
   [addFilter.type]: (state, { payload: { filter } }) => {
     const {
-      filtering: { filters }
+      filtering: { filters },
     } = state;
     const idx = filters.indexOf(filter);
 
@@ -122,14 +125,15 @@ const handlers = {
       filtering: {
         ...state.filtering,
         page: 0,
-        filters: idx !== -1 ? remove(idx, 1, filters) : prepend(filter, filters)
-      }
+        filters:
+          idx !== -1 ? remove(idx, 1, filters) : prepend(filter, filters),
+      },
     });
   },
   [addSelected.type]: (state, action) => {
     const { selected } = state;
     const {
-      payload: { name, force }
+      payload: { name, force },
     } = action;
 
     const idx = selected.indexOf(name);
@@ -145,42 +149,42 @@ const handlers = {
 
     return merge(state, {
       ...state,
-      selected: newSelected
+      selected: newSelected,
     });
   },
-  [clearFilters.type]: state =>
+  [clearFilters.type]: (state) =>
     merge(state, {
       filtering: {
         filters: [],
-        page: 0
-      }
+        page: 0,
+      },
     }),
-  [clearSelected.type]: state =>
+  [clearSelected.type]: (state) =>
     merge(state, {
       ...state,
-      selected: []
+      selected: [],
     }),
   [setSortOptions.type]: (state, { payload: { sortBy, sortDir } }) =>
     merge(state, {
       ...state,
       sorting: {
         sortBy,
-        sortDir
-      }
+        sortDir,
+      },
     }),
   [setPage.type]: (state, { payload: { page } }) =>
     merge(state, {
       pagination: {
         ...state.pagination,
-        page
-      }
+        page,
+      },
     }),
   [setPageRows.type]: (state, { payload: { rowsPerPage } }) =>
     merge(state, {
       pagination: {
         ...state.pagination,
-        rowsPerPage
-      }
+        rowsPerPage,
+      },
     }),
   [setDialog.type]: (state, { payload: { open, name, content } }) =>
     merge(state, {
@@ -189,10 +193,10 @@ const handlers = {
         open,
         report: {
           name,
-          content
-        }
-      }
-    })
+          content,
+        },
+      },
+    }),
 };
 
 const reducer = createReducer(ui, handlers);

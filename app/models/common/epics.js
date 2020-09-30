@@ -12,7 +12,7 @@ import {
   viewPackageListener,
   installPackageListener,
   updatePackagesListener,
-  uninstallPackagesListener
+  uninstallPackagesListener,
 } from 'models/packages/actions';
 import { clearSelected, setSnackbar } from 'models/ui/actions';
 import {
@@ -27,21 +27,21 @@ import {
   runDoctor,
   runAudit,
   runInit,
-  runCache
+  runCache,
 } from 'models/npm/actions';
 import { initActions } from 'models/common/actions';
 
 const updateCommand = ({
   operationStatus,
   operationPackages,
-  operationCommand
+  operationCommand,
 }) => ({
   type: setRunningCommand.type,
   payload: {
     operationStatus,
     operationPackages,
-    operationCommand
-  }
+    operationCommand,
+  },
 });
 
 const updateSnackbar = ({ type, position, message, open, hideOnClose }) => ({
@@ -51,9 +51,9 @@ const updateSnackbar = ({ type, position, message, open, hideOnClose }) => ({
     type,
     position,
     message,
-    hideOnClose
-  }
-})
+    hideOnClose,
+  },
+});
 
 const addActionErrorEpic = pipe(
   ofType(addActionError.type),
@@ -62,8 +62,8 @@ const addActionErrorEpic = pipe(
 
     return error.split('npm ERR!');
   }),
-  map(errorsArr =>
-    errorsArr.map(errorLine => {
+  map((errorsArr) =>
+    errorsArr.map((errorLine) => {
       const notEmptyLine = errorLine.trim().length > 1;
 
       return notEmptyLine && errorLine.indexOf('fatal') > 0 ? errorLine : '';
@@ -93,14 +93,14 @@ const updateCommandEpic = pipe(
         open: true,
         type: 'warning',
         message: `running npm ${runningCommand}`,
-        hideOnClose: true
+        hideOnClose: true,
       }),
       updateCommand({
         operationStatus: 'running',
         operationCommand: runningCommand,
-        operationPackages: Array.isArray(packages) ? packages : []
+        operationPackages: Array.isArray(packages) ? packages : [],
       }),
-      clearSelected()
+      clearSelected(),
     ];
   })
 );
@@ -123,7 +123,7 @@ const onInitActionsEpic = pipe(
     npmDoctorListener(),
     npmInitListener(),
     npmDedupeListener(),
-    npmCacheListener()
+    npmCacheListener(),
   ])
 );
 

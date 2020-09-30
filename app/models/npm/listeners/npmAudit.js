@@ -3,33 +3,33 @@ import { Observable } from 'rxjs';
 import {
   setRunningCommand,
   parseNpmAuditData,
-  parseNpmAuditFixData
+  parseNpmAuditFixData,
 } from 'models/npm/actions';
 import {
   toggleAuditLoader,
   // setActivePage,
-  setSnackbar
+  setSnackbar,
 } from 'models/ui/actions';
 import { iMessage } from 'commons/utils';
 
 const updateCommand = ({
   operationStatus,
   operationPackages,
-  operationCommand
+  operationCommand,
 }) => ({
   type: setRunningCommand.type,
   payload: {
     operationStatus,
     operationPackages,
-    operationCommand
-  }
+    operationCommand,
+  },
 });
 
-const onNpmAudit$ = new Observable(observer => {
+const onNpmAudit$ = new Observable((observer) => {
   ipcRenderer.removeAllListeners([
     'npm-audit-completed',
     'npm-audit-fix-completed',
-    'npm-audit-error'
+    'npm-audit-error',
   ]);
 
   ipcRenderer.on('npm-audit-completed', (event, error, data) => {
@@ -37,7 +37,7 @@ const onNpmAudit$ = new Observable(observer => {
       updateCommand({
         operationStatus: 'idle',
         operationCommand: null,
-        operationPackages: []
+        operationPackages: [],
       })
     );
 
@@ -47,7 +47,7 @@ const onNpmAudit$ = new Observable(observer => {
     observer.next(
       toggleAuditLoader({
         loading: false,
-        message: null
+        message: null,
       })
     );
 
@@ -55,7 +55,7 @@ const onNpmAudit$ = new Observable(observer => {
       setSnackbar({
         open: true,
         type: 'info',
-        message: iMessage('info', 'auditCompleted')
+        message: iMessage('info', 'auditCompleted'),
       })
     );
   });
@@ -65,7 +65,7 @@ const onNpmAudit$ = new Observable(observer => {
       updateCommand({
         operationStatus: 'idle',
         operationCommand: null,
-        operationPackages: []
+        operationPackages: [],
       })
     );
 
@@ -74,7 +74,7 @@ const onNpmAudit$ = new Observable(observer => {
     observer.next(
       toggleAuditLoader({
         loading: false,
-        message: null
+        message: null,
       })
     );
   });

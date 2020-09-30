@@ -12,8 +12,8 @@ const onlineStatusEpic = pipe(
     payload: {
       type: status === 'online' ? 'info' : 'error',
       open: true,
-      message: `App is now ${status}`
-    }
+      message: `App is now ${status}`,
+    },
   }))
 );
 

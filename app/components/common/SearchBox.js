@@ -8,7 +8,12 @@ import { useDispatch } from 'redux-react-hook';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import ClearIcon from '@material-ui/icons/Clear';
-import { setActivePage, setPage, clearFilters, setSnackbar } from 'models/ui/actions';
+import {
+  setActivePage,
+  setPage,
+  clearFilters,
+  setSnackbar,
+} from 'models/ui/actions';
 import { setPackagesSearchStart } from 'models/packages/actions';
 import { iMessage } from 'commons/utils';
 import styles from './styles/searchBox';
@@ -30,18 +35,22 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
   };
 
   const handleSearch = () => {
-    dispatch(setSnackbar({
-      open: false,
-      type: 'info',
-      message: null
-    }))
+    dispatch(
+      setSnackbar({
+        open: false,
+        type: 'info',
+        message: null,
+      })
+    );
 
     if (!packageName || packageName.length < 2) {
-      dispatch(setSnackbar({
-        open: true,
-        type: 'error',
-        message: iMessage('error', 'searchMissing')
-      }))
+      dispatch(
+        setSnackbar({
+          open: true,
+          type: 'error',
+          message: iMessage('error', 'searchMissing'),
+        })
+      );
 
       return;
     }
@@ -52,15 +61,15 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
       type: setActivePage.type,
       payload: {
         page: 'packages',
-        paused: true
-      }
+        paused: true,
+      },
     });
 
     dispatch({
       type: setPage.type,
       payload: {
-        page: 0
-      }
+        page: 0,
+      },
     });
 
     dispatch(
@@ -69,19 +78,19 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
         options: {
           cmd: ['search'],
           pkgName: packageName,
-          fromSearch: true
-        }
+          fromSearch: true,
+        },
       })
     );
 
     return false;
   };
 
-  const onKeyUp = e => {
+  const onKeyUp = (e) => {
     const {
       which,
       keyCode,
-      currentTarget: { value }
+      currentTarget: { value },
     } = e;
     const key = which || keyCode || 0;
 
@@ -96,7 +105,7 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
     const { current } = searchInputEl;
 
     if (current) {
-      current.addEventListener('keyup', onKeyUp, () => { });
+      current.addEventListener('keyup', onKeyUp, () => {});
 
       return () => current.removeEventListener('keyup', onKeyUp);
     }
@@ -109,20 +118,20 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
           <ClearIcon />
         </a>
       ) : (
-          <a href="#" className={classes.searchIcon} onClick={handleSearch}>
-            <SearchIcon />
-          </a>
-        )}
+        <a href="#" className={classes.searchIcon} onClick={handleSearch}>
+          <SearchIcon />
+        </a>
+      )}
 
       <InputBase
         disabled={disabled || onlineStatus === 'offline'}
         placeholder="Search npm registry"
         classes={{
           root: classes.inputRoot,
-          input: classes.inputInput
+          input: classes.inputInput,
         }}
         inputProps={{
-          ref: searchInputEl
+          ref: searchInputEl,
         }}
       />
     </div>
@@ -132,7 +141,7 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
 SearchBox.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   disabled: PropTypes.bool,
-  onlineStatus: PropTypes.string
+  onlineStatus: PropTypes.string,
 };
 
 export default withStyles(styles)(SearchBox);

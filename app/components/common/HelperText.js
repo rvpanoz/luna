@@ -13,42 +13,42 @@ const HelperText = ({
   detail,
   actionText,
   actionHandler,
-  actionDisabled
+  actionDisabled,
 }) => (
-    <div className={classes.containerColumn}>
+  <div className={classes.containerColumn}>
+    <Typography
+      color="textSecondary"
+      variant="subtitle1"
+      className={cn(classes.noData, classes.withPadding)}
+    >
+      {text}
+    </Typography>
+    {detail && (
       <Typography
         color="textSecondary"
-        variant="subtitle1"
-        className={cn(classes.noData, classes.withPadding)}
+        variant="body2"
+        className={classes.withPadding}
       >
-        {text}
+        {detail}
       </Typography>
-      {detail && (
-        <Typography
-          color="textSecondary"
-          variant="body2"
-          className={classes.withPadding}
-        >
-          {detail}
-        </Typography>
-      )}
-      {actionText && actionHandler ? (
-        <Button
-          disabled={actionDisabled}
-          color={color}
-          className={classes.button}
-          variant="contained"
-          onClick={actionHandler}
-        >
-          {actionText}
-        </Button>
-      ) : null}
-    </div>
-  );
+    )}
+    {actionText && actionHandler ? (
+      <Button
+        disabled={actionDisabled}
+        color={color}
+        className={classes.button}
+        variant="contained"
+        onClick={actionHandler}
+      >
+        {actionText}
+      </Button>
+    ) : null}
+  </div>
+);
 
 HelperText.defaultProps = {
-  color: 'secondary'
-}
+  color: 'secondary',
+};
 
 HelperText.propTypes = {
   classes: objectOf(string).isRequired,
@@ -57,7 +57,7 @@ HelperText.propTypes = {
   detail: string,
   actionText: string,
   actionHandler: func,
-  actionDisabled: bool
+  actionDisabled: bool,
 };
 
 export default withStyles(styles)(HelperText);

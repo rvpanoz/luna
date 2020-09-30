@@ -54,7 +54,7 @@ Icon.propTypes = {
   white: PropTypes.string,
   purple: PropTypes.string,
   text: PropTypes.bool,
-  light: PropTypes.bool
+  light: PropTypes.bool,
 };
 
 export default Icon;

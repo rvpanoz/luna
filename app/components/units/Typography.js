@@ -63,7 +63,7 @@ Typography.propTypes = {
   secondary: PropTypes.string,
   tertiary: PropTypes.string,
   success: PropTypes.bool,
-  danger: PropTypes.bool
+  danger: PropTypes.bool,
 };
 
 export default Typography;

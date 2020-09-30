@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    padding: theme.spacing(1)
-  }
+    padding: theme.spacing(1),
+  },
 });
 
 const AppError = ({ classes, error }) => (
@@ -17,7 +17,7 @@ const AppError = ({ classes, error }) => (
 
 AppError.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  error: PropTypes.string.isRequired
+  error: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(AppError);

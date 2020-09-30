@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
   packages,
   ui,
   notifications,
-  npm
+  npm,
 });
 
 export default rootReducer;

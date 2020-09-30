@@ -6,7 +6,7 @@
  * npm update
  * @param {*} options
  */
-const update = options => {
+const update = (options) => {
   const command = ['update'];
   const { name, mode, pkgOptions, multiple, packages } = options || {};
   const defaults = ['--no-audit', '--verbose'];
@@ -24,7 +24,7 @@ const update = options => {
   const commandArgs = mode === 'global' ? [].concat(defaults, '-g') : defaults;
   const commandOpts =
     pkgOptions && pkgOptions.length
-      ? pkgOptions.map(option => `--${option}`)
+      ? pkgOptions.map((option) => `--${option}`)
       : [];
 
   const run = []

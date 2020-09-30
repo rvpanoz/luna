@@ -6,17 +6,17 @@ import { toggleLoader, setActivePage, setSnackbar } from 'models/ui/actions';
 const updateCommand = ({
   operationStatus,
   operationPackages,
-  operationCommand
+  operationCommand,
 }) => ({
   type: setRunningCommand.type,
   payload: {
     operationStatus,
     operationPackages,
-    operationCommand
-  }
+    operationCommand,
+  },
 });
 
-const onNpmInitLock$ = new Observable(observer => {
+const onNpmInitLock$ = new Observable((observer) => {
   ipcRenderer.removeAllListeners(['npm-init-lock-completed']);
 
   ipcRenderer.on('npm-init-lock-completed', () => {
@@ -24,7 +24,7 @@ const onNpmInitLock$ = new Observable(observer => {
       updateCommand({
         operationStatus: 'idle',
         operationCommand: null,
-        operationPackages: []
+        operationPackages: [],
       })
     );
 
@@ -34,14 +34,14 @@ const onNpmInitLock$ = new Observable(observer => {
       setSnackbar({
         open: true,
         type: 'info',
-        message: 'npm init completed'
+        message: 'npm init completed',
       })
     );
 
     observer.next(
       toggleLoader({
         loading: false,
-        message: null
+        message: null,
       })
     );
   });
