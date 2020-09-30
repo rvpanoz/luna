@@ -8,17 +8,17 @@ import { setPackagesStart } from '../actions';
 const updateCommand = ({
   operationStatus,
   operationPackages,
-  operationCommand
+  operationCommand,
 }) => ({
   type: setRunningCommand.type,
   payload: {
     operationStatus,
     operationPackages,
-    operationCommand
-  }
+    operationCommand,
+  },
 });
 
-const onNpmInstall$ = new Observable(observer => {
+const onNpmInstall$ = new Observable((observer) => {
   ipcRenderer.removeAllListeners(['npm-install-completed']);
 
   ipcRenderer.on('npm-install-completed', () => {
@@ -28,14 +28,14 @@ const onNpmInstall$ = new Observable(observer => {
         updateCommand({
           operationStatus: 'idle',
           operationCommand: null,
-          operationPackages: []
+          operationPackages: [],
         })
       );
 
       observer.next(
         setActivePage({
           page: 'packages',
-          paused: false
+          paused: false,
         })
       );
 
@@ -43,11 +43,10 @@ const onNpmInstall$ = new Observable(observer => {
         setPackagesStart({
           channel: 'npm-list-outdated',
           options: {
-            cmd: ['outdated', 'list']
-          }
+            cmd: ['outdated', 'list'],
+          },
         })
       );
-
     } catch (error) {
       observer.error(error);
     }

@@ -4,7 +4,7 @@
 import React from 'react';
 import { Component, createFactory } from 'react';
 
-const withErrorBoundary = BaseComponent => {
+const withErrorBoundary = (BaseComponent) => {
   const factory = createFactory(BaseComponent);
 
   return class ErrorBoundary extends Component {
@@ -21,7 +21,7 @@ const withErrorBoundary = BaseComponent => {
     render() {
       const { hasError, error, errorInfo } = this.state;
       const props = {
-        ...this.props
+        ...this.props,
       };
 
       if (hasError) {
@@ -38,7 +38,7 @@ const withErrorBoundary = BaseComponent => {
       }
 
       return factory({
-        ...props
+        ...props,
       });
     }
   };

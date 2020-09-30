@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { parseFromSearch } from 'commons/utils';
 import { mapSearchPackages } from '../actions';
 
-const onSearchPackages$ = new Observable(observer => {
+const onSearchPackages$ = new Observable((observer) => {
   ipcRenderer.removeAllListeners(['npm-search-completed']);
 
   ipcRenderer.on('npm-search-completed', (event, data) => {
@@ -14,13 +14,13 @@ const onSearchPackages$ = new Observable(observer => {
       observer.next(
         mapSearchPackages({
           data: packages,
-          fromSearch: true
+          fromSearch: true,
         })
       );
 
       observer.next(
         toggleLoader({
-          loading: false
+          loading: false,
         })
       );
     } catch (error) {

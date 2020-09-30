@@ -34,7 +34,6 @@ export default merge(baseConfig, {
       constants: path.resolve(path.join(__dirname, '..', 'app', 'constants')),
       commons: path.resolve(path.join(__dirname, '..', 'app', 'commons')),
       components: path.resolve(path.join(__dirname, '..', 'app', 'components')),
-      containers: path.resolve(path.join(__dirname, '..', 'app', 'containers')),
       models: path.resolve(path.join(__dirname, '..', 'app', 'models')),
       styles: path.resolve(path.join(__dirname, '..', 'app', 'styles')),
     },

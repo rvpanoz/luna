@@ -6,7 +6,7 @@ import {
   objectOf,
   node,
   oneOfType,
-  string
+  string,
 } from 'prop-types';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
@@ -14,12 +14,20 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { Typography } from '@material-ui/core';
 import styles from './styles/appLoader';
 
-const AppLoader = ({ loading, classes, className, children, message, relative, mini }) =>
+const AppLoader = ({
+  loading,
+  classes,
+  className,
+  children,
+  message,
+  relative,
+  mini,
+}) =>
   loading ? (
     <div
       className={cn(classes.loader, {
         [classes.relative]: relative,
-        [className]: className
+        [className]: className,
       })}
     >
       <CircularProgress
@@ -28,14 +36,19 @@ const AppLoader = ({ loading, classes, className, children, message, relative, m
         size={mini ? 20 : 30}
       />
       {message && (
-        <Typography variant="inherit" component="span" color="textSecondary" className={classes.message}>
+        <Typography
+          variant="inherit"
+          component="span"
+          color="textSecondary"
+          className={classes.message}
+        >
           {message}
         </Typography>
       )}
     </div>
   ) : (
-      children
-    );
+    children
+  );
 
 AppLoader.propTypes = {
   classes: objectOf(string).isRequired,

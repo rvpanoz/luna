@@ -1,7 +1,7 @@
 /**
-* Remove extraneous packages
-* https://docs.npmjs.com/cli/prune.html
-*/
+ * Remove extraneous packages
+ * https://docs.npmjs.com/cli/prune.html
+ */
 
 const prune = () => {
   const command = ['prune'];

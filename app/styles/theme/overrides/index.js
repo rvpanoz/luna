@@ -29,5 +29,5 @@ export default {
   MuiTableRow,
   MuiTabs,
   MuiDrawer,
-  MuiDivider
+  MuiDivider,
 };

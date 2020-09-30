@@ -4,7 +4,7 @@ import {
   npmRunInitEpic,
   npmRunLockEpic,
   npmRunInitListenerEpic,
-  showInitLoaderEpic
+  showInitLoaderEpic,
 } from './initEpics';
 
 import {
@@ -12,25 +12,22 @@ import {
   npmRunAuditListenerEpic,
   npmAuditParseEpic,
   npmAuditParseFixEpic,
-  showAuditingLoaderEpic
+  showAuditingLoaderEpic,
 } from './auditEpics';
 
 import {
   npmRunDoctorEpic,
   npmRunDoctorListenerEpic,
   showDoctorLoaderEpic,
-  npmDoctorParseEpic
+  npmDoctorParseEpic,
 } from './doctorEpics';
 
-import {
-  npmRunDedupeEpic,
-  npmRunDedupeListenerEpic,
-} from './dedupeEpics';
+import { npmRunDedupeEpic, npmRunDedupeListenerEpic } from './dedupeEpics';
 
 import {
   npmRunCacheEpic,
   npmRunCacheListenerEpic,
-  npmCacheParseEpic
+  npmCacheParseEpic,
 } from './cacheEpics';
 
 export default combineEpics(

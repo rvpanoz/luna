@@ -11,5 +11,5 @@ export {
   onViewPackage$,
   onNpmInstall$,
   onNpmUninstall$,
-  onNpmUpdate$
+  onNpmUpdate$,
 };

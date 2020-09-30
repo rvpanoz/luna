@@ -5,7 +5,7 @@
  * npm view
  * @param {*} options
  */
-const view = options => {
+const view = (options) => {
   const command = ['view'];
   const { mode, name, version } = options || {};
   const defaults = ['--depth=0', '--json'];

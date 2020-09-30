@@ -10,7 +10,7 @@ const AppLogo = ({ classes, className }) => {
     const logoAnimationTL = anime
       .timeline({
         autoplay: false,
-        easing: 'easeOutSine'
+        easing: 'easeOutSine',
       })
       .add(
         {
@@ -18,7 +18,7 @@ const AppLogo = ({ classes, className }) => {
           strokeDashoffset: [anime.setDashoffset, 0],
           duration: 500,
           direction: 'alternate',
-          delay: anime.stagger(60, { from: 'center' })
+          delay: anime.stagger(60, { from: 'center' }),
         },
         0
       );
@@ -27,9 +27,11 @@ const AppLogo = ({ classes, className }) => {
   }, []);
 
   return (
-    <div className={cn(classes.main_logo, {
-      [className]: className
-    })}>
+    <div
+      className={cn(classes.main_logo, {
+        [className]: className,
+      })}
+    >
       <div className={classes.logo_animation_wrapper}>
         <div className={classes.logo_animation}>
           <div className={classes.anime_logo}>
@@ -115,7 +117,7 @@ const AppLogo = ({ classes, className }) => {
 
 AppLogo.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
 };
 
 export default withStyles(styles)(AppLogo);

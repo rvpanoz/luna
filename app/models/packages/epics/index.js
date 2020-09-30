@@ -15,34 +15,38 @@ import {
 // uninstall related epics
 import {
   uninstallPackagesEpic,
-  uninstallPackagesListenerEpic
+  uninstallPackagesListenerEpic,
 } from './uninstallEpics';
 
 // list, outdated, search related epics
 import {
   listOutdatedPackagesListenerEpic,
-  searchPackagesListenerEpic
+  searchPackagesListenerEpic,
 } from './listOutdatedEpics';
 
 // view related epics
 import {
   viewPackageEpic,
   viewPackageLoaderEpic,
-  viewPackageListenerEpic
+  viewPackageListenerEpic,
 } from './viewEpics';
 
 // update related epics
 import {
   updatePackagesEpic,
   updatePackagesListenerEpic,
-  showUpdateLoaderEpic
+  showUpdateLoaderEpic,
 } from './updateEpics';
 
 // search related epics
 import { searchEpic, updateSearchFlagEpic } from './searchEpics';
 
 // transformation related epics
-import { mapSearchPackagesEpic, mapPackagesEpic, mapOutdatedPackagesEpic } from './transformEpics';
+import {
+  mapSearchPackagesEpic,
+  mapPackagesEpic,
+  mapOutdatedPackagesEpic,
+} from './transformEpics';
 
 export default combineEpics(
   listOutdatedPackagesListenerEpic,
@@ -65,5 +69,5 @@ export default combineEpics(
   mapPackagesEpic,
   mapOutdatedPackagesEpic,
   searchEpic,
-  updateSearchFlagEpic,
+  updateSearchFlagEpic
 );

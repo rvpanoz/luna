@@ -1,10 +1,8 @@
-/* eslint-disable global-require */
-
 import React from 'react';
 import ReactDom from 'react-dom';
 import { StoreContext } from 'redux-react-hook';
 import configureStore from './store/configureStore';
-import App from './containers/App';
+import App from './components/App';
 
 const store = configureStore();
 
@@ -16,8 +14,8 @@ ReactDom.render(
 );
 
 if (module.hot) {
-  module.hot.accept('./containers/App', () => {
-    const NextApp = require('./containers/App').default;
+  module.hot.accept('./components/App', () => {
+    const NextApp = require('./components/App').default;
 
     ReactDom.render(
       <StoreContext.Provider value={store}>

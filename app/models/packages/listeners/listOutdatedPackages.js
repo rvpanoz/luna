@@ -6,7 +6,7 @@ import { addNotification } from 'models/notifications/actions';
 import { switchcase, objectEntries } from 'commons/utils';
 import { mapPackages, mapOutdatedPackages } from '../actions';
 
-const onListOutdatedPackages$ = new Observable(observer => {
+const onListOutdatedPackages$ = new Observable((observer) => {
   ipcRenderer.removeAllListeners(['npm-list-outdated-completed']);
 
   const onComplete = (event, ...rest) => {
@@ -28,10 +28,12 @@ const onListOutdatedPackages$ = new Observable(observer => {
         : objectEntries(packageData);
 
       if (notifications && Array.isArray(notifications)) {
-        notifications.forEach(notification => observer.next(addNotification(notification)));
+        notifications.forEach((notification) =>
+          observer.next(addNotification(notification))
+        );
       }
 
-      const noDependencies = dataArray.every(dep =>
+      const noDependencies = dataArray.every((dep) =>
         dep && dep[1] ? typeof dep[1] !== 'object' : false
       );
 
@@ -42,33 +44,37 @@ const onListOutdatedPackages$ = new Observable(observer => {
               data: noDependencies ? [] : dataArray,
               projectName: name,
               projectVersion: version,
-              projectDescription: description
+              projectDescription: description,
             })
           );
 
-          observer.next(setPage({
-            page: 0
-          }));
+          observer.next(
+            setPage({
+              page: 0,
+            })
+          );
 
           observer.next(
             toggleLoader({
-              loading: false
+              loading: false,
             })
           );
 
-          observer.next(setSnackbar({
-            open: false,
-            type: 'info',
-            message: null
-          }))
+          observer.next(
+            setSnackbar({
+              open: false,
+              type: 'info',
+              message: null,
+            })
+          );
         },
         outdated: () => {
           observer.next(
             mapOutdatedPackages({
-              data: noDependencies ? [] : dataArray
+              data: noDependencies ? [] : dataArray,
             })
           );
-        }
+        },
       })('list')(command);
     } catch (error) {
       observer.error(error);

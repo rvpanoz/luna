@@ -12,7 +12,7 @@ import {
   removePackages,
   setActive,
   setPackagesSearchSuccess,
-  updateSearchFlag
+  updateSearchFlag,
 } from 'models/packages/actions';
 import initialState from './initialState';
 
@@ -29,37 +29,31 @@ const handlers = {
       metadata: {
         ...state.metadata,
         fromSearch,
-        fromSort
-      }
+        fromSort,
+      },
     }),
   [updateSearchFlag.type]: (state, { payload: { fromSearch } }) =>
     merge(state, {
       metadata: {
         ...state.metadata,
-        fromSearch
-      }
+        fromSearch,
+      },
     }),
   [setPackagesSearchSuccess.type]: (
     state,
-    {
-      payload: {
-        dependencies,
-        fromSearch,
-        lastUpdatedAt
-      }
-    }
+    { payload: { dependencies, fromSearch, lastUpdatedAt } }
   ) =>
     merge(state, {
       packagesFromSearch: dependencies,
       metadata: {
         ...state.metadata,
         fromSearch,
-        lastUpdatedAt
-      }
+        lastUpdatedAt,
+      },
     }),
   [setActive.type]: (state, { payload: { active } }) =>
     assoc('active', active, state),
-  [clearPackages.type]: state =>
+  [clearPackages.type]: (state) =>
     merge(state, {
       active: null,
       packagesFromSearch: [],
@@ -68,8 +62,8 @@ const handlers = {
       metadata: {
         ...state.metadata,
         fromSearch: false,
-        fromSort: false
-      }
+        fromSort: false,
+      },
     }),
   [setPackagesSuccess.type]: (
     state,
@@ -83,8 +77,8 @@ const handlers = {
         projectAuthor,
         fromSort,
         fromSearch,
-        lastUpdatedAt
-      }
+        lastUpdatedAt,
+      },
     }
   ) =>
     merge(state, {
@@ -96,47 +90,47 @@ const handlers = {
         version: projectVersion,
         description: projectDescription,
         license: projectLicense,
-        author: projectAuthor
+        author: projectAuthor,
       },
       metadata: {
         ...state.metadata,
         fromSearch,
         fromSort,
-        lastUpdatedAt
-      }
+        lastUpdatedAt,
+      },
     }),
   [addOutdatedPackage.type]: (state, { payload: { dependency } }) => {
     const { packagesOutdated } = state;
 
     return merge(state, {
       ...state,
-      packagesOutdated: prepend(dependency, packagesOutdated)
+      packagesOutdated: prepend(dependency, packagesOutdated),
     });
   },
   [setOutdatedSuccess.type]: (state, { payload: { outdated } }) =>
     merge(state, {
       ...state,
-      packagesOutdated: outdated
+      packagesOutdated: outdated,
     }),
   [removePackages.type]: (state, { payload: { removedPackages } }) => {
     const { packagesData, packagesOutdated } = state;
 
     // update packages
     const newPackages = packagesData.filter(
-      pkg => removedPackages.indexOf(pkg.name) === -1 || pkg.name === 'npm'
+      (pkg) => removedPackages.indexOf(pkg.name) === -1 || pkg.name === 'npm'
     );
 
     // update outdated packages
     const newPackagesOutdated = packagesOutdated.filter(
-      pkg => removedPackages.indexOf(pkg.name) === -1 || pkg.name === 'npm'
+      (pkg) => removedPackages.indexOf(pkg.name) === -1 || pkg.name === 'npm'
     );
 
     return merge(state, {
       ...state,
       packagesData: newPackages,
-      packagesOutdated: newPackagesOutdated
+      packagesOutdated: newPackagesOutdated,
     });
-  }
+  },
 };
 
 export default createReducer(packages, handlers);

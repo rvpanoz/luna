@@ -2,8 +2,8 @@ const styles = {
   cardAvatar: {
     '&$cardAvatarProfile img': {
       width: '100%',
-      height: 'auto'
-    }
+      height: 'auto',
+    },
   },
   cardAvatarProfile: {
     maxWidth: 130,
@@ -13,10 +13,10 @@ const styles = {
     overflow: 'hidden',
     padding: 0,
     '&$cardAvatarPlain': {
-      marginTop: 0
-    }
+      marginTop: 0,
+    },
   },
-  cardAvatarPlain: {}
+  cardAvatarPlain: {},
 };
 
 export default styles;

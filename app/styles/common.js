@@ -4,7 +4,7 @@
 
 export const APP_BAR = {
   root: 'app-bar__root',
-  shaded: 'app-bar--shaded'
+  shaded: 'app-bar--shaded',
 };
 
 export const AVATAR = {
@@ -13,21 +13,21 @@ export const AVATAR = {
   medium: 'avatar--medium',
   ultraLarge: 'avatar--ultra-large',
   bordered: 'avatar--bordered',
-  link: 'avatar--link'
+  link: 'avatar--link',
 };
 
 export const BADGE = {
   root: 'badge__root',
   dotted: 'badge--dotted',
   number: 'badge--number',
-  badge: 'badge__badge'
+  badge: 'badge__badge',
 };
 
 export const BUTTON = {
   root: 'button__root',
   inverted: 'button--inverted',
   danger: 'button--danger',
-  large: 'button--large'
+  large: 'button--large',
 };
 
 export const CARD = {
@@ -35,26 +35,26 @@ export const CARD = {
   contained: 'card__root--contained',
   actionable: 'card__root--actionable',
   spaceGrey: 'card__root--space-grey',
-  darkBlue: 'card__root--dark-blue'
+  darkBlue: 'card__root--dark-blue',
 };
 
 export const CARD_CONTENT = {
-  root: 'card-content__root'
+  root: 'card-content__root',
 };
 
 export const CARD_ACTION_AREA = {
-  root: 'card-action-area__root'
+  root: 'card-action-area__root',
 };
 
 export const CARD_ACTIONS = {
   root: 'card-actions__root',
   action: 'card-actions__action',
-  contained: 'card-actions--contained'
+  contained: 'card-actions--contained',
 };
 
 export const CARD_MEDIA = {
   root: 'card-media__root',
-  wideScreen: 'card-media--wide-screen'
+  wideScreen: 'card-media--wide-screen',
 };
 
 export const CHIP = {
@@ -62,16 +62,16 @@ export const CHIP = {
   label: 'chip__label',
   narrow: 'chip--narrow',
   icon: 'chip__icon',
-  inverted: 'chip--inverted'
+  inverted: 'chip--inverted',
 };
 
 export const DRAWER = {
-  root: 'drawer__root'
+  root: 'drawer__root',
 };
 
 export const DIVIDER = {
   root: 'divider__root',
-  vertical: 'divider--vertical'
+  vertical: 'divider--vertical',
 };
 
 export const ICON_BUTTON = {
@@ -82,7 +82,7 @@ export const ICON_BUTTON = {
   separated: 'icon-button--separated',
   linkInverted: 'icon-button--link-inverted',
   danger: 'icon-button--red',
-  success: 'icon-button--success'
+  success: 'icon-button--success',
 };
 
 export const ICON = {
@@ -101,16 +101,16 @@ export const ICON = {
   primary: 'icon--primary',
   small: 'icon--small',
   text: 'icon--text',
-  light: 'icon--light'
+  light: 'icon--light',
 };
 
 export const INPUT_ADORNMENT = {
   root: 'input-adornment__root',
-  positionStart: 'input-adornment--start'
+  positionStart: 'input-adornment--start',
 };
 
 export const LIST = {
-  root: 'list__root'
+  root: 'list__root',
 };
 
 export const LIST_ITEM = {
@@ -120,7 +120,7 @@ export const LIST_ITEM = {
   headerActionable: 'list-item__header--actionable',
   active: 'list-item--active',
   category: 'list-item__category',
-  subcategory: 'list-item__subcategory'
+  subcategory: 'list-item__subcategory',
 };
 
 export const LIST_ITEM_TEXT = {
@@ -128,33 +128,33 @@ export const LIST_ITEM_TEXT = {
   primary: 'list-item-text__primary',
   category: 'list-item-text__category',
   subcategory: 'list-item-text__subcategory',
-  subcategoryPrimary: 'list-item-text__subcategory--primary'
+  subcategoryPrimary: 'list-item-text__subcategory--primary',
 };
 
 export const LIST_ITEM_ICON = {
   root: 'list-item-icon__root',
-  subcategory: 'list-item-icon__subcategory'
+  subcategory: 'list-item-icon__subcategory',
 };
 
 export const NOTCHED_OUTLINE = {
   root: 'notched-outline__root',
-  focused: 'notched-outline--focused'
+  focused: 'notched-outline--focused',
 };
 
 export const OUTLINED_INPUT = {
   root: 'outlined-input__root',
-  focused: 'outlined-input--notched-outline'
+  focused: 'outlined-input--notched-outline',
 };
 
 export const PAPER = {
-  root: 'paper__root'
+  root: 'paper__root',
 };
 
 export const TABS = {
   root: 'tabs__root',
   inverted: 'tabs--inverted',
   indicator: 'tabs__indicator',
-  underline: 'tabs--underline'
+  underline: 'tabs--underline',
 };
 
 export const TAB = {
@@ -162,7 +162,7 @@ export const TAB = {
   label: 'tab__label',
   selected: 'tab--selected',
   wrapper: 'tab__wrapper',
-  onlyIcon: 'tab--only-icon'
+  onlyIcon: 'tab--only-icon',
 };
 
 export const TEXT = {
@@ -181,12 +181,12 @@ export const TEXT = {
   primary: 'text--primary',
   secondary: 'text--secondary',
   success: 'text--success',
-  danger: 'text--danger'
+  danger: 'text--danger',
 };
 
 export const TOOLBAR = {
   root: 'toolbar__root',
-  narrow: 'toolbar--narrow'
+  narrow: 'toolbar--narrow',
 };
 
 export default {
@@ -213,5 +213,5 @@ export default {
   TABS,
   TAB,
   TOOLBAR,
-  TEXT
+  TEXT,
 };

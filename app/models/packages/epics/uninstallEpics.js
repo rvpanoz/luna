@@ -8,7 +8,7 @@ import { tap, switchMap, ignoreElements } from 'rxjs/operators';
 
 import {
   uninstallPackages,
-  uninstallPackagesListener
+  uninstallPackagesListener,
 } from 'models/packages/actions';
 
 import { onNpmUninstall$ } from '../listeners';
@@ -22,14 +22,14 @@ const uninstallPackagesEpic = (action$, state$) =>
     ofType(uninstallPackages.type),
     tap(({ payload }) => {
       const {
-        common: { mode, directory }
+        common: { mode, directory },
       } = state$.value;
 
       ipcRenderer.send(
         'npm-uninstall',
         Object.assign({}, payload, {
           mode,
-          directory
+          directory,
         })
       );
     }),

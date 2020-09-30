@@ -13,7 +13,7 @@ const Badge = ({ className, dotted, number, children, ...props }) => (
       number && BADGE.number
     )}
     classes={{
-      badge: BADGE.badge
+      badge: BADGE.badge,
     }}
     {...props}
   >
@@ -25,7 +25,7 @@ Badge.propTypes = {
   className: PropTypes.string,
   dotted: PropTypes.bool,
   number: PropTypes.number,
-  children: PropTypes.arrayOf(PropTypes.object)
+  children: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default Badge;

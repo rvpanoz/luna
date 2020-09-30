@@ -36,7 +36,7 @@ export const INFO_MESSAGES = {
     'Automatically install any compatible updates to vulnerable dependencies',
   auditForce:
     'Have audit fix install semver-major updates to toplevel dependencies, not just semver-compatible ones',
-  backToPackages: 'Back to packages'
+  backToPackages: 'Back to packages',
 };
 
 export const ACTION_MESSAGES = {
@@ -59,7 +59,7 @@ export const ACTION_MESSAGES = {
   runAuditFixForce: 'Force',
   runAuditFixProd: 'Fix only prod',
   runAuditFixDev: 'Fix only dev',
-  runAuditFixLock: 'Fix only lock'
+  runAuditFixLock: 'Fix only lock',
 };
 
 export const LABEL_MESSAGES = {
@@ -98,7 +98,7 @@ export const LABEL_MESSAGES = {
   reason: 'Reason',
   requiredByName: 'Required by',
   visitGithub: 'visit',
-  visitHomepage: 'visit'
+  visitHomepage: 'visit',
 };
 
 export const TITLE_MESSAGES = {
@@ -148,7 +148,7 @@ export const TITLE_MESSAGES = {
   backList: 'Back to list',
   listReload: 'Reload',
   createPackageJson: 'Create a package.json file',
-  doctorReport: 'Doctor report'
+  doctorReport: 'Doctor report',
 };
 
 export const CONFIRMATION_MESSAGES = {
@@ -173,7 +173,7 @@ export const CONFIRMATION_MESSAGES = {
   auditFixOnlyProd:
     'Do you want to run npm audit fix --only=prod?\n\nIt will skip updating devDependencies.',
   auditFixOnlyDev:
-    'Do you want to run npm audit fix --only=dev? \n\nIt will skip updating dependencies.'
+    'Do you want to run npm audit fix --only=dev? \n\nIt will skip updating dependencies.',
 };
 
 export const WARNING_MESSAGES = {
@@ -190,5 +190,5 @@ export const ERROR_MESSAGES = {
   installationError: 'Installation error',
   updateError: 'Update error',
   uninstallError: 'Uninstall error',
-  searchMissing: 'Package name is missing or value is invalid'
+  searchMissing: 'Package name is missing or value is invalid',
 };

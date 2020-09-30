@@ -5,12 +5,12 @@ export default {
     padding: 10,
     color: palette.text.secondary,
     '&:hover': {
-      backgroundColor: 'rgba(0, 0, 0, 0.03)'
-    }
+      backgroundColor: 'rgba(0, 0, 0, 0.03)',
+    },
   },
   sizeSmall: {
     marginLeft: 4,
     marginRight: 4,
-    padding: 12
-  }
+    padding: 12,
+  },
 };

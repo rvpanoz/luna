@@ -7,7 +7,11 @@ import { mergeMap, concatMap, tap } from 'rxjs/operators';
 import { clearSelected, toggleLoader, clearFilters } from 'models/ui/actions';
 import { clearInstallOptions } from 'models/common/actions';
 import { clearNotifications } from 'models/notifications/actions';
-import { clearCommands, clearAuditData, clearDoctorData } from 'models/npm/actions';
+import {
+  clearCommands,
+  clearAuditData,
+  clearDoctorData,
+} from 'models/npm/actions';
 import { iMessage } from 'commons/utils';
 
 import { onOffOperator } from '../operators';
@@ -16,9 +20,9 @@ import { clearPackages, setPackagesStart } from '../actions';
 const ON = 'ON';
 const OFF = 'OFF';
 
-const updateLoader = payload => ({
+const updateLoader = (payload) => ({
   type: toggleLoader.type,
-  payload
+  payload,
 });
 
 const initEpic = (action$, state$) =>
@@ -27,7 +31,7 @@ const initEpic = (action$, state$) =>
     mergeMap(({ payload: { channel, options } }) => {
       const {
         ui: { paused },
-        common: { mode, directory }
+        common: { mode, directory },
       } = state$.value;
 
       return [
@@ -38,10 +42,10 @@ const initEpic = (action$, state$) =>
             options: {
               ...options,
               mode,
-              directory
-            }
-          }
-        }
+              directory,
+            },
+          },
+        },
       ];
     }),
     onOffOperator(ON, OFF),
@@ -51,7 +55,7 @@ const initEpic = (action$, state$) =>
     concatMap(() => [
       updateLoader({
         loading: true,
-        message: iMessage('info', 'loading')
+        message: iMessage('info', 'loading'),
       }),
       clearDoctorData(),
       clearAuditData(),
@@ -60,7 +64,7 @@ const initEpic = (action$, state$) =>
       clearNotifications(),
       clearInstallOptions(),
       clearFilters(),
-      clearPackages()
+      clearPackages(),
     ])
   );
 

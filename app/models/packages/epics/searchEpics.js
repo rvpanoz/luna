@@ -11,16 +11,16 @@ import { clearCommands } from 'models/npm/actions';
 import { iMessage } from 'commons/utils';
 import { updateSearchFlag, setPackagesSearchStart } from '../actions';
 
-const updateLoader = payload => ({
+const updateLoader = (payload) => ({
   type: toggleLoader.type,
-  payload
+  payload,
 });
 
 const updateSearchFlagEpic = pipe(
   ofType(setPackagesSearchStart.type),
   map(() =>
     updateSearchFlag({
-      fromSearch: true
+      fromSearch: true,
     })
   )
 );
@@ -30,21 +30,21 @@ const searchEpic = (action$, state$) =>
     ofType(setPackagesSearchStart.type),
     tap(({ payload: { channel, options } }) => {
       const {
-        common: { mode, directory }
+        common: { mode, directory },
       } = state$.value;
 
       ipcRenderer.send(
         channel,
         Object.assign({}, options, {
           mode,
-          directory
+          directory,
         })
       );
     }),
     concatMap(() => [
       updateLoader({
         loading: true,
-        message: iMessage('info', 'searching')
+        message: iMessage('info', 'searching'),
       }),
       clearSelected(),
       clearCommands(),

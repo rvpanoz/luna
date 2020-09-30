@@ -17,7 +17,7 @@ import {
   updateNpmAuditData,
   updateNpmAuditFixData,
   updateNpmDoctorData,
-  updateNpmCacheData
+  updateNpmCacheData,
 } from 'models/npm/actions';
 
 import initialState from './initialState';
@@ -32,34 +32,34 @@ const handlers = {
     merge(state, {
       cache: {
         ...state.cache,
-        result: data
-      }
+        result: data,
+      },
     }),
   [updateNpmAuditData.type]: (state, { payload: { data } }) =>
     merge(state, {
       audit: {
         ...state.audit,
-        result: data
-      }
+        result: data,
+      },
     }),
   [updateNpmAuditFixData.type]: (state, { payload: { data } }) =>
     merge(state, {
       audit: {
         ...state.audit,
         result: data,
-        fix: true
-      }
+        fix: true,
+      },
     }),
   [updateNpmDoctorData.type]: (state, { payload: { data } }) =>
     merge(state, {
       doctor: {
         ...state.doctor,
-        result: data
-      }
+        result: data,
+      },
     }),
   [addActionError.type]: (state, { payload: { error } }) => {
     const {
-      operations: { commandsErrors }
+      operations: { commandsErrors },
     } = state;
 
     const newErrors = prepend(error, commandsErrors);
@@ -68,15 +68,15 @@ const handlers = {
       ...state,
       operations: {
         ...state.operations,
-        commandsErrors: newErrors
-      }
+        commandsErrors: newErrors,
+      },
     });
   },
-  [clearRunningCommand.type]: state =>
+  [clearRunningCommand.type]: (state) =>
     merge(state, {
       operationStatus: 'idle',
       operationPackages: [],
-      operationCommand: null
+      operationCommand: null,
     }),
   [setRunningCommand.type]: (
     state,
@@ -85,35 +85,35 @@ const handlers = {
     merge(state, {
       operationStatus,
       operationPackages,
-      operationCommand
+      operationCommand,
     }),
   [setEnv.type]: (state, { payload: env }) => assoc('env', env, state),
   [npmCommand.type]: (state, { payload: command }) =>
     merge(state, {
-      commands: prepend(command, state.npm.commands)
+      commands: prepend(command, state.npm.commands),
     }),
   [commandError.type]: (state, { payload: error }) =>
     assoc('command_error', error, state),
   [commandMessage.type]: (state, { payload: message }) =>
     assoc('command_message', message, state),
-  [clearCommands.type]: state =>
+  [clearCommands.type]: (state) =>
     merge(state, {
-      commands: []
+      commands: [],
     }),
-  [clearAuditData.type]: state =>
+  [clearAuditData.type]: (state) =>
     merge(state, {
       audit: {
         result: null,
-        fix: false
-      }
+        fix: false,
+      },
     }),
-  [clearDoctorData.type]: state =>
+  [clearDoctorData.type]: (state) =>
     merge(state, {
       doctor: {
         result: null,
-        fix: false
-      }
-    })
+        fix: false,
+      },
+    }),
 };
 
 export default createReducer(npm, handlers);

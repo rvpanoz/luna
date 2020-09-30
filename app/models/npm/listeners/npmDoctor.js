@@ -4,24 +4,23 @@ import { setRunningCommand, parseNpmDoctorData } from 'models/npm/actions';
 import {
   toggleDoctorLoader,
   // setActivePage,
-  setSnackbar
-}
-  from 'models/ui/actions';
+  setSnackbar,
+} from 'models/ui/actions';
 
 const updateCommand = ({
   operationStatus,
   operationPackages,
-  operationCommand
+  operationCommand,
 }) => ({
   type: setRunningCommand.type,
   payload: {
     operationStatus,
     operationPackages,
-    operationCommand
-  }
+    operationCommand,
+  },
 });
 
-const onNpmDoctor$ = new Observable(observer => {
+const onNpmDoctor$ = new Observable((observer) => {
   ipcRenderer.removeAllListeners(['npm-doctor-completed']);
 
   ipcRenderer.on('npm-doctor-completed', (event, data) => {
@@ -29,7 +28,7 @@ const onNpmDoctor$ = new Observable(observer => {
       updateCommand({
         operationStatus: 'idle',
         operationCommand: null,
-        operationPackages: []
+        operationPackages: [],
       })
     );
 
@@ -40,14 +39,14 @@ const onNpmDoctor$ = new Observable(observer => {
       setSnackbar({
         open: true,
         type: 'info',
-        message: 'npm doctor completed'
+        message: 'npm doctor completed',
       })
     );
 
     observer.next(
       toggleDoctorLoader({
         loading: false,
-        message: null
+        message: null,
       })
     );
   });

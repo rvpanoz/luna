@@ -10,49 +10,51 @@ import { removePackages, setActive } from '../actions';
 const updateCommand = ({
   operationStatus,
   operationPackages,
-  operationCommand
+  operationCommand,
 }) => ({
   type: setRunningCommand.type,
   payload: {
     operationStatus,
     operationPackages,
-    operationCommand
-  }
+    operationCommand,
+  },
 });
 
-const onNpmUninstall$ = new Observable(observer => {
+const onNpmUninstall$ = new Observable((observer) => {
   ipcRenderer.removeAllListeners(['npm-uninstall-completed']);
 
-  ipcRenderer.on('npm-uninstall-completed', (event, resultMessage, errors, packages) => {
-    observer.next(
-      setActive({
-        active: null
-      })
-    );
+  ipcRenderer.on(
+    'npm-uninstall-completed',
+    (event, resultMessage, errors, packages) => {
+      observer.next(
+        setActive({
+          active: null,
+        })
+      );
 
-    observer.next(
-      updateCommand({
-        operationStatus: 'idle',
-        operationCommand: null,
-        operationPackages: []
-      })
-    );
+      observer.next(
+        updateCommand({
+          operationStatus: 'idle',
+          operationCommand: null,
+          operationPackages: [],
+        })
+      );
 
-    observer.next(clearNotifications())
-    observer.next(removePackages({ removedPackages: packages }));
+      observer.next(clearNotifications());
+      observer.next(removePackages({ removedPackages: packages }));
 
-    observer.next(
-      setSnackbar({
-        open: true,
-        type: 'info',
-        message: resultMessage,
-      })
-    );
-  }
+      observer.next(
+        setSnackbar({
+          open: true,
+          type: 'info',
+          message: resultMessage,
+        })
+      );
+    }
   );
 
   ipcRenderer.on('npm-uninstall-error', (event, error) => {
-    console.log(error)
+    console.log(error);
   });
 });
 
