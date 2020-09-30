@@ -9,13 +9,13 @@ const mk = {
   defaultSettings: {
     defaultManager: 'npm',
     registry: 'https://registry.npmjs.org/',
-    startMinized: false
+    startMinized: false,
   },
   cnc(...args) {
     let txt = '';
     const values = Object.values(args);
 
-    values.forEach(element => {
+    values.forEach((element) => {
       txt += String(JSON.stringify(element));
     });
 
@@ -53,7 +53,7 @@ const mk = {
     const txt = this.cnc(args);
 
     fs.writeFileSync('debug.log', `${txt}\n`, { flag: 'a' });
-  }
+  },
 };
 
 export default mk;

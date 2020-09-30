@@ -1,26 +1,22 @@
 import { of } from 'rxjs';
-import {
-  mergeMap,
-  catchError,
-  withLatestFrom,
-} from 'rxjs/operators';
+import { mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
 import { v1 as uuidv1 } from 'uuid';
 import semver from 'semver';
 import { combineEpics, ofType } from 'redux-observable';
 
 import {
   addNotification,
-  updateNotification
+  updateNotification,
 } from 'models/notifications/actions';
 
 const addNotificationEpic = (action$, state$) =>
   action$.pipe(
     ofType(addNotification.type),
     withLatestFrom(state$),
-    mergeMap(values => {
+    mergeMap((values) => {
       const [notification, state] = values;
       const {
-        notifications: { notifications: stateNotifications }
+        notifications: { notifications: stateNotifications },
       } = state;
 
       const id = uuidv1();
@@ -43,7 +39,7 @@ const addNotificationEpic = (action$, state$) =>
 
       const minVersion = semver.minVersion(requiredVersion);
       const activeNotification = stateNotifications.find(
-        notificationItem => notificationItem.requiredName === requiredName
+        (notificationItem) => notificationItem.requiredName === requiredName
       );
 
       if (activeNotification && typeof activeNotification === 'object') {
@@ -54,13 +50,14 @@ const addNotificationEpic = (action$, state$) =>
 
         if (!isGreaterThanMinVersion) {
           // remove notification from state
-          return [{
-            type: updateNotification.type,
-            payload: {
-              id: activeNotification.id,
-              _remove: true
-            }
-          }
+          return [
+            {
+              type: updateNotification.type,
+              payload: {
+                id: activeNotification.id,
+                _remove: true,
+              },
+            },
           ];
         }
       }
@@ -74,15 +71,15 @@ const addNotificationEpic = (action$, state$) =>
             requiredName,
             requiredVersion,
             requiredByName,
-            minVersion: minVersion.version
-          }
-        }
+            minVersion: minVersion.version,
+          },
+        },
       ];
     }),
-    catchError(error =>
+    catchError((error) =>
       of({
         type: '@@LUNA/ERROR/ADD_NOTIFICATION',
-        error: error.toString()
+        error: error.toString(),
       })
     )
   );

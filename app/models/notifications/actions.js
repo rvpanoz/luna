@@ -8,4 +8,10 @@ const setActive = ActionCreator('SET_ACTIVE');
 const clearNotifications = ActionCreator('CLEAR_NOTIFICATIONS');
 const updateNotifications = ActionCreator('UPDATE_NOTIFICATIONS');
 
-export { updateNotifications, updateNotification, addNotification, clearNotifications, setActive };
+export {
+  updateNotifications,
+  updateNotification,
+  addNotification,
+  clearNotifications,
+  setActive,
+};

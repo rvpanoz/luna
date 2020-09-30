@@ -84,5 +84,5 @@ export {
   searchPackagesListener,
   viewPackageListener,
   updatePackagesListener,
-  updateSearchFlag
+  updateSearchFlag,
 };

@@ -3,21 +3,26 @@ import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { toggleDoctorLoader } from 'models/ui/actions';
-import { runDoctor, npmDoctorListener, parseNpmDoctorData, updateNpmDoctorData } from 'models/npm/actions';
+import {
+  runDoctor,
+  npmDoctorListener,
+  parseNpmDoctorData,
+  updateNpmDoctorData,
+} from 'models/npm/actions';
 import { onNpmDoctor$ } from '../listeners';
 
-const updateLoader = payload => ({
+const updateLoader = (payload) => ({
   type: toggleDoctorLoader.type,
-  payload
+  payload,
 });
 
-const showDoctorLoaderEpic = action$ =>
+const showDoctorLoaderEpic = (action$) =>
   action$.pipe(
     ofType(runDoctor.type),
     map(() =>
       updateLoader({
         loading: true,
-        message: 'Please wait. npm doctor is running..'
+        message: 'Please wait. npm doctor is running..',
       })
     )
   );
@@ -30,23 +35,23 @@ const npmRunDoctorEpic = (action$, state$) =>
     ofType(runDoctor.type),
     tap(({ payload }) => {
       const {
-        common: { mode, directory }
+        common: { mode, directory },
       } = state$.value;
 
       ipcRenderer.send('npm-doctor', {
         ...payload,
         mode,
-        directory
+        directory,
       });
     }),
     ignoreElements()
   );
 
 /**
-* Parse npm audit output
-* @param {*} action$
-*/
-const npmDoctorParseEpic = action$ =>
+ * Parse npm audit output
+ * @param {*} action$
+ */
+const npmDoctorParseEpic = (action$) =>
   action$.pipe(
     ofType(parseNpmDoctorData.type),
     map(({ payload: data }) => {
@@ -64,21 +69,23 @@ const npmDoctorParseEpic = action$ =>
               error: {
                 code,
                 detail,
-                message: summary
+                message: summary,
               },
-              content: null
-            }
+              content: null,
+            },
           });
         }
       } catch (error) {
-        content = data.split('\n').map(line => line.trim().replace(/  +/g, ' '));
+        content = data
+          .split('\n')
+          .map((line) => line.trim().replace(/  +/g, ' '));
       }
 
       return updateNpmDoctorData({
         data: {
           error: null,
-          content
-        }
+          content,
+        },
       });
     })
   );
@@ -89,4 +96,9 @@ const npmRunDoctorListenerEpic = pipe(
   switchMap(() => onNpmDoctor$)
 );
 
-export { npmRunDoctorEpic, npmRunDoctorListenerEpic, npmDoctorParseEpic, showDoctorLoaderEpic };
+export {
+  npmRunDoctorEpic,
+  npmRunDoctorListenerEpic,
+  npmDoctorParseEpic,
+  showDoctorLoaderEpic,
+};

@@ -21,10 +21,10 @@ const checkNpm = () => {
       cache: env.cache,
       prefix: env.prefix,
       shrinkWrap: env.shrinkWrap,
-      logLevel: env.lockLevel
+      logLevel: env.lockLevel,
     };
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error);
   }
 };
 

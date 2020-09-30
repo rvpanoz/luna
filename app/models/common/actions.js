@@ -15,5 +15,5 @@ export {
   clearInstallOptions,
   setManager,
   setMode,
-  updateStatus
+  updateStatus,
 };

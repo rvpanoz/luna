@@ -13,38 +13,38 @@ import {
   setPackagesSuccess,
   setPackagesSearchSuccess,
   setOutdatedSuccess,
-  mapSearchPackages
+  mapSearchPackages,
 } from '../actions';
 
-const setSearchPackages = payload => ({
+const setSearchPackages = (payload) => ({
   type: setPackagesSearchSuccess.type,
-  payload
+  payload,
 });
 
-const setPackages = payload => ({
+const setPackages = (payload) => ({
   type: setPackagesSuccess.type,
-  payload
+  payload,
 });
 
-const setOutdatedPackages = payload => ({
+const setOutdatedPackages = (payload) => ({
   type: setOutdatedSuccess.type,
-  payload
+  payload,
 });
 
-const mapSearchPackagesEpic = action$ =>
+const mapSearchPackagesEpic = (action$) =>
   action$.pipe(
     ofType(mapSearchPackages.type),
     map(({ payload: { data, fromSearch } }) => {
       const enhancedDependencies = data.map(({ name, version }) => ({
         name,
         latest: version,
-        version: null
+        version: null,
       }));
 
       return setSearchPackages({
         dependencies: enhancedDependencies,
         fromSearch,
-        lastUpdatedAt: format(new Date(), 'dd/MM/yyyy h:mm')
+        lastUpdatedAt: format(new Date(), 'dd/MM/yyyy h:mm'),
       });
     })
   );
@@ -60,35 +60,37 @@ const mapPackagesEpic = (action$, state$) =>
           fromSort,
           projectName,
           projectDescription,
-          projectVersion
-        }
+          projectVersion,
+        },
       }) => {
         const {
           common: { mode, directory },
           packages: {
             packagesOutdated,
-            project: { name, version, description }
-          }
+            project: { name, version, description },
+          },
         } = state$.value;
 
         const enhancedDependencies = data.reduce(
           (alldependencies, dependency) => {
             const [pkgName, details] = fromSearch
               ? [
-                dependency.name,
-                {
-                  version: dependency.version,
-                  description: dependency.description
-                }
-              ]
+                  dependency.name,
+                  {
+                    version: dependency.version,
+                    description: dependency.description,
+                  },
+                ]
               : dependency;
 
             // eslint-disable-next-line
             const { extraneous, invalid, missing, peerMissing, problems } =
               details || {};
 
-            const isOutdated = packagesOutdated.some(o => o.name === pkgName);
-            const outdatedPkg = packagesOutdated.find(o => o.name === pkgName);
+            const isOutdated = packagesOutdated.some((o) => o.name === pkgName);
+            const outdatedPkg = packagesOutdated.find(
+              (o) => o.name === pkgName
+            );
 
             // side effect
             const packageJSON = readPackageJson(directory);
@@ -96,9 +98,9 @@ const mapPackagesEpic = (action$, state$) =>
             const group =
               mode === 'local'
                 ? Object.keys(PACKAGE_GROUPS).find(
-                  groupName =>
-                    packageJSON[groupName] && packageJSON[groupName][pkgName]
-                )
+                    (groupName) =>
+                      packageJSON[groupName] && packageJSON[groupName][pkgName]
+                  )
                 : null;
 
             return [
@@ -116,8 +118,8 @@ const mapPackagesEpic = (action$, state$) =>
                 __peerMissing: peerMissing,
                 __fromSearch: fromSearch,
                 __group: group,
-                ...details
-              }
+                ...details,
+              },
             ];
           },
           []
@@ -125,7 +127,7 @@ const mapPackagesEpic = (action$, state$) =>
 
         return setPackages({
           dependencies: enhancedDependencies.filter(
-            dependency =>
+            (dependency) =>
               !dependency.__invalid &&
               !dependency.__hasError &&
               !dependency.__peerMissing &&
@@ -136,7 +138,7 @@ const mapPackagesEpic = (action$, state$) =>
           projectVersion: fromSearch ? version : projectVersion,
           fromSearch,
           fromSort,
-          lastUpdatedAt: format(new Date(), 'dd/MM/yyyy h:mm')
+          lastUpdatedAt: format(new Date(), 'dd/MM/yyyy h:mm'),
         });
       }
     )
@@ -153,12 +155,12 @@ const mapOutdatedPackagesEpic = pipe(
         {
           name,
           isOutdated: true,
-          ...details
-        }
+          ...details,
+        },
       ];
     }, [])
   ),
-  map(alldependencies => setOutdatedPackages({ outdated: alldependencies }))
+  map((alldependencies) => setOutdatedPackages({ outdated: alldependencies }))
 );
 
 export { mapPackagesEpic, mapOutdatedPackagesEpic, mapSearchPackagesEpic };

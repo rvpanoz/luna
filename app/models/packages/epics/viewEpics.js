@@ -7,16 +7,16 @@ import { togglePackageLoader } from 'models/ui/actions';
 import { viewPackageStart, viewPackageListener } from '../actions';
 import { onViewPackage$ } from '../listeners';
 
-const updatePackageLoader = payload => ({
+const updatePackageLoader = (payload) => ({
   type: togglePackageLoader.type,
-  payload
+  payload,
 });
 
 const viewPackageEpic = pipe(
   ofType(viewPackageStart.type),
   map(() =>
     updatePackageLoader({
-      loading: true
+      loading: true,
     })
   )
 );

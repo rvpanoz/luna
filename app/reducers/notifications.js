@@ -3,10 +3,7 @@
  */
 
 import { assoc, prepend, identity, merge, prop, propOr } from 'ramda';
-import {
-  clearNotifications,
-  setActive
-} from 'models/notifications/actions';
+import { clearNotifications, setActive } from 'models/notifications/actions';
 
 import initialState from './initialState';
 import { updateNotification } from '../models/notifications/actions';
@@ -20,22 +17,25 @@ const createReducer = (notificationsState, handlers) => (
 const handlers = {
   [setActive.type]: (state, { payload: { active } }) =>
     assoc('active', active, state),
-  [updateNotification.type]: (
-    state,
-    data
-  ) => {
-    const { payload: {
-      id,
-      reason,
-      requiredName,
-      requiredVersion,
-      minVersion,
-      requiredByName,
-      _remove
-    } } = data || {};
+  [updateNotification.type]: (state, data) => {
+    const {
+      payload: {
+        id,
+        reason,
+        requiredName,
+        requiredVersion,
+        minVersion,
+        requiredByName,
+        _remove,
+      },
+    } = data || {};
 
     if (_remove) {
-      return assoc('notifications', state.notifications.filter(notification => notification.id !== id), state)
+      return assoc(
+        'notifications',
+        state.notifications.filter((notification) => notification.id !== id),
+        state
+      );
     }
 
     return merge(state, {
@@ -46,17 +46,17 @@ const handlers = {
           requiredName,
           requiredVersion,
           minVersion,
-          requiredByName
+          requiredByName,
         },
         state.notifications
-      )
-    })
+      ),
+    });
   },
-  [clearNotifications.type]: state =>
+  [clearNotifications.type]: (state) =>
     merge(state, {
       ...state,
-      notifications: []
-    })
+      notifications: [],
+    }),
 };
 
 export default createReducer(notifications, handlers);

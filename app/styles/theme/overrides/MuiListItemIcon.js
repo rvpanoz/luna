@@ -3,7 +3,7 @@ export default {
     color: 'inherit',
     marginRight: 0,
     '& svg': {
-      fontSize: 20
-    }
-  }
+      fontSize: 20,
+    },
+  },
 };

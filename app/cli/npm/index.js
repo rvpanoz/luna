@@ -23,5 +23,5 @@ export default {
   prune,
   dedupe,
   verify,
-  clean
+  clean,
 };

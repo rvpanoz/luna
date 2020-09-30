@@ -1,10 +1,10 @@
 const props = {
   MuiTab: {
-    disableRipple: true
+    disableRipple: true,
   },
   MuiButtonBase: {
-    disableRipple: true
-  }
+    disableRipple: true,
+  },
 };
 
 export default props;

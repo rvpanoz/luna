@@ -39,7 +39,7 @@ IconButton.propTypes = {
   separated: PropTypes.bool,
   linkInverted: PropTypes.bool,
   danger: PropTypes.bool,
-  success: PropTypes.bool
+  success: PropTypes.bool,
 };
 
 export default IconButton;

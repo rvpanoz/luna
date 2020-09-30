@@ -1,6 +1,6 @@
 import { whiteColor } from 'styles/variables';
 
-const style = theme => ({
+const style = (theme) => ({
   card: {
     border: 0,
     marginBottom: theme.spacing(3),
@@ -13,22 +13,22 @@ const style = theme => ({
     flexDirection: 'column',
     minWidth: 0,
     wordWrap: 'break-word',
-    fontSize: 12
+    fontSize: 12,
   },
   cardPlain: {
     background: 'transparent',
-    boxShadow: 'none'
+    boxShadow: 'none',
   },
   cardProfile: {
     marginTop: theme.spacing(3),
-    textAlign: 'center'
+    textAlign: 'center',
   },
   cardChart: {
     '& p': {
       marginTop: 0,
-      paddingTop: 0
-    }
-  }
+      paddingTop: 0,
+    },
+  },
 });
 
 export default style;

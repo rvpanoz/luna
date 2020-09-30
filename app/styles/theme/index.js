@@ -11,7 +11,7 @@ const theme = createMuiTheme({
   props,
   zIndex: {
     appBar: 1200,
-    drawer: 1100
+    drawer: 1100,
   },
   spacing: 8,
   breakpoints: {
@@ -20,17 +20,17 @@ const theme = createMuiTheme({
       sm: 600,
       md: 960,
       lg: 1280,
-      xl: 1440
-    }
+      xl: 1440,
+    },
   },
   mixins: {
     toolbar: {
-      minHeight: 56
-    }
+      minHeight: 56,
+    },
   },
   shape: {
-    borderRadius: 8
-  }
+    borderRadius: 8,
+  },
 });
 
 export default theme;

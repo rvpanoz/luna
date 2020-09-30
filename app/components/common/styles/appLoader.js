@@ -10,22 +10,22 @@ const styles = () => ({
     left: '50%',
     top: '50%',
     padding: 0,
-    margin: 0
+    margin: 0,
   },
   relative: {
     left: '0%',
-    position: 'relative'
+    position: 'relative',
   },
   progress: {
     padding: 0,
-    margin: 0
+    margin: 0,
   },
   message: {
     ...defaultFont,
     fontSize: 14,
     padding: 0,
-    margin: 0
-  }
+    margin: 0,
+  },
 });
 
 export default styles;

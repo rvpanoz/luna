@@ -25,17 +25,17 @@ const ControlTypes = ({ classes, packageName, onSelect }) => {
       <FormControl className={classes.formControl}>
         <Select
           value={groupName}
-          onChange={e => {
+          onChange={(e) => {
             const { value } = e.target;
 
             setGroup(value);
             onSelect({
               name: packageName,
-              options: [value]
+              options: [value],
             });
           }}
         >
-          {groups.map(group =>
+          {groups.map((group) =>
             group !== 'save-exact' ? (
               <MenuItem key={`group${group}`} value={group}>
                 {group}
@@ -51,7 +51,7 @@ const ControlTypes = ({ classes, packageName, onSelect }) => {
             onChange={() =>
               onSelect({
                 name: packageName,
-                options: ['save-exact']
+                options: ['save-exact'],
               })
             }
             value="save-exact"
@@ -66,7 +66,7 @@ const ControlTypes = ({ classes, packageName, onSelect }) => {
 ControlTypes.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   packageName: PropTypes.string.isRequired,
-  onSelect: PropTypes.func.isRequired
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ControlTypes);

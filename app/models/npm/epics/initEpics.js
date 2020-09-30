@@ -8,13 +8,13 @@ import { runInit, runLock, npmInitListener } from 'models/npm/actions';
 
 import { onNpmInit$ } from '../listeners';
 
-const showInitLoaderEpic = action$ =>
+const showInitLoaderEpic = (action$) =>
   action$.pipe(
     ofType(runInit.type),
     map(() =>
       toggleLoader({
         loading: true,
-        message: 'Please wait. Initialization project...'
+        message: 'Please wait. Initialization project...',
       })
     )
   );
@@ -24,7 +24,7 @@ const npmRunInitEpic = pipe(
   tap(({ payload }) =>
     ipcRenderer.send('npm-init', {
       ...payload,
-      mode: 'local'
+      mode: 'local',
     })
   ),
   ignoreElements()
@@ -35,7 +35,7 @@ const npmRunLockEpic = pipe(
   tap(({ payload }) =>
     ipcRenderer.send('npm-init-lock', {
       ...payload,
-      mode: 'local'
+      mode: 'local',
     })
   ),
   ignoreElements()
@@ -46,4 +46,9 @@ const npmRunInitListenerEpic = pipe(
   switchMap(() => onNpmInit$)
 );
 
-export { npmRunInitEpic, npmRunLockEpic, npmRunInitListenerEpic, showInitLoaderEpic };
+export {
+  npmRunInitEpic,
+  npmRunLockEpic,
+  npmRunInitListenerEpic,
+  showInitLoaderEpic,
+};

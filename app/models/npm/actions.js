@@ -78,5 +78,5 @@ export {
   updateNpmAuditFixData,
   updateNpmDoctorData,
   updateNpmAuditData,
-  updateNpmCacheData
+  updateNpmCacheData,
 };

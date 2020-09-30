@@ -41,5 +41,5 @@ export {
   toggleLoader,
   togglePackageLoader,
   toggleAuditLoader,
-  toggleDoctorLoader
+  toggleDoctorLoader,
 };

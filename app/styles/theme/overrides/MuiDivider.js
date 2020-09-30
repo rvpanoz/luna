@@ -2,6 +2,6 @@ import palette from '../palette';
 
 export default {
   root: {
-    backgroundColor: palette.common.neutral
-  }
+    backgroundColor: palette.common.neutral,
+  },
 };

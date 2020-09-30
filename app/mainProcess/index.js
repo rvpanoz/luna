@@ -23,5 +23,5 @@ export {
   onNpmAudit,
   onNpmDoctor,
   onNpmInit,
-  onNpmInitLock
+  onNpmInitLock,
 };

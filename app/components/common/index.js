@@ -9,9 +9,16 @@ import SnackbarContent from './SnackbarContent';
 import Transition from './Transition';
 import Widget from './Widget';
 import HelperText from './HelperText';
-import SearchBox from './SearchBox'
+import SearchBox from './SearchBox';
 
-import { Card, CardHeader, CardIcon, CardBody, CardFooter, CardAvatar } from './card';
+import {
+  Card,
+  CardHeader,
+  CardIcon,
+  CardBody,
+  CardFooter,
+  CardAvatar,
+} from './card';
 
 export {
   AppError,
@@ -31,5 +38,5 @@ export {
   SnackbarContent,
   Widget,
   HelperText,
-  SearchBox
+  SearchBox,
 };

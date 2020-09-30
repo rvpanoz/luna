@@ -15,46 +15,47 @@ import {
 import { iMessage } from 'commons/utils';
 import { onNpmInstall$ } from '../listeners';
 
-const updateLoader = payload => ({
+const updateLoader = (payload) => ({
   type: toggleLoader.type,
-  payload
+  payload,
 });
 
-const showInstallLoaderEpic = action$ =>
+const showInstallLoaderEpic = (action$) =>
   action$.pipe(
-    ofType(installPackage.type, installPackageJson.type, installMultiplePackages.type),
+    ofType(
+      installPackage.type,
+      installPackageJson.type,
+      installMultiplePackages.type
+    ),
     concatMap(() => [
       setActivePage({
         page: 'packages',
-        paused: true
+        paused: true,
       }),
       updateLoader({
         loading: true,
-        message: iMessage('info', 'installingPackages')
-      })
+        message: iMessage('info', 'installingPackages'),
+      }),
     ])
   );
 
 /**
-* Send ipc event to main process to handle npm-install for a single package
-* supports global and local mode
-*/
+ * Send ipc event to main process to handle npm-install for a single package
+ * supports global and local mode
+ */
 const installPackageJsonEpic = (action$, state$) =>
   action$.pipe(
     ofType(installPackageJson.type),
     tap(({ payload }) => {
       const {
-        common: {
-          mode,
-          directory,
-        }
+        common: { mode, directory },
       } = state$.value;
 
       const parameters = {
         ...payload,
         mode,
         directory,
-        packageJson: true
+        packageJson: true,
       };
 
       ipcRenderer.send('npm-install', parameters);
@@ -75,12 +76,12 @@ const installPackageEpic = (action$, state$) =>
         common: {
           mode,
           directory,
-          operations: { packagesInstallOptions }
-        }
+          operations: { packagesInstallOptions },
+        },
       } = state$.value;
 
       const options = packagesInstallOptions.find(
-        option => option.name === name
+        (option) => option.name === name
       );
 
       const parameters = {
@@ -88,7 +89,7 @@ const installPackageEpic = (action$, state$) =>
         name,
         pkgOptions: options ? options.options : pkgOptions || ['save-prod'],
         mode,
-        directory
+        directory,
       };
 
       ipcRenderer.send('npm-install', parameters);
@@ -104,7 +105,6 @@ const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(installMultiplePackages.type),
     tap(({ payload }) => {
-
       // use selectedFromNotifications for installation from notifications
       const { pkgOptions, selectedFromNotifications } = payload;
 
@@ -112,36 +112,35 @@ const installMultiplePackagesEpic = (action$, state$) =>
         common: {
           mode,
           directory,
-          operations: { packagesInstallOptions }
+          operations: { packagesInstallOptions },
         },
-        ui: { selected }
+        ui: { selected },
       } = state$.value;
 
       const selectedPackages = selectedFromNotifications || selected;
       const options = selectedPackages.map((selectedPackage, idx) => {
         const pkg = packagesInstallOptions.find(
-          option => option.name === selectedPackage
+          (option) => option.name === selectedPackage
         );
 
         return pkg && pkg.options
           ? pkg.options
           : pkgOptions
-            ? pkgOptions[idx]
-            : ['save-prod'];
+          ? pkgOptions[idx]
+          : ['save-prod'];
       });
 
       const parameters = {
         ...payload,
         pkgOptions: options,
         mode,
-        directory
+        directory,
       };
 
       ipcRenderer.send('npm-install', parameters);
     }),
     ignoreElements()
   );
-
 
 const installPackageListenerEpic = pipe(
   ofType(installPackageListener.type),
