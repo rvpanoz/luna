@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { remote } from 'electron';
 import { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { directoryParameters } from 'commons/parameters';
 import { iMessage } from 'commons/utils';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -14,23 +13,29 @@ const Init = ({ classes, enableInit }) => {
   const [initOptions, setInitOptions] = useState({ directory: null });
   const { directory } = initOptions;
 
-  const startInitFlow = useCallback(
-    () =>
-      remote.dialog.showOpenDialog(
-        remote.getCurrentWindow(),
-        directoryParameters,
-        (filePath) => {
-          if (filePath) {
-            setInitOptions({
-              ...initOptions,
-              directory: filePath[0],
-            });
-            enableInit(filePath[0]);
-          }
-        }
-      ),
-    [initOptions, enableInit]
-  );
+  const startInitFlow = useCallback(() => {
+    const dialoOptions = {
+      title: 'Choose directory',
+      buttonLabel: 'Open',
+      properties: ['openDirectory'],
+    };
+
+    const dialogHandler = (filePath) => {
+      if (filePath) {
+        setInitOptions({
+          ...initOptions,
+          directory: filePath[0],
+        });
+        enableInit(filePath[0]);
+      }
+    };
+
+    remote.dialog.showOpenDialog(
+      remote.getCurrentWindow(),
+      dialoOptions,
+      dialogHandler
+    );
+  }, [initOptions, enableInit]);
 
   return (
     <Paper elevation={0}>
