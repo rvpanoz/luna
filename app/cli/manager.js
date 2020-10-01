@@ -1,7 +1,3 @@
-/* eslint-disable prefer-promise-reject-errors */
-/* eslint-disable global-require */
-/* eslint-disable compat/compat */
-
 import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
