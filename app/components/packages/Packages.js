@@ -1,9 +1,8 @@
-import React from 'react';
-import { useEffect, useState, useRef, useCallback } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
-import { withStyles } from '@material-ui/core/styles';
 import cn from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
@@ -180,12 +179,13 @@ const Packages = ({ classes }) => {
   const activePackages = fromSearch ? packagesFromSearch : packagesData;
   const [filteredPackages] = useFilters(activePackages, filters);
 
-  const data = filteredByNamePackages.length
+  const dataPackages = filteredByNamePackages.length
     ? filteredByNamePackages
     : filteredPackages;
 
   const dataSlices =
-    data && data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    dataPackages &&
+    dataPackages.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const listDataPackages =
     sortDir === 'asc'
@@ -254,9 +254,9 @@ const Packages = ({ classes }) => {
                     })}
                   >
                     <TableHeader
-                      packages={dataSlices.map((d) => d.name)}
+                      packages={dataPackages.map((pkg) => pkg.name)}
                       numSelected={selected.length}
-                      rowCount={listDataPackages && listDataPackages.length}
+                      rowCount={dataPackages && dataPackages.length}
                       sortBy={sortBy}
                       sortDir={sortDir}
                     />
@@ -279,9 +279,11 @@ const Packages = ({ classes }) => {
                           }) => {
                             const isPackageSelected =
                               selected.indexOf(name) > -1;
-                            const installOptions = Array.isArray(
+                            const isArrayOptions = Array.isArray(
                               packagesInstallOptions
-                            )
+                            );
+
+                            const installOptions = isArrayOptions
                               ? packagesInstallOptions.find(
                                   (installOption) => installOption.name === name
                                 )
@@ -321,7 +323,7 @@ const Packages = ({ classes }) => {
                         )}
                     </TableBody>
                     <Pagination
-                      rowCount={data && data.length}
+                      rowCount={dataPackages && dataPackages.length}
                       page={page}
                       rowsPerPage={rowsPerPage}
                       handleChangePage={(e, pageNo) => {
