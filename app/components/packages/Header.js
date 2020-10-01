@@ -6,7 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-import { addSelected } from 'models/ui/actions';
+import { addSelected, clearSelected } from 'models/ui/actions';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
@@ -30,7 +30,11 @@ const TableHeader = ({ numSelected, rowCount, packages, sortBy, sortDir }) => {
             })
           )
         );
+
+        return;
       }
+
+      dispatch(clearSelected());
     },
     [dispatch, packages]
   );
