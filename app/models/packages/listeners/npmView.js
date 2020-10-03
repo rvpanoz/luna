@@ -1,6 +1,3 @@
-/* eslint-disable */
-/* eslint-disable no-underscore-dangle */
-
 import { ipcRenderer } from 'electron';
 import { togglePackageLoader } from 'models/ui/actions';
 import { Observable } from 'rxjs';
@@ -13,7 +10,7 @@ const onViewPackage$ = new Observable((observer) => {
 
   ipcRenderer.on('npm-view-completed', (event, data, errors) => {
     try {
-      const newActive = data && JSON.parse(data);
+      const newActive = data ? JSON.parse(data) : null;
       const getCleanProps = (val, key) => /^[^_]/.test(key);
       const properties = pickBy(getCleanProps, newActive);
 

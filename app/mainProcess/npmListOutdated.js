@@ -47,7 +47,7 @@ const onNpmListOutdated = (event, options, store) => {
           path.join(path.dirname(directory), 'yarn.lock')
         );
       } catch (error) {
-        throw new Error(error);
+        log.error(error);
       }
 
       if (yarnLock) {
@@ -77,7 +77,6 @@ const onNpmListOutdated = (event, options, store) => {
 
     runCommand(params, callback);
   } catch (error) {
-    log.error(error.message);
     event.sender.send('npm-list-outdated-error', error);
   }
 };

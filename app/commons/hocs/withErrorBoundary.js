@@ -1,12 +1,7 @@
-/* eslint-disable object-shorthand */
-/* eslint-disable react/state-in-constructor */
-
 import React from 'react';
-import { Component, createFactory } from 'react';
+import { Component } from 'react';
 
 const withErrorBoundary = (BaseComponent) => {
-  const factory = createFactory(BaseComponent);
-
   return class ErrorBoundary extends Component {
     constructor(props) {
       super(props);
@@ -37,9 +32,7 @@ const withErrorBoundary = (BaseComponent) => {
         );
       }
 
-      return factory({
-        ...props,
-      });
+      return <BaseComponent {...props} />;
     }
   };
 };
