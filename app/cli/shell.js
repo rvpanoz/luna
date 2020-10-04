@@ -1,4 +1,6 @@
 import log from 'electron-log';
+import fs from 'fs';
+import path from 'path';
 import { concat } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import manager from './manager';
@@ -18,7 +20,7 @@ const runCommand = (options, callback) => {
       const runner = manager[command];
       const result$ = runner(rest, idx);
 
-      return result$.pipe(catchError((error) => log.error(error)));
+      return result$.pipe(catchError(log.error));
     });
 
   // subscribe to observables in order as previous completes

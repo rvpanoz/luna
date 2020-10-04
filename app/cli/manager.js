@@ -1,4 +1,4 @@
-import cp from 'child_process';
+import cp, { exec } from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
 import { Observable } from 'rxjs';
@@ -52,12 +52,10 @@ const execute = ({
     });
 
     try {
-      // on windows use npm.cmd
       const command = spawn(
         /^win/.test(process.platform) ? `${manager}.cmd` : manager,
         commandArgs,
         {
-          shell: true,
           env: process.env,
           cwd: isLocal
             ? operation === 'init'
@@ -107,10 +105,10 @@ const execute = ({
         observer.next({
           status: 'close',
           errors,
-          data: result.join(''),
+          initDirectory,
           cmd: commandArgs,
           packageJson: Boolean(packageJson),
-          initDirectory,
+          data: result.join(' '),
         });
 
         observer.complete();

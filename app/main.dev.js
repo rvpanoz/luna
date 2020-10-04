@@ -1,13 +1,11 @@
-/* eslint-disable global-require */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable compat/compat */
-
 /**
  * Electron's main process
  */
 
 import ElectronStore from 'electron-store';
 import path from 'path';
+import fs from 'fs';
+import fixPath from 'fix-path';
 import chalk from 'chalk';
 import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import log from 'electron-log';
@@ -29,27 +27,28 @@ import {
   onNpmInitLock,
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
+import { __ } from 'ramda';
 
-// https://github.com/electron/electron/issues/18397
-app.allowRendererProcessReuse = false;
+// fix the $PATH on macOS
+fixPath();
+
+app.allowRendererProcessReuse = true;
+
+global.APP_PATHS = {
+  appData: app.getPath('appData'),
+  userData: app.getPath('userData'),
+};
+
+const debug = /--debug/.test(process.argv[2]);
 
 const {
   defaultSettings: { startMinimized },
 } = mk || {};
 
-/* eslint-disable-next-line */
-const debug = /--debug/.test(process.argv[2]);
-
-/* eslint-disable-next-line */
-const APP_PATHS = {
-  appData: app.getPath('appData'),
-  userData: app.getPath('userData'),
-};
-
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 1024,
+  MIN_WIDTH = 960,
   MIN_HEIGHT = 768,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS = 1,
@@ -57,10 +56,8 @@ const {
   START_MINIMIZED = startMinimized,
 } = process.env;
 
-// store initialization
 const Store = new ElectronStore();
 
-// clear opened packages
 Store.set('history', []);
 
 let mainWindow = null;
@@ -117,25 +114,23 @@ const createWindow = async () => {
     show: false,
     webPreferences: {
       nodeIntegration: true,
-      preload:
-        NODE_ENV === 'production'
-          ? path.join(__dirname, 'dist/renderer.prod.js')
-          : undefined,
     },
     resizable: true,
-    icon: path.join(__dirname, 'resources/icon.ico'),
+    icon: path.join(__dirname, '..', 'resources/icon.png'),
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', () => {
-    NODE_ENV === 'development' &&
+    if (NODE_ENV === 'development') {
       log.log(chalk.white.bold('[EVENT]: ready-to-show event fired'));
+    }
   });
 
   mainWindow.webContents.on('did-finish-load', async (event) => {
-    NODE_ENV === 'development' &&
+    if (NODE_ENV === 'development') {
       log.log(chalk.white.bold('[EVENT]: did-finish-load event fired'));
+    }
 
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');
@@ -152,21 +147,15 @@ const createWindow = async () => {
       mainWindow.openDevTools();
     }
 
-    // npm and node info
     const npmEnv = await CheckNpm();
     const npmEnvError = npmEnv && npmEnv.error;
-
     event.sender.send('npm-env-close', npmEnvError, npmEnv);
 
-    // user settings
     const userSettings = Store.get('user_settings') || {};
     event.sender.send('settings-loaded-close', userSettings);
 
-    // directories history
     const history = Store.get('history') || [];
     event.sender.send('history-close', history);
-
-    // signal finish
     event.sender.send('finish-loaded');
   });
 
@@ -322,32 +311,29 @@ app.on('window-all-closed', () => {
   }
 });
 
-/* eslint-disable-next-line */
 app.once('browser-window-created', (event, webContents) => {
-  NODE_ENV === 'development' &&
+  if (NODE_ENV === 'development') {
     log.log(chalk.white.bold('[EVENT]: browser-window-created event fired'));
+  }
 });
 
-/* eslint-disable-next-line */
 app.once('web-contents-created', (event, webContents) => {
-  NODE_ENV === 'development' &&
+  if (NODE_ENV === 'development') {
     log.log(chalk.white.bold('[EVENT]: web-contents-created event fired'));
+  }
 });
 
-if (process.env.E2E_BUILD === 'true') {
-  // eslint-disable-next-line promise/catch-or-return
-  app.whenReady().then(createWindow);
-} else {
-  app.on('ready', createWindow);
-}
+app.whenReady().then(createWindow).catch(log.error);
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) createWindow();
+  if (mainWindow === null) {
+    createWindow();
+  }
 });
 
 process.on('uncaughtException', (error) => {
-  log.error('[ERROR]', error);
+  log.error(error);
   mainWindow.webContents.send('uncaught-exception', error);
 });

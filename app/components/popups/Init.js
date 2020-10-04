@@ -26,6 +26,7 @@ const Init = ({ classes, enableInit }) => {
           ...initOptions,
           directory: filePath[0],
         });
+
         enableInit(filePath[0]);
       }
     };

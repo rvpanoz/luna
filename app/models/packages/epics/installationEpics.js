@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';

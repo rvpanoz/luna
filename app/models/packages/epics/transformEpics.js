@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 import format from 'date-fns/format';
 import { map } from 'rxjs/operators';
 import { pipe } from 'rxjs';
