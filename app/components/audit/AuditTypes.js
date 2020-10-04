@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import React from 'react';
 import {
   objectOf,
@@ -19,13 +17,12 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 import Chip from '@material-ui/core/Chip';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { iMessage, switchcase } from 'commons/utils';
 import { AUDIT_TYPES } from 'constants/AppConstants';
 import { Widget, Dot } from 'components/common';
 import styles from './styles/listTypes';
 
-const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
+const AuditTypes = ({ classes, theme, data, vulnerabilities }) => {
   const groupByTitle = groupBy((dataItem) => {
     const { title } = dataItem;
 
@@ -117,43 +114,12 @@ const ListTypes = ({ classes, theme, data, vulnerabilities }) => {
             </ListItem>
           ))}
         </List>
-        <Hidden mdDown>
-          <div
-            style={{
-              width: '100%',
-              height: 140,
-              display: 'flex',
-              justifyContent: 'space-around',
-            }}
-          >
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie
-                  cy="85%"
-                  startAngle={180}
-                  endAngle={0}
-                  data={typesData}
-                  dataKey="value"
-                  outerRadius={80}
-                  label
-                >
-                  {typesData.map((entry, index) => (
-                    <Cell
-                      key={entry.name}
-                      fill={theme.palette[entry.color].main}
-                    />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-        </Hidden>
       </div>
     </Widget>
   );
 };
 
-ListTypes.propTypes = {
+AuditTypes.propTypes = {
   classes: objectOf(string).isRequired,
   theme: objectOf(oneOfType([string, object, array, func])).isRequired,
   data: objectOf(oneOfType([string, array, object])).isRequired,
@@ -162,4 +128,4 @@ ListTypes.propTypes = {
 
 export default withStyles(styles, {
   withTheme: true,
-})(ListTypes);
+})(AuditTypes);
