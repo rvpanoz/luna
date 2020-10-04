@@ -115,7 +115,13 @@ export const InstallAction = ({ handler }) => {
     message: iMessage('confirmation', 'installSelected'),
     buttons: ['Cancel', 'Install'],
   };
-  const dialogHandler = () => handler('install');
+  const dialogHandler = ({ response }) => {
+    if (response === 0) {
+      return;
+    }
+
+    handler('install');
+  };
   const onClickHandler = () => showDialog(dialogHandler, dialogOptions);
 
   return (

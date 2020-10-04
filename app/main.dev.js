@@ -27,6 +27,7 @@ import {
   onNpmInitLock,
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
+import { __ } from 'ramda';
 
 // fix the $PATH on macOS
 fixPath();
@@ -115,6 +116,7 @@ const createWindow = async () => {
       nodeIntegration: true,
     },
     resizable: true,
+    icon: path.join(__dirname, '..', 'resources/icon.png'),
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);

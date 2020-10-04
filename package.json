@@ -54,10 +54,12 @@
     "productName": "luna",
     "appId": "org.dev.lunav3",
     "files": [
+      "node_modules/",
       "app/dist/",
       "app/app.html",
       "app/main.prod.js",
-      "app/main.prod.js.map"
+      "app/main.prod.js.map",
+      "package.json"
     ],
     "dmg": {
       "contents": [
@@ -92,6 +94,9 @@
       "buildResources": "resources",
       "output": "release"
     },
+    "extraResources": [
+      "./resources/**"
+    ],
     "publish": {
       "provider": "github",
       "owner": "rvpanoz",

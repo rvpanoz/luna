@@ -43,25 +43,7 @@ const App = () => {
 
   useEffect(() => {
     ipcRenderer.once('finish-loaded', () => dispatch(initActions()));
-    ipcRenderer.once('npm-env-close', (event, error, env) => {
-      dispatch(
-        setSnackbar({
-          open: true,
-          message: env.prefix,
-        })
-      );
 
-      dispatch({ type: setEnv.type, payload: env });
-    });
-    ipcRenderer.on('npm-command-flow', (event, message) => {
-      dispatch(
-        setSnackbar({
-          open: true,
-          type: 'primary',
-          message,
-        })
-      );
-    });
     ipcRenderer.on('yarn-lock-detected', () => {
       dispatch(
         setSnackbar({
@@ -71,6 +53,7 @@ const App = () => {
         })
       );
     });
+
     ipcRenderer.on('uncaught-exception', (event, ...args) => {
       dispatch({ type: setUIException.type, payload: { message: args[0] } });
     });
