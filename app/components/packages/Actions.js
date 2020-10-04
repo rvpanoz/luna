@@ -115,7 +115,13 @@ export const InstallAction = ({ handler }) => {
     message: iMessage('confirmation', 'installSelected'),
     buttons: ['Cancel', 'Install'],
   };
-  const dialogHandler = () => handler('install');
+  const dialogHandler = ({ response }) => {
+    if (response === 0) {
+      return;
+    }
+
+    handler('install');
+  };
   const onClickHandler = () => showDialog(dialogHandler, dialogOptions);
 
   return (
@@ -145,7 +151,13 @@ export const LatestAction = ({ handler }) => {
     buttons: ['Cancel', 'Install'],
   };
 
-  const dialogHandler = () => handler('install', true, true);
+  const dialogHandler = ({ response }) => {
+    if (response === 0) {
+      return;
+    }
+
+    handler('install', true, true);
+  };
   const onClickHandler = () => showDialog(dialogHandler, dialogOptions);
 
   return (
@@ -175,7 +187,13 @@ export const UpdateAction = ({ handler }) => {
     buttons: ['Cancel', 'Update'],
   };
 
-  const dialogHandler = () => handler('update');
+  const dialogHandler = ({ response }) => {
+    if (response === 0) {
+      return;
+    }
+
+    handler('update');
+  };
   const onClickHandler = () => showDialog(dialogHandler, dialogOptions);
 
   return (
@@ -198,7 +216,7 @@ UpdateAction.propTypes = {
 };
 
 export const UninstallAction = ({ handler, options }) => {
-  const { selected } = options;
+  const { selected } = options || [];
   const hasNpmSelected = selected && selected.indexOf('npm') > -1;
 
   const dialogOptions = {
@@ -208,7 +226,13 @@ export const UninstallAction = ({ handler, options }) => {
     buttons: ['Cancel', 'Uninstall'],
   };
 
-  const dialogHandler = () => handler('uninstall');
+  const dialogHandler = ({ response }) => {
+    if (response === 0) {
+      return;
+    }
+
+    handler('uninstall');
+  };
   const onClickHandler = () => showDialog(dialogHandler, dialogOptions);
 
   // avoid npm uninstallation :)

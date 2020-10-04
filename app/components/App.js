@@ -44,20 +44,6 @@ const App = () => {
   useEffect(() => {
     ipcRenderer.once('finish-loaded', () => dispatch(initActions()));
 
-    ipcRenderer.on('npm-env-close', (event, error, env) => {
-      dispatch({ type: setEnv.type, payload: env });
-    });
-
-    ipcRenderer.on('npm-command-flow', (event, message) => {
-      dispatch(
-        setSnackbar({
-          open: true,
-          type: 'primary',
-          message,
-        })
-      );
-    });
-
     ipcRenderer.on('yarn-lock-detected', () => {
       dispatch(
         setSnackbar({
@@ -85,7 +71,7 @@ const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
-      {!uiException ? <Layout app="Luna" /> : uiException}
+      {!uiException ? <Layout app="Luna" /> : <div>{uiException?.message}</div>}
     </MuiThemeProvider>
   );
 };

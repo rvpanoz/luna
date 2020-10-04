@@ -25,7 +25,7 @@ const updateLoader = (payload) => ({
   payload,
 });
 
-const initEpic = (action$, state$) =>
+export const initEpic = (action$, state$) =>
   action$.pipe(
     ofType(setPackagesStart.type),
     mergeMap(({ payload: { channel, options } }) => {
@@ -67,5 +67,3 @@ const initEpic = (action$, state$) =>
       clearPackages(),
     ])
   );
-
-export { initEpic };

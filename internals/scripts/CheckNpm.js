@@ -10,7 +10,7 @@ const checkNpm = () => {
     const env = JSON.parse(result.toString());
 
     if (NODE_ENV === 'development') {
-      log.log(chalk.whiteBright.bgYellow.bold(`[INFO] ${env['user-agent']}`));
+      log.log(chalk.yellowBright.bold(`[INFO] ${env['user-agent']}`));
     }
 
     return {

@@ -82,6 +82,10 @@ const AppTopBar = ({ classes, className }) => {
     };
 
     const dialogHandler = ({ filePaths }) => {
+      if (!filePaths.length) {
+        return;
+      }
+
       dispatch(
         setActivePage({
           page: 'packages',

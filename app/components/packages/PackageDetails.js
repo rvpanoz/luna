@@ -101,7 +101,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       });
     }
 
-    return dispatch(
+    dispatch(
       installPackage({
         ipcEvent: 'npm-install',
         cmd: ['install'],
@@ -112,7 +112,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
     );
   };
 
-  const handleUpdate = () =>
+  const handleUpdate = () => {
     dispatch(
       updatePackages({
         ipcEvent: 'npm-update',
@@ -121,8 +121,9 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         packages: [active.name],
       })
     );
+  };
 
-  const handleUninstall = () =>
+  const handleUninstall = () => {
     dispatch(
       uninstallPackages({
         ipcEvent: 'npm-uninstall',
@@ -131,6 +132,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         packages: [active.name],
       })
     );
+  };
 
   const handleInstallVersion = (packageVersion) => {
     if (fromSearch && mode === 'local') {
@@ -158,7 +160,11 @@ const PackageDetails = ({ classes, toggleOptions }) => {
       optionalDependencies: () => ['save-optional'],
     })('')(group);
 
-    const dialogHandler = () =>
+    const dialogHandler = ({ response }) => {
+      if (response === 0) {
+        return;
+      }
+
       dispatch(
         installPackage({
           cmd: ['install'],
@@ -168,6 +174,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
           single: true,
         })
       );
+    };
 
     return showDialog(dialogHandler, dialogOptions);
   };

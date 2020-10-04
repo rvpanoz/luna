@@ -1,7 +1,7 @@
 {
   "name": "luna",
   "productName": "luna",
-  "version": "3.3.1",
+  "version": "3.3.5",
   "description": "npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. Build on Electron",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
@@ -23,7 +23,7 @@
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{*{js,jsx,json},babelrc,eslintrc,prettierrc,stylelintrc}'",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
     "prestart": "npm run build",
-    "start": "cross-env NODE_ENV=production electron ./app/main.prod.js",
+    "start": "electron ./app/main.prod.js",
     "start-main-dev": "cross-env HOT=1 NODE_ENV=development electron -r @babel/register ./app/main.dev.js",
     "start-renderer-dev": "cross-env NODE_ENV=development webpack-dev-server --config configs/webpack.config.renderer.dev.babel.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -54,10 +54,12 @@
     "productName": "luna",
     "appId": "org.dev.lunav3",
     "files": [
+      "node_modules/",
       "app/dist/",
       "app/app.html",
       "app/main.prod.js",
-      "app/main.prod.js.map"
+      "app/main.prod.js.map",
+      "package.json"
     ],
     "dmg": {
       "contents": [
@@ -92,6 +94,9 @@
       "buildResources": "resources",
       "output": "release"
     },
+    "extraResources": [
+      "./resources/**"
+    ],
     "publish": {
       "provider": "github",
       "owner": "rvpanoz",
@@ -205,6 +210,7 @@
     "electron-log": "^4.2.4",
     "electron-store": "^6.0.0",
     "eslint": "^7.10.0",
+    "fix-path": "^3.0.0",
     "lock-verify": "^2.2.1",
     "material-design-icons": "^3.0.1",
     "prop-types": "^15.7.2",
@@ -223,8 +229,8 @@
     "uuid": "^8.3.0"
   },
   "devEngines": {
-    "node": ">=8.x",
-    "npm": ">=6.x"
+    "node": ">=7.x",
+    "npm": ">=4.x"
   },
   "husky": {
     "hooks": {

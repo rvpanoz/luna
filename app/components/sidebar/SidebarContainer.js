@@ -104,7 +104,11 @@ const AppSidebar = ({ classes, className }) => {
       buttons: ['Cancel', 'Install'],
     };
 
-    const dialogHandler = () =>
+    const dialogHandler = ({ response }) => {
+      if (response === 0) {
+        return;
+      }
+
       dispatch(
         installPackageJson({
           ipcEvent: 'install',
@@ -115,6 +119,7 @@ const AppSidebar = ({ classes, className }) => {
           directory: shrinkedDirectory,
         })
       );
+    };
 
     return showDialog(dialogHandler, dialogOptions);
   }, [mode, directory, dispatch]);
@@ -129,13 +134,18 @@ const AppSidebar = ({ classes, className }) => {
       buttons: ['Cancel', 'Run'],
     };
 
-    const dialogHandler = () =>
+    const dialogHandler = ({ response }) => {
+      if (response === 0) {
+        return;
+      }
+
       dispatch(
         runDedupe({
           ipcEvent: 'dedupe',
           cmd: ['dedupe'],
         })
       );
+    };
 
     return showDialog(dialogHandler, dialogOptions);
   }, [dispatch]);
@@ -150,7 +160,11 @@ const AppSidebar = ({ classes, className }) => {
       buttons: ['Cancel', 'Run'],
     };
 
-    const dialogHandler = () =>
+    const dialogHandler = ({ response }) => {
+      if (response === 0) {
+        return;
+      }
+
       dispatch(
         runCache({
           ipcEvent: 'cache',
@@ -160,6 +174,7 @@ const AppSidebar = ({ classes, className }) => {
           },
         })
       );
+    };
 
     return showDialog(dialogHandler, dialogOptions);
   }, [dispatch]);
