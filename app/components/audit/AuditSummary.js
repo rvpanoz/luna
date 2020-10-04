@@ -35,7 +35,7 @@ const AuditSummary = ({ classes, mode, data, onClose }) => {
             className={classes.title}
             color="textSecondary"
             gutterBottom
-            variant="h6"
+            variant="h4"
           >
             {iMessage('title', 'auditSummary')}
           </Typography>

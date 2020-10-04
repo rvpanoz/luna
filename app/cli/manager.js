@@ -367,19 +367,17 @@ const view = (options) => {
 };
 
 const runAudit = (options) => {
-  const { activeManager = 'npm', mode, directory } = options || {};
+  const { mode, directory } = options || {};
 
   try {
     const command = ['audit'];
     const commandOptions = [];
     const {
-      options: { flag },
+      options: { fix, force },
     } = options || {};
 
-    if (flag) {
-      const argv = flag === 'fix' ? flag : `fix --${flag}`;
-      commandOptions.push(argv);
-    }
+    const argv = fix ? fix : force ? `fix --${flag}` : '';
+    commandOptions.push(argv);
 
     const commandArgs = command
       .concat(commandOptions)
@@ -418,14 +416,13 @@ const runDoctor = (options) => {
 };
 
 const runInit = (options) => {
-  const { mode, directory, activeManager = 'npm' } = options;
+  const { mode, directory } = options;
 
   try {
     const init = require('./npm/tooling/init').default;
     const commandArgs = init(options);
 
     const params = {
-      activeManager,
       commandArgs,
       mode,
       directory,
@@ -438,14 +435,13 @@ const runInit = (options) => {
 };
 
 const runDedupe = (options) => {
-  const { mode, directory, activeManager = 'npm' } = options;
+  const { mode, directory } = options;
 
   try {
     const dedupe = require('./npm/tooling/dedupe').default;
     const commandArgs = dedupe(options);
 
     const params = {
-      activeManager,
       commandArgs,
       mode,
       directory,
@@ -458,7 +454,7 @@ const runDedupe = (options) => {
 };
 
 const runCache = (params) => {
-  const { mode, directory, action, activeManager = 'npm' } = params;
+  const { mode, directory, action } = params;
   let cacheAction;
 
   try {
@@ -472,7 +468,6 @@ const runCache = (params) => {
 
     const commandArgs = cacheAction(params);
     const parameters = {
-      activeManager,
       commandArgs,
       mode,
       directory,

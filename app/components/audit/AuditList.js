@@ -132,27 +132,6 @@ const AuditList = ({ classes, data, handleAudit, vulnerabilities }) => {
               >
                 {iMessage('action', 'runAudit')}
               </Button>
-              <Hidden mdDown>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  onClick={() => handleFix('fix')}
-                  disabled={zeroKeys}
-                  className={classes.marLeft}
-                >
-                  {iMessage('action', 'runAuditFix')}
-                </Button>
-                <Button
-                  size="small"
-                  variant="outlined"
-                  onClick={() => handleFix('force')}
-                  disabled={zeroKeys}
-                  className={classes.marLeft}
-                >
-                  {iMessage('action', 'runAuditFixForce')}
-                </Button>
-              </Hidden>
-              {/* <ActionsMenu handler={handleFix} /> */}
             </div>
           </Toolbar>
           <div className={classes.tableWrapper}>

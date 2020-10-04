@@ -135,7 +135,11 @@ const Audit = ({ classes }) => {
       <AppLoader loading={loading} message={message}>
         <div className={classes.root}>
           {status === 'result' && (
-            <AuditSummary data={result} onClose={() => setStatus('init')} />
+            <AuditSummary
+              data={result}
+              onClose={() => setStatus('init')}
+              mode={mode}
+            />
           )}
           {status === 'error' && (
             <AuditStatus text={error} mode={mode} hideAction={true} />
@@ -156,23 +160,6 @@ const Audit = ({ classes }) => {
           )}
         </div>
       </AppLoader>
-      <Dialog open={false} onClose={() => {}} aria-labelledby="audit" fullWidth>
-        <DialogContent>
-          {error && (
-            <HelperText
-              text={
-                mode === 'global'
-                  ? iMessage('warning', 'noGlobalAudit')
-                  : iMessage('info', 'npmAuditInfo')
-              }
-              actionText={iMessage('action', 'runAudit')}
-              actionDisabled={Boolean(mode === 'global')}
-              color="primary"
-              actionHandler={auditRun}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
     </>
   );
 };
