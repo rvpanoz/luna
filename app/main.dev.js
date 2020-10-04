@@ -47,7 +47,7 @@ const {
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
-  MIN_WIDTH = 1024,
+  MIN_WIDTH = 960,
   MIN_HEIGHT = 768,
   INSTALL_EXTENSIONS = 1,
   UPGRADE_EXTENSIONS = 1,
@@ -120,13 +120,15 @@ const createWindow = async () => {
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   mainWindow.once('ready-to-show', () => {
-    NODE_ENV === 'development' &&
+    if (NODE_ENV === 'development') {
       log.log(chalk.white.bold('[EVENT]: ready-to-show event fired'));
+    }
   });
 
   mainWindow.webContents.on('did-finish-load', async (event) => {
-    NODE_ENV === 'development' &&
+    if (NODE_ENV === 'development') {
       log.log(chalk.white.bold('[EVENT]: did-finish-load event fired'));
+    }
 
     if (!mainWindow) {
       throw new Error('mainWindow is not defined');
@@ -308,13 +310,15 @@ app.on('window-all-closed', () => {
 });
 
 app.once('browser-window-created', (event, webContents) => {
-  NODE_ENV === 'development' &&
+  if (NODE_ENV === 'development') {
     log.log(chalk.white.bold('[EVENT]: browser-window-created event fired'));
+  }
 });
 
 app.once('web-contents-created', (event, webContents) => {
-  NODE_ENV === 'development' &&
+  if (NODE_ENV === 'development') {
     log.log(chalk.white.bold('[EVENT]: web-contents-created event fired'));
+  }
 });
 
 app.whenReady().then(createWindow).catch(log.error);
