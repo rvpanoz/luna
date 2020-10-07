@@ -1,8 +1,6 @@
 import { fade } from '@material-ui/core/styles/colorManipulator';
 
 const styles = (theme) => {
-  console.log(theme);
-
   return {
     search: {
       position: 'relative',
