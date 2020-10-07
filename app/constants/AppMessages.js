@@ -121,6 +121,7 @@ export const TITLE_MESSAGES = {
   installationOptions: 'Please select installation options',
   settings: 'Settings',
   switchGlobals: 'Switch to global packages',
+  auditSummary: 'Audit results',
   showFilters: 'Show filters',
   clearFilters: 'Clear filters',
   searchPackage: 'Search for package',

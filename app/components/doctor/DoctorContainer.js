@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useMappedState } from 'redux-react-hook';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { useDispatch, useMappedState } from 'redux-react-hook';
-import Grid from '@material-ui/core/Grid';
 
 import { AppLoader, HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import { runDoctor } from 'models/npm/actions';
-
 import Doctor from './Doctor';
 import styles from './styles/doctor';
 
@@ -81,15 +79,7 @@ const DoctorContainer = ({ classes }) => {
       <div className={classes.root}>
         {type === 'error' && <HelperText {...options} />}
         {type === 'init' && <HelperText {...initOptions} />}
-        {type === 'doctor' && (
-          <Grid className={classes.container} container>
-            <Grid item sm={12} md={12} lg={12} xl={12}>
-              <div className={classes.wrapper}>
-                <Doctor data={content} />
-              </div>
-            </Grid>
-          </Grid>
-        )}
+        {type === 'doctor' && <Doctor data={content} />}
       </div>
     </AppLoader>
   );

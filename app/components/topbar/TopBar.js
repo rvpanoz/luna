@@ -10,9 +10,9 @@ import ArchiveIcon from '@material-ui/icons/ArchiveOutlined';
 import SecurityIcon from '@material-ui/icons/SecurityOutlined';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospitalOutlined';
 
-import { SearchBox } from 'components/common';
+import SearchBox from './SearchBox';
 import { iMessage } from 'commons/utils';
-import styles from './styles';
+import styles from './styles/topbar';
 
 const Topbar = ({
   classes,
@@ -65,21 +65,6 @@ const Topbar = ({
                 onClick={onInitFlow}
               >
                 <AddIcon className={classes.icon} />
-              </IconButton>
-            </div>
-          </Tooltip>
-          <Tooltip title={iMessage('info', 'npmAuditInfo')}>
-            <div>
-              <IconButton
-                classes={{
-                  root: classes.button,
-                }}
-                color="inherit"
-                disableRipple
-                onClick={() => setActivePage('audit')}
-                disabled={loading || mode === 'global'}
-              >
-                <SecurityIcon className={classes.icon} />
               </IconButton>
             </div>
           </Tooltip>

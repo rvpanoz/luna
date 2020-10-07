@@ -55,6 +55,15 @@ const npmAuditParseEpic = (action$) =>
   action$.pipe(
     ofType(parseNpmAuditData.type),
     map(({ payload: data }) => {
+      if (!data) {
+        return updateNpmAuditData({
+          data: {
+            error: null,
+            content: null,
+          },
+        });
+      }
+
       try {
         const dataToJson = JSON.parse(data);
         const { error } = dataToJson || {};

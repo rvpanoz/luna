@@ -49,7 +49,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
               }
             />
             <ListItemSecondaryAction>
-              <Tooltip title={iMessage('info', 'loadDirectory')}>
+              <Tooltip title={iMessage('title', 'loadDirectory')}>
                 <IconButton
                   aria-label="load-directory"
                   onClick={() => onClick(dir.directory)}

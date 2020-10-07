@@ -1,4 +1,4 @@
-import cp, { exec } from 'child_process';
+import cp from 'child_process';
 import path from 'path';
 import chalk from 'chalk';
 import { Observable } from 'rxjs';
@@ -6,17 +6,18 @@ import { Observable } from 'rxjs';
 import mk from '../mk';
 
 const { spawn } = cp;
+const cwd = process.cwd();
 const {
   defaultSettings: { defaultManager },
 } = mk || {};
 
 const defaultsArgs = {
   list: ['--json', '--depth=0'],
+  operation: ['--no-audit', '--ignore-scripts', '--verbose'],
 };
 
-const cwd = process.cwd();
-
 /**
+ * Uses spawn to spawn a new child process to run npm commands
  *
  * @param {*} manager
  * @param {*} commandArgs
@@ -35,10 +36,15 @@ const execute = ({
   const { NODE_ENV } = process.env;
   const isLocal = Boolean(mode === 'local' && directory);
   const isDevelopment = Boolean(NODE_ENV === 'development');
+  const isInitDirectory = Boolean(isLocal && operation === 'init');
 
   const result$ = new Observable((observer) => {
     const result = [];
     let errors = '';
+
+    const initDirectory = isInitDirectory
+      ? path.join(directory, 'package.json')
+      : null;
 
     if (isDevelopment) {
       console.log(
@@ -97,18 +103,13 @@ const execute = ({
           message: `finished: ${manager} ${commandArgs.join(' ')}`,
         });
 
-        const initDirectory =
-          isLocal && operation === 'init'
-            ? path.join(directory, 'package.json')
-            : null;
-
         observer.next({
           status: 'close',
           errors,
           initDirectory,
           cmd: commandArgs,
           packageJson: Boolean(packageJson),
-          data: result.join(' '),
+          data: result.join(''),
         });
 
         observer.complete();
@@ -121,10 +122,6 @@ const execute = ({
   return result$;
 };
 
-/**
- * npm list
- * @param {*} options
- */
 const list = (options) => {
   const command = ['list'];
   const { mode, directory } = options || {};
@@ -135,7 +132,6 @@ const list = (options) => {
       : command.concat(defaultsArgs.list);
 
   const params = {
-    activeManager: 'npm',
     commandArgs,
     mode,
     directory,
@@ -144,10 +140,6 @@ const list = (options) => {
   return execute(params);
 };
 
-/**
- * npm outdated
- * @param {*} options
- */
 const outdated = (options) => {
   const command = ['outdated'];
   const { mode, directory } = options || {};
@@ -158,7 +150,6 @@ const outdated = (options) => {
       : command.concat(defaultsArgs.list);
 
   const params = {
-    activeManager: 'npm',
     commandArgs,
     mode,
     directory,
@@ -167,24 +158,18 @@ const outdated = (options) => {
   return execute(params);
 };
 
-/**
- * npm search
- * @param {*} options
- */
 const search = (options) => {
   const command = ['search'];
   const { directory, mode, pkgName } = options || {};
-  const defaults = ['--depth=0', '--json'];
 
   if (!pkgName) {
     throw new Error('npm[search] package name parameter must be given');
   }
 
   try {
-    const commandArgs = command.concat(defaults, pkgName);
+    const commandArgs = command.concat(defaultsArgs.list, pkgName);
 
     const params = {
-      activeManager: 'npm',
       commandArgs,
       mode,
       directory,
@@ -196,20 +181,69 @@ const search = (options) => {
   }
 };
 
-/**
- * npm install
- * @param {*} opts
- * @param {*} idx
- */
 const install = (options, idx) => {
   const { mode, directory, packageJson, activeManager = 'npm' } = options || {};
 
   try {
-    const runInstall = require('./npm/install').default;
-    const commandArgs = runInstall(options, idx);
+    const command = ['install'];
+    const {
+      mode,
+      version,
+      name,
+      pkgOptions,
+      multiple,
+      packages,
+      single,
+      packageJson,
+      packageLock,
+    } = options || {};
+
+    // create package-lock.json file
+    if (packageLock) {
+      return command.concat(['--package-lock-only']);
+    }
+
+    // attach -g option if mode is global
+    const args =
+      mode === 'global'
+        ? [].concat(defaultsArgs.operation, '-g')
+        : defaultsArgs.operation;
+
+    let packagesToInstall;
+
+    // handle installation of a single package
+    if (single) {
+      packagesToInstall = version ? [`${name}@${version}`] : [name];
+    }
+
+    // handle installation of multiple packages
+    if (multiple && packages) {
+      if (idx > -1 && packages.length > 1) {
+        packagesToInstall = packages[idx];
+      } else {
+        packagesToInstall = packages;
+      }
+    }
+
+    // get installation options
+    const hasOptions = Boolean(Array.isArray(pkgOptions) && pkgOptions.length);
+    const commandOptions =
+      mode === 'local' && hasOptions
+        ? multiple
+          ? pkgOptions[idx].map((option) => `--${option}`)
+          : pkgOptions.map((option) => `--${option}`)
+        : [];
+
+    // build running command
+    const commandArgs = packageJson
+      ? [].concat(command).concat(args)
+      : []
+          .concat(command)
+          .concat(packagesToInstall)
+          .concat(commandOptions)
+          .concat(args);
 
     const params = {
-      activeManager,
       commandArgs,
       mode,
       directory,
@@ -222,19 +256,39 @@ const install = (options, idx) => {
   }
 };
 
-/**
- * npm update
- * @param {*} options
- */
 const update = (options) => {
   const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
-    const runUpdate = require('./npm/update').default;
-    const commandArgs = runUpdate(options);
+    const command = ['update'];
+    const { name, mode, pkgOptions, multiple, packages } = options || {};
+
+    if (!name && !multiple) {
+      throw new Error('npm[update] package name parameter must be given');
+    }
+
+    function getNames() {
+      return multiple && packages && Array.isArray(packages)
+        ? packages
+        : name.trim();
+    }
+
+    const args =
+      mode === 'global'
+        ? [].concat(defaultsArgs.operation, '-g')
+        : defaultsArgs.operation;
+    const commandOpts =
+      pkgOptions && pkgOptions.length
+        ? pkgOptions.map((option) => `--${option}`)
+        : [];
+
+    const commandArgs = []
+      .concat(command)
+      .concat(getNames())
+      .concat(args)
+      .concat(commandOpts);
 
     const params = {
-      activeManager,
       commandArgs,
       mode,
       directory,
@@ -246,19 +300,28 @@ const update = (options) => {
   }
 };
 
-/**
- * npm uninstall
- * @param {*} options
- */
 const uninstall = (options) => {
   const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
-    const runUninstall = require('./npm/uninstall').default;
-    const commandArgs = runUninstall(options);
+    const command = ['uninstall'];
+    const { name, mode, multiple, packages } = options;
+
+    function getNames() {
+      if (multiple && Array.isArray(packages)) {
+        return packages.filter((pkgName) => pkgName !== 'npm'); // do not uninstall npm :)
+      }
+
+      return name;
+    }
+
+    const args =
+      mode === 'global'
+        ? [].concat(defaultsArgs.operation, '-g')
+        : defaultsArgs.operation;
+    const commandArgs = [].concat(command).concat(args).concat(getNames());
 
     const params = {
-      activeManager,
       commandArgs,
       mode,
       directory,
@@ -270,16 +333,25 @@ const uninstall = (options) => {
   }
 };
 
-/**
- * npm view
- * @param {*} options
- */
 const view = (options) => {
   const { mode, directory, activeManager = 'npm' } = options || {};
 
   try {
-    const runView = require('./npm/view').default;
-    const commandArgs = runView(options);
+    const command = ['view'];
+    const { mode, name, version } = options || {};
+
+    if (!name) {
+      throw new Error('npm[view] package name parameter must be given');
+    }
+
+    const args =
+      mode === 'global'
+        ? [].concat(defaultsArgs.list, '-g')
+        : defaultsArgs.list;
+    const commandArgs = []
+      .concat(command)
+      .concat(version ? [].concat([`${name}@${version}`]) : [name])
+      .concat(args);
 
     const params = {
       activeManager,
@@ -294,19 +366,24 @@ const view = (options) => {
   }
 };
 
-/**
- * npm audit
- * @param {*} options
- */
 const runAudit = (options) => {
-  const { activeManager = 'npm', mode, directory } = options || {};
+  const { mode, directory } = options || {};
 
   try {
-    const audit = require('./npm/audit').default;
-    const commandArgs = audit(options);
+    const command = ['audit'];
+    const commandOptions = [];
+    const {
+      options: { fix, force },
+    } = options || {};
+
+    const argv = fix ? fix : force ? `fix --${flag}` : '';
+    commandOptions.push(argv);
+
+    const commandArgs = command
+      .concat(commandOptions)
+      .concat(defaultsArgs.list);
 
     const params = {
-      activeManager,
       commandArgs,
       mode,
       directory,
@@ -318,10 +395,6 @@ const runAudit = (options) => {
   }
 };
 
-/**
- * npm doctor
- * @param {*} options
- */
 const runDoctor = (options) => {
   const { mode, directory, activeManager = 'npm' } = options || {};
 
@@ -342,19 +415,14 @@ const runDoctor = (options) => {
   }
 };
 
-/**
- * npm init
- * @param {*} options
- */
 const runInit = (options) => {
-  const { mode, directory, activeManager = 'npm' } = options;
+  const { mode, directory } = options;
 
   try {
     const init = require('./npm/tooling/init').default;
     const commandArgs = init(options);
 
     const params = {
-      activeManager,
       commandArgs,
       mode,
       directory,
@@ -366,19 +434,14 @@ const runInit = (options) => {
   }
 };
 
-/**
- * npm dedupe
- * @param {*} options
- */
 const runDedupe = (options) => {
-  const { mode, directory, activeManager = 'npm' } = options;
+  const { mode, directory } = options;
 
   try {
     const dedupe = require('./npm/tooling/dedupe').default;
     const commandArgs = dedupe(options);
 
     const params = {
-      activeManager,
       commandArgs,
       mode,
       directory,
@@ -390,12 +453,8 @@ const runDedupe = (options) => {
   }
 };
 
-/**
- * npm cache
- * @param {*} options
- */
 const runCache = (params) => {
-  const { mode, directory, action, activeManager = 'npm' } = params;
+  const { mode, directory, action } = params;
   let cacheAction;
 
   try {
@@ -409,7 +468,6 @@ const runCache = (params) => {
 
     const commandArgs = cacheAction(params);
     const parameters = {
-      activeManager,
       commandArgs,
       mode,
       directory,
