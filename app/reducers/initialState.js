@@ -5,8 +5,8 @@
 const initialState = {
   manager: 'npm',
   mode: 'global',
-  directory: null,
   onlineStatus: 'offline',
+  directory: null,
   operations: {
     action: null,
     packagesInstallOptions: [],
