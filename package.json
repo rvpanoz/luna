@@ -218,7 +218,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.1",
-    "recharts": "^1.8.5",
     "redux": "^4.0.5",
     "redux-observable": "^1.2.0",
     "redux-react-hook": "^4.0.1",

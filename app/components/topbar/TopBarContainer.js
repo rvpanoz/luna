@@ -19,7 +19,7 @@ import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runInit } from 'models/npm/actions';
 import { iMessage } from 'commons/utils';
-import styles from './styles';
+import styles from './styles/topbar';
 
 const mapState = ({
   common: { mode, directory, activePage },

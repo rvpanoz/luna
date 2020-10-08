@@ -9,7 +9,6 @@ import SnackbarContent from './SnackbarContent';
 import Transition from './Transition';
 import Widget from './Widget';
 import HelperText from './HelperText';
-import SearchBox from './SearchBox';
 
 import {
   Card,
@@ -38,5 +37,4 @@ export {
   SnackbarContent,
   Widget,
   HelperText,
-  SearchBox,
 };

@@ -55,7 +55,7 @@ ListItemDetail.propTypes = {
   value: oneOfType([string, number]),
 };
 
-const AdvisoryDetails = ({ classes, data, onClose }) => {
+const AuditDetails = ({ classes, data, onClose }) => {
   const {
     access,
     name,
@@ -91,7 +91,6 @@ const AdvisoryDetails = ({ classes, data, onClose }) => {
               <Typography component="p">
                 {iMessage('label', 'recommendation')}
               </Typography>
-              <br />
               <Typography component="p" color="textSecondary">
                 {recommendation}
               </Typography>
@@ -99,7 +98,6 @@ const AdvisoryDetails = ({ classes, data, onClose }) => {
               <Typography component="p">
                 {iMessage('label', 'vulnerableVersions')}
               </Typography>
-              <br />
               <Typography component="p" color="textSecondary">
                 {vulnerable_versions}
               </Typography>
@@ -161,10 +159,10 @@ const AdvisoryDetails = ({ classes, data, onClose }) => {
   );
 };
 
-AdvisoryDetails.propTypes = {
+AuditDetails.propTypes = {
   classes: objectOf(string).isRequired,
   data: objectOf(oneOfType([object, array, bool, string, number])),
   onClose: func.isRequired,
 };
 
-export default withStyles(styles)(AdvisoryDetails);
+export default withStyles(styles)(AuditDetails);
