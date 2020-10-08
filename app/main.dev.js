@@ -45,6 +45,10 @@ const {
   defaultSettings: { startMinimized },
 } = mk || {};
 
+const RESOURCES_PATH = app.isPackaged
+  ? path.join(process.resourcesPath, 'resources')
+  : path.join(__dirname, '../resources');
+
 const {
   DEBUG_PROD = 0,
   DEBUG_DEV = 1,
@@ -57,10 +61,10 @@ const {
 } = process.env;
 
 const Store = new ElectronStore();
-
-Store.set('history', []);
-
 let mainWindow = null;
+
+// initialize Store
+Store.set('history', []);
 
 if (NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -93,6 +97,10 @@ const createWindow = async () => {
     await installExtensions();
   }
 
+  const getAssetPath = (...paths) => {
+    return path.join(RESOURCES_PATH, ...paths);
+  };
+
   let x = 0;
   let y = 0;
   const screenSize = screen.getPrimaryDisplay().size;
@@ -116,7 +124,7 @@ const createWindow = async () => {
       nodeIntegration: true,
     },
     resizable: true,
-    icon: path.join(__dirname, '..', 'resources/icon.png'),
+    icon: getAssetPath('icon.icns'),
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
