@@ -1,7 +1,7 @@
 ## Luna - npm management through a modern UI. Built with Electron :hibiscus:
 
 <p align="center">
-  <img alt="Luna" src="./media/luna-small.jpeg">
+  <img alt="Luna" src="./media/images/luna-small.jpeg">
 </p>
 
 <p align="center">npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux.</p>
