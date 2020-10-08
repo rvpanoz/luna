@@ -1,7 +1,7 @@
 ## Luna - npm management through a modern UI. Built with Electron :hibiscus:
 
 <p align="center">
-  <img alt="Luna" src="./resources/luna-small.jpeg">
+  <img alt="Luna" src="./media/luna-small.jpeg">
 </p>
 
 <p align="center">npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux.</p>
@@ -21,10 +21,6 @@
 ## Motivation
 
 Luna was created with main purpose to provide a flexible and modern UI for npm dependencies management. Furthermore I wanted to create a project with the latest web technologies combined in one application.
-
-## GreeceJS presentation
-
-You can view my presentation in the GreeceJS meetup at http://bit.ly/2RES3AN
 
 ## Features
 
@@ -102,9 +98,13 @@ Contributions, issues and feature requests are welcome. <br />Feel free to check
 Pull requests are always welcome. 💪 <br />
 Be sure to merge the latest from "upstream" before making a pull request. 🙏
 
+## GreeceJS presentation
+
+You can view my presentation in the GreeceJS meetup at http://bit.ly/2RES3AN
+
 ## License
 
-Copyright © 2019 [rvpanoz](https://github.com/rvpanoz). This project is [GPL-3.0](https://github.com/rvpanoz/luna/blob/master/LICENSE) licensed.
+Copyright © 2020 [rvpanoz](https://github.com/rvpanoz). This project is [GPL-3.0](https://github.com/rvpanoz/luna/blob/master/LICENSE) licensed.
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Frvpanoz%2Fluna.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Frvpanoz%2Fluna?ref=badge_large)
 
