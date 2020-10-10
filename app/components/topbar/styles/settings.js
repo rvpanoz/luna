@@ -13,6 +13,10 @@ const styles = (theme) => ({
     color: grayColor,
     paddingBottom: theme.spacing(2),
   },
+  formControl: {
+    padding: theme.spacing(2),
+    minWidth: 120,
+  },
 });
 
 export default styles;

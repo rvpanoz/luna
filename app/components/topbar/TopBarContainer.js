@@ -54,6 +54,7 @@ const AppTopBar = ({ classes, className }) => {
     activePage,
   } = useMappedState(mapState);
   const dispatch = useDispatch();
+
   const [state, setState] = useState({
     view: '',
     dialogTitle: '',
@@ -146,7 +147,14 @@ const AppTopBar = ({ classes, className }) => {
             dialogTitle: iMessage('title', 'createPackageJson'),
           });
         }}
-        onShowSettings={() => dispatch(setActiveView('settings'))}
+        onShowSettings={() =>
+          setState({
+            ...state,
+            dialogOpen: true,
+            dialogTitle: iMessage('title', 'settings'),
+            view: 'settings',
+          })
+        }
       />
       <Dialog
         open={state.dialogOpen}
@@ -158,7 +166,7 @@ const AppTopBar = ({ classes, className }) => {
         <DialogTitle disableTypography classes={{ root: classes.dialogTitle }}>
           {state.dialogTitle}
         </DialogTitle>
-        <Divider light />
+        <Divider />
         <DialogContent>
           {state.view === 'init' && (
             <Init
