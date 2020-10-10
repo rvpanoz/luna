@@ -5,7 +5,6 @@ import { ipcRenderer } from 'electron';
 
 import { toggleLoader } from 'models/ui/actions';
 import { runInit, runLock, npmInitListener } from 'models/npm/actions';
-
 import { onNpmInit$ } from '../listeners';
 
 const showInitLoaderEpic = (action$) =>
@@ -14,7 +13,7 @@ const showInitLoaderEpic = (action$) =>
     map(() =>
       toggleLoader({
         loading: true,
-        message: 'Please wait. Initialization project...',
+        message: 'Please wait. Initialize project...',
       })
     )
   );

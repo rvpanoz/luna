@@ -10,9 +10,39 @@ import ArchiveIcon from '@material-ui/icons/ArchiveOutlined';
 import SecurityIcon from '@material-ui/icons/SecurityOutlined';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospitalOutlined';
 
-import SearchBox from './SearchBox';
 import { iMessage } from 'commons/utils';
+import SearchBox from './SearchBox';
 import styles from './styles/topbar';
+
+const ToolbarAction = (props) => {
+  const { title, onClick, icon, classes, disabled = false } = props;
+
+  return (
+    <Tooltip title={title}>
+      <div>
+        <IconButton
+          classes={{
+            root: classes.button,
+          }}
+          disableRipple
+          disabled={disabled}
+          onClick={onClick}
+          color="inherit"
+        >
+          {icon}
+        </IconButton>
+      </div>
+    </Tooltip>
+  );
+};
+
+ToolbarAction.props = {
+  classes: objectOf(string).isRequired,
+  icon: arrayOf(object),
+  title: string.isRequired,
+  disabled: bool,
+  onClick: func,
+};
 
 const Topbar = ({
   classes,
@@ -20,14 +50,14 @@ const Topbar = ({
   mode,
   loading,
   onLoadDirectory,
-  onInitFlow,
+  onCreate,
   onShowSettings,
   setActivePage,
 }) => (
   <AppBar
     className={classes.topbar}
-    position="static"
     elevation={0}
+    position="static"
     color="inherit"
   >
     <Toolbar disableGutters>
@@ -38,51 +68,30 @@ const Topbar = ({
             root: classes.root,
           }}
         >
-          <Tooltip title={iMessage('title', 'loadDirectory')}>
-            <div>
-              <IconButton
-                classes={{
-                  root: classes.button,
-                }}
-                disableRipple
-                disabled={loading}
-                onClick={onLoadDirectory}
-                color="inherit"
-              >
-                <ArchiveIcon className={classes.icon} />
-              </IconButton>
-            </div>
-          </Tooltip>
-          <Tooltip title={iMessage('title', 'createPackageJson')}>
-            <div>
-              <IconButton
-                classes={{
-                  root: classes.button,
-                }}
-                disableRipple
-                color="inherit"
-                disabled={loading}
-                onClick={onInitFlow}
-              >
-                <AddIcon className={classes.icon} />
-              </IconButton>
-            </div>
-          </Tooltip>
-          <Tooltip title={iMessage('info', 'npmDoctorInfo')}>
-            <div>
-              <IconButton
-                color="inherit"
-                classes={{
-                  root: classes.button,
-                }}
-                disableRipple
-                disabled={loading}
-                onClick={() => setActivePage('doctor')}
-              >
-                <LocalHospitalIcon className={classes.icon} />
-              </IconButton>
-            </div>
-          </Tooltip>
+          <ToolbarAction
+            classes={classes}
+            title={iMessage('title', 'loadDirectory')}
+            onClick={onLoadDirectory}
+            icon={<ArchiveIcon className={classes.icon} />}
+            disabled={loading}
+          />
+
+          <ToolbarAction
+            classes={classes}
+            title={iMessage('title', 'createPackageJson')}
+            onClick={onCreate}
+            icon={<AddIcon className={classes.icon} />}
+            disabled={loading}
+          />
+
+          <ToolbarAction
+            classes={classes}
+            title={iMessage('info', 'npmDoctorInfo')}
+            onClick={() => setActivePage('doctor')}
+            icon={<LocalHospitalIcon className={classes.icon} />}
+            disabled={loading}
+          />
+
           <Tooltip title={iMessage('title', 'notifications')}>
             <div>
               <IconButton
