@@ -38,7 +38,7 @@ const Settings = ({ classes, ...restProps }) => {
                 <MenuItem value={10}>10</MenuItem>
                 <MenuItem value={25}>25</MenuItem>
                 <MenuItem value={50}>50</MenuItem>
-                <MenuItem value={0}>All</MenuItem>
+                <MenuItem value={999}>All</MenuItem>
               </Select>
             </FormControl>
           </ListItemSecondaryAction>
