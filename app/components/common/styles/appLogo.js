@@ -5,9 +5,10 @@ const styles = (theme) => ({
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
-    width: '100%',
     maxWidth: 290,
-    padding: theme.spacing(2),
+    height: 64,
+    padding: theme.spacing(1),
+    backgroundColor: lighten(theme.palette.secondary.main, 0.25),
   },
   logo_animation_wrapper: {
     position: 'relative',
@@ -56,7 +57,7 @@ const styles = (theme) => ({
     fillRule: 'evenodd',
   },
   logo_animation__line: {
-    fill: '#fff',
+    fill: lighten(theme.palette.secondary.main, 0.25),
     fillRule: 'evenodd',
     strokeLinecap: 'square',
     strokeWidth: 50,
@@ -66,17 +67,8 @@ const styles = (theme) => ({
     stroke: 'currentColor',
     strokeWidth: 40,
   },
-  primaryColor: {
-    stroke: lighten(theme.palette.primary.main, 0.2),
-  },
-  secondaryColor: {
-    stroke: lighten(theme.palette.secondary.main, 0.2),
-  },
-  warningColor: {
-    stroke: lighten(theme.palette.error.main, 0.2),
-  },
-  errorColor: {
-    stroke: lighten(theme.palette.error.main, 0.2),
+  whiteColor: {
+    stroke: lighten(theme.palette.common.white, 0.1),
   },
 });
 

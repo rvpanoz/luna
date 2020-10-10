@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import anime from 'animejs';
 import cn from 'classnames';
+
 import styles from './styles/appLogo';
 
 const AppLogo = ({ classes, className }) => {
@@ -42,7 +43,7 @@ const AppLogo = ({ classes, className }) => {
                     classes.logo_animation__logo_letter_svg,
                     classes.logo_animation__bounce,
                     classes.rot,
-                    classes.errorColor
+                    classes.whiteColor
                   )}
                   viewBox="0 0 150 250"
                   width="20"
@@ -60,7 +61,7 @@ const AppLogo = ({ classes, className }) => {
                   className={cn(
                     classes.logo_animation__bounce,
                     classes.flip,
-                    classes.primaryColor
+                    classes.whiteColor
                   )}
                   viewBox="0 0 150 250"
                   width="20"
@@ -77,7 +78,7 @@ const AppLogo = ({ classes, className }) => {
                 <svg
                   className={cn(
                     classes.logo_animation__bounce,
-                    classes.warningColor
+                    classes.whiteColor
                   )}
                   viewBox="0 0 150 250"
                   width="30"
@@ -94,7 +95,7 @@ const AppLogo = ({ classes, className }) => {
                 <svg
                   className={cn(
                     classes.logo_animation__bounce,
-                    classes.secondaryColor
+                    classes.whiteColor
                   )}
                   viewBox="0 0 150 250"
                   width="20"

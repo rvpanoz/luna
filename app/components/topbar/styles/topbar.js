@@ -1,3 +1,4 @@
+import { lighten } from '@material-ui/core';
 import { grayColor } from 'styles/variables';
 
 const styles = (theme) => ({
@@ -12,7 +13,7 @@ const styles = (theme) => ({
     textTransform: 'lowercase',
   },
   actions: {
-    paddingLeft: theme.spacing(1) / 2,
+    paddingLeft: theme.spacing(4),
   },
   flexGrow: {
     flexGrow: 1,
@@ -23,6 +24,10 @@ const styles = (theme) => ({
   topbar: {
     zIndex: 'auto',
     boxShadow: 'none',
+    backgroundColor: `${lighten(
+      theme.palette.secondary.main,
+      0.25
+    )} !important`,
   },
 });
 

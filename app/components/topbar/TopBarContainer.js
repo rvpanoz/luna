@@ -48,7 +48,6 @@ const AppTopBar = ({ classes, className }) => {
     rowsPerPage,
   } = useMappedState(mapState);
   const dispatch = useDispatch();
-
   const [state, setState] = useState({
     view: '',
     dialogTitle: '',
@@ -144,9 +143,9 @@ const AppTopBar = ({ classes, className }) => {
         onShowSettings={() =>
           setState({
             ...state,
+            view: 'settings',
             dialogOpen: true,
             dialogTitle: iMessage('title', 'settings'),
-            view: 'settings',
           })
         }
       />

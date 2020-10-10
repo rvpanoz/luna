@@ -2,13 +2,13 @@ import React from 'react';
 import { objectOf, func, bool, arrayOf, object, string } from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 import { AppBar, Toolbar, Tooltip, Badge, IconButton } from '@material-ui/core';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActiveOutlined';
-import NotificationsIcon from '@material-ui/icons/NotificationsOutlined';
-import SettingsIcon from '@material-ui/icons/SettingsOutlined';
-import AddIcon from '@material-ui/icons/AddOutlined';
-import ArchiveIcon from '@material-ui/icons/ArchiveOutlined';
-import SecurityIcon from '@material-ui/icons/SecurityOutlined';
-import LocalHospitalIcon from '@material-ui/icons/LocalHospitalOutlined';
+import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import SettingsIcon from '@material-ui/icons/Settings';
+import AddIcon from '@material-ui/icons/Add';
+import ArchiveIcon from '@material-ui/icons/Archive';
+import SecurityIcon from '@material-ui/icons/Security';
+import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 
 import { iMessage } from 'commons/utils';
 import SearchBox from './SearchBox';
@@ -54,12 +54,7 @@ const Topbar = ({
   onShowSettings,
   setActivePage,
 }) => (
-  <AppBar
-    className={classes.topbar}
-    elevation={0}
-    position="static"
-    color="inherit"
-  >
+  <AppBar className={classes.topbar} elevation={0} position="static">
     <Toolbar disableGutters>
       <div className={classes.actions}>
         <Toolbar
@@ -72,7 +67,12 @@ const Topbar = ({
             classes={classes}
             title={iMessage('title', 'loadDirectory')}
             onClick={onLoadDirectory}
-            icon={<ArchiveIcon className={classes.icon} />}
+            icon={
+              <ArchiveIcon
+                className={classes.icon}
+                shapeRendering="crispEdges"
+              />
+            }
             disabled={loading}
           />
 

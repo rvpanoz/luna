@@ -1,4 +1,5 @@
 import { drawerWidth } from 'styles/variables';
+import { lighten } from '@material-ui/core';
 
 const styles = (theme) => ({
   root: {
@@ -17,7 +18,6 @@ const styles = (theme) => ({
     flexDirection: 'column',
     flex: 1,
     paddingLeft: theme.spacing(6),
-    paddingTop: theme.spacing(1),
   },
   topBar: {
     width: '100%',
