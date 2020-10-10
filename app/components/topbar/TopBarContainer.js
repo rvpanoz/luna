@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback, useReducer, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -10,15 +9,15 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import { Init, Settings } from 'components/popups';
-
-import TopBar from './TopBar';
 
 import { showDialog } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runInit } from 'models/npm/actions';
 import { iMessage } from 'commons/utils';
+import Init from './Init';
+import Settings from './Settings';
+import TopBar from './TopBar';
 import styles from './styles/topbar';
 
 const mapState = ({
@@ -55,17 +54,20 @@ const AppTopBar = ({ classes, className }) => {
     activePage,
   } = useMappedState(mapState);
   const dispatch = useDispatch();
-
-  const [initFlow, toggleInitFlow] = useState({
-    show: false,
-    directory: null,
+  const [state, setState] = useState({
+    view: '',
+    dialogTitle: '',
+    dialogOpen: false,
+    selectedDirectory: null,
   });
 
-  const [dialog, setDialog] = useState({
-    open: false,
-    title: '',
-    active: null,
-  });
+  const setActivePageHandler = (page) =>
+    dispatch(
+      setActivePage({
+        page,
+        paused: true,
+      })
+    );
 
   const onLoadDirectory = useCallback(() => {
     const dialogOptions = {
@@ -82,50 +84,45 @@ const AppTopBar = ({ classes, className }) => {
     };
 
     const dialogHandler = ({ filePaths }) => {
-      if (!filePaths.length) {
+      if (!filePaths || !filePaths.lenght) {
         return;
       }
 
+      dispatch(setMode({ mode: 'local', directory: filePaths.join() }));
       dispatch(
         setActivePage({
           page: 'packages',
           paused: false,
         })
       );
-
-      dispatch(setMode({ mode: 'local', directory: filePaths.join() }));
     };
 
     return showDialog(dialogHandler, { mode: 'file', ...dialogOptions });
   }, [dispatch]);
 
   const closeDialog = useCallback(() => {
-    setDialog({ ...dialog, open: false, active: null, title: '' });
-    toggleInitFlow({
-      ...initFlow,
-      show: false,
+    setState({
+      ...state,
+      view: '',
+      dialogOpen: false,
     });
-  }, [dialog, initFlow]);
+  }, [state]);
 
   const onNpmInit = useCallback(() => {
+    if (!state.selectedDirectory) {
+      return;
+    }
+
     dispatch(
       runInit({
         ipcEvent: 'npm-init',
         cmd: ['init'],
-        directory: initFlow.directory || null,
+        directory: state.selectedDirectory,
       })
     );
 
     closeDialog();
-  }, [dispatch, closeDialog, initFlow]);
-
-  const setActivePageHandler = (page) =>
-    dispatch(
-      setActivePage({
-        page,
-        paused: true,
-      })
-    );
+  }, [state.selectedDirectory, dispatch, closeDialog]);
 
   return (
     <div
@@ -138,50 +135,41 @@ const AppTopBar = ({ classes, className }) => {
         directory={directory}
         notifications={notifications}
         loading={loading}
+        activePage={activePage}
         onLoadDirectory={onLoadDirectory}
         setActivePage={setActivePageHandler}
-        activePage={activePage}
-        onInitFlow={() =>
-          setDialog({
-            ...dialog,
-            open: true,
-            active: 'Init',
-            title: iMessage('title', 'createPackageJson'),
-          })
-        }
-        onShowSettings={() =>
-          setDialog({
-            ...dialog,
-            open: true,
-            active: 'Settings',
-            title: iMessage('title', 'settings'),
-          })
-        }
+        onCreate={() => {
+          setState({
+            ...state,
+            view: 'init',
+            dialogOpen: true,
+            dialogTitle: iMessage('title', 'createPackageJson'),
+          });
+        }}
+        onShowSettings={() => dispatch(setActiveView('settings'))}
       />
       <Dialog
-        open={dialog.open}
+        open={state.dialogOpen}
         fullWidth
         maxWidth="sm"
         onClose={closeDialog}
         aria-labelledby="npm-init"
       >
         <DialogTitle disableTypography classes={{ root: classes.dialogTitle }}>
-          {dialog.title}
+          {state.dialogTitle}
         </DialogTitle>
         <Divider light />
         <DialogContent>
-          {dialog.active === 'Init' && (
+          {state.view === 'init' && (
             <Init
               onClose={closeDialog}
-              enableInit={(directoryPath) =>
-                toggleInitFlow({
-                  ...initFlow,
-                  directory: directoryPath,
-                })
+              onNpmInit={onNpmInit}
+              onSelectDirectory={(selectedDirectory) =>
+                setState({ ...state, selectedDirectory })
               }
             />
           )}
-          {dialog.active === 'Settings' && (
+          {state.view === 'settings' && (
             <Settings
               onClose={closeDialog}
               metricsRegistry={metricsRegistry}
@@ -201,12 +189,12 @@ const AppTopBar = ({ classes, className }) => {
           >
             {iMessage('action', 'close')}
           </Button>
-          {dialog.active === 'Init' && (
+          {state.view === 'init' && (
             <Button
               color="primary"
               variant="outlined"
-              onClick={() => onNpmInit()}
-              disabled={!initFlow.directory}
+              onClick={onNpmInit}
+              disabled={!state.selectedDirectory}
             >
               {iMessage('action', 'create')}
             </Button>

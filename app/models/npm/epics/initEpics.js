@@ -5,7 +5,6 @@ import { ipcRenderer } from 'electron';
 
 import { toggleLoader } from 'models/ui/actions';
 import { runInit, runLock, npmInitListener } from 'models/npm/actions';
-
 import { onNpmInit$ } from '../listeners';
 
 const showInitLoaderEpic = (action$) =>
