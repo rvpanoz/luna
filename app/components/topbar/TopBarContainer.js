@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 
 import { showDialog } from 'commons/utils';
-import { setActivePage } from 'models/ui/actions';
+import { setActivePage, setPageRows } from 'models/ui/actions';
 import { setMode } from 'models/common/actions';
 import { runInit } from 'models/npm/actions';
 import { iMessage } from 'commons/utils';
@@ -24,34 +24,28 @@ const mapState = ({
   common: { mode, directory, activePage },
   notifications: { notifications },
   ui: {
+    pagination: { page, rowsPerPage },
     loaders: {
       loader: { loading },
     },
-  },
-  npm: {
-    env: { metricsRegistry, auditLevel, cache },
   },
 }) => ({
   activePage,
   notifications,
   mode,
   directory,
-  metricsRegistry,
-  auditLevel,
-  cache,
   loading,
+  rowsPerPage,
 });
 
 const AppTopBar = ({ classes, className }) => {
   const {
-    metricsRegistry,
-    auditLevel,
-    cache,
     mode,
     directory,
     notifications,
     loading,
     activePage,
+    rowsPerPage,
   } = useMappedState(mapState);
   const dispatch = useDispatch();
 
@@ -180,9 +174,10 @@ const AppTopBar = ({ classes, className }) => {
           {state.view === 'settings' && (
             <Settings
               onClose={closeDialog}
-              metricsRegistry={metricsRegistry}
-              cache={cache}
-              auditLevel={auditLevel}
+              rowsPerPage={rowsPerPage}
+              onChangeRowsPage={(rowsPerPage) =>
+                dispatch(setPageRows({ rowsPerPage }))
+              }
             />
           )}
         </DialogContent>

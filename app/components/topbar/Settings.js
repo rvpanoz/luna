@@ -19,32 +19,21 @@ import { iMessage } from 'commons/utils';
 import styles from './styles/settings';
 
 const Settings = ({ classes, ...restProps }) => {
-  const { metricsRegistry, auditLevel, cache } = restProps;
-
-  const [settings, setSettings] = useState({
-    pagination: 10,
-  });
+  const { onChangeRowsPage, rowsPerPage } = restProps;
 
   return (
     <div className={classes.root}>
       <List>
         <ListItem key="rows-per-page">
-          <ListItemText
-            primary={<Typography color="textPrmary">Rows per page</Typography>}
-          />
+          <ListItemText primary={<Typography>Rows per page</Typography>} />
           <ListItemSecondaryAction>
             <FormControl className={classes.formControl}>
               <InputLabel id="rowsPerPage-label">Rows per page</InputLabel>
               <Select
                 labelId="rowsPerPage-label"
                 id="rows-per-page"
-                value={settings.pagination}
-                onChange={(e) => {
-                  setSettings({
-                    ...settings,
-                    pagination: e.target.value,
-                  });
-                }}
+                value={rowsPerPage}
+                onChange={(e) => onChangeRowsPage(e.target.value)}
               >
                 <MenuItem value={10}>10</MenuItem>
                 <MenuItem value={25}>25</MenuItem>
@@ -61,6 +50,7 @@ const Settings = ({ classes, ...restProps }) => {
 
 Settings.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  onChangeRowsPage: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Settings);
