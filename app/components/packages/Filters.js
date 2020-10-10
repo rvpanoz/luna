@@ -16,7 +16,7 @@ import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 import { iMessage } from 'commons/utils';
-import { updateFilters } from 'models/ui/actions';
+import { updateFilters, setPage } from 'models/ui/actions';
 import styles from './styles/filters';
 
 const Filters = ({ classes, mode, close, listFilters }) => {
@@ -87,6 +87,7 @@ const Filters = ({ classes, mode, close, listFilters }) => {
 
     if (hasFilters) {
       dispatch(updateFilters({ allFilters }));
+      dispatch(setPage({ page: 0 }));
     }
 
     close();

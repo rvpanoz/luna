@@ -7,7 +7,11 @@ const AppSnackbar = ({ snackbar, onClose }) => {
   const { open, type, message, position } = snackbar;
 
   return (
-    <Snackbar anchorOrigin={position} open={open}>
+    <Snackbar
+      anchorOrigin={position}
+      open={open}
+      autoHideDuration={type === 'info' ? 3000 : null}
+    >
       <SnackbarContent variant={type} message={message} onClose={onClose} />
     </Snackbar>
   );

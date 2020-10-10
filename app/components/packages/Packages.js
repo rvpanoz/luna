@@ -195,7 +195,7 @@ const Packages = ({ classes }) => {
   const noPackages =
     Boolean(!packagesData || !packagesData.length) && !fromSearch;
 
-  if (noPackages) {
+  if (noPackages && !loading) {
     return (
       <HelperText
         text={iMessage('info', 'noPackages')}
