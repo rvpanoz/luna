@@ -9,15 +9,19 @@ const windowDims = () => ({
 
 const WindowDimensionsProvider = ({ children }) => {
   const [dimensions, setDimensions] = useState(windowDims());
+
   useEffect(() => {
     const handleResize = () => {
       setDimensions(windowDims());
     };
+
     window.addEventListener('resize', handleResize);
+
     return () => {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+
   return (
     <WindowDimensionsCtx.Provider value={dimensions}>
       {children}
