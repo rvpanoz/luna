@@ -13,7 +13,7 @@ const showInitLoaderEpic = (action$) =>
     map(() =>
       toggleLoader({
         loading: true,
-        message: 'Please wait. Initialization project...',
+        message: 'Please wait. Initialize project...',
       })
     )
   );

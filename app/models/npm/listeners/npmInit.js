@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { setRunningCommand } from 'models/npm/actions';
 import { setMode } from 'models/common/actions';
-import { setActivePage, setSnackbar } from 'models/ui/actions';
+import { setActivePage, setSnackbar, toggleLoader } from 'models/ui/actions';
 
 const updateCommand = ({
   operationStatus,
@@ -37,6 +37,13 @@ const onNpmInit$ = new Observable((observer) => {
         open: true,
         type: 'info',
         message: 'npm init completed',
+      })
+    );
+
+    observer.next(
+      toggleLoader({
+        loading: false,
+        message: '',
       })
     );
   });

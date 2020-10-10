@@ -86,7 +86,7 @@ const Topbar = ({
 
           <ToolbarAction
             classes={classes}
-            title={iMessage('title', 'npmDoctorInfo')}
+            title={iMessage('info', 'npmDoctorInfo')}
             onClick={() => setActivePage('doctor')}
             icon={<LocalHospitalIcon className={classes.icon} />}
             disabled={loading}

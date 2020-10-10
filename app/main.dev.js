@@ -115,15 +115,14 @@ const createWindow = async () => {
   }
 
   mainWindow = new BrowserWindow({
-    minWidth: MIN_WIDTH || screenSize.width,
-    minHeight: MIN_HEIGHT || screenSize.height,
+    minWidth: MIN_WIDTH,
+    minHeight: MIN_HEIGHT,
     x,
     y,
     show: false,
     webPreferences: {
       nodeIntegration: true,
     },
-    resizable: true,
     icon: getAssetPath('icon.icns'),
   });
 
