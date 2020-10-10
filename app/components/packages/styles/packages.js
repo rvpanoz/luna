@@ -45,10 +45,10 @@ const styles = (theme) => ({
     overflowY: 'scroll',
     padding: theme.spacing(1),
     [theme.breakpoints.down('md')]: {
-      maxHeight: 535,
+      height: window.innerHeight - 200,
     },
     [theme.breakpoints.up('lg')]: {
-      maxHeight: 700,
+      height: window.innerHeight - 200,
     },
   },
   table: {

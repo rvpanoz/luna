@@ -70,7 +70,7 @@ const initialState = {
     },
     pagination: {
       page: 0,
-      rowsPerPage: 10,
+      rowsPerPage: 25,
     },
     snackbar: {
       type: 'info',
