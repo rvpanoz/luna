@@ -1,6 +1,3 @@
-/* eslint-disable array-callback-return */
-/* eslint-disable no-underscore-dangle */
-
 import { useState, useEffect } from 'react';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 

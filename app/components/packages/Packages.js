@@ -195,6 +195,20 @@ const Packages = ({ classes }) => {
   const noPackages =
     Boolean(!packagesData || !packagesData.length) && !fromSearch;
 
+  if (noPackages && !loading) {
+    return (
+      <HelperText
+        text={iMessage('info', 'noPackages')}
+        actionText={
+          mode === 'local' ? iMessage('title', 'switchToGlobals') : null
+        }
+        actionHandler={
+          mode === 'local' ? () => switchModeHandler('global') : null
+        }
+      />
+    );
+  }
+
   return (
     <>
       <AppLoader loading={loading} message={message}>
@@ -206,138 +220,122 @@ const Packages = ({ classes }) => {
             xl={active ? 8 : 10}
             className={classes.transition}
           >
-            {noPackages && (
-              <HelperText
-                text={iMessage('info', 'noPackages')}
-                actionText={
-                  mode === 'local' ? iMessage('title', 'switchToGlobals') : null
-                }
-                actionHandler={
-                  mode === 'local' ? () => switchModeHandler('global') : null
-                }
-              />
-            )}
-            {!noPackages && (
-              <Paper elevation={2}>
-                <div className={classes.toolbar}>
-                  <Toolbar
-                    title={iMessage('title', 'packages')}
-                    total={
-                      fromSearch
-                        ? packagesFromSearch.length
-                        : packagesData.length
-                    }
-                    mode={mode}
-                    directory={directory}
-                    selected={selected}
-                    outdated={packagesOutdated}
-                    packagesData={packagesData}
-                    packagesInstallOptions={packagesInstallOptions}
-                    fromSearch={fromSearch}
-                    filters={filters}
-                    scrollWrapper={() =>
-                      scrollWrapper(wrapperRef && wrapperRef.current, 0)
-                    }
-                    toggleOptions={toggleOptions}
-                    switchMode={switchModeHandler}
-                    reload={reload}
-                    filteredByNamePackages={filteredByNamePackages}
-                    setFilteredByNamePackages={setFilteredByNamePackages}
+            <Paper elevation={2}>
+              <div className={classes.toolbar}>
+                <Toolbar
+                  title={iMessage('title', 'packages')}
+                  total={
+                    fromSearch ? packagesFromSearch.length : packagesData.length
+                  }
+                  mode={mode}
+                  directory={directory}
+                  selected={selected}
+                  outdated={packagesOutdated}
+                  packagesData={packagesData}
+                  packagesInstallOptions={packagesInstallOptions}
+                  fromSearch={fromSearch}
+                  filters={filters}
+                  scrollWrapper={() =>
+                    scrollWrapper(wrapperRef && wrapperRef.current, 0)
+                  }
+                  toggleOptions={toggleOptions}
+                  switchMode={switchModeHandler}
+                  reload={reload}
+                  filteredByNamePackages={filteredByNamePackages}
+                  setFilteredByNamePackages={setFilteredByNamePackages}
+                />
+              </div>
+              <Divider />
+              <div className={classes.tableWrapper} ref={wrapperRef}>
+                <Table
+                  aria-labelledby="packages-list"
+                  className={cn(classes.table, {
+                    [classes.hasFilterBlur]: loading,
+                  })}
+                >
+                  <TableHeader
+                    packages={dataPackages.map((pkg) => pkg.name)}
+                    numSelected={selected.length}
+                    rowCount={dataPackages && dataPackages.length}
+                    sortBy={sortBy}
+                    sortDir={sortDir}
                   />
-                </div>
-                <Divider />
-                <div className={classes.tableWrapper} ref={wrapperRef}>
-                  <Table
-                    aria-labelledby="packages-list"
-                    className={cn(classes.table, {
-                      [classes.hasFilterBlur]: loading,
-                    })}
-                  >
-                    <TableHeader
-                      packages={dataPackages.map((pkg) => pkg.name)}
-                      numSelected={selected.length}
-                      rowCount={dataPackages && dataPackages.length}
-                      sortBy={sortBy}
-                      sortDir={sortDir}
-                    />
-                    <TableBody>
-                      {listDataPackages &&
-                        listDataPackages.map(
-                          ({
-                            name,
-                            version,
-                            latest,
-                            isOutdated,
-                            peerDependencies,
-                            extraneous,
-                            problems,
-                            missing,
-                            peerMissing,
-                            __fromSearch,
-                            __hasError,
-                            __group,
-                          }) => {
-                            const isPackageSelected =
-                              selected.indexOf(name) > -1;
-                            const isArrayOptions = Array.isArray(
-                              packagesInstallOptions
-                            );
+                  <TableBody>
+                    {listDataPackages &&
+                      listDataPackages.map(
+                        ({
+                          name,
+                          version,
+                          latest,
+                          isOutdated,
+                          peerDependencies,
+                          extraneous,
+                          problems,
+                          missing,
+                          peerMissing,
+                          __fromSearch,
+                          __hasError,
+                          __group,
+                        }) => {
+                          const isPackageSelected = selected.indexOf(name) > -1;
+                          const isArrayOptions = Array.isArray(
+                            packagesInstallOptions
+                          );
 
-                            const installOptions = isArrayOptions
-                              ? packagesInstallOptions.find(
-                                  (installOption) => installOption.name === name
-                                )
-                              : {};
+                          const installOptions = isArrayOptions
+                            ? packagesInstallOptions.find(
+                                (installOption) => installOption.name === name
+                              )
+                            : {};
 
-                            const inOperation =
-                              operationStatus !== 'idle' &&
-                              operationCommand !== 'install' &&
-                              operationPackages.indexOf(name) > -1;
+                          const inOperation =
+                            operationStatus !== 'idle' &&
+                            operationCommand !== 'install' &&
+                            operationPackages.indexOf(name) > -1;
 
-                            return (
-                              <PackageItem
-                                key={`pkg-${name}`}
-                                isSelected={isPackageSelected}
-                                installOptions={installOptions}
-                                addSelected={() =>
-                                  dispatch(addSelected({ name }))
-                                }
-                                name={name}
-                                peerDependencies={peerDependencies}
-                                latest={latest}
-                                version={version}
-                                mode={mode}
-                                missing={missing}
-                                isOutdated={isOutdated}
-                                extraneous={extraneous}
-                                problems={problems}
-                                viewPackage={viewPackageHandler}
-                                inOperation={inOperation}
-                                peerMissing={peerMissing}
-                                fromSearch={__fromSearch}
-                                hasError={__hasError}
-                                group={__group}
-                              />
-                            );
-                          }
-                        )}
-                    </TableBody>
-                    <Pagination
-                      rowCount={dataPackages && dataPackages.length}
-                      page={page}
-                      rowsPerPage={rowsPerPage}
-                      handleChangePage={(e, pageNo) => {
-                        scrollWrapper(wrapperRef && wrapperRef.current, 0);
-                        dispatch(setPage({ page: pageNo }));
-                      }}
-                      handleChangePageRows={(e) =>
-                        dispatch(setPageRows({ rowsPerPage: e.target.value }))
-                      }
-                    />
-                  </Table>
-                </div>
-              </Paper>
-            )}
+                          return (
+                            <PackageItem
+                              key={`pkg-${name}`}
+                              isSelected={isPackageSelected}
+                              installOptions={installOptions}
+                              addSelected={() =>
+                                dispatch(addSelected({ name }))
+                              }
+                              name={name}
+                              peerDependencies={peerDependencies}
+                              latest={latest}
+                              version={version}
+                              mode={mode}
+                              missing={missing}
+                              isOutdated={isOutdated}
+                              extraneous={extraneous}
+                              problems={problems}
+                              viewPackage={viewPackageHandler}
+                              inOperation={inOperation}
+                              peerMissing={peerMissing}
+                              fromSearch={__fromSearch}
+                              hasError={__hasError}
+                              group={__group}
+                            />
+                          );
+                        }
+                      )}
+                  </TableBody>
+                  <Pagination
+                    rowCount={dataPackages && dataPackages.length}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    handleChangePage={(e, pageNo) => {
+                      scrollWrapper(wrapperRef && wrapperRef.current, 0);
+                      dispatch(setPage({ page: pageNo }));
+                    }}
+                    handleChangePageRows={(e) =>
+                      dispatch(setPageRows({ rowsPerPage: e.target.value }))
+                    }
+                  />
+                </Table>
+              </div>
+            </Paper>
           </Grid>
           <Grid
             item
