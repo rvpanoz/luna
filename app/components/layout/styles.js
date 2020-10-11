@@ -17,7 +17,7 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
-    paddingLeft: theme.spacing(6),
+    paddingLeft: theme.spacing(8) + 1,
   },
   topBar: {
     width: '100%',

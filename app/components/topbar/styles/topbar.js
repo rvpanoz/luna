@@ -13,7 +13,7 @@ const styles = (theme) => ({
     textTransform: 'lowercase',
   },
   actions: {
-    paddingLeft: theme.spacing(4),
+    width: '100%',
   },
   flexGrow: {
     flexGrow: 1,

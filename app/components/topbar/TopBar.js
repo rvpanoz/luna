@@ -8,7 +8,6 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AddIcon from '@material-ui/icons/Add';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import SecurityIcon from '@material-ui/icons/Security';
-import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 
 import { iMessage } from 'commons/utils';
 import SearchBox from './SearchBox';
@@ -84,14 +83,6 @@ const Topbar = ({
             disabled={loading}
           />
 
-          <ToolbarAction
-            classes={classes}
-            title={iMessage('info', 'npmDoctorInfo')}
-            onClick={() => setActivePage('doctor')}
-            icon={<LocalHospitalIcon className={classes.icon} />}
-            disabled={loading}
-          />
-
           <Tooltip title={iMessage('title', 'notifications')}>
             <div>
               <IconButton
@@ -121,13 +112,15 @@ const Topbar = ({
       </div>
       <div className={classes.flexGrow} />
       <SearchBox />
-      <IconButton
-        className={classes.button}
-        color="inherit"
-        onClick={onShowSettings}
-      >
-        <SettingsIcon />
-      </IconButton>
+      <Tooltip title={iMessage('title', 'settings')}>
+        <IconButton
+          className={classes.button}
+          color="inherit"
+          onClick={onShowSettings}
+        >
+          <SettingsIcon />
+        </IconButton>
+      </Tooltip>
     </Toolbar>
   </AppBar>
 );

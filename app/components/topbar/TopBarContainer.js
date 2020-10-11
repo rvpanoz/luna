@@ -78,7 +78,7 @@ const AppTopBar = ({ classes, className }) => {
     };
 
     const dialogHandler = ({ filePaths }) => {
-      if (!filePaths || !filePaths.lenght) {
+      if (!filePaths || !filePaths.length) {
         return;
       }
 
