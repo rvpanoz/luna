@@ -2,7 +2,7 @@ import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont, grayColor } from 'styles/variables';
 
 const styles = (theme) => ({
-  containerColumn: {
+  container: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

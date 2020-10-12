@@ -41,7 +41,7 @@ const styles = (theme) => {
       transition: theme.transitions.create('width'),
       width: 175,
       '&:focus': {
-        width: 220,
+        width: 320,
       },
     },
   };
