@@ -15,7 +15,7 @@ const HelperText = ({
   actionHandler,
   actionDisabled,
 }) => (
-  <div className={classes.containerColumn}>
+  <div className={classes.container}>
     <Typography
       color="textSecondary"
       variant="subtitle1"
@@ -37,7 +37,6 @@ const HelperText = ({
         disabled={actionDisabled}
         color={color}
         className={classes.button}
-        variant="contained"
         onClick={actionHandler}
       >
         {actionText}

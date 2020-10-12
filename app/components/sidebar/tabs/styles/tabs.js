@@ -3,10 +3,10 @@ import { defaultFont } from 'styles/variables';
 const styles = (theme) => ({
   root: {
     width: '100%',
-    backgroundColor: theme.palette.background.paper,
+    maxWidth: 275,
   },
   indicator: {
-    backgroundColor: theme.palette.secondary.light,
+    backgroundColor: theme.palette.secondary.main,
   },
   tabLabel: {
     ...defaultFont,

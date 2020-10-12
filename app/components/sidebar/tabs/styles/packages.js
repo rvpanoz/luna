@@ -6,7 +6,7 @@ const styles = (theme) => ({
     ...flexContainer,
   },
   card: {
-    width: 260,
+    width: 266,
   },
   cardTitle: {
     ...defaultFont,
@@ -31,7 +31,13 @@ const styles = (theme) => ({
   },
   tab: {
     width: '100%',
-    minHeight: 150,
+    minHeight: 115,
+  },
+  loading: {
+    ...defaultFont,
+    paddingTop: theme.spacing(1),
+    fontSize: 14,
+    color: darken(grayColor, 0.5),
   },
   listItem: {
     margin: 0,

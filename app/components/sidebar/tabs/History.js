@@ -42,11 +42,6 @@ const HistoryTab = ({ classes, directories, onClick }) => (
               primary={
                 <Typography className={classes.label}>{dir.name}</Typography>
               }
-              secondary={
-                <Typography variant="caption" className={classes.directory}>
-                  {directory}
-                </Typography>
-              }
             />
             <ListItemSecondaryAction>
               <Tooltip title={iMessage('title', 'loadDirectory')}>

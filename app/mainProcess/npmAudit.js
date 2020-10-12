@@ -1,7 +1,7 @@
 import log from 'electron-log';
 import { merge } from 'ramda';
+import { runCommand } from '../lib';
 import { switchcase } from '../commons/utils';
-import { runCommand } from '../cli';
 import mk from '../mk';
 
 const {
