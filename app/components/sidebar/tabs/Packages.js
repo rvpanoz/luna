@@ -23,12 +23,9 @@ const PackagesTab = ({ classes, items, loading, updatedAt, fromSearch }) => (
       </Typography>
       <Divider />
       <div className={classes.tab}>
-        <AppLoader
-          relative
-          mini
-          loading={loading && !fromSearch}
-          className={classes.loader}
-        >
+        {loading && !fromSearch ? (
+          <div className={classes.loading}>Loading..</div>
+        ) : (
           <List disablePadding>
             {items &&
               items.map((item) => (
@@ -53,7 +50,7 @@ const PackagesTab = ({ classes, items, loading, updatedAt, fromSearch }) => (
                 </ListItem>
               ))}
           </List>
-        </AppLoader>
+        )}
       </div>
     </CardContent>
     <Divider />

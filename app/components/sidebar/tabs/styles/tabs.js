@@ -3,7 +3,6 @@ import { defaultFont } from 'styles/variables';
 const styles = (theme) => ({
   root: {
     width: '100%',
-    paddingTop: 5,
     maxWidth: 275,
   },
   indicator: {
