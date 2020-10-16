@@ -21,7 +21,7 @@ const styles = (theme) => ({
     maxWidth: 190,
   },
   listItem: {
-    padding: 0,
+    paddingTop: theme.spacing(1),
     paddingLeft: theme.spacing(1) + 4,
     margin: 0,
   },

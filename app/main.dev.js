@@ -27,7 +27,6 @@ import {
   onNpmInitLock,
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
-import { __ } from 'ramda';
 
 // fix the $PATH on macOS
 fixPath();

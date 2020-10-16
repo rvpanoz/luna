@@ -5,7 +5,7 @@ const styles = (theme) => {
     search: {
       position: 'relative',
       borderRadius: theme.shape.borderRadius,
-      color: '#eee',
+      color: '#fff',
       backgroundColor: fade(theme.palette.common.white, 0.15),
       marginRight: theme.spacing(2),
       marginLeft: 0,
@@ -25,24 +25,23 @@ const styles = (theme) => {
       alignItems: 'center',
       justifyContent: 'center',
       paddingLeft: theme.spacing(2),
-      color: fade(theme.palette.common.black, 0.15),
+      color: fade(theme.palette.common.white, 0.75),
       zIndex: 9999,
     },
     inputRoot: {
-      color: 'inherit',
       width: '100%',
       fontFamily: 'inherit',
       fontSize: 20,
       lineHeight: '0.75em',
     },
     inputInput: {
-      color: theme.palette.grey['600'],
+      color: theme.palette.common.white,
       paddingLeft: theme.spacing(10),
       paddingRight: theme.spacing(10),
       transition: theme.transitions.create('width'),
       width: 175,
       '&:focus': {
-        width: 220,
+        width: 320,
       },
     },
   };
