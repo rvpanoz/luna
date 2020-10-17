@@ -122,6 +122,8 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: true,
     },
+    fullscreen: true,
+    resizable: true,
     icon: getAssetPath('icon.icns'),
   });
 
