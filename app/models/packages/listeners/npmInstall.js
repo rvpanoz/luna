@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 import { setActivePage } from 'models/ui/actions';
 import { setRunningCommand } from 'models/npm/actions';
 import { clearInstallOptions } from 'models/common/actions';
@@ -18,41 +18,43 @@ const updateCommand = ({
   },
 });
 
-const onNpmInstall$ = new Observable((observer) => {
-  ipcRenderer.removeAllListeners(['npm-install-completed']);
+const onNpmInstall$ = new Subject();
 
-  ipcRenderer.on('npm-install-completed', () => {
-    try {
-      observer.next(clearInstallOptions());
-      observer.next(
-        updateCommand({
-          operationStatus: 'idle',
-          operationCommand: null,
-          operationPackages: [],
-        })
-      );
+ipcRenderer.removeAllListeners(['npm-install-completed']);
 
-      observer.next(
-        setActivePage({
-          page: 'packages',
-          paused: false,
-        })
-      );
+ipcRenderer.on('npm-install-completed', () => {
+  try {
+    onNpmInstall$.next(clearInstallOptions());
+    onNpmInstall$.next(
+      updateCommand({
+        operationStatus: 'idle',
+        operationCommand: null,
+        operationPackages: [],
+      })
+    );
 
-      observer.next(
-        setPackagesStart({
-          channel: 'npm-list-outdated',
-          options: {
-            cmd: ['outdated', 'list'],
-          },
-        })
-      );
-    } catch (error) {
-      observer.error(error);
-    }
-  });
+    onNpmInstall$.next(
+      setActivePage({
+        page: 'packages',
+        paused: false,
+      })
+    );
 
-  ipcRenderer.on('npm-install-error', (event, error) => observer.error(error));
+    onNpmInstall$.next(
+      setPackagesStart({
+        channel: 'npm-list-outdated',
+        options: {
+          cmd: ['outdated', 'list'],
+        },
+      })
+    );
+  } catch (error) {
+    onNpmInstall$.error(error);
+  }
 });
+
+ipcRenderer.on('npm-install-error', (event, error) =>
+  onNpmInstall$.error(error)
+);
 
 export default onNpmInstall$;

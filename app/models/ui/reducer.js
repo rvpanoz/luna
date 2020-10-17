@@ -1,5 +1,6 @@
 /**
- * global reducer: Handles state management for global operations.
+ * Global reducer
+ * Handles state management for global operations.
  */
 
 import { identity, merge, assoc, propOr, prop, prepend, remove } from 'ramda';
@@ -24,7 +25,7 @@ import {
   updateFilters,
 } from 'models/ui/actions';
 
-import initialState from './initialState';
+import initialState from '../initialState';
 
 const { ui } = initialState;
 
