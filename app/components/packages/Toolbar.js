@@ -34,7 +34,7 @@ const ToolbarView = ({
   selected,
   title,
   mode,
-  toggleOptions,
+  showCommandOptions,
   fromSearch,
   filters,
   reload,
@@ -84,8 +84,7 @@ const ToolbarView = ({
       }
 
       if (mode === 'local' && action === 'install' && !force) {
-        return toggleOptions({
-          open: true,
+        return showCommandOptions({
           single: false,
         });
       }
@@ -139,7 +138,14 @@ const ToolbarView = ({
 
       return false;
     },
-    [selected, packagesData, mode, clearAllFilters, toggleOptions, dispatch]
+    [
+      selected,
+      packagesData,
+      mode,
+      clearAllFilters,
+      showCommandOptions,
+      dispatch,
+    ]
   );
 
   const renderAction = (action) =>
@@ -248,7 +254,7 @@ ToolbarView.propTypes = {
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   switchMode: PropTypes.func.isRequired,
-  toggleOptions: PropTypes.func.isRequired,
+  showCommandOptions: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ToolbarView);

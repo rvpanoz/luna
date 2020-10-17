@@ -54,7 +54,9 @@ const execute = ({
 
     observer.next({
       status: 'flow',
-      message: `running: ${manager} ${commandArgs.join(' ')}`,
+      isTerminated: false,
+      manager,
+      cmd: commandArgs,
     });
 
     try {
@@ -100,7 +102,9 @@ const execute = ({
 
         observer.next({
           status: 'flow',
-          message: `finished: ${manager} ${commandArgs.join(' ')}`,
+          isTerminated: true,
+          manager,
+          cmd: commandArgs,
         });
 
         observer.next({

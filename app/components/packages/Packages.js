@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -9,9 +10,6 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 
 import { useFilters } from 'commons/hooks';
 import { AppLoader, HelperText } from 'components/common';
@@ -34,6 +32,7 @@ import TableHeader from './Header';
 import PackageItem from './PackageItem';
 import Pagination from './Pagination';
 import CommandOptions from './CommandOptions';
+import CommandStatus from './CommandStatus';
 import PackageDetails from './PackageDetails';
 import styles from './styles/packages';
 
@@ -107,11 +106,11 @@ const Packages = ({ classes }) => {
     operationCommand,
   } = useMappedState(mapState);
 
-  const [options, toggleOptions] = useState({
-    open: false,
+  const [dialogOptions, setDialogOptions] = useState({
+    activeDialog: null,
     single: false,
-    name: null,
-    version: null,
+    name: '',
+    version: '',
   });
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
@@ -163,6 +162,37 @@ const Packages = ({ classes }) => {
     [dispatch]
   );
 
+  const onCommandOptionsClose = () => {
+    dispatch(clearInstallOptions());
+    showCommandOptions({
+      activeDialog: null,
+      single: false,
+      name: '',
+      version: '',
+    });
+  };
+
+  const onCommandStatusClose = () => {
+    showCommandOptions({
+      activeDialog: null,
+      single: false,
+      name: '',
+      version: '',
+    });
+  };
+
+  const showCommandOptions = (options) =>
+    setDialogOptions({
+      activeDialog: 'command-options',
+      ...options,
+    });
+
+  const showCommandStatus = (options) =>
+    setDialogOptions({
+      activeDialog: 'command-status',
+      ...options,
+    });
+
   useEffect(() => {
     dispatch(
       setPackagesStart({
@@ -175,6 +205,14 @@ const Packages = ({ classes }) => {
       })
     );
   }, [mode, directory, dispatch]);
+
+  useEffect(() => {
+    ipcRenderer.on('npm-command-flow', (event, data) => {
+      showCommandStatus();
+    });
+
+    return () => ipcRenderer.removeAllListeners(['npm-command-flow']);
+  }, []);
 
   const activePackages = fromSearch ? packagesFromSearch : packagesData;
   const [filteredPackages] = useFilters(activePackages, filters);
@@ -238,7 +276,7 @@ const Packages = ({ classes }) => {
                   scrollWrapper={() =>
                     scrollWrapper(wrapperRef && wrapperRef.current, 0)
                   }
-                  toggleOptions={toggleOptions}
+                  showCommandOptions={showCommandOptions}
                   switchMode={switchModeHandler}
                   reload={reload}
                   filteredByNamePackages={filteredByNamePackages}
@@ -346,7 +384,7 @@ const Packages = ({ classes }) => {
             className={classes.transition}
           >
             <PackageDetails
-              toggleOptions={toggleOptions}
+              showCommandOptions={showCommandOptions}
               addSelected={() =>
                 dispatch(addSelected({ name: active ? active.name : null }))
               }
@@ -354,77 +392,13 @@ const Packages = ({ classes }) => {
           </Grid>
         </Grid>
       </AppLoader>
-      <Dialog
-        open={options.open}
-        fullWidth
-        onClose={() => {
-          dispatch(clearInstallOptions());
-          toggleOptions({
-            open: false,
-            single: false,
-            name: null,
-            version: null,
-          });
-        }}
-        aria-labelledby="install-options"
-      >
-        <DialogContent>
-          <CommandOptions
-            selected={selected.length ? selected : active ? [active.name] : []}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch(clearInstallOptions());
-              toggleOptions({
-                open: false,
-                single: false,
-                name: null,
-                version: null,
-              });
-            }}
-            color="secondary"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              if (options.single) {
-                dispatch(
-                  installPackage({
-                    ipcEvent: 'npm-install',
-                    cmd: ['install'],
-                    name: active.name,
-                    version: options.version,
-                    single: true,
-                  })
-                );
-              } else {
-                dispatch(
-                  installMultiplePackages({
-                    ipcEvent: 'npm-install',
-                    cmd: selected.map(() => 'install'),
-                    multiple: true,
-                    packages: selected,
-                  })
-                );
-              }
-
-              toggleOptions({
-                open: false,
-                single: false,
-                name: null,
-                version: null,
-              });
-            }}
-            color="primary"
-            autoFocus
-          >
-            Install
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <CommandOptions
+        isOpen={dialogOptions.activeDialog === 'command-options'}
+        active={active}
+        selected={selected}
+        onClose={onCommandOptionsClose}
+      />
+      <CommandStatus isOpen={dialogOptions.activeDialog === 'command-status'} />
     </>
   );
 };

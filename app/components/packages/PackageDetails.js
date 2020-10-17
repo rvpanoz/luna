@@ -60,7 +60,7 @@ const mapState = ({
   fromSearch,
 });
 
-const PackageDetails = ({ classes, toggleOptions }) => {
+const PackageDetails = ({ classes, showCommandOptions }) => {
   const dispatch = useDispatch();
   const [expanded, expand] = useState(true);
   const [dependencies, setDependencies] = useState([]);
@@ -93,8 +93,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
 
   const handleInstall = () => {
     if (fromSearch && mode === 'local') {
-      return toggleOptions({
-        open: true,
+      return showCommandOptions({
         single: true,
         name: active.name,
         version,
@@ -136,8 +135,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
 
   const handleInstallVersion = (packageVersion) => {
     if (fromSearch && mode === 'local') {
-      return toggleOptions({
-        open: true,
+      return showCommandOptions({
         single: true,
         name: active.name,
         version: packageVersion,
@@ -395,7 +393,7 @@ PackageDetails.defaultProps = {
 
 PackageDetails.propTypes = {
   classes: objectOf(string).isRequired,
-  toggleOptions: func.isRequired,
+  showCommandOptions: func.isRequired,
   group: string,
 };
 

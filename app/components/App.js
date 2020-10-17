@@ -60,7 +60,6 @@ const App = () => {
 
     return () =>
       ipcRenderer.removeAllListeners([
-        'npm-command-flow',
         'finish-loaded',
         'uncaught-exception',
         'npm-env-close',
