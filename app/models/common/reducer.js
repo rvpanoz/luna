@@ -1,5 +1,6 @@
 /**
- * Common reducer: Handles state management for common operations
+ * Common reducer
+ * Handles state management for common operations
  */
 
 import { assoc, identity, merge, prepend, prop, propOr, remove } from 'ramda';
@@ -11,7 +12,7 @@ import {
   updateStatus,
 } from 'models/common/actions';
 
-import initialState from './initialState';
+import initialState from '../initialState';
 
 const { npm, notifications, packages, ui, ...common } = initialState;
 
