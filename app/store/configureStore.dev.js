@@ -11,7 +11,7 @@ import { epics as uiEpics } from 'models/ui';
 import { epics as npmEpics } from 'models/npm';
 import { epics as commonEpics } from 'models/common';
 import { epics as notificationsEpics } from 'models/notifications';
-import rootReducer from '../reducers';
+import rootReducer from '../models/rootReducer';
 
 const reduxLogger = /--redux-logger/.test(process.argv[3]);
 

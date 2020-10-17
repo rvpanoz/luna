@@ -1,12 +1,15 @@
 /**
- * Notifications reducer: Handles state management for notifications operations
+ * Notifications reducer
+ * Handles state management for notifications operations
  */
 
 import { assoc, prepend, identity, merge, prop, propOr } from 'ramda';
-import { clearNotifications, setActive } from 'models/notifications/actions';
-
-import initialState from './initialState';
-import { updateNotification } from '../models/notifications/actions';
+import {
+  clearNotifications,
+  setActive,
+  updateNotification,
+} from 'models/notifications/actions';
+import initialState from '../initialState';
 
 const { notifications } = initialState;
 

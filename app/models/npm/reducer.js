@@ -1,5 +1,6 @@
 /**
- * Npm reducer: Handles state management for npm operations
+ * Npm reducer
+ * Handles state management for npm operations
  */
 
 import { assoc, prepend, identity, merge, prop, propOr } from 'ramda';
@@ -19,8 +20,7 @@ import {
   updateNpmDoctorData,
   updateNpmCacheData,
 } from 'models/npm/actions';
-
-import initialState from './initialState';
+import initialState from '../initialState';
 
 const { npm } = initialState;
 

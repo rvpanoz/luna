@@ -1,5 +1,6 @@
 /**
- * Packages reducer: Handles state management for packages operations
+ * Packages reducer
+ * Handles state management for packages operations
  */
 
 import { assoc, identity, merge, prop, propOr, prepend } from 'ramda';
@@ -14,7 +15,7 @@ import {
   setPackagesSearchSuccess,
   updateSearchFlag,
 } from 'models/packages/actions';
-import initialState from './initialState';
+import initialState from '../initialState';
 
 const { packages } = initialState;
 
