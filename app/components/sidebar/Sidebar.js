@@ -1,10 +1,10 @@
 import React from 'react';
 import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import { AppLogo } from 'components/common';
-import Tabs from './tabs/Tabs';
-import { PackagesTab, ActionsTab, HistoryTab } from './tabs';
 
+import { AppLogo } from 'components/common';
+import { PackagesTab, ProjectTab, HistoryTab } from './tabs';
+import Tabs from './tabs/Tabs';
 import styles from './styles';
 
 const Sidebar = ({
@@ -34,13 +34,7 @@ const Sidebar = ({
         mode={mode}
         npmEnv={npmEnv}
       />
-      <ActionsTab
-        onInstallPackagesFromJson={installPackagesFromJson}
-        onDedupe={dedupe}
-        mode={mode}
-        loading={loading}
-        onCacheVerify={cache}
-      />
+      <ProjectTab projectInfo={projectInfo} npmEnv={npmEnv} />
       <HistoryTab
         directories={history}
         onClick={loadDirectory}

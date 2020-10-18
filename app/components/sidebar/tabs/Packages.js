@@ -28,26 +28,6 @@ const PackagesTab = ({
   <>
     <Card className={classes.card}>
       <CardContent>
-        {loading && !fromSearch ? (
-          <div className={classes.loading}>Loading..</div>
-        ) : (
-          <>
-            <div className={classes.projectInfo}>
-              <Typography color="textSecondary" variant="h5">
-                {mode === 'local' ? projectInfo.name : 'Global'}
-              </Typography>
-              <Typography color="textSecondary" variant="h5">
-                {projectInfo.version && mode === 'local'
-                  ? `v.${projectInfo.version}`
-                  : 'N/A'}
-              </Typography>
-            </div>
-          </>
-        )}
-      </CardContent>
-    </Card>
-    <Card className={classes.card}>
-      <CardContent>
         <Typography className={classes.cardTitle} color="textSecondary">
           {iMessage('title', 'overview')}
         </Typography>
@@ -85,6 +65,7 @@ const PackagesTab = ({
           )}
         </div>
       </CardContent>
+      <Divider />
       <CardActions>
         <div className={classes.cardFlexContainer}>
           <div className={classes.cardFlexContainerInner}>

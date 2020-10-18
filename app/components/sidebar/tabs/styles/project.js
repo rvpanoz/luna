@@ -35,42 +35,13 @@ const styles = (theme) => ({
     fontSize: 12,
     color: darken(grayColor, 0.5),
   },
-  tab: {
-    width: '100%',
-    minHeight: 115,
-  },
-  loading: {
+  info: {
+    ...flexContainer,
     ...defaultFont,
-    paddingTop: theme.spacing(1),
+    justifyContent: 'space-between',
+    marginTop: theme.spacing(1),
     fontSize: 14,
     color: darken(grayColor, 0.5),
-  },
-  listItem: {
-    margin: 0,
-  },
-  secondaryText: {
-    ...defaultFont,
-    color: darken(grayColor, 0.2),
-    fontSize: 12,
-  },
-  loader: {
-    paddingTop: theme.spacing(1),
-  },
-  updateIcon: {
-    color: lighten(theme.palette.primary.main, 0.2),
-    marginRight: theme.spacing(1) / 2,
-  },
-  primaryColor: {
-    color: theme.palette.primary.main,
-  },
-  secondaryColor: {
-    color: theme.palette.secondary.main,
-  },
-  warningColor: {
-    color: theme.palette.error.light,
-  },
-  errorColor: {
-    color: theme.palette.error.light,
   },
 });
 

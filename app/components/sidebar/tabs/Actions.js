@@ -55,63 +55,6 @@ const ActionsTab = ({
           </Tooltip>
         </ListItemSecondaryAction>
       </ListItem>
-      <ListItem key="npm-cache-verify" className={classes.listItem}>
-        <ListItemText
-          primary={
-            <Typography className={classes.label}>
-              {iMessage('action', 'npmCacheVerify')}
-            </Typography>
-          }
-          secondary={
-            <Typography className={classes.secondaryText}>
-              {iMessage('info', 'npmCacheVerifyInfo')}
-            </Typography>
-          }
-        />
-        <ListItemSecondaryAction>
-          <IconButton
-            aria-label="action-dedupe"
-            onClick={onCacheVerify}
-            disableRipple
-          >
-            <ArrowRightIcon color="primary" />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-      <ListItem key="npm-dedupe" className={classes.listItem}>
-        <ListItemText
-          primary={
-            <Typography className={classes.label}>
-              {iMessage('action', 'npmDedupe')}
-            </Typography>
-          }
-          secondary={
-            <Typography className={classes.secondaryText}>
-              {iMessage('info', 'npmDedupeInfo')}
-            </Typography>
-          }
-        />
-        <ListItemSecondaryAction>
-          <Tooltip
-            title={
-              mode === 'global'
-                ? iMessage('info', 'notGlobalModeAvailable')
-                : iMessage('info', 'npmInstallInfo')
-            }
-          >
-            <div>
-              <IconButton
-                aria-label="action-dedupe"
-                disabled={mode === 'global'}
-                onClick={onDedupe}
-                disableRipple
-              >
-                <ArrowRightIcon color="primary" />
-              </IconButton>
-            </div>
-          </Tooltip>
-        </ListItemSecondaryAction>
-      </ListItem>
     </List>
   </div>
 );
