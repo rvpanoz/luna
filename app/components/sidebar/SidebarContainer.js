@@ -19,6 +19,7 @@ import styles from './styles';
 const mapState = ({
   common: { mode, directory },
   packages: {
+    project: projectInfo,
     packagesData,
     packagesOutdated,
     metadata: { lastUpdatedAt, fromSearch },
@@ -29,15 +30,18 @@ const mapState = ({
       loader: { loading },
     },
   },
+  npm: { env: npmEnv },
 }) => ({
   fromSearch,
   mode,
   directory,
   loading,
   lastUpdatedAt,
+  projectInfo,
   packagesData,
   packagesOutdated,
   notifications,
+  npmEnv,
 });
 
 const AppSidebar = ({ classes, className }) => {
@@ -49,10 +53,12 @@ const AppSidebar = ({ classes, className }) => {
     directory,
     lastUpdatedAt,
     loading,
+    projectInfo,
     packagesData,
     packagesOutdated,
     notifications,
     fromSearch,
+    npmEnv,
   } = useMappedState(mapState);
 
   const packagesItems = [
@@ -205,6 +211,8 @@ const AppSidebar = ({ classes, className }) => {
           loading={loading}
           updatedAt={lastUpdatedAt}
           tabPackagesData={packagesItems}
+          projectInfo={projectInfo}
+          npmEnv={npmEnv}
           fromSearch={fromSearch}
           installPackagesFromJson={installPackagesFromJson}
           dedupe={dedupe}

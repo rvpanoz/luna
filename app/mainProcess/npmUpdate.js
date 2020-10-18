@@ -12,17 +12,17 @@ const onNpmUpdate = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
-  const onFlow = (message) => event.sender.send('npm-command-flow', message);
+  const onFlow = (options) => event.sender.send('npm-command-flow', options);
   const onError = (error) => event.sender.send('npm-update-error', error);
 
   const onComplete = (result) =>
     event.sender.send('npm-update-completed', result);
 
   const callback = (result) => {
-    const { status, errors, data, message } = result;
+    const { status, errors, data, manager, cmd, isTerminated } = result;
 
     return switchcase({
-      flow: () => onFlow(message),
+      flow: () => onFlow({ manager, cmd, isTerminated }),
       close: () => onComplete(errors, data),
       error: (error) => onError(error),
     })(null)(status);

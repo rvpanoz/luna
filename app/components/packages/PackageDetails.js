@@ -37,7 +37,7 @@ import Dependencies from './Dependencies';
 import Versions from './Versions';
 import PackageInfo from './PackageInfo';
 import { InstallAction, UpdateAction, UninstallAction } from './Actions';
-
+import { initialDialogOptions } from 'components/packages/Packages';
 import styles from './styles/packageDetails';
 
 const mapState = ({
@@ -97,6 +97,7 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
         single: true,
         name: active.name,
         version,
+        ...initialDialogOptions,
       });
     }
 
@@ -355,7 +356,6 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
         loading={packageLoader.loading}
         message={iMessage('info', 'loadingPackage')}
         relative
-        mini
       >
         {active ? renderCard() : null}
       </AppLoader>

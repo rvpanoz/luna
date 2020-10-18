@@ -88,13 +88,13 @@ const PackageItem = ({
         </div>
       </TableCell>
       <TableCell padding="none" name="installed" className={classes.tableCell}>
-        <Typography className={classes.typo}>
+        <Typography className={classes.version}>
           {fromSearch ? 'No' : version}
         </Typography>
       </TableCell>
       <TableCell padding="none" name="latest" className={classes.tableCell}>
         <Typography
-          className={cn(classes.typo, {
+          className={cn(classes.version, {
             [classes.outdated]: isOutdated,
           })}
         >

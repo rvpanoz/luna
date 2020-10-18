@@ -17,7 +17,9 @@ const initialState = {
   },
   npm: {
     commands: [],
-    env: '',
+    env: {
+      prefix: '',
+    },
     command_error: '',
     command_message: '',
     operationStatus: 'idle',

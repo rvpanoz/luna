@@ -1,4 +1,9 @@
-import { defaultFont, grayColor, flexContainer } from 'styles/variables';
+import {
+  defaultFont,
+  grayColor,
+  flexContainer,
+  defaultBoxShadow,
+} from 'styles/variables';
 import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = (theme) => ({
@@ -7,6 +12,8 @@ const styles = (theme) => ({
   },
   card: {
     width: 266,
+    marginBottom: theme.spacing(2),
+    ...defaultBoxShadow,
   },
   cardTitle: {
     ...defaultFont,
@@ -61,6 +68,14 @@ const styles = (theme) => ({
   },
   errorColor: {
     color: theme.palette.error.light,
+  },
+  projectInfo: {
+    ...flexContainer,
+    ...defaultFont,
+    justifyContent: 'space-between',
+    marginTop: theme.spacing(1),
+    fontSize: 14,
+    color: darken(grayColor, 0.5),
   },
 });
 

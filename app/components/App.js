@@ -43,6 +43,7 @@ const App = () => {
 
   useEffect(() => {
     ipcRenderer.once('finish-loaded', () => dispatch(initActions()));
+    ipcRenderer.once('npm-env-close', (event, env) => dispatch(setEnv(env)));
 
     ipcRenderer.on('yarn-lock-detected', () => {
       dispatch(
@@ -63,7 +64,7 @@ const App = () => {
         'finish-loaded',
         'uncaught-exception',
         'npm-env-close',
-        'yarn-env-close',
+        'yarn-lock-detected',
       ]);
   }, [dispatch]);
 

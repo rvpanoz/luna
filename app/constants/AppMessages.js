@@ -150,6 +150,7 @@ export const TITLE_MESSAGES = {
   listReload: 'Reload',
   createPackageJson: 'Create a package.json file',
   doctorReport: 'Doctor report',
+  'project-info': 'Package',
 };
 
 export const CONFIRMATION_MESSAGES = {

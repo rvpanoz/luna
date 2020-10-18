@@ -16,6 +16,8 @@ const Sidebar = ({
   loadDirectory,
   updatedAt,
   tabPackagesData,
+  projectInfo,
+  npmEnv,
   installPackagesFromJson,
   dedupe,
   cache,
@@ -28,6 +30,9 @@ const Sidebar = ({
         updatedAt={updatedAt}
         loading={loading}
         fromSearch={fromSearch}
+        projectInfo={projectInfo}
+        mode={mode}
+        npmEnv={npmEnv}
       />
       <ActionsTab
         onInstallPackagesFromJson={installPackagesFromJson}
@@ -55,6 +60,8 @@ Sidebar.propTypes = {
   dedupe: func.isRequired,
   cache: func.isRequired,
   updatedAt: string,
+  projectInfo: objectOf(string).isRequired,
+  npmEnv: object,
   fromSearch: bool,
   tabPackagesData: arrayOf(object),
 };

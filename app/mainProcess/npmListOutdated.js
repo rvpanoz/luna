@@ -16,7 +16,6 @@ const onNpmListOutdated = (event, options, store) => {
   const history = store.get('history') || [];
   let yarnLock;
 
-  // define callbacks
   const onFlow = (options) => event.sender.send('npm-command-flow', options);
   const onError = (error) =>
     event.sender.send('npm-list-outdated-error', error);

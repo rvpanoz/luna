@@ -18,7 +18,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import styles from './styles/commandsStatus';
 
-const CommandStatus = ({ classes, isOpen, commands, onClose }) => {
+const CommandStatus = ({ classes, isOpen, cmd, onClose }) => {
   const dispatch = useDispatch();
 
   return (

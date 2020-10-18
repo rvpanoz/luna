@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
-import { ControlTypes } from 'components/common';
-import { addInstallOption } from 'models/common/actions';
-import { iMessage } from 'commons/utils';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -16,11 +13,48 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
+import { ControlTypes } from 'components/common';
+import { addInstallOption } from 'models/common/actions';
+import {
+  installPackage,
+  installMultiplePackages,
+} from 'models/packages/actions';
+import { iMessage } from 'commons/utils';
 import styles from './styles/commandOptions';
 
-const Options = ({ classes, active, selected, isOpen, onClose }) => {
+const CommandOptions = ({
+  classes,
+  active,
+  selected,
+  isOpen,
+  single,
+  version,
+  onClose,
+}) => {
   const dispatch = useDispatch();
   const packages = selected.length ? selected : active ? [active.name] : [];
+
+  const onInstallPackage = () =>
+    dispatch(
+      installPackage({
+        ipcEvent: 'npm-install',
+        cmd: ['install'],
+        name: active.name,
+        single: true,
+        version,
+      })
+    );
+
+  const onInstallMultiplePackages = () => {
+    dispatch(
+      installMultiplePackages({
+        ipcEvent: 'npm-install',
+        cmd: selected.map(() => 'install'),
+        multiple: true,
+        packages: selected,
+      })
+    );
+  };
 
   return (
     <Dialog
@@ -64,13 +98,7 @@ const Options = ({ classes, active, selected, isOpen, onClose }) => {
       <DialogActions>
         <Button
           onClick={() => {
-            dispatch(clearInstallOptions());
-            toggleOptions({
-              open: false,
-              single: false,
-              name: null,
-              version: null,
-            });
+            onClose();
           }}
           color="secondary"
         >
@@ -78,33 +106,13 @@ const Options = ({ classes, active, selected, isOpen, onClose }) => {
         </Button>
         <Button
           onClick={() => {
-            if (options.single) {
-              dispatch(
-                installPackage({
-                  ipcEvent: 'npm-install',
-                  cmd: ['install'],
-                  name: active.name,
-                  version: options.version,
-                  single: true,
-                })
-              );
+            if (single) {
+              onInstallPackage();
             } else {
-              dispatch(
-                installMultiplePackages({
-                  ipcEvent: 'npm-install',
-                  cmd: selected.map(() => 'install'),
-                  multiple: true,
-                  packages: selected,
-                })
-              );
+              onInstallMultiplePackages();
             }
 
-            toggleOptions({
-              open: false,
-              single: false,
-              name: null,
-              version: null,
-            });
+            onClose();
           }}
           color="primary"
           autoFocus
@@ -116,9 +124,9 @@ const Options = ({ classes, active, selected, isOpen, onClose }) => {
   );
 };
 
-Options.propTypes = {
+CommandOptions.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default withStyles(styles)(Options);
+export default withStyles(styles)(CommandOptions);

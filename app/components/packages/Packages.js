@@ -84,6 +84,16 @@ const mapState = ({
   operationCommand,
 });
 
+export const initialDialogOptions = {
+  activeDialog: null,
+  cmd: [],
+  single: false,
+  isTerminated: false,
+  manager: 'npm',
+  name: '',
+  version: '',
+};
+
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
@@ -106,13 +116,9 @@ const Packages = ({ classes }) => {
     operationCommand,
   } = useMappedState(mapState);
 
-  const [dialogOptions, setDialogOptions] = useState({
-    activeDialog: null,
-    single: false,
-    name: '',
-    version: '',
-  });
+  const [dialogOptions, setDialogOptions] = useState(initialDialogOptions);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
+  const [npmOperations, addNpmOperation] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -162,36 +168,30 @@ const Packages = ({ classes }) => {
     [dispatch]
   );
 
+  const updateRunningCommands = useCallback(
+    (data) => {
+      const { cmd, isTerminated } = data;
+
+      addNpmOperation([
+        ...npmOperations,
+        {
+          isTerminated,
+          operation: cmd.slice(0, 1),
+          arguments: cmd.splice(1, cmd.length - 1),
+        },
+      ]);
+    },
+    [npmOperations]
+  );
+
   const onCommandOptionsClose = () => {
     dispatch(clearInstallOptions());
-    showCommandOptions({
-      activeDialog: null,
-      single: false,
-      name: '',
-      version: '',
-    });
+    setDialogOptions(initialDialogOptions);
   };
 
   const onCommandStatusClose = () => {
-    showCommandOptions({
-      activeDialog: null,
-      single: false,
-      name: '',
-      version: '',
-    });
+    setDialogOptions(initialDialogOptions);
   };
-
-  const showCommandOptions = (options) =>
-    setDialogOptions({
-      activeDialog: 'command-options',
-      ...options,
-    });
-
-  const showCommandStatus = (options) =>
-    setDialogOptions({
-      activeDialog: 'command-status',
-      ...options,
-    });
 
   useEffect(() => {
     dispatch(
@@ -207,12 +207,12 @@ const Packages = ({ classes }) => {
   }, [mode, directory, dispatch]);
 
   useEffect(() => {
-    ipcRenderer.on('npm-command-flow', (event, data) => {
-      showCommandStatus();
-    });
+    ipcRenderer.on('npm-command-flow', (event, data) =>
+      updateRunningCommands(data)
+    );
 
     return () => ipcRenderer.removeAllListeners(['npm-command-flow']);
-  }, []);
+  }, [updateRunningCommands]);
 
   const activePackages = fromSearch ? packagesFromSearch : packagesData;
   const [filteredPackages] = useFilters(activePackages, filters);
@@ -276,7 +276,12 @@ const Packages = ({ classes }) => {
                   scrollWrapper={() =>
                     scrollWrapper(wrapperRef && wrapperRef.current, 0)
                   }
-                  showCommandOptions={showCommandOptions}
+                  showCommandOptions={() =>
+                    setDialogOptions({
+                      activeDialog: 'command-options',
+                      single: false,
+                    })
+                  }
                   switchMode={switchModeHandler}
                   reload={reload}
                   filteredByNamePackages={filteredByNamePackages}
@@ -384,21 +389,29 @@ const Packages = ({ classes }) => {
             className={classes.transition}
           >
             <PackageDetails
-              showCommandOptions={showCommandOptions}
-              addSelected={() =>
-                dispatch(addSelected({ name: active ? active.name : null }))
+              showCommandOptions={(options) =>
+                setDialogOptions({
+                  activeDialog: 'command-options',
+                  ...options,
+                })
               }
             />
           </Grid>
         </Grid>
+        <CommandOptions
+          isOpen={dialogOptions.activeDialog === 'command-options'}
+          single={dialogOptions.single}
+          version={dialogOptions.version}
+          active={active}
+          selected={selected}
+          onClose={onCommandOptionsClose}
+        />
+        <CommandStatus
+          isOpen={dialogOptions.activeDialog === 'command-status'}
+          cmd={dialogOptions.cmd}
+          onClose={onCommandStatusClose}
+        />
       </AppLoader>
-      <CommandOptions
-        isOpen={dialogOptions.activeDialog === 'command-options'}
-        active={active}
-        selected={selected}
-        onClose={onCommandOptionsClose}
-      />
-      <CommandStatus isOpen={dialogOptions.activeDialog === 'command-status'} />
     </>
   );
 };
