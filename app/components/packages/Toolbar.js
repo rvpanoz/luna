@@ -1,6 +1,5 @@
 import React from 'react';
 import cn from 'classnames';
-import { always, cond, equals } from 'ramda';
 import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
