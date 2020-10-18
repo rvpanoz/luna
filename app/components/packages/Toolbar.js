@@ -1,5 +1,6 @@
 import React from 'react';
 import cn from 'classnames';
+import { always, cond, equals } from 'ramda';
 import PropTypes from 'prop-types';
 import { useState, useCallback } from 'react';
 import { useDispatch } from 'redux-react-hook';
@@ -176,7 +177,9 @@ const ToolbarView = ({
     selected.some(
       (packageSelected) => packagesOutdatedNames.indexOf(packageSelected) !== -1
     );
-  const hasPackagesSelected = selected && selected.length > 0;
+  const hasPackagesSelected = !!selected.length;
+  const hasFilters =
+    (filters && filters.length) || filteredByNamePackages.length;
 
   return (
     <div className={classes.root}>
@@ -195,15 +198,17 @@ const ToolbarView = ({
         </div>
         <div className={classes.spacer} />
         <div className={classes.actions}>
-          {selected.length === 0 && renderToolbarActions()}
-          {fromSearch && selected.length ? renderAction('install') : null}
-          {!fromSearch && hasUpdatedPackages && selected.length
+          {!hasPackagesSelected && renderToolbarActions()}
+          {fromSearch && hasPackagesSelected ? renderAction('install') : null}
+          {!fromSearch && hasUpdatedPackages && hasPackagesSelected
             ? renderAction('latest')
             : null}
           {!fromSearch && hasUpdatedPackages ? renderAction('update') : null}
-          {!fromSearch && selected.length ? renderAction('uninstall') : null}
-          {(filters && filters.length) || filteredByNamePackages.length
-            ? selected.length
+          {!fromSearch && hasPackagesSelected
+            ? renderAction('uninstall')
+            : null}
+          {hasFilters
+            ? hasPackagesSelected
               ? null
               : renderAction('clearFilters')
             : null}

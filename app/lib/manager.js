@@ -13,7 +13,7 @@ const {
 
 const defaultsArgs = {
   list: ['--json', '--depth=0'],
-  operation: ['--no-audit', '--ignore-scripts', '--verbose'],
+  operation: ['--no-audit', '--verbose'],
 };
 
 /**
