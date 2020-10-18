@@ -12,8 +12,10 @@ const styles = (theme) => ({
   },
   actions: {
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
+    '& > Button:nth-child(1)': {
+      marginRight: theme.spacing(1),
+    },
   },
   flexContainer: { display: 'flex' },
   filterItems: {
@@ -31,11 +33,10 @@ const styles = (theme) => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    color: '#fff',
-    backgroundColor: fade(theme.palette.common.black, 0.15),
+    backgroundColor: fade(theme.palette.common.white, 0.75),
     margin: '10px 0px 10px 0px',
     width: '100%',
-    border: '1px solid',
+    border: '1px solid #ccc',
   },
   searchIcon: {
     width: theme.spacing(1) * 6,
@@ -50,16 +51,11 @@ const styles = (theme) => ({
     color: 'inherit',
     width: '100%',
     fontFamily: 'inherit',
-    fontSize: 14,
     lineHeight: '1em',
   },
   inputInput: {
     ...defaultFont,
-    color: '#001',
-    paddingTop: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-    paddingLeft: theme.spacing(1) * 5,
+    padding: theme.spacing(1),
   },
   toolbar: {
     height: 10,
