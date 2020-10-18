@@ -221,16 +221,12 @@ const Filters = ({ classes, mode, close, listFilters }) => {
             />
           </FormGroup>
         </FormControl>
-        <Divider className={classes.bottomDivider} light />
+        <Divider className={classes.bottomDivider} />
         <div className={classes.actions}>
-          <Button color="secondary" variant="outlined" onClick={close}>
+          <Button color="secondary" onClick={close}>
             {iMessage('action', 'close')}
           </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={() => handleFilters(filters)}
-          >
+          <Button color="primary" onClick={() => handleFilters(filters)}>
             {iMessage('action', 'filter')}
           </Button>
         </div>
