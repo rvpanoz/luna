@@ -118,7 +118,6 @@ const Packages = ({ classes }) => {
 
   const [dialogOptions, setDialogOptions] = useState(initialDialogOptions);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
-  const [npmOperations, addNpmOperation] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -168,26 +167,6 @@ const Packages = ({ classes }) => {
     [dispatch]
   );
 
-  const updateRunningCommands = useCallback(
-    (data) => {
-      const { cmd, isTerminated } = data;
-
-      if (!cmd) {
-        return;
-      }
-
-      addNpmOperation([
-        ...npmOperations,
-        {
-          isTerminated,
-          operation: cmd.slice(0, 1),
-          arguments: cmd.splice(1, cmd.length - 1),
-        },
-      ]);
-    },
-    [npmOperations]
-  );
-
   const onCommandOptionsClose = () => {
     dispatch(clearInstallOptions());
     setDialogOptions(initialDialogOptions);
@@ -223,31 +202,6 @@ const Packages = ({ classes }) => {
       })
     );
   }, [mode, directory, dispatch]);
-
-  // useEffect(() => {
-  //   ipcRenderer.once('npm-command-flow', (event, data) => {
-  //     const { cmd } = data;
-  //     const [command] = cmd;
-
-  //     if(command === 'install' || command === 'update' || command === 'uninstall') {
-  //       setDialogOptions({
-  //         ...dialogOptions,
-  //         activeDialog: 'command-status'
-  //       });
-  //     }
-  //   });
-
-  //   ipcRenderer.on('npm-command-flow', (event, data) => {
-  //     const { cmd } = data;
-  //     const [command] = cmd;
-
-  //     if(command === 'install' || command === 'update' || command === 'uninstall') {
-  //       updateRunningCommands(data);
-  //     }
-  //   });
-
-  //   return () => ipcRenderer.removeAllListeners(['npm-command-flow']);
-  // }, [updateRunningCommands]);
 
   const noPackages =
     Boolean(!packagesData || !packagesData.length) && !fromSearch;
@@ -422,20 +376,22 @@ const Packages = ({ classes }) => {
             />
           </Grid>
         </Grid>
-        <CommandOptions
-          isOpen={dialogOptions.activeDialog === 'command-options'}
-          single={dialogOptions.single}
-          version={dialogOptions.version}
-          active={active}
-          selected={selected}
-          onClose={onCommandOptionsClose}
-        />
-        <CommandStatus
-          isOpen={dialogOptions.activeDialog === 'command-status'}
-          cmd={dialogOptions.cmd}
-          onClose={onCommandStatusClose}
-        />
       </AppLoader>
+      <CommandOptions
+        isOpen={dialogOptions.activeDialog === 'command-options'}
+        single={dialogOptions.single}
+        version={dialogOptions.version}
+        active={active}
+        selected={selected}
+        onClose={onCommandOptionsClose}
+      />
+      <CommandStatus
+        isOpen={operationStatus === 'running'}
+        command={operationCommand}
+        status={operationStatus}
+        packages={operationPackages}
+        onClose={onCommandStatusClose}
+      />
     </>
   );
 };

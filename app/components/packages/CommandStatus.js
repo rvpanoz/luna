@@ -16,9 +16,18 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 
+import { AppLoader } from 'components/common';
+
 import styles from './styles/commandsStatus';
 
-const CommandStatus = ({ classes, isOpen, cmd, onClose }) => {
+const CommandStatus = ({
+  classes,
+  isOpen,
+  status,
+  command,
+  packages,
+  onClose,
+}) => {
   const dispatch = useDispatch();
 
   return (
@@ -35,16 +44,28 @@ const CommandStatus = ({ classes, isOpen, cmd, onClose }) => {
           </Typography>
           <Divider />
           <List dense className={classes.list}>
-            <ListItem key="__KEY__">
-              <ListItemText
-                primary={
-                  <Typography variant="subtitle1">__COMMAND__</Typography>
-                }
-              />
-              <ListItemSecondaryAction>
-                <Typography variant="subtitle1">__ARGUMENTS__</Typography>
-              </ListItemSecondaryAction>
-            </ListItem>
+            {packages.map((pkg, idx) => {
+              return (
+                <ListItem key={pkg}>
+                  <ListItemText
+                    primary={
+                      <Typography variant="subtitle1">
+                        {command}&nbsp;{pkg}
+                      </Typography>
+                    }
+                  />
+                  <ListItemSecondaryAction>
+                    <Typography variant="subtitle1">
+                      <AppLoader
+                        loading={status === 'running'}
+                        relative
+                        mini
+                      ></AppLoader>
+                    </Typography>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              );
+            })}
           </List>
         </div>
       </DialogContent>
