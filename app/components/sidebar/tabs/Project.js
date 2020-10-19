@@ -38,34 +38,18 @@ const ProjectTab = ({
             {iMessage('title', 'project-info')}
           </Typography>
           <Divider />
-          {loading && !fromSearch ? (
+          {loading ? (
             <div className={classes.loading}>Loading..</div>
           ) : (
             <>
               <div className={classes.info}>
                 <Typography color="textSecondary" component="div">
-                  {mode === 'local' ? projectInfo.name : 'Global'}
+                  {mode === 'local' ? projectInfo.name : 'Global packages'}
                 </Typography>
                 <Typography color="textSecondary" component="div">
                   {projectInfo.version && mode === 'local'
                     ? `v.${projectInfo.version}`
                     : 'N/A'}
-                </Typography>
-              </div>
-              <div className={classes.info}>
-                <Typography color="textSecondary" component="div">
-                  Node&nbsp;
-                </Typography>
-                <Typography color="textSecondary" component="div">
-                  {npmEnv['node-version']}
-                </Typography>
-              </div>
-              <div className={classes.info}>
-                <Typography color="textSecondary" component="div">
-                  Prefix&nbsp;
-                </Typography>
-                <Typography color="textSecondary" component="div">
-                  {npmEnv['prefix']}
                 </Typography>
               </div>
             </>
@@ -80,8 +64,6 @@ ProjectTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   projectInfo: PropTypes.objectOf(PropTypes.string).isRequired,
   loading: PropTypes.bool,
-  fromSearch: PropTypes.bool,
-  npmEnv: PropTypes.object,
 };
 
 export default withStyles(styles)(ProjectTab);

@@ -3,7 +3,8 @@ import { defaultFont } from 'styles/variables';
 const styles = (theme) => ({
   root: {
     width: '100%',
-    maxWidth: 275,
+    maxWidth: 285,
+    marginTop: theme.spacing(1) / 2,
   },
   indicator: {
     backgroundColor: theme.palette.secondary.main,

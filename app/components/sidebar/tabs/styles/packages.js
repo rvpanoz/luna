@@ -11,8 +11,7 @@ const styles = (theme) => ({
     ...flexContainer,
   },
   card: {
-    width: 266,
-    marginBottom: theme.spacing(2),
+    width: 270,
   },
   cardTitle: {
     ...defaultFont,

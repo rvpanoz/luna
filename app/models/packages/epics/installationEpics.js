@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
-import { tap, concatMap, switchMap, ignoreElements } from 'rxjs/operators';
+import { map, tap, concatMap, switchMap, ignoreElements } from 'rxjs/operators';
 
 import { toggleLoader, setActivePage } from 'models/ui/actions';
 import {
@@ -44,54 +44,19 @@ const showInstallLoaderEpic = (action$) =>
 const installPackageJsonEpic = (action$, state$) =>
   action$.pipe(
     ofType(installPackageJson.type),
-    tap(({ payload }) => {
+    map(({ payload }) => {
       const {
         common: { mode, directory },
       } = state$.value;
 
-      const parameters = {
+      return {
         ...payload,
         mode,
         directory,
         packageJson: true,
       };
-
-      ipcRenderer.send('npm-install', parameters);
     }),
-    ignoreElements()
-  );
-
-/**
- * Send ipc event to main process to handle npm-install for a single package
- * supports global and local mode
- */
-const installPackageEpic = (action$, state$) =>
-  action$.pipe(
-    ofType(installPackage.type),
-    tap(({ payload }) => {
-      const { name, pkgOptions } = payload;
-      const {
-        common: {
-          mode,
-          directory,
-          operations: { packagesInstallOptions },
-        },
-      } = state$.value;
-
-      const options = packagesInstallOptions.find(
-        (option) => option.name === name
-      );
-
-      const parameters = {
-        ...payload,
-        name,
-        pkgOptions: options ? options.options : pkgOptions || ['save-prod'],
-        mode,
-        directory,
-      };
-
-      ipcRenderer.send('npm-install', parameters);
-    }),
+    tap((parameters) => ipcRenderer.send('npm-install', parameters)),
     ignoreElements()
   );
 
@@ -102,8 +67,7 @@ const installPackageEpic = (action$, state$) =>
 const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(installMultiplePackages.type),
-    tap(({ payload }) => {
-      // use selectedFromNotifications for installation from notifications
+    map(({ payload }) => {
       const { pkgOptions, selectedFromNotifications } = payload;
 
       const {
@@ -128,15 +92,14 @@ const installMultiplePackagesEpic = (action$, state$) =>
           : ['save-prod'];
       });
 
-      const parameters = {
+      return {
         ...payload,
         pkgOptions: options,
         mode,
         directory,
       };
-
-      ipcRenderer.send('npm-install', parameters);
     }),
+    tap((parameters) => ipcRenderer.send('npm-install', parameters)),
     ignoreElements()
   );
 
@@ -148,7 +111,6 @@ const installPackageListenerEpic = pipe(
 export {
   installPackageListenerEpic,
   installPackageJsonEpic,
-  installPackageEpic,
   installMultiplePackagesEpic,
   showInstallLoaderEpic,
 };

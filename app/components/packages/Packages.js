@@ -172,6 +172,10 @@ const Packages = ({ classes }) => {
     (data) => {
       const { cmd, isTerminated } = data;
 
+      if (!cmd) {
+        return;
+      }
+
       addNpmOperation([
         ...npmOperations,
         {
@@ -193,6 +197,20 @@ const Packages = ({ classes }) => {
     setDialogOptions(initialDialogOptions);
   };
 
+  const renderHelperText = () => {
+    return (
+      <HelperText
+        text={iMessage('info', 'noPackages')}
+        actionText={
+          mode === 'local' ? iMessage('title', 'switchToGlobals') : null
+        }
+        actionHandler={
+          mode === 'local' ? () => switchModeHandler('global') : null
+        }
+      />
+    );
+  };
+
   useEffect(() => {
     dispatch(
       setPackagesStart({
@@ -206,13 +224,33 @@ const Packages = ({ classes }) => {
     );
   }, [mode, directory, dispatch]);
 
-  useEffect(() => {
-    ipcRenderer.on('npm-command-flow', (event, data) =>
-      updateRunningCommands(data)
-    );
+  // useEffect(() => {
+  //   ipcRenderer.once('npm-command-flow', (event, data) => {
+  //     const { cmd } = data;
+  //     const [command] = cmd;
 
-    return () => ipcRenderer.removeAllListeners(['npm-command-flow']);
-  }, [updateRunningCommands]);
+  //     if(command === 'install' || command === 'update' || command === 'uninstall') {
+  //       setDialogOptions({
+  //         ...dialogOptions,
+  //         activeDialog: 'command-status'
+  //       });
+  //     }
+  //   });
+
+  //   ipcRenderer.on('npm-command-flow', (event, data) => {
+  //     const { cmd } = data;
+  //     const [command] = cmd;
+
+  //     if(command === 'install' || command === 'update' || command === 'uninstall') {
+  //       updateRunningCommands(data);
+  //     }
+  //   });
+
+  //   return () => ipcRenderer.removeAllListeners(['npm-command-flow']);
+  // }, [updateRunningCommands]);
+
+  const noPackages =
+    Boolean(!packagesData || !packagesData.length) && !fromSearch;
 
   const activePackages = fromSearch ? packagesFromSearch : packagesData;
   const [filteredPackages] = useFilters(activePackages, filters);
@@ -229,22 +267,8 @@ const Packages = ({ classes }) => {
     sortDir === 'asc'
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
-
-  const noPackages =
-    Boolean(!packagesData || !packagesData.length) && !fromSearch;
-
   if (noPackages && !loading) {
-    return (
-      <HelperText
-        text={iMessage('info', 'noPackages')}
-        actionText={
-          mode === 'local' ? iMessage('title', 'switchToGlobals') : null
-        }
-        actionHandler={
-          mode === 'local' ? () => switchModeHandler('global') : null
-        }
-      />
-    );
+    return renderHelperText();
   }
 
   return (

@@ -2,7 +2,6 @@ import { createActionCreator } from 'commons/utils';
 
 const ActionCreator = createActionCreator('@@LUNA/PACKAGES');
 
-// basic actions
 const clearAll = ActionCreator('CLEAR_ALL');
 const clearPackages = ActionCreator('CLEAR_PACKAGES');
 const setPackagesStart = ActionCreator('SET_PACKAGES_START');
@@ -32,7 +31,6 @@ const transformationCompleted = ActionCreator('TRANSFORMATION_COMPLETED');
 const transformOutdatedPackages = ActionCreator('TRANSFORM_OUTDATED');
 const transformUpdatedPackages = ActionCreator('TRANSFORM_UPDATED');
 
-// listerers actions
 const listOutdatedPackagesListener = ActionCreator(
   'REGISTER_LISTENER_PACKAGES'
 );

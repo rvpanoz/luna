@@ -43,6 +43,8 @@ const PackagesTab = ({
                     <ListItem
                       key={`packages-${item.name}`}
                       className={classes.listItem}
+                      disableGutters
+                      dense
                     >
                       <ListItemText
                         primary={

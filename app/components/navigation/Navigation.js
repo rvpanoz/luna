@@ -68,7 +68,7 @@ const Navigation = ({ classes, className }) => {
               : iMessage('info', 'showingGlobals')}
           </Typography>
           <Typography variant="subtitle2" component="div" color="textSecondary">
-            {mode === 'local' ? directory : npmEnv.prefix}
+            {mode === 'local' ? directory : npmEnv ? npmEnv.prefix : null}
           </Typography>
         </div>
       </div>
