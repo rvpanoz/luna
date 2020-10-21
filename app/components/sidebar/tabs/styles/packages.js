@@ -13,7 +13,7 @@ const styles = (theme) => ({
   card: {
     width: 270,
   },
-  cardTitle: {
+  title: {
     ...defaultFont,
     fontSize: 20,
     paddingBottom: theme.spacing(1),

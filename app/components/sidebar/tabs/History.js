@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
@@ -14,51 +15,59 @@ import { iMessage } from 'commons/utils';
 import styles from './styles/history';
 
 const HistoryTab = ({ classes, directories, onClick }) => (
-  <div className={classes.tab}>
-    <List>
-      {!directories || !directories.length ? (
-        <ListItem dense className={classes.listItem}>
-          <ListItemText
-            primary={
-              <Typography color="textSecondary" className={classes.label}>
-                {iMessage('info', 'noHistory')}
-              </Typography>
-            }
-          />
-        </ListItem>
-      ) : null}
-      {directories.map((dir) => {
-        const pathParts = path.parse(dir.directory);
-        const directory = pathParts.dir.split('/').slice(0, -1).join('/');
-
-        return (
-          <ListItem
-            classes={{
-              root: classes.listItem,
-            }}
-            key={dir.name}
-          >
+  <>
+    <div className={classes.header}>
+      <Typography className={classes.title} color="textSecondary">
+        {iMessage('title', 'history')}
+      </Typography>
+      <Divider />
+    </div>
+    <div className={classes.tab}>
+      <List>
+        {!directories || !directories.length ? (
+          <ListItem dense className={classes.listItem}>
             <ListItemText
               primary={
-                <Typography className={classes.label}>{dir.name}</Typography>
+                <Typography color="textSecondary" className={classes.label}>
+                  {iMessage('info', 'noHistory')}
+                </Typography>
               }
             />
-            <ListItemSecondaryAction>
-              <Tooltip title={iMessage('title', 'loadDirectory')}>
-                <IconButton
-                  aria-label="load-directory"
-                  onClick={() => onClick(dir.directory)}
-                  disableRipple
-                >
-                  <ArrowRightIcon />
-                </IconButton>
-              </Tooltip>
-            </ListItemSecondaryAction>
           </ListItem>
-        );
-      })}
-    </List>
-  </div>
+        ) : null}
+        {directories.map((dir) => {
+          const pathParts = path.parse(dir.directory);
+          const directory = pathParts.dir.split('/').slice(0, -1).join('/');
+
+          return (
+            <ListItem
+              classes={{
+                root: classes.listItem,
+              }}
+              key={dir.name}
+            >
+              <ListItemText
+                primary={
+                  <Typography className={classes.label}>{dir.name}</Typography>
+                }
+              />
+              <ListItemSecondaryAction>
+                <Tooltip title={iMessage('title', 'loadDirectory')}>
+                  <IconButton
+                    aria-label="load-directory"
+                    onClick={() => onClick(dir.directory)}
+                    disableRipple
+                  >
+                    <ArrowRightIcon />
+                  </IconButton>
+                </Tooltip>
+              </ListItemSecondaryAction>
+            </ListItem>
+          );
+        })}
+      </List>
+    </div>
+  </>
 );
 
 HistoryTab.propTypes = {

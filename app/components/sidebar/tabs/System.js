@@ -33,26 +33,7 @@ const ProjectTab = ({
   <>
     <Card className={classes.card}>
       <CardContent>
-        <>
-          <Typography className={classes.cardTitle} color="textSecondary">
-            {iMessage('title', 'project-info')}
-          </Typography>
-          <Divider />
-          {loading ? (
-            <div className={classes.loading}>Loading..</div>
-          ) : (
-            <>
-              <div className={classes.info}>
-                <Typography color="textSecondary" component="div">
-                  {mode === 'local' ? projectInfo.name : 'U/A'}
-                </Typography>
-                <Typography color="textSecondary" component="div">
-                  {npmEnv['user-agent']}
-                </Typography>
-              </div>
-            </>
-          )}
-        </>
+        <>__CARD_CONTENT__</>
       </CardContent>
     </Card>
   </>

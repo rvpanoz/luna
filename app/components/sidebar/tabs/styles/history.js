@@ -12,6 +12,15 @@ const styles = (theme) => ({
   label: {
     ...defaultFont,
   },
+  header: {
+    paddingTop: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+  },
+  title: {
+    ...defaultFont,
+    fontSize: 20,
+    paddingBottom: theme.spacing(1),
+  },
   directory: {
     ...defaultFont,
     display: 'inline-block',

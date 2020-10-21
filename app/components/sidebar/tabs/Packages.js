@@ -28,7 +28,7 @@ const PackagesTab = ({
   <>
     <Card className={classes.card}>
       <CardContent>
-        <Typography className={classes.cardTitle} color="textSecondary">
+        <Typography className={classes.title} color="textSecondary">
           {iMessage('title', 'overview')}
         </Typography>
         <Divider />

@@ -114,6 +114,7 @@ export const TITLE_MESSAGES = {
   total: 'Total',
   vulnerabilities: 'Vulnerabilities',
   overview: 'Overview',
+  history: 'History',
   audit: 'Audit',
   doctor: 'Doctor',
   loadDirectory: 'Load a directory from a package.json file',
