@@ -3,7 +3,7 @@ import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
 import { AppLogo } from 'components/common';
-import { PackagesTab, ProjectTab, HistoryTab } from './tabs';
+import { PackagesTab, SystemTab, HistoryTab } from './tabs';
 import Tabs from './tabs/Tabs';
 import styles from './styles';
 
@@ -21,28 +21,31 @@ const Sidebar = ({
   installPackagesFromJson,
   dedupe,
   cache,
-}) => (
-  <>
-    <AppLogo />
-    <Tabs>
-      <PackagesTab
-        items={tabPackagesData}
-        updatedAt={updatedAt}
-        loading={loading}
-        fromSearch={fromSearch}
-        projectInfo={projectInfo}
-        mode={mode}
-        npmEnv={npmEnv}
-      />
-      <ProjectTab projectInfo={projectInfo} npmEnv={npmEnv} />
-      <HistoryTab
-        directories={history}
-        onClick={loadDirectory}
-        loading={loading}
-      />
-    </Tabs>
-  </>
-);
+}) => {
+  console.log(npmEnv);
+  return (
+    <>
+      <AppLogo />
+      <Tabs>
+        <PackagesTab
+          items={tabPackagesData}
+          updatedAt={updatedAt}
+          loading={loading}
+          fromSearch={fromSearch}
+          projectInfo={projectInfo}
+          mode={mode}
+          npmEnv={npmEnv}
+        />
+        <HistoryTab
+          directories={history}
+          onClick={loadDirectory}
+          loading={loading}
+        />
+        <SystemTab projectInfo={projectInfo} npmEnv={npmEnv} />
+      </Tabs>
+    </>
+  );
+};
 
 Sidebar.propTypes = {
   classes: objectOf(string).isRequired,

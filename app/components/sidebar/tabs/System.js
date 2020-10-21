@@ -44,12 +44,10 @@ const ProjectTab = ({
             <>
               <div className={classes.info}>
                 <Typography color="textSecondary" component="div">
-                  {mode === 'local' ? projectInfo.name : 'Global packages'}
+                  {mode === 'local' ? projectInfo.name : 'U/A'}
                 </Typography>
                 <Typography color="textSecondary" component="div">
-                  {projectInfo.version && mode === 'local'
-                    ? `v.${projectInfo.version}`
-                    : 'N/A'}
+                  {npmEnv['user-agent']}
                 </Typography>
               </div>
             </>

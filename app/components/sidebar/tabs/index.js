@@ -1,5 +1,5 @@
 import PackagesTab from './Packages';
-import ProjectTab from './Project';
+import SystemTab from './System';
 import HistoryTab from './History';
 
-export { PackagesTab, ProjectTab, HistoryTab };
+export { PackagesTab, SystemTab, HistoryTab };

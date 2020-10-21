@@ -36,13 +36,13 @@ const SidebarTabs = ({ classes, children }) => {
             classes={{
               root: classes.tabLabel,
             }}
-            label="Project"
+            label="History"
           />
           <Tab
             classes={{
               root: classes.tabLabel,
             }}
-            label="History"
+            label="System"
           />
         </Tabs>
       </AppBar>
