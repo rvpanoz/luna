@@ -25,7 +25,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
       </Typography>
       <Divider />
     </div>
-    <div className={classes.tab}>
+    <div className={classes.content}>
       <List dense>
         {!directories || !directories.length ? (
           <ListItem dense className={classes.listItem}>
@@ -62,6 +62,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
               <ListItemSecondaryAction>
                 <Tooltip title={iMessage('title', 'loadDirectory')}>
                   <IconButton
+                    color="primary"
                     aria-label="load-directory"
                     onClick={() => onClick(dir.directory)}
                     disableRipple
