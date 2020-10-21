@@ -9,8 +9,11 @@ import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import ArrowRightIcon from '@material-ui/icons/ArchiveOutlined';
+import FolderIcon from '@material-ui/icons/Folder';
 import { iMessage } from 'commons/utils';
 import styles from './styles/history';
 
@@ -23,7 +26,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
       <Divider />
     </div>
     <div className={classes.tab}>
-      <List>
+      <List dense>
         {!directories || !directories.length ? (
           <ListItem dense className={classes.listItem}>
             <ListItemText
@@ -46,6 +49,11 @@ const HistoryTab = ({ classes, directories, onClick }) => (
               }}
               key={dir.name}
             >
+              <ListItemAvatar>
+                <Avatar>
+                  <FolderIcon />
+                </Avatar>
+              </ListItemAvatar>
               <ListItemText
                 primary={
                   <Typography className={classes.label}>{dir.name}</Typography>
