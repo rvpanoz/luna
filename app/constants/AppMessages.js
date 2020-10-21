@@ -112,6 +112,7 @@ export const TITLE_MESSAGES = {
   issues: 'Issues',
   actions: 'Actions',
   total: 'Total',
+  history: 'History',
   vulnerabilities: 'Vulnerabilities',
   overview: 'Overview',
   audit: 'Audit',
