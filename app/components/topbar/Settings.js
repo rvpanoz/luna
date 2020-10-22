@@ -19,16 +19,33 @@ import { iMessage } from 'commons/utils';
 import styles from './styles/settings';
 
 const Settings = ({ classes, ...restProps }) => {
-  const { onChangeRowsPage, rowsPerPage } = restProps;
+  const { onChangeRowsPage, onChangeManager, rowsPerPage, manager } = restProps;
 
   return (
     <div className={classes.root}>
       <List>
+        <ListItem key="manager">
+          <ListItemText primary={<Typography>Manager</Typography>} />
+          <ListItemSecondaryAction>
+            <FormControl className={classes.formControl}>
+              <InputLabel id="manager-label">Select manager</InputLabel>
+              <Select
+                labelId="manager-label"
+                id="manager"
+                value={manager}
+                onChange={(e) => onChangeManager(e.target.value)}
+              >
+                <MenuItem value="npm">npm</MenuItem>
+                <MenuItem value="yarn">yarn</MenuItem>
+              </Select>
+            </FormControl>
+          </ListItemSecondaryAction>
+        </ListItem>
         <ListItem key="rows-per-page">
           <ListItemText primary={<Typography>Rows per page</Typography>} />
           <ListItemSecondaryAction>
             <FormControl className={classes.formControl}>
-              <InputLabel id="rowsPerPage-label">Rows per page</InputLabel>
+              <InputLabel id="rowsPerPage-label">Set rows</InputLabel>
               <Select
                 labelId="rowsPerPage-label"
                 id="rows-per-page"

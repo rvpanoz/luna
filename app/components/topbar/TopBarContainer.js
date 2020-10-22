@@ -12,7 +12,7 @@ import Divider from '@material-ui/core/Divider';
 
 import { showDialog } from 'commons/utils';
 import { setActivePage, setPageRows } from 'models/ui/actions';
-import { setMode } from 'models/common/actions';
+import { setMode, setManager } from 'models/common/actions';
 import { runInit } from 'models/npm/actions';
 import { iMessage } from 'commons/utils';
 import Init from './Init';
@@ -21,7 +21,7 @@ import TopBar from './TopBar';
 import styles from './styles/topbar';
 
 const mapState = ({
-  common: { mode, directory, activePage },
+  common: { mode, directory, activePage, manager },
   notifications: { notifications },
   ui: {
     pagination: { page, rowsPerPage },
@@ -33,6 +33,7 @@ const mapState = ({
   activePage,
   notifications,
   mode,
+  manager,
   directory,
   loading,
   rowsPerPage,
@@ -42,6 +43,7 @@ const AppTopBar = ({ classes, className }) => {
   const {
     mode,
     directory,
+    manager,
     notifications,
     loading,
     activePage,
@@ -172,11 +174,13 @@ const AppTopBar = ({ classes, className }) => {
           )}
           {state.view === 'settings' && (
             <Settings
+              manager={manager}
               onClose={closeDialog}
               rowsPerPage={rowsPerPage}
               onChangeRowsPage={(rowsPerPage) =>
                 dispatch(setPageRows({ rowsPerPage }))
               }
+              onChangeManager={(manager) => dispatch(setManager({ manager }))}
             />
           )}
         </DialogContent>

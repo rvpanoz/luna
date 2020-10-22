@@ -5,6 +5,7 @@
 const initialState = {
   manager: 'npm',
   mode: 'global',
+  manager: 'npm',
   onlineStatus: 'offline',
   directory: null,
   operations: {
