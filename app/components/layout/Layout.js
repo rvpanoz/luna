@@ -23,7 +23,6 @@ import styles from './styles';
 const mapState = ({
   common: { mode, directory, onlineStatus },
   ui: { activePage, snackbar },
-  npm: { operationStatus, operationPackages, operationCommand },
 }) => ({
   onlineStatus,
   activePage,
