@@ -18,9 +18,9 @@ import DialogContent from '@material-ui/core/DialogContent';
 
 import { AppLoader } from 'components/common';
 
-import styles from './styles/commandsStatus';
+import styles from './styles/operationsLoader';
 
-const CommandStatus = ({
+const OperationsLoader = ({
   classes,
   isOpen,
   status,
@@ -35,7 +35,7 @@ const CommandStatus = ({
       open={isOpen}
       fullWidth
       onClose={onClose}
-      aria-labelledby="commands-status"
+      aria-labelledby="operations-loader"
     >
       <DialogContent>
         <div>
@@ -74,8 +74,9 @@ const CommandStatus = ({
   );
 };
 
-CommandStatus.propTypes = {
+OperationsLoader.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  packages: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default withStyles(styles)(CommandStatus);
+export default withStyles(styles)(OperationsLoader);

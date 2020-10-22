@@ -2,7 +2,7 @@ import { defaultFont, grayColor } from 'styles/variables';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = (theme) => ({
-  tab: {
+  content: {
     backgroundColor: theme.palette.background.paper,
   },
   label: {
@@ -21,6 +21,22 @@ const styles = (theme) => ({
     paddingTop: theme.spacing(1),
     paddingLeft: theme.spacing(1) + 4,
     margin: 0,
+  },
+  primaryColor: {
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.primary.main,
+  },
+  secondaryColor: {
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.secondary.main,
+  },
+  warningColor: {
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.error.light,
+  },
+  errorColor: {
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.error.light,
   },
 });
 

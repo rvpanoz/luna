@@ -14,6 +14,7 @@ import Notifications from 'components/notifications/NotificationsContainer';
 import Doctor from 'components/doctor/DoctorContainer';
 import Audit from 'components/audit/Audit';
 import AppSnackbar from 'components/common/AppSnackbar';
+import OperationsLoader from 'components/common/OperationsLoader';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 import appTheme from 'styles/theme';
@@ -23,16 +24,26 @@ import styles from './styles';
 const mapState = ({
   common: { mode, directory, onlineStatus },
   ui: { activePage, snackbar },
+  npm: { operationStatus, operationPackages, operationCommand },
 }) => ({
   onlineStatus,
   activePage,
   mode,
   directory,
   snackbar,
+  operationCommand,
+  operationStatus,
+  operationPackages,
 });
 
 const AppLayout = ({ classes }) => {
-  const { activePage, snackbar } = useMappedState(mapState);
+  const {
+    activePage,
+    snackbar,
+    operationCommand,
+    operationStatus,
+    operationPackages,
+  } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   const onClose = useCallback(
@@ -79,6 +90,13 @@ const AppLayout = ({ classes }) => {
           snackbar={snackbar}
           ContentProps={{ 'aria-describedby': 'app-snackbar' }}
           onClose={hideOnClose ? null : onClose}
+        />
+
+        <OperationsLoader
+          isOpen={operationStatus === 'running'}
+          command={operationCommand}
+          status={operationStatus}
+          packages={operationPackages}
         />
       </div>
     </MuiThemeProvider>

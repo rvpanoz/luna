@@ -24,11 +24,7 @@ const HelperText = ({
       {text}
     </Typography>
     {detail && (
-      <Typography
-        color="textSecondary"
-        variant="body2"
-        className={classes.withPadding}
-      >
+      <Typography variant="body2" className={classes.withPadding}>
         {detail}
       </Typography>
     )}
@@ -46,7 +42,7 @@ const HelperText = ({
 );
 
 HelperText.defaultProps = {
-  color: 'secondary',
+  color: 'primary',
 };
 
 HelperText.propTypes = {

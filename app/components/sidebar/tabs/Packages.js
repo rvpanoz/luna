@@ -32,7 +32,7 @@ const PackagesTab = ({
           {iMessage('title', 'overview')}
         </Typography>
         <Divider />
-        <div className={classes.tab}>
+        <div className={classes.content}>
           {loading && !fromSearch ? (
             <div className={classes.loading}>Loading..</div>
           ) : (

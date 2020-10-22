@@ -32,7 +32,6 @@ import TableHeader from './Header';
 import PackageItem from './PackageItem';
 import Pagination from './Pagination';
 import CommandOptions from './CommandOptions';
-import CommandStatus from './CommandStatus';
 import PackageDetails from './PackageDetails';
 import styles from './styles/packages';
 
@@ -221,6 +220,7 @@ const Packages = ({ classes }) => {
     sortDir === 'asc'
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
+
   if (noPackages && !loading) {
     return renderHelperText();
   }
@@ -384,13 +384,6 @@ const Packages = ({ classes }) => {
         active={active}
         selected={selected}
         onClose={onCommandOptionsClose}
-      />
-      <CommandStatus
-        isOpen={operationStatus === 'running'}
-        command={operationCommand}
-        status={operationStatus}
-        packages={operationPackages}
-        onClose={onCommandStatusClose}
       />
     </>
   );

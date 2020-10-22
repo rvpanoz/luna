@@ -2,13 +2,20 @@ import { defaultFont, grayColor } from 'styles/variables';
 import { darken } from '@material-ui/core/styles/colorManipulator';
 
 const styles = (theme) => ({
-  tab: {
+  content: {
     backgroundColor: theme.palette.background.paper,
   },
   label: {
     ...defaultFont,
-    fontSize: 18,
-    color: darken(grayColor, 0.5),
+  },
+  header: {
+    paddingTop: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+  },
+  title: {
+    ...defaultFont,
+    fontSize: 20,
+    paddingBottom: theme.spacing(1),
   },
   secondaryText: {
     ...defaultFont,

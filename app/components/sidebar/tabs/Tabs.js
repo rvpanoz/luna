@@ -42,7 +42,7 @@ const SidebarTabs = ({ classes, children }) => {
             classes={{
               root: classes.tabLabel,
             }}
-            label="System"
+            label="Actions"
           />
         </Tabs>
       </AppBar>

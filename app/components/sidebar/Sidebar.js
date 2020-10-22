@@ -3,7 +3,7 @@ import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
 import { AppLogo } from 'components/common';
-import { PackagesTab, SystemTab, HistoryTab } from './tabs';
+import { PackagesTab, ActionsTab, HistoryTab } from './tabs';
 import Tabs from './tabs/Tabs';
 import styles from './styles';
 
@@ -22,7 +22,6 @@ const Sidebar = ({
   dedupe,
   cache,
 }) => {
-  console.log(npmEnv);
   return (
     <>
       <AppLogo />
@@ -41,7 +40,10 @@ const Sidebar = ({
           onClick={loadDirectory}
           loading={loading}
         />
-        <SystemTab projectInfo={projectInfo} npmEnv={npmEnv} />
+        <ActionsTab
+          mode={mode}
+          onInstallPackagesFromJson={installPackagesFromJson}
+        />
       </Tabs>
     </>
   );
