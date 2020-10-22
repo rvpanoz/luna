@@ -1,7 +1,7 @@
 {
   "name": "luna",
   "productName": "luna",
-  "version": "3.4.0",
+  "version": "3.4.3",
   "description": "npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux. Build on Electron",
   "scripts": {
     "build": "concurrently \"npm run build-main\" \"npm run build-renderer\"",
