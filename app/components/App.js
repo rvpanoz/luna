@@ -78,6 +78,7 @@ const App = () => {
         'finish-loaded',
         'uncaught-exception',
         'npm-env-close',
+        'npm-command-flow',
         'yarn-lock-detected',
       ]);
     };
