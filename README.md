@@ -20,7 +20,7 @@
 
 ## Motivation
 
-Luna was created with main purpose to provide a flexible and modern UI for npm dependencies management. Furthermore I wanted to create a project with the latest web technologies combined in one application.
+Luna was created with main purpose to provide a flexible and modern UI for npm dependencies management. You can install, update and uninstall packages using a user interface build on latest web technologies.
 
 ## Features
 
@@ -28,23 +28,22 @@ Luna was created with main purpose to provide a flexible and modern UI for npm d
 - Search npm for new packages
 - Install packages
 - Uninstall packages
-- Update existing packages
+- Update packages
 - Filter packages by type or outdated
 - Preview package details (versions, statistics, dependencies and more)
 - Get notifications for missing dependencies or extraneous dependencies
-- Reporting (audit/doctor)
 
 ## Screenshots
 
-<div style="display: flex; flex-wrap: wrap;padding: 0 4px;">
+<div style="display: flex; flex-wrap: wrap;padding: 0 4px; justify-content: space-between;">
   <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
     <img style="margin-top: 8px; vertical-align: middle;" title="luna-1" src="./media/images/luna-screen-1.png"/>
   </div>
-  <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
+  <div style="flex: 25%;max-width: 25%;padding: 8px 4px;">
     <img style="margin-top: 8px; vertical-align: middle;" title="luna-2" src="./media/images/luna-screen-2.png"/>
   </div>
-  <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
-    <img style="margin-top: 8px; vertical-align: middle;" title="luna-2" src="./media/images/luna-screen-3.png"/>
+  <div style="flex: 25%;max-width: 25%;padding: 8px 4px;">
+    <img style="margin-top: 8px; vertical-align: middle;" title="luna-3" src="./media/images/luna-screen-3.png"/>
   </div>
 </div>
 
@@ -94,16 +93,16 @@ All binaries of the latest version are uploaded to the [releases](https://github
 - [Rxjs](https://rxjs-dev.firebaseapp.com/) - [🛠️](https://stackshare.io/rxjs) - [🐙](https://github.com/Reactive-Extensions/RxJS) - Reactive extensions library for Javascript
 - [Material-UI](https://material-ui.com//) - [🛠️](https://stackshare.io/material-ui) - [🐙](https://github.com/mui-org/material-ui) - React components that implement Google's Material Design.
 
+## GreeceJS meetup presentation
+
+You can view my presentation in the GreeceJS meetup at http://bit.ly/2RES3AN
+
 ## Contributing and Issues
 
 Contributions, issues and feature requests are welcome. <br />Feel free to check [issues page](https://github.com/rvpanoz/luna/issues).
 
 Pull requests are always welcome. 💪 <br />
 Be sure to merge the latest from "upstream" before making a pull request. 🙏
-
-## GreeceJS presentation
-
-You can view my presentation in the GreeceJS meetup at http://bit.ly/2RES3AN
 
 ## License
 
