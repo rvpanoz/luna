@@ -66,9 +66,9 @@ const installPackageJsonEpic = (action$, state$) =>
  */
 const installMultiplePackagesEpic = (action$, state$) =>
   action$.pipe(
-    ofType(installMultiplePackages.type),
+    ofType(installMultiplePackages.type, installPackage.type),
     map(({ payload }) => {
-      const { pkgOptions, selectedFromNotifications } = payload;
+      const { pkgOptions, selectedFromNotifications, single } = payload;
 
       const {
         common: {
@@ -94,9 +94,9 @@ const installMultiplePackagesEpic = (action$, state$) =>
 
       return {
         ...payload,
-        pkgOptions: options,
         mode,
         directory,
+        pkgOptions: options,
       };
     }),
     tap((parameters) => ipcRenderer.send('npm-install', parameters)),

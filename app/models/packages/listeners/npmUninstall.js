@@ -42,19 +42,11 @@ const onNpmUninstall$ = new Observable((observer) => {
 
       observer.next(clearNotifications());
       observer.next(removePackages({ removedPackages: packages }));
-
-      observer.next(
-        setSnackbar({
-          open: true,
-          type: 'info',
-          message: resultMessage,
-        })
-      );
     }
   );
 
   ipcRenderer.on('npm-uninstall-error', (event, error) => {
-    console.log(error);
+    observer.error(error);
   });
 });
 

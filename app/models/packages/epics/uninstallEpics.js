@@ -10,10 +10,6 @@ import {
 
 import { onNpmUninstall$ } from '../listeners';
 
-/**
- * Uninstall packages
- * supports global and local mode
- */
 const uninstallPackagesEpic = (action$, state$) =>
   action$.pipe(
     ofType(uninstallPackages.type),

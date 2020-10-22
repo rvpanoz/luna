@@ -23,6 +23,7 @@ const onNpmInstall$ = new Subject();
 ipcRenderer.on('npm-install-completed', () => {
   try {
     onNpmInstall$.next(clearInstallOptions());
+
     onNpmInstall$.next(
       updateCommand({
         operationStatus: 'idle',

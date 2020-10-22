@@ -34,14 +34,6 @@ const App = () => {
       });
     };
 
-    // passing in true for the third parameter causes the event to be captured on the way down.
-    window.addEventListener('online', updateOnlineStatus, true);
-    window.addEventListener('offline', updateOnlineStatus, true);
-
-    updateOnlineStatus();
-  }, [dispatch]);
-
-  useEffect(() => {
     ipcRenderer.once('finish-loaded', () => dispatch(initActions()));
     ipcRenderer.once('npm-env-close', (event, env) => dispatch(setEnv(env)));
 
@@ -55,17 +47,40 @@ const App = () => {
       );
     });
 
+    ipcRenderer.on('npm-command-flow', (event, data) => {
+      const { cmd, isTerminated } = data;
+      const [command, ...args] = cmd;
+
+      dispatch(
+        setSnackbar({
+          open: isTerminated === false,
+          type: 'info',
+          message: `npm ${cmd.join(' ')}`,
+        })
+      );
+    });
+
     ipcRenderer.on('uncaught-exception', (event, ...args) => {
       dispatch({ type: setUIException.type, payload: { message: args[0] } });
     });
 
-    return () =>
+    // passing in true for the third parameter causes the event to be captured on the way down.
+    window.addEventListener('online', updateOnlineStatus, true);
+    window.addEventListener('offline', updateOnlineStatus, true);
+
+    updateOnlineStatus();
+
+    return () => {
+      window.removeEventListener('online', updateOnlineStatus, true);
+      window.removeEventListener('offline', updateOnlineStatus, true);
+
       ipcRenderer.removeAllListeners([
         'finish-loaded',
         'uncaught-exception',
         'npm-env-close',
         'yarn-lock-detected',
       ]);
+    };
   }, [dispatch]);
 
   return (
