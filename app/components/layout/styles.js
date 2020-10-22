@@ -31,12 +31,6 @@ const styles = (theme) => ({
   content: {
     padding: theme.spacing(1),
   },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
 });
 
 export default styles;

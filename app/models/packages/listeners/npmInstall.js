@@ -20,11 +20,10 @@ const updateCommand = ({
 
 const onNpmInstall$ = new Subject();
 
-ipcRenderer.removeAllListeners(['npm-install-completed']);
-
 ipcRenderer.on('npm-install-completed', () => {
   try {
     onNpmInstall$.next(clearInstallOptions());
+
     onNpmInstall$.next(
       updateCommand({
         operationStatus: 'idle',
@@ -56,5 +55,7 @@ ipcRenderer.on('npm-install-completed', () => {
 ipcRenderer.on('npm-install-error', (event, error) =>
   onNpmInstall$.error(error)
 );
+
+ipcRenderer.removeAllListeners(['npm-install-completed', 'npm-install-error']);
 
 export default onNpmInstall$;

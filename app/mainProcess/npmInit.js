@@ -12,7 +12,7 @@ const onNpmInit = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
-  const onFlow = (chunk) => event.sender.send('npm-init-flow', chunk);
+  const onFlow = (options) => event.sender.send('npm-init-flow', options);
   const onError = (error) => event.sender.send('npm-init-error', error);
   const onComplete = (errors, data, initDirectory) =>
     setTimeout(
@@ -22,10 +22,10 @@ const onNpmInit = (event, options, store) => {
     );
 
   const callback = (result) => {
-    const { status, errors, data, initDirectory } = result;
+    const { status, errors, data, cmd, manager, isTerminated } = result;
 
     return switchcase({
-      flow: (dataChunk) => onFlow(dataChunk),
+      flow: () => onFlow({ manager, cmd, isTerminated }),
       close: () => onComplete(errors, data, initDirectory),
       error: (error) => onError(error),
     })(null)(status);

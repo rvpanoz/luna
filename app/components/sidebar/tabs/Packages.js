@@ -15,67 +15,84 @@ import { AppLoader } from 'components/common';
 import { iMessage } from 'commons/utils';
 import styles from './styles/packages';
 
-const PackagesTab = ({ classes, items, loading, updatedAt, fromSearch }) => (
-  <Card className={classes.card}>
-    <CardContent>
-      <Typography className={classes.cardTitle} color="textSecondary">
-        {iMessage('title', 'overview')}
-      </Typography>
-      <Divider />
-      <div className={classes.tab}>
-        {loading && !fromSearch ? (
-          <div className={classes.loading}>Loading..</div>
-        ) : (
-          <List disablePadding>
-            {items &&
-              items.map((item) => (
-                <ListItem
-                  key={`packages-${item.name}`}
-                  className={classes.listItem}
-                >
-                  <ListItemText
-                    primary={
-                      <div className={classes.flexContainer}>
-                        <Typography color="textSecondary" variant="h5">
-                          {item.primaryText}
+const PackagesTab = ({
+  classes,
+  items,
+  loading,
+  updatedAt,
+  fromSearch,
+  projectInfo,
+  npmEnv,
+  mode,
+}) => (
+  <>
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography className={classes.title} color="textSecondary">
+          {iMessage('title', 'overview')}
+        </Typography>
+        <Divider />
+        <div className={classes.content}>
+          {loading && !fromSearch ? (
+            <div className={classes.loading}>Loading..</div>
+          ) : (
+            <>
+              <List disablePadding>
+                {items &&
+                  items.map((item) => (
+                    <ListItem
+                      key={`packages-${item.name}`}
+                      className={classes.listItem}
+                      disableGutters
+                      dense
+                    >
+                      <ListItemText
+                        primary={
+                          <div className={classes.flexContainer}>
+                            <Typography color="textSecondary" variant="h5">
+                              {item.primaryText}
+                            </Typography>
+                          </div>
+                        }
+                      />
+                      <ListItemSecondaryAction>
+                        <Typography color="textSecondary" variant="h4">
+                          {item.secondaryText}
                         </Typography>
-                      </div>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <Typography color="textSecondary" variant="h4">
-                      {item.secondaryText}
-                    </Typography>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-          </List>
-        )}
-      </div>
-    </CardContent>
-    <Divider />
-    <CardActions>
-      <div className={classes.cardFlexContainer}>
-        <div className={classes.cardFlexContainerInner}>
-          <UpdateIcon className={classes.updateIcon} />
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+              </List>
+            </>
+          )}
+        </div>
+      </CardContent>
+      <Divider />
+      <CardActions>
+        <div className={classes.cardFlexContainer}>
+          <div className={classes.cardFlexContainerInner}>
+            <UpdateIcon className={classes.updateIcon} />
+            <Typography variant="caption" color="textSecondary">
+              {iMessage('info', 'updatedAt')}
+            </Typography>
+          </div>
           <Typography variant="caption" color="textSecondary">
-            {iMessage('info', 'updatedAt')}
+            {updatedAt !== null ? updatedAt : '...'}
           </Typography>
         </div>
-        <Typography variant="caption" color="textSecondary">
-          {updatedAt !== null ? updatedAt : '...'}
-        </Typography>
-      </div>
-    </CardActions>
-  </Card>
+      </CardActions>
+    </Card>
+  </>
 );
 
 PackagesTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
+  projectInfo: PropTypes.objectOf(PropTypes.string).isRequired,
   loading: PropTypes.bool,
   fromSearch: PropTypes.bool,
   updatedAt: PropTypes.string,
+  npmEnv: PropTypes.object,
 };
 
 export default withStyles(styles)(PackagesTab);

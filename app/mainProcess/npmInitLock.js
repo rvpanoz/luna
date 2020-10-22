@@ -12,16 +12,16 @@ const onNpmInitLock = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
-  const onFlow = (chunk) => event.sender.send('npm-init-lock-flow', chunk);
+  const onFlow = (options) => event.sender.send('npm-init-lock-flow', options);
   const onError = (error) => event.sender.send('npm-init-lock-error', error);
   const onComplete = (errors, data) =>
     event.sender.send('npm-init-lock-completed', data, errors);
 
   const callback = (result) => {
-    const { status, errors, data } = result;
+    const { status, errors, data, cmd, manager, isTerminated } = result;
 
     return switchcase({
-      flow: (dataChunk) => onFlow(dataChunk),
+      flow: () => onFlow({ manager, cmd, isTerminated }),
       close: () => onComplete(errors, data),
       error: (error) => onError(error),
     })(null)(status);

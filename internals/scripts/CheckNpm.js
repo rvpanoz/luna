@@ -1,12 +1,12 @@
-import cp from 'child_process';
+import { execSync } from 'child_process';
 import chalk from 'chalk';
 import log from 'electron-log';
 
 const { NODE_ENV } = process.env;
 
-const checkNpm = () => {
+const checkNpm = async () => {
   try {
-    const result = cp.execSync('npm config list --json');
+    const result = await execSync('npm config list --json');
     const env = JSON.parse(result.toString());
 
     if (NODE_ENV === 'development') {
@@ -14,14 +14,7 @@ const checkNpm = () => {
     }
 
     return {
-      userAgent: env['user-agent'],
-      metricsRegistry: env['metrics-registry'],
-      auditLevel: env['audit-level'],
-      nodeVersion: env['node-version'],
-      cache: env.cache,
-      prefix: env.prefix,
-      shrinkWrap: env.shrinkWrap,
-      logLevel: env.lockLevel,
+      ...env,
     };
   } catch (error) {
     throw new Error(error);

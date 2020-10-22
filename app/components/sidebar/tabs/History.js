@@ -21,7 +21,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
   <>
     <div className={classes.header}>
       <Typography className={classes.title} color="textSecondary">
-        {iMessage('title', 'history')}
+        {iMessage('title', 'historyDirectories')}
       </Typography>
       <Divider />
     </div>
@@ -50,7 +50,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
               key={dir.name}
             >
               <ListItemAvatar>
-                <Avatar>
+                <Avatar className={classes.secondaryColor}>
                   <FolderIcon />
                 </Avatar>
               </ListItemAvatar>
@@ -62,7 +62,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
               <ListItemSecondaryAction>
                 <Tooltip title={iMessage('title', 'loadDirectory')}>
                   <IconButton
-                    color="primary"
+                    color="inherit"
                     aria-label="load-directory"
                     onClick={() => onClick(dir.directory)}
                     disableRipple

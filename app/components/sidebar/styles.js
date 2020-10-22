@@ -14,6 +14,9 @@ const styles = (theme) => ({
   drawer: {
     width: drawerWidth,
     borderRight: 0,
+    [theme.breakpoints.up('sm')]: {
+      flexShrink: 0,
+    },
   },
 });
 

@@ -12,16 +12,16 @@ const onNpmView = (event, options, store) => {
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
-  const onFlow = (message) => event.sender.send('npm-command-flow', message);
+  const onFlow = (options) => event.sender.send('npm-command-flow', options);
   const onError = (error) => event.sender.send('npm-view-error', error);
   const onComplete = (errors, data) =>
     event.sender.send('npm-view-completed', data, errors);
 
   const callback = (result) => {
-    const { status, errors, data, message } = result;
+    const { status, errors, data, manager, cmd, isTerminated } = result;
 
     return switchcase({
-      flow: () => onFlow(message),
+      flow: () => onFlow({ manager, cmd, isTerminated }),
       close: () => onComplete(errors, data),
       error: (error) => onError(error),
     })(null)(status);

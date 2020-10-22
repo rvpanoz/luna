@@ -1,4 +1,5 @@
-import { flexContainer, defaultFont } from 'styles/variables';
+import { darken } from '@material-ui/core/styles/colorManipulator';
+import { flexContainer, defaultFont, grayColor } from 'styles/variables';
 
 const styles = (theme) => ({
   flexContainer: {
@@ -37,14 +38,24 @@ const styles = (theme) => ({
     },
     [theme.breakpoints.down('md')]: {
       width: 200,
+      fontSize: 14,
     },
+    color: darken(grayColor, 0.5),
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     textAlign: 'left',
   },
+  version: {
+    [theme.breakpoints.down('md')]: {
+      fontSize: 14,
+    },
+  },
   group: {
     color: theme.palette.primary.main,
+    [theme.breakpoints.down('md')]: {
+      fontSize: 14,
+    },
   },
   statusMissing: {
     color: theme.palette.secondary.main,

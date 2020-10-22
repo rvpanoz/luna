@@ -19,18 +19,17 @@ const mapState = ({
       loader: { loading },
     },
   },
-  npm: { env },
+  npm: { env: npmEnv },
 }) => ({
   activePage,
   mode,
   directory,
-  env,
+  npmEnv,
   loading,
 });
 
 const Navigation = ({ classes, className }) => {
-  const { env, mode, directory, activePage } = useMappedState(mapState);
-
+  const { npmEnv, mode, directory, activePage } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   const setActivePageHandler = (page) =>
@@ -69,7 +68,7 @@ const Navigation = ({ classes, className }) => {
               : iMessage('info', 'showingGlobals')}
           </Typography>
           <Typography variant="subtitle2" component="div" color="textSecondary">
-            {mode === 'local' ? directory : env.prefix}
+            {mode === 'local' ? directory : npmEnv ? npmEnv.prefix : null}
           </Typography>
         </div>
       </div>

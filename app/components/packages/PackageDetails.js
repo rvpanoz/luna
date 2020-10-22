@@ -37,7 +37,7 @@ import Dependencies from './Dependencies';
 import Versions from './Versions';
 import PackageInfo from './PackageInfo';
 import { InstallAction, UpdateAction, UninstallAction } from './Actions';
-
+import { initialDialogOptions } from 'components/packages/Packages';
 import styles from './styles/packageDetails';
 
 const mapState = ({
@@ -60,7 +60,7 @@ const mapState = ({
   fromSearch,
 });
 
-const PackageDetails = ({ classes, toggleOptions }) => {
+const PackageDetails = ({ classes, showCommandOptions }) => {
   const dispatch = useDispatch();
   const [expanded, expand] = useState(true);
   const [dependencies, setDependencies] = useState([]);
@@ -93,11 +93,11 @@ const PackageDetails = ({ classes, toggleOptions }) => {
 
   const handleInstall = () => {
     if (fromSearch && mode === 'local') {
-      return toggleOptions({
-        open: true,
+      return showCommandOptions({
         single: true,
         name: active.name,
         version,
+        ...initialDialogOptions,
       });
     }
 
@@ -136,8 +136,7 @@ const PackageDetails = ({ classes, toggleOptions }) => {
 
   const handleInstallVersion = (packageVersion) => {
     if (fromSearch && mode === 'local') {
-      return toggleOptions({
-        open: true,
+      return showCommandOptions({
         single: true,
         name: active.name,
         version: packageVersion,
@@ -357,7 +356,6 @@ const PackageDetails = ({ classes, toggleOptions }) => {
         loading={packageLoader.loading}
         message={iMessage('info', 'loadingPackage')}
         relative
-        mini
       >
         {active ? renderCard() : null}
       </AppLoader>
@@ -395,7 +393,7 @@ PackageDetails.defaultProps = {
 
 PackageDetails.propTypes = {
   classes: objectOf(string).isRequired,
-  toggleOptions: func.isRequired,
+  showCommandOptions: func.isRequired,
   group: string,
 };
 

@@ -1,3 +1,4 @@
+import { ipcRenderer } from 'electron';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { objectOf, string } from 'prop-types';
 import { useMappedState, useDispatch } from 'redux-react-hook';
@@ -9,9 +10,6 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 
 import { useFilters } from 'commons/hooks';
 import { AppLoader, HelperText } from 'components/common';
@@ -85,6 +83,16 @@ const mapState = ({
   operationCommand,
 });
 
+export const initialDialogOptions = {
+  activeDialog: null,
+  cmd: [],
+  single: false,
+  isTerminated: false,
+  manager: 'npm',
+  name: '',
+  version: '',
+};
+
 const Packages = ({ classes }) => {
   const {
     loader: { loading, message },
@@ -107,12 +115,7 @@ const Packages = ({ classes }) => {
     operationCommand,
   } = useMappedState(mapState);
 
-  const [options, toggleOptions] = useState({
-    open: false,
-    single: false,
-    name: null,
-    version: null,
-  });
+  const [dialogOptions, setDialogOptions] = useState(initialDialogOptions);
   const [filteredByNamePackages, setFilteredByNamePackages] = useState([]);
   const wrapperRef = useRef(null);
   const dispatch = useDispatch();
@@ -163,6 +166,29 @@ const Packages = ({ classes }) => {
     [dispatch]
   );
 
+  const onCommandOptionsClose = () => {
+    dispatch(clearInstallOptions());
+    setDialogOptions(initialDialogOptions);
+  };
+
+  const onCommandStatusClose = () => {
+    setDialogOptions(initialDialogOptions);
+  };
+
+  const renderHelperText = () => {
+    return (
+      <HelperText
+        text={iMessage('info', 'noPackages')}
+        actionText={
+          mode === 'local' ? iMessage('title', 'switchToGlobals') : null
+        }
+        actionHandler={
+          mode === 'local' ? () => switchModeHandler('global') : null
+        }
+      />
+    );
+  };
+
   useEffect(() => {
     dispatch(
       setPackagesStart({
@@ -175,6 +201,9 @@ const Packages = ({ classes }) => {
       })
     );
   }, [mode, directory, dispatch]);
+
+  const noPackages =
+    Boolean(!packagesData || !packagesData.length) && !fromSearch;
 
   const activePackages = fromSearch ? packagesFromSearch : packagesData;
   const [filteredPackages] = useFilters(activePackages, filters);
@@ -192,21 +221,8 @@ const Packages = ({ classes }) => {
       ? dataSlices.sort((a, b) => (a[sortBy] < b[sortBy] ? -1 : 1))
       : dataSlices.sort((a, b) => (b[sortBy] < a[sortBy] ? -1 : 1));
 
-  const noPackages =
-    Boolean(!packagesData || !packagesData.length) && !fromSearch;
-
   if (noPackages && !loading) {
-    return (
-      <HelperText
-        text={iMessage('info', 'noPackages')}
-        actionText={
-          mode === 'local' ? iMessage('title', 'switchToGlobals') : null
-        }
-        actionHandler={
-          mode === 'local' ? () => switchModeHandler('global') : null
-        }
-      />
-    );
+    return renderHelperText();
   }
 
   return (
@@ -238,7 +254,12 @@ const Packages = ({ classes }) => {
                   scrollWrapper={() =>
                     scrollWrapper(wrapperRef && wrapperRef.current, 0)
                   }
-                  toggleOptions={toggleOptions}
+                  showCommandOptions={() =>
+                    setDialogOptions({
+                      activeDialog: 'command-options',
+                      single: false,
+                    })
+                  }
                   switchMode={switchModeHandler}
                   reload={reload}
                   filteredByNamePackages={filteredByNamePackages}
@@ -346,85 +367,24 @@ const Packages = ({ classes }) => {
             className={classes.transition}
           >
             <PackageDetails
-              toggleOptions={toggleOptions}
-              addSelected={() =>
-                dispatch(addSelected({ name: active ? active.name : null }))
+              showCommandOptions={(options) =>
+                setDialogOptions({
+                  activeDialog: 'command-options',
+                  ...options,
+                })
               }
             />
           </Grid>
         </Grid>
       </AppLoader>
-      <Dialog
-        open={options.open}
-        fullWidth
-        onClose={() => {
-          dispatch(clearInstallOptions());
-          toggleOptions({
-            open: false,
-            single: false,
-            name: null,
-            version: null,
-          });
-        }}
-        aria-labelledby="install-options"
-      >
-        <DialogContent>
-          <CommandOptions
-            selected={selected.length ? selected : active ? [active.name] : []}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              dispatch(clearInstallOptions());
-              toggleOptions({
-                open: false,
-                single: false,
-                name: null,
-                version: null,
-              });
-            }}
-            color="secondary"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              if (options.single) {
-                dispatch(
-                  installPackage({
-                    ipcEvent: 'npm-install',
-                    cmd: ['install'],
-                    name: active.name,
-                    version: options.version,
-                    single: true,
-                  })
-                );
-              } else {
-                dispatch(
-                  installMultiplePackages({
-                    ipcEvent: 'npm-install',
-                    cmd: selected.map(() => 'install'),
-                    multiple: true,
-                    packages: selected,
-                  })
-                );
-              }
-
-              toggleOptions({
-                open: false,
-                single: false,
-                name: null,
-                version: null,
-              });
-            }}
-            color="primary"
-            autoFocus
-          >
-            Install
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <CommandOptions
+        isOpen={dialogOptions.activeDialog === 'command-options'}
+        single={dialogOptions.single}
+        version={dialogOptions.version}
+        active={active}
+        selected={selected}
+        onClose={onCommandOptionsClose}
+      />
     </>
   );
 };

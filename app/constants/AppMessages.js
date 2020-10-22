@@ -113,8 +113,11 @@ export const TITLE_MESSAGES = {
   actions: 'Actions',
   total: 'Total',
   history: 'History',
+  historyDirectories: 'List directories',
+  actionList: 'List actions',
   vulnerabilities: 'Vulnerabilities',
   overview: 'Overview',
+  history: 'History',
   audit: 'Audit',
   doctor: 'Doctor',
   loadDirectory: 'Load a directory from a package.json file',
@@ -151,6 +154,7 @@ export const TITLE_MESSAGES = {
   listReload: 'Reload',
   createPackageJson: 'Create a package.json file',
   doctorReport: 'Doctor report',
+  'project-info': 'Project',
 };
 
 export const CONFIRMATION_MESSAGES = {

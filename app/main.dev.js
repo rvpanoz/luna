@@ -122,6 +122,8 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: true,
     },
+    fullscreen: true,
+    resizable: true,
     icon: getAssetPath('icon.icns'),
   });
 
@@ -154,8 +156,7 @@ const createWindow = async () => {
     }
 
     const npmEnv = await CheckNpm();
-    const npmEnvError = npmEnv && npmEnv.error;
-    event.sender.send('npm-env-close', npmEnvError, npmEnv);
+    event.sender.send('npm-env-close', npmEnv);
 
     const userSettings = Store.get('user_settings') || {};
     event.sender.send('settings-loaded-close', userSettings);

@@ -18,14 +18,10 @@ import { clearSelected, setSnackbar } from 'models/ui/actions';
 import {
   addActionError,
   setRunningCommand,
-  npmAuditListener,
-  npmDoctorListener,
   npmInitListener,
   npmDedupeListener,
   npmCacheListener,
   runDedupe,
-  runDoctor,
-  runAudit,
   runInit,
   runCache,
 } from 'models/npm/actions';
@@ -41,17 +37,6 @@ const updateCommand = ({
     operationStatus,
     operationPackages,
     operationCommand,
-  },
-});
-
-const updateSnackbar = ({ type, position, message, open, hideOnClose }) => ({
-  type: setSnackbar.type,
-  payload: {
-    open,
-    type,
-    position,
-    message,
-    hideOnClose,
   },
 });
 
@@ -74,27 +59,16 @@ const addActionErrorEpic = pipe(
 
 const updateCommandEpic = pipe(
   ofType(
-    installPackage.type,
     installMultiplePackages.type,
     updatePackages.type,
     uninstallPackages.type,
-    runAudit.type,
-    runDoctor.type,
-    runInit.type,
-    runDedupe.type,
-    runCache.type
+    runInit.type
   ),
   mergeMap(({ payload }) => {
     const { packages, cmd } = payload || {};
     const [runningCommand] = cmd;
 
     return [
-      updateSnackbar({
-        open: true,
-        type: 'warning',
-        message: `running npm ${runningCommand}`,
-        hideOnClose: true,
-      }),
       updateCommand({
         operationStatus: 'running',
         operationCommand: runningCommand,
@@ -119,8 +93,6 @@ const onInitActionsEpic = pipe(
     installPackageListener(),
     updatePackagesListener(),
     uninstallPackagesListener(),
-    npmAuditListener(),
-    npmDoctorListener(),
     npmInitListener(),
     npmDedupeListener(),
     npmCacheListener(),

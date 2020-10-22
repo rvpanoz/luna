@@ -3,7 +3,7 @@ import { flexContainer } from 'styles/variables';
 const styles = (theme) => ({
   root: {
     width: '100%',
-    paddingTop: theme.spacing(1) - 3,
+    marginTop: theme.spacing(1) / 1.5,
   },
   bar: {
     display: 'flex',

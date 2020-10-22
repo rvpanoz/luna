@@ -1,10 +1,10 @@
 import React from 'react';
 import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
 import { withStyles } from '@material-ui/styles';
-import { AppLogo } from 'components/common';
-import Tabs from './tabs/Tabs';
-import { PackagesTab, ActionsTab, HistoryTab } from './tabs';
 
+import { AppLogo } from 'components/common';
+import { PackagesTab, ActionsTab, HistoryTab } from './tabs';
+import Tabs from './tabs/Tabs';
 import styles from './styles';
 
 const Sidebar = ({
@@ -16,34 +16,38 @@ const Sidebar = ({
   loadDirectory,
   updatedAt,
   tabPackagesData,
+  projectInfo,
+  npmEnv,
   installPackagesFromJson,
   dedupe,
   cache,
-}) => (
-  <>
-    <AppLogo />
-    <Tabs>
-      <PackagesTab
-        items={tabPackagesData}
-        updatedAt={updatedAt}
-        loading={loading}
-        fromSearch={fromSearch}
-      />
-      <ActionsTab
-        onInstallPackagesFromJson={installPackagesFromJson}
-        onDedupe={dedupe}
-        mode={mode}
-        loading={loading}
-        onCacheVerify={cache}
-      />
-      <HistoryTab
-        directories={history}
-        onClick={loadDirectory}
-        loading={loading}
-      />
-    </Tabs>
-  </>
-);
+}) => {
+  return (
+    <>
+      <AppLogo />
+      <Tabs>
+        <PackagesTab
+          items={tabPackagesData}
+          updatedAt={updatedAt}
+          loading={loading}
+          fromSearch={fromSearch}
+          projectInfo={projectInfo}
+          mode={mode}
+          npmEnv={npmEnv}
+        />
+        <HistoryTab
+          directories={history}
+          onClick={loadDirectory}
+          loading={loading}
+        />
+        <ActionsTab
+          mode={mode}
+          onInstallPackagesFromJson={installPackagesFromJson}
+        />
+      </Tabs>
+    </>
+  );
+};
 
 Sidebar.propTypes = {
   classes: objectOf(string).isRequired,
@@ -55,6 +59,8 @@ Sidebar.propTypes = {
   dedupe: func.isRequired,
   cache: func.isRequired,
   updatedAt: string,
+  projectInfo: objectOf(string).isRequired,
+  npmEnv: object,
   fromSearch: bool,
   tabPackagesData: arrayOf(object),
 };
