@@ -83,7 +83,10 @@ const PackagesTab = ({
               <WithStylesLoader />
             ) : (
               <List disablePadding>
-                {items && items.map((item) => <WithStylesItem {...item} />)}
+                {items &&
+                  items.map((item, idx) => (
+                    <WithStylesItem key={idx.toString()} {...item} />
+                  ))}
               </List>
             )}
           </div>

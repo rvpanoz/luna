@@ -33,9 +33,8 @@ const Item = ({ classes, dirName, dirPath, onHistoryClick }) => {
         primary={<Typography className={classes.label}>{dirName}</Typography>}
       />
       <ListItemSecondaryAction>
-        <Tooltip title={iMessage('title', 'loadDirectory')}>
+        <Tooltip title={iMessage('title', 'loadHistory')}>
           <IconButton
-            color="inherit"
             aria-label="load-directory"
             onClick={() => onHistoryClick(dirPath)}
             disableRipple

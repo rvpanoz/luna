@@ -1,5 +1,5 @@
 import { defaultFont, grayColor } from 'styles/variables';
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = (theme) => ({
   content: {
@@ -7,6 +7,7 @@ const styles = (theme) => ({
   },
   label: {
     ...defaultFont,
+    color: lighten(grayColor, 0.1),
   },
   header: {
     paddingTop: theme.spacing(2),

@@ -3,8 +3,8 @@ import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
 import { AppLogo } from 'components/common';
-import { PackagesTab, ActionsTab, HistoryTab } from './tabs';
 import Tabs from './tabs/Tabs';
+import { PackagesTab, ActionsTab, HistoryTab } from './tabs';
 import styles from './styles';
 
 const Sidebar = ({
