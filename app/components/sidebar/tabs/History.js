@@ -17,7 +17,46 @@ import FolderIcon from '@material-ui/icons/Folder';
 import { iMessage } from 'commons/utils';
 import styles from './styles/history';
 
-const HistoryTab = ({ classes, directories, onClick }) => (
+const Item = ({ classes, dirName, dirPath, onHistoryClick }) => {
+  return (
+    <ListItem
+      classes={{
+        root: classes.listItem,
+      }}
+    >
+      <ListItemAvatar>
+        <Avatar className={classes.secondaryColor}>
+          <FolderIcon />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText
+        primary={<Typography className={classes.label}>{dirName}</Typography>}
+      />
+      <ListItemSecondaryAction>
+        <Tooltip title={iMessage('title', 'loadHistory')}>
+          <IconButton
+            aria-label="load-directory"
+            onClick={() => onHistoryClick(dirPath)}
+            disableRipple
+          >
+            <ArrowRightIcon />
+          </IconButton>
+        </Tooltip>
+      </ListItemSecondaryAction>
+    </ListItem>
+  );
+};
+
+Item.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  dirName: PropTypes.string.isRequired,
+  dirPath: PropTypes.string.isRequired,
+  onHistoryClick: PropTypes.func.isRequired,
+};
+
+const WithStylesItem = withStyles(styles)(Item);
+
+const HistoryTab = ({ classes, directories, onHistoryClick }) => (
   <>
     <div className={classes.header}>
       <Typography className={classes.title} color="textSecondary">
@@ -43,35 +82,12 @@ const HistoryTab = ({ classes, directories, onClick }) => (
           const directory = pathParts.dir.split('/').slice(0, -1).join('/');
 
           return (
-            <ListItem
-              classes={{
-                root: classes.listItem,
-              }}
+            <WithStylesItem
               key={dir.name}
-            >
-              <ListItemAvatar>
-                <Avatar className={classes.secondaryColor}>
-                  <FolderIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={
-                  <Typography className={classes.label}>{dir.name}</Typography>
-                }
-              />
-              <ListItemSecondaryAction>
-                <Tooltip title={iMessage('title', 'loadDirectory')}>
-                  <IconButton
-                    color="inherit"
-                    aria-label="load-directory"
-                    onClick={() => onClick(dir.directory)}
-                    disableRipple
-                  >
-                    <ArrowRightIcon />
-                  </IconButton>
-                </Tooltip>
-              </ListItemSecondaryAction>
-            </ListItem>
+              dirName={dir.name}
+              dirPath={dir.directory}
+              onHistoryClick={onHistoryClick}
+            />
           );
         })}
       </List>
@@ -82,7 +98,7 @@ const HistoryTab = ({ classes, directories, onClick }) => (
 HistoryTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   directories: PropTypes.arrayOf(PropTypes.object),
-  onClick: PropTypes.func.isRequired,
+  onHistoryClick: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(HistoryTab);
