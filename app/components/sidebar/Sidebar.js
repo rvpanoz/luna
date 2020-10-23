@@ -37,7 +37,7 @@ const Sidebar = ({
         />
         <HistoryTab
           directories={history}
-          onClick={loadDirectory}
+          onHistoryClick={loadDirectory}
           loading={loading}
         />
         <ActionsTab
