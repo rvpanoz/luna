@@ -18,6 +18,9 @@ const styles = (theme) => ({
     fontSize: 20,
     paddingBottom: theme.spacing(1),
   },
+  content: {
+    minHeight: 150,
+  },
   cardFlexContainer: {
     ...flexContainer,
     width: '100%',
