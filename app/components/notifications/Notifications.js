@@ -9,6 +9,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import InfoIcon from '@material-ui/icons/InfoTwoTone';
 import Typography from '@material-ui/core/Typography';
 
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+
 import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
@@ -16,14 +21,7 @@ import Toolbar from './Toolbar';
 import PackageDetails from 'components/packages/PackageDetails';
 import styles from './styles/notifications';
 
-const NotificationItem = ({
-  classes,
-  id,
-  selected,
-  handleSelectOne,
-  onClick,
-  ...restProps
-}) => {
+const NotificationItem = ({ classes, id, onClick, ...restProps }) => {
   const {
     requiredName,
     requiredVersion,
@@ -31,35 +29,28 @@ const NotificationItem = ({
     reason,
     requiredByName,
   } = restProps;
-  const isSelected = selected.indexOf(id) !== -1;
 
   return (
-    <TableRow
+    <ListItem
       key={id}
-      aria-checked={isSelected}
-      tabIndex={-1}
-      selected={isSelected}
-      classes={{
-        root: classes.tableRow,
-      }}
       onClick={() => onClick(requiredName, minVersion)}
+      className={classes.listItem}
     >
-      <TableCell className={cn(classes.tableCell, classes.cellText)}>
-        <div className={classes.flex}>
-          <Typography variant="subtitle2" className={classes.name}>
-            {requiredName}
-          </Typography>
-          <Typography variant="subtitle2">{requiredByName}</Typography>
-        </div>
-      </TableCell>
-      <TableCell className={cn(classes.tableCell, classes.cellText)}>
-        <div className={classes.flex}>
-          <Typography variant="subtitle2" className={classes.name}>
-            {requiredVersion}
-          </Typography>
-        </div>
-      </TableCell>
-    </TableRow>
+      <ListItemText
+        primary={`${requiredName}-${minVersion}`}
+        secondary={
+          <React.Fragment>
+            <Typography
+              component="span"
+              variant="subtitle2"
+              color="textSecondary"
+            >
+              {requiredByName}
+            </Typography>
+          </React.Fragment>
+        }
+      />
+    </ListItem>
   );
 };
 
@@ -106,37 +97,23 @@ const NotificationsList = ({
             />
           </div>
           <Divider />
-          <div className={classes.tableWrapper}>
-            <Table
-              aria-labelledby="notifications-list"
-              className={cn(classes.table, {
-                [classes.hasFilterBlur]: loading,
-              })}
-            >
-              <TableHeader
-                total={notifications.length}
-                handleSelectAll={handleSelectAll}
-                selected={selected}
-                sortBy="Required"
-                sortDir="asc"
-              />
-              <TableBody>
-                {notifications.slice(0, 10).map((notification) => (
-                  <WithStylesItem
-                    {...notification}
-                    key={notification.id}
-                    selected={selected}
-                    handleSelectOne={handleSelectOne}
-                    handleSelectAll={handleSelectAll}
-                    onClick={onViewPackage}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          <List className={classes.wrapper}>
+            {notifications.slice(0, 10).map((notification) => (
+              <>
+                <WithStylesItem
+                  {...notification}
+                  key={notification.id}
+                  selected={selected}
+                  handleSelectOne={handleSelectOne}
+                  handleSelectAll={handleSelectAll}
+                  onClick={onViewPackage}
+                />
+                <Divider variant="inset" component="li" />
+              </>
+            ))}
+          </List>
         </Paper>
       </Grid>
-
       <Grid
         item
         sm={12}
