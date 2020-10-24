@@ -11,53 +11,21 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 const columnData = [
   {
     id: 'name',
-    numeric: false,
-    disablePadding: true,
     label: 'Package',
-    align: 'left',
   },
-  { id: 'version', numeric: false, disablePadding: true, label: 'Version' },
-  {
-    id: 'info',
-    numeric: false,
-    disablePadding: true,
-    label: 'Reason',
-    align: 'left',
-  },
+  { id: 'version', label: 'Version' },
 ];
 
-const TableHeader = ({ selected, total, sortBy, sortDir, handleSelectAll }) => (
+const TableHeader = ({ selected, total, sortBy, sortDir }) => (
   <TableHead>
     <TableRow>
-      <TableCell padding="checkbox" style={{ width: '55px' }}>
-        <Checkbox
-          checked={selected.length === total}
-          indeterminate={selected.length > 0 && selected.length < total}
-          onClick={handleSelectAll}
-        />
-      </TableCell>
       {columnData.map((column) => {
         const needSort =
           and(!!sortBy, !!column.id) && and(true, sortBy === column.id);
 
         return (
           <Hidden mdDown={column.hiddenSm} key={column.id}>
-            <TableCell
-              align={column.align}
-              padding={column.disablePadding ? 'none' : 'default'}
-              sortDirection={sortBy === column.id ? sortDir : false}
-            >
-              {needSort ? (
-                <TableSortLabel
-                  active={sortBy === column.id}
-                  direction={sortDir}
-                >
-                  {column.label}
-                </TableSortLabel>
-              ) : (
-                column.label
-              )}
-            </TableCell>
+            <TableCell>{column.label}</TableCell>
           </Hidden>
         );
       })}
@@ -66,10 +34,6 @@ const TableHeader = ({ selected, total, sortBy, sortDir, handleSelectAll }) => (
 );
 
 TableHeader.propTypes = {
-  selected: PropTypes.arrayOf(PropTypes.string),
-  sortBy: PropTypes.string,
-  sortDir: PropTypes.string,
-  handleSelectAll: PropTypes.func,
   total: PropTypes.number,
 };
 

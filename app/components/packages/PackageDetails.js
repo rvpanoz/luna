@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { useEffect, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import { objectOf, string, func } from 'prop-types';
+import { objectOf, string, func, bool } from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Popper from '@material-ui/core/Popper';
 import Card from '@material-ui/core/Card';
@@ -60,7 +60,7 @@ const mapState = ({
   fromSearch,
 });
 
-const PackageDetails = ({ classes, showCommandOptions }) => {
+const PackageDetails = ({ classes, showCommandOptions, notification }) => {
   const dispatch = useDispatch();
   const [expanded, expand] = useState(true);
   const [dependencies, setDependencies] = useState([]);
@@ -185,6 +185,12 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
         ? semver.gt(latestVersion, version)
         : false;
 
+      if (notification) {
+        return (
+          <InstallAction packageName={active.name} handler={handleInstall} />
+        );
+      }
+
       return (
         <>
           {isOutdated && (
@@ -211,7 +217,7 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
               />
             ),
           ],
-        ])(Boolean(fromSearch))}
+        ])(Boolean(fromSearch && notification))}
         <Hidden mdDown>
           <IconButton
             disableRipple
@@ -394,6 +400,7 @@ PackageDetails.defaultProps = {
 PackageDetails.propTypes = {
   classes: objectOf(string).isRequired,
   showCommandOptions: func.isRequired,
+  notification: bool,
   group: string,
 };
 

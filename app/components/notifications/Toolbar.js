@@ -29,22 +29,6 @@ const ToolbarView = ({ classes, total, title, selected, handleInstall }) => {
               : `${selected.length} notification(s) selected`}
           </Typography>
         </div>
-        <div className={classes.spacer} />
-        <div className={classes.actions}>
-          <Tooltip title={iMessage('title', 'installSelected')}>
-            <div>
-              <IconButton
-                disabled={!selected.length}
-                disableRipple
-                color="primary"
-                aria-label="install-package"
-                onClick={handleInstall}
-              >
-                <AddIcon />
-              </IconButton>
-            </div>
-          </Tooltip>
-        </div>
       </Toolbar>
     </div>
   );
@@ -54,7 +38,6 @@ ToolbarView.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
-  handleInstall: PropTypes.func.isRequired,
   total: PropTypes.number,
 };
 

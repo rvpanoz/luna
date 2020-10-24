@@ -18,7 +18,7 @@ const onViewPackage$ = new Observable((observer) => {
         setActive({
           active: {
             ...properties,
-            group: newActive.__group,
+            group: newActive ? newActive.__group || '' : '',
           },
         })
       );

@@ -13,6 +13,7 @@ import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
 import Toolbar from './Toolbar';
+import PackageDetails from 'components/packages/PackageDetails';
 import styles from './styles/notifications';
 
 const NotificationItem = ({
@@ -35,7 +36,6 @@ const NotificationItem = ({
   return (
     <TableRow
       key={id}
-      role="checkbox"
       aria-checked={isSelected}
       tabIndex={-1}
       selected={isSelected}
@@ -44,40 +44,18 @@ const NotificationItem = ({
       }}
       onClick={() => onClick(requiredName, minVersion)}
     >
-      <TableCell padding="checkbox" style={{ width: '55px' }}>
-        <Checkbox
-          checked={isSelected}
-          disableRipple
-          onClick={(e) => handleSelectOne(e, id)}
-        />
-      </TableCell>
-      <TableCell
-        padding="none"
-        className={cn(classes.tableCell, classes.cellText)}
-      >
+      <TableCell className={cn(classes.tableCell, classes.cellText)}>
         <div className={classes.flex}>
           <Typography variant="subtitle2" className={classes.name}>
             {requiredName}
           </Typography>
+          <Typography variant="subtitle2">{requiredByName}</Typography>
         </div>
       </TableCell>
-      <TableCell
-        padding="none"
-        className={cn(classes.tableCell, classes.cellText)}
-      >
+      <TableCell className={cn(classes.tableCell, classes.cellText)}>
         <div className={classes.flex}>
           <Typography variant="subtitle2" className={classes.name}>
             {requiredVersion}
-          </Typography>
-        </div>
-      </TableCell>
-      <TableCell
-        padding="none"
-        className={cn(classes.tableCell, classes.cellText)}
-      >
-        <div className={classes.flex}>
-          <Typography variant="subtitle2">
-            {reason}:{requiredByName}
           </Typography>
         </div>
       </TableCell>
@@ -93,8 +71,6 @@ NotificationItem.propTypes = {
   requiredVersion: string,
   requiredByName: string,
   minVersion: string,
-  handleSelectOne: func.isRequired,
-  selected: arrayOf(string),
 };
 
 const WithStylesItem = withStyles(styles)(NotificationItem);
@@ -118,13 +94,7 @@ const NotificationsList = ({
 
   return (
     <Grid container>
-      <Grid
-        item
-        md={active ? 8 : 10}
-        lg={active ? 8 : 10}
-        xl={active ? 8 : 10}
-        className={classes.transition}
-      >
+      <Grid item md={8} lg={8} xl={8} className={classes.transition}>
         <Paper elevation={2}>
           <div className={classes.toolbar}>
             <Toolbar
@@ -175,7 +145,7 @@ const NotificationsList = ({
         xl={active ? 4 : 2}
         className={classes.transition}
       >
-        __ITEM__
+        <PackageDetails showCommandOptions={() => {}} notification />
       </Grid>
     </Grid>
   );
@@ -186,9 +156,6 @@ NotificationsList.propTypes = {
   notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
   active: PropTypes.objectOf(PropTypes.string),
-  handleSelectAll: PropTypes.func.isRequired,
-  handleSelectOne: PropTypes.func.isRequired,
-  handleInstall: PropTypes.func.isRequired,
   onViewPackage: PropTypes.func.isRequired,
   loading: PropTypes.bool,
 };

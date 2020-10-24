@@ -29,42 +29,6 @@ const NotificationsContainer = () => {
   const { active, notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
-  const handleSelectAll = useCallback(
-    (e) => {
-      if (e.target.checked) {
-        return setSelected(
-          notifications.map((notification) => notification.id)
-        );
-      }
-
-      setSelected([]);
-    },
-    [notifications]
-  );
-
-  const handleSelectOne = useCallback(
-    (e, id) => {
-      const selectedIndex = selected.indexOf(id);
-      let newSelected = [];
-
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, id);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1)
-        );
-      }
-
-      setSelected(newSelected);
-    },
-    [selected]
-  );
-
   const viewPackageHandler = useCallback(
     (name, version) =>
       dispatch(
@@ -96,9 +60,6 @@ const NotificationsContainer = () => {
         active={active}
         selected={selected}
         notifications={notifications}
-        handleInstall={() => setDialogOpen(true)}
-        handleSelectAll={handleSelectAll}
-        handleSelectOne={handleSelectOne}
         onViewPackage={viewPackageHandler}
       />
       <CommandOptions
