@@ -2,7 +2,7 @@ import { ipcRenderer } from 'electron';
 import { Observable } from 'rxjs';
 import { pick } from 'ramda';
 import { toggleLoader, setPage, setSnackbar } from 'models/ui/actions';
-import { addNotification } from 'models/notifications/actions';
+import { parseNotification } from 'models/notifications/actions';
 import { switchcase, objectEntries } from 'commons/utils';
 import { mapPackages, mapOutdatedPackages } from '../actions';
 
@@ -21,15 +21,15 @@ const onListOutdatedPackages$ = new Observable((observer) => {
       const packageData = JSON.parse(data);
       const { name, version, description } = packageData || {};
       const packages = pick(['dependencies', 'problems'], packageData);
-      const { dependencies, problems: notifications } = packages || {};
+      const { dependencies, problems } = packages || {};
 
       const dataArray = dependencies
         ? objectEntries(dependencies)
         : objectEntries(packageData);
 
-      if (notifications && Array.isArray(notifications)) {
-        notifications.forEach((notification) =>
-          observer.next(addNotification(notification))
+      if (problems && Array.isArray(problems)) {
+        problems.forEach((notification) =>
+          observer.next(parseNotification(notification))
         );
       }
 

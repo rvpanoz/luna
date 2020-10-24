@@ -5,13 +5,13 @@ import semver from 'semver';
 import { combineEpics, ofType } from 'redux-observable';
 
 import {
-  addNotification,
+  parseNotification,
   updateNotification,
 } from 'models/notifications/actions';
 
 const addNotificationEpic = (action$, state$) =>
   action$.pipe(
-    ofType(addNotification.type),
+    ofType(parseNotification.type),
     withLatestFrom(state$),
     mergeMap((values) => {
       const [notification, state] = values;
@@ -26,9 +26,8 @@ const addNotificationEpic = (action$, state$) =>
       const isExtraneous = reason === 'extraneous';
 
       let detailsWithTrim = details.trim();
-      const isNameSpace = detailsWithTrim.startsWith('@');
 
-      if (isNameSpace) {
+      if (detailsWithTrim.startsWith('@')) {
         detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1);
       }
 
