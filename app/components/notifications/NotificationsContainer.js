@@ -19,12 +19,7 @@ const mapState = ({ notifications: { notifications } }) => ({
 const NotificationsContainer = () => {
   const [selected, setSelected] = useState([]);
   const [selectedPackagesNames, setSelectedPackagesNames] = useState([]);
-  const [dialogOptions, setDialogOptions] = useState({
-    open: false,
-    single: false,
-    name: null,
-    version: null,
-  });
+  const [isDialogOpen, setDialogOpen] = useState(false);
   const { notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
@@ -68,30 +63,6 @@ const NotificationsContainer = () => {
     [selected]
   );
 
-  const handleCancel = useCallback(() => {
-    dispatch(clearInstallOptions());
-    setDialogOptions({
-      open: false,
-      single: false,
-      name: null,
-      version: null,
-    });
-  }, [dispatch]);
-
-  const handleInstall = useCallback(
-    () =>
-      dispatch(
-        installMultiplePackages({
-          ipcEvent: 'npm-install',
-          cmd: selectedPackagesNames.map(() => 'install'),
-          multiple: true,
-          packages: selectedPackagesNames.map((pkgName) => `${pkgName}@latest`),
-          selectedFromNotifications: selectedPackagesNames,
-        })
-      ),
-    [selectedPackagesNames, dispatch]
-  );
-
   useEffect(() => {
     const packagesNames = selected.length
       ? selected.map((notificationId) => {
@@ -111,24 +82,14 @@ const NotificationsContainer = () => {
       <Notifications
         selected={selected}
         notifications={notifications}
-        handleInstall={() =>
-          setDialogOptions({
-            ...dialogOptions,
-            open: true,
-          })
-        }
+        handleInstall={() => setDialogOpen(true)}
         handleSelectAll={handleSelectAll}
         handleSelectOne={handleSelectOne}
       />
       <CommandOptions
-        isOpen={dialogOptions.open}
+        isOpen={isDialogOpen}
         selected={selectedPackagesNames}
-        onClose={() =>
-          setDialogOptions({
-            ...dialogOptions,
-            open: false,
-          })
-        }
+        onClose={() => setDialogOpen(false)}
       />
     </>
   );
