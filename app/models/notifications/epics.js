@@ -9,7 +9,7 @@ import {
   updateNotification,
 } from 'models/notifications/actions';
 
-const addNotificationEpic = (action$, state$) =>
+const parseNotificationEpic = (action$, state$) =>
   action$.pipe(
     ofType(parseNotification.type),
     withLatestFrom(state$),
@@ -27,9 +27,9 @@ const addNotificationEpic = (action$, state$) =>
 
       let detailsWithTrim = details.trim();
 
-      if (detailsWithTrim.startsWith('@')) {
-        detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1);
-      }
+      // if (detailsWithTrim.startsWith('@')) {
+      //   detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1);
+      // }
 
       const [requiredDetails, requiredByName] = isExtraneous
         ? detailsWithTrim.split('@')
@@ -83,4 +83,4 @@ const addNotificationEpic = (action$, state$) =>
     )
   );
 
-export default combineEpics(addNotificationEpic);
+export default combineEpics(parseNotificationEpic);

@@ -20,9 +20,16 @@ const NotificationItem = ({
   id,
   selected,
   handleSelectOne,
+  onClick,
   ...restProps
 }) => {
-  const { requiredName, requiredVersion, reason, requiredByName } = restProps;
+  const {
+    requiredName,
+    requiredVersion,
+    minVersion,
+    reason,
+    requiredByName,
+  } = restProps;
   const isSelected = selected.indexOf(id) !== -1;
 
   return (
@@ -35,6 +42,7 @@ const NotificationItem = ({
       classes={{
         root: classes.tableRow,
       }}
+      onClick={() => onClick(requiredName, minVersion)}
     >
       <TableCell padding="checkbox" style={{ width: '55px' }}>
         <Checkbox
@@ -84,6 +92,7 @@ NotificationItem.propTypes = {
   requiredName: string,
   requiredVersion: string,
   requiredByName: string,
+  minVersion: string,
   handleSelectOne: func.isRequired,
   selected: arrayOf(string),
 };
@@ -98,6 +107,8 @@ const NotificationsList = ({
   handleSelectAll,
   handleSelectOne,
   handleInstall,
+  active,
+  onViewPackage,
 }) => {
   const noNotifications = !notifications || notifications.length === 0;
 
@@ -107,7 +118,13 @@ const NotificationsList = ({
 
   return (
     <Grid container>
-      <Grid item md={12} className={classes.transition}>
+      <Grid
+        item
+        md={active ? 8 : 10}
+        lg={active ? 8 : 10}
+        xl={active ? 8 : 10}
+        className={classes.transition}
+      >
         <Paper elevation={2}>
           <div className={classes.toolbar}>
             <Toolbar
@@ -141,12 +158,24 @@ const NotificationsList = ({
                     selected={selected}
                     handleSelectOne={handleSelectOne}
                     handleSelectAll={handleSelectAll}
+                    onClick={onViewPackage}
                   />
                 ))}
               </TableBody>
             </Table>
           </div>
         </Paper>
+      </Grid>
+
+      <Grid
+        item
+        sm={12}
+        md={active ? 4 : 2}
+        lg={active ? 4 : 2}
+        xl={active ? 4 : 2}
+        className={classes.transition}
+      >
+        __ITEM__
       </Grid>
     </Grid>
   );
@@ -156,9 +185,11 @@ NotificationsList.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
+  active: PropTypes.objectOf(PropTypes.string),
   handleSelectAll: PropTypes.func.isRequired,
   handleSelectOne: PropTypes.func.isRequired,
   handleInstall: PropTypes.func.isRequired,
+  onViewPackage: PropTypes.func.isRequired,
   loading: PropTypes.bool,
 };
 
