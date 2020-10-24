@@ -13,7 +13,7 @@ import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
 import NotificationsToolbar from './NotificationsToolbar';
-import PackageDetails from 'components/packages/PackageDetails';
+import NotificationDetails from './NotificationDetails';
 import styles from './styles/notifications';
 
 const NotificationItem = ({ classes, id, onClick, ...restProps }) => {
@@ -107,7 +107,7 @@ const NotificationsList = ({
         xl={active ? 4 : 2}
         className={classes.transition}
       >
-        <PackageDetails showCommandOptions={() => {}} notification />
+        <NotificationDetails active={active} />
       </Grid>
     </Grid>
   );
