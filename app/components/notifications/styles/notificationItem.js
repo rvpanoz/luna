@@ -1,7 +1,7 @@
 import { flexContainer, defaultFont } from 'styles/variables';
 
 const styles = (theme) => ({
-  flexContainerCell: {
+  flex: {
     ...flexContainer,
     flexDirection: 'column',
     justifyContent: 'flex-start',

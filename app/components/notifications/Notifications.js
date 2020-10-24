@@ -6,9 +6,9 @@ import { Table, TableBody, Grid, Paper, Divider } from '@material-ui/core';
 import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
-import Item from './Item';
-import ToolbarView from './Toolbar';
-import styles from './styles/list';
+import NotificationItem from './NotificationItem';
+import Toolbar from './Toolbar';
+import styles from './styles/notifications';
 
 const NotificationsList = ({
   classes,
@@ -21,53 +21,52 @@ const NotificationsList = ({
 }) => {
   const noNotifications = !notifications || notifications.length === 0;
 
+  if (noNotifications) {
+    return <HelperText text={iMessage('info', 'noNotifications')} />;
+  }
+
   return (
     <Grid container>
-      <Grid item md={10} lg={10} xl={10} className={classes.transition}>
-        {noNotifications && (
-          <HelperText text={iMessage('info', 'noNotifications')} />
-        )}
-        {!noNotifications && (
-          <Paper elevation={2}>
-            <div className={classes.toolbar}>
-              <ToolbarView
-                title={iMessage('title', 'notifications')}
+      <Grid item md={12} className={classes.transition}>
+        <Paper elevation={2}>
+          <div className={classes.toolbar}>
+            <Toolbar
+              title={iMessage('title', 'notifications')}
+              total={notifications.length}
+              selected={selected}
+              notifications={notifications}
+              handleInstall={handleInstall}
+            />
+          </div>
+          <Divider />
+          <div className={classes.tableWrapper}>
+            <Table
+              aria-labelledby="notifications-list"
+              className={cn(classes.table, {
+                [classes.hasFilterBlur]: loading,
+              })}
+            >
+              <TableHeader
                 total={notifications.length}
+                handleSelectAll={handleSelectAll}
                 selected={selected}
-                notifications={notifications}
-                handleInstall={handleInstall}
+                sortBy="Required"
+                sortDir="asc"
               />
-            </div>
-            <Divider />
-            <div className={classes.tableWrapper}>
-              <Table
-                aria-labelledby="notifications-list"
-                className={cn(classes.table, {
-                  [classes.hasFilterBlur]: loading,
-                })}
-              >
-                <TableHeader
-                  total={notifications.length}
-                  handleSelectAll={handleSelectAll}
-                  selected={selected}
-                  sortBy="Required"
-                  sortDir="asc"
-                />
-                <TableBody>
-                  {notifications.slice(0, 10).map((notification) => (
-                    <Item
-                      {...notification}
-                      key={notification.id}
-                      selected={selected}
-                      handleSelectOne={handleSelectOne}
-                      handleSelectAll={handleSelectAll}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </Paper>
-        )}
+              <TableBody>
+                {notifications.slice(0, 10).map((notification) => (
+                  <NotificationItem
+                    {...notification}
+                    key={notification.id}
+                    selected={selected}
+                    handleSelectOne={handleSelectOne}
+                    handleSelectAll={handleSelectAll}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </Paper>
       </Grid>
     </Grid>
   );

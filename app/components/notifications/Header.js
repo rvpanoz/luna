@@ -10,10 +10,10 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 const columnData = [
   {
-    id: 'required',
+    id: 'name',
     numeric: false,
     disablePadding: true,
-    label: 'Required',
+    label: 'Package',
     align: 'left',
   },
   { id: 'version', numeric: false, disablePadding: true, label: 'Version' },
@@ -21,8 +21,8 @@ const columnData = [
     id: 'info',
     numeric: false,
     disablePadding: true,
-    label: '',
-    align: 'right',
+    label: 'Reason',
+    align: 'left',
   },
 ];
 

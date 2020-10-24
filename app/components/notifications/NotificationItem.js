@@ -10,7 +10,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import InfoIcon from '@material-ui/icons/InfoTwoTone';
 import { iMessage } from 'commons/utils';
-import styles from './styles/listItem';
+import styles from './styles/notificationItem';
 
 const NotificationItem = ({
   classes,
@@ -19,10 +19,8 @@ const NotificationItem = ({
   handleSelectOne,
   ...restProps
 }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
   const { requiredName, requiredVersion, reason, requiredByName } = restProps;
   const isSelected = selected.indexOf(id) !== -1;
-  const open = Boolean(anchorEl);
 
   return (
     <TableRow
@@ -45,60 +43,31 @@ const NotificationItem = ({
       <TableCell
         padding="none"
         className={cn(classes.tableCell, classes.cellText)}
-        align="left"
       >
-        <div className={classes.flexContainerCell}>
-          <Typography className={classes.name}>{requiredName}</Typography>
-        </div>
-      </TableCell>
-      <TableCell
-        padding="none"
-        className={cn(classes.tableCell, classes.cellText)}
-      >
-        <div className={classes.flexContainerCell}>
-          <Typography className={classes.name}>{requiredVersion}</Typography>
-        </div>
-      </TableCell>
-      <TableCell
-        padding="none"
-        className={cn(classes.tableCell, classes.cellText)}
-        align="right"
-      >
-        <div className={classes.flexContainerCell}>
-          <Typography
-            aria-owns={open ? 'mouse-over-popover' : undefined}
-            aria-haspopup="true"
-            onMouseEnter={(e) => setAnchorEl(e.currentTarget)}
-            onMouseLeave={() => setAnchorEl(null)}
-          >
-            <InfoIcon color="secondary" />
+        <div className={classes.flex}>
+          <Typography variant="subtitle2" className={classes.name}>
+            {requiredName}
           </Typography>
-          <Popover
-            id="mouse-over-popover"
-            className={classes.popover}
-            classes={{
-              paper: classes.paper,
-            }}
-            open={open}
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            onClose={() => setAnchorEl(null)}
-            disableRestoreFocus
-          >
-            <Typography>
-              {iMessage('label', 'reason')}:&nbsp;{reason}
-            </Typography>
-            <Typography>
-              {iMessage('label', 'requiredByName')}:{requiredByName || ' - '}
-            </Typography>
-          </Popover>
+        </div>
+      </TableCell>
+      <TableCell
+        padding="none"
+        className={cn(classes.tableCell, classes.cellText)}
+      >
+        <div className={classes.flex}>
+          <Typography variant="subtitle2" className={classes.name}>
+            {requiredVersion}
+          </Typography>
+        </div>
+      </TableCell>
+      <TableCell
+        padding="none"
+        className={cn(classes.tableCell, classes.cellText)}
+      >
+        <div className={classes.flex}>
+          <Typography variant="subtitle2">
+            {reason}:{requiredByName}
+          </Typography>
         </div>
       </TableCell>
     </TableRow>

@@ -17,6 +17,7 @@ const createReducer = (notificationsState, handlers) => (
   state = notificationsState,
   action
 ) => propOr(identity, prop('type', action), handlers)(state, action);
+
 const handlers = {
   [setActive.type]: (state, { payload: { active } }) =>
     assoc('active', active, state),
