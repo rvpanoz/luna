@@ -4,7 +4,6 @@ const ActionCreator = createActionCreator('@@LUNA/NPM');
 
 // general actions
 const addActionError = ActionCreator('ACTION_ERROR');
-const addAuditFixOption = ActionCreator('ADD_AUDIT_FIX_OPTION');
 const clearCommands = ActionCreator('CLEAR_COMMANDS');
 const commandError = ActionCreator('COMMAND_ERROR');
 const commandMessage = ActionCreator('COMMAND_MESSAGE');
@@ -14,20 +13,10 @@ const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const npmCommand = ActionCreator('NPM_COMMAND');
 
 // npm utils
-const parseNpmAuditData = ActionCreator('PARSE_NPM_AUDIT_DATA');
-const parseNpmDoctorData = ActionCreator('PARSE_NPM_DOCTOR_DATA');
-const parseNpmAuditFixData = ActionCreator('PARSE_NPM_AUDIT_FIX_DATA');
 const parseNpmCacheData = ActionCreator('PARSE_NPM_CACHE_DATA');
-const updateNpmAuditData = ActionCreator('UPDATE_NPM_AUDIT_DATA');
-const updateNpmAuditFixData = ActionCreator('UPDATE_NPM_AUDIT_FIX_DATA');
-const updateNpmDoctorData = ActionCreator('UPDATE_NPM_DOCTOR_DATA');
 const updateNpmCacheData = ActionCreator('UPDATE_NPM_CACHE_DATA');
-const clearAuditData = ActionCreator('CLEAR_AUDIT_DATA');
-const clearDoctorData = ActionCreator('CLEAR_DOCTOR_DATA');
 
 // listeners
-const npmAuditListener = ActionCreator('REGISTER_LISTENER_AUDIT');
-const npmDoctorListener = ActionCreator('REGISTER_LISTENER_DOCTOR');
 const npmInitListener = ActionCreator('REGISTER_LISTENER_INIT');
 const npmDedupeListener = ActionCreator('REGISTER_LISTENER_DEDUPE');
 const npmCacheListener = ActionCreator('REGISTER_LISTENER_CACHE');
@@ -38,15 +27,12 @@ const runUpdate = ActionCreator('RUN_UPDATE');
 const runUninstall = ActionCreator('RUN_UNINSTALL');
 
 // utilities
-const runAudit = ActionCreator('RUN_AUDIT');
 const runInit = ActionCreator('RUN_INIT');
 const runLock = ActionCreator('RUN_INIT_LOCK');
-const runDoctor = ActionCreator('RUN_DOCTOR');
 const runDedupe = ActionCreator('RUN_DEDUPE');
 const runCache = ActionCreator('RUN_CACHE');
 
 export {
-  addAuditFixOption,
   addActionError,
   clearCommands,
   commandError,
@@ -58,25 +44,13 @@ export {
   runInstall,
   runUpdate,
   runUninstall,
-  runAudit,
   runDedupe,
   runInit,
   runLock,
-  runDoctor,
   runCache,
-  npmDoctorListener,
-  npmAuditListener,
   npmInitListener,
   npmDedupeListener,
   npmCacheListener,
-  clearAuditData,
-  clearDoctorData,
-  parseNpmDoctorData,
-  parseNpmAuditData,
-  parseNpmAuditFixData,
   parseNpmCacheData,
-  updateNpmAuditFixData,
-  updateNpmDoctorData,
-  updateNpmAuditData,
   updateNpmCacheData,
 };
