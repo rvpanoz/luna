@@ -31,7 +31,7 @@ Luna was created with main purpose to provide a flexible and modern UI for npm d
 - Update packages
 - Filter packages by type or outdated
 - Preview package details (versions, statistics, dependencies and more)
-- Get notifications for missing dependencies or extraneous dependencies
+- Get notifications for missing dependencies or extraneous packages
 
 ## Screenshots
 
