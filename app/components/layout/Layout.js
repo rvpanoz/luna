@@ -11,8 +11,6 @@ import Sidebar from 'components/sidebar/SidebarContainer';
 import Navigation from 'components/navigation/Navigation';
 import Packages from 'components/packages/Packages';
 import Notifications from 'components/notifications/NotificationsContainer';
-import Doctor from 'components/doctor/DoctorContainer';
-import Audit from 'components/audit/Audit';
 import AppSnackbar from 'components/common/AppSnackbar';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
@@ -68,8 +66,6 @@ const AppLayout = ({ classes }) => {
           <main className={classes.content}>
             {switchcase({
               packages: () => <Packages />,
-              audit: () => <Audit />,
-              doctor: () => <Doctor />,
               notifications: () => <Notifications />,
             })(<Packages />)(activePage)}
           </main>

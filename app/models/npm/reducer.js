@@ -13,11 +13,6 @@ import {
   npmCommand,
   setRunningCommand,
   clearRunningCommand,
-  clearAuditData,
-  clearDoctorData,
-  updateNpmAuditData,
-  updateNpmAuditFixData,
-  updateNpmDoctorData,
   updateNpmCacheData,
 } from 'models/npm/actions';
 import initialState from '../initialState';
@@ -32,28 +27,6 @@ const handlers = {
     merge(state, {
       cache: {
         ...state.cache,
-        result: data,
-      },
-    }),
-  [updateNpmAuditData.type]: (state, { payload: { data } }) =>
-    merge(state, {
-      audit: {
-        ...state.audit,
-        result: data,
-      },
-    }),
-  [updateNpmAuditFixData.type]: (state, { payload: { data } }) =>
-    merge(state, {
-      audit: {
-        ...state.audit,
-        result: data,
-        fix: true,
-      },
-    }),
-  [updateNpmDoctorData.type]: (state, { payload: { data } }) =>
-    merge(state, {
-      doctor: {
-        ...state.doctor,
         result: data,
       },
     }),
@@ -99,20 +72,6 @@ const handlers = {
   [clearCommands.type]: (state) =>
     merge(state, {
       commands: [],
-    }),
-  [clearAuditData.type]: (state) =>
-    merge(state, {
-      audit: {
-        result: null,
-        fix: false,
-      },
-    }),
-  [clearDoctorData.type]: (state) =>
-    merge(state, {
-      doctor: {
-        result: null,
-        fix: false,
-      },
     }),
 };
 
