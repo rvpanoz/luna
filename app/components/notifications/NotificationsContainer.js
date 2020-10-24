@@ -15,10 +15,7 @@ import CommandOptions from 'components/packages/CommandOptions';
 import { iMessage } from 'commons/utils';
 import Notifications from './Notifications';
 
-const mapState = ({
-  notifications: { notifications },
-  packages: { active },
-}) => ({
+const mapState = ({ notifications: { active, notifications } }) => ({
   active,
   notifications,
 });
@@ -38,6 +35,7 @@ const NotificationsContainer = () => {
             cmd: ['view'],
             name,
             version: name === 'npm' ? null : version,
+            notification: true,
           },
         })
       ),

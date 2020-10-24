@@ -60,7 +60,7 @@ const mapState = ({
   fromSearch,
 });
 
-const PackageDetails = ({ classes, showCommandOptions, notification }) => {
+const PackageDetails = ({ classes, showCommandOptions }) => {
   const dispatch = useDispatch();
   const [expanded, expand] = useState(true);
   const [dependencies, setDependencies] = useState([]);
@@ -185,12 +185,6 @@ const PackageDetails = ({ classes, showCommandOptions, notification }) => {
         ? semver.gt(latestVersion, version)
         : false;
 
-      if (notification) {
-        return (
-          <InstallAction packageName={active.name} handler={handleInstall} />
-        );
-      }
-
       return (
         <>
           {isOutdated && (
@@ -217,7 +211,7 @@ const PackageDetails = ({ classes, showCommandOptions, notification }) => {
               />
             ),
           ],
-        ])(Boolean(fromSearch && notification))}
+        ])(Boolean(fromSearch))}
         <Hidden mdDown>
           <IconButton
             disableRipple
@@ -400,7 +394,6 @@ PackageDetails.defaultProps = {
 PackageDetails.propTypes = {
   classes: objectOf(string).isRequired,
   showCommandOptions: func.isRequired,
-  notification: bool,
   group: string,
 };
 

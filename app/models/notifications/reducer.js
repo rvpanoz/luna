@@ -9,6 +9,7 @@ import {
   updateNotification,
 } from 'models/notifications/actions';
 import initialState from '../initialState';
+import { setActiveNotification } from './actions';
 
 const { notifications } = initialState;
 
@@ -18,6 +19,8 @@ const createReducer = (notificationsState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
+  [setActiveNotification.type]: (state, { payload: { active } }) =>
+    assoc('active', active, state),
   [updateNotification.type]: (state, data) => {
     const {
       payload: {

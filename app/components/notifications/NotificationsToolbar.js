@@ -10,23 +10,18 @@ import AddIcon from '@material-ui/icons/Add';
 import { iMessage } from 'commons/utils';
 import styles from './styles/toolbar';
 
-const ToolbarView = ({ classes, total, title, selected, handleInstall }) => {
-  const hasNotificationsSelected = selected && selected.length > 0;
-
+const NotificationsToolbar = ({ classes, total, title }) => {
   return (
     <div className={classes.root}>
       <Toolbar
         disableGutters
         className={cn({
-          [classes.highlight]:
-            hasNotificationsSelected && hasNotificationsSelected.length,
+          [classes.highlight]: true,
         })}
       >
         <div className={classes.header}>
           <Typography variant="h4" className={classes.title}>
-            {!hasNotificationsSelected
-              ? `${title} ${total}`
-              : `${selected.length} notification(s) selected`}
+            {`${title} ${total}`}
           </Typography>
         </div>
       </Toolbar>
@@ -34,11 +29,10 @@ const ToolbarView = ({ classes, total, title, selected, handleInstall }) => {
   );
 };
 
-ToolbarView.propTypes = {
+NotificationsToolbar.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  selected: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
   total: PropTypes.number,
 };
 
-export default withStyles(styles)(ToolbarView);
+export default withStyles(styles)(NotificationsToolbar);

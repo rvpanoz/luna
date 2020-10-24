@@ -2,13 +2,8 @@ import React from 'react';
 import PropTypes, { arrayOf, objectOf, string, func } from 'prop-types';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/styles';
-import { Table, TableBody, Grid, Paper, Divider } from '@material-ui/core';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
-import InfoIcon from '@material-ui/icons/InfoTwoTone';
+import { Grid, Paper, Divider } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -17,7 +12,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import TableHeader from './Header';
-import Toolbar from './Toolbar';
+import NotificationsToolbar from './NotificationsToolbar';
 import PackageDetails from 'components/packages/PackageDetails';
 import styles from './styles/notifications';
 
@@ -69,11 +64,6 @@ const WithStylesItem = withStyles(styles)(NotificationItem);
 const NotificationsList = ({
   classes,
   notifications,
-  selected,
-  loading,
-  handleSelectAll,
-  handleSelectOne,
-  handleInstall,
   active,
   onViewPackage,
 }) => {
@@ -88,12 +78,10 @@ const NotificationsList = ({
       <Grid item md={8} lg={8} xl={8} className={classes.transition}>
         <Paper elevation={2}>
           <div className={classes.toolbar}>
-            <Toolbar
+            <NotificationsToolbar
               title={iMessage('title', 'notifications')}
               total={notifications.length}
-              selected={selected}
               notifications={notifications}
-              handleInstall={handleInstall}
             />
           </div>
           <Divider />
@@ -103,9 +91,6 @@ const NotificationsList = ({
                 <WithStylesItem
                   {...notification}
                   key={notification.id}
-                  selected={selected}
-                  handleSelectOne={handleSelectOne}
-                  handleSelectAll={handleSelectAll}
                   onClick={onViewPackage}
                 />
                 <Divider variant="inset" component="li" />
@@ -131,10 +116,8 @@ const NotificationsList = ({
 NotificationsList.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selected: PropTypes.arrayOf(PropTypes.string).isRequired,
-  active: PropTypes.objectOf(PropTypes.string),
+  active: PropTypes.object,
   onViewPackage: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
 };
 
 export default withStyles(styles)(NotificationsList);

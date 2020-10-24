@@ -19,9 +19,7 @@ import {
   onNpmInstall,
   onNpmUpdate,
   onNpmUninstall,
-  onNpmAudit,
   onNpmCache,
-  onNpmDoctor,
   onNpmDedupe,
   onNpmInit,
   onNpmInitLock,
@@ -250,14 +248,6 @@ ipcMain.on('npm-update', (event, options) =>
 );
 
 /**
- * Channel: npm-audit
- * Supports: npm audit [--json|--parseable]
- * https://docs.npmjs.com/cli/audit
- *
- */
-ipcMain.on('npm-audit', (event, options) => onNpmAudit(event, options, Store));
-
-/**
  * Channel: npm-init
  * Supports: npm init
  * https://docs.npmjs.com/cli/init
@@ -291,16 +281,6 @@ ipcMain.on('npm-init-lock', (event, options) =>
  *
  */
 ipcMain.on('npm-cache', (event, options) => onNpmCache(event, options, Store));
-
-/**
- * Channel: npm-doctor
- * Supports: npm doctor
- * https://docs.npmjs.com/cli/doctor
- *
- */
-ipcMain.on('npm-doctor', (event, options) =>
-  onNpmDoctor(event, options, Store)
-);
 
 /**
  * app listeners

@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
+import { map, filter, tap, switchMap, ignoreElements } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { pipe } from 'rxjs';
 
@@ -14,6 +14,7 @@ const updatePackageLoader = (payload) => ({
 
 const viewPackageEpic = pipe(
   ofType(viewPackageStart.type),
+  filter(({ payload: { options } }) => !options.notification),
   map(() =>
     updatePackageLoader({
       loading: true,

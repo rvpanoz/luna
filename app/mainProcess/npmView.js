@@ -9,13 +9,14 @@ const {
 } = mk || {};
 
 const onNpmView = (event, options, store) => {
+  console.log(options);
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 
   const onFlow = (options) => event.sender.send('npm-command-flow', options);
   const onError = (error) => event.sender.send('npm-view-error', error);
   const onComplete = (errors, data) =>
-    event.sender.send('npm-view-completed', data, errors);
+    event.sender.send('npm-view-completed', errors, data, options);
 
   const callback = (result) => {
     const { status, errors, data, manager, cmd, isTerminated } = result;
