@@ -1,12 +1,17 @@
-import { defaultFont, grayColor } from 'styles/variables';
-import { darken } from '@material-ui/core/styles/colorManipulator';
+import { defaultFont, grayColor, flexContainer } from 'styles/variables';
+import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = (theme) => ({
+  flexWrapper: {
+    ...flexContainer,
+  },
   content: {
     backgroundColor: theme.palette.background.paper,
   },
   label: {
     ...defaultFont,
+    color: lighten(grayColor, 0.01),
+    marginLeft: theme.spacing(1),
   },
   header: {
     paddingTop: theme.spacing(2),
@@ -18,9 +23,8 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(1),
   },
   secondaryText: {
-    ...defaultFont,
-    color: darken(grayColor, 0.2),
     fontSize: 12,
+    color: darken(grayColor, 0.1),
   },
   listItem: {
     margin: 0,

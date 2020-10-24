@@ -9,6 +9,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import ArrowRightIcon from '@material-ui/icons/ArrowRightAlt';
+import InstallIcon from '@material-ui/icons/ArchiveOutlined';
 import Typography from '@material-ui/core/Typography';
 import { iMessage } from 'commons/utils';
 
@@ -24,12 +25,15 @@ const ActionsTab = ({ classes, mode, onInstallPackagesFromJson }) => (
     </div>
     <div className={classes.content}>
       <List dense>
-        <ListItem key="install-from-packagejson" className={classes.listItem}>
+        <ListItem className={classes.listItem}>
           <ListItemText
             primary={
-              <Typography className={classes.label}>
-                {iMessage('action', 'npmInstall')}
-              </Typography>
+              <div className={classes.flexWrapper}>
+                <InstallIcon />
+                <Typography className={classes.label}>
+                  {iMessage('action', 'npmInstall')}
+                </Typography>
+              </div>
             }
             secondary={
               <Typography className={classes.secondaryText}>
@@ -42,7 +46,7 @@ const ActionsTab = ({ classes, mode, onInstallPackagesFromJson }) => (
               title={
                 mode === 'global'
                   ? iMessage('info', 'notGlobalModeAvailable')
-                  : iMessage('info', 'npmInstallInfo')
+                  : iMessage('info', 'npmInstallRun')
               }
             >
               <div>
@@ -52,7 +56,9 @@ const ActionsTab = ({ classes, mode, onInstallPackagesFromJson }) => (
                   onClick={onInstallPackagesFromJson}
                   disableRipple
                 >
-                  <ArrowRightIcon color="primary" />
+                  <ArrowRightIcon
+                    color={mode === 'global' ? 'inherit' : 'primary'}
+                  />
                 </IconButton>
               </div>
             </Tooltip>

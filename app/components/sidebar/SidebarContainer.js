@@ -6,14 +6,13 @@ import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Sidebar from './Sidebar';
 
 import { setActivePage } from 'models/ui/actions';
 import { installPackageJson } from 'models/packages/actions';
 import { setMode } from 'models/common/actions';
 import { runDedupe, runCache } from 'models/npm/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils';
-
+import Sidebar from './Sidebar';
 import styles from './styles';
 
 const mapState = ({
