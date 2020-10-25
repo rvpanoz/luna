@@ -6,10 +6,10 @@
 import { assoc, prepend, identity, merge, prop, propOr } from 'ramda';
 import {
   clearNotifications,
-  setActive,
   updateNotification,
 } from 'models/notifications/actions';
 import initialState from '../initialState';
+import { setActiveNotification } from './actions';
 
 const { notifications } = initialState;
 
@@ -19,7 +19,7 @@ const createReducer = (notificationsState, handlers) => (
 ) => propOr(identity, prop('type', action), handlers)(state, action);
 
 const handlers = {
-  [setActive.type]: (state, { payload: { active } }) =>
+  [setActiveNotification.type]: (state, { payload: { active } }) =>
     assoc('active', active, state),
   [updateNotification.type]: (state, data) => {
     const {

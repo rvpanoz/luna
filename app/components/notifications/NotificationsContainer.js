@@ -6,90 +6,49 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
 
-import { installMultiplePackages } from 'models/packages/actions';
-import { clearInstallOptions } from 'models/common/actions';
-import CommandOptions from 'components/packages/CommandOptions';
+import {
+  installMultiplePackages,
+  viewPackageStart,
+} from 'models/packages/actions';
 import { iMessage } from 'commons/utils';
 import Notifications from './Notifications';
 
-const mapState = ({ notifications: { notifications } }) => ({
+const mapState = ({
+  common: { mode },
+  notifications: { active, notifications },
+}) => ({
+  active,
   notifications,
+  mode,
 });
 
 const NotificationsContainer = () => {
-  const [selected, setSelected] = useState([]);
-  const [selectedPackagesNames, setSelectedPackagesNames] = useState([]);
-  const [isDialogOpen, setDialogOpen] = useState(false);
-  const { notifications } = useMappedState(mapState);
+  const { active, mode, notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
-  const handleSelectAll = useCallback(
-    (e) => {
-      let selectedNotifications;
-
-      if (e.target.checked) {
-        selectedNotifications = notifications.map(
-          (notification) => notification.id
-        );
-      } else {
-        selectedNotifications = [];
-      }
-
-      setSelected(selectedNotifications);
-    },
-    [notifications]
-  );
-
-  const handleSelectOne = useCallback(
-    (e, id) => {
-      const selectedIndex = selected.indexOf(id);
-      let newSelected = [];
-
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, id);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1)
-        );
-      }
-
-      setSelected(newSelected);
-    },
-    [selected]
-  );
-
-  useEffect(() => {
-    const packagesNames = selected.length
-      ? selected.map((notificationId) => {
-          const { requiredName } = notifications.find(
-            (notification) => notification.id === notificationId
-          );
-
-          return requiredName;
+  const viewPackageHandler = useCallback(
+    (name, version) =>
+      dispatch(
+        viewPackageStart({
+          channel: 'npm-view',
+          options: {
+            cmd: ['view'],
+            name,
+            version: name === 'npm' ? null : version,
+            notification: true,
+          },
         })
-      : [];
-
-    setSelectedPackagesNames(packagesNames);
-  }, [selected, notifications]);
+      ),
+    [dispatch]
+  );
 
   return (
     <>
       <Notifications
-        selected={selected}
+        active={active}
+        mode={mode}
         notifications={notifications}
-        handleInstall={() => setDialogOpen(true)}
-        handleSelectAll={handleSelectAll}
-        handleSelectOne={handleSelectOne}
-      />
-      <CommandOptions
-        isOpen={isDialogOpen}
-        selected={selectedPackagesNames}
-        onClose={() => setDialogOpen(false)}
+        onViewPackage={viewPackageHandler}
       />
     </>
   );

@@ -9,7 +9,7 @@ import {
   updateNotification,
 } from 'models/notifications/actions';
 
-const addNotificationEpic = (action$, state$) =>
+const parseNotificationEpic = (action$, state$) =>
   action$.pipe(
     ofType(parseNotification.type),
     withLatestFrom(state$),
@@ -24,41 +24,19 @@ const addNotificationEpic = (action$, state$) =>
 
       const [reason, details] = notificationText.split(':');
       const isExtraneous = reason === 'extraneous';
+      const detailsArr = details.trim().split(',');
+      const [requiredDetails, requiredByName] = detailsArr;
+      const [requiredName, requiredVersion] = requiredDetails.split('@^');
+      const semVersion = semver.minVersion(requiredVersion);
 
-      let detailsWithTrim = details.trim();
-
-      if (detailsWithTrim.startsWith('@')) {
-        detailsWithTrim = detailsWithTrim.slice(1, detailsWithTrim.length - 1);
-      }
-
-      const [requiredDetails, requiredByName] = isExtraneous
-        ? detailsWithTrim.split('@')
-        : detailsWithTrim.split(',');
-      const [requiredName, requiredVersion] = requiredDetails.split('@');
-
-      const minVersion = semver.minVersion(requiredVersion);
       const activeNotification = stateNotifications.find(
         (notificationItem) => notificationItem.requiredName === requiredName
       );
 
-      if (activeNotification && typeof activeNotification === 'object') {
-        const isGreaterThanMinVersion = semver.gte(
-          activeNotification.minVersion,
-          minVersion.version
-        );
+      let version = semVersion.version;
 
-        if (!isGreaterThanMinVersion) {
-          // remove notification from state
-          return [
-            {
-              type: updateNotification.type,
-              payload: {
-                id: activeNotification.id,
-                _remove: true,
-              },
-            },
-          ];
-        }
+      if (version.indexOf('-') > -1) {
+        version = version.substring(0, version.indexOf('-'));
       }
 
       return [
@@ -70,7 +48,7 @@ const addNotificationEpic = (action$, state$) =>
             requiredName,
             requiredVersion,
             requiredByName,
-            minVersion: minVersion.version,
+            minVersion: version,
           },
         },
       ];
@@ -83,4 +61,4 @@ const addNotificationEpic = (action$, state$) =>
     )
   );
 
-export default combineEpics(addNotificationEpic);
+export default combineEpics(parseNotificationEpic);

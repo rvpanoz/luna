@@ -4,7 +4,7 @@ import cn from 'classnames';
 import { useEffect, useState } from 'react';
 import { always, cond, equals } from 'ramda';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import { objectOf, string, func } from 'prop-types';
+import { objectOf, string, func, bool } from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Popper from '@material-ui/core/Popper';
 import Card from '@material-ui/core/Card';
@@ -233,7 +233,7 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
     <Grid container justify="space-around">
       <Grid item md={10} lg={10} xl={10}>
         <Transition>
-          <Card className={classes.card}>
+          <Card>
             <CardHeader
               title={
                 <Typography

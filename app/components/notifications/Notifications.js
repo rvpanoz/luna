@@ -2,78 +2,50 @@ import React from 'react';
 import PropTypes, { arrayOf, objectOf, string, func } from 'prop-types';
 import cn from 'classnames';
 import { withStyles } from '@material-ui/styles';
-import { Table, TableBody, Grid, Paper, Divider } from '@material-ui/core';
-import TableCell from '@material-ui/core/TableCell';
-import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
-import InfoIcon from '@material-ui/icons/InfoTwoTone';
+import { Grid, Paper, Divider } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 
 import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
-import TableHeader from './Header';
-import Toolbar from './Toolbar';
+import NotificationsToolbar from './NotificationsToolbar';
+import NotificationDetails from './NotificationDetails';
 import styles from './styles/notifications';
 
-const NotificationItem = ({
-  classes,
-  id,
-  selected,
-  handleSelectOne,
-  ...restProps
-}) => {
-  const { requiredName, requiredVersion, reason, requiredByName } = restProps;
-  const isSelected = selected.indexOf(id) !== -1;
+const NotificationItem = ({ classes, id, onClick, ...restProps }) => {
+  const {
+    requiredName,
+    requiredVersion,
+    minVersion,
+    reason,
+    requiredByName,
+  } = restProps;
 
   return (
-    <TableRow
-      key={id}
-      role="checkbox"
-      aria-checked={isSelected}
-      tabIndex={-1}
-      selected={isSelected}
-      classes={{
-        root: classes.tableRow,
-      }}
-    >
-      <TableCell padding="checkbox" style={{ width: '55px' }}>
-        <Checkbox
-          checked={isSelected}
-          disableRipple
-          onClick={(e) => handleSelectOne(e, id)}
+    <>
+      <ListItem
+        key={id}
+        onClick={() => onClick(requiredName, minVersion)}
+        className={classes.listItem}
+      >
+        <ListItemText
+          primary={`${requiredName}-${minVersion}`}
+          secondary={
+            <Typography
+              component="span"
+              variant="subtitle2"
+              color="textSecondary"
+            >
+              {requiredByName}
+            </Typography>
+          }
         />
-      </TableCell>
-      <TableCell
-        padding="none"
-        className={cn(classes.tableCell, classes.cellText)}
-      >
-        <div className={classes.flex}>
-          <Typography variant="subtitle2" className={classes.name}>
-            {requiredName}
-          </Typography>
-        </div>
-      </TableCell>
-      <TableCell
-        padding="none"
-        className={cn(classes.tableCell, classes.cellText)}
-      >
-        <div className={classes.flex}>
-          <Typography variant="subtitle2" className={classes.name}>
-            {requiredVersion}
-          </Typography>
-        </div>
-      </TableCell>
-      <TableCell
-        padding="none"
-        className={cn(classes.tableCell, classes.cellText)}
-      >
-        <div className={classes.flex}>
-          <Typography variant="subtitle2">
-            {reason}:{requiredByName}
-          </Typography>
-        </div>
-      </TableCell>
-    </TableRow>
+      </ListItem>
+      <Divider component="li" />
+    </>
   );
 };
 
@@ -84,8 +56,7 @@ NotificationItem.propTypes = {
   requiredName: string,
   requiredVersion: string,
   requiredByName: string,
-  handleSelectOne: func.isRequired,
-  selected: arrayOf(string),
+  minVersion: string,
 };
 
 const WithStylesItem = withStyles(styles)(NotificationItem);
@@ -93,11 +64,9 @@ const WithStylesItem = withStyles(styles)(NotificationItem);
 const NotificationsList = ({
   classes,
   notifications,
-  selected,
-  loading,
-  handleSelectAll,
-  handleSelectOne,
-  handleInstall,
+  active,
+  mode,
+  onViewPackage,
 }) => {
   const noNotifications = !notifications || notifications.length === 0;
 
@@ -107,46 +76,36 @@ const NotificationsList = ({
 
   return (
     <Grid container>
-      <Grid item md={12} className={classes.transition}>
+      <Grid item md={8} lg={8} xl={8} className={classes.transition}>
         <Paper elevation={2}>
           <div className={classes.toolbar}>
-            <Toolbar
+            <NotificationsToolbar
               title={iMessage('title', 'notifications')}
               total={notifications.length}
-              selected={selected}
               notifications={notifications}
-              handleInstall={handleInstall}
             />
           </div>
           <Divider />
-          <div className={classes.tableWrapper}>
-            <Table
-              aria-labelledby="notifications-list"
-              className={cn(classes.table, {
-                [classes.hasFilterBlur]: loading,
-              })}
-            >
-              <TableHeader
-                total={notifications.length}
-                handleSelectAll={handleSelectAll}
-                selected={selected}
-                sortBy="Required"
-                sortDir="asc"
+          <List className={classes.wrapper}>
+            {notifications.map((notification) => (
+              <WithStylesItem
+                {...notification}
+                key={notification.id}
+                onClick={onViewPackage}
               />
-              <TableBody>
-                {notifications.slice(0, 10).map((notification) => (
-                  <WithStylesItem
-                    {...notification}
-                    key={notification.id}
-                    selected={selected}
-                    handleSelectOne={handleSelectOne}
-                    handleSelectAll={handleSelectAll}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+            ))}
+          </List>
         </Paper>
+      </Grid>
+      <Grid
+        item
+        sm={12}
+        md={active ? 4 : 2}
+        lg={active ? 4 : 2}
+        xl={active ? 4 : 2}
+        className={classes.transition}
+      >
+        {active && <NotificationDetails active={active} mode={mode} />}
       </Grid>
     </Grid>
   );
@@ -155,11 +114,9 @@ const NotificationsList = ({
 NotificationsList.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
-  selected: PropTypes.arrayOf(PropTypes.string).isRequired,
-  handleSelectAll: PropTypes.func.isRequired,
-  handleSelectOne: PropTypes.func.isRequired,
-  handleInstall: PropTypes.func.isRequired,
-  loading: PropTypes.bool,
+  onViewPackage: PropTypes.func.isRequired,
+  mode: PropTypes.string.isRequired,
+  active: PropTypes.object,
 };
 
 export default withStyles(styles)(NotificationsList);

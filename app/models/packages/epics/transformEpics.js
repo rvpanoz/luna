@@ -1,5 +1,5 @@
 import format from 'date-fns/format';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { pipe } from 'rxjs';
 import { ofType } from 'redux-observable';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
@@ -68,7 +68,6 @@ const mapPackagesEpic = (action$, state$) =>
             project: { name, version, description },
           },
         } = state$.value;
-
         const enhancedDependencies = data.reduce(
           (alldependencies, dependency) => {
             const [pkgName, details] = fromSearch
@@ -81,7 +80,6 @@ const mapPackagesEpic = (action$, state$) =>
                 ]
               : dependency;
 
-            // eslint-disable-next-line
             const { extraneous, invalid, missing, peerMissing, problems } =
               details || {};
 
@@ -123,14 +121,16 @@ const mapPackagesEpic = (action$, state$) =>
           []
         );
 
+        const dependencies = enhancedDependencies.filter(
+          (dependency) =>
+            !dependency.__invalid &&
+            !dependency.__hasError &&
+            !dependency.__peerMissing &&
+            !dependency.__missing
+        );
+
         return setPackages({
-          dependencies: enhancedDependencies.filter(
-            (dependency) =>
-              !dependency.__invalid &&
-              !dependency.__hasError &&
-              !dependency.__peerMissing &&
-              !dependency.__missing
-          ),
+          dependencies,
           projectName: fromSearch ? name : projectName,
           projectDescription: fromSearch ? description : projectDescription,
           projectVersion: fromSearch ? version : projectVersion,
