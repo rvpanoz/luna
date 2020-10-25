@@ -22,7 +22,15 @@ const onNpmInit = (event, options, store) => {
     );
 
   const callback = (result) => {
-    const { status, errors, data, cmd, manager, isTerminated } = result;
+    const {
+      status,
+      errors,
+      data,
+      cmd,
+      manager,
+      isTerminated,
+      initDirectory,
+    } = result;
 
     return switchcase({
       flow: () => onFlow({ manager, cmd, isTerminated }),
