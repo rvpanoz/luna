@@ -9,7 +9,6 @@ const {
 } = mk || {};
 
 const onNpmView = (event, options, store) => {
-  console.log(options);
   const settings = store.get('user_settings');
   const { activeManager = defaultManager, ...rest } = options || {};
 

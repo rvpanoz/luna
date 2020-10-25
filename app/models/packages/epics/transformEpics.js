@@ -68,7 +68,7 @@ const mapPackagesEpic = (action$, state$) =>
             project: { name, version, description },
           },
         } = state$.value;
-
+        console.log(data);
         const enhancedDependencies = data.reduce(
           (alldependencies, dependency) => {
             const [pkgName, details] = fromSearch
@@ -81,7 +81,6 @@ const mapPackagesEpic = (action$, state$) =>
                 ]
               : dependency;
 
-            // eslint-disable-next-line
             const { extraneous, invalid, missing, peerMissing, problems } =
               details || {};
 
@@ -128,7 +127,7 @@ const mapPackagesEpic = (action$, state$) =>
             (dependency) =>
               !dependency.__invalid &&
               !dependency.__hasError &&
-              !dependency.__peerMissing &&
+              // !dependency.__peerMissing &&
               !dependency.__missing
           ),
           projectName: fromSearch ? name : projectName,

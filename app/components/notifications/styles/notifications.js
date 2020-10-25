@@ -8,6 +8,8 @@ const styles = (theme) => ({
   },
   toolbar: {
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   wrapper: {
     whiteSpace: 'nowrap',
@@ -19,6 +21,18 @@ const styles = (theme) => ({
       cursor: 'pointer',
       backgroundColor: theme.palette.secondary.light,
     },
+  },
+  cardHeader: {
+    padding: theme.spacing(1),
+  },
+  subheader: {
+    paddingTop: theme.spacing(1),
+  },
+  cardContent: {
+    maxHeight: 375,
+    overflowY: 'scroll',
+    overflowX: 'hidden',
+    padding: theme.spacing(1),
   },
 });
 

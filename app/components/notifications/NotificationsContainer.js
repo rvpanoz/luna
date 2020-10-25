@@ -10,20 +10,20 @@ import {
   installMultiplePackages,
   viewPackageStart,
 } from 'models/packages/actions';
-import { clearInstallOptions } from 'models/common/actions';
-import CommandOptions from 'components/packages/CommandOptions';
 import { iMessage } from 'commons/utils';
 import Notifications from './Notifications';
 
-const mapState = ({ notifications: { active, notifications } }) => ({
+const mapState = ({
+  common: { mode },
+  notifications: { active, notifications },
+}) => ({
   active,
   notifications,
+  mode,
 });
 
 const NotificationsContainer = () => {
-  const [selected, setSelected] = useState([]);
-  const [isDialogOpen, setDialogOpen] = useState(false);
-  const { active, notifications } = useMappedState(mapState);
+  const { active, mode, notifications } = useMappedState(mapState);
   const dispatch = useDispatch();
 
   const viewPackageHandler = useCallback(
@@ -42,28 +42,13 @@ const NotificationsContainer = () => {
     [dispatch]
   );
 
-  const selectedPackages = selected.length
-    ? selected.map((notificationId) => {
-        const { requiredName } = notifications.find(
-          (notification) => notification.id === notificationId
-        );
-
-        return requiredName;
-      })
-    : [];
-
   return (
     <>
       <Notifications
         active={active}
-        selected={selected}
+        mode={mode}
         notifications={notifications}
         onViewPackage={viewPackageHandler}
-      />
-      <CommandOptions
-        isOpen={isDialogOpen}
-        selected={selectedPackages}
-        onClose={() => setDialogOpen(false)}
       />
     </>
   );

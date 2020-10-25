@@ -233,7 +233,7 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
     <Grid container justify="space-around">
       <Grid item md={10} lg={10} xl={10}>
         <Transition>
-          <Card className={classes.card}>
+          <Card>
             <CardHeader
               title={
                 <Typography

@@ -26,15 +26,15 @@ const NotificationItem = ({ classes, id, onClick, ...restProps }) => {
   } = restProps;
 
   return (
-    <ListItem
-      key={id}
-      onClick={() => onClick(requiredName, minVersion)}
-      className={classes.listItem}
-    >
-      <ListItemText
-        primary={`${requiredName}-${minVersion}`}
-        secondary={
-          <React.Fragment>
+    <>
+      <ListItem
+        key={id}
+        onClick={() => onClick(requiredName, minVersion)}
+        className={classes.listItem}
+      >
+        <ListItemText
+          primary={`${requiredName}-${minVersion}`}
+          secondary={
             <Typography
               component="span"
               variant="subtitle2"
@@ -42,10 +42,11 @@ const NotificationItem = ({ classes, id, onClick, ...restProps }) => {
             >
               {requiredByName}
             </Typography>
-          </React.Fragment>
-        }
-      />
-    </ListItem>
+          }
+        />
+      </ListItem>
+      <Divider component="li" />
+    </>
   );
 };
 
@@ -65,6 +66,7 @@ const NotificationsList = ({
   classes,
   notifications,
   active,
+  mode,
   onViewPackage,
 }) => {
   const noNotifications = !notifications || notifications.length === 0;
@@ -87,14 +89,11 @@ const NotificationsList = ({
           <Divider />
           <List className={classes.wrapper}>
             {notifications.slice(0, 10).map((notification) => (
-              <>
-                <WithStylesItem
-                  {...notification}
-                  key={notification.id}
-                  onClick={onViewPackage}
-                />
-                <Divider variant="inset" component="li" />
-              </>
+              <WithStylesItem
+                {...notification}
+                key={notification.id}
+                onClick={onViewPackage}
+              />
             ))}
           </List>
         </Paper>
@@ -107,7 +106,7 @@ const NotificationsList = ({
         xl={active ? 4 : 2}
         className={classes.transition}
       >
-        <NotificationDetails active={active} />
+        {active && <NotificationDetails active={active} mode={mode} />}
       </Grid>
     </Grid>
   );
@@ -116,8 +115,9 @@ const NotificationsList = ({
 NotificationsList.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   notifications: PropTypes.arrayOf(PropTypes.object).isRequired,
-  active: PropTypes.object,
   onViewPackage: PropTypes.func.isRequired,
+  mode: PropTypes.string.isRequired,
+  active: PropTypes.object,
 };
 
 export default withStyles(styles)(NotificationsList);
