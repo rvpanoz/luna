@@ -11,7 +11,6 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 
 import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
-import TableHeader from './Header';
 import NotificationsToolbar from './NotificationsToolbar';
 import NotificationDetails from './NotificationDetails';
 import styles from './styles/notifications';
@@ -88,7 +87,7 @@ const NotificationsList = ({
           </div>
           <Divider />
           <List className={classes.wrapper}>
-            {notifications.slice(0, 10).map((notification) => (
+            {notifications.map((notification) => (
               <WithStylesItem
                 {...notification}
                 key={notification.id}

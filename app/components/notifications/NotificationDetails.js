@@ -25,6 +25,7 @@ import { iMessage, showDialog } from 'commons/utils';
 import Versions from 'components/packages/Versions';
 import CommandOptions from 'components/packages/CommandOptions';
 import { installPackage } from 'models/packages/actions';
+import { setActiveNotification } from 'models/notifications/actions';
 import styles from './styles/notifications';
 
 const NotificationDetails = ({ classes, active, mode }) => {
@@ -70,6 +71,9 @@ const NotificationDetails = ({ classes, active, mode }) => {
     return showDialog(dialogHandler, dialogOptions);
   };
 
+  const clearNotification = () =>
+    dispatch(setActiveNotification({ active: null }));
+
   return (
     <>
       <Grid container justify="space-around">
@@ -113,7 +117,11 @@ const NotificationDetails = ({ classes, active, mode }) => {
           >
             <Tooltip title={iMessage('title', 'clearActive')}>
               <div>
-                <IconButton color="secondary" disableRipple onClick={() => {}}>
+                <IconButton
+                  color="secondary"
+                  disableRipple
+                  onClick={clearNotification}
+                >
                   <CloseIcon />
                 </IconButton>
               </div>
