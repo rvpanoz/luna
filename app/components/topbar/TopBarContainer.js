@@ -17,6 +17,7 @@ import { runInit } from 'models/npm/actions';
 import { iMessage } from 'commons/utils';
 import Init from './Init';
 import Settings from './Settings';
+import System from './System';
 import TopBar from './TopBar';
 import styles from './styles/topbar';
 
@@ -29,6 +30,7 @@ const mapState = ({
       loader: { loading },
     },
   },
+  npm: { env },
 }) => ({
   activePage,
   notifications,
@@ -36,6 +38,7 @@ const mapState = ({
   directory,
   loading,
   rowsPerPage,
+  env,
 });
 
 const AppTopBar = ({ classes, className }) => {
@@ -46,6 +49,7 @@ const AppTopBar = ({ classes, className }) => {
     loading,
     activePage,
     rowsPerPage,
+    env,
   } = useMappedState(mapState);
   const dispatch = useDispatch();
   const [state, setState] = useState({
@@ -148,6 +152,14 @@ const AppTopBar = ({ classes, className }) => {
             dialogTitle: iMessage('title', 'settings'),
           })
         }
+        onShowSystem={() =>
+          setState({
+            ...state,
+            view: 'system',
+            dialogOpen: true,
+            dialogTitle: iMessage('title', 'system'),
+          })
+        }
       />
       <Dialog
         open={state.dialogOpen}
@@ -177,6 +189,13 @@ const AppTopBar = ({ classes, className }) => {
               onChangeRowsPage={(rowsPerPage) =>
                 dispatch(setPageRows({ rowsPerPage }))
               }
+            />
+          )}
+          {state.view === 'system' && (
+            <System
+              userAgent={env['user-agent']}
+              cache={env.cache}
+              prefix={env.prefix}
             />
           )}
         </DialogContent>
