@@ -2,7 +2,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator';
 
 const styles = (theme) => {
   return {
-    search: {
+    root: {
       position: 'relative',
       borderRadius: theme.shape.borderRadius,
       color: '#fff',

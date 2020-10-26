@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,6 +12,12 @@ import Divider from '@material-ui/core/Divider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import Select from '@material-ui/core/Select';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import { ControlTypes } from 'components/common';
 import { addInstallOption } from 'models/common/actions';
@@ -22,6 +28,63 @@ import {
 import { iMessage } from 'commons/utils';
 
 import styles from './styles';
+import { PACKAGE_GROUPS } from 'constants/AppConstants';
+
+const groups = Object.values(PACKAGE_GROUPS);
+
+const Controls = ({ classes, packageName, onSelect }) => {
+  const [groupName, setGroup] = useState('save-prod');
+
+  return (
+    <FormGroup row>
+      <FormControl className={classes.formControl}>
+        <Select
+          value={groupName}
+          onChange={(e) => {
+            const { value } = e.target;
+
+            setGroup(value);
+            onSelect({
+              name: packageName,
+              options: [value],
+            });
+          }}
+        >
+          {groups.map((group) =>
+            group !== 'save-exact' ? (
+              <MenuItem key={`group${group}`} value={group}>
+                {group}
+              </MenuItem>
+            ) : null
+          )}
+        </Select>
+      </FormControl>
+      <FormControlLabel
+        className={classes.formControl}
+        control={
+          <Checkbox
+            onChange={() =>
+              onSelect({
+                name: packageName,
+                options: ['save-exact'],
+              })
+            }
+            value="save-exact"
+          />
+        }
+        label="exact"
+      />
+    </FormGroup>
+  );
+};
+
+Controls.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  packageName: PropTypes.string.isRequired,
+  onSelect: PropTypes.func.isRequired,
+};
+
+const WithStylesControls = withStyles(styles)(Controls);
 
 const CommandOptions = ({
   classes,
@@ -79,7 +142,7 @@ const CommandOptions = ({
                   }
                 />
                 <ListItemSecondaryAction>
-                  <ControlTypes
+                  <WithStylesControls
                     packageName={packageName}
                     onSelect={({ name, options }) =>
                       dispatch(

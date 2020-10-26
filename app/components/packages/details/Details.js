@@ -31,7 +31,7 @@ import {
   uninstallPackages,
   setActive,
 } from 'models/packages/actions';
-import { AppLoader, Transition } from 'components/common';
+import { Transition } from 'components/common';
 import { iMessage, showDialog, switchcase } from 'commons/utils';
 import Dependencies from '../Dependencies';
 import Versions from '../Versions';
@@ -352,13 +352,13 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
 
   return (
     <div className={classes.wrapper}>
-      <AppLoader
+      <Loader
         loading={packageLoader.loading}
         message={iMessage('info', 'loadingPackage')}
         relative
       >
         {active ? renderCard() : null}
-      </AppLoader>
+      </Loader>
       <Popper
         open={activePopper.index === 1}
         anchorEl={activePopper.index === 1 ? activePopper.anchorEl : null}

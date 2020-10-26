@@ -11,7 +11,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import UpdateIcon from '@material-ui/icons/Update';
-import { AppLoader } from 'components/common';
 import { iMessage } from 'commons/utils';
 import styles from './styles/packages';
 
@@ -35,7 +34,7 @@ const Item = ({ classes, name, primaryText, secondaryText }) => {
     >
       <ListItemText
         primary={
-          <div className={classes.flexContainer}>
+          <div className={classes.flex}>
             <Typography color="textSecondary" variant="h5">
               {primaryText}
             </Typography>

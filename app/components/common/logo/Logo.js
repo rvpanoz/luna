@@ -4,9 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import anime from 'animejs';
 import cn from 'classnames';
 
-import styles from './styles/appLogo';
+import styles from './styles';
 
-const AppLogo = ({ classes, className }) => {
+const Logo = ({ classes, className }) => {
   useEffect(() => {
     const logoAnimationTL = anime
       .timeline({
@@ -116,9 +116,9 @@ const AppLogo = ({ classes, className }) => {
   );
 };
 
-AppLogo.propTypes = {
+Logo.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   className: PropTypes.string,
 };
 
-export default withStyles(styles)(AppLogo);
+export default withStyles(styles)(Logo);

@@ -110,7 +110,7 @@ const SearchBox = ({ classes, disabled, onlineStatus }) => {
   });
 
   return (
-    <div className={classes.search}>
+    <div className={classes.root}>
       {packageName && packageName.length ? (
         <a href="#" className={classes.searchIcon} onClick={handleClear}>
           <ClearIcon />

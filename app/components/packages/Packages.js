@@ -12,7 +12,7 @@ import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
 
 import { useFilters } from 'commons/hooks';
-import { AppLoader, HelperText } from 'components/common';
+import { HelperText } from 'components/common';
 import { scrollWrapper, iMessage } from 'commons/utils';
 import {
   setPackagesStart,
@@ -33,6 +33,7 @@ import PackageItem from './item/Item';
 import PackageDetails from './details/Details';
 import Pagination from './Pagination';
 import InstallationOptions from './options/InstallationOptions';
+import Loader from '../common/loader/Loader';
 import styles from './styles/packages';
 
 const mapState = ({
@@ -227,7 +228,7 @@ const Packages = ({ classes }) => {
 
   return (
     <>
-      <AppLoader loading={loading} message={message}>
+      <Loader loading={loading} message={message}>
         <Grid container>
           <Grid
             item
@@ -378,7 +379,7 @@ const Packages = ({ classes }) => {
             </Grid>
           )}
         </Grid>
-      </AppLoader>
+      </Loader>
       <InstallationOptions
         isOpen={dialogOptions.activeDialog === 'installation-options'}
         single={dialogOptions.single}

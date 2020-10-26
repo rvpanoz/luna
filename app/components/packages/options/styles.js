@@ -1,7 +1,7 @@
 import { darken } from '@material-ui/core/styles/colorManipulator';
 import { defaultFont, flexContainer, grayColor } from 'styles/variables';
 
-const styles = () => ({
+const styles = (theme) => ({
   list: {
     width: '100%',
   },
@@ -15,6 +15,10 @@ const styles = () => ({
     display: 'flex',
     color: darken(grayColor, 0.2),
     flexDirection: 'column',
+  },
+  formControl: {
+    padding: theme.spacing(2),
+    minWidth: 120,
   },
 });
 
