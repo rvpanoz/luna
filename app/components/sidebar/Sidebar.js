@@ -2,9 +2,9 @@ import React from 'react';
 import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
 import { withStyles } from '@material-ui/styles';
 
-import { AppLogo } from 'components/common';
 import Tabs from './tabs/Tabs';
 import { PackagesTab, ActionsTab, HistoryTab } from './tabs';
+import { Logo } from '../common/logo';
 import styles from './styles';
 
 const Sidebar = ({
@@ -24,7 +24,7 @@ const Sidebar = ({
 }) => {
   return (
     <>
-      <AppLogo />
+      <Logo />
       <Tabs>
         <PackagesTab
           items={tabPackagesData}
