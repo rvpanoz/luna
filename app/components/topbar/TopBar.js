@@ -8,6 +8,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AddIcon from '@material-ui/icons/Add';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import SecurityIcon from '@material-ui/icons/Security';
+import InfoIcon from '@material-ui/icons/Info';
 
 import { iMessage } from 'commons/utils';
 import SearchBox from './SearchBox';
@@ -51,6 +52,7 @@ const Topbar = ({
   onLoadDirectory,
   onCreate,
   onShowSettings,
+  onShowSystem,
   setActivePage,
 }) => (
   <AppBar className={classes.topbar} elevation={0} position="static">
@@ -121,6 +123,15 @@ const Topbar = ({
           <SettingsIcon />
         </IconButton>
       </Tooltip>
+      <Tooltip title={iMessage('title', 'system')}>
+        <IconButton
+          className={classes.button}
+          color="inherit"
+          onClick={onShowSystem}
+        >
+          <InfoIcon />
+        </IconButton>
+      </Tooltip>
     </Toolbar>
   </AppBar>
 );
@@ -134,6 +145,7 @@ Topbar.propTypes = {
   setActivePage: func,
   onInitFlow: func,
   onShowSettings: func,
+  onShowSystem: func,
 };
 
 export default withStyles(styles)(Topbar);
