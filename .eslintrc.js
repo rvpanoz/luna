@@ -29,7 +29,7 @@ module.exports = {
     'import/no-unresolved': 'error',
     'import/no-duplicates': 'off',
     'import/no-extraneous-dependencies': 'off',
-    'import/prefer-default-export': 'warn',
+    'import/prefer-default-export': 'off',
     'no-nested-ternary': 'off',
     'jsx-a11y/anchor-is-valid': 'off',
     'no-console': 'off',

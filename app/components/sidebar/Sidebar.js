@@ -3,7 +3,7 @@ import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
 
 import Tabs from './tabs/Tabs';
 import { PackagesTab, ActionsTab, HistoryTab } from './tabs';
-import { Logo } from '../common/logo';
+import Logo from '../common/logo/Logo';
 
 const Sidebar = ({
   loading,

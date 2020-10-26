@@ -38,7 +38,7 @@ import Dependencies from './Dependencies';
 import Versions from './Versions';
 import PackageInfo from './PackageInfo';
 import { InstallAction, UpdateAction, UninstallAction } from './Actions';
-import { Loader } from '../common/loader';
+import Loader from '../common/loader/Loader';
 import styles from './styles/packageDetails';
 
 const mapState = ({

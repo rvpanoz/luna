@@ -2,11 +2,11 @@ import Dot from './Dot';
 import Transition from './Transition';
 import HelperText from './HelperText';
 
-import SnackbarContent from './snackbar';
-import Logo from './logo';
-import Loader from './loader';
-import Paper from './paper';
-import Widget from './widget';
+import SnackbarContent from './snackbar/SnackbarContent';
+import Logo from './logo/Logo';
+import Loader from './loader/Loader';
+import Paper from './paper/Paper';
+import Widget from './widget/Widget';
 
 export {
   Loader,

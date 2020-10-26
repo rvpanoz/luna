@@ -14,7 +14,7 @@ import Notifications from 'components/notifications/NotificationsContainer';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 import appTheme from 'styles/theme';
-import { AppSnackbar } from '../common/snackbar';
+import AppSnackbar from '../common/snackbar/AppSnackbar';
 
 import styles from './styles';
 
