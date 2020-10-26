@@ -9,7 +9,7 @@ const styles = (theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
-  flexContainer: {
+  flex: {
     ...flexContainer,
     flexDirection: 'column',
     justifyContent: 'space-between',

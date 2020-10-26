@@ -12,9 +12,10 @@ import cn from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { Typography } from '@material-ui/core';
-import styles from './styles/appLoader';
 
-const AppLoader = ({
+import styles from './styles';
+
+const Loader = ({
   loading,
   classes,
   className,
@@ -50,7 +51,7 @@ const AppLoader = ({
     children
   );
 
-AppLoader.propTypes = {
+Loader.propTypes = {
   classes: objectOf(string).isRequired,
   loading: bool.isRequired,
   children: oneOfType([node, array, symbol]),
@@ -60,4 +61,4 @@ AppLoader.propTypes = {
   className: string,
 };
 
-export default withStyles(styles)(AppLoader);
+export default withStyles(styles)(Loader);

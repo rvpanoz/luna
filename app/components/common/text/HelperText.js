@@ -3,12 +3,12 @@ import cn from 'classnames';
 import { string, func, bool, objectOf } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import styles from './styles/helperText';
+
+import AppButton from '../button/Button';
+import styles from './styles';
 
 const HelperText = ({
   classes,
-  color,
   text,
   detail,
   actionText,
@@ -29,21 +29,17 @@ const HelperText = ({
       </Typography>
     )}
     {actionText && actionHandler ? (
-      <Button
+      <AppButton
         disabled={actionDisabled}
-        color={color}
+        color="simple"
         className={classes.button}
         onClick={actionHandler}
       >
         {actionText}
-      </Button>
+      </AppButton>
     ) : null}
   </div>
 );
-
-HelperText.defaultProps = {
-  color: 'primary',
-};
 
 HelperText.propTypes = {
   classes: objectOf(string).isRequired,

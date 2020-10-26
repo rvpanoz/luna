@@ -20,7 +20,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import VersionsIcon from '@material-ui/icons/LabelOutlined';
 import DependenciesIcon from '@material-ui/icons/ListOutlined';
 
-import { AppLoader, Transition } from 'components/common';
+import { Transition } from 'components/common';
 import { iMessage, showDialog } from 'commons/utils';
 import Versions from 'components/packages/Versions';
 import CommandOptions from 'components/packages/CommandOptions';

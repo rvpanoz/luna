@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
 import { mergeMap, concatMap, tap } from 'rxjs/operators';

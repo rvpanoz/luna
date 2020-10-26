@@ -31,13 +31,14 @@ import {
   uninstallPackages,
   setActive,
 } from 'models/packages/actions';
-import { AppLoader, Transition } from 'components/common';
+import { Transition } from 'components/common';
+import { initialDialogOptions } from 'components/packages/Packages';
 import { iMessage, showDialog, switchcase } from 'commons/utils';
 import Dependencies from './Dependencies';
 import Versions from './Versions';
 import PackageInfo from './PackageInfo';
 import { InstallAction, UpdateAction, UninstallAction } from './Actions';
-import { initialDialogOptions } from 'components/packages/Packages';
+import Loader from '../common/loader/Loader';
 import styles from './styles/packageDetails';
 
 const mapState = ({
@@ -352,13 +353,13 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
 
   return (
     <div className={classes.wrapper}>
-      <AppLoader
+      <Loader
         loading={packageLoader.loading}
         message={iMessage('info', 'loadingPackage')}
         relative
       >
         {active ? renderCard() : null}
-      </AppLoader>
+      </Loader>
       <Popper
         open={activePopper.index === 1}
         anchorEl={activePopper.index === 1 ? activePopper.anchorEl : null}

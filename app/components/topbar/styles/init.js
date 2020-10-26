@@ -14,33 +14,11 @@ const styles = (theme) => ({
   actions: {
     padding: 0,
   },
-  caption: {
-    color: darken(grayColor, 0.6),
-    marginTop: theme.spacing(4),
-  },
-  options: {
-    paddingTop: theme.spacing(4),
-  },
-  formControl: {
-    margin: 0,
-  },
-  flexGrow: {
-    flexGrow: 1,
-  },
-  title: {
-    padding: theme.spacing(2),
-  },
-  info: {
-    marginTop: theme.spacing(5),
-  },
   directory: {
     padding: theme.spacing(1),
   },
   button: {
     marginBottom: theme.spacing(8),
-  },
-  paper: {
-    padding: theme.spacing(1),
   },
 });
 

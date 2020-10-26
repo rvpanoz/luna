@@ -1,7 +1,6 @@
 const styles = (theme) => ({
   widgetWrapper: {
     display: 'flex',
-    minHeight: '100%',
   },
   widgetHeader: {
     padding: theme.spacing(3),
