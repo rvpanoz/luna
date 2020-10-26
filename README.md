@@ -25,11 +25,11 @@ Luna was created with main purpose to provide a flexible and modern UI for npm d
 ## Features
 
 - Manage global and local packages
-- Search npm for new packages
+- Search for new packages
 - Install packages
-- Uninstall packages
 - Update packages
-- Filter packages by type or outdated
+- Uninstall packages
+- Filter packages by name, group and outdated
 - Preview package details (versions, statistics, dependencies and more)
 - Get notifications for missing dependencies or extraneous packages
 
