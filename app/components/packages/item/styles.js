@@ -2,16 +2,10 @@ import { darken } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont, grayColor } from 'styles/variables';
 
 const styles = (theme) => ({
-  flexContainer: {
+  flex: {
     ...flexContainer,
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  flexContainerCell: {
-    ...flexContainer,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
   },
   tableRow: {
     border: 'none',

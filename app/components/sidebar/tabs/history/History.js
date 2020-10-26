@@ -15,7 +15,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ArrowRightIcon from '@material-ui/icons/ArchiveOutlined';
 import FolderIcon from '@material-ui/icons/Folder';
 import { iMessage } from 'commons/utils';
-import styles from './styles/history';
+
+import styles from './styles';
 
 const Item = ({ classes, dirName, dirPath, onHistoryClick }) => {
   return (

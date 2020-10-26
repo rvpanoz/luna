@@ -65,24 +65,24 @@ const PackageItem = ({
       </TableCell>
       <TableCell padding="none" name="name" className={classes.tableCell}>
         <div
-          className={cn(classes.flexContainerCell, {
+          className={cn(classes.flex, {
             [classes.flexRow]: extraneous,
           })}
         >
-          <div className={classes.flexContainer}>
+          <div className={classes.flex}>
             <Typography className={classes.name} color="textPrimary">
-              {name}
+              {name}&nbsp;
+              {inOperation && (
+                <CircularProgress
+                  size={15}
+                  thickness={5}
+                  className={classes.loader}
+                  color="primary"
+                />
+              )}
             </Typography>
-            {inOperation && (
-              <CircularProgress
-                size={15}
-                thickness={5}
-                className={classes.loader}
-                color="primary"
-              />
-            )}
           </div>
-          {!extraneous && group && !fromSearch && (
+          {group && (
             <Typography variant="caption" color="textSecondary">
               {group}
             </Typography>
@@ -90,9 +90,7 @@ const PackageItem = ({
         </div>
       </TableCell>
       <TableCell padding="none" name="installed" className={classes.tableCell}>
-        <Typography className={classes.version}>
-          {fromSearch ? 'No' : version}
-        </Typography>
+        <Typography className={classes.version}>{version}</Typography>
       </TableCell>
       <TableCell padding="none" name="latest" className={classes.tableCell}>
         <Typography

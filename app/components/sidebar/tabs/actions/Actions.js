@@ -13,7 +13,7 @@ import InstallIcon from '@material-ui/icons/ArchiveOutlined';
 import Typography from '@material-ui/core/Typography';
 import { iMessage } from 'commons/utils';
 
-import styles from './styles/actions';
+import styles from './styles';
 
 const ActionsTab = ({ classes, mode, onInstallPackagesFromJson }) => (
   <>
