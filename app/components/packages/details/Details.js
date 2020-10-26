@@ -33,12 +33,12 @@ import {
 } from 'models/packages/actions';
 import { AppLoader, Transition } from 'components/common';
 import { iMessage, showDialog, switchcase } from 'commons/utils';
-import Dependencies from './Dependencies';
-import Versions from './Versions';
-import PackageInfo from './PackageInfo';
-import { InstallAction, UpdateAction, UninstallAction } from './Actions';
+import Dependencies from '../Dependencies';
+import Versions from '../Versions';
+import PackageInfo from '../PackageInfo';
+import { InstallAction, UpdateAction, UninstallAction } from '../Actions';
 import { initialDialogOptions } from 'components/packages/Packages';
-import styles from './styles/packageDetails';
+import styles from './styles';
 
 const mapState = ({
   common: { mode },
@@ -60,7 +60,7 @@ const mapState = ({
   fromSearch,
 });
 
-const PackageDetails = ({ classes, showCommandOptions }) => {
+const PackageDetails = ({ classes, showInstallationOptions }) => {
   const dispatch = useDispatch();
   const [expanded, expand] = useState(true);
   const [dependencies, setDependencies] = useState([]);
@@ -93,7 +93,7 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
 
   const handleInstall = () => {
     if (fromSearch && mode === 'local') {
-      return showCommandOptions({
+      return showInstallationOptions({
         single: true,
         name: active.name,
         version,
@@ -136,7 +136,7 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
 
   const handleInstallVersion = (packageVersion) => {
     if (fromSearch && mode === 'local') {
-      return showCommandOptions({
+      return showInstallationOptions({
         single: true,
         name: active.name,
         version: packageVersion,
@@ -393,7 +393,7 @@ PackageDetails.defaultProps = {
 
 PackageDetails.propTypes = {
   classes: objectOf(string).isRequired,
-  showCommandOptions: func.isRequired,
+  showInstallationOptions: func.isRequired,
   group: string,
 };
 

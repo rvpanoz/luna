@@ -11,7 +11,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import WarningIcon from '@material-ui/icons/WarningTwoTone';
 import CheckIcon from '@material-ui/icons/CheckTwoTone';
 import UpdateIcon from '@material-ui/icons/UpdateTwoTone';
-import styles from './styles/packageItem';
+
+import styles from './styles';
 
 const PackageItem = ({
   classes,
@@ -62,7 +63,6 @@ const PackageItem = ({
           }}
         />
       </TableCell>
-
       <TableCell padding="none" name="name" className={classes.tableCell}>
         <div
           className={cn(classes.flexContainerCell, {
@@ -70,7 +70,9 @@ const PackageItem = ({
           })}
         >
           <div className={classes.flexContainer}>
-            <Typography className={classes.name}>{name}</Typography>
+            <Typography className={classes.name} color="textPrimary">
+              {name}
+            </Typography>
             {inOperation && (
               <CircularProgress
                 size={15}

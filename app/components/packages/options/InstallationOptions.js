@@ -20,7 +20,8 @@ import {
   installMultiplePackages,
 } from 'models/packages/actions';
 import { iMessage } from 'commons/utils';
-import styles from './styles/commandOptions';
+
+import styles from './styles';
 
 const CommandOptions = ({
   classes,

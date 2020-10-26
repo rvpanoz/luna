@@ -33,18 +33,18 @@ const styles = (theme) => ({
     marginLeft: theme.spacing(1),
   },
   name: {
-    [theme.breakpoints.up('lg')]: {
-      width: 'auto',
-    },
-    [theme.breakpoints.down('md')]: {
-      width: 200,
-      fontSize: 14,
-    },
+    fontSize: 14,
     color: darken(grayColor, 0.5),
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     textAlign: 'left',
+    [theme.breakpoints.up('lg')]: {
+      width: 'auto',
+    },
+    [theme.breakpoints.down('md')]: {
+      width: 300,
+    },
   },
   version: {
     [theme.breakpoints.down('md')]: {

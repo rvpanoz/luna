@@ -23,7 +23,7 @@ import DependenciesIcon from '@material-ui/icons/ListOutlined';
 import { AppLoader, Transition } from 'components/common';
 import { iMessage, showDialog } from 'commons/utils';
 import Versions from 'components/packages/Versions';
-import CommandOptions from 'components/packages/CommandOptions';
+import InstallationOptions from 'components/packages/options/InstallationOptions';
 import { installPackage } from 'models/packages/actions';
 import { setActiveNotification } from 'models/notifications/actions';
 import styles from './styles/notifications';
@@ -160,7 +160,7 @@ const NotificationDetails = ({ classes, active, mode }) => {
         )}
       </Popper>
 
-      <CommandOptions
+      <InstallationOptions
         isOpen={isDialogOpen}
         selected={[name]}
         onClose={() => setDialogOpen(false)}

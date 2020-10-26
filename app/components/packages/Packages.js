@@ -29,10 +29,10 @@ import {
 import { setMode, clearInstallOptions } from 'models/common/actions';
 import Toolbar from './Toolbar';
 import TableHeader from './Header';
-import PackageItem from './PackageItem';
+import PackageItem from './item/Item';
+import PackageDetails from './details/Details';
 import Pagination from './Pagination';
-import CommandOptions from './CommandOptions';
-import PackageDetails from './PackageDetails';
+import InstallationOptions from './options/InstallationOptions';
 import styles from './styles/packages';
 
 const mapState = ({
@@ -166,7 +166,7 @@ const Packages = ({ classes }) => {
     [dispatch]
   );
 
-  const onCommandOptionsClose = () => {
+  const onInstallationOptionsClose = () => {
     dispatch(clearInstallOptions());
     setDialogOptions(initialDialogOptions);
   };
@@ -231,9 +231,9 @@ const Packages = ({ classes }) => {
         <Grid container>
           <Grid
             item
-            md={active ? 8 : 10}
-            lg={active ? 8 : 10}
-            xl={active ? 8 : 10}
+            md={active ? 8 : 12}
+            lg={active ? 8 : 12}
+            xl={active ? 8 : 12}
             className={classes.transition}
           >
             <Paper elevation={2}>
@@ -254,9 +254,9 @@ const Packages = ({ classes }) => {
                   scrollWrapper={() =>
                     scrollWrapper(wrapperRef && wrapperRef.current, 0)
                   }
-                  showCommandOptions={() =>
+                  showInstallationOptions={() =>
                     setDialogOptions({
-                      activeDialog: 'command-options',
+                      activeDialog: 'installation-options',
                       single: false,
                     })
                   }
@@ -358,32 +358,34 @@ const Packages = ({ classes }) => {
               </div>
             </Paper>
           </Grid>
-          <Grid
-            item
-            sm={12}
-            md={active ? 4 : 2}
-            lg={active ? 4 : 2}
-            xl={active ? 4 : 2}
-            className={classes.transition}
-          >
-            <PackageDetails
-              showCommandOptions={(options) =>
-                setDialogOptions({
-                  activeDialog: 'command-options',
-                  ...options,
-                })
-              }
-            />
-          </Grid>
+          {active && (
+            <Grid
+              item
+              sm={12}
+              md={4}
+              lg={4}
+              xl={4}
+              className={classes.transition}
+            >
+              <PackageDetails
+                showInstallationOptions={(options) =>
+                  setDialogOptions({
+                    activeDialog: 'installation-options',
+                    ...options,
+                  })
+                }
+              />
+            </Grid>
+          )}
         </Grid>
       </AppLoader>
-      <CommandOptions
-        isOpen={dialogOptions.activeDialog === 'command-options'}
+      <InstallationOptions
+        isOpen={dialogOptions.activeDialog === 'installation-options'}
         single={dialogOptions.single}
         version={dialogOptions.version}
         active={active}
         selected={selected}
-        onClose={onCommandOptionsClose}
+        onClose={onInstallationOptionsClose}
       />
     </>
   );
