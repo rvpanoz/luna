@@ -1,11 +1,10 @@
-/* eslint-disable react/require-default-props */
-
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import PropTypes, { string, bool } from 'prop-types';
-import cx from 'classnames';
-import buttonStyle from './styles/buttonStyle';
+import cn from 'classnames';
+
+import styles from './styles';
 
 const AppButton = ({
   classes,
@@ -17,7 +16,7 @@ const AppButton = ({
   disabled,
   ...restProps
 }) => {
-  const btnClasses = cx({
+  const btnClasses = cn({
     [classes[color]]: color,
     [classes.round]: round,
     [classes.border]: border,
@@ -26,7 +25,7 @@ const AppButton = ({
   });
 
   return (
-    <Button {...restProps} className={cx(classes.button, btnClasses)}>
+    <Button {...restProps} className={cn(classes.button, btnClasses)}>
       {children}
     </Button>
   );
@@ -41,13 +40,11 @@ AppButton.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   color: PropTypes.oneOf([
     'info',
-    'success',
     'warning',
     'error',
     'transparent',
     'primary',
     'secondary',
-    'secondaryLarge',
     'simple',
   ]),
   round: bool,
@@ -56,4 +53,4 @@ AppButton.propTypes = {
   disabled: bool,
 };
 
-export default withStyles(buttonStyle)(AppButton);
+export default withStyles(styles)(AppButton);

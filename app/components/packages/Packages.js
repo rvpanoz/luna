@@ -34,10 +34,7 @@ import Pagination from './Pagination';
 import CommandOptions from './CommandOptions';
 import PackageDetails from './PackageDetails';
 import Loader from '../common/loader/Loader';
-import Widget from '../common/widget/Widget';
 import styles from './styles/packages';
-
-import { Dot } from 'components/common';
 
 const mapState = ({
   common: {

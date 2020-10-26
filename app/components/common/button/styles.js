@@ -36,15 +36,8 @@ const buttonStyle = (theme) => ({
     backgroundColor: theme.palette.secondary.main,
     ...defaultBoxShadow,
     '&:hover': {
+      color: theme.palette.common.white,
       backgroundColor: darken(theme.palette.secondary.light, 0.1),
-    },
-  },
-  secondaryLarge: {
-    color: theme.palette.secondary.main,
-    ...boxShadow,
-    '&:hover': {
-      color: theme.palette.primary.main,
-      backgroundColor: lighten(theme.palette.secondary.light, 0.9),
     },
   },
   error: {
@@ -59,7 +52,8 @@ const buttonStyle = (theme) => ({
   simple: {
     '&,&:focus,&:hover': {
       color: theme.palette.common.white,
-      backgroundColor: theme.palette.secondary.main,
+      fontWeight: 600,
+      backgroundColor: darken(theme.palette.common.gray, 0.1),
       boxShadow: 'none',
     },
   },

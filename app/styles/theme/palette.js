@@ -7,6 +7,7 @@ export default {
     white,
     neutral: '#e4e5ff',
     muted: '#ccceee',
+    gray: '#ededed',
   },
   primary: {
     contrastText: white,
