@@ -1,5 +1,3 @@
-/* eslint-disable class-methods-use-this */
-
 import { Menu, shell } from 'electron';
 
 export default class MenuBuilder {

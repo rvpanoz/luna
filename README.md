@@ -1,7 +1,7 @@
 ## Luna - npm management through a modern UI. Built with Electron :hibiscus:
 
 <p align="center">
-  <img alt="Luna" src="./media/images/luna-small.jpeg">
+  <img alt="Luna" src="./resources/media/images/luna-small.jpeg">
 </p>
 
 <p align="center">npm desktop manager for handling npm dependencies. Supported platforms: OS X Windows and Linux.</p>
@@ -36,14 +36,14 @@ Luna was created with main purpose to provide a flexible and modern UI for npm d
 ## Screenshots
 
 <div style="display: flex; flex-wrap: wrap;padding: 0 4px; justify-content: space-between;">
-  <div style="flex: 25%;max-width: 25%;padding: 0 4px;">
-    <img style="margin-top: 8px; vertical-align: middle;" title="luna-1" src="./media/images/luna-screen-1.png"/>
+  <div style="flex: 25%;max-width: 25%;padding: 8px 4px;">
+    <img style="margin-top: 8px; vertical-align: middle;" title="luna-1" src="./resources/media/images/luna-screen-1.png"/>
   </div>
   <div style="flex: 25%;max-width: 25%;padding: 8px 4px;">
-    <img style="margin-top: 8px; vertical-align: middle;" title="luna-2" src="./media/images/luna-screen-2.png"/>
+    <img style="margin-top: 8px; vertical-align: middle;" title="luna-2" src="./resources/media/images/luna-screen-2.png"/>
   </div>
   <div style="flex: 25%;max-width: 25%;padding: 8px 4px;">
-    <img style="margin-top: 8px; vertical-align: middle;" title="luna-3" src="./media/images/luna-screen-3.png"/>
+    <img style="margin-top: 8px; vertical-align: middle;" title="luna-3" src="./resources/media/images/luna-screen-3.png"/>
   </div>
 </div>
 

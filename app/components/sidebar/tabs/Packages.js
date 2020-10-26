@@ -11,7 +11,6 @@ import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import UpdateIcon from '@material-ui/icons/Update';
-import { AppLoader } from 'components/common';
 import { iMessage } from 'commons/utils';
 import styles from './styles/packages';
 

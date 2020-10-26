@@ -36,6 +36,9 @@ global.APP_PATHS = {
   userData: app.getPath('userData'),
 };
 
+log.transports.file.level = 'info';
+log.transports.file.file = APP_PATHS.userData + 'log.log';
+
 const debug = /--debug/.test(process.argv[2]);
 
 const {
@@ -112,6 +115,8 @@ const createWindow = async () => {
   }
 
   mainWindow = new BrowserWindow({
+    width: MIN_WIDTH,
+    height: MIN_HEIGHT,
     minWidth: MIN_WIDTH,
     minHeight: MIN_HEIGHT,
     x,
@@ -120,8 +125,6 @@ const createWindow = async () => {
     webPreferences: {
       nodeIntegration: true,
     },
-    fullscreen: true,
-    resizable: true,
     icon: getAssetPath('icon.icns'),
   });
 
