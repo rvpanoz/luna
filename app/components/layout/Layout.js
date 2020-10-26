@@ -10,7 +10,7 @@ import TopBar from 'components/topbar/TopBarContainer';
 import Sidebar from 'components/sidebar/SidebarContainer';
 import Navigation from 'components/navigation/Navigation';
 import Packages from '../packages/packages/Packages';
-import Notifications from 'components/notifications/NotificationsContainer';
+import Notifications from 'components/notifications/list/Container';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 import appTheme from 'styles/theme';

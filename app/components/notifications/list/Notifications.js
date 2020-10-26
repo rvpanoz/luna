@@ -8,12 +8,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-
 import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
-import NotificationsToolbar from './NotificationsToolbar';
-import NotificationDetails from './NotificationDetails';
-import styles from './styles/notifications';
+import Toolbar from '../toolbar/Toolbar';
+import Details from '../details/Details';
+
+import styles from './styles';
 
 const NotificationItem = ({ classes, id, onClick, ...restProps }) => {
   const {
@@ -79,7 +79,7 @@ const NotificationsList = ({
       <Grid item md={8} lg={8} xl={8} className={classes.transition}>
         <Paper elevation={2}>
           <div className={classes.toolbar}>
-            <NotificationsToolbar
+            <Toolbar
               title={iMessage('title', 'notifications')}
               total={notifications.length}
               notifications={notifications}
@@ -105,7 +105,7 @@ const NotificationsList = ({
         xl={active ? 4 : 2}
         className={classes.transition}
       >
-        {active && <NotificationDetails active={active} mode={mode} />}
+        {active && <Details active={active} mode={mode} />}
       </Grid>
     </Grid>
   );

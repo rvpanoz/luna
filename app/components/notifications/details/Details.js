@@ -26,7 +26,8 @@ import Versions from 'components/packages/versions/Versions';
 import InstallationOptions from 'components/packages/options/InstallationOptions';
 import { installPackage } from 'models/packages/actions';
 import { setActiveNotification } from 'models/notifications/actions';
-import styles from './styles/notifications';
+
+import styles from './styles';
 
 const NotificationDetails = ({ classes, active, mode }) => {
   const { name, version, license, description, versions } = active;
@@ -79,7 +80,7 @@ const NotificationDetails = ({ classes, active, mode }) => {
       <Grid container justify="space-around">
         <Grid item md={10} lg={10} xl={10}>
           <Transition>
-            <Card className={classes.card}>
+            <Card>
               <CardHeader
                 title={
                   <Typography
