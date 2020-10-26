@@ -50,18 +50,15 @@ const Navigation = ({ classes, className }) => {
         <Tooltip title={iMessage('info', 'backToPackages')}>
           <div>
             <IconButton
-              classes={{
-                root: classes.button,
-              }}
               disableRipple
               disabled={activePage === 'packages'}
               onClick={() => setActivePageHandler('packages')}
             >
-              <ArrowBackIcon className={classes.icon} />
+              <ArrowBackIcon />
             </IconButton>
           </div>
         </Tooltip>
-        <div className={cn(classes.flexContainer, classes.padTop)}>
+        <div className={classes.flex}>
           <Typography variant="subtitle1" component="div" color="textSecondary">
             {mode === 'local'
               ? iMessage('info', 'workingDirectory')

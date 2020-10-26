@@ -1,14 +1,11 @@
 import React from 'react';
 import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
-import { withStyles } from '@material-ui/styles';
 
 import Tabs from './tabs/Tabs';
 import { PackagesTab, ActionsTab, HistoryTab } from './tabs';
 import { Logo } from '../common/logo';
-import styles from './styles';
 
 const Sidebar = ({
-  classes,
   loading,
   fromSearch,
   mode,
@@ -50,7 +47,6 @@ const Sidebar = ({
 };
 
 Sidebar.propTypes = {
-  classes: objectOf(string).isRequired,
   mode: string.isRequired,
   loading: bool,
   history: arrayOf(object),
@@ -65,4 +61,4 @@ Sidebar.propTypes = {
   tabPackagesData: arrayOf(object),
 };
 
-export default withStyles(styles)(Sidebar);
+export default Sidebar;

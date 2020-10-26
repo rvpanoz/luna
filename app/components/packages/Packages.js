@@ -37,6 +37,8 @@ import { Loader } from '../common/loader';
 import { Widget } from '../common/widget';
 import styles from './styles/packages';
 
+import { Dot } from 'components/common';
+
 const mapState = ({
   common: {
     directory,

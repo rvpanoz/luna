@@ -7,7 +7,7 @@ import {
 import { darken, lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = (theme) => ({
-  flexContainer: {
+  flex: {
     ...flexContainer,
   },
   card: {

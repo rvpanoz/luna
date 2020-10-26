@@ -34,7 +34,7 @@ const Item = ({ classes, name, primaryText, secondaryText }) => {
     >
       <ListItemText
         primary={
-          <div className={classes.flexContainer}>
+          <div className={classes.flex}>
             <Typography color="textSecondary" variant="h5">
               {primaryText}
             </Typography>
