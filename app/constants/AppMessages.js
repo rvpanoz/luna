@@ -112,6 +112,7 @@ export const TITLE_MESSAGES = {
   bundleDependencies: 'Bundle',
   issues: 'Issues',
   actions: 'Actions',
+  system: 'System',
   total: 'Total',
   history: 'History',
   historyDirectories: 'List directories',
