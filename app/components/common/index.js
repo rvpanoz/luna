@@ -1,6 +1,5 @@
 import Transition from './Transition';
-import HelperText from './HelperText';
-
+import HelperText from './text/HelperText';
 import SnackbarContent from './snackbar/SnackbarContent';
 import Logo from './logo/Logo';
 import Loader from './loader/Loader';

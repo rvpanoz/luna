@@ -3,8 +3,9 @@ import cn from 'classnames';
 import { string, func, bool, objectOf } from 'prop-types';
 import { withStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import AppButton from './button/Button';
-import styles from './styles/helperText';
+
+import AppButton from '../button/Button';
+import styles from './styles';
 
 const HelperText = ({
   classes,
