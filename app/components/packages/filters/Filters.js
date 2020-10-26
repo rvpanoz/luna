@@ -17,7 +17,8 @@ import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 import { iMessage } from 'commons/utils';
 import { updateFilters, setPage } from 'models/ui/actions';
-import styles from './styles/filters';
+
+import styles from './styles';
 
 const Filters = ({ classes, mode, close, listFilters }) => {
   const searchInputEl = useRef(null);

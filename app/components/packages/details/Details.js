@@ -33,11 +33,12 @@ import {
 } from 'models/packages/actions';
 import { Transition } from 'components/common';
 import { iMessage, showDialog, switchcase } from 'commons/utils';
-import Dependencies from '../Dependencies';
-import Versions from '../Versions';
-import PackageInfo from '../PackageInfo';
-import { InstallAction, UpdateAction, UninstallAction } from '../Actions';
-import { initialDialogOptions } from 'components/packages/Packages';
+import { Loader } from 'components/common';
+import Dependencies from '../dependencies/Dependencies';
+import Versions from '../versions/Versions';
+import PackageInfo from '../info/Info';
+import { InstallAction, UpdateAction, UninstallAction } from '../actions';
+import { initialDialogOptions } from '../packages/Packages';
 import styles from './styles';
 
 const mapState = ({

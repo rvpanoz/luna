@@ -9,7 +9,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import TopBar from 'components/topbar/TopBarContainer';
 import Sidebar from 'components/sidebar/SidebarContainer';
 import Navigation from 'components/navigation/Navigation';
-import Packages from 'components/packages/Packages';
+import Packages from '../packages/packages/Packages';
 import Notifications from 'components/notifications/NotificationsContainer';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';

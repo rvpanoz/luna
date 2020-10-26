@@ -27,14 +27,15 @@ import {
   setActivePage,
 } from 'models/ui/actions';
 import { setMode, clearInstallOptions } from 'models/common/actions';
-import Toolbar from './Toolbar';
+import { Loader } from 'components/common';
 import TableHeader from './Header';
-import PackageItem from './item/Item';
-import PackageDetails from './details/Details';
 import Pagination from './Pagination';
-import InstallationOptions from './options/InstallationOptions';
-import Loader from '../common/loader/Loader';
-import styles from './styles/packages';
+import Toolbar from '../toolbar/Toolbar';
+import PackageItem from '../item/Item';
+import PackageDetails from '../details/Details';
+import InstallationOptions from '../options/InstallationOptions';
+
+import styles from './styles';
 
 const mapState = ({
   common: {

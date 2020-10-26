@@ -1,4 +1,3 @@
-import Item from './item/Item';
-import Details from './details/Details';
+import Packages from './packages/Packages';
 
-export default { Details, Item };
+export default { Packages };

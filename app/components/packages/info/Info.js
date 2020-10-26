@@ -8,7 +8,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Typography from '@material-ui/core/Typography';
 import { iMessage } from 'commons/utils';
-import styles from './styles/packageInfo';
+
+import styles from './styles';
 
 const PackageInfo = ({ classes, active, dependencies, short }) => {
   const enchancedActive = Object.assign({}, active, {

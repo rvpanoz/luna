@@ -24,10 +24,10 @@ import {
   InstallAction,
   UpdateAction,
   UninstallAction,
-} from './Actions';
+} from '../actions';
+import Filters from '../filters/Filters';
 
-import Filters from './Filters';
-import styles from './styles/toolbar';
+import styles from './styles';
 
 const ToolbarView = ({
   classes,

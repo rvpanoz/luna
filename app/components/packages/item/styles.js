@@ -43,7 +43,7 @@ const styles = (theme) => ({
       width: 'auto',
     },
     [theme.breakpoints.down('md')]: {
-      width: 300,
+      width: 225,
     },
   },
   version: {
