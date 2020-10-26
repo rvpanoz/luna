@@ -11,10 +11,10 @@ import Sidebar from 'components/sidebar/SidebarContainer';
 import Navigation from 'components/navigation/Navigation';
 import Packages from 'components/packages/Packages';
 import Notifications from 'components/notifications/NotificationsContainer';
-import AppSnackbar from 'components/common/AppSnackbar';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 import appTheme from 'styles/theme';
+import { AppSnackbar } from '../common/snackbar';
 
 import styles from './styles';
 

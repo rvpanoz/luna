@@ -10,7 +10,6 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import ErrorIcon from '@material-ui/icons/Error';
 import CloseIcon from '@material-ui/icons/Close';
 import InfoIcon from '@material-ui/icons/Info';
-
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = (theme) => ({

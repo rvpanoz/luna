@@ -1,7 +1,7 @@
 import React from 'react';
 import { objectOf, string, bool, func, oneOfType, object } from 'prop-types';
 import Snackbar from '@material-ui/core/Snackbar';
-import { SnackbarContent } from 'components/common';
+import SnackbarContent from './SnackbarContent';
 
 const AppSnackbar = ({ snackbar, onClose }) => {
   const { open, type, message, position } = snackbar;
