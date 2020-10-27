@@ -26,8 +26,9 @@ import {
   installMultiplePackages,
 } from 'models/packages/actions';
 import { iMessage } from 'commons/utils';
+
+import styles from './styles';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
-import styles from './styles/commandOptions';
 
 const groups = Object.values(PACKAGE_GROUPS);
 

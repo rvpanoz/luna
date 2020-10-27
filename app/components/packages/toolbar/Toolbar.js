@@ -24,17 +24,17 @@ import {
   InstallAction,
   UpdateAction,
   UninstallAction,
-} from './Actions';
+} from '../actions';
+import Filters from '../filters/Filters';
 
-import Filters from './Filters';
-import styles from './styles/toolbar';
+import styles from './styles';
 
 const ToolbarView = ({
   classes,
   selected,
   title,
   mode,
-  showCommandOptions,
+  showInstallationOptions,
   fromSearch,
   filters,
   reload,
@@ -84,7 +84,7 @@ const ToolbarView = ({
       }
 
       if (mode === 'local' && action === 'install' && !force) {
-        return showCommandOptions({
+        return showInstallationOptions({
           single: false,
         });
       }
@@ -143,7 +143,7 @@ const ToolbarView = ({
       packagesData,
       mode,
       clearAllFilters,
-      showCommandOptions,
+      showInstallationOptions,
       dispatch,
     ]
   );
@@ -258,7 +258,7 @@ ToolbarView.propTypes = {
   filteredByNamePackages: PropTypes.arrayOf(PropTypes.object),
   setFilteredByNamePackages: PropTypes.func,
   switchMode: PropTypes.func.isRequired,
-  showCommandOptions: PropTypes.func.isRequired,
+  showInstallationOptions: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ToolbarView);

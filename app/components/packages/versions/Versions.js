@@ -12,7 +12,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 import { iMessage } from 'commons/utils';
-import styles from './styles/versions';
+
+import styles from './styles';
 
 const Versions = ({ classes, data, handleInstall }) => (
   <Paper className={classes.paper}>

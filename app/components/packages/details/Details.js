@@ -32,14 +32,14 @@ import {
   setActive,
 } from 'models/packages/actions';
 import { Transition } from 'components/common';
-import { initialDialogOptions } from 'components/packages/Packages';
 import { iMessage, showDialog, switchcase } from 'commons/utils';
-import Dependencies from './Dependencies';
-import Versions from './Versions';
-import PackageInfo from './PackageInfo';
-import { InstallAction, UpdateAction, UninstallAction } from './Actions';
-import Loader from '../common/loader/Loader';
-import styles from './styles/packageDetails';
+import { Loader } from 'components/common';
+import Dependencies from '../dependencies/Dependencies';
+import Versions from '../versions/Versions';
+import PackageInfo from '../info/Info';
+import { InstallAction, UpdateAction, UninstallAction } from '../actions';
+import { initialDialogOptions } from '../packages/Packages';
+import styles from './styles';
 
 const mapState = ({
   common: { mode },
@@ -61,7 +61,7 @@ const mapState = ({
   fromSearch,
 });
 
-const PackageDetails = ({ classes, showCommandOptions }) => {
+const PackageDetails = ({ classes, showInstallationOptions }) => {
   const dispatch = useDispatch();
   const [expanded, expand] = useState(true);
   const [dependencies, setDependencies] = useState([]);
@@ -94,7 +94,7 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
 
   const handleInstall = () => {
     if (fromSearch && mode === 'local') {
-      return showCommandOptions({
+      return showInstallationOptions({
         single: true,
         name: active.name,
         version,
@@ -137,7 +137,7 @@ const PackageDetails = ({ classes, showCommandOptions }) => {
 
   const handleInstallVersion = (packageVersion) => {
     if (fromSearch && mode === 'local') {
-      return showCommandOptions({
+      return showInstallationOptions({
         single: true,
         name: active.name,
         version: packageVersion,
@@ -394,7 +394,7 @@ PackageDetails.defaultProps = {
 
 PackageDetails.propTypes = {
   classes: objectOf(string).isRequired,
-  showCommandOptions: func.isRequired,
+  showInstallationOptions: func.isRequired,
   group: string,
 };
 

@@ -5,9 +5,6 @@ const styles = (theme) => ({
   root: {
     width: '100%',
   },
-  tableListToolbar: {
-    paddingRight: 8,
-  },
   spacer: {
     flex: '1 1 100%',
   },
@@ -21,18 +18,9 @@ const styles = (theme) => ({
     flexDirection: 'column',
     justifyContent: 'flex-start',
   },
-  directory: {
-    ...defaultFont,
-    fontSize: 12,
-  },
   highlight: {
     color: theme.palette.common.white,
     backgroundColor: lighten(theme.palette.secondary.light, 0.9),
-  },
-  actions: {
-    ...flexContainer,
-    flex: '0 0 auto',
-    padding: theme.spacing(1),
   },
 });
 

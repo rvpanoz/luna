@@ -12,7 +12,8 @@ import CardActions from '@material-ui/core/CardActions';
 import Typography from '@material-ui/core/Typography';
 import UpdateIcon from '@material-ui/icons/Update';
 import { iMessage } from 'commons/utils';
-import styles from './styles/packages';
+
+import styles from './styles';
 
 const Loader = ({ classes }) => (
   <div className={classes.loading}>Loading..</div>

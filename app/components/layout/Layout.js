@@ -6,11 +6,11 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 
-import TopBar from 'components/topbar/TopBarContainer';
-import Sidebar from 'components/sidebar/SidebarContainer';
+import TopBar from 'components/topbar/Container';
+import Sidebar from 'components/sidebar/Container';
 import Navigation from 'components/navigation/Navigation';
-import Packages from 'components/packages/Packages';
-import Notifications from 'components/notifications/NotificationsContainer';
+import Packages from '../packages/packages/Packages';
+import Notifications from 'components/notifications/list/Container';
 import { setSnackbar } from 'models/ui/actions';
 import { switchcase } from 'commons/utils';
 import appTheme from 'styles/theme';

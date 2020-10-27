@@ -13,6 +13,7 @@ import { setMode } from 'models/common/actions';
 import { runDedupe, runCache } from 'models/npm/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils';
 import Sidebar from './Sidebar';
+
 import styles from './styles';
 
 const mapState = ({

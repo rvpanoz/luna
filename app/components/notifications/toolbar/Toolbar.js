@@ -8,7 +8,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import { iMessage } from 'commons/utils';
-import styles from './styles/toolbar';
+
+import styles from './styles';
 
 const NotificationsToolbar = ({ classes, total, title }) => {
   return (

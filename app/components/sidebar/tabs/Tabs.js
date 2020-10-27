@@ -6,7 +6,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import styles from './styles/tabs';
+import styles from './styles';
 
 const TabContainer = ({ children, loading }) => (
   <Typography component="div" style={{ padding: 8, minHeight: 265 }}>

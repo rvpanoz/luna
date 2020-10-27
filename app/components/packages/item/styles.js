@@ -2,16 +2,10 @@ import { darken } from '@material-ui/core/styles/colorManipulator';
 import { flexContainer, defaultFont, grayColor } from 'styles/variables';
 
 const styles = (theme) => ({
-  flexContainer: {
+  flex: {
     ...flexContainer,
     alignItems: 'center',
     justifyContent: 'space-between',
-  },
-  flexContainerCell: {
-    ...flexContainer,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
   },
   tableRow: {
     border: 'none',
@@ -33,18 +27,18 @@ const styles = (theme) => ({
     marginLeft: theme.spacing(1),
   },
   name: {
-    [theme.breakpoints.up('lg')]: {
-      width: 'auto',
-    },
-    [theme.breakpoints.down('md')]: {
-      width: 200,
-      fontSize: 14,
-    },
+    fontSize: 14,
     color: darken(grayColor, 0.5),
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     textAlign: 'left',
+    [theme.breakpoints.up('lg')]: {
+      width: 'auto',
+    },
+    [theme.breakpoints.down('md')]: {
+      width: 225,
+    },
   },
   version: {
     [theme.breakpoints.down('md')]: {
