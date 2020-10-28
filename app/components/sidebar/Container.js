@@ -6,11 +6,10 @@ import { useDispatch, useMappedState } from 'redux-react-hook';
 import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-
 import { setActivePage } from 'models/ui/actions';
 import { installPackageJson } from 'models/packages/actions';
 import { setMode } from 'models/common/actions';
-import { runDedupe, runCache } from 'models/npm/actions';
+import { runDedupe, runCache, runDoctor } from 'models/npm/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils';
 import Sidebar from './Sidebar';
 
@@ -181,6 +180,30 @@ const AppSidebar = ({ classes, className }) => {
         })
       );
     };
+  }, [dispatch]);
+
+  const doctor = useCallback(() => {
+    const dialogOptions = {
+      title: 'Confirmation',
+      type: 'question',
+      message: iMessage('confirmation', 'actionRun', {
+        '%name%': 'npm doctor',
+      }),
+      buttons: ['Cancel', 'Run'],
+    };
+
+    const dialogHandler = ({ response }) => {
+      if (response === 0) {
+        return;
+      }
+
+      dispatch(
+        runDoctor({
+          ipcEvent: 'npm-doctor',
+          cmd: ['doctor'],
+        })
+      );
+    };
 
     return showDialog(dialogHandler, dialogOptions);
   }, [dispatch]);
@@ -217,6 +240,7 @@ const AppSidebar = ({ classes, className }) => {
           installPackagesFromJson={installPackagesFromJson}
           dedupe={dedupe}
           cache={cache}
+          onNpmDoctor={doctor}
         />
       </Drawer>
     </div>

@@ -11,8 +11,6 @@ const clearRunningCommand = ActionCreator('CLEAR_RUNNING_COMMAND');
 const setEnv = ActionCreator('SET_ENV');
 const setRunningCommand = ActionCreator('SET_RUNNING_COMMAND');
 const npmCommand = ActionCreator('NPM_COMMAND');
-
-// npm utils
 const parseNpmCacheData = ActionCreator('PARSE_NPM_CACHE_DATA');
 const updateNpmCacheData = ActionCreator('UPDATE_NPM_CACHE_DATA');
 
@@ -20,17 +18,17 @@ const updateNpmCacheData = ActionCreator('UPDATE_NPM_CACHE_DATA');
 const npmInitListener = ActionCreator('REGISTER_LISTENER_INIT');
 const npmDedupeListener = ActionCreator('REGISTER_LISTENER_DEDUPE');
 const npmCacheListener = ActionCreator('REGISTER_LISTENER_CACHE');
+const npmDoctorListener = ActionCreator('REGISTER_LISTENER_DOCTOR');
 
 // operations
 const runInstall = ActionCreator('RUN_INSTALL');
 const runUpdate = ActionCreator('RUN_UPDATE');
 const runUninstall = ActionCreator('RUN_UNINSTALL');
-
-// utilities
 const runInit = ActionCreator('RUN_INIT');
 const runLock = ActionCreator('RUN_INIT_LOCK');
 const runDedupe = ActionCreator('RUN_DEDUPE');
 const runCache = ActionCreator('RUN_CACHE');
+const runDoctor = ActionCreator('RUN_DOCTOR');
 
 export {
   addActionError,
@@ -48,9 +46,11 @@ export {
   runInit,
   runLock,
   runCache,
+  runDoctor,
   npmInitListener,
   npmDedupeListener,
   npmCacheListener,
   parseNpmCacheData,
   updateNpmCacheData,
+  npmDoctorListener,
 };

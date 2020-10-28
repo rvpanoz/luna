@@ -23,6 +23,7 @@ import {
   onNpmDedupe,
   onNpmInit,
   onNpmInitLock,
+  onNpmDoctor,
 } from './mainProcess';
 import { CheckNpm } from '../internals/scripts';
 
@@ -278,12 +279,22 @@ ipcMain.on('npm-init-lock', (event, options) =>
 );
 
 /**
+ * Channel: npm-cache
+ * Supports: npm cache
+ * https://docs.npmjs.com/cli/cache
+ *
+ */
+ipcMain.on('npm-cache', (event, options) => onNpmCache(event, options, Store));
+
+/**
  * Channel: npm-doctor
  * Supports: npm doctor
  * https://docs.npmjs.com/cli/doctor
  *
  */
-ipcMain.on('npm-cache', (event, options) => onNpmCache(event, options, Store));
+ipcMain.on('npm-doctor', (event, options) =>
+  onNpmDoctor(event, options, Store)
+);
 
 /**
  * app listeners

@@ -21,9 +21,11 @@ import {
   npmInitListener,
   npmDedupeListener,
   npmCacheListener,
+  npmDoctorListener,
   runDedupe,
   runInit,
   runCache,
+  runDoctor,
 } from 'models/npm/actions';
 import { initActions } from 'models/common/actions';
 
@@ -96,6 +98,7 @@ const onInitActionsEpic = pipe(
     npmInitListener(),
     npmDedupeListener(),
     npmCacheListener(),
+    npmDoctorListener(),
   ])
 );
 

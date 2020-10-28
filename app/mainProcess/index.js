@@ -8,8 +8,10 @@ import onNpmInit from './npmInit';
 import onNpmInitLock from './npmInitLock';
 import onNpmDedupe from './npmDedupe';
 import onNpmCache from './npmCache';
+import onNpmDoctor from './npmDoctor';
 
 export {
+  onNpmDoctor,
   onNpmCache,
   onNpmView,
   onNpmSearch,

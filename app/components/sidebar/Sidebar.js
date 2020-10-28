@@ -18,6 +18,7 @@ const Sidebar = ({
   installPackagesFromJson,
   dedupe,
   cache,
+  onNpmDoctor,
 }) => {
   return (
     <>
@@ -40,6 +41,7 @@ const Sidebar = ({
         <ActionsTab
           mode={mode}
           onInstallPackagesFromJson={installPackagesFromJson}
+          onNpmDoctor={onNpmDoctor}
         />
       </Tabs>
     </>
@@ -54,6 +56,7 @@ Sidebar.propTypes = {
   installPackagesFromJson: func.isRequired,
   dedupe: func.isRequired,
   cache: func.isRequired,
+  onNpmDoctor: func.isRequired,
   updatedAt: string,
   projectInfo: objectOf(string).isRequired,
   npmEnv: object,

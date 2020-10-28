@@ -14,8 +14,14 @@ import Typography from '@material-ui/core/Typography';
 import { iMessage } from 'commons/utils';
 
 import styles from './styles';
+import { onNpmDoctor } from '../../../../mainProcess';
 
-const ActionsTab = ({ classes, mode, onInstallPackagesFromJson }) => (
+const ActionsTab = ({
+  classes,
+  mode,
+  onInstallPackagesFromJson,
+  onNpmDoctor,
+}) => (
   <>
     <div className={classes.header}>
       <Typography className={classes.title} color="textSecondary">
@@ -64,6 +70,36 @@ const ActionsTab = ({ classes, mode, onInstallPackagesFromJson }) => (
             </Tooltip>
           </ListItemSecondaryAction>
         </ListItem>
+        <ListItem className={classes.listItem}>
+          <ListItemText
+            primary={
+              <div className={classes.flexWrapper}>
+                <InstallIcon />
+                <Typography className={classes.label}>
+                  {iMessage('action', 'npmDoctor')}
+                </Typography>
+              </div>
+            }
+            secondary={
+              <Typography className={classes.secondaryText}>
+                {iMessage('info', 'npmDoctorInfo')}
+              </Typography>
+            }
+          />
+          <ListItemSecondaryAction>
+            <Tooltip title={iMessage('info', 'npmDoctorRun')}>
+              <div>
+                <IconButton
+                  aria-label="action-doctor"
+                  onClick={onNpmDoctor}
+                  disableRipple
+                >
+                  <ArrowRightIcon color="primary" />
+                </IconButton>
+              </div>
+            </Tooltip>
+          </ListItemSecondaryAction>
+        </ListItem>
       </List>
     </div>
   </>
@@ -72,6 +108,7 @@ const ActionsTab = ({ classes, mode, onInstallPackagesFromJson }) => (
 ActionsTab.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   onInstallPackagesFromJson: PropTypes.func.isRequired,
+  onNpmDoctor: PropTypes.func.isRequired,
   mode: PropTypes.string.isRequired,
 };
 
