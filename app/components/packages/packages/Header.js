@@ -10,8 +10,8 @@ import { addSelected, clearSelected } from 'models/ui/actions';
 
 const columnData = [
   { id: 'name', numeric: false, disablePadding: true, label: 'Name' },
-  { id: 'version', disablePadding: true, label: 'Installed' },
   { id: 'latest', disablePadding: true, label: 'Latest' },
+  { id: 'version', disablePadding: true, label: 'Installed' },
   { id: 'Status', disablePadding: true, label: 'Status' },
 ];
 

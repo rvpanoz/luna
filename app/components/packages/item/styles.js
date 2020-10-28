@@ -41,12 +41,11 @@ const styles = (theme) => ({
     },
   },
   version: {
-    [theme.breakpoints.down('md')]: {
-      fontSize: 14,
-    },
+    fontSize: 14,
+    color: darken(grayColor, 0.5),
   },
   group: {
-    color: theme.palette.primary.main,
+    color: theme.palette.common.grayColor,
     [theme.breakpoints.down('md')]: {
       fontSize: 14,
     },

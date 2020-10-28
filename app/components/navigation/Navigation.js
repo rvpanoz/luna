@@ -20,16 +20,20 @@ const mapState = ({
     },
   },
   npm: { env: npmEnv },
+  packages: { project },
 }) => ({
   activePage,
   mode,
   directory,
   npmEnv,
   loading,
+  project,
 });
 
 const Navigation = ({ classes, className }) => {
-  const { npmEnv, mode, directory, activePage } = useMappedState(mapState);
+  const { npmEnv, mode, directory, activePage, project } = useMappedState(
+    mapState
+  );
   const dispatch = useDispatch();
 
   const setActivePageHandler = (page) =>
@@ -66,6 +70,13 @@ const Navigation = ({ classes, className }) => {
           </Typography>
           <Typography variant="subtitle2" component="div" color="textSecondary">
             {mode === 'local' ? directory : npmEnv ? npmEnv.prefix : null}
+          </Typography>
+        </div>
+        <div className={classes.project}>
+          <Typography variant="subtitle2" component="div" color="textSecondary">
+            {mode === 'local' && project.name && project.version
+              ? `${project.name} - ${project.version}`
+              : null}
           </Typography>
         </div>
       </div>
