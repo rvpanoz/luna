@@ -22,7 +22,7 @@ import DependenciesIcon from '@material-ui/icons/ListOutlined';
 
 import { Transition } from 'components/common';
 import { iMessage, showDialog } from 'commons/utils';
-import Versions from 'components/packages/versions/Versions';
+import PackageVersions from 'components/packages/details/PackageVersions';
 import InstallationOptions from 'components/packages/options/InstallationOptions';
 import { installPackage } from 'models/packages/actions';
 import { setActiveNotification } from 'models/notifications/actions';

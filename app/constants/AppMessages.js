@@ -69,6 +69,7 @@ export const LABEL_MESSAGES = {
   next: 'Next',
   homepage: 'Homepage',
   repository: 'Repository',
+  issues: 'Issues',
   tarball: 'Tarball',
   engines: 'Engines',
   dependencies: 'Dependencies',

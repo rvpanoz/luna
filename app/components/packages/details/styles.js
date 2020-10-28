@@ -1,10 +1,32 @@
-import { lighten } from '@material-ui/core/styles/colorManipulator';
-import { defaultFont } from 'styles/variables';
+import { lighten, darken } from '@material-ui/core/styles/colorManipulator';
+import { defaultFont, grayColor } from 'styles/variables';
 import red from '@material-ui/core/colors/red';
 
 const styles = (theme) => ({
-  actions: {
-    display: 'flex',
+  wrapper: {
+    width: '100%',
+  },
+  paper: {
+    width: '100%',
+  },
+  header: {
+    ...defaultFont,
+    backgroundColor: lighten(theme.palette.secondary.main, 0.5),
+    fontSize: 20,
+    fontWeight: 400,
+    padding: theme.spacing(1),
+    '& > p': {
+      color: theme.palette.common.white,
+    },
+  },
+  list: {
+    overflowY: 'scroll',
+    minWidth: 225,
+    maxHeight: 425,
+  },
+  listItem: {
+    padding: theme.spacing(1) / 2,
+    margin: 0,
   },
   cardHeader: {
     padding: theme.spacing(1),
@@ -18,27 +40,15 @@ const styles = (theme) => ({
     overflowX: 'hidden',
     padding: theme.spacing(1),
   },
-  avatar: {
-    width: 50,
-    height: 50,
-    backgroundColor: red[500],
+  toolbar: {
+    display: 'flex',
+    flexDirection: 'column',
   },
-  badge: {
-    margin: theme.spacing(1),
+  actions: {
+    display: 'flex',
   },
   divider: {
     marginTop: theme.spacing(1),
-  },
-  group: {
-    padding: 0,
-    margin: 0,
-  },
-  header: {
-    ...defaultFont,
-    backgroundColor: lighten(theme.palette.secondary.light, 0.9),
-    fontSize: 20,
-    fontWeight: 400,
-    padding: theme.spacing(1),
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -50,18 +60,36 @@ const styles = (theme) => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
-  toolbar: {
-    display: 'flex',
-    flexDirection: 'column',
+  secondaryColor: {
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.secondary.light,
   },
-  paper: {
-    width: '100%',
+  warningColor: {
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.error.light,
   },
-  wrapper: {
-    width: '100%',
+  errorColor: {
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.error.light,
   },
-  withPadding: {
-    padding: theme.spacing(1),
+  label: {
+    ...defaultFont,
+    fontSize: 20,
+    color: grayColor,
+  },
+  label: {
+    ...defaultFont,
+    fontSize: 16,
+    color: grayColor,
+  },
+  link: {
+    ...defaultFont,
+    fontSize: 16,
+    color: grayColor,
+    textDecoration: 'none',
+    '&:hover': {
+      color: darken(grayColor, 0.4),
+    },
   },
 });
 
