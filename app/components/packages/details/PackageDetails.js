@@ -251,7 +251,7 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
                     color="textSecondary"
                     variant="body2"
                   >{`License: ${active.license || '-'}`}</Typography>
-                  {mode === 'local' && !fromSearch && (
+                  {mode === 'local' && (
                     <Typography
                       color="textSecondary"
                       variant="body2"

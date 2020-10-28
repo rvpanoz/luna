@@ -94,6 +94,7 @@ const Navigation = ({ classes, className }) => {
                     <InfoIcon />
                   </Avatar>
                 }
+                variant="outlined"
                 color="primary"
                 label="Global packages"
               />

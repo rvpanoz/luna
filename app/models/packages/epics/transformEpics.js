@@ -121,6 +121,8 @@ const mapPackagesEpic = (action$, state$) =>
           []
         );
 
+        console.log(enhancedDependencies);
+
         const dependencies = enhancedDependencies.filter(
           (dependency) =>
             !dependency.__invalid &&

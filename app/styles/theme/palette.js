@@ -12,12 +12,12 @@ export default {
   primary: {
     contrastText: white,
     light: lighten('#006db3', 0.1),
-    main: '#006db3',
-    dark: darken('#006db3', 0.1),
+    main: '#0051a0',
+    dark: darken('#0051a0', 0.1),
   },
   secondary: {
     contrastText: white,
-    light: lighten('#f7cac9', 0.8),
+    light: lighten('#e54a90', 0.8),
     main: '#e51a90',
     dark: darken('#e51a90', 0.1),
   },

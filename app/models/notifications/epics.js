@@ -21,21 +21,23 @@ const parseNotificationEpic = (action$, state$) =>
 
       const id = uuidv1();
       const { payload: notificationText } = notification;
-
+      console.log(notificationText);
       const [reason, details] = notificationText.split(':');
       const isExtraneous = reason === 'extraneous';
       const detailsArr = details.trim().split(',');
       const [requiredDetails, requiredByName] = detailsArr;
-      const [requiredName, requiredVersion] = requiredDetails.split('@^');
-      const semVersion = semver.minVersion(requiredVersion);
+      const [requiredName, requiredVersion] = requiredDetails.split('@');
+      const semVersion = requiredVersion
+        ? semver.minVersion(requiredVersion)
+        : null;
 
       const activeNotification = stateNotifications.find(
         (notificationItem) => notificationItem.requiredName === requiredName
       );
 
-      let version = semVersion.version;
+      let version = semVersion?.version;
 
-      if (version.indexOf('-') > -1) {
+      if (version && version.indexOf('-') > -1) {
         version = version.substring(0, version.indexOf('-'));
       }
 
@@ -48,14 +50,14 @@ const parseNotificationEpic = (action$, state$) =>
             requiredName,
             requiredVersion,
             requiredByName,
-            minVersion: version,
+            minVersion: version || '1.0.0',
           },
         },
       ];
     }),
     catchError((error) =>
       of({
-        type: '@@LUNA/ERROR/ADD_NOTIFICATION',
+        type: '@@LUNA/ERROR/PARSE_NOTIFICATION',
         error: error.toString(),
       })
     )

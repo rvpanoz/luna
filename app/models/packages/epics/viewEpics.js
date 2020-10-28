@@ -14,7 +14,7 @@ const updatePackageLoader = (payload) => ({
 
 const viewPackageEpic = pipe(
   ofType(viewPackageStart.type),
-  filter(({ payload: { options } }) => !options.notification),
+  // filter(({ payload: { options } }) => !options.notification),
   map(() =>
     updatePackageLoader({
       loading: true,
