@@ -5,8 +5,11 @@ import { useMappedState, useDispatch } from 'redux-react-hook';
 import PropTypes, { objectOf, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import Tooltip from '@material-ui/core/Tooltip';
+import Chip from '@material-ui/core/Chip';
+import Avatar from '@material-ui/core/Avatar';
 import { IconButton } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import InfoIcon from '@material-ui/icons/Info';
 import { iMessage } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
 import styles from './styles';
@@ -74,9 +77,27 @@ const Navigation = ({ classes, className }) => {
         </div>
         <div className={classes.project}>
           <Typography variant="subtitle2" component="div" color="textSecondary">
-            {mode === 'local' && project.name && project.version
-              ? `${project.name} - ${project.version}`
-              : null}
+            {mode === 'local' && project.name && project.version ? (
+              <Chip
+                avatar={
+                  <Avatar>
+                    <InfoIcon />
+                  </Avatar>
+                }
+                color="primary"
+                label={`${project.name} - ${project.version}`}
+              />
+            ) : (
+              <Chip
+                avatar={
+                  <Avatar>
+                    <InfoIcon />
+                  </Avatar>
+                }
+                color="primary"
+                label="Global packages"
+              />
+            )}
           </Typography>
         </div>
       </div>
