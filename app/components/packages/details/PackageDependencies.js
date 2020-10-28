@@ -20,9 +20,15 @@ const PackageDependencies = ({ classes, dependencies }) => (
       {dependencies.map((item) => (
         <ListItem key={item.name} className={classes.listItem}>
           <ListItemText
-            primary={<Typography variant="subtitle2">{item.name}</Typography>}
+            primary={
+              <Typography color="textSecondary" variant="body2">
+                {item.name}
+              </Typography>
+            }
             secondary={
-              <Typography variant="subtitle2">{item.version}</Typography>
+              <Typography color="textSecondary" variant="body2">
+                {item.version}
+              </Typography>
             }
           />
         </ListItem>

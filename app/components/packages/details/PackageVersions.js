@@ -25,7 +25,11 @@ const PackageVersions = ({ classes, versions, handleInstall }) => (
       {versions.map((version) => (
         <ListItem key={version} className={classes.listItem}>
           <ListItemText
-            primary={<Typography variant="subtitle2">{version}</Typography>}
+            primary={
+              <Typography color="textSecondary" variant="body2">
+                {version}
+              </Typography>
+            }
           />
           <ListItemSecondaryAction>
             <Tooltip title={iMessage('title', 'installVersion')}>

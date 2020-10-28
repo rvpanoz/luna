@@ -25,7 +25,7 @@ const styles = (theme) => ({
     maxHeight: 425,
   },
   listItem: {
-    padding: theme.spacing(1) / 2,
+    padding: theme.spacing(1),
     margin: 0,
   },
   cardHeader: {
