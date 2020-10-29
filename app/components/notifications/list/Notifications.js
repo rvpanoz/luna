@@ -92,15 +92,17 @@ const NotificationsList = ({
             />
           </div>
           <Divider />
-          <List className={classes.wrapper}>
-            {notifications.map((notification) => (
-              <WithStylesItem
-                {...notification}
-                key={notification.id}
-                onClick={onViewPackage}
-              />
-            ))}
-          </List>
+          <div className={classes.listWrapper}>
+            <List>
+              {notifications.map((notification) => (
+                <WithStylesItem
+                  {...notification}
+                  key={notification.id}
+                  onClick={onViewPackage}
+                />
+              ))}
+            </List>
+          </div>
         </Paper>
       </Grid>
       {active && (

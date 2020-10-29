@@ -12,10 +12,11 @@ const styles = (theme) => ({
     display: 'flex',
     flexDirection: 'column',
   },
-  wrapper: {
+  listWrapper: {
     whiteSpace: 'nowrap',
     overflowY: 'scroll',
     padding: theme.spacing(1),
+    height: window.innerHeight - 200,
   },
   listItem: {
     '&:hover': {
