@@ -17,7 +17,7 @@ const styles = (theme) => ({
       marginRight: theme.spacing(1),
     },
   },
-  flexContainer: { display: 'flex' },
+  flex: { display: 'flex' },
   filterItems: {
     display: 'flex',
     flexDirection: 'column',
@@ -56,9 +56,6 @@ const styles = (theme) => ({
   inputInput: {
     ...defaultFont,
     padding: theme.spacing(1),
-  },
-  toolbar: {
-    height: 10,
   },
 });
 

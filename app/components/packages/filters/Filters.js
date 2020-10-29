@@ -55,8 +55,8 @@ const Filters = ({ classes, mode, close, listFilters }) => {
           setFilters(remove(idx, 1, filters));
           break;
         case filterType === 'name':
-          const newFilters = filters.map((filterDetails) => {
-            if (filterDetails.filterType === 'name') {
+          const newFilters = filters.map(({ filterType, filterValue }) => {
+            if (filterType === 'name') {
               return { filterType, filterValue };
             }
 
@@ -99,54 +99,50 @@ const Filters = ({ classes, mode, close, listFilters }) => {
   return (
     <div className={classes.root}>
       <div className={classes.filterItems}>
-        <div className={classes.flexContainer}>
-          <div style={{ flex: 1 }}>
-            <FormControl component="fieldset" style={{ width: '100%' }}>
-              <FormLabel component="legend">
-                {iMessage('label', 'packageName')}
-              </FormLabel>
-              <FormGroup>
-                <FormHelperText>
-                  {iMessage('label', 'packageNameInput')}
-                </FormHelperText>
-                <div className={classes.search}>
-                  <SearchIcon className={classes.searchIcon} />
-                  <InputBase
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                    inputProps={{
-                      ref: searchInputEl,
-                    }}
-                    onChange={(e) => {
-                      const { value } = e.currentTarget;
+        <FormControl component="fieldset">
+          <FormLabel component="legend" color="secondary">
+            {iMessage('label', 'packageName')}
+          </FormLabel>
+          <FormGroup>
+            <FormHelperText>
+              {iMessage('label', 'packageNameInput')}
+            </FormHelperText>
+            <div className={classes.search}>
+              <SearchIcon className={classes.searchIcon} />
+              <InputBase
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{
+                  ref: searchInputEl,
+                }}
+                onChange={(e) => {
+                  const { value } = e.currentTarget;
 
-                      if (value && value.length) {
-                        addFilter({
-                          filterType: 'name',
-                          filterValue: value,
-                        });
-                      }
-                    }}
-                  />
-                </div>
-              </FormGroup>
-            </FormControl>
-          </div>
-        </div>
-
+                  if (value && value.length) {
+                    addFilter({
+                      filterType: 'name',
+                      filterValue: value,
+                    });
+                  }
+                }}
+              />
+            </div>
+          </FormGroup>
+        </FormControl>
         <FormControl component="fieldset">
           <FormLabel
             component="legend"
-            className={cn({
+            color="secondary"
+            className={{
               [classes.hidden]: mode === 'global',
-            })}
+            }}
           >
             Group
           </FormLabel>
           <FormGroup
-            className={cn(classes.flexContainer, {
+            className={cn(classes.flex, {
               [classes.hidden]: mode === 'global',
             })}
           >
@@ -200,7 +196,7 @@ const Filters = ({ classes, mode, close, listFilters }) => {
           <FormHelperText />
         </FormControl>
         <FormControl component="fieldset">
-          <FormLabel component="legend">
+          <FormLabel component="legend" color="secondary">
             {iMessage('label', 'status')}
           </FormLabel>
           <FormGroup>
