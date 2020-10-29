@@ -86,7 +86,7 @@ Controls.propTypes = {
 
 const WithStylesControls = withStyles(styles)(Controls);
 
-const CommandOptions = ({
+const InstallationOptions = ({
   classes,
   active,
   selected,
@@ -188,9 +188,9 @@ const CommandOptions = ({
   );
 };
 
-CommandOptions.propTypes = {
+InstallationOptions.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   selected: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-export default withStyles(styles)(CommandOptions);
+export default withStyles(styles)(InstallationOptions);

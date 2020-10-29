@@ -30,7 +30,7 @@ const NotificationsContainer = () => {
           options: {
             cmd: ['view'],
             name,
-            version: name === 'npm' ? null : version,
+            version,
             notification: true,
           },
         })

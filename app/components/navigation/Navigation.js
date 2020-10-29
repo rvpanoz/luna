@@ -84,7 +84,7 @@ const Navigation = ({ classes, className }) => {
                     <InfoIcon />
                   </Avatar>
                 }
-                color="primary"
+                color="secondary"
                 label={`${project.name} - ${project.version}`}
               />
             ) : (
@@ -94,8 +94,7 @@ const Navigation = ({ classes, className }) => {
                     <InfoIcon />
                   </Avatar>
                 }
-                variant="outlined"
-                color="primary"
+                color="secondary"
                 label="Global packages"
               />
             )}

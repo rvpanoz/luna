@@ -11,7 +11,7 @@ const onViewPackage$ = new Observable((observer) => {
 
   ipcRenderer.on('npm-view-completed', (event, errors, data, options) => {
     const { notification } = options;
-    debugger;
+
     try {
       const newActive = data ? JSON.parse(data) : null;
       const getCleanProps = (val, key) => /^[^_]/.test(key);

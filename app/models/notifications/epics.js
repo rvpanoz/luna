@@ -21,15 +21,17 @@ const parseNotificationEpic = (action$, state$) =>
 
       const id = uuidv1();
       const { payload: notificationText } = notification;
-      console.log(notificationText);
+
       const [reason, details] = notificationText.split(':');
       const isExtraneous = reason === 'extraneous';
       const detailsArr = details.trim().split(',');
       const [requiredDetails, requiredByName] = detailsArr;
       const [requiredName, requiredVersion] = requiredDetails.split('@');
-      const semVersion = requiredVersion
+      const isValidVersion = semver.valid(requiredVersion);
+
+      const semVersion = isValidVersion
         ? semver.minVersion(requiredVersion)
-        : null;
+        : { version: 'latest' };
 
       const activeNotification = stateNotifications.find(
         (notificationItem) => notificationItem.requiredName === requiredName
@@ -48,9 +50,9 @@ const parseNotificationEpic = (action$, state$) =>
             id,
             reason,
             requiredName,
-            requiredVersion,
             requiredByName,
-            minVersion: version || '1.0.0',
+            requiredVersion,
+            minVersion: version,
           },
         },
       ];

@@ -32,8 +32,6 @@ import { setActiveNotification } from 'models/notifications/actions';
 import styles from './styles';
 
 const NotificationDetails = ({ classes, active, mode }) => {
-  console.log(active);
-
   const { name, version, license, description, versions } = active;
   const dispatch = useDispatch();
   const [expanded, expand] = useState(true);

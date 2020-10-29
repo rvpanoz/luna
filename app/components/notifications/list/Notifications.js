@@ -32,7 +32,7 @@ const NotificationItem = ({ classes, id, onClick, ...restProps }) => {
         className={classes.listItem}
       >
         <ListItemText
-          primary={`${requiredName}-${minVersion}`}
+          primary={`${requiredName} ${requiredVersion}`}
           secondary={
             <Typography
               component="span"
