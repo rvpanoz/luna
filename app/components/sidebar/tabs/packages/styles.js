@@ -59,7 +59,7 @@ const styles = (theme) => ({
     paddingTop: theme.spacing(1),
   },
   updateIcon: {
-    color: lighten(theme.palette.primary.main, 0.2),
+    color: darken(grayColor, 0.2),
     marginRight: theme.spacing(1) / 2,
   },
   primaryColor: {
