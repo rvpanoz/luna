@@ -5,6 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import PackagesIcon from '@material-ui/icons/ListTwoTone';
+import HistoryIcon from '@material-ui/icons/HistoryTwoTone';
+import ActionsIcon from '@material-ui/icons/TextFormatTwoTone';
 
 import styles from './styles';
 
@@ -30,19 +33,19 @@ const SidebarTabs = ({ classes, children }) => {
             classes={{
               root: classes.tabLabel,
             }}
-            label="Packages"
+            icon={<PackagesIcon />}
           />
           <Tab
             classes={{
               root: classes.tabLabel,
             }}
-            label="History"
+            icon={<HistoryIcon />}
           />
           <Tab
             classes={{
               root: classes.tabLabel,
             }}
-            label="Actions"
+            icon={<ActionsIcon />}
           />
         </Tabs>
       </AppBar>

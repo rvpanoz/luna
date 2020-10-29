@@ -8,7 +8,7 @@ const styles = (theme) => ({
     maxWidth: 290,
     height: 64,
     padding: theme.spacing(1),
-    backgroundColor: lighten(theme.palette.secondary.main, 0.25),
+    backgroundColor: theme.palette.secondary.main,
   },
   logo_animation_wrapper: {
     position: 'relative',
@@ -57,7 +57,7 @@ const styles = (theme) => ({
     fillRule: 'evenodd',
   },
   logo_animation__line: {
-    fill: lighten(theme.palette.secondary.main, 0.25),
+    fill: theme.palette.secondary.main,
     fillRule: 'evenodd',
     strokeLinecap: 'square',
     strokeWidth: 50,
@@ -68,7 +68,7 @@ const styles = (theme) => ({
     strokeWidth: 40,
   },
   whiteColor: {
-    stroke: lighten(theme.palette.common.white, 0.1),
+    stroke: theme.palette.common.white,
   },
 });
 

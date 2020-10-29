@@ -9,7 +9,6 @@ import Chip from '@material-ui/core/Chip';
 import Avatar from '@material-ui/core/Avatar';
 import { IconButton } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import InfoIcon from '@material-ui/icons/Info';
 import { iMessage } from 'commons/utils';
 import { setActivePage } from 'models/ui/actions';
 import styles from './styles';
@@ -79,22 +78,14 @@ const Navigation = ({ classes, className }) => {
           <Typography variant="subtitle2" component="div" color="textSecondary">
             {mode === 'local' && project.name && project.version ? (
               <Chip
-                avatar={
-                  <Avatar>
-                    <InfoIcon />
-                  </Avatar>
-                }
-                color="secondary"
+                avatar={<Avatar>L</Avatar>}
+                color="default"
                 label={`${project.name} - ${project.version}`}
               />
             ) : (
               <Chip
-                avatar={
-                  <Avatar>
-                    <InfoIcon />
-                  </Avatar>
-                }
-                color="secondary"
+                avatar={<Avatar>G</Avatar>}
+                color="default"
                 label="Global packages"
               />
             )}

@@ -1,4 +1,5 @@
 import { flexContainer, defaultFont } from 'styles/variables';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
 
 const styles = (theme) => ({
   transition: {
@@ -19,7 +20,7 @@ const styles = (theme) => ({
   listItem: {
     '&:hover': {
       cursor: 'pointer',
-      backgroundColor: theme.palette.secondary.light,
+      backgroundColor: lighten(theme.palette.common.gray, 0.1),
     },
   },
 });

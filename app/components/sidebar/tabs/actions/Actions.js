@@ -19,7 +19,7 @@ const ActionsTab = ({ classes, mode, onInstallPackagesFromJson }) => (
   <>
     <div className={classes.header}>
       <Typography className={classes.title} color="textSecondary">
-        {iMessage('title', 'actionList')}
+        {iMessage('title', 'actions')}
       </Typography>
       <Divider />
     </div>

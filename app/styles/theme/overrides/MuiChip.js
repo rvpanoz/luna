@@ -2,7 +2,7 @@ import palette from '../palette';
 
 export default {
   root: {
-    backgroundColor: palette.primary.light,
+    backgroundColor: palette.common.gray,
     color: '#425A70',
   },
   clickable: {
@@ -17,7 +17,7 @@ export default {
   },
   outlined: {
     '&:hover': {
-      backgroundColor: palette.primary.light,
+      backgroundColor: palette.secondary.light,
     },
   },
 };

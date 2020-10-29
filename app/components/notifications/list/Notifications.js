@@ -76,7 +76,13 @@ const NotificationsList = ({
 
   return (
     <Grid container>
-      <Grid item md={8} lg={8} xl={8} className={classes.transition}>
+      <Grid
+        item
+        md={active ? 8 : 12}
+        lg={active ? 8 : 12}
+        xl={active ? 8 : 12}
+        className={classes.transition}
+      >
         <Paper elevation={2}>
           <div className={classes.toolbar}>
             <Toolbar
@@ -97,16 +103,11 @@ const NotificationsList = ({
           </List>
         </Paper>
       </Grid>
-      <Grid
-        item
-        sm={12}
-        md={active ? 4 : 2}
-        lg={active ? 4 : 2}
-        xl={active ? 4 : 2}
-        className={classes.transition}
-      >
-        {active && <NotificationDetails active={active} mode={mode} />}
-      </Grid>
+      {active && (
+        <Grid item sm={4} md={4} lg={4} xl={4} className={classes.transition}>
+          {<NotificationDetails active={active} mode={mode} />}
+        </Grid>
+      )}
     </Grid>
   );
 };

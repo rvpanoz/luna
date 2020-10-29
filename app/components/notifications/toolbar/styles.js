@@ -20,7 +20,6 @@ const styles = (theme) => ({
   },
   highlight: {
     color: theme.palette.common.white,
-    backgroundColor: lighten(theme.palette.secondary.light, 0.9),
   },
 });
 

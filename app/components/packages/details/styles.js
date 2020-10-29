@@ -11,12 +11,12 @@ const styles = (theme) => ({
   },
   header: {
     ...defaultFont,
-    backgroundColor: lighten(theme.palette.primary.main, 0.15),
+    backgroundColor: lighten(grayColor, 0.75),
     fontSize: 20,
     fontWeight: 400,
     padding: theme.spacing(1),
     '& > p': {
-      color: theme.palette.common.white,
+      color: lighten(theme.palette.common.black, 0.55),
     },
   },
   list: {
