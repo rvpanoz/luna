@@ -11,7 +11,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import { HelperText } from 'components/common';
 import { iMessage } from 'commons/utils';
 import Toolbar from '../toolbar/Toolbar';
-import Details from '../details/Details';
+import NotificationDetails from '../details/NotificationDetails';
 
 import styles from './styles';
 
@@ -32,7 +32,7 @@ const NotificationItem = ({ classes, id, onClick, ...restProps }) => {
         className={classes.listItem}
       >
         <ListItemText
-          primary={`${requiredName}-${minVersion}`}
+          primary={`${requiredName} ${requiredVersion}`}
           secondary={
             <Typography
               component="span"
@@ -105,7 +105,7 @@ const NotificationsList = ({
         xl={active ? 4 : 2}
         className={classes.transition}
       >
-        {active && <Details active={active} mode={mode} />}
+        {active && <NotificationDetails active={active} mode={mode} />}
       </Grid>
     </Grid>
   );

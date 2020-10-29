@@ -34,11 +34,12 @@ import {
 import { Transition } from 'components/common';
 import { iMessage, showDialog, switchcase } from 'commons/utils';
 import { Loader } from 'components/common';
-import Dependencies from '../dependencies/Dependencies';
-import Versions from '../versions/Versions';
-import PackageInfo from '../info/Info';
+import PackageDependencies from './PackageDependencies';
+import PackageVersions from './PackageVersions';
+import PackageInfo from './PackageInfo';
 import { InstallAction, UpdateAction, UninstallAction } from '../actions';
 import { initialDialogOptions } from '../packages/Packages';
+
 import styles from './styles';
 
 const mapState = ({
@@ -213,19 +214,17 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
             ),
           ],
         ])(Boolean(fromSearch))}
-        <Hidden mdDown>
-          <IconButton
-            disableRipple
-            className={cn(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={() => expand(!expanded)}
-            aria-expanded={expanded}
-            aria-label="Show more"
-          >
-            <ExpandMoreIcon />
-          </IconButton>
-        </Hidden>
+        <IconButton
+          disableRipple
+          className={cn(classes.expand, {
+            [classes.expandOpen]: expanded,
+          })}
+          onClick={() => expand(!expanded)}
+          aria-expanded={expanded}
+          aria-label="Show more"
+        >
+          <ExpandMoreIcon />
+        </IconButton>
       </CardActions>
     );
   };
@@ -252,7 +251,7 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
                     color="textSecondary"
                     variant="body2"
                   >{`License: ${active.license || '-'}`}</Typography>
-                  {mode === 'local' && !fromSearch && (
+                  {mode === 'local' && (
                     <Typography
                       color="textSecondary"
                       variant="body2"
@@ -262,13 +261,13 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
               }
             />
             <CardContent classes={{ root: classes.cardContent }}>
-              <Typography variant="body1">{description}</Typography>
+              <Typography variant="subtitle2" color="textSecondary">
+                {description}
+              </Typography>
               <Divider className={classes.divider} />
-              <Hidden mdDown>
-                <Collapse in={expanded} timeout="auto" unmountOnExit>
-                  <PackageInfo active={active} dependencies={dependencies} />
-                </Collapse>
-              </Hidden>
+              <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <PackageInfo active={active} dependencies={dependencies} />
+              </Collapse>
             </CardContent>
             {renderActions(name, fromSearch)}
           </Card>
@@ -368,7 +367,10 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            <Versions data={versions} handleInstall={handleInstallVersion} />
+            <PackageVersions
+              versions={versions}
+              handleInstall={handleInstallVersion}
+            />
           </Fade>
         )}
       </Popper>
@@ -380,7 +382,7 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            <Dependencies data={dependencies} />
+            <PackageDependencies dependencies={dependencies} />
           </Fade>
         )}
       </Popper>

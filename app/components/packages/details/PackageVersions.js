@@ -15,17 +15,21 @@ import { iMessage } from 'commons/utils';
 
 import styles from './styles';
 
-const Versions = ({ classes, data, handleInstall }) => (
+const PackageVersions = ({ classes, versions, handleInstall }) => (
   <Paper className={classes.paper}>
     <div className={classes.header}>
-      <Typography>{`Versions (${data.length})`}</Typography>
+      <Typography>{`Versions (${versions.length})`}</Typography>
     </div>
     <Divider />
-    <List dense style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 500 }}>
-      {data.map((version) => (
+    <List dense style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 425 }}>
+      {versions.map((version) => (
         <ListItem key={version} className={classes.listItem}>
           <ListItemText
-            primary={<Typography variant="subtitle2">{version}</Typography>}
+            primary={
+              <Typography color="textSecondary" variant="body2">
+                {version}
+              </Typography>
+            }
           />
           <ListItemSecondaryAction>
             <Tooltip title={iMessage('title', 'installVersion')}>
@@ -45,10 +49,10 @@ const Versions = ({ classes, data, handleInstall }) => (
   </Paper>
 );
 
-Versions.propTypes = {
+PackageVersions.propTypes = {
   classes: objectOf(string).isRequired,
   handleInstall: func.isRequired,
-  data: arrayOf(string).isRequired,
+  versions: arrayOf(string).isRequired,
 };
 
-export default withStyles(styles)(Versions);
+export default withStyles(styles)(PackageVersions);

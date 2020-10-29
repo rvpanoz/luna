@@ -10,19 +10,25 @@ import ListItemText from '@material-ui/core/ListItemText';
 
 import styles from './styles';
 
-const Dependencies = ({ classes, data }) => (
+const PackageDependencies = ({ classes, dependencies }) => (
   <Paper className={classes.paper}>
     <div className={classes.header}>
-      <Typography>{`Dependencies (${data.length})`}</Typography>
+      <Typography>{`Dependencies (${dependencies.length})`}</Typography>
     </div>
     <Divider />
     <List dense style={{ overflowY: 'scroll', minWidth: 225, maxHeight: 425 }}>
-      {data.map((item) => (
+      {dependencies.map((item) => (
         <ListItem key={item.name} className={classes.listItem}>
           <ListItemText
-            primary={<Typography variant="subtitle2">{item.name}</Typography>}
+            primary={
+              <Typography color="textSecondary" variant="body2">
+                {item.name}
+              </Typography>
+            }
             secondary={
-              <Typography variant="subtitle2">{item.version}</Typography>
+              <Typography color="textSecondary" variant="body2">
+                {item.version}
+              </Typography>
             }
           />
         </ListItem>
@@ -31,9 +37,9 @@ const Dependencies = ({ classes, data }) => (
   </Paper>
 );
 
-Dependencies.propTypes = {
+PackageDependencies.propTypes = {
   classes: objectOf(string).isRequired,
-  data: arrayOf(objectOf(string)).isRequired,
+  dependencies: arrayOf(objectOf(string)).isRequired,
 };
 
-export default withStyles(styles)(Dependencies);
+export default withStyles(styles)(PackageDependencies);

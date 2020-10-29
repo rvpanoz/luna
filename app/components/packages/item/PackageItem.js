@@ -83,14 +83,15 @@ const PackageItem = ({
             </Typography>
           </div>
           {group && (
-            <Typography variant="caption" color="textSecondary">
+            <Typography
+              className={classes.group}
+              variant="caption"
+              color="textSecondary"
+            >
               {group}
             </Typography>
           )}
         </div>
-      </TableCell>
-      <TableCell padding="none" name="installed" className={classes.tableCell}>
-        <Typography className={classes.version}>{version}</Typography>
       </TableCell>
       <TableCell padding="none" name="latest" className={classes.tableCell}>
         <Typography
@@ -100,6 +101,9 @@ const PackageItem = ({
         >
           {latest}
         </Typography>
+      </TableCell>
+      <TableCell padding="none" name="installed" className={classes.tableCell}>
+        <Typography className={classes.version}>{version}</Typography>
       </TableCell>
       <TableCell padding="none" name="status" className={classes.tableCell}>
         {missing && <WarningIcon className={classes.statusMissing} />}

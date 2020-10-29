@@ -31,8 +31,8 @@ import { Loader } from 'components/common';
 import TableHeader from './Header';
 import Pagination from './Pagination';
 import Toolbar from '../toolbar/Toolbar';
-import PackageItem from '../item/Item';
-import PackageDetails from '../details/Details';
+import PackageItem from '../item/PackageItem';
+import PackageDetails from '../details/PackageDetails';
 import InstallationOptions from '../options/InstallationOptions';
 
 import styles from './styles';
