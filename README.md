@@ -45,6 +45,9 @@ Luna was created with main purpose to provide a flexible and modern UI for npm d
   <div style="flex: 25%;max-width: 25%;padding: 8px 4px;">
     <img style="margin-top: 8px; vertical-align: middle;" title="luna-3" src="./resources/media/images/luna-screen-3.png"/>
   </div>
+  <div style="flex: 25%;max-width: 25%;padding: 8px 4px;">
+    <img style="margin-top: 8px; vertical-align: middle;" title="luna-3" src="./resources/media/images/luna-screen-4.png"/>
+  </div>
 </div>
 
 ## How it works
