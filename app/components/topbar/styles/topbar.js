@@ -24,10 +24,7 @@ const styles = (theme) => ({
   topbar: {
     zIndex: 'auto',
     boxShadow: 'none',
-    backgroundColor: `${lighten(
-      theme.palette.secondary.main,
-      0.25
-    )} !important`,
+    backgroundColor: `${theme.palette.secondary.main} !important`,
   },
 });
 

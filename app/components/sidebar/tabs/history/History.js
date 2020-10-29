@@ -61,7 +61,7 @@ const HistoryTab = ({ classes, directories, onHistoryClick }) => (
   <>
     <div className={classes.header}>
       <Typography className={classes.title} color="textSecondary">
-        {iMessage('title', 'historyDirectories')}
+        {iMessage('title', 'history')}
       </Typography>
       <Divider />
     </div>
