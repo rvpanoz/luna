@@ -8,6 +8,7 @@ const clearInstallOptions = ActionCreator('CLEAR_INSTALL_OPTIONS');
 const setManager = ActionCreator('SET_MANAGER');
 const setMode = ActionCreator('SET_MODE');
 const updateStatus = ActionCreator('UPDATE_STATUS');
+const updateCommandLog = ActionCreator('UPDATE_COMMAND_LOG');
 
 export {
   initActions,
@@ -16,4 +17,5 @@ export {
   setManager,
   setMode,
   updateStatus,
+  updateCommandLog,
 };

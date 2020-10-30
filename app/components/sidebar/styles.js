@@ -9,6 +9,18 @@ const styles = (theme) => ({
       flexShrink: 0,
     },
   },
+  flex: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  log: {
+    overflowY: 'scroll',
+    height: 600,
+  },
+  command: {
+    fontSize: 12,
+    wordWrap: 'break-word',
+  },
 });
 
 export default styles;

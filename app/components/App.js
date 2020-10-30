@@ -7,7 +7,11 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Layout from 'components/layout/Layout';
 import { withErrorBoundary } from 'commons/hocs';
 import { setEnv } from 'models/npm/actions';
-import { initActions, updateStatus } from 'models/common/actions';
+import {
+  initActions,
+  updateStatus,
+  updateCommandLog,
+} from 'models/common/actions';
 import { setUIException, setSnackbar } from 'models/ui/actions';
 import { iMessage } from 'commons/utils';
 import theme from 'styles/theme';
@@ -51,11 +55,13 @@ const App = () => {
       const { cmd, isTerminated } = data;
       const [command, ...args] = cmd;
 
+      if (!isTerminated) {
+        return;
+      }
+
       dispatch(
-        setSnackbar({
-          open: isTerminated === false,
-          type: 'info',
-          message: `npm ${cmd.join(' ')}`,
+        updateCommandLog({
+          command: `npm ${cmd.join(' ')}`,
         })
       );
     });

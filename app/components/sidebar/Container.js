@@ -13,11 +13,12 @@ import { setMode } from 'models/common/actions';
 import { runDedupe, runCache } from 'models/npm/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils';
 import Sidebar from './Sidebar';
+import CommandsLog from './CommandsLog';
 
 import styles from './styles';
 
 const mapState = ({
-  common: { mode, directory },
+  common: { mode, directory, commandLog },
   packages: {
     project: projectInfo,
     packagesData,
@@ -42,6 +43,7 @@ const mapState = ({
   packagesOutdated,
   notifications,
   npmEnv,
+  commandLog,
 });
 
 const AppSidebar = ({ classes, className }) => {
@@ -59,6 +61,7 @@ const AppSidebar = ({ classes, className }) => {
     notifications,
     fromSearch,
     npmEnv,
+    commandLog,
   } = useMappedState(mapState);
 
   const packagesItems = [
@@ -218,6 +221,7 @@ const AppSidebar = ({ classes, className }) => {
           dedupe={dedupe}
           cache={cache}
         />
+        <CommandsLog logs={commandLog} />
       </Drawer>
     </div>
   );
