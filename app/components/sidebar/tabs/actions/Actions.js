@@ -19,7 +19,15 @@ import { iMessage } from 'commons/utils';
 
 import styles from './styles';
 
-const ActionItem = ({ classes, mode, label, details, handler, icon }) => {
+const ActionItem = ({
+  classes,
+  mode,
+  label,
+  title,
+  details,
+  handler,
+  icon,
+}) => {
   return (
     <ListItem className={classes.listItem}>
       <ListItemText
@@ -34,7 +42,7 @@ const ActionItem = ({ classes, mode, label, details, handler, icon }) => {
         }
       />
       <ListItemSecondaryAction>
-        <Tooltip>
+        <Tooltip title={title}>
           <div>
             <IconButton
               aria-label="action-install"
@@ -42,9 +50,7 @@ const ActionItem = ({ classes, mode, label, details, handler, icon }) => {
               onClick={handler}
               disableRipple
             >
-              <ArrowRightIcon
-                color={mode === 'global' ? 'inherit' : 'primary'}
-              />
+              <ArrowRightIcon />
             </IconButton>
           </div>
         </Tooltip>
@@ -57,6 +63,7 @@ ActionItem.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   mode: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   details: PropTypes.string.isRequired,
   handler: PropTypes.func.isRequired,
 };
@@ -76,18 +83,21 @@ const ActionsTab = ({
     {
       label: 'npm install',
       details: 'Install packages from package.json',
+      title: 'Run npm install',
       handler: onInstallPackagesFromJson,
       icon: <InstallIcon color="secondary" />,
     },
     {
       label: 'npm cache clean',
       details: 'Delete all data out of the cache folder.',
+      title: 'Run npm cache clean',
       handler: onCacheClean,
       icon: <CacheCleanIcon color="secondary" />,
     },
     {
       label: 'npm cache verify',
       details: 'Verify the contents of the cache folder',
+      title: 'Run npm cache verify',
       handler: onCacheVerify,
       icon: <CacheCleanVerify color="secondary" />,
     },
@@ -95,12 +105,14 @@ const ActionsTab = ({
       label: 'npm shrinkwrap',
       details:
         'Repurposes package-lock.json into a publishable npm-shrinkwrap.json',
+      title: 'Run npm shrinkwrap',
       handler: onShrinkWrap,
       icon: <ShrinkWrapIcon color="secondary" />,
     },
     {
       label: 'npm dedupe',
       details: 'Mode dependencies further up the tree',
+      title: 'Run npm dedupe',
       handler: onDedupe,
       icon: <DedupeIcon color="secondary" />,
     },
