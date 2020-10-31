@@ -266,11 +266,7 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
               </Typography>
               <Divider className={classes.divider} />
               <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <PackageInfo
-                  active={active}
-                  dependencies={dependencies}
-                  readme={readme}
-                />
+                <PackageInfo active={active} dependencies={dependencies} />
               </Collapse>
             </CardContent>
             {renderActions(name, fromSearch)}
