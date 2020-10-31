@@ -36,15 +36,15 @@ const Sidebar = ({
           mode={mode}
           npmEnv={npmEnv}
         />
-        <HistoryTab
-          directories={history}
-          onHistoryClick={loadDirectory}
-          loading={loading}
-        />
         <ActionsTab
           mode={mode}
           onInstallPackagesFromJson={installPackagesFromJson}
           onDedupe={onDedupe}
+        />
+        <HistoryTab
+          directories={history}
+          onHistoryClick={loadDirectory}
+          loading={loading}
         />
       </Tabs>
     </>
