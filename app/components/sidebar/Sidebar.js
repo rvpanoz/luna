@@ -20,7 +20,7 @@ const Sidebar = ({
   projectInfo,
   npmEnv,
   installPackagesFromJson,
-  dedupe,
+  onDedupe,
   cache,
 }) => {
   return (
@@ -44,6 +44,7 @@ const Sidebar = ({
         <ActionsTab
           mode={mode}
           onInstallPackagesFromJson={installPackagesFromJson}
+          onDedupe={onDedupe}
         />
       </Tabs>
     </>
@@ -56,7 +57,7 @@ Sidebar.propTypes = {
   history: arrayOf(object),
   loadDirectory: func.isRequired,
   installPackagesFromJson: func.isRequired,
-  dedupe: func.isRequired,
+  onDedupe: func.isRequired,
   cache: func.isRequired,
   projectInfo: objectOf(string).isRequired,
   updatedAt: string,
