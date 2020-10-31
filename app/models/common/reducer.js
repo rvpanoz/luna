@@ -13,7 +13,7 @@ import {
 } from 'models/common/actions';
 import format from 'date-fns/format';
 import initialState from '../initialState';
-import { updateCommandLog } from './actions';
+import { clearCommandLog, updateCommandLog } from './actions';
 
 const { npm, notifications, packages, ui, ...common } = initialState;
 
@@ -151,6 +151,7 @@ const handlers = {
         state.commandLog
       ),
     }),
+  [clearCommandLog.type]: (state) => assoc('commandLog', [], state),
 };
 
 export default createReducer(common, handlers);

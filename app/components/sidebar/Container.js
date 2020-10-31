@@ -1,11 +1,11 @@
+import { ipcRenderer } from 'electron';
 import React from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+import { Drawer, Typography } from '@material-ui/core';
 
 import { setActivePage } from 'models/ui/actions';
 import { installPackageJson } from 'models/packages/actions';
@@ -13,7 +13,7 @@ import { setMode } from 'models/common/actions';
 import { runDedupe, runCache } from 'models/npm/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils';
 import Sidebar from './Sidebar';
-import CommandsLog from './CommandsLog';
+import Log from './Log';
 
 import styles from './styles';
 
@@ -207,21 +207,23 @@ const AppSidebar = ({ classes, className }) => {
         anchor="left"
         classes={{ paper: classes.drawer }}
       >
-        <Sidebar
-          mode={mode}
-          loadDirectory={loadDirectory}
-          history={history}
-          loading={loading}
-          updatedAt={lastUpdatedAt}
-          tabPackagesData={packagesItems}
-          projectInfo={projectInfo}
-          npmEnv={npmEnv}
-          fromSearch={fromSearch}
-          installPackagesFromJson={installPackagesFromJson}
-          dedupe={dedupe}
-          cache={cache}
-        />
-        <CommandsLog logs={commandLog} />
+        <div className={classes.flex}>
+          <Sidebar
+            mode={mode}
+            loadDirectory={loadDirectory}
+            history={history}
+            loading={loading}
+            updatedAt={lastUpdatedAt}
+            tabPackagesData={packagesItems}
+            projectInfo={projectInfo}
+            npmEnv={npmEnv}
+            fromSearch={fromSearch}
+            installPackagesFromJson={installPackagesFromJson}
+            dedupe={dedupe}
+            cache={cache}
+          />
+          <Log log={commandLog} />
+        </div>
       </Drawer>
     </div>
   );

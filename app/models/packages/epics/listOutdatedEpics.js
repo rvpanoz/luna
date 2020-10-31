@@ -1,6 +1,6 @@
-import { switchMap } from 'rxjs/operators';
+import { switchMap, catchError } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
-import { pipe } from 'rxjs';
+import { of, pipe } from 'rxjs';
 
 import {
   listOutdatedPackagesListener,
@@ -11,12 +11,24 @@ import { onListOutdatedPackages$, onSearchPackages$ } from '../listeners';
 
 const listOutdatedPackagesListenerEpic = pipe(
   ofType(listOutdatedPackagesListener.type),
-  switchMap(() => onListOutdatedPackages$)
+  switchMap(() => onListOutdatedPackages$),
+  catchError((error) =>
+    of({
+      type: '@@LUNA/ERROR/LIST_OUTDATED_PACKAGES',
+      error: error.toString(),
+    })
+  )
 );
 
 const searchPackagesListenerEpic = pipe(
   ofType(searchPackagesListener.type),
-  switchMap(() => onSearchPackages$)
+  switchMap(() => onSearchPackages$),
+  catchError((error) =>
+    of({
+      type: '@@LUNA/ERROR/SEARCH_PACKAGES',
+      error: error.toString(),
+    })
+  )
 );
 
 export { listOutdatedPackagesListenerEpic, searchPackagesListenerEpic };

@@ -1,7 +1,14 @@
 import { ipcRenderer } from 'electron';
-import { map, filter, tap, switchMap, ignoreElements } from 'rxjs/operators';
+import {
+  map,
+  filter,
+  tap,
+  switchMap,
+  ignoreElements,
+  catchError,
+} from 'rxjs/operators';
 import { ofType } from 'redux-observable';
-import { pipe } from 'rxjs';
+import { of, pipe } from 'rxjs';
 
 import { togglePackageLoader } from 'models/ui/actions';
 import { viewPackageStart, viewPackageListener } from '../actions';
@@ -30,7 +37,13 @@ const viewPackageLoaderEpic = pipe(
 
 const viewPackageListenerEpic = pipe(
   ofType(viewPackageListener.type),
-  switchMap(() => onViewPackage$)
+  switchMap(() => onViewPackage$),
+  catchError((error) =>
+    of({
+      type: '@@LUNA/ERROR/VIEW_PACKAGE',
+      error: error.toString(),
+    })
+  )
 );
 
 export { viewPackageEpic, viewPackageLoaderEpic, viewPackageListenerEpic };

@@ -1,6 +1,6 @@
 import format from 'date-fns/format';
-import { map, tap } from 'rxjs/operators';
-import { pipe } from 'rxjs';
+import { map, tap, catchError } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
 import { ofType } from 'redux-observable';
 import { PACKAGE_GROUPS } from 'constants/AppConstants';
 import { readPackageJson } from 'commons/utils';
@@ -44,7 +44,13 @@ const mapSearchPackagesEpic = (action$) =>
         fromSearch,
         lastUpdatedAt: format(new Date(), 'dd/MM/yyyy h:mm'),
       });
-    })
+    }),
+    catchError((error) =>
+      of({
+        type: '@@LUNA/ERROR/SEARCH_PACKAGES',
+        error: error.toString(),
+      })
+    )
   );
 
 const mapPackagesEpic = (action$, state$) =>
@@ -139,6 +145,12 @@ const mapPackagesEpic = (action$, state$) =>
           lastUpdatedAt: format(new Date(), 'dd/MM/yyyy h:mm'),
         });
       }
+    ),
+    catchError((error) =>
+      of({
+        type: '@@LUNA/ERROR/MAP_PACKAGES',
+        error: error.toString(),
+      })
     )
   );
 
@@ -158,7 +170,13 @@ const mapOutdatedPackagesEpic = pipe(
       ];
     }, [])
   ),
-  map((alldependencies) => setOutdatedPackages({ outdated: alldependencies }))
+  map((alldependencies) => setOutdatedPackages({ outdated: alldependencies })),
+  catchError((error) =>
+    of({
+      type: '@@LUNA/ERROR/MAP_OUTDATED_PACKAGES',
+      error: error.toString(),
+    })
+  )
 );
 
 export { mapPackagesEpic, mapOutdatedPackagesEpic, mapSearchPackagesEpic };

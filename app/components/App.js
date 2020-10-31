@@ -11,6 +11,7 @@ import {
   initActions,
   updateStatus,
   updateCommandLog,
+  clearCommandLog,
 } from 'models/common/actions';
 import { setUIException, setSnackbar } from 'models/ui/actions';
 import { iMessage } from 'commons/utils';
@@ -55,8 +56,8 @@ const App = () => {
       const { cmd, isTerminated } = data;
       const [command, ...args] = cmd;
 
-      if (!isTerminated) {
-        return;
+      if (isTerminated) {
+        return dispatch(clearCommandLog());
       }
 
       dispatch(

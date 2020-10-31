@@ -1,7 +1,14 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
-import { pipe } from 'rxjs';
-import { map, tap, concatMap, switchMap, ignoreElements } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
+import {
+  map,
+  tap,
+  concatMap,
+  switchMap,
+  ignoreElements,
+  catchError,
+} from 'rxjs/operators';
 
 import { toggleLoader, setActivePage } from 'models/ui/actions';
 import {
@@ -105,7 +112,13 @@ const installMultiplePackagesEpic = (action$, state$) =>
 
 const installPackageListenerEpic = pipe(
   ofType(installPackageListener.type),
-  switchMap(() => onNpmInstall$)
+  switchMap(() => onNpmInstall$),
+  catchError((error) =>
+    of({
+      type: '@@LUNA/ERROR/INSTALL_PACKAGE',
+      error: error.toString(),
+    })
+  )
 );
 
 export {

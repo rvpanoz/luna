@@ -65,6 +65,7 @@ const mapState = ({
 const PackageDetails = ({ classes, showInstallationOptions }) => {
   const dispatch = useDispatch();
   const [expanded, expand] = useState(true);
+  const [readme, setReadme] = useState('');
   const [dependencies, setDependencies] = useState([]);
   const [activePopper, setActivePopper] = useState({
     index: 0,
@@ -266,7 +267,11 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
               </Typography>
               <Divider className={classes.divider} />
               <Collapse in={expanded} timeout="auto" unmountOnExit>
-                <PackageInfo active={active} dependencies={dependencies} />
+                <PackageInfo
+                  active={active}
+                  dependencies={dependencies}
+                  readme={readme}
+                />
               </Collapse>
             </CardContent>
             {renderActions(name, fromSearch)}
@@ -339,7 +344,12 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
   );
 
   useEffect(() => {
-    if (active && active.dependencies) {
+    console.log(active);
+    if (!active) {
+      return;
+    }
+
+    if (active.dependencies) {
       const dependenciesNames = Object.keys(active.dependencies);
       const dependenciesToArray = dependenciesNames.map((dep) => ({
         name: dep,
@@ -347,6 +357,25 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
       }));
 
       setDependencies(dependenciesToArray);
+    }
+
+    if (active.repository) {
+      const {
+        repository: { url },
+      } = active || {};
+
+      if (url) {
+        const resource = url
+          .replace('git+https://github.com/', '')
+          .replace('.git', '');
+
+        fetch(`https://api.github.com/repos/${resource}/readme`)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => setReadme(atob(data.content)))
+          .catch((error) => setReadme(''));
+      }
     }
   }, [active]);
 

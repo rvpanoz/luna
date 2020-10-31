@@ -1,5 +1,11 @@
-import { pipe } from 'rxjs';
-import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
+import {
+  map,
+  tap,
+  switchMap,
+  ignoreElements,
+  catchError,
+} from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 
@@ -42,7 +48,13 @@ const npmRunLockEpic = pipe(
 
 const npmRunInitListenerEpic = pipe(
   ofType(npmInitListener.type),
-  switchMap(() => onNpmInit$)
+  switchMap(() => onNpmInit$),
+  catchError((error) =>
+    of({
+      type: '@@LUNA/ERROR/NPM_INIT',
+      error: error.toString(),
+    })
+  )
 );
 
 export {
