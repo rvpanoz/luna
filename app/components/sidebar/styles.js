@@ -4,7 +4,7 @@ import { drawerWidth, grayColor } from 'styles/variables';
 const styles = (theme) => ({
   drawer: {
     width: drawerWidth,
-    borderRight: 0,
+    borderRight: '0 !important',
     [theme.breakpoints.up('sm')]: {
       flexShrink: 0,
     },

@@ -16,7 +16,13 @@ import { iMessage } from 'commons/utils';
 import styles from './styles';
 
 const Loader = ({ classes }) => (
-  <div className={classes.loading}>Loading..</div>
+  <Typography
+    className={classes.loading}
+    variant="caption"
+    color="textSecondary"
+  >
+    Loading..
+  </Typography>
 );
 
 Loader.propTypes = {

@@ -43,9 +43,8 @@ const styles = (theme) => ({
   },
   loading: {
     ...defaultFont,
-    paddingTop: theme.spacing(1),
     fontSize: 14,
-    color: darken(grayColor, 0.5),
+    paddingTop: theme.spacing(1),
   },
   listItem: {
     margin: 0,
