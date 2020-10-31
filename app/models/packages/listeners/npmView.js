@@ -14,8 +14,8 @@ const onViewPackage$ = new Observable((observer) => {
 
     try {
       const newActive = data ? JSON.parse(data) : null;
-      const getCleanProps = (val, key) => /^[^_]/.test(key);
-      const properties = pickBy(getCleanProps, newActive);
+      const filterProps = (val, key) => /^[^_]/.test(key);
+      const properties = pickBy(filterProps, newActive);
 
       if (notification) {
         observer.next(

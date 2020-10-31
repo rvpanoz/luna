@@ -344,19 +344,8 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
   );
 
   useEffect(() => {
-    console.log(active);
     if (!active) {
       return;
-    }
-
-    if (active.dependencies) {
-      const dependenciesNames = Object.keys(active.dependencies);
-      const dependenciesToArray = dependenciesNames.map((dep) => ({
-        name: dep,
-        version: active.dependencies[dep],
-      }));
-
-      setDependencies(dependenciesToArray);
     }
 
     if (active.repository) {
@@ -411,7 +400,7 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            <PackageDependencies dependencies={dependencies} />
+            <PackageDependencies dependencies={active.dependencies} />
           </Fade>
         )}
       </Popper>

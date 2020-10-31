@@ -10,7 +10,7 @@ const Log = ({ classes, log }) => {
 
   useEffect(() => {
     if (!log.length) {
-      return;
+      return setCommandLog(null);
     }
 
     const [command] = log;
@@ -37,12 +37,6 @@ const Log = ({ classes, log }) => {
       >
         {`running: ${commandLog.runningCommand}`}
       </Typography>
-      <CircularProgress
-        size={15}
-        thickness={5}
-        className={classes.loader}
-        color="inherit"
-      />
     </div>
   );
 };

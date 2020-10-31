@@ -197,35 +197,29 @@ const AppSidebar = ({ classes, className }) => {
   }, []);
 
   return (
-    <div
-      className={cn(classes.root, {
-        [className]: className !== undefined,
-      })}
+    <Drawer
+      variant="permanent"
+      anchor="left"
+      classes={{ paper: classes.drawer }}
     >
-      <Drawer
-        variant="permanent"
-        anchor="left"
-        classes={{ paper: classes.drawer }}
-      >
-        <div className={classes.flex}>
-          <Sidebar
-            mode={mode}
-            loadDirectory={loadDirectory}
-            history={history}
-            loading={loading}
-            updatedAt={lastUpdatedAt}
-            tabPackagesData={packagesItems}
-            projectInfo={projectInfo}
-            npmEnv={npmEnv}
-            fromSearch={fromSearch}
-            installPackagesFromJson={installPackagesFromJson}
-            dedupe={dedupe}
-            cache={cache}
-          />
-          <Log log={commandLog} />
-        </div>
-      </Drawer>
-    </div>
+      <div className={classes.flex}>
+        <Sidebar
+          mode={mode}
+          loadDirectory={loadDirectory}
+          history={history}
+          loading={loading}
+          updatedAt={lastUpdatedAt}
+          tabPackagesData={packagesItems}
+          projectInfo={projectInfo}
+          npmEnv={npmEnv}
+          fromSearch={fromSearch}
+          installPackagesFromJson={installPackagesFromJson}
+          dedupe={dedupe}
+          cache={cache}
+        />
+        <Log log={commandLog} />
+      </div>
+    </Drawer>
   );
 };
 

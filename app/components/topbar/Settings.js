@@ -28,7 +28,7 @@ const Settings = ({ classes, ...restProps }) => {
           <ListItemText primary={<Typography>Rows per page</Typography>} />
           <ListItemSecondaryAction>
             <FormControl className={classes.formControl}>
-              <InputLabel id="rowsPerPage-label">Rows per page</InputLabel>
+              <InputLabel id="rowsPerPage-label">Set rows</InputLabel>
               <Select
                 labelId="rowsPerPage-label"
                 id="rows-per-page"
