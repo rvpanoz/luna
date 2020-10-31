@@ -1,11 +1,11 @@
+import { ipcRenderer } from 'electron';
 import React from 'react';
 import cn from 'classnames';
 import { objectOf, string } from 'prop-types';
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useMappedState } from 'redux-react-hook';
-import { ipcRenderer } from 'electron';
 import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+import { Drawer, Typography } from '@material-ui/core';
 
 import { setActivePage } from 'models/ui/actions';
 import { installPackageJson } from 'models/packages/actions';
@@ -13,11 +13,12 @@ import { setMode } from 'models/common/actions';
 import { runDedupe, runCache } from 'models/npm/actions';
 import { iMessage, shrinkDirectory, showDialog } from 'commons/utils';
 import Sidebar from './Sidebar';
+import Log from './Log';
 
 import styles from './styles';
 
 const mapState = ({
-  common: { mode, directory },
+  common: { mode, directory, commandLog },
   packages: {
     project: projectInfo,
     packagesData,
@@ -42,6 +43,7 @@ const mapState = ({
   packagesOutdated,
   notifications,
   npmEnv,
+  commandLog,
 });
 
 const AppSidebar = ({ classes, className }) => {
@@ -59,6 +61,7 @@ const AppSidebar = ({ classes, className }) => {
     notifications,
     fromSearch,
     npmEnv,
+    commandLog,
   } = useMappedState(mapState);
 
   const packagesItems = [
@@ -194,16 +197,12 @@ const AppSidebar = ({ classes, className }) => {
   }, []);
 
   return (
-    <div
-      className={cn(classes.root, {
-        [className]: className !== undefined,
-      })}
+    <Drawer
+      variant="permanent"
+      anchor="left"
+      classes={{ paper: classes.drawer }}
     >
-      <Drawer
-        variant="permanent"
-        anchor="left"
-        classes={{ paper: classes.drawer }}
-      >
+      <div className={classes.flex}>
         <Sidebar
           mode={mode}
           loadDirectory={loadDirectory}
@@ -218,8 +217,9 @@ const AppSidebar = ({ classes, className }) => {
           dedupe={dedupe}
           cache={cache}
         />
-      </Drawer>
-    </div>
+        <Log log={commandLog} />
+      </div>
+    </Drawer>
   );
 };
 

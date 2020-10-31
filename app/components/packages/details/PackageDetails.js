@@ -338,18 +338,6 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
     </Grid>
   );
 
-  useEffect(() => {
-    if (active && active.dependencies) {
-      const dependenciesNames = Object.keys(active.dependencies);
-      const dependenciesToArray = dependenciesNames.map((dep) => ({
-        name: dep,
-        version: active.dependencies[dep],
-      }));
-
-      setDependencies(dependenciesToArray);
-    }
-  }, [active]);
-
   return (
     <div className={classes.wrapper}>
       <Loader
@@ -382,7 +370,7 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
       >
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={100}>
-            <PackageDependencies dependencies={dependencies} />
+            <PackageDependencies dependencies={active.dependencies} />
           </Fade>
         )}
       </Popper>

@@ -1,11 +1,15 @@
 import React from 'react';
 import { string, objectOf, func, bool, object, arrayOf } from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 import Tabs from './tabs/Tabs';
 import { PackagesTab, ActionsTab, HistoryTab } from './tabs';
 import Logo from '../common/logo/Logo';
 
+import styles from './styles';
+
 const Sidebar = ({
+  classes,
   loading,
   fromSearch,
   mode,
@@ -22,7 +26,7 @@ const Sidebar = ({
   return (
     <>
       <Logo />
-      <Tabs>
+      <Tabs className={classes.tabs}>
         <PackagesTab
           items={tabPackagesData}
           updatedAt={updatedAt}
@@ -54,11 +58,11 @@ Sidebar.propTypes = {
   installPackagesFromJson: func.isRequired,
   dedupe: func.isRequired,
   cache: func.isRequired,
-  updatedAt: string,
   projectInfo: objectOf(string).isRequired,
+  updatedAt: string,
   npmEnv: object,
   fromSearch: bool,
   tabPackagesData: arrayOf(object),
 };
 
-export default Sidebar;
+export default withStyles(styles)(Sidebar);

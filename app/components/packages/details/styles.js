@@ -11,7 +11,7 @@ const styles = (theme) => ({
   },
   header: {
     ...defaultFont,
-    backgroundColor: lighten(grayColor, 0.75),
+    backgroundColor: lighten(grayColor, 0.85),
     fontSize: 20,
     fontWeight: 400,
     padding: theme.spacing(1),

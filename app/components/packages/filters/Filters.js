@@ -55,8 +55,8 @@ const Filters = ({ classes, mode, close, listFilters }) => {
           setFilters(remove(idx, 1, filters));
           break;
         case filterType === 'name':
-          const newFilters = filters.map((filterDetails) => {
-            if (filterDetails.filterType === 'name') {
+          const newFilters = filters.map(({ filterType, filterValue }) => {
+            if (filterType === 'name') {
               return { filterType, filterValue };
             }
 
@@ -98,139 +98,123 @@ const Filters = ({ classes, mode, close, listFilters }) => {
 
   return (
     <div className={classes.root}>
-      <div className={classes.filterItems}>
-        <div className={classes.flexContainer}>
-          <div style={{ flex: 1 }}>
-            <FormControl component="fieldset" style={{ width: '100%' }}>
-              <FormLabel component="legend">
-                {iMessage('label', 'packageName')}
-              </FormLabel>
-              <FormGroup>
-                <FormHelperText>
-                  {iMessage('label', 'packageNameInput')}
-                </FormHelperText>
-                <div className={classes.search}>
-                  <SearchIcon className={classes.searchIcon} />
-                  <InputBase
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                    inputProps={{
-                      ref: searchInputEl,
-                    }}
-                    onChange={(e) => {
-                      const { value } = e.currentTarget;
+      <FormControl component="fieldset">
+        <FormGroup>
+          <FormHelperText>
+            {iMessage('label', 'packageNameInput')}
+          </FormHelperText>
+          <div className={classes.search}>
+            <SearchIcon className={classes.searchIcon} />
+            <InputBase
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{
+                ref: searchInputEl,
+              }}
+              onChange={(e) => {
+                const { value } = e.currentTarget;
 
-                      if (value && value.length) {
-                        addFilter({
-                          filterType: 'name',
-                          filterValue: value,
-                        });
-                      }
-                    }}
-                  />
-                </div>
-              </FormGroup>
-            </FormControl>
+                if (value && value.length) {
+                  addFilter({
+                    filterType: 'name',
+                    filterValue: value,
+                  });
+                }
+              }}
+            />
           </div>
-        </div>
-
-        <FormControl component="fieldset">
-          <FormLabel
-            component="legend"
-            className={cn({
-              [classes.hidden]: mode === 'global',
-            })}
-          >
-            Group
-          </FormLabel>
-          <FormGroup
-            className={cn(classes.flexContainer, {
-              [classes.hidden]: mode === 'global',
-            })}
-          >
-            <FormHelperText>{iMessage('label', 'groupType')}</FormHelperText>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={activeFilters.indexOf('dependencies') > -1}
-                  onChange={() =>
-                    addFilter({
-                      filterType: 'group',
-                      filterValue: 'dependencies',
-                    })
-                  }
-                  value="dependencies"
-                />
-              }
-              label="Dependencies"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={activeFilters.indexOf('devDependencies') > -1}
-                  onChange={() =>
-                    addFilter({
-                      filterType: 'group',
-                      filterValue: 'devDependencies',
-                    })
-                  }
-                  value="devDependencies"
-                />
-              }
-              label="Dev dependencies"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={activeFilters.indexOf('optionalDependencies') > -1}
-                  onChange={() =>
-                    addFilter({
-                      filterType: 'group',
-                      filterValue: 'optionalDependencies',
-                    })
-                  }
-                  value="optionalDependencies"
-                />
-              }
-              label="Optional dependencies"
-            />
-          </FormGroup>
-          <FormHelperText />
-        </FormControl>
-        <FormControl component="fieldset">
-          <FormLabel component="legend">
-            {iMessage('label', 'status')}
-          </FormLabel>
-          <FormGroup>
-            <FormHelperText>{iMessage('label', 'byOutdated')}</FormHelperText>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={activeFilters.indexOf('isOutdated') > -1}
-                  onChange={() =>
-                    addFilter({
-                      filterType: 'version',
-                      filterValue: 'isOutdated',
-                    })
-                  }
-                  value="isOutdated"
-                />
-              }
-              label="Outdated"
-            />
-          </FormGroup>
-        </FormControl>
-        <Divider className={classes.bottomDivider} />
-        <div className={classes.actions}>
-          <Button color="secondary" onClick={close}>
-            {iMessage('action', 'close')}
-          </Button>
-          <Button color="primary" onClick={() => handleFilters(filters)}>
-            {iMessage('action', 'filter')}
-          </Button>
-        </div>
+        </FormGroup>
+      </FormControl>
+      <FormControl component="fieldset">
+        <FormGroup
+          className={cn(classes.flex, {
+            [classes.hidden]: mode === 'global',
+          })}
+        >
+          <FormHelperText>{iMessage('label', 'groupType')}</FormHelperText>
+          <FormControlLabel
+            className={classes.controlLabel}
+            control={
+              <Checkbox
+                checked={activeFilters.indexOf('dependencies') > -1}
+                onChange={() =>
+                  addFilter({
+                    filterType: 'group',
+                    filterValue: 'dependencies',
+                  })
+                }
+                value="dependencies"
+              />
+            }
+            label="Dependencies"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={activeFilters.indexOf('devDependencies') > -1}
+                onChange={() =>
+                  addFilter({
+                    filterType: 'group',
+                    filterValue: 'devDependencies',
+                  })
+                }
+                value="devDependencies"
+              />
+            }
+            label="Dev dependencies"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={activeFilters.indexOf('optionalDependencies') > -1}
+                onChange={() =>
+                  addFilter({
+                    filterType: 'group',
+                    filterValue: 'optionalDependencies',
+                  })
+                }
+                value="optionalDependencies"
+              />
+            }
+            label="Optional dependencies"
+          />
+        </FormGroup>
+        <FormHelperText />
+      </FormControl>
+      <FormControl component="fieldset">
+        <FormGroup>
+          <FormHelperText>{iMessage('label', 'byOutdated')}</FormHelperText>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={activeFilters.indexOf('isOutdated') > -1}
+                onChange={() =>
+                  addFilter({
+                    filterType: 'version',
+                    filterValue: 'isOutdated',
+                  })
+                }
+                value="isOutdated"
+              />
+            }
+            label="Outdated"
+          />
+        </FormGroup>
+      </FormControl>
+      <Divider className={classes.bottomDivider} />
+      <div className={classes.actions}>
+        <Button color="secondary" variant="outlined" onClick={close}>
+          {iMessage('action', 'close')}
+        </Button>
+        <Button
+          color="primary"
+          variant="outlined"
+          onClick={() => handleFilters(filters)}
+        >
+          {iMessage('action', 'filter')}
+        </Button>
       </div>
     </div>
   );

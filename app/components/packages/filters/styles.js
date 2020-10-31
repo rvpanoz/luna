@@ -3,12 +3,10 @@ import { defaultFont } from 'styles/variables';
 
 const styles = (theme) => ({
   root: {
-    minWidth: 400,
-    padding: theme.spacing(1),
-    '& > h2': {
-      color: theme.palette.primary.dark,
-      fontSize: 18,
-    },
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    padding: theme.spacing(2),
   },
   actions: {
     display: 'flex',
@@ -16,13 +14,6 @@ const styles = (theme) => ({
     '& > Button:nth-child(1)': {
       marginRight: theme.spacing(1),
     },
-  },
-  flexContainer: { display: 'flex' },
-  filterItems: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    padding: theme.spacing(1),
   },
   bottomDivider: {
     margin: theme.spacing(1),
@@ -57,8 +48,8 @@ const styles = (theme) => ({
     ...defaultFont,
     padding: theme.spacing(1),
   },
-  toolbar: {
-    height: 10,
+  controlLabel: {
+    fontSize: 12,
   },
 });
 

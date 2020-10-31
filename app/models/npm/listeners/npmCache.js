@@ -17,14 +17,9 @@ const updateCommand = ({
 });
 
 const onNpmCache$ = new Observable((observer) => {
-  ipcRenderer.removeAllListeners(['npm-cache-completed']);
+  ipcRenderer.removeAllListeners(['npm-cache-completed', 'npm-cache-error']);
 
   ipcRenderer.on('npm-cache-completed', (event, errors, data, action) => {
-    // TODO: npm cache errors
-    if (errors) {
-      console.error(errors);
-    }
-
     observer.next(parseNpmCacheData(data));
 
     observer.next(
@@ -51,9 +46,7 @@ const onNpmCache$ = new Observable((observer) => {
     );
   });
 
-  ipcRenderer.on('npm-cache-error', (event, error) => {
-    observer.error(error);
-  });
+  ipcRenderer.on('npm-cache-error', (event, error) => observer.error(error));
 });
 
 export default onNpmCache$;

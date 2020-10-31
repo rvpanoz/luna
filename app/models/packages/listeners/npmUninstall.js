@@ -45,9 +45,9 @@ const onNpmUninstall$ = new Observable((observer) => {
     }
   );
 
-  ipcRenderer.on('npm-uninstall-error', (event, error) => {
-    observer.error(error);
-  });
+  ipcRenderer.on('npm-uninstall-error', (event, error) =>
+    observer.error(error)
+  );
 });
 
 export default onNpmUninstall$;

@@ -11,8 +11,9 @@ import {
   setMode,
   updateStatus,
 } from 'models/common/actions';
-
+import format from 'date-fns/format';
 import initialState from '../initialState';
+import { clearCommandLog, updateCommandLog } from './actions';
 
 const { npm, notifications, packages, ui, ...common } = initialState;
 
@@ -140,6 +141,17 @@ const handlers = {
     assoc('manager', manager, state),
   [updateStatus.type]: (state, { payload: { status } }) =>
     assoc('onlineStatus', status, state),
+  [updateCommandLog.type]: (state, { payload: { command } }) =>
+    merge(state, {
+      commandLog: prepend(
+        {
+          runningCommand: command,
+          timestamp: format(new Date(), 'dd/MM/yyyy h:mm'),
+        },
+        state.commandLog
+      ),
+    }),
+  [clearCommandLog.type]: (state) => assoc('commandLog', [], state),
 };
 
 export default createReducer(common, handlers);

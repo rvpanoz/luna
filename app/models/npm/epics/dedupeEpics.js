@@ -1,5 +1,5 @@
-import { pipe } from 'rxjs';
-import { tap, switchMap, mergeMap } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
+import { tap, switchMap, mergeMap, catchError } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { toggleLoader } from 'models/ui/actions';
@@ -40,7 +40,13 @@ const npmRunDedupeEpic = (action$, state$) =>
 // listener epics
 const npmRunDedupeListenerEpic = pipe(
   ofType(npmDedupeListener.type),
-  switchMap(() => onNpmDedupe$)
+  switchMap(() => onNpmDedupe$),
+  catchError((error) =>
+    of({
+      type: '@@LUNA/ERROR/DEDUPE',
+      error: error.toString(),
+    })
+  )
 );
 
 export { npmRunDedupeEpic, npmRunDedupeListenerEpic };

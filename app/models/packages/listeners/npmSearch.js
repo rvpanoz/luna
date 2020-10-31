@@ -5,7 +5,7 @@ import { parseFromSearch } from 'commons/utils';
 import { mapSearchPackages } from '../actions';
 
 const onSearchPackages$ = new Observable((observer) => {
-  ipcRenderer.removeAllListeners(['npm-search-completed']);
+  ipcRenderer.removeAllListeners(['npm-search-completed', 'npm-search-error']);
 
   ipcRenderer.on('npm-search-completed', (event, data) => {
     try {
@@ -27,6 +27,8 @@ const onSearchPackages$ = new Observable((observer) => {
       observer.error(error);
     }
   });
+
+  ipcRenderer.on('npm-search-error', (error) => observer.error(error));
 });
 
 export default onSearchPackages$;

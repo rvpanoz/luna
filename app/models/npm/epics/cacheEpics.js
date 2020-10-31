@@ -1,5 +1,12 @@
-import { pipe } from 'rxjs';
-import { tap, map, switchMap, mergeMap, ignoreElements } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
+import {
+  tap,
+  map,
+  switchMap,
+  mergeMap,
+  ignoreElements,
+  catchError,
+} from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { ipcRenderer } from 'electron';
 import { toggleLoader } from 'models/ui/actions';
@@ -61,7 +68,13 @@ const npmRunCacheEpic = (action$, state$) =>
 // listener epics
 const npmRunCacheListenerEpic = pipe(
   ofType(npmCacheListener.type),
-  switchMap(() => onNpmCache$)
+  switchMap(() => onNpmCache$),
+  catchError((error) =>
+    of({
+      type: '@@LUNA/ERROR/CACHE',
+      error: error.toString(),
+    })
+  )
 );
 
 export { npmRunCacheEpic, npmRunCacheListenerEpic, npmCacheParseEpic };

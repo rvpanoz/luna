@@ -1,7 +1,13 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
-import { pipe } from 'rxjs';
-import { map, tap, switchMap, ignoreElements } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
+import {
+  map,
+  tap,
+  switchMap,
+  ignoreElements,
+  catchError,
+} from 'rxjs/operators';
 
 import { toggleLoader } from 'models/ui/actions';
 import {
@@ -52,7 +58,13 @@ const updatePackagesEpic = (action$, state$) =>
 
 const updatePackagesListenerEpic = pipe(
   ofType(updatePackagesListener.type),
-  switchMap(() => onNpmUpdate$)
+  switchMap(() => onNpmUpdate$),
+  catchError((error) =>
+    of({
+      type: '@@LUNA/ERROR/UPDATE_PACKAGES',
+      error: error.toString(),
+    })
+  )
 );
 
 export { updatePackagesEpic, updatePackagesListenerEpic, showUpdateLoaderEpic };

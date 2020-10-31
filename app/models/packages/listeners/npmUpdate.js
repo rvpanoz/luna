@@ -19,7 +19,7 @@ const updateCommand = ({
 });
 
 const onNpmUpdate$ = new Observable((observer) => {
-  ipcRenderer.removeAllListeners(['npm-update-completed']);
+  ipcRenderer.removeAllListeners(['npm-update-completed', 'npm-update-error']);
 
   ipcRenderer.on('npm-update-completed', () => {
     try {

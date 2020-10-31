@@ -11,6 +11,7 @@ const initialState = {
     action: null,
     packagesInstallOptions: [],
   },
+  commandLog: [],
   notifications: {
     active: null,
     notifications: [],

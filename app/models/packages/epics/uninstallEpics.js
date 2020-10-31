@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { ofType } from 'redux-observable';
-import { pipe } from 'rxjs';
-import { tap, switchMap, ignoreElements } from 'rxjs/operators';
+import { of, pipe } from 'rxjs';
+import { tap, switchMap, ignoreElements, catchError } from 'rxjs/operators';
 
 import {
   uninstallPackages,
@@ -31,7 +31,13 @@ const uninstallPackagesEpic = (action$, state$) =>
 
 const uninstallPackagesListenerEpic = pipe(
   ofType(uninstallPackagesListener.type),
-  switchMap(() => onNpmUninstall$)
+  switchMap(() => onNpmUninstall$),
+  catchError((error) =>
+    of({
+      type: '@@LUNA/ERROR/VIEW_PACKAGE',
+      error: error.toString(),
+    })
+  )
 );
 
 export { uninstallPackagesEpic, uninstallPackagesListenerEpic };

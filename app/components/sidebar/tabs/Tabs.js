@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
+import cn from 'classnames';
 import { bool, node, objectOf, string } from 'prop-types';
 import Typography from '@material-ui/core/Typography';
 import AppBar from '@material-ui/core/AppBar';
@@ -22,11 +23,15 @@ TabContainer.propTypes = {
   loading: bool,
 };
 
-const SidebarTabs = ({ classes, children }) => {
+const SidebarTabs = ({ classes, className, children }) => {
   const [value, setValue] = useState(0);
 
   return (
-    <div className={classes.root}>
+    <div
+      className={cn(classes.root, {
+        [className]: className !== undefined,
+      })}
+    >
       <AppBar position="static" color="inherit">
         <Tabs value={value} onChange={(e, tabValue) => setValue(tabValue)}>
           <Tab
@@ -71,6 +76,7 @@ const SidebarTabs = ({ classes, children }) => {
 SidebarTabs.propTypes = {
   children: node.isRequired,
   classes: objectOf(string).isRequired,
+  className: string,
 };
 
 export default withStyles(styles)(SidebarTabs);
