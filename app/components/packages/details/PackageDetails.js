@@ -65,7 +65,6 @@ const mapState = ({
 const PackageDetails = ({ classes, showInstallationOptions }) => {
   const dispatch = useDispatch();
   const [expanded, expand] = useState(true);
-  const [readme, setReadme] = useState('');
   const [dependencies, setDependencies] = useState([]);
   const [activePopper, setActivePopper] = useState({
     index: 0,
@@ -342,31 +341,6 @@ const PackageDetails = ({ classes, showInstallationOptions }) => {
       </Grid>
     </Grid>
   );
-
-  useEffect(() => {
-    if (!active) {
-      return;
-    }
-
-    if (active.repository) {
-      const {
-        repository: { url },
-      } = active || {};
-
-      if (url) {
-        const resource = url
-          .replace('git+https://github.com/', '')
-          .replace('.git', '');
-
-        fetch(`https://api.github.com/repos/${resource}/readme`)
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => setReadme(atob(data.content)))
-          .catch((error) => setReadme(''));
-      }
-    }
-  }, [active]);
 
   return (
     <div className={classes.wrapper}>
