@@ -10,7 +10,6 @@ const onViewPackage$ = new Observable((observer) => {
   ipcRenderer.removeAllListeners(['npm-view-completed', 'npm-view-error']);
 
   ipcRenderer.on('npm-view-completed', (event, errors, data, options) => {
-    throw Error('test');
     const { notification } = options;
 
     try {
