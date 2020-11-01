@@ -45,10 +45,8 @@ const styles = (theme) => ({
     color: darken(grayColor, 0.5),
   },
   group: {
+    fontSize: 14,
     color: theme.palette.common.grayColor,
-    [theme.breakpoints.down('md')]: {
-      fontSize: 14,
-    },
   },
   statusMissing: {
     color: theme.palette.secondary.main,

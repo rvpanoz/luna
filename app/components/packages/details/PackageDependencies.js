@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 
 import styles from './styles';
 
@@ -35,12 +36,10 @@ const PackageDependencies = ({ classes, dependencies }) => {
                   {dependency.name}
                 </Typography>
               }
-              secondary={
-                <Typography color="textSecondary" variant="body2">
-                  {dependency.version}
-                </Typography>
-              }
             />
+            <ListItemSecondaryAction>
+              {dependency.version}
+            </ListItemSecondaryAction>
           </ListItem>
         ))}
       </List>
