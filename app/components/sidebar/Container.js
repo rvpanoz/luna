@@ -133,7 +133,7 @@ const AppSidebar = ({ classes, className }) => {
     return showDialog(dialogHandler, dialogOptions);
   }, [mode, directory, dispatch]);
 
-  const dedupe = useCallback(() => {
+  const onDedupe = useCallback(() => {
     const dialogOptions = {
       title: 'Confirmation',
       type: 'question',
@@ -214,7 +214,10 @@ const AppSidebar = ({ classes, className }) => {
           npmEnv={npmEnv}
           fromSearch={fromSearch}
           installPackagesFromJson={installPackagesFromJson}
-          dedupe={dedupe}
+          onDedupe={onDedupe}
+          onCacheClean={() => {}}
+          onCacheVerify={() => {}}
+          onShrinkWrap={() => {}}
           cache={cache}
         />
         <Log log={commandLog} />

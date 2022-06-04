@@ -1,5 +1,5 @@
 import { of } from 'rxjs';
-import { mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
+import { map, mergeMap, catchError, withLatestFrom } from 'rxjs/operators';
 import { v1 as uuidv1 } from 'uuid';
 import semver from 'semver';
 import { combineEpics, ofType } from 'redux-observable';
@@ -13,7 +13,7 @@ const parseNotificationEpic = (action$, state$) =>
   action$.pipe(
     ofType(parseNotification.type),
     withLatestFrom(state$),
-    mergeMap((values) => {
+    map((values) => {
       const [notification, state] = values;
       const {
         notifications: { notifications: stateNotifications },
@@ -25,7 +25,14 @@ const parseNotificationEpic = (action$, state$) =>
       const [reason, details] = notificationText.split(':');
       const isExtraneous = reason === 'extraneous';
       const detailsArr = details.trim().split(',');
-      const [requiredDetails, requiredByName] = detailsArr;
+
+      return {
+        isExtraneous,
+        details: detailsArr,
+      };
+    }),
+    mergeMap(({ details, isExtraneous }) => {
+      const [requiredDetails, requiredByName] = details;
       const [requiredName, requiredVersion] = requiredDetails.split('@');
       const isValidVersion = semver.valid(requiredVersion);
 

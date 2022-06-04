@@ -39,18 +39,21 @@ const SidebarTabs = ({ classes, className, children }) => {
               root: classes.tabLabel,
             }}
             icon={<PackagesIcon />}
-          />
-          <Tab
-            classes={{
-              root: classes.tabLabel,
-            }}
-            icon={<HistoryIcon />}
+            label="Packages"
           />
           <Tab
             classes={{
               root: classes.tabLabel,
             }}
             icon={<ActionsIcon />}
+            label="Actions"
+          />
+          <Tab
+            classes={{
+              root: classes.tabLabel,
+            }}
+            icon={<HistoryIcon />}
+            label="History"
           />
         </Tabs>
       </AppBar>
